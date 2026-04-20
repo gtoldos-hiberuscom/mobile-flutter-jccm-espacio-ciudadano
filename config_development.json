@@ -1,0 +1,5 @@
+{
+  "APP_FLAVOR": "development",
+  "TIMEOUT": "30",
+  "DEBUG_MODE": "true"
+}
