@@ -1,0 +1,41 @@
+---
+name: flutter-ticket-sync
+description: Keep implementation work synchronized with the repository ticket flow by delegating ticket administration to ticket-manager or the ticket skills. Use when a code change is driven by a ticket, Jira key, or acceptance criteria that must be reflected back into tracking.
+argument-hint: When asking to implement a change, provide as much context as possible about the affected area, the relevant ticket if any, and the expected outcome. For example:
+Implement the new navigation menu design according to the mockups provided by the design team. The change should follow the architecture canon v2 and be traceable to the existing ticket NAVEMP-126. Make sure to consult the relevant sections of the canon for guidance on repository topology, feature structure, and implementation rules. Use the appropriate architecture skills for scaffolding, UI composition, and ticket synchronization. Validate tests and confirm that the implementation aligns with the acceptance criteria in the ticket.
+target: github-copilot
+handoffs:
+  - label: Start Ticket Synchronization
+    agent: ticket-manager
+    prompt: Synchronize the implementation work with the relevant ticket according to the provided context
+    send: true 
+---
+
+Use this skill when an implementation task comes from a ticket or when completion evidence should be written back to ticket tracking.
+
+## Coordination rule
+The canonical ticket-administration agent is `ticket-manager`. Use it for structural ticket updates or when several ticket fields must change together.
+
+When a direct operation is enough, use the existing ticket skills:
+- `ticket-create-update`
+- `ticket-transition`
+- `ticket-comment`
+- `ticket-reassign`
+- `ticket-linking`
+- `ticket-complete`
+
+## Workflow
+1. Resolve the ticket context from the user request, a Jira key, or an existing `tickets/TICKET-{id}.md`.
+2. Read the ticket before implementing when the file exists.
+3. Align the code change with the ticket acceptance criteria and technical notes.
+4. After implementation, report progress or evidence through `ticket-manager` or the right ticket skill.
+5. Move status conservatively:
+   - use `ticket-comment` for progress and implementation notes;
+   - use `ticket-transition` for workflow changes;
+   - use `ticket-complete` only when the listed acceptance criteria are demonstrably satisfied;
+   - use `ticket-linking` if the work reveals blockers, dependencies, or ADR traceability.
+
+## Guardrails
+- Never invent ticket ids, dates, assignees, relationships, or acceptance criteria.
+- Never bypass the ticket schema with ad hoc edits when a ticket skill or `ticket-manager` should handle the change.
+- If no ticket context exists, say ticket synchronization is not applicable.
