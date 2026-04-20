@@ -1,0 +1,77 @@
+# espacio_ciudadano_api.model.ZCSSTPUBPORTAL
+
+## Load the model package
+```dart
+import 'package:espacio_ciudadano_api/api.dart';
+```
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**apellido1** | **String** |  | [optional] 
+**apellido2** | **String** |  | [optional] 
+**asunto** | **String** |  | [optional] 
+**bezei** | **String** |  | [optional] 
+**bland** | **String** |  | [optional] 
+**calle** | **String** |  | [optional] 
+**certific** | **String** |  | [optional] 
+**codpos** | **String** |  | [optional] 
+**consej** | **String** |  | [optional] 
+**cont1** | **String** |  | [optional] 
+**cont2** | **String** |  | [optional] 
+**cont3** | **String** |  | [optional] 
+**cont4** | **String** |  | [optional] 
+**cont5** | **String** |  | [optional] 
+**contacto** | **String** |  | [optional] 
+**desasunto** | **String** |  | [optional] 
+**desconsej** | **String** |  | [optional] 
+**descrip** | **String** |  | [optional] 
+**desfam** | **String** |  | [optional] 
+**desproc** | **String** |  | [optional] 
+**destipodoc** | **String** |  | [optional] 
+**destipres** | **String** |  | [optional] 
+**destipvia** | **String** |  | [optional] 
+**desuniorg** | **String** |  | [optional] 
+**dmbrt** | **num** |  | [optional] 
+**documentos** | [**ZCSSTTBDOCUMENTO**](ZCSSTTBDOCUMENTO.md) |  | [optional] 
+**ejeexp** | **String** |  | [optional] 
+**email** | **String** |  | [optional] 
+**estado** | **String** |  | [optional] 
+**familia** | **String** |  | [optional] 
+**fechafin** | **String** |  | [optional] 
+**fechaini** | **String** |  | [optional] 
+**fechainipag** | **String** |  | [optional] 
+**fechains** | **String** |  | [optional] 
+**fechainscrip** | **String** |  | [optional] 
+**fechapag** | **String** |  | [optional] 
+**fechareg** | **String** |  | [optional] 
+**inicio** | **String** |  | [optional] 
+**label1** | **String** |  | [optional] 
+**label2** | **String** |  | [optional] 
+**label3** | **String** |  | [optional] 
+**label4** | **String** |  | [optional] 
+**label5** | **String** |  | [optional] 
+**land1** | **String** |  | [optional] 
+**landx50** | **String** |  | [optional] 
+**ncalle** | **String** |  | [optional] 
+**nombre** | **String** |  | [optional] 
+**numdoc** | **String** |  | [optional] 
+**numexp** | **String** |  | [optional] 
+**ort01** | **String** |  | [optional] 
+**partner** | **String** |  | [optional] 
+**registro** | **String** |  | [optional] 
+**resolucion** | **String** |  | [optional] 
+**source_** | **String** |  | [optional] 
+**tipodoc** | **String** |  | [optional] 
+**tipoproc** | **String** |  | [optional] 
+**tipvia** | **String** |  | [optional] 
+**titulo** | **String** |  | [optional] 
+**tlfax** | **String** |  | [optional] 
+**tlfno** | **String** |  | [optional] 
+**uniorg** | **String** |  | [optional] 
+**waers** | **String** |  | [optional] 
+**zzbezei** | **String** |  | [optional] 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
