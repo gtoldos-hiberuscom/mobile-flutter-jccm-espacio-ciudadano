@@ -1,6 +1,7 @@
 # Copilot repository conventions
 
 ## Preferred agents and skills
+- Use `project-planner` when the user wants a project roadmap, epics, stories, risks, dependencies, and ticket-tree creation from specifications or repository documentation.
 - Use `plan-manager` when the user wants coordinated backlog or plan execution across tickets, implementation, validation, and progressive branch integration.
 - Use `implementer` for Flutter implementation, scaffolding, refactors, and architecture-sensitive work.
 - Use `ticket-manager` for ticket administration in `tickets/`.
@@ -73,7 +74,7 @@ Every ticket file must preserve the exact YAML key order defined below:
 ## Ticket field definitions
 - `id`: numeric internal identifier, required, must match the filename.
 - `jira_key`: external issue key from the source system, or empty when unavailable.
-- `type`: source-system issue type label such as `Story`, `Task`, `Subtask`, or `Bug`.
+- `type`: source-system or planning issue type label such as `Epic`, `Story`, `Task`, `Subtask`, or `Bug`.
 - `status`: workflow state label.
 - `priority`: priority label from the source system.
 - `project`: stable project key or project identifier from the source system.

@@ -1,7 +1,7 @@
 ---
 id: <numeric internal id>
 jira_key: <Jira key or empty>
-type: <Story | Task | Subtask | Bug | Other>
+type: <Epic | Story | Task | Subtask | Bug | Other>
 status: <To Do | In Progress | QA Testing | Done | ...>
 priority: <Medium | High | Low | ...>
 project: <project key or empty>
