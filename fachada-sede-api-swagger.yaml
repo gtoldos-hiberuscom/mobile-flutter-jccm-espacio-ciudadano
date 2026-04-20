@@ -1,0 +1,7267 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "contact": {
+      "email": "ae.modernizacion@jccm.es"
+    },
+    "description": "Servicio REST para gestionar SOAP Fachada Sede<br><br>Consulte la documentación de la API <a href=\"/api-rest-doc.html\" target=\"_blank\">en el manual del integrador REST</a>.",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "title": "Fachada Sede API",
+    "version": "1.41.0"
+  },
+  "servers": [
+    {
+      "url": "https://fachada-sede-api-pre.cm-pre.jccm.es",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "description": "Operaciones de SEPE",
+      "name": "sepe"
+    },
+    {
+      "description": "Operaciones de CCAA",
+      "name": "ccaa"
+    },
+    {
+      "description": "Operaciones de la DGT",
+      "name": "dgt"
+    },
+    {
+      "description": "Operaciones de Obtención de carnets digitales",
+      "name": "carnet-digital"
+    },
+    {
+      "description": "Operaciones de documentacion",
+      "name": "documentacion"
+    },
+    {
+      "description": "Operaciones de Catastro",
+      "name": "catastro"
+    },
+    {
+      "description": "Operaciones de procedimiento",
+      "name": "procedimiento"
+    },
+    {
+      "description": "Operaciones de INE",
+      "name": "ine"
+    },
+    {
+      "description": "Operaciones de Intermediación",
+      "name": "intermediacion"
+    },
+    {
+      "description": "Operaciones del sescam",
+      "name": "sescam"
+    },
+    {
+      "description": "Operaciones de consulta",
+      "name": "consulta"
+    },
+    {
+      "description": "Operaciones de Educación",
+      "name": "educacion"
+    }
+  ],
+  "paths": {
+    "/api/v1/afirma/milistardocumentosreq": {
+      "post": {
+        "operationId": "miListarDocumentosReq",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSLISTARTIPOSDOC"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSLISTARTIPOSDOCBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSVECResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar el listado de los tipos de documentos en cesar",
+        "tags": [
+          "afirma"
+        ]
+      }
+    },
+    "/api/v1/afirma/mivecreq": {
+      "post": {
+        "operationId": "miVecReq",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSVEC"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSVECBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSVECResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar el servicio para la validación de la firma en cesar",
+        "tags": [
+          "afirma"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/discapacidad-pkpass/{dni}": {
+      "get": {
+        "operationId": "obtenerPkPassFamiliaNumerosa_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener PkPass del carné de familia numerosa",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/familia-numerosa-pkpass/{dni}": {
+      "get": {
+        "description": "(Método GET) Obtiene el PKPASS de familia numerosa por DNI.",
+        "operationId": "obtenerPkPassFamiliaNumerosa",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PkpassFamiliaNumerosa"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener PkPass del carné de familia numerosa",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/familia-numerosa/{dni}": {
+      "get": {
+        "description": "(Método GET) Obtiene los datos de familia numerosa por DNI.",
+        "operationId": "obtenerDatosFamiliaNumerosa_2",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatosFamiliaNumerosa"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener datos del carné de familia numerosa",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/grado-discapacidad/{dni}": {
+      "get": {
+        "operationId": "obtenerDatosFamiliaNumerosa_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener datos del carné de familia numerosa",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/joven/{dni}": {
+      "get": {
+        "operationId": "obtenerCarnetJoven",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarnetJoven"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener carnet joven",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/pdf/{dni}": {
+      "post": {
+        "operationId": "obtenerPdf",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener Pdf de un carné",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/pkpass/{dni}": {
+      "post": {
+        "operationId": "obtenerPkPass",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener PkPass de un carné",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/carnet-digital/qr/{dni}": {
+      "post": {
+        "operationId": "obtenerQr",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarnetQr"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener Qr de un carné",
+        "tags": [
+          "carnet-digital"
+        ]
+      }
+    },
+    "/api/v1/catastro/datos-catastrales/{numDocumento}": {
+      "post": {
+        "operationId": "getDatosCatastrales",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTCTROCDATREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTCTROCDATREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para obtener los datos catastrales",
+        "tags": [
+          "catastro"
+        ]
+      }
+    },
+    "/api/v1/ccaa/familia-numerosa/{numDocumento}": {
+      "post": {
+        "operationId": "getDatosFamiliaNumerosa",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTMINHAFPCCCAFNREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTMINHAFPCCCAFNREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTMINHAFPCCCAFNRES"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para obtener los datos de familia numerosa",
+        "tags": [
+          "ccaa"
+        ]
+      }
+    },
+    "/api/v1/consulta/miconsultareq": {
+      "post": {
+        "operationId": "miConsultafaqOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSRFCCONSULTAFAQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSRFCCONSULTAFAQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCCONSULTAFAQResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar el servicio para obtener el texto de la consulta o reclamacion y la respuesta",
+        "tags": [
+          "consulta"
+        ]
+      }
+    },
+    "/api/v1/dgt/lista-vehiculos/{numDocumento}": {
+      "post": {
+        "operationId": "getListaVehiculos",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTDGTLISTADOVEHICULOSREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTDGTLISTADOVEHICULOSREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTDGTLISTADOVEHICULOSRES"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para consultar el listado de vehiculos",
+        "tags": [
+          "dgt"
+        ]
+      }
+    },
+    "/api/v1/documentacion/registrarfichero": {
+      "post": {
+        "operationId": "registrarFicheroOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrarFicheroRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Permite realizar el registro de un fichero obteniendo el justificante como resultado",
+        "tags": [
+          "documentacion"
+        ]
+      }
+    },
+    "/api/v1/educacion/titulos-no-universitarios/{numDocumento}": {
+      "post": {
+        "operationId": "getTitulosNoUniversitarios",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTEDUTNUREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTEDUTNUREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTEDUTNURES"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para obtener los títulos no universitarios",
+        "tags": [
+          "educacion"
+        ]
+      }
+    },
+    "/api/v1/educacion/titulos-universitarios/{numDocumento}": {
+      "post": {
+        "operationId": "getTitulosUniversitarios",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTEDUTUOREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTEDUTUOREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTEDUTUORES"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para obtener los títulos universitarios",
+        "tags": [
+          "educacion"
+        ]
+      }
+    },
+    "/api/v1/hechos-vitales/clausulas": {
+      "patch": {
+        "operationId": "enviarClausulas_1",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClausulasAgente"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clausulas"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Procesar las clausulas seleccionadas por un idAgente",
+        "tags": [
+          "hechos-vitales"
+        ]
+      },
+      "post": {
+        "operationId": "enviarClausulas",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClausulasAgente"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clausulas"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Procesar las clausulas seleccionadas por un idAgente",
+        "tags": [
+          "hechos-vitales"
+        ]
+      }
+    },
+    "/api/v1/hechos-vitales/clausulas/{idAgente}": {
+      "get": {
+        "operationId": "ObtenerClausulas",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "idAgente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener Clausulas asociadas a un Agente",
+        "tags": [
+          "hechos-vitales"
+        ]
+      }
+    },
+    "/api/v1/hechos-vitales/hechos": {
+      "patch": {
+        "operationId": "actualizarListaHechos",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListaHechosAgente"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Actualizar lista de hechos",
+        "tags": [
+          "hechos-vitales"
+        ]
+      }
+    },
+    "/api/v1/hechos-vitales/hechos/{idAgente}": {
+      "get": {
+        "operationId": "obtenerListaHechosByIdAgente",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "idAgente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaHechos"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener lista de hechos vitales por idAgente",
+        "tags": [
+          "hechos-vitales"
+        ]
+      }
+    },
+    "/api/v1/hechos-vitales/preferencias/{idAgente}": {
+      "delete": {
+        "operationId": "eliminarPreferencias",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "idAgente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Eliminar preferencias por idAgente",
+        "tags": [
+          "hechos-vitales"
+        ]
+      }
+    },
+    "/api/v1/hechos-vitales/servicios/segmentacion/{idAgente}": {
+      "get": {
+        "operationId": "enviarClausulas_2",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "idAgente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "operacion",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ultimosDias",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hechosvitales",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clausulas"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtencion de servicios en los ultimos dias disponibles para tramitacion",
+        "tags": [
+          "hechos-vitales"
+        ]
+      }
+    },
+    "/api/v1/hechos-vitales/servicios/{idAgente}": {
+      "get": {
+        "operationId": "getServicios",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "idAgente",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaTramitesPorHechos"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener servicios",
+        "tags": [
+          "hechos-vitales"
+        ]
+      }
+    },
+    "/api/v1/ine/datos-residencia/{numDocumento}": {
+      "post": {
+        "operationId": "getDatosResidencia",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTINECDRFREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTINECDRFREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTINECDRFRES"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para obtener los datos de residencia",
+        "tags": [
+          "ine"
+        ]
+      }
+    },
+    "/api/v1/intermediacion/discapacidad/datos": {
+      "post": {
+        "operationId": "obtenerDatosFamiliaNumerosa",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestFachadaDiscapacidadInterm"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Obtener datos del carné de familia numerosa",
+        "tags": [
+          "carnet-digital",
+          "intermediacion"
+        ]
+      }
+    },
+    "/api/v1/intermediacion/familia-numerosa/datos": {
+      "post": {
+        "operationId": "obtenerDatosFamiliaNumerosaIntermediacion",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestFachadaFamiliaNumerosaInterm"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaRespuestaFachadaFamiliaNumerosaInterm"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "intermediacion"
+        ]
+      }
+    },
+    "/api/v1/procedimiento/inicproc": {
+      "post": {
+        "operationId": "miIniProcOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTProcedimiento"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESULTADOPROCEDIMIENTO"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para realizar la validacion de un procedimiento en cesar",
+        "tags": [
+          "procedimiento"
+        ]
+      }
+    },
+    "/api/v1/procedimiento/miconfirmarproc": {
+      "post": {
+        "operationId": "miConfirmarProcOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CONFIRMARPROCEDIMIENTO"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "CONFIRMARPROCEDIMIENTOBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESULTADOPROCEDIMIENTO"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para realizar la escritura de un procedimiento en cesar",
+        "tags": [
+          "procedimiento"
+        ]
+      }
+    },
+    "/api/v1/procedimiento/miobtenerres": {
+      "post": {
+        "operationId": "miObtenerRespuestaOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSRMOBTRESPUESTAEXP"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSRMOBTRESPUESTAEXPBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRMOBTRESPUESTAEXPResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar la respuesta de un expediente en cesar",
+        "tags": [
+          "procedimiento"
+        ]
+      }
+    },
+    "/api/v1/procedimiento/obtenerhashdeadjunto": {
+      "post": {
+        "operationId": "hashAdjuntoaOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ADJUNTO"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ADJUNTOBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESULTADOPROCEDIMIENTO"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio que permite generar el hash de un documento codificado en base64 sin firma",
+        "tags": [
+          "procedimiento"
+        ]
+      }
+    },
+    "/api/v1/procedimiento/subiradjunto": {
+      "post": {
+        "operationId": "miSubirAdjuntoOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ADJUNTO"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ADJUNTOBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESULTADOPROCEDIMIENTO"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio que permite subir al buzon de tramitacion un documento codificado en base64 firmado",
+        "tags": [
+          "procedimiento"
+        ]
+      }
+    },
+    "/api/v1/procedimiento/subiradjuntosinfirma": {
+      "post": {
+        "operationId": "miSubirAdjuntoSinFirmaOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ADJUNTO"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ADJUNTOBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESULTADOPROCEDIMIENTO"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma",
+        "tags": [
+          "procedimiento"
+        ]
+      }
+    },
+    "/api/v1/publicacion/midocfirmados": {
+      "post": {
+        "operationId": "miDocsfirmados",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSRFCDOCSFIRMADOSPFEXPTE"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSRFCDOCSFIRMADOSPFEXPTEBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCDOCSFIRMADOSPFEXPTEResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio que permite consultar el documento de certificado de deuda en cesar",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/publicacion/misexpedientes": {
+      "post": {
+        "operationId": "siMisExpedientesOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSRFCMISEXPEDIENTES"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSRFCMISEXPEDIENTESBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCMISEXPEDIENTESResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar listado de expedientes asociados a un número de documento",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/publicacion/selectbynif": {
+      "post": {
+        "operationId": "myPubliSelecByNifOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTSELECTBYNIFREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTSELECTBYNIFREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNIFResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar la lista de expedientes vinculados a un NIF o número de identificación",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/publicacion/selectbynifentrada": {
+      "post": {
+        "operationId": "myPubliSelecByNifTipoProcOperation_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTSELECTBYNIFV2REQ"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNIFResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar la lista de entradas vinculados a un NIF o número de identificación",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/publicacion/selectbynifexp": {
+      "post": {
+        "operationId": "myPubliSelecByNifTipoProcOperation_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTSELECTBYNIFV2REQ"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNIFResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar la lista de expedientes vinculados a un NIF o número de identificación",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/publicacion/selectbynifsalida": {
+      "post": {
+        "operationId": "myPubliSelecByNifTipoProcOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTSELECTBYNIFV2REQ"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNIFResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar la lista de salidas vinculados a un NIF o número de identificación",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/publicacion/selectbynumexp": {
+      "post": {
+        "operationId": "myPubliSelecByNumExpOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNUMEXP"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSRFCPUBLISELECTBYNUMEXPBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNUMEXPResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar el expediente especificado por número de expediente",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/publicacion/selectbynumreg": {
+      "post": {
+        "operationId": "myPubliNumRegOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNUMREG"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "ZCSRFCPUBLISELECTBYNUMREGBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNUMREGResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consulta un expediente especificado por número de registro",
+        "tags": [
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/sepe/demandante-empleo-fecha-actual/{numDocumento}": {
+      "post": {
+        "operationId": "getDemandanteEmpleoFechaActual",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTSEPESVDIDEFAREQ"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTSEPESVDIDEFAREQBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTSEPESVDIDEFARES"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para obtener los datos de demandante de empleo a Fecha Actual",
+        "tags": [
+          "sepe"
+        ]
+      }
+    },
+    "/api/v1/servicio/midetalle": {
+      "post": {
+        "operationId": "miDetalleOperation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTQUERY"
+              }
+            }
+          },
+          "required": true,
+          "x-codegen-request-body-name": "DTQUERYBody"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZCSRFCPUBLISELECTBYNIFResponse"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Consultar el detalle de un tramite en cesar",
+        "tags": [
+          "servicio",
+          "publicacion"
+        ]
+      }
+    },
+    "/api/v1/sescam/cip/{numDocumento}": {
+      "get": {
+        "operationId": "getCipFromNif",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para obtener el CIP de un NIF",
+        "tags": [
+          "sescam"
+        ]
+      }
+    },
+    "/api/v1/sescam/citas-pasadas/{numDocumento}": {
+      "get": {
+        "operationId": "citasPasadas",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para consultar las citas pasadas",
+        "tags": [
+          "sescam"
+        ]
+      }
+    },
+    "/api/v1/sescam/citas/{numDocumento}": {
+      "get": {
+        "operationId": "citasFuturas",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "numDocumento",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "ok"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description": "Entry not found"
+          }
+        },
+        "summary": "Servicio para consultar las citas futuras",
+        "tags": [
+          "sescam"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ADJUNTO": {
+        "required": [
+          "idunico",
+          "nifcif",
+          "nombre",
+          "tipoprocedimiento"
+        ],
+        "type": "object",
+        "properties": {
+          "categoria": {
+            "type": "string",
+            "xml": {
+              "name": "CATEGORIA"
+            }
+          },
+          "data": {
+            "type": "string",
+            "xml": {
+              "name": "DATA"
+            }
+          },
+          "hash": {
+            "type": "string",
+            "xml": {
+              "name": "HASH"
+            }
+          },
+          "idaplic": {
+            "type": "string",
+            "xml": {
+              "name": "IDAPLIC"
+            }
+          },
+          "idprop": {
+            "type": "string",
+            "xml": {
+              "name": "IDPROP"
+            }
+          },
+          "idtrans": {
+            "type": "string",
+            "xml": {
+              "name": "IDTRANS"
+            }
+          },
+          "idunico": {
+            "type": "string",
+            "xml": {
+              "name": "ID_UNICO"
+            }
+          },
+          "metadatos": {
+            "type": "string",
+            "xml": {
+              "name": "METADATOS"
+            }
+          },
+          "nifcif": {
+            "type": "string",
+            "xml": {
+              "name": "NIFCIF"
+            }
+          },
+          "nombre": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE"
+            }
+          },
+          "observaciones1": {
+            "type": "string",
+            "xml": {
+              "name": "OBSERVACIONES_1"
+            }
+          },
+          "observaciones2": {
+            "type": "string",
+            "xml": {
+              "name": "OBSERVACIONES_2"
+            }
+          },
+          "observaciones3": {
+            "type": "string",
+            "xml": {
+              "name": "OBSERVACIONES_3"
+            }
+          },
+          "origen": {
+            "type": "string",
+            "xml": {
+              "name": "ORIGEN"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "xml": {
+              "name": "SUBJECT"
+            }
+          },
+          "tdoc": {
+            "type": "string",
+            "xml": {
+              "name": "TDOC"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          },
+          "tipoprocedimiento": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO_PROCEDIMIENTO"
+            }
+          }
+        }
+      },
+      "ADJUNTOS": {
+        "required": [
+          "adjunto"
+        ],
+        "type": "object",
+        "properties": {
+          "adjunto": {
+            "type": "array",
+            "xml": {
+              "name": "ADJUNTO"
+            },
+            "items": {
+              "type": "string",
+              "xml": {
+                "name": "ADJUNTO"
+              }
+            }
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "codigo-error": {
+            "type": "string",
+            "description": "Código del error"
+          },
+          "mensaje-error": {
+            "type": "string",
+            "description": "Mensaje descriptivo del error"
+          }
+        },
+        "description": "Información del error"
+      },
+      "BAPIRET2": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "xml": {
+              "name": "FIELD"
+            }
+          },
+          "id": {
+            "type": "string",
+            "xml": {
+              "name": "ID"
+            }
+          },
+          "logmsgno": {
+            "type": "string",
+            "xml": {
+              "name": "LOG_MSG_NO"
+            }
+          },
+          "logno": {
+            "type": "string",
+            "xml": {
+              "name": "LOG_NO"
+            }
+          },
+          "message": {
+            "type": "string",
+            "xml": {
+              "name": "MESSAGE"
+            }
+          },
+          "messagev1": {
+            "type": "string",
+            "xml": {
+              "name": "MESSAGE_V1"
+            }
+          },
+          "messagev2": {
+            "type": "string",
+            "xml": {
+              "name": "MESSAGE_V2"
+            }
+          },
+          "messagev3": {
+            "type": "string",
+            "xml": {
+              "name": "MESSAGE_V3"
+            }
+          },
+          "messagev4": {
+            "type": "string",
+            "xml": {
+              "name": "MESSAGE_V4"
+            }
+          },
+          "number": {
+            "type": "string",
+            "xml": {
+              "name": "NUMBER"
+            }
+          },
+          "parameter": {
+            "type": "string",
+            "xml": {
+              "name": "PARAMETER"
+            }
+          },
+          "row": {
+            "type": "integer",
+            "xml": {
+              "name": "ROW"
+            }
+          },
+          "system": {
+            "type": "string",
+            "xml": {
+              "name": "SYSTEM"
+            }
+          },
+          "type": {
+            "type": "string",
+            "xml": {
+              "name": "TYPE"
+            }
+          }
+        }
+      },
+      "BENEFICIARIOS": {
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO1"
+            }
+          },
+          "apellido2": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO2"
+            }
+          },
+          "fecnac": {
+            "type": "string",
+            "xml": {
+              "name": "FECNAC"
+            }
+          },
+          "nombre": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE"
+            }
+          },
+          "numdoc": {
+            "type": "string",
+            "xml": {
+              "name": "NUMDOC"
+            }
+          },
+          "tipdoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPDOC"
+            }
+          },
+          "titular": {
+            "type": "string",
+            "xml": {
+              "name": "TITULAR"
+            }
+          }
+        }
+      },
+      "CONFIRMARPROCEDIMIENTO": {
+        "required": [
+          "pdatos",
+          "procedimiento"
+        ],
+        "type": "object",
+        "properties": {
+          "pdatos": {
+            "$ref": "#/components/schemas/PDATOS"
+          },
+          "procedimiento": {
+            "$ref": "#/components/schemas/DTProcedimiento"
+          }
+        }
+      },
+      "CarnetJoven": {
+        "type": "object",
+        "properties": {
+          "FechaFinValidez": {
+            "type": "string"
+          },
+          "FechaNacimiento": {
+            "type": "string"
+          },
+          "Numero": {
+            "type": "string"
+          },
+          "Titular": {
+            "type": "string"
+          },
+          "enTramitacion": {
+            "type": "string"
+          }
+        }
+      },
+      "CarnetQr": {
+        "type": "object",
+        "properties": {
+          "qr": {
+            "type": "string"
+          }
+        }
+      },
+      "Clausulas": {
+        "type": "object",
+        "properties": {
+          "idClausula": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "seleccionado": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "ClausulasAgente": {
+        "type": "object",
+        "properties": {
+          "clausulas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Clausulas"
+            }
+          },
+          "idAgente": {
+            "type": "string"
+          }
+        }
+      },
+      "DATOSPAGO": {
+        "required": [
+          "imprec",
+          "refdocrecur"
+        ],
+        "type": "object",
+        "properties": {
+          "imprec": {
+            "type": "string",
+            "xml": {
+              "name": "IMPREC"
+            }
+          },
+          "refdocrecur": {
+            "type": "string",
+            "xml": {
+              "name": "REFDOCRECUR"
+            }
+          }
+        }
+      },
+      "DATOSPROCEDIMIENTO": {
+        "type": "object"
+      },
+      "DATOSREGISTRO": {
+        "type": "object",
+        "properties": {
+          "pregistro": {
+            "$ref": "#/components/schemas/PREGISTRO"
+          }
+        }
+      },
+      "DATOSSOLICITANTE": {
+        "required": [
+          "apellido1",
+          "apellido2",
+          "codigopostal",
+          "domicilio",
+          "entidad",
+          "nombre",
+          "numero",
+          "poblacion",
+          "provincia"
+        ],
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO1"
+            }
+          },
+          "apellido2": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO2"
+            }
+          },
+          "codigopostal": {
+            "type": "string",
+            "xml": {
+              "name": "CODIGO_POSTAL"
+            }
+          },
+          "domicilio": {
+            "type": "string",
+            "xml": {
+              "name": "DOMICILIO"
+            }
+          },
+          "entidad": {
+            "type": "string",
+            "xml": {
+              "name": "ENTIDAD"
+            }
+          },
+          "nombre": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE"
+            }
+          },
+          "numero": {
+            "type": "string",
+            "xml": {
+              "name": "NUMERO"
+            }
+          },
+          "poblacion": {
+            "type": "string",
+            "xml": {
+              "name": "POBLACION"
+            }
+          },
+          "provincia": {
+            "type": "string",
+            "xml": {
+              "name": "PROVINCIA"
+            }
+          }
+        }
+      },
+      "DTCTROCDATREQ": {
+        "type": "object",
+        "properties": {
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "documentofuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "DOCUMENTO_FUNCIONARIO"
+            }
+          },
+          "idaut": {
+            "type": "string",
+            "xml": {
+              "name": "IDAUT"
+            }
+          },
+          "nombrefuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_FUNCIONARIO"
+            }
+          },
+          "proc": {
+            "type": "string",
+            "xml": {
+              "name": "PROC"
+            }
+          },
+          "tipdoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPDOC"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          }
+        }
+      },
+      "DTDGTLISTADOVEHICULOSREQ": {
+        "type": "object",
+        "properties": {
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "documentofuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "DOCUMENTO_FUNCIONARIO"
+            }
+          },
+          "idaut": {
+            "type": "string",
+            "xml": {
+              "name": "IDAUT"
+            }
+          },
+          "nombrefuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_FUNCIONARIO"
+            }
+          },
+          "proc": {
+            "type": "string",
+            "xml": {
+              "name": "PROC"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          }
+        }
+      },
+      "DTDGTLISTADOVEHICULOSRES": {
+        "type": "object",
+        "properties": {
+          "idepeticion": {
+            "type": "string",
+            "xml": {
+              "name": "IDEPETICION"
+            }
+          },
+          "listavehiculos": {
+            "$ref": "#/components/schemas/LISTAVEHICULOS"
+          },
+          "mensaje": {
+            "type": "string",
+            "xml": {
+              "name": "MENSAJE"
+            }
+          },
+          "resul": {
+            "type": "string",
+            "xml": {
+              "name": "RESUL"
+            }
+          }
+        }
+      },
+      "DTEDUTNUREQ": {
+        "type": "object",
+        "properties": {
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "documentofuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "DOCUMENTO_FUNCIONARIO"
+            }
+          },
+          "idaut": {
+            "type": "string",
+            "xml": {
+              "name": "IDAUT"
+            }
+          },
+          "nombrefuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_FUNCIONARIO"
+            }
+          },
+          "proc": {
+            "type": "string",
+            "xml": {
+              "name": "PROC"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          }
+        }
+      },
+      "DTEDUTNURES": {
+        "type": "object",
+        "properties": {
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "elemento": {
+            "type": "array",
+            "xml": {
+              "name": "ELEMENTO"
+            },
+            "items": {
+              "$ref": "#/components/schemas/ELEMENTO"
+            }
+          },
+          "fecnac": {
+            "type": "string",
+            "xml": {
+              "name": "FECNAC"
+            }
+          },
+          "idpeticion": {
+            "type": "string",
+            "xml": {
+              "name": "IDPETICION"
+            }
+          },
+          "locnac": {
+            "type": "string",
+            "xml": {
+              "name": "LOCNAC"
+            }
+          },
+          "mensaje": {
+            "type": "string",
+            "xml": {
+              "name": "MENSAJE"
+            }
+          },
+          "pais": {
+            "type": "string",
+            "xml": {
+              "name": "PAIS"
+            }
+          },
+          "provnac": {
+            "type": "string",
+            "xml": {
+              "name": "PROVNAC"
+            }
+          },
+          "resul": {
+            "type": "string",
+            "xml": {
+              "name": "RESUL"
+            }
+          }
+        }
+      },
+      "DTEDUTUOREQ": {
+        "type": "object",
+        "properties": {
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "documentofuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "DOCUMENTO_FUNCIONARIO"
+            }
+          },
+          "idaut": {
+            "type": "string",
+            "xml": {
+              "name": "IDAUT"
+            }
+          },
+          "nombrefuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_FUNCIONARIO"
+            }
+          },
+          "proc": {
+            "type": "string",
+            "xml": {
+              "name": "PROC"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          }
+        }
+      },
+      "DTEDUTUORES": {
+        "type": "object",
+        "properties": {
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "elemento": {
+            "type": "array",
+            "xml": {
+              "name": "ELEMENTO"
+            },
+            "items": {
+              "$ref": "#/components/schemas/ELEMENTO"
+            }
+          },
+          "fecnac": {
+            "type": "string",
+            "xml": {
+              "name": "FECNAC"
+            }
+          },
+          "idpeticion": {
+            "type": "string",
+            "xml": {
+              "name": "IDPETICION"
+            }
+          },
+          "mensaje": {
+            "type": "string",
+            "xml": {
+              "name": "MENSAJE"
+            }
+          },
+          "resul": {
+            "type": "string",
+            "xml": {
+              "name": "RESUL"
+            }
+          }
+        }
+      },
+      "DTINECDRFREQ": {
+        "type": "object",
+        "properties": {
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "documentofuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "DOCUMENTO_FUNCIONARIO"
+            }
+          },
+          "idaut": {
+            "type": "string",
+            "xml": {
+              "name": "IDAUT"
+            }
+          },
+          "nombrefuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_FUNCIONARIO"
+            }
+          },
+          "proc": {
+            "type": "string",
+            "xml": {
+              "name": "PROC"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          }
+        }
+      },
+      "DTINECDRFRES": {
+        "type": "object",
+        "properties": {
+          "blores": {
+            "type": "string",
+            "xml": {
+              "name": "BLORES"
+            }
+          },
+          "codencol": {
+            "type": "string",
+            "xml": {
+              "name": "CODENCOL"
+            }
+          },
+          "codensin": {
+            "type": "string",
+            "xml": {
+              "name": "CODENSIN"
+            }
+          },
+          "codmun": {
+            "type": "string",
+            "xml": {
+              "name": "CODMUN"
+            }
+          },
+          "codnuc": {
+            "type": "string",
+            "xml": {
+              "name": "CODNUC"
+            }
+          },
+          "codpos": {
+            "type": "string",
+            "xml": {
+              "name": "CODPOS"
+            }
+          },
+          "codpro": {
+            "type": "string",
+            "xml": {
+              "name": "CODPRO"
+            }
+          },
+          "codunip": {
+            "type": "string",
+            "xml": {
+              "name": "CODUNIP"
+            }
+          },
+          "codvar": {
+            "type": "string",
+            "xml": {
+              "name": "CODVAR"
+            }
+          },
+          "codvia": {
+            "type": "string",
+            "xml": {
+              "name": "CODVIA"
+            }
+          },
+          "denencol": {
+            "type": "string",
+            "xml": {
+              "name": "DENENCOL"
+            }
+          },
+          "denensin": {
+            "type": "string",
+            "xml": {
+              "name": "DENENSIN"
+            }
+          },
+          "denmun": {
+            "type": "string",
+            "xml": {
+              "name": "DENMUN"
+            }
+          },
+          "dennuc": {
+            "type": "string",
+            "xml": {
+              "name": "DENNUC"
+            }
+          },
+          "denpro": {
+            "type": "string",
+            "xml": {
+              "name": "DENPRO"
+            }
+          },
+          "descvar": {
+            "type": "string",
+            "xml": {
+              "name": "DESCVAR"
+            }
+          },
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "escres": {
+            "type": "string",
+            "xml": {
+              "name": "ESCRES"
+            }
+          },
+          "fecvar": {
+            "type": "string",
+            "xml": {
+              "name": "FECVAR"
+            }
+          },
+          "hecres": {
+            "type": "string",
+            "xml": {
+              "name": "HECRES"
+            }
+          },
+          "idpeticion": {
+            "type": "string",
+            "xml": {
+              "name": "IDPETICION"
+            }
+          },
+          "kimres": {
+            "type": "string",
+            "xml": {
+              "name": "KIMRES"
+            }
+          },
+          "mensaje": {
+            "type": "string",
+            "xml": {
+              "name": "MENSAJE"
+            }
+          },
+          "nomvia": {
+            "type": "string",
+            "xml": {
+              "name": "NOMVIA"
+            }
+          },
+          "numres": {
+            "type": "string",
+            "xml": {
+              "name": "NUMRES"
+            }
+          },
+          "numsup": {
+            "type": "string",
+            "xml": {
+              "name": "NUMSUP"
+            }
+          },
+          "plares": {
+            "type": "string",
+            "xml": {
+              "name": "PLARES"
+            }
+          },
+          "portes": {
+            "type": "string",
+            "xml": {
+              "name": "PORTES"
+            }
+          },
+          "pueres": {
+            "type": "string",
+            "xml": {
+              "name": "PUERES"
+            }
+          },
+          "resul": {
+            "type": "string",
+            "xml": {
+              "name": "RESUL"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          },
+          "tipvia": {
+            "type": "string",
+            "xml": {
+              "name": "TIPVIA"
+            }
+          }
+        }
+      },
+      "DTIdentificacion": {
+        "required": [
+          "category",
+          "nifcif"
+        ],
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "xml": {
+              "name": "CATEGORY"
+            }
+          },
+          "nifcif": {
+            "type": "string",
+            "xml": {
+              "name": "NIFCIF"
+            }
+          }
+        }
+      },
+      "DTIdentificacionRep": {
+        "required": [
+          "categoryrep",
+          "nifcifrep"
+        ],
+        "type": "object",
+        "properties": {
+          "categoryrep": {
+            "type": "string",
+            "xml": {
+              "name": "CATEGORY_REP"
+            }
+          },
+          "nifcifrep": {
+            "type": "string",
+            "xml": {
+              "name": "NIFCIF_REP"
+            }
+          }
+        }
+      },
+      "DTMINHAFPCCCAFNREQ": {
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO1"
+            }
+          },
+          "apellido2": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO2"
+            }
+          },
+          "comaut": {
+            "type": "string",
+            "xml": {
+              "name": "COMAUT"
+            }
+          },
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "documentofuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "DOCUMENTO_FUNCIONARIO"
+            }
+          },
+          "fechacon": {
+            "type": "string",
+            "xml": {
+              "name": "FECHACON"
+            }
+          },
+          "fechanac": {
+            "type": "string",
+            "xml": {
+              "name": "FECHANAC"
+            }
+          },
+          "idaut": {
+            "type": "string",
+            "xml": {
+              "name": "IDAUT"
+            }
+          },
+          "nombre": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE"
+            }
+          },
+          "nombrefuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_FUNCIONARIO"
+            }
+          },
+          "numexp": {
+            "type": "string",
+            "xml": {
+              "name": "NUMEXP"
+            }
+          },
+          "nutitulo": {
+            "type": "string",
+            "xml": {
+              "name": "NUTITULO"
+            }
+          },
+          "proc": {
+            "type": "string",
+            "xml": {
+              "name": "PROC"
+            }
+          },
+          "tipdoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPDOC"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          }
+        }
+      },
+      "DTMINHAFPCCCAFNRES": {
+        "type": "object",
+        "properties": {
+          "beneficiarios": {
+            "type": "array",
+            "xml": {
+              "name": "BENEFICIARIOS"
+            },
+            "items": {
+              "$ref": "#/components/schemas/BENEFICIARIOS"
+            }
+          },
+          "categoria": {
+            "type": "string",
+            "xml": {
+              "name": "CATEGORIA"
+            }
+          },
+          "comaut": {
+            "type": "string",
+            "xml": {
+              "name": "COMAUT"
+            }
+          },
+          "feccaduci": {
+            "type": "string",
+            "xml": {
+              "name": "FECCADUCI"
+            }
+          },
+          "fecexpedi": {
+            "type": "string",
+            "xml": {
+              "name": "FECEXPEDI"
+            }
+          },
+          "idpeticion": {
+            "type": "string",
+            "xml": {
+              "name": "IDPETICION"
+            }
+          },
+          "mensaje": {
+            "type": "string",
+            "xml": {
+              "name": "MENSAJE"
+            }
+          },
+          "numhij": {
+            "type": "string",
+            "xml": {
+              "name": "NUMHIJ"
+            }
+          },
+          "nutitulo": {
+            "type": "string",
+            "xml": {
+              "name": "NUTITULO"
+            }
+          },
+          "resul": {
+            "type": "string",
+            "xml": {
+              "name": "RESUL"
+            }
+          },
+          "vigente": {
+            "type": "string",
+            "xml": {
+              "name": "VIGENTE"
+            }
+          }
+        }
+      },
+      "DTProcedimiento": {
+        "required": [
+          "adjuntos",
+          "asunto",
+          "consejeria",
+          "datosprocedimiento",
+          "datossolicitante",
+          "identificacion",
+          "identificacionrep",
+          "idunico",
+          "noexpediente",
+          "provincia",
+          "registro",
+          "tipoprocedimiento",
+          "unidadorganica"
+        ],
+        "type": "object",
+        "properties": {
+          "adjuntos": {
+            "$ref": "#/components/schemas/ADJUNTOS"
+          },
+          "asudescripcion": {
+            "type": "string",
+            "xml": {
+              "name": "ASU_DESCRIPCION"
+            }
+          },
+          "asunto": {
+            "type": "string",
+            "xml": {
+              "name": "ASUNTO"
+            }
+          },
+          "consejeria": {
+            "type": "string",
+            "xml": {
+              "name": "CONSEJERIA"
+            }
+          },
+          "datospago": {
+            "$ref": "#/components/schemas/DATOSPAGO"
+          },
+          "datosprocedimiento": {
+            "$ref": "#/components/schemas/DATOSPROCEDIMIENTO"
+          },
+          "datossolicitante": {
+            "$ref": "#/components/schemas/DATOSSOLICITANTE"
+          },
+          "firma": {
+            "type": "string",
+            "xml": {
+              "name": "FIRMA"
+            }
+          },
+          "identificacion": {
+            "$ref": "#/components/schemas/DTIdentificacion"
+          },
+          "identificacionrep": {
+            "$ref": "#/components/schemas/DTIdentificacionRep"
+          },
+          "idunico": {
+            "type": "string",
+            "xml": {
+              "name": "ID_UNICO"
+            }
+          },
+          "noexpediente": {
+            "type": "string",
+            "xml": {
+              "name": "NO_EXPEDIENTE"
+            }
+          },
+          "provincia": {
+            "type": "string",
+            "xml": {
+              "name": "PROVINCIA"
+            }
+          },
+          "registro": {
+            "$ref": "#/components/schemas/REGISTRO"
+          },
+          "source": {
+            "type": "string",
+            "xml": {
+              "name": "SOURCE"
+            }
+          },
+          "tipoprocedimiento": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO_PROCEDIMIENTO"
+            }
+          },
+          "unidadorganica": {
+            "type": "string",
+            "xml": {
+              "name": "UNIDAD_ORGANICA"
+            }
+          }
+        }
+      },
+      "DTQUERY": {
+        "required": [
+          "query"
+        ],
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "xml": {
+              "name": "QUERY"
+            }
+          }
+        }
+      },
+      "DTSELECTBYNIFREQ": {
+        "type": "object",
+        "properties": {
+          "numerodocumento": {
+            "type": "string",
+            "xml": {
+              "name": "NUMERO_DOCUMENTO"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO_DOC"
+            }
+          }
+        }
+      },
+      "DTSELECTBYNIFV2REQ": {
+        "type": "object",
+        "properties": {
+          "numerodocumento": {
+            "type": "string",
+            "xml": {
+              "name": "NUMERO_DOCUMENTO"
+            }
+          },
+          "tipodocumento": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO_DOCUMENTO"
+            }
+          },
+          "tipoprocedimiento": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO_PROCEDIMIENTO"
+            }
+          }
+        }
+      },
+      "DTSEPESVDIDEFAREQ": {
+        "type": "object",
+        "properties": {
+          "apellido1TITULAR": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO1_TITULAR"
+            }
+          },
+          "apellido2TITULAR": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO2_TITULAR"
+            }
+          },
+          "docu": {
+            "type": "string",
+            "xml": {
+              "name": "DOCU"
+            }
+          },
+          "documentofuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "DOCUMENTO_FUNCIONARIO"
+            }
+          },
+          "idaut": {
+            "type": "string",
+            "xml": {
+              "name": "IDAUT"
+            }
+          },
+          "nombrefuncionario": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_FUNCIONARIO"
+            }
+          },
+          "nombretitular": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE_TITULAR"
+            }
+          },
+          "proc": {
+            "type": "string",
+            "xml": {
+              "name": "PROC"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          }
+        }
+      },
+      "DTSEPESVDIDEFARES": {
+        "type": "object",
+        "properties": {
+          "idpeticion": {
+            "type": "string",
+            "xml": {
+              "name": "IDPETICION"
+            }
+          },
+          "inscrito": {
+            "type": "string",
+            "xml": {
+              "name": "INSCRITO"
+            }
+          },
+          "mensaje": {
+            "type": "string",
+            "xml": {
+              "name": "MENSAJE"
+            }
+          },
+          "resul": {
+            "type": "string",
+            "xml": {
+              "name": "RESUL"
+            }
+          },
+          "ultimainscrip": {
+            "type": "string",
+            "xml": {
+              "name": "ULTIMAINSCRIP"
+            }
+          }
+        }
+      },
+      "DatosBeneficiariosFamiliaNumerosa": {
+        "type": "object",
+        "properties": {
+          "row": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatosBeneficiariosFamiliaNumerosaList"
+            }
+          }
+        }
+      },
+      "DatosBeneficiariosFamiliaNumerosaList": {
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string"
+          },
+          "apellido2": {
+            "type": "string"
+          },
+          "documentacion": {
+            "type": "string"
+          },
+          "fecha_nacimiento": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "tipo_documentacion": {
+            "type": "string"
+          },
+          "titular": {
+            "type": "string"
+          }
+        }
+      },
+      "DatosEspecificosFamiliaNumerosa": {
+        "type": "object",
+        "properties": {
+          "beneficiarios": {
+            "$ref": "#/components/schemas/DatosBeneficiariosFamiliaNumerosa"
+          },
+          "datos_titulo": {
+            "$ref": "#/components/schemas/DatosTituloFamiliaNumerosa"
+          }
+        }
+      },
+      "DatosFamiliaNumerosa": {
+        "type": "object",
+        "properties": {
+          "codError": {
+            "type": "string"
+          },
+          "datos": {
+            "type": "string"
+          },
+          "descError": {
+            "type": "string"
+          },
+          "fechaValidezDesde": {
+            "type": "string"
+          },
+          "fechaValidezHasta": {
+            "type": "string"
+          },
+          "numeroTitulo": {
+            "type": "string"
+          }
+        }
+      },
+      "DatosRepresentante": {
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string"
+          },
+          "apellido2": {
+            "type": "string"
+          },
+          "nifcif": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "tipodoc": {
+            "type": "string"
+          }
+        }
+      },
+      "DatosTituloFamiliaNumerosa": {
+        "type": "object",
+        "properties": {
+          "row": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatosTituloFamiliaNumerosaList"
+            }
+          }
+        }
+      },
+      "DatosTituloFamiliaNumerosaList": {
+        "type": "object",
+        "properties": {
+          "categoria": {
+            "type": "string"
+          },
+          "codigo_comunidad_automa": {
+            "type": "string"
+          },
+          "fecha_caducidad": {
+            "type": "string"
+          },
+          "fecha_efecto": {
+            "type": "string"
+          },
+          "numero_hijos": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numero_titulo": {
+            "type": "string"
+          },
+          "titulo_vigente": {
+            "type": "string"
+          }
+        }
+      },
+      "DocumentoRegistro": {
+        "type": "object",
+        "properties": {
+          "algoritmo": {
+            "type": "string"
+          },
+          "fileSize": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          }
+        }
+      },
+      "ELEMENTO": {
+        "type": "object",
+        "properties": {
+          "centro": {
+            "type": "string",
+            "xml": {
+              "name": "CENTRO"
+            }
+          },
+          "codcen": {
+            "type": "string",
+            "xml": {
+              "name": "CODCEN"
+            }
+          },
+          "codpaisexpedicion": {
+            "type": "string",
+            "xml": {
+              "name": "CODPAISEXPEDICION"
+            }
+          },
+          "codtipotitulo": {
+            "type": "string",
+            "xml": {
+              "name": "CODTIPOTITULO"
+            }
+          },
+          "codtitulacion": {
+            "type": "string",
+            "xml": {
+              "name": "CODTITULACION"
+            }
+          },
+          "fecexp": {
+            "type": "string",
+            "xml": {
+              "name": "FECEXP"
+            }
+          },
+          "fecfin": {
+            "type": "string",
+            "xml": {
+              "name": "FECFIN"
+            }
+          },
+          "ley": {
+            "type": "string",
+            "xml": {
+              "name": "LEY"
+            }
+          },
+          "nivel": {
+            "type": "string",
+            "xml": {
+              "name": "NIVEL"
+            }
+          },
+          "nordlib": {
+            "type": "string",
+            "xml": {
+              "name": "NORDLIB"
+            }
+          },
+          "nregaut": {
+            "type": "string",
+            "xml": {
+              "name": "NREGAUT"
+            }
+          },
+          "nregmec": {
+            "type": "string",
+            "xml": {
+              "name": "NREGMEC"
+            }
+          },
+          "nregnac": {
+            "type": "string",
+            "xml": {
+              "name": "NREGNAC"
+            }
+          },
+          "numfol": {
+            "type": "string",
+            "xml": {
+              "name": "NUMFOL"
+            }
+          },
+          "numlib": {
+            "type": "string",
+            "xml": {
+              "name": "NUMLIB"
+            }
+          },
+          "paisexpedicion": {
+            "type": "string",
+            "xml": {
+              "name": "PAISEXPEDICION"
+            }
+          },
+          "provtit": {
+            "type": "string",
+            "xml": {
+              "name": "PROVTIT"
+            }
+          },
+          "tipoest": {
+            "type": "string",
+            "xml": {
+              "name": "TIPOEST"
+            }
+          },
+          "tipotit": {
+            "type": "string",
+            "xml": {
+              "name": "TIPOTIT"
+            }
+          },
+          "titulacion": {
+            "type": "string",
+            "xml": {
+              "name": "TITULACION"
+            }
+          }
+        }
+      },
+      "ETLISTDOCS": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZCSLISTADODOCSEXPTE"
+            }
+          }
+        }
+      },
+      "ETRETURN": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BAPIRET2"
+            }
+          }
+        }
+      },
+      "EXPEDIENTES": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZCSAUXSTEXPEDIENTES"
+            }
+          }
+        }
+      },
+      "Hecho": {
+        "type": "object",
+        "properties": {
+          "idHecho": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreHecho": {
+            "type": "string"
+          },
+          "seleccionado": {
+            "type": "boolean"
+          }
+        }
+      },
+      "InfoError": {
+        "type": "object",
+        "properties": {
+          "errores": {
+            "type": "array",
+            "description": "Listado de errores reportados por la operación",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          },
+          "id-error": {
+            "type": "string",
+            "description": "Identificador único del error ocurrido"
+          }
+        },
+        "description": "Información de error asociada a la respuesta"
+      },
+      "LISTAVEHICULOS": {
+        "type": "object",
+        "properties": {
+          "vehiculo": {
+            "type": "array",
+            "xml": {
+              "name": "VEHICULO"
+            },
+            "items": {
+              "$ref": "#/components/schemas/VEHICULO"
+            }
+          }
+        }
+      },
+      "ListaHechos": {
+        "type": "object",
+        "properties": {
+          "listaHechos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hecho"
+            }
+          }
+        }
+      },
+      "ListaHechosAgente": {
+        "type": "object",
+        "properties": {
+          "idAgente": {
+            "type": "string"
+          },
+          "listaHechos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hecho"
+            }
+          }
+        }
+      },
+      "ListaTramitesPorHechos": {
+        "type": "object",
+        "properties": {
+          "listaTramitesPorHechos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TramitesPorHecho"
+            }
+          }
+        }
+      },
+      "PDATOS": {
+        "required": [
+          "apellido1",
+          "apellido2",
+          "asuid",
+          "descrip",
+          "idunico",
+          "nombre",
+          "numdoc",
+          "uniorg"
+        ],
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO1"
+            }
+          },
+          "apellido2": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO2"
+            }
+          },
+          "asuid": {
+            "type": "string",
+            "xml": {
+              "name": "ASU_ID"
+            }
+          },
+          "descrip": {
+            "type": "string",
+            "xml": {
+              "name": "DESCRIP"
+            }
+          },
+          "idunico": {
+            "type": "string",
+            "xml": {
+              "name": "ID_UNICO"
+            }
+          },
+          "nombre": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE"
+            }
+          },
+          "numdoc": {
+            "type": "string",
+            "xml": {
+              "name": "NUMDOC"
+            }
+          },
+          "uniorg": {
+            "type": "string",
+            "xml": {
+              "name": "UNIORG"
+            }
+          }
+        }
+      },
+      "PREGISTRO": {
+        "required": [
+          "apellido1",
+          "apellido2",
+          "asuid",
+          "descrip",
+          "idunico",
+          "nombre",
+          "numdoc",
+          "uniorg"
+        ],
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO1"
+            }
+          },
+          "apellido2": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO2"
+            }
+          },
+          "asuid": {
+            "type": "string",
+            "xml": {
+              "name": "ASU_ID"
+            }
+          },
+          "descrip": {
+            "type": "string",
+            "xml": {
+              "name": "DESCRIP"
+            }
+          },
+          "idunico": {
+            "type": "string",
+            "xml": {
+              "name": "ID_UNICO"
+            }
+          },
+          "nombre": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE"
+            }
+          },
+          "numdoc": {
+            "type": "string",
+            "xml": {
+              "name": "NUMDOC"
+            }
+          },
+          "uniorg": {
+            "type": "string",
+            "xml": {
+              "name": "UNIORG"
+            }
+          }
+        }
+      },
+      "PUBLICACIONPORTAL": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZCSSTPUBPORTAL"
+            }
+          }
+        }
+      },
+      "PkpassFamiliaNumerosa": {
+        "type": "object",
+        "properties": {
+          "codError": {
+            "type": "string"
+          },
+          "datos": {
+            "type": "string"
+          },
+          "descError": {
+            "type": "string"
+          },
+          "pkpass": {
+            "type": "string"
+          }
+        }
+      },
+      "REGISTRO": {
+        "required": [
+          "fecha",
+          "noregistro"
+        ],
+        "type": "object",
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "xml": {
+              "name": "FECHA"
+            }
+          },
+          "noregistro": {
+            "type": "string",
+            "xml": {
+              "name": "NO_REGISTRO"
+            }
+          }
+        }
+      },
+      "RESULTADOPROCEDIMIENTO": {
+        "required": [
+          "datosregistro",
+          "estado",
+          "idregistro",
+          "idunico",
+          "mensaje"
+        ],
+        "type": "object",
+        "properties": {
+          "datosregistro": {
+            "$ref": "#/components/schemas/DATOSREGISTRO"
+          },
+          "estado": {
+            "type": "string",
+            "xml": {
+              "name": "ESTADO"
+            }
+          },
+          "idregistro": {
+            "type": "string",
+            "xml": {
+              "name": "ID_REGISTRO"
+            }
+          },
+          "idunico": {
+            "type": "string",
+            "xml": {
+              "name": "ID_UNICO"
+            }
+          },
+          "mensaje": {
+            "type": "string",
+            "xml": {
+              "name": "MENSAJE"
+            }
+          }
+        }
+      },
+      "RETURNS": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BAPIRET2"
+            }
+          }
+        }
+      },
+      "RegistrarFicheroRequest": {
+        "type": "object",
+        "properties": {
+          "confirmarProcedimiento": {
+            "$ref": "#/components/schemas/CONFIRMARPROCEDIMIENTO"
+          },
+          "consejeriaTramitadora": {
+            "type": "string"
+          },
+          "datosRepresentante": {
+            "$ref": "#/components/schemas/DatosRepresentante"
+          },
+          "documentos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentoRegistro"
+            }
+          },
+          "esPorContraste": {
+            "type": "boolean"
+          },
+          "estadoTramitacion": {
+            "type": "string"
+          },
+          "fechaCierreTramitacion": {
+            "type": "string"
+          },
+          "fechaInicioTramitacion": {
+            "type": "string"
+          },
+          "oficinaTramitadora": {
+            "type": "string"
+          },
+          "procedimiento": {
+            "type": "string"
+          },
+          "xmlRegistro": {
+            "$ref": "#/components/schemas/XMLRegistro"
+          }
+        }
+      },
+      "RequestFachadaDiscapacidadInterm": {
+        "type": "object",
+        "properties": {
+          "doc_funcionario": {
+            "type": "string"
+          },
+          "docu": {
+            "type": "string"
+          },
+          "nombre_funcionario": {
+            "type": "string"
+          },
+          "tipodoc": {
+            "type": "string"
+          }
+        }
+      },
+      "RequestFachadaFamiliaNumerosaInterm": {
+        "type": "object",
+        "properties": {
+          "doc_funcionario": {
+            "type": "string"
+          },
+          "docu": {
+            "type": "string"
+          },
+          "idaut": {
+            "type": "string"
+          },
+          "nombre_funcionario": {
+            "type": "string"
+          },
+          "proc": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "tipodoc": {
+            "type": "string"
+          }
+        }
+      },
+      "ResponseFamiliaNumerosaIntermediacion": {
+        "type": "object",
+        "properties": {
+          "codestado": {
+            "type": "string"
+          },
+          "datosespecificos": {
+            "$ref": "#/components/schemas/DatosEspecificosFamiliaNumerosa"
+          },
+          "docu": {
+            "type": "string"
+          },
+          "idpeticion": {
+            "type": "string"
+          },
+          "mensaje": {
+            "type": "string"
+          },
+          "tipodoc": {
+            "type": "string"
+          }
+        }
+      },
+      "Respuesta": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "object",
+            "description": "Objeto devuelto en el payload"
+          },
+          "codigo-respuesta": {
+            "type": "string",
+            "description": "Código asociado a la respuesta obtenida"
+          },
+          "info-error": {
+            "$ref": "#/components/schemas/InfoError"
+          },
+          "mensaje-respuesta": {
+            "type": "string",
+            "description": "Mensaje informativo de la respuesta obtenida"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Momento en que se registró la respuesta",
+            "format": "date-time"
+          }
+        },
+        "description": "Respuesta de la operación"
+      },
+      "RespuestaFachadaFamiliaNumerosaInterm": {
+        "type": "object",
+        "properties": {
+          "respuesta": {
+            "$ref": "#/components/schemas/ResponseFamiliaNumerosaIntermediacion"
+          }
+        },
+        "description": "Objeto devuelto en el payload"
+      },
+      "RespuestaRespuestaFachadaFamiliaNumerosaInterm": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/RespuestaFachadaFamiliaNumerosaInterm"
+          },
+          "codigo-respuesta": {
+            "type": "string",
+            "description": "Código asociado a la respuesta obtenida"
+          },
+          "info-error": {
+            "$ref": "#/components/schemas/InfoError"
+          },
+          "mensaje-respuesta": {
+            "type": "string",
+            "description": "Mensaje informativo de la respuesta obtenida"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Momento en que se registró la respuesta",
+            "format": "date-time"
+          }
+        },
+        "description": "Respuesta de la operación"
+      },
+      "TFAQ": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZCSSFAQ"
+            }
+          }
+        }
+      },
+      "TTEXTOSRESPUESTA": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZCSSTFAQ"
+            }
+          }
+        }
+      },
+      "Tramite": {
+        "type": "object",
+        "properties": {
+          "fechaPresentacionFin": {
+            "type": "string"
+          },
+          "fechaPresentacionIni": {
+            "type": "string"
+          },
+          "idTramite": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "idUnidadResponsable": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreTramite": {
+            "type": "string"
+          },
+          "nombreUnidadResponsable": {
+            "type": "string"
+          }
+        }
+      },
+      "TramitesPorHecho": {
+        "type": "object",
+        "properties": {
+          "idHecho": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreHecho": {
+            "type": "string"
+          },
+          "tramites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tramite"
+            }
+          }
+        }
+      },
+      "VEHICULO": {
+        "type": "object",
+        "properties": {
+          "matricula": {
+            "type": "string",
+            "xml": {
+              "name": "MATRICULA"
+            }
+          }
+        }
+      },
+      "XMLRegistro": {
+        "type": "object",
+        "properties": {
+          "xmlClave": {
+            "type": "string"
+          }
+        }
+      },
+      "ZCSAUXSTEXPEDIENTES": {
+        "type": "object",
+        "properties": {
+          "adjuntar": {
+            "type": "string",
+            "xml": {
+              "name": "ADJUNTAR"
+            }
+          },
+          "certific": {
+            "type": "string",
+            "xml": {
+              "name": "CERTIFIC"
+            }
+          },
+          "consej": {
+            "type": "string",
+            "xml": {
+              "name": "CONSEJ"
+            }
+          },
+          "desconsej": {
+            "type": "string",
+            "xml": {
+              "name": "DES_CONSEJ"
+            }
+          },
+          "descrip": {
+            "type": "string",
+            "xml": {
+              "name": "DESCRIP"
+            }
+          },
+          "desfam": {
+            "type": "string",
+            "xml": {
+              "name": "DES_FAM"
+            }
+          },
+          "desproc": {
+            "type": "string",
+            "xml": {
+              "name": "DES_PROC"
+            }
+          },
+          "ejeexp": {
+            "type": "string",
+            "xml": {
+              "name": "EJEEXP"
+            }
+          },
+          "estado": {
+            "type": "string",
+            "xml": {
+              "name": "ESTADO"
+            }
+          },
+          "estadosede": {
+            "type": "string",
+            "xml": {
+              "name": "ESTADO_SEDE"
+            }
+          },
+          "familia": {
+            "type": "string",
+            "xml": {
+              "name": "FAMILIA"
+            }
+          },
+          "fechafin": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAFIN"
+            }
+          },
+          "fechareg": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAREG"
+            }
+          },
+          "numexp": {
+            "type": "string",
+            "xml": {
+              "name": "NUMEXP"
+            }
+          },
+          "registro": {
+            "type": "string",
+            "xml": {
+              "name": "REGISTRO"
+            }
+          },
+          "tipoproc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPOPROC"
+            }
+          },
+          "titulo": {
+            "type": "string",
+            "xml": {
+              "name": "TITULO"
+            }
+          }
+        }
+      },
+      "ZCSLISTADODOCSEXPTE": {
+        "type": "object",
+        "properties": {
+          "clase": {
+            "type": "string",
+            "xml": {
+              "name": "CLASE"
+            }
+          },
+          "codmod": {
+            "type": "string",
+            "xml": {
+              "name": "CODMOD"
+            }
+          },
+          "datarege": {
+            "type": "string",
+            "xml": {
+              "name": "DATAREG_E"
+            }
+          },
+          "descrip": {
+            "type": "string",
+            "xml": {
+              "name": "DESCRIP"
+            }
+          },
+          "ejeexp": {
+            "type": "string",
+            "xml": {
+              "name": "EJEEXP"
+            }
+          },
+          "fechadoc": {
+            "type": "string",
+            "xml": {
+              "name": "FECHADOC"
+            }
+          },
+          "horarege": {
+            "type": "string",
+            "xml": {
+              "name": "HORAREG_E"
+            }
+          },
+          "idtransaccion": {
+            "type": "string",
+            "xml": {
+              "name": "ID_TRANSACCION"
+            }
+          },
+          "numdoc": {
+            "type": "string",
+            "xml": {
+              "name": "NUMDOC"
+            }
+          },
+          "numexp": {
+            "type": "string",
+            "xml": {
+              "name": "NUMEXP"
+            }
+          },
+          "numrege": {
+            "type": "string",
+            "xml": {
+              "name": "NUMREG_E"
+            }
+          }
+        }
+      },
+      "ZCSLISTARTIPOSDOC": {
+        "required": [
+          "zlistadoc"
+        ],
+        "type": "object",
+        "properties": {
+          "zlistadoc": {
+            "$ref": "#/components/schemas/ZLISTADOC"
+          }
+        },
+        "xml": {
+          "name": "Z_CS_LISTAR_TIPOSDOC",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCCONSULTAFAQ": {
+        "required": [
+          "idatos",
+          "returns",
+          "tfaq"
+        ],
+        "type": "object",
+        "properties": {
+          "idatos": {
+            "$ref": "#/components/schemas/ZCSSPORTAL"
+          },
+          "returns": {
+            "$ref": "#/components/schemas/RETURNS"
+          },
+          "tfaq": {
+            "$ref": "#/components/schemas/TFAQ"
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_CONSULTA_FAQ",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCCONSULTAFAQResponse": {
+        "required": [
+          "returns",
+          "tfaq"
+        ],
+        "type": "object",
+        "properties": {
+          "isubrc": {
+            "type": "integer",
+            "xml": {
+              "name": "I_SUBRC"
+            }
+          },
+          "return": {
+            "type": "string"
+          },
+          "returns": {
+            "$ref": "#/components/schemas/RETURNS"
+          },
+          "tfaq": {
+            "$ref": "#/components/schemas/TFAQ"
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_CONSULTA_FAQ.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCDOCSFIRMADOSPFEXPTE": {
+        "type": "object",
+        "properties": {
+          "etlistdocs": {
+            "$ref": "#/components/schemas/ETLISTDOCS"
+          },
+          "etreturn": {
+            "$ref": "#/components/schemas/ETRETURN"
+          },
+          "ipclase": {
+            "type": "string",
+            "xml": {
+              "name": "IP_CLASE"
+            }
+          },
+          "ipejeexp": {
+            "type": "string",
+            "xml": {
+              "name": "IP_EJEEXP"
+            }
+          },
+          "ipnumexp": {
+            "type": "string",
+            "xml": {
+              "name": "IP_NUMEXP"
+            }
+          },
+          "iprefdoc": {
+            "type": "string",
+            "xml": {
+              "name": "IP_REFDOC"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_DOCS_FIRMADOS_PF_EXPTE",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCDOCSFIRMADOSPFEXPTEResponse": {
+        "type": "object",
+        "properties": {
+          "etlistdocs": {
+            "$ref": "#/components/schemas/ETLISTDOCS"
+          },
+          "etreturn": {
+            "$ref": "#/components/schemas/ETRETURN"
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_DOCS_FIRMADOS_PF_EXPTE.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCMISEXPEDIENTES": {
+        "required": [
+          "pnumdoc"
+        ],
+        "type": "object",
+        "properties": {
+          "pdescproc": {
+            "type": "string",
+            "xml": {
+              "name": "P_DESC_PROC"
+            }
+          },
+          "pestado": {
+            "type": "string",
+            "xml": {
+              "name": "P_ESTADO"
+            }
+          },
+          "pfechadesde": {
+            "type": "string",
+            "xml": {
+              "name": "P_FECHA_DESDE"
+            }
+          },
+          "pfechahasta": {
+            "type": "string",
+            "xml": {
+              "name": "P_FECHA_HASTA"
+            }
+          },
+          "pnumdoc": {
+            "type": "string",
+            "xml": {
+              "name": "P_NUMDOC"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_MIS_EXPEDIENTES",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCMISEXPEDIENTESResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "xml": {
+              "name": "ERROR"
+            }
+          },
+          "expedientes": {
+            "$ref": "#/components/schemas/EXPEDIENTES"
+          },
+          "subrc": {
+            "type": "integer",
+            "xml": {
+              "name": "SUBRC"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_MIS_EXPEDIENTES.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCPUBLISELECTBYNIFResponse": {
+        "type": "object",
+        "properties": {
+          "isubrc": {
+            "type": "integer",
+            "xml": {
+              "name": "I_SUBRC"
+            }
+          },
+          "publicacionportal": {
+            "$ref": "#/components/schemas/PUBLICACIONPORTAL"
+          },
+          "resultado": {
+            "type": "string",
+            "xml": {
+              "name": "RESULTADO"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_PUBLI_SELECT_BY_NIF.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCPUBLISELECTBYNUMEXP": {
+        "required": [
+          "pnumdoc",
+          "pnumexp",
+          "ptipodoc"
+        ],
+        "type": "object",
+        "properties": {
+          "pnumdoc": {
+            "type": "string",
+            "xml": {
+              "name": "P_NUMDOC"
+            }
+          },
+          "pnumexp": {
+            "type": "string",
+            "xml": {
+              "name": "P_NUMEXP"
+            }
+          },
+          "ptipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "P_TIPODOC"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_PUBLI_SELECT_BY_NUMEXP",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCPUBLISELECTBYNUMEXPResponse": {
+        "type": "object",
+        "properties": {
+          "adjuntar": {
+            "type": "string",
+            "xml": {
+              "name": "ADJUNTAR"
+            }
+          },
+          "isubrc": {
+            "type": "integer",
+            "xml": {
+              "name": "I_SUBRC"
+            }
+          },
+          "publicacionportal": {
+            "$ref": "#/components/schemas/ZCSSTPUBPORTAL"
+          },
+          "resultado": {
+            "type": "string",
+            "xml": {
+              "name": "RESULTADO"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_PUBLI_SELECT_BY_NUMEXP.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCPUBLISELECTBYNUMREG": {
+        "required": [
+          "pnumdoc",
+          "pregistro",
+          "ptipodoc"
+        ],
+        "type": "object",
+        "properties": {
+          "pnumdoc": {
+            "type": "string",
+            "xml": {
+              "name": "P_NUMDOC"
+            }
+          },
+          "pregistro": {
+            "type": "string",
+            "xml": {
+              "name": "P_REGISTRO"
+            }
+          },
+          "ptipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "P_TIPODOC"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_PUBLI_SELECT_BY_NUMREG",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRFCPUBLISELECTBYNUMREGResponse": {
+        "type": "object",
+        "properties": {
+          "adjuntar": {
+            "type": "string",
+            "xml": {
+              "name": "ADJUNTAR"
+            }
+          },
+          "isubrc": {
+            "type": "integer",
+            "xml": {
+              "name": "I_SUBRC"
+            }
+          },
+          "publicacionportal": {
+            "$ref": "#/components/schemas/PUBLICACIONPORTAL"
+          },
+          "resultado": {
+            "type": "string",
+            "xml": {
+              "name": "RESULTADO"
+            }
+          }
+        },
+        "xml": {
+          "name": "ZCS_RFC_PUBLI_SELECT_BY_NUMREG.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRMOBTRESPUESTAEXP": {
+        "required": [
+          "irefdoc",
+          "ttextosrespuesta"
+        ],
+        "type": "object",
+        "properties": {
+          "irefdoc": {
+            "type": "string",
+            "xml": {
+              "name": "I_REFDOC"
+            }
+          },
+          "ttextosrespuesta": {
+            "$ref": "#/components/schemas/TTEXTOSRESPUESTA"
+          }
+        },
+        "xml": {
+          "name": "Z_CS_RM_OBT_RESPUESTA_EXP",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSRMOBTRESPUESTAEXPResponse": {
+        "required": [
+          "ttextosrespuesta"
+        ],
+        "type": "object",
+        "properties": {
+          "esubrc": {
+            "type": "integer",
+            "xml": {
+              "name": "E_SUBRC"
+            }
+          },
+          "return": {
+            "type": "string"
+          },
+          "ttextosrespuesta": {
+            "$ref": "#/components/schemas/TTEXTOSRESPUESTA"
+          }
+        },
+        "xml": {
+          "name": "Z_CS_RM_OBT_RESPUESTA_EXP.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSSFAQ": {
+        "type": "object",
+        "properties": {
+          "numseq": {
+            "type": "string",
+            "xml": {
+              "name": "NUMSEQ"
+            }
+          },
+          "textarea": {
+            "type": "string",
+            "xml": {
+              "name": "TEXTAREA"
+            }
+          },
+          "textlinea": {
+            "type": "string",
+            "xml": {
+              "name": "TEXTLINEA"
+            }
+          }
+        }
+      },
+      "ZCSSPORTAL": {
+        "type": "object",
+        "properties": {
+          "ejeexp": {
+            "type": "string",
+            "xml": {
+              "name": "EJEEXP"
+            }
+          },
+          "numexp": {
+            "type": "string",
+            "xml": {
+              "name": "NUMEXP"
+            }
+          },
+          "subfam": {
+            "type": "string",
+            "xml": {
+              "name": "SUBFAM"
+            }
+          }
+        }
+      },
+      "ZCSSTFAQ": {
+        "type": "object",
+        "properties": {
+          "numseq": {
+            "type": "string",
+            "xml": {
+              "name": "NUMSEQ"
+            }
+          },
+          "textarea": {
+            "type": "string",
+            "xml": {
+              "name": "TEXTAREA"
+            }
+          },
+          "textlinea": {
+            "type": "string",
+            "xml": {
+              "name": "TEXTLINEA"
+            }
+          }
+        }
+      },
+      "ZCSSTPUBPORTAL": {
+        "type": "object",
+        "properties": {
+          "apellido1": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO1"
+            }
+          },
+          "apellido2": {
+            "type": "string",
+            "xml": {
+              "name": "APELLIDO2"
+            }
+          },
+          "asunto": {
+            "type": "string",
+            "xml": {
+              "name": "ASUNTO"
+            }
+          },
+          "bezei": {
+            "type": "string",
+            "xml": {
+              "name": "BEZEI"
+            }
+          },
+          "bland": {
+            "type": "string",
+            "xml": {
+              "name": "BLAND"
+            }
+          },
+          "calle": {
+            "type": "string",
+            "xml": {
+              "name": "CALLE"
+            }
+          },
+          "certific": {
+            "type": "string",
+            "xml": {
+              "name": "CERTIFIC"
+            }
+          },
+          "codpos": {
+            "type": "string",
+            "xml": {
+              "name": "CODPOS"
+            }
+          },
+          "consej": {
+            "type": "string",
+            "xml": {
+              "name": "CONSEJ"
+            }
+          },
+          "cont1": {
+            "type": "string",
+            "xml": {
+              "name": "CONT1"
+            }
+          },
+          "cont2": {
+            "type": "string",
+            "xml": {
+              "name": "CONT2"
+            }
+          },
+          "cont3": {
+            "type": "string",
+            "xml": {
+              "name": "CONT3"
+            }
+          },
+          "cont4": {
+            "type": "string",
+            "xml": {
+              "name": "CONT4"
+            }
+          },
+          "cont5": {
+            "type": "string",
+            "xml": {
+              "name": "CONT5"
+            }
+          },
+          "contacto": {
+            "type": "string",
+            "xml": {
+              "name": "CONTACTO"
+            }
+          },
+          "desasunto": {
+            "type": "string",
+            "xml": {
+              "name": "DES_ASUNTO"
+            }
+          },
+          "desconsej": {
+            "type": "string",
+            "xml": {
+              "name": "DES_CONSEJ"
+            }
+          },
+          "descrip": {
+            "type": "string",
+            "xml": {
+              "name": "DESCRIP"
+            }
+          },
+          "desfam": {
+            "type": "string",
+            "xml": {
+              "name": "DES_FAM"
+            }
+          },
+          "desproc": {
+            "type": "string",
+            "xml": {
+              "name": "DES_PROC"
+            }
+          },
+          "destipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "DES_TIPODOC"
+            }
+          },
+          "destipres": {
+            "type": "string",
+            "xml": {
+              "name": "DES_TIPRES"
+            }
+          },
+          "destipvia": {
+            "type": "string",
+            "xml": {
+              "name": "DES_TIPVIA"
+            }
+          },
+          "desuniorg": {
+            "type": "string",
+            "xml": {
+              "name": "DES_UNIORG"
+            }
+          },
+          "dmbrt": {
+            "type": "number",
+            "xml": {
+              "name": "DMBRT"
+            }
+          },
+          "documentos": {
+            "$ref": "#/components/schemas/ZCSSTTBDOCUMENTO"
+          },
+          "ejeexp": {
+            "type": "string",
+            "xml": {
+              "name": "EJEEXP"
+            }
+          },
+          "email": {
+            "type": "string",
+            "xml": {
+              "name": "EMAIL"
+            }
+          },
+          "estado": {
+            "type": "string",
+            "xml": {
+              "name": "ESTADO"
+            }
+          },
+          "familia": {
+            "type": "string",
+            "xml": {
+              "name": "FAMILIA"
+            }
+          },
+          "fechafin": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAFIN"
+            }
+          },
+          "fechaini": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAINI"
+            }
+          },
+          "fechainipag": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAINIPAG"
+            }
+          },
+          "fechains": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAINS"
+            }
+          },
+          "fechainscrip": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAINSCRIP"
+            }
+          },
+          "fechapag": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAPAG"
+            }
+          },
+          "fechareg": {
+            "type": "string",
+            "xml": {
+              "name": "FECHAREG"
+            }
+          },
+          "inicio": {
+            "type": "string",
+            "xml": {
+              "name": "INICIO"
+            }
+          },
+          "label1": {
+            "type": "string",
+            "xml": {
+              "name": "LABEL1"
+            }
+          },
+          "label2": {
+            "type": "string",
+            "xml": {
+              "name": "LABEL2"
+            }
+          },
+          "label3": {
+            "type": "string",
+            "xml": {
+              "name": "LABEL3"
+            }
+          },
+          "label4": {
+            "type": "string",
+            "xml": {
+              "name": "LABEL4"
+            }
+          },
+          "label5": {
+            "type": "string",
+            "xml": {
+              "name": "LABEL5"
+            }
+          },
+          "land1": {
+            "type": "string",
+            "xml": {
+              "name": "LAND1"
+            }
+          },
+          "landx50": {
+            "type": "string",
+            "xml": {
+              "name": "LANDX50"
+            }
+          },
+          "ncalle": {
+            "type": "string",
+            "xml": {
+              "name": "NCALLE"
+            }
+          },
+          "nombre": {
+            "type": "string",
+            "xml": {
+              "name": "NOMBRE"
+            }
+          },
+          "numdoc": {
+            "type": "string",
+            "xml": {
+              "name": "NUMDOC"
+            }
+          },
+          "numexp": {
+            "type": "string",
+            "xml": {
+              "name": "NUMEXP"
+            }
+          },
+          "ort01": {
+            "type": "string",
+            "xml": {
+              "name": "ORT01"
+            }
+          },
+          "partner": {
+            "type": "string",
+            "xml": {
+              "name": "PARTNER"
+            }
+          },
+          "registro": {
+            "type": "string",
+            "xml": {
+              "name": "REGISTRO"
+            }
+          },
+          "resolucion": {
+            "type": "string",
+            "xml": {
+              "name": "RESOLUCION"
+            }
+          },
+          "source": {
+            "type": "string",
+            "xml": {
+              "name": "SOURCE"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          },
+          "tipoproc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPOPROC"
+            }
+          },
+          "tipvia": {
+            "type": "string",
+            "xml": {
+              "name": "TIPVIA"
+            }
+          },
+          "titulo": {
+            "type": "string",
+            "xml": {
+              "name": "TITULO"
+            }
+          },
+          "tlfax": {
+            "type": "string",
+            "xml": {
+              "name": "TLFAX"
+            }
+          },
+          "tlfno": {
+            "type": "string",
+            "xml": {
+              "name": "TLFNO"
+            }
+          },
+          "uniorg": {
+            "type": "string",
+            "xml": {
+              "name": "UNIORG"
+            }
+          },
+          "waers": {
+            "type": "string",
+            "xml": {
+              "name": "WAERS"
+            }
+          },
+          "zzbezei": {
+            "type": "string",
+            "xml": {
+              "name": "ZZBEZEI"
+            }
+          }
+        }
+      },
+      "ZCSSTTBDOCUMENTO": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZCSTBDOCUMENTO"
+            }
+          }
+        }
+      },
+      "ZCSTBDOCUMENTO": {
+        "type": "object",
+        "properties": {
+          "ejeexp": {
+            "type": "string",
+            "xml": {
+              "name": "EJEEXP"
+            }
+          },
+          "iddoc": {
+            "type": "string",
+            "xml": {
+              "name": "IDDOC"
+            }
+          },
+          "numexp": {
+            "type": "string",
+            "xml": {
+              "name": "NUMEXP"
+            }
+          },
+          "tipoproc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPOPROC"
+            }
+          }
+        }
+      },
+      "ZCSTBTDOCFIRMA": {
+        "type": "object",
+        "properties": {
+          "codtdf": {
+            "type": "string",
+            "xml": {
+              "name": "CODTDF"
+            }
+          },
+          "dentdf": {
+            "type": "string",
+            "xml": {
+              "name": "DENTDF"
+            }
+          }
+        }
+      },
+      "ZCSVEC": {
+        "required": [
+          "codtdf",
+          "coduo",
+          "datfirma",
+          "desdoc",
+          "firma",
+          "idaplic",
+          "idprop",
+          "origen",
+          "tipo",
+          "tipodoc"
+        ],
+        "type": "object",
+        "properties": {
+          "codtdf": {
+            "type": "string",
+            "xml": {
+              "name": "CODTDF"
+            }
+          },
+          "coduo": {
+            "type": "string",
+            "xml": {
+              "name": "CODUO"
+            }
+          },
+          "datfirma": {
+            "type": "string",
+            "xml": {
+              "name": "DATFIRMA"
+            }
+          },
+          "desdoc": {
+            "type": "string",
+            "xml": {
+              "name": "DESDOC"
+            }
+          },
+          "firma": {
+            "type": "string",
+            "xml": {
+              "name": "FIRMA"
+            }
+          },
+          "idaplic": {
+            "type": "string",
+            "xml": {
+              "name": "IDAPLIC"
+            }
+          },
+          "idprop": {
+            "type": "string",
+            "xml": {
+              "name": "IDPROP"
+            }
+          },
+          "origen": {
+            "type": "string",
+            "xml": {
+              "name": "ORIGEN"
+            }
+          },
+          "tipo": {
+            "type": "string",
+            "xml": {
+              "name": "TIPO"
+            }
+          },
+          "tipodoc": {
+            "type": "string",
+            "xml": {
+              "name": "TIPODOC"
+            }
+          }
+        },
+        "xml": {
+          "name": "Z_CS_VEC",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZCSVECResponse": {
+        "type": "object",
+        "properties": {
+          "certificado": {
+            "type": "string",
+            "xml": {
+              "name": "CERTIFICADO"
+            }
+          },
+          "denerror": {
+            "type": "string",
+            "xml": {
+              "name": "DENERROR"
+            }
+          },
+          "idtrans": {
+            "type": "string",
+            "xml": {
+              "name": "IDTRANS"
+            }
+          },
+          "resul": {
+            "type": "string",
+            "xml": {
+              "name": "RESUL"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "xml": {
+              "name": "SUBJECT"
+            }
+          },
+          "uriformava": {
+            "type": "string",
+            "xml": {
+              "name": "URIFORMAVA"
+            }
+          },
+          "uritipofirma": {
+            "type": "string",
+            "xml": {
+              "name": "URITIPOFIRMA"
+            }
+          }
+        },
+        "xml": {
+          "name": "Z_CS_VEC.Response",
+          "namespace": "urn:sap-com:document:sap:rfc:functions"
+        }
+      },
+      "ZLISTADOC": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZCSTBTDOCFIRMA"
+            }
+          }
+        }
+      }
+    }
+  }
+}
