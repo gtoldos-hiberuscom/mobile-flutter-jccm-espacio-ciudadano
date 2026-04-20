@@ -12,8 +12,8 @@ reporter: <reporter name or empty>
 assignee: <assignee name or empty>
 story_points: <number or empty>
 labels: []
-fix_versions: <string or empty>
-affected_versions: <string or empty>
+fix_versions: []
+affected_versions: []
 created_at: <ISO8601>
 updated_at: <ISO8601>
 due_date: <ISO8601 or empty>

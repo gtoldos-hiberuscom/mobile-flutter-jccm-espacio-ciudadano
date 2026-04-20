@@ -16,6 +16,13 @@ Use this skill when an implementation task comes from a ticket or when completio
 ## Coordination rule
 The canonical ticket-administration agent is `ticket-manager`. Use it for structural ticket updates or when several ticket fields must change together.
 
+## Ticket schema conventions
+- `id` is the numeric internal identifier and defines the canonical filename `tickets/TICKET-{id}.md`.
+- `jira_key` is the external tracker key and may be used as lookup context, but not as the filename.
+- The canonical frontmatter fields are the ones defined in `copilot-instructions.md`; preserve them exactly, including key order.
+- `labels`, `fix_versions`, and `affected_versions` are YAML lists.
+- `epic_link` and `parent` store `jira_key` values; `blocked-by`, `blocks`, and `related` belong in `## Technical Details` -> `Dependencies`.
+
 When a direct operation is enough, use the existing ticket skills:
 - `ticket-create-update`
 - `ticket-transition`

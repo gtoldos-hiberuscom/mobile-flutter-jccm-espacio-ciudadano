@@ -23,8 +23,17 @@ Use this skill when the task is to create, normalize, or update a ticket file fr
 ## Objective
 Create or update exactly one Markdown file for a ticket using the repository ticket schema.
 
+## Canonical identifier and field rules
+- `id` is the numeric internal identifier and drives the filename `tickets/TICKET-{id}.md`.
+- `jira_key` is the external tracker key and may be used to locate an existing ticket, but it must not replace `id` in the filename.
+- `summary` maps to the `# <Summary>` heading, not to a frontmatter key.
+- `epic_link` and `parent` store related `jira_key` values, not numeric internal ids.
+- `labels`, `fix_versions`, and `affected_versions` are YAML lists; use `[]` when they are empty.
+- `story_points` is numeric when present; otherwise leave it empty.
+- `created_at`, `updated_at`, and `due_date` use ISO8601 timestamps, with `due_date` allowed to be empty.
+
 ## Workflow
-1. Extract the ticket `id` from the input.
+1. Extract the ticket `id` from the input, or resolve it from an existing ticket file when the user only provides `jira_key`.
 2. Target the path `tickets/TICKET-{id}.md`.
 3. Read the existing file first if it already exists.
 4. Use `ticket-template.md` from this skill directory as the canonical structure.
@@ -43,11 +52,13 @@ Create or update exactly one Markdown file for a ticket using the repository tic
 ## Relationship rules
 When input contains epic, parent, blocked-by, blocks, or related references:
 - Populate `epic_link` and `parent` in frontmatter when applicable.
-- Reflect those references in `## Technical Details` and/or `## Traceability`.
+- Reflect `blocked-by`, `blocks`, and `related` references under `## Technical Details` -> `Dependencies`.
+- Reflect Jira, epic, and parent identifiers under `## Traceability`.
 - Do not invent references.
 
 ## Missing-data behavior
-If `id` is missing, stop and report the exact missing fields.
+If a new ticket does not provide `id`, stop and report the exact missing fields.
+If the user only provides `jira_key`, resolve the existing ticket file before editing; if it cannot be resolved uniquely, stop and report the ambiguity.
 If optional fields are missing, leave them empty while preserving the schema.
 
 ## Output rules

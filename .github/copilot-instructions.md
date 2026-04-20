@@ -64,6 +64,33 @@ Every ticket file must preserve the exact YAML key order defined below:
 18. `due_date`
 19. `jira_url`
 
+## Ticket identifier conventions
+- `id` is the numeric internal identifier and is the source of truth for the filename `tickets/TICKET-{id}.md`.
+- `jira_key` is the external tracker key, such as `NAVEMP-126`; it is not used as the filename.
+- A user may refer to a ticket by `id`, `jira_key`, or file path, but repository edits must always target the canonical file resolved from `id`.
+
+## Ticket field definitions
+- `id`: numeric internal identifier, required, must match the filename.
+- `jira_key`: external issue key from the source system, or empty when unavailable.
+- `type`: source-system issue type label such as `Story`, `Task`, `Subtask`, or `Bug`.
+- `status`: workflow state label.
+- `priority`: priority label from the source system.
+- `project`: stable project key or project identifier from the source system.
+- `epic_link`: related epic `jira_key`, or empty.
+- `parent`: parent `jira_key`, or empty.
+- `sprint`: sprint name, or empty.
+- `reporter`: reporter display name, or empty.
+- `assignee`: assignee display name, or empty.
+- `story_points`: numeric estimate, or empty.
+- `labels`: YAML list of strings; use `[]` when empty.
+- `fix_versions`: YAML list of version strings; use `[]` when empty.
+- `affected_versions`: YAML list of version strings; use `[]` when empty.
+- `created_at`: original creation timestamp in ISO8601.
+- `updated_at`: last modification timestamp in ISO8601; update it on every mutation.
+- `due_date`: due-date timestamp in ISO8601, or empty.
+- `jira_url`: full tracker URL, or empty.
+- `# <Summary>`: the human-readable ticket summary; this lives in the H1 heading, not in frontmatter.
+
 Each file must also contain these required sections in this order:
 - `# <Summary>`
 - `## Functional Description`
@@ -86,3 +113,4 @@ Append new comments and changes. Do not rewrite history unless explicitly asked.
 - Never invent ticket relationships or metadata.
 - Always update `updated_at` after any change.
 - Keep `created_at` stable unless the user explicitly corrects it.
+- Preserve list-typed fields as YAML lists instead of comma-separated strings or scalar placeholders.

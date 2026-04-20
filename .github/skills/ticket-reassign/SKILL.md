@@ -9,6 +9,12 @@ target: github-copilot
 
 Use this skill when the task is to assign, reassign, or unassign a ticket.
 
+## Schema preservation rules
+- Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/TICKET-{id}.md` path, but edit only the canonical file named from `id`.
+- Preserve all frontmatter keys, their order, and all required sections.
+- Only mutate `assignee` and `updated_at` unless the user explicitly requests additional field changes.
+- Keep list-typed fields such as `labels`, `fix_versions`, and `affected_versions` untouched.
+
 ## Rules
 - Read the current ticket file first.
 - Update the `assignee` field only.

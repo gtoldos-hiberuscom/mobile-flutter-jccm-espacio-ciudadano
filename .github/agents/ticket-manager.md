@@ -1,39 +1,34 @@
 ---
 name: ticket-manager
 description: Specialized agent for creating and maintaining Jira-style tickets stored as Markdown files under tickets/.
-argument-hint: When asking to create or update a ticket, provide the ticket information in a structured format that includes all mandatory fields and sections. For example:
-{
-  "id": "40162",
-  "jira_key": "NAVEMP-126",
-  "type": "Story",
-  "status": "To Do",
-  "priority": "High",
-  "project": "Navigation",
-  "epic_link": "NAVEMP-100",
-  "parent": "",
-  "sprint": "Sprint 5",
-  "reporter": "",
-   "assignee": "gtoldos",
-   "story_points": 3,
-   "labels": ["navigation", "ui"],
-   "fix_versions": ["1.2.0"],
-   "affected_versions": ["1.1.0"],
-   "created_at": "2024-06-01T10:00:00Z
-   "updated_at": "2024-06-01T10:00:00Z",
-   "due_date": "2024-06-15T23:59:59Z",
-   "jira_url": "https://jira.example.com/browse/NAVEMP-126",
-   "summary": "Implement new navigation menu design",
-   "functional_description": "Redesign the navigation menu according to the new mockups provided by
-   the design team. The new design includes a collapsible sidebar and updated icons.",
-   "acceptance_criteria": "- The navigation menu matches the new design mockups.\n- The sidebar is collapsible and expands on hover.\n- Icons are updated according to the design specifications.",
-   "technical_details": "- Update the `lib/app/navigation/` module to implement the new
-   menu structure.\n- Use the `flutter-feature-implementation` skill for the feature scaffolding and entity updates.\n- Use the `flutter-presentation-routing` skill for UI changes and navigation updates.",
-   "traceability": "- Linked to epic NAVEMP-100.\n- No parent ticket
-- No blocked-by or blocks relationships.",
-   "notes": "- Initial ticket created by gtoldos on 2024-06-01."
-}
+argument-hint: |
+  When asking to create or update a ticket, provide the ticket information in a structured format. Prefer the numeric `id` when available and use canonical field names. Example:
+  id: 40162
+  jira_key: NAVEMP-126
+  type: Story
+  status: To Do
+  priority: High
+  project: NAVEMP
+  epic_link: NAVEMP-100
+  parent:
+  sprint: Sprint 5
+  reporter:
+  assignee: gtoldos
+  story_points: 3
+  labels: [navigation, ui]
+  fix_versions: [1.2.0]
+  affected_versions: [1.1.0]
+  created_at: 2024-06-01T10:00:00Z
+  updated_at: 2024-06-01T10:00:00Z
+  due_date: 2024-06-15T23:59:59Z
+  jira_url: https://jira.example.com/browse/NAVEMP-126
+  summary: Implement new navigation menu design
+  functional_description: Redesign the navigation menu according to the approved mockups.
+  acceptance_criteria:
+    - The navigation menu matches the approved design.
+    - The sidebar can be collapsed and expanded.
 target: github-copilot
-- handoffs:
+handoffs:
   - label: Start Implementation
     agent: implementer
     prompt: Implement the ticket according to the provided information
@@ -86,6 +81,18 @@ The YAML frontmatter must preserve the following keys in this exact order:
 - `updated_at`
 - `due_date`
 - `jira_url`
+
+## Ticket identifier and field definitions
+- `id` is the numeric internal identifier and must match the filename `tickets/TICKET-{id}.md`.
+- `jira_key` is the external tracker key and is not used as the filename.
+- `type`, `status`, `priority`, and `project` preserve the source-system labels or identifiers.
+- `epic_link` and `parent` store related `jira_key` values.
+- `sprint`, `reporter`, and `assignee` store display names or labels and may be empty.
+- `story_points` is numeric when present.
+- `labels`, `fix_versions`, and `affected_versions` are YAML lists and use `[]` when empty.
+- `created_at`, `updated_at`, and `due_date` use ISO8601 timestamps, with `due_date` allowed to be empty.
+- `jira_url` stores the full tracker URL when available.
+- The ticket summary lives in the `# <Summary>` heading, not in frontmatter.
 
 ## Source-of-truth rules
 - Copy structured fields exactly from the source data when the user provides them.

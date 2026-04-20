@@ -8,6 +8,12 @@ target: github-copilot
 
 Use this skill when the task is to move a ticket through its workflow or adjust workflow-related metadata.
 
+## Canonical workflow fields
+- Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/TICKET-{id}.md` path, but edit only the canonical file named from `id`.
+- The workflow-related frontmatter fields are `status`, `priority`, `sprint`, and `due_date`.
+- Preserve all other frontmatter keys, their order, and all required sections.
+- Do not invent new workflow metadata fields outside the canonical schema.
+
 ## Status change workflow
 Use the default workflow below unless the repository or user specifies a stricter one:
 - `To Do` -> `In Progress`, `Blocked`, `Cancelled`
