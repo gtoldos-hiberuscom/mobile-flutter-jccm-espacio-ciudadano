@@ -11,10 +11,11 @@ part 'zcstbtdocfirma.g.dart';
 /// ZCSTBTDOCFIRMA
 ///
 /// Properties:
-/// * [codtdf] 
-/// * [dentdf] 
+/// * [codtdf]
+/// * [dentdf]
 @BuiltValue()
-abstract class ZCSTBTDOCFIRMA implements Built<ZCSTBTDOCFIRMA, ZCSTBTDOCFIRMABuilder> {
+abstract class ZCSTBTDOCFIRMA
+    implements Built<ZCSTBTDOCFIRMA, ZCSTBTDOCFIRMABuilder> {
   @BuiltValueField(wireName: r'codtdf')
   String? get codtdf;
 
@@ -23,16 +24,19 @@ abstract class ZCSTBTDOCFIRMA implements Built<ZCSTBTDOCFIRMA, ZCSTBTDOCFIRMABui
 
   ZCSTBTDOCFIRMA._();
 
-  factory ZCSTBTDOCFIRMA([void updates(ZCSTBTDOCFIRMABuilder b)]) = _$ZCSTBTDOCFIRMA;
+  factory ZCSTBTDOCFIRMA([void updates(ZCSTBTDOCFIRMABuilder b)]) =
+      _$ZCSTBTDOCFIRMA;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSTBTDOCFIRMABuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSTBTDOCFIRMA> get serializer => _$ZCSTBTDOCFIRMASerializer();
+  static Serializer<ZCSTBTDOCFIRMA> get serializer =>
+      _$ZCSTBTDOCFIRMASerializer();
 }
 
-class _$ZCSTBTDOCFIRMASerializer implements PrimitiveSerializer<ZCSTBTDOCFIRMA> {
+class _$ZCSTBTDOCFIRMASerializer
+    implements PrimitiveSerializer<ZCSTBTDOCFIRMA> {
   @override
   final Iterable<Type> types = const [ZCSTBTDOCFIRMA, _$ZCSTBTDOCFIRMA];
 
@@ -66,7 +70,9 @@ class _$ZCSTBTDOCFIRMASerializer implements PrimitiveSerializer<ZCSTBTDOCFIRMA> 
     ZCSTBTDOCFIRMA object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -123,4 +129,3 @@ class _$ZCSTBTDOCFIRMASerializer implements PrimitiveSerializer<ZCSTBTDOCFIRMA> 
     return result.build();
   }
 }
-

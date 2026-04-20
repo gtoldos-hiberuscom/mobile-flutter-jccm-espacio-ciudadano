@@ -13,7 +13,7 @@ part 'zlistadoc.g.dart';
 /// ZLISTADOC
 ///
 /// Properties:
-/// * [item] 
+/// * [item]
 @BuiltValue()
 abstract class ZLISTADOC implements Built<ZLISTADOC, ZLISTADOCBuilder> {
   @BuiltValueField(wireName: r'item')
@@ -57,7 +57,9 @@ class _$ZLISTADOCSerializer implements PrimitiveSerializer<ZLISTADOC> {
     ZLISTADOC object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -75,7 +77,8 @@ class _$ZLISTADOCSerializer implements PrimitiveSerializer<ZLISTADOC> {
         case r'item':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(ZCSTBTDOCFIRMA)]),
+            specifiedType:
+                const FullType(BuiltList, [FullType(ZCSTBTDOCFIRMA)]),
           ) as BuiltList<ZCSTBTDOCFIRMA>;
           result.item.replace(valueDes);
           break;
@@ -107,4 +110,3 @@ class _$ZLISTADOCSerializer implements PrimitiveSerializer<ZLISTADOC> {
     return result.build();
   }
 }
-

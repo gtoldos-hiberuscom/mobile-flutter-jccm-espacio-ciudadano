@@ -11,13 +11,14 @@ part 'zcsrfcmisexpedientes.g.dart';
 /// ZCSRFCMISEXPEDIENTES
 ///
 /// Properties:
-/// * [pdescproc] 
-/// * [pestado] 
-/// * [pfechadesde] 
-/// * [pfechahasta] 
-/// * [pnumdoc] 
+/// * [pdescproc]
+/// * [pestado]
+/// * [pfechadesde]
+/// * [pfechahasta]
+/// * [pnumdoc]
 @BuiltValue()
-abstract class ZCSRFCMISEXPEDIENTES implements Built<ZCSRFCMISEXPEDIENTES, ZCSRFCMISEXPEDIENTESBuilder> {
+abstract class ZCSRFCMISEXPEDIENTES
+    implements Built<ZCSRFCMISEXPEDIENTES, ZCSRFCMISEXPEDIENTESBuilder> {
   @BuiltValueField(wireName: r'pdescproc')
   String? get pdescproc;
 
@@ -35,18 +36,24 @@ abstract class ZCSRFCMISEXPEDIENTES implements Built<ZCSRFCMISEXPEDIENTES, ZCSRF
 
   ZCSRFCMISEXPEDIENTES._();
 
-  factory ZCSRFCMISEXPEDIENTES([void updates(ZCSRFCMISEXPEDIENTESBuilder b)]) = _$ZCSRFCMISEXPEDIENTES;
+  factory ZCSRFCMISEXPEDIENTES([void updates(ZCSRFCMISEXPEDIENTESBuilder b)]) =
+      _$ZCSRFCMISEXPEDIENTES;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCMISEXPEDIENTESBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCMISEXPEDIENTES> get serializer => _$ZCSRFCMISEXPEDIENTESSerializer();
+  static Serializer<ZCSRFCMISEXPEDIENTES> get serializer =>
+      _$ZCSRFCMISEXPEDIENTESSerializer();
 }
 
-class _$ZCSRFCMISEXPEDIENTESSerializer implements PrimitiveSerializer<ZCSRFCMISEXPEDIENTES> {
+class _$ZCSRFCMISEXPEDIENTESSerializer
+    implements PrimitiveSerializer<ZCSRFCMISEXPEDIENTES> {
   @override
-  final Iterable<Type> types = const [ZCSRFCMISEXPEDIENTES, _$ZCSRFCMISEXPEDIENTES];
+  final Iterable<Type> types = const [
+    ZCSRFCMISEXPEDIENTES,
+    _$ZCSRFCMISEXPEDIENTES
+  ];
 
   @override
   final String wireName = r'ZCSRFCMISEXPEDIENTES';
@@ -97,7 +104,9 @@ class _$ZCSRFCMISEXPEDIENTESSerializer implements PrimitiveSerializer<ZCSRFCMISE
     ZCSRFCMISEXPEDIENTES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -175,4 +184,3 @@ class _$ZCSRFCMISEXPEDIENTESSerializer implements PrimitiveSerializer<ZCSRFCMISE
     return result.build();
   }
 }
-

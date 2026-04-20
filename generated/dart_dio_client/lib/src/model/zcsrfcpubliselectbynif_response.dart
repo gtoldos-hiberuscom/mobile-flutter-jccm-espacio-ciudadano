@@ -12,11 +12,14 @@ part 'zcsrfcpubliselectbynif_response.g.dart';
 /// ZCSRFCPUBLISELECTBYNIFResponse
 ///
 /// Properties:
-/// * [isubrc] 
-/// * [publicacionportal] 
-/// * [resultado] 
+/// * [isubrc]
+/// * [publicacionportal]
+/// * [resultado]
 @BuiltValue()
-abstract class ZCSRFCPUBLISELECTBYNIFResponse implements Built<ZCSRFCPUBLISELECTBYNIFResponse, ZCSRFCPUBLISELECTBYNIFResponseBuilder> {
+abstract class ZCSRFCPUBLISELECTBYNIFResponse
+    implements
+        Built<ZCSRFCPUBLISELECTBYNIFResponse,
+            ZCSRFCPUBLISELECTBYNIFResponseBuilder> {
   @BuiltValueField(wireName: r'isubrc')
   int? get isubrc;
 
@@ -28,18 +31,25 @@ abstract class ZCSRFCPUBLISELECTBYNIFResponse implements Built<ZCSRFCPUBLISELECT
 
   ZCSRFCPUBLISELECTBYNIFResponse._();
 
-  factory ZCSRFCPUBLISELECTBYNIFResponse([void updates(ZCSRFCPUBLISELECTBYNIFResponseBuilder b)]) = _$ZCSRFCPUBLISELECTBYNIFResponse;
+  factory ZCSRFCPUBLISELECTBYNIFResponse(
+          [void updates(ZCSRFCPUBLISELECTBYNIFResponseBuilder b)]) =
+      _$ZCSRFCPUBLISELECTBYNIFResponse;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCPUBLISELECTBYNIFResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCPUBLISELECTBYNIFResponse> get serializer => _$ZCSRFCPUBLISELECTBYNIFResponseSerializer();
+  static Serializer<ZCSRFCPUBLISELECTBYNIFResponse> get serializer =>
+      _$ZCSRFCPUBLISELECTBYNIFResponseSerializer();
 }
 
-class _$ZCSRFCPUBLISELECTBYNIFResponseSerializer implements PrimitiveSerializer<ZCSRFCPUBLISELECTBYNIFResponse> {
+class _$ZCSRFCPUBLISELECTBYNIFResponseSerializer
+    implements PrimitiveSerializer<ZCSRFCPUBLISELECTBYNIFResponse> {
   @override
-  final Iterable<Type> types = const [ZCSRFCPUBLISELECTBYNIFResponse, _$ZCSRFCPUBLISELECTBYNIFResponse];
+  final Iterable<Type> types = const [
+    ZCSRFCPUBLISELECTBYNIFResponse,
+    _$ZCSRFCPUBLISELECTBYNIFResponse
+  ];
 
   @override
   final String wireName = r'ZCSRFCPUBLISELECTBYNIFResponse';
@@ -78,7 +88,9 @@ class _$ZCSRFCPUBLISELECTBYNIFResponseSerializer implements PrimitiveSerializer<
     ZCSRFCPUBLISELECTBYNIFResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -142,4 +154,3 @@ class _$ZCSRFCPUBLISELECTBYNIFResponseSerializer implements PrimitiveSerializer<
     return result.build();
   }
 }
-

@@ -11,10 +11,11 @@ part 'dt_identificacion.g.dart';
 /// DTIdentificacion
 ///
 /// Properties:
-/// * [category] 
-/// * [nifcif] 
+/// * [category]
+/// * [nifcif]
 @BuiltValue()
-abstract class DTIdentificacion implements Built<DTIdentificacion, DTIdentificacionBuilder> {
+abstract class DTIdentificacion
+    implements Built<DTIdentificacion, DTIdentificacionBuilder> {
   @BuiltValueField(wireName: r'category')
   String get category;
 
@@ -23,16 +24,19 @@ abstract class DTIdentificacion implements Built<DTIdentificacion, DTIdentificac
 
   DTIdentificacion._();
 
-  factory DTIdentificacion([void updates(DTIdentificacionBuilder b)]) = _$DTIdentificacion;
+  factory DTIdentificacion([void updates(DTIdentificacionBuilder b)]) =
+      _$DTIdentificacion;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTIdentificacionBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTIdentificacion> get serializer => _$DTIdentificacionSerializer();
+  static Serializer<DTIdentificacion> get serializer =>
+      _$DTIdentificacionSerializer();
 }
 
-class _$DTIdentificacionSerializer implements PrimitiveSerializer<DTIdentificacion> {
+class _$DTIdentificacionSerializer
+    implements PrimitiveSerializer<DTIdentificacion> {
   @override
   final Iterable<Type> types = const [DTIdentificacion, _$DTIdentificacion];
 
@@ -62,7 +66,9 @@ class _$DTIdentificacionSerializer implements PrimitiveSerializer<DTIdentificaci
     DTIdentificacion object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -119,4 +125,3 @@ class _$DTIdentificacionSerializer implements PrimitiveSerializer<DTIdentificaci
     return result.build();
   }
 }
-

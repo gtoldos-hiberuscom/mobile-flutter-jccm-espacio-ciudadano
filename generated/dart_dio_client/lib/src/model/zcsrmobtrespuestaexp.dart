@@ -12,10 +12,11 @@ part 'zcsrmobtrespuestaexp.g.dart';
 /// ZCSRMOBTRESPUESTAEXP
 ///
 /// Properties:
-/// * [irefdoc] 
-/// * [ttextosrespuesta] 
+/// * [irefdoc]
+/// * [ttextosrespuesta]
 @BuiltValue()
-abstract class ZCSRMOBTRESPUESTAEXP implements Built<ZCSRMOBTRESPUESTAEXP, ZCSRMOBTRESPUESTAEXPBuilder> {
+abstract class ZCSRMOBTRESPUESTAEXP
+    implements Built<ZCSRMOBTRESPUESTAEXP, ZCSRMOBTRESPUESTAEXPBuilder> {
   @BuiltValueField(wireName: r'irefdoc')
   String get irefdoc;
 
@@ -24,18 +25,24 @@ abstract class ZCSRMOBTRESPUESTAEXP implements Built<ZCSRMOBTRESPUESTAEXP, ZCSRM
 
   ZCSRMOBTRESPUESTAEXP._();
 
-  factory ZCSRMOBTRESPUESTAEXP([void updates(ZCSRMOBTRESPUESTAEXPBuilder b)]) = _$ZCSRMOBTRESPUESTAEXP;
+  factory ZCSRMOBTRESPUESTAEXP([void updates(ZCSRMOBTRESPUESTAEXPBuilder b)]) =
+      _$ZCSRMOBTRESPUESTAEXP;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRMOBTRESPUESTAEXPBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRMOBTRESPUESTAEXP> get serializer => _$ZCSRMOBTRESPUESTAEXPSerializer();
+  static Serializer<ZCSRMOBTRESPUESTAEXP> get serializer =>
+      _$ZCSRMOBTRESPUESTAEXPSerializer();
 }
 
-class _$ZCSRMOBTRESPUESTAEXPSerializer implements PrimitiveSerializer<ZCSRMOBTRESPUESTAEXP> {
+class _$ZCSRMOBTRESPUESTAEXPSerializer
+    implements PrimitiveSerializer<ZCSRMOBTRESPUESTAEXP> {
   @override
-  final Iterable<Type> types = const [ZCSRMOBTRESPUESTAEXP, _$ZCSRMOBTRESPUESTAEXP];
+  final Iterable<Type> types = const [
+    ZCSRMOBTRESPUESTAEXP,
+    _$ZCSRMOBTRESPUESTAEXP
+  ];
 
   @override
   final String wireName = r'ZCSRMOBTRESPUESTAEXP';
@@ -63,7 +70,9 @@ class _$ZCSRMOBTRESPUESTAEXPSerializer implements PrimitiveSerializer<ZCSRMOBTRE
     ZCSRMOBTRESPUESTAEXP object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -120,4 +129,3 @@ class _$ZCSRMOBTRESPUESTAEXPSerializer implements PrimitiveSerializer<ZCSRMOBTRE
     return result.build();
   }
 }
-

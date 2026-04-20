@@ -4,7 +4,6 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
@@ -13,7 +12,6 @@ import 'package:espacio_ciudadano_api/src/model/dtctrocdatreq.dart';
 import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class CatastroApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -21,12 +19,12 @@ class CatastroApi {
   const CatastroApi(this._dio, this._serializers);
 
   /// Servicio para obtener los datos catastrales
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [numDocumento] 
-  /// * [dTCTROCDATREQBody] 
-  /// * [authorization] 
+  /// * [numDocumento]
+  /// * [dTCTROCDATREQBody]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -36,7 +34,7 @@ class CatastroApi {
   ///
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<Respuesta>> getDatosCatastrales({ 
+  Future<Response<Respuesta>> getDatosCatastrales({
     required String numDocumento,
     required DTCTROCDATREQ dTCTROCDATREQBody,
     String? authorization,
@@ -47,7 +45,12 @@ class CatastroApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/catastro/datos-catastrales/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
+    final _path = r'/api/v1/catastro/datos-catastrales/{numDocumento}'
+        .replaceAll(
+            '{' r'numDocumento' '}',
+            encodeQueryParameter(
+                    _serializers, numDocumento, const FullType(String))
+                .toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -66,11 +69,11 @@ class CatastroApi {
 
     try {
       const _type = FullType(DTCTROCDATREQ);
-      _bodyData = _serializers.serialize(dTCTROCDATREQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData =
+          _serializers.serialize(dTCTROCDATREQBody, specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -93,11 +96,12 @@ class CatastroApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(Respuesta),
-      ) as Respuesta;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -119,5 +123,4 @@ class CatastroApi {
       extra: _response.extra,
     );
   }
-
 }

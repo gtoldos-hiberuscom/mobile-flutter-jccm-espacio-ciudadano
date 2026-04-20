@@ -12,11 +12,14 @@ part 'zcsrmobtrespuestaexp_response.g.dart';
 /// ZCSRMOBTRESPUESTAEXPResponse
 ///
 /// Properties:
-/// * [esubrc] 
-/// * [return_] 
-/// * [ttextosrespuesta] 
+/// * [esubrc]
+/// * [return_]
+/// * [ttextosrespuesta]
 @BuiltValue()
-abstract class ZCSRMOBTRESPUESTAEXPResponse implements Built<ZCSRMOBTRESPUESTAEXPResponse, ZCSRMOBTRESPUESTAEXPResponseBuilder> {
+abstract class ZCSRMOBTRESPUESTAEXPResponse
+    implements
+        Built<ZCSRMOBTRESPUESTAEXPResponse,
+            ZCSRMOBTRESPUESTAEXPResponseBuilder> {
   @BuiltValueField(wireName: r'esubrc')
   int? get esubrc;
 
@@ -28,18 +31,25 @@ abstract class ZCSRMOBTRESPUESTAEXPResponse implements Built<ZCSRMOBTRESPUESTAEX
 
   ZCSRMOBTRESPUESTAEXPResponse._();
 
-  factory ZCSRMOBTRESPUESTAEXPResponse([void updates(ZCSRMOBTRESPUESTAEXPResponseBuilder b)]) = _$ZCSRMOBTRESPUESTAEXPResponse;
+  factory ZCSRMOBTRESPUESTAEXPResponse(
+          [void updates(ZCSRMOBTRESPUESTAEXPResponseBuilder b)]) =
+      _$ZCSRMOBTRESPUESTAEXPResponse;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRMOBTRESPUESTAEXPResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRMOBTRESPUESTAEXPResponse> get serializer => _$ZCSRMOBTRESPUESTAEXPResponseSerializer();
+  static Serializer<ZCSRMOBTRESPUESTAEXPResponse> get serializer =>
+      _$ZCSRMOBTRESPUESTAEXPResponseSerializer();
 }
 
-class _$ZCSRMOBTRESPUESTAEXPResponseSerializer implements PrimitiveSerializer<ZCSRMOBTRESPUESTAEXPResponse> {
+class _$ZCSRMOBTRESPUESTAEXPResponseSerializer
+    implements PrimitiveSerializer<ZCSRMOBTRESPUESTAEXPResponse> {
   @override
-  final Iterable<Type> types = const [ZCSRMOBTRESPUESTAEXPResponse, _$ZCSRMOBTRESPUESTAEXPResponse];
+  final Iterable<Type> types = const [
+    ZCSRMOBTRESPUESTAEXPResponse,
+    _$ZCSRMOBTRESPUESTAEXPResponse
+  ];
 
   @override
   final String wireName = r'ZCSRMOBTRESPUESTAEXPResponse';
@@ -76,7 +86,9 @@ class _$ZCSRMOBTRESPUESTAEXPResponseSerializer implements PrimitiveSerializer<ZC
     ZCSRMOBTRESPUESTAEXPResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -140,4 +152,3 @@ class _$ZCSRMOBTRESPUESTAEXPResponseSerializer implements PrimitiveSerializer<ZC
     return result.build();
   }
 }
-

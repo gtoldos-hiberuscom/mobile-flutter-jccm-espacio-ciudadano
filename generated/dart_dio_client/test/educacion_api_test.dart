@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
-
 /// tests for EducacionApi
 void main() {
   final instance = EspacioCiudadanoApi().getEducacionApi();
@@ -20,6 +19,5 @@ void main() {
     test('test getTitulosUniversitarios', () async {
       // TODO
     });
-
   });
 }

@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
-
 /// tests for HechosVitalesApi
 void main() {
   final instance = EspacioCiudadanoApi().getHechosVitalesApi();
@@ -62,6 +61,5 @@ void main() {
     test('test obtenerListaHechosByIdAgente', () async {
       // TODO
     });
-
   });
 }

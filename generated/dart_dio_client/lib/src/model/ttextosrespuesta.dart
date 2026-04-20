@@ -13,24 +13,28 @@ part 'ttextosrespuesta.g.dart';
 /// TTEXTOSRESPUESTA
 ///
 /// Properties:
-/// * [item] 
+/// * [item]
 @BuiltValue()
-abstract class TTEXTOSRESPUESTA implements Built<TTEXTOSRESPUESTA, TTEXTOSRESPUESTABuilder> {
+abstract class TTEXTOSRESPUESTA
+    implements Built<TTEXTOSRESPUESTA, TTEXTOSRESPUESTABuilder> {
   @BuiltValueField(wireName: r'item')
   BuiltList<ZCSSTFAQ>? get item;
 
   TTEXTOSRESPUESTA._();
 
-  factory TTEXTOSRESPUESTA([void updates(TTEXTOSRESPUESTABuilder b)]) = _$TTEXTOSRESPUESTA;
+  factory TTEXTOSRESPUESTA([void updates(TTEXTOSRESPUESTABuilder b)]) =
+      _$TTEXTOSRESPUESTA;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(TTEXTOSRESPUESTABuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<TTEXTOSRESPUESTA> get serializer => _$TTEXTOSRESPUESTASerializer();
+  static Serializer<TTEXTOSRESPUESTA> get serializer =>
+      _$TTEXTOSRESPUESTASerializer();
 }
 
-class _$TTEXTOSRESPUESTASerializer implements PrimitiveSerializer<TTEXTOSRESPUESTA> {
+class _$TTEXTOSRESPUESTASerializer
+    implements PrimitiveSerializer<TTEXTOSRESPUESTA> {
   @override
   final Iterable<Type> types = const [TTEXTOSRESPUESTA, _$TTEXTOSRESPUESTA];
 
@@ -57,7 +61,9 @@ class _$TTEXTOSRESPUESTASerializer implements PrimitiveSerializer<TTEXTOSRESPUES
     TTEXTOSRESPUESTA object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -107,4 +113,3 @@ class _$TTEXTOSRESPUESTASerializer implements PrimitiveSerializer<TTEXTOSRESPUES
     return result.build();
   }
 }
-

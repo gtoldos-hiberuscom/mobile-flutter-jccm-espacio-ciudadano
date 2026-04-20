@@ -11,15 +11,16 @@ part 'zcsvec_response.g.dart';
 /// ZCSVECResponse
 ///
 /// Properties:
-/// * [certificado] 
-/// * [denerror] 
-/// * [idtrans] 
-/// * [resul] 
-/// * [subject] 
-/// * [uriformava] 
-/// * [uritipofirma] 
+/// * [certificado]
+/// * [denerror]
+/// * [idtrans]
+/// * [resul]
+/// * [subject]
+/// * [uriformava]
+/// * [uritipofirma]
 @BuiltValue()
-abstract class ZCSVECResponse implements Built<ZCSVECResponse, ZCSVECResponseBuilder> {
+abstract class ZCSVECResponse
+    implements Built<ZCSVECResponse, ZCSVECResponseBuilder> {
   @BuiltValueField(wireName: r'certificado')
   String? get certificado;
 
@@ -43,16 +44,19 @@ abstract class ZCSVECResponse implements Built<ZCSVECResponse, ZCSVECResponseBui
 
   ZCSVECResponse._();
 
-  factory ZCSVECResponse([void updates(ZCSVECResponseBuilder b)]) = _$ZCSVECResponse;
+  factory ZCSVECResponse([void updates(ZCSVECResponseBuilder b)]) =
+      _$ZCSVECResponse;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSVECResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSVECResponse> get serializer => _$ZCSVECResponseSerializer();
+  static Serializer<ZCSVECResponse> get serializer =>
+      _$ZCSVECResponseSerializer();
 }
 
-class _$ZCSVECResponseSerializer implements PrimitiveSerializer<ZCSVECResponse> {
+class _$ZCSVECResponseSerializer
+    implements PrimitiveSerializer<ZCSVECResponse> {
   @override
   final Iterable<Type> types = const [ZCSVECResponse, _$ZCSVECResponse];
 
@@ -121,7 +125,9 @@ class _$ZCSVECResponseSerializer implements PrimitiveSerializer<ZCSVECResponse> 
     ZCSVECResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -213,4 +219,3 @@ class _$ZCSVECResponseSerializer implements PrimitiveSerializer<ZCSVECResponse> 
     return result.build();
   }
 }
-

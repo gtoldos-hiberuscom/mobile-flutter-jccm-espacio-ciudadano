@@ -11,40 +11,41 @@ part 'dtinecdrfres.g.dart';
 /// DTINECDRFRES
 ///
 /// Properties:
-/// * [blores] 
-/// * [codencol] 
-/// * [codensin] 
-/// * [codmun] 
-/// * [codnuc] 
-/// * [codpos] 
-/// * [codpro] 
-/// * [codunip] 
-/// * [codvar] 
-/// * [codvia] 
-/// * [denencol] 
-/// * [denensin] 
-/// * [denmun] 
-/// * [dennuc] 
-/// * [denpro] 
-/// * [descvar] 
-/// * [docu] 
-/// * [escres] 
-/// * [fecvar] 
-/// * [hecres] 
-/// * [idpeticion] 
-/// * [kimres] 
-/// * [mensaje] 
-/// * [nomvia] 
-/// * [numres] 
-/// * [numsup] 
-/// * [plares] 
-/// * [portes] 
-/// * [pueres] 
-/// * [resul] 
-/// * [tipodoc] 
-/// * [tipvia] 
+/// * [blores]
+/// * [codencol]
+/// * [codensin]
+/// * [codmun]
+/// * [codnuc]
+/// * [codpos]
+/// * [codpro]
+/// * [codunip]
+/// * [codvar]
+/// * [codvia]
+/// * [denencol]
+/// * [denensin]
+/// * [denmun]
+/// * [dennuc]
+/// * [denpro]
+/// * [descvar]
+/// * [docu]
+/// * [escres]
+/// * [fecvar]
+/// * [hecres]
+/// * [idpeticion]
+/// * [kimres]
+/// * [mensaje]
+/// * [nomvia]
+/// * [numres]
+/// * [numsup]
+/// * [plares]
+/// * [portes]
+/// * [pueres]
+/// * [resul]
+/// * [tipodoc]
+/// * [tipvia]
 @BuiltValue()
-abstract class DTINECDRFRES implements Built<DTINECDRFRES, DTINECDRFRESBuilder> {
+abstract class DTINECDRFRES
+    implements Built<DTINECDRFRES, DTINECDRFRESBuilder> {
   @BuiltValueField(wireName: r'blores')
   String? get blores;
 
@@ -396,7 +397,9 @@ class _$DTINECDRFRESSerializer implements PrimitiveSerializer<DTINECDRFRES> {
     DTINECDRFRES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -663,4 +666,3 @@ class _$DTINECDRFRESSerializer implements PrimitiveSerializer<DTINECDRFRES> {
     return result.build();
   }
 }
-

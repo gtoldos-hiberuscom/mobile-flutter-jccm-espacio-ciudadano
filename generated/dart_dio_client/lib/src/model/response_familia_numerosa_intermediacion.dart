@@ -12,14 +12,17 @@ part 'response_familia_numerosa_intermediacion.g.dart';
 /// ResponseFamiliaNumerosaIntermediacion
 ///
 /// Properties:
-/// * [codestado] 
-/// * [datosespecificos] 
-/// * [docu] 
-/// * [idpeticion] 
-/// * [mensaje] 
-/// * [tipodoc] 
+/// * [codestado]
+/// * [datosespecificos]
+/// * [docu]
+/// * [idpeticion]
+/// * [mensaje]
+/// * [tipodoc]
 @BuiltValue()
-abstract class ResponseFamiliaNumerosaIntermediacion implements Built<ResponseFamiliaNumerosaIntermediacion, ResponseFamiliaNumerosaIntermediacionBuilder> {
+abstract class ResponseFamiliaNumerosaIntermediacion
+    implements
+        Built<ResponseFamiliaNumerosaIntermediacion,
+            ResponseFamiliaNumerosaIntermediacionBuilder> {
   @BuiltValueField(wireName: r'codestado')
   String? get codestado;
 
@@ -40,18 +43,25 @@ abstract class ResponseFamiliaNumerosaIntermediacion implements Built<ResponseFa
 
   ResponseFamiliaNumerosaIntermediacion._();
 
-  factory ResponseFamiliaNumerosaIntermediacion([void updates(ResponseFamiliaNumerosaIntermediacionBuilder b)]) = _$ResponseFamiliaNumerosaIntermediacion;
+  factory ResponseFamiliaNumerosaIntermediacion(
+          [void updates(ResponseFamiliaNumerosaIntermediacionBuilder b)]) =
+      _$ResponseFamiliaNumerosaIntermediacion;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ResponseFamiliaNumerosaIntermediacionBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ResponseFamiliaNumerosaIntermediacion> get serializer => _$ResponseFamiliaNumerosaIntermediacionSerializer();
+  static Serializer<ResponseFamiliaNumerosaIntermediacion> get serializer =>
+      _$ResponseFamiliaNumerosaIntermediacionSerializer();
 }
 
-class _$ResponseFamiliaNumerosaIntermediacionSerializer implements PrimitiveSerializer<ResponseFamiliaNumerosaIntermediacion> {
+class _$ResponseFamiliaNumerosaIntermediacionSerializer
+    implements PrimitiveSerializer<ResponseFamiliaNumerosaIntermediacion> {
   @override
-  final Iterable<Type> types = const [ResponseFamiliaNumerosaIntermediacion, _$ResponseFamiliaNumerosaIntermediacion];
+  final Iterable<Type> types = const [
+    ResponseFamiliaNumerosaIntermediacion,
+    _$ResponseFamiliaNumerosaIntermediacion
+  ];
 
   @override
   final String wireName = r'ResponseFamiliaNumerosaIntermediacion';
@@ -111,7 +121,9 @@ class _$ResponseFamiliaNumerosaIntermediacionSerializer implements PrimitiveSeri
     ResponseFamiliaNumerosaIntermediacion object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -196,4 +208,3 @@ class _$ResponseFamiliaNumerosaIntermediacionSerializer implements PrimitiveSeri
     return result.build();
   }
 }
-

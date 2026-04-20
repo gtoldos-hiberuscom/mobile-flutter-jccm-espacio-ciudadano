@@ -4,17 +4,14 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 import 'package:espacio_ciudadano_api/src/model/zcslistartiposdoc.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsvec.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsvec_response.dart';
 
 class AfirmaApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -22,10 +19,10 @@ class AfirmaApi {
   const AfirmaApi(this._dio, this._serializers);
 
   /// Consultar el listado de los tipos de documentos en cesar
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [zCSLISTARTIPOSDOCBody] 
+  /// * [zCSLISTARTIPOSDOCBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -35,7 +32,7 @@ class AfirmaApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ZCSVECResponse] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<ZCSVECResponse>> miListarDocumentosReq({ 
+  Future<Response<ZCSVECResponse>> miListarDocumentosReq({
     required ZCSLISTARTIPOSDOC zCSLISTARTIPOSDOCBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -62,11 +59,11 @@ class AfirmaApi {
 
     try {
       const _type = FullType(ZCSLISTARTIPOSDOC);
-      _bodyData = _serializers.serialize(zCSLISTARTIPOSDOCBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData =
+          _serializers.serialize(zCSLISTARTIPOSDOCBody, specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -89,11 +86,12 @@ class AfirmaApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(ZCSVECResponse),
-      ) as ZCSVECResponse;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(ZCSVECResponse),
+            ) as ZCSVECResponse;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -117,10 +115,10 @@ class AfirmaApi {
   }
 
   /// Consultar el servicio para la validación de la firma en cesar
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [zCSVECBody] 
+  /// * [zCSVECBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -130,7 +128,7 @@ class AfirmaApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ZCSVECResponse] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<ZCSVECResponse>> miVecReq({ 
+  Future<Response<ZCSVECResponse>> miVecReq({
     required ZCSVEC zCSVECBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -158,10 +156,9 @@ class AfirmaApi {
     try {
       const _type = FullType(ZCSVEC);
       _bodyData = _serializers.serialize(zCSVECBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -184,11 +181,12 @@ class AfirmaApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(ZCSVECResponse),
-      ) as ZCSVECResponse;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(ZCSVECResponse),
+            ) as ZCSVECResponse;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -210,5 +208,4 @@ class AfirmaApi {
       extra: _response.extra,
     );
   }
-
 }

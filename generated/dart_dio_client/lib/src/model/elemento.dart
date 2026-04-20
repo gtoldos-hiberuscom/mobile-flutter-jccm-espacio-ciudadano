@@ -11,26 +11,26 @@ part 'elemento.g.dart';
 /// ELEMENTO
 ///
 /// Properties:
-/// * [centro] 
-/// * [codcen] 
-/// * [codpaisexpedicion] 
-/// * [codtipotitulo] 
-/// * [codtitulacion] 
-/// * [fecexp] 
-/// * [fecfin] 
-/// * [ley] 
-/// * [nivel] 
-/// * [nordlib] 
-/// * [nregaut] 
-/// * [nregmec] 
-/// * [nregnac] 
-/// * [numfol] 
-/// * [numlib] 
-/// * [paisexpedicion] 
-/// * [provtit] 
-/// * [tipoest] 
-/// * [tipotit] 
-/// * [titulacion] 
+/// * [centro]
+/// * [codcen]
+/// * [codpaisexpedicion]
+/// * [codtipotitulo]
+/// * [codtitulacion]
+/// * [fecexp]
+/// * [fecfin]
+/// * [ley]
+/// * [nivel]
+/// * [nordlib]
+/// * [nregaut]
+/// * [nregmec]
+/// * [nregnac]
+/// * [numfol]
+/// * [numlib]
+/// * [paisexpedicion]
+/// * [provtit]
+/// * [tipoest]
+/// * [tipotit]
+/// * [titulacion]
 @BuiltValue()
 abstract class ELEMENTO implements Built<ELEMENTO, ELEMENTOBuilder> {
   @BuiltValueField(wireName: r'centro')
@@ -264,7 +264,9 @@ class _$ELEMENTOSerializer implements PrimitiveSerializer<ELEMENTO> {
     ELEMENTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -447,4 +449,3 @@ class _$ELEMENTOSerializer implements PrimitiveSerializer<ELEMENTO> {
     return result.build();
   }
 }
-

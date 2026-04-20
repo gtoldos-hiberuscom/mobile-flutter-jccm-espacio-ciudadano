@@ -11,9 +11,9 @@ part 'zcssfaq.g.dart';
 /// ZCSSFAQ
 ///
 /// Properties:
-/// * [numseq] 
-/// * [textarea] 
-/// * [textlinea] 
+/// * [numseq]
+/// * [textarea]
+/// * [textlinea]
 @BuiltValue()
 abstract class ZCSSFAQ implements Built<ZCSSFAQ, ZCSSFAQBuilder> {
   @BuiltValueField(wireName: r'numseq')
@@ -77,7 +77,9 @@ class _$ZCSSFAQSerializer implements PrimitiveSerializer<ZCSSFAQ> {
     ZCSSFAQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -141,4 +143,3 @@ class _$ZCSSFAQSerializer implements PrimitiveSerializer<ZCSSFAQ> {
     return result.build();
   }
 }
-

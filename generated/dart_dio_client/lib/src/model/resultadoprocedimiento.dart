@@ -12,13 +12,14 @@ part 'resultadoprocedimiento.g.dart';
 /// RESULTADOPROCEDIMIENTO
 ///
 /// Properties:
-/// * [datosregistro] 
-/// * [estado] 
-/// * [idregistro] 
-/// * [idunico] 
-/// * [mensaje] 
+/// * [datosregistro]
+/// * [estado]
+/// * [idregistro]
+/// * [idunico]
+/// * [mensaje]
 @BuiltValue()
-abstract class RESULTADOPROCEDIMIENTO implements Built<RESULTADOPROCEDIMIENTO, RESULTADOPROCEDIMIENTOBuilder> {
+abstract class RESULTADOPROCEDIMIENTO
+    implements Built<RESULTADOPROCEDIMIENTO, RESULTADOPROCEDIMIENTOBuilder> {
   @BuiltValueField(wireName: r'datosregistro')
   DATOSREGISTRO get datosregistro;
 
@@ -36,18 +37,25 @@ abstract class RESULTADOPROCEDIMIENTO implements Built<RESULTADOPROCEDIMIENTO, R
 
   RESULTADOPROCEDIMIENTO._();
 
-  factory RESULTADOPROCEDIMIENTO([void updates(RESULTADOPROCEDIMIENTOBuilder b)]) = _$RESULTADOPROCEDIMIENTO;
+  factory RESULTADOPROCEDIMIENTO(
+          [void updates(RESULTADOPROCEDIMIENTOBuilder b)]) =
+      _$RESULTADOPROCEDIMIENTO;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(RESULTADOPROCEDIMIENTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<RESULTADOPROCEDIMIENTO> get serializer => _$RESULTADOPROCEDIMIENTOSerializer();
+  static Serializer<RESULTADOPROCEDIMIENTO> get serializer =>
+      _$RESULTADOPROCEDIMIENTOSerializer();
 }
 
-class _$RESULTADOPROCEDIMIENTOSerializer implements PrimitiveSerializer<RESULTADOPROCEDIMIENTO> {
+class _$RESULTADOPROCEDIMIENTOSerializer
+    implements PrimitiveSerializer<RESULTADOPROCEDIMIENTO> {
   @override
-  final Iterable<Type> types = const [RESULTADOPROCEDIMIENTO, _$RESULTADOPROCEDIMIENTO];
+  final Iterable<Type> types = const [
+    RESULTADOPROCEDIMIENTO,
+    _$RESULTADOPROCEDIMIENTO
+  ];
 
   @override
   final String wireName = r'RESULTADOPROCEDIMIENTO';
@@ -90,7 +98,9 @@ class _$RESULTADOPROCEDIMIENTOSerializer implements PrimitiveSerializer<RESULTAD
     RESULTADOPROCEDIMIENTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -168,4 +178,3 @@ class _$RESULTADOPROCEDIMIENTOSerializer implements PrimitiveSerializer<RESULTAD
     return result.build();
   }
 }
-

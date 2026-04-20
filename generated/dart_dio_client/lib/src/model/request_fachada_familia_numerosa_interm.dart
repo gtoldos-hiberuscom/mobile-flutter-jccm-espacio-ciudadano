@@ -11,15 +11,18 @@ part 'request_fachada_familia_numerosa_interm.g.dart';
 /// RequestFachadaFamiliaNumerosaInterm
 ///
 /// Properties:
-/// * [docFuncionario] 
-/// * [docu] 
-/// * [idaut] 
-/// * [nombreFuncionario] 
-/// * [proc] 
-/// * [tipo] 
-/// * [tipodoc] 
+/// * [docFuncionario]
+/// * [docu]
+/// * [idaut]
+/// * [nombreFuncionario]
+/// * [proc]
+/// * [tipo]
+/// * [tipodoc]
 @BuiltValue()
-abstract class RequestFachadaFamiliaNumerosaInterm implements Built<RequestFachadaFamiliaNumerosaInterm, RequestFachadaFamiliaNumerosaIntermBuilder> {
+abstract class RequestFachadaFamiliaNumerosaInterm
+    implements
+        Built<RequestFachadaFamiliaNumerosaInterm,
+            RequestFachadaFamiliaNumerosaIntermBuilder> {
   @BuiltValueField(wireName: r'doc_funcionario')
   String? get docFuncionario;
 
@@ -43,18 +46,25 @@ abstract class RequestFachadaFamiliaNumerosaInterm implements Built<RequestFacha
 
   RequestFachadaFamiliaNumerosaInterm._();
 
-  factory RequestFachadaFamiliaNumerosaInterm([void updates(RequestFachadaFamiliaNumerosaIntermBuilder b)]) = _$RequestFachadaFamiliaNumerosaInterm;
+  factory RequestFachadaFamiliaNumerosaInterm(
+          [void updates(RequestFachadaFamiliaNumerosaIntermBuilder b)]) =
+      _$RequestFachadaFamiliaNumerosaInterm;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(RequestFachadaFamiliaNumerosaIntermBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<RequestFachadaFamiliaNumerosaInterm> get serializer => _$RequestFachadaFamiliaNumerosaIntermSerializer();
+  static Serializer<RequestFachadaFamiliaNumerosaInterm> get serializer =>
+      _$RequestFachadaFamiliaNumerosaIntermSerializer();
 }
 
-class _$RequestFachadaFamiliaNumerosaIntermSerializer implements PrimitiveSerializer<RequestFachadaFamiliaNumerosaInterm> {
+class _$RequestFachadaFamiliaNumerosaIntermSerializer
+    implements PrimitiveSerializer<RequestFachadaFamiliaNumerosaInterm> {
   @override
-  final Iterable<Type> types = const [RequestFachadaFamiliaNumerosaInterm, _$RequestFachadaFamiliaNumerosaInterm];
+  final Iterable<Type> types = const [
+    RequestFachadaFamiliaNumerosaInterm,
+    _$RequestFachadaFamiliaNumerosaInterm
+  ];
 
   @override
   final String wireName = r'RequestFachadaFamiliaNumerosaInterm';
@@ -121,7 +131,9 @@ class _$RequestFachadaFamiliaNumerosaIntermSerializer implements PrimitiveSerial
     RequestFachadaFamiliaNumerosaInterm object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -213,4 +225,3 @@ class _$RequestFachadaFamiliaNumerosaIntermSerializer implements PrimitiveSerial
     return result.build();
   }
 }
-

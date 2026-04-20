@@ -13,12 +13,12 @@ part 'dtedutuores.g.dart';
 /// DTEDUTUORES
 ///
 /// Properties:
-/// * [docu] 
-/// * [elemento] 
-/// * [fecnac] 
-/// * [idpeticion] 
-/// * [mensaje] 
-/// * [resul] 
+/// * [docu]
+/// * [elemento]
+/// * [fecnac]
+/// * [idpeticion]
+/// * [mensaje]
+/// * [resul]
 @BuiltValue()
 abstract class DTEDUTUORES implements Built<DTEDUTUORES, DTEDUTUORESBuilder> {
   @BuiltValueField(wireName: r'docu')
@@ -112,7 +112,9 @@ class _$DTEDUTUORESSerializer implements PrimitiveSerializer<DTEDUTUORES> {
     DTEDUTUORES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -197,4 +199,3 @@ class _$DTEDUTUORESSerializer implements PrimitiveSerializer<DTEDUTUORES> {
     return result.build();
   }
 }
-

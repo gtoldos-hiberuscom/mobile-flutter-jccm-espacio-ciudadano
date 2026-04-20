@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
-
 /// tests for IntermediacionApi
 void main() {
   final instance = EspacioCiudadanoApi().getIntermediacionApi();
@@ -18,6 +17,5 @@ void main() {
     test('test obtenerDatosFamiliaNumerosaIntermediacion', () async {
       // TODO
     });
-
   });
 }

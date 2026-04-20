@@ -11,19 +11,20 @@ part 'zcslistadodocsexpte.g.dart';
 /// ZCSLISTADODOCSEXPTE
 ///
 /// Properties:
-/// * [clase] 
-/// * [codmod] 
-/// * [datarege] 
-/// * [descrip] 
-/// * [ejeexp] 
-/// * [fechadoc] 
-/// * [horarege] 
-/// * [idtransaccion] 
-/// * [numdoc] 
-/// * [numexp] 
-/// * [numrege] 
+/// * [clase]
+/// * [codmod]
+/// * [datarege]
+/// * [descrip]
+/// * [ejeexp]
+/// * [fechadoc]
+/// * [horarege]
+/// * [idtransaccion]
+/// * [numdoc]
+/// * [numexp]
+/// * [numrege]
 @BuiltValue()
-abstract class ZCSLISTADODOCSEXPTE implements Built<ZCSLISTADODOCSEXPTE, ZCSLISTADODOCSEXPTEBuilder> {
+abstract class ZCSLISTADODOCSEXPTE
+    implements Built<ZCSLISTADODOCSEXPTE, ZCSLISTADODOCSEXPTEBuilder> {
   @BuiltValueField(wireName: r'clase')
   String? get clase;
 
@@ -59,18 +60,24 @@ abstract class ZCSLISTADODOCSEXPTE implements Built<ZCSLISTADODOCSEXPTE, ZCSLIST
 
   ZCSLISTADODOCSEXPTE._();
 
-  factory ZCSLISTADODOCSEXPTE([void updates(ZCSLISTADODOCSEXPTEBuilder b)]) = _$ZCSLISTADODOCSEXPTE;
+  factory ZCSLISTADODOCSEXPTE([void updates(ZCSLISTADODOCSEXPTEBuilder b)]) =
+      _$ZCSLISTADODOCSEXPTE;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSLISTADODOCSEXPTEBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSLISTADODOCSEXPTE> get serializer => _$ZCSLISTADODOCSEXPTESerializer();
+  static Serializer<ZCSLISTADODOCSEXPTE> get serializer =>
+      _$ZCSLISTADODOCSEXPTESerializer();
 }
 
-class _$ZCSLISTADODOCSEXPTESerializer implements PrimitiveSerializer<ZCSLISTADODOCSEXPTE> {
+class _$ZCSLISTADODOCSEXPTESerializer
+    implements PrimitiveSerializer<ZCSLISTADODOCSEXPTE> {
   @override
-  final Iterable<Type> types = const [ZCSLISTADODOCSEXPTE, _$ZCSLISTADODOCSEXPTE];
+  final Iterable<Type> types = const [
+    ZCSLISTADODOCSEXPTE,
+    _$ZCSLISTADODOCSEXPTE
+  ];
 
   @override
   final String wireName = r'ZCSLISTADODOCSEXPTE';
@@ -165,7 +172,9 @@ class _$ZCSLISTADODOCSEXPTESerializer implements PrimitiveSerializer<ZCSLISTADOD
     ZCSLISTADODOCSEXPTE object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -285,4 +294,3 @@ class _$ZCSLISTADODOCSEXPTESerializer implements PrimitiveSerializer<ZCSLISTADOD
     return result.build();
   }
 }
-

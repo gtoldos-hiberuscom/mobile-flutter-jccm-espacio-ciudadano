@@ -13,12 +13,14 @@ part 'zcsrfcconsultafaq_response.g.dart';
 /// ZCSRFCCONSULTAFAQResponse
 ///
 /// Properties:
-/// * [isubrc] 
-/// * [return_] 
-/// * [returns] 
-/// * [tfaq] 
+/// * [isubrc]
+/// * [return_]
+/// * [returns]
+/// * [tfaq]
 @BuiltValue()
-abstract class ZCSRFCCONSULTAFAQResponse implements Built<ZCSRFCCONSULTAFAQResponse, ZCSRFCCONSULTAFAQResponseBuilder> {
+abstract class ZCSRFCCONSULTAFAQResponse
+    implements
+        Built<ZCSRFCCONSULTAFAQResponse, ZCSRFCCONSULTAFAQResponseBuilder> {
   @BuiltValueField(wireName: r'isubrc')
   int? get isubrc;
 
@@ -33,18 +35,25 @@ abstract class ZCSRFCCONSULTAFAQResponse implements Built<ZCSRFCCONSULTAFAQRespo
 
   ZCSRFCCONSULTAFAQResponse._();
 
-  factory ZCSRFCCONSULTAFAQResponse([void updates(ZCSRFCCONSULTAFAQResponseBuilder b)]) = _$ZCSRFCCONSULTAFAQResponse;
+  factory ZCSRFCCONSULTAFAQResponse(
+          [void updates(ZCSRFCCONSULTAFAQResponseBuilder b)]) =
+      _$ZCSRFCCONSULTAFAQResponse;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCCONSULTAFAQResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCCONSULTAFAQResponse> get serializer => _$ZCSRFCCONSULTAFAQResponseSerializer();
+  static Serializer<ZCSRFCCONSULTAFAQResponse> get serializer =>
+      _$ZCSRFCCONSULTAFAQResponseSerializer();
 }
 
-class _$ZCSRFCCONSULTAFAQResponseSerializer implements PrimitiveSerializer<ZCSRFCCONSULTAFAQResponse> {
+class _$ZCSRFCCONSULTAFAQResponseSerializer
+    implements PrimitiveSerializer<ZCSRFCCONSULTAFAQResponse> {
   @override
-  final Iterable<Type> types = const [ZCSRFCCONSULTAFAQResponse, _$ZCSRFCCONSULTAFAQResponse];
+  final Iterable<Type> types = const [
+    ZCSRFCCONSULTAFAQResponse,
+    _$ZCSRFCCONSULTAFAQResponse
+  ];
 
   @override
   final String wireName = r'ZCSRFCCONSULTAFAQResponse';
@@ -86,7 +95,9 @@ class _$ZCSRFCCONSULTAFAQResponseSerializer implements PrimitiveSerializer<ZCSRF
     ZCSRFCCONSULTAFAQResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -157,4 +168,3 @@ class _$ZCSRFCCONSULTAFAQResponseSerializer implements PrimitiveSerializer<ZCSRF
     return result.build();
   }
 }
-

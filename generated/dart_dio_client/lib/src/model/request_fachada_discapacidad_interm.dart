@@ -11,12 +11,15 @@ part 'request_fachada_discapacidad_interm.g.dart';
 /// RequestFachadaDiscapacidadInterm
 ///
 /// Properties:
-/// * [docFuncionario] 
-/// * [docu] 
-/// * [nombreFuncionario] 
-/// * [tipodoc] 
+/// * [docFuncionario]
+/// * [docu]
+/// * [nombreFuncionario]
+/// * [tipodoc]
 @BuiltValue()
-abstract class RequestFachadaDiscapacidadInterm implements Built<RequestFachadaDiscapacidadInterm, RequestFachadaDiscapacidadIntermBuilder> {
+abstract class RequestFachadaDiscapacidadInterm
+    implements
+        Built<RequestFachadaDiscapacidadInterm,
+            RequestFachadaDiscapacidadIntermBuilder> {
   @BuiltValueField(wireName: r'doc_funcionario')
   String? get docFuncionario;
 
@@ -31,18 +34,25 @@ abstract class RequestFachadaDiscapacidadInterm implements Built<RequestFachadaD
 
   RequestFachadaDiscapacidadInterm._();
 
-  factory RequestFachadaDiscapacidadInterm([void updates(RequestFachadaDiscapacidadIntermBuilder b)]) = _$RequestFachadaDiscapacidadInterm;
+  factory RequestFachadaDiscapacidadInterm(
+          [void updates(RequestFachadaDiscapacidadIntermBuilder b)]) =
+      _$RequestFachadaDiscapacidadInterm;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(RequestFachadaDiscapacidadIntermBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<RequestFachadaDiscapacidadInterm> get serializer => _$RequestFachadaDiscapacidadIntermSerializer();
+  static Serializer<RequestFachadaDiscapacidadInterm> get serializer =>
+      _$RequestFachadaDiscapacidadIntermSerializer();
 }
 
-class _$RequestFachadaDiscapacidadIntermSerializer implements PrimitiveSerializer<RequestFachadaDiscapacidadInterm> {
+class _$RequestFachadaDiscapacidadIntermSerializer
+    implements PrimitiveSerializer<RequestFachadaDiscapacidadInterm> {
   @override
-  final Iterable<Type> types = const [RequestFachadaDiscapacidadInterm, _$RequestFachadaDiscapacidadInterm];
+  final Iterable<Type> types = const [
+    RequestFachadaDiscapacidadInterm,
+    _$RequestFachadaDiscapacidadInterm
+  ];
 
   @override
   final String wireName = r'RequestFachadaDiscapacidadInterm';
@@ -88,7 +98,9 @@ class _$RequestFachadaDiscapacidadIntermSerializer implements PrimitiveSerialize
     RequestFachadaDiscapacidadInterm object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -159,4 +171,3 @@ class _$RequestFachadaDiscapacidadIntermSerializer implements PrimitiveSerialize
     return result.build();
   }
 }
-

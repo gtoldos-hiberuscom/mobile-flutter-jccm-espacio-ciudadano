@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
-
 /// tests for PublicacionApi
 void main() {
   final instance = EspacioCiudadanoApi().getPublicacionApi();
@@ -69,6 +68,5 @@ void main() {
     test('test siMisExpedientesOperation', () async {
       // TODO
     });
-
   });
 }

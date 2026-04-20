@@ -13,24 +13,28 @@ part 'listavehiculos.g.dart';
 /// LISTAVEHICULOS
 ///
 /// Properties:
-/// * [vehiculo] 
+/// * [vehiculo]
 @BuiltValue()
-abstract class LISTAVEHICULOS implements Built<LISTAVEHICULOS, LISTAVEHICULOSBuilder> {
+abstract class LISTAVEHICULOS
+    implements Built<LISTAVEHICULOS, LISTAVEHICULOSBuilder> {
   @BuiltValueField(wireName: r'vehiculo')
   BuiltList<VEHICULO>? get vehiculo;
 
   LISTAVEHICULOS._();
 
-  factory LISTAVEHICULOS([void updates(LISTAVEHICULOSBuilder b)]) = _$LISTAVEHICULOS;
+  factory LISTAVEHICULOS([void updates(LISTAVEHICULOSBuilder b)]) =
+      _$LISTAVEHICULOS;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(LISTAVEHICULOSBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<LISTAVEHICULOS> get serializer => _$LISTAVEHICULOSSerializer();
+  static Serializer<LISTAVEHICULOS> get serializer =>
+      _$LISTAVEHICULOSSerializer();
 }
 
-class _$LISTAVEHICULOSSerializer implements PrimitiveSerializer<LISTAVEHICULOS> {
+class _$LISTAVEHICULOSSerializer
+    implements PrimitiveSerializer<LISTAVEHICULOS> {
   @override
   final Iterable<Type> types = const [LISTAVEHICULOS, _$LISTAVEHICULOS];
 
@@ -57,7 +61,9 @@ class _$LISTAVEHICULOSSerializer implements PrimitiveSerializer<LISTAVEHICULOS> 
     LISTAVEHICULOS object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -107,4 +113,3 @@ class _$LISTAVEHICULOSSerializer implements PrimitiveSerializer<LISTAVEHICULOS> 
     return result.build();
   }
 }
-

@@ -12,11 +12,14 @@ part 'zcsrfcmisexpedientes_response.g.dart';
 /// ZCSRFCMISEXPEDIENTESResponse
 ///
 /// Properties:
-/// * [error] 
-/// * [expedientes] 
-/// * [subrc] 
+/// * [error]
+/// * [expedientes]
+/// * [subrc]
 @BuiltValue()
-abstract class ZCSRFCMISEXPEDIENTESResponse implements Built<ZCSRFCMISEXPEDIENTESResponse, ZCSRFCMISEXPEDIENTESResponseBuilder> {
+abstract class ZCSRFCMISEXPEDIENTESResponse
+    implements
+        Built<ZCSRFCMISEXPEDIENTESResponse,
+            ZCSRFCMISEXPEDIENTESResponseBuilder> {
   @BuiltValueField(wireName: r'error')
   String? get error;
 
@@ -28,18 +31,25 @@ abstract class ZCSRFCMISEXPEDIENTESResponse implements Built<ZCSRFCMISEXPEDIENTE
 
   ZCSRFCMISEXPEDIENTESResponse._();
 
-  factory ZCSRFCMISEXPEDIENTESResponse([void updates(ZCSRFCMISEXPEDIENTESResponseBuilder b)]) = _$ZCSRFCMISEXPEDIENTESResponse;
+  factory ZCSRFCMISEXPEDIENTESResponse(
+          [void updates(ZCSRFCMISEXPEDIENTESResponseBuilder b)]) =
+      _$ZCSRFCMISEXPEDIENTESResponse;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCMISEXPEDIENTESResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCMISEXPEDIENTESResponse> get serializer => _$ZCSRFCMISEXPEDIENTESResponseSerializer();
+  static Serializer<ZCSRFCMISEXPEDIENTESResponse> get serializer =>
+      _$ZCSRFCMISEXPEDIENTESResponseSerializer();
 }
 
-class _$ZCSRFCMISEXPEDIENTESResponseSerializer implements PrimitiveSerializer<ZCSRFCMISEXPEDIENTESResponse> {
+class _$ZCSRFCMISEXPEDIENTESResponseSerializer
+    implements PrimitiveSerializer<ZCSRFCMISEXPEDIENTESResponse> {
   @override
-  final Iterable<Type> types = const [ZCSRFCMISEXPEDIENTESResponse, _$ZCSRFCMISEXPEDIENTESResponse];
+  final Iterable<Type> types = const [
+    ZCSRFCMISEXPEDIENTESResponse,
+    _$ZCSRFCMISEXPEDIENTESResponse
+  ];
 
   @override
   final String wireName = r'ZCSRFCMISEXPEDIENTESResponse';
@@ -78,7 +88,9 @@ class _$ZCSRFCMISEXPEDIENTESResponseSerializer implements PrimitiveSerializer<ZC
     ZCSRFCMISEXPEDIENTESResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -142,4 +154,3 @@ class _$ZCSRFCMISEXPEDIENTESResponseSerializer implements PrimitiveSerializer<ZC
     return result.build();
   }
 }
-

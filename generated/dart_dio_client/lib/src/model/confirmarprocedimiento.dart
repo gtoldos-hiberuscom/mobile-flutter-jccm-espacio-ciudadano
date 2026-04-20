@@ -13,10 +13,11 @@ part 'confirmarprocedimiento.g.dart';
 /// CONFIRMARPROCEDIMIENTO
 ///
 /// Properties:
-/// * [pdatos] 
-/// * [procedimiento] 
+/// * [pdatos]
+/// * [procedimiento]
 @BuiltValue()
-abstract class CONFIRMARPROCEDIMIENTO implements Built<CONFIRMARPROCEDIMIENTO, CONFIRMARPROCEDIMIENTOBuilder> {
+abstract class CONFIRMARPROCEDIMIENTO
+    implements Built<CONFIRMARPROCEDIMIENTO, CONFIRMARPROCEDIMIENTOBuilder> {
   @BuiltValueField(wireName: r'pdatos')
   PDATOS get pdatos;
 
@@ -25,18 +26,25 @@ abstract class CONFIRMARPROCEDIMIENTO implements Built<CONFIRMARPROCEDIMIENTO, C
 
   CONFIRMARPROCEDIMIENTO._();
 
-  factory CONFIRMARPROCEDIMIENTO([void updates(CONFIRMARPROCEDIMIENTOBuilder b)]) = _$CONFIRMARPROCEDIMIENTO;
+  factory CONFIRMARPROCEDIMIENTO(
+          [void updates(CONFIRMARPROCEDIMIENTOBuilder b)]) =
+      _$CONFIRMARPROCEDIMIENTO;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(CONFIRMARPROCEDIMIENTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<CONFIRMARPROCEDIMIENTO> get serializer => _$CONFIRMARPROCEDIMIENTOSerializer();
+  static Serializer<CONFIRMARPROCEDIMIENTO> get serializer =>
+      _$CONFIRMARPROCEDIMIENTOSerializer();
 }
 
-class _$CONFIRMARPROCEDIMIENTOSerializer implements PrimitiveSerializer<CONFIRMARPROCEDIMIENTO> {
+class _$CONFIRMARPROCEDIMIENTOSerializer
+    implements PrimitiveSerializer<CONFIRMARPROCEDIMIENTO> {
   @override
-  final Iterable<Type> types = const [CONFIRMARPROCEDIMIENTO, _$CONFIRMARPROCEDIMIENTO];
+  final Iterable<Type> types = const [
+    CONFIRMARPROCEDIMIENTO,
+    _$CONFIRMARPROCEDIMIENTO
+  ];
 
   @override
   final String wireName = r'CONFIRMARPROCEDIMIENTO';
@@ -64,7 +72,9 @@ class _$CONFIRMARPROCEDIMIENTOSerializer implements PrimitiveSerializer<CONFIRMA
     CONFIRMARPROCEDIMIENTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -121,4 +131,3 @@ class _$CONFIRMARPROCEDIMIENTOSerializer implements PrimitiveSerializer<CONFIRMA
     return result.build();
   }
 }
-

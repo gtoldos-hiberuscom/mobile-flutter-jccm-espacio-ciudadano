@@ -13,7 +13,7 @@ part 'returns.g.dart';
 /// RETURNS
 ///
 /// Properties:
-/// * [item] 
+/// * [item]
 @BuiltValue()
 abstract class RETURNS implements Built<RETURNS, RETURNSBuilder> {
   @BuiltValueField(wireName: r'item')
@@ -57,7 +57,9 @@ class _$RETURNSSerializer implements PrimitiveSerializer<RETURNS> {
     RETURNS object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -107,4 +109,3 @@ class _$RETURNSSerializer implements PrimitiveSerializer<RETURNS> {
     return result.build();
   }
 }
-

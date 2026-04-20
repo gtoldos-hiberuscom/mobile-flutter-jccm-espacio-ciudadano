@@ -11,14 +11,15 @@ part 'datos_familia_numerosa.g.dart';
 /// DatosFamiliaNumerosa
 ///
 /// Properties:
-/// * [codError] 
-/// * [datos] 
-/// * [descError] 
-/// * [fechaValidezDesde] 
-/// * [fechaValidezHasta] 
-/// * [numeroTitulo] 
+/// * [codError]
+/// * [datos]
+/// * [descError]
+/// * [fechaValidezDesde]
+/// * [fechaValidezHasta]
+/// * [numeroTitulo]
 @BuiltValue()
-abstract class DatosFamiliaNumerosa implements Built<DatosFamiliaNumerosa, DatosFamiliaNumerosaBuilder> {
+abstract class DatosFamiliaNumerosa
+    implements Built<DatosFamiliaNumerosa, DatosFamiliaNumerosaBuilder> {
   @BuiltValueField(wireName: r'codError')
   String? get codError;
 
@@ -39,18 +40,24 @@ abstract class DatosFamiliaNumerosa implements Built<DatosFamiliaNumerosa, Datos
 
   DatosFamiliaNumerosa._();
 
-  factory DatosFamiliaNumerosa([void updates(DatosFamiliaNumerosaBuilder b)]) = _$DatosFamiliaNumerosa;
+  factory DatosFamiliaNumerosa([void updates(DatosFamiliaNumerosaBuilder b)]) =
+      _$DatosFamiliaNumerosa;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DatosFamiliaNumerosaBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DatosFamiliaNumerosa> get serializer => _$DatosFamiliaNumerosaSerializer();
+  static Serializer<DatosFamiliaNumerosa> get serializer =>
+      _$DatosFamiliaNumerosaSerializer();
 }
 
-class _$DatosFamiliaNumerosaSerializer implements PrimitiveSerializer<DatosFamiliaNumerosa> {
+class _$DatosFamiliaNumerosaSerializer
+    implements PrimitiveSerializer<DatosFamiliaNumerosa> {
   @override
-  final Iterable<Type> types = const [DatosFamiliaNumerosa, _$DatosFamiliaNumerosa];
+  final Iterable<Type> types = const [
+    DatosFamiliaNumerosa,
+    _$DatosFamiliaNumerosa
+  ];
 
   @override
   final String wireName = r'DatosFamiliaNumerosa';
@@ -110,7 +117,9 @@ class _$DatosFamiliaNumerosaSerializer implements PrimitiveSerializer<DatosFamil
     DatosFamiliaNumerosa object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -195,4 +204,3 @@ class _$DatosFamiliaNumerosaSerializer implements PrimitiveSerializer<DatosFamil
     return result.build();
   }
 }
-

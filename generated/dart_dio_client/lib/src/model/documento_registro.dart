@@ -11,12 +11,13 @@ part 'documento_registro.g.dart';
 /// DocumentoRegistro
 ///
 /// Properties:
-/// * [algoritmo] 
-/// * [fileSize] 
-/// * [hash] 
-/// * [nombre] 
+/// * [algoritmo]
+/// * [fileSize]
+/// * [hash]
+/// * [nombre]
 @BuiltValue()
-abstract class DocumentoRegistro implements Built<DocumentoRegistro, DocumentoRegistroBuilder> {
+abstract class DocumentoRegistro
+    implements Built<DocumentoRegistro, DocumentoRegistroBuilder> {
   @BuiltValueField(wireName: r'algoritmo')
   String? get algoritmo;
 
@@ -31,16 +32,19 @@ abstract class DocumentoRegistro implements Built<DocumentoRegistro, DocumentoRe
 
   DocumentoRegistro._();
 
-  factory DocumentoRegistro([void updates(DocumentoRegistroBuilder b)]) = _$DocumentoRegistro;
+  factory DocumentoRegistro([void updates(DocumentoRegistroBuilder b)]) =
+      _$DocumentoRegistro;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DocumentoRegistroBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DocumentoRegistro> get serializer => _$DocumentoRegistroSerializer();
+  static Serializer<DocumentoRegistro> get serializer =>
+      _$DocumentoRegistroSerializer();
 }
 
-class _$DocumentoRegistroSerializer implements PrimitiveSerializer<DocumentoRegistro> {
+class _$DocumentoRegistroSerializer
+    implements PrimitiveSerializer<DocumentoRegistro> {
   @override
   final Iterable<Type> types = const [DocumentoRegistro, _$DocumentoRegistro];
 
@@ -88,7 +92,9 @@ class _$DocumentoRegistroSerializer implements PrimitiveSerializer<DocumentoRegi
     DocumentoRegistro object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -159,4 +165,3 @@ class _$DocumentoRegistroSerializer implements PrimitiveSerializer<DocumentoRegi
     return result.build();
   }
 }
-

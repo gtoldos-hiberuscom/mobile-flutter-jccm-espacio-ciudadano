@@ -13,7 +13,7 @@ part 'etreturn.g.dart';
 /// ETRETURN
 ///
 /// Properties:
-/// * [item] 
+/// * [item]
 @BuiltValue()
 abstract class ETRETURN implements Built<ETRETURN, ETRETURNBuilder> {
   @BuiltValueField(wireName: r'item')
@@ -57,7 +57,9 @@ class _$ETRETURNSerializer implements PrimitiveSerializer<ETRETURN> {
     ETRETURN object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -107,4 +109,3 @@ class _$ETRETURNSerializer implements PrimitiveSerializer<ETRETURN> {
     return result.build();
   }
 }
-

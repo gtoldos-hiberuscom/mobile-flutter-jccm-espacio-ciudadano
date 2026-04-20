@@ -13,10 +13,13 @@ part 'zcsrfcdocsfirmadospfexpte_response.g.dart';
 /// ZCSRFCDOCSFIRMADOSPFEXPTEResponse
 ///
 /// Properties:
-/// * [etlistdocs] 
-/// * [etreturn] 
+/// * [etlistdocs]
+/// * [etreturn]
 @BuiltValue()
-abstract class ZCSRFCDOCSFIRMADOSPFEXPTEResponse implements Built<ZCSRFCDOCSFIRMADOSPFEXPTEResponse, ZCSRFCDOCSFIRMADOSPFEXPTEResponseBuilder> {
+abstract class ZCSRFCDOCSFIRMADOSPFEXPTEResponse
+    implements
+        Built<ZCSRFCDOCSFIRMADOSPFEXPTEResponse,
+            ZCSRFCDOCSFIRMADOSPFEXPTEResponseBuilder> {
   @BuiltValueField(wireName: r'etlistdocs')
   ETLISTDOCS? get etlistdocs;
 
@@ -25,18 +28,25 @@ abstract class ZCSRFCDOCSFIRMADOSPFEXPTEResponse implements Built<ZCSRFCDOCSFIRM
 
   ZCSRFCDOCSFIRMADOSPFEXPTEResponse._();
 
-  factory ZCSRFCDOCSFIRMADOSPFEXPTEResponse([void updates(ZCSRFCDOCSFIRMADOSPFEXPTEResponseBuilder b)]) = _$ZCSRFCDOCSFIRMADOSPFEXPTEResponse;
+  factory ZCSRFCDOCSFIRMADOSPFEXPTEResponse(
+          [void updates(ZCSRFCDOCSFIRMADOSPFEXPTEResponseBuilder b)]) =
+      _$ZCSRFCDOCSFIRMADOSPFEXPTEResponse;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCDOCSFIRMADOSPFEXPTEResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCDOCSFIRMADOSPFEXPTEResponse> get serializer => _$ZCSRFCDOCSFIRMADOSPFEXPTEResponseSerializer();
+  static Serializer<ZCSRFCDOCSFIRMADOSPFEXPTEResponse> get serializer =>
+      _$ZCSRFCDOCSFIRMADOSPFEXPTEResponseSerializer();
 }
 
-class _$ZCSRFCDOCSFIRMADOSPFEXPTEResponseSerializer implements PrimitiveSerializer<ZCSRFCDOCSFIRMADOSPFEXPTEResponse> {
+class _$ZCSRFCDOCSFIRMADOSPFEXPTEResponseSerializer
+    implements PrimitiveSerializer<ZCSRFCDOCSFIRMADOSPFEXPTEResponse> {
   @override
-  final Iterable<Type> types = const [ZCSRFCDOCSFIRMADOSPFEXPTEResponse, _$ZCSRFCDOCSFIRMADOSPFEXPTEResponse];
+  final Iterable<Type> types = const [
+    ZCSRFCDOCSFIRMADOSPFEXPTEResponse,
+    _$ZCSRFCDOCSFIRMADOSPFEXPTEResponse
+  ];
 
   @override
   final String wireName = r'ZCSRFCDOCSFIRMADOSPFEXPTEResponse';
@@ -68,7 +78,9 @@ class _$ZCSRFCDOCSFIRMADOSPFEXPTEResponseSerializer implements PrimitiveSerializ
     ZCSRFCDOCSFIRMADOSPFEXPTEResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -125,4 +137,3 @@ class _$ZCSRFCDOCSFIRMADOSPFEXPTEResponseSerializer implements PrimitiveSerializ
     return result.build();
   }
 }
-

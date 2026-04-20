@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
-
 /// tests for IneApi
 void main() {
   final instance = EspacioCiudadanoApi().getIneApi();
@@ -13,6 +12,5 @@ void main() {
     test('test getDatosResidencia', () async {
       // TODO
     });
-
   });
 }

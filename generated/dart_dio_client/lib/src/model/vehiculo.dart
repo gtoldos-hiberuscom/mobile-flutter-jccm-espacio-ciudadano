@@ -11,7 +11,7 @@ part 'vehiculo.g.dart';
 /// VEHICULO
 ///
 /// Properties:
-/// * [matricula] 
+/// * [matricula]
 @BuiltValue()
 abstract class VEHICULO implements Built<VEHICULO, VEHICULOBuilder> {
   @BuiltValueField(wireName: r'matricula')
@@ -55,7 +55,9 @@ class _$VEHICULOSerializer implements PrimitiveSerializer<VEHICULO> {
     VEHICULO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -105,4 +107,3 @@ class _$VEHICULOSerializer implements PrimitiveSerializer<VEHICULO> {
     return result.build();
   }
 }
-

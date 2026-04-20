@@ -4,17 +4,14 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
 import 'package:espacio_ciudadano_api/src/model/request_fachada_discapacidad_interm.dart';
 import 'package:espacio_ciudadano_api/src/model/request_fachada_familia_numerosa_interm.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 import 'package:espacio_ciudadano_api/src/model/respuesta_respuesta_fachada_familia_numerosa_interm.dart';
 
 class IntermediacionApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -22,11 +19,11 @@ class IntermediacionApi {
   const IntermediacionApi(this._dio, this._serializers);
 
   /// Obtener datos del carné de familia numerosa
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [requestFachadaDiscapacidadInterm] 
-  /// * [authorization] 
+  /// * [requestFachadaDiscapacidadInterm]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -36,7 +33,7 @@ class IntermediacionApi {
   ///
   /// Returns a [Future] containing a [Response] with a [String] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<String>> obtenerDatosFamiliaNumerosa({ 
+  Future<Response<String>> obtenerDatosFamiliaNumerosa({
     required RequestFachadaDiscapacidadInterm requestFachadaDiscapacidadInterm,
     String? authorization,
     CancelToken? cancelToken,
@@ -65,11 +62,11 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(RequestFachadaDiscapacidadInterm);
-      _bodyData = _serializers.serialize(requestFachadaDiscapacidadInterm, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData = _serializers.serialize(requestFachadaDiscapacidadInterm,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -93,7 +90,6 @@ class IntermediacionApi {
     try {
       final rawResponse = _response.data;
       _responseData = rawResponse == null ? null : rawResponse as String;
-
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -117,11 +113,11 @@ class IntermediacionApi {
   }
 
   /// obtenerDatosFamiliaNumerosaIntermediacion
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [requestFachadaFamiliaNumerosaInterm] 
-  /// * [authorization] 
+  /// * [requestFachadaFamiliaNumerosaInterm]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -131,8 +127,10 @@ class IntermediacionApi {
   ///
   /// Returns a [Future] containing a [Response] with a [RespuestaRespuestaFachadaFamiliaNumerosaInterm] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaRespuestaFachadaFamiliaNumerosaInterm>> obtenerDatosFamiliaNumerosaIntermediacion({ 
-    required RequestFachadaFamiliaNumerosaInterm requestFachadaFamiliaNumerosaInterm,
+  Future<Response<RespuestaRespuestaFachadaFamiliaNumerosaInterm>>
+      obtenerDatosFamiliaNumerosaIntermediacion({
+    required RequestFachadaFamiliaNumerosaInterm
+        requestFachadaFamiliaNumerosaInterm,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -160,11 +158,11 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(RequestFachadaFamiliaNumerosaInterm);
-      _bodyData = _serializers.serialize(requestFachadaFamiliaNumerosaInterm, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData = _serializers.serialize(requestFachadaFamiliaNumerosaInterm,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -187,11 +185,13 @@ class IntermediacionApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(RespuestaRespuestaFachadaFamiliaNumerosaInterm),
-      ) as RespuestaRespuestaFachadaFamiliaNumerosaInterm;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(
+                  RespuestaRespuestaFachadaFamiliaNumerosaInterm),
+            ) as RespuestaRespuestaFachadaFamiliaNumerosaInterm;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -213,5 +213,4 @@ class IntermediacionApi {
       extra: _response.extra,
     );
   }
-
 }

@@ -15,7 +15,7 @@ part 'respuesta.g.dart';
 /// Properties:
 /// * [body] - Objeto devuelto en el payload
 /// * [codigoRespuesta] - Código asociado a la respuesta obtenida
-/// * [infoError] 
+/// * [infoError]
 /// * [mensajeRespuesta] - Mensaje informativo de la respuesta obtenida
 /// * [timestamp] - Momento en que se registró la respuesta
 @BuiltValue()
@@ -105,7 +105,9 @@ class _$RespuestaSerializer implements PrimitiveSerializer<Respuesta> {
     Respuesta object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -183,4 +185,3 @@ class _$RespuestaSerializer implements PrimitiveSerializer<Respuesta> {
     return result.build();
   }
 }
-

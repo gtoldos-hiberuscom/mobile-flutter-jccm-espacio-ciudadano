@@ -13,7 +13,7 @@ part 'tfaq.g.dart';
 /// TFAQ
 ///
 /// Properties:
-/// * [item] 
+/// * [item]
 @BuiltValue()
 abstract class TFAQ implements Built<TFAQ, TFAQBuilder> {
   @BuiltValueField(wireName: r'item')
@@ -57,7 +57,9 @@ class _$TFAQSerializer implements PrimitiveSerializer<TFAQ> {
     TFAQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -107,4 +109,3 @@ class _$TFAQSerializer implements PrimitiveSerializer<TFAQ> {
     return result.build();
   }
 }
-

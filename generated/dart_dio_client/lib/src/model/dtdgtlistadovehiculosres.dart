@@ -12,12 +12,14 @@ part 'dtdgtlistadovehiculosres.g.dart';
 /// DTDGTLISTADOVEHICULOSRES
 ///
 /// Properties:
-/// * [idepeticion] 
-/// * [listavehiculos] 
-/// * [mensaje] 
-/// * [resul] 
+/// * [idepeticion]
+/// * [listavehiculos]
+/// * [mensaje]
+/// * [resul]
 @BuiltValue()
-abstract class DTDGTLISTADOVEHICULOSRES implements Built<DTDGTLISTADOVEHICULOSRES, DTDGTLISTADOVEHICULOSRESBuilder> {
+abstract class DTDGTLISTADOVEHICULOSRES
+    implements
+        Built<DTDGTLISTADOVEHICULOSRES, DTDGTLISTADOVEHICULOSRESBuilder> {
   @BuiltValueField(wireName: r'idepeticion')
   String? get idepeticion;
 
@@ -32,18 +34,25 @@ abstract class DTDGTLISTADOVEHICULOSRES implements Built<DTDGTLISTADOVEHICULOSRE
 
   DTDGTLISTADOVEHICULOSRES._();
 
-  factory DTDGTLISTADOVEHICULOSRES([void updates(DTDGTLISTADOVEHICULOSRESBuilder b)]) = _$DTDGTLISTADOVEHICULOSRES;
+  factory DTDGTLISTADOVEHICULOSRES(
+          [void updates(DTDGTLISTADOVEHICULOSRESBuilder b)]) =
+      _$DTDGTLISTADOVEHICULOSRES;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTDGTLISTADOVEHICULOSRESBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTDGTLISTADOVEHICULOSRES> get serializer => _$DTDGTLISTADOVEHICULOSRESSerializer();
+  static Serializer<DTDGTLISTADOVEHICULOSRES> get serializer =>
+      _$DTDGTLISTADOVEHICULOSRESSerializer();
 }
 
-class _$DTDGTLISTADOVEHICULOSRESSerializer implements PrimitiveSerializer<DTDGTLISTADOVEHICULOSRES> {
+class _$DTDGTLISTADOVEHICULOSRESSerializer
+    implements PrimitiveSerializer<DTDGTLISTADOVEHICULOSRES> {
   @override
-  final Iterable<Type> types = const [DTDGTLISTADOVEHICULOSRES, _$DTDGTLISTADOVEHICULOSRES];
+  final Iterable<Type> types = const [
+    DTDGTLISTADOVEHICULOSRES,
+    _$DTDGTLISTADOVEHICULOSRES
+  ];
 
   @override
   final String wireName = r'DTDGTLISTADOVEHICULOSRES';
@@ -89,7 +98,9 @@ class _$DTDGTLISTADOVEHICULOSRESSerializer implements PrimitiveSerializer<DTDGTL
     DTDGTLISTADOVEHICULOSRES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -160,4 +171,3 @@ class _$DTDGTLISTADOVEHICULOSRESSerializer implements PrimitiveSerializer<DTDGTL
     return result.build();
   }
 }
-

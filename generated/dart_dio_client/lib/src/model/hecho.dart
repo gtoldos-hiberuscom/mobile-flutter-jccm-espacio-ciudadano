@@ -11,9 +11,9 @@ part 'hecho.g.dart';
 /// Hecho
 ///
 /// Properties:
-/// * [idHecho] 
-/// * [nombreHecho] 
-/// * [seleccionado] 
+/// * [idHecho]
+/// * [nombreHecho]
+/// * [seleccionado]
 @BuiltValue()
 abstract class Hecho implements Built<Hecho, HechoBuilder> {
   @BuiltValueField(wireName: r'idHecho')
@@ -77,7 +77,9 @@ class _$HechoSerializer implements PrimitiveSerializer<Hecho> {
     Hecho object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -141,4 +143,3 @@ class _$HechoSerializer implements PrimitiveSerializer<Hecho> {
     return result.build();
   }
 }
-

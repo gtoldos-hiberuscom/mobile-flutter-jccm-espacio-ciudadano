@@ -4,17 +4,14 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
 import 'package:espacio_ciudadano_api/src/api_util.dart';
 import 'package:espacio_ciudadano_api/src/model/dtsepesvdidefareq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtsepesvdidefares.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class SepeApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -22,12 +19,12 @@ class SepeApi {
   const SepeApi(this._dio, this._serializers);
 
   /// Servicio para obtener los datos de demandante de empleo a Fecha Actual
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [numDocumento] 
-  /// * [dTSEPESVDIDEFAREQBody] 
-  /// * [authorization] 
+  /// * [numDocumento]
+  /// * [dTSEPESVDIDEFAREQBody]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -37,7 +34,7 @@ class SepeApi {
   ///
   /// Returns a [Future] containing a [Response] with a [DTSEPESVDIDEFARES] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTSEPESVDIDEFARES>> getDemandanteEmpleoFechaActual({ 
+  Future<Response<DTSEPESVDIDEFARES>> getDemandanteEmpleoFechaActual({
     required String numDocumento,
     required DTSEPESVDIDEFAREQ dTSEPESVDIDEFAREQBody,
     String? authorization,
@@ -48,7 +45,12 @@ class SepeApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/sepe/demandante-empleo-fecha-actual/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
+    final _path = r'/api/v1/sepe/demandante-empleo-fecha-actual/{numDocumento}'
+        .replaceAll(
+            '{' r'numDocumento' '}',
+            encodeQueryParameter(
+                    _serializers, numDocumento, const FullType(String))
+                .toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -67,11 +69,11 @@ class SepeApi {
 
     try {
       const _type = FullType(DTSEPESVDIDEFAREQ);
-      _bodyData = _serializers.serialize(dTSEPESVDIDEFAREQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData =
+          _serializers.serialize(dTSEPESVDIDEFAREQBody, specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -94,11 +96,12 @@ class SepeApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(DTSEPESVDIDEFARES),
-      ) as DTSEPESVDIDEFARES;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(DTSEPESVDIDEFARES),
+            ) as DTSEPESVDIDEFARES;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -120,5 +123,4 @@ class SepeApi {
       extra: _response.extra,
     );
   }
-
 }

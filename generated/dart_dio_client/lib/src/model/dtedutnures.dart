@@ -13,15 +13,15 @@ part 'dtedutnures.g.dart';
 /// DTEDUTNURES
 ///
 /// Properties:
-/// * [docu] 
-/// * [elemento] 
-/// * [fecnac] 
-/// * [idpeticion] 
-/// * [locnac] 
-/// * [mensaje] 
-/// * [pais] 
-/// * [provnac] 
-/// * [resul] 
+/// * [docu]
+/// * [elemento]
+/// * [fecnac]
+/// * [idpeticion]
+/// * [locnac]
+/// * [mensaje]
+/// * [pais]
+/// * [provnac]
+/// * [resul]
 @BuiltValue()
 abstract class DTEDUTNURES implements Built<DTEDUTNURES, DTEDUTNURESBuilder> {
   @BuiltValueField(wireName: r'docu')
@@ -145,7 +145,9 @@ class _$DTEDUTNURESSerializer implements PrimitiveSerializer<DTEDUTNURES> {
     DTEDUTNURES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -251,4 +253,3 @@ class _$DTEDUTNURESSerializer implements PrimitiveSerializer<DTEDUTNURES> {
     return result.build();
   }
 }
-

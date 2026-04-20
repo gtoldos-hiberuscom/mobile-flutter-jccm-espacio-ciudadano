@@ -12,26 +12,36 @@ part 'respuesta_fachada_familia_numerosa_interm.g.dart';
 /// Objeto devuelto en el payload
 ///
 /// Properties:
-/// * [respuesta] 
+/// * [respuesta]
 @BuiltValue()
-abstract class RespuestaFachadaFamiliaNumerosaInterm implements Built<RespuestaFachadaFamiliaNumerosaInterm, RespuestaFachadaFamiliaNumerosaIntermBuilder> {
+abstract class RespuestaFachadaFamiliaNumerosaInterm
+    implements
+        Built<RespuestaFachadaFamiliaNumerosaInterm,
+            RespuestaFachadaFamiliaNumerosaIntermBuilder> {
   @BuiltValueField(wireName: r'respuesta')
   ResponseFamiliaNumerosaIntermediacion? get respuesta;
 
   RespuestaFachadaFamiliaNumerosaInterm._();
 
-  factory RespuestaFachadaFamiliaNumerosaInterm([void updates(RespuestaFachadaFamiliaNumerosaIntermBuilder b)]) = _$RespuestaFachadaFamiliaNumerosaInterm;
+  factory RespuestaFachadaFamiliaNumerosaInterm(
+          [void updates(RespuestaFachadaFamiliaNumerosaIntermBuilder b)]) =
+      _$RespuestaFachadaFamiliaNumerosaInterm;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(RespuestaFachadaFamiliaNumerosaIntermBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<RespuestaFachadaFamiliaNumerosaInterm> get serializer => _$RespuestaFachadaFamiliaNumerosaIntermSerializer();
+  static Serializer<RespuestaFachadaFamiliaNumerosaInterm> get serializer =>
+      _$RespuestaFachadaFamiliaNumerosaIntermSerializer();
 }
 
-class _$RespuestaFachadaFamiliaNumerosaIntermSerializer implements PrimitiveSerializer<RespuestaFachadaFamiliaNumerosaInterm> {
+class _$RespuestaFachadaFamiliaNumerosaIntermSerializer
+    implements PrimitiveSerializer<RespuestaFachadaFamiliaNumerosaInterm> {
   @override
-  final Iterable<Type> types = const [RespuestaFachadaFamiliaNumerosaInterm, _$RespuestaFachadaFamiliaNumerosaInterm];
+  final Iterable<Type> types = const [
+    RespuestaFachadaFamiliaNumerosaInterm,
+    _$RespuestaFachadaFamiliaNumerosaInterm
+  ];
 
   @override
   final String wireName = r'RespuestaFachadaFamiliaNumerosaInterm';
@@ -56,7 +66,9 @@ class _$RespuestaFachadaFamiliaNumerosaIntermSerializer implements PrimitiveSeri
     RespuestaFachadaFamiliaNumerosaInterm object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -74,7 +86,8 @@ class _$RespuestaFachadaFamiliaNumerosaIntermSerializer implements PrimitiveSeri
         case r'respuesta':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(ResponseFamiliaNumerosaIntermediacion),
+            specifiedType:
+                const FullType(ResponseFamiliaNumerosaIntermediacion),
           ) as ResponseFamiliaNumerosaIntermediacion;
           result.respuesta.replace(valueDes);
           break;
@@ -106,4 +119,3 @@ class _$RespuestaFachadaFamiliaNumerosaIntermSerializer implements PrimitiveSeri
     return result.build();
   }
 }
-

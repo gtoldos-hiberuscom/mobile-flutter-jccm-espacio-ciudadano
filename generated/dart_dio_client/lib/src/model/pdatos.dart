@@ -11,14 +11,14 @@ part 'pdatos.g.dart';
 /// PDATOS
 ///
 /// Properties:
-/// * [apellido1] 
-/// * [apellido2] 
-/// * [asuid] 
-/// * [descrip] 
-/// * [idunico] 
-/// * [nombre] 
-/// * [numdoc] 
-/// * [uniorg] 
+/// * [apellido1]
+/// * [apellido2]
+/// * [asuid]
+/// * [descrip]
+/// * [idunico]
+/// * [nombre]
+/// * [numdoc]
+/// * [uniorg]
 @BuiltValue()
 abstract class PDATOS implements Built<PDATOS, PDATOSBuilder> {
   @BuiltValueField(wireName: r'apellido1')
@@ -116,7 +116,9 @@ class _$PDATOSSerializer implements PrimitiveSerializer<PDATOS> {
     PDATOS object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -215,4 +217,3 @@ class _$PDATOSSerializer implements PrimitiveSerializer<PDATOS> {
     return result.build();
   }
 }
-

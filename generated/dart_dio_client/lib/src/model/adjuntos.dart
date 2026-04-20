@@ -12,7 +12,7 @@ part 'adjuntos.g.dart';
 /// ADJUNTOS
 ///
 /// Properties:
-/// * [adjunto] 
+/// * [adjunto]
 @BuiltValue()
 abstract class ADJUNTOS implements Built<ADJUNTOS, ADJUNTOSBuilder> {
   @BuiltValueField(wireName: r'adjunto')
@@ -54,7 +54,9 @@ class _$ADJUNTOSSerializer implements PrimitiveSerializer<ADJUNTOS> {
     ADJUNTOS object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -104,4 +106,3 @@ class _$ADJUNTOSSerializer implements PrimitiveSerializer<ADJUNTOS> {
     return result.build();
   }
 }
-

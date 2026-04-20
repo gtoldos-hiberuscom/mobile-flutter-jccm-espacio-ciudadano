@@ -12,24 +12,28 @@ part 'zcslistartiposdoc.g.dart';
 /// ZCSLISTARTIPOSDOC
 ///
 /// Properties:
-/// * [zlistadoc] 
+/// * [zlistadoc]
 @BuiltValue()
-abstract class ZCSLISTARTIPOSDOC implements Built<ZCSLISTARTIPOSDOC, ZCSLISTARTIPOSDOCBuilder> {
+abstract class ZCSLISTARTIPOSDOC
+    implements Built<ZCSLISTARTIPOSDOC, ZCSLISTARTIPOSDOCBuilder> {
   @BuiltValueField(wireName: r'zlistadoc')
   ZLISTADOC get zlistadoc;
 
   ZCSLISTARTIPOSDOC._();
 
-  factory ZCSLISTARTIPOSDOC([void updates(ZCSLISTARTIPOSDOCBuilder b)]) = _$ZCSLISTARTIPOSDOC;
+  factory ZCSLISTARTIPOSDOC([void updates(ZCSLISTARTIPOSDOCBuilder b)]) =
+      _$ZCSLISTARTIPOSDOC;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSLISTARTIPOSDOCBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSLISTARTIPOSDOC> get serializer => _$ZCSLISTARTIPOSDOCSerializer();
+  static Serializer<ZCSLISTARTIPOSDOC> get serializer =>
+      _$ZCSLISTARTIPOSDOCSerializer();
 }
 
-class _$ZCSLISTARTIPOSDOCSerializer implements PrimitiveSerializer<ZCSLISTARTIPOSDOC> {
+class _$ZCSLISTARTIPOSDOCSerializer
+    implements PrimitiveSerializer<ZCSLISTARTIPOSDOC> {
   @override
   final Iterable<Type> types = const [ZCSLISTARTIPOSDOC, _$ZCSLISTARTIPOSDOC];
 
@@ -54,7 +58,9 @@ class _$ZCSLISTARTIPOSDOCSerializer implements PrimitiveSerializer<ZCSLISTARTIPO
     ZCSLISTARTIPOSDOC object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -104,4 +110,3 @@ class _$ZCSLISTARTIPOSDOCSerializer implements PrimitiveSerializer<ZCSLISTARTIPO
     return result.build();
   }
 }
-

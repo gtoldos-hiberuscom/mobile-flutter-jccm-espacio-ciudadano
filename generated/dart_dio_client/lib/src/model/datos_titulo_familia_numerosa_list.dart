@@ -11,15 +11,18 @@ part 'datos_titulo_familia_numerosa_list.g.dart';
 /// DatosTituloFamiliaNumerosaList
 ///
 /// Properties:
-/// * [categoria] 
-/// * [codigoComunidadAutoma] 
-/// * [fechaCaducidad] 
-/// * [fechaEfecto] 
-/// * [numeroHijos] 
-/// * [numeroTitulo] 
-/// * [tituloVigente] 
+/// * [categoria]
+/// * [codigoComunidadAutoma]
+/// * [fechaCaducidad]
+/// * [fechaEfecto]
+/// * [numeroHijos]
+/// * [numeroTitulo]
+/// * [tituloVigente]
 @BuiltValue()
-abstract class DatosTituloFamiliaNumerosaList implements Built<DatosTituloFamiliaNumerosaList, DatosTituloFamiliaNumerosaListBuilder> {
+abstract class DatosTituloFamiliaNumerosaList
+    implements
+        Built<DatosTituloFamiliaNumerosaList,
+            DatosTituloFamiliaNumerosaListBuilder> {
   @BuiltValueField(wireName: r'categoria')
   String? get categoria;
 
@@ -43,18 +46,25 @@ abstract class DatosTituloFamiliaNumerosaList implements Built<DatosTituloFamili
 
   DatosTituloFamiliaNumerosaList._();
 
-  factory DatosTituloFamiliaNumerosaList([void updates(DatosTituloFamiliaNumerosaListBuilder b)]) = _$DatosTituloFamiliaNumerosaList;
+  factory DatosTituloFamiliaNumerosaList(
+          [void updates(DatosTituloFamiliaNumerosaListBuilder b)]) =
+      _$DatosTituloFamiliaNumerosaList;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DatosTituloFamiliaNumerosaListBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DatosTituloFamiliaNumerosaList> get serializer => _$DatosTituloFamiliaNumerosaListSerializer();
+  static Serializer<DatosTituloFamiliaNumerosaList> get serializer =>
+      _$DatosTituloFamiliaNumerosaListSerializer();
 }
 
-class _$DatosTituloFamiliaNumerosaListSerializer implements PrimitiveSerializer<DatosTituloFamiliaNumerosaList> {
+class _$DatosTituloFamiliaNumerosaListSerializer
+    implements PrimitiveSerializer<DatosTituloFamiliaNumerosaList> {
   @override
-  final Iterable<Type> types = const [DatosTituloFamiliaNumerosaList, _$DatosTituloFamiliaNumerosaList];
+  final Iterable<Type> types = const [
+    DatosTituloFamiliaNumerosaList,
+    _$DatosTituloFamiliaNumerosaList
+  ];
 
   @override
   final String wireName = r'DatosTituloFamiliaNumerosaList';
@@ -121,7 +131,9 @@ class _$DatosTituloFamiliaNumerosaListSerializer implements PrimitiveSerializer<
     DatosTituloFamiliaNumerosaList object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -213,4 +225,3 @@ class _$DatosTituloFamiliaNumerosaListSerializer implements PrimitiveSerializer<
     return result.build();
   }
 }
-

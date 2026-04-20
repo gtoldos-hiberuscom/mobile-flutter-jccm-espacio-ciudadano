@@ -13,7 +13,7 @@ part 'lista_hechos.g.dart';
 /// ListaHechos
 ///
 /// Properties:
-/// * [listaHechos] 
+/// * [listaHechos]
 @BuiltValue()
 abstract class ListaHechos implements Built<ListaHechos, ListaHechosBuilder> {
   @BuiltValueField(wireName: r'listaHechos')
@@ -57,7 +57,9 @@ class _$ListaHechosSerializer implements PrimitiveSerializer<ListaHechos> {
     ListaHechos object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -107,4 +109,3 @@ class _$ListaHechosSerializer implements PrimitiveSerializer<ListaHechos> {
     return result.build();
   }
 }
-

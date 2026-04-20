@@ -11,15 +11,16 @@ part 'beneficiarios.g.dart';
 /// BENEFICIARIOS
 ///
 /// Properties:
-/// * [apellido1] 
-/// * [apellido2] 
-/// * [fecnac] 
-/// * [nombre] 
-/// * [numdoc] 
-/// * [tipdoc] 
-/// * [titular] 
+/// * [apellido1]
+/// * [apellido2]
+/// * [fecnac]
+/// * [nombre]
+/// * [numdoc]
+/// * [tipdoc]
+/// * [titular]
 @BuiltValue()
-abstract class BENEFICIARIOS implements Built<BENEFICIARIOS, BENEFICIARIOSBuilder> {
+abstract class BENEFICIARIOS
+    implements Built<BENEFICIARIOS, BENEFICIARIOSBuilder> {
   @BuiltValueField(wireName: r'apellido1')
   String? get apellido1;
 
@@ -43,13 +44,15 @@ abstract class BENEFICIARIOS implements Built<BENEFICIARIOS, BENEFICIARIOSBuilde
 
   BENEFICIARIOS._();
 
-  factory BENEFICIARIOS([void updates(BENEFICIARIOSBuilder b)]) = _$BENEFICIARIOS;
+  factory BENEFICIARIOS([void updates(BENEFICIARIOSBuilder b)]) =
+      _$BENEFICIARIOS;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(BENEFICIARIOSBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<BENEFICIARIOS> get serializer => _$BENEFICIARIOSSerializer();
+  static Serializer<BENEFICIARIOS> get serializer =>
+      _$BENEFICIARIOSSerializer();
 }
 
 class _$BENEFICIARIOSSerializer implements PrimitiveSerializer<BENEFICIARIOS> {
@@ -121,7 +124,9 @@ class _$BENEFICIARIOSSerializer implements PrimitiveSerializer<BENEFICIARIOS> {
     BENEFICIARIOS object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -213,4 +218,3 @@ class _$BENEFICIARIOSSerializer implements PrimitiveSerializer<BENEFICIARIOS> {
     return result.build();
   }
 }
-

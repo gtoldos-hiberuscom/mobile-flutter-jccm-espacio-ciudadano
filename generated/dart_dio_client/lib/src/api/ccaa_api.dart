@@ -4,17 +4,14 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
 import 'package:espacio_ciudadano_api/src/api_util.dart';
 import 'package:espacio_ciudadano_api/src/model/dtminhafpcccafnreq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtminhafpcccafnres.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class CcaaApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -22,12 +19,12 @@ class CcaaApi {
   const CcaaApi(this._dio, this._serializers);
 
   /// Servicio para obtener los datos de familia numerosa
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [numDocumento] 
-  /// * [dTMINHAFPCCCAFNREQBody] 
-  /// * [authorization] 
+  /// * [numDocumento]
+  /// * [dTMINHAFPCCCAFNREQBody]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -37,7 +34,7 @@ class CcaaApi {
   ///
   /// Returns a [Future] containing a [Response] with a [DTMINHAFPCCCAFNRES] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTMINHAFPCCCAFNRES>> getDatosFamiliaNumerosa({ 
+  Future<Response<DTMINHAFPCCCAFNRES>> getDatosFamiliaNumerosa({
     required String numDocumento,
     required DTMINHAFPCCCAFNREQ dTMINHAFPCCCAFNREQBody,
     String? authorization,
@@ -48,7 +45,10 @@ class CcaaApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/ccaa/familia-numerosa/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
+    final _path = r'/api/v1/ccaa/familia-numerosa/{numDocumento}'.replaceAll(
+        '{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
+            .toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -67,11 +67,11 @@ class CcaaApi {
 
     try {
       const _type = FullType(DTMINHAFPCCCAFNREQ);
-      _bodyData = _serializers.serialize(dTMINHAFPCCCAFNREQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData =
+          _serializers.serialize(dTMINHAFPCCCAFNREQBody, specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -94,11 +94,12 @@ class CcaaApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(DTMINHAFPCCCAFNRES),
-      ) as DTMINHAFPCCCAFNRES;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(DTMINHAFPCCCAFNRES),
+            ) as DTMINHAFPCCCAFNRES;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -120,5 +121,4 @@ class CcaaApi {
       extra: _response.extra,
     );
   }
-
 }

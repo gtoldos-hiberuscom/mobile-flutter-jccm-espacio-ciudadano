@@ -11,14 +11,14 @@ part 'pregistro.g.dart';
 /// PREGISTRO
 ///
 /// Properties:
-/// * [apellido1] 
-/// * [apellido2] 
-/// * [asuid] 
-/// * [descrip] 
-/// * [idunico] 
-/// * [nombre] 
-/// * [numdoc] 
-/// * [uniorg] 
+/// * [apellido1]
+/// * [apellido2]
+/// * [asuid]
+/// * [descrip]
+/// * [idunico]
+/// * [nombre]
+/// * [numdoc]
+/// * [uniorg]
 @BuiltValue()
 abstract class PREGISTRO implements Built<PREGISTRO, PREGISTROBuilder> {
   @BuiltValueField(wireName: r'apellido1')
@@ -116,7 +116,9 @@ class _$PREGISTROSerializer implements PrimitiveSerializer<PREGISTRO> {
     PREGISTRO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -215,4 +217,3 @@ class _$PREGISTROSerializer implements PrimitiveSerializer<PREGISTRO> {
     return result.build();
   }
 }
-

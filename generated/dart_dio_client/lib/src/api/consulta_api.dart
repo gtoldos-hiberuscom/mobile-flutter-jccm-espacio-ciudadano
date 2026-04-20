@@ -4,16 +4,13 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcconsultafaq.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcconsultafaq_response.dart';
 
 class ConsultaApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -21,10 +18,10 @@ class ConsultaApi {
   const ConsultaApi(this._dio, this._serializers);
 
   /// Consultar el servicio para obtener el texto de la consulta o reclamacion y la respuesta
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [zCSRFCCONSULTAFAQBody] 
+  /// * [zCSRFCCONSULTAFAQBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -34,7 +31,7 @@ class ConsultaApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ZCSRFCCONSULTAFAQResponse] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<ZCSRFCCONSULTAFAQResponse>> miConsultafaqOperation({ 
+  Future<Response<ZCSRFCCONSULTAFAQResponse>> miConsultafaqOperation({
     required ZCSRFCCONSULTAFAQ zCSRFCCONSULTAFAQBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -61,11 +58,11 @@ class ConsultaApi {
 
     try {
       const _type = FullType(ZCSRFCCONSULTAFAQ);
-      _bodyData = _serializers.serialize(zCSRFCCONSULTAFAQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData =
+          _serializers.serialize(zCSRFCCONSULTAFAQBody, specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -88,11 +85,12 @@ class ConsultaApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(ZCSRFCCONSULTAFAQResponse),
-      ) as ZCSRFCCONSULTAFAQResponse;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(ZCSRFCCONSULTAFAQResponse),
+            ) as ZCSRFCCONSULTAFAQResponse;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -114,5 +112,4 @@ class ConsultaApi {
       extra: _response.extra,
     );
   }
-
 }

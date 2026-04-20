@@ -4,7 +4,6 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
@@ -13,10 +12,8 @@ import 'package:espacio_ciudadano_api/src/model/dtedutnureq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtedutnures.dart';
 import 'package:espacio_ciudadano_api/src/model/dtedutuoreq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtedutuores.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class EducacionApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -24,12 +21,12 @@ class EducacionApi {
   const EducacionApi(this._dio, this._serializers);
 
   /// Servicio para obtener los títulos no universitarios
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [numDocumento] 
-  /// * [dTEDUTNUREQBody] 
-  /// * [authorization] 
+  /// * [numDocumento]
+  /// * [dTEDUTNUREQBody]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -39,7 +36,7 @@ class EducacionApi {
   ///
   /// Returns a [Future] containing a [Response] with a [DTEDUTNURES] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTEDUTNURES>> getTitulosNoUniversitarios({ 
+  Future<Response<DTEDUTNURES>> getTitulosNoUniversitarios({
     required String numDocumento,
     required DTEDUTNUREQ dTEDUTNUREQBody,
     String? authorization,
@@ -50,7 +47,12 @@ class EducacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/educacion/titulos-no-universitarios/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
+    final _path = r'/api/v1/educacion/titulos-no-universitarios/{numDocumento}'
+        .replaceAll(
+            '{' r'numDocumento' '}',
+            encodeQueryParameter(
+                    _serializers, numDocumento, const FullType(String))
+                .toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -70,10 +72,9 @@ class EducacionApi {
     try {
       const _type = FullType(DTEDUTNUREQ);
       _bodyData = _serializers.serialize(dTEDUTNUREQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -96,11 +97,12 @@ class EducacionApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(DTEDUTNURES),
-      ) as DTEDUTNURES;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(DTEDUTNURES),
+            ) as DTEDUTNURES;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -124,12 +126,12 @@ class EducacionApi {
   }
 
   /// Servicio para obtener los títulos universitarios
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [numDocumento] 
-  /// * [dTEDUTUOREQBody] 
-  /// * [authorization] 
+  /// * [numDocumento]
+  /// * [dTEDUTUOREQBody]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -139,7 +141,7 @@ class EducacionApi {
   ///
   /// Returns a [Future] containing a [Response] with a [DTEDUTUORES] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTEDUTUORES>> getTitulosUniversitarios({ 
+  Future<Response<DTEDUTUORES>> getTitulosUniversitarios({
     required String numDocumento,
     required DTEDUTUOREQ dTEDUTUOREQBody,
     String? authorization,
@@ -150,7 +152,12 @@ class EducacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/educacion/titulos-universitarios/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
+    final _path = r'/api/v1/educacion/titulos-universitarios/{numDocumento}'
+        .replaceAll(
+            '{' r'numDocumento' '}',
+            encodeQueryParameter(
+                    _serializers, numDocumento, const FullType(String))
+                .toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -170,10 +177,9 @@ class EducacionApi {
     try {
       const _type = FullType(DTEDUTUOREQ);
       _bodyData = _serializers.serialize(dTEDUTUOREQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -196,11 +202,12 @@ class EducacionApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(DTEDUTUORES),
-      ) as DTEDUTUORES;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(DTEDUTUORES),
+            ) as DTEDUTUORES;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -222,5 +229,4 @@ class EducacionApi {
       extra: _response.extra,
     );
   }
-
 }

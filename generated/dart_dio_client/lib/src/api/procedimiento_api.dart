@@ -4,20 +4,17 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
 import 'package:espacio_ciudadano_api/src/model/adjunto.dart';
 import 'package:espacio_ciudadano_api/src/model/confirmarprocedimiento.dart';
 import 'package:espacio_ciudadano_api/src/model/dt_procedimiento.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 import 'package:espacio_ciudadano_api/src/model/resultadoprocedimiento.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrmobtrespuestaexp.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrmobtrespuestaexp_response.dart';
 
 class ProcedimientoApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -25,10 +22,10 @@ class ProcedimientoApi {
   const ProcedimientoApi(this._dio, this._serializers);
 
   /// Servicio que permite generar el hash de un documento codificado en base64 sin firma
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [aDJUNTOBody] 
+  /// * [aDJUNTOBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -38,7 +35,7 @@ class ProcedimientoApi {
   ///
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RESULTADOPROCEDIMIENTO>> hashAdjuntoaOperation({ 
+  Future<Response<RESULTADOPROCEDIMIENTO>> hashAdjuntoaOperation({
     required ADJUNTO aDJUNTOBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -66,10 +63,9 @@ class ProcedimientoApi {
     try {
       const _type = FullType(ADJUNTO);
       _bodyData = _serializers.serialize(aDJUNTOBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -92,11 +88,12 @@ class ProcedimientoApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
-      ) as RESULTADOPROCEDIMIENTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
+            ) as RESULTADOPROCEDIMIENTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -120,10 +117,10 @@ class ProcedimientoApi {
   }
 
   /// Servicio para realizar la escritura de un procedimiento en cesar
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [cONFIRMARPROCEDIMIENTOBody] 
+  /// * [cONFIRMARPROCEDIMIENTOBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -133,7 +130,7 @@ class ProcedimientoApi {
   ///
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RESULTADOPROCEDIMIENTO>> miConfirmarProcOperation({ 
+  Future<Response<RESULTADOPROCEDIMIENTO>> miConfirmarProcOperation({
     required CONFIRMARPROCEDIMIENTO cONFIRMARPROCEDIMIENTOBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -160,11 +157,11 @@ class ProcedimientoApi {
 
     try {
       const _type = FullType(CONFIRMARPROCEDIMIENTO);
-      _bodyData = _serializers.serialize(cONFIRMARPROCEDIMIENTOBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData = _serializers.serialize(cONFIRMARPROCEDIMIENTOBody,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -187,11 +184,12 @@ class ProcedimientoApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
-      ) as RESULTADOPROCEDIMIENTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
+            ) as RESULTADOPROCEDIMIENTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -215,10 +213,10 @@ class ProcedimientoApi {
   }
 
   /// Servicio para realizar la validacion de un procedimiento en cesar
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [dTProcedimiento] 
+  /// * [dTProcedimiento]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -228,7 +226,7 @@ class ProcedimientoApi {
   ///
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RESULTADOPROCEDIMIENTO>> miIniProcOperation({ 
+  Future<Response<RESULTADOPROCEDIMIENTO>> miIniProcOperation({
     required DTProcedimiento dTProcedimiento,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -256,10 +254,9 @@ class ProcedimientoApi {
     try {
       const _type = FullType(DTProcedimiento);
       _bodyData = _serializers.serialize(dTProcedimiento, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -282,11 +279,12 @@ class ProcedimientoApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
-      ) as RESULTADOPROCEDIMIENTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
+            ) as RESULTADOPROCEDIMIENTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -310,10 +308,10 @@ class ProcedimientoApi {
   }
 
   /// Consultar la respuesta de un expediente en cesar
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [zCSRMOBTRESPUESTAEXPBody] 
+  /// * [zCSRMOBTRESPUESTAEXPBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -323,7 +321,7 @@ class ProcedimientoApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ZCSRMOBTRESPUESTAEXPResponse] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<ZCSRMOBTRESPUESTAEXPResponse>> miObtenerRespuestaOperation({ 
+  Future<Response<ZCSRMOBTRESPUESTAEXPResponse>> miObtenerRespuestaOperation({
     required ZCSRMOBTRESPUESTAEXP zCSRMOBTRESPUESTAEXPBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -350,11 +348,11 @@ class ProcedimientoApi {
 
     try {
       const _type = FullType(ZCSRMOBTRESPUESTAEXP);
-      _bodyData = _serializers.serialize(zCSRMOBTRESPUESTAEXPBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData = _serializers.serialize(zCSRMOBTRESPUESTAEXPBody,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -377,11 +375,12 @@ class ProcedimientoApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(ZCSRMOBTRESPUESTAEXPResponse),
-      ) as ZCSRMOBTRESPUESTAEXPResponse;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(ZCSRMOBTRESPUESTAEXPResponse),
+            ) as ZCSRMOBTRESPUESTAEXPResponse;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -405,10 +404,10 @@ class ProcedimientoApi {
   }
 
   /// Servicio que permite subir al buzon de tramitacion un documento codificado en base64 firmado
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [aDJUNTOBody] 
+  /// * [aDJUNTOBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -418,7 +417,7 @@ class ProcedimientoApi {
   ///
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RESULTADOPROCEDIMIENTO>> miSubirAdjuntoOperation({ 
+  Future<Response<RESULTADOPROCEDIMIENTO>> miSubirAdjuntoOperation({
     required ADJUNTO aDJUNTOBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -446,10 +445,9 @@ class ProcedimientoApi {
     try {
       const _type = FullType(ADJUNTO);
       _bodyData = _serializers.serialize(aDJUNTOBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -472,11 +470,12 @@ class ProcedimientoApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
-      ) as RESULTADOPROCEDIMIENTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
+            ) as RESULTADOPROCEDIMIENTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -500,10 +499,10 @@ class ProcedimientoApi {
   }
 
   /// Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [aDJUNTOBody] 
+  /// * [aDJUNTOBody]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -513,7 +512,7 @@ class ProcedimientoApi {
   ///
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RESULTADOPROCEDIMIENTO>> miSubirAdjuntoSinFirmaOperation({ 
+  Future<Response<RESULTADOPROCEDIMIENTO>> miSubirAdjuntoSinFirmaOperation({
     required ADJUNTO aDJUNTOBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -541,10 +540,9 @@ class ProcedimientoApi {
     try {
       const _type = FullType(ADJUNTO);
       _bodyData = _serializers.serialize(aDJUNTOBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -567,11 +565,12 @@ class ProcedimientoApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
-      ) as RESULTADOPROCEDIMIENTO;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RESULTADOPROCEDIMIENTO),
+            ) as RESULTADOPROCEDIMIENTO;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -593,5 +592,4 @@ class ProcedimientoApi {
       extra: _response.extra,
     );
   }
-
 }

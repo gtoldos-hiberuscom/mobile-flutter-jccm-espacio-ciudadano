@@ -13,7 +13,7 @@ part 'expedientes.g.dart';
 /// EXPEDIENTES
 ///
 /// Properties:
-/// * [item] 
+/// * [item]
 @BuiltValue()
 abstract class EXPEDIENTES implements Built<EXPEDIENTES, EXPEDIENTESBuilder> {
   @BuiltValueField(wireName: r'item')
@@ -46,7 +46,8 @@ class _$EXPEDIENTESSerializer implements PrimitiveSerializer<EXPEDIENTES> {
       yield r'item';
       yield serializers.serialize(
         object.item,
-        specifiedType: const FullType(BuiltList, [FullType(ZCSAUXSTEXPEDIENTES)]),
+        specifiedType:
+            const FullType(BuiltList, [FullType(ZCSAUXSTEXPEDIENTES)]),
       );
     }
   }
@@ -57,7 +58,9 @@ class _$EXPEDIENTESSerializer implements PrimitiveSerializer<EXPEDIENTES> {
     EXPEDIENTES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -75,7 +78,8 @@ class _$EXPEDIENTESSerializer implements PrimitiveSerializer<EXPEDIENTES> {
         case r'item':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(ZCSAUXSTEXPEDIENTES)]),
+            specifiedType:
+                const FullType(BuiltList, [FullType(ZCSAUXSTEXPEDIENTES)]),
           ) as BuiltList<ZCSAUXSTEXPEDIENTES>;
           result.item.replace(valueDes);
           break;
@@ -107,4 +111,3 @@ class _$EXPEDIENTESSerializer implements PrimitiveSerializer<EXPEDIENTES> {
     return result.build();
   }
 }
-

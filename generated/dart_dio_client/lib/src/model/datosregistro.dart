@@ -12,21 +12,24 @@ part 'datosregistro.g.dart';
 /// DATOSREGISTRO
 ///
 /// Properties:
-/// * [pregistro] 
+/// * [pregistro]
 @BuiltValue()
-abstract class DATOSREGISTRO implements Built<DATOSREGISTRO, DATOSREGISTROBuilder> {
+abstract class DATOSREGISTRO
+    implements Built<DATOSREGISTRO, DATOSREGISTROBuilder> {
   @BuiltValueField(wireName: r'pregistro')
   PREGISTRO? get pregistro;
 
   DATOSREGISTRO._();
 
-  factory DATOSREGISTRO([void updates(DATOSREGISTROBuilder b)]) = _$DATOSREGISTRO;
+  factory DATOSREGISTRO([void updates(DATOSREGISTROBuilder b)]) =
+      _$DATOSREGISTRO;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DATOSREGISTROBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DATOSREGISTRO> get serializer => _$DATOSREGISTROSerializer();
+  static Serializer<DATOSREGISTRO> get serializer =>
+      _$DATOSREGISTROSerializer();
 }
 
 class _$DATOSREGISTROSerializer implements PrimitiveSerializer<DATOSREGISTRO> {
@@ -56,7 +59,9 @@ class _$DATOSREGISTROSerializer implements PrimitiveSerializer<DATOSREGISTRO> {
     DATOSREGISTRO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -106,4 +111,3 @@ class _$DATOSREGISTROSerializer implements PrimitiveSerializer<DATOSREGISTRO> {
     return result.build();
   }
 }
-

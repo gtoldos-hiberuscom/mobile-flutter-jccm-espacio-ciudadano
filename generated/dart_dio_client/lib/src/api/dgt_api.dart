@@ -4,17 +4,14 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
 import 'package:espacio_ciudadano_api/src/api_util.dart';
 import 'package:espacio_ciudadano_api/src/model/dtdgtlistadovehiculosreq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtdgtlistadovehiculosres.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class DgtApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -22,12 +19,12 @@ class DgtApi {
   const DgtApi(this._dio, this._serializers);
 
   /// Servicio para consultar el listado de vehiculos
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [numDocumento] 
-  /// * [dTDGTLISTADOVEHICULOSREQBody] 
-  /// * [authorization] 
+  /// * [numDocumento]
+  /// * [dTDGTLISTADOVEHICULOSREQBody]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -37,7 +34,7 @@ class DgtApi {
   ///
   /// Returns a [Future] containing a [Response] with a [DTDGTLISTADOVEHICULOSRES] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTDGTLISTADOVEHICULOSRES>> getListaVehiculos({ 
+  Future<Response<DTDGTLISTADOVEHICULOSRES>> getListaVehiculos({
     required String numDocumento,
     required DTDGTLISTADOVEHICULOSREQ dTDGTLISTADOVEHICULOSREQBody,
     String? authorization,
@@ -48,7 +45,10 @@ class DgtApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/dgt/lista-vehiculos/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
+    final _path = r'/api/v1/dgt/lista-vehiculos/{numDocumento}'.replaceAll(
+        '{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
+            .toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -67,11 +67,11 @@ class DgtApi {
 
     try {
       const _type = FullType(DTDGTLISTADOVEHICULOSREQ);
-      _bodyData = _serializers.serialize(dTDGTLISTADOVEHICULOSREQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData = _serializers.serialize(dTDGTLISTADOVEHICULOSREQBody,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -94,11 +94,12 @@ class DgtApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(DTDGTLISTADOVEHICULOSRES),
-      ) as DTDGTLISTADOVEHICULOSRES;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(DTDGTLISTADOVEHICULOSRES),
+            ) as DTDGTLISTADOVEHICULOSRES;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -120,5 +121,4 @@ class DgtApi {
       extra: _response.extra,
     );
   }
-
 }

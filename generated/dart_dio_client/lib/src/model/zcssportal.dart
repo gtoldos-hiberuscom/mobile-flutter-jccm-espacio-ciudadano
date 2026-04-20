@@ -11,9 +11,9 @@ part 'zcssportal.g.dart';
 /// ZCSSPORTAL
 ///
 /// Properties:
-/// * [ejeexp] 
-/// * [numexp] 
-/// * [subfam] 
+/// * [ejeexp]
+/// * [numexp]
+/// * [subfam]
 @BuiltValue()
 abstract class ZCSSPORTAL implements Built<ZCSSPORTAL, ZCSSPORTALBuilder> {
   @BuiltValueField(wireName: r'ejeexp')
@@ -77,7 +77,9 @@ class _$ZCSSPORTALSerializer implements PrimitiveSerializer<ZCSSPORTAL> {
     ZCSSPORTAL object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -141,4 +143,3 @@ class _$ZCSSPORTALSerializer implements PrimitiveSerializer<ZCSSPORTAL> {
     return result.build();
   }
 }
-

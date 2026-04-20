@@ -16,19 +16,20 @@ part 'registrar_fichero_request.g.dart';
 /// RegistrarFicheroRequest
 ///
 /// Properties:
-/// * [confirmarProcedimiento] 
-/// * [consejeriaTramitadora] 
-/// * [datosRepresentante] 
-/// * [documentos] 
-/// * [esPorContraste] 
-/// * [estadoTramitacion] 
-/// * [fechaCierreTramitacion] 
-/// * [fechaInicioTramitacion] 
-/// * [oficinaTramitadora] 
-/// * [procedimiento] 
-/// * [xmlRegistro] 
+/// * [confirmarProcedimiento]
+/// * [consejeriaTramitadora]
+/// * [datosRepresentante]
+/// * [documentos]
+/// * [esPorContraste]
+/// * [estadoTramitacion]
+/// * [fechaCierreTramitacion]
+/// * [fechaInicioTramitacion]
+/// * [oficinaTramitadora]
+/// * [procedimiento]
+/// * [xmlRegistro]
 @BuiltValue()
-abstract class RegistrarFicheroRequest implements Built<RegistrarFicheroRequest, RegistrarFicheroRequestBuilder> {
+abstract class RegistrarFicheroRequest
+    implements Built<RegistrarFicheroRequest, RegistrarFicheroRequestBuilder> {
   @BuiltValueField(wireName: r'confirmarProcedimiento')
   CONFIRMARPROCEDIMIENTO? get confirmarProcedimiento;
 
@@ -64,18 +65,25 @@ abstract class RegistrarFicheroRequest implements Built<RegistrarFicheroRequest,
 
   RegistrarFicheroRequest._();
 
-  factory RegistrarFicheroRequest([void updates(RegistrarFicheroRequestBuilder b)]) = _$RegistrarFicheroRequest;
+  factory RegistrarFicheroRequest(
+          [void updates(RegistrarFicheroRequestBuilder b)]) =
+      _$RegistrarFicheroRequest;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(RegistrarFicheroRequestBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<RegistrarFicheroRequest> get serializer => _$RegistrarFicheroRequestSerializer();
+  static Serializer<RegistrarFicheroRequest> get serializer =>
+      _$RegistrarFicheroRequestSerializer();
 }
 
-class _$RegistrarFicheroRequestSerializer implements PrimitiveSerializer<RegistrarFicheroRequest> {
+class _$RegistrarFicheroRequestSerializer
+    implements PrimitiveSerializer<RegistrarFicheroRequest> {
   @override
-  final Iterable<Type> types = const [RegistrarFicheroRequest, _$RegistrarFicheroRequest];
+  final Iterable<Type> types = const [
+    RegistrarFicheroRequest,
+    _$RegistrarFicheroRequest
+  ];
 
   @override
   final String wireName = r'RegistrarFicheroRequest';
@@ -170,7 +178,9 @@ class _$RegistrarFicheroRequestSerializer implements PrimitiveSerializer<Registr
     RegistrarFicheroRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -209,7 +219,8 @@ class _$RegistrarFicheroRequestSerializer implements PrimitiveSerializer<Registr
         case r'documentos':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(DocumentoRegistro)]),
+            specifiedType:
+                const FullType(BuiltList, [FullType(DocumentoRegistro)]),
           ) as BuiltList<DocumentoRegistro>;
           result.documentos.replace(valueDes);
           break;
@@ -290,4 +301,3 @@ class _$RegistrarFicheroRequestSerializer implements PrimitiveSerializer<Registr
     return result.build();
   }
 }
-

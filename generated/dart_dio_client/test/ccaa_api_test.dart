@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
-
 /// tests for CcaaApi
 void main() {
   final instance = EspacioCiudadanoApi().getCcaaApi();
@@ -13,6 +12,5 @@ void main() {
     test('test getDatosFamiliaNumerosa', () async {
       // TODO
     });
-
   });
 }

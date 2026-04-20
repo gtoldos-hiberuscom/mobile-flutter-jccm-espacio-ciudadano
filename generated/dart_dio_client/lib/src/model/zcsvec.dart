@@ -11,16 +11,16 @@ part 'zcsvec.g.dart';
 /// ZCSVEC
 ///
 /// Properties:
-/// * [codtdf] 
-/// * [coduo] 
-/// * [datfirma] 
-/// * [desdoc] 
-/// * [firma] 
-/// * [idaplic] 
-/// * [idprop] 
-/// * [origen] 
-/// * [tipo] 
-/// * [tipodoc] 
+/// * [codtdf]
+/// * [coduo]
+/// * [datfirma]
+/// * [desdoc]
+/// * [firma]
+/// * [idaplic]
+/// * [idprop]
+/// * [origen]
+/// * [tipo]
+/// * [tipodoc]
 @BuiltValue()
 abstract class ZCSVEC implements Built<ZCSVEC, ZCSVECBuilder> {
   @BuiltValueField(wireName: r'codtdf')
@@ -134,7 +134,9 @@ class _$ZCSVECSerializer implements PrimitiveSerializer<ZCSVEC> {
     ZCSVEC object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -247,4 +249,3 @@ class _$ZCSVECSerializer implements PrimitiveSerializer<ZCSVEC> {
     return result.build();
   }
 }
-

@@ -11,7 +11,7 @@ part 'carnet_qr.g.dart';
 /// CarnetQr
 ///
 /// Properties:
-/// * [qr] 
+/// * [qr]
 @BuiltValue()
 abstract class CarnetQr implements Built<CarnetQr, CarnetQrBuilder> {
   @BuiltValueField(wireName: r'qr')
@@ -55,7 +55,9 @@ class _$CarnetQrSerializer implements PrimitiveSerializer<CarnetQr> {
     CarnetQr object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -105,4 +107,3 @@ class _$CarnetQrSerializer implements PrimitiveSerializer<CarnetQr> {
     return result.build();
   }
 }
-

@@ -13,19 +13,20 @@ part 'dtminhafpcccafnres.g.dart';
 /// DTMINHAFPCCCAFNRES
 ///
 /// Properties:
-/// * [beneficiarios] 
-/// * [categoria] 
-/// * [comaut] 
-/// * [feccaduci] 
-/// * [fecexpedi] 
-/// * [idpeticion] 
-/// * [mensaje] 
-/// * [numhij] 
-/// * [nutitulo] 
-/// * [resul] 
-/// * [vigente] 
+/// * [beneficiarios]
+/// * [categoria]
+/// * [comaut]
+/// * [feccaduci]
+/// * [fecexpedi]
+/// * [idpeticion]
+/// * [mensaje]
+/// * [numhij]
+/// * [nutitulo]
+/// * [resul]
+/// * [vigente]
 @BuiltValue()
-abstract class DTMINHAFPCCCAFNRES implements Built<DTMINHAFPCCCAFNRES, DTMINHAFPCCCAFNRESBuilder> {
+abstract class DTMINHAFPCCCAFNRES
+    implements Built<DTMINHAFPCCCAFNRES, DTMINHAFPCCCAFNRESBuilder> {
   @BuiltValueField(wireName: r'beneficiarios')
   BuiltList<BENEFICIARIOS>? get beneficiarios;
 
@@ -61,16 +62,19 @@ abstract class DTMINHAFPCCCAFNRES implements Built<DTMINHAFPCCCAFNRES, DTMINHAFP
 
   DTMINHAFPCCCAFNRES._();
 
-  factory DTMINHAFPCCCAFNRES([void updates(DTMINHAFPCCCAFNRESBuilder b)]) = _$DTMINHAFPCCCAFNRES;
+  factory DTMINHAFPCCCAFNRES([void updates(DTMINHAFPCCCAFNRESBuilder b)]) =
+      _$DTMINHAFPCCCAFNRES;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTMINHAFPCCCAFNRESBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTMINHAFPCCCAFNRES> get serializer => _$DTMINHAFPCCCAFNRESSerializer();
+  static Serializer<DTMINHAFPCCCAFNRES> get serializer =>
+      _$DTMINHAFPCCCAFNRESSerializer();
 }
 
-class _$DTMINHAFPCCCAFNRESSerializer implements PrimitiveSerializer<DTMINHAFPCCCAFNRES> {
+class _$DTMINHAFPCCCAFNRESSerializer
+    implements PrimitiveSerializer<DTMINHAFPCCCAFNRES> {
   @override
   final Iterable<Type> types = const [DTMINHAFPCCCAFNRES, _$DTMINHAFPCCCAFNRES];
 
@@ -167,7 +171,9 @@ class _$DTMINHAFPCCCAFNRESSerializer implements PrimitiveSerializer<DTMINHAFPCCC
     DTMINHAFPCCCAFNRES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -287,4 +293,3 @@ class _$DTMINHAFPCCCAFNRESSerializer implements PrimitiveSerializer<DTMINHAFPCCC
     return result.build();
   }
 }
-

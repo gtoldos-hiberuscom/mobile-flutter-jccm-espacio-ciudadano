@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
-
 /// tests for CatastroApi
 void main() {
   final instance = EspacioCiudadanoApi().getCatastroApi();
@@ -13,6 +12,5 @@ void main() {
     test('test getDatosCatastrales', () async {
       // TODO
     });
-
   });
 }

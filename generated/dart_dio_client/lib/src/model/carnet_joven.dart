@@ -11,11 +11,11 @@ part 'carnet_joven.g.dart';
 /// CarnetJoven
 ///
 /// Properties:
-/// * [fechaFinValidez] 
-/// * [fechaNacimiento] 
-/// * [numero] 
-/// * [titular] 
-/// * [enTramitacion] 
+/// * [fechaFinValidez]
+/// * [fechaNacimiento]
+/// * [numero]
+/// * [titular]
+/// * [enTramitacion]
 @BuiltValue()
 abstract class CarnetJoven implements Built<CarnetJoven, CarnetJovenBuilder> {
   @BuiltValueField(wireName: r'FechaFinValidez')
@@ -99,7 +99,9 @@ class _$CarnetJovenSerializer implements PrimitiveSerializer<CarnetJoven> {
     CarnetJoven object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -177,4 +179,3 @@ class _$CarnetJovenSerializer implements PrimitiveSerializer<CarnetJoven> {
     return result.build();
   }
 }
-

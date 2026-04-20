@@ -18,25 +18,26 @@ part 'dt_procedimiento.g.dart';
 /// DTProcedimiento
 ///
 /// Properties:
-/// * [adjuntos] 
-/// * [asudescripcion] 
-/// * [asunto] 
-/// * [consejeria] 
-/// * [datospago] 
-/// * [datosprocedimiento] 
-/// * [datossolicitante] 
-/// * [firma] 
-/// * [identificacion] 
-/// * [identificacionrep] 
-/// * [idunico] 
-/// * [noexpediente] 
-/// * [provincia] 
-/// * [registro] 
-/// * [source_] 
-/// * [tipoprocedimiento] 
-/// * [unidadorganica] 
+/// * [adjuntos]
+/// * [asudescripcion]
+/// * [asunto]
+/// * [consejeria]
+/// * [datospago]
+/// * [datosprocedimiento]
+/// * [datossolicitante]
+/// * [firma]
+/// * [identificacion]
+/// * [identificacionrep]
+/// * [idunico]
+/// * [noexpediente]
+/// * [provincia]
+/// * [registro]
+/// * [source_]
+/// * [tipoprocedimiento]
+/// * [unidadorganica]
 @BuiltValue()
-abstract class DTProcedimiento implements Built<DTProcedimiento, DTProcedimientoBuilder> {
+abstract class DTProcedimiento
+    implements Built<DTProcedimiento, DTProcedimientoBuilder> {
   @BuiltValueField(wireName: r'adjuntos')
   ADJUNTOS get adjuntos;
 
@@ -90,16 +91,19 @@ abstract class DTProcedimiento implements Built<DTProcedimiento, DTProcedimiento
 
   DTProcedimiento._();
 
-  factory DTProcedimiento([void updates(DTProcedimientoBuilder b)]) = _$DTProcedimiento;
+  factory DTProcedimiento([void updates(DTProcedimientoBuilder b)]) =
+      _$DTProcedimiento;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTProcedimientoBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTProcedimiento> get serializer => _$DTProcedimientoSerializer();
+  static Serializer<DTProcedimiento> get serializer =>
+      _$DTProcedimientoSerializer();
 }
 
-class _$DTProcedimientoSerializer implements PrimitiveSerializer<DTProcedimiento> {
+class _$DTProcedimientoSerializer
+    implements PrimitiveSerializer<DTProcedimiento> {
   @override
   final Iterable<Type> types = const [DTProcedimiento, _$DTProcedimiento];
 
@@ -212,7 +216,9 @@ class _$DTProcedimientoSerializer implements PrimitiveSerializer<DTProcedimiento
     DTProcedimiento object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -374,4 +380,3 @@ class _$DTProcedimientoSerializer implements PrimitiveSerializer<DTProcedimiento
     return result.build();
   }
 }
-

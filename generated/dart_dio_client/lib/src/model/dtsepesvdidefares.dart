@@ -11,13 +11,14 @@ part 'dtsepesvdidefares.g.dart';
 /// DTSEPESVDIDEFARES
 ///
 /// Properties:
-/// * [idpeticion] 
-/// * [inscrito] 
-/// * [mensaje] 
-/// * [resul] 
-/// * [ultimainscrip] 
+/// * [idpeticion]
+/// * [inscrito]
+/// * [mensaje]
+/// * [resul]
+/// * [ultimainscrip]
 @BuiltValue()
-abstract class DTSEPESVDIDEFARES implements Built<DTSEPESVDIDEFARES, DTSEPESVDIDEFARESBuilder> {
+abstract class DTSEPESVDIDEFARES
+    implements Built<DTSEPESVDIDEFARES, DTSEPESVDIDEFARESBuilder> {
   @BuiltValueField(wireName: r'idpeticion')
   String? get idpeticion;
 
@@ -35,16 +36,19 @@ abstract class DTSEPESVDIDEFARES implements Built<DTSEPESVDIDEFARES, DTSEPESVDID
 
   DTSEPESVDIDEFARES._();
 
-  factory DTSEPESVDIDEFARES([void updates(DTSEPESVDIDEFARESBuilder b)]) = _$DTSEPESVDIDEFARES;
+  factory DTSEPESVDIDEFARES([void updates(DTSEPESVDIDEFARESBuilder b)]) =
+      _$DTSEPESVDIDEFARES;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTSEPESVDIDEFARESBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTSEPESVDIDEFARES> get serializer => _$DTSEPESVDIDEFARESSerializer();
+  static Serializer<DTSEPESVDIDEFARES> get serializer =>
+      _$DTSEPESVDIDEFARESSerializer();
 }
 
-class _$DTSEPESVDIDEFARESSerializer implements PrimitiveSerializer<DTSEPESVDIDEFARES> {
+class _$DTSEPESVDIDEFARESSerializer
+    implements PrimitiveSerializer<DTSEPESVDIDEFARES> {
   @override
   final Iterable<Type> types = const [DTSEPESVDIDEFARES, _$DTSEPESVDIDEFARES];
 
@@ -99,7 +103,9 @@ class _$DTSEPESVDIDEFARESSerializer implements PrimitiveSerializer<DTSEPESVDIDEF
     DTSEPESVDIDEFARES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -177,4 +183,3 @@ class _$DTSEPESVDIDEFARESSerializer implements PrimitiveSerializer<DTSEPESVDIDEF
     return result.build();
   }
 }
-

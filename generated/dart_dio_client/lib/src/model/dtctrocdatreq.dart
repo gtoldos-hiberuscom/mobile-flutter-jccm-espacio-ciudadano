@@ -11,15 +11,16 @@ part 'dtctrocdatreq.g.dart';
 /// DTCTROCDATREQ
 ///
 /// Properties:
-/// * [docu] 
-/// * [documentofuncionario] 
-/// * [idaut] 
-/// * [nombrefuncionario] 
-/// * [proc] 
-/// * [tipdoc] 
-/// * [tipo] 
+/// * [docu]
+/// * [documentofuncionario]
+/// * [idaut]
+/// * [nombrefuncionario]
+/// * [proc]
+/// * [tipdoc]
+/// * [tipo]
 @BuiltValue()
-abstract class DTCTROCDATREQ implements Built<DTCTROCDATREQ, DTCTROCDATREQBuilder> {
+abstract class DTCTROCDATREQ
+    implements Built<DTCTROCDATREQ, DTCTROCDATREQBuilder> {
   @BuiltValueField(wireName: r'docu')
   String? get docu;
 
@@ -43,13 +44,15 @@ abstract class DTCTROCDATREQ implements Built<DTCTROCDATREQ, DTCTROCDATREQBuilde
 
   DTCTROCDATREQ._();
 
-  factory DTCTROCDATREQ([void updates(DTCTROCDATREQBuilder b)]) = _$DTCTROCDATREQ;
+  factory DTCTROCDATREQ([void updates(DTCTROCDATREQBuilder b)]) =
+      _$DTCTROCDATREQ;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTCTROCDATREQBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTCTROCDATREQ> get serializer => _$DTCTROCDATREQSerializer();
+  static Serializer<DTCTROCDATREQ> get serializer =>
+      _$DTCTROCDATREQSerializer();
 }
 
 class _$DTCTROCDATREQSerializer implements PrimitiveSerializer<DTCTROCDATREQ> {
@@ -121,7 +124,9 @@ class _$DTCTROCDATREQSerializer implements PrimitiveSerializer<DTCTROCDATREQ> {
     DTCTROCDATREQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -213,4 +218,3 @@ class _$DTCTROCDATREQSerializer implements PrimitiveSerializer<DTCTROCDATREQ> {
     return result.build();
   }
 }
-

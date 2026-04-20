@@ -11,12 +11,12 @@ part 'tramite.g.dart';
 /// Tramite
 ///
 /// Properties:
-/// * [fechaPresentacionFin] 
-/// * [fechaPresentacionIni] 
-/// * [idTramite] 
-/// * [idUnidadResponsable] 
-/// * [nombreTramite] 
-/// * [nombreUnidadResponsable] 
+/// * [fechaPresentacionFin]
+/// * [fechaPresentacionIni]
+/// * [idTramite]
+/// * [idUnidadResponsable]
+/// * [nombreTramite]
+/// * [nombreUnidadResponsable]
 @BuiltValue()
 abstract class Tramite implements Built<Tramite, TramiteBuilder> {
   @BuiltValueField(wireName: r'fechaPresentacionFin')
@@ -110,7 +110,9 @@ class _$TramiteSerializer implements PrimitiveSerializer<Tramite> {
     Tramite object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -195,4 +197,3 @@ class _$TramiteSerializer implements PrimitiveSerializer<Tramite> {
     return result.build();
   }
 }
-

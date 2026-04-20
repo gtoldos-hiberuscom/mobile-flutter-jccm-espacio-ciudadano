@@ -4,17 +4,14 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
 import 'package:espacio_ciudadano_api/src/api_util.dart';
 import 'package:espacio_ciudadano_api/src/model/dtinecdrfreq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtinecdrfres.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class IneApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -22,12 +19,12 @@ class IneApi {
   const IneApi(this._dio, this._serializers);
 
   /// Servicio para obtener los datos de residencia
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [numDocumento] 
-  /// * [dTINECDRFREQBody] 
-  /// * [authorization] 
+  /// * [numDocumento]
+  /// * [dTINECDRFREQBody]
+  /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -37,7 +34,7 @@ class IneApi {
   ///
   /// Returns a [Future] containing a [Response] with a [DTINECDRFRES] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTINECDRFRES>> getDatosResidencia({ 
+  Future<Response<DTINECDRFRES>> getDatosResidencia({
     required String numDocumento,
     required DTINECDRFREQ dTINECDRFREQBody,
     String? authorization,
@@ -48,7 +45,10 @@ class IneApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/ine/datos-residencia/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
+    final _path = r'/api/v1/ine/datos-residencia/{numDocumento}'.replaceAll(
+        '{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
+            .toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -67,11 +67,11 @@ class IneApi {
 
     try {
       const _type = FullType(DTINECDRFREQ);
-      _bodyData = _serializers.serialize(dTINECDRFREQBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData =
+          _serializers.serialize(dTINECDRFREQBody, specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -94,11 +94,12 @@ class IneApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(DTINECDRFRES),
-      ) as DTINECDRFRES;
-
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(DTINECDRFRES),
+            ) as DTINECDRFRES;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -120,5 +121,4 @@ class IneApi {
       extra: _response.extra,
     );
   }
-
 }

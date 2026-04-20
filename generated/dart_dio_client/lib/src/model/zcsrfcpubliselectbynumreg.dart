@@ -11,11 +11,13 @@ part 'zcsrfcpubliselectbynumreg.g.dart';
 /// ZCSRFCPUBLISELECTBYNUMREG
 ///
 /// Properties:
-/// * [pnumdoc] 
-/// * [pregistro] 
-/// * [ptipodoc] 
+/// * [pnumdoc]
+/// * [pregistro]
+/// * [ptipodoc]
 @BuiltValue()
-abstract class ZCSRFCPUBLISELECTBYNUMREG implements Built<ZCSRFCPUBLISELECTBYNUMREG, ZCSRFCPUBLISELECTBYNUMREGBuilder> {
+abstract class ZCSRFCPUBLISELECTBYNUMREG
+    implements
+        Built<ZCSRFCPUBLISELECTBYNUMREG, ZCSRFCPUBLISELECTBYNUMREGBuilder> {
   @BuiltValueField(wireName: r'pnumdoc')
   String get pnumdoc;
 
@@ -27,18 +29,25 @@ abstract class ZCSRFCPUBLISELECTBYNUMREG implements Built<ZCSRFCPUBLISELECTBYNUM
 
   ZCSRFCPUBLISELECTBYNUMREG._();
 
-  factory ZCSRFCPUBLISELECTBYNUMREG([void updates(ZCSRFCPUBLISELECTBYNUMREGBuilder b)]) = _$ZCSRFCPUBLISELECTBYNUMREG;
+  factory ZCSRFCPUBLISELECTBYNUMREG(
+          [void updates(ZCSRFCPUBLISELECTBYNUMREGBuilder b)]) =
+      _$ZCSRFCPUBLISELECTBYNUMREG;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCPUBLISELECTBYNUMREGBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCPUBLISELECTBYNUMREG> get serializer => _$ZCSRFCPUBLISELECTBYNUMREGSerializer();
+  static Serializer<ZCSRFCPUBLISELECTBYNUMREG> get serializer =>
+      _$ZCSRFCPUBLISELECTBYNUMREGSerializer();
 }
 
-class _$ZCSRFCPUBLISELECTBYNUMREGSerializer implements PrimitiveSerializer<ZCSRFCPUBLISELECTBYNUMREG> {
+class _$ZCSRFCPUBLISELECTBYNUMREGSerializer
+    implements PrimitiveSerializer<ZCSRFCPUBLISELECTBYNUMREG> {
   @override
-  final Iterable<Type> types = const [ZCSRFCPUBLISELECTBYNUMREG, _$ZCSRFCPUBLISELECTBYNUMREG];
+  final Iterable<Type> types = const [
+    ZCSRFCPUBLISELECTBYNUMREG,
+    _$ZCSRFCPUBLISELECTBYNUMREG
+  ];
 
   @override
   final String wireName = r'ZCSRFCPUBLISELECTBYNUMREG';
@@ -71,7 +80,9 @@ class _$ZCSRFCPUBLISELECTBYNUMREGSerializer implements PrimitiveSerializer<ZCSRF
     ZCSRFCPUBLISELECTBYNUMREG object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -135,4 +146,3 @@ class _$ZCSRFCPUBLISELECTBYNUMREGSerializer implements PrimitiveSerializer<ZCSRF
     return result.build();
   }
 }
-

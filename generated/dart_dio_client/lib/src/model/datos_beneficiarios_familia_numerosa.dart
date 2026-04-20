@@ -13,26 +13,36 @@ part 'datos_beneficiarios_familia_numerosa.g.dart';
 /// DatosBeneficiariosFamiliaNumerosa
 ///
 /// Properties:
-/// * [row] 
+/// * [row]
 @BuiltValue()
-abstract class DatosBeneficiariosFamiliaNumerosa implements Built<DatosBeneficiariosFamiliaNumerosa, DatosBeneficiariosFamiliaNumerosaBuilder> {
+abstract class DatosBeneficiariosFamiliaNumerosa
+    implements
+        Built<DatosBeneficiariosFamiliaNumerosa,
+            DatosBeneficiariosFamiliaNumerosaBuilder> {
   @BuiltValueField(wireName: r'row')
   BuiltList<DatosBeneficiariosFamiliaNumerosaList>? get row;
 
   DatosBeneficiariosFamiliaNumerosa._();
 
-  factory DatosBeneficiariosFamiliaNumerosa([void updates(DatosBeneficiariosFamiliaNumerosaBuilder b)]) = _$DatosBeneficiariosFamiliaNumerosa;
+  factory DatosBeneficiariosFamiliaNumerosa(
+          [void updates(DatosBeneficiariosFamiliaNumerosaBuilder b)]) =
+      _$DatosBeneficiariosFamiliaNumerosa;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DatosBeneficiariosFamiliaNumerosaBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DatosBeneficiariosFamiliaNumerosa> get serializer => _$DatosBeneficiariosFamiliaNumerosaSerializer();
+  static Serializer<DatosBeneficiariosFamiliaNumerosa> get serializer =>
+      _$DatosBeneficiariosFamiliaNumerosaSerializer();
 }
 
-class _$DatosBeneficiariosFamiliaNumerosaSerializer implements PrimitiveSerializer<DatosBeneficiariosFamiliaNumerosa> {
+class _$DatosBeneficiariosFamiliaNumerosaSerializer
+    implements PrimitiveSerializer<DatosBeneficiariosFamiliaNumerosa> {
   @override
-  final Iterable<Type> types = const [DatosBeneficiariosFamiliaNumerosa, _$DatosBeneficiariosFamiliaNumerosa];
+  final Iterable<Type> types = const [
+    DatosBeneficiariosFamiliaNumerosa,
+    _$DatosBeneficiariosFamiliaNumerosa
+  ];
 
   @override
   final String wireName = r'DatosBeneficiariosFamiliaNumerosa';
@@ -46,7 +56,8 @@ class _$DatosBeneficiariosFamiliaNumerosaSerializer implements PrimitiveSerializ
       yield r'row';
       yield serializers.serialize(
         object.row,
-        specifiedType: const FullType(BuiltList, [FullType(DatosBeneficiariosFamiliaNumerosaList)]),
+        specifiedType: const FullType(
+            BuiltList, [FullType(DatosBeneficiariosFamiliaNumerosaList)]),
       );
     }
   }
@@ -57,7 +68,9 @@ class _$DatosBeneficiariosFamiliaNumerosaSerializer implements PrimitiveSerializ
     DatosBeneficiariosFamiliaNumerosa object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -75,7 +88,8 @@ class _$DatosBeneficiariosFamiliaNumerosaSerializer implements PrimitiveSerializ
         case r'row':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(DatosBeneficiariosFamiliaNumerosaList)]),
+            specifiedType: const FullType(
+                BuiltList, [FullType(DatosBeneficiariosFamiliaNumerosaList)]),
           ) as BuiltList<DatosBeneficiariosFamiliaNumerosaList>;
           result.row.replace(valueDes);
           break;
@@ -107,4 +121,3 @@ class _$DatosBeneficiariosFamiliaNumerosaSerializer implements PrimitiveSerializ
     return result.build();
   }
 }
-

@@ -13,26 +13,34 @@ part 'lista_tramites_por_hechos.g.dart';
 /// ListaTramitesPorHechos
 ///
 /// Properties:
-/// * [listaTramitesPorHechos] 
+/// * [listaTramitesPorHechos]
 @BuiltValue()
-abstract class ListaTramitesPorHechos implements Built<ListaTramitesPorHechos, ListaTramitesPorHechosBuilder> {
+abstract class ListaTramitesPorHechos
+    implements Built<ListaTramitesPorHechos, ListaTramitesPorHechosBuilder> {
   @BuiltValueField(wireName: r'listaTramitesPorHechos')
   BuiltList<TramitesPorHecho>? get listaTramitesPorHechos;
 
   ListaTramitesPorHechos._();
 
-  factory ListaTramitesPorHechos([void updates(ListaTramitesPorHechosBuilder b)]) = _$ListaTramitesPorHechos;
+  factory ListaTramitesPorHechos(
+          [void updates(ListaTramitesPorHechosBuilder b)]) =
+      _$ListaTramitesPorHechos;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ListaTramitesPorHechosBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ListaTramitesPorHechos> get serializer => _$ListaTramitesPorHechosSerializer();
+  static Serializer<ListaTramitesPorHechos> get serializer =>
+      _$ListaTramitesPorHechosSerializer();
 }
 
-class _$ListaTramitesPorHechosSerializer implements PrimitiveSerializer<ListaTramitesPorHechos> {
+class _$ListaTramitesPorHechosSerializer
+    implements PrimitiveSerializer<ListaTramitesPorHechos> {
   @override
-  final Iterable<Type> types = const [ListaTramitesPorHechos, _$ListaTramitesPorHechos];
+  final Iterable<Type> types = const [
+    ListaTramitesPorHechos,
+    _$ListaTramitesPorHechos
+  ];
 
   @override
   final String wireName = r'ListaTramitesPorHechos';
@@ -57,7 +65,9 @@ class _$ListaTramitesPorHechosSerializer implements PrimitiveSerializer<ListaTra
     ListaTramitesPorHechos object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -75,7 +85,8 @@ class _$ListaTramitesPorHechosSerializer implements PrimitiveSerializer<ListaTra
         case r'listaTramitesPorHechos':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(TramitesPorHecho)]),
+            specifiedType:
+                const FullType(BuiltList, [FullType(TramitesPorHecho)]),
           ) as BuiltList<TramitesPorHecho>;
           result.listaTramitesPorHechos.replace(valueDes);
           break;
@@ -107,4 +118,3 @@ class _$ListaTramitesPorHechosSerializer implements PrimitiveSerializer<ListaTra
     return result.build();
   }
 }
-

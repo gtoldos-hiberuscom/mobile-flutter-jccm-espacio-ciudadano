@@ -11,20 +11,20 @@ part 'bapiret2.g.dart';
 /// BAPIRET2
 ///
 /// Properties:
-/// * [field] 
-/// * [id] 
-/// * [logmsgno] 
-/// * [logno] 
-/// * [message] 
-/// * [messagev1] 
-/// * [messagev2] 
-/// * [messagev3] 
-/// * [messagev4] 
-/// * [number] 
-/// * [parameter] 
-/// * [row] 
-/// * [system] 
-/// * [type] 
+/// * [field]
+/// * [id]
+/// * [logmsgno]
+/// * [logno]
+/// * [message]
+/// * [messagev1]
+/// * [messagev2]
+/// * [messagev3]
+/// * [messagev4]
+/// * [number]
+/// * [parameter]
+/// * [row]
+/// * [system]
+/// * [type]
 @BuiltValue()
 abstract class BAPIRET2 implements Built<BAPIRET2, BAPIRET2Builder> {
   @BuiltValueField(wireName: r'field')
@@ -198,7 +198,9 @@ class _$BAPIRET2Serializer implements PrimitiveSerializer<BAPIRET2> {
     BAPIRET2 object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -339,4 +341,3 @@ class _$BAPIRET2Serializer implements PrimitiveSerializer<BAPIRET2> {
     return result.build();
   }
 }
-

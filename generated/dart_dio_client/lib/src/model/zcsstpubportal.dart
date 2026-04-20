@@ -12,71 +12,72 @@ part 'zcsstpubportal.g.dart';
 /// ZCSSTPUBPORTAL
 ///
 /// Properties:
-/// * [apellido1] 
-/// * [apellido2] 
-/// * [asunto] 
-/// * [bezei] 
-/// * [bland] 
-/// * [calle] 
-/// * [certific] 
-/// * [codpos] 
-/// * [consej] 
-/// * [cont1] 
-/// * [cont2] 
-/// * [cont3] 
-/// * [cont4] 
-/// * [cont5] 
-/// * [contacto] 
-/// * [desasunto] 
-/// * [desconsej] 
-/// * [descrip] 
-/// * [desfam] 
-/// * [desproc] 
-/// * [destipodoc] 
-/// * [destipres] 
-/// * [destipvia] 
-/// * [desuniorg] 
-/// * [dmbrt] 
-/// * [documentos] 
-/// * [ejeexp] 
-/// * [email] 
-/// * [estado] 
-/// * [familia] 
-/// * [fechafin] 
-/// * [fechaini] 
-/// * [fechainipag] 
-/// * [fechains] 
-/// * [fechainscrip] 
-/// * [fechapag] 
-/// * [fechareg] 
-/// * [inicio] 
-/// * [label1] 
-/// * [label2] 
-/// * [label3] 
-/// * [label4] 
-/// * [label5] 
-/// * [land1] 
-/// * [landx50] 
-/// * [ncalle] 
-/// * [nombre] 
-/// * [numdoc] 
-/// * [numexp] 
-/// * [ort01] 
-/// * [partner] 
-/// * [registro] 
-/// * [resolucion] 
-/// * [source_] 
-/// * [tipodoc] 
-/// * [tipoproc] 
-/// * [tipvia] 
-/// * [titulo] 
-/// * [tlfax] 
-/// * [tlfno] 
-/// * [uniorg] 
-/// * [waers] 
-/// * [zzbezei] 
+/// * [apellido1]
+/// * [apellido2]
+/// * [asunto]
+/// * [bezei]
+/// * [bland]
+/// * [calle]
+/// * [certific]
+/// * [codpos]
+/// * [consej]
+/// * [cont1]
+/// * [cont2]
+/// * [cont3]
+/// * [cont4]
+/// * [cont5]
+/// * [contacto]
+/// * [desasunto]
+/// * [desconsej]
+/// * [descrip]
+/// * [desfam]
+/// * [desproc]
+/// * [destipodoc]
+/// * [destipres]
+/// * [destipvia]
+/// * [desuniorg]
+/// * [dmbrt]
+/// * [documentos]
+/// * [ejeexp]
+/// * [email]
+/// * [estado]
+/// * [familia]
+/// * [fechafin]
+/// * [fechaini]
+/// * [fechainipag]
+/// * [fechains]
+/// * [fechainscrip]
+/// * [fechapag]
+/// * [fechareg]
+/// * [inicio]
+/// * [label1]
+/// * [label2]
+/// * [label3]
+/// * [label4]
+/// * [label5]
+/// * [land1]
+/// * [landx50]
+/// * [ncalle]
+/// * [nombre]
+/// * [numdoc]
+/// * [numexp]
+/// * [ort01]
+/// * [partner]
+/// * [registro]
+/// * [resolucion]
+/// * [source_]
+/// * [tipodoc]
+/// * [tipoproc]
+/// * [tipvia]
+/// * [titulo]
+/// * [tlfax]
+/// * [tlfno]
+/// * [uniorg]
+/// * [waers]
+/// * [zzbezei]
 @BuiltValue()
-abstract class ZCSSTPUBPORTAL implements Built<ZCSSTPUBPORTAL, ZCSSTPUBPORTALBuilder> {
+abstract class ZCSSTPUBPORTAL
+    implements Built<ZCSSTPUBPORTAL, ZCSSTPUBPORTALBuilder> {
   @BuiltValueField(wireName: r'apellido1')
   String? get apellido1;
 
@@ -268,16 +269,19 @@ abstract class ZCSSTPUBPORTAL implements Built<ZCSSTPUBPORTAL, ZCSSTPUBPORTALBui
 
   ZCSSTPUBPORTAL._();
 
-  factory ZCSSTPUBPORTAL([void updates(ZCSSTPUBPORTALBuilder b)]) = _$ZCSSTPUBPORTAL;
+  factory ZCSSTPUBPORTAL([void updates(ZCSSTPUBPORTALBuilder b)]) =
+      _$ZCSSTPUBPORTAL;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSSTPUBPORTALBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSSTPUBPORTAL> get serializer => _$ZCSSTPUBPORTALSerializer();
+  static Serializer<ZCSSTPUBPORTAL> get serializer =>
+      _$ZCSSTPUBPORTALSerializer();
 }
 
-class _$ZCSSTPUBPORTALSerializer implements PrimitiveSerializer<ZCSSTPUBPORTAL> {
+class _$ZCSSTPUBPORTALSerializer
+    implements PrimitiveSerializer<ZCSSTPUBPORTAL> {
   @override
   final Iterable<Type> types = const [ZCSSTPUBPORTAL, _$ZCSSTPUBPORTAL];
 
@@ -738,7 +742,9 @@ class _$ZCSSTPUBPORTALSerializer implements PrimitiveSerializer<ZCSSTPUBPORTAL> 
     ZCSSTPUBPORTAL object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -1222,4 +1228,3 @@ class _$ZCSSTPUBPORTALSerializer implements PrimitiveSerializer<ZCSSTPUBPORTAL> 
     return result.build();
   }
 }
-

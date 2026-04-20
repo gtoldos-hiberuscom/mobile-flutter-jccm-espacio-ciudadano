@@ -11,25 +11,26 @@ part 'zcsauxstexpedientes.g.dart';
 /// ZCSAUXSTEXPEDIENTES
 ///
 /// Properties:
-/// * [adjuntar] 
-/// * [certific] 
-/// * [consej] 
-/// * [desconsej] 
-/// * [descrip] 
-/// * [desfam] 
-/// * [desproc] 
-/// * [ejeexp] 
-/// * [estado] 
-/// * [estadosede] 
-/// * [familia] 
-/// * [fechafin] 
-/// * [fechareg] 
-/// * [numexp] 
-/// * [registro] 
-/// * [tipoproc] 
-/// * [titulo] 
+/// * [adjuntar]
+/// * [certific]
+/// * [consej]
+/// * [desconsej]
+/// * [descrip]
+/// * [desfam]
+/// * [desproc]
+/// * [ejeexp]
+/// * [estado]
+/// * [estadosede]
+/// * [familia]
+/// * [fechafin]
+/// * [fechareg]
+/// * [numexp]
+/// * [registro]
+/// * [tipoproc]
+/// * [titulo]
 @BuiltValue()
-abstract class ZCSAUXSTEXPEDIENTES implements Built<ZCSAUXSTEXPEDIENTES, ZCSAUXSTEXPEDIENTESBuilder> {
+abstract class ZCSAUXSTEXPEDIENTES
+    implements Built<ZCSAUXSTEXPEDIENTES, ZCSAUXSTEXPEDIENTESBuilder> {
   @BuiltValueField(wireName: r'adjuntar')
   String? get adjuntar;
 
@@ -83,18 +84,24 @@ abstract class ZCSAUXSTEXPEDIENTES implements Built<ZCSAUXSTEXPEDIENTES, ZCSAUXS
 
   ZCSAUXSTEXPEDIENTES._();
 
-  factory ZCSAUXSTEXPEDIENTES([void updates(ZCSAUXSTEXPEDIENTESBuilder b)]) = _$ZCSAUXSTEXPEDIENTES;
+  factory ZCSAUXSTEXPEDIENTES([void updates(ZCSAUXSTEXPEDIENTESBuilder b)]) =
+      _$ZCSAUXSTEXPEDIENTES;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSAUXSTEXPEDIENTESBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSAUXSTEXPEDIENTES> get serializer => _$ZCSAUXSTEXPEDIENTESSerializer();
+  static Serializer<ZCSAUXSTEXPEDIENTES> get serializer =>
+      _$ZCSAUXSTEXPEDIENTESSerializer();
 }
 
-class _$ZCSAUXSTEXPEDIENTESSerializer implements PrimitiveSerializer<ZCSAUXSTEXPEDIENTES> {
+class _$ZCSAUXSTEXPEDIENTESSerializer
+    implements PrimitiveSerializer<ZCSAUXSTEXPEDIENTES> {
   @override
-  final Iterable<Type> types = const [ZCSAUXSTEXPEDIENTES, _$ZCSAUXSTEXPEDIENTES];
+  final Iterable<Type> types = const [
+    ZCSAUXSTEXPEDIENTES,
+    _$ZCSAUXSTEXPEDIENTES
+  ];
 
   @override
   final String wireName = r'ZCSAUXSTEXPEDIENTES';
@@ -231,7 +238,9 @@ class _$ZCSAUXSTEXPEDIENTESSerializer implements PrimitiveSerializer<ZCSAUXSTEXP
     ZCSAUXSTEXPEDIENTES object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -393,4 +402,3 @@ class _$ZCSAUXSTEXPEDIENTESSerializer implements PrimitiveSerializer<ZCSAUXSTEXP
     return result.build();
   }
 }
-

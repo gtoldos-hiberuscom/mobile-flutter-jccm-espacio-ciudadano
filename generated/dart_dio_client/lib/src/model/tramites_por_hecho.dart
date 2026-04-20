@@ -13,11 +13,12 @@ part 'tramites_por_hecho.g.dart';
 /// TramitesPorHecho
 ///
 /// Properties:
-/// * [idHecho] 
-/// * [nombreHecho] 
-/// * [tramites] 
+/// * [idHecho]
+/// * [nombreHecho]
+/// * [tramites]
 @BuiltValue()
-abstract class TramitesPorHecho implements Built<TramitesPorHecho, TramitesPorHechoBuilder> {
+abstract class TramitesPorHecho
+    implements Built<TramitesPorHecho, TramitesPorHechoBuilder> {
   @BuiltValueField(wireName: r'idHecho')
   int? get idHecho;
 
@@ -29,16 +30,19 @@ abstract class TramitesPorHecho implements Built<TramitesPorHecho, TramitesPorHe
 
   TramitesPorHecho._();
 
-  factory TramitesPorHecho([void updates(TramitesPorHechoBuilder b)]) = _$TramitesPorHecho;
+  factory TramitesPorHecho([void updates(TramitesPorHechoBuilder b)]) =
+      _$TramitesPorHecho;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(TramitesPorHechoBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<TramitesPorHecho> get serializer => _$TramitesPorHechoSerializer();
+  static Serializer<TramitesPorHecho> get serializer =>
+      _$TramitesPorHechoSerializer();
 }
 
-class _$TramitesPorHechoSerializer implements PrimitiveSerializer<TramitesPorHecho> {
+class _$TramitesPorHechoSerializer
+    implements PrimitiveSerializer<TramitesPorHecho> {
   @override
   final Iterable<Type> types = const [TramitesPorHecho, _$TramitesPorHecho];
 
@@ -79,7 +83,9 @@ class _$TramitesPorHechoSerializer implements PrimitiveSerializer<TramitesPorHec
     TramitesPorHecho object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -143,4 +149,3 @@ class _$TramitesPorHechoSerializer implements PrimitiveSerializer<TramitesPorHec
     return result.build();
   }
 }
-

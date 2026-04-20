@@ -11,11 +11,12 @@ part 'dtselectbynifv2_req.g.dart';
 /// DTSELECTBYNIFV2REQ
 ///
 /// Properties:
-/// * [numerodocumento] 
-/// * [tipodocumento] 
-/// * [tipoprocedimiento] 
+/// * [numerodocumento]
+/// * [tipodocumento]
+/// * [tipoprocedimiento]
 @BuiltValue()
-abstract class DTSELECTBYNIFV2REQ implements Built<DTSELECTBYNIFV2REQ, DTSELECTBYNIFV2REQBuilder> {
+abstract class DTSELECTBYNIFV2REQ
+    implements Built<DTSELECTBYNIFV2REQ, DTSELECTBYNIFV2REQBuilder> {
   @BuiltValueField(wireName: r'numerodocumento')
   String? get numerodocumento;
 
@@ -27,16 +28,19 @@ abstract class DTSELECTBYNIFV2REQ implements Built<DTSELECTBYNIFV2REQ, DTSELECTB
 
   DTSELECTBYNIFV2REQ._();
 
-  factory DTSELECTBYNIFV2REQ([void updates(DTSELECTBYNIFV2REQBuilder b)]) = _$DTSELECTBYNIFV2REQ;
+  factory DTSELECTBYNIFV2REQ([void updates(DTSELECTBYNIFV2REQBuilder b)]) =
+      _$DTSELECTBYNIFV2REQ;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTSELECTBYNIFV2REQBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTSELECTBYNIFV2REQ> get serializer => _$DTSELECTBYNIFV2REQSerializer();
+  static Serializer<DTSELECTBYNIFV2REQ> get serializer =>
+      _$DTSELECTBYNIFV2REQSerializer();
 }
 
-class _$DTSELECTBYNIFV2REQSerializer implements PrimitiveSerializer<DTSELECTBYNIFV2REQ> {
+class _$DTSELECTBYNIFV2REQSerializer
+    implements PrimitiveSerializer<DTSELECTBYNIFV2REQ> {
   @override
   final Iterable<Type> types = const [DTSELECTBYNIFV2REQ, _$DTSELECTBYNIFV2REQ];
 
@@ -77,7 +81,9 @@ class _$DTSELECTBYNIFV2REQSerializer implements PrimitiveSerializer<DTSELECTBYNI
     DTSELECTBYNIFV2REQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -141,4 +147,3 @@ class _$DTSELECTBYNIFV2REQSerializer implements PrimitiveSerializer<DTSELECTBYNI
     return result.build();
   }
 }
-

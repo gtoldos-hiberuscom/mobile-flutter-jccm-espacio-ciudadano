@@ -11,8 +11,8 @@ part 'registro.g.dart';
 /// REGISTRO
 ///
 /// Properties:
-/// * [fecha] 
-/// * [noregistro] 
+/// * [fecha]
+/// * [noregistro]
 @BuiltValue()
 abstract class REGISTRO implements Built<REGISTRO, REGISTROBuilder> {
   @BuiltValueField(wireName: r'fecha')
@@ -62,7 +62,9 @@ class _$REGISTROSerializer implements PrimitiveSerializer<REGISTRO> {
     REGISTRO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -119,4 +121,3 @@ class _$REGISTROSerializer implements PrimitiveSerializer<REGISTRO> {
     return result.build();
   }
 }
-

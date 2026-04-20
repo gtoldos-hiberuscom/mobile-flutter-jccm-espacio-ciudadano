@@ -14,11 +14,12 @@ part 'zcsrfcconsultafaq.g.dart';
 /// ZCSRFCCONSULTAFAQ
 ///
 /// Properties:
-/// * [idatos] 
-/// * [returns] 
-/// * [tfaq] 
+/// * [idatos]
+/// * [returns]
+/// * [tfaq]
 @BuiltValue()
-abstract class ZCSRFCCONSULTAFAQ implements Built<ZCSRFCCONSULTAFAQ, ZCSRFCCONSULTAFAQBuilder> {
+abstract class ZCSRFCCONSULTAFAQ
+    implements Built<ZCSRFCCONSULTAFAQ, ZCSRFCCONSULTAFAQBuilder> {
   @BuiltValueField(wireName: r'idatos')
   ZCSSPORTAL get idatos;
 
@@ -30,16 +31,19 @@ abstract class ZCSRFCCONSULTAFAQ implements Built<ZCSRFCCONSULTAFAQ, ZCSRFCCONSU
 
   ZCSRFCCONSULTAFAQ._();
 
-  factory ZCSRFCCONSULTAFAQ([void updates(ZCSRFCCONSULTAFAQBuilder b)]) = _$ZCSRFCCONSULTAFAQ;
+  factory ZCSRFCCONSULTAFAQ([void updates(ZCSRFCCONSULTAFAQBuilder b)]) =
+      _$ZCSRFCCONSULTAFAQ;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCCONSULTAFAQBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCCONSULTAFAQ> get serializer => _$ZCSRFCCONSULTAFAQSerializer();
+  static Serializer<ZCSRFCCONSULTAFAQ> get serializer =>
+      _$ZCSRFCCONSULTAFAQSerializer();
 }
 
-class _$ZCSRFCCONSULTAFAQSerializer implements PrimitiveSerializer<ZCSRFCCONSULTAFAQ> {
+class _$ZCSRFCCONSULTAFAQSerializer
+    implements PrimitiveSerializer<ZCSRFCCONSULTAFAQ> {
   @override
   final Iterable<Type> types = const [ZCSRFCCONSULTAFAQ, _$ZCSRFCCONSULTAFAQ];
 
@@ -74,7 +78,9 @@ class _$ZCSRFCCONSULTAFAQSerializer implements PrimitiveSerializer<ZCSRFCCONSULT
     ZCSRFCCONSULTAFAQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -138,4 +144,3 @@ class _$ZCSRFCCONSULTAFAQSerializer implements PrimitiveSerializer<ZCSRFCCONSULT
     return result.build();
   }
 }
-

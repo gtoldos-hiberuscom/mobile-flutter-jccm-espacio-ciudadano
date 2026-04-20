@@ -13,7 +13,7 @@ part 'etlistdocs.g.dart';
 /// ETLISTDOCS
 ///
 /// Properties:
-/// * [item] 
+/// * [item]
 @BuiltValue()
 abstract class ETLISTDOCS implements Built<ETLISTDOCS, ETLISTDOCSBuilder> {
   @BuiltValueField(wireName: r'item')
@@ -46,7 +46,8 @@ class _$ETLISTDOCSSerializer implements PrimitiveSerializer<ETLISTDOCS> {
       yield r'item';
       yield serializers.serialize(
         object.item,
-        specifiedType: const FullType(BuiltList, [FullType(ZCSLISTADODOCSEXPTE)]),
+        specifiedType:
+            const FullType(BuiltList, [FullType(ZCSLISTADODOCSEXPTE)]),
       );
     }
   }
@@ -57,7 +58,9 @@ class _$ETLISTDOCSSerializer implements PrimitiveSerializer<ETLISTDOCS> {
     ETLISTDOCS object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -75,7 +78,8 @@ class _$ETLISTDOCSSerializer implements PrimitiveSerializer<ETLISTDOCS> {
         case r'item':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(ZCSLISTADODOCSEXPTE)]),
+            specifiedType:
+                const FullType(BuiltList, [FullType(ZCSLISTADODOCSEXPTE)]),
           ) as BuiltList<ZCSLISTADODOCSEXPTE>;
           result.item.replace(valueDes);
           break;
@@ -107,4 +111,3 @@ class _$ETLISTDOCSSerializer implements PrimitiveSerializer<ETLISTDOCS> {
     return result.build();
   }
 }
-

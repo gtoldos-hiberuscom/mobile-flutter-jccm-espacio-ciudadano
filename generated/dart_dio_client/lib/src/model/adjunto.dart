@@ -11,24 +11,24 @@ part 'adjunto.g.dart';
 /// ADJUNTO
 ///
 /// Properties:
-/// * [categoria] 
-/// * [data] 
-/// * [hash] 
-/// * [idaplic] 
-/// * [idprop] 
-/// * [idtrans] 
-/// * [idunico] 
-/// * [metadatos] 
-/// * [nifcif] 
-/// * [nombre] 
-/// * [observaciones1] 
-/// * [observaciones2] 
-/// * [observaciones3] 
-/// * [origen] 
-/// * [subject] 
-/// * [tdoc] 
-/// * [tipodoc] 
-/// * [tipoprocedimiento] 
+/// * [categoria]
+/// * [data]
+/// * [hash]
+/// * [idaplic]
+/// * [idprop]
+/// * [idtrans]
+/// * [idunico]
+/// * [metadatos]
+/// * [nifcif]
+/// * [nombre]
+/// * [observaciones1]
+/// * [observaciones2]
+/// * [observaciones3]
+/// * [origen]
+/// * [subject]
+/// * [tdoc]
+/// * [tipodoc]
+/// * [tipoprocedimiento]
 @BuiltValue()
 abstract class ADJUNTO implements Built<ADJUNTO, ADJUNTOBuilder> {
   @BuiltValueField(wireName: r'categoria')
@@ -234,7 +234,9 @@ class _$ADJUNTOSerializer implements PrimitiveSerializer<ADJUNTO> {
     ADJUNTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -403,4 +405,3 @@ class _$ADJUNTOSerializer implements PrimitiveSerializer<ADJUNTO> {
     return result.build();
   }
 }
-

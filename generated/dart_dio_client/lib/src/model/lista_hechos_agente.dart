@@ -13,10 +13,11 @@ part 'lista_hechos_agente.g.dart';
 /// ListaHechosAgente
 ///
 /// Properties:
-/// * [idAgente] 
-/// * [listaHechos] 
+/// * [idAgente]
+/// * [listaHechos]
 @BuiltValue()
-abstract class ListaHechosAgente implements Built<ListaHechosAgente, ListaHechosAgenteBuilder> {
+abstract class ListaHechosAgente
+    implements Built<ListaHechosAgente, ListaHechosAgenteBuilder> {
   @BuiltValueField(wireName: r'idAgente')
   String? get idAgente;
 
@@ -25,16 +26,19 @@ abstract class ListaHechosAgente implements Built<ListaHechosAgente, ListaHechos
 
   ListaHechosAgente._();
 
-  factory ListaHechosAgente([void updates(ListaHechosAgenteBuilder b)]) = _$ListaHechosAgente;
+  factory ListaHechosAgente([void updates(ListaHechosAgenteBuilder b)]) =
+      _$ListaHechosAgente;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ListaHechosAgenteBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ListaHechosAgente> get serializer => _$ListaHechosAgenteSerializer();
+  static Serializer<ListaHechosAgente> get serializer =>
+      _$ListaHechosAgenteSerializer();
 }
 
-class _$ListaHechosAgenteSerializer implements PrimitiveSerializer<ListaHechosAgente> {
+class _$ListaHechosAgenteSerializer
+    implements PrimitiveSerializer<ListaHechosAgente> {
   @override
   final Iterable<Type> types = const [ListaHechosAgente, _$ListaHechosAgente];
 
@@ -68,7 +72,9 @@ class _$ListaHechosAgenteSerializer implements PrimitiveSerializer<ListaHechosAg
     ListaHechosAgente object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -125,4 +131,3 @@ class _$ListaHechosAgenteSerializer implements PrimitiveSerializer<ListaHechosAg
     return result.build();
   }
 }
-

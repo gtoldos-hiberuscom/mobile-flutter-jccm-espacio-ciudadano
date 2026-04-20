@@ -11,12 +11,13 @@ part 'pkpass_familia_numerosa.g.dart';
 /// PkpassFamiliaNumerosa
 ///
 /// Properties:
-/// * [codError] 
-/// * [datos] 
-/// * [descError] 
-/// * [pkpass] 
+/// * [codError]
+/// * [datos]
+/// * [descError]
+/// * [pkpass]
 @BuiltValue()
-abstract class PkpassFamiliaNumerosa implements Built<PkpassFamiliaNumerosa, PkpassFamiliaNumerosaBuilder> {
+abstract class PkpassFamiliaNumerosa
+    implements Built<PkpassFamiliaNumerosa, PkpassFamiliaNumerosaBuilder> {
   @BuiltValueField(wireName: r'codError')
   String? get codError;
 
@@ -31,18 +32,24 @@ abstract class PkpassFamiliaNumerosa implements Built<PkpassFamiliaNumerosa, Pkp
 
   PkpassFamiliaNumerosa._();
 
-  factory PkpassFamiliaNumerosa([void updates(PkpassFamiliaNumerosaBuilder b)]) = _$PkpassFamiliaNumerosa;
+  factory PkpassFamiliaNumerosa(
+      [void updates(PkpassFamiliaNumerosaBuilder b)]) = _$PkpassFamiliaNumerosa;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(PkpassFamiliaNumerosaBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<PkpassFamiliaNumerosa> get serializer => _$PkpassFamiliaNumerosaSerializer();
+  static Serializer<PkpassFamiliaNumerosa> get serializer =>
+      _$PkpassFamiliaNumerosaSerializer();
 }
 
-class _$PkpassFamiliaNumerosaSerializer implements PrimitiveSerializer<PkpassFamiliaNumerosa> {
+class _$PkpassFamiliaNumerosaSerializer
+    implements PrimitiveSerializer<PkpassFamiliaNumerosa> {
   @override
-  final Iterable<Type> types = const [PkpassFamiliaNumerosa, _$PkpassFamiliaNumerosa];
+  final Iterable<Type> types = const [
+    PkpassFamiliaNumerosa,
+    _$PkpassFamiliaNumerosa
+  ];
 
   @override
   final String wireName = r'PkpassFamiliaNumerosa';
@@ -88,7 +95,9 @@ class _$PkpassFamiliaNumerosaSerializer implements PrimitiveSerializer<PkpassFam
     PkpassFamiliaNumerosa object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -159,4 +168,3 @@ class _$PkpassFamiliaNumerosaSerializer implements PrimitiveSerializer<PkpassFam
     return result.build();
   }
 }
-

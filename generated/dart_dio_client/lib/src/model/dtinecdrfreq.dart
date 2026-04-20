@@ -11,15 +11,16 @@ part 'dtinecdrfreq.g.dart';
 /// DTINECDRFREQ
 ///
 /// Properties:
-/// * [docu] 
-/// * [documentofuncionario] 
-/// * [idaut] 
-/// * [nombrefuncionario] 
-/// * [proc] 
-/// * [tipo] 
-/// * [tipodoc] 
+/// * [docu]
+/// * [documentofuncionario]
+/// * [idaut]
+/// * [nombrefuncionario]
+/// * [proc]
+/// * [tipo]
+/// * [tipodoc]
 @BuiltValue()
-abstract class DTINECDRFREQ implements Built<DTINECDRFREQ, DTINECDRFREQBuilder> {
+abstract class DTINECDRFREQ
+    implements Built<DTINECDRFREQ, DTINECDRFREQBuilder> {
   @BuiltValueField(wireName: r'docu')
   String? get docu;
 
@@ -121,7 +122,9 @@ class _$DTINECDRFREQSerializer implements PrimitiveSerializer<DTINECDRFREQ> {
     DTINECDRFREQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -213,4 +216,3 @@ class _$DTINECDRFREQSerializer implements PrimitiveSerializer<DTINECDRFREQ> {
     return result.build();
   }
 }
-

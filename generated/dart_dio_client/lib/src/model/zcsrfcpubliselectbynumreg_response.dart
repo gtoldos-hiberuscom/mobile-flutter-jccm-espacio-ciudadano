@@ -12,12 +12,15 @@ part 'zcsrfcpubliselectbynumreg_response.g.dart';
 /// ZCSRFCPUBLISELECTBYNUMREGResponse
 ///
 /// Properties:
-/// * [adjuntar] 
-/// * [isubrc] 
-/// * [publicacionportal] 
-/// * [resultado] 
+/// * [adjuntar]
+/// * [isubrc]
+/// * [publicacionportal]
+/// * [resultado]
 @BuiltValue()
-abstract class ZCSRFCPUBLISELECTBYNUMREGResponse implements Built<ZCSRFCPUBLISELECTBYNUMREGResponse, ZCSRFCPUBLISELECTBYNUMREGResponseBuilder> {
+abstract class ZCSRFCPUBLISELECTBYNUMREGResponse
+    implements
+        Built<ZCSRFCPUBLISELECTBYNUMREGResponse,
+            ZCSRFCPUBLISELECTBYNUMREGResponseBuilder> {
   @BuiltValueField(wireName: r'adjuntar')
   String? get adjuntar;
 
@@ -32,18 +35,25 @@ abstract class ZCSRFCPUBLISELECTBYNUMREGResponse implements Built<ZCSRFCPUBLISEL
 
   ZCSRFCPUBLISELECTBYNUMREGResponse._();
 
-  factory ZCSRFCPUBLISELECTBYNUMREGResponse([void updates(ZCSRFCPUBLISELECTBYNUMREGResponseBuilder b)]) = _$ZCSRFCPUBLISELECTBYNUMREGResponse;
+  factory ZCSRFCPUBLISELECTBYNUMREGResponse(
+          [void updates(ZCSRFCPUBLISELECTBYNUMREGResponseBuilder b)]) =
+      _$ZCSRFCPUBLISELECTBYNUMREGResponse;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSRFCPUBLISELECTBYNUMREGResponseBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSRFCPUBLISELECTBYNUMREGResponse> get serializer => _$ZCSRFCPUBLISELECTBYNUMREGResponseSerializer();
+  static Serializer<ZCSRFCPUBLISELECTBYNUMREGResponse> get serializer =>
+      _$ZCSRFCPUBLISELECTBYNUMREGResponseSerializer();
 }
 
-class _$ZCSRFCPUBLISELECTBYNUMREGResponseSerializer implements PrimitiveSerializer<ZCSRFCPUBLISELECTBYNUMREGResponse> {
+class _$ZCSRFCPUBLISELECTBYNUMREGResponseSerializer
+    implements PrimitiveSerializer<ZCSRFCPUBLISELECTBYNUMREGResponse> {
   @override
-  final Iterable<Type> types = const [ZCSRFCPUBLISELECTBYNUMREGResponse, _$ZCSRFCPUBLISELECTBYNUMREGResponse];
+  final Iterable<Type> types = const [
+    ZCSRFCPUBLISELECTBYNUMREGResponse,
+    _$ZCSRFCPUBLISELECTBYNUMREGResponse
+  ];
 
   @override
   final String wireName = r'ZCSRFCPUBLISELECTBYNUMREGResponse';
@@ -89,7 +99,9 @@ class _$ZCSRFCPUBLISELECTBYNUMREGResponseSerializer implements PrimitiveSerializ
     ZCSRFCPUBLISELECTBYNUMREGResponse object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -160,4 +172,3 @@ class _$ZCSRFCPUBLISELECTBYNUMREGResponseSerializer implements PrimitiveSerializ
     return result.build();
   }
 }
-

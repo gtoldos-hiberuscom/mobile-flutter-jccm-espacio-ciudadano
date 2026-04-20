@@ -4,7 +4,6 @@
 
 import 'dart:async';
 
-import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
@@ -12,7 +11,6 @@ import 'dart:typed_data';
 import 'package:espacio_ciudadano_api/src/model/registrar_fichero_request.dart';
 
 class DocumentacionApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -20,10 +18,10 @@ class DocumentacionApi {
   const DocumentacionApi(this._dio, this._serializers);
 
   /// Permite realizar el registro de un fichero obteniendo el justificante como resultado
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [registrarFicheroRequest] 
+  /// * [registrarFicheroRequest]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -33,7 +31,7 @@ class DocumentacionApi {
   ///
   /// Returns a [Future] containing a [Response] with a [Uint8List] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<Uint8List>> registrarFicheroOperation({ 
+  Future<Response<Uint8List>> registrarFicheroOperation({
     required RegistrarFicheroRequest registrarFicheroRequest,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -61,11 +59,11 @@ class DocumentacionApi {
 
     try {
       const _type = FullType(RegistrarFicheroRequest);
-      _bodyData = _serializers.serialize(registrarFicheroRequest, specifiedType: _type);
-
-    } catch(error, stackTrace) {
+      _bodyData =
+          _serializers.serialize(registrarFicheroRequest, specifiedType: _type);
+    } catch (error, stackTrace) {
       throw DioException(
-         requestOptions: _options.compose(
+        requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -89,7 +87,6 @@ class DocumentacionApi {
     try {
       final rawResponse = _response.data;
       _responseData = rawResponse == null ? null : rawResponse as Uint8List;
-
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -111,5 +108,4 @@ class DocumentacionApi {
       extra: _response.extra,
     );
   }
-
 }

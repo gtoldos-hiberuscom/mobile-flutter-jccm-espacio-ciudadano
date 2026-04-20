@@ -13,26 +13,35 @@ part 'datos_titulo_familia_numerosa.g.dart';
 /// DatosTituloFamiliaNumerosa
 ///
 /// Properties:
-/// * [row] 
+/// * [row]
 @BuiltValue()
-abstract class DatosTituloFamiliaNumerosa implements Built<DatosTituloFamiliaNumerosa, DatosTituloFamiliaNumerosaBuilder> {
+abstract class DatosTituloFamiliaNumerosa
+    implements
+        Built<DatosTituloFamiliaNumerosa, DatosTituloFamiliaNumerosaBuilder> {
   @BuiltValueField(wireName: r'row')
   BuiltList<DatosTituloFamiliaNumerosaList>? get row;
 
   DatosTituloFamiliaNumerosa._();
 
-  factory DatosTituloFamiliaNumerosa([void updates(DatosTituloFamiliaNumerosaBuilder b)]) = _$DatosTituloFamiliaNumerosa;
+  factory DatosTituloFamiliaNumerosa(
+          [void updates(DatosTituloFamiliaNumerosaBuilder b)]) =
+      _$DatosTituloFamiliaNumerosa;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DatosTituloFamiliaNumerosaBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DatosTituloFamiliaNumerosa> get serializer => _$DatosTituloFamiliaNumerosaSerializer();
+  static Serializer<DatosTituloFamiliaNumerosa> get serializer =>
+      _$DatosTituloFamiliaNumerosaSerializer();
 }
 
-class _$DatosTituloFamiliaNumerosaSerializer implements PrimitiveSerializer<DatosTituloFamiliaNumerosa> {
+class _$DatosTituloFamiliaNumerosaSerializer
+    implements PrimitiveSerializer<DatosTituloFamiliaNumerosa> {
   @override
-  final Iterable<Type> types = const [DatosTituloFamiliaNumerosa, _$DatosTituloFamiliaNumerosa];
+  final Iterable<Type> types = const [
+    DatosTituloFamiliaNumerosa,
+    _$DatosTituloFamiliaNumerosa
+  ];
 
   @override
   final String wireName = r'DatosTituloFamiliaNumerosa';
@@ -46,7 +55,8 @@ class _$DatosTituloFamiliaNumerosaSerializer implements PrimitiveSerializer<Dato
       yield r'row';
       yield serializers.serialize(
         object.row,
-        specifiedType: const FullType(BuiltList, [FullType(DatosTituloFamiliaNumerosaList)]),
+        specifiedType: const FullType(
+            BuiltList, [FullType(DatosTituloFamiliaNumerosaList)]),
       );
     }
   }
@@ -57,7 +67,9 @@ class _$DatosTituloFamiliaNumerosaSerializer implements PrimitiveSerializer<Dato
     DatosTituloFamiliaNumerosa object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -75,7 +87,8 @@ class _$DatosTituloFamiliaNumerosaSerializer implements PrimitiveSerializer<Dato
         case r'row':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(BuiltList, [FullType(DatosTituloFamiliaNumerosaList)]),
+            specifiedType: const FullType(
+                BuiltList, [FullType(DatosTituloFamiliaNumerosaList)]),
           ) as BuiltList<DatosTituloFamiliaNumerosaList>;
           result.row.replace(valueDes);
           break;
@@ -107,4 +120,3 @@ class _$DatosTituloFamiliaNumerosaSerializer implements PrimitiveSerializer<Dato
     return result.build();
   }
 }
-
