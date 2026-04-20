@@ -1,6 +1,7 @@
 # Copilot repository conventions
 
 ## Preferred agents and skills
+- Use `plan-manager` when the user wants coordinated backlog or plan execution across tickets, implementation, validation, and progressive branch integration.
 - Use `implementer` for Flutter implementation, scaffolding, refactors, and architecture-sensitive work.
 - Use `ticket-manager` for ticket administration in `tickets/`.
 - If an implementation request references a ticket, keep code and ticket traceability synchronized through `ticket-manager` or the ticket skills.
