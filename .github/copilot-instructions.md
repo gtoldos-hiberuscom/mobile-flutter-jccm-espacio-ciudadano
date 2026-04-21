@@ -42,14 +42,14 @@ This repository stores Jira-style tickets as Markdown files.
 ## Ticket location and naming
 - All tickets live under `tickets/`.
 - Each ticket uses exactly one file.
-- The filename must be `TICKET-{id}.md`.
-- The visible ticket identifier must be derived from `type + id` using:
+- The filename must be derived from `type + id` using:
   - `Epic` -> `EPIC-{id}`
   - `Story` -> `STORY-{id}`
   - `Task` -> `TASK-{id}`
   - `Subtask` -> `SUBTASK-{id}`
   - `Bug` -> `BUG-{id}`
   - `Other` -> `OTHER-{id}`
+- Every epic, story, task, and subtask must have its own file. Never store child tickets as inline pseudo-subtasks, ad hoc checklists, or child-ticket sections inside a parent ticket file.
 - The H1 must be `# [<TYPE>-<id>] <Summary>`.
 - Before reusing a summary to build a title or slug, strip any existing leading `[<TYPE>-<id>]` token to avoid duplicated prefixes.
 
@@ -76,13 +76,14 @@ Every ticket file must preserve the exact YAML key order defined below:
 19. `jira_url`
 
 ## Ticket identifier conventions
-- `id` is the numeric internal identifier and is the source of truth for the filename `tickets/TICKET-{id}.md`.
+- `id` is the numeric internal identifier and is the source of truth for the numeric segment of the filename.
+- The canonical filename is `tickets/<TYPE>-{id}.md`, where `<TYPE>` is derived from `type + id`.
 - `jira_key` is the external tracker key, such as `NAVEMP-126`; it is not used as the filename.
 - A user may refer to a ticket by `id`, `jira_key`, or file path, but repository edits must always target the canonical file resolved from `id`.
 - The visible typed identifier in titles, branch names, and planning artifacts always comes from `type + id`, never from `jira_key`.
 
 ## Ticket field definitions
-- `id`: numeric internal identifier, required, must match the filename.
+- `id`: numeric internal identifier, required, must match the numeric segment of the filename.
 - `jira_key`: external issue key from the source system, or empty when unavailable.
 - `type`: source-system or planning issue type label such as `Epic`, `Story`, `Task`, `Subtask`, or `Bug`.
 - `status`: workflow state label.

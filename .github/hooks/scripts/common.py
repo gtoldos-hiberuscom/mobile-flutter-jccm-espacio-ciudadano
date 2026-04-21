@@ -21,6 +21,7 @@ VISIBLE_ID_PREFIX_BY_TYPE = {
     "Other": "OTHER",
 }
 VISIBLE_ID_PREFIX_RE = re.compile(r"^\[(EPIC|STORY|TASK|SUBTASK|BUG|OTHER)-\d+\]\s+")
+CANONICAL_TICKET_NAME_RE = re.compile(r"^(EPIC|STORY|TASK|SUBTASK|BUG|OTHER)-(\d+)\.md$")
 REQUIRED_FRONTMATTER_KEYS = [
     "id",
     "jira_key",
@@ -49,7 +50,11 @@ REQUIRED_SECTIONS = [
     "## Traceability",
     "## Notes",
 ]
-TICKET_PATH_RE = re.compile(r"(^|/)tickets/TICKET-(\d+)\.md$")
+TICKET_PATH_RE = re.compile(r"(^|/)tickets/(EPIC|STORY|TASK|SUBTASK|BUG|OTHER|TICKET)-(\d+)\.md$")
+FORBIDDEN_CHILD_SECTION_RE = re.compile(
+    r"^#{2,6}\s+(Child Tickets|Child Stories|Child Tasks|Subtasks|Sub-tasks|Subtickets|Sub-tickets)\b",
+    flags=re.IGNORECASE | re.MULTILINE,
+)
 
 
 def ensure_log_dir() -> None:
@@ -89,8 +94,22 @@ def parse_tool_args(raw: str | None) -> dict[str, Any]:
     return {}
 
 
-def ticket_path_from_id(ticket_id: str) -> pathlib.Path:
-    return ROOT / "tickets" / f"TICKET-{ticket_id}.md"
+def ticket_path_from_id(ticket_id: str) -> pathlib.Path | None:
+    matches = [
+        ROOT / "tickets" / f"{prefix}-{ticket_id}.md"
+        for prefix in VISIBLE_ID_PREFIX_BY_TYPE.values()
+        if (ROOT / "tickets" / f"{prefix}-{ticket_id}.md").exists()
+    ]
+    if len(matches) != 1:
+        return None
+    return matches[0]
+
+
+def parse_ticket_filename(path: pathlib.Path) -> tuple[str, str] | None:
+    match = CANONICAL_TICKET_NAME_RE.fullmatch(path.name)
+    if match is None:
+        return None
+    return match.group(1), match.group(2)
 
 
 def ticket_type_to_visible_prefix(ticket_type: str) -> str | None:
@@ -127,7 +146,7 @@ def parse_ticket_content(content: str) -> tuple[list[str], dict[str, str], str] 
 
 def read_ticket_frontmatter(ticket_id: str) -> dict[str, str] | None:
     path = ticket_path_from_id(ticket_id)
-    if not path.exists():
+    if path is None or not path.exists():
         return None
 
     parsed = parse_ticket_content(path.read_text(encoding="utf-8"))
@@ -181,10 +200,13 @@ def validate_ticket_file(path: pathlib.Path) -> list[str]:
         errors.append(f"{rel}: file does not exist")
         return errors
 
-    name_match = re.match(r"TICKET-(\d+)\.md$", path.name)
-    if not name_match:
-        errors.append(f"{rel}: invalid filename; expected TICKET-{{id}}.md")
+    parsed_name = parse_ticket_filename(path)
+    if parsed_name is None:
+        errors.append(
+            f"{rel}: invalid filename; expected <TYPE>-{{id}}.md using EPIC, STORY, TASK, SUBTASK, BUG, or OTHER"
+        )
         return errors
+    filename_prefix, filename_id = parsed_name
 
     content = path.read_text(encoding="utf-8")
     if not content.startswith("---\n"):
@@ -209,7 +231,7 @@ def validate_ticket_file(path: pathlib.Path) -> list[str]:
     ticket_id = key_values.get("id", "")
     if not ticket_id.isdigit():
         errors.append(f"{rel}: id must be numeric")
-    elif ticket_id != name_match.group(1):
+    elif ticket_id != filename_id:
         errors.append(f"{rel}: file name id does not match frontmatter id")
 
     heading_match = re.search(r"^#\s+(.+)$", body, flags=re.MULTILINE)
@@ -222,6 +244,11 @@ def validate_ticket_file(path: pathlib.Path) -> list[str]:
             errors.append(
                 f"{rel}: type '{ticket_type}' cannot be converted to a visible ticket identifier"
             )
+        elif visible_prefix != filename_prefix:
+            errors.append(
+                f"{rel}: filename prefix '{filename_prefix}' does not match ticket type '{ticket_type}' "
+                f"(expected {visible_prefix}-{ticket_id}.md)"
+            )
         elif not re.fullmatch(
             rf"\[{visible_prefix}-{ticket_id}\]\s+.+",
             heading_match.group(1).strip(),
@@ -233,5 +260,11 @@ def validate_ticket_file(path: pathlib.Path) -> list[str]:
     for section in REQUIRED_SECTIONS:
         if section not in body:
             errors.append(f"{rel}: missing required section '{section}'")
+
+    forbidden_child_section = FORBIDDEN_CHILD_SECTION_RE.search(body)
+    if forbidden_child_section is not None:
+        errors.append(
+            f"{rel}: child-ticket sections are forbidden; create separate ticket files instead of a '{forbidden_child_section.group(1)}' heading"
+        )
 
     return errors

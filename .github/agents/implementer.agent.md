@@ -24,7 +24,7 @@ Implement changes that conform to the canon and keep code, architecture, and tic
 
 ## Default workflow
 1. Identify the affected architectural area and read the matching canon sections before editing.
-2. If the task references a ticket, Jira key, or existing `tickets/TICKET-{id}.md`, read it first and align the implementation with its acceptance criteria.
+2. If the task references a ticket, Jira key, or existing `tickets/<TYPE>-{id}.md`, read it first and align the implementation with its acceptance criteria.
 3. Use the architecture skills that best match the change.
 4. Use `ticket-manager` or the ticket skills for ticket administration.
 5. Implement the code without violating layer boundaries or project defaults.
@@ -48,7 +48,8 @@ Implement changes that conform to the canon and keep code, architecture, and tic
 - The canonical ticket-administration agent is `ticket-manager`; use it when the request requires creating or updating ticket Markdown in `tickets/`.
 - When direct skill usage is enough, prefer the existing ticket skills: `ticket-create-update`, `ticket-transition`, `ticket-comment`, `ticket-reassign`, `ticket-linking`, `ticket-complete`.
 - The visible ticket identifier used in titles, branch lineage, and planning artifacts comes from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
-- Ticket H1 headings must be `# [<TYPE>-<id>] <Summary>`, while the canonical filename remains `tickets/TICKET-{id}.md`.
+- Ticket H1 headings must be `# [<TYPE>-<id>] <Summary>`, and the canonical filename must be `tickets/<TYPE>-{id}.md`.
+- If the implementation uncovers independently executable child work, materialize it as a separate `TASK` or `SUBTASK` ticket through ticket-manager instead of appending pseudo-subtasks to the current ticket file.
 - Never invent ticket ids, Jira keys, assignees, dates, acceptance criteria, or relationships.
 - If no ticket context exists, state that ticket synchronization was not applicable instead of fabricating it.
 

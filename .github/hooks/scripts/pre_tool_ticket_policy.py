@@ -25,8 +25,12 @@ def main() -> int:
         path_value = str(tool_args.get("path", "") or "").replace("\\", "/")
         if path_value.startswith("tickets/"):
             basename = os.path.basename(path_value)
-            if not re.fullmatch(r"TICKET-\d+\.md", basename):
-                return deny("Ticket files under tickets/ must be named TICKET-{id}.md")
+            if basename == "README.md":
+                return 0
+            if not re.fullmatch(r"(EPIC|STORY|TASK|SUBTASK|BUG|OTHER)-\d+\.md", basename):
+                return deny(
+                    "Ticket files under tickets/ must be named README.md or <TYPE>-{id}.md using EPIC, STORY, TASK, SUBTASK, BUG, or OTHER"
+                )
             if not path_value.endswith(".md"):
                 return deny("Ticket files under tickets/ must be Markdown files")
 

@@ -3,10 +3,17 @@
 This folder stores Jira-style tickets as Markdown files.
 
 ## Rules
-- One file per ticket.
-- Filename: `TICKET-{id}.md`.
+- One file per real ticket.
+- Canonical ticket filenames are derived from `type + id`:
+  - `EPIC-{id}.md`
+  - `STORY-{id}.md`
+  - `TASK-{id}.md`
+  - `SUBTASK-{id}.md`
+  - `BUG-{id}.md`
+  - `OTHER-{id}.md`
 - Visible title: `# [<TYPE>-<id>] <Summary>`.
-- Visible ID mapping: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
+- Do not use legacy filenames such as `TICKET-{id}.md`.
+- Do not store child stories, tasks, or subtasks inline inside a parent ticket file. If the work needs tracking, create a dedicated ticket file.
 - Keep the mandatory frontmatter and section order intact.
 - Preserve the original language of user-provided ticket content.
 - Store new comments in `## Notes` -> `### Comments`.

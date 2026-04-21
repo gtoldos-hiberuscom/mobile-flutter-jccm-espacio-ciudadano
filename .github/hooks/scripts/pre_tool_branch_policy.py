@@ -72,7 +72,7 @@ def validate_ticket_type_token(segment: str) -> str | None:
         return None
     if prefix != expected_prefix:
         return (
-            f"Managed branch segment '{segment}' does not match ticket TICKET-{ticket_id}.md "
+            f"Managed branch segment '{segment}' does not match canonical ticket type for id {ticket_id} "
             f"type '{ticket.get('type', '')}' (expected prefix {expected_prefix})"
         )
     return None
@@ -92,7 +92,7 @@ def validate_epic_segment(segment: str) -> str | None:
     if expected_prefix == "EPIC":
         return None
     return (
-        f"Epic branch segment '{segment}' does not match ticket TICKET-{ticket_id}.md "
+        f"Epic branch segment '{segment}' does not match canonical epic ticket type for id {ticket_id} "
         f"type '{ticket.get('type', '')}' (expected prefix EPIC)"
     )
 

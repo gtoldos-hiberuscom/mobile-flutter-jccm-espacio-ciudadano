@@ -6,7 +6,7 @@ description: Change the assignee or unassign a ticket while recording the change
 Use this skill when the task is to assign, reassign, or unassign a ticket.
 
 ## Schema preservation rules
-- Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/TICKET-{id}.md` path, but edit only the canonical file named from `id`.
+- Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/<TYPE>-{id}.md` path, but edit only the canonical file named from `type + id`.
 - Preserve all frontmatter keys, their order, and all required sections.
 - Preserve the H1 as `# [<TYPE>-<id>] <Summary>`.
 - Only mutate `assignee` and `updated_at` unless the user explicitly requests additional field changes.

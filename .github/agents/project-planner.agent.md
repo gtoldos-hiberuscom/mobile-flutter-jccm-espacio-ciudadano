@@ -63,19 +63,20 @@ Do not treat ad hoc Markdown summaries as the source of truth when the repositor
 
 ## Ticketing contract
 - The canonical ticket-administration agent is `ticket-manager`.
-- Use `ticket-manager` or the ticket skills to materialize the backlog into `tickets/TICKET-{id}.md`.
+- Use `ticket-manager` or the ticket skills to materialize the backlog into `tickets/<TYPE>-{id}.md`, where `<TYPE>` is `EPIC`, `STORY`, `TASK`, `SUBTASK`, `BUG`, or `OTHER` according to the ticket type.
 - Ticket types may include `Epic`, `Story`, `Task`, `Subtask`, `Bug`, or `Other`, depending on the backlog level.
 - Visible identifiers in ticket titles and planning artifacts must use `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - Use `type: Epic` for roadmap-level delivery groups.
 - Use `type: Story` or `type: Task` for coherent delivery units.
 - Use `type: Subtask` only when a ticket must be broken into distinct executable leaves that deserve their own ticket files.
+- Never encode child stories, tasks, or subtasks as inline sections inside an epic, story, or task file. If the child work deserves tracking, create a real child ticket file.
 - Preserve the repository schema exactly when creating or updating tickets.
 
 When creating a repository-local backlog from scratch:
 - allocate deterministic numeric `id` values starting from the current highest existing ticket id plus one
 - leave `jira_key` empty unless a real external tracker key already exists
 - keep `epic_link` and `parent` empty until real tracker keys exist
-- write ticket H1 headings as `# [<TYPE>-<id>] <Summary>`
+- write ticket filenames and H1 headings from `type + id`
 - record provisional hierarchy and dependencies explicitly in `## Traceability` and `## Technical Details`
 
 Never fabricate external Jira metadata that does not exist.
@@ -169,6 +170,12 @@ Build the hierarchy:
 - tickets for coherent slices within an epic
 - tasks or subtasks only when they add execution clarity
 
+Materialize the hierarchy literally:
+- one epic file per epic
+- one story file per user story
+- one task file per task
+- one subtask file per subtask
+
 Avoid tickets that are too vague to execute or too broad to validate.
 
 ### 6. Ticket materialization
@@ -211,6 +218,8 @@ Each task should be:
 - verifiable
 - small enough for real execution
 - large enough to matter as a distinct work item
+
+Each subtask should follow the same rule and must exist as its own ticket file instead of being embedded inside a parent ticket body.
 
 Do not create meaningless placeholders such as:
 - "Implement module X"

@@ -16,10 +16,11 @@ Act as the canonical ticket-administration agent for other agents in this reposi
 ## Storage convention
 - Store every ticket under `tickets/`.
 - Use exactly one file per ticket.
-- The filename must be `TICKET-{id}.md`, where `{id}` is the numeric internal id.
+- The filename must be derived from `type + id`: `Epic->EPIC-{id}.md`, `Story->STORY-{id}.md`, `Task->TASK-{id}.md`, `Subtask->SUBTASK-{id}.md`, `Bug->BUG-{id}.md`, `Other->OTHER-{id}.md`.
 - The visible ticket identifier in the H1 must come from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
+- Each epic, story, task, and subtask is a real ticket file of its own. Never represent child tickets as inline "subtasks", "child tickets", or embedded execution lists inside a parent file.
 - If a file already exists for that id, update it instead of creating a duplicate.
-- Never create alternate filenames such as `ticket-40162.md`, `NAVEMP-126.md`, or `branch-flow.md`.
+- Never create alternate filenames such as `TICKET-40162.md`, `ticket-40162.md`, `NAVEMP-126.md`, or `branch-flow.md`.
 
 ## Mandatory ticket schema
 Each ticket file must contain:
@@ -54,7 +55,7 @@ The YAML frontmatter must preserve the following keys in this exact order:
 - `jira_url`
 
 ## Ticket identifier and field definitions
-- `id` is the numeric internal identifier and must match the filename `tickets/TICKET-{id}.md`.
+- `id` is the numeric internal identifier and must match the numeric segment of the canonical filename `tickets/<TYPE>-{id}.md`.
 - `jira_key` is the external tracker key and is not used as the filename.
 - `type`, `status`, `priority`, and `project` preserve the source-system labels or identifiers.
 - `epic_link` and `parent` store related `jira_key` values.
@@ -71,6 +72,7 @@ The YAML frontmatter must preserve the following keys in this exact order:
 - Keep section headings in English.
 - Normalize formatting only when the meaning is preserved.
 - Before regenerating a title from user input, remove any leading `[<TYPE>-<id>]` token from the summary text so the prefix is not duplicated.
+- When work needs its own epic, story, task, or subtask, materialize that work as its own file instead of embedding it as prose inside another ticket.
 - Never invent ticket relationships, status history, acceptance criteria, dates, reporters, assignees, Jira keys, or URLs.
 - If a mandatory field is missing, keep it empty or use the approved placeholder from the schema rules.
 
@@ -99,7 +101,7 @@ Use the specialized ticket skills whenever they fit the task:
 
 ## Quality gate
 Before finishing:
-- Confirm the filename matches the `id`.
+- Confirm the filename matches `type + id`.
 - Confirm the H1 matches `[<TYPE>-<id>]` for the current `type` and `id`.
 - Confirm all mandatory sections are present.
 - Confirm frontmatter key order is intact.

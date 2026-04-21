@@ -9,7 +9,7 @@ Use this skill when the task is to create, normalize, or update a ticket file fr
 Create or update exactly one Markdown file for a ticket using the repository ticket schema.
 
 ## Canonical identifier and field rules
-- `id` is the numeric internal identifier and drives the filename `tickets/TICKET-{id}.md`.
+- `id` is the numeric internal identifier and, together with `type`, drives the filename `tickets/<TYPE>-{id}.md`.
 - `jira_key` is the external tracker key and may be used to locate an existing ticket, but it must not replace `id` in the filename.
 - The visible ticket identifier in the H1 comes from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - `summary` maps to the `# [<TYPE>-<id>] <Summary>` heading, not to a frontmatter key.
@@ -17,10 +17,11 @@ Create or update exactly one Markdown file for a ticket using the repository tic
 - `labels`, `fix_versions`, and `affected_versions` are YAML lists; use `[]` when they are empty.
 - `story_points` is numeric when present; otherwise leave it empty.
 - `created_at`, `updated_at`, and `due_date` use ISO8601 timestamps, with `due_date` allowed to be empty.
+- Every epic, story, task, and subtask is its own file. Never write child tickets as inline subsections inside the target ticket.
 
 ## Workflow
-1. Extract the ticket `id` from the input, or resolve it from an existing ticket file when the user only provides `jira_key`.
-2. Target the path `tickets/TICKET-{id}.md`.
+1. Extract the ticket `id` and `type` from the input, or resolve them from an existing ticket file when the user only provides `jira_key`.
+2. Target the path `tickets/<TYPE>-{id}.md`.
 3. Read the existing file first if it already exists.
 4. Use `ticket-template.md` from this skill directory as the canonical structure.
 5. Preserve the frontmatter key order exactly.
@@ -44,7 +45,7 @@ When input contains epic, parent, blocked-by, blocks, or related references:
 - Do not invent references.
 
 ## Missing-data behavior
-If a new ticket does not provide `id`, stop and report the exact missing fields.
+If a new ticket does not provide `id` or `type`, stop and report the exact missing fields.
 If the user only provides `jira_key`, resolve the existing ticket file before editing; if it cannot be resolved uniquely, stop and report the ambiguity.
 If optional fields are missing, leave them empty while preserving the schema.
 

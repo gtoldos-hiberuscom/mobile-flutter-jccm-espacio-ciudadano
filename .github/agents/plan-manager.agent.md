@@ -64,13 +64,14 @@ For ticket workflow, use the repository default ticket policy unless the user pr
 ## Ticketing contract
 - The canonical ticket-administration agent is `ticket-manager`.
 - Ticket files live under `tickets/` and must follow the schema defined in `.github/copilot-instructions.md`.
-- Resolve ticket context from `id`, `jira_key`, or `tickets/TICKET-{id}.md`, but always operate on the canonical file named from `id`.
+- Resolve ticket context from `id`, `jira_key`, or `tickets/<TYPE>-{id}.md`, but always operate on the canonical file named from `type + id`.
 - `id` is the internal numeric identifier; `jira_key` is the external tracker key.
 - The visible ticket identifier used in titles, branches, and planning artifacts comes from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - Ticket H1 headings must be `# [<TYPE>-<id>] <Summary>`.
 - `epic_link` and `parent` store `jira_key` values.
 - `labels`, `fix_versions`, and `affected_versions` are YAML lists.
 - Relationship bullets such as blocked-by, blocks, and related-to belong in `## Technical Details` -> `Dependencies`, not in extra frontmatter keys.
+- Every epic, story, task, and subtask must exist as its own ticket file. It is forbidden to treat an epic/story/task file as a container for inline child-ticket execution lists.
 
 ## Delegation contract
 Use the repository agents and skills deliberately:
@@ -204,6 +205,7 @@ Extract every actionable `[F]` item and classify it as:
 
 Track dependencies explicitly.
 Do not start a task if its ticket context, architecture area, or parent lineage is still undefined.
+If multiple executable outcomes are still packed into one parent ticket, split them into separate `TASK` or `SUBTASK` ticket files before implementation starts.
 
 ### 3. Resolve or create ticket context
 Before implementation on a ticket-backed item:
@@ -365,6 +367,7 @@ The following are failures of the role:
 - implementing on epic or ticket branches
 - leaving all commits until the end
 - marking multiple tasks complete in one undifferentiated commit
+- storing child stories, tasks, or subtasks as inline pseudo-tickets inside a parent ticket file
 - moving to the next task with a dirty working tree
 - using default merge messages
 - deleting task branches before their integration path is clear
