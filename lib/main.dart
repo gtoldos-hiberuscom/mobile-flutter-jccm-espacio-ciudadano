@@ -1,20 +1,4 @@
-import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MainApp());
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(final BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
-}
+// Default IDE entry-point — delegates to the development configuration.
+// Use main_development.dart, main_preproduction.dart, or main_production.dart
+// for environment-specific run configurations and CI/CD builds.
+export 'package:jccm_espacio_ciudadano/main_development.dart';
