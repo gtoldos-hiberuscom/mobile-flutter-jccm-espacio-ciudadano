@@ -17,6 +17,7 @@ Read the relevant repository context before planning:
 - `.github/agents/ticket-manager.agent.md`
 - `.github/agents/plan-manager.agent.md`
 - `.github/agents/implementer.agent.md`
+- the relevant existing ticket files under `tickets/` when a backlog already exists or when the user references current tickets
 - `documentation/architecture_canon_flutter_v2_docs/architecture_canon_flutter_v2_index.md`
 - the relevant architecture canon annexes
 - `documentation/initial_documentation/PLANIFICACION_PROYECTO.md`
@@ -64,6 +65,7 @@ Do not treat ad hoc Markdown summaries as the source of truth when the repositor
 ## Ticketing contract
 - The canonical ticket-administration agent is `ticket-manager`.
 - Use `ticket-manager` or the ticket skills to materialize the backlog into `tickets/<TYPE>-{id}.md`, where `<TYPE>` is `EPIC`, `STORY`, `TASK`, `SUBTASK`, `BUG`, or `OTHER` according to the ticket type.
+- Existing files under `tickets/` are valid Jira-style backlog inputs and must be read as structured planning sources, not treated as disposable output.
 - Ticket types may include `Epic`, `Story`, `Task`, `Subtask`, `Bug`, or `Other`, depending on the backlog level.
 - Visible identifiers in ticket titles and planning artifacts must use `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - Use `type: Epic` for roadmap-level delivery groups.
@@ -80,6 +82,13 @@ When creating a repository-local backlog from scratch:
 - record provisional hierarchy and dependencies explicitly in `## Traceability` and `## Technical Details`
 
 Never fabricate external Jira metadata that does not exist.
+
+When evolving an existing backlog:
+- ingest the current ticket tree first
+- parse frontmatter, `## Acceptance Criteria`, `## Technical Details`, `## Traceability`, and `## Notes`
+- preserve stable ids, statuses, comments, and change history unless the user explicitly asks to rewrite them
+- normalize or extend tickets instead of replacing them wholesale
+- treat existing ticket dependencies as real planning inputs that must be reconciled with documentation and architecture
 
 ## Architecture-aware planning rules
 Every roadmap must account for the architecture canon when relevant:
@@ -111,6 +120,7 @@ Every substantial project plan must cover, when applicable:
 - cross-cutting risks and assumptions
 - dependencies between epics, tickets, and tasks
 - tasks that can be parallelized safely
+- owned modules, likely write surfaces, or integration points when tickets are expected to be implemented by multiple concurrent implementers
 
 If a requirement is clearly implied but under-specified, create explicit analysis, refinement, spike, or validation tickets instead of silently omitting the work.
 
@@ -128,6 +138,14 @@ Always follow this sequence.
    - planning
    - operations or support
 3. Detect duplicates, variants, and overlapping documents.
+4. If `tickets/` already contains Jira-style tickets, inventory the current epic/story/task/subtask tree before proposing structural changes.
+
+### 1.b Existing backlog ingestion
+When a ticket backlog already exists:
+1. Read the relevant existing tickets first.
+2. Compare current ticket scope, acceptance criteria, dependencies, and traceability against repository documentation.
+3. Detect missing work, overlapping work, stale decomposition, orphan tickets, and tickets that should be split for execution.
+4. Preserve stable typed ids whenever the ticket still represents the same underlying work item.
 
 ### 2. Structured extraction
 Extract at minimum:
@@ -163,6 +181,7 @@ For each roadmap slice, identify:
 - safe parallelism
 - critical risks
 - validation checkpoints
+- implementer-ready ownership boundaries when parallel execution is intended
 
 ### 5. Backlog structuring
 Build the hierarchy:
@@ -178,12 +197,15 @@ Materialize the hierarchy literally:
 
 Avoid tickets that are too vague to execute or too broad to validate.
 
+Prefer leaf tickets that can be owned by one `implementer` instance at a time without ambiguous responsibility.
+
 ### 6. Ticket materialization
 When the user wants repository output:
 1. Create or update epic tickets through `ticket-manager`.
 2. Create or update child story and task tickets through `ticket-manager` or the ticket skills.
 3. Synchronize dependencies, traceability, and notes.
 4. Ensure the ticket tree reflects roadmap priority, dependency order, and parallelizable work.
+5. Where parallel delivery matters, make ticket scope boundaries explicit enough that separate `implementer` instances can pick up sibling tickets without reinterpreting ownership.
 
 ### 7. Final consistency check
 Before finishing, verify:
@@ -194,6 +216,17 @@ Before finishing, verify:
 - major risks are captured
 - architecture constraints are reflected
 - ticket files are internally consistent if they were created
+- tickets marked as parallelizable are genuinely implementer-ready and do not hide shared ownership ambiguity
+
+## Parallel implementer readiness
+Assume that downstream execution may use several concurrent instances of `.github/agents/implementer.agent.md`.
+
+Plan for that explicitly:
+- parallelize only across tickets whose expected write sets are disjoint or safely mergeable
+- call out shared integration points such as routing registries, DI composition, app shell, l10n catalogs, shared design-system files, generated API wrappers, config, analytics, and cross-feature test harnesses
+- if several tickets would need the same shared file or registry, either serialize them or create a dedicated integration ticket that owns that shared surface
+- avoid backlog slices that force two implementers to guess ownership of the same area
+- make clear when a ticket is a good candidate for parallel implementation and when it must remain serialized behind a dependency
 
 ## Quality bar for epics, stories, and tasks
 ### Epics
@@ -210,6 +243,7 @@ Each ticket should include:
 - enough context to execute
 - key functional or technical criteria
 - explicit dependency or traceability notes
+- enough ownership clarity that an `implementer` can tell whether the ticket is safe to execute in parallel with siblings
 
 ### Tasks or subtasks
 Each task should be:
@@ -239,6 +273,7 @@ Break the work down until it becomes realistically executable.
 ## Delegation rules
 - Use `ticket-manager` to materialize or normalize tickets.
 - Hand off to `plan-manager` only after the roadmap or ticket tree is mature enough to execute.
+- If the user asks for direct execution planning with several implementers, only propose parallel lanes after ticket ownership and shared integration points are explicit.
 - Use ticket skills directly only for narrow and deterministic follow-up operations.
 - Use the architecture canon as a planning constraint even when no code is being written yet.
 
@@ -248,5 +283,6 @@ You are done only when:
 2. dependencies, safe parallelism, and risks are explicit
 3. the backlog is agile, executable, and adaptable
 4. if ticket creation was requested, the ticket tree exists in the repository and reflects the planned hierarchy
+5. tickets intended for concurrent implementation are decomposed clearly enough for multiple `implementer` instances to work in parallel without ownership ambiguity
 
 Do not stop at a vague roadmap. Do not stop at a flat ticket list. Do not stop at a backlog that ignores architecture or execution reality.

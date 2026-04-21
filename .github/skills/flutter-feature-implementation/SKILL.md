@@ -36,6 +36,8 @@ Every feature follows this structure:
 - Pages, widgets, and controllers do not import concrete `3_data/` implementations.
 - `2_presentation/providers/` is the only allowed DI composition point that may wire `3_data/` to `1_domain/`.
 - A feature may depend on `core/` and approved public contracts from another feature, never on another feature's internals.
+- If several implementers may work in parallel, keep the write set inside the current feature or explicit integration points owned by the current ticket.
+- If the work requires changes to shared surfaces such as routing, app shell, l10n, theme, shared analytics, or generated wrappers, make that ownership explicit instead of spreading those edits opportunistically.
 
 ## Anti-patterns to reject
 - DTO leak outside `3_data/`
@@ -50,3 +52,4 @@ Every feature follows this structure:
 - Entities, use cases, repositories, datasources, and mappers have clear ownership.
 - No forbidden imports or DTO leaks were introduced.
 - Naming stays consistent with the canon: `snake_case.dart`, `PascalCase`, `camelCase`, `*Provider`, `*UseCase`, `*RepositoryImpl`, `*State`.
+- When the work is ticket-backed, the implementation is isolated enough to land as a reviewable commit attributable to that ticket.

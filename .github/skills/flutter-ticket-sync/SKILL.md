@@ -34,7 +34,7 @@ When a direct operation is enough, use the existing ticket skills:
 1. Resolve the ticket context from the user request, a Jira key, or an existing `tickets/<TYPE>-{id}.md`.
 2. Read the ticket before implementing when the file exists.
 3. Align the code change with the ticket acceptance criteria and technical notes.
-4. After implementation, report progress or evidence through `ticket-manager` or the right ticket skill.
+4. After implementation, report progress or evidence through `ticket-manager` or the right ticket skill. Include commit SHA(s) when that evidence materially improves traceability.
 5. Move status conservatively:
    - use `ticket-comment` for progress and implementation notes;
    - use `ticket-transition` for workflow changes;
