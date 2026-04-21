@@ -1,21 +1,6 @@
 ---
 name: ticket-create-update
 description: Create or update a Jira-style Markdown ticket from raw input while preserving the required schema and formatting.
-argument-hint: When asking to create or update a ticket, provide as much context as possible about the relevant ticket data, including the ticket id, summary, description, acceptance criteria, relationships, and any other relevant fields. For example:
-Create a ticket with the following data:
-- id: 126
-- summary: Implement new navigation menu design
-- functional description: Redesign the navigation menu according to the new mockups provided by the design team. The new design includes a collapsible sidebar and updated icons.
-- acceptance criteria:
-  - The navigation menu matches the new design mockups.
-  - The sidebar is collapsible and expands on hover.
-  - Icons are updated according to the design specifications.
-- epic_link: NAVEMP-100
-- assignee: gtoldos
-- story_points: 3
-Make sure to create or update the file `tickets/TICKET-126.md` with the correct schema, formatting, and content based on the provided data. If the file already exists, update it while preserving existing information that is not explicitly overwritten by the input. If any mandatory fields are missing, report the exact missing fields without creating or modifying the ticket file.
-target: github-copilot  
-
 ---
 
 Use this skill when the task is to create, normalize, or update a ticket file from structured or semi-structured Jira-like data.

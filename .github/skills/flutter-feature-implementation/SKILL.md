@@ -1,10 +1,10 @@
 ---
 name: flutter-feature-implementation
-description: Implement or refactor a Flutter feature according to the canon: 0_entity, 1_domain, 2_presentation, 3_data, with explicit entities, use cases, repositories, DTOs, mappers, and ownership boundaries. Use when adding a feature or touching feature internals.
-argument-hint: When asking to implement a change, provide as much context as possible about the affected area, the relevant ticket if any, and the expected outcome. For example:
-Implement the new navigation menu design according to the mockups provided by the design team. The change should follow the architecture canon v2 and be traceable to the existing ticket NAVEMP-126. Make sure to consult the relevant sections of the canon for guidance on repository topology, feature structure, and implementation rules. Use the appropriate architecture skills for scaffolding, UI composition, and ticket synchronization. Validate tests and confirm that the implementation aligns with the acceptance criteria in the ticket.
-target: github-copilot  
-
+description: >-
+  Implement or refactor a Flutter feature according to the canon: 0_entity,
+  1_domain, 2_presentation, 3_data, with explicit entities, use cases,
+  repositories, DTOs, mappers, and ownership boundaries. Use when adding a
+  feature or touching feature internals.
 ---
 
 Use this skill when the task adds or restructures a feature, or when it touches entities, use cases, repositories, datasources, DTOs, mappers, or feature boundaries.

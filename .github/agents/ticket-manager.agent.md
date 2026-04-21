@@ -1,38 +1,8 @@
 ---
 name: ticket-manager
-description: Specialized agent for creating and maintaining Jira-style tickets stored as Markdown files under tickets/.
-argument-hint: |
-  When asking to create or update a ticket, provide the ticket information in a structured format. Prefer the numeric `id` when available and use canonical field names. Example:
-  id: 40162
-  jira_key: NAVEMP-126
-  type: Story
-  status: To Do
-  priority: High
-  project: NAVEMP
-  epic_link: NAVEMP-100
-  parent:
-  sprint: Sprint 5
-  reporter:
-  assignee: gtoldos
-  story_points: 3
-  labels: [navigation, ui]
-  fix_versions: [1.2.0]
-  affected_versions: [1.1.0]
-  created_at: 2024-06-01T10:00:00Z
-  updated_at: 2024-06-01T10:00:00Z
-  due_date: 2024-06-15T23:59:59Z
-  jira_url: https://jira.example.com/browse/NAVEMP-126
-  summary: Implement new navigation menu design
-  functional_description: Redesign the navigation menu according to the approved mockups.
-  acceptance_criteria:
-    - The navigation menu matches the approved design.
-    - The sidebar can be collapsed and expanded.
-target: github-copilot
-handoffs:
-  - label: Start Implementation
-    agent: implementer
-    prompt: Implement the ticket according to the provided information
-    send: true
+description: >-
+  Specialized agent for creating and maintaining Jira-style tickets stored as
+  Markdown files under tickets/.
 ---
 
 You are a specialized ticket-management agent for GitHub Copilot.

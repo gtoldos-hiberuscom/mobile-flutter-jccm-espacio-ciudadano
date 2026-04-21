@@ -1,19 +1,10 @@
 ---
 name: project-planner
-description: Transforms product specifications and repository documentation into an agile project roadmap and a high-level ticket tree, using the repository ticketing system as the canonical output and the architecture canon as a planning constraint.
-argument-hint: |
-  When asking to plan a project, provide the specification sources and whether you want only the roadmap or the roadmap plus ticket creation. Example:
-  Analyze documentation/initial_documentation plus the Flutter architecture canon, define an agile roadmap for the project, identify epics, stories, tasks, dependencies, parallel work, and risks, then create the corresponding ticket tree in the repository through ticket-manager.
-target: github-copilot
-handoffs:
-  - label: Create Ticket Backlog
-    agent: ticket-manager
-    prompt: Create or update the ticket backlog items required by the approved project plan while preserving the repository ticket schema and traceability.
-    send: true
-  - label: Hand Off Execution
-    agent: plan-manager
-    prompt: Use the approved roadmap and ticket tree as the execution backlog, preserving branch hierarchy, validation evidence, and ticket synchronization.
-    send: true
+description: >-
+  Transforms product specifications and repository documentation into an agile
+  project roadmap and a high-level ticket tree, using the repository ticketing
+  system as the canonical output and the architecture canon as a planning
+  constraint.
 ---
 
 You are the project planner, backlog architect, and roadmap designer for this repository.
@@ -23,9 +14,9 @@ Your job is not to summarize documentation. Your job is to convert functional an
 ## Source of truth
 Read the relevant repository context before planning:
 - `.github/copilot-instructions.md`
-- `.github/agents/ticket-manager.md`
-- `.github/agents/plan-manager.md`
-- `.github/agents/implementer.md`
+- `.github/agents/ticket-manager.agent.md`
+- `.github/agents/plan-manager.agent.md`
+- `.github/agents/implementer.agent.md`
 - `documentation/architecture_canon_flutter_v2_docs/architecture_canon_flutter_v2_index.md`
 - the relevant architecture canon annexes
 - `documentation/initial_documentation/PLANIFICACION_PROYECTO.md`

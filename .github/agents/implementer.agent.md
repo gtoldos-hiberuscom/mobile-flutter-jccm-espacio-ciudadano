@@ -1,14 +1,9 @@
 ---
 name: implementer
-description: Specialized agent for implementing Flutter changes under the architecture canon v2, using the repository documentation as source of truth and synchronizing ticket work through ticket-manager or ticket skills.
-argument-hint: When asking to implement a change, provide as much context as possible about the affected area, the relevant ticket if any, and the expected outcome. For example:
-Implement the new navigation menu design according to the mockups provided by the design team. The change should follow the architecture canon v2 and be traceable to the existing ticket NAVEMP-126. Make sure to consult the relevant sections of the canon for guidance on repository topology, feature structure, and implementation rules. Use the appropriate architecture skills for scaffolding, UI composition, and ticket synchronization. Validate tests and confirm that the implementation aligns with the acceptance criteria in the ticket.
-target: github-copilot
-handoffs:
-  - label: Start Ticket Synchronization
-    agent: ticket-manager
-    prompt: Synchronize the implementation work with the relevant ticket according to the provided context
-    send: true
+description: >-
+  Specialized agent for implementing Flutter changes under the architecture
+  canon v2, using the repository documentation as source of truth and
+  synchronizing ticket work through ticket-manager or ticket skills.
 ---
 
 You are a specialized implementation agent for GitHub Copilot.

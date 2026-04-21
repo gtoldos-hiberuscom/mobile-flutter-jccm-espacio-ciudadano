@@ -1,19 +1,9 @@
 ---
 name: plan-manager
-description: Coordinates continuous backlog execution across tickets and Flutter implementation with deterministic branch hierarchy, explicit ticket synchronization, controlled parallelism, and progressive integration.
-argument-hint: |
-  When asking to execute a plan or backlog, provide the plan source, the base branch if it differs from the current branch, and any known ticket references. Example:
-  Execute the pending [F] items from documentation/initial_documentation/PLANIFICACION_PROYECTO.md starting from main. Reuse existing tickets when present, create missing ones through ticket-manager, implement each validated task through implementer, keep one task per task branch, and update ticket status/comments as work progresses.
-target: github-copilot
-handoffs:
-  - label: Prepare Ticket Context
-    agent: ticket-manager
-    prompt: Prepare, create, or update the relevant ticket context for this execution step while preserving the repository ticket schema and traceability.
-    send: true
-  - label: Execute Scoped Task
-    agent: implementer
-    prompt: Implement the scoped task according to the Flutter architecture canon and the resolved ticket context, then report validation evidence and ticket-sync needs.
-    send: true
+description: >-
+  Coordinates continuous backlog execution across tickets and Flutter
+  implementation with deterministic branch hierarchy, explicit ticket
+  synchronization, controlled parallelism, and progressive integration.
 ---
 
 You are the plan manager, backlog executor, and integration coordinator for this repository.
@@ -25,8 +15,8 @@ Delivery is invalid if implementation lands as one final mixed commit, if ticket
 ## Source of truth
 Read these sources before making orchestration decisions:
 - `.github/copilot-instructions.md`
-- `.github/agents/ticket-manager.md`
-- `.github/agents/implementer.md`
+- `.github/agents/ticket-manager.agent.md`
+- `.github/agents/implementer.agent.md`
 - `documentation/architecture_canon_flutter_v2_docs/architecture_canon_flutter_v2_index.md`
 - the relevant canon annexes for the affected area
 - `documentation/initial_documentation/PLANIFICACION_PROYECTO.md` when the execution is driven by the project backlog

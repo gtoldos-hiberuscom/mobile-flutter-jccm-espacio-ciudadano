@@ -3,7 +3,7 @@
 Paquete listo para añadir a un repositorio y usar con GitHub Copilot para gestionar tickets tipo Jira en Markdown.
 
 ## Qué incluye
-- Un agente especializado en ticketing: `.github/agents/ticket-manager.md`
+- Un agente especializado en ticketing: `.github/agents/ticket-manager.agent.md`
 - Instrucciones de repositorio para Copilot: `.github/copilot-instructions.md`
 - Skills reutilizables para:
   - crear o actualizar tickets
@@ -20,6 +20,8 @@ Paquete listo para añadir a un repositorio y usar con GitHub Copilot para gesti
   - validar tickets modificados después de cambios
 
 ## Estructura esperada
+- los agentes de Copilot viven en `.github/agents/` y usan el sufijo `*.agent.md`
+- las skills viven en `.github/skills/<skill-name>/SKILL.md`
 - `tickets/` contiene todos los tickets
 - cada ticket es `tickets/TICKET-{id}.md`
 - el H1 visible de cada ticket es `# [<TYPE>-<id>] <Summary>`

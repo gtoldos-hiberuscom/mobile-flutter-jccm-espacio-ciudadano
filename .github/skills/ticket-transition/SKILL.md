@@ -1,9 +1,6 @@
 ---
 name: ticket-transition
 description: Change a ticket workflow state, priority, sprint, due date, or other workflow-related metadata while preserving ticket history.
-argument-hint: When asking to transition a ticket, provide as much context as possible about the relevant ticket, the desired status or metadata change, and the expected outcome. For example:
-Move ticket NAVEMP-126 from "To Do" to "In Progress". Make sure to read the existing ticket file first, verify that the transition follows the defined workflow, update the "status" field accordingly, update the "updated_at" field, and append a concise changelog entry under "## Notes" -> "### Change Log" with the format: "- 2026-04-21T10:12:00Z | status | To Do -> In Progress | by Copilot". If the transition is outside the default workflow, do not apply it unless there is an explicit user override.
-target: github-copilot
 ---
 
 Use this skill when the task is to move a ticket through its workflow or adjust workflow-related metadata.
