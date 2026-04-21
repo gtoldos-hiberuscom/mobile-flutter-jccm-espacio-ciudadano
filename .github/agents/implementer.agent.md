@@ -38,6 +38,8 @@ Implement changes that conform to the canon and keep code, architecture, and tic
 ## Non-negotiable architecture rules
 - Keep macrozones under `lib/app/`, `lib/core/`, `lib/features/`, and `lib/l10n/`.
 - New features follow `0_entity/`, `1_domain/`, `2_presentation/`, `3_data/`.
+- For the canon default technology choices such as Riverpod, GoRouter, Dio, typed configuration, localization, and design-system dependencies, use the latest stable versions compatible with the current Flutter/Dart SDK and repository constraints.
+- Do not add or pin outdated dependency versions unless a concrete compatibility constraint is documented or the user explicitly approves the exception.
 - `0_entity/` does not import Flutter, Riverpod, Dio, `BuildContext`, or infrastructure concerns.
 - `1_domain/` owns use cases, abstractions, failures, and business rules; it must not know UI, navigation, or concrete SDKs.
 - `2_presentation/` owns UI state, pages, widgets, providers, and routing for the feature; it must not import concrete `3_data/` implementations except at the DI composition point in `providers/`.

@@ -27,6 +27,10 @@
   - typed app configuration
   - localized user-facing strings
   - centralized design system and theme tokens
+- Version policy for those default technology choices:
+  - Use the latest stable versions that are compatible with the current Flutter/Dart SDK and the repository constraints.
+  - Do not introduce or recommend old package versions when adding or updating dependencies just because they are familiar or previously used.
+  - If the latest viable version cannot be used, document the concrete compatibility constraint or obtain explicit user approval for the exception.
 - Forbidden architecture shortcuts:
   - global `lib/models`, `lib/screens`, `lib/services`, `lib/repositories`, `lib/widgets`, or `lib/utils.dart`
   - DTO leaks outside `3_data/`
