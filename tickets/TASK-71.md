@@ -18,7 +18,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-21T23:50:13+02:00
 due_date:
 jira_url:
 ---
@@ -37,15 +37,15 @@ Validar y reconciliar con el alcance oficial las superficies de tarjeta sanitari
 - Environment:
 - Dependencies:
   - Blocked by:
-    - TASK-27
+    - [TASK-27]
   - Blocks:
   - Related to:
-    - EPIC-3
-    - EPIC-4
-    - EPIC-7
-    - STORY-22
-    - STORY-31
-    - STORY-48
+    - [EPIC-3]
+    - [EPIC-4]
+    - [EPIC-7]
+    - [STORY-22]
+    - [STORY-31]
+    - [STORY-48]
 - Scope notes:
   - Revisar la correspondencia entre las superficies visibles en portada y el alcance funcional oficial del módulo de carnets digitales.
   - Confirmar si Tarjeta Sanitaria y Tarjeta Biblioteca requieren contrato backend, definición de navegación o descarte explícito del MVP.
@@ -73,3 +73,4 @@ Validar y reconciliar con el alcance oficial las superficies de tarjeta sanitari
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 — Initial file creation by Copilot.
+- 2026-04-21T23:50:13+02:00 | by Copilot | Normalized dependency references after backlog audit.
