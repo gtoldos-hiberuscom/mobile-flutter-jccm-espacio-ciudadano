@@ -12,14 +12,14 @@ reporter: Daniel Lostao Bono
 assignee: Daniel Lostao Bono
 story_points:
 labels: []
-fix_versions:
-affected_versions:
+fix_versions: []
+affected_versions: []
 created_at: 2026-04-20T07:55:53.858Z
 updated_at: 2026-04-20T07:55:53.997Z
 due_date:
 jira_url: https://hiberusmobile.atlassian.net/browse/NAVEMP-126
 ---
-# [Improvement] “Which is my branch” / Reference branch
+# [TASK-40162] Which is my branch / Reference branch
 ## Functional Description
 Rework the “Which is my branch” flow.
 

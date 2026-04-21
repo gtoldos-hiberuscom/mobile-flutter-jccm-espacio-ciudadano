@@ -43,6 +43,15 @@ This repository stores Jira-style tickets as Markdown files.
 - All tickets live under `tickets/`.
 - Each ticket uses exactly one file.
 - The filename must be `TICKET-{id}.md`.
+- The visible ticket identifier must be derived from `type + id` using:
+  - `Epic` -> `EPIC-{id}`
+  - `Story` -> `STORY-{id}`
+  - `Task` -> `TASK-{id}`
+  - `Subtask` -> `SUBTASK-{id}`
+  - `Bug` -> `BUG-{id}`
+  - `Other` -> `OTHER-{id}`
+- The H1 must be `# [<TYPE>-<id>] <Summary>`.
+- Before reusing a summary to build a title or slug, strip any existing leading `[<TYPE>-<id>]` token to avoid duplicated prefixes.
 
 ## Mandatory schema
 Every ticket file must preserve the exact YAML key order defined below:
@@ -70,6 +79,7 @@ Every ticket file must preserve the exact YAML key order defined below:
 - `id` is the numeric internal identifier and is the source of truth for the filename `tickets/TICKET-{id}.md`.
 - `jira_key` is the external tracker key, such as `NAVEMP-126`; it is not used as the filename.
 - A user may refer to a ticket by `id`, `jira_key`, or file path, but repository edits must always target the canonical file resolved from `id`.
+- The visible typed identifier in titles, branch names, and planning artifacts always comes from `type + id`, never from `jira_key`.
 
 ## Ticket field definitions
 - `id`: numeric internal identifier, required, must match the filename.
@@ -91,15 +101,22 @@ Every ticket file must preserve the exact YAML key order defined below:
 - `updated_at`: last modification timestamp in ISO8601; update it on every mutation.
 - `due_date`: due-date timestamp in ISO8601, or empty.
 - `jira_url`: full tracker URL, or empty.
-- `# <Summary>`: the human-readable ticket summary; this lives in the H1 heading, not in frontmatter.
+- `# [<TYPE>-<id>] <Summary>`: the human-readable ticket summary; this lives in the H1 heading, not in frontmatter.
 
 Each file must also contain these required sections in this order:
-- `# <Summary>`
+- `# [<TYPE>-<id>] <Summary>`
 - `## Functional Description`
 - `## Acceptance Criteria`
 - `## Technical Details`
 - `## Traceability`
 - `## Notes`
+
+## Managed branch naming
+- Managed epic branches must be `epic/<EPIC-id>-<epic-slug>`.
+- Managed ticket branches must be `ticket/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>`.
+- Managed task branches must be `task/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>/<task-slug>`.
+- Slugs must be lowercase, ASCII-only, hyphen-separated, and derived from normalized title text without the visible `[<TYPE>-<id>]` prefix.
+- `jira_key` remains tracker metadata only; it must not replace the visible typed identifier in branch names, task lineage, or planning headings.
 
 ## Notes conventions
 Inside `## Notes`, prefer these optional subsections when relevant:

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import os
 import pathlib
 import re
 import subprocess
@@ -13,6 +12,15 @@ from typing import Any
 ROOT = pathlib.Path.cwd()
 LOG_DIR = ROOT / ".github" / "hooks" / "logs"
 AUDIT_LOG = LOG_DIR / "ticket-audit.jsonl"
+VISIBLE_ID_PREFIX_BY_TYPE = {
+    "Epic": "EPIC",
+    "Story": "STORY",
+    "Task": "TASK",
+    "Subtask": "SUBTASK",
+    "Bug": "BUG",
+    "Other": "OTHER",
+}
+VISIBLE_ID_PREFIX_RE = re.compile(r"^\[(EPIC|STORY|TASK|SUBTASK|BUG|OTHER)-\d+\]\s+")
 REQUIRED_FRONTMATTER_KEYS = [
     "id",
     "jira_key",
@@ -81,6 +89,55 @@ def parse_tool_args(raw: str | None) -> dict[str, Any]:
     return {}
 
 
+def ticket_path_from_id(ticket_id: str) -> pathlib.Path:
+    return ROOT / "tickets" / f"TICKET-{ticket_id}.md"
+
+
+def ticket_type_to_visible_prefix(ticket_type: str) -> str | None:
+    return VISIBLE_ID_PREFIX_BY_TYPE.get(ticket_type.strip())
+
+
+def strip_visible_ticket_prefix(summary: str) -> str:
+    return VISIBLE_ID_PREFIX_RE.sub("", summary, count=1).strip()
+
+
+def parse_ticket_content(content: str) -> tuple[list[str], dict[str, str], str] | None:
+    if not content.startswith("---\n"):
+        return None
+
+    parts = content.split("\n---\n", 1)
+    if len(parts) != 2:
+        return None
+
+    frontmatter_raw = parts[0][4:]
+    body = parts[1]
+
+    keys_in_order: list[str] = []
+    key_values: dict[str, str] = {}
+    for line in frontmatter_raw.splitlines():
+        match = re.match(r"^([a-z_]+):\s*(.*)$", line)
+        if match:
+            key = match.group(1)
+            value = match.group(2)
+            keys_in_order.append(key)
+            key_values[key] = value
+
+    return keys_in_order, key_values, body
+
+
+def read_ticket_frontmatter(ticket_id: str) -> dict[str, str] | None:
+    path = ticket_path_from_id(ticket_id)
+    if not path.exists():
+        return None
+
+    parsed = parse_ticket_content(path.read_text(encoding="utf-8"))
+    if parsed is None:
+        return None
+
+    _, key_values, _ = parsed
+    return key_values
+
+
 def git_changed_ticket_files() -> list[pathlib.Path]:
     try:
         proc = subprocess.run(
@@ -133,24 +190,16 @@ def validate_ticket_file(path: pathlib.Path) -> list[str]:
     if not content.startswith("---\n"):
         errors.append(f"{rel}: missing opening frontmatter delimiter")
         return errors
-
-    parts = content.split("\n---\n", 1)
-    if len(parts) != 2:
+    if content.split("\n---\n", 1) == [content]:
         errors.append(f"{rel}: missing closing frontmatter delimiter")
         return errors
 
-    frontmatter_raw = parts[0][4:]
-    body = parts[1]
+    parsed = parse_ticket_content(content)
+    if parsed is None:
+        errors.append(f"{rel}: invalid ticket frontmatter structure")
+        return errors
 
-    keys_in_order = []
-    key_values: dict[str, str] = {}
-    for line in frontmatter_raw.splitlines():
-        match = re.match(r"^([a-z_]+):\s*(.*)$", line)
-        if match:
-            key = match.group(1)
-            value = match.group(2)
-            keys_in_order.append(key)
-            key_values[key] = value
+    keys_in_order, key_values, body = parsed
 
     if keys_in_order != REQUIRED_FRONTMATTER_KEYS:
         errors.append(
@@ -163,8 +212,23 @@ def validate_ticket_file(path: pathlib.Path) -> list[str]:
     elif ticket_id != name_match.group(1):
         errors.append(f"{rel}: file name id does not match frontmatter id")
 
-    if not re.search(r"^#\s+.+", body, flags=re.MULTILINE):
+    heading_match = re.search(r"^#\s+(.+)$", body, flags=re.MULTILINE)
+    if not heading_match:
         errors.append(f"{rel}: missing level-1 summary heading")
+    else:
+        ticket_type = key_values.get("type", "")
+        visible_prefix = ticket_type_to_visible_prefix(ticket_type)
+        if visible_prefix is None:
+            errors.append(
+                f"{rel}: type '{ticket_type}' cannot be converted to a visible ticket identifier"
+            )
+        elif not re.fullmatch(
+            rf"\[{visible_prefix}-{ticket_id}\]\s+.+",
+            heading_match.group(1).strip(),
+        ):
+            errors.append(
+                f"{rel}: summary heading must be '# [{visible_prefix}-{ticket_id}] <Summary>'"
+            )
 
     for section in REQUIRED_SECTIONS:
         if section not in body:

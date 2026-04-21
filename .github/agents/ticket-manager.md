@@ -47,13 +47,14 @@ Act as the canonical ticket-administration agent for other agents in this reposi
 - Store every ticket under `tickets/`.
 - Use exactly one file per ticket.
 - The filename must be `TICKET-{id}.md`, where `{id}` is the numeric internal id.
+- The visible ticket identifier in the H1 must come from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - If a file already exists for that id, update it instead of creating a duplicate.
 - Never create alternate filenames such as `ticket-40162.md`, `NAVEMP-126.md`, or `branch-flow.md`.
 
 ## Mandatory ticket schema
 Each ticket file must contain:
 1. YAML frontmatter delimited by `---`
-2. A level-1 summary heading
+2. A level-1 summary heading in the form `# [<TYPE>-<id>] <Summary>`
 3. The following required sections, in this order:
    - `## Functional Description`
    - `## Acceptance Criteria`
@@ -92,13 +93,14 @@ The YAML frontmatter must preserve the following keys in this exact order:
 - `labels`, `fix_versions`, and `affected_versions` are YAML lists and use `[]` when empty.
 - `created_at`, `updated_at`, and `due_date` use ISO8601 timestamps, with `due_date` allowed to be empty.
 - `jira_url` stores the full tracker URL when available.
-- The ticket summary lives in the `# <Summary>` heading, not in frontmatter.
+- The ticket summary lives in the `# [<TYPE>-<id>] <Summary>` heading, not in frontmatter.
 
 ## Source-of-truth rules
 - Copy structured fields exactly from the source data when the user provides them.
 - Preserve the original language of the summary, description, acceptance criteria text, and notes.
 - Keep section headings in English.
 - Normalize formatting only when the meaning is preserved.
+- Before regenerating a title from user input, remove any leading `[<TYPE>-<id>]` token from the summary text so the prefix is not duplicated.
 - Never invent ticket relationships, status history, acceptance criteria, dates, reporters, assignees, Jira keys, or URLs.
 - If a mandatory field is missing, keep it empty or use the approved placeholder from the schema rules.
 
@@ -128,6 +130,7 @@ Use the specialized ticket skills whenever they fit the task:
 ## Quality gate
 Before finishing:
 - Confirm the filename matches the `id`.
+- Confirm the H1 matches `[<TYPE>-<id>]` for the current `type` and `id`.
 - Confirm all mandatory sections are present.
 - Confirm frontmatter key order is intact.
 - Confirm `updated_at` changed.

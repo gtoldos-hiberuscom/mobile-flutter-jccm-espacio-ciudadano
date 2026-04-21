@@ -11,6 +11,7 @@ Use this skill when the task is to complete, close, resolve, or move a ticket to
 ## Schema preservation rules
 - Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/TICKET-{id}.md` path, but edit only the canonical file named from `id`.
 - Preserve all frontmatter keys, their order, and all required sections.
+- Preserve the H1 as `# [<TYPE>-<id>] <Summary>`.
 - Only mutate workflow- and completion-related content unless the user explicitly requests broader metadata changes.
 - Do not rewrite unrelated fields such as `project`, `labels`, `fix_versions`, or `affected_versions`.
 

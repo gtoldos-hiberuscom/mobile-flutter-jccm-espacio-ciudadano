@@ -19,7 +19,7 @@ updated_at: <ISO8601>
 due_date: <ISO8601 or empty>
 jira_url: <URL or empty>
 ---
-# <Summary>
+# [<TYPE>-<id>] <Summary>
 ## Functional Description
 <Functional description in prose. Preserve source language.>
 

@@ -63,12 +63,18 @@ Secondary outputs are optional and should only be created when the user explicit
 - roadmap summary documents such as `jiraItems.md`
 - task matrix documents such as `tasks.md`
 
+When those secondary outputs are requested:
+- use `[EPIC-id]` in epic headings
+- use `[TYPE-id]` in ticket headings
+- keep those visible IDs exactly aligned with the ticket files that were created or referenced
+
 Do not treat ad hoc Markdown summaries as the source of truth when the repository ticket system is available.
 
 ## Ticketing contract
 - The canonical ticket-administration agent is `ticket-manager`.
 - Use `ticket-manager` or the ticket skills to materialize the backlog into `tickets/TICKET-{id}.md`.
 - Ticket types may include `Epic`, `Story`, `Task`, `Subtask`, `Bug`, or `Other`, depending on the backlog level.
+- Visible identifiers in ticket titles and planning artifacts must use `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - Use `type: Epic` for roadmap-level delivery groups.
 - Use `type: Story` or `type: Task` for coherent delivery units.
 - Use `type: Subtask` only when a ticket must be broken into distinct executable leaves that deserve their own ticket files.
@@ -78,6 +84,7 @@ When creating a repository-local backlog from scratch:
 - allocate deterministic numeric `id` values starting from the current highest existing ticket id plus one
 - leave `jira_key` empty unless a real external tracker key already exists
 - keep `epic_link` and `parent` empty until real tracker keys exist
+- write ticket H1 headings as `# [<TYPE>-<id>] <Summary>`
 - record provisional hierarchy and dependencies explicitly in `## Traceability` and `## Technical Details`
 
 Never fabricate external Jira metadata that does not exist.

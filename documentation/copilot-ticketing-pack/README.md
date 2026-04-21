@@ -15,12 +15,18 @@ Paquete listo para añadir a un repositorio y usar con GitHub Copilot para gesti
 - Hooks para:
   - registrar sesiones y prompts sin guardar el texto completo
   - bloquear nombres inválidos en `tickets/`
+  - validar nombres de ramas gestionadas `epic/`, `ticket/` y `task/`
   - bloquear comandos destructivos sobre tickets
   - validar tickets modificados después de cambios
 
 ## Estructura esperada
 - `tickets/` contiene todos los tickets
 - cada ticket es `tickets/TICKET-{id}.md`
+- el H1 visible de cada ticket es `# [<TYPE>-<id>] <Summary>`
+- las ramas gestionadas usan:
+  - `epic/<EPIC-id>-<epic-slug>`
+  - `ticket/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>`
+  - `task/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>/<task-slug>`
 - `examples/` contiene ejemplos de referencia y no forma parte del backlog real
 
 ## Instalación
@@ -30,6 +36,7 @@ Paquete listo para añadir a un repositorio y usar con GitHub Copilot para gesti
 
 ## Ejemplos de uso
 - `Use the ticket-manager agent to create tickets/TICKET-40162.md from this Jira payload.`
+- `Use the plan-manager agent to create branch ticket/EPIC-10-platform-foundations/STORY-42-repo-bootstrap from its parent epic branch.`
 - `Use the ticket-manager agent to move tickets/TICKET-40162.md from To Do to In Progress and append the change log.`
 - `Use the ticket-manager agent to add a comment to tickets/TICKET-40162.md saying that PO validation is pending.`
 - `Use the ticket-manager agent to reassign tickets/TICKET-40162.md to María Pérez.`

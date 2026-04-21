@@ -26,7 +26,8 @@ Create or update exactly one Markdown file for a ticket using the repository tic
 ## Canonical identifier and field rules
 - `id` is the numeric internal identifier and drives the filename `tickets/TICKET-{id}.md`.
 - `jira_key` is the external tracker key and may be used to locate an existing ticket, but it must not replace `id` in the filename.
-- `summary` maps to the `# <Summary>` heading, not to a frontmatter key.
+- The visible ticket identifier in the H1 comes from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
+- `summary` maps to the `# [<TYPE>-<id>] <Summary>` heading, not to a frontmatter key.
 - `epic_link` and `parent` store related `jira_key` values, not numeric internal ids.
 - `labels`, `fix_versions`, and `affected_versions` are YAML lists; use `[]` when they are empty.
 - `story_points` is numeric when present; otherwise leave it empty.
@@ -39,9 +40,10 @@ Create or update exactly one Markdown file for a ticket using the repository tic
 4. Use `ticket-template.md` from this skill directory as the canonical structure.
 5. Preserve the frontmatter key order exactly.
 6. Preserve source language for the ticket content.
-7. Normalize formatting only when meaning is unchanged.
-8. Update `updated_at` on every mutation.
-9. Keep `created_at` stable unless the user explicitly corrects it.
+7. Strip any leading `[<TYPE>-<id>]` token from the input summary before rebuilding the H1 so the prefix is never duplicated.
+8. Normalize formatting only when meaning is unchanged.
+9. Update `updated_at` on every mutation.
+10. Keep `created_at` stable unless the user explicitly corrects it.
 
 ## Acceptance criteria derivation rules
 - If explicit acceptance criteria exist, convert them into checkbox items.

@@ -23,6 +23,12 @@
         "bash": "python3 .github/hooks/scripts/pre_tool_ticket_policy.py",
         "cwd": ".",
         "timeoutSec": 10
+      },
+      {
+        "type": "command",
+        "bash": "python3 .github/hooks/scripts/pre_tool_branch_policy.py",
+        "cwd": ".",
+        "timeoutSec": 10
       }
     ],
     "postToolUse": [

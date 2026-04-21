@@ -11,6 +11,7 @@ Use this skill when the task is to add a comment to a ticket file.
 ## Schema preservation rules
 - Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/TICKET-{id}.md` path, but edit only the canonical file named from `id`.
 - Preserve all frontmatter keys, their order, and all required sections.
+- Preserve the H1 as `# [<TYPE>-<id>] <Summary>`.
 - Only mutate `updated_at` in frontmatter for a pure comment operation.
 - Do not rewrite `labels`, `fix_versions`, or `affected_versions`; keep their existing YAML-list shape.
 

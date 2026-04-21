@@ -200,6 +200,7 @@ Cada épica debe tener:
 ### Tickets
 Cada ticket debe tener:
 
+- identificador visible tipado en el formato `[TYPE-id]`
 - título claro y específico
 - descripción detallada
 - objetivo
@@ -240,7 +241,7 @@ Cuando aplique, separa tareas de:
 ```md
 # Jira Items
 
-## Épica: [Nombre]
+## Épica: [EPIC-001] Nombre
 
 ### Descripción
 ...
@@ -253,7 +254,7 @@ Cuando aplique, separa tareas de:
 
 ---
 
-### Ticket: [Nombre]
+### Ticket: [STORY-002] Nombre
 
 **Descripción**
 ...
@@ -279,6 +280,7 @@ Reglas:
 - incluir todas las épicas
 - incluir todos los tickets de cada épica
 - incluir todas las tareas de cada ticket
+- usar siempre el identificador visible tipado `[EPIC-id]` o `[TYPE-id]` correspondiente
 - mantener alto nivel de detalle
 - mantener estructura legible y jerárquica
 
@@ -291,12 +293,12 @@ Reglas:
 
 ## [EPIC-001] Nombre de la épica
 
-### [TICKET-001] Nombre del ticket
+### [STORY-002] Nombre del ticket
 - [ ] Tarea 1
 - [ ] Tarea 2
 - [ ] Tarea 3
 
-### [TICKET-002] Nombre del ticket
+### [TASK-003] Nombre del ticket
 - [ ] Tarea 1
 - [ ] Tarea 2
 ```
@@ -306,6 +308,7 @@ Reglas:
 - usar checkboxes `- [ ]`
 - agrupar por épica y ticket
 - mantener formato operativo
+- usar el mismo identificador visible tipado que tendrá el ticket materializado
 - mantener correspondencia exacta con `jiraItems.md`
 
 ---

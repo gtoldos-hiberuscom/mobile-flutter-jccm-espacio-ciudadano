@@ -52,6 +52,8 @@ Implement changes that conform to the canon and keep code, architecture, and tic
 ## Ticket coordination rules
 - The canonical ticket-administration agent is `ticket-manager`; use it when the request requires creating or updating ticket Markdown in `tickets/`.
 - When direct skill usage is enough, prefer the existing ticket skills: `ticket-create-update`, `ticket-transition`, `ticket-comment`, `ticket-reassign`, `ticket-linking`, `ticket-complete`.
+- The visible ticket identifier used in titles, branch lineage, and planning artifacts comes from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
+- Ticket H1 headings must be `# [<TYPE>-<id>] <Summary>`, while the canonical filename remains `tickets/TICKET-{id}.md`.
 - Never invent ticket ids, Jira keys, assignees, dates, acceptance criteria, or relationships.
 - If no ticket context exists, state that ticket synchronization was not applicable instead of fabricating it.
 

@@ -76,6 +76,8 @@ For ticket workflow, use the repository default ticket policy unless the user pr
 - Ticket files live under `tickets/` and must follow the schema defined in `.github/copilot-instructions.md`.
 - Resolve ticket context from `id`, `jira_key`, or `tickets/TICKET-{id}.md`, but always operate on the canonical file named from `id`.
 - `id` is the internal numeric identifier; `jira_key` is the external tracker key.
+- The visible ticket identifier used in titles, branches, and planning artifacts comes from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
+- Ticket H1 headings must be `# [<TYPE>-<id>] <Summary>`.
 - `epic_link` and `parent` store `jira_key` values.
 - `labels`, `fix_versions`, and `affected_versions` are YAML lists.
 - Relationship bullets such as blocked-by, blocks, and related-to belong in `## Technical Details` -> `Dependencies`, not in extra frontmatter keys.
@@ -98,9 +100,9 @@ At the beginning of execution:
 
 ## Managed branch hierarchy
 Use this hierarchy:
-- `epic/<epic-slug>`
-- `ticket/<epic-slug>/<ticket-slug>`
-- `task/<epic-slug>/<ticket-slug>/<task-slug>`
+- `epic/<EPIC-id>-<epic-slug>`
+- `ticket/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>`
+- `task/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>/<task-slug>`
 
 Branch ancestry is mandatory:
 - `epic/*` must be created from the base branch.
@@ -111,20 +113,28 @@ Do not create task branches directly from the base branch.
 Do not create ticket branches directly from the base branch.
 Do not implement directly on base, epic, or ticket branches.
 
-## Epic and ticket slug rules
-Slugs must be deterministic, readable, and stable:
+## Managed ID and slug rules
+The visible typed ID segment is mandatory in every managed branch:
+- `Epic` -> `EPIC-{id}`
+- `Story` -> `STORY-{id}`
+- `Task` -> `TASK-{id}`
+- `Subtask` -> `SUBTASK-{id}`
+- `Bug` -> `BUG-{id}`
+- `Other` -> `OTHER-{id}`
+
+Slug segments must be deterministic, readable, and stable:
 - lowercase
 - ascii only
 - hyphen separated
 - concise but unambiguous
-- derived from ticket or plan text, not invented arbitrarily
+- derived from ticket or plan text after removing any leading `[TYPE-id]` prefix
 
-Preserve stable identifiers when present:
-- prefer `epic_link` in epic slugs when available
-- prefer `jira_key` in ticket slugs when available
-- otherwise fall back to `ticket-{id}` or a stable backlog-derived slug
+Preserve stable typed identifiers:
+- always use the real `type + id` token for epic and ticket segments when a corresponding ticket exists
+- never substitute `jira_key` for the visible typed identifier in branch names
+- keep `jira_key` only as tracker metadata inside ticket content and traceability notes
 
-If a ticket has no `epic_link`, derive an execution-only epic slug from `project` when available, otherwise use `standalone`. Do not write that synthetic epic slug back into ticket metadata unless the user explicitly asks for it.
+If a ticket has no real epic context, derive an execution-only umbrella epic branch as `epic/EPIC-0-<project-slug>` when `project` is available, otherwise use `epic/EPIC-0-standalone`. Do not write that synthetic branch segment back into ticket metadata unless the user explicitly asks for it.
 
 ## Hook and guardrail contract
 This repository uses `.github/hooks/*.json` manifests, not a custom `.githooks/` tree.
@@ -137,6 +147,8 @@ For implementation-only runs, prefer:
 
 For ticket-only runs, prefer:
 - `.github/hooks/ticket-guardrails.json`
+
+Managed branch creation is guarded by `.github/hooks/scripts/pre_tool_branch_policy.py`.
 
 Do not bypass repository guardrails or use `--no-verify` style escapes.
 
@@ -158,7 +170,7 @@ But those commits must still belong to one task only.
 
 ### Commit message requirements
 Prefer a traceable format that includes the branch lineage token:
-`<type>(<scope>): [<epic-slug>/<ticket-slug>/<task-slug>] <clear summary>`
+`<type>(<scope>): [EPIC-<id>/TYPE-<id>/<task-slug>] <clear summary>`
 
 Forbidden summaries include:
 - `wip`
@@ -174,9 +186,9 @@ Use explicit merge commits when integrating upward:
 - epic into base
 
 Recommended format:
-- `chore(<scope>): merge task/<epic-slug>/<ticket-slug>/<task-slug> into ticket/<epic-slug>/<ticket-slug>`
-- `chore(<scope>): merge ticket/<epic-slug>/<ticket-slug> into epic/<epic-slug>`
-- `chore(<scope>): merge epic/<epic-slug> into <base-branch>`
+- `chore(<scope>): merge task/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>/<task-slug> into ticket/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug>`
+- `chore(<scope>): merge ticket/<EPIC-id>-<epic-slug>/<TYPE-id>-<ticket-slug> into epic/<EPIC-id>-<epic-slug>`
+- `chore(<scope>): merge epic/<EPIC-id>-<epic-slug> into <base-branch>`
 
 Do not rely on default merge messages.
 

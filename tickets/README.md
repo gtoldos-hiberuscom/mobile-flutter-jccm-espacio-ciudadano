@@ -5,6 +5,8 @@ This folder stores Jira-style tickets as Markdown files.
 ## Rules
 - One file per ticket.
 - Filename: `TICKET-{id}.md`.
+- Visible title: `# [<TYPE>-<id>] <Summary>`.
+- Visible ID mapping: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - Keep the mandatory frontmatter and section order intact.
 - Preserve the original language of user-provided ticket content.
 - Store new comments in `## Notes` -> `### Comments`.

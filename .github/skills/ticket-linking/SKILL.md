@@ -11,6 +11,7 @@ Use this skill when the task is to add or update ticket relationships.
 
 ## Canonical relationship mapping
 - Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/TICKET-{id}.md` path, but edit only the canonical file named from `id`.
+- Preserve the H1 as `# [<TYPE>-<id>] <Summary>`.
 - `epic_link` stores an epic `jira_key`, not a numeric internal id.
 - `parent` stores a parent `jira_key`, not a numeric internal id.
 - `Blocked by`, `Blocks`, and `Related to` belong in `## Technical Details` -> `Dependencies`; do not create extra frontmatter keys for them.

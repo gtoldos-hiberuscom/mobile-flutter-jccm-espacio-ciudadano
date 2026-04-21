@@ -12,6 +12,7 @@ Use this skill when the task is to move a ticket through its workflow or adjust 
 - Resolve the target ticket from `id`, `jira_key`, or an explicit `tickets/TICKET-{id}.md` path, but edit only the canonical file named from `id`.
 - The workflow-related frontmatter fields are `status`, `priority`, `sprint`, and `due_date`.
 - Preserve all other frontmatter keys, their order, and all required sections.
+- Preserve the H1 as `# [<TYPE>-<id>] <Summary>` and do not rewrite the visible typed prefix during a pure transition.
 - Do not invent new workflow metadata fields outside the canonical schema.
 
 ## Status change workflow
