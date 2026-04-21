@@ -1,5 +1,7 @@
 {
   "APP_FLAVOR": "development",
   "TIMEOUT": "30",
-  "DEBUG_MODE": "true"
+  "DEBUG_MODE": "true",
+  "baseUrl": "",
+  "appName": "Espacio Ciudadano (Dev)"
 }

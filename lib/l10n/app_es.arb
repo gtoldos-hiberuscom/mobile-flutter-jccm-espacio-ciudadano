@@ -1,0 +1,7 @@
+{
+  "@@locale": "es",
+  "appTitle": "Espacio Ciudadano CLM",
+  "@appTitle": {
+    "description": "El título de la aplicación que se muestra en el lanzador."
+  }
+}
