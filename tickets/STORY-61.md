@@ -1,0 +1,79 @@
+---
+id: 61
+jira_key:
+type: Story
+status: To Do
+priority:
+project: Carpeta Ciudadana CLM
+epic_link:
+parent:
+sprint:
+reporter:
+assignee:
+story_points:
+labels:
+  - legal
+  - privacidad
+  - accesibilidad
+  - aviso-legal
+  - contenidos-estaticos
+fix_versions: []
+affected_versions: []
+created_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-21T22:41:38+02:00
+due_date:
+jira_url:
+---
+# [STORY-61] Páginas legales y estáticas de uso, privacidad, accesibilidad y aviso legal
+## Functional Description
+Cubrir las páginas estáticas o semiestáticas que forman parte del cumplimiento legal y la navegación global, incluyendo condiciones de uso, protección de datos, accesibilidad y aviso legal, con especial atención a contenido empaquetado y reutilización de textos ya presentes en onboarding.
+
+## Acceptance Criteria
+- [ ] Se contemplan Condiciones de uso, Protección de datos, Accesibilidad y Aviso legal.
+- [ ] Se contempla lectura completa con scroll, enlaces externos y contenido empaquetado cuando aplique.
+- [ ] Se contempla reutilización del contenido de protección de datos mostrado en el onboarding.
+- [ ] Se contemplan estados sin conexión para contenidos estáticos locales.
+
+## Technical Details
+- Platform(s): Multi-platform
+- Environment: development, preproduction, production
+- Dependencies:
+  - Blocked by:
+    - [STORY-14]
+    - [STORY-19]
+  - Blocks:
+    - None.
+  - Related to:
+    - [EPIC-9]
+- Legal/static scope:
+  - Pantallas legales accesibles desde navegación global.
+  - Reutilización del contenido de protección de datos ya mostrado en onboarding.
+  - Soporte de contenido local empaquetado y enlaces externos cuando proceda.
+  - Estados offline para contenido estático disponible en la app.
+- Consistency requirements:
+  - Mantener coherencia entre onboarding, footer, menú y páginas estáticas.
+  - Diferenciar piezas 100% locales frente a contenido con dependencia externa.
+
+## Traceability
+- Jira:
+- Epic:
+- Parent:
+- Sources:
+  - image_references/Acceso - Condiciones-1.png
+  - image_references/Acceso - Condiciones-2.png
+  - image_references/Servicios - Mis carnets digitales-1.png
+  - DOCUMENTO_COMPRENSION_FUNCIONAL.md pantallas 10 y 11
+  - RESUMEN_FUNCIONALIDADES_PPT.md secciones 10 y 11
+- Provisional hierarchy:
+  - Epic candidate: [EPIC-9]
+- Dependency map:
+  - Blocked by [STORY-14] y [STORY-19].
+  - Sin descendientes explícitos en este corte.
+  - Da soporte legal y de contenidos estáticos a la navegación global del epic [EPIC-9].
+
+## Notes
+### Comments
+- None yet.
+
+### Change Log
+- 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.

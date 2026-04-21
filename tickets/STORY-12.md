@@ -1,0 +1,78 @@
+---
+id: 12
+jira_key:
+type: Story
+status: To Do
+priority:
+project: Carpeta Ciudadana CLM
+epic_link:
+parent:
+sprint:
+reporter:
+assignee:
+story_points:
+labels:
+  - foundation
+  - architecture
+  - networking
+  - storage
+  - error-handling
+  - auth
+fix_versions: []
+affected_versions: []
+created_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-21T22:41:38+02:00
+due_date:
+jira_url:
+---
+# [STORY-12] Red, almacenamiento seguro y estrategia de errores compartida
+## Functional Description
+Definir la infraestructura transversal de red, auth-ready client, storage sensible/no sensible y mapping de errores para todas las features.
+
+## Acceptance Criteria
+- [ ] Se contempla cliente Dio común con interceptores, timeouts, cancelación y headers de autorización.
+- [ ] Tokens y secretos se almacenan en secure storage y datos no sensibles en storage no seguro.
+- [ ] Existe estrategia común de errores técnicos -> fallos de dominio -> mensajes de usuario localizados.
+- [ ] Los clientes OpenAPI generados se encapsulan como detalle de infraestructura en 3_data/api.
+
+## Technical Details
+- Platform(s): Multi-platform
+- Environment: development, preproduction, production
+- Dependencies:
+  - Blocked by:
+    - [STORY-11]
+  - Blocks:
+    - [STORY-18]
+    - [STORY-29]
+    - [STORY-34]
+    - [STORY-41]
+    - [STORY-48]
+    - [STORY-54]
+    - [STORY-64]
+  - Related to:
+    - [EPIC-1]
+    - [TASK-16]
+
+## Traceability
+- Jira:
+- Epic:
+- Parent:
+- Sources:
+  - architecture_canon_flutter_v2.md §§2,5
+  - annex_a core/network/auth
+  - annex_b §13
+  - annex_c §§21,24,26
+  - generated/dart_dio_client/README.md
+- Provisional hierarchy:
+  - Epic candidate: [EPIC-1]
+- Dependency map:
+  - Blocked by [STORY-11].
+  - Blocks [STORY-18], [STORY-29], [STORY-34], [STORY-41], [STORY-48], [STORY-54] y [STORY-64].
+  - Related to [TASK-16].
+
+## Notes
+### Comments
+- None yet.
+
+### Change Log
+- 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
