@@ -2,12 +2,12 @@
 id: 11
 jira_key:
 type: Story
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T01:35:57+02:00
 due_date:
 jira_url:
 ---
@@ -67,3 +67,4 @@ Definir la topología obligatoria del repo y los entrypoints de entorno para una
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T01:35:57+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 execution started.
