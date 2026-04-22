@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -130,6 +131,13 @@ final goRouterProvider = Provider<GoRouter>(
           path: Routes.afirmaReturn,
           builder: (final BuildContext context, final GoRouterState state) =>
               const LoginCallbackPlaceholder(),
+        ),
+
+        // ── Consent ──────────────────────────────────────────────────────────
+        GoRoute(
+          path: Routes.consent,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const ConsentPage(),
         ),
 
         // ── Authenticated shell ──────────────────────────────────────────────

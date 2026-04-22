@@ -55,4 +55,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionExpired => 'Your session has expired';
+
+  @override
+  String get consentPageTitle => 'Terms of Use';
+
+  @override
+  String get consentPageSubtitle => 'Personal data protection';
+
+  @override
+  String get consentPageBody => 'In accordance with Regulation (EU) 2016/679 of the European Parliament and of the Council (GDPR) and Organic Law 3/2018 on Personal Data Protection and guarantee of digital rights (LOPDGDD), the Government of Castilla-La Mancha informs you that the personal data collected through this application will be processed under the responsibility of the Government of Castilla-La Mancha, in order to provide you with the e-government services included in the Citizen Space.\n\nIn accordance with Law 3/2017 of the Government of Castilla-La Mancha, you have the right to access, rectify and delete your data, as well as to exercise the other rights recognised in applicable regulations, by writing to the Secretary General of the Government of Castilla-La Mancha.\n\nTo continue using the application you must accept these terms of use and data protection conditions. If you do not accept, the application will close.';
+
+  @override
+  String get consentPagePrivacyLink => 'View full privacy policy';
+
+  @override
+  String get consentAcceptButton => 'Accept and continue';
+
+  @override
+  String get consentRejectButton => 'Reject and exit';
+
+  @override
+  String get consentPageSemantics => 'Terms of use acceptance screen';
 }

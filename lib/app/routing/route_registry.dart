@@ -46,6 +46,9 @@ abstract final class Routes {
   static const String claveCallback = '/auth/clave/callback';
   static const String afirmaReturn = '/sign/afirma/return';
 
+  // ── Consent ───────────────────────────────────────────────────────────────
+  static const String consent = '/consent';
+
   // ── Route sets for guard classification ───────────────────────────────────
 
   /// Paths that require an active session.
