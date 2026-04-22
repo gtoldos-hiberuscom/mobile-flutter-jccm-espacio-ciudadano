@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTitle": "Citizen Space CLM",
+  "@appTitle": {
+    "description": "The application title shown in the browser tab and app launcher."
+  }
+}
