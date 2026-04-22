@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/app/observers/analytics_observer.dart';
 import 'package:jccm_espacio_ciudadano/app/observers/app_lifecycle_observer.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_guards.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
+import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
 ///
@@ -15,11 +17,14 @@ import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 final goRouterProvider = Provider<GoRouter>(
   (final ref) {
     final guard = SessionGuard(ref);
-    final observer = AppLifecycleObserver();
+    final lifecycleObserver = AppLifecycleObserver();
+    final analyticsObserver = AnalyticsObserver(
+      analyticsService: ref.read(analyticsServiceProvider),
+    );
 
     final router = GoRouter(
       initialLocation: Routes.splash,
-      observers: [observer],
+      observers: [lifecycleObserver, analyticsObserver],
       // ── Global redirect ──────────────────────────────────────────────────
       redirect: (final BuildContext context, final GoRouterState state) =>
           guard.redirect(state),
