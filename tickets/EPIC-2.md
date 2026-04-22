@@ -2,7 +2,7 @@
 id: 2
 jira_key:
 type: Epic
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -19,7 +19,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T01:35:57+02:00
 due_date:
 jira_url:
 ---
@@ -80,3 +80,4 @@ Cubrir el acceso con Cl@ve, la sesión segura, las autorizaciones iniciales y lo
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T01:35:57+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 execution started.
