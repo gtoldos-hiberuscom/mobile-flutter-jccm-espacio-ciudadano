@@ -77,4 +77,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get consentPageSemantics => 'Pantalla de aceptación de condiciones de uso';
+
+  @override
+  String userGreeting(String name) {
+    return 'Hola, $name';
+  }
+
+  @override
+  String get userMenuProfile => 'Mi perfil';
+
+  @override
+  String get userMenuNotifications => 'Notificaciones';
+
+  @override
+  String get userMenuSettings => 'Configuración';
+
+  @override
+  String get userMenuLogout => 'Cerrar sesión';
+
+  @override
+  String get maintenanceTitle => 'Servicio en mantenimiento';
+
+  @override
+  String get maintenanceSubtitle => 'El servicio no está disponible temporalmente.';
+
+  @override
+  String get maintenanceRetry => 'Reintentar';
 }
