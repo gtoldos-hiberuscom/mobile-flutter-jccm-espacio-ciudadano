@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +10,8 @@ import 'package:jccm_espacio_ciudadano/app/routing/route_guards.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -53,7 +57,7 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.login,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LoginPlaceholder(),
+              const LoginPage(),
           routes: [
             GoRoute(
               path: 'callback',
@@ -104,10 +108,23 @@ final goRouterProvider = Provider<GoRouter>(
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────
+        // Custom URL scheme: jccmapp://auth/clave/callback?code=<authorization_code>
+        // GoRouter matches the path portion: /auth/clave/callback
+        // The `code` query parameter is extracted and passed to [SessionNotifier].
         GoRoute(
           path: Routes.claveCallback,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LoginCallbackPlaceholder(),
+          builder: (final BuildContext context, final GoRouterState routerState) {
+            final callbackUri = routerState.uri;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              final container = ProviderScope.containerOf(context);
+              unawaited(
+                container
+                    .read<SessionNotifier>(sessionProvider.notifier)
+                    .handleCallback(callbackUri),
+              );
+            });
+            return const LoginCallbackPlaceholder();
+          },
         ),
         GoRoute(
           path: Routes.afirmaReturn,

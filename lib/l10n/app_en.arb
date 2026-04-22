@@ -39,5 +39,29 @@
   "landingFooterPrivacy": "Data protection",
   "@landingFooterPrivacy": {
     "description": "Footer link to the data protection policy."
+  },
+  "loginPageTitle": "Signing in with Cl@ve",
+  "@loginPageTitle": {
+    "description": "Title of the login screen shown while signing in with Cl@ve."
+  },
+  "loginPageLoading": "Starting authentication...",
+  "@loginPageLoading": {
+    "description": "Status message while the Cl@ve authentication is being initiated."
+  },
+  "loginPageError": "Sign-in error",
+  "@loginPageError": {
+    "description": "Error title shown when the login process fails."
+  },
+  "loginRetryButton": "Try again",
+  "@loginRetryButton": {
+    "description": "Button label to retry the login process."
+  },
+  "logoutConfirm": "Sign out?",
+  "@logoutConfirm": {
+    "description": "Confirmation text for signing the user out."
+  },
+  "sessionExpired": "Your session has expired",
+  "@sessionExpired": {
+    "description": "Message shown when the user's session has expired."
   }
 }

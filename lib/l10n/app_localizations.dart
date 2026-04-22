@@ -151,6 +151,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Protección de datos'**
   String get landingFooterPrivacy;
+
+  /// Título de la pantalla de login que indica que se está accediendo con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Accediendo con Cl@ve'**
+  String get loginPageTitle;
+
+  /// Mensaje de estado mientras se inicia la autenticación con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciando autenticación...'**
+  String get loginPageLoading;
+
+  /// Título del mensaje de error mostrado cuando falla la autenticación.
+  ///
+  /// In es, this message translates to:
+  /// **'Error al iniciar sesión'**
+  String get loginPageError;
+
+  /// Texto del botón para reintentar el proceso de login.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get loginRetryButton;
+
+  /// Texto de confirmación para cerrar la sesión del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cerrar sesión?'**
+  String get logoutConfirm;
+
+  /// Mensaje mostrado cuando la sesión del usuario ha expirado.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu sesión ha caducado'**
+  String get sessionExpired;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
