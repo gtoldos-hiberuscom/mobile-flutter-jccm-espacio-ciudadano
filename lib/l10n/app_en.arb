@@ -3,5 +3,41 @@
   "appTitle": "Citizen Space CLM",
   "@appTitle": {
     "description": "The application title shown in the browser tab and app launcher."
+  },
+  "landingTitle": "Citizen Space",
+  "@landingTitle": {
+    "description": "Main title displayed in the hero section of the public landing screen."
+  },
+  "landingTagline": "Your public information in one place",
+  "@landingTagline": {
+    "description": "Subtitle shown below the title on the landing screen."
+  },
+  "landingCtaButton": "Access with Cl@ve",
+  "@landingCtaButton": {
+    "description": "Primary CTA button text that initiates the Cl@ve authentication flow."
+  },
+  "landingWhatYouFindTitle": "What you'll find",
+  "@landingWhatYouFindTitle": {
+    "description": "Heading for the section that shows available service categories."
+  },
+  "landingHowToAccessTitle": "How to access",
+  "@landingHowToAccessTitle": {
+    "description": "Heading for the authentication steps section."
+  },
+  "landingFooterHelp": "Help",
+  "@landingFooterHelp": {
+    "description": "Footer link to the help section."
+  },
+  "landingFooterAccessibility": "Accessibility",
+  "@landingFooterAccessibility": {
+    "description": "Footer link to the accessibility statement."
+  },
+  "landingFooterLegal": "Legal notice",
+  "@landingFooterLegal": {
+    "description": "Footer link to the legal notice."
+  },
+  "landingFooterPrivacy": "Data protection",
+  "@landingFooterPrivacy": {
+    "description": "Footer link to the data protection policy."
   }
 }

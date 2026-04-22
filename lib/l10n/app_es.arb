@@ -3,5 +3,41 @@
   "appTitle": "Espacio Ciudadano CLM",
   "@appTitle": {
     "description": "El título de la aplicación que se muestra en el lanzador."
+  },
+  "landingTitle": "Espacio Ciudadano",
+  "@landingTitle": {
+    "description": "Título principal mostrado en la sección hero de la pantalla de inicio pública."
+  },
+  "landingTagline": "Tu información pública en un solo lugar",
+  "@landingTagline": {
+    "description": "Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio."
+  },
+  "landingCtaButton": "Acceder con Cl@ve",
+  "@landingCtaButton": {
+    "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
+  },
+  "landingWhatYouFindTitle": "Qué encontrarás",
+  "@landingWhatYouFindTitle": {
+    "description": "Encabezado de la sección que muestra las categorías de servicios disponibles."
+  },
+  "landingHowToAccessTitle": "Cómo acceder",
+  "@landingHowToAccessTitle": {
+    "description": "Encabezado de la sección de pasos para autenticarse."
+  },
+  "landingFooterHelp": "Ayuda",
+  "@landingFooterHelp": {
+    "description": "Enlace de pie de página a la sección de ayuda."
+  },
+  "landingFooterAccessibility": "Accesibilidad",
+  "@landingFooterAccessibility": {
+    "description": "Enlace de pie de página a la declaración de accesibilidad."
+  },
+  "landingFooterLegal": "Aviso legal",
+  "@landingFooterLegal": {
+    "description": "Enlace de pie de página al aviso legal."
+  },
+  "landingFooterPrivacy": "Protección de datos",
+  "@landingFooterPrivacy": {
+    "description": "Enlace de pie de página a la política de protección de datos."
   }
 }
