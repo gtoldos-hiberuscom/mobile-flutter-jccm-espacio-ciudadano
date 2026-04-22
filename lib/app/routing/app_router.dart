@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -115,8 +117,11 @@ final goRouterProvider = Provider<GoRouter>(
             final callbackUri = routerState.uri;
             WidgetsBinding.instance.addPostFrameCallback((_) {
               final container = ProviderScope.containerOf(context);
-              container.read<SessionNotifier>(sessionProvider.notifier)
-                  .handleCallback(callbackUri);
+              unawaited(
+                container
+                    .read<SessionNotifier>(sessionProvider.notifier)
+                    .handleCallback(callbackUri),
+              );
             });
             return const LoginCallbackPlaceholder();
           },
