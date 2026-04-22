@@ -56,6 +56,19 @@ final class AuthRepositoryImpl implements AuthRepository {
 
   // ── handleCallback ────────────────────────────────────────────────────────
 
+  // TASK-21: Replace mock session with real OIDC token exchange:
+  // 1. POST authorization code to Cl@ve token endpoint
+  // 2. Receive id_token + access_token
+  // 3. Decode id_token with JwtDecoder.decode()
+  // 4. Validate: claims.validateAudience(appClientId), !claims.isExpired
+  // 5. Map claims to Session: idAgente = claims.idAgente, displayName = claims.displayName
+  //
+  // Prerequisites (see docs/architecture/TASK-21-jwt-claims-validation.md §6):
+  // - Cl@ve OIDC discovery endpoint URL confirmed
+  // - client_id and redirect URI registered in Cl@ve sandbox
+  // - nif/idAgente claim name confirmed
+  // - token exchange endpoint URL confirmed
+
   /// Processes the Cl@ve deep-link callback URI.
   ///
   /// Sprint 1: creates a **mock** session from the `code` parameter.
