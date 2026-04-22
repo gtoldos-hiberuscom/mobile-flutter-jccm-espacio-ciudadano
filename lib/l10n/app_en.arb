@@ -3,5 +3,94 @@
   "appTitle": "Citizen Space CLM",
   "@appTitle": {
     "description": "The application title shown in the browser tab and app launcher."
+  },
+  "landingTitle": "Citizen Space",
+  "@landingTitle": {
+    "description": "Main title displayed in the hero section of the public landing screen."
+  },
+  "landingTagline": "Your public information in one place",
+  "@landingTagline": {
+    "description": "Subtitle shown below the title on the landing screen."
+  },
+  "landingCtaButton": "Access with Cl@ve",
+  "@landingCtaButton": {
+    "description": "Primary CTA button text that initiates the Cl@ve authentication flow."
+  },
+  "landingWhatYouFindTitle": "What you'll find",
+  "@landingWhatYouFindTitle": {
+    "description": "Heading for the section that shows available service categories."
+  },
+  "landingHowToAccessTitle": "How to access",
+  "@landingHowToAccessTitle": {
+    "description": "Heading for the authentication steps section."
+  },
+  "landingFooterHelp": "Help",
+  "@landingFooterHelp": {
+    "description": "Footer link to the help section."
+  },
+  "landingFooterAccessibility": "Accessibility",
+  "@landingFooterAccessibility": {
+    "description": "Footer link to the accessibility statement."
+  },
+  "landingFooterLegal": "Legal notice",
+  "@landingFooterLegal": {
+    "description": "Footer link to the legal notice."
+  },
+  "landingFooterPrivacy": "Data protection",
+  "@landingFooterPrivacy": {
+    "description": "Footer link to the data protection policy."
+  },
+  "loginPageTitle": "Signing in with Cl@ve",
+  "@loginPageTitle": {
+    "description": "Title of the login screen shown while signing in with Cl@ve."
+  },
+  "loginPageLoading": "Starting authentication...",
+  "@loginPageLoading": {
+    "description": "Status message while the Cl@ve authentication is being initiated."
+  },
+  "loginPageError": "Sign-in error",
+  "@loginPageError": {
+    "description": "Error title shown when the login process fails."
+  },
+  "loginRetryButton": "Try again",
+  "@loginRetryButton": {
+    "description": "Button label to retry the login process."
+  },
+  "logoutConfirm": "Sign out?",
+  "@logoutConfirm": {
+    "description": "Confirmation text for signing the user out."
+  },
+  "sessionExpired": "Your session has expired",
+  "@sessionExpired": {
+    "description": "Message shown when the user's session has expired."
+  }
+,
+  "consentPageTitle": "Terms of Use",
+  "@consentPageTitle": {
+    "description": "Main title of the terms of use acceptance screen."
+  },
+  "consentPageSubtitle": "Personal data protection",
+  "@consentPageSubtitle": {
+    "description": "Subtitle of the consent screen relating to data protection."
+  },
+  "consentPageBody": "In accordance with Regulation (EU) 2016/679 of the European Parliament and of the Council (GDPR) and Organic Law 3/2018 on Personal Data Protection and guarantee of digital rights (LOPDGDD), the Government of Castilla-La Mancha informs you that the personal data collected through this application will be processed under the responsibility of the Government of Castilla-La Mancha, in order to provide you with the e-government services included in the Citizen Space.\n\nIn accordance with Law 3/2017 of the Government of Castilla-La Mancha, you have the right to access, rectify and delete your data, as well as to exercise the other rights recognised in applicable regulations, by writing to the Secretary General of the Government of Castilla-La Mancha.\n\nTo continue using the application you must accept these terms of use and data protection conditions. If you do not accept, the application will close.",
+  "@consentPageBody": {
+    "description": "Body text of the consent screen with information about data protection and terms of use."
+  },
+  "consentPagePrivacyLink": "View full privacy policy",
+  "@consentPagePrivacyLink": {
+    "description": "Link to view the full privacy policy in the browser."
+  },
+  "consentAcceptButton": "Accept and continue",
+  "@consentAcceptButton": {
+    "description": "Button to accept the terms of use and continue to the main screen."
+  },
+  "consentRejectButton": "Reject and exit",
+  "@consentRejectButton": {
+    "description": "Button to reject the terms of use and close the application."
+  },
+  "consentPageSemantics": "Terms of use acceptance screen",
+  "@consentPageSemantics": {
+    "description": "Accessibility label for the consent screen."
   }
 }

@@ -2,12 +2,12 @@
 id: 14
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Establecer la base visual y de UX compartida para que todas las pantallas usen tokens, textos localizados y contratos mínimos de accesibilidad.
 
 ## Acceptance Criteria
-- [ ] Tema único, tipografía, spacing y tokens quedan contemplados como fuente de verdad.
-- [ ] Todos los textos de usuario se planifican localizables desde el inicio.
-- [ ] Se contemplan labels/semantics, foco, contraste y escalado tipográfico para componentes base.
-- [ ] Se incluye la cobertura de páginas Accesibilidad, footer legal y ayudas visuales comunes.
+- [x] Tema único, tipografía, spacing y tokens quedan contemplados como fuente de verdad.
+- [x] Todos los textos de usuario se planifican localizables desde el inicio.
+- [x] Se contemplan labels/semantics, foco, contraste y escalado tipográfico para componentes base.
+- [x] Se incluye la cobertura de páginas Accesibilidad, footer legal y ayudas visuales comunes.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -73,3 +73,4 @@ Establecer la base visual y de UX compartida para que todas las pantallas usen t
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T12:00:00+02:00 | status | In Progress -> Done | by Copilot
