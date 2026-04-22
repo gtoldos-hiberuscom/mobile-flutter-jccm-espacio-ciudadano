@@ -132,5 +132,42 @@
   "pullToRefresh": "Pull to refresh",
   "@pullToRefresh": {
     "description": "Accessibility label for the RefreshIndicator in paginated lists."
+  },
+  "userGreeting": "Hello, {name}",
+  "@userGreeting": {
+    "description": "Personalised greeting in the authenticated user header.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "userMenuProfile": "My profile",
+  "@userMenuProfile": {
+    "description": "Navigation menu item to the user profile."
+  },
+  "userMenuNotifications": "Notifications",
+  "@userMenuNotifications": {
+    "description": "Navigation menu item to notifications."
+  },
+  "userMenuSettings": "Settings",
+  "@userMenuSettings": {
+    "description": "Navigation menu item to settings."
+  },
+  "userMenuLogout": "Log out",
+  "@userMenuLogout": {
+    "description": "Menu item to log the user out."
+  },
+  "maintenanceTitle": "Service under maintenance",
+  "@maintenanceTitle": {
+    "description": "Title of the maintenance page."
+  },
+  "maintenanceSubtitle": "The service is temporarily unavailable.",
+  "@maintenanceSubtitle": {
+    "description": "Subtitle of the maintenance page."
+  },
+  "maintenanceRetry": "Retry",
+  "@maintenanceRetry": {
+    "description": "Button to retry after maintenance."
   }
 }

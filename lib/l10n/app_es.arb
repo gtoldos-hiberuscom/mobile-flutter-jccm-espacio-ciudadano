@@ -132,5 +132,42 @@
   "pullToRefresh": "Desliza para actualizar",
   "@pullToRefresh": {
     "description": "Etiqueta de accesibilidad para el RefreshIndicator en listas paginadas."
+  },
+  "userGreeting": "Hola, {name}",
+  "@userGreeting": {
+    "description": "Saludo personalizado en la cabecera del usuario autenticado.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "userMenuProfile": "Mi perfil",
+  "@userMenuProfile": {
+    "description": "Ítem de menú de navegación al perfil del usuario."
+  },
+  "userMenuNotifications": "Notificaciones",
+  "@userMenuNotifications": {
+    "description": "Ítem de menú de navegación a notificaciones."
+  },
+  "userMenuSettings": "Configuración",
+  "@userMenuSettings": {
+    "description": "Ítem de menú de navegación a la configuración."
+  },
+  "userMenuLogout": "Cerrar sesión",
+  "@userMenuLogout": {
+    "description": "Ítem de menú para cerrar la sesión del usuario."
+  },
+  "maintenanceTitle": "Servicio en mantenimiento",
+  "@maintenanceTitle": {
+    "description": "Título de la página de mantenimiento."
+  },
+  "maintenanceSubtitle": "El servicio no está disponible temporalmente.",
+  "@maintenanceSubtitle": {
+    "description": "Subtítulo de la página de mantenimiento."
+  },
+  "maintenanceRetry": "Reintentar",
+  "@maintenanceRetry": {
+    "description": "Botón para reintentar la carga después del mantenimiento."
   }
 }

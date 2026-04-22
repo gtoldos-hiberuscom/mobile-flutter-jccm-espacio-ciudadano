@@ -106,4 +106,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pullToRefresh => 'Pull to refresh';
+
+  @override
+  String userGreeting(String name) {
+    return 'Hello, $name';
+  }
+
+  @override
+  String get userMenuProfile => 'My profile';
+
+  @override
+  String get userMenuNotifications => 'Notifications';
+
+  @override
+  String get userMenuSettings => 'Settings';
+
+  @override
+  String get userMenuLogout => 'Log out';
+
+  @override
+  String get maintenanceTitle => 'Service under maintenance';
+
+  @override
+  String get maintenanceSubtitle => 'The service is temporarily unavailable.';
+
+  @override
+  String get maintenanceRetry => 'Retry';
 }

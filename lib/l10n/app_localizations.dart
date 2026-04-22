@@ -289,6 +289,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Desliza para actualizar'**
   String get pullToRefresh;
+
+  /// Saludo personalizado en la cabecera del usuario autenticado.
+  ///
+  /// In es, this message translates to:
+  /// **'Hola, {name}'**
+  String userGreeting(String name);
+
+  /// Ítem de menú de navegación al perfil del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi perfil'**
+  String get userMenuProfile;
+
+  /// Ítem de menú de navegación a notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get userMenuNotifications;
+
+  /// Ítem de menú de navegación a la configuración.
+  ///
+  /// In es, this message translates to:
+  /// **'Configuración'**
+  String get userMenuSettings;
+
+  /// Ítem de menú para cerrar la sesión del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sesión'**
+  String get userMenuLogout;
+
+  /// Título de la página de mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio en mantenimiento'**
+  String get maintenanceTitle;
+
+  /// Subtítulo de la página de mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio no está disponible temporalmente.'**
+  String get maintenanceSubtitle;
+
+  /// Botón para reintentar la carga después del mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get maintenanceRetry;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
