@@ -74,7 +74,6 @@ final class AuthRepositoryImpl implements AuthRepository {
     // TASK-21 will replace this with real OIDC token exchange + JWT validation.
     final mockSession = Session(
       accessToken: 'mock-access-token-$code',
-      refreshToken: null,
       idAgente: 'mock-user',
       displayName: 'Usuario Mock',
       expiresAt: DateTime.now().add(const Duration(hours: 8)),

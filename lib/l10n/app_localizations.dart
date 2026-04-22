@@ -187,6 +187,48 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Tu sesión ha caducado'**
   String get sessionExpired;
+
+  /// Título principal de la pantalla de aceptación de condiciones de uso.
+  ///
+  /// In es, this message translates to:
+  /// **'Condiciones de uso'**
+  String get consentPageTitle;
+
+  /// Subtítulo de la pantalla de consentimiento relativo a la protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Protección de datos personales'**
+  String get consentPageSubtitle;
+
+  /// Texto del cuerpo de la pantalla de consentimiento con información sobre protección de datos y condiciones de uso.
+  ///
+  /// In es, this message translates to:
+  /// **'De conformidad con lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), la Junta de Comunidades de Castilla-La Mancha le informa de que los datos personales recabados a través de esta aplicación serán tratados bajo la responsabilidad de la Junta de Comunidades de Castilla-La Mancha, con el fin de prestarle los servicios de administración electrónica incluidos en el Espacio Ciudadano.\n\nDe acuerdo con la Ley 3/2017 de la Junta de Comunidades de Castilla-La Mancha, tiene usted derecho a acceder, rectificar y suprimir sus datos, así como a ejercer los demás derechos reconocidos en la normativa aplicable, mediante escrito dirigido a la Secretaría General de la Junta de Comunidades de Castilla-La Mancha.\n\nPara continuar utilizando la aplicación debe aceptar las presentes condiciones de uso y protección de datos. Si no acepta, la aplicación se cerrará.'**
+  String get consentPageBody;
+
+  /// Enlace para ver la política de privacidad completa en el navegador.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver política de privacidad completa'**
+  String get consentPagePrivacyLink;
+
+  /// Botón para aceptar las condiciones de uso y continuar a la pantalla principal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptar y continuar'**
+  String get consentAcceptButton;
+
+  /// Botón para rechazar las condiciones de uso y cerrar la aplicación.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazar y salir'**
+  String get consentRejectButton;
+
+  /// Etiqueta de accesibilidad para la pantalla de consentimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Pantalla de aceptación de condiciones de uso'**
+  String get consentPageSemantics;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -63,5 +63,33 @@
   "sessionExpired": "Tu sesión ha caducado",
   "@sessionExpired": {
     "description": "Mensaje mostrado cuando la sesión del usuario ha expirado."
+  },
+  "consentPageTitle": "Condiciones de uso",
+  "@consentPageTitle": {
+    "description": "Título principal de la pantalla de aceptación de condiciones de uso."
+  },
+  "consentPageSubtitle": "Protección de datos personales",
+  "@consentPageSubtitle": {
+    "description": "Subtítulo de la pantalla de consentimiento relativo a la protección de datos."
+  },
+  "consentPageBody": "De conformidad con lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), la Junta de Comunidades de Castilla-La Mancha le informa de que los datos personales recabados a través de esta aplicación serán tratados bajo la responsabilidad de la Junta de Comunidades de Castilla-La Mancha, con el fin de prestarle los servicios de administración electrónica incluidos en el Espacio Ciudadano.\n\nDe acuerdo con la Ley 3/2017 de la Junta de Comunidades de Castilla-La Mancha, tiene usted derecho a acceder, rectificar y suprimir sus datos, así como a ejercer los demás derechos reconocidos en la normativa aplicable, mediante escrito dirigido a la Secretaría General de la Junta de Comunidades de Castilla-La Mancha.\n\nPara continuar utilizando la aplicación debe aceptar las presentes condiciones de uso y protección de datos. Si no acepta, la aplicación se cerrará.",
+  "@consentPageBody": {
+    "description": "Texto del cuerpo de la pantalla de consentimiento con información sobre protección de datos y condiciones de uso."
+  },
+  "consentPagePrivacyLink": "Ver política de privacidad completa",
+  "@consentPagePrivacyLink": {
+    "description": "Enlace para ver la política de privacidad completa en el navegador."
+  },
+  "consentAcceptButton": "Aceptar y continuar",
+  "@consentAcceptButton": {
+    "description": "Botón para aceptar las condiciones de uso y continuar a la pantalla principal."
+  },
+  "consentRejectButton": "Rechazar y salir",
+  "@consentRejectButton": {
+    "description": "Botón para rechazar las condiciones de uso y cerrar la aplicación."
+  },
+  "consentPageSemantics": "Pantalla de aceptación de condiciones de uso",
+  "@consentPageSemantics": {
+    "description": "Etiqueta de accesibilidad para la pantalla de consentimiento."
   }
 }

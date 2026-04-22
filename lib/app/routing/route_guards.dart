@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/auth/session_state_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/consent_state.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_notifier.dart';
 
 /// Navigation guard based on session state.
 ///
@@ -44,9 +46,12 @@ final class SessionGuard {
       return Routes.landing;
     }
 
-    // ── Reverse gate (already logged-in on public route) ─────────────────────
-    if (!needsAuth && isAuthenticated) {
-      // Allow deep-link callbacks and legal pages through.
+    // ── Consent gate (post-auth, pre-home) ───────────────────────────────────
+    // After authentication is confirmed, if consent has not been accepted,
+    // redirect to the consent screen. This gate is skipped for:
+    // - the consent screen itself (prevent infinite loop)
+    // - callbacks, legal pages, and other non-functional routes
+    if (isAuthenticated && location != Routes.consent) {
       final isCallback = location.startsWith('/auth/') ||
           location.startsWith('/sign/') ||
           location.startsWith('/login') ||
@@ -54,6 +59,29 @@ final class SessionGuard {
           location == Routes.sitemap ||
           location == Routes.help ||
           location == Routes.maintenance;
+
+      if (!isCallback) {
+        final consentAsync = _ref.read(consentProvider);
+        final consentState = consentAsync.value;
+        // Only redirect when consent state is definitively Pending.
+        // If still loading (null) or Accepted, allow through.
+        if (consentState is ConsentPending) {
+          return Routes.consent;
+        }
+      }
+    }
+
+    // ── Reverse gate (already logged-in on public route) ─────────────────────
+    if (!needsAuth && isAuthenticated) {
+      // Allow deep-link callbacks, legal pages, and consent through.
+      final isCallback = location.startsWith('/auth/') ||
+          location.startsWith('/sign/') ||
+          location.startsWith('/login') ||
+          location.startsWith('/legal') ||
+          location == Routes.sitemap ||
+          location == Routes.help ||
+          location == Routes.maintenance ||
+          location == Routes.consent;
 
       if (!isCallback && location != Routes.home) {
         return Routes.home;
