@@ -2,7 +2,7 @@
 id: 59
 jira_key:
 type: Story
-status: To Do
+status: In Review
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T13:03:08+00:00
 due_date:
 jira_url:
 ---
@@ -71,7 +71,23 @@ Cubrir la pantalla de ayuda con preguntas frecuentes, guías y datos de contacto
 
 ## Notes
 ### Comments
-- None yet.
+- 2026-04-22T13:03:08+00:00 | by Copilot | Implementation complete on branch `task/EPIC-9-help-support-legal/STORY-59-help-center/implement-help-center` (commit `bd3f083`).
+
+  Delivered:
+  - `lib/features/help/` — full 4-layer feature (0_entity, 1_domain, 2_presentation, 3_data)
+  - Entities: `FaqItem`, `HelpGuide`, `ContactInfo` (with `HelpCategory` and `ContactType` enums)
+  - `HelpRepository` abstract class (domain), `HelpRepositoryImpl` (bundled in-memory data: 6 FAQs, 3 guides, 3 contacts)
+  - `helpRepositoryProvider` with hand-crafted `.g.dart`
+  - `HelpPage` (`ConsumerStatefulWidget` + `SingleTickerProviderStateMixin`, 3-tab `TabBar`)
+  - `FaqList` (live search, `ExpansionTile` accordion, inline empty state)
+  - `HelpGuidesList` (cards with optional external link via `url_launcher`)
+  - `ContactInfoList` (`tel:`, `mailto:`, `https:` URIs with semantics labels)
+  - l10n keys added (9 new keys in `app_es.arb` + `app_en.arb`); `flutter gen-l10n` run
+  - `url_launcher ^6.3.1` added to `pubspec.yaml`
+  - `/help` route wired (`HelpPlaceholder` → `HelpPage`) in `app_router.dart`
+  - Barrel file `lib/features/help/help.dart`
+  - `dart analyze lib/`: **0 errors**
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T13:03:08+00:00 | by Copilot | Status transitioned from `To Do` → `In Review`. Implementation complete on branch `task/EPIC-9-help-support-legal/STORY-59-help-center/implement-help-center` (commit `bd3f083`).
