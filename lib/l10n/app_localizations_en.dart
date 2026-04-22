@@ -37,4 +37,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get landingFooterPrivacy => 'Data protection';
+
+  @override
+  String get loginPageTitle => 'Signing in with Cl@ve';
+
+  @override
+  String get loginPageLoading => 'Starting authentication...';
+
+  @override
+  String get loginPageError => 'Sign-in error';
+
+  @override
+  String get loginRetryButton => 'Try again';
+
+  @override
+  String get logoutConfirm => 'Sign out?';
+
+  @override
+  String get sessionExpired => 'Your session has expired';
 }
