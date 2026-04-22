@@ -1,0 +1,96 @@
+{
+  "@@locale": "es",
+  "appTitle": "Espacio Ciudadano CLM",
+  "@appTitle": {
+    "description": "El título de la aplicación que se muestra en el lanzador."
+  },
+  "landingTitle": "Espacio Ciudadano",
+  "@landingTitle": {
+    "description": "Título principal mostrado en la sección hero de la pantalla de inicio pública."
+  },
+  "landingTagline": "Tu información pública en un solo lugar",
+  "@landingTagline": {
+    "description": "Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio."
+  },
+  "landingCtaButton": "Acceder con Cl@ve",
+  "@landingCtaButton": {
+    "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
+  },
+  "landingWhatYouFindTitle": "Qué encontrarás",
+  "@landingWhatYouFindTitle": {
+    "description": "Encabezado de la sección que muestra las categorías de servicios disponibles."
+  },
+  "landingHowToAccessTitle": "Cómo acceder",
+  "@landingHowToAccessTitle": {
+    "description": "Encabezado de la sección de pasos para autenticarse."
+  },
+  "landingFooterHelp": "Ayuda",
+  "@landingFooterHelp": {
+    "description": "Enlace de pie de página a la sección de ayuda."
+  },
+  "landingFooterAccessibility": "Accesibilidad",
+  "@landingFooterAccessibility": {
+    "description": "Enlace de pie de página a la declaración de accesibilidad."
+  },
+  "landingFooterLegal": "Aviso legal",
+  "@landingFooterLegal": {
+    "description": "Enlace de pie de página al aviso legal."
+  },
+  "landingFooterPrivacy": "Protección de datos",
+  "@landingFooterPrivacy": {
+    "description": "Enlace de pie de página a la política de protección de datos."
+  },
+  "loginPageTitle": "Accediendo con Cl@ve",
+  "@loginPageTitle": {
+    "description": "Título de la pantalla de login que indica que se está accediendo con Cl@ve."
+  },
+  "loginPageLoading": "Iniciando autenticación...",
+  "@loginPageLoading": {
+    "description": "Mensaje de estado mientras se inicia la autenticación con Cl@ve."
+  },
+  "loginPageError": "Error al iniciar sesión",
+  "@loginPageError": {
+    "description": "Título del mensaje de error mostrado cuando falla la autenticación."
+  },
+  "loginRetryButton": "Reintentar",
+  "@loginRetryButton": {
+    "description": "Texto del botón para reintentar el proceso de login."
+  },
+  "logoutConfirm": "¿Cerrar sesión?",
+  "@logoutConfirm": {
+    "description": "Texto de confirmación para cerrar la sesión del usuario."
+  },
+  "sessionExpired": "Tu sesión ha caducado",
+  "@sessionExpired": {
+    "description": "Mensaje mostrado cuando la sesión del usuario ha expirado."
+  }
+,
+  "consentPageTitle": "Condiciones de uso",
+  "@consentPageTitle": {
+    "description": "Título principal de la pantalla de aceptación de condiciones de uso."
+  },
+  "consentPageSubtitle": "Protección de datos personales",
+  "@consentPageSubtitle": {
+    "description": "Subtítulo de la pantalla de consentimiento relativo a la protección de datos."
+  },
+  "consentPageBody": "De conformidad con lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), la Junta de Comunidades de Castilla-La Mancha le informa de que los datos personales recabados a través de esta aplicación serán tratados bajo la responsabilidad de la Junta de Comunidades de Castilla-La Mancha, con el fin de prestarle los servicios de administración electrónica incluidos en el Espacio Ciudadano.\n\nDe acuerdo con la Ley 3/2017 de la Junta de Comunidades de Castilla-La Mancha, tiene usted derecho a acceder, rectificar y suprimir sus datos, así como a ejercer los demás derechos reconocidos en la normativa aplicable, mediante escrito dirigido a la Secretaría General de la Junta de Comunidades de Castilla-La Mancha.\n\nPara continuar utilizando la aplicación debe aceptar las presentes condiciones de uso y protección de datos. Si no acepta, la aplicación se cerrará.",
+  "@consentPageBody": {
+    "description": "Texto del cuerpo de la pantalla de consentimiento."
+  },
+  "consentPagePrivacyLink": "Ver política de privacidad completa",
+  "@consentPagePrivacyLink": {
+    "description": "Enlace para ver la política de privacidad completa en el navegador."
+  },
+  "consentAcceptButton": "Aceptar y continuar",
+  "@consentAcceptButton": {
+    "description": "Botón para aceptar las condiciones de uso y continuar a la pantalla principal."
+  },
+  "consentRejectButton": "Rechazar y salir",
+  "@consentRejectButton": {
+    "description": "Botón para rechazar las condiciones de uso y cerrar la aplicación."
+  },
+  "consentPageSemantics": "Pantalla de aceptación de condiciones de uso",
+  "@consentPageSemantics": {
+    "description": "Etiqueta de accesibilidad para la pantalla de consentimiento."
+  }
+}

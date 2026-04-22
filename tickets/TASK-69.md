@@ -2,12 +2,12 @@
 id: 69
 jira_key:
 type: Task
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cerrar el marco de seguridad del proyecto y cualquier excepción arquitectónica necesaria, inventariando PII, reglas de tratamiento permitido y decisiones explícitas de hardening o ADR cuando el canon requiera una excepción documentada.
 
 ## Acceptance Criteria
-- [ ] Se inventarían campos PII y su tratamiento permitido.
-- [ ] Se contemplan secure storage, borrado de sesión, validación de URLs externas y redacción de logs.
-- [ ] Se identifican decisiones que requieran ADR explícito.
-- [ ] Se dejan trazadas dependencias con módulos que manejan datos especialmente sensibles.
+- [x] Se inventarían campos PII y su tratamiento permitido.
+- [x] Se contemplan secure storage, borrado de sesión, validación de URLs externas y redacción de logs.
+- [x] Se identifican decisiones que requieran ADR explícito.
+- [x] Se dejan trazadas dependencias con módulos que manejan datos especialmente sensibles.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -77,3 +77,4 @@ Cerrar el marco de seguridad del proyecto y cualquier excepción arquitectónica
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T12:00:00+02:00 | status | In Progress -> Done | by Copilot

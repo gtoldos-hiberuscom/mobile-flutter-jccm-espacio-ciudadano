@@ -2,12 +2,12 @@
 id: 13
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Modelar el shell global y la navegación declarativa para áreas autenticadas, no autenticadas, legales y callbacks externos.
 
 ## Acceptance Criteria
-- [ ] Se contempla GoRouter global con áreas pública y autenticada.
-- [ ] Se cubren guards de sesión, rutas de mantenimiento/bloqueo y retorno desde Cl@ve/Afirma.
-- [ ] Se refleja la navegación de cabecera, menú lateral y footer/sitemap inferida de las capturas.
-- [ ] Se reserva soporte para deep links y redirecciones seguras.
+- [x] Se contempla GoRouter global con áreas pública y autenticada.
+- [x] Se cubren guards de sesión, rutas de mantenimiento/bloqueo y retorno desde Cl@ve/Afirma.
+- [x] Se refleja la navegación de cabecera, menú lateral y footer/sitemap inferida de las capturas.
+- [x] Se reserva soporte para deep links y redirecciones seguras.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -74,3 +74,4 @@ Modelar el shell global y la navegación declarativa para áreas autenticadas, n
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T12:00:00+02:00 | status | In Progress -> Done | by Copilot
