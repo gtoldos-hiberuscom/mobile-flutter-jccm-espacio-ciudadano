@@ -265,6 +265,102 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Contenido legal'**
   String get legalContentSemantics;
+
+  /// Título de la página de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda'**
+  String get helpPageTitle;
+
+  /// Etiqueta de la pestaña de preguntas frecuentes en la página de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Preguntas frecuentes'**
+  String get helpTabFaq;
+
+  /// Etiqueta de la pestaña de guías en la página de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Guías'**
+  String get helpTabGuides;
+
+  /// Etiqueta de la pestaña de contacto en la página de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Contacto'**
+  String get helpTabContact;
+
+  /// Texto de marcador de posición del campo de búsqueda de preguntas frecuentes.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar en preguntas frecuentes…'**
+  String get helpFaqSearch;
+
+  /// Etiqueta del botón para abrir el recurso externo de una guía de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver recurso externo'**
+  String get helpGuideExternalLink;
+
+  /// Etiqueta de accesibilidad para el elemento de contacto telefónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Llamar'**
+  String get helpContactCall;
+
+  /// Etiqueta de accesibilidad para el elemento de contacto por correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar correo'**
+  String get helpContactEmail;
+
+  /// Etiqueta de accesibilidad para el elemento de enlace web de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Visitar'**
+  String get helpContactVisit;
+
+  /// Título de la página del mapa web.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa web'**
+  String get sitemapTitle;
+
+  /// Enlace de ayuda en el pie de página global.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda'**
+  String get footerHelp;
+
+  /// Enlace de accesibilidad en el pie de página global.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get footerAccessibility;
+
+  /// Enlace de protección de datos en el pie de página global.
+  ///
+  /// In es, this message translates to:
+  /// **'Protección de datos'**
+  String get footerPrivacy;
+
+  /// Enlace de aviso legal en el pie de página global.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get footerLegalNotice;
+
+  /// Enlace al mapa web en el pie de página global.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa web'**
+  String get footerSitemap;
+
+  /// Línea de copyright en el pie de página global.
+  ///
+  /// In es, this message translates to:
+  /// **'© {year} Junta de Comunidades de Castilla-La Mancha'**
+  String footerCopyright(int year);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

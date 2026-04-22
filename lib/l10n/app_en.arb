@@ -122,5 +122,75 @@
   "legalContentSemantics": "Legal content",
   "@legalContentSemantics": {
     "description": "Accessibility label for the content area on legal pages."
+  },
+  "helpPageTitle": "Help",
+  "@helpPageTitle": {
+    "description": "Title of the help page."
+  },
+  "helpTabFaq": "FAQ",
+  "@helpTabFaq": {
+    "description": "Label for the FAQ tab on the help page."
+  },
+  "helpTabGuides": "Guides",
+  "@helpTabGuides": {
+    "description": "Label for the guides tab on the help page."
+  },
+  "helpTabContact": "Contact",
+  "@helpTabContact": {
+    "description": "Label for the contact tab on the help page."
+  },
+  "helpFaqSearch": "Search FAQ…",
+  "@helpFaqSearch": {
+    "description": "Placeholder text for the FAQ search field."
+  },
+  "helpGuideExternalLink": "View external resource",
+  "@helpGuideExternalLink": {
+    "description": "Button label to open the external resource of a help guide."
+  },
+  "helpContactCall": "Call",
+  "@helpContactCall": {
+    "description": "Accessibility label for the phone contact item."
+  },
+  "helpContactEmail": "Send email",
+  "@helpContactEmail": {
+    "description": "Accessibility label for the email contact item."
+  },
+  "helpContactVisit": "Visit",
+  "@helpContactVisit": {
+    "description": "Accessibility label for the web link contact item."
+  },
+  "sitemapTitle": "Site map",
+  "@sitemapTitle": {
+    "description": "Title of the site map page."
+  },
+  "footerHelp": "Help",
+  "@footerHelp": {
+    "description": "Help link in the global footer."
+  },
+  "footerAccessibility": "Accessibility",
+  "@footerAccessibility": {
+    "description": "Accessibility link in the global footer."
+  },
+  "footerPrivacy": "Privacy",
+  "@footerPrivacy": {
+    "description": "Privacy/data protection link in the global footer."
+  },
+  "footerLegalNotice": "Legal notice",
+  "@footerLegalNotice": {
+    "description": "Legal notice link in the global footer."
+  },
+  "footerSitemap": "Site map",
+  "@footerSitemap": {
+    "description": "Site map link in the global footer."
+  },
+  "footerCopyright": "© {year} Regional Government of Castilla-La Mancha",
+  "@footerCopyright": {
+    "description": "Copyright line in the global footer.",
+    "placeholders": {
+      "year": {
+        "type": "int",
+        "description": "The current year."
+      }
+    }
   }
 }

@@ -97,4 +97,54 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalContentSemantics => 'Contenido legal';
+
+  @override
+  String get helpPageTitle => 'Ayuda';
+
+  @override
+  String get helpTabFaq => 'Preguntas frecuentes';
+
+  @override
+  String get helpTabGuides => 'Guías';
+
+  @override
+  String get helpTabContact => 'Contacto';
+
+  @override
+  String get helpFaqSearch => 'Buscar en preguntas frecuentes…';
+
+  @override
+  String get helpGuideExternalLink => 'Ver recurso externo';
+
+  @override
+  String get helpContactCall => 'Llamar';
+
+  @override
+  String get helpContactEmail => 'Enviar correo';
+
+  @override
+  String get helpContactVisit => 'Visitar';
+
+  @override
+  String get sitemapTitle => 'Mapa web';
+
+  @override
+  String get footerHelp => 'Ayuda';
+
+  @override
+  String get footerAccessibility => 'Accesibilidad';
+
+  @override
+  String get footerPrivacy => 'Protección de datos';
+
+  @override
+  String get footerLegalNotice => 'Aviso legal';
+
+  @override
+  String get footerSitemap => 'Mapa web';
+
+  @override
+  String footerCopyright(int year) {
+    return '© $year Junta de Comunidades de Castilla-La Mancha';
+  }
 }

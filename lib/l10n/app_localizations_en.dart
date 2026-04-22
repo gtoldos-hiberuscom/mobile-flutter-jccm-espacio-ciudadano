@@ -96,4 +96,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalContentSemantics => 'Legal content';
+
+  @override
+  String get helpPageTitle => 'Help';
+
+  @override
+  String get helpTabFaq => 'FAQ';
+
+  @override
+  String get helpTabGuides => 'Guides';
+
+  @override
+  String get helpTabContact => 'Contact';
+
+  @override
+  String get helpFaqSearch => 'Search FAQ…';
+
+  @override
+  String get helpGuideExternalLink => 'View external resource';
+
+  @override
+  String get helpContactCall => 'Call';
+
+  @override
+  String get helpContactEmail => 'Send email';
+
+  @override
+  String get helpContactVisit => 'Visit';
+
+  @override
+  String get sitemapTitle => 'Site map';
+
+  @override
+  String get footerHelp => 'Help';
+
+  @override
+  String get footerAccessibility => 'Accessibility';
+
+  @override
+  String get footerPrivacy => 'Privacy';
+
+  @override
+  String get footerLegalNotice => 'Legal notice';
+
+  @override
+  String get footerSitemap => 'Site map';
+
+  @override
+  String footerCopyright(int year) {
+    return '© $year Regional Government of Castilla-La Mancha';
+  }
 }
