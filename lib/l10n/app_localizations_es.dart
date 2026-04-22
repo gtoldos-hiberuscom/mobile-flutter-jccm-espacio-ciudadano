@@ -97,4 +97,31 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalContentSemantics => 'Contenido legal';
+
+  @override
+  String get helpPageTitle => 'Ayuda';
+
+  @override
+  String get helpTabFaq => 'Preguntas frecuentes';
+
+  @override
+  String get helpTabGuides => 'Guías';
+
+  @override
+  String get helpTabContact => 'Contacto';
+
+  @override
+  String get helpFaqSearch => 'Buscar en preguntas frecuentes…';
+
+  @override
+  String get helpGuideExternalLink => 'Ver recurso externo';
+
+  @override
+  String get helpContactCall => 'Llamar';
+
+  @override
+  String get helpContactEmail => 'Enviar correo';
+
+  @override
+  String get helpContactVisit => 'Visitar';
 }

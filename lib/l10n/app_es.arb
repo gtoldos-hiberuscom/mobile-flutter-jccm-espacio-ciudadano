@@ -122,5 +122,41 @@
   "legalContentSemantics": "Contenido legal",
   "@legalContentSemantics": {
     "description": "Etiqueta de accesibilidad para el área de contenido de las páginas legales."
+  },
+  "helpPageTitle": "Ayuda",
+  "@helpPageTitle": {
+    "description": "Título de la página de ayuda."
+  },
+  "helpTabFaq": "Preguntas frecuentes",
+  "@helpTabFaq": {
+    "description": "Etiqueta de la pestaña de preguntas frecuentes en la página de ayuda."
+  },
+  "helpTabGuides": "Guías",
+  "@helpTabGuides": {
+    "description": "Etiqueta de la pestaña de guías en la página de ayuda."
+  },
+  "helpTabContact": "Contacto",
+  "@helpTabContact": {
+    "description": "Etiqueta de la pestaña de contacto en la página de ayuda."
+  },
+  "helpFaqSearch": "Buscar en preguntas frecuentes…",
+  "@helpFaqSearch": {
+    "description": "Texto de marcador de posición del campo de búsqueda de preguntas frecuentes."
+  },
+  "helpGuideExternalLink": "Ver recurso externo",
+  "@helpGuideExternalLink": {
+    "description": "Etiqueta del botón para abrir el recurso externo de una guía de ayuda."
+  },
+  "helpContactCall": "Llamar",
+  "@helpContactCall": {
+    "description": "Etiqueta de accesibilidad para el elemento de contacto telefónico."
+  },
+  "helpContactEmail": "Enviar correo",
+  "@helpContactEmail": {
+    "description": "Etiqueta de accesibilidad para el elemento de contacto por correo electrónico."
+  },
+  "helpContactVisit": "Visitar",
+  "@helpContactVisit": {
+    "description": "Etiqueta de accesibilidad para el elemento de enlace web de contacto."
   }
 }
