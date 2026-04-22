@@ -92,5 +92,35 @@
   "consentPageSemantics": "Pantalla de aceptación de condiciones de uso",
   "@consentPageSemantics": {
     "description": "Etiqueta de accesibilidad para la pantalla de consentimiento."
+  },
+  "legalPageLastUpdated": "Última actualización: {date}",
+  "@legalPageLastUpdated": {
+    "description": "Texto que muestra la fecha de última actualización del documento legal.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "Fecha formateada como dd/MM/yyyy."
+      }
+    }
+  },
+  "legalTermsTitle": "Condiciones de uso",
+  "@legalTermsTitle": {
+    "description": "Título de la página de condiciones de uso."
+  },
+  "legalPrivacyTitle": "Protección de datos",
+  "@legalPrivacyTitle": {
+    "description": "Título de la página de política de privacidad / protección de datos."
+  },
+  "legalAccessibilityTitle": "Accesibilidad",
+  "@legalAccessibilityTitle": {
+    "description": "Título de la página de declaración de accesibilidad."
+  },
+  "legalNoticeTitle": "Aviso legal",
+  "@legalNoticeTitle": {
+    "description": "Título de la página de aviso legal."
+  },
+  "legalContentSemantics": "Contenido legal",
+  "@legalContentSemantics": {
+    "description": "Etiqueta de accesibilidad para el área de contenido de las páginas legales."
   }
 }

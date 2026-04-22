@@ -229,6 +229,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Pantalla de aceptación de condiciones de uso'**
   String get consentPageSemantics;
+
+  /// Texto que muestra la fecha de última actualización del documento legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Última actualización: {date}'**
+  String legalPageLastUpdated(String date);
+
+  /// Título de la página de condiciones de uso.
+  ///
+  /// In es, this message translates to:
+  /// **'Condiciones de uso'**
+  String get legalTermsTitle;
+
+  /// Título de la página de política de privacidad / protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Protección de datos'**
+  String get legalPrivacyTitle;
+
+  /// Título de la página de declaración de accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get legalAccessibilityTitle;
+
+  /// Título de la página de aviso legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get legalNoticeTitle;
+
+  /// Etiqueta de accesibilidad para el área de contenido de las páginas legales.
+  ///
+  /// In es, this message translates to:
+  /// **'Contenido legal'**
+  String get legalContentSemantics;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

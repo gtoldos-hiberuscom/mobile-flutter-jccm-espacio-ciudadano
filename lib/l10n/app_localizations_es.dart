@@ -77,4 +77,24 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get consentPageSemantics => 'Pantalla de aceptación de condiciones de uso';
+
+  @override
+  String legalPageLastUpdated(String date) {
+    return 'Última actualización: $date';
+  }
+
+  @override
+  String get legalTermsTitle => 'Condiciones de uso';
+
+  @override
+  String get legalPrivacyTitle => 'Protección de datos';
+
+  @override
+  String get legalAccessibilityTitle => 'Accesibilidad';
+
+  @override
+  String get legalNoticeTitle => 'Aviso legal';
+
+  @override
+  String get legalContentSemantics => 'Contenido legal';
 }

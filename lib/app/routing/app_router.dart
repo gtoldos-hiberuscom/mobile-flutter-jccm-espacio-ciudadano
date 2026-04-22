@@ -14,6 +14,8 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.d
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
+import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
 ///
@@ -80,22 +82,22 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.terms,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Condiciones de uso'),
+              const LegalPage(documentType: LegalDocumentType.termsOfUse),
         ),
         GoRoute(
           path: Routes.privacy,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Política de privacidad'),
+              const LegalPage(documentType: LegalDocumentType.privacyPolicy),
         ),
         GoRoute(
           path: Routes.accessibility,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Accesibilidad'),
+              const LegalPage(documentType: LegalDocumentType.accessibility),
         ),
         GoRoute(
           path: Routes.legalNotice,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Aviso legal'),
+              const LegalPage(documentType: LegalDocumentType.legalNotice),
         ),
         GoRoute(
           path: Routes.sitemap,

@@ -92,5 +92,35 @@
   "consentPageSemantics": "Terms of use acceptance screen",
   "@consentPageSemantics": {
     "description": "Accessibility label for the consent screen."
+  },
+  "legalPageLastUpdated": "Last updated: {date}",
+  "@legalPageLastUpdated": {
+    "description": "Text showing the last update date of the legal document.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "Date formatted as dd/MM/yyyy."
+      }
+    }
+  },
+  "legalTermsTitle": "Terms of use",
+  "@legalTermsTitle": {
+    "description": "Title for the terms of use page."
+  },
+  "legalPrivacyTitle": "Privacy policy",
+  "@legalPrivacyTitle": {
+    "description": "Title for the privacy policy / data protection page."
+  },
+  "legalAccessibilityTitle": "Accessibility",
+  "@legalAccessibilityTitle": {
+    "description": "Title for the accessibility statement page."
+  },
+  "legalNoticeTitle": "Legal notice",
+  "@legalNoticeTitle": {
+    "description": "Title for the legal notice page."
+  },
+  "legalContentSemantics": "Legal content",
+  "@legalContentSemantics": {
+    "description": "Accessibility label for the content area on legal pages."
   }
 }

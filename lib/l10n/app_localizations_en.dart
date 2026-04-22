@@ -76,4 +76,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentPageSemantics => 'Terms of use acceptance screen';
+
+  @override
+  String legalPageLastUpdated(String date) {
+    return 'Last updated: $date';
+  }
+
+  @override
+  String get legalTermsTitle => 'Terms of use';
+
+  @override
+  String get legalPrivacyTitle => 'Privacy policy';
+
+  @override
+  String get legalAccessibilityTitle => 'Accessibility';
+
+  @override
+  String get legalNoticeTitle => 'Legal notice';
+
+  @override
+  String get legalContentSemantics => 'Legal content';
 }
