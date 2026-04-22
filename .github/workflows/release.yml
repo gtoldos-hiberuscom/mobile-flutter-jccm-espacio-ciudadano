@@ -1,0 +1,126 @@
+# Release Pipeline — jccm_espacio_ciudadano
+# Triggers on push to main (production release) or manual workflow_dispatch
+# with an environment selector (development / preproduction / production).
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - development
+          - preproduction
+          - production
+
+permissions:
+  contents: write   # needed to create GitHub Release tags
+
+jobs:
+  build_and_release:
+    name: Build & Release (${{ github.event_name == 'workflow_dispatch' && inputs.environment || 'production' }})
+    runs-on: ubuntu-latest
+
+    env:
+      # Resolve environment: workflow_dispatch input takes precedence; push to main → production
+      RELEASE_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || 'production' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history for changelog / tagging
+
+      - name: Set up Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run build_runner (code generation)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Generate localizations
+        run: flutter gen-l10n
+
+      - name: Flutter analyze (fatal infos)
+        run: flutter analyze --fatal-infos
+
+      - name: Run tests
+        run: flutter test
+
+      # ── Resolve flavor/target for the selected environment ────────────────
+      - name: Resolve build parameters
+        id: build_params
+        run: |
+          case "$RELEASE_ENV" in
+            development)
+              echo "flavor=development" >> "$GITHUB_OUTPUT"
+              echo "target=lib/main_development.dart" >> "$GITHUB_OUTPUT"
+              echo "apk_suffix=development-release" >> "$GITHUB_OUTPUT"
+              ;;
+            preproduction)
+              echo "flavor=preproduction" >> "$GITHUB_OUTPUT"
+              echo "target=lib/main_preproduction.dart" >> "$GITHUB_OUTPUT"
+              echo "apk_suffix=preproduction-release" >> "$GITHUB_OUTPUT"
+              ;;
+            production|*)
+              echo "flavor=production" >> "$GITHUB_OUTPUT"
+              echo "target=lib/main_production.dart" >> "$GITHUB_OUTPUT"
+              echo "apk_suffix=production-release" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - name: Build release APK
+        run: >
+          flutter build apk
+          --release
+          --flavor ${{ steps.build_params.outputs.flavor }}
+          --target ${{ steps.build_params.outputs.target }}
+
+      - name: Upload release APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ steps.build_params.outputs.apk_suffix }}
+          path: build/app/outputs/flutter-apk/app-${{ steps.build_params.outputs.apk_suffix }}.apk
+          if-no-files-found: warn
+
+      # ── Create a GitHub Release tag when pushing to main ─────────────────
+      - name: Determine release version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: version
+        run: |
+          # Extract version from pubspec.yaml (e.g. "version: 1.2.3+4")
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}' | tr -d '\r')
+          echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "name=Release ${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.name }}
+          generate_release_notes: true
+          files: build/app/outputs/flutter-apk/app-${{ steps.build_params.outputs.apk_suffix }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
