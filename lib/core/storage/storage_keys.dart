@@ -12,6 +12,12 @@ abstract final class StorageKeys {
   /// JWT refresh token for silent re-authentication.
   static const String refreshToken = 'refresh_token';
 
+  /// Federated user identifier from the Cl@ve identity assertion (DNI / NIE).
+  static const String idAgente = 'id_agente';
+
+  /// ISO-8601 string of the access-token expiry instant.
+  static const String sessionExpiresAt = 'session_expires_at';
+
   // ── Non-sensitive keys ────────────────────────────────────────────────────
 
   /// Whether the user has accepted the consent / terms screen.
