@@ -2,7 +2,7 @@
 id: 68
 jira_key:
 type: Story
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T07:20:32Z
 due_date:
 jira_url:
 ---
@@ -78,3 +78,4 @@ Definir el pipeline mínimo y la checklist de salida para builds, tests, version
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T07:20:32Z | status | To Do -> In Progress | by Copilot | 4 GitHub Actions workflows created and committed on task/EPIC-10-quality-security/STORY-68-cicd-pipeline/implement-cicd (commit c83dde8): ci.yml, release.yml, pr_quality.yml, dependency_review.yml.
