@@ -1,6 +1,6 @@
 analyzer:
-  # plugins:
-  #   - custom_lint
+  plugins:
+    - custom_lint
 
   # exclude:
     # - '**/generated/**'

@@ -2,12 +2,12 @@
 id: 11
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Definir la topología obligatoria del repo y los entrypoints de entorno para una app Flutter multi-entorno alineada con el canon.
 
 ## Acceptance Criteria
-- [ ] lib/app, lib/core, lib/features y lib/l10n quedan contemplados como macrozonas obligatorias.
-- [ ] Se define AppConfig tipado y estrategia de carga para development/preproduction/production.
-- [ ] Se contemplan main_<env>.dart, bootstrap único y lectura de configuración compilada.
-- [ ] Se identifican exclusiones explícitas de anti-patrones globales.
+- [x] lib/app, lib/core, lib/features y lib/l10n quedan contemplados como macrozonas obligatorias.
+- [x] Se define AppConfig tipado y estrategia de carga para development/preproduction/production.
+- [x] Se contemplan main_<env>.dart, bootstrap único y lectura de configuración compilada.
+- [x] Se identifican exclusiones explícitas de anti-patrones globales.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -67,3 +67,4 @@ Definir la topología obligatoria del repo y los entrypoints de entorno para una
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T12:00:00+02:00 | status | In Progress -> Done | by Copilot
