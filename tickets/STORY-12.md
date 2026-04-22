@@ -2,7 +2,7 @@
 id: 12
 jira_key:
 type: Story
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -21,7 +21,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T02:00:00+02:00
+updated_at: 2026-04-22T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -30,10 +30,10 @@ jira_url:
 Definir la infraestructura transversal de red, auth-ready client, storage sensible/no sensible y mapping de errores para todas las features.
 
 ## Acceptance Criteria
-- [ ] Se contempla cliente Dio común con interceptores, timeouts, cancelación y headers de autorización.
-- [ ] Tokens y secretos se almacenan en secure storage y datos no sensibles en storage no seguro.
-- [ ] Existe estrategia común de errores técnicos -> fallos de dominio -> mensajes de usuario localizados.
-- [ ] Los clientes OpenAPI generados se encapsulan como detalle de infraestructura en 3_data/api.
+- [x] Se contempla cliente Dio común con interceptores, timeouts, cancelación y headers de autorización.
+- [x] Tokens y secretos se almacenan en secure storage y datos no sensibles en storage no seguro.
+- [x] Existe estrategia común de errores técnicos -> fallos de dominio -> mensajes de usuario localizados.
+- [x] Los clientes OpenAPI generados se encapsulan como detalle de infraestructura en 3_data/api.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -76,4 +76,4 @@ Definir la infraestructura transversal de red, auth-ready client, storage sensib
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
-- 2026-04-22T02:00:00+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 wave 2 execution started.
+- 2026-04-22T12:00:00+02:00 | status | In Progress -> Done | by Copilot

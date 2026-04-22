@@ -2,7 +2,7 @@
 id: 17
 jira_key:
 type: Story
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T02:00:00+02:00
+updated_at: 2026-04-22T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Ofrecer la experiencia previa al login con explicación de valor, alcance, requisitos de acceso y enlaces legales/ayuda.
 
 ## Acceptance Criteria
-- [ ] Se contempla una landing no autenticada con secciones “Qué encontrarás” y “Cómo acceder”.
-- [ ] Se contempla CTA principal de acceso a Espacio Ciudadano.
-- [ ] Se contempla explicación de métodos Cl@ve y alcance de la información disponible.
-- [ ] Se contemplan accesos a ayuda, accesibilidad, aviso legal y protección de datos.
+- [x] Se contempla una landing no autenticada con secciones “Qué encontrarás” y “Cómo acceder”.
+- [x] Se contempla CTA principal de acceso a Espacio Ciudadano.
+- [x] Se contempla explicación de métodos Cl@ve y alcance de la información disponible.
+- [x] Se contemplan accesos a ayuda, accesibilidad, aviso legal y protección de datos.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -67,4 +67,4 @@ Ofrecer la experiencia previa al login con explicación de valor, alcance, requi
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
-- 2026-04-22T02:00:00+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 wave 2 execution started.
+- 2026-04-22T12:00:00+02:00 | status | In Progress -> Done | by Copilot
