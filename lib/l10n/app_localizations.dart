@@ -97,6 +97,60 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Espacio Ciudadano CLM'**
   String get appTitle;
+
+  /// Título principal mostrado en la sección hero de la pantalla de inicio pública.
+  ///
+  /// In es, this message translates to:
+  /// **'Espacio Ciudadano'**
+  String get landingTitle;
+
+  /// Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu información pública en un solo lugar'**
+  String get landingTagline;
+
+  /// Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder con Cl@ve'**
+  String get landingCtaButton;
+
+  /// Encabezado de la sección que muestra las categorías de servicios disponibles.
+  ///
+  /// In es, this message translates to:
+  /// **'Qué encontrarás'**
+  String get landingWhatYouFindTitle;
+
+  /// Encabezado de la sección de pasos para autenticarse.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo acceder'**
+  String get landingHowToAccessTitle;
+
+  /// Enlace de pie de página a la sección de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda'**
+  String get landingFooterHelp;
+
+  /// Enlace de pie de página a la declaración de accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get landingFooterAccessibility;
+
+  /// Enlace de pie de página al aviso legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get landingFooterLegal;
+
+  /// Enlace de pie de página a la política de protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Protección de datos'**
+  String get landingFooterPrivacy;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -10,4 +10,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appTitle => 'Citizen Space CLM';
+
+  @override
+  String get landingTitle => 'Citizen Space';
+
+  @override
+  String get landingTagline => 'Your public information in one place';
+
+  @override
+  String get landingCtaButton => 'Access with Cl@ve';
+
+  @override
+  String get landingWhatYouFindTitle => 'What you\'ll find';
+
+  @override
+  String get landingHowToAccessTitle => 'How to access';
+
+  @override
+  String get landingFooterHelp => 'Help';
+
+  @override
+  String get landingFooterAccessibility => 'Accessibility';
+
+  @override
+  String get landingFooterLegal => 'Legal notice';
+
+  @override
+  String get landingFooterPrivacy => 'Data protection';
 }
