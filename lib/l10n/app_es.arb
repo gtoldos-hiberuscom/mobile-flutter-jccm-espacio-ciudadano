@@ -39,5 +39,29 @@
   "landingFooterPrivacy": "Protección de datos",
   "@landingFooterPrivacy": {
     "description": "Enlace de pie de página a la política de protección de datos."
+  },
+  "loginPageTitle": "Accediendo con Cl@ve",
+  "@loginPageTitle": {
+    "description": "Título de la pantalla de login que indica que se está accediendo con Cl@ve."
+  },
+  "loginPageLoading": "Iniciando autenticación...",
+  "@loginPageLoading": {
+    "description": "Mensaje de estado mientras se inicia la autenticación con Cl@ve."
+  },
+  "loginPageError": "Error al iniciar sesión",
+  "@loginPageError": {
+    "description": "Título del mensaje de error mostrado cuando falla la autenticación."
+  },
+  "loginRetryButton": "Reintentar",
+  "@loginRetryButton": {
+    "description": "Texto del botón para reintentar el proceso de login."
+  },
+  "logoutConfirm": "¿Cerrar sesión?",
+  "@logoutConfirm": {
+    "description": "Texto de confirmación para cerrar la sesión del usuario."
+  },
+  "sessionExpired": "Tu sesión ha caducado",
+  "@sessionExpired": {
+    "description": "Mensaje mostrado cuando la sesión del usuario ha expirado."
   }
 }
