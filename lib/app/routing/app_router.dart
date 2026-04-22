@@ -1,37 +1,186 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/observers/app_lifecycle_observer.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/placeholder_screens.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/route_guards.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 
-/// Centralised GoRouter configuration.
+/// Riverpod provider that owns the application [GoRouter].
 ///
-/// This is a placeholder that exposes a single root route with a
-/// "Hello World" body. Expand with feature routes in STORY-13.
-final class AppRouter {
-  AppRouter() : _observer = AppLifecycleObserver() {
-    _router = GoRouter(
-      initialLocation: RouteRegistry.root,
-      observers: [_observer],
+/// Kept alive for the entire app lifetime so the router is never recreated
+/// on widget-tree rebuilds. The [SessionGuard] captures `ref` from this
+/// factory, keeping all navigation decisions free of [BuildContext].
+final goRouterProvider = Provider<GoRouter>(
+  (final ref) {
+    final guard = SessionGuard(ref);
+    final observer = AppLifecycleObserver();
+
+    final router = GoRouter(
+      initialLocation: Routes.splash,
+      observers: [observer],
+      // ── Global redirect ──────────────────────────────────────────────────
+      redirect: (final BuildContext context, final GoRouterState state) =>
+          guard.redirect(state),
+
+      // ── 404 fallback ──────────────────────────────────────────────────────
+      errorBuilder: (final BuildContext context, final GoRouterState state) =>
+          const NotFoundScreen(),
+
       routes: [
+        // ── Splash ──────────────────────────────────────────────────────────
         GoRoute(
-          path: RouteRegistry.root,
+          path: Routes.splash,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const Scaffold(
-            body: Center(child: Text('Espacio Ciudadano')),
-          ),
+              const SplashScreen(),
+        ),
+
+        // ── Landing ─────────────────────────────────────────────────────────
+        GoRoute(
+          path: Routes.landing,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LandingScreen(),
+        ),
+
+        // ── Login flow ───────────────────────────────────────────────────────
+        GoRoute(
+          path: Routes.login,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LoginPlaceholder(),
+          routes: [
+            GoRoute(
+              path: 'callback',
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const LoginCallbackPlaceholder(),
+            ),
+          ],
+        ),
+
+        // ── Maintenance ──────────────────────────────────────────────────────
+        GoRoute(
+          path: Routes.maintenance,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const MaintenanceScreen(),
+        ),
+
+        // ── Legal / static pages ─────────────────────────────────────────────
+        GoRoute(
+          path: Routes.terms,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LegalPlaceholder(title: 'Condiciones de uso'),
+        ),
+        GoRoute(
+          path: Routes.privacy,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LegalPlaceholder(title: 'Política de privacidad'),
+        ),
+        GoRoute(
+          path: Routes.accessibility,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LegalPlaceholder(title: 'Accesibilidad'),
+        ),
+        GoRoute(
+          path: Routes.legalNotice,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LegalPlaceholder(title: 'Aviso legal'),
+        ),
+        GoRoute(
+          path: Routes.sitemap,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const SitemapPlaceholder(),
+        ),
+        GoRoute(
+          path: Routes.help,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const HelpPlaceholder(),
+        ),
+
+        // ── Deep-link callbacks ──────────────────────────────────────────────
+        GoRoute(
+          path: Routes.claveCallback,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LoginCallbackPlaceholder(),
+        ),
+        GoRoute(
+          path: Routes.afirmaReturn,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LoginCallbackPlaceholder(),
+        ),
+
+        // ── Authenticated shell ──────────────────────────────────────────────
+        ShellRoute(
+          builder: (
+            final BuildContext context,
+            final GoRouterState state,
+            final Widget child,
+          ) =>
+              AppScaffold(child: child),
+          routes: [
+            GoRoute(
+              path: Routes.home,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const HomePlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.agenda,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const AgendaPlaceholder(),
+              routes: [
+                GoRoute(
+                  path: ':id',
+                  builder:
+                      (final BuildContext context, final GoRouterState state) =>
+                          const AgendaPlaceholder(),
+                ),
+              ],
+            ),
+            GoRoute(
+              path: Routes.casework,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const CaseworkPlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.notifications,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const NotificationsPlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.cards,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const CardsPlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.profile,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const ProfilePlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.recommendations,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const RecommendationsPlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.support,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const SupportPlaceholder(),
+            ),
+          ],
         ),
       ],
     );
-  }
 
-  final AppLifecycleObserver _observer;
-  late final GoRouter _router;
-
-  /// The configured [GoRouter] instance.
-  GoRouter get router => _router;
-
-  /// Disposes the router and its observer.
-  void dispose() {
-    _router.dispose();
-  }
-}
+    ref.onDispose(router.dispose);
+    return router;
+  },
+  name: 'goRouterProvider',
+);
