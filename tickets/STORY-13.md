@@ -2,12 +2,12 @@
 id: 13
 jira_key:
 type: Story
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T02:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -74,3 +74,4 @@ Modelar el shell global y la navegación declarativa para áreas autenticadas, n
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T02:00:00+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 wave 2 execution started.
