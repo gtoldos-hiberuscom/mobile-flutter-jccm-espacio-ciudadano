@@ -92,5 +92,45 @@
   "consentPageSemantics": "Terms of use acceptance screen",
   "@consentPageSemantics": {
     "description": "Accessibility label for the consent screen."
+  },
+  "loadingStateDefault": "Loading…",
+  "@loadingStateDefault": {
+    "description": "Default accessibility text for loading indicators."
+  },
+  "emptyStateDefault": "No items",
+  "@emptyStateDefault": {
+    "description": "Default message for empty-state screens."
+  },
+  "errorStateDefault": "An error occurred",
+  "@errorStateDefault": {
+    "description": "Default message for error-state screens."
+  },
+  "errorStateRetry": "Retry",
+  "@errorStateRetry": {
+    "description": "Label for the retry button in the error state widget."
+  },
+  "blockedStateDefault": "Access not available",
+  "@blockedStateDefault": {
+    "description": "Default message for blocked-access or maintenance screens."
+  },
+  "documentOpen": "Open document",
+  "@documentOpen": {
+    "description": "Accessibility label and tooltip for the open-document button."
+  },
+  "documentDownload": "Download document",
+  "@documentDownload": {
+    "description": "Accessibility label and tooltip for the download-document button."
+  },
+  "documentShare": "Share document",
+  "@documentShare": {
+    "description": "Accessibility label and tooltip for the share-document button."
+  },
+  "loadMoreItems": "Load more items",
+  "@loadMoreItems": {
+    "description": "Accessibility label for the load-more footer in paginated lists."
+  },
+  "pullToRefresh": "Pull to refresh",
+  "@pullToRefresh": {
+    "description": "Accessibility label for the RefreshIndicator in paginated lists."
   }
 }

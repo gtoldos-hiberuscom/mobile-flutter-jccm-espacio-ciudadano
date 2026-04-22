@@ -229,6 +229,66 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Pantalla de aceptación de condiciones de uso'**
   String get consentPageSemantics;
+
+  /// Texto de accesibilidad predeterminado para los indicadores de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando…'**
+  String get loadingStateDefault;
+
+  /// Mensaje predeterminado para las pantallas de estado vacío.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay elementos'**
+  String get emptyStateDefault;
+
+  /// Mensaje predeterminado para las pantallas de estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Se ha producido un error'**
+  String get errorStateDefault;
+
+  /// Etiqueta del botón de reintento en el widget de estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get errorStateRetry;
+
+  /// Mensaje predeterminado para las pantallas de acceso bloqueado o mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso no disponible'**
+  String get blockedStateDefault;
+
+  /// Etiqueta de accesibilidad y tooltip para el botón de abrir documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir documento'**
+  String get documentOpen;
+
+  /// Etiqueta de accesibilidad y tooltip para el botón de descarga de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar documento'**
+  String get documentDownload;
+
+  /// Etiqueta de accesibilidad y tooltip para el botón de compartir documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Compartir documento'**
+  String get documentShare;
+
+  /// Etiqueta de accesibilidad para el pie de página de carga adicional en listas paginadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargar más elementos'**
+  String get loadMoreItems;
+
+  /// Etiqueta de accesibilidad para el RefreshIndicator en listas paginadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Desliza para actualizar'**
+  String get pullToRefresh;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

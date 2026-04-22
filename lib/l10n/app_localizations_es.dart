@@ -77,4 +77,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get consentPageSemantics => 'Pantalla de aceptación de condiciones de uso';
+
+  @override
+  String get loadingStateDefault => 'Cargando…';
+
+  @override
+  String get emptyStateDefault => 'No hay elementos';
+
+  @override
+  String get errorStateDefault => 'Se ha producido un error';
+
+  @override
+  String get errorStateRetry => 'Reintentar';
+
+  @override
+  String get blockedStateDefault => 'Acceso no disponible';
+
+  @override
+  String get documentOpen => 'Abrir documento';
+
+  @override
+  String get documentDownload => 'Descargar documento';
+
+  @override
+  String get documentShare => 'Compartir documento';
+
+  @override
+  String get loadMoreItems => 'Cargar más elementos';
+
+  @override
+  String get pullToRefresh => 'Desliza para actualizar';
 }

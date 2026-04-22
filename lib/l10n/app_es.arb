@@ -92,5 +92,45 @@
   "consentPageSemantics": "Pantalla de aceptación de condiciones de uso",
   "@consentPageSemantics": {
     "description": "Etiqueta de accesibilidad para la pantalla de consentimiento."
+  },
+  "loadingStateDefault": "Cargando…",
+  "@loadingStateDefault": {
+    "description": "Texto de accesibilidad predeterminado para los indicadores de carga."
+  },
+  "emptyStateDefault": "No hay elementos",
+  "@emptyStateDefault": {
+    "description": "Mensaje predeterminado para las pantallas de estado vacío."
+  },
+  "errorStateDefault": "Se ha producido un error",
+  "@errorStateDefault": {
+    "description": "Mensaje predeterminado para las pantallas de estado de error."
+  },
+  "errorStateRetry": "Reintentar",
+  "@errorStateRetry": {
+    "description": "Etiqueta del botón de reintento en el widget de estado de error."
+  },
+  "blockedStateDefault": "Acceso no disponible",
+  "@blockedStateDefault": {
+    "description": "Mensaje predeterminado para las pantallas de acceso bloqueado o mantenimiento."
+  },
+  "documentOpen": "Abrir documento",
+  "@documentOpen": {
+    "description": "Etiqueta de accesibilidad y tooltip para el botón de abrir documento."
+  },
+  "documentDownload": "Descargar documento",
+  "@documentDownload": {
+    "description": "Etiqueta de accesibilidad y tooltip para el botón de descarga de documento."
+  },
+  "documentShare": "Compartir documento",
+  "@documentShare": {
+    "description": "Etiqueta de accesibilidad y tooltip para el botón de compartir documento."
+  },
+  "loadMoreItems": "Cargar más elementos",
+  "@loadMoreItems": {
+    "description": "Etiqueta de accesibilidad para el pie de página de carga adicional en listas paginadas."
+  },
+  "pullToRefresh": "Desliza para actualizar",
+  "@pullToRefresh": {
+    "description": "Etiqueta de accesibilidad para el RefreshIndicator en listas paginadas."
   }
 }
