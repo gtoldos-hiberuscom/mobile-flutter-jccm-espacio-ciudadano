@@ -2,7 +2,7 @@
 id: 18
 jira_key:
 type: Story
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T02:00:00+02:00
+updated_at: 2026-04-22T12:30:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Modelar la autenticación con Cl@ve y el ciclo de vida completo de la sesión para alimentar servicios federados y flujos protegidos.
 
 ## Acceptance Criteria
-- [ ] Se contempla inicio de login con Cl@ve y retorno seguro a la app.
-- [ ] Se contemplan persistencia segura, restauración de sesión, expiración, renovación y cierre de sesión.
-- [ ] Se contempla inyección uniforme de claims/token en llamadas protegidas.
-- [ ] Se contemplan errores 401/403, sesión caducada y pérdida de claims obligatorios.
+- [x] Se contempla inicio de login con Cl@ve y retorno seguro a la app.
+- [x] Se contemplan persistencia segura, restauración de sesión, expiración, renovación y cierre de sesión.
+- [x] Se contempla inyección uniforme de claims/token en llamadas protegidas.
+- [x] Se contemplan errores 401/403, sesión caducada y pérdida de claims obligatorios.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -78,3 +78,4 @@ Modelar la autenticación con Cl@ve y el ciclo de vida completo de la sesión pa
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-22T02:00:00+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 wave 2 execution started.
+- 2026-04-22T12:30:00+02:00 | status | In Progress -> Done | by Copilot
