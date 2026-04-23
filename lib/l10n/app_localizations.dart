@@ -337,6 +337,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Reintentar'**
   String get maintenanceRetry;
+
+  /// Saludo mostrado en la home cuando todavía no se conoce el perfil del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienvenido al Espacio Ciudadano'**
+  String get homeGreetingFallback;
+
+  /// Etiqueta del identificador del ciudadano (idAgente) mostrada en la home autenticada.
+  ///
+  /// In es, this message translates to:
+  /// **'Identificador: {id}'**
+  String homeCitizenId(String id);
+
+  /// Título del bloque temático de Educación en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get homeBlockEducationTitle;
+
+  /// Título del bloque temático de Empleo en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get homeBlockEmploymentTitle;
+
+  /// Título del bloque temático de Bienestar Social en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar Social'**
+  String get homeBlockSocialWelfareTitle;
+
+  /// Título del bloque temático de Estado y otros temas en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado y otros'**
+  String get homeBlockStateAffairsTitle;
+
+  /// Título del bloque temático de Agenda en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get homeBlockAgendaTitle;
+
+  /// Título del widget de próximos eventos en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos eventos'**
+  String get homeBlockUpcomingEventsTitle;
+
+  /// Título del widget de expedientes en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get homeBlockCaseworkTitle;
+
+  /// Título del widget de notificaciones en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis notificaciones'**
+  String get homeBlockNotificationsTitle;
+
+  /// Título del widget de carnets digitales en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis carnets digitales'**
+  String get homeBlockDigitalCardsTitle;
+
+  /// Título del widget de recomendaciones en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendaciones'**
+  String get homeBlockRecommendationsTitle;
+
+  /// Mensaje de estado vacío para una tarjeta de la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin novedades'**
+  String get homeBlockEmpty;
+
+  /// Mensaje de error parcial mostrado en una tarjeta de la home cuando su carga falla.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar este bloque'**
+  String get homeBlockError;
+
+  /// Resumen del número de elementos disponibles en una tarjeta de la home.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =0{Sin elementos} =1{1 elemento} other{{count} elementos}}'**
+  String homeBlockCount(int count);
+
+  /// Etiqueta del timestamp de última actualización de una tarjeta de la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado a las {time}'**
+  String homeBlockLastUpdated(String time);
+
+  /// Texto mostrado cuando no se conoce el timestamp de actualización de una tarjeta.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin datos de actualización'**
+  String get homeBlockLastUpdatedUnknown;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

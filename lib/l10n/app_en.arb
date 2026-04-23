@@ -169,5 +169,89 @@
   "maintenanceRetry": "Retry",
   "@maintenanceRetry": {
     "description": "Button to retry after maintenance."
+  },
+  "homeGreetingFallback": "Welcome to Espacio Ciudadano",
+  "@homeGreetingFallback": {
+    "description": "Greeting shown on the home when the user profile is not yet available."
+  },
+  "homeCitizenId": "Citizen ID: {id}",
+  "@homeCitizenId": {
+    "description": "Citizen identifier (idAgente) label shown on the authenticated home.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBlockEducationTitle": "Education",
+  "@homeBlockEducationTitle": {
+    "description": "Education thematic block title on the home."
+  },
+  "homeBlockEmploymentTitle": "Employment",
+  "@homeBlockEmploymentTitle": {
+    "description": "Employment thematic block title on the home."
+  },
+  "homeBlockSocialWelfareTitle": "Social welfare",
+  "@homeBlockSocialWelfareTitle": {
+    "description": "Social welfare thematic block title on the home."
+  },
+  "homeBlockStateAffairsTitle": "State and other affairs",
+  "@homeBlockStateAffairsTitle": {
+    "description": "State and other affairs thematic block title on the home."
+  },
+  "homeBlockAgendaTitle": "Agenda",
+  "@homeBlockAgendaTitle": {
+    "description": "Agenda thematic block title on the home."
+  },
+  "homeBlockUpcomingEventsTitle": "Upcoming events",
+  "@homeBlockUpcomingEventsTitle": {
+    "description": "Upcoming events widget title on the home."
+  },
+  "homeBlockCaseworkTitle": "My casework",
+  "@homeBlockCaseworkTitle": {
+    "description": "Casework widget title on the home."
+  },
+  "homeBlockNotificationsTitle": "My notifications",
+  "@homeBlockNotificationsTitle": {
+    "description": "Notifications widget title on the home."
+  },
+  "homeBlockDigitalCardsTitle": "My digital cards",
+  "@homeBlockDigitalCardsTitle": {
+    "description": "Digital cards widget title on the home."
+  },
+  "homeBlockRecommendationsTitle": "Recommendations",
+  "@homeBlockRecommendationsTitle": {
+    "description": "Recommendations widget title on the home."
+  },
+  "homeBlockEmpty": "Nothing to show",
+  "@homeBlockEmpty": {
+    "description": "Empty-state message for a home card."
+  },
+  "homeBlockError": "This block could not be loaded",
+  "@homeBlockError": {
+    "description": "Partial-error message shown in a home card when its load fails."
+  },
+  "homeBlockCount": "{count, plural, =0{No items} =1{1 item} other{{count} items}}",
+  "@homeBlockCount": {
+    "description": "Summary of how many items are available in a home card.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "homeBlockLastUpdated": "Updated at {time}",
+  "@homeBlockLastUpdated": {
+    "description": "Last-updated timestamp label of a home card.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBlockLastUpdatedUnknown": "No update info",
+  "@homeBlockLastUpdatedUnknown": {
+    "description": "Shown when the last-updated timestamp of a card is unknown."
   }
 }
