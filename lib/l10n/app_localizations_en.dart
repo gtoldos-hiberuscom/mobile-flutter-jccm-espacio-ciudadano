@@ -226,4 +226,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get externalLinkInfanciaFamiliasLabel => 'Childhood and families';
+
+  @override
+  String get helpPageTitle => 'Help center';
+
+  @override
+  String get helpSearchHint => 'Search frequently asked questions';
+
+  @override
+  String get helpFaqSectionTitle => 'Frequently asked questions';
+
+  @override
+  String get helpGuidesSectionTitle => 'Guides';
+
+  @override
+  String get helpContactSectionTitle => 'Contact';
+
+  @override
+  String get helpEmptySearchMessage => 'No results';
+
+  @override
+  String get helpEmptySearchSubtitle => 'Try different search terms.';
+
+  @override
+  String get helpCategoryAccess => 'Access and authentication';
+
+  @override
+  String get helpCategoryPrivacy => 'Privacy and data';
+
+  @override
+  String get helpCategoryServices => 'Services and features';
+
+  @override
+  String get helpFaqLoginClaveQ => 'How do I sign in with Cl@ve?';
+
+  @override
+  String get helpFaqLoginClaveA => 'Tap \"Sign in with Cl@ve\" on the welcome screen. The official identification system opens; once authenticated you return to the app.';
+
+  @override
+  String get helpFaqLoginProblemsQ => 'I can\'t sign in, what should I do?';
+
+  @override
+  String get helpFaqLoginProblemsA => 'Check your connection and that your Cl@ve credential is still valid. If the issue persists, contact 012.';
+
+  @override
+  String get helpFaqDataProtectionQ => 'What happens with my personal data?';
+
+  @override
+  String get helpFaqDataProtectionA => 'Your data is processed under GDPR and LOPDGDD. See the privacy policy for purposes, retention and your rights.';
+
+  @override
+  String get helpFaqNotificationsQ => 'How do I receive notifications?';
+
+  @override
+  String get helpFaqNotificationsA => 'Enable alerts in your profile and allow system notifications. You will be notified of changes in your case files.';
+
+  @override
+  String get helpFaqDocumentsQ => 'Can I download official documents?';
+
+  @override
+  String get helpFaqDocumentsA => 'Yes. From each case file detail you can download or share the available documents.';
+
+  @override
+  String get helpFaqOfflineQ => 'Does the app work offline?';
+
+  @override
+  String get helpFaqOfflineA => 'Some features (cards and legal content) work offline. Anything that needs fresh data requires connectivity.';
+
+  @override
+  String get helpGuideFirstStepsTitle => 'First steps';
+
+  @override
+  String get helpGuideFirstStepsBody => 'Learn how to navigate Home, Case files, Notifications and Cards. Personalise your profile for a tailored experience.';
+
+  @override
+  String get helpGuideCarpetaAgeTitle => 'State Citizen Folder';
+
+  @override
+  String get helpGuideCarpetaAgeBody => 'If your case depends on the Spanish State Administration, open the AGE Citizen Folder directly.';
+
+  @override
+  String get helpContact012PhoneLabel => '012 phone support';
+
+  @override
+  String get helpContactEmailSupportLabel => 'Support email';
+
+  @override
+  String get helpContactOfficesUrlLabel => 'Information and registry offices';
 }

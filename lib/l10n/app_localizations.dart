@@ -493,6 +493,180 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Infancia y familias'**
   String get externalLinkInfanciaFamiliasLabel;
+
+  /// Título de la pantalla de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro de ayuda'**
+  String get helpPageTitle;
+
+  /// Texto de ayuda del buscador local del centro de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar en preguntas frecuentes'**
+  String get helpSearchHint;
+
+  /// Encabezado de la sección FAQ.
+  ///
+  /// In es, this message translates to:
+  /// **'Preguntas frecuentes'**
+  String get helpFaqSectionTitle;
+
+  /// Encabezado de la sección de guías.
+  ///
+  /// In es, this message translates to:
+  /// **'Guías'**
+  String get helpGuidesSectionTitle;
+
+  /// Encabezado de la sección de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Contacto'**
+  String get helpContactSectionTitle;
+
+  /// Mensaje principal cuando la búsqueda local no encuentra resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin resultados'**
+  String get helpEmptySearchMessage;
+
+  /// Subtítulo del estado vacío de búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Prueba con otros términos.'**
+  String get helpEmptySearchSubtitle;
+
+  /// Categoría FAQ: acceso y autenticación.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso y autenticación'**
+  String get helpCategoryAccess;
+
+  /// Categoría FAQ: privacidad y protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Privacidad y datos'**
+  String get helpCategoryPrivacy;
+
+  /// Categoría FAQ: uso de los servicios.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicios y funcionalidades'**
+  String get helpCategoryServices;
+
+  /// FAQ — pregunta sobre acceso con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo accedo con Cl@ve?'**
+  String get helpFaqLoginClaveQ;
+
+  /// FAQ — respuesta sobre acceso con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Pulsa \"Acceder con Cl@ve\" en la pantalla de inicio. Se abrirá el sistema oficial de identificación. Tras la autenticación volverás a la aplicación.'**
+  String get helpFaqLoginClaveA;
+
+  /// FAQ — pregunta sobre problemas de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'No puedo iniciar sesión, ¿qué hago?'**
+  String get helpFaqLoginProblemsQ;
+
+  /// FAQ — respuesta sobre problemas de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Verifica tu conexión y que tu certificado o credencial Cl@ve siga vigente. Si el problema persiste, contacta con el 012.'**
+  String get helpFaqLoginProblemsA;
+
+  /// FAQ — pregunta sobre protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué se hace con mis datos personales?'**
+  String get helpFaqDataProtectionQ;
+
+  /// FAQ — respuesta sobre protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos se tratan conforme al RGPD y la LOPDGDD. Consulta la política de privacidad para conocer las finalidades, plazos y derechos.'**
+  String get helpFaqDataProtectionA;
+
+  /// FAQ — pregunta sobre notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo recibo notificaciones?'**
+  String get helpFaqNotificationsQ;
+
+  /// FAQ — respuesta sobre notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Activa los avisos en tu perfil y permite las notificaciones del sistema. Recibirás aviso cuando haya novedades en tus expedientes.'**
+  String get helpFaqNotificationsA;
+
+  /// FAQ — pregunta sobre descarga de documentos.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Puedo descargar documentos oficiales?'**
+  String get helpFaqDocumentsQ;
+
+  /// FAQ — respuesta sobre descarga de documentos.
+  ///
+  /// In es, this message translates to:
+  /// **'Sí. Desde el detalle de cada expediente puedes descargar o compartir los documentos disponibles.'**
+  String get helpFaqDocumentsA;
+
+  /// FAQ — pregunta sobre uso sin conexión.
+  ///
+  /// In es, this message translates to:
+  /// **'¿La aplicación funciona sin conexión?'**
+  String get helpFaqOfflineQ;
+
+  /// FAQ — respuesta sobre uso sin conexión.
+  ///
+  /// In es, this message translates to:
+  /// **'Algunas funciones (consulta de tarjetas y contenidos legales) se mantienen sin conexión. Las que requieren datos actualizados necesitan conectividad.'**
+  String get helpFaqOfflineA;
+
+  /// Guía — primeros pasos: título.
+  ///
+  /// In es, this message translates to:
+  /// **'Primeros pasos'**
+  String get helpGuideFirstStepsTitle;
+
+  /// Guía — primeros pasos: cuerpo.
+  ///
+  /// In es, this message translates to:
+  /// **'Aprende a navegar entre Inicio, Expedientes, Notificaciones y Tarjetas. Personaliza tu perfil para una experiencia adaptada.'**
+  String get helpGuideFirstStepsBody;
+
+  /// Guía sobre la Carpeta Ciudadana AGE.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta Ciudadana del Estado'**
+  String get helpGuideCarpetaAgeTitle;
+
+  /// Guía AGE — cuerpo.
+  ///
+  /// In es, this message translates to:
+  /// **'Si tu trámite depende de la Administración General del Estado, accede directamente a la Carpeta Ciudadana AGE.'**
+  String get helpGuideCarpetaAgeBody;
+
+  /// Contacto — etiqueta para el teléfono 012.
+  ///
+  /// In es, this message translates to:
+  /// **'Atención telefónica 012'**
+  String get helpContact012PhoneLabel;
+
+  /// Contacto — etiqueta para el correo de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo de soporte'**
+  String get helpContactEmailSupportLabel;
+
+  /// Contacto — etiqueta del recurso web de oficinas de información.
+  ///
+  /// In es, this message translates to:
+  /// **'Oficinas de información y registro'**
+  String get helpContactOfficesUrlLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
