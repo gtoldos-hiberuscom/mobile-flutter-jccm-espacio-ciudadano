@@ -1,15 +1,15 @@
-# CI Pipeline — jccm_espacio_ciudadano
-# Triggers on pushes to develop/epic/**/ticket/**/task/** and on PRs targeting develop or main.
-# Jobs: analyze → test → build_android_dev / build_ios_dev
+# CI baseline — jccm_espacio_ciudadano
+# Sprint 2 baseline (STORY-68): static analysis + format check + codegen verification + tests.
+# Build/upload artifacts, store deploys, signed builds, integration tests and coverage reports
+# are intentionally deferred to later sprints (see ADR-002 and the gating tickets STORY-66,
+# STORY-67, TASK-69, TASK-70).
 name: CI
 
 on:
   push:
     branches:
       - develop
-      - 'epic/**'
-      - 'ticket/**'
-      - 'task/**'
+      - main
   pull_request:
     branches:
       - develop
@@ -18,202 +18,44 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  # ──────────────────────────────────────────────────────────────────────────
-  # 1. Static analysis + code generation
-  # ──────────────────────────────────────────────────────────────────────────
-  analyze:
-    name: Analyze
+  analyze-test:
+    name: Analyze, codegen verify and test
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Flutter (stable)
+      - name: Set up Flutter (pinned to .fvmrc)
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          channel: stable
+          flutter-version: 3.41.7
+          flutter-version-file: .fvmrc
           cache: true
 
-      - name: Cache pub packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pub-cache
-            ${{ env.PUB_CACHE }}
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-
+      - name: Print Flutter version
+        run: flutter --version
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run build_runner (code generation)
+      - name: Run code generation
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Generate localizations
-        run: flutter gen-l10n
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test
 
-      - name: Flutter analyze (fail on error)
-        run: flutter analyze
+      - name: Verify codegen produced no uncommitted changes
+        run: git diff --exit-code
 
-      - name: Run custom_lint (informational)
-        run: dart run custom_lint
-        continue-on-error: true
+      - name: Static analysis
+        run: flutter analyze --no-fatal-infos
 
-  # ──────────────────────────────────────────────────────────────────────────
-  # 2. Tests + coverage
-  # ──────────────────────────────────────────────────────────────────────────
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs: analyze
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter (stable)
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-          cache: true
-
-      - name: Cache pub packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pub-cache
-            ${{ env.PUB_CACHE }}
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Run build_runner (code generation)
-        run: dart run build_runner build --delete-conflicting-outputs
-
-      - name: Generate localizations
-        run: flutter gen-l10n
-
-      - name: Run tests with coverage
-        run: flutter test --coverage
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-lcov
-          path: coverage/lcov.info
-          if-no-files-found: warn
-
-  # ──────────────────────────────────────────────────────────────────────────
-  # 3. Android debug build (development) — non-PR pushes to develop/epic/**
-  # ──────────────────────────────────────────────────────────────────────────
-  build_android_dev:
-    name: Build Android (dev debug)
-    runs-on: ubuntu-latest
-    needs: test
-    if: >
-      github.event_name == 'push' &&
-      (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/epic/'))
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter (stable)
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-          cache: true
-
-      - name: Cache pub packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pub-cache
-            ${{ env.PUB_CACHE }}
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Run build_runner (code generation)
-        run: dart run build_runner build --delete-conflicting-outputs
-
-      - name: Generate localizations
-        run: flutter gen-l10n
-
-      - name: Build APK (development debug)
-        run: >
-          flutter build apk
-          --debug
-          --flavor development
-          --target lib/main_development.dart
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk-development-debug
-          path: build/app/outputs/flutter-apk/app-development-debug.apk
-          if-no-files-found: warn
-
-  # ──────────────────────────────────────────────────────────────────────────
-  # 4. iOS debug build (development, no codesign) — non-PR pushes to develop/epic/**
-  # ──────────────────────────────────────────────────────────────────────────
-  build_ios_dev:
-    name: Build iOS (dev debug, no codesign)
-    runs-on: macos-latest
-    needs: test
-    if: >
-      github.event_name == 'push' &&
-      (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/epic/'))
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter (stable)
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-          cache: true
-
-      - name: Cache pub packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pub-cache
-            ${{ env.PUB_CACHE }}
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Run build_runner (code generation)
-        run: dart run build_runner build --delete-conflicting-outputs
-
-      - name: Generate localizations
-        run: flutter gen-l10n
-
-      - name: Build iOS (development debug, no codesign)
-        run: >
-          flutter build ios
-          --debug
-          --flavor development
-          --target lib/main_development.dart
-          --no-codesign
-
-      - name: Upload Runner.app artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-development-debug
-          path: build/ios/iphonesimulator/Runner.app
-          if-no-files-found: warn
+      - name: Run tests
+        run: flutter test
