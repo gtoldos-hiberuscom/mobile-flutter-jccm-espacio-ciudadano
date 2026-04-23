@@ -97,6 +97,24 @@ class HomePlaceholder extends StatelessWidget {
       const Center(child: Text('Inicio (placeholder)'));
 }
 
+/// Placeholder for the thematic landing screens (Educación, Empleo,
+/// Bienestar Social, Estado/Otros) that are wired from the home dashboard.
+///
+/// The real pages are implemented in STORY-23/24/25/26. This placeholder
+/// simply renders the title so navigation from the home is observable.
+// TODO(STORY-23/24/25/26): replace with real thematic landing pages.
+class DomainLandingPlaceholder extends StatelessWidget {
+  const DomainLandingPlaceholder({required this.title, super.key});
+
+  final String title;
+
+  @override
+  Widget build(final BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: Center(child: Text('$title (placeholder)')),
+      );
+}
+
 class AgendaPlaceholder extends StatelessWidget {
   const AgendaPlaceholder({super.key});
 

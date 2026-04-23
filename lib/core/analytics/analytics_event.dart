@@ -44,6 +44,21 @@ class DownloadEvent extends AnalyticsEvent {
   final String? mimeType;
 }
 
+/// Fired when the user taps a block on the authenticated home dashboard.
+///
+/// [blockId] is the stable string id of the block (e.g. `'education'`,
+/// `'notifications'`) — never a localised label or any value derived from
+/// user content.
+class HomeBlockNavigateEvent extends AnalyticsEvent {
+  const HomeBlockNavigateEvent(this.blockId, {this.target});
+
+  /// Stable identifier of the block that was tapped.
+  final String blockId;
+
+  /// Optional target route slug (e.g. `'/education'`).
+  final String? target;
+}
+
 /// Fired when the user follows an external link.
 ///
 /// Only the [domain] is recorded — the full URL is never stored because
