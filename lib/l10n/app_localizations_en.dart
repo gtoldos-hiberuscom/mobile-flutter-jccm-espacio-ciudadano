@@ -226,4 +226,181 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get externalLinkInfanciaFamiliasLabel => 'Childhood and families';
+
+  @override
+  String get helpPageTitle => 'Help center';
+
+  @override
+  String get helpSearchHint => 'Search frequently asked questions';
+
+  @override
+  String get helpFaqSectionTitle => 'Frequently asked questions';
+
+  @override
+  String get helpGuidesSectionTitle => 'Guides';
+
+  @override
+  String get helpContactSectionTitle => 'Contact';
+
+  @override
+  String get helpEmptySearchMessage => 'No results';
+
+  @override
+  String get helpEmptySearchSubtitle => 'Try different search terms.';
+
+  @override
+  String get helpCategoryAccess => 'Access and authentication';
+
+  @override
+  String get helpCategoryPrivacy => 'Privacy and data';
+
+  @override
+  String get helpCategoryServices => 'Services and features';
+
+  @override
+  String get helpFaqLoginClaveQ => 'How do I sign in with Cl@ve?';
+
+  @override
+  String get helpFaqLoginClaveA => 'Tap \"Sign in with Cl@ve\" on the welcome screen. The official identification system opens; once authenticated you return to the app.';
+
+  @override
+  String get helpFaqLoginProblemsQ => 'I can\'t sign in, what should I do?';
+
+  @override
+  String get helpFaqLoginProblemsA => 'Check your connection and that your Cl@ve credential is still valid. If the issue persists, contact 012.';
+
+  @override
+  String get helpFaqDataProtectionQ => 'What happens with my personal data?';
+
+  @override
+  String get helpFaqDataProtectionA => 'Your data is processed under GDPR and LOPDGDD. See the privacy policy for purposes, retention and your rights.';
+
+  @override
+  String get helpFaqNotificationsQ => 'How do I receive notifications?';
+
+  @override
+  String get helpFaqNotificationsA => 'Enable alerts in your profile and allow system notifications. You will be notified of changes in your case files.';
+
+  @override
+  String get helpFaqDocumentsQ => 'Can I download official documents?';
+
+  @override
+  String get helpFaqDocumentsA => 'Yes. From each case file detail you can download or share the available documents.';
+
+  @override
+  String get helpFaqOfflineQ => 'Does the app work offline?';
+
+  @override
+  String get helpFaqOfflineA => 'Some features (cards and legal content) work offline. Anything that needs fresh data requires connectivity.';
+
+  @override
+  String get helpGuideFirstStepsTitle => 'First steps';
+
+  @override
+  String get helpGuideFirstStepsBody => 'Learn how to navigate Home, Case files, Notifications and Cards. Personalise your profile for a tailored experience.';
+
+  @override
+  String get helpGuideCarpetaAgeTitle => 'State Citizen Folder';
+
+  @override
+  String get helpGuideCarpetaAgeBody => 'If your case depends on the Spanish State Administration, open the AGE Citizen Folder directly.';
+
+  @override
+  String get helpContact012PhoneLabel => '012 phone support';
+
+  @override
+  String get helpContactEmailSupportLabel => 'Support email';
+
+  @override
+  String get helpContactOfficesUrlLabel => 'Information and registry offices';
+
+  @override
+  String get legalTermsTitle => 'Terms of use';
+
+  @override
+  String get legalPrivacyTitle => 'Data protection';
+
+  @override
+  String get legalAccessibilityTitle => 'Accessibility';
+
+  @override
+  String get legalNoticeTitle => 'Legal notice';
+
+  @override
+  String get legalNotFoundTitle => 'Document not found';
+
+  @override
+  String get legalNotFoundMessage => 'The requested document could not be loaded.';
+
+  @override
+  String get sitemapPageTitle => 'Sitemap';
+
+  @override
+  String get sitemapGroupAuthenticated => 'My space';
+
+  @override
+  String get sitemapGroupThematic => 'Thematic areas';
+
+  @override
+  String get sitemapGroupHelpLegal => 'Help and legal';
+
+  @override
+  String get sitemapGroupExternal => 'External resources';
+
+  @override
+  String get sitemapHome => 'Home';
+
+  @override
+  String get sitemapAgenda => 'Agenda';
+
+  @override
+  String get sitemapCasework => 'Case files';
+
+  @override
+  String get sitemapNotifications => 'Notifications';
+
+  @override
+  String get sitemapCards => 'Cards';
+
+  @override
+  String get sitemapRecommendations => 'Recommendations';
+
+  @override
+  String get sitemapSupport => 'Support';
+
+  @override
+  String get sitemapProfile => 'Profile';
+
+  @override
+  String get sitemapEducation => 'Education';
+
+  @override
+  String get sitemapEmployment => 'Employment';
+
+  @override
+  String get sitemapSocialWelfare => 'Social welfare';
+
+  @override
+  String get sitemapStateAffairs => 'State and other';
+
+  @override
+  String get sitemapHelp => 'Help center';
+
+  @override
+  String get footerHelp => 'Help';
+
+  @override
+  String get footerSitemap => 'Sitemap';
+
+  @override
+  String get footerTerms => 'Terms';
+
+  @override
+  String get footerPrivacy => 'Privacy';
+
+  @override
+  String get footerAccessibility => 'Accessibility';
+
+  @override
+  String get footerLegalNotice => 'Legal notice';
 }
