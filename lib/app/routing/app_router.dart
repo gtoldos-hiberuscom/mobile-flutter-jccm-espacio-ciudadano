@@ -10,6 +10,8 @@ import 'package:jccm_espacio_ciudadano/app/routing/route_guards.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_event_detail_page.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
@@ -195,13 +197,15 @@ final goRouterProvider = Provider<GoRouter>(
               path: Routes.agenda,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const AgendaPlaceholder(),
+                      const AgendaPage(),
               routes: [
                 GoRoute(
                   path: ':id',
                   builder:
                       (final BuildContext context, final GoRouterState state) =>
-                          const AgendaPlaceholder(),
+                          AgendaEventDetailPage(
+                    eventId: state.pathParameters['id'] ?? '',
+                  ),
                 ),
               ],
             ),
