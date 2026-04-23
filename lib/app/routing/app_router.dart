@@ -13,6 +13,7 @@ import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
+import 'package:jccm_espacio_ciudadano/features/help/2_presentation/help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 
@@ -106,7 +107,7 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.help,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const HelpPlaceholder(),
+              const HelpPage(),
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────

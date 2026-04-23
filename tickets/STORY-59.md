@@ -2,12 +2,12 @@
 id: 59
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 2
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T19:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir la pantalla de ayuda con preguntas frecuentes, guías y datos de contacto informativo, organizando los contenidos para consulta local y acceso a recursos externos de apoyo al ciudadano cuando aplique.
 
 ## Acceptance Criteria
-- [ ] Se contempla listado FAQ en formato acordeón con respuesta expandible.
-- [ ] Se contempla búsqueda local y organización temática de contenidos según documentación funcional.
-- [ ] Se contemplan secciones de guías de ayuda y datos de contacto administrativo.
-- [ ] Se contemplan enlaces a recursos externos como oficinas de información y registro o vídeos cuando apliquen.
+- [x] Se contempla listado FAQ en formato acordeón con respuesta expandible.
+- [x] Se contempla búsqueda local y organización temática de contenidos según documentación funcional.
+- [x] Se contemplan secciones de guías de ayuda y datos de contacto administrativo.
+- [x] Se contemplan enlaces a recursos externos como oficinas de información y registro o vídeos cuando apliquen.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -71,7 +71,10 @@ Cubrir la pantalla de ayuda con preguntas frecuentes, guías y datos de contacto
 
 ## Notes
 ### Comments
-- None yet.
+- 2026-05-04T19:00:00+02:00 | by Copilot | Implemented help center under `lib/features/help/` with FAQ accordion, local search, guides and contacts. Wired `/help` route to `HelpPage`. Added `help_repository_test.dart` (4 tests, pass). `flutter analyze` 45 issues (baseline preserved). Offline-first: content bundled.
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T19:00:00+02:00 | status | To Do -> In Progress | by Copilot
+- 2026-05-04T19:00:00+02:00 | status | In Progress -> Done | by Copilot
+- 2026-05-04T19:00:00+02:00 | sprint | (none) -> Sprint 2 | by Copilot
