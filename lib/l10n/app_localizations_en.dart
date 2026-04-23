@@ -602,4 +602,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get educationScholarshipTooltip => 'Capability pending a specific scholarship endpoint. Awaiting contract validation (TASK-27).';
+
+  @override
+  String get employmentTitle => 'Employment';
+
+  @override
+  String get employmentHeaderDescription => 'Check your job-seeker status and reach the official Empleo CLM portals.';
+
+  @override
+  String get employmentSeekerTitle => 'Job-seeker status';
+
+  @override
+  String get employmentSeekerSource => 'Source: SEPE';
+
+  @override
+  String get employmentSeekerEmpty => 'No job-seeker records are registered under your name.';
+
+  @override
+  String get employmentSeekerError => 'We could not load your job-seeker status.';
+
+  @override
+  String get employmentSeekerEstadoLabel => 'Current status';
+
+  @override
+  String get employmentSeekerInscripcionLabel => 'Registration date';
+
+  @override
+  String get employmentSeekerContinuidadLabel => 'Continuity date';
+
+  @override
+  String get employmentSeekerEstadoInscrito => 'Registered';
+
+  @override
+  String get employmentSeekerEstadoNoInscrito => 'Not registered';
+
+  @override
+  String get employmentSeekerEstadoBajaTemporal => 'Temporary leave';
+
+  @override
+  String get employmentOffersTitle => 'Offer subscriptions';
+
+  @override
+  String get employmentOffersDescription => 'Browsing and managing your offer subscriptions takes place directly on the Empleo CLM portal.';
 }
