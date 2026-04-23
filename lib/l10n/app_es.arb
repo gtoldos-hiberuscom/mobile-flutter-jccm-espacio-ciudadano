@@ -286,6 +286,10 @@
   "@externalLinkHistoriaSocialUnicaLabel": {
     "description": "Etiqueta del enlace externo al portal de Historia Social Única."
   },
+  "externalLinkBienestarSocialClmLabel": "Bienestar Social CLM",
+  "@externalLinkBienestarSocialClmLabel": {
+    "description": "Etiqueta del enlace externo al portal de Bienestar Social de Castilla-La Mancha."
+  },
   "externalLinkInfanciaFamiliasLabel": "Infancia y familias",
   "@externalLinkInfanciaFamiliasLabel": {
     "description": "Etiqueta del enlace externo al portal de Infancia y Familias."
@@ -581,5 +585,55 @@
   "employmentOffersTitle": "Inscripciones en ofertas",
   "@employmentOffersTitle": {"description": "Empleo — sección inscripciones en ofertas (external link)."},
   "employmentOffersDescription": "La consulta y gestión de tus inscripciones en ofertas se realiza directamente en el portal de Empleo CLM.",
-  "@employmentOffersDescription": {"description": "Empleo — copy explicativo inscripciones en ofertas."}
+  "@employmentOffersDescription": {"description": "Empleo — copy explicativo inscripciones en ofertas."},
+  "socialWelfareTitle": "Bienestar Social",
+  "@socialWelfareTitle": {"description": "Bienestar — título de la landing."},
+  "socialWelfareHeaderDescription": "Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.",
+  "@socialWelfareHeaderDescription": {"description": "Bienestar — descripción de cabecera."},
+  "socialWelfareFamilyTitle": "Familia numerosa",
+  "@socialWelfareFamilyTitle": {"description": "Bienestar — sección familia numerosa."},
+  "socialWelfareFamilySource": "Fuente: Junta de Comunidades de Castilla-La Mancha",
+  "@socialWelfareFamilySource": {"description": "Bienestar — atribución CCAA."},
+  "socialWelfareFamilyEmpty": "No consta título de familia numerosa a tu nombre.",
+  "@socialWelfareFamilyEmpty": {"description": "Bienestar — vacío familia numerosa."},
+  "socialWelfareFamilyError": "No hemos podido cargar tu título de familia numerosa.",
+  "@socialWelfareFamilyError": {"description": "Bienestar — error familia numerosa."},
+  "socialWelfareFamilyNumberLabel": "Número de título",
+  "@socialWelfareFamilyNumberLabel": {"description": "Bienestar — etiqueta número de título."},
+  "socialWelfareFamilyCategoriaLabel": "Categoría",
+  "@socialWelfareFamilyCategoriaLabel": {"description": "Bienestar — etiqueta categoría."},
+  "socialWelfareFamilyCaducidadLabel": "Fecha de caducidad",
+  "@socialWelfareFamilyCaducidadLabel": {"description": "Bienestar — etiqueta caducidad."},
+  "socialWelfareFamilyCategoriaGeneral": "General",
+  "@socialWelfareFamilyCategoriaGeneral": {"description": "Bienestar — categoría general."},
+  "socialWelfareFamilyCategoriaEspecial": "Especial",
+  "@socialWelfareFamilyCategoriaEspecial": {"description": "Bienestar — categoría especial."},
+  "socialWelfareFamilyBeneficiariosTitle": "Beneficiarios",
+  "@socialWelfareFamilyBeneficiariosTitle": {"description": "Bienestar — sub-título beneficiarios."},
+  "socialWelfareFamilyRelacionTitular": "Titular",
+  "@socialWelfareFamilyRelacionTitular": {"description": "Bienestar — relación titular."},
+  "socialWelfareFamilyRelacionConyuge": "Cónyuge",
+  "@socialWelfareFamilyRelacionConyuge": {"description": "Bienestar — relación cónyuge."},
+  "socialWelfareFamilyRelacionHijo": "Hijo/a",
+  "@socialWelfareFamilyRelacionHijo": {"description": "Bienestar — relación hijo/a."},
+  "socialWelfareFamilyBeneficiarioLine": "{relacion} — nacido el {fecha}",
+  "@socialWelfareFamilyBeneficiarioLine": {
+    "description": "Bienestar — línea descriptiva de un beneficiario.",
+    "placeholders": {
+      "relacion": {"type": "String"},
+      "fecha": {"type": "String"}
+    }
+  },
+  "socialWelfareTermalismoTitle": "Termalismo / Balnearios",
+  "@socialWelfareTermalismoTitle": {"description": "Bienestar — sección termalismo (external link)."},
+  "socialWelfareTermalismoDescription": "El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.",
+  "@socialWelfareTermalismoDescription": {"description": "Bienestar — copy termalismo."},
+  "socialWelfareParkingTitle": "Tarjeta de estacionamiento",
+  "@socialWelfareParkingTitle": {"description": "Bienestar — sección tarjeta de estacionamiento (external link)."},
+  "socialWelfareParkingDescription": "La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.",
+  "@socialWelfareParkingDescription": {"description": "Bienestar — copy tarjeta estacionamiento."},
+  "socialWelfareDependenciaTitle": "Atención a la dependencia",
+  "@socialWelfareDependenciaTitle": {"description": "Bienestar — sección atención a la dependencia (external link)."},
+  "socialWelfareDependenciaDescription": "La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.",
+  "@socialWelfareDependenciaDescription": {"description": "Bienestar — copy dependencia."}
 }

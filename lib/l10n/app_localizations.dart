@@ -488,6 +488,12 @@ abstract class AppLocalizations {
   /// **'Historia social única'**
   String get externalLinkHistoriaSocialUnicaLabel;
 
+  /// Etiqueta del enlace externo al portal de Bienestar Social de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar Social CLM'**
+  String get externalLinkBienestarSocialClmLabel;
+
   /// Etiqueta del enlace externo al portal de Infancia y Familias.
   ///
   /// In es, this message translates to:
@@ -1297,6 +1303,138 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'La consulta y gestión de tus inscripciones en ofertas se realiza directamente en el portal de Empleo CLM.'**
   String get employmentOffersDescription;
+
+  /// Bienestar — título de la landing.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar Social'**
+  String get socialWelfareTitle;
+
+  /// Bienestar — descripción de cabecera.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.'**
+  String get socialWelfareHeaderDescription;
+
+  /// Bienestar — sección familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Familia numerosa'**
+  String get socialWelfareFamilyTitle;
+
+  /// Bienestar — atribución CCAA.
+  ///
+  /// In es, this message translates to:
+  /// **'Fuente: Junta de Comunidades de Castilla-La Mancha'**
+  String get socialWelfareFamilySource;
+
+  /// Bienestar — vacío familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'No consta título de familia numerosa a tu nombre.'**
+  String get socialWelfareFamilyEmpty;
+
+  /// Bienestar — error familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tu título de familia numerosa.'**
+  String get socialWelfareFamilyError;
+
+  /// Bienestar — etiqueta número de título.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de título'**
+  String get socialWelfareFamilyNumberLabel;
+
+  /// Bienestar — etiqueta categoría.
+  ///
+  /// In es, this message translates to:
+  /// **'Categoría'**
+  String get socialWelfareFamilyCategoriaLabel;
+
+  /// Bienestar — etiqueta caducidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de caducidad'**
+  String get socialWelfareFamilyCaducidadLabel;
+
+  /// Bienestar — categoría general.
+  ///
+  /// In es, this message translates to:
+  /// **'General'**
+  String get socialWelfareFamilyCategoriaGeneral;
+
+  /// Bienestar — categoría especial.
+  ///
+  /// In es, this message translates to:
+  /// **'Especial'**
+  String get socialWelfareFamilyCategoriaEspecial;
+
+  /// Bienestar — sub-título beneficiarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Beneficiarios'**
+  String get socialWelfareFamilyBeneficiariosTitle;
+
+  /// Bienestar — relación titular.
+  ///
+  /// In es, this message translates to:
+  /// **'Titular'**
+  String get socialWelfareFamilyRelacionTitular;
+
+  /// Bienestar — relación cónyuge.
+  ///
+  /// In es, this message translates to:
+  /// **'Cónyuge'**
+  String get socialWelfareFamilyRelacionConyuge;
+
+  /// Bienestar — relación hijo/a.
+  ///
+  /// In es, this message translates to:
+  /// **'Hijo/a'**
+  String get socialWelfareFamilyRelacionHijo;
+
+  /// Bienestar — línea descriptiva de un beneficiario.
+  ///
+  /// In es, this message translates to:
+  /// **'{relacion} — nacido el {fecha}'**
+  String socialWelfareFamilyBeneficiarioLine(String relacion, String fecha);
+
+  /// Bienestar — sección termalismo (external link).
+  ///
+  /// In es, this message translates to:
+  /// **'Termalismo / Balnearios'**
+  String get socialWelfareTermalismoTitle;
+
+  /// Bienestar — copy termalismo.
+  ///
+  /// In es, this message translates to:
+  /// **'El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.'**
+  String get socialWelfareTermalismoDescription;
+
+  /// Bienestar — sección tarjeta de estacionamiento (external link).
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta de estacionamiento'**
+  String get socialWelfareParkingTitle;
+
+  /// Bienestar — copy tarjeta estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.'**
+  String get socialWelfareParkingDescription;
+
+  /// Bienestar — sección atención a la dependencia (external link).
+  ///
+  /// In es, this message translates to:
+  /// **'Atención a la dependencia'**
+  String get socialWelfareDependenciaTitle;
+
+  /// Bienestar — copy dependencia.
+  ///
+  /// In es, this message translates to:
+  /// **'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.'**
+  String get socialWelfareDependenciaDescription;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

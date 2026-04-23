@@ -55,6 +55,15 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
       url: Uri.parse('https://historiasocial.castillalamancha.es/'),
       category: ExternalLinkCategory.socialHistoria,
     ),
+    // STORY-25 / TASK-27 EXTERNAL_LINK fallback entry. Pending product
+    // confirmation of the canonical landing URL for termalismo and
+    // atención a la dependencia.
+    ExternalLink(
+      id: 'bienestar_social_clm',
+      displayKey: 'externalLinkBienestarSocialClmLabel',
+      url: Uri.parse('https://bienestarsocial.castillalamancha.es/'),
+      category: ExternalLinkCategory.socialWelfareCLM,
+    ),
     ExternalLink(
       id: 'infancia_familias',
       displayKey: 'externalLinkInfanciaFamiliasLabel',
