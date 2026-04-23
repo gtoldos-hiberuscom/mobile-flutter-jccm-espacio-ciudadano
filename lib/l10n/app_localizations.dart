@@ -667,6 +667,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Oficinas de información y registro'**
   String get helpContactOfficesUrlLabel;
+
+  /// Título de la pantalla de condiciones de uso.
+  ///
+  /// In es, this message translates to:
+  /// **'Condiciones de uso'**
+  String get legalTermsTitle;
+
+  /// Título de la pantalla de protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Protección de datos'**
+  String get legalPrivacyTitle;
+
+  /// Título de la pantalla de accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get legalAccessibilityTitle;
+
+  /// Título de la pantalla de aviso legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get legalNoticeTitle;
+
+  /// Título cuando el documento legal solicitado no existe.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento no encontrado'**
+  String get legalNotFoundTitle;
+
+  /// Mensaje cuando un documento legal no existe.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar el documento solicitado.'**
+  String get legalNotFoundMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

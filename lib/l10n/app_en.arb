@@ -347,5 +347,17 @@
   "helpContactEmailSupportLabel": "Support email",
   "@helpContactEmailSupportLabel": {"description": "Contact — support email label."},
   "helpContactOfficesUrlLabel": "Information and registry offices",
-  "@helpContactOfficesUrlLabel": {"description": "Contact — offices info label."}
+  "@helpContactOfficesUrlLabel": {"description": "Contact — offices info label."},
+  "legalTermsTitle": "Terms of use",
+  "@legalTermsTitle": {"description": "Terms of use page title."},
+  "legalPrivacyTitle": "Data protection",
+  "@legalPrivacyTitle": {"description": "Privacy page title."},
+  "legalAccessibilityTitle": "Accessibility",
+  "@legalAccessibilityTitle": {"description": "Accessibility page title."},
+  "legalNoticeTitle": "Legal notice",
+  "@legalNoticeTitle": {"description": "Legal notice page title."},
+  "legalNotFoundTitle": "Document not found",
+  "@legalNotFoundTitle": {"description": "Title when the requested legal document is missing."},
+  "legalNotFoundMessage": "The requested document could not be loaded.",
+  "@legalNotFoundMessage": {"description": "Message when a legal document is missing."}
 }
