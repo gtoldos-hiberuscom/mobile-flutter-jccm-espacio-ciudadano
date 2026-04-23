@@ -23,6 +23,7 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_p
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
+import 'package:jccm_espacio_ciudadano/features/social_welfare/2_presentation/social_welfare_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/state_affairs/2_presentation/state_affairs_landing_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -184,9 +185,7 @@ final goRouterProvider = Provider<GoRouter>(
               path: Routes.socialWelfare,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const DomainLandingPlaceholder(
-                title: 'Bienestar Social',
-              ),
+                      const SocialWelfareLandingPage(),
             ),
             GoRoute(
               path: Routes.stateAffairs,

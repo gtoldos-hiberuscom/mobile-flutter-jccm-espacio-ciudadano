@@ -226,6 +226,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get externalLinkHistoriaSocialUnicaLabel => 'Historia social única';
 
   @override
+  String get externalLinkBienestarSocialClmLabel => 'Bienestar Social CLM';
+
+  @override
   String get externalLinkInfanciaFamiliasLabel => 'Infancia y familias';
 
   @override
@@ -645,4 +648,72 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get employmentOffersDescription => 'La consulta y gestión de tus inscripciones en ofertas se realiza directamente en el portal de Empleo CLM.';
+
+  @override
+  String get socialWelfareTitle => 'Bienestar Social';
+
+  @override
+  String get socialWelfareHeaderDescription => 'Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareFamilyTitle => 'Familia numerosa';
+
+  @override
+  String get socialWelfareFamilySource => 'Fuente: Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get socialWelfareFamilyEmpty => 'No consta título de familia numerosa a tu nombre.';
+
+  @override
+  String get socialWelfareFamilyError => 'No hemos podido cargar tu título de familia numerosa.';
+
+  @override
+  String get socialWelfareFamilyNumberLabel => 'Número de título';
+
+  @override
+  String get socialWelfareFamilyCategoriaLabel => 'Categoría';
+
+  @override
+  String get socialWelfareFamilyCaducidadLabel => 'Fecha de caducidad';
+
+  @override
+  String get socialWelfareFamilyCategoriaGeneral => 'General';
+
+  @override
+  String get socialWelfareFamilyCategoriaEspecial => 'Especial';
+
+  @override
+  String get socialWelfareFamilyBeneficiariosTitle => 'Beneficiarios';
+
+  @override
+  String get socialWelfareFamilyRelacionTitular => 'Titular';
+
+  @override
+  String get socialWelfareFamilyRelacionConyuge => 'Cónyuge';
+
+  @override
+  String get socialWelfareFamilyRelacionHijo => 'Hijo/a';
+
+  @override
+  String socialWelfareFamilyBeneficiarioLine(String relacion, String fecha) {
+    return '$relacion — nacido el $fecha';
+  }
+
+  @override
+  String get socialWelfareTermalismoTitle => 'Termalismo / Balnearios';
+
+  @override
+  String get socialWelfareTermalismoDescription => 'El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.';
+
+  @override
+  String get socialWelfareParkingTitle => 'Tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingDescription => 'La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.';
+
+  @override
+  String get socialWelfareDependenciaTitle => 'Atención a la dependencia';
+
+  @override
+  String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
 }

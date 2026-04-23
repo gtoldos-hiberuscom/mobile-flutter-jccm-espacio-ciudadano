@@ -40,6 +40,7 @@ final class SitemapRepositoryImpl implements SitemapRepository {
       extById('sede_dgt', 'externalLinkSedeDgtLabel'),
       extById('carpeta_ciudadana_age', 'externalLinkCarpetaCiudadanaAgeLabel'),
       extById('historia_social_unica', 'externalLinkHistoriaSocialUnicaLabel'),
+      extById('bienestar_social_clm', 'externalLinkBienestarSocialClmLabel'),
       extById('infancia_familias', 'externalLinkInfanciaFamiliasLabel'),
     ].whereType<SitemapNode>().toList(growable: false);
 

@@ -22,6 +22,8 @@ String resolveExternalLinkLabel(
       return l10n.externalLinkCarpetaCiudadanaAgeLabel;
     case 'externalLinkHistoriaSocialUnicaLabel':
       return l10n.externalLinkHistoriaSocialUnicaLabel;
+    case 'externalLinkBienestarSocialClmLabel':
+      return l10n.externalLinkBienestarSocialClmLabel;
     case 'externalLinkInfanciaFamiliasLabel':
       return l10n.externalLinkInfanciaFamiliasLabel;
     default:
