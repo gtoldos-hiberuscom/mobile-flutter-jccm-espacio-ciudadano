@@ -2,7 +2,7 @@
 id: 22
 jira_key:
 type: Story
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -82,3 +82,4 @@ Diseñar la home autenticada con saludo, resumen temático, próximos eventos, a
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T15:00:00+02:00 | status | To Do -> In Progress | by Copilot
