@@ -2,12 +2,12 @@
 id: 22
 jira_key:
 type: Story
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 2
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T15:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Diseñar la home autenticada con saludo, resumen temático, próximos eventos, accesos directos y degradación por errores parciales.
 
 ## Acceptance Criteria
-- [ ] Se contempla saludo personalizado e identificador del ciudadano.
-- [ ] Se contemplan bloques/resúmenes por áreas temáticas y navegación a sus landings.
-- [ ] Se contemplan widgets de próximos eventos, mis expedientes, mis notificaciones, mis carnets digitales y recomendaciones.
-- [ ] Se contemplan timestamps de actualización, estados vacíos y fallos parciales sin bloquear el resto de la home.
+- [x] Se contempla saludo personalizado e identificador del ciudadano.
+- [x] Se contemplan bloques/resúmenes por áreas temáticas y navegación a sus landings.
+- [x] Se contemplan widgets de próximos eventos, mis expedientes, mis notificaciones, mis carnets digitales y recomendaciones.
+- [x] Se contemplan timestamps de actualización, estados vacíos y fallos parciales sin bloquear el resto de la home.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -78,8 +78,11 @@ Diseñar la home autenticada con saludo, resumen temático, próximos eventos, a
 
 ## Notes
 ### Comments
-- None yet.
+- 2026-05-04T15:00:00+02:00 | author: Copilot | comment: Implementación end-to-end de la home autenticada bajo `lib/features/home/` (capas 0_entity → 3_data) con HomePage, HomeBlockCard, HomeDashboardNotifier y mock HomeDashboardRepositoryImpl que expone bloques en estado loaded / empty / partial-error. Routing reemplaza HomePlaceholder por HomePage y añade rutas autenticadas /education, /employment, /social-welfare y /state-affairs sobre DomainLandingPlaceholder pendientes de STORY-23/24/25/26. l10n añadida en `app_es.arb` y `app_en.arb` (`home_*`) y `AppLocalizations` regenerado. Evento analítico `HomeBlockNavigateEvent` PII-free al pulsar bloque. Validación: `flutter analyze` 44 issues (baseline 43, +1 informativo en `lib/features/user_profile/user_profile.dart`); `flutter test test/features/home/` 2/2 OK. Commits: `chore(tickets): [STORY-22] To Do -> In Progress` y `feat(dashboard-domains): [EPIC-3/STORY-22/implement-home-dashboard] authenticated home dashboard with thematic blocks`.
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-05-04T15:00:00+02:00 | status | To Do -> In Progress | by Copilot
+- 2026-05-04T15:00:00+02:00 | status | In Progress -> Done | by Copilot
+- 2026-05-04T15:00:00+02:00 | sprint | (unset) -> Sprint 2 | by Copilot
+- 2026-05-04T15:00:00+02:00 | acceptance_criteria | all four AC checked off as implemented | by Copilot
