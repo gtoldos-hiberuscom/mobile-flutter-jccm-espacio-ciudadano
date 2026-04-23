@@ -2,10 +2,10 @@
 id: 29
 jira_key:
 type: Story
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
+epic_link: EPIC-4
 parent:
 sprint:
 reporter:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T22:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -78,3 +78,5 @@ Modelar la agenda del ciudadano con selector de periodo, vista calendario y list
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T22:00:00+02:00 | status | To Do -> In Progress | by Copilot
+- 2026-05-04T22:00:00+02:00 | epic_link | (none) -> EPIC-4 | by Copilot
