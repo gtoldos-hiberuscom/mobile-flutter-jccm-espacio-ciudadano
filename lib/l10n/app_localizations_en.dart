@@ -331,4 +331,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalNotFoundMessage => 'The requested document could not be loaded.';
+
+  @override
+  String get sitemapPageTitle => 'Sitemap';
+
+  @override
+  String get sitemapGroupAuthenticated => 'My space';
+
+  @override
+  String get sitemapGroupThematic => 'Thematic areas';
+
+  @override
+  String get sitemapGroupHelpLegal => 'Help and legal';
+
+  @override
+  String get sitemapGroupExternal => 'External resources';
+
+  @override
+  String get sitemapHome => 'Home';
+
+  @override
+  String get sitemapAgenda => 'Agenda';
+
+  @override
+  String get sitemapCasework => 'Case files';
+
+  @override
+  String get sitemapNotifications => 'Notifications';
+
+  @override
+  String get sitemapCards => 'Cards';
+
+  @override
+  String get sitemapRecommendations => 'Recommendations';
+
+  @override
+  String get sitemapSupport => 'Support';
+
+  @override
+  String get sitemapProfile => 'Profile';
+
+  @override
+  String get sitemapEducation => 'Education';
+
+  @override
+  String get sitemapEmployment => 'Employment';
+
+  @override
+  String get sitemapSocialWelfare => 'Social welfare';
+
+  @override
+  String get sitemapStateAffairs => 'State and other';
+
+  @override
+  String get sitemapHelp => 'Help center';
+
+  @override
+  String get footerHelp => 'Help';
+
+  @override
+  String get footerSitemap => 'Sitemap';
+
+  @override
+  String get footerTerms => 'Terms';
+
+  @override
+  String get footerPrivacy => 'Privacy';
+
+  @override
+  String get footerAccessibility => 'Accessibility';
+
+  @override
+  String get footerLegalNotice => 'Legal notice';
 }
