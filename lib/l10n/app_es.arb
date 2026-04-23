@@ -454,5 +454,75 @@
   "agendaDetailLocation": "Ubicación",
   "@agendaDetailLocation": {"description": "Agenda — etiqueta del campo ubicación en el detalle."},
   "agendaDetailWhen": "Fecha",
-  "@agendaDetailWhen": {"description": "Agenda — etiqueta del campo fecha en el detalle."}
+  "@agendaDetailWhen": {"description": "Agenda — etiqueta del campo fecha en el detalle."},
+  "stateAffairsTitle": "Estado y otros temas de interés",
+  "@stateAffairsTitle": {"description": "Estado — título de la landing."},
+  "stateAffairsHeaderDescription": "Información procedente de registros estatales (INE/Padrón, Catastro, DGT). Los datos pueden no estar actualizados en tiempo real.",
+  "@stateAffairsHeaderDescription": {"description": "Estado — descripción de cabecera."},
+  "stateAffairsResidenceTitle": "Domicilio",
+  "@stateAffairsResidenceTitle": {"description": "Estado — título sección domicilio (INE)."},
+  "stateAffairsResidenceSource": "Fuente: INE / Padrón municipal",
+  "@stateAffairsResidenceSource": {"description": "Estado — atribución de fuente para domicilio."},
+  "stateAffairsResidenceMunicipio": "Municipio",
+  "@stateAffairsResidenceMunicipio": {"description": "Estado — etiqueta municipio."},
+  "stateAffairsResidenceProvincia": "Provincia",
+  "@stateAffairsResidenceProvincia": {"description": "Estado — etiqueta provincia."},
+  "stateAffairsResidenceComunidad": "Comunidad autónoma",
+  "@stateAffairsResidenceComunidad": {"description": "Estado — etiqueta comunidad autónoma."},
+  "stateAffairsResidenceDireccion": "Dirección",
+  "@stateAffairsResidenceDireccion": {"description": "Estado — etiqueta dirección."},
+  "stateAffairsResidenceCp": "Código postal",
+  "@stateAffairsResidenceCp": {"description": "Estado — etiqueta código postal."},
+  "stateAffairsResidenceLastUpdated": "Actualizado: {timestamp}",
+  "@stateAffairsResidenceLastUpdated": {
+    "description": "Estado — texto de última actualización del padrón.",
+    "placeholders": {"timestamp": {"type": "String"}}
+  },
+  "stateAffairsPropertiesTitle": "Bienes inmuebles",
+  "@stateAffairsPropertiesTitle": {"description": "Estado — título sección Catastro."},
+  "stateAffairsPropertiesSource": "Fuente: Catastro",
+  "@stateAffairsPropertiesSource": {"description": "Estado — atribución de fuente para Catastro."},
+  "stateAffairsPropertiesEmpty": "No constan bienes inmuebles a tu nombre.",
+  "@stateAffairsPropertiesEmpty": {"description": "Estado — vacío Catastro."},
+  "stateAffairsPropertiesError": "No hemos podido cargar los datos de Catastro.",
+  "@stateAffairsPropertiesError": {"description": "Estado — error Catastro."},
+  "stateAffairsPropertiesTitularidad": "Titularidad: {value}",
+  "@stateAffairsPropertiesTitularidad": {
+    "description": "Estado — etiqueta titularidad de un inmueble.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsPropertiesSurface": "Superficie: {m2} m²",
+  "@stateAffairsPropertiesSurface": {
+    "description": "Estado — etiqueta superficie en m².",
+    "placeholders": {"m2": {"type": "String"}}
+  },
+  "stateAffairsPropertiesReference": "Referencia catastral: {value}",
+  "@stateAffairsPropertiesReference": {
+    "description": "Estado — etiqueta referencia catastral.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsVehiclesTitle": "Vehículos",
+  "@stateAffairsVehiclesTitle": {"description": "Estado — título sección DGT."},
+  "stateAffairsVehiclesSource": "Fuente: DGT",
+  "@stateAffairsVehiclesSource": {"description": "Estado — atribución de fuente para DGT."},
+  "stateAffairsVehiclesEmpty": "No constan vehículos a tu nombre.",
+  "@stateAffairsVehiclesEmpty": {"description": "Estado — vacío DGT."},
+  "stateAffairsVehiclesError": "No hemos podido cargar los datos de la DGT.",
+  "@stateAffairsVehiclesError": {"description": "Estado — error DGT."},
+  "stateAffairsVehiclesPlate": "Matrícula: {value}",
+  "@stateAffairsVehiclesPlate": {
+    "description": "Estado — etiqueta matrícula vehículo.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsVehiclesFuel": "Combustible: {value}",
+  "@stateAffairsVehiclesFuel": {
+    "description": "Estado — etiqueta combustible vehículo.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsDataDisclaimer": "Los datos proceden de la DGT, INE y Catastro y pueden no estar actualizados en tiempo real.",
+  "@stateAffairsDataDisclaimer": {"description": "Estado — aclaración de procedencia de los datos."},
+  "domainExternalLinksTitle": "Enlaces externos",
+  "@domainExternalLinksTitle": {"description": "Domains — título de la sección de enlaces externos."},
+  "domainGenericLoadError": "No hemos podido cargar la información solicitada.",
+  "@domainGenericLoadError": {"description": "Domains — error genérico de carga."}
 }
