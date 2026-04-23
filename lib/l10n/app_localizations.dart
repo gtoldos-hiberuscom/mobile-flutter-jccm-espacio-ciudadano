@@ -847,6 +847,138 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aviso legal'**
   String get footerLegalNotice;
+
+  /// Agenda — título de la pantalla.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get agendaPageTitle;
+
+  /// Agenda — filtro temporal: todos los eventos.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get agendaFilterAll;
+
+  /// Agenda — filtro temporal: próximos 7 días.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos 7 días'**
+  String get agendaFilterNext7Days;
+
+  /// Agenda — filtro temporal: próximos 30 días.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos 30 días'**
+  String get agendaFilterNext30Days;
+
+  /// Agenda — filtro temporal: próximos 365 días.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos 365 días'**
+  String get agendaFilterNext365Days;
+
+  /// Agenda — filtro temporal: eventos pasados.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasados'**
+  String get agendaFilterPast;
+
+  /// Agenda — pestaña de vista lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Lista'**
+  String get agendaViewList;
+
+  /// Agenda — pestaña de vista calendario.
+  ///
+  /// In es, this message translates to:
+  /// **'Calendario'**
+  String get agendaViewCalendar;
+
+  /// Agenda — mensaje cuando no hay eventos visibles.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay eventos para el periodo seleccionado.'**
+  String get agendaEmpty;
+
+  /// Agenda — mensaje de error al cargar.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tu agenda.'**
+  String get agendaError;
+
+  /// Agenda — etiqueta del timestamp de última actualización.
+  ///
+  /// In es, this message translates to:
+  /// **'Última actualización: {timestamp}'**
+  String agendaLastUpdated(String timestamp);
+
+  /// Agenda — etiqueta de la categoría salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get agendaCategorySalud;
+
+  /// Agenda — etiqueta de la categoría administrativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Administrativo'**
+  String get agendaCategoryAdministrativo;
+
+  /// Agenda — etiqueta de la categoría educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get agendaCategoryEducacion;
+
+  /// Agenda — etiqueta de la categoría otros.
+  ///
+  /// In es, this message translates to:
+  /// **'Otros'**
+  String get agendaCategoryOtros;
+
+  /// Agenda — botón para ir al mes anterior en el calendario.
+  ///
+  /// In es, this message translates to:
+  /// **'Mes anterior'**
+  String get agendaPreviousMonth;
+
+  /// Agenda — botón para ir al mes siguiente en el calendario.
+  ///
+  /// In es, this message translates to:
+  /// **'Mes siguiente'**
+  String get agendaNextMonth;
+
+  /// Agenda — botón para limpiar la selección de día del calendario.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar filtro de día'**
+  String get agendaClearDay;
+
+  /// Agenda — botón para volver desde el detalle del evento.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get agendaDetailBack;
+
+  /// Agenda — mensaje cuando el evento del detalle no existe.
+  ///
+  /// In es, this message translates to:
+  /// **'El evento solicitado ya no está disponible.'**
+  String get agendaDetailNotFound;
+
+  /// Agenda — etiqueta del campo ubicación en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ubicación'**
+  String get agendaDetailLocation;
+
+  /// Agenda — etiqueta del campo fecha en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha'**
+  String get agendaDetailWhen;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
