@@ -561,4 +561,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get domainGenericLoadError => 'We could not load the requested information.';
+
+  @override
+  String get domainComingSoonBadge => 'Coming soon';
+
+  @override
+  String get educationTitle => 'Education';
+
+  @override
+  String get educationHeaderDescription => 'Check your academic titles and reach the official Castilla-La Mancha education services.';
+
+  @override
+  String get educationUniversityTitlesTitle => 'University titles';
+
+  @override
+  String get educationUniversityTitlesEmpty => 'No university titles are registered under your name.';
+
+  @override
+  String get educationUniversityTitlesError => 'We could not load your university titles.';
+
+  @override
+  String get educationNonUniversityTitlesTitle => 'Non-university titles';
+
+  @override
+  String get educationNonUniversityTitlesEmpty => 'No non-university titles are registered under your name.';
+
+  @override
+  String get educationNonUniversityTitlesError => 'We could not load your non-university titles.';
+
+  @override
+  String educationTitleYear(String year) {
+    return 'Year: $year';
+  }
+
+  @override
+  String get educationScholarshipTitle => 'Scholarship status';
+
+  @override
+  String get educationScholarshipDescription => 'This information will be available soon. It depends on an additional service that is not yet integrated.';
+
+  @override
+  String get educationScholarshipTooltip => 'Capability pending a specific scholarship endpoint. Awaiting contract validation (TASK-27).';
 }
