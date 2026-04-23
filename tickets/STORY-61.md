@@ -2,12 +2,12 @@
 id: 61
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 2
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T19:30:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir las páginas estáticas o semiestáticas que forman parte del cumplimiento legal y la navegación global, incluyendo condiciones de uso, protección de datos, accesibilidad y aviso legal, con especial atención a contenido empaquetado y reutilización de textos ya presentes en onboarding.
 
 ## Acceptance Criteria
-- [ ] Se contemplan Condiciones de uso, Protección de datos, Accesibilidad y Aviso legal.
-- [ ] Se contempla lectura completa con scroll, enlaces externos y contenido empaquetado cuando aplique.
-- [ ] Se contempla reutilización del contenido de protección de datos mostrado en el onboarding.
-- [ ] Se contemplan estados sin conexión para contenidos estáticos locales.
+- [x] Se contemplan Condiciones de uso, Protección de datos, Accesibilidad y Aviso legal.
+- [x] Se contempla lectura completa con scroll, enlaces externos y contenido empaquetado cuando aplique.
+- [x] Se contempla reutilización del contenido de protección de datos mostrado en el onboarding.
+- [x] Se contemplan estados sin conexión para contenidos estáticos locales.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -73,7 +73,10 @@ Cubrir las páginas estáticas o semiestáticas que forman parte del cumplimient
 
 ## Notes
 ### Comments
-- None yet.
+- 2026-05-04T19:30:00+02:00 | by Copilot | Added `lib/features/legal/` with 4 bundled documents (terms/privacy/accessibility/legalNotice). Privacy reuses the RGPD/LOPDGDD copy from the consent flow. Wired all four legal `Routes.*` to `LegalDocumentPage`. Mini-Markdown rendering (paragraphs + bullets) without new deps. Test `legal_documents_repository_test.dart` (4 tests, pass). Analyze 46 issues (+1 info vs baseline, within budget).
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T19:30:00+02:00 | status | To Do -> In Progress | by Copilot
+- 2026-05-04T19:30:00+02:00 | status | In Progress -> Done | by Copilot
+- 2026-05-04T19:30:00+02:00 | sprint | (none) -> Sprint 2 | by Copilot

@@ -347,5 +347,17 @@
   "helpContactEmailSupportLabel": "Correo de soporte",
   "@helpContactEmailSupportLabel": {"description": "Contacto — etiqueta para el correo de soporte."},
   "helpContactOfficesUrlLabel": "Oficinas de información y registro",
-  "@helpContactOfficesUrlLabel": {"description": "Contacto — etiqueta del recurso web de oficinas de información."}
+  "@helpContactOfficesUrlLabel": {"description": "Contacto — etiqueta del recurso web de oficinas de información."},
+  "legalTermsTitle": "Condiciones de uso",
+  "@legalTermsTitle": {"description": "Título de la pantalla de condiciones de uso."},
+  "legalPrivacyTitle": "Protección de datos",
+  "@legalPrivacyTitle": {"description": "Título de la pantalla de protección de datos."},
+  "legalAccessibilityTitle": "Accesibilidad",
+  "@legalAccessibilityTitle": {"description": "Título de la pantalla de accesibilidad."},
+  "legalNoticeTitle": "Aviso legal",
+  "@legalNoticeTitle": {"description": "Título de la pantalla de aviso legal."},
+  "legalNotFoundTitle": "Documento no encontrado",
+  "@legalNotFoundTitle": {"description": "Título cuando el documento legal solicitado no existe."},
+  "legalNotFoundMessage": "No se ha podido cargar el documento solicitado.",
+  "@legalNotFoundMessage": {"description": "Mensaje cuando un documento legal no existe."}
 }

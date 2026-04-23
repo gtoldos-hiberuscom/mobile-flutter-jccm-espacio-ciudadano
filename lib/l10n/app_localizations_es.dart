@@ -314,4 +314,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helpContactOfficesUrlLabel => 'Oficinas de información y registro';
+
+  @override
+  String get legalTermsTitle => 'Condiciones de uso';
+
+  @override
+  String get legalPrivacyTitle => 'Protección de datos';
+
+  @override
+  String get legalAccessibilityTitle => 'Accesibilidad';
+
+  @override
+  String get legalNoticeTitle => 'Aviso legal';
+
+  @override
+  String get legalNotFoundTitle => 'Documento no encontrado';
+
+  @override
+  String get legalNotFoundMessage => 'No se ha podido cargar el documento solicitado.';
 }
