@@ -1,0 +1,30 @@
+# Dependency Review — jccm_espacio_ciudadano
+# Scans dependency changes introduced by a PR targeting develop for
+# known vulnerabilities and license violations.
+# Requires the GitHub Dependency Graph feature to be enabled on the repository.
+name: Dependency Review
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+  pull-requests: write   # allows the action to post a PR comment with findings
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        # Optional: configure allowed/denied licenses and vulnerability severity.
+        # TODO: configure GITHUB_TOKEN if the repo is private (actions/dependency-review-action
+        #       uses GITHUB_TOKEN automatically, but ensure the token has sufficient permissions
+        #       in GitHub repo settings → Actions → General).
