@@ -2,12 +2,12 @@
 id: 62
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 2
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T20:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir la página de mapa web y la consistencia de accesos globales desde footer/cabecera, asegurando que la jerarquía funcional visible en diseño se traduzca en un sitemap navegable y coherente con shell y menú lateral.
 
 ## Acceptance Criteria
-- [ ] Se contempla sitemap navegable con la jerarquía funcional visible en diseño.
-- [ ] Se contemplan accesos globales a ayuda, accesibilidad, aviso legal, protección de datos y mapa web.
-- [ ] Se contempla consistencia entre mapa web, shell y menú lateral.
-- [ ] Se contemplan enlaces internos y externos seguros.
+- [x] Se contempla sitemap navegable con la jerarquía funcional visible en diseño.
+- [x] Se contemplan accesos globales a ayuda, accesibilidad, aviso legal, protección de datos y mapa web.
+- [x] Se contempla consistencia entre mapa web, shell y menú lateral.
+- [x] Se contemplan enlaces internos y externos seguros.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -72,7 +72,10 @@ Cubrir la página de mapa web y la consistencia de accesos globales desde footer
 
 ## Notes
 ### Comments
-- None yet.
+- 2026-05-04T20:00:00+02:00 | by Copilot | Implemented sitemap feature under `lib/features/sitemap/` (entity/domain/data/presentation). External nodes resolved via the STORY-28 `ExternalLinkCatalog` provider — no URLs hard-coded again. Wired `Routes.sitemap` to `SitemapPage`. Added authenticated-only footer in `lib/app/shell/app_scaffold.dart` linking Help, Sitemap and the four legal pages, each wrapped in `Semantics(button: true, label: ...)`. Footer lives inside the `ShellRoute` so unauthenticated landing/login keep their original chrome. Added `sitemap_repository_test.dart` (5 tests, pass). Analyze 47 issues (+2 vs Sprint-2 baseline, well within budget).
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T20:00:00+02:00 | status | To Do -> In Progress | by Copilot
+- 2026-05-04T20:00:00+02:00 | status | In Progress -> Done | by Copilot
+- 2026-05-04T20:00:00+02:00 | sprint | (none) -> Sprint 2 | by Copilot

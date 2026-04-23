@@ -332,4 +332,76 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalNotFoundMessage => 'No se ha podido cargar el documento solicitado.';
+
+  @override
+  String get sitemapPageTitle => 'Mapa del sitio';
+
+  @override
+  String get sitemapGroupAuthenticated => 'Mi espacio';
+
+  @override
+  String get sitemapGroupThematic => 'Áreas temáticas';
+
+  @override
+  String get sitemapGroupHelpLegal => 'Ayuda y legales';
+
+  @override
+  String get sitemapGroupExternal => 'Recursos externos';
+
+  @override
+  String get sitemapHome => 'Inicio';
+
+  @override
+  String get sitemapAgenda => 'Agenda';
+
+  @override
+  String get sitemapCasework => 'Expedientes';
+
+  @override
+  String get sitemapNotifications => 'Notificaciones';
+
+  @override
+  String get sitemapCards => 'Tarjetas';
+
+  @override
+  String get sitemapRecommendations => 'Recomendaciones';
+
+  @override
+  String get sitemapSupport => 'Soporte';
+
+  @override
+  String get sitemapProfile => 'Perfil';
+
+  @override
+  String get sitemapEducation => 'Educación';
+
+  @override
+  String get sitemapEmployment => 'Empleo';
+
+  @override
+  String get sitemapSocialWelfare => 'Bienestar Social';
+
+  @override
+  String get sitemapStateAffairs => 'Estado y otros';
+
+  @override
+  String get sitemapHelp => 'Centro de ayuda';
+
+  @override
+  String get footerHelp => 'Ayuda';
+
+  @override
+  String get footerSitemap => 'Mapa del sitio';
+
+  @override
+  String get footerTerms => 'Condiciones';
+
+  @override
+  String get footerPrivacy => 'Privacidad';
+
+  @override
+  String get footerAccessibility => 'Accesibilidad';
+
+  @override
+  String get footerLegalNotice => 'Aviso legal';
 }
