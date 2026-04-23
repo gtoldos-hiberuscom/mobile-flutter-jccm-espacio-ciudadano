@@ -2,12 +2,12 @@
 id: 27
 jira_key:
 type: Task
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 3
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T22:30:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cerrar los gaps de contrato para capacidades presentes en documentación visual pero no cubiertas claramente por la API actual.
 
 ## Acceptance Criteria
-- [ ] Se inventarían los bloques con diseño visible y contrato ausente o insuficiente: condición de becado, termalismo, tarjeta de estacionamiento, atención a la dependencia, inscripciones en ofertas, mi salud digital.
-- [ ] Se decide para cada bloque si entra con API real, enlace externo, placeholder controlado o scope posterior.
-- [ ] Se deja trazado el impacto sobre historias funcionales afectadas.
-- [ ] Se documentan dependencias con backend/producto.
+- [x] Se inventarían los bloques con diseño visible y contrato ausente o insuficiente: condición de becado, termalismo, tarjeta de estacionamiento, atención a la dependencia, inscripciones en ofertas, mi salud digital.
+- [x] Se decide para cada bloque si entra con API real, enlace externo, placeholder controlado o scope posterior.
+- [x] Se deja trazado el impacto sobre historias funcionales afectadas.
+- [x] Se documentan dependencias con backend/producto.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -76,7 +76,9 @@ Cerrar los gaps de contrato para capacidades presentes en documentación visual 
 
 ## Notes
 ### Comments
-- None yet.
+- 2026-05-04T22:30:00+02:00 | author: Copilot | comment: Discovery completed. Decision matrix per visible-but-uncontracted block — condición de becado: PLACEHOLDER_CONTROLLED; termalismo/balnearios: EXTERNAL_LINK; tarjeta de estacionamiento: EXTERNAL_LINK; atención a la dependencia: EXTERNAL_LINK; inscripciones en ofertas: EXTERNAL_LINK; mi salud digital: DEFERRED to STORY-31 sprint. Full reasoning, swagger evidence, AC-level impact on STORY-23/24/25 and backend follow-ups in `documentation/discovery/TASK-27-dashboard-contract-gaps.md`.
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T22:30:00+02:00 | status | To Do -> In Progress | by Copilot
+- 2026-05-04T22:30:00+02:00 | status | In Progress -> Done | by Copilot

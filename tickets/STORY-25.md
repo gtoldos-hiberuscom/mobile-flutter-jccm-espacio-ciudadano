@@ -75,7 +75,7 @@ Cubrir la experiencia de bienestar social mostrando información social relevant
 
 ## Notes
 ### Comments
-- None yet.
+- 2026-05-04T22:35:00+02:00 | author: Copilot | comment: TASK-27 discovery resolved Sprint 3 gaps that affect this story. See `documentation/discovery/TASK-27-dashboard-contract-gaps.md` (commit `docs(dashboard-domains): [EPIC-3/TASK-27/document-gap-decisions] add dashboard contract gap discovery doc and close TASK-27`). Decision summary para Bienestar social: termalismo, tarjeta de estacionamiento y atención a la dependencia → external link via ExternalLinkCatalog; familia numerosa se mantiene contra `/ccaa/familia-numerosa/{numDocumento}`.
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
