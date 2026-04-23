@@ -225,6 +225,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalLinkHistoriaSocialUnicaLabel => 'Unified Social History';
 
   @override
+  String get externalLinkBienestarSocialClmLabel => 'Social Welfare CLM';
+
+  @override
   String get externalLinkInfanciaFamiliasLabel => 'Childhood and families';
 
   @override
@@ -471,4 +474,245 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get agendaDetailWhen => 'Date';
+
+  @override
+  String get stateAffairsTitle => 'State and other matters of interest';
+
+  @override
+  String get stateAffairsHeaderDescription => 'Information from national registries (INE/Padrón, Catastro, DGT). Data may not be updated in real time.';
+
+  @override
+  String get stateAffairsResidenceTitle => 'Residence';
+
+  @override
+  String get stateAffairsResidenceSource => 'Source: INE / municipal census';
+
+  @override
+  String get stateAffairsResidenceMunicipio => 'Municipality';
+
+  @override
+  String get stateAffairsResidenceProvincia => 'Province';
+
+  @override
+  String get stateAffairsResidenceComunidad => 'Autonomous community';
+
+  @override
+  String get stateAffairsResidenceDireccion => 'Address';
+
+  @override
+  String get stateAffairsResidenceCp => 'Postal code';
+
+  @override
+  String stateAffairsResidenceLastUpdated(String timestamp) {
+    return 'Updated: $timestamp';
+  }
+
+  @override
+  String get stateAffairsPropertiesTitle => 'Real-estate assets';
+
+  @override
+  String get stateAffairsPropertiesSource => 'Source: Catastro';
+
+  @override
+  String get stateAffairsPropertiesEmpty => 'No real-estate assets are registered under your name.';
+
+  @override
+  String get stateAffairsPropertiesError => 'We could not load Catastro data.';
+
+  @override
+  String stateAffairsPropertiesTitularidad(String value) {
+    return 'Ownership: $value';
+  }
+
+  @override
+  String stateAffairsPropertiesSurface(String m2) {
+    return 'Surface: $m2 m²';
+  }
+
+  @override
+  String stateAffairsPropertiesReference(String value) {
+    return 'Cadastral reference: $value';
+  }
+
+  @override
+  String get stateAffairsVehiclesTitle => 'Vehicles';
+
+  @override
+  String get stateAffairsVehiclesSource => 'Source: DGT';
+
+  @override
+  String get stateAffairsVehiclesEmpty => 'No vehicles are registered under your name.';
+
+  @override
+  String get stateAffairsVehiclesError => 'We could not load DGT data.';
+
+  @override
+  String stateAffairsVehiclesPlate(String value) {
+    return 'Plate: $value';
+  }
+
+  @override
+  String stateAffairsVehiclesFuel(String value) {
+    return 'Fuel: $value';
+  }
+
+  @override
+  String get stateAffairsDataDisclaimer => 'Data is sourced from DGT, INE and Catastro and may not be updated in real time.';
+
+  @override
+  String get domainExternalLinksTitle => 'External links';
+
+  @override
+  String get domainGenericLoadError => 'We could not load the requested information.';
+
+  @override
+  String get domainComingSoonBadge => 'Coming soon';
+
+  @override
+  String get educationTitle => 'Education';
+
+  @override
+  String get educationHeaderDescription => 'Check your academic titles and reach the official Castilla-La Mancha education services.';
+
+  @override
+  String get educationUniversityTitlesTitle => 'University titles';
+
+  @override
+  String get educationUniversityTitlesEmpty => 'No university titles are registered under your name.';
+
+  @override
+  String get educationUniversityTitlesError => 'We could not load your university titles.';
+
+  @override
+  String get educationNonUniversityTitlesTitle => 'Non-university titles';
+
+  @override
+  String get educationNonUniversityTitlesEmpty => 'No non-university titles are registered under your name.';
+
+  @override
+  String get educationNonUniversityTitlesError => 'We could not load your non-university titles.';
+
+  @override
+  String educationTitleYear(String year) {
+    return 'Year: $year';
+  }
+
+  @override
+  String get educationScholarshipTitle => 'Scholarship status';
+
+  @override
+  String get educationScholarshipDescription => 'This information will be available soon. It depends on an additional service that is not yet integrated.';
+
+  @override
+  String get educationScholarshipTooltip => 'Capability pending a specific scholarship endpoint. Awaiting contract validation (TASK-27).';
+
+  @override
+  String get employmentTitle => 'Employment';
+
+  @override
+  String get employmentHeaderDescription => 'Check your job-seeker status and reach the official Empleo CLM portals.';
+
+  @override
+  String get employmentSeekerTitle => 'Job-seeker status';
+
+  @override
+  String get employmentSeekerSource => 'Source: SEPE';
+
+  @override
+  String get employmentSeekerEmpty => 'No job-seeker records are registered under your name.';
+
+  @override
+  String get employmentSeekerError => 'We could not load your job-seeker status.';
+
+  @override
+  String get employmentSeekerEstadoLabel => 'Current status';
+
+  @override
+  String get employmentSeekerInscripcionLabel => 'Registration date';
+
+  @override
+  String get employmentSeekerContinuidadLabel => 'Continuity date';
+
+  @override
+  String get employmentSeekerEstadoInscrito => 'Registered';
+
+  @override
+  String get employmentSeekerEstadoNoInscrito => 'Not registered';
+
+  @override
+  String get employmentSeekerEstadoBajaTemporal => 'Temporary leave';
+
+  @override
+  String get employmentOffersTitle => 'Offer subscriptions';
+
+  @override
+  String get employmentOffersDescription => 'Browsing and managing your offer subscriptions takes place directly on the Empleo CLM portal.';
+
+  @override
+  String get socialWelfareTitle => 'Social Welfare';
+
+  @override
+  String get socialWelfareHeaderDescription => 'Check your familia numerosa title and reach the official Castilla-La Mancha social welfare services.';
+
+  @override
+  String get socialWelfareFamilyTitle => 'Large family';
+
+  @override
+  String get socialWelfareFamilySource => 'Source: Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get socialWelfareFamilyEmpty => 'No large-family title is registered under your name.';
+
+  @override
+  String get socialWelfareFamilyError => 'We could not load your large-family title.';
+
+  @override
+  String get socialWelfareFamilyNumberLabel => 'Title number';
+
+  @override
+  String get socialWelfareFamilyCategoriaLabel => 'Category';
+
+  @override
+  String get socialWelfareFamilyCaducidadLabel => 'Expiration date';
+
+  @override
+  String get socialWelfareFamilyCategoriaGeneral => 'General';
+
+  @override
+  String get socialWelfareFamilyCategoriaEspecial => 'Special';
+
+  @override
+  String get socialWelfareFamilyBeneficiariosTitle => 'Beneficiaries';
+
+  @override
+  String get socialWelfareFamilyRelacionTitular => 'Title holder';
+
+  @override
+  String get socialWelfareFamilyRelacionConyuge => 'Spouse';
+
+  @override
+  String get socialWelfareFamilyRelacionHijo => 'Child';
+
+  @override
+  String socialWelfareFamilyBeneficiarioLine(String relacion, String fecha) {
+    return '$relacion — born on $fecha';
+  }
+
+  @override
+  String get socialWelfareTermalismoTitle => 'Thermal-spa programs';
+
+  @override
+  String get socialWelfareTermalismoDescription => 'The Castilla-La Mancha thermal-spa program is managed through the official Social Welfare portal.';
+
+  @override
+  String get socialWelfareParkingTitle => 'Parking card';
+
+  @override
+  String get socialWelfareParkingDescription => 'Requesting and managing the disability parking card is handled in the corresponding e-office.';
+
+  @override
+  String get socialWelfareDependenciaTitle => 'Dependency support';
+
+  @override
+  String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
 }

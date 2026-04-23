@@ -15,12 +15,16 @@ import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_pag
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
+import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/employment/2_presentation/employment_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/help/2_presentation/help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
+import 'package:jccm_espacio_ciudadano/features/social_welfare/2_presentation/social_welfare_landing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/state_affairs/2_presentation/state_affairs_landing_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
 ///
@@ -169,29 +173,25 @@ final goRouterProvider = Provider<GoRouter>(
               path: Routes.education,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const DomainLandingPlaceholder(title: 'Educación'),
+                      const EducationLandingPage(),
             ),
             GoRoute(
               path: Routes.employment,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const DomainLandingPlaceholder(title: 'Empleo'),
+                      const EmploymentLandingPage(),
             ),
             GoRoute(
               path: Routes.socialWelfare,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const DomainLandingPlaceholder(
-                title: 'Bienestar Social',
-              ),
+                      const SocialWelfareLandingPage(),
             ),
             GoRoute(
               path: Routes.stateAffairs,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const DomainLandingPlaceholder(
-                title: 'Estado y otros',
-              ),
+                      const StateAffairsLandingPage(),
             ),
             GoRoute(
               path: Routes.agenda,

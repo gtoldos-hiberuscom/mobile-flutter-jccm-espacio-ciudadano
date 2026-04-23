@@ -226,6 +226,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get externalLinkHistoriaSocialUnicaLabel => 'Historia social única';
 
   @override
+  String get externalLinkBienestarSocialClmLabel => 'Bienestar Social CLM';
+
+  @override
   String get externalLinkInfanciaFamiliasLabel => 'Infancia y familias';
 
   @override
@@ -472,4 +475,245 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get agendaDetailWhen => 'Fecha';
+
+  @override
+  String get stateAffairsTitle => 'Estado y otros temas de interés';
+
+  @override
+  String get stateAffairsHeaderDescription => 'Información procedente de registros estatales (INE/Padrón, Catastro, DGT). Los datos pueden no estar actualizados en tiempo real.';
+
+  @override
+  String get stateAffairsResidenceTitle => 'Domicilio';
+
+  @override
+  String get stateAffairsResidenceSource => 'Fuente: INE / Padrón municipal';
+
+  @override
+  String get stateAffairsResidenceMunicipio => 'Municipio';
+
+  @override
+  String get stateAffairsResidenceProvincia => 'Provincia';
+
+  @override
+  String get stateAffairsResidenceComunidad => 'Comunidad autónoma';
+
+  @override
+  String get stateAffairsResidenceDireccion => 'Dirección';
+
+  @override
+  String get stateAffairsResidenceCp => 'Código postal';
+
+  @override
+  String stateAffairsResidenceLastUpdated(String timestamp) {
+    return 'Actualizado: $timestamp';
+  }
+
+  @override
+  String get stateAffairsPropertiesTitle => 'Bienes inmuebles';
+
+  @override
+  String get stateAffairsPropertiesSource => 'Fuente: Catastro';
+
+  @override
+  String get stateAffairsPropertiesEmpty => 'No constan bienes inmuebles a tu nombre.';
+
+  @override
+  String get stateAffairsPropertiesError => 'No hemos podido cargar los datos de Catastro.';
+
+  @override
+  String stateAffairsPropertiesTitularidad(String value) {
+    return 'Titularidad: $value';
+  }
+
+  @override
+  String stateAffairsPropertiesSurface(String m2) {
+    return 'Superficie: $m2 m²';
+  }
+
+  @override
+  String stateAffairsPropertiesReference(String value) {
+    return 'Referencia catastral: $value';
+  }
+
+  @override
+  String get stateAffairsVehiclesTitle => 'Vehículos';
+
+  @override
+  String get stateAffairsVehiclesSource => 'Fuente: DGT';
+
+  @override
+  String get stateAffairsVehiclesEmpty => 'No constan vehículos a tu nombre.';
+
+  @override
+  String get stateAffairsVehiclesError => 'No hemos podido cargar los datos de la DGT.';
+
+  @override
+  String stateAffairsVehiclesPlate(String value) {
+    return 'Matrícula: $value';
+  }
+
+  @override
+  String stateAffairsVehiclesFuel(String value) {
+    return 'Combustible: $value';
+  }
+
+  @override
+  String get stateAffairsDataDisclaimer => 'Los datos proceden de la DGT, INE y Catastro y pueden no estar actualizados en tiempo real.';
+
+  @override
+  String get domainExternalLinksTitle => 'Enlaces externos';
+
+  @override
+  String get domainGenericLoadError => 'No hemos podido cargar la información solicitada.';
+
+  @override
+  String get domainComingSoonBadge => 'Próximamente';
+
+  @override
+  String get educationTitle => 'Educación';
+
+  @override
+  String get educationHeaderDescription => 'Consulta tus títulos académicos y accede a los servicios oficiales de educación de Castilla-La Mancha.';
+
+  @override
+  String get educationUniversityTitlesTitle => 'Títulos universitarios';
+
+  @override
+  String get educationUniversityTitlesEmpty => 'No constan títulos universitarios a tu nombre.';
+
+  @override
+  String get educationUniversityTitlesError => 'No hemos podido cargar tus títulos universitarios.';
+
+  @override
+  String get educationNonUniversityTitlesTitle => 'Títulos no universitarios';
+
+  @override
+  String get educationNonUniversityTitlesEmpty => 'No constan títulos no universitarios a tu nombre.';
+
+  @override
+  String get educationNonUniversityTitlesError => 'No hemos podido cargar tus títulos no universitarios.';
+
+  @override
+  String educationTitleYear(String year) {
+    return 'Año: $year';
+  }
+
+  @override
+  String get educationScholarshipTitle => 'Condición de becado';
+
+  @override
+  String get educationScholarshipDescription => 'Esta información estará disponible próximamente. Necesita un servicio adicional que aún no está integrado.';
+
+  @override
+  String get educationScholarshipTooltip => 'Capacidad pendiente de un endpoint específico de becas. Pendiente de validación de contrato (TASK-27).';
+
+  @override
+  String get employmentTitle => 'Empleo';
+
+  @override
+  String get employmentHeaderDescription => 'Consulta tu situación como demandante de empleo y accede a los portales oficiales de Empleo CLM.';
+
+  @override
+  String get employmentSeekerTitle => 'Estado de demandante de empleo';
+
+  @override
+  String get employmentSeekerSource => 'Fuente: SEPE';
+
+  @override
+  String get employmentSeekerEmpty => 'No constan datos de demanda de empleo a tu nombre.';
+
+  @override
+  String get employmentSeekerError => 'No hemos podido cargar tu estado de demandante de empleo.';
+
+  @override
+  String get employmentSeekerEstadoLabel => 'Estado actual';
+
+  @override
+  String get employmentSeekerInscripcionLabel => 'Fecha de inscripción';
+
+  @override
+  String get employmentSeekerContinuidadLabel => 'Fecha de continuidad';
+
+  @override
+  String get employmentSeekerEstadoInscrito => 'Inscrito';
+
+  @override
+  String get employmentSeekerEstadoNoInscrito => 'No inscrito';
+
+  @override
+  String get employmentSeekerEstadoBajaTemporal => 'Baja temporal';
+
+  @override
+  String get employmentOffersTitle => 'Inscripciones en ofertas';
+
+  @override
+  String get employmentOffersDescription => 'La consulta y gestión de tus inscripciones en ofertas se realiza directamente en el portal de Empleo CLM.';
+
+  @override
+  String get socialWelfareTitle => 'Bienestar Social';
+
+  @override
+  String get socialWelfareHeaderDescription => 'Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareFamilyTitle => 'Familia numerosa';
+
+  @override
+  String get socialWelfareFamilySource => 'Fuente: Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get socialWelfareFamilyEmpty => 'No consta título de familia numerosa a tu nombre.';
+
+  @override
+  String get socialWelfareFamilyError => 'No hemos podido cargar tu título de familia numerosa.';
+
+  @override
+  String get socialWelfareFamilyNumberLabel => 'Número de título';
+
+  @override
+  String get socialWelfareFamilyCategoriaLabel => 'Categoría';
+
+  @override
+  String get socialWelfareFamilyCaducidadLabel => 'Fecha de caducidad';
+
+  @override
+  String get socialWelfareFamilyCategoriaGeneral => 'General';
+
+  @override
+  String get socialWelfareFamilyCategoriaEspecial => 'Especial';
+
+  @override
+  String get socialWelfareFamilyBeneficiariosTitle => 'Beneficiarios';
+
+  @override
+  String get socialWelfareFamilyRelacionTitular => 'Titular';
+
+  @override
+  String get socialWelfareFamilyRelacionConyuge => 'Cónyuge';
+
+  @override
+  String get socialWelfareFamilyRelacionHijo => 'Hijo/a';
+
+  @override
+  String socialWelfareFamilyBeneficiarioLine(String relacion, String fecha) {
+    return '$relacion — nacido el $fecha';
+  }
+
+  @override
+  String get socialWelfareTermalismoTitle => 'Termalismo / Balnearios';
+
+  @override
+  String get socialWelfareTermalismoDescription => 'El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.';
+
+  @override
+  String get socialWelfareParkingTitle => 'Tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingDescription => 'La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.';
+
+  @override
+  String get socialWelfareDependenciaTitle => 'Atención a la dependencia';
+
+  @override
+  String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
 }
