@@ -403,4 +403,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get footerLegalNotice => 'Legal notice';
+
+  @override
+  String get agendaPageTitle => 'Agenda';
+
+  @override
+  String get agendaFilterAll => 'All';
+
+  @override
+  String get agendaFilterNext7Days => 'Next 7 days';
+
+  @override
+  String get agendaFilterNext30Days => 'Next 30 days';
+
+  @override
+  String get agendaFilterNext365Days => 'Next 365 days';
+
+  @override
+  String get agendaFilterPast => 'Past';
+
+  @override
+  String get agendaViewList => 'List';
+
+  @override
+  String get agendaViewCalendar => 'Calendar';
+
+  @override
+  String get agendaEmpty => 'No events for the selected period.';
+
+  @override
+  String get agendaError => 'We couldn\'t load your agenda.';
+
+  @override
+  String agendaLastUpdated(String timestamp) {
+    return 'Last updated: $timestamp';
+  }
+
+  @override
+  String get agendaCategorySalud => 'Health';
+
+  @override
+  String get agendaCategoryAdministrativo => 'Administrative';
+
+  @override
+  String get agendaCategoryEducacion => 'Education';
+
+  @override
+  String get agendaCategoryOtros => 'Other';
+
+  @override
+  String get agendaPreviousMonth => 'Previous month';
+
+  @override
+  String get agendaNextMonth => 'Next month';
+
+  @override
+  String get agendaClearDay => 'Clear day filter';
+
+  @override
+  String get agendaDetailBack => 'Back';
+
+  @override
+  String get agendaDetailNotFound => 'The requested event is no longer available.';
+
+  @override
+  String get agendaDetailLocation => 'Location';
+
+  @override
+  String get agendaDetailWhen => 'Date';
 }
