@@ -114,6 +114,20 @@ class ExternalLinkOpenFailedEvent extends AnalyticsEvent {
 
 // ── Errors ────────────────────────────────────────────────────────────────────
 
+/// Fired the first time a thematic dashboard landing
+/// (STORY-23/24/25/26) is opened by the user during a session.
+///
+/// [domain] is the stable, locale-independent identifier of the landing
+/// (e.g. `'state_affairs'`, `'education'`, `'employment'`,
+/// `'social_welfare'`) — never a localized title or any value derived
+/// from user content.
+class DomainLandingViewedEvent extends AnalyticsEvent {
+  const DomainLandingViewedEvent({required this.domain});
+
+  /// Stable identifier of the landing.
+  final String domain;
+}
+
 /// Fired when the user changes the agenda temporal filter (STORY-29).
 ///
 /// [periodId] is the stable enum name of the [AgendaPeriodFilter]

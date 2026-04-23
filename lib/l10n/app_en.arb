@@ -454,5 +454,75 @@
   "agendaDetailLocation": "Location",
   "@agendaDetailLocation": {"description": "Agenda — detail location field label."},
   "agendaDetailWhen": "Date",
-  "@agendaDetailWhen": {"description": "Agenda — detail date field label."}
+  "@agendaDetailWhen": {"description": "Agenda — detail date field label."},
+  "stateAffairsTitle": "State and other matters of interest",
+  "@stateAffairsTitle": {"description": "State affairs — landing title."},
+  "stateAffairsHeaderDescription": "Information from national registries (INE/Padrón, Catastro, DGT). Data may not be updated in real time.",
+  "@stateAffairsHeaderDescription": {"description": "State affairs — header description."},
+  "stateAffairsResidenceTitle": "Residence",
+  "@stateAffairsResidenceTitle": {"description": "State affairs — residence section title."},
+  "stateAffairsResidenceSource": "Source: INE / municipal census",
+  "@stateAffairsResidenceSource": {"description": "State affairs — residence source attribution."},
+  "stateAffairsResidenceMunicipio": "Municipality",
+  "@stateAffairsResidenceMunicipio": {"description": "State affairs — municipality label."},
+  "stateAffairsResidenceProvincia": "Province",
+  "@stateAffairsResidenceProvincia": {"description": "State affairs — province label."},
+  "stateAffairsResidenceComunidad": "Autonomous community",
+  "@stateAffairsResidenceComunidad": {"description": "State affairs — autonomous community label."},
+  "stateAffairsResidenceDireccion": "Address",
+  "@stateAffairsResidenceDireccion": {"description": "State affairs — address label."},
+  "stateAffairsResidenceCp": "Postal code",
+  "@stateAffairsResidenceCp": {"description": "State affairs — postal code label."},
+  "stateAffairsResidenceLastUpdated": "Updated: {timestamp}",
+  "@stateAffairsResidenceLastUpdated": {
+    "description": "State affairs — residence last-updated text.",
+    "placeholders": {"timestamp": {"type": "String"}}
+  },
+  "stateAffairsPropertiesTitle": "Real-estate assets",
+  "@stateAffairsPropertiesTitle": {"description": "State affairs — Catastro section title."},
+  "stateAffairsPropertiesSource": "Source: Catastro",
+  "@stateAffairsPropertiesSource": {"description": "State affairs — Catastro source attribution."},
+  "stateAffairsPropertiesEmpty": "No real-estate assets are registered under your name.",
+  "@stateAffairsPropertiesEmpty": {"description": "State affairs — Catastro empty."},
+  "stateAffairsPropertiesError": "We could not load Catastro data.",
+  "@stateAffairsPropertiesError": {"description": "State affairs — Catastro error."},
+  "stateAffairsPropertiesTitularidad": "Ownership: {value}",
+  "@stateAffairsPropertiesTitularidad": {
+    "description": "State affairs — property ownership label.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsPropertiesSurface": "Surface: {m2} m²",
+  "@stateAffairsPropertiesSurface": {
+    "description": "State affairs — property surface label.",
+    "placeholders": {"m2": {"type": "String"}}
+  },
+  "stateAffairsPropertiesReference": "Cadastral reference: {value}",
+  "@stateAffairsPropertiesReference": {
+    "description": "State affairs — cadastral reference label.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsVehiclesTitle": "Vehicles",
+  "@stateAffairsVehiclesTitle": {"description": "State affairs — DGT section title."},
+  "stateAffairsVehiclesSource": "Source: DGT",
+  "@stateAffairsVehiclesSource": {"description": "State affairs — DGT source attribution."},
+  "stateAffairsVehiclesEmpty": "No vehicles are registered under your name.",
+  "@stateAffairsVehiclesEmpty": {"description": "State affairs — DGT empty."},
+  "stateAffairsVehiclesError": "We could not load DGT data.",
+  "@stateAffairsVehiclesError": {"description": "State affairs — DGT error."},
+  "stateAffairsVehiclesPlate": "Plate: {value}",
+  "@stateAffairsVehiclesPlate": {
+    "description": "State affairs — vehicle plate label.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsVehiclesFuel": "Fuel: {value}",
+  "@stateAffairsVehiclesFuel": {
+    "description": "State affairs — vehicle fuel label.",
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "stateAffairsDataDisclaimer": "Data is sourced from DGT, INE and Catastro and may not be updated in real time.",
+  "@stateAffairsDataDisclaimer": {"description": "State affairs — data origin disclaimer."},
+  "domainExternalLinksTitle": "External links",
+  "@domainExternalLinksTitle": {"description": "Domains — external links section title."},
+  "domainGenericLoadError": "We could not load the requested information.",
+  "@domainGenericLoadError": {"description": "Domains — generic load error."}
 }

@@ -979,6 +979,162 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Fecha'**
   String get agendaDetailWhen;
+
+  /// Estado — título de la landing.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado y otros temas de interés'**
+  String get stateAffairsTitle;
+
+  /// Estado — descripción de cabecera.
+  ///
+  /// In es, this message translates to:
+  /// **'Información procedente de registros estatales (INE/Padrón, Catastro, DGT). Los datos pueden no estar actualizados en tiempo real.'**
+  String get stateAffairsHeaderDescription;
+
+  /// Estado — título sección domicilio (INE).
+  ///
+  /// In es, this message translates to:
+  /// **'Domicilio'**
+  String get stateAffairsResidenceTitle;
+
+  /// Estado — atribución de fuente para domicilio.
+  ///
+  /// In es, this message translates to:
+  /// **'Fuente: INE / Padrón municipal'**
+  String get stateAffairsResidenceSource;
+
+  /// Estado — etiqueta municipio.
+  ///
+  /// In es, this message translates to:
+  /// **'Municipio'**
+  String get stateAffairsResidenceMunicipio;
+
+  /// Estado — etiqueta provincia.
+  ///
+  /// In es, this message translates to:
+  /// **'Provincia'**
+  String get stateAffairsResidenceProvincia;
+
+  /// Estado — etiqueta comunidad autónoma.
+  ///
+  /// In es, this message translates to:
+  /// **'Comunidad autónoma'**
+  String get stateAffairsResidenceComunidad;
+
+  /// Estado — etiqueta dirección.
+  ///
+  /// In es, this message translates to:
+  /// **'Dirección'**
+  String get stateAffairsResidenceDireccion;
+
+  /// Estado — etiqueta código postal.
+  ///
+  /// In es, this message translates to:
+  /// **'Código postal'**
+  String get stateAffairsResidenceCp;
+
+  /// Estado — texto de última actualización del padrón.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado: {timestamp}'**
+  String stateAffairsResidenceLastUpdated(String timestamp);
+
+  /// Estado — título sección Catastro.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienes inmuebles'**
+  String get stateAffairsPropertiesTitle;
+
+  /// Estado — atribución de fuente para Catastro.
+  ///
+  /// In es, this message translates to:
+  /// **'Fuente: Catastro'**
+  String get stateAffairsPropertiesSource;
+
+  /// Estado — vacío Catastro.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan bienes inmuebles a tu nombre.'**
+  String get stateAffairsPropertiesEmpty;
+
+  /// Estado — error Catastro.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los datos de Catastro.'**
+  String get stateAffairsPropertiesError;
+
+  /// Estado — etiqueta titularidad de un inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Titularidad: {value}'**
+  String stateAffairsPropertiesTitularidad(String value);
+
+  /// Estado — etiqueta superficie en m².
+  ///
+  /// In es, this message translates to:
+  /// **'Superficie: {m2} m²'**
+  String stateAffairsPropertiesSurface(String m2);
+
+  /// Estado — etiqueta referencia catastral.
+  ///
+  /// In es, this message translates to:
+  /// **'Referencia catastral: {value}'**
+  String stateAffairsPropertiesReference(String value);
+
+  /// Estado — título sección DGT.
+  ///
+  /// In es, this message translates to:
+  /// **'Vehículos'**
+  String get stateAffairsVehiclesTitle;
+
+  /// Estado — atribución de fuente para DGT.
+  ///
+  /// In es, this message translates to:
+  /// **'Fuente: DGT'**
+  String get stateAffairsVehiclesSource;
+
+  /// Estado — vacío DGT.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan vehículos a tu nombre.'**
+  String get stateAffairsVehiclesEmpty;
+
+  /// Estado — error DGT.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los datos de la DGT.'**
+  String get stateAffairsVehiclesError;
+
+  /// Estado — etiqueta matrícula vehículo.
+  ///
+  /// In es, this message translates to:
+  /// **'Matrícula: {value}'**
+  String stateAffairsVehiclesPlate(String value);
+
+  /// Estado — etiqueta combustible vehículo.
+  ///
+  /// In es, this message translates to:
+  /// **'Combustible: {value}'**
+  String stateAffairsVehiclesFuel(String value);
+
+  /// Estado — aclaración de procedencia de los datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos proceden de la DGT, INE y Catastro y pueden no estar actualizados en tiempo real.'**
+  String get stateAffairsDataDisclaimer;
+
+  /// Domains — título de la sección de enlaces externos.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlaces externos'**
+  String get domainExternalLinksTitle;
+
+  /// Domains — error genérico de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar la información solicitada.'**
+  String get domainGenericLoadError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
