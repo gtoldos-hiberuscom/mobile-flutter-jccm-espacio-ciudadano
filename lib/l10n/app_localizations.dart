@@ -1213,6 +1213,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Capacidad pendiente de un endpoint específico de becas. Pendiente de validación de contrato (TASK-27).'**
   String get educationScholarshipTooltip;
+
+  /// Empleo — título de la landing.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get employmentTitle;
+
+  /// Empleo — descripción de cabecera.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tu situación como demandante de empleo y accede a los portales oficiales de Empleo CLM.'**
+  String get employmentHeaderDescription;
+
+  /// Empleo — sección demandante (SEPE).
+  ///
+  /// In es, this message translates to:
+  /// **'Estado de demandante de empleo'**
+  String get employmentSeekerTitle;
+
+  /// Empleo — atribución de fuente SEPE.
+  ///
+  /// In es, this message translates to:
+  /// **'Fuente: SEPE'**
+  String get employmentSeekerSource;
+
+  /// Empleo — vacío demandante.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan datos de demanda de empleo a tu nombre.'**
+  String get employmentSeekerEmpty;
+
+  /// Empleo — error demandante.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tu estado de demandante de empleo.'**
+  String get employmentSeekerError;
+
+  /// Empleo — etiqueta estado actual.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado actual'**
+  String get employmentSeekerEstadoLabel;
+
+  /// Empleo — etiqueta fecha inscripción.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de inscripción'**
+  String get employmentSeekerInscripcionLabel;
+
+  /// Empleo — etiqueta fecha continuidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de continuidad'**
+  String get employmentSeekerContinuidadLabel;
+
+  /// Empleo — estado inscrito.
+  ///
+  /// In es, this message translates to:
+  /// **'Inscrito'**
+  String get employmentSeekerEstadoInscrito;
+
+  /// Empleo — estado no inscrito.
+  ///
+  /// In es, this message translates to:
+  /// **'No inscrito'**
+  String get employmentSeekerEstadoNoInscrito;
+
+  /// Empleo — estado baja temporal.
+  ///
+  /// In es, this message translates to:
+  /// **'Baja temporal'**
+  String get employmentSeekerEstadoBajaTemporal;
+
+  /// Empleo — sección inscripciones en ofertas (external link).
+  ///
+  /// In es, this message translates to:
+  /// **'Inscripciones en ofertas'**
+  String get employmentOffersTitle;
+
+  /// Empleo — copy explicativo inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'La consulta y gestión de tus inscripciones en ofertas se realiza directamente en el portal de Empleo CLM.'**
+  String get employmentOffersDescription;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

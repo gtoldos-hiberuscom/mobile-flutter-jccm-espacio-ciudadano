@@ -16,6 +16,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.d
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/employment/2_presentation/employment_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/help/2_presentation/help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
@@ -177,7 +178,7 @@ final goRouterProvider = Provider<GoRouter>(
               path: Routes.employment,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const DomainLandingPlaceholder(title: 'Empleo'),
+                      const EmploymentLandingPage(),
             ),
             GoRoute(
               path: Routes.socialWelfare,
