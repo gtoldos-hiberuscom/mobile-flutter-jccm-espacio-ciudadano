@@ -200,4 +200,31 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeBlockLastUpdatedUnknown => 'Sin datos de actualización';
+
+  @override
+  String get externalLinkA11yHint => 'Abre en navegador externo';
+
+  @override
+  String get externalLinkOpenFailed => 'No se pudo abrir el enlace. Inténtalo de nuevo más tarde.';
+
+  @override
+  String get externalLinkEducamosClmLabel => 'Educamos CLM';
+
+  @override
+  String get externalLinkEmpleoClmLabel => 'Empleo CLM';
+
+  @override
+  String get externalLinkEmpleoPublicoClmLabel => 'Empleo público CLM';
+
+  @override
+  String get externalLinkSedeDgtLabel => 'Sede Electrónica DGT';
+
+  @override
+  String get externalLinkCarpetaCiudadanaAgeLabel => 'Carpeta Ciudadana AGE';
+
+  @override
+  String get externalLinkHistoriaSocialUnicaLabel => 'Historia social única';
+
+  @override
+  String get externalLinkInfanciaFamiliasLabel => 'Infancia y familias';
 }
