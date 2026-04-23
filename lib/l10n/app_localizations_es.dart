@@ -227,4 +227,91 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get externalLinkInfanciaFamiliasLabel => 'Infancia y familias';
+
+  @override
+  String get helpPageTitle => 'Centro de ayuda';
+
+  @override
+  String get helpSearchHint => 'Buscar en preguntas frecuentes';
+
+  @override
+  String get helpFaqSectionTitle => 'Preguntas frecuentes';
+
+  @override
+  String get helpGuidesSectionTitle => 'Guías';
+
+  @override
+  String get helpContactSectionTitle => 'Contacto';
+
+  @override
+  String get helpEmptySearchMessage => 'Sin resultados';
+
+  @override
+  String get helpEmptySearchSubtitle => 'Prueba con otros términos.';
+
+  @override
+  String get helpCategoryAccess => 'Acceso y autenticación';
+
+  @override
+  String get helpCategoryPrivacy => 'Privacidad y datos';
+
+  @override
+  String get helpCategoryServices => 'Servicios y funcionalidades';
+
+  @override
+  String get helpFaqLoginClaveQ => '¿Cómo accedo con Cl@ve?';
+
+  @override
+  String get helpFaqLoginClaveA => 'Pulsa \"Acceder con Cl@ve\" en la pantalla de inicio. Se abrirá el sistema oficial de identificación. Tras la autenticación volverás a la aplicación.';
+
+  @override
+  String get helpFaqLoginProblemsQ => 'No puedo iniciar sesión, ¿qué hago?';
+
+  @override
+  String get helpFaqLoginProblemsA => 'Verifica tu conexión y que tu certificado o credencial Cl@ve siga vigente. Si el problema persiste, contacta con el 012.';
+
+  @override
+  String get helpFaqDataProtectionQ => '¿Qué se hace con mis datos personales?';
+
+  @override
+  String get helpFaqDataProtectionA => 'Tus datos se tratan conforme al RGPD y la LOPDGDD. Consulta la política de privacidad para conocer las finalidades, plazos y derechos.';
+
+  @override
+  String get helpFaqNotificationsQ => '¿Cómo recibo notificaciones?';
+
+  @override
+  String get helpFaqNotificationsA => 'Activa los avisos en tu perfil y permite las notificaciones del sistema. Recibirás aviso cuando haya novedades en tus expedientes.';
+
+  @override
+  String get helpFaqDocumentsQ => '¿Puedo descargar documentos oficiales?';
+
+  @override
+  String get helpFaqDocumentsA => 'Sí. Desde el detalle de cada expediente puedes descargar o compartir los documentos disponibles.';
+
+  @override
+  String get helpFaqOfflineQ => '¿La aplicación funciona sin conexión?';
+
+  @override
+  String get helpFaqOfflineA => 'Algunas funciones (consulta de tarjetas y contenidos legales) se mantienen sin conexión. Las que requieren datos actualizados necesitan conectividad.';
+
+  @override
+  String get helpGuideFirstStepsTitle => 'Primeros pasos';
+
+  @override
+  String get helpGuideFirstStepsBody => 'Aprende a navegar entre Inicio, Expedientes, Notificaciones y Tarjetas. Personaliza tu perfil para una experiencia adaptada.';
+
+  @override
+  String get helpGuideCarpetaAgeTitle => 'Carpeta Ciudadana del Estado';
+
+  @override
+  String get helpGuideCarpetaAgeBody => 'Si tu trámite depende de la Administración General del Estado, accede directamente a la Carpeta Ciudadana AGE.';
+
+  @override
+  String get helpContact012PhoneLabel => 'Atención telefónica 012';
+
+  @override
+  String get helpContactEmailSupportLabel => 'Correo de soporte';
+
+  @override
+  String get helpContactOfficesUrlLabel => 'Oficinas de información y registro';
 }
