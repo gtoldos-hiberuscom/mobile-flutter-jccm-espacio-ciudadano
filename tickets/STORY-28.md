@@ -2,14 +2,14 @@
 id: 28
 jira_key:
 type: Story
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
+epic_link: EPIC-3
 parent:
-sprint:
+sprint: Sprint 3
 reporter:
-assignee:
+assignee: Copilot
 story_points:
 labels:
   - external-links
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T15:30:00+02:00
 due_date:
 jira_url:
 ---
@@ -77,3 +77,7 @@ Definir la experiencia consistente de acceso a portales externos y enlaces de in
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T15:30:00+02:00 | status | To Do -> In Progress | by Copilot
+- 2026-05-04T15:30:00+02:00 | sprint | (none) -> Sprint 3 | by Copilot
+- 2026-05-04T15:30:00+02:00 | epic_link | (none) -> EPIC-3 | by Copilot
+- 2026-05-04T15:30:00+02:00 | assignee | (none) -> Copilot | by Copilot
