@@ -253,5 +253,41 @@
   "homeBlockLastUpdatedUnknown": "Sin datos de actualización",
   "@homeBlockLastUpdatedUnknown": {
     "description": "Texto mostrado cuando no se conoce el timestamp de actualización de una tarjeta."
+  },
+  "externalLinkA11yHint": "Abre en navegador externo",
+  "@externalLinkA11yHint": {
+    "description": "Pista de accesibilidad anunciada por lectores de pantalla en cualquier botón que abre un enlace externo."
+  },
+  "externalLinkOpenFailed": "No se pudo abrir el enlace. Inténtalo de nuevo más tarde.",
+  "@externalLinkOpenFailed": {
+    "description": "Mensaje de SnackBar mostrado cuando un enlace externo no se puede abrir (validación o rechazo del sistema)."
+  },
+  "externalLinkEducamosClmLabel": "Educamos CLM",
+  "@externalLinkEducamosClmLabel": {
+    "description": "Etiqueta del enlace externo al portal Educamos CLM."
+  },
+  "externalLinkEmpleoClmLabel": "Empleo CLM",
+  "@externalLinkEmpleoClmLabel": {
+    "description": "Etiqueta del enlace externo al portal de Empleo de Castilla-La Mancha."
+  },
+  "externalLinkEmpleoPublicoClmLabel": "Empleo público CLM",
+  "@externalLinkEmpleoPublicoClmLabel": {
+    "description": "Etiqueta del enlace externo al portal de Empleo Público de Castilla-La Mancha."
+  },
+  "externalLinkSedeDgtLabel": "Sede Electrónica DGT",
+  "@externalLinkSedeDgtLabel": {
+    "description": "Etiqueta del enlace externo a la Sede Electrónica de la DGT."
+  },
+  "externalLinkCarpetaCiudadanaAgeLabel": "Carpeta Ciudadana AGE",
+  "@externalLinkCarpetaCiudadanaAgeLabel": {
+    "description": "Etiqueta del enlace externo a la Carpeta Ciudadana de la Administración General del Estado."
+  },
+  "externalLinkHistoriaSocialUnicaLabel": "Historia social única",
+  "@externalLinkHistoriaSocialUnicaLabel": {
+    "description": "Etiqueta del enlace externo al portal de Historia Social Única."
+  },
+  "externalLinkInfanciaFamiliasLabel": "Infancia y familias",
+  "@externalLinkInfanciaFamiliasLabel": {
+    "description": "Etiqueta del enlace externo al portal de Infancia y Familias."
   }
 }

@@ -8,7 +8,7 @@ part of 'home_dashboard_notifier.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Riverpod [AsyncNotifier] that owns the authenticated home dashboard state.
+/// Riverpod async notifier that owns the authenticated home dashboard state.
 ///
 /// ## Lifecycle
 /// - On `build()`, asks the home dashboard repository for a snapshot and
@@ -25,7 +25,7 @@ part of 'home_dashboard_notifier.dart';
 @ProviderFor(HomeDashboardNotifier)
 const homeDashboardProvider = HomeDashboardNotifierProvider._();
 
-/// Riverpod [AsyncNotifier] that owns the authenticated home dashboard state.
+/// Riverpod async notifier that owns the authenticated home dashboard state.
 ///
 /// ## Lifecycle
 /// - On `build()`, asks the home dashboard repository for a snapshot and
@@ -41,7 +41,7 @@ const homeDashboardProvider = HomeDashboardNotifierProvider._();
 final class HomeDashboardNotifierProvider
     extends
         $AsyncNotifierProvider<HomeDashboardNotifier, HomeDashboardSnapshot> {
-  /// Riverpod [AsyncNotifier] that owns the authenticated home dashboard state.
+  /// Riverpod async notifier that owns the authenticated home dashboard state.
   ///
   /// ## Lifecycle
   /// - On `build()`, asks the home dashboard repository for a snapshot and
@@ -76,7 +76,7 @@ final class HomeDashboardNotifierProvider
 String _$homeDashboardNotifierHash() =>
     r'a5373a501633e3b3f9d1df45a6e14bc843e80440';
 
-/// Riverpod [AsyncNotifier] that owns the authenticated home dashboard state.
+/// Riverpod async notifier that owns the authenticated home dashboard state.
 ///
 /// ## Lifecycle
 /// - On `build()`, asks the home dashboard repository for a snapshot and

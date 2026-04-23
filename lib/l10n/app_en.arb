@@ -253,5 +253,41 @@
   "homeBlockLastUpdatedUnknown": "No update info",
   "@homeBlockLastUpdatedUnknown": {
     "description": "Shown when the last-updated timestamp of a card is unknown."
+  },
+  "externalLinkA11yHint": "Opens in external browser",
+  "@externalLinkA11yHint": {
+    "description": "Accessibility hint announced by screen readers on any button that opens an external link."
+  },
+  "externalLinkOpenFailed": "The link could not be opened. Please try again later.",
+  "@externalLinkOpenFailed": {
+    "description": "SnackBar message shown when an external link cannot be opened (validation or system rejection)."
+  },
+  "externalLinkEducamosClmLabel": "Educamos CLM",
+  "@externalLinkEducamosClmLabel": {
+    "description": "Label of the external link to the Educamos CLM portal."
+  },
+  "externalLinkEmpleoClmLabel": "Castilla-La Mancha Employment",
+  "@externalLinkEmpleoClmLabel": {
+    "description": "Label of the external link to the Castilla-La Mancha Employment portal."
+  },
+  "externalLinkEmpleoPublicoClmLabel": "Castilla-La Mancha Public Employment",
+  "@externalLinkEmpleoPublicoClmLabel": {
+    "description": "Label of the external link to the Castilla-La Mancha Public Employment portal."
+  },
+  "externalLinkSedeDgtLabel": "DGT e-office",
+  "@externalLinkSedeDgtLabel": {
+    "description": "Label of the external link to the DGT (Spanish traffic authority) e-office."
+  },
+  "externalLinkCarpetaCiudadanaAgeLabel": "Citizen Folder (AGE)",
+  "@externalLinkCarpetaCiudadanaAgeLabel": {
+    "description": "Label of the external link to the Citizen Folder of the Spanish General State Administration."
+  },
+  "externalLinkHistoriaSocialUnicaLabel": "Unified Social History",
+  "@externalLinkHistoriaSocialUnicaLabel": {
+    "description": "Label of the external link to the Unified Social History portal."
+  },
+  "externalLinkInfanciaFamiliasLabel": "Childhood and families",
+  "@externalLinkInfanciaFamiliasLabel": {
+    "description": "Label of the external link to the Childhood and Families portal."
   }
 }
