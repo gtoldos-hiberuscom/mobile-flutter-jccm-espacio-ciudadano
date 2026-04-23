@@ -43,39 +43,32 @@ final goRouterProvider = Provider<GoRouter>(
       initialLocation: Routes.splash,
       observers: [lifecycleObserver, analyticsObserver],
       // ── Global redirect ──────────────────────────────────────────────────
-      redirect: (final BuildContext context, final GoRouterState state) =>
-          guard.redirect(state),
+      redirect: (final BuildContext context, final GoRouterState state) => guard.redirect(state),
 
       // ── 404 fallback ──────────────────────────────────────────────────────
-      errorBuilder: (final BuildContext context, final GoRouterState state) =>
-          const NotFoundScreen(),
+      errorBuilder: (final BuildContext context, final GoRouterState state) => const NotFoundScreen(),
 
       routes: [
         // ── Splash ──────────────────────────────────────────────────────────
         GoRoute(
           path: Routes.splash,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const SplashScreen(),
+          builder: (final BuildContext context, final GoRouterState state) => const SplashScreen(),
         ),
 
         // ── Landing ─────────────────────────────────────────────────────────
         GoRoute(
           path: Routes.landing,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LandingPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const LandingPage(),
         ),
 
         // ── Login flow ───────────────────────────────────────────────────────
         GoRoute(
           path: Routes.login,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LoginPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const LoginPage(),
           routes: [
             GoRoute(
               path: 'callback',
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const LoginCallbackPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPlaceholder(),
             ),
           ],
         ),
@@ -83,42 +76,35 @@ final goRouterProvider = Provider<GoRouter>(
         // ── Maintenance ──────────────────────────────────────────────────────
         GoRoute(
           path: Routes.maintenance,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const MaintenanceScreen(),
+          builder: (final BuildContext context, final GoRouterState state) => const MaintenanceScreen(),
         ),
 
         // ── Legal / static pages ─────────────────────────────────────────────
         GoRoute(
           path: Routes.terms,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalDocumentPage(documentId: LegalDocumentId.terms),
+          builder: (final BuildContext context, final GoRouterState state) => const LegalDocumentPage(documentId: LegalDocumentId.terms),
         ),
         GoRoute(
           path: Routes.privacy,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalDocumentPage(documentId: LegalDocumentId.privacy),
+          builder: (final BuildContext context, final GoRouterState state) => const LegalDocumentPage(documentId: LegalDocumentId.privacy),
         ),
         GoRoute(
           path: Routes.accessibility,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalDocumentPage(
+          builder: (final BuildContext context, final GoRouterState state) => const LegalDocumentPage(
             documentId: LegalDocumentId.accessibility,
           ),
         ),
         GoRoute(
           path: Routes.legalNotice,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalDocumentPage(documentId: LegalDocumentId.legalNotice),
+          builder: (final BuildContext context, final GoRouterState state) => const LegalDocumentPage(documentId: LegalDocumentId.legalNotice),
         ),
         GoRoute(
           path: Routes.sitemap,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const SitemapPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const SitemapPage(),
         ),
         GoRoute(
           path: Routes.help,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const HelpPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const HelpPage(),
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────
@@ -132,9 +118,7 @@ final goRouterProvider = Provider<GoRouter>(
             WidgetsBinding.instance.addPostFrameCallback((_) {
               final container = ProviderScope.containerOf(context);
               unawaited(
-                container
-                    .read<SessionNotifier>(sessionProvider.notifier)
-                    .handleCallback(callbackUri),
+                container.read<SessionNotifier>(sessionProvider.notifier).handleCallback(callbackUri),
               );
             });
             return const LoginCallbackPlaceholder();
@@ -142,68 +126,52 @@ final goRouterProvider = Provider<GoRouter>(
         ),
         GoRoute(
           path: Routes.afirmaReturn,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LoginCallbackPlaceholder(),
+          builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPlaceholder(),
         ),
 
         // ── Consent ──────────────────────────────────────────────────────────
         GoRoute(
           path: Routes.consent,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const ConsentPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const ConsentPage(),
         ),
 
         // ── Authenticated shell ──────────────────────────────────────────────
         ShellRoute(
-          builder: (
-            final BuildContext context,
-            final GoRouterState state,
-            final Widget child,
-          ) =>
-              AppScaffold(child: child),
+          builder:
+              (
+                final BuildContext context,
+                final GoRouterState state,
+                final Widget child,
+              ) => AppScaffold(child: child),
           routes: [
             GoRoute(
               path: Routes.home,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const HomePage(),
+              builder: (final BuildContext context, final GoRouterState state) => const HomePage(),
             ),
             // ── Thematic landings (placeholder until STORY-23/24/25/26) ────
             GoRoute(
               path: Routes.education,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const EducationLandingPage(),
+              builder: (final BuildContext context, final GoRouterState state) => const EducationLandingPage(),
             ),
             GoRoute(
               path: Routes.employment,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const EmploymentLandingPage(),
+              builder: (final BuildContext context, final GoRouterState state) => const EmploymentLandingPage(),
             ),
             GoRoute(
               path: Routes.socialWelfare,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const SocialWelfareLandingPage(),
+              builder: (final BuildContext context, final GoRouterState state) => const SocialWelfareLandingPage(),
             ),
             GoRoute(
               path: Routes.stateAffairs,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const StateAffairsLandingPage(),
+              builder: (final BuildContext context, final GoRouterState state) => const StateAffairsLandingPage(),
             ),
             GoRoute(
               path: Routes.agenda,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const AgendaPage(),
+              builder: (final BuildContext context, final GoRouterState state) => const AgendaPage(),
               routes: [
                 GoRoute(
                   path: ':id',
-                  builder:
-                      (final BuildContext context, final GoRouterState state) =>
-                          AgendaEventDetailPage(
+                  builder: (final BuildContext context, final GoRouterState state) => AgendaEventDetailPage(
                     eventId: state.pathParameters['id'] ?? '',
                   ),
                 ),
@@ -211,39 +179,27 @@ final goRouterProvider = Provider<GoRouter>(
             ),
             GoRoute(
               path: Routes.casework,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const CaseworkPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const CaseworkPlaceholder(),
             ),
             GoRoute(
               path: Routes.notifications,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const NotificationsPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const NotificationsPlaceholder(),
             ),
             GoRoute(
               path: Routes.cards,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const CardsPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const CardsPlaceholder(),
             ),
             GoRoute(
               path: Routes.profile,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const ProfilePlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const ProfilePlaceholder(),
             ),
             GoRoute(
               path: Routes.recommendations,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const RecommendationsPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPlaceholder(),
             ),
             GoRoute(
               path: Routes.support,
-              builder:
-                  (final BuildContext context, final GoRouterState state) =>
-                      const SupportPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const SupportPlaceholder(),
             ),
           ],
         ),
