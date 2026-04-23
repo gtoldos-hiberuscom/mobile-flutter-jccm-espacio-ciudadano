@@ -1135,6 +1135,84 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hemos podido cargar la información solicitada.'**
   String get domainGenericLoadError;
+
+  /// Domains — etiqueta para placeholder controlado.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximamente'**
+  String get domainComingSoonBadge;
+
+  /// Educación — título de la landing.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get educationTitle;
+
+  /// Educación — descripción de cabecera.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus títulos académicos y accede a los servicios oficiales de educación de Castilla-La Mancha.'**
+  String get educationHeaderDescription;
+
+  /// Educación — sección títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Títulos universitarios'**
+  String get educationUniversityTitlesTitle;
+
+  /// Educación — vacío títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan títulos universitarios a tu nombre.'**
+  String get educationUniversityTitlesEmpty;
+
+  /// Educación — error títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus títulos universitarios.'**
+  String get educationUniversityTitlesError;
+
+  /// Educación — sección títulos no universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Títulos no universitarios'**
+  String get educationNonUniversityTitlesTitle;
+
+  /// Educación — vacío títulos no universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan títulos no universitarios a tu nombre.'**
+  String get educationNonUniversityTitlesEmpty;
+
+  /// Educación — error títulos no universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus títulos no universitarios.'**
+  String get educationNonUniversityTitlesError;
+
+  /// Educación — etiqueta año del título.
+  ///
+  /// In es, this message translates to:
+  /// **'Año: {year}'**
+  String educationTitleYear(String year);
+
+  /// Educación — sección condición de becado (placeholder).
+  ///
+  /// In es, this message translates to:
+  /// **'Condición de becado'**
+  String get educationScholarshipTitle;
+
+  /// Educación — descripción placeholder condición de becado.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta información estará disponible próximamente. Necesita un servicio adicional que aún no está integrado.'**
+  String get educationScholarshipDescription;
+
+  /// Educación — tooltip explicativo placeholder condición de becado.
+  ///
+  /// In es, this message translates to:
+  /// **'Capacidad pendiente de un endpoint específico de becas. Pendiente de validación de contrato (TASK-27).'**
+  String get educationScholarshipTooltip;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -562,4 +562,45 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get domainGenericLoadError => 'No hemos podido cargar la información solicitada.';
+
+  @override
+  String get domainComingSoonBadge => 'Próximamente';
+
+  @override
+  String get educationTitle => 'Educación';
+
+  @override
+  String get educationHeaderDescription => 'Consulta tus títulos académicos y accede a los servicios oficiales de educación de Castilla-La Mancha.';
+
+  @override
+  String get educationUniversityTitlesTitle => 'Títulos universitarios';
+
+  @override
+  String get educationUniversityTitlesEmpty => 'No constan títulos universitarios a tu nombre.';
+
+  @override
+  String get educationUniversityTitlesError => 'No hemos podido cargar tus títulos universitarios.';
+
+  @override
+  String get educationNonUniversityTitlesTitle => 'Títulos no universitarios';
+
+  @override
+  String get educationNonUniversityTitlesEmpty => 'No constan títulos no universitarios a tu nombre.';
+
+  @override
+  String get educationNonUniversityTitlesError => 'No hemos podido cargar tus títulos no universitarios.';
+
+  @override
+  String educationTitleYear(String year) {
+    return 'Año: $year';
+  }
+
+  @override
+  String get educationScholarshipTitle => 'Condición de becado';
+
+  @override
+  String get educationScholarshipDescription => 'Esta información estará disponible próximamente. Necesita un servicio adicional que aún no está integrado.';
+
+  @override
+  String get educationScholarshipTooltip => 'Capacidad pendiente de un endpoint específico de becas. Pendiente de validación de contrato (TASK-27).';
 }
