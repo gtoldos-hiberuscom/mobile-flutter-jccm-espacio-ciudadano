@@ -603,4 +603,46 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get educationScholarshipTooltip => 'Capacidad pendiente de un endpoint específico de becas. Pendiente de validación de contrato (TASK-27).';
+
+  @override
+  String get employmentTitle => 'Empleo';
+
+  @override
+  String get employmentHeaderDescription => 'Consulta tu situación como demandante de empleo y accede a los portales oficiales de Empleo CLM.';
+
+  @override
+  String get employmentSeekerTitle => 'Estado de demandante de empleo';
+
+  @override
+  String get employmentSeekerSource => 'Fuente: SEPE';
+
+  @override
+  String get employmentSeekerEmpty => 'No constan datos de demanda de empleo a tu nombre.';
+
+  @override
+  String get employmentSeekerError => 'No hemos podido cargar tu estado de demandante de empleo.';
+
+  @override
+  String get employmentSeekerEstadoLabel => 'Estado actual';
+
+  @override
+  String get employmentSeekerInscripcionLabel => 'Fecha de inscripción';
+
+  @override
+  String get employmentSeekerContinuidadLabel => 'Fecha de continuidad';
+
+  @override
+  String get employmentSeekerEstadoInscrito => 'Inscrito';
+
+  @override
+  String get employmentSeekerEstadoNoInscrito => 'No inscrito';
+
+  @override
+  String get employmentSeekerEstadoBajaTemporal => 'Baja temporal';
+
+  @override
+  String get employmentOffersTitle => 'Inscripciones en ofertas';
+
+  @override
+  String get employmentOffersDescription => 'La consulta y gestión de tus inscripciones en ofertas se realiza directamente en el portal de Empleo CLM.';
 }
