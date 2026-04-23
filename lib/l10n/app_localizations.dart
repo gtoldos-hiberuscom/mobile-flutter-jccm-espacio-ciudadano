@@ -439,6 +439,60 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Sin datos de actualización'**
   String get homeBlockLastUpdatedUnknown;
+
+  /// Pista de accesibilidad anunciada por lectores de pantalla en cualquier botón que abre un enlace externo.
+  ///
+  /// In es, this message translates to:
+  /// **'Abre en navegador externo'**
+  String get externalLinkA11yHint;
+
+  /// Mensaje de SnackBar mostrado cuando un enlace externo no se puede abrir (validación o rechazo del sistema).
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo abrir el enlace. Inténtalo de nuevo más tarde.'**
+  String get externalLinkOpenFailed;
+
+  /// Etiqueta del enlace externo al portal Educamos CLM.
+  ///
+  /// In es, this message translates to:
+  /// **'Educamos CLM'**
+  String get externalLinkEducamosClmLabel;
+
+  /// Etiqueta del enlace externo al portal de Empleo de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo CLM'**
+  String get externalLinkEmpleoClmLabel;
+
+  /// Etiqueta del enlace externo al portal de Empleo Público de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo público CLM'**
+  String get externalLinkEmpleoPublicoClmLabel;
+
+  /// Etiqueta del enlace externo a la Sede Electrónica de la DGT.
+  ///
+  /// In es, this message translates to:
+  /// **'Sede Electrónica DGT'**
+  String get externalLinkSedeDgtLabel;
+
+  /// Etiqueta del enlace externo a la Carpeta Ciudadana de la Administración General del Estado.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta Ciudadana AGE'**
+  String get externalLinkCarpetaCiudadanaAgeLabel;
+
+  /// Etiqueta del enlace externo al portal de Historia Social Única.
+  ///
+  /// In es, this message translates to:
+  /// **'Historia social única'**
+  String get externalLinkHistoriaSocialUnicaLabel;
+
+  /// Etiqueta del enlace externo al portal de Infancia y Familias.
+  ///
+  /// In es, this message translates to:
+  /// **'Infancia y familias'**
+  String get externalLinkInfanciaFamiliasLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
