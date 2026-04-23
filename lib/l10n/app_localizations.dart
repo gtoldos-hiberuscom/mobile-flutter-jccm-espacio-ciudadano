@@ -703,6 +703,150 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se ha podido cargar el documento solicitado.'**
   String get legalNotFoundMessage;
+
+  /// Título de la pantalla de mapa del sitio.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa del sitio'**
+  String get sitemapPageTitle;
+
+  /// Sitemap — agrupación de áreas autenticadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi espacio'**
+  String get sitemapGroupAuthenticated;
+
+  /// Sitemap — agrupación de landings temáticas.
+  ///
+  /// In es, this message translates to:
+  /// **'Áreas temáticas'**
+  String get sitemapGroupThematic;
+
+  /// Sitemap — agrupación de ayuda y páginas legales.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda y legales'**
+  String get sitemapGroupHelpLegal;
+
+  /// Sitemap — agrupación de enlaces externos.
+  ///
+  /// In es, this message translates to:
+  /// **'Recursos externos'**
+  String get sitemapGroupExternal;
+
+  /// Sitemap — Inicio.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get sitemapHome;
+
+  /// Sitemap — Agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get sitemapAgenda;
+
+  /// Sitemap — Expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Expedientes'**
+  String get sitemapCasework;
+
+  /// Sitemap — Notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get sitemapNotifications;
+
+  /// Sitemap — Tarjetas.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjetas'**
+  String get sitemapCards;
+
+  /// Sitemap — Recomendaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendaciones'**
+  String get sitemapRecommendations;
+
+  /// Sitemap — Soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Soporte'**
+  String get sitemapSupport;
+
+  /// Sitemap — Perfil.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfil'**
+  String get sitemapProfile;
+
+  /// Sitemap — Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get sitemapEducation;
+
+  /// Sitemap — Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get sitemapEmployment;
+
+  /// Sitemap — Bienestar Social.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar Social'**
+  String get sitemapSocialWelfare;
+
+  /// Sitemap — Estado y otros.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado y otros'**
+  String get sitemapStateAffairs;
+
+  /// Sitemap — Centro de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro de ayuda'**
+  String get sitemapHelp;
+
+  /// Footer — Ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda'**
+  String get footerHelp;
+
+  /// Footer — Mapa del sitio.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa del sitio'**
+  String get footerSitemap;
+
+  /// Footer — Condiciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Condiciones'**
+  String get footerTerms;
+
+  /// Footer — Privacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Privacidad'**
+  String get footerPrivacy;
+
+  /// Footer — Accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get footerAccessibility;
+
+  /// Footer — Aviso legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get footerLegalNotice;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
