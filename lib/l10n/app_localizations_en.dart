@@ -132,4 +132,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maintenanceRetry => 'Retry';
+
+  @override
+  String get homeGreetingFallback => 'Welcome to Espacio Ciudadano';
+
+  @override
+  String homeCitizenId(String id) {
+    return 'Citizen ID: $id';
+  }
+
+  @override
+  String get homeBlockEducationTitle => 'Education';
+
+  @override
+  String get homeBlockEmploymentTitle => 'Employment';
+
+  @override
+  String get homeBlockSocialWelfareTitle => 'Social welfare';
+
+  @override
+  String get homeBlockStateAffairsTitle => 'State and other affairs';
+
+  @override
+  String get homeBlockAgendaTitle => 'Agenda';
+
+  @override
+  String get homeBlockUpcomingEventsTitle => 'Upcoming events';
+
+  @override
+  String get homeBlockCaseworkTitle => 'My casework';
+
+  @override
+  String get homeBlockNotificationsTitle => 'My notifications';
+
+  @override
+  String get homeBlockDigitalCardsTitle => 'My digital cards';
+
+  @override
+  String get homeBlockRecommendationsTitle => 'Recommendations';
+
+  @override
+  String get homeBlockEmpty => 'Nothing to show';
+
+  @override
+  String get homeBlockError => 'This block could not be loaded';
+
+  @override
+  String homeBlockCount(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString items',
+      one: '1 item',
+      zero: 'No items',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeBlockLastUpdated(String time) {
+    return 'Updated at $time';
+  }
+
+  @override
+  String get homeBlockLastUpdatedUnknown => 'No update info';
 }
