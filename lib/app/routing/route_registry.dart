@@ -42,6 +42,14 @@ abstract final class Routes {
   static const String recommendations = '/recommendations';
   static const String support = '/support';
 
+  // ── Authenticated thematic landings ───────────────────────────────────────
+  // Real pages will be implemented in STORY-23/24/25/26 — for now the home
+  // wires these routes to a [DomainLandingPlaceholder].
+  static const String education = '/education';
+  static const String employment = '/employment';
+  static const String socialWelfare = '/social-welfare';
+  static const String stateAffairs = '/state-affairs';
+
   // ── Deep-link callbacks ───────────────────────────────────────────────────
   static const String claveCallback = '/auth/clave/callback';
   static const String afirmaReturn = '/sign/afirma/return';
@@ -61,6 +69,10 @@ abstract final class Routes {
     cards,
     recommendations,
     support,
+    education,
+    employment,
+    socialWelfare,
+    stateAffairs,
   };
 
   /// Returns true when [path] requires authentication.

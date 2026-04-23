@@ -169,5 +169,89 @@
   "maintenanceRetry": "Reintentar",
   "@maintenanceRetry": {
     "description": "Botón para reintentar la carga después del mantenimiento."
+  },
+  "homeGreetingFallback": "Bienvenido al Espacio Ciudadano",
+  "@homeGreetingFallback": {
+    "description": "Saludo mostrado en la home cuando todavía no se conoce el perfil del usuario."
+  },
+  "homeCitizenId": "Identificador: {id}",
+  "@homeCitizenId": {
+    "description": "Etiqueta del identificador del ciudadano (idAgente) mostrada en la home autenticada.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBlockEducationTitle": "Educación",
+  "@homeBlockEducationTitle": {
+    "description": "Título del bloque temático de Educación en la home."
+  },
+  "homeBlockEmploymentTitle": "Empleo",
+  "@homeBlockEmploymentTitle": {
+    "description": "Título del bloque temático de Empleo en la home."
+  },
+  "homeBlockSocialWelfareTitle": "Bienestar Social",
+  "@homeBlockSocialWelfareTitle": {
+    "description": "Título del bloque temático de Bienestar Social en la home."
+  },
+  "homeBlockStateAffairsTitle": "Estado y otros",
+  "@homeBlockStateAffairsTitle": {
+    "description": "Título del bloque temático de Estado y otros temas en la home."
+  },
+  "homeBlockAgendaTitle": "Agenda",
+  "@homeBlockAgendaTitle": {
+    "description": "Título del bloque temático de Agenda en la home."
+  },
+  "homeBlockUpcomingEventsTitle": "Próximos eventos",
+  "@homeBlockUpcomingEventsTitle": {
+    "description": "Título del widget de próximos eventos en la home."
+  },
+  "homeBlockCaseworkTitle": "Mis expedientes",
+  "@homeBlockCaseworkTitle": {
+    "description": "Título del widget de expedientes en la home."
+  },
+  "homeBlockNotificationsTitle": "Mis notificaciones",
+  "@homeBlockNotificationsTitle": {
+    "description": "Título del widget de notificaciones en la home."
+  },
+  "homeBlockDigitalCardsTitle": "Mis carnets digitales",
+  "@homeBlockDigitalCardsTitle": {
+    "description": "Título del widget de carnets digitales en la home."
+  },
+  "homeBlockRecommendationsTitle": "Recomendaciones",
+  "@homeBlockRecommendationsTitle": {
+    "description": "Título del widget de recomendaciones en la home."
+  },
+  "homeBlockEmpty": "Sin novedades",
+  "@homeBlockEmpty": {
+    "description": "Mensaje de estado vacío para una tarjeta de la home."
+  },
+  "homeBlockError": "No se ha podido cargar este bloque",
+  "@homeBlockError": {
+    "description": "Mensaje de error parcial mostrado en una tarjeta de la home cuando su carga falla."
+  },
+  "homeBlockCount": "{count, plural, =0{Sin elementos} =1{1 elemento} other{{count} elementos}}",
+  "@homeBlockCount": {
+    "description": "Resumen del número de elementos disponibles en una tarjeta de la home.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "homeBlockLastUpdated": "Actualizado a las {time}",
+  "@homeBlockLastUpdated": {
+    "description": "Etiqueta del timestamp de última actualización de una tarjeta de la home.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBlockLastUpdatedUnknown": "Sin datos de actualización",
+  "@homeBlockLastUpdatedUnknown": {
+    "description": "Texto mostrado cuando no se conoce el timestamp de actualización de una tarjeta."
   }
 }
