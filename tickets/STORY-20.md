@@ -2,12 +2,12 @@
 id: 20
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 2
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-04T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Contemplar las superficies de identidad del usuario autenticado y el estado de mantenimiento que bloquea temporalmente el acceso operativo.
 
 ## Acceptance Criteria
-- [ ] Se contempla header/área personal con saludo e identificador documental del ciudadano.
-- [ ] Se contempla menú lateral con accesos a áreas personales y acción de salir.
-- [ ] Se contempla estado de mantenimiento/bloqueo con mensaje y continuidad limitada.
-- [ ] Se contempla degradación visual cuando la sesión existe pero el sistema no está operativo.
+- [x] Se contempla header/área personal con saludo e identificador documental del ciudadano.
+- [x] Se contempla menú lateral con accesos a áreas personales y acción de salir.
+- [x] Se contempla estado de mantenimiento/bloqueo con mensaje y continuidad limitada.
+- [x] Se contempla degradación visual cuando la sesión existe pero el sistema no está operativo.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -66,6 +66,8 @@ Contemplar las superficies de identidad del usuario autenticado y el estado de m
 ## Notes
 ### Comments
 - None yet.
+- 2026-05-04T12:00:00+02:00 | by ticket-manager | Implementation merged to `develop`. Evidence: `lib/features/user_profile/` (entity, notifier, header widget with greeting + document id, drawer menu with logout, avatar widget) and `lib/features/maintenance/` (state, notifier, blocking page) cover personal header, lateral menu, maintenance blocking and degraded session state. Implementing commit: `cd15aea`.
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-05-04T12:00:00+02:00 | by ticket-manager | Sprint set to `Sprint 2`; status transitioned from `To Do` → `Done` after reconciling against merged implementation on `develop`.

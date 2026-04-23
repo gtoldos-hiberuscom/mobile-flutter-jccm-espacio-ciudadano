@@ -62,7 +62,7 @@ final class SessionGuard {
 
       if (!isCallback) {
         final consentAsync = _ref.read(consentProvider);
-        final consentState = consentAsync.valueOrNull;
+        final consentState = consentAsync.value;
         // Only redirect when consent state is definitively Pending.
         // If still loading (null) or Accepted, allow through.
         if (consentState is ConsentPending) {

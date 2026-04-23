@@ -229,6 +229,624 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Pantalla de aceptación de condiciones de uso'**
   String get consentPageSemantics;
+
+  /// Texto de accesibilidad predeterminado para los indicadores de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando…'**
+  String get loadingStateDefault;
+
+  /// Mensaje predeterminado para las pantallas de estado vacío.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay elementos'**
+  String get emptyStateDefault;
+
+  /// Mensaje predeterminado para las pantallas de estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Se ha producido un error'**
+  String get errorStateDefault;
+
+  /// Etiqueta del botón de reintento en el widget de estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get errorStateRetry;
+
+  /// Mensaje predeterminado para las pantallas de acceso bloqueado o mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso no disponible'**
+  String get blockedStateDefault;
+
+  /// Etiqueta de accesibilidad y tooltip para el botón de abrir documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir documento'**
+  String get documentOpen;
+
+  /// Etiqueta de accesibilidad y tooltip para el botón de descarga de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar documento'**
+  String get documentDownload;
+
+  /// Etiqueta de accesibilidad y tooltip para el botón de compartir documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Compartir documento'**
+  String get documentShare;
+
+  /// Etiqueta de accesibilidad para el pie de página de carga adicional en listas paginadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargar más elementos'**
+  String get loadMoreItems;
+
+  /// Etiqueta de accesibilidad para el RefreshIndicator en listas paginadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Desliza para actualizar'**
+  String get pullToRefresh;
+
+  /// Saludo personalizado en la cabecera del usuario autenticado.
+  ///
+  /// In es, this message translates to:
+  /// **'Hola, {name}'**
+  String userGreeting(String name);
+
+  /// Ítem de menú de navegación al perfil del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi perfil'**
+  String get userMenuProfile;
+
+  /// Ítem de menú de navegación a notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get userMenuNotifications;
+
+  /// Ítem de menú de navegación a la configuración.
+  ///
+  /// In es, this message translates to:
+  /// **'Configuración'**
+  String get userMenuSettings;
+
+  /// Ítem de menú para cerrar la sesión del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sesión'**
+  String get userMenuLogout;
+
+  /// Título de la página de mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio en mantenimiento'**
+  String get maintenanceTitle;
+
+  /// Subtítulo de la página de mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio no está disponible temporalmente.'**
+  String get maintenanceSubtitle;
+
+  /// Botón para reintentar la carga después del mantenimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get maintenanceRetry;
+
+  /// Saludo mostrado en la home cuando todavía no se conoce el perfil del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienvenido al Espacio Ciudadano'**
+  String get homeGreetingFallback;
+
+  /// Etiqueta del identificador del ciudadano (idAgente) mostrada en la home autenticada.
+  ///
+  /// In es, this message translates to:
+  /// **'Identificador: {id}'**
+  String homeCitizenId(String id);
+
+  /// Título del bloque temático de Educación en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get homeBlockEducationTitle;
+
+  /// Título del bloque temático de Empleo en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get homeBlockEmploymentTitle;
+
+  /// Título del bloque temático de Bienestar Social en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar Social'**
+  String get homeBlockSocialWelfareTitle;
+
+  /// Título del bloque temático de Estado y otros temas en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado y otros'**
+  String get homeBlockStateAffairsTitle;
+
+  /// Título del bloque temático de Agenda en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get homeBlockAgendaTitle;
+
+  /// Título del widget de próximos eventos en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos eventos'**
+  String get homeBlockUpcomingEventsTitle;
+
+  /// Título del widget de expedientes en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get homeBlockCaseworkTitle;
+
+  /// Título del widget de notificaciones en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis notificaciones'**
+  String get homeBlockNotificationsTitle;
+
+  /// Título del widget de carnets digitales en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis carnets digitales'**
+  String get homeBlockDigitalCardsTitle;
+
+  /// Título del widget de recomendaciones en la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendaciones'**
+  String get homeBlockRecommendationsTitle;
+
+  /// Mensaje de estado vacío para una tarjeta de la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin novedades'**
+  String get homeBlockEmpty;
+
+  /// Mensaje de error parcial mostrado en una tarjeta de la home cuando su carga falla.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar este bloque'**
+  String get homeBlockError;
+
+  /// Resumen del número de elementos disponibles en una tarjeta de la home.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =0{Sin elementos} =1{1 elemento} other{{count} elementos}}'**
+  String homeBlockCount(int count);
+
+  /// Etiqueta del timestamp de última actualización de una tarjeta de la home.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado a las {time}'**
+  String homeBlockLastUpdated(String time);
+
+  /// Texto mostrado cuando no se conoce el timestamp de actualización de una tarjeta.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin datos de actualización'**
+  String get homeBlockLastUpdatedUnknown;
+
+  /// Pista de accesibilidad anunciada por lectores de pantalla en cualquier botón que abre un enlace externo.
+  ///
+  /// In es, this message translates to:
+  /// **'Abre en navegador externo'**
+  String get externalLinkA11yHint;
+
+  /// Mensaje de SnackBar mostrado cuando un enlace externo no se puede abrir (validación o rechazo del sistema).
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo abrir el enlace. Inténtalo de nuevo más tarde.'**
+  String get externalLinkOpenFailed;
+
+  /// Etiqueta del enlace externo al portal Educamos CLM.
+  ///
+  /// In es, this message translates to:
+  /// **'Educamos CLM'**
+  String get externalLinkEducamosClmLabel;
+
+  /// Etiqueta del enlace externo al portal de Empleo de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo CLM'**
+  String get externalLinkEmpleoClmLabel;
+
+  /// Etiqueta del enlace externo al portal de Empleo Público de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo público CLM'**
+  String get externalLinkEmpleoPublicoClmLabel;
+
+  /// Etiqueta del enlace externo a la Sede Electrónica de la DGT.
+  ///
+  /// In es, this message translates to:
+  /// **'Sede Electrónica DGT'**
+  String get externalLinkSedeDgtLabel;
+
+  /// Etiqueta del enlace externo a la Carpeta Ciudadana de la Administración General del Estado.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta Ciudadana AGE'**
+  String get externalLinkCarpetaCiudadanaAgeLabel;
+
+  /// Etiqueta del enlace externo al portal de Historia Social Única.
+  ///
+  /// In es, this message translates to:
+  /// **'Historia social única'**
+  String get externalLinkHistoriaSocialUnicaLabel;
+
+  /// Etiqueta del enlace externo al portal de Infancia y Familias.
+  ///
+  /// In es, this message translates to:
+  /// **'Infancia y familias'**
+  String get externalLinkInfanciaFamiliasLabel;
+
+  /// Título de la pantalla de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro de ayuda'**
+  String get helpPageTitle;
+
+  /// Texto de ayuda del buscador local del centro de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar en preguntas frecuentes'**
+  String get helpSearchHint;
+
+  /// Encabezado de la sección FAQ.
+  ///
+  /// In es, this message translates to:
+  /// **'Preguntas frecuentes'**
+  String get helpFaqSectionTitle;
+
+  /// Encabezado de la sección de guías.
+  ///
+  /// In es, this message translates to:
+  /// **'Guías'**
+  String get helpGuidesSectionTitle;
+
+  /// Encabezado de la sección de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Contacto'**
+  String get helpContactSectionTitle;
+
+  /// Mensaje principal cuando la búsqueda local no encuentra resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin resultados'**
+  String get helpEmptySearchMessage;
+
+  /// Subtítulo del estado vacío de búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Prueba con otros términos.'**
+  String get helpEmptySearchSubtitle;
+
+  /// Categoría FAQ: acceso y autenticación.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso y autenticación'**
+  String get helpCategoryAccess;
+
+  /// Categoría FAQ: privacidad y protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Privacidad y datos'**
+  String get helpCategoryPrivacy;
+
+  /// Categoría FAQ: uso de los servicios.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicios y funcionalidades'**
+  String get helpCategoryServices;
+
+  /// FAQ — pregunta sobre acceso con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo accedo con Cl@ve?'**
+  String get helpFaqLoginClaveQ;
+
+  /// FAQ — respuesta sobre acceso con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Pulsa \"Acceder con Cl@ve\" en la pantalla de inicio. Se abrirá el sistema oficial de identificación. Tras la autenticación volverás a la aplicación.'**
+  String get helpFaqLoginClaveA;
+
+  /// FAQ — pregunta sobre problemas de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'No puedo iniciar sesión, ¿qué hago?'**
+  String get helpFaqLoginProblemsQ;
+
+  /// FAQ — respuesta sobre problemas de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Verifica tu conexión y que tu certificado o credencial Cl@ve siga vigente. Si el problema persiste, contacta con el 012.'**
+  String get helpFaqLoginProblemsA;
+
+  /// FAQ — pregunta sobre protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué se hace con mis datos personales?'**
+  String get helpFaqDataProtectionQ;
+
+  /// FAQ — respuesta sobre protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos se tratan conforme al RGPD y la LOPDGDD. Consulta la política de privacidad para conocer las finalidades, plazos y derechos.'**
+  String get helpFaqDataProtectionA;
+
+  /// FAQ — pregunta sobre notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo recibo notificaciones?'**
+  String get helpFaqNotificationsQ;
+
+  /// FAQ — respuesta sobre notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Activa los avisos en tu perfil y permite las notificaciones del sistema. Recibirás aviso cuando haya novedades en tus expedientes.'**
+  String get helpFaqNotificationsA;
+
+  /// FAQ — pregunta sobre descarga de documentos.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Puedo descargar documentos oficiales?'**
+  String get helpFaqDocumentsQ;
+
+  /// FAQ — respuesta sobre descarga de documentos.
+  ///
+  /// In es, this message translates to:
+  /// **'Sí. Desde el detalle de cada expediente puedes descargar o compartir los documentos disponibles.'**
+  String get helpFaqDocumentsA;
+
+  /// FAQ — pregunta sobre uso sin conexión.
+  ///
+  /// In es, this message translates to:
+  /// **'¿La aplicación funciona sin conexión?'**
+  String get helpFaqOfflineQ;
+
+  /// FAQ — respuesta sobre uso sin conexión.
+  ///
+  /// In es, this message translates to:
+  /// **'Algunas funciones (consulta de tarjetas y contenidos legales) se mantienen sin conexión. Las que requieren datos actualizados necesitan conectividad.'**
+  String get helpFaqOfflineA;
+
+  /// Guía — primeros pasos: título.
+  ///
+  /// In es, this message translates to:
+  /// **'Primeros pasos'**
+  String get helpGuideFirstStepsTitle;
+
+  /// Guía — primeros pasos: cuerpo.
+  ///
+  /// In es, this message translates to:
+  /// **'Aprende a navegar entre Inicio, Expedientes, Notificaciones y Tarjetas. Personaliza tu perfil para una experiencia adaptada.'**
+  String get helpGuideFirstStepsBody;
+
+  /// Guía sobre la Carpeta Ciudadana AGE.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta Ciudadana del Estado'**
+  String get helpGuideCarpetaAgeTitle;
+
+  /// Guía AGE — cuerpo.
+  ///
+  /// In es, this message translates to:
+  /// **'Si tu trámite depende de la Administración General del Estado, accede directamente a la Carpeta Ciudadana AGE.'**
+  String get helpGuideCarpetaAgeBody;
+
+  /// Contacto — etiqueta para el teléfono 012.
+  ///
+  /// In es, this message translates to:
+  /// **'Atención telefónica 012'**
+  String get helpContact012PhoneLabel;
+
+  /// Contacto — etiqueta para el correo de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo de soporte'**
+  String get helpContactEmailSupportLabel;
+
+  /// Contacto — etiqueta del recurso web de oficinas de información.
+  ///
+  /// In es, this message translates to:
+  /// **'Oficinas de información y registro'**
+  String get helpContactOfficesUrlLabel;
+
+  /// Título de la pantalla de condiciones de uso.
+  ///
+  /// In es, this message translates to:
+  /// **'Condiciones de uso'**
+  String get legalTermsTitle;
+
+  /// Título de la pantalla de protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Protección de datos'**
+  String get legalPrivacyTitle;
+
+  /// Título de la pantalla de accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get legalAccessibilityTitle;
+
+  /// Título de la pantalla de aviso legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get legalNoticeTitle;
+
+  /// Título cuando el documento legal solicitado no existe.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento no encontrado'**
+  String get legalNotFoundTitle;
+
+  /// Mensaje cuando un documento legal no existe.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar el documento solicitado.'**
+  String get legalNotFoundMessage;
+
+  /// Título de la pantalla de mapa del sitio.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa del sitio'**
+  String get sitemapPageTitle;
+
+  /// Sitemap — agrupación de áreas autenticadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi espacio'**
+  String get sitemapGroupAuthenticated;
+
+  /// Sitemap — agrupación de landings temáticas.
+  ///
+  /// In es, this message translates to:
+  /// **'Áreas temáticas'**
+  String get sitemapGroupThematic;
+
+  /// Sitemap — agrupación de ayuda y páginas legales.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda y legales'**
+  String get sitemapGroupHelpLegal;
+
+  /// Sitemap — agrupación de enlaces externos.
+  ///
+  /// In es, this message translates to:
+  /// **'Recursos externos'**
+  String get sitemapGroupExternal;
+
+  /// Sitemap — Inicio.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get sitemapHome;
+
+  /// Sitemap — Agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get sitemapAgenda;
+
+  /// Sitemap — Expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Expedientes'**
+  String get sitemapCasework;
+
+  /// Sitemap — Notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get sitemapNotifications;
+
+  /// Sitemap — Tarjetas.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjetas'**
+  String get sitemapCards;
+
+  /// Sitemap — Recomendaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendaciones'**
+  String get sitemapRecommendations;
+
+  /// Sitemap — Soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Soporte'**
+  String get sitemapSupport;
+
+  /// Sitemap — Perfil.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfil'**
+  String get sitemapProfile;
+
+  /// Sitemap — Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get sitemapEducation;
+
+  /// Sitemap — Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get sitemapEmployment;
+
+  /// Sitemap — Bienestar Social.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar Social'**
+  String get sitemapSocialWelfare;
+
+  /// Sitemap — Estado y otros.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado y otros'**
+  String get sitemapStateAffairs;
+
+  /// Sitemap — Centro de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro de ayuda'**
+  String get sitemapHelp;
+
+  /// Footer — Ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda'**
+  String get footerHelp;
+
+  /// Footer — Mapa del sitio.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa del sitio'**
+  String get footerSitemap;
+
+  /// Footer — Condiciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Condiciones'**
+  String get footerTerms;
+
+  /// Footer — Privacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Privacidad'**
+  String get footerPrivacy;
+
+  /// Footer — Accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get footerAccessibility;
+
+  /// Footer — Aviso legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get footerLegalNotice;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

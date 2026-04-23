@@ -2,7 +2,7 @@
 id: 64
 jira_key:
 type: Story
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T01:35:57+02:00
+updated_at: 2026-05-04T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Definir la base de analítica, trazas y monitoring sin exponer datos sensibles del ciudadano, contemplando eventos clave de navegación, errores relevantes, descargas y enlaces externos, junto con una política explícita de redacción de PII.
 
 ## Acceptance Criteria
-- [ ] Se contempla logging estructurado y redactado.
-- [ ] Se contemplan eventos/telemetría para navegación principal, descargas, enlaces externos y errores relevantes.
-- [ ] Se contempla monitoring/crash reporting sin fuga de PII.
-- [ ] Se contempla preparación operativa para evolución futura, incluidas capacidades de notificación/push cuando proceda.
+- [x] Se contempla logging estructurado y redactado.
+- [x] Se contemplan eventos/telemetría para navegación principal, descargas, enlaces externos y errores relevantes.
+- [x] Se contempla monitoring/crash reporting sin fuga de PII.
+- [x] Se contempla preparación operativa para evolución futura, incluidas capacidades de notificación/push cuando proceda.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -74,7 +74,9 @@ Definir la base de analítica, trazas y monitoring sin exponer datos sensibles d
 ## Notes
 ### Comments
 - None yet.
+- 2026-05-04T12:00:00+02:00 | by ticket-manager | Formalizing Done status: STORY-64 was already internally marked Done in the change log of an earlier draft; this entry reconciles the ticket against the merged implementation on `develop`. Evidence: `lib/core/logging/` (`app_logger.dart`, `console_logger.dart`, `log_level.dart`, `logger_provider.dart`) provides structured PII-redacted logging; `lib/core/analytics/` (`analytics_service.dart`, `analytics_event.dart`, `console_analytics_service.dart`, `analytics_provider.dart`) provides navigation/error/external-link telemetry events and the crash-reporting hook readiness for future evolution; `lib/app/observers/analytics_observer.dart` wires navigation telemetry into the app shell. Implementing commit: `9ba4b8d`.
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-22T01:35:57+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 execution started.
+- 2026-05-04T12:00:00+02:00 | by ticket-manager | Status transitioned from `In Progress` → `Done` after reconciling against merged implementation on `develop`.

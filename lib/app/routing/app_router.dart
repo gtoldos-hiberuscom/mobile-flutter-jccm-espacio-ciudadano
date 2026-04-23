@@ -13,7 +13,12 @@ import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
+import 'package:jccm_espacio_ciudadano/features/help/2_presentation/help_page.dart';
+import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
+import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
+import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
 ///
@@ -80,32 +85,34 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.terms,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Condiciones de uso'),
+              const LegalDocumentPage(documentId: LegalDocumentId.terms),
         ),
         GoRoute(
           path: Routes.privacy,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Política de privacidad'),
+              const LegalDocumentPage(documentId: LegalDocumentId.privacy),
         ),
         GoRoute(
           path: Routes.accessibility,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Accesibilidad'),
+              const LegalDocumentPage(
+            documentId: LegalDocumentId.accessibility,
+          ),
         ),
         GoRoute(
           path: Routes.legalNotice,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const LegalPlaceholder(title: 'Aviso legal'),
+              const LegalDocumentPage(documentId: LegalDocumentId.legalNotice),
         ),
         GoRoute(
           path: Routes.sitemap,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const SitemapPlaceholder(),
+              const SitemapPage(),
         ),
         GoRoute(
           path: Routes.help,
           builder: (final BuildContext context, final GoRouterState state) =>
-              const HelpPlaceholder(),
+              const HelpPage(),
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────
@@ -153,7 +160,36 @@ final goRouterProvider = Provider<GoRouter>(
               path: Routes.home,
               builder:
                   (final BuildContext context, final GoRouterState state) =>
-                      const HomePlaceholder(),
+                      const HomePage(),
+            ),
+            // ── Thematic landings (placeholder until STORY-23/24/25/26) ────
+            GoRoute(
+              path: Routes.education,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const DomainLandingPlaceholder(title: 'Educación'),
+            ),
+            GoRoute(
+              path: Routes.employment,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const DomainLandingPlaceholder(title: 'Empleo'),
+            ),
+            GoRoute(
+              path: Routes.socialWelfare,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const DomainLandingPlaceholder(
+                title: 'Bienestar Social',
+              ),
+            ),
+            GoRoute(
+              path: Routes.stateAffairs,
+              builder:
+                  (final BuildContext context, final GoRouterState state) =>
+                      const DomainLandingPlaceholder(
+                title: 'Estado y otros',
+              ),
             ),
             GoRoute(
               path: Routes.agenda,

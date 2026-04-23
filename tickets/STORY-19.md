@@ -2,7 +2,7 @@
 id: 19
 jira_key:
 type: Story
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T02:00:00+02:00
+updated_at: 2026-05-04T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir el flujo obligatorio de aceptación/rechazo de autorizaciones y consulta de la información ampliada de protección de datos.
 
 ## Acceptance Criteria
-- [ ] Se contempla pantalla/modal inicial de condiciones de uso y autorizaciones antes del acceso funcional.
-- [ ] Se contempla navegación hacia información ampliada de protección de datos.
-- [ ] Se contempla rechazo y salida, así como aceptación y continuación.
-- [ ] Se contempla persistencia/versionado de consentimientos y su reutilización posterior en preferencias.
+- [x] Se contempla pantalla/modal inicial de condiciones de uso y autorizaciones antes del acceso funcional.
+- [x] Se contempla navegación hacia información ampliada de protección de datos.
+- [x] Se contempla rechazo y salida, así como aceptación y continuación.
+- [x] Se contempla persistencia/versionado de consentimientos y su reutilización posterior en preferencias.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -66,7 +66,9 @@ Cubrir el flujo obligatorio de aceptación/rechazo de autorizaciones y consulta 
 ## Notes
 ### Comments
 - None yet.
+- 2026-05-04T12:00:00+02:00 | by ticket-manager | Implementation merged to `develop`. Evidence under `lib/features/consent/` (entity, domain notifier, repository, presentation page) covering accept/reject flow, persistence and reuse. Implementing commits: `21a23b1`, `3131064`, `1cae757`, `84b9272`.
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-22T02:00:00+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 wave 2 execution started.
+- 2026-05-04T12:00:00+02:00 | by ticket-manager | Status transitioned from `In Progress` → `Done` after reconciling against merged implementation on `develop`.

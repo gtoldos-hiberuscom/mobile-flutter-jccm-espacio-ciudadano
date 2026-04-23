@@ -44,6 +44,21 @@ class DownloadEvent extends AnalyticsEvent {
   final String? mimeType;
 }
 
+/// Fired when the user taps a block on the authenticated home dashboard.
+///
+/// [blockId] is the stable string id of the block (e.g. `'education'`,
+/// `'notifications'`) — never a localised label or any value derived from
+/// user content.
+class HomeBlockNavigateEvent extends AnalyticsEvent {
+  const HomeBlockNavigateEvent(this.blockId, {this.target});
+
+  /// Stable identifier of the block that was tapped.
+  final String blockId;
+
+  /// Optional target route slug (e.g. `'/education'`).
+  final String? target;
+}
+
 /// Fired when the user follows an external link.
 ///
 /// Only the [domain] is recorded — the full URL is never stored because
@@ -53,6 +68,48 @@ class ExternalLinkEvent extends AnalyticsEvent {
 
   /// Registered domain of the external destination (e.g. `'sede.jccm.es'`).
   final String domain;
+}
+
+/// Fired when the application attempts to open an external link from the
+/// outbound-navigation infrastructure (STORY-28).
+///
+/// [linkId] is the stable, locale-independent identifier of the link in
+/// the [ExternalLinkCatalog] (e.g. `'educamos_clm'`) — never the
+/// localised label, never the full URL.
+/// [success] is `true` when the platform accepted the launch and `false`
+/// when the launcher returned a failure (validation rejected, platform
+/// rejected, or unknown error).
+class ExternalLinkOpenedEvent extends AnalyticsEvent {
+  const ExternalLinkOpenedEvent({
+    required this.linkId,
+    required this.success,
+  });
+
+  /// Stable identifier of the catalog entry.
+  final String linkId;
+
+  /// Whether the platform accepted the launch.
+  final bool success;
+}
+
+/// Fired when an external-link launch attempt fails.
+///
+/// Carries the same [linkId] as [ExternalLinkOpenedEvent] plus a
+/// coarse-grained [reason] code. The reason is intentionally a short
+/// stable label (e.g. `'invalidScheme'`, `'hostMismatch'`) — never the
+/// underlying error message — to guarantee no PII or session token can
+/// leak through analytics (canon §26).
+class ExternalLinkOpenFailedEvent extends AnalyticsEvent {
+  const ExternalLinkOpenFailedEvent({
+    required this.linkId,
+    required this.reason,
+  });
+
+  /// Stable identifier of the catalog entry.
+  final String linkId;
+
+  /// Coarse-grained failure reason as a short stable label.
+  final String reason;
 }
 
 // ── Errors ────────────────────────────────────────────────────────────────────

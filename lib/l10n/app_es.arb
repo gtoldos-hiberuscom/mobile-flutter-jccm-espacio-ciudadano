@@ -92,5 +92,320 @@
   "consentPageSemantics": "Pantalla de aceptación de condiciones de uso",
   "@consentPageSemantics": {
     "description": "Etiqueta de accesibilidad para la pantalla de consentimiento."
-  }
+  },
+  "loadingStateDefault": "Cargando…",
+  "@loadingStateDefault": {
+    "description": "Texto de accesibilidad predeterminado para los indicadores de carga."
+  },
+  "emptyStateDefault": "No hay elementos",
+  "@emptyStateDefault": {
+    "description": "Mensaje predeterminado para las pantallas de estado vacío."
+  },
+  "errorStateDefault": "Se ha producido un error",
+  "@errorStateDefault": {
+    "description": "Mensaje predeterminado para las pantallas de estado de error."
+  },
+  "errorStateRetry": "Reintentar",
+  "@errorStateRetry": {
+    "description": "Etiqueta del botón de reintento en el widget de estado de error."
+  },
+  "blockedStateDefault": "Acceso no disponible",
+  "@blockedStateDefault": {
+    "description": "Mensaje predeterminado para las pantallas de acceso bloqueado o mantenimiento."
+  },
+  "documentOpen": "Abrir documento",
+  "@documentOpen": {
+    "description": "Etiqueta de accesibilidad y tooltip para el botón de abrir documento."
+  },
+  "documentDownload": "Descargar documento",
+  "@documentDownload": {
+    "description": "Etiqueta de accesibilidad y tooltip para el botón de descarga de documento."
+  },
+  "documentShare": "Compartir documento",
+  "@documentShare": {
+    "description": "Etiqueta de accesibilidad y tooltip para el botón de compartir documento."
+  },
+  "loadMoreItems": "Cargar más elementos",
+  "@loadMoreItems": {
+    "description": "Etiqueta de accesibilidad para el pie de página de carga adicional en listas paginadas."
+  },
+  "pullToRefresh": "Desliza para actualizar",
+  "@pullToRefresh": {
+    "description": "Etiqueta de accesibilidad para el RefreshIndicator en listas paginadas."
+  },
+  "userGreeting": "Hola, {name}",
+  "@userGreeting": {
+    "description": "Saludo personalizado en la cabecera del usuario autenticado.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "userMenuProfile": "Mi perfil",
+  "@userMenuProfile": {
+    "description": "Ítem de menú de navegación al perfil del usuario."
+  },
+  "userMenuNotifications": "Notificaciones",
+  "@userMenuNotifications": {
+    "description": "Ítem de menú de navegación a notificaciones."
+  },
+  "userMenuSettings": "Configuración",
+  "@userMenuSettings": {
+    "description": "Ítem de menú de navegación a la configuración."
+  },
+  "userMenuLogout": "Cerrar sesión",
+  "@userMenuLogout": {
+    "description": "Ítem de menú para cerrar la sesión del usuario."
+  },
+  "maintenanceTitle": "Servicio en mantenimiento",
+  "@maintenanceTitle": {
+    "description": "Título de la página de mantenimiento."
+  },
+  "maintenanceSubtitle": "El servicio no está disponible temporalmente.",
+  "@maintenanceSubtitle": {
+    "description": "Subtítulo de la página de mantenimiento."
+  },
+  "maintenanceRetry": "Reintentar",
+  "@maintenanceRetry": {
+    "description": "Botón para reintentar la carga después del mantenimiento."
+  },
+  "homeGreetingFallback": "Bienvenido al Espacio Ciudadano",
+  "@homeGreetingFallback": {
+    "description": "Saludo mostrado en la home cuando todavía no se conoce el perfil del usuario."
+  },
+  "homeCitizenId": "Identificador: {id}",
+  "@homeCitizenId": {
+    "description": "Etiqueta del identificador del ciudadano (idAgente) mostrada en la home autenticada.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBlockEducationTitle": "Educación",
+  "@homeBlockEducationTitle": {
+    "description": "Título del bloque temático de Educación en la home."
+  },
+  "homeBlockEmploymentTitle": "Empleo",
+  "@homeBlockEmploymentTitle": {
+    "description": "Título del bloque temático de Empleo en la home."
+  },
+  "homeBlockSocialWelfareTitle": "Bienestar Social",
+  "@homeBlockSocialWelfareTitle": {
+    "description": "Título del bloque temático de Bienestar Social en la home."
+  },
+  "homeBlockStateAffairsTitle": "Estado y otros",
+  "@homeBlockStateAffairsTitle": {
+    "description": "Título del bloque temático de Estado y otros temas en la home."
+  },
+  "homeBlockAgendaTitle": "Agenda",
+  "@homeBlockAgendaTitle": {
+    "description": "Título del bloque temático de Agenda en la home."
+  },
+  "homeBlockUpcomingEventsTitle": "Próximos eventos",
+  "@homeBlockUpcomingEventsTitle": {
+    "description": "Título del widget de próximos eventos en la home."
+  },
+  "homeBlockCaseworkTitle": "Mis expedientes",
+  "@homeBlockCaseworkTitle": {
+    "description": "Título del widget de expedientes en la home."
+  },
+  "homeBlockNotificationsTitle": "Mis notificaciones",
+  "@homeBlockNotificationsTitle": {
+    "description": "Título del widget de notificaciones en la home."
+  },
+  "homeBlockDigitalCardsTitle": "Mis carnets digitales",
+  "@homeBlockDigitalCardsTitle": {
+    "description": "Título del widget de carnets digitales en la home."
+  },
+  "homeBlockRecommendationsTitle": "Recomendaciones",
+  "@homeBlockRecommendationsTitle": {
+    "description": "Título del widget de recomendaciones en la home."
+  },
+  "homeBlockEmpty": "Sin novedades",
+  "@homeBlockEmpty": {
+    "description": "Mensaje de estado vacío para una tarjeta de la home."
+  },
+  "homeBlockError": "No se ha podido cargar este bloque",
+  "@homeBlockError": {
+    "description": "Mensaje de error parcial mostrado en una tarjeta de la home cuando su carga falla."
+  },
+  "homeBlockCount": "{count, plural, =0{Sin elementos} =1{1 elemento} other{{count} elementos}}",
+  "@homeBlockCount": {
+    "description": "Resumen del número de elementos disponibles en una tarjeta de la home.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "homeBlockLastUpdated": "Actualizado a las {time}",
+  "@homeBlockLastUpdated": {
+    "description": "Etiqueta del timestamp de última actualización de una tarjeta de la home.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeBlockLastUpdatedUnknown": "Sin datos de actualización",
+  "@homeBlockLastUpdatedUnknown": {
+    "description": "Texto mostrado cuando no se conoce el timestamp de actualización de una tarjeta."
+  },
+  "externalLinkA11yHint": "Abre en navegador externo",
+  "@externalLinkA11yHint": {
+    "description": "Pista de accesibilidad anunciada por lectores de pantalla en cualquier botón que abre un enlace externo."
+  },
+  "externalLinkOpenFailed": "No se pudo abrir el enlace. Inténtalo de nuevo más tarde.",
+  "@externalLinkOpenFailed": {
+    "description": "Mensaje de SnackBar mostrado cuando un enlace externo no se puede abrir (validación o rechazo del sistema)."
+  },
+  "externalLinkEducamosClmLabel": "Educamos CLM",
+  "@externalLinkEducamosClmLabel": {
+    "description": "Etiqueta del enlace externo al portal Educamos CLM."
+  },
+  "externalLinkEmpleoClmLabel": "Empleo CLM",
+  "@externalLinkEmpleoClmLabel": {
+    "description": "Etiqueta del enlace externo al portal de Empleo de Castilla-La Mancha."
+  },
+  "externalLinkEmpleoPublicoClmLabel": "Empleo público CLM",
+  "@externalLinkEmpleoPublicoClmLabel": {
+    "description": "Etiqueta del enlace externo al portal de Empleo Público de Castilla-La Mancha."
+  },
+  "externalLinkSedeDgtLabel": "Sede Electrónica DGT",
+  "@externalLinkSedeDgtLabel": {
+    "description": "Etiqueta del enlace externo a la Sede Electrónica de la DGT."
+  },
+  "externalLinkCarpetaCiudadanaAgeLabel": "Carpeta Ciudadana AGE",
+  "@externalLinkCarpetaCiudadanaAgeLabel": {
+    "description": "Etiqueta del enlace externo a la Carpeta Ciudadana de la Administración General del Estado."
+  },
+  "externalLinkHistoriaSocialUnicaLabel": "Historia social única",
+  "@externalLinkHistoriaSocialUnicaLabel": {
+    "description": "Etiqueta del enlace externo al portal de Historia Social Única."
+  },
+  "externalLinkInfanciaFamiliasLabel": "Infancia y familias",
+  "@externalLinkInfanciaFamiliasLabel": {
+    "description": "Etiqueta del enlace externo al portal de Infancia y Familias."
+  },
+  "helpPageTitle": "Centro de ayuda",
+  "@helpPageTitle": {"description": "Título de la pantalla de ayuda."},
+  "helpSearchHint": "Buscar en preguntas frecuentes",
+  "@helpSearchHint": {"description": "Texto de ayuda del buscador local del centro de ayuda."},
+  "helpFaqSectionTitle": "Preguntas frecuentes",
+  "@helpFaqSectionTitle": {"description": "Encabezado de la sección FAQ."},
+  "helpGuidesSectionTitle": "Guías",
+  "@helpGuidesSectionTitle": {"description": "Encabezado de la sección de guías."},
+  "helpContactSectionTitle": "Contacto",
+  "@helpContactSectionTitle": {"description": "Encabezado de la sección de contacto."},
+  "helpEmptySearchMessage": "Sin resultados",
+  "@helpEmptySearchMessage": {"description": "Mensaje principal cuando la búsqueda local no encuentra resultados."},
+  "helpEmptySearchSubtitle": "Prueba con otros términos.",
+  "@helpEmptySearchSubtitle": {"description": "Subtítulo del estado vacío de búsqueda."},
+  "helpCategoryAccess": "Acceso y autenticación",
+  "@helpCategoryAccess": {"description": "Categoría FAQ: acceso y autenticación."},
+  "helpCategoryPrivacy": "Privacidad y datos",
+  "@helpCategoryPrivacy": {"description": "Categoría FAQ: privacidad y protección de datos."},
+  "helpCategoryServices": "Servicios y funcionalidades",
+  "@helpCategoryServices": {"description": "Categoría FAQ: uso de los servicios."},
+  "helpFaqLoginClaveQ": "¿Cómo accedo con Cl@ve?",
+  "@helpFaqLoginClaveQ": {"description": "FAQ — pregunta sobre acceso con Cl@ve."},
+  "helpFaqLoginClaveA": "Pulsa \"Acceder con Cl@ve\" en la pantalla de inicio. Se abrirá el sistema oficial de identificación. Tras la autenticación volverás a la aplicación.",
+  "@helpFaqLoginClaveA": {"description": "FAQ — respuesta sobre acceso con Cl@ve."},
+  "helpFaqLoginProblemsQ": "No puedo iniciar sesión, ¿qué hago?",
+  "@helpFaqLoginProblemsQ": {"description": "FAQ — pregunta sobre problemas de acceso."},
+  "helpFaqLoginProblemsA": "Verifica tu conexión y que tu certificado o credencial Cl@ve siga vigente. Si el problema persiste, contacta con el 012.",
+  "@helpFaqLoginProblemsA": {"description": "FAQ — respuesta sobre problemas de acceso."},
+  "helpFaqDataProtectionQ": "¿Qué se hace con mis datos personales?",
+  "@helpFaqDataProtectionQ": {"description": "FAQ — pregunta sobre protección de datos."},
+  "helpFaqDataProtectionA": "Tus datos se tratan conforme al RGPD y la LOPDGDD. Consulta la política de privacidad para conocer las finalidades, plazos y derechos.",
+  "@helpFaqDataProtectionA": {"description": "FAQ — respuesta sobre protección de datos."},
+  "helpFaqNotificationsQ": "¿Cómo recibo notificaciones?",
+  "@helpFaqNotificationsQ": {"description": "FAQ — pregunta sobre notificaciones."},
+  "helpFaqNotificationsA": "Activa los avisos en tu perfil y permite las notificaciones del sistema. Recibirás aviso cuando haya novedades en tus expedientes.",
+  "@helpFaqNotificationsA": {"description": "FAQ — respuesta sobre notificaciones."},
+  "helpFaqDocumentsQ": "¿Puedo descargar documentos oficiales?",
+  "@helpFaqDocumentsQ": {"description": "FAQ — pregunta sobre descarga de documentos."},
+  "helpFaqDocumentsA": "Sí. Desde el detalle de cada expediente puedes descargar o compartir los documentos disponibles.",
+  "@helpFaqDocumentsA": {"description": "FAQ — respuesta sobre descarga de documentos."},
+  "helpFaqOfflineQ": "¿La aplicación funciona sin conexión?",
+  "@helpFaqOfflineQ": {"description": "FAQ — pregunta sobre uso sin conexión."},
+  "helpFaqOfflineA": "Algunas funciones (consulta de tarjetas y contenidos legales) se mantienen sin conexión. Las que requieren datos actualizados necesitan conectividad.",
+  "@helpFaqOfflineA": {"description": "FAQ — respuesta sobre uso sin conexión."},
+  "helpGuideFirstStepsTitle": "Primeros pasos",
+  "@helpGuideFirstStepsTitle": {"description": "Guía — primeros pasos: título."},
+  "helpGuideFirstStepsBody": "Aprende a navegar entre Inicio, Expedientes, Notificaciones y Tarjetas. Personaliza tu perfil para una experiencia adaptada.",
+  "@helpGuideFirstStepsBody": {"description": "Guía — primeros pasos: cuerpo."},
+  "helpGuideCarpetaAgeTitle": "Carpeta Ciudadana del Estado",
+  "@helpGuideCarpetaAgeTitle": {"description": "Guía sobre la Carpeta Ciudadana AGE."},
+  "helpGuideCarpetaAgeBody": "Si tu trámite depende de la Administración General del Estado, accede directamente a la Carpeta Ciudadana AGE.",
+  "@helpGuideCarpetaAgeBody": {"description": "Guía AGE — cuerpo."},
+  "helpContact012PhoneLabel": "Atención telefónica 012",
+  "@helpContact012PhoneLabel": {"description": "Contacto — etiqueta para el teléfono 012."},
+  "helpContactEmailSupportLabel": "Correo de soporte",
+  "@helpContactEmailSupportLabel": {"description": "Contacto — etiqueta para el correo de soporte."},
+  "helpContactOfficesUrlLabel": "Oficinas de información y registro",
+  "@helpContactOfficesUrlLabel": {"description": "Contacto — etiqueta del recurso web de oficinas de información."},
+  "legalTermsTitle": "Condiciones de uso",
+  "@legalTermsTitle": {"description": "Título de la pantalla de condiciones de uso."},
+  "legalPrivacyTitle": "Protección de datos",
+  "@legalPrivacyTitle": {"description": "Título de la pantalla de protección de datos."},
+  "legalAccessibilityTitle": "Accesibilidad",
+  "@legalAccessibilityTitle": {"description": "Título de la pantalla de accesibilidad."},
+  "legalNoticeTitle": "Aviso legal",
+  "@legalNoticeTitle": {"description": "Título de la pantalla de aviso legal."},
+  "legalNotFoundTitle": "Documento no encontrado",
+  "@legalNotFoundTitle": {"description": "Título cuando el documento legal solicitado no existe."},
+  "legalNotFoundMessage": "No se ha podido cargar el documento solicitado.",
+  "@legalNotFoundMessage": {"description": "Mensaje cuando un documento legal no existe."},
+  "sitemapPageTitle": "Mapa del sitio",
+  "@sitemapPageTitle": {"description": "Título de la pantalla de mapa del sitio."},
+  "sitemapGroupAuthenticated": "Mi espacio",
+  "@sitemapGroupAuthenticated": {"description": "Sitemap — agrupación de áreas autenticadas."},
+  "sitemapGroupThematic": "Áreas temáticas",
+  "@sitemapGroupThematic": {"description": "Sitemap — agrupación de landings temáticas."},
+  "sitemapGroupHelpLegal": "Ayuda y legales",
+  "@sitemapGroupHelpLegal": {"description": "Sitemap — agrupación de ayuda y páginas legales."},
+  "sitemapGroupExternal": "Recursos externos",
+  "@sitemapGroupExternal": {"description": "Sitemap — agrupación de enlaces externos."},
+  "sitemapHome": "Inicio",
+  "@sitemapHome": {"description": "Sitemap — Inicio."},
+  "sitemapAgenda": "Agenda",
+  "@sitemapAgenda": {"description": "Sitemap — Agenda."},
+  "sitemapCasework": "Expedientes",
+  "@sitemapCasework": {"description": "Sitemap — Expedientes."},
+  "sitemapNotifications": "Notificaciones",
+  "@sitemapNotifications": {"description": "Sitemap — Notificaciones."},
+  "sitemapCards": "Tarjetas",
+  "@sitemapCards": {"description": "Sitemap — Tarjetas."},
+  "sitemapRecommendations": "Recomendaciones",
+  "@sitemapRecommendations": {"description": "Sitemap — Recomendaciones."},
+  "sitemapSupport": "Soporte",
+  "@sitemapSupport": {"description": "Sitemap — Soporte."},
+  "sitemapProfile": "Perfil",
+  "@sitemapProfile": {"description": "Sitemap — Perfil."},
+  "sitemapEducation": "Educación",
+  "@sitemapEducation": {"description": "Sitemap — Educación."},
+  "sitemapEmployment": "Empleo",
+  "@sitemapEmployment": {"description": "Sitemap — Empleo."},
+  "sitemapSocialWelfare": "Bienestar Social",
+  "@sitemapSocialWelfare": {"description": "Sitemap — Bienestar Social."},
+  "sitemapStateAffairs": "Estado y otros",
+  "@sitemapStateAffairs": {"description": "Sitemap — Estado y otros."},
+  "sitemapHelp": "Centro de ayuda",
+  "@sitemapHelp": {"description": "Sitemap — Centro de ayuda."},
+  "footerHelp": "Ayuda",
+  "@footerHelp": {"description": "Footer — Ayuda."},
+  "footerSitemap": "Mapa del sitio",
+  "@footerSitemap": {"description": "Footer — Mapa del sitio."},
+  "footerTerms": "Condiciones",
+  "@footerTerms": {"description": "Footer — Condiciones."},
+  "footerPrivacy": "Privacidad",
+  "@footerPrivacy": {"description": "Footer — Privacidad."},
+  "footerAccessibility": "Accesibilidad",
+  "@footerAccessibility": {"description": "Footer — Accesibilidad."},
+  "footerLegalNotice": "Aviso legal",
+  "@footerLegalNotice": {"description": "Footer — Aviso legal."}
 }

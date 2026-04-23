@@ -76,4 +76,331 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentPageSemantics => 'Terms of use acceptance screen';
+
+  @override
+  String get loadingStateDefault => 'Loading…';
+
+  @override
+  String get emptyStateDefault => 'No items';
+
+  @override
+  String get errorStateDefault => 'An error occurred';
+
+  @override
+  String get errorStateRetry => 'Retry';
+
+  @override
+  String get blockedStateDefault => 'Access not available';
+
+  @override
+  String get documentOpen => 'Open document';
+
+  @override
+  String get documentDownload => 'Download document';
+
+  @override
+  String get documentShare => 'Share document';
+
+  @override
+  String get loadMoreItems => 'Load more items';
+
+  @override
+  String get pullToRefresh => 'Pull to refresh';
+
+  @override
+  String userGreeting(String name) {
+    return 'Hello, $name';
+  }
+
+  @override
+  String get userMenuProfile => 'My profile';
+
+  @override
+  String get userMenuNotifications => 'Notifications';
+
+  @override
+  String get userMenuSettings => 'Settings';
+
+  @override
+  String get userMenuLogout => 'Log out';
+
+  @override
+  String get maintenanceTitle => 'Service under maintenance';
+
+  @override
+  String get maintenanceSubtitle => 'The service is temporarily unavailable.';
+
+  @override
+  String get maintenanceRetry => 'Retry';
+
+  @override
+  String get homeGreetingFallback => 'Welcome to Espacio Ciudadano';
+
+  @override
+  String homeCitizenId(String id) {
+    return 'Citizen ID: $id';
+  }
+
+  @override
+  String get homeBlockEducationTitle => 'Education';
+
+  @override
+  String get homeBlockEmploymentTitle => 'Employment';
+
+  @override
+  String get homeBlockSocialWelfareTitle => 'Social welfare';
+
+  @override
+  String get homeBlockStateAffairsTitle => 'State and other affairs';
+
+  @override
+  String get homeBlockAgendaTitle => 'Agenda';
+
+  @override
+  String get homeBlockUpcomingEventsTitle => 'Upcoming events';
+
+  @override
+  String get homeBlockCaseworkTitle => 'My casework';
+
+  @override
+  String get homeBlockNotificationsTitle => 'My notifications';
+
+  @override
+  String get homeBlockDigitalCardsTitle => 'My digital cards';
+
+  @override
+  String get homeBlockRecommendationsTitle => 'Recommendations';
+
+  @override
+  String get homeBlockEmpty => 'Nothing to show';
+
+  @override
+  String get homeBlockError => 'This block could not be loaded';
+
+  @override
+  String homeBlockCount(int count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countString items',
+      one: '1 item',
+      zero: 'No items',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeBlockLastUpdated(String time) {
+    return 'Updated at $time';
+  }
+
+  @override
+  String get homeBlockLastUpdatedUnknown => 'No update info';
+
+  @override
+  String get externalLinkA11yHint => 'Opens in external browser';
+
+  @override
+  String get externalLinkOpenFailed => 'The link could not be opened. Please try again later.';
+
+  @override
+  String get externalLinkEducamosClmLabel => 'Educamos CLM';
+
+  @override
+  String get externalLinkEmpleoClmLabel => 'Castilla-La Mancha Employment';
+
+  @override
+  String get externalLinkEmpleoPublicoClmLabel => 'Castilla-La Mancha Public Employment';
+
+  @override
+  String get externalLinkSedeDgtLabel => 'DGT e-office';
+
+  @override
+  String get externalLinkCarpetaCiudadanaAgeLabel => 'Citizen Folder (AGE)';
+
+  @override
+  String get externalLinkHistoriaSocialUnicaLabel => 'Unified Social History';
+
+  @override
+  String get externalLinkInfanciaFamiliasLabel => 'Childhood and families';
+
+  @override
+  String get helpPageTitle => 'Help center';
+
+  @override
+  String get helpSearchHint => 'Search frequently asked questions';
+
+  @override
+  String get helpFaqSectionTitle => 'Frequently asked questions';
+
+  @override
+  String get helpGuidesSectionTitle => 'Guides';
+
+  @override
+  String get helpContactSectionTitle => 'Contact';
+
+  @override
+  String get helpEmptySearchMessage => 'No results';
+
+  @override
+  String get helpEmptySearchSubtitle => 'Try different search terms.';
+
+  @override
+  String get helpCategoryAccess => 'Access and authentication';
+
+  @override
+  String get helpCategoryPrivacy => 'Privacy and data';
+
+  @override
+  String get helpCategoryServices => 'Services and features';
+
+  @override
+  String get helpFaqLoginClaveQ => 'How do I sign in with Cl@ve?';
+
+  @override
+  String get helpFaqLoginClaveA => 'Tap \"Sign in with Cl@ve\" on the welcome screen. The official identification system opens; once authenticated you return to the app.';
+
+  @override
+  String get helpFaqLoginProblemsQ => 'I can\'t sign in, what should I do?';
+
+  @override
+  String get helpFaqLoginProblemsA => 'Check your connection and that your Cl@ve credential is still valid. If the issue persists, contact 012.';
+
+  @override
+  String get helpFaqDataProtectionQ => 'What happens with my personal data?';
+
+  @override
+  String get helpFaqDataProtectionA => 'Your data is processed under GDPR and LOPDGDD. See the privacy policy for purposes, retention and your rights.';
+
+  @override
+  String get helpFaqNotificationsQ => 'How do I receive notifications?';
+
+  @override
+  String get helpFaqNotificationsA => 'Enable alerts in your profile and allow system notifications. You will be notified of changes in your case files.';
+
+  @override
+  String get helpFaqDocumentsQ => 'Can I download official documents?';
+
+  @override
+  String get helpFaqDocumentsA => 'Yes. From each case file detail you can download or share the available documents.';
+
+  @override
+  String get helpFaqOfflineQ => 'Does the app work offline?';
+
+  @override
+  String get helpFaqOfflineA => 'Some features (cards and legal content) work offline. Anything that needs fresh data requires connectivity.';
+
+  @override
+  String get helpGuideFirstStepsTitle => 'First steps';
+
+  @override
+  String get helpGuideFirstStepsBody => 'Learn how to navigate Home, Case files, Notifications and Cards. Personalise your profile for a tailored experience.';
+
+  @override
+  String get helpGuideCarpetaAgeTitle => 'State Citizen Folder';
+
+  @override
+  String get helpGuideCarpetaAgeBody => 'If your case depends on the Spanish State Administration, open the AGE Citizen Folder directly.';
+
+  @override
+  String get helpContact012PhoneLabel => '012 phone support';
+
+  @override
+  String get helpContactEmailSupportLabel => 'Support email';
+
+  @override
+  String get helpContactOfficesUrlLabel => 'Information and registry offices';
+
+  @override
+  String get legalTermsTitle => 'Terms of use';
+
+  @override
+  String get legalPrivacyTitle => 'Data protection';
+
+  @override
+  String get legalAccessibilityTitle => 'Accessibility';
+
+  @override
+  String get legalNoticeTitle => 'Legal notice';
+
+  @override
+  String get legalNotFoundTitle => 'Document not found';
+
+  @override
+  String get legalNotFoundMessage => 'The requested document could not be loaded.';
+
+  @override
+  String get sitemapPageTitle => 'Sitemap';
+
+  @override
+  String get sitemapGroupAuthenticated => 'My space';
+
+  @override
+  String get sitemapGroupThematic => 'Thematic areas';
+
+  @override
+  String get sitemapGroupHelpLegal => 'Help and legal';
+
+  @override
+  String get sitemapGroupExternal => 'External resources';
+
+  @override
+  String get sitemapHome => 'Home';
+
+  @override
+  String get sitemapAgenda => 'Agenda';
+
+  @override
+  String get sitemapCasework => 'Case files';
+
+  @override
+  String get sitemapNotifications => 'Notifications';
+
+  @override
+  String get sitemapCards => 'Cards';
+
+  @override
+  String get sitemapRecommendations => 'Recommendations';
+
+  @override
+  String get sitemapSupport => 'Support';
+
+  @override
+  String get sitemapProfile => 'Profile';
+
+  @override
+  String get sitemapEducation => 'Education';
+
+  @override
+  String get sitemapEmployment => 'Employment';
+
+  @override
+  String get sitemapSocialWelfare => 'Social welfare';
+
+  @override
+  String get sitemapStateAffairs => 'State and other';
+
+  @override
+  String get sitemapHelp => 'Help center';
+
+  @override
+  String get footerHelp => 'Help';
+
+  @override
+  String get footerSitemap => 'Sitemap';
+
+  @override
+  String get footerTerms => 'Terms';
+
+  @override
+  String get footerPrivacy => 'Privacy';
+
+  @override
+  String get footerAccessibility => 'Accessibility';
+
+  @override
+  String get footerLegalNotice => 'Legal notice';
 }
