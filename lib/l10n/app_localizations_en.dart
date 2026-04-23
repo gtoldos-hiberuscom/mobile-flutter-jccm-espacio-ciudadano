@@ -471,4 +471,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get agendaDetailWhen => 'Date';
+
+  @override
+  String get stateAffairsTitle => 'State and other matters of interest';
+
+  @override
+  String get stateAffairsHeaderDescription => 'Information from national registries (INE/Padrón, Catastro, DGT). Data may not be updated in real time.';
+
+  @override
+  String get stateAffairsResidenceTitle => 'Residence';
+
+  @override
+  String get stateAffairsResidenceSource => 'Source: INE / municipal census';
+
+  @override
+  String get stateAffairsResidenceMunicipio => 'Municipality';
+
+  @override
+  String get stateAffairsResidenceProvincia => 'Province';
+
+  @override
+  String get stateAffairsResidenceComunidad => 'Autonomous community';
+
+  @override
+  String get stateAffairsResidenceDireccion => 'Address';
+
+  @override
+  String get stateAffairsResidenceCp => 'Postal code';
+
+  @override
+  String stateAffairsResidenceLastUpdated(String timestamp) {
+    return 'Updated: $timestamp';
+  }
+
+  @override
+  String get stateAffairsPropertiesTitle => 'Real-estate assets';
+
+  @override
+  String get stateAffairsPropertiesSource => 'Source: Catastro';
+
+  @override
+  String get stateAffairsPropertiesEmpty => 'No real-estate assets are registered under your name.';
+
+  @override
+  String get stateAffairsPropertiesError => 'We could not load Catastro data.';
+
+  @override
+  String stateAffairsPropertiesTitularidad(String value) {
+    return 'Ownership: $value';
+  }
+
+  @override
+  String stateAffairsPropertiesSurface(String m2) {
+    return 'Surface: $m2 m²';
+  }
+
+  @override
+  String stateAffairsPropertiesReference(String value) {
+    return 'Cadastral reference: $value';
+  }
+
+  @override
+  String get stateAffairsVehiclesTitle => 'Vehicles';
+
+  @override
+  String get stateAffairsVehiclesSource => 'Source: DGT';
+
+  @override
+  String get stateAffairsVehiclesEmpty => 'No vehicles are registered under your name.';
+
+  @override
+  String get stateAffairsVehiclesError => 'We could not load DGT data.';
+
+  @override
+  String stateAffairsVehiclesPlate(String value) {
+    return 'Plate: $value';
+  }
+
+  @override
+  String stateAffairsVehiclesFuel(String value) {
+    return 'Fuel: $value';
+  }
+
+  @override
+  String get stateAffairsDataDisclaimer => 'Data is sourced from DGT, INE and Catastro and may not be updated in real time.';
+
+  @override
+  String get domainExternalLinksTitle => 'External links';
+
+  @override
+  String get domainGenericLoadError => 'We could not load the requested information.';
 }
