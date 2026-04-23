@@ -114,6 +114,35 @@ class ExternalLinkOpenFailedEvent extends AnalyticsEvent {
 
 // ── Errors ────────────────────────────────────────────────────────────────────
 
+/// Fired when the user changes the agenda temporal filter (STORY-29).
+///
+/// [periodId] is the stable enum name of the [AgendaPeriodFilter]
+/// (e.g. `'all'`, `'next7Days'`) — never a localised label.
+class AgendaPeriodChangedEvent extends AnalyticsEvent {
+  const AgendaPeriodChangedEvent({required this.periodId});
+
+  /// Stable identifier of the selected period filter.
+  final String periodId;
+}
+
+/// Fired when the user opens the detail view of an agenda event (STORY-29).
+///
+/// [eventId] is the stable identifier from the agenda repository — must
+/// not embed PII. [category] is the stable enum name of the
+/// `AgendaCategory` (e.g. `'salud'`, `'administrativo'`).
+class AgendaEventOpenedEvent extends AnalyticsEvent {
+  const AgendaEventOpenedEvent({
+    required this.eventId,
+    required this.category,
+  });
+
+  /// Stable identifier of the opened event.
+  final String eventId;
+
+  /// Stable enum name of the event category.
+  final String category;
+}
+
 /// Fired when a user-visible or operationally relevant error occurs.
 ///
 /// [errorType] is the runtime type name of the `AppError` subclass —

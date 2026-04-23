@@ -404,4 +404,72 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get footerLegalNotice => 'Aviso legal';
+
+  @override
+  String get agendaPageTitle => 'Agenda';
+
+  @override
+  String get agendaFilterAll => 'Todos';
+
+  @override
+  String get agendaFilterNext7Days => 'Próximos 7 días';
+
+  @override
+  String get agendaFilterNext30Days => 'Próximos 30 días';
+
+  @override
+  String get agendaFilterNext365Days => 'Próximos 365 días';
+
+  @override
+  String get agendaFilterPast => 'Pasados';
+
+  @override
+  String get agendaViewList => 'Lista';
+
+  @override
+  String get agendaViewCalendar => 'Calendario';
+
+  @override
+  String get agendaEmpty => 'No hay eventos para el periodo seleccionado.';
+
+  @override
+  String get agendaError => 'No hemos podido cargar tu agenda.';
+
+  @override
+  String agendaLastUpdated(String timestamp) {
+    return 'Última actualización: $timestamp';
+  }
+
+  @override
+  String get agendaCategorySalud => 'Salud';
+
+  @override
+  String get agendaCategoryAdministrativo => 'Administrativo';
+
+  @override
+  String get agendaCategoryEducacion => 'Educación';
+
+  @override
+  String get agendaCategoryOtros => 'Otros';
+
+  @override
+  String get agendaPreviousMonth => 'Mes anterior';
+
+  @override
+  String get agendaNextMonth => 'Mes siguiente';
+
+  @override
+  String get agendaClearDay => 'Quitar filtro de día';
+
+  @override
+  String get agendaDetailBack => 'Volver';
+
+  @override
+  String get agendaDetailNotFound => 'El evento solicitado ya no está disponible.';
+
+  @override
+  String get agendaDetailLocation => 'Ubicación';
+
+  @override
+  String get agendaDetailWhen => 'Fecha';
 }
