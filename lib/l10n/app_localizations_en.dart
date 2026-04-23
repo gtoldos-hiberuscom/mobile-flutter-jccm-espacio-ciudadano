@@ -225,6 +225,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalLinkHistoriaSocialUnicaLabel => 'Unified Social History';
 
   @override
+  String get externalLinkBienestarSocialClmLabel => 'Social Welfare CLM';
+
+  @override
   String get externalLinkInfanciaFamiliasLabel => 'Childhood and families';
 
   @override
@@ -644,4 +647,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get employmentOffersDescription => 'Browsing and managing your offer subscriptions takes place directly on the Empleo CLM portal.';
+
+  @override
+  String get socialWelfareTitle => 'Social Welfare';
+
+  @override
+  String get socialWelfareHeaderDescription => 'Check your familia numerosa title and reach the official Castilla-La Mancha social welfare services.';
+
+  @override
+  String get socialWelfareFamilyTitle => 'Large family';
+
+  @override
+  String get socialWelfareFamilySource => 'Source: Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get socialWelfareFamilyEmpty => 'No large-family title is registered under your name.';
+
+  @override
+  String get socialWelfareFamilyError => 'We could not load your large-family title.';
+
+  @override
+  String get socialWelfareFamilyNumberLabel => 'Title number';
+
+  @override
+  String get socialWelfareFamilyCategoriaLabel => 'Category';
+
+  @override
+  String get socialWelfareFamilyCaducidadLabel => 'Expiration date';
+
+  @override
+  String get socialWelfareFamilyCategoriaGeneral => 'General';
+
+  @override
+  String get socialWelfareFamilyCategoriaEspecial => 'Special';
+
+  @override
+  String get socialWelfareFamilyBeneficiariosTitle => 'Beneficiaries';
+
+  @override
+  String get socialWelfareFamilyRelacionTitular => 'Title holder';
+
+  @override
+  String get socialWelfareFamilyRelacionConyuge => 'Spouse';
+
+  @override
+  String get socialWelfareFamilyRelacionHijo => 'Child';
+
+  @override
+  String socialWelfareFamilyBeneficiarioLine(String relacion, String fecha) {
+    return '$relacion — born on $fecha';
+  }
+
+  @override
+  String get socialWelfareTermalismoTitle => 'Thermal-spa programs';
+
+  @override
+  String get socialWelfareTermalismoDescription => 'The Castilla-La Mancha thermal-spa program is managed through the official Social Welfare portal.';
+
+  @override
+  String get socialWelfareParkingTitle => 'Parking card';
+
+  @override
+  String get socialWelfareParkingDescription => 'Requesting and managing the disability parking card is handled in the corresponding e-office.';
+
+  @override
+  String get socialWelfareDependenciaTitle => 'Dependency support';
+
+  @override
+  String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
 }

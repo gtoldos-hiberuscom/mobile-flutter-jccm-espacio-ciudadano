@@ -27,6 +27,11 @@ enum ExternalLinkCategory {
   /// Historia social única — social welfare unified history portal.
   socialHistoria,
 
+  /// Bienestar Social CLM — JCCM social welfare general portal (used as
+  /// landing for capabilities without a federated read endpoint, e.g.
+  /// termalismo / atención a la dependencia per TASK-27).
+  socialWelfareCLM,
+
   /// Infancia y familias — childhood and families portal.
   infanciaFamilias,
 }
