@@ -9,9 +9,7 @@ import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/paginated_list_view.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_links_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_link_button.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_links_section.dart';
 import 'package:jccm_espacio_ciudadano/features/state_affairs/0_entity/cadastral_property.dart';
 import 'package:jccm_espacio_ciudadano/features/state_affairs/0_entity/residence_data.dart';
 import 'package:jccm_espacio_ciudadano/features/state_affairs/0_entity/state_affairs_snapshot.dart';
@@ -158,7 +156,7 @@ class _StateAffairsLandingPageState
             ),
           ),
         ),
-        const _ExternalLinksSection(linkIds: <String>[
+        const ExternalLinksSection(linkIds: <String>[
           'sede_dgt',
           'carpeta_ciudadana_age',
         ]),
@@ -367,65 +365,5 @@ class _LabeledRow extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-/// Renders the "Enlaces externos" section using the existing
-/// external-link catalog (STORY-28). Accepts a list of catalog `id`s
-/// instead of URLs to preserve the allow-list contract.
-class _ExternalLinksSection extends ConsumerWidget {
-  const _ExternalLinksSection({required this.linkIds});
-
-  final List<String> linkIds;
-
-  @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final catalog = ref.watch(externalLinkCatalogProvider);
-    final links = <ExternalLink>[
-      for (final id in linkIds)
-        if (catalog.findById(id) != null) catalog.findById(id)!,
-    ];
-    if (links.isEmpty) {
-      return const SizedBox.shrink();
-    }
-    return DomainSection(
-      title: l10n.domainExternalLinksTitle,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final link in links) ...[
-            ExternalLinkButton(
-              link: link,
-              label: _resolveLabel(l10n, link.displayKey),
-            ),
-            const SizedBox(height: AppDimensions.space8),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-/// Resolves a catalog `displayKey` to a localized label without forcing
-/// every consumer to import the generated `AppLocalizations` switch.
-String _resolveLabel(final AppLocalizations l10n, final String key) {
-  switch (key) {
-    case 'externalLinkEducamosClmLabel':
-      return l10n.externalLinkEducamosClmLabel;
-    case 'externalLinkEmpleoClmLabel':
-      return l10n.externalLinkEmpleoClmLabel;
-    case 'externalLinkEmpleoPublicoClmLabel':
-      return l10n.externalLinkEmpleoPublicoClmLabel;
-    case 'externalLinkSedeDgtLabel':
-      return l10n.externalLinkSedeDgtLabel;
-    case 'externalLinkCarpetaCiudadanaAgeLabel':
-      return l10n.externalLinkCarpetaCiudadanaAgeLabel;
-    case 'externalLinkHistoriaSocialUnicaLabel':
-      return l10n.externalLinkHistoriaSocialUnicaLabel;
-    case 'externalLinkInfanciaFamiliasLabel':
-      return l10n.externalLinkInfanciaFamiliasLabel;
-    default:
-      return key;
   }
 }
