@@ -2,12 +2,12 @@
 id: 32
 jira_key:
 type: Task
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 4
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T08:30:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Conseguir ejemplos reales y cerrar la estrategia de parsing para citas, citas pasadas y CIP, actualmente tipados como string.
 
 ## Acceptance Criteria
-- [ ] Se obtienen o solicitan ejemplos reales de respuestas string de SESCAM.
-- [ ] Se decide estrategia de parseo, validación y manejo de errores recuperables.
-- [ ] Se documenta el impacto en agenda, CIP y widget de próximos eventos.
-- [ ] Se dejan trazadas las limitaciones si no hay acceso temprano a preproducción.
+- [x] Se obtienen o solicitan ejemplos reales de respuestas string de SESCAM.
+- [x] Se decide estrategia de parseo, validación y manejo de errores recuperables.
+- [x] Se documenta el impacto en agenda, CIP y widget de próximos eventos.
+- [x] Se dejan trazadas las limitaciones si no hay acceso temprano a preproducción.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -74,3 +74,5 @@ Conseguir ejemplos reales y cerrar la estrategia de parsing para citas, citas pa
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T08:20:00+02:00 | by plan-manager | Sprint 4: To Do → In Progress; sprint set.
+- 2026-04-22T08:30:00+02:00 | by plan-manager | Strategy documented in `documentation/discovery/TASK-32-sescam-payload-strategy.md`. Tolerant parser scaffold landed in `lib/features/agenda/3_data/sescam/sescam_payload_parser.dart` with 4 strategies (json_object, json_array, line_separated, base64_envelope), typed error taxonomy (empty/unknownShape/partial/serverEnvelopeKo) and feature flag `kSescamLiveParsingEnabled = false`. 12 unit tests pass. Ticket marked Done — must be revisited as soon as a real preproduction sample is captured. AC1 satisfied as "documented request" (no preproduction credentials available in this run).
