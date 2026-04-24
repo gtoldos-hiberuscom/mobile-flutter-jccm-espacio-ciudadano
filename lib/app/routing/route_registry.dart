@@ -41,6 +41,7 @@ abstract final class Routes {
   static const String caseworkSearch = '/casework/search';
   static const String caseworkItemDetail = '/casework/item/:id';
   static const String notifications = '/notifications';
+  static const String notificationDetail = '/notifications/:id';
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
