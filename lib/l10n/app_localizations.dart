@@ -2371,6 +2371,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Mis autorizaciones'**
   String get dataConsentNavCta;
+
+  /// Digital cards exporter — label for the open-with-system-viewer action.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir'**
+  String get walletActionOpen;
+
+  /// Digital cards exporter — label for the share-sheet action.
+  ///
+  /// In es, this message translates to:
+  /// **'Compartir'**
+  String get walletActionShare;
+
+  /// Digital cards exporter — label for the Apple/Google Wallet action.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir a Wallet'**
+  String get walletActionAddToWallet;
+
+  /// Digital cards exporter — placeholder caption for a PDF preview tile.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento PDF'**
+  String get walletPreviewPdfPlaceholder;
+
+  /// Digital cards exporter — placeholder caption for a PKPass preview tile.
+  ///
+  /// In es, this message translates to:
+  /// **'Pase para Wallet'**
+  String get walletPreviewPkpassPlaceholder;
+
+  /// Digital cards exporter — fallback message when the QR image bytes are missing.
+  ///
+  /// In es, this message translates to:
+  /// **'Vista previa del QR no disponible'**
+  String get walletPreviewQrUnavailable;
+
+  /// Digital cards exporter — accessibility label for the QR image preview.
+  ///
+  /// In es, this message translates to:
+  /// **'Imagen del código QR'**
+  String get walletPreviewQrImageSemantic;
+
+  /// Digital cards exporter — accessibility label for the QR textual preview.
+  ///
+  /// In es, this message translates to:
+  /// **'Contenido del código QR en texto'**
+  String get walletPreviewQrTextSemantic;
+
+  /// Digital cards exporter — error shown when the binary fails magic / size validation.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo recibido no es válido. Inténtalo de nuevo.'**
+  String get walletErrorInvalidArtifact;
+
+  /// Digital cards exporter — error shown when an OS-level operation fails.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido completar la acción. Inténtalo de nuevo.'**
+  String get walletErrorSystem;
+
+  /// Digital cards exporter — error shown when no platform capability matches the request.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta acción no está disponible en tu dispositivo.'**
+  String get walletErrorNoCapability;
+
+  /// Digital cards exporter — error shown when the payload has zero bytes.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo está vacío.'**
+  String get walletErrorEmptyPayload;
+
+  /// Digital cards exporter — error shown when the payload exceeds the safety threshold.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo supera el tamaño permitido.'**
+  String get walletErrorTooLarge;
+
+  /// Digital cards exporter — error shown when the source variant is unsupported / unavailable.
+  ///
+  /// In es, this message translates to:
+  /// **'El formato recibido no es compatible.'**
+  String get walletErrorUnsupportedSource;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -25,7 +25,9 @@ const cipRepositoryProvider = CipRepositoryProvider._();
 /// CIP snapshot should refresh on every visit to the agenda or salud
 /// home entry (canon §16).
 
-final class CipRepositoryProvider extends $FunctionalProvider<CipRepository, CipRepository, CipRepository> with $Provider<CipRepository> {
+final class CipRepositoryProvider
+    extends $FunctionalProvider<CipRepository, CipRepository, CipRepository>
+    with $Provider<CipRepository> {
   /// DI composition for [CipRepository] (STORY-31).
   ///
   /// Co-located in the agenda data layer per the TASK-71 surface decision
@@ -48,7 +50,8 @@ final class CipRepositoryProvider extends $FunctionalProvider<CipRepository, Cip
 
   @$internal
   @override
-  $ProviderElement<CipRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<CipRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   CipRepository create(Ref ref) {

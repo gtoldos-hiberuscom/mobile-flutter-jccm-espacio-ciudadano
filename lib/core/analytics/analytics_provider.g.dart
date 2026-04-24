@@ -29,7 +29,14 @@ const analyticsServiceProvider = AnalyticsServiceProvider._();
 /// Future sprint: replace the release implementation with a real analytics
 /// SDK provider (e.g. Firebase Analytics) without changing any call-sites.
 
-final class AnalyticsServiceProvider extends $FunctionalProvider<AnalyticsService, AnalyticsService, AnalyticsService> with $Provider<AnalyticsService> {
+final class AnalyticsServiceProvider
+    extends
+        $FunctionalProvider<
+          AnalyticsService,
+          AnalyticsService,
+          AnalyticsService
+        >
+    with $Provider<AnalyticsService> {
   /// Provides the application-level [AnalyticsService] singleton.
   ///
   /// Currently returns a [ConsoleAnalyticsService] in all environments:
@@ -54,7 +61,8 @@ final class AnalyticsServiceProvider extends $FunctionalProvider<AnalyticsServic
 
   @$internal
   @override
-  $ProviderElement<AnalyticsService> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AnalyticsService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   AnalyticsService create(Ref ref) {

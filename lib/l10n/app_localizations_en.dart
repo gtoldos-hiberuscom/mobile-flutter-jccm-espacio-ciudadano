@@ -1195,4 +1195,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataConsentNavCta => 'My authorizations';
+
+  @override
+  String get walletActionOpen => 'Open';
+
+  @override
+  String get walletActionShare => 'Share';
+
+  @override
+  String get walletActionAddToWallet => 'Add to Wallet';
+
+  @override
+  String get walletPreviewPdfPlaceholder => 'PDF document';
+
+  @override
+  String get walletPreviewPkpassPlaceholder => 'Wallet pass';
+
+  @override
+  String get walletPreviewQrUnavailable => 'QR preview not available';
+
+  @override
+  String get walletPreviewQrImageSemantic => 'QR code image';
+
+  @override
+  String get walletPreviewQrTextSemantic => 'QR code textual content';
+
+  @override
+  String get walletErrorInvalidArtifact => 'The file received is not valid. Please try again.';
+
+  @override
+  String get walletErrorSystem => 'We could not complete the action. Please try again.';
+
+  @override
+  String get walletErrorNoCapability => 'This action is not available on your device.';
+
+  @override
+  String get walletErrorEmptyPayload => 'The file is empty.';
+
+  @override
+  String get walletErrorTooLarge => 'The file exceeds the allowed size.';
+
+  @override
+  String get walletErrorUnsupportedSource => 'The received format is not supported.';
 }

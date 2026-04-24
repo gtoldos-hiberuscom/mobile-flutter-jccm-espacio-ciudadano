@@ -21,7 +21,14 @@ const stateAffairsRepositoryProvider = StateAffairsRepositoryProvider._();
 /// Not kept alive on purpose — the snapshot is expected to refresh
 /// whenever the user re-enters the landing (canon §16).
 
-final class StateAffairsRepositoryProvider extends $FunctionalProvider<StateAffairsRepository, StateAffairsRepository, StateAffairsRepository> with $Provider<StateAffairsRepository> {
+final class StateAffairsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          StateAffairsRepository,
+          StateAffairsRepository,
+          StateAffairsRepository
+        >
+    with $Provider<StateAffairsRepository> {
   /// DI composition for [StateAffairsRepository].
   ///
   /// Not kept alive on purpose — the snapshot is expected to refresh
@@ -60,4 +67,5 @@ final class StateAffairsRepositoryProvider extends $FunctionalProvider<StateAffa
   }
 }
 
-String _$stateAffairsRepositoryHash() => r'2c2184a3dc1fe5bdf9ca7fa25ffda941a5158d55';
+String _$stateAffairsRepositoryHash() =>
+    r'2c2184a3dc1fe5bdf9ca7fa25ffda941a5158d55';
