@@ -5,11 +5,13 @@ import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/0_entity/casework_item.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/0_entity/casework_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/0_entity/casework_tab.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/1_domain/casework_workspace_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/widgets/casework_breadcrumb.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/widgets/casework_item_tile.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/registro/0_entity/registro_kind.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// "Mis gestiones" workspace (STORY-34).
@@ -57,6 +59,12 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage> w
             icon: const Icon(Icons.search),
             tooltip: l10n.caseworkSearchOpenCta,
             onPressed: () => GoRouter.of(context).go('/casework/search'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.upload_file_outlined),
+            tooltip: l10n.caseworkAportacionOpenCta,
+            onPressed: () =>
+                GoRouter.of(context).go('/casework/aportacion'),
           ),
         ],
       ),
@@ -166,10 +174,38 @@ class _CaseworkTabView extends StatelessWidget {
               vertical: AppDimensions.space8,
             ),
             itemCount: section.items.length,
-            itemBuilder: (final ctx, final i) => CaseworkItemTile(item: section.items[i]),
+            itemBuilder: (final ctx, final i) {
+              final item = section.items[i];
+              return CaseworkItemTile(
+                item: item,
+                onTap: _onTapFor(ctx, item),
+              );
+            },
           ),
         );
     }
+  }
+
+  /// Returns a navigation handler only for registro items (entradas /
+  /// salidas) — STORY-36 wires those to the registro detail screen.
+  /// Expediente items are owned by STORY-35 and remain untouched here.
+  static VoidCallback? _onTapFor(
+    final BuildContext context,
+    final CaseworkItem item,
+  ) {
+    final RegistroKind kind;
+    switch (item.type) {
+      case CaseworkTab.entradasRegistro:
+        kind = RegistroKind.entrada;
+      case CaseworkTab.salidasRegistro:
+        kind = RegistroKind.salida;
+      case CaseworkTab.expedientes:
+        return null;
+    }
+    return () {
+      final encoded = Uri.encodeComponent(item.number);
+      GoRouter.of(context).go('/casework/registro/${kind.token}/$encoded');
+    };
   }
 
   static String _emptyMessage(
