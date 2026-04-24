@@ -476,6 +476,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaDetailWhen => 'Date';
 
   @override
+  String get agendaDetailCentro => 'Facility';
+
+  @override
+  String get agendaDetailProfesional => 'Professional';
+
+  @override
+  String get agendaDetailTipo => 'Type';
+
+  @override
+  String get agendaDetailDescription => 'Description';
+
+  @override
+  String get agendaDetailJustificante => 'View attendance proof';
+
+  @override
+  String get agendaJustificanteUnavailable => 'The proof will open once the external link is enabled.';
+
+  @override
+  String get agendaTileExpand => 'Show more details';
+
+  @override
+  String get agendaTileCollapse => 'Hide details';
+
+  @override
+  String get agendaTileOpenDetail => 'Open full detail';
+
+  @override
+  String get agendaParseErrorTitle => 'We couldn\'t read your agenda';
+
+  @override
+  String get agendaParseErrorDetail => 'There was a problem interpreting the service response. Please try again in a few minutes.';
+
+  @override
+  String get agendaParseErrorRetry => 'Try again';
+
+  @override
+  String get agendaPartialBanner => 'Some events couldn\'t be loaded. Showing the ones available.';
+
+  @override
   String get stateAffairsTitle => 'State and other matters of interest';
 
   @override
@@ -715,4 +754,100 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
+
+  @override
+  String get supportFormTitle => 'Technical support';
+
+  @override
+  String get supportFormIntro => 'Tell us what happened. Our team will get back to you by e-mail.';
+
+  @override
+  String get supportCtaFromHelp => 'Contact support';
+
+  @override
+  String get supportFieldName => 'Name';
+
+  @override
+  String get supportFieldEmail => 'E-mail';
+
+  @override
+  String get supportFieldEmailConfirm => 'Confirm e-mail';
+
+  @override
+  String get supportFieldSubject => 'Subject';
+
+  @override
+  String get supportFieldDescription => 'Description';
+
+  @override
+  String get supportAttachmentLabel => 'Attachment (optional)';
+
+  @override
+  String get supportAttachmentHint => 'You may attach a single file (screenshots, documents).';
+
+  @override
+  String get supportAttachmentPick => 'Pick file';
+
+  @override
+  String get supportAttachmentChange => 'Change file';
+
+  @override
+  String get supportAttachmentRemove => 'Remove attachment';
+
+  @override
+  String get supportConsentLabel => 'I authorise the processing of my data to handle my request.';
+
+  @override
+  String get supportCaptchaLabel => 'I am not a robot';
+
+  @override
+  String get supportCaptchaMockBadge => 'MOCK';
+
+  @override
+  String get supportSubmitButton => 'Send request';
+
+  @override
+  String get supportConfirmationTitle => 'Request sent';
+
+  @override
+  String get supportConfirmationMessage => 'We\'ve received your request. We\'ll confirm by e-mail.';
+
+  @override
+  String get supportConfirmationNewRequest => 'Send another request';
+
+  @override
+  String get supportSubmissionError => 'We couldn\'t send your request. Please try again.';
+
+  @override
+  String get supportErrorNameRequired => 'Please enter your name.';
+
+  @override
+  String get supportErrorEmailRequired => 'Please enter your e-mail.';
+
+  @override
+  String get supportErrorEmailInvalid => 'Please enter a valid e-mail address.';
+
+  @override
+  String get supportErrorEmailConfirmRequired => 'Please confirm your e-mail.';
+
+  @override
+  String get supportErrorEmailMismatch => 'E-mails don\'t match.';
+
+  @override
+  String get supportErrorSubjectRequired => 'Please add a subject.';
+
+  @override
+  String get supportErrorSubjectTooLong => 'Subject can\'t exceed 100 characters.';
+
+  @override
+  String get supportErrorDescriptionRequired => 'Please describe your request.';
+
+  @override
+  String get supportErrorDescriptionTooLong => 'Description exceeds the allowed length.';
+
+  @override
+  String get supportErrorConsentRequired => 'You must authorise the processing of your data.';
+
+  @override
+  String get supportErrorCaptchaRequired => 'Please confirm you are not a robot.';
 }
