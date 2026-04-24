@@ -847,6 +847,198 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aviso legal'**
   String get footerLegalNotice;
+
+  /// Título de la pantalla de formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Soporte técnico'**
+  String get supportFormTitle;
+
+  /// Texto introductorio del formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuéntanos qué ha pasado. Nuestro equipo te responderá por correo electrónico.'**
+  String get supportFormIntro;
+
+  /// CTA en el centro de ayuda para abrir el formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Contactar con soporte'**
+  String get supportCtaFromHelp;
+
+  /// Etiqueta del campo Nombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get supportFieldName;
+
+  /// Etiqueta del campo Email.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get supportFieldEmail;
+
+  /// Etiqueta del campo Confirmar email.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmación del correo electrónico'**
+  String get supportFieldEmailConfirm;
+
+  /// Etiqueta del campo Asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Asunto'**
+  String get supportFieldSubject;
+
+  /// Etiqueta del campo Descripción.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get supportFieldDescription;
+
+  /// Etiqueta de la sección de adjuntos.
+  ///
+  /// In es, this message translates to:
+  /// **'Adjunto (opcional)'**
+  String get supportAttachmentLabel;
+
+  /// Texto de ayuda del adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes adjuntar un único archivo (capturas, documentos).'**
+  String get supportAttachmentHint;
+
+  /// Botón para seleccionar adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar archivo'**
+  String get supportAttachmentPick;
+
+  /// Botón para cambiar el adjunto seleccionado.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar archivo'**
+  String get supportAttachmentChange;
+
+  /// Acción para quitar el adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar adjunto'**
+  String get supportAttachmentRemove;
+
+  /// Texto del checkbox de consentimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Autorizo el tratamiento de mis datos para gestionar mi solicitud.'**
+  String get supportConsentLabel;
+
+  /// Etiqueta del checkbox antibot.
+  ///
+  /// In es, this message translates to:
+  /// **'No soy un robot'**
+  String get supportCaptchaLabel;
+
+  /// Insignia que indica que el captcha es un mock.
+  ///
+  /// In es, this message translates to:
+  /// **'MOCK'**
+  String get supportCaptchaMockBadge;
+
+  /// Botón de envío del formulario.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar solicitud'**
+  String get supportSubmitButton;
+
+  /// Título de la pantalla de confirmación.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud enviada'**
+  String get supportConfirmationTitle;
+
+  /// Mensaje de confirmación tras el envío.
+  ///
+  /// In es, this message translates to:
+  /// **'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.'**
+  String get supportConfirmationMessage;
+
+  /// Botón para enviar otra solicitud.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar otra solicitud'**
+  String get supportConfirmationNewRequest;
+
+  /// Mensaje genérico de error de envío.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido enviar tu solicitud. Inténtalo de nuevo.'**
+  String get supportSubmissionError;
+
+  /// Error: nombre requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica tu nombre.'**
+  String get supportErrorNameRequired;
+
+  /// Error: email requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica tu correo electrónico.'**
+  String get supportErrorEmailRequired;
+
+  /// Error: email no válido.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un correo electrónico válido.'**
+  String get supportErrorEmailInvalid;
+
+  /// Error: confirmación de email requerida.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma tu correo electrónico.'**
+  String get supportErrorEmailConfirmRequired;
+
+  /// Error: emails no coinciden.
+  ///
+  /// In es, this message translates to:
+  /// **'Los correos no coinciden.'**
+  String get supportErrorEmailMismatch;
+
+  /// Error: asunto requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica un asunto.'**
+  String get supportErrorSubjectRequired;
+
+  /// Error: asunto demasiado largo.
+  ///
+  /// In es, this message translates to:
+  /// **'El asunto no puede superar los 100 caracteres.'**
+  String get supportErrorSubjectTooLong;
+
+  /// Error: descripción requerida.
+  ///
+  /// In es, this message translates to:
+  /// **'Describe tu solicitud.'**
+  String get supportErrorDescriptionRequired;
+
+  /// Error: descripción demasiado larga.
+  ///
+  /// In es, this message translates to:
+  /// **'La descripción supera el límite permitido.'**
+  String get supportErrorDescriptionTooLong;
+
+  /// Error: consentimiento requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes autorizar el tratamiento de tus datos.'**
+  String get supportErrorConsentRequired;
+
+  /// Error: captcha requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma que no eres un robot.'**
+  String get supportErrorCaptchaRequired;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
