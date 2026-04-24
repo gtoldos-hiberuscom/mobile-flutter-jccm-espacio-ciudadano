@@ -850,4 +850,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get supportErrorCaptchaRequired => 'Please confirm you are not a robot.';
+
+  @override
+  String get cipCardTitle => 'Health card (CIP)';
+
+  @override
+  String get cipCardCopyTooltip => 'Copy CIP';
+
+  @override
+  String get cipCardCopied => 'CIP copied to clipboard';
+
+  @override
+  String get cipCardReadOnlySubtitle => 'Read-only — the health card cannot be downloaded from the app.';
+
+  @override
+  String get cipCardContractGap => 'Other health capabilities (visits, prescriptions) are subject to contract confirmation.';
+
+  @override
+  String get cipCardEmpty => 'No health card is associated with your profile yet.';
+
+  @override
+  String get cipCardError => 'We couldn\'t load your health card.';
+
+  @override
+  String get cipCardParseError => 'We couldn\'t read the health card response.';
+
+  @override
+  String get saludSurfaceTitle => 'Health';
+
+  @override
+  String get saludSurfaceCta => 'View agenda';
+
+  @override
+  String get homeUpcomingEventsTitle => 'Upcoming events';
+
+  @override
+  String get homeUpcomingEventsEmpty => 'You have no upcoming events.';
 }
