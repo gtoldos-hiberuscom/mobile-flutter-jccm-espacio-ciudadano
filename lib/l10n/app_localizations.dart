@@ -1705,6 +1705,78 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Confirma que no eres un robot.'**
   String get supportErrorCaptchaRequired;
+
+  /// CIP — título del bloque destacado de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta sanitaria (CIP)'**
+  String get cipCardTitle;
+
+  /// CIP — tooltip del botón copiar al portapapeles.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar CIP'**
+  String get cipCardCopyTooltip;
+
+  /// CIP — confirmación tras copiar el código.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP copiado al portapapeles'**
+  String get cipCardCopied;
+
+  /// CIP — leyenda obligatoria de sólo lectura (TASK-71).
+  ///
+  /// In es, this message translates to:
+  /// **'Sólo lectura — la tarjeta sanitaria no es descargable desde la app.'**
+  String get cipCardReadOnlySubtitle;
+
+  /// CIP — gap de contrato visible en diseño (TASK-27 / TASK-32).
+  ///
+  /// In es, this message translates to:
+  /// **'Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.'**
+  String get cipCardContractGap;
+
+  /// CIP — mensaje cuando no hay CIP disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no hay tarjeta sanitaria asociada a tu perfil.'**
+  String get cipCardEmpty;
+
+  /// CIP — mensaje de error genérico.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tu tarjeta sanitaria.'**
+  String get cipCardError;
+
+  /// CIP — mensaje de error de parseo (TASK-32).
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido leer la respuesta de la tarjeta sanitaria.'**
+  String get cipCardParseError;
+
+  /// Home — título de la superficie destacada de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get saludSurfaceTitle;
+
+  /// Home — CTA de la superficie de salud que lleva a la agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver agenda'**
+  String get saludSurfaceCta;
+
+  /// Resumen de próximos eventos — título compartido entre home y agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos eventos'**
+  String get homeUpcomingEventsTitle;
+
+  /// Resumen de próximos eventos — mensaje cuando no hay eventos.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes eventos próximos.'**
+  String get homeUpcomingEventsEmpty;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

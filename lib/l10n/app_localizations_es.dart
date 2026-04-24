@@ -851,4 +851,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get supportErrorCaptchaRequired => 'Confirma que no eres un robot.';
+
+  @override
+  String get cipCardTitle => 'Tarjeta sanitaria (CIP)';
+
+  @override
+  String get cipCardCopyTooltip => 'Copiar CIP';
+
+  @override
+  String get cipCardCopied => 'CIP copiado al portapapeles';
+
+  @override
+  String get cipCardReadOnlySubtitle => 'Sólo lectura — la tarjeta sanitaria no es descargable desde la app.';
+
+  @override
+  String get cipCardContractGap => 'Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.';
+
+  @override
+  String get cipCardEmpty => 'Aún no hay tarjeta sanitaria asociada a tu perfil.';
+
+  @override
+  String get cipCardError => 'No hemos podido cargar tu tarjeta sanitaria.';
+
+  @override
+  String get cipCardParseError => 'No hemos podido leer la respuesta de la tarjeta sanitaria.';
+
+  @override
+  String get saludSurfaceTitle => 'Salud';
+
+  @override
+  String get saludSurfaceCta => 'Ver agenda';
+
+  @override
+  String get homeUpcomingEventsTitle => 'Próximos eventos';
+
+  @override
+  String get homeUpcomingEventsEmpty => 'No tienes eventos próximos.';
 }
