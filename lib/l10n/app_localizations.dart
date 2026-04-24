@@ -1705,6 +1705,126 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Confirma que no eres un robot.'**
   String get supportErrorCaptchaRequired;
+
+  /// Título de la pantalla de catálogo de carnets digitales (STORY-48).
+  ///
+  /// In es, this message translates to:
+  /// **'Mis carnets digitales'**
+  String get digitalCardsPageTitle;
+
+  /// Carnets — etiqueta del tipo familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de familia numerosa'**
+  String get digitalCardsTypeFamiliaNumerosa;
+
+  /// Carnets — etiqueta del tipo carnet joven.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet joven'**
+  String get digitalCardsTypeJoven;
+
+  /// Carnets — etiqueta del tipo discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de discapacidad'**
+  String get digitalCardsTypeDiscapacidad;
+
+  /// Carnets — badge para estado disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible'**
+  String get digitalCardsStatusAvailable;
+
+  /// Carnets — badge para estado no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'No vigente'**
+  String get digitalCardsStatusNotValid;
+
+  /// Carnets — badge para estado no descargable.
+  ///
+  /// In es, this message translates to:
+  /// **'No descargable'**
+  String get digitalCardsStatusNotDownloadable;
+
+  /// Carnets — badge para estado no disponible / sin datos.
+  ///
+  /// In es, this message translates to:
+  /// **'No disponible'**
+  String get digitalCardsStatusNotAvailable;
+
+  /// Carnets — mensaje explícito para el estado no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'Este carnet no está vigente. No es posible obtener QR, PKPASS ni PDF.'**
+  String get digitalCardsMessageNotValid;
+
+  /// Carnets — mensaje explícito para el estado no descargable.
+  ///
+  /// In es, this message translates to:
+  /// **'Este carnet no es descargable en este momento.'**
+  String get digitalCardsMessageNotDownloadable;
+
+  /// Carnets — mensaje explícito para el estado no disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes este carnet disponible.'**
+  String get digitalCardsMessageNotAvailable;
+
+  /// Carnets — acción para mostrar el código QR.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver QR'**
+  String get digitalCardsActionQr;
+
+  /// Carnets — acción para añadir el carnet a la cartera (PKPASS).
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir a Wallet'**
+  String get digitalCardsActionPkpass;
+
+  /// Carnets — acción para descargar el PDF.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar PDF'**
+  String get digitalCardsActionPdf;
+
+  /// Carnets — mensaje stub mientras TASK-53 cablea las descargas reales.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible próximamente.'**
+  String get digitalCardsActionComingSoon;
+
+  /// Carnets — estado vacío del catálogo.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no tienes carnets digitales asociados.'**
+  String get digitalCardsEmptyMessage;
+
+  /// Carnets — estado de error del catálogo.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus carnets digitales.'**
+  String get digitalCardsErrorMessage;
+
+  /// Carnets — título del mini-card CIP de sólo lectura (TASK-71).
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta sanitaria (CIP)'**
+  String get digitalCardsCipMiniTitle;
+
+  /// Carnets — subtítulo que indica que la tarjeta sanitaria es de sólo lectura.
+  ///
+  /// In es, this message translates to:
+  /// **'Sólo lectura'**
+  String get digitalCardsCipMiniReadOnly;
+
+  /// Carnets — CTA para abrir la tarjeta sanitaria en la pantalla de salud (STORY-31).
+  ///
+  /// In es, this message translates to:
+  /// **'Ver tarjeta sanitaria'**
+  String get digitalCardsCipMiniOpenAction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
