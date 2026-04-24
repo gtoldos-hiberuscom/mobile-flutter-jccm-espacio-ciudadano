@@ -15,6 +15,8 @@ import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/agenda_notifier.
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/agenda_state.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/agenda_event_tile.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/agenda_month_calendar.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/cip_card.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/upcoming_events_summary.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Agenda surface (STORY-29).
@@ -110,6 +112,26 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
       children: [
         if (state.snapshot.loadState == AgendaLoadState.partial)
           _PartialBanner(message: l10n.agendaPartialBanner),
+        // STORY-31 — sticky CIP read-only card at the top of the agenda
+        // header. Per TASK-71 (CIP_REUSE) this is the single, non-wallet
+        // CIP rendering shared with the home salud entry point.
+        const CipCard(),
+        // STORY-31 AC2 — reuse the home upcoming events summary inside
+        // the agenda header so both surfaces stay in sync.
+        UpcomingEventsSummary(
+          snapshot: state.snapshot,
+          now: now,
+          onEventTap: (final event) {
+            ref.read(analyticsServiceProvider).logEvent(
+                  AgendaEventOpenedEvent(
+                    eventId: event.id,
+                    category: event.category.name,
+                  ),
+                );
+            context.go('/agenda/${event.id}');
+          },
+        ),
+        const Divider(height: 1),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppDimensions.space12,
