@@ -715,4 +715,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
+
+  @override
+  String get lifeEventsTitle => 'My life events';
+
+  @override
+  String get lifeEventsHeaderDescription => 'Select the life events that best describe your situation to receive personalized recommendations.';
+
+  @override
+  String get lifeEventsSaveAction => 'Save';
+
+  @override
+  String get lifeEventsResetAction => 'Reset preferences';
+
+  @override
+  String get lifeEventsResetConfirmTitle => 'Reset your preferences';
+
+  @override
+  String get lifeEventsResetConfirmBody => 'All selected life events will be removed. This action cannot be undone.';
+
+  @override
+  String get lifeEventsResetConfirm => 'Reset';
+
+  @override
+  String get lifeEventsResetCancel => 'Cancel';
+
+  @override
+  String get lifeEventsSavedFeedback => 'Your preferences have been saved.';
+
+  @override
+  String get lifeEventsErrorFeedback => 'We couldn\'t save your preferences. Please try again.';
+
+  @override
+  String get lifeEventsLoadError => 'We couldn\'t load the life events.';
+
+  @override
+  String get lifeEventsEmpty => 'There are no life events available at the moment.';
+
+  @override
+  String get lifeEventsCategoryFamilia => 'Family';
+
+  @override
+  String get lifeEventsCategorySalud => 'Health';
+
+  @override
+  String get lifeEventsCategoryEmpleo => 'Employment';
+
+  @override
+  String get lifeEventsCategoryVivienda => 'Housing';
+
+  @override
+  String get lifeEventsCategoryEducacion => 'Education';
 }
