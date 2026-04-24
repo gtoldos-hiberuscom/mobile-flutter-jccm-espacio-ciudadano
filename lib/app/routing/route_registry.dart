@@ -39,6 +39,8 @@ abstract final class Routes {
   static const String agendaDetail = '/agenda/:id';
   static const String casework = '/casework';
   static const String caseworkSearch = '/casework/search';
+  /// Third-party aportación documental wizard (STORY-37).
+  static const String caseworkAportacion = '/casework/aportacion';
   static const String caseworkItemDetail = '/casework/item/:id';
   /// Upload-evidence screen for a given expediente (STORY-38).
   static const String caseworkUpload = '/casework/item/:id/upload';
