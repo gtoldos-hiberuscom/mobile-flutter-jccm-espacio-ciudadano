@@ -16,6 +16,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.d
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/aportacion/2_presentation/aportacion_wizard_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/detail/2_presentation/expediente_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/registro/0_entity/registro_kind.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/registro/2_presentation/registro_detail_page.dart';
@@ -197,6 +198,10 @@ final goRouterProvider = Provider<GoRouter>(
                 GoRoute(
                   path: 'search',
                   builder: (final BuildContext context, final GoRouterState state) => const CaseworkSearchPage(),
+                ),
+                GoRoute(
+                  path: 'aportacion',
+                  builder: (final BuildContext context, final GoRouterState state) => const AportacionWizardPage(),
                 ),
                 GoRoute(
                   path: 'item/:id',
