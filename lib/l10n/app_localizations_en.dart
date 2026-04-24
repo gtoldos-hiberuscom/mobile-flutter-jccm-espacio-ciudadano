@@ -476,6 +476,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaDetailWhen => 'Date';
 
   @override
+  String get agendaDetailCentro => 'Facility';
+
+  @override
+  String get agendaDetailProfesional => 'Professional';
+
+  @override
+  String get agendaDetailTipo => 'Type';
+
+  @override
+  String get agendaDetailDescription => 'Description';
+
+  @override
+  String get agendaDetailJustificante => 'View attendance proof';
+
+  @override
+  String get agendaJustificanteUnavailable => 'The proof will open once the external link is enabled.';
+
+  @override
+  String get agendaTileExpand => 'Show more details';
+
+  @override
+  String get agendaTileCollapse => 'Hide details';
+
+  @override
+  String get agendaTileOpenDetail => 'Open full detail';
+
+  @override
+  String get agendaParseErrorTitle => 'We couldn\'t read your agenda';
+
+  @override
+  String get agendaParseErrorDetail => 'There was a problem interpreting the service response. Please try again in a few minutes.';
+
+  @override
+  String get agendaParseErrorRetry => 'Try again';
+
+  @override
+  String get agendaPartialBanner => 'Some events couldn\'t be loaded. Showing the ones available.';
+
+  @override
   String get stateAffairsTitle => 'State and other matters of interest';
 
   @override
