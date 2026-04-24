@@ -1019,4 +1019,64 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get caseworkItemDetailPlaceholderPending => 'El detalle real se habilita en STORY-35 / STORY-36.';
+
+  @override
+  String get digitalCardsPageTitle => 'Mis carnets digitales';
+
+  @override
+  String get digitalCardsTypeFamiliaNumerosa => 'Carnet de familia numerosa';
+
+  @override
+  String get digitalCardsTypeJoven => 'Carnet joven';
+
+  @override
+  String get digitalCardsTypeDiscapacidad => 'Carnet de discapacidad';
+
+  @override
+  String get digitalCardsStatusAvailable => 'Disponible';
+
+  @override
+  String get digitalCardsStatusNotValid => 'No vigente';
+
+  @override
+  String get digitalCardsStatusNotDownloadable => 'No descargable';
+
+  @override
+  String get digitalCardsStatusNotAvailable => 'No disponible';
+
+  @override
+  String get digitalCardsMessageNotValid => 'Este carnet no está vigente. No es posible obtener QR, PKPASS ni PDF.';
+
+  @override
+  String get digitalCardsMessageNotDownloadable => 'Este carnet no es descargable en este momento.';
+
+  @override
+  String get digitalCardsMessageNotAvailable => 'No tienes este carnet disponible.';
+
+  @override
+  String get digitalCardsActionQr => 'Ver QR';
+
+  @override
+  String get digitalCardsActionPkpass => 'Añadir a Wallet';
+
+  @override
+  String get digitalCardsActionPdf => 'Descargar PDF';
+
+  @override
+  String get digitalCardsActionComingSoon => 'Disponible próximamente.';
+
+  @override
+  String get digitalCardsEmptyMessage => 'Aún no tienes carnets digitales asociados.';
+
+  @override
+  String get digitalCardsErrorMessage => 'No hemos podido cargar tus carnets digitales.';
+
+  @override
+  String get digitalCardsCipMiniTitle => 'Tarjeta sanitaria (CIP)';
+
+  @override
+  String get digitalCardsCipMiniReadOnly => 'Sólo lectura';
+
+  @override
+  String get digitalCardsCipMiniOpenAction => 'Ver tarjeta sanitaria';
 }

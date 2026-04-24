@@ -18,6 +18,7 @@ import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_catalog_page.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/employment/2_presentation/employment_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/help/2_presentation/help_page.dart';
@@ -208,7 +209,7 @@ final goRouterProvider = Provider<GoRouter>(
             ),
             GoRoute(
               path: Routes.cards,
-              builder: (final BuildContext context, final GoRouterState state) => const CardsPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const DigitalCardsCatalogPage(),
             ),
             GoRoute(
               path: Routes.profile,
