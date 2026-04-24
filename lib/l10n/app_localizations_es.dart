@@ -1010,15 +1010,76 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get caseworkItemDetailPlaceholderTitle => 'Detalle del expediente';
+  String get caseworkExpedienteDetailTitle => 'Detalle del expediente';
 
   @override
-  String caseworkItemDetailPlaceholderBody(String id) {
-    return 'Detalle del elemento $id';
-  }
+  String get caseworkExpedienteDetailBack => 'Volver a Mis gestiones';
 
   @override
-  String get caseworkItemDetailPlaceholderPending => 'El detalle real se habilita en STORY-35 / STORY-36.';
+  String get caseworkExpedienteDetailLoading => 'Cargando detalle del expediente…';
+
+  @override
+  String get caseworkExpedienteDetailErrorTitle => 'No hemos podido cargar el expediente.';
+
+  @override
+  String get caseworkExpedienteDetailErrorBody => 'Vuelve a intentarlo en unos minutos.';
+
+  @override
+  String get caseworkExpedienteDetailMetadataTitle => 'Información del expediente';
+
+  @override
+  String get caseworkExpedienteDetailNumero => 'Número de expediente';
+
+  @override
+  String get caseworkExpedienteDetailAsuntoCodigo => 'Código del asunto';
+
+  @override
+  String get caseworkExpedienteDetailAsunto => 'Asunto';
+
+  @override
+  String get caseworkExpedienteDetailConsejeria => 'Consejería';
+
+  @override
+  String get caseworkExpedienteDetailOficina => 'Oficina tramitadora';
+
+  @override
+  String get caseworkExpedienteDetailProcedimiento => 'Procedimiento';
+
+  @override
+  String get caseworkExpedienteDetailFechaInicio => 'Fecha de inicio';
+
+  @override
+  String get caseworkExpedienteDetailFechaActualizacion => 'Última actualización';
+
+  @override
+  String get caseworkExpedienteDetailEstadoLabel => 'Estado';
+
+  @override
+  String get caseworkExpedienteDetailEstadoAbierto => 'Abierto';
+
+  @override
+  String get caseworkExpedienteDetailEstadoCerrado => 'Cerrado';
+
+  @override
+  String get caseworkExpedienteDetailEstadoUnknown => 'Estado desconocido';
+
+  @override
+  String get caseworkExpedienteDetailFilesTitle => 'Ficheros asociados';
+
+  @override
+  String get caseworkExpedienteDetailFilesEmpty => 'No hay ficheros asociados a este expediente.';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadTooltip => 'Descargar fichero';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadStub => 'La descarga del fichero se habilitará en una próxima versión.';
+
+  @override
+  String get caseworkExpedienteDetailOperationsTitle => 'Aportar documentación';
+
+  @override
+  String get caseworkExpedienteDetailClosedBanner => 'Expediente cerrado, no se admiten aportaciones.';
 
   @override
   String get digitalCardsPageTitle => 'Mis carnets digitales';
