@@ -1350,4 +1350,64 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get notificationDetailPlaceholderPending =>
       'Detalle pendiente de habilitar en STORY-44.';
+
+  @override
+  String get notificationContactPageTitle => 'Datos de contacto';
+
+  @override
+  String get notificationContactExplanation =>
+      'Necesitamos un teléfono móvil o un correo electrónico para avisarte de las notificaciones electrónicas que recibas. Solo usaremos estos datos para enviarte avisos relacionados con tus notificaciones.';
+
+  @override
+  String get notificationContactPhoneLabel => 'Teléfono móvil';
+
+  @override
+  String get notificationContactPhoneHint => '600 123 456';
+
+  @override
+  String get notificationContactPhoneHelper =>
+      'Indica un número con prefijo internacional si no es de España.';
+
+  @override
+  String get notificationContactEmailLabel => 'Correo electrónico';
+
+  @override
+  String get notificationContactEmailHint => 'ejemplo@correo.com';
+
+  @override
+  String get notificationContactEmailHelper =>
+      'Usaremos este correo solo para avisos de notificaciones.';
+
+  @override
+  String get notificationContactSubmitCta => 'Registrar';
+
+  @override
+  String get notificationContactLoading => 'Cargando datos de contacto…';
+
+  @override
+  String get notificationContactErrorLoading =>
+      'No hemos podido cargar tus datos de contacto.';
+
+  @override
+  String get notificationContactErrorPhoneInvalid =>
+      'Introduce un teléfono móvil válido.';
+
+  @override
+  String get notificationContactErrorEmailInvalid =>
+      'Introduce un correo electrónico válido.';
+
+  @override
+  String get notificationContactErrorBothEmpty =>
+      'Indica al menos un teléfono móvil o un correo electrónico.';
+
+  @override
+  String get notificationContactSuccessMessage =>
+      'Tus datos de contacto se han registrado correctamente.';
+
+  @override
+  String get notificationContactGateBannerMessage =>
+      'Configura tus datos de contacto para recibir notificaciones.';
+
+  @override
+  String get notificationContactGateBannerCta => 'Configurar ahora';
 }
