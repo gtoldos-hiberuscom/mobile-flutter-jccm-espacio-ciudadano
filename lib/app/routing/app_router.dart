@@ -17,6 +17,8 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.d
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_item_detail_placeholder_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/registro/0_entity/registro_kind.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/registro/2_presentation/registro_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/uploads/2_presentation/upload_evidence_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_catalog_page.dart';
@@ -209,6 +211,18 @@ final goRouterProvider = Provider<GoRouter>(
                       ),
                     ),
                   ],
+                ),
+                GoRoute(
+                  path: 'registro/:kind/:numreg',
+                  builder: (final BuildContext context, final GoRouterState state) {
+                    final kind = RegistroKindToken.fromToken(
+                          state.pathParameters['kind'],
+                        ) ??
+                        RegistroKind.entrada;
+                    final encoded = state.pathParameters['numreg'] ?? '';
+                    final numreg = Uri.decodeComponent(encoded);
+                    return RegistroDetailPage(numreg: numreg, kind: kind);
+                  },
                 ),
               ],
             ),
