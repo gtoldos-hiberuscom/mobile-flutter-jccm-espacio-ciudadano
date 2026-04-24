@@ -14,6 +14,9 @@ import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_eve
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_item_detail_placeholder_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/employment/2_presentation/employment_landing_page.dart';
@@ -185,7 +188,19 @@ final goRouterProvider = Provider<GoRouter>(
             ),
             GoRoute(
               path: Routes.casework,
-              builder: (final BuildContext context, final GoRouterState state) => const CaseworkPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const CaseworkWorkspacePage(),
+              routes: [
+                GoRoute(
+                  path: 'search',
+                  builder: (final BuildContext context, final GoRouterState state) => const CaseworkSearchPage(),
+                ),
+                GoRoute(
+                  path: 'item/:id',
+                  builder: (final BuildContext context, final GoRouterState state) => CaseworkItemDetailPlaceholderPage(
+                    itemId: state.pathParameters['id'] ?? '',
+                  ),
+                ),
+              ],
             ),
             GoRoute(
               path: Routes.notifications,

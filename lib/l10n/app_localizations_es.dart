@@ -887,4 +887,136 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeUpcomingEventsEmpty => 'No tienes eventos próximos.';
+
+  @override
+  String get caseworkWorkspaceTitle => 'Mis gestiones';
+
+  @override
+  String get caseworkWorkspaceLoadError => 'No hemos podido cargar tus gestiones.';
+
+  @override
+  String get caseworkBreadcrumbHome => 'Inicio';
+
+  @override
+  String get caseworkTabExpedientes => 'Mis expedientes';
+
+  @override
+  String get caseworkTabEntradasRegistro => 'Mis entradas de registro';
+
+  @override
+  String get caseworkTabSalidasRegistro => 'Mis salidas de registro';
+
+  @override
+  String get caseworkExpedientesEmpty => 'No constan expedientes a tu nombre.';
+
+  @override
+  String get caseworkEntradasRegistroEmpty => 'No constan entradas de registro a tu nombre.';
+
+  @override
+  String get caseworkSalidasRegistroEmpty => 'No constan salidas de registro a tu nombre.';
+
+  @override
+  String get caseworkExpedientesError => 'No hemos podido cargar tus expedientes.';
+
+  @override
+  String get caseworkEntradasRegistroError => 'No hemos podido cargar tus entradas de registro.';
+
+  @override
+  String get caseworkSalidasRegistroError => 'No hemos podido cargar tus salidas de registro.';
+
+  @override
+  String get caseworkStatusEnTramite => 'En trámite';
+
+  @override
+  String get caseworkStatusFinalizado => 'Finalizado';
+
+  @override
+  String get caseworkStatusPendiente => 'Pendiente';
+
+  @override
+  String get caseworkStatusRechazado => 'Rechazado';
+
+  @override
+  String caseworkItemDateLabel(String date) {
+    return 'Fecha: $date';
+  }
+
+  @override
+  String get caseworkSearchTitle => 'Buscar expedientes y registros';
+
+  @override
+  String get caseworkSearchOpenCta => 'Buscar expedientes y registros';
+
+  @override
+  String get caseworkSearchIntro => 'Rellena al menos uno de los campos para localizar tu expediente o registro.';
+
+  @override
+  String get caseworkSearchFieldIdentificationLabel => 'NIF / NIE / Pasaporte';
+
+  @override
+  String get caseworkSearchFieldIdentificationHelper => 'Ej.: 12345678Z, X1234567A o pasaporte alfanumérico.';
+
+  @override
+  String get caseworkSearchFieldExpedienteLabel => 'Número de expediente';
+
+  @override
+  String get caseworkSearchFieldExpedienteHelper => 'Ej.: EXP/2025/00123';
+
+  @override
+  String get caseworkSearchFieldRegistroLabel => 'Número de registro';
+
+  @override
+  String get caseworkSearchFieldRegistroHelper => 'Ej.: REG/E/45612';
+
+  @override
+  String get caseworkSearchSubmit => 'Buscar';
+
+  @override
+  String get caseworkSearchAnother => 'Buscar otra cosa';
+
+  @override
+  String get caseworkSearchAportar => 'Aportar documentación al resultado';
+
+  @override
+  String get caseworkSearchAportarPending => 'La aportación documental se habilita en STORY-37 / STORY-38.';
+
+  @override
+  String get caseworkSearchErrorAtLeastOne => 'Introduce al menos uno de los tres campos para buscar.';
+
+  @override
+  String get caseworkSearchErrorInvalidIdentification => 'Formato no válido. Usa NIF (8 dígitos + letra), NIE (X/Y/Z + 7 dígitos + letra) o pasaporte alfanumérico de 6 a 9 caracteres.';
+
+  @override
+  String get caseworkSearchErrorInvalidNumber => 'Formato no válido. Solo letras, números, guiones y barras.';
+
+  @override
+  String get caseworkSearchNoResults => 'Sin coincidencias';
+
+  @override
+  String get caseworkSearchNoResultsHint => 'Revisa los datos introducidos y vuelve a intentarlo.';
+
+  @override
+  String get caseworkSearchError => 'No hemos podido completar la búsqueda. Inténtalo de nuevo.';
+
+  @override
+  String caseworkSearchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count resultados',
+      one: '1 resultado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkItemDetailPlaceholderTitle => 'Detalle del expediente';
+
+  @override
+  String caseworkItemDetailPlaceholderBody(String id) {
+    return 'Detalle del elemento $id';
+  }
+
+  @override
+  String get caseworkItemDetailPlaceholderPending => 'El detalle real se habilita en STORY-35 / STORY-36.';
 }

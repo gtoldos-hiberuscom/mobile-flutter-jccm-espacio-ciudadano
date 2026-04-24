@@ -1777,6 +1777,246 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No tienes eventos próximos.'**
   String get homeUpcomingEventsEmpty;
+
+  /// Casework — título del workspace.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis gestiones'**
+  String get caseworkWorkspaceTitle;
+
+  /// Casework — error global de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus gestiones.'**
+  String get caseworkWorkspaceLoadError;
+
+  /// Casework — breadcrumb raíz.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get caseworkBreadcrumbHome;
+
+  /// Casework — etiqueta tab expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get caseworkTabExpedientes;
+
+  /// Casework — etiqueta tab entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis entradas de registro'**
+  String get caseworkTabEntradasRegistro;
+
+  /// Casework — etiqueta tab salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis salidas de registro'**
+  String get caseworkTabSalidasRegistro;
+
+  /// Casework — vacío expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan expedientes a tu nombre.'**
+  String get caseworkExpedientesEmpty;
+
+  /// Casework — vacío entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan entradas de registro a tu nombre.'**
+  String get caseworkEntradasRegistroEmpty;
+
+  /// Casework — vacío salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan salidas de registro a tu nombre.'**
+  String get caseworkSalidasRegistroEmpty;
+
+  /// Casework — error expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus expedientes.'**
+  String get caseworkExpedientesError;
+
+  /// Casework — error entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus entradas de registro.'**
+  String get caseworkEntradasRegistroError;
+
+  /// Casework — error salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus salidas de registro.'**
+  String get caseworkSalidasRegistroError;
+
+  /// Casework — estado en trámite.
+  ///
+  /// In es, this message translates to:
+  /// **'En trámite'**
+  String get caseworkStatusEnTramite;
+
+  /// Casework — estado finalizado.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizado'**
+  String get caseworkStatusFinalizado;
+
+  /// Casework — estado pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get caseworkStatusPendiente;
+
+  /// Casework — estado rechazado.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazado'**
+  String get caseworkStatusRechazado;
+
+  /// Casework — etiqueta de fecha del item.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha: {date}'**
+  String caseworkItemDateLabel(String date);
+
+  /// Casework search — título de la pantalla.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar expedientes y registros'**
+  String get caseworkSearchTitle;
+
+  /// Casework search — CTA en el workspace para abrir la búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar expedientes y registros'**
+  String get caseworkSearchOpenCta;
+
+  /// Casework search — texto introductorio del formulario.
+  ///
+  /// In es, this message translates to:
+  /// **'Rellena al menos uno de los campos para localizar tu expediente o registro.'**
+  String get caseworkSearchIntro;
+
+  /// Casework search — etiqueta del campo identificación.
+  ///
+  /// In es, this message translates to:
+  /// **'NIF / NIE / Pasaporte'**
+  String get caseworkSearchFieldIdentificationLabel;
+
+  /// Casework search — helper del campo identificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej.: 12345678Z, X1234567A o pasaporte alfanumérico.'**
+  String get caseworkSearchFieldIdentificationHelper;
+
+  /// Casework search — etiqueta del campo expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get caseworkSearchFieldExpedienteLabel;
+
+  /// Casework search — helper del campo expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej.: EXP/2025/00123'**
+  String get caseworkSearchFieldExpedienteHelper;
+
+  /// Casework search — etiqueta del campo registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de registro'**
+  String get caseworkSearchFieldRegistroLabel;
+
+  /// Casework search — helper del campo registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej.: REG/E/45612'**
+  String get caseworkSearchFieldRegistroHelper;
+
+  /// Casework search — etiqueta del botón de búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar'**
+  String get caseworkSearchSubmit;
+
+  /// Casework search — CTA para reiniciar la búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar otra cosa'**
+  String get caseworkSearchAnother;
+
+  /// Casework search — CTA placeholder para aportación documental.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación al resultado'**
+  String get caseworkSearchAportar;
+
+  /// Casework search — mensaje provisional de aportación pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'La aportación documental se habilita en STORY-37 / STORY-38.'**
+  String get caseworkSearchAportarPending;
+
+  /// Casework search — error: ningún campo informado.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce al menos uno de los tres campos para buscar.'**
+  String get caseworkSearchErrorAtLeastOne;
+
+  /// Casework search — error de identificación inválida.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato no válido. Usa NIF (8 dígitos + letra), NIE (X/Y/Z + 7 dígitos + letra) o pasaporte alfanumérico de 6 a 9 caracteres.'**
+  String get caseworkSearchErrorInvalidIdentification;
+
+  /// Casework search — error de número inválido.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato no válido. Solo letras, números, guiones y barras.'**
+  String get caseworkSearchErrorInvalidNumber;
+
+  /// Casework search — estado sin resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin coincidencias'**
+  String get caseworkSearchNoResults;
+
+  /// Casework search — pista cuando no hay resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Revisa los datos introducidos y vuelve a intentarlo.'**
+  String get caseworkSearchNoResultsHint;
+
+  /// Casework search — error al ejecutar la búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido completar la búsqueda. Inténtalo de nuevo.'**
+  String get caseworkSearchError;
+
+  /// Casework search — recuento de resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, one{1 resultado} other{{count} resultados}}'**
+  String caseworkSearchResultsCount(int count);
+
+  /// Casework — título del detalle (placeholder).
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle del expediente'**
+  String get caseworkItemDetailPlaceholderTitle;
+
+  /// Casework — cuerpo del detalle (placeholder).
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle del elemento {id}'**
+  String caseworkItemDetailPlaceholderBody(String id);
+
+  /// Casework — mensaje provisional del detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'El detalle real se habilita en STORY-35 / STORY-36.'**
+  String get caseworkItemDetailPlaceholderPending;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
