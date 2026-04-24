@@ -14,7 +14,7 @@ Iterable<SitemapNode> _flatten(final SitemapNode node) sync* {
 void main() {
   group('SitemapRepositoryImpl', () {
     const catalog = ExternalLinkCatalogImpl();
-    final repo = SitemapRepositoryImpl(catalog: catalog);
+    const repo = SitemapRepositoryImpl(catalog: catalog);
     final tree = repo.loadTree();
     final allNodes = tree.expand(_flatten).toList(growable: false);
     final ids = allNodes.map((final n) => n.id).toSet();

@@ -8,7 +8,7 @@ import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/life_ev
 /// pre-selected items) and the loaded/saving/saved transitions without a
 /// live backend.
 ///
-/// TODO(STORY-54): replace with the real Dio-backed implementation
+// TODO(STORY-54): replace with the real Dio-backed implementation
 /// hitting `/hechos-vitales/hechos/{idAgente}` (GET catalog),
 /// `PATCH /hechos-vitales/hechos` (persist selection) and
 /// `/hechos-vitales/preferencias/{idAgente}` (DELETE reset). Depends on

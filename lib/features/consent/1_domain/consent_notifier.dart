@@ -1,5 +1,7 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' show AsyncNotifier;
 import 'package:jccm_espacio_ciudadano/core/network/result.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/consent_state.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_repository.dart' show ConsentRepository;
 import 'package:jccm_espacio_ciudadano/features/consent/3_data/consent_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

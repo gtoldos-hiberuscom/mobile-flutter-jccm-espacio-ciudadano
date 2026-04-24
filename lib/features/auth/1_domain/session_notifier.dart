@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' show AsyncNotifier;
 import 'package:jccm_espacio_ciudadano/core/auth/session_state_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/network/result.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_state.dart';

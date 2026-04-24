@@ -15,7 +15,7 @@ final class DataConsentLoadResult {
 
 /// Domain contract for the data-consent screen (STORY-55).
 ///
-/// TODO(STORY-55): Sprint-4 implementation returns mocked data. Real Dio
+// TODO(STORY-55): Sprint-4 implementation returns mocked data. Real Dio
 /// wiring against `/hechos-vitales/clausulas/{idAgente}` (GET catalog),
 /// `PATCH /hechos-vitales/clausulas` (persist consents) and
 /// `/hechos-vitales/preferencias/{idAgente}` (DELETE revoke) is owned by

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart' show AppButton;
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart' show AppButton;
 
 /// A centred empty-state placeholder with an icon, message and optional action.
 class EmptyStateWidget extends StatelessWidget {
   const EmptyStateWidget({
-    super.key,
-    required this.message,
+    required this.message, super.key,
     this.subtitle,
     this.action,
     this.icon = Icons.inbox_outlined,
@@ -20,7 +21,7 @@ class EmptyStateWidget extends StatelessWidget {
   final IconData icon;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final theme = Theme.of(context);
 
     return Center(

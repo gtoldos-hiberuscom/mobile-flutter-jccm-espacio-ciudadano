@@ -6,8 +6,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// A centred error state with a message, optional detail, and retry button.
 class ErrorStateWidget extends StatelessWidget {
   const ErrorStateWidget({
-    super.key,
-    required this.message,
+    required this.message, super.key,
     this.detail,
     this.onRetry,
     this.retryLabel,
@@ -23,8 +22,8 @@ class ErrorStateWidget extends StatelessWidget {
   final String? retryLabel;
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
     return Semantics(
@@ -35,7 +34,7 @@ class ErrorStateWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
               const SizedBox(height: 16),
               Text(
                 message,

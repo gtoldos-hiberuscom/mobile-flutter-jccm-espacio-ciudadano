@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/extensions/date_time_format.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart' show ExternalLinkCatalog;
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_link_card.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_links_section.dart';
 import 'package:jccm_espacio_ciudadano/features/social_welfare/0_entity/family_numerosa_title.dart';

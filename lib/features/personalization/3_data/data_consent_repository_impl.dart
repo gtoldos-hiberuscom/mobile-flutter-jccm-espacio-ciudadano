@@ -8,7 +8,7 @@ import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/data_co
 /// the UI can exercise the loaded / saving / saved transitions without a
 /// live backend.
 ///
-/// TODO(future-sprint): replace with the real Dio-backed implementation
+// TODO(future-sprint): replace with the real Dio-backed implementation
 /// hitting `/hechos-vitales/clausulas/{idAgente}` (GET catalog),
 /// `PATCH /hechos-vitales/clausulas` (persist consents) and
 /// `DELETE /hechos-vitales/preferencias/{idAgente}` (revoke). Depends on

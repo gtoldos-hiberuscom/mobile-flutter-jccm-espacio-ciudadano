@@ -4,7 +4,7 @@ import 'package:jccm_espacio_ciudadano/features/social_welfare/1_domain/social_w
 
 /// Mock implementation of [SocialWelfareRepository] for STORY-25.
 ///
-/// TODO(STORY-25): replace with the real Dio-backed implementation
+// TODO(STORY-25): replace with the real Dio-backed implementation
 /// hitting `/ccaa/familia-numerosa/{numDocumento}`.
 final class SocialWelfareRepositoryImpl implements SocialWelfareRepository {
   const SocialWelfareRepositoryImpl();

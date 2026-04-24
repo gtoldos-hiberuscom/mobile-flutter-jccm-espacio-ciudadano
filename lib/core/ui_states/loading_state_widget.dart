@@ -18,8 +18,8 @@ class LoadingStateWidget extends StatelessWidget {
   final String? semanticsLabel;
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final label = semanticsLabel ?? l10n.loadingStateDefault;
 
     return Semantics(

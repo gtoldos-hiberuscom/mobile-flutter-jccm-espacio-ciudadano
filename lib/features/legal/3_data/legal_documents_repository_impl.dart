@@ -9,7 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/legal/1_domain/legal_documents_r
 /// the post-login onboarding flow so the user sees consistent wording
 /// (canon §29 — consistency between onboarding, footer and static pages).
 ///
-/// TODO(l10n): translate body markdown when the legal team approves
+// TODO(l10n): translate body markdown when the legal team approves
 ///   the canonical English copy. Titles are already routed through ARB.
 final class LegalDocumentsRepositoryImpl implements LegalDocumentsRepository {
   const LegalDocumentsRepositoryImpl();
