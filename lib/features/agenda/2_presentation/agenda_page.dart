@@ -10,6 +10,7 @@ import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/paginated_list_view.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_event.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_period_filter.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/agenda_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/agenda_state.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/agenda_event_tile.dart';
@@ -76,7 +77,21 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           onRetry: () =>
               ref.read(agendaProvider.notifier).refresh(),
         ),
-        data: (final s) => _buildBody(context, s, l10n),
+        data: (final s) {
+          // Parse-error → recoverable surface with explicit "intentar de
+          // nuevo" CTA. Never expose the raw reason (canon §24).
+          if (s.snapshot.loadState == AgendaLoadState.parseError) {
+            return ErrorStateWidget(
+              key: const ValueKey('agenda-parse-error'),
+              message: l10n.agendaParseErrorTitle,
+              detail: l10n.agendaParseErrorDetail,
+              retryLabel: l10n.agendaParseErrorRetry,
+              onRetry: () =>
+                  ref.read(agendaProvider.notifier).refresh(),
+            );
+          }
+          return _buildBody(context, s, l10n);
+        },
       ),
     );
   }
@@ -93,6 +108,8 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
 
     return Column(
       children: [
+        if (state.snapshot.loadState == AgendaLoadState.partial)
+          _PartialBanner(message: l10n.agendaPartialBanner),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppDimensions.space12,
@@ -303,6 +320,51 @@ class _ViewModeToggle extends StatelessWidget {
         ],
         selected: <_AgendaViewMode>{value},
         onSelectionChanged: (final s) => onChanged(s.first),
+      ),
+    );
+  }
+}
+
+/// Non-blocking warning banner shown above the agenda list when the
+/// snapshot is in [AgendaLoadState.partial] (STORY-30 / TASK-32).
+///
+/// Renders the items that did load while signalling that some events
+/// were discarded by the parser. Uses the `errorContainer` token of
+/// the active theme to stay tonal and accessible (canon §22 / §23).
+class _PartialBanner extends StatelessWidget {
+  const _PartialBanner({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(final BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      key: const ValueKey('agenda-partial-banner'),
+      color: theme.colorScheme.errorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space12,
+          vertical: AppDimensions.space8,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.info_outline,
+              size: AppDimensions.iconSmall,
+              color: theme.colorScheme.onErrorContainer,
+            ),
+            const SizedBox(width: AppDimensions.space8),
+            Expanded(
+              child: Text(
+                message,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onErrorContainer,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

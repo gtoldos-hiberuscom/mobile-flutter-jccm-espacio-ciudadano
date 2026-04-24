@@ -52,13 +52,7 @@ final class SessionGuard {
     // - the consent screen itself (prevent infinite loop)
     // - callbacks, legal pages, and other non-functional routes
     if (isAuthenticated && location != Routes.consent) {
-      final isCallback = location.startsWith('/auth/') ||
-          location.startsWith('/sign/') ||
-          location.startsWith('/login') ||
-          location.startsWith('/legal') ||
-          location == Routes.sitemap ||
-          location == Routes.help ||
-          location == Routes.maintenance;
+      final isCallback = location.startsWith('/auth/') || location.startsWith('/sign/') || location.startsWith('/login') || location.startsWith('/legal') || location == Routes.sitemap || location == Routes.help || location == Routes.maintenance;
 
       if (!isCallback) {
         final consentAsync = _ref.read(consentProvider);
@@ -74,14 +68,7 @@ final class SessionGuard {
     // ── Reverse gate (already logged-in on public route) ─────────────────────
     if (!needsAuth && isAuthenticated) {
       // Allow deep-link callbacks, legal pages, and consent through.
-      final isCallback = location.startsWith('/auth/') ||
-          location.startsWith('/sign/') ||
-          location.startsWith('/login') ||
-          location.startsWith('/legal') ||
-          location == Routes.sitemap ||
-          location == Routes.help ||
-          location == Routes.maintenance ||
-          location == Routes.consent;
+      final isCallback = location.startsWith('/auth/') || location.startsWith('/sign/') || location.startsWith('/login') || location.startsWith('/legal') || location == Routes.sitemap || location == Routes.help || location == Routes.maintenance || location == Routes.consent;
 
       if (!isCallback && location != Routes.home) {
         return Routes.home;

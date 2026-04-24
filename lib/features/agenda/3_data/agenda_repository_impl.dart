@@ -25,12 +25,21 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       AgendaEvent(
         id: 'past-1',
         rawTitle: 'Revisión de cardiología',
-        description: 'Hospital General de Toledo — Cardiología',
+        description:
+            'Revisión anual de cardiología. Se revisarán los resultados '
+            'de la última prueba de esfuerzo y el ecocardiograma. Acuda 15 '
+            'minutos antes con la documentación habitual y la tarjeta '
+            'sanitaria. Si tiene síntomas nuevos, indíquelo en recepción.',
         startsAt: today.subtract(const Duration(days: 60, hours: 1)),
         endsAt: today.subtract(const Duration(days: 60)),
         location: 'Toledo',
         category: AgendaCategory.salud,
         source: AgendaEventSource.ssalud,
+        centro: 'Hospital General de Toledo',
+        profesional: 'Dra. M. Pérez',
+        tipo: 'Cardiología',
+        justificanteUrl:
+            'https://sescam.castillalamancha.es/justificantes/past-1.pdf',
       ),
       AgendaEvent(
         id: 'past-2',
@@ -40,6 +49,8 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         location: 'Toledo',
         category: AgendaCategory.administrativo,
         source: AgendaEventSource.ccaa,
+        centro: 'Comisaría de Policía Nacional',
+        tipo: 'Renovación documento',
       ),
       AgendaEvent(
         id: 'past-3',
@@ -49,16 +60,24 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         location: 'Albacete',
         category: AgendaCategory.educacion,
         source: AgendaEventSource.ccaa,
+        centro: 'CEIP Cervantes',
+        profesional: 'D. J. García (tutor)',
       ),
       // ── Next 7 days (includes a duplicate-day pair on +3d) ───────────
       AgendaEvent(
         id: 'next7-1',
         rawTitle: 'Análisis de sangre',
-        description: 'Centro de salud Talavera',
+        description:
+            'Extracción rutinaria. Acuda en ayunas (mínimo 8 horas) y '
+            'lleve la tarjeta sanitaria. Si toma medicación crónica, '
+            'consulte previamente con su médico de familia.',
         startsAt: today.add(const Duration(days: 1, hours: -1)),
         location: 'Talavera de la Reina',
         category: AgendaCategory.salud,
         source: AgendaEventSource.ssalud,
+        centro: 'Centro de Salud Talavera Centro',
+        profesional: 'Equipo de extracciones',
+        tipo: 'Análisis clínico',
       ),
       AgendaEvent(
         id: 'next7-2',

@@ -986,6 +986,84 @@ abstract class AppLocalizations {
   /// **'Fecha'**
   String get agendaDetailWhen;
 
+  /// Agenda — etiqueta del campo centro en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro'**
+  String get agendaDetailCentro;
+
+  /// Agenda — etiqueta del campo profesional en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Profesional'**
+  String get agendaDetailProfesional;
+
+  /// Agenda — etiqueta del campo tipo en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo'**
+  String get agendaDetailTipo;
+
+  /// Agenda — etiqueta de la descripción larga en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get agendaDetailDescription;
+
+  /// Agenda — CTA para abrir el justificante de asistencia.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver justificante de asistencia'**
+  String get agendaDetailJustificante;
+
+  /// Agenda — aviso al pulsar el justificante mientras el enlace externo no está habilitado.
+  ///
+  /// In es, this message translates to:
+  /// **'El justificante se podrá abrir cuando se habilite el enlace externo.'**
+  String get agendaJustificanteUnavailable;
+
+  /// Agenda — affordance para expandir el detalle inline en la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver más detalles'**
+  String get agendaTileExpand;
+
+  /// Agenda — affordance para colapsar el detalle inline en la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Ocultar detalles'**
+  String get agendaTileCollapse;
+
+  /// Agenda — CTA para navegar al detalle completo del evento.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir detalle completo'**
+  String get agendaTileOpenDetail;
+
+  /// Agenda — título del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido leer tu agenda'**
+  String get agendaParseErrorTitle;
+
+  /// Agenda — detalle del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'Hubo un problema al interpretar la respuesta del servicio. Vuelve a intentarlo en unos minutos.'**
+  String get agendaParseErrorDetail;
+
+  /// Agenda — CTA de reintento del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'Intentar de nuevo'**
+  String get agendaParseErrorRetry;
+
+  /// Agenda — aviso de datos parciales sobre la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Algunos eventos no se han podido cargar. Mostramos los disponibles.'**
+  String get agendaPartialBanner;
+
   /// Estado — título de la landing.
   ///
   /// In es, this message translates to:
@@ -1435,6 +1513,198 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.'**
   String get socialWelfareDependenciaDescription;
+
+  /// Título de la pantalla de formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Soporte técnico'**
+  String get supportFormTitle;
+
+  /// Texto introductorio del formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuéntanos qué ha pasado. Nuestro equipo te responderá por correo electrónico.'**
+  String get supportFormIntro;
+
+  /// CTA en el centro de ayuda para abrir el formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Contactar con soporte'**
+  String get supportCtaFromHelp;
+
+  /// Etiqueta del campo Nombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get supportFieldName;
+
+  /// Etiqueta del campo Email.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get supportFieldEmail;
+
+  /// Etiqueta del campo Confirmar email.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmación del correo electrónico'**
+  String get supportFieldEmailConfirm;
+
+  /// Etiqueta del campo Asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Asunto'**
+  String get supportFieldSubject;
+
+  /// Etiqueta del campo Descripción.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get supportFieldDescription;
+
+  /// Etiqueta de la sección de adjuntos.
+  ///
+  /// In es, this message translates to:
+  /// **'Adjunto (opcional)'**
+  String get supportAttachmentLabel;
+
+  /// Texto de ayuda del adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes adjuntar un único archivo (capturas, documentos).'**
+  String get supportAttachmentHint;
+
+  /// Botón para seleccionar adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar archivo'**
+  String get supportAttachmentPick;
+
+  /// Botón para cambiar el adjunto seleccionado.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar archivo'**
+  String get supportAttachmentChange;
+
+  /// Acción para quitar el adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar adjunto'**
+  String get supportAttachmentRemove;
+
+  /// Texto del checkbox de consentimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Autorizo el tratamiento de mis datos para gestionar mi solicitud.'**
+  String get supportConsentLabel;
+
+  /// Etiqueta del checkbox antibot.
+  ///
+  /// In es, this message translates to:
+  /// **'No soy un robot'**
+  String get supportCaptchaLabel;
+
+  /// Insignia que indica que el captcha es un mock.
+  ///
+  /// In es, this message translates to:
+  /// **'MOCK'**
+  String get supportCaptchaMockBadge;
+
+  /// Botón de envío del formulario.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar solicitud'**
+  String get supportSubmitButton;
+
+  /// Título de la pantalla de confirmación.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud enviada'**
+  String get supportConfirmationTitle;
+
+  /// Mensaje de confirmación tras el envío.
+  ///
+  /// In es, this message translates to:
+  /// **'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.'**
+  String get supportConfirmationMessage;
+
+  /// Botón para enviar otra solicitud.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar otra solicitud'**
+  String get supportConfirmationNewRequest;
+
+  /// Mensaje genérico de error de envío.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido enviar tu solicitud. Inténtalo de nuevo.'**
+  String get supportSubmissionError;
+
+  /// Error: nombre requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica tu nombre.'**
+  String get supportErrorNameRequired;
+
+  /// Error: email requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica tu correo electrónico.'**
+  String get supportErrorEmailRequired;
+
+  /// Error: email no válido.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un correo electrónico válido.'**
+  String get supportErrorEmailInvalid;
+
+  /// Error: confirmación de email requerida.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma tu correo electrónico.'**
+  String get supportErrorEmailConfirmRequired;
+
+  /// Error: emails no coinciden.
+  ///
+  /// In es, this message translates to:
+  /// **'Los correos no coinciden.'**
+  String get supportErrorEmailMismatch;
+
+  /// Error: asunto requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica un asunto.'**
+  String get supportErrorSubjectRequired;
+
+  /// Error: asunto demasiado largo.
+  ///
+  /// In es, this message translates to:
+  /// **'El asunto no puede superar los 100 caracteres.'**
+  String get supportErrorSubjectTooLong;
+
+  /// Error: descripción requerida.
+  ///
+  /// In es, this message translates to:
+  /// **'Describe tu solicitud.'**
+  String get supportErrorDescriptionRequired;
+
+  /// Error: descripción demasiado larga.
+  ///
+  /// In es, this message translates to:
+  /// **'La descripción supera el límite permitido.'**
+  String get supportErrorDescriptionTooLong;
+
+  /// Error: consentimiento requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes autorizar el tratamiento de tus datos.'**
+  String get supportErrorConsentRequired;
+
+  /// Error: captcha requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma que no eres un robot.'**
+  String get supportErrorCaptchaRequired;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

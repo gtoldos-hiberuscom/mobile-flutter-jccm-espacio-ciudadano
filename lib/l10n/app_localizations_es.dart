@@ -477,6 +477,45 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaDetailWhen => 'Fecha';
 
   @override
+  String get agendaDetailCentro => 'Centro';
+
+  @override
+  String get agendaDetailProfesional => 'Profesional';
+
+  @override
+  String get agendaDetailTipo => 'Tipo';
+
+  @override
+  String get agendaDetailDescription => 'Descripción';
+
+  @override
+  String get agendaDetailJustificante => 'Ver justificante de asistencia';
+
+  @override
+  String get agendaJustificanteUnavailable => 'El justificante se podrá abrir cuando se habilite el enlace externo.';
+
+  @override
+  String get agendaTileExpand => 'Ver más detalles';
+
+  @override
+  String get agendaTileCollapse => 'Ocultar detalles';
+
+  @override
+  String get agendaTileOpenDetail => 'Abrir detalle completo';
+
+  @override
+  String get agendaParseErrorTitle => 'No hemos podido leer tu agenda';
+
+  @override
+  String get agendaParseErrorDetail => 'Hubo un problema al interpretar la respuesta del servicio. Vuelve a intentarlo en unos minutos.';
+
+  @override
+  String get agendaParseErrorRetry => 'Intentar de nuevo';
+
+  @override
+  String get agendaPartialBanner => 'Algunos eventos no se han podido cargar. Mostramos los disponibles.';
+
+  @override
   String get stateAffairsTitle => 'Estado y otros temas de interés';
 
   @override
@@ -716,4 +755,100 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get supportFormTitle => 'Soporte técnico';
+
+  @override
+  String get supportFormIntro => 'Cuéntanos qué ha pasado. Nuestro equipo te responderá por correo electrónico.';
+
+  @override
+  String get supportCtaFromHelp => 'Contactar con soporte';
+
+  @override
+  String get supportFieldName => 'Nombre';
+
+  @override
+  String get supportFieldEmail => 'Correo electrónico';
+
+  @override
+  String get supportFieldEmailConfirm => 'Confirmación del correo electrónico';
+
+  @override
+  String get supportFieldSubject => 'Asunto';
+
+  @override
+  String get supportFieldDescription => 'Descripción';
+
+  @override
+  String get supportAttachmentLabel => 'Adjunto (opcional)';
+
+  @override
+  String get supportAttachmentHint => 'Puedes adjuntar un único archivo (capturas, documentos).';
+
+  @override
+  String get supportAttachmentPick => 'Seleccionar archivo';
+
+  @override
+  String get supportAttachmentChange => 'Cambiar archivo';
+
+  @override
+  String get supportAttachmentRemove => 'Quitar adjunto';
+
+  @override
+  String get supportConsentLabel => 'Autorizo el tratamiento de mis datos para gestionar mi solicitud.';
+
+  @override
+  String get supportCaptchaLabel => 'No soy un robot';
+
+  @override
+  String get supportCaptchaMockBadge => 'MOCK';
+
+  @override
+  String get supportSubmitButton => 'Enviar solicitud';
+
+  @override
+  String get supportConfirmationTitle => 'Solicitud enviada';
+
+  @override
+  String get supportConfirmationMessage => 'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.';
+
+  @override
+  String get supportConfirmationNewRequest => 'Enviar otra solicitud';
+
+  @override
+  String get supportSubmissionError => 'No hemos podido enviar tu solicitud. Inténtalo de nuevo.';
+
+  @override
+  String get supportErrorNameRequired => 'Indica tu nombre.';
+
+  @override
+  String get supportErrorEmailRequired => 'Indica tu correo electrónico.';
+
+  @override
+  String get supportErrorEmailInvalid => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get supportErrorEmailConfirmRequired => 'Confirma tu correo electrónico.';
+
+  @override
+  String get supportErrorEmailMismatch => 'Los correos no coinciden.';
+
+  @override
+  String get supportErrorSubjectRequired => 'Indica un asunto.';
+
+  @override
+  String get supportErrorSubjectTooLong => 'El asunto no puede superar los 100 caracteres.';
+
+  @override
+  String get supportErrorDescriptionRequired => 'Describe tu solicitud.';
+
+  @override
+  String get supportErrorDescriptionTooLong => 'La descripción supera el límite permitido.';
+
+  @override
+  String get supportErrorConsentRequired => 'Debes autorizar el tratamiento de tus datos.';
+
+  @override
+  String get supportErrorCaptchaRequired => 'Confirma que no eres un robot.';
 }
