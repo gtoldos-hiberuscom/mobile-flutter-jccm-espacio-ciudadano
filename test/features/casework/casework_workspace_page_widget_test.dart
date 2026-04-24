@@ -24,6 +24,22 @@ class _StubRepo implements CaseworkRepository {
           status: CaseworkItemStatus.enTramite,
         ),
       ];
+
+  @override
+  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
+      const <CaseworkItem>[];
+
+  @override
+  Future<List<CaseworkItem>> searchByExpedienteNumber(
+    final String number,
+  ) async =>
+      const <CaseworkItem>[];
+
+  @override
+  Future<List<CaseworkItem>> searchByRegistroNumber(
+    final String number,
+  ) async =>
+      const <CaseworkItem>[];
 }
 
 Widget _wrapWithStub(final Widget child) => ProviderScope(

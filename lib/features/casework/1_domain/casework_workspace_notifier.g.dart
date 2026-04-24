@@ -44,7 +44,7 @@ final class CaseworkWorkspaceNotifierProvider
 }
 
 String _$caseworkWorkspaceNotifierHash() =>
-    r'de85da328d746d995e416d5fa1bbb815756960dc';
+    r'bee280350417ed0fa8e7ecb9a2901baf8d22415f';
 
 /// Owns the "Mis gestiones" workspace state (STORY-34). Loads the three
 /// tabs in parallel so each section surfaces its own loading / empty /

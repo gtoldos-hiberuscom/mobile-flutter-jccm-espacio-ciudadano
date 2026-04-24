@@ -674,5 +674,61 @@
     "placeholders": {
       "date": {"type": "String"}
     }
-  }
+  },
+  "caseworkSearchTitle": "Search casework files and registry entries",
+  "@caseworkSearchTitle": {"description": "Casework search — screen title."},
+  "caseworkSearchOpenCta": "Search casework files and registry entries",
+  "@caseworkSearchOpenCta": {"description": "Casework search — workspace CTA to open search."},
+  "caseworkSearchIntro": "Fill at least one field to find your casework file or registry entry.",
+  "@caseworkSearchIntro": {"description": "Casework search — form intro."},
+  "caseworkSearchFieldIdentificationLabel": "ID document (NIF / NIE / Passport)",
+  "@caseworkSearchFieldIdentificationLabel": {"description": "Casework search — identification field label."},
+  "caseworkSearchFieldIdentificationHelper": "E.g. 12345678Z, X1234567A or alphanumeric passport.",
+  "@caseworkSearchFieldIdentificationHelper": {"description": "Casework search — identification field helper."},
+  "caseworkSearchFieldExpedienteLabel": "Casework file number",
+  "@caseworkSearchFieldExpedienteLabel": {"description": "Casework search — expediente field label."},
+  "caseworkSearchFieldExpedienteHelper": "E.g. EXP/2025/00123",
+  "@caseworkSearchFieldExpedienteHelper": {"description": "Casework search — expediente helper."},
+  "caseworkSearchFieldRegistroLabel": "Registry number",
+  "@caseworkSearchFieldRegistroLabel": {"description": "Casework search — registro field label."},
+  "caseworkSearchFieldRegistroHelper": "E.g. REG/E/45612",
+  "@caseworkSearchFieldRegistroHelper": {"description": "Casework search — registro helper."},
+  "caseworkSearchSubmit": "Search",
+  "@caseworkSearchSubmit": {"description": "Casework search — submit button label."},
+  "caseworkSearchAnother": "Search something else",
+  "@caseworkSearchAnother": {"description": "Casework search — reset CTA."},
+  "caseworkSearchAportar": "Submit documents to this result",
+  "@caseworkSearchAportar": {"description": "Casework search — placeholder CTA to attach documents."},
+  "caseworkSearchAportarPending": "Document submission will be enabled by STORY-37 / STORY-38.",
+  "@caseworkSearchAportarPending": {"description": "Casework search — placeholder message for attach."},
+  "caseworkSearchErrorAtLeastOne": "Please fill at least one of the three fields.",
+  "@caseworkSearchErrorAtLeastOne": {"description": "Casework search — error: no field provided."},
+  "caseworkSearchErrorInvalidIdentification": "Invalid format. Use NIF (8 digits + letter), NIE (X/Y/Z + 7 digits + letter) or alphanumeric passport (6–9 chars).",
+  "@caseworkSearchErrorInvalidIdentification": {"description": "Casework search — invalid identification error."},
+  "caseworkSearchErrorInvalidNumber": "Invalid format. Only letters, digits, dashes and slashes are allowed.",
+  "@caseworkSearchErrorInvalidNumber": {"description": "Casework search — invalid number error."},
+  "caseworkSearchNoResults": "No matches",
+  "@caseworkSearchNoResults": {"description": "Casework search — no-results state."},
+  "caseworkSearchNoResultsHint": "Check the data you entered and try again.",
+  "@caseworkSearchNoResultsHint": {"description": "Casework search — no-results hint."},
+  "caseworkSearchError": "We could not complete the search. Please try again.",
+  "@caseworkSearchError": {"description": "Casework search — error state."},
+  "caseworkSearchResultsCount": "{count, plural, one{1 result} other{{count} results}}",
+  "@caseworkSearchResultsCount": {
+    "description": "Casework search — results count.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "caseworkItemDetailPlaceholderTitle": "Casework file detail",
+  "@caseworkItemDetailPlaceholderTitle": {"description": "Casework — placeholder detail title."},
+  "caseworkItemDetailPlaceholderBody": "Detail for item {id}",
+  "@caseworkItemDetailPlaceholderBody": {
+    "description": "Casework — placeholder detail body.",
+    "placeholders": {
+      "id": {"type": "String"}
+    }
+  },
+  "caseworkItemDetailPlaceholderPending": "The real detail screen will be enabled by STORY-35 / STORY-36.",
+  "@caseworkItemDetailPlaceholderPending": {"description": "Casework — placeholder detail pending message."}
 }
