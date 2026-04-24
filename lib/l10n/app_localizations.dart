@@ -2371,6 +2371,174 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Mis autorizaciones'**
   String get dataConsentNavCta;
+
+  /// Casework upload — page title.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get caseworkUploadPageTitle;
+
+  /// Casework upload — picker panel headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Adjuntar archivos'**
+  String get caseworkUploadPickerCta;
+
+  /// Casework upload — picker button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar archivos'**
+  String get caseworkUploadSelectFilesCta;
+
+  /// Casework upload — semantic label for the drop / picker area.
+  ///
+  /// In es, this message translates to:
+  /// **'Zona para arrastrar y soltar archivos. También se pueden seleccionar pulsando.'**
+  String get caseworkUploadDropZoneSemantic;
+
+  /// Casework upload — files and size limit hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Máximo {maxFiles} archivos. Hasta {maxMb} MB cada uno.'**
+  String caseworkUploadLimitHint(int maxFiles, int maxMb);
+
+  /// Casework upload — remaining slots.
+  ///
+  /// In es, this message translates to:
+  /// **'{remaining, plural, =0{No puedes adjuntar más archivos.} =1{Puedes adjuntar 1 archivo más.} other{Puedes adjuntar {remaining} archivos más.}}'**
+  String caseworkUploadRemainingHint(int remaining);
+
+  /// Casework upload — empty list state.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no hay archivos adjuntos.'**
+  String get caseworkUploadEmptyList;
+
+  /// Casework upload — remove file tooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar archivo'**
+  String get caseworkUploadRemoveFile;
+
+  /// Casework upload — upload all CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir todos'**
+  String get caseworkUploadUploadAllCta;
+
+  /// Casework upload — finalize CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizar y solicitar justificante'**
+  String get caseworkUploadFinalizeCta;
+
+  /// Casework upload — status: selected.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionado'**
+  String get caseworkUploadStatusSelected;
+
+  /// Casework upload — status: validating.
+  ///
+  /// In es, this message translates to:
+  /// **'Validando'**
+  String get caseworkUploadStatusValidating;
+
+  /// Casework upload — status: hashed.
+  ///
+  /// In es, this message translates to:
+  /// **'Hash calculado'**
+  String get caseworkUploadStatusHashed;
+
+  /// Casework upload — status: uploading.
+  ///
+  /// In es, this message translates to:
+  /// **'Subiendo'**
+  String get caseworkUploadStatusUploading;
+
+  /// Casework upload — status: uploaded.
+  ///
+  /// In es, this message translates to:
+  /// **'Subido'**
+  String get caseworkUploadStatusUploaded;
+
+  /// Casework upload — status: failed.
+  ///
+  /// In es, this message translates to:
+  /// **'Error'**
+  String get caseworkUploadStatusFailed;
+
+  /// Casework upload — error: unsupported mime.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato no admitido.'**
+  String get caseworkUploadErrorUnsupportedMime;
+
+  /// Casework upload — error: too large.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo excede el tamaño máximo.'**
+  String get caseworkUploadErrorTooLarge;
+
+  /// Casework upload — error: too many files.
+  ///
+  /// In es, this message translates to:
+  /// **'Has alcanzado el número máximo de archivos.'**
+  String get caseworkUploadErrorTooManyFiles;
+
+  /// Casework upload — error: empty file.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo está vacío.'**
+  String get caseworkUploadErrorEmptyFile;
+
+  /// Casework upload — error: hash mismatch.
+  ///
+  /// In es, this message translates to:
+  /// **'La huella del archivo no coincide.'**
+  String get caseworkUploadErrorHashMismatch;
+
+  /// Casework upload — error: generic.
+  ///
+  /// In es, this message translates to:
+  /// **'Se produjo un error con el archivo.'**
+  String get caseworkUploadErrorGeneric;
+
+  /// Casework upload — justificante pending.
+  ///
+  /// In es, this message translates to:
+  /// **'El justificante se generará cuando finalices el envío.'**
+  String get caseworkUploadJustificantePending;
+
+  /// Casework upload — justificante unavailable headline.
+  ///
+  /// In es, this message translates to:
+  /// **'El justificante todavía no está disponible.'**
+  String get caseworkUploadJustificanteUnavailable;
+
+  /// Casework upload — justificante unavailable reason.
+  ///
+  /// In es, this message translates to:
+  /// **'Motivo: {reason}'**
+  String caseworkUploadJustificanteUnavailableReason(String reason);
+
+  /// Casework upload — justificante available.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu justificante está listo.'**
+  String get caseworkUploadJustificanteAvailable;
+
+  /// Casework upload — justificante download CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar justificante'**
+  String get caseworkUploadJustificanteDownloadCta;
+
+  /// Casework upload — stub message when download is triggered.
+  ///
+  /// In es, this message translates to:
+  /// **'La descarga del justificante se habilitará cuando el backend confirme el formato.'**
+  String get caseworkUploadJustificanteDownloadStub;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

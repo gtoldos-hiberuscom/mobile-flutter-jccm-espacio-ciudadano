@@ -1195,4 +1195,101 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataConsentNavCta => 'My authorizations';
+
+  @override
+  String get caseworkUploadPageTitle => 'Submit documentation';
+
+  @override
+  String get caseworkUploadPickerCta => 'Attach files';
+
+  @override
+  String get caseworkUploadSelectFilesCta => 'Select files';
+
+  @override
+  String get caseworkUploadDropZoneSemantic => 'Drop area for attachments. You can also tap to pick files.';
+
+  @override
+  String caseworkUploadLimitHint(int maxFiles, int maxMb) {
+    return 'Up to $maxFiles files, $maxMb MB each.';
+  }
+
+  @override
+  String caseworkUploadRemainingHint(int remaining) {
+    String _temp0 = intl.Intl.pluralLogic(
+      remaining,
+      locale: localeName,
+      other: 'You can attach $remaining more files.',
+      one: 'You can attach 1 more file.',
+      zero: 'You cannot attach more files.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkUploadEmptyList => 'No files attached yet.';
+
+  @override
+  String get caseworkUploadRemoveFile => 'Remove file';
+
+  @override
+  String get caseworkUploadUploadAllCta => 'Upload all';
+
+  @override
+  String get caseworkUploadFinalizeCta => 'Finish and request receipt';
+
+  @override
+  String get caseworkUploadStatusSelected => 'Selected';
+
+  @override
+  String get caseworkUploadStatusValidating => 'Validating';
+
+  @override
+  String get caseworkUploadStatusHashed => 'Hash computed';
+
+  @override
+  String get caseworkUploadStatusUploading => 'Uploading';
+
+  @override
+  String get caseworkUploadStatusUploaded => 'Uploaded';
+
+  @override
+  String get caseworkUploadStatusFailed => 'Error';
+
+  @override
+  String get caseworkUploadErrorUnsupportedMime => 'Unsupported file format.';
+
+  @override
+  String get caseworkUploadErrorTooLarge => 'The file exceeds the maximum size.';
+
+  @override
+  String get caseworkUploadErrorTooManyFiles => 'You have reached the maximum number of files.';
+
+  @override
+  String get caseworkUploadErrorEmptyFile => 'The file is empty.';
+
+  @override
+  String get caseworkUploadErrorHashMismatch => 'The file fingerprint does not match.';
+
+  @override
+  String get caseworkUploadErrorGeneric => 'There was an error with the file.';
+
+  @override
+  String get caseworkUploadJustificantePending => 'The receipt will be generated once you finish the submission.';
+
+  @override
+  String get caseworkUploadJustificanteUnavailable => 'The receipt is not available yet.';
+
+  @override
+  String caseworkUploadJustificanteUnavailableReason(String reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
+  String get caseworkUploadJustificanteAvailable => 'Your receipt is ready.';
+
+  @override
+  String get caseworkUploadJustificanteDownloadCta => 'Download receipt';
+
+  @override
+  String get caseworkUploadJustificanteDownloadStub => 'Receipt download will be enabled once the backend confirms the format.';
 }

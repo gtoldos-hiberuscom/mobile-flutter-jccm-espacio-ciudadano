@@ -1196,4 +1196,101 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dataConsentNavCta => 'Mis autorizaciones';
+
+  @override
+  String get caseworkUploadPageTitle => 'Aportar documentación';
+
+  @override
+  String get caseworkUploadPickerCta => 'Adjuntar archivos';
+
+  @override
+  String get caseworkUploadSelectFilesCta => 'Seleccionar archivos';
+
+  @override
+  String get caseworkUploadDropZoneSemantic => 'Zona para arrastrar y soltar archivos. También se pueden seleccionar pulsando.';
+
+  @override
+  String caseworkUploadLimitHint(int maxFiles, int maxMb) {
+    return 'Máximo $maxFiles archivos. Hasta $maxMb MB cada uno.';
+  }
+
+  @override
+  String caseworkUploadRemainingHint(int remaining) {
+    String _temp0 = intl.Intl.pluralLogic(
+      remaining,
+      locale: localeName,
+      other: 'Puedes adjuntar $remaining archivos más.',
+      one: 'Puedes adjuntar 1 archivo más.',
+      zero: 'No puedes adjuntar más archivos.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkUploadEmptyList => 'Aún no hay archivos adjuntos.';
+
+  @override
+  String get caseworkUploadRemoveFile => 'Quitar archivo';
+
+  @override
+  String get caseworkUploadUploadAllCta => 'Subir todos';
+
+  @override
+  String get caseworkUploadFinalizeCta => 'Finalizar y solicitar justificante';
+
+  @override
+  String get caseworkUploadStatusSelected => 'Seleccionado';
+
+  @override
+  String get caseworkUploadStatusValidating => 'Validando';
+
+  @override
+  String get caseworkUploadStatusHashed => 'Hash calculado';
+
+  @override
+  String get caseworkUploadStatusUploading => 'Subiendo';
+
+  @override
+  String get caseworkUploadStatusUploaded => 'Subido';
+
+  @override
+  String get caseworkUploadStatusFailed => 'Error';
+
+  @override
+  String get caseworkUploadErrorUnsupportedMime => 'Formato no admitido.';
+
+  @override
+  String get caseworkUploadErrorTooLarge => 'El archivo excede el tamaño máximo.';
+
+  @override
+  String get caseworkUploadErrorTooManyFiles => 'Has alcanzado el número máximo de archivos.';
+
+  @override
+  String get caseworkUploadErrorEmptyFile => 'El archivo está vacío.';
+
+  @override
+  String get caseworkUploadErrorHashMismatch => 'La huella del archivo no coincide.';
+
+  @override
+  String get caseworkUploadErrorGeneric => 'Se produjo un error con el archivo.';
+
+  @override
+  String get caseworkUploadJustificantePending => 'El justificante se generará cuando finalices el envío.';
+
+  @override
+  String get caseworkUploadJustificanteUnavailable => 'El justificante todavía no está disponible.';
+
+  @override
+  String caseworkUploadJustificanteUnavailableReason(String reason) {
+    return 'Motivo: $reason';
+  }
+
+  @override
+  String get caseworkUploadJustificanteAvailable => 'Tu justificante está listo.';
+
+  @override
+  String get caseworkUploadJustificanteDownloadCta => 'Descargar justificante';
+
+  @override
+  String get caseworkUploadJustificanteDownloadStub => 'La descarga del justificante se habilitará cuando el backend confirme el formato.';
 }

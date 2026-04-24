@@ -40,6 +40,8 @@ abstract final class Routes {
   static const String casework = '/casework';
   static const String caseworkSearch = '/casework/search';
   static const String caseworkItemDetail = '/casework/item/:id';
+  /// Upload-evidence screen for a given expediente (STORY-38).
+  static const String caseworkUpload = '/casework/item/:id/upload';
   static const String notifications = '/notifications';
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';
