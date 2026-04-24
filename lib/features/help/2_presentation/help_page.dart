@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
@@ -80,6 +82,15 @@ class _HelpPageState extends ConsumerState<HelpPage> {
           const SizedBox(height: AppDimensions.space24),
           _SectionHeader(title: l10n.helpContactSectionTitle),
           ...content.contacts.map((final c) => _ContactTile(contact: c)),
+          const SizedBox(height: AppDimensions.space16),
+          Center(
+            child: FilledButton.icon(
+              key: const Key('help_support_cta'),
+              icon: const Icon(Icons.support_agent),
+              label: Text(l10n.supportCtaFromHelp),
+              onPressed: () => context.go(Routes.supportForm),
+            ),
+          ),
           const SizedBox(height: AppDimensions.space24),
         ],
       ),

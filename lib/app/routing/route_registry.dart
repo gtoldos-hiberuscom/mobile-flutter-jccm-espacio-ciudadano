@@ -30,6 +30,7 @@ abstract final class Routes {
   static const String legalNotice = '/legal/notice';
   static const String sitemap = '/sitemap';
   static const String help = '/help';
+  static const String supportForm = '/help/support';
 
   // ── Authenticated ─────────────────────────────────────────────────────────
   static const String home = '/home';
