@@ -1354,4 +1354,55 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get caseworkUploadJustificanteDownloadStub => 'La descarga del justificante se habilitará cuando el backend confirme el formato.';
+
+  @override
+  String get caseworkRegistroDetailTitleEntrada => 'Detalle de entrada de registro';
+
+  @override
+  String get caseworkRegistroDetailTitleSalida => 'Detalle de salida de registro';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbHome => 'Inicio';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbCasework => 'Mis gestiones';
+
+  @override
+  String get caseworkRegistroDetailKindEntrada => 'Entradas de registro';
+
+  @override
+  String get caseworkRegistroDetailKindSalida => 'Salidas de registro';
+
+  @override
+  String get caseworkRegistroDetailBackToList => 'Volver al listado';
+
+  @override
+  String get caseworkRegistroDetailLoadError => 'No hemos podido cargar el detalle del registro.';
+
+  @override
+  String get caseworkRegistroDetailFieldNumero => 'Número de registro';
+
+  @override
+  String get caseworkRegistroDetailFieldFecha => 'Fecha';
+
+  @override
+  String get caseworkRegistroDetailFieldConsejeria => 'Consejería destino';
+
+  @override
+  String get caseworkRegistroDetailFieldOficina => 'Oficina de registro';
+
+  @override
+  String get caseworkRegistroDetailFieldAsunto => 'Asunto';
+
+  @override
+  String get caseworkRegistroDetailFieldObservaciones => 'Observaciones';
+
+  @override
+  String get caseworkRegistroDetailFicherosTitle => 'Documentación adjunta';
+
+  @override
+  String get caseworkRegistroDetailFicherosEmpty => 'Este registro no incluye ficheros adjuntos.';
+
+  @override
+  String get caseworkRegistroDetailReadOnlyBanner => 'Esta pantalla muestra el detalle del registro en modo consulta. No es posible aportar documentación desde aquí.';
 }

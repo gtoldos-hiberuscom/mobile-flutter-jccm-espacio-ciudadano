@@ -1353,4 +1353,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get caseworkUploadJustificanteDownloadStub => 'Receipt download will be enabled once the backend confirms the format.';
+
+  @override
+  String get caseworkRegistroDetailTitleEntrada => 'Registry entry detail';
+
+  @override
+  String get caseworkRegistroDetailTitleSalida => 'Registry exit detail';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbHome => 'Home';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbCasework => 'My files';
+
+  @override
+  String get caseworkRegistroDetailKindEntrada => 'Registry inbox';
+
+  @override
+  String get caseworkRegistroDetailKindSalida => 'Registry outbox';
+
+  @override
+  String get caseworkRegistroDetailBackToList => 'Back to list';
+
+  @override
+  String get caseworkRegistroDetailLoadError => 'We could not load the registry detail.';
+
+  @override
+  String get caseworkRegistroDetailFieldNumero => 'Registry number';
+
+  @override
+  String get caseworkRegistroDetailFieldFecha => 'Date';
+
+  @override
+  String get caseworkRegistroDetailFieldConsejeria => 'Destination department';
+
+  @override
+  String get caseworkRegistroDetailFieldOficina => 'Registry office';
+
+  @override
+  String get caseworkRegistroDetailFieldAsunto => 'Subject';
+
+  @override
+  String get caseworkRegistroDetailFieldObservaciones => 'Notes';
+
+  @override
+  String get caseworkRegistroDetailFicherosTitle => 'Attached documentation';
+
+  @override
+  String get caseworkRegistroDetailFicherosEmpty => 'This registry entry has no attached files.';
+
+  @override
+  String get caseworkRegistroDetailReadOnlyBanner => 'This screen shows the registry entry in read-only mode. You cannot submit documentation from here.';
 }

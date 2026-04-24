@@ -2665,6 +2665,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'La descarga del justificante se habilitará cuando el backend confirme el formato.'**
   String get caseworkUploadJustificanteDownloadStub;
+
+  /// Casework registro detail — page title for entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de entrada de registro'**
+  String get caseworkRegistroDetailTitleEntrada;
+
+  /// Casework registro detail — page title for salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de salida de registro'**
+  String get caseworkRegistroDetailTitleSalida;
+
+  /// Casework registro detail — breadcrumb root.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get caseworkRegistroDetailBreadcrumbHome;
+
+  /// Casework registro detail — breadcrumb workspace segment.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis gestiones'**
+  String get caseworkRegistroDetailBreadcrumbCasework;
+
+  /// Casework registro detail — breadcrumb segment for entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Entradas de registro'**
+  String get caseworkRegistroDetailKindEntrada;
+
+  /// Casework registro detail — breadcrumb segment for salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'Salidas de registro'**
+  String get caseworkRegistroDetailKindSalida;
+
+  /// Casework registro detail — back-to-list tooltip on the AppBar.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver al listado'**
+  String get caseworkRegistroDetailBackToList;
+
+  /// Casework registro detail — error loading detail.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar el detalle del registro.'**
+  String get caseworkRegistroDetailLoadError;
+
+  /// Casework registro detail — número field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de registro'**
+  String get caseworkRegistroDetailFieldNumero;
+
+  /// Casework registro detail — fecha field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha'**
+  String get caseworkRegistroDetailFieldFecha;
+
+  /// Casework registro detail — consejería destino field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Consejería destino'**
+  String get caseworkRegistroDetailFieldConsejeria;
+
+  /// Casework registro detail — oficina field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Oficina de registro'**
+  String get caseworkRegistroDetailFieldOficina;
+
+  /// Casework registro detail — asunto field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Asunto'**
+  String get caseworkRegistroDetailFieldAsunto;
+
+  /// Casework registro detail — observaciones field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Observaciones'**
+  String get caseworkRegistroDetailFieldObservaciones;
+
+  /// Casework registro detail — ficheros section title.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentación adjunta'**
+  String get caseworkRegistroDetailFicherosTitle;
+
+  /// Casework registro detail — ficheros empty state.
+  ///
+  /// In es, this message translates to:
+  /// **'Este registro no incluye ficheros adjuntos.'**
+  String get caseworkRegistroDetailFicherosEmpty;
+
+  /// Casework registro detail — informational banner reminding the user the screen is read-only.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta pantalla muestra el detalle del registro en modo consulta. No es posible aportar documentación desde aquí.'**
+  String get caseworkRegistroDetailReadOnlyBanner;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
