@@ -2,12 +2,12 @@
 id: 47
 jira_key:
 type: Task
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 5
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-24T13:04:14+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Validar si /servicio/midetalle y /publicacion/midocfirmados cubren realmente el caso de uso de notificaciones, cómo se asocian los documentos y si existe backend para alta de contacto.
 
 ## Acceptance Criteria
-- [ ] Se valida o corrige el endpoint de listado o detalle de notificaciones.
-- [ ] Se documenta el modelo de estados de notificación y de asociación de documentos.
-- [ ] Se aclara si existe backend para el alta de datos de contacto.
-- [ ] Se deja trazado el impacto sobre [STORY-41], [STORY-42], [STORY-43] y [STORY-44].
+- [x] Se valida o corrige el endpoint de listado o detalle de notificaciones.
+- [x] Se documenta el modelo de estados de notificación y de asociación de documentos.
+- [x] Se aclara si existe backend para el alta de datos de contacto.
+- [x] Se deja trazado el impacto sobre [STORY-41], [STORY-42], [STORY-43] y [STORY-44].
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -75,5 +75,15 @@ Validar si /servicio/midetalle y /publicacion/midocfirmados cubren realmente el 
 ### Comments
 - None yet.
 
+### Impact Summary
+- Discovery deliverable: `documentation/discovery/TASK-47-notifications-contract-strategy.md`.
+- `POST /servicio/midetalle` (`ServicioApi.miDetalleOperation`) and `POST /publicacion/midocfirmados` (`PublicacionApi.miDocsfirmados`) confirmed at wire-shape level against the generated Dio client; `estado` value-set remains R2-open and is absorbed by a tolerant placeholder enum.
+- STORY-41: unblocked — bind listing to `miDetalleOperation`, map `ZCSSTPUBPORTAL` → `Notification`, render four canonical states, paginate/order client-side.
+- STORY-42: unblocked **mock-only** — no contact-registration endpoint exists in the API; ship form + success state behind `kNotificationContactLiveBackendEnabled = false` with a follow-up ticket reserved for real wiring.
+- STORY-43: partially unblocked — accept/reject **actions** also lack a backend operation; same mock-with-deferred-wiring pattern (`kNotificationActionsLiveBackendEnabled`); confirmation step is client-side.
+- STORY-44: unblocked — variants share the `estado` enum; documents fetched via `miDocsfirmados` using `ipejeexp` + `ipnumexp` from the listing item; download URL strategy deferred (open question).
+- Open backend questions: `estado` value-set, `ipclase` semantics, accept/reject operation, contact-registration operation, document download URL.
+
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-24T13:04:14+02:00 | by plan-manager | TASK-47 closed: discovery doc `documentation/discovery/TASK-47-notifications-contract-strategy.md` added; AC 1–4 satisfied; status → Done; sprint → Sprint 5.

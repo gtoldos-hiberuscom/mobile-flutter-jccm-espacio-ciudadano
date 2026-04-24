@@ -62,8 +62,7 @@ import 'app_localizations_es.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,19 +82,15 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('es'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('es')];
 
   /// El título de la aplicación que se muestra en el lanzador.
   ///
@@ -3031,10 +3025,213 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Volver a Mis gestiones'**
   String get caseworkAportacionCompleteHomeCta;
+
+  /// Notifications — título del centro de notificaciones (STORY-41).
+  ///
+  /// In es, this message translates to:
+  /// **'Mis notificaciones'**
+  String get notificationsCenterTitle;
+
+  /// Notifications — mensaje del estado de carga del listado.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando notificaciones…'**
+  String get notificationsLoading;
+
+  /// Notifications — mensaje del estado de error global.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus notificaciones.'**
+  String get notificationsErrorMessage;
+
+  /// Notifications — aviso bajo el listado cuando falla la carga incremental.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar más notificaciones. Inténtalo de nuevo.'**
+  String get notificationsLoadMoreError;
+
+  /// Notifications — título del estado vacío del listado.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay notificaciones'**
+  String get notificationsEmptyTitle;
+
+  /// Notifications — subtítulo del estado vacío del listado.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado notificaciones para los filtros aplicados.'**
+  String get notificationsEmptySubtitle;
+
+  /// Notifications — etiqueta del filtro que muestra todos los estados.
+  ///
+  /// In es, this message translates to:
+  /// **'Todas'**
+  String get notificationsFilterAll;
+
+  /// Notifications — indicador de que la notificación tiene documentos.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentos asociados'**
+  String get notificationsItemHasDocuments;
+
+  /// Notifications — pie del listado con el progreso de la paginación.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrando {loaded} de {total}'**
+  String notificationsPaginationFooter(int loaded, int total);
+
+  /// Notifications — etiqueta del estado pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get notificationStatusPendiente;
+
+  /// Notifications — etiqueta del estado aceptada.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptada'**
+  String get notificationStatusAceptada;
+
+  /// Notifications — etiqueta del estado rechazada.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazada'**
+  String get notificationStatusRechazada;
+
+  /// Notifications — etiqueta del estado caducada.
+  ///
+  /// In es, this message translates to:
+  /// **'Caducada'**
+  String get notificationStatusCaducada;
+
+  /// Notifications — etiqueta del estado desconocido (parser tolerante).
+  ///
+  /// In es, this message translates to:
+  /// **'Sin clasificar'**
+  String get notificationStatusUnknown;
+
+  /// Notifications — título de la pantalla provisional de detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de notificación'**
+  String get notificationDetailPlaceholderTitle;
+
+  /// Notifications — cuerpo provisional con el identificador de la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificación {id}'**
+  String notificationDetailPlaceholderBody(String id);
+
+  /// Notifications — mensaje provisional para el detalle real.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle pendiente de habilitar en STORY-44.'**
+  String get notificationDetailPlaceholderPending;
+
+  /// Notifications contact — título de la pantalla de alta de contacto (STORY-42).
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto'**
+  String get notificationContactPageTitle;
+
+  /// Notifications contact — copy explicativo sobre el uso futuro del contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesitamos un teléfono móvil o un correo electrónico para avisarte de las notificaciones electrónicas que recibas. Solo usaremos estos datos para enviarte avisos relacionados con tus notificaciones.'**
+  String get notificationContactExplanation;
+
+  /// Notifications contact — etiqueta del campo teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'Teléfono móvil'**
+  String get notificationContactPhoneLabel;
+
+  /// Notifications contact — placeholder del campo teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'600 123 456'**
+  String get notificationContactPhoneHint;
+
+  /// Notifications contact — texto auxiliar del campo teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica un número con prefijo internacional si no es de España.'**
+  String get notificationContactPhoneHelper;
+
+  /// Notifications contact — etiqueta del campo correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get notificationContactEmailLabel;
+
+  /// Notifications contact — placeholder del campo correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'ejemplo@correo.com'**
+  String get notificationContactEmailHint;
+
+  /// Notifications contact — texto auxiliar del campo correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Usaremos este correo solo para avisos de notificaciones.'**
+  String get notificationContactEmailHelper;
+
+  /// Notifications contact — botón principal del formulario.
+  ///
+  /// In es, this message translates to:
+  /// **'Registrar'**
+  String get notificationContactSubmitCta;
+
+  /// Notifications contact — mensaje del estado de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando datos de contacto…'**
+  String get notificationContactLoading;
+
+  /// Notifications contact — mensaje del estado de error global.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus datos de contacto.'**
+  String get notificationContactErrorLoading;
+
+  /// Notifications contact — error de validación del teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un teléfono móvil válido.'**
+  String get notificationContactErrorPhoneInvalid;
+
+  /// Notifications contact — error de validación del correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un correo electrónico válido.'**
+  String get notificationContactErrorEmailInvalid;
+
+  /// Notifications contact — error cuando no se proporciona ningún canal.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica al menos un teléfono móvil o un correo electrónico.'**
+  String get notificationContactErrorBothEmpty;
+
+  /// Notifications contact — mensaje de éxito tras el alta.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos de contacto se han registrado correctamente.'**
+  String get notificationContactSuccessMessage;
+
+  /// Notifications contact — mensaje del banner que aparece cuando faltan datos de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Configura tus datos de contacto para recibir notificaciones.'**
+  String get notificationContactGateBannerMessage;
+
+  /// Notifications contact — CTA del banner que abre el formulario de alta.
+  ///
+  /// In es, this message translates to:
+  /// **'Configurar ahora'**
+  String get notificationContactGateBannerCta;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -3043,8 +3240,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

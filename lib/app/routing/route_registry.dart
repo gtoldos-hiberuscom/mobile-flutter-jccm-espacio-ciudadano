@@ -48,6 +48,9 @@ abstract final class Routes {
   /// `kind` is one of `entrada|salida`; `numreg` must be URL-encoded.
   static const String caseworkRegistroDetail = '/casework/registro/:kind/:numreg';
   static const String notifications = '/notifications';
+  static const String notificationDetail = '/notifications/:id';
+  static const String notificationContactRegistration =
+      '/notifications/contact/registration';
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
@@ -80,6 +83,7 @@ abstract final class Routes {
     agenda,
     casework,
     notifications,
+    notificationContactRegistration,
     cards,
     recommendations,
     support,
