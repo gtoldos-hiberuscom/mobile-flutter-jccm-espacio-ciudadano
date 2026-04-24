@@ -63,8 +63,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         if (value == null) {
           return;
         }
-        if (value.state == LifeEventsLoadState.saved &&
-            _previousState != LifeEventsLoadState.saved) {
+        if (value.state == LifeEventsLoadState.saved && _previousState != LifeEventsLoadState.saved) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -73,13 +72,10 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           // Auto-acknowledge so the screen returns to the idle baseline.
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              ref
-                  .read(lifeEventsProvider(idAgente).notifier)
-                  .acknowledgeSaved();
+              ref.read(lifeEventsProvider(idAgente).notifier).acknowledgeSaved();
             }
           });
-        } else if (value.state == LifeEventsLoadState.error &&
-            _previousState != LifeEventsLoadState.error) {
+        } else if (value.state == LifeEventsLoadState.error && _previousState != LifeEventsLoadState.error) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -97,9 +93,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           asyncSelection.maybeWhen<Widget>(
             data: (final selection) => _SaveAction(
               selection: selection,
-              onSave: () => ref
-                  .read(lifeEventsProvider(idAgente).notifier)
-                  .save(),
+              onSave: () => ref.read(lifeEventsProvider(idAgente).notifier).save(),
             ),
             orElse: () => const SizedBox.shrink(),
           ),
@@ -109,15 +103,11 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
         error: (final err, final _) => ErrorStateWidget(
           message: l10n.lifeEventsLoadError,
-          onRetry: () => ref
-              .read(lifeEventsProvider(idAgente).notifier)
-              .refresh(),
+          onRetry: () => ref.read(lifeEventsProvider(idAgente).notifier).refresh(),
         ),
         data: (final selection) => _LifeEventsBody(
           selection: selection,
-          onToggle: (final id) => ref
-              .read(lifeEventsProvider(idAgente).notifier)
-              .toggle(id),
+          onToggle: (final id) => ref.read(lifeEventsProvider(idAgente).notifier).toggle(id),
           onReset: () => _confirmReset(context, l10n, idAgente),
         ),
       ),
@@ -147,9 +137,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
       ),
     );
     if (confirmed ?? false) {
-      await ref
-          .read(lifeEventsProvider(idAgente).notifier)
-          .resetPreferencias();
+      await ref.read(lifeEventsProvider(idAgente).notifier).resetPreferencias();
     }
   }
 }
@@ -176,8 +164,7 @@ class _SaveAction extends StatelessWidget {
         ),
       );
     }
-    final canSave = selection.isDirty &&
-        selection.state != LifeEventsLoadState.saving;
+    final canSave = selection.isDirty && selection.state != LifeEventsLoadState.saving;
     return TextButton(
       onPressed: canSave ? onSave : null,
       child: Text(l10n.lifeEventsSaveAction),
@@ -200,8 +187,7 @@ class _LifeEventsBody extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    if (selection.state == LifeEventsLoadState.empty ||
-        selection.items.isEmpty) {
+    if (selection.state == LifeEventsLoadState.empty || selection.items.isEmpty) {
       return EmptyStateWidget(message: l10n.lifeEventsEmpty);
     }
     final grouped = LifeEventsNotifier.groupByCategory(selection.items);
@@ -233,8 +219,7 @@ class _LifeEventsBody extends StatelessWidget {
                     key: const ValueKey<String>(
                       'life-events-data-consent-cta',
                     ),
-                    onPressed: () =>
-                        context.go(Routes.preferencesConsent),
+                    onPressed: () => context.go(Routes.preferencesConsent),
                     icon: const Icon(Icons.shield_outlined),
                     label: Text(l10n.dataConsentNavCta),
                   ),
@@ -258,9 +243,7 @@ class _LifeEventsBody extends StatelessWidget {
                     key: ValueKey<String>('life-event-tile-${event.id}'),
                     title: Text(event.label),
                     value: selection.isSelected(event.id),
-                    onChanged: selection.state == LifeEventsLoadState.saving
-                        ? null
-                        : (_) => onToggle(event.id),
+                    onChanged: selection.state == LifeEventsLoadState.saving ? null : (_) => onToggle(event.id),
                   ),
               ],
             ],
@@ -272,9 +255,7 @@ class _LifeEventsBody extends StatelessWidget {
             padding: const EdgeInsets.all(AppDimensions.space16),
             child: OutlinedButton.icon(
               key: const ValueKey<String>('life-events-reset-button'),
-              onPressed: selection.state == LifeEventsLoadState.saving
-                  ? null
-                  : onReset,
+              onPressed: selection.state == LifeEventsLoadState.saving ? null : onReset,
               icon: const Icon(Icons.delete_outline),
               label: Text(l10n.lifeEventsResetAction),
             ),

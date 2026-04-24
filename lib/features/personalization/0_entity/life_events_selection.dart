@@ -35,11 +35,11 @@ final class LifeEventsSelection {
 
   /// Initial empty value used by the notifier before the first load.
   factory LifeEventsSelection.initial() => const LifeEventsSelection(
-        items: <LifeEvent>[],
-        selectedIds: <String>{},
-        baselineIds: <String>{},
-        state: LifeEventsLoadState.initial,
-      );
+    items: <LifeEvent>[],
+    selectedIds: <String>{},
+    baselineIds: <String>{},
+    state: LifeEventsLoadState.initial,
+  );
 
   final List<LifeEvent> items;
   final Set<String> selectedIds;

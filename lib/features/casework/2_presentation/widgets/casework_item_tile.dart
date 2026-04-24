@@ -52,8 +52,7 @@ class CaseworkItemTile extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: statusColor.withValues(alpha: 0.12),
-                      borderRadius:
-                          BorderRadius.circular(AppDimensions.radiusRound),
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
                     ),
                     child: Text(
                       statusLabel,

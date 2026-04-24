@@ -8,22 +8,16 @@ enum CaseworkSectionStatus { loading, loaded, empty, error }
 final class CaseworkSection {
   const CaseworkSection({required this.status, this.items = const []});
 
-  factory CaseworkSection.loading() =>
-      const CaseworkSection(status: CaseworkSectionStatus.loading);
+  factory CaseworkSection.loading() => const CaseworkSection(status: CaseworkSectionStatus.loading);
 
-  factory CaseworkSection.loaded(final List<CaseworkItem> items) =>
-      CaseworkSection(
-        status: items.isEmpty
-            ? CaseworkSectionStatus.empty
-            : CaseworkSectionStatus.loaded,
-        items: items,
-      );
+  factory CaseworkSection.loaded(final List<CaseworkItem> items) => CaseworkSection(
+    status: items.isEmpty ? CaseworkSectionStatus.empty : CaseworkSectionStatus.loaded,
+    items: items,
+  );
 
-  factory CaseworkSection.empty() =>
-      const CaseworkSection(status: CaseworkSectionStatus.empty);
+  factory CaseworkSection.empty() => const CaseworkSection(status: CaseworkSectionStatus.empty);
 
-  factory CaseworkSection.error() =>
-      const CaseworkSection(status: CaseworkSectionStatus.error);
+  factory CaseworkSection.error() => const CaseworkSection(status: CaseworkSectionStatus.error);
 
   final CaseworkSectionStatus status;
   final List<CaseworkItem> items;
@@ -63,11 +57,10 @@ final class CaseworkSnapshot {
     final CaseworkSection? expedientes,
     final CaseworkSection? entradasRegistro,
     final CaseworkSection? salidasRegistro,
-  }) =>
-      CaseworkSnapshot(
-        selectedTab: selectedTab ?? this.selectedTab,
-        expedientes: expedientes ?? this.expedientes,
-        entradasRegistro: entradasRegistro ?? this.entradasRegistro,
-        salidasRegistro: salidasRegistro ?? this.salidasRegistro,
-      );
+  }) => CaseworkSnapshot(
+    selectedTab: selectedTab ?? this.selectedTab,
+    expedientes: expedientes ?? this.expedientes,
+    entradasRegistro: entradasRegistro ?? this.entradasRegistro,
+    salidasRegistro: salidasRegistro ?? this.salidasRegistro,
+  );
 }

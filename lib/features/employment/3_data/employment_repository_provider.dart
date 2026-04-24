@@ -5,5 +5,4 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'employment_repository_provider.g.dart';
 
 @riverpod
-EmploymentRepository employmentRepository(final Ref ref) =>
-    const EmploymentRepositoryImpl();
+EmploymentRepository employmentRepository(final Ref ref) => const EmploymentRepositoryImpl();

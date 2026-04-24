@@ -110,8 +110,7 @@ final class AuthRepositoryImpl implements AuthRepository {
     try {
       final accessToken = await _secureStorage.read(StorageKeys.accessToken);
       final idAgente = await _secureStorage.read(StorageKeys.idAgente);
-      final expiresAtRaw =
-          await _secureStorage.read(StorageKeys.sessionExpiresAt);
+      final expiresAtRaw = await _secureStorage.read(StorageKeys.sessionExpiresAt);
 
       if (accessToken == null || idAgente == null || expiresAtRaw == null) {
         return const Success(null);

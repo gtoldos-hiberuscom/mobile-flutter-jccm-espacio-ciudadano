@@ -76,8 +76,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (final err, final st) => ErrorStateWidget(
           message: l10n.agendaError,
-          onRetry: () =>
-              ref.read(agendaProvider.notifier).refresh(),
+          onRetry: () => ref.read(agendaProvider.notifier).refresh(),
         ),
         data: (final s) {
           // Parse-error → recoverable surface with explicit "intentar de
@@ -88,8 +87,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
               message: l10n.agendaParseErrorTitle,
               detail: l10n.agendaParseErrorDetail,
               retryLabel: l10n.agendaParseErrorRetry,
-              onRetry: () =>
-                  ref.read(agendaProvider.notifier).refresh(),
+              onRetry: () => ref.read(agendaProvider.notifier).refresh(),
             );
           }
           return _buildBody(context, s, l10n);
@@ -110,8 +108,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
 
     return Column(
       children: [
-        if (state.snapshot.loadState == AgendaLoadState.partial)
-          _PartialBanner(message: l10n.agendaPartialBanner),
+        if (state.snapshot.loadState == AgendaLoadState.partial) _PartialBanner(message: l10n.agendaPartialBanner),
         // STORY-31 — sticky CIP read-only card at the top of the agenda
         // header. Per TASK-71 (CIP_REUSE) this is the single, non-wallet
         // CIP rendering shared with the home salud entry point.
@@ -122,7 +119,9 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           snapshot: state.snapshot,
           now: now,
           onEventTap: (final event) {
-            ref.read(analyticsServiceProvider).logEvent(
+            ref
+                .read(analyticsServiceProvider)
+                .logEvent(
                   AgendaEventOpenedEvent(
                     eventId: event.id,
                     category: event.category.name,
@@ -140,9 +139,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           child: _PeriodFilterBar(
             selected: state.period,
             onChanged: (final period) {
-              ref
-                  .read(analyticsServiceProvider)
-                  .logEvent(AgendaPeriodChangedEvent(periodId: period.name));
+              ref.read(analyticsServiceProvider).logEvent(AgendaPeriodChangedEvent(periodId: period.name));
               ref.read(agendaProvider.notifier).setPeriod(period);
               _resetPagination();
             },
@@ -154,9 +151,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         ),
         const Divider(height: 1),
         Expanded(
-          child: _viewMode == _AgendaViewMode.list
-              ? _buildListView(context, state, pageItems, hasMore, l10n)
-              : _buildCalendarView(context, state, pageItems, l10n),
+          child: _viewMode == _AgendaViewMode.list ? _buildListView(context, state, pageItems, hasMore, l10n) : _buildCalendarView(context, state, pageItems, l10n),
         ),
       ],
     );
@@ -168,103 +163,101 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
     final List<AgendaEvent> pageItems,
     final bool hasMore,
     final AppLocalizations l10n,
-  ) =>
-      PaginatedListView<AgendaEvent>(
-        items: pageItems,
-        hasMore: hasMore,
-        onLoadMore: () =>
-            setState(() => _visibleCount += _pageSize),
-        onRefresh: () async {
-          await ref.read(agendaProvider.notifier).refresh();
-          _resetPagination();
-        },
-        emptyState: EmptyStateWidget(message: l10n.agendaEmpty),
-        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-        itemBuilder: (final context, final event, final index) =>
-            AgendaEventTile(
-          event: event,
-          subtitle: event.startsAt.formatDdMmYyyyHhMm(),
-          onTap: () {
-            ref.read(analyticsServiceProvider).logEvent(
-                  AgendaEventOpenedEvent(
-                    eventId: event.id,
-                    category: event.category.name,
-                  ),
-                );
-            context.go('/agenda/${event.id}');
-          },
-        ),
-      );
+  ) => PaginatedListView<AgendaEvent>(
+    items: pageItems,
+    hasMore: hasMore,
+    onLoadMore: () => setState(() => _visibleCount += _pageSize),
+    onRefresh: () async {
+      await ref.read(agendaProvider.notifier).refresh();
+      _resetPagination();
+    },
+    emptyState: EmptyStateWidget(message: l10n.agendaEmpty),
+    padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
+    itemBuilder: (final context, final event, final index) => AgendaEventTile(
+      event: event,
+      subtitle: event.startsAt.formatDdMmYyyyHhMm(),
+      onTap: () {
+        ref
+            .read(analyticsServiceProvider)
+            .logEvent(
+              AgendaEventOpenedEvent(
+                eventId: event.id,
+                category: event.category.name,
+              ),
+            );
+        context.go('/agenda/${event.id}');
+      },
+    ),
+  );
 
   Widget _buildCalendarView(
     final BuildContext context,
     final AgendaState state,
     final List<AgendaEvent> pageItems,
     final AppLocalizations l10n,
-  ) =>
-      ListView(
-        padding: const EdgeInsets.all(AppDimensions.space12),
-        children: [
-          AgendaMonthCalendar(
-            month: state.calendarMonth,
-            daysWithEvents: state.daysWithEvents(),
-            selectedDay: state.selectedDay,
-            onDaySelected: (final day) {
-              ref.read(agendaProvider.notifier).selectDay(day);
+  ) => ListView(
+    padding: const EdgeInsets.all(AppDimensions.space12),
+    children: [
+      AgendaMonthCalendar(
+        month: state.calendarMonth,
+        daysWithEvents: state.daysWithEvents(),
+        selectedDay: state.selectedDay,
+        onDaySelected: (final day) {
+          ref.read(agendaProvider.notifier).selectDay(day);
+          _resetPagination();
+        },
+        onPreviousMonth: () {
+          final prev = DateTime(
+            state.calendarMonth.year,
+            state.calendarMonth.month - 1,
+          );
+          ref.read(agendaProvider.notifier).setMonth(prev);
+          _resetPagination();
+        },
+        onNextMonth: () {
+          final next = DateTime(
+            state.calendarMonth.year,
+            state.calendarMonth.month + 1,
+          );
+          ref.read(agendaProvider.notifier).setMonth(next);
+          _resetPagination();
+        },
+      ),
+      if (state.selectedDay != null)
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton.icon(
+            onPressed: () {
+              ref.read(agendaProvider.notifier).clearSelectedDay();
               _resetPagination();
             },
-            onPreviousMonth: () {
-              final prev = DateTime(
-                state.calendarMonth.year,
-                state.calendarMonth.month - 1,
-              );
-              ref.read(agendaProvider.notifier).setMonth(prev);
-              _resetPagination();
-            },
-            onNextMonth: () {
-              final next = DateTime(
-                state.calendarMonth.year,
-                state.calendarMonth.month + 1,
-              );
-              ref.read(agendaProvider.notifier).setMonth(next);
-              _resetPagination();
+            icon: const Icon(Icons.clear),
+            label: Text(l10n.agendaClearDay),
+          ),
+        ),
+      const SizedBox(height: AppDimensions.space8),
+      if (pageItems.isEmpty)
+        EmptyStateWidget(message: l10n.agendaEmpty)
+      else
+        ...pageItems.map(
+          (final event) => AgendaEventTile(
+            event: event,
+            subtitle: event.startsAt.formatDdMmYyyyHhMm(),
+            onTap: () {
+              ref
+                  .read(analyticsServiceProvider)
+                  .logEvent(
+                    AgendaEventOpenedEvent(
+                      eventId: event.id,
+                      category: event.category.name,
+                    ),
+                  );
+              context.go('/agenda/${event.id}');
             },
           ),
-          if (state.selectedDay != null)
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton.icon(
-                onPressed: () {
-                  ref
-                      .read(agendaProvider.notifier)
-                      .clearSelectedDay();
-                  _resetPagination();
-                },
-                icon: const Icon(Icons.clear),
-                label: Text(l10n.agendaClearDay),
-              ),
-            ),
-          const SizedBox(height: AppDimensions.space8),
-          if (pageItems.isEmpty)
-            EmptyStateWidget(message: l10n.agendaEmpty)
-          else
-            ...pageItems.map(
-              (final event) => AgendaEventTile(
-                event: event,
-                subtitle: event.startsAt.formatDdMmYyyyHhMm(),
-                onTap: () {
-                  ref.read(analyticsServiceProvider).logEvent(
-                        AgendaEventOpenedEvent(
-                          eventId: event.id,
-                          category: event.category.name,
-                        ),
-                      );
-                  context.go('/agenda/${event.id}');
-                },
-              ),
-            ),
-        ],
-      );
+        ),
+    ],
+  );
 }
 
 class _PeriodFilterBar extends StatelessWidget {

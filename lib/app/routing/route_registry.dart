@@ -84,6 +84,5 @@ abstract final class Routes {
   };
 
   /// Returns true when [path] requires authentication.
-  static bool requiresAuth(final String path) =>
-      _authenticated.any(path.startsWith);
+  static bool requiresAuth(final String path) => _authenticated.any(path.startsWith);
 }

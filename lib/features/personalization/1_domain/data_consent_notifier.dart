@@ -30,9 +30,7 @@ class DataConsentNotifier extends _$DataConsentNotifier {
       items: result.items,
       draft: draft,
       baseline: baseline,
-      state: result.items.isEmpty
-          ? DataConsentLoadState.empty
-          : DataConsentLoadState.loaded,
+      state: result.items.isEmpty ? DataConsentLoadState.empty : DataConsentLoadState.loaded,
     );
   }
 
@@ -71,12 +69,9 @@ class DataConsentNotifier extends _$DataConsentNotifier {
     );
     try {
       final acceptance = <DataConsentType, bool>{
-        for (final c in current.items)
-          c.type: current.draft[c.id] ?? false,
+        for (final c in current.items) c.type: current.draft[c.id] ?? false,
       };
-      await ref
-          .read(dataConsentRepositoryProvider)
-          .saveClausulas(idAgente, acceptance);
+      await ref.read(dataConsentRepositoryProvider).saveClausulas(idAgente, acceptance);
       state = AsyncValue<DataConsentSnapshot>.data(
         current.copyWith(
           baseline: Map<String, bool>.from(current.draft),

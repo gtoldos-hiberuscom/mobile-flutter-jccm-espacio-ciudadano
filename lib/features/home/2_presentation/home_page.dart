@@ -42,8 +42,7 @@ class HomePage extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: () =>
-              ref.read(homeDashboardProvider.notifier).refresh(),
+          onRefresh: () => ref.read(homeDashboardProvider.notifier).refresh(),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -61,9 +60,7 @@ class HomePage extends ConsumerWidget {
                   hasScrollBody: false,
                   child: ErrorStateWidget(
                     message: l10n.errorStateDefault,
-                    onRetry: () => ref
-                        .read(homeDashboardProvider.notifier)
-                        .refresh(),
+                    onRetry: () => ref.read(homeDashboardProvider.notifier).refresh(),
                   ),
                 ),
               ),
@@ -98,17 +95,18 @@ class HomePage extends ConsumerWidget {
           summary: block,
           icon: _iconFor(block.blockId),
           onTap: () => _onBlockTap(context, ref, block),
-          onRetry: () =>
-              ref.read(homeDashboardProvider.notifier).refresh(),
+          onRetry: () => ref.read(homeDashboardProvider.notifier).refresh(),
         ),
       );
       // STORY-31 AC2 — append the agenda upcoming-events summary inside
       // the upcomingEvents block so the home preview matches the agenda
       // full screen 1-to-1.
       if (block.blockId == HomeBlockId.upcomingEvents) {
-        widgets.add(_HomeUpcomingEventsPreview(
-          onEventTap: (final id) => context.go('/agenda/$id'),
-        ));
+        widgets.add(
+          _HomeUpcomingEventsPreview(
+            onEventTap: (final id) => context.go('/agenda/$id'),
+          ),
+        );
       }
     }
     return widgets;
@@ -120,7 +118,9 @@ class HomePage extends ConsumerWidget {
     final HomeWidgetSummary block,
   ) {
     final route = _routeFor(block.blockId);
-    ref.read(analyticsServiceProvider).logEvent(
+    ref
+        .read(analyticsServiceProvider)
+        .logEvent(
           HomeBlockNavigateEvent(block.blockId.name, target: route),
         );
     context.go(route);
@@ -233,12 +233,10 @@ class _Greeting extends StatelessWidget {
           if (profile != null) ...[
             const SizedBox(height: AppDimensions.space4),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
               child: Text(
                 l10n.homeCitizenId(profile.idAgente),
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: AppColors.textSecondary),
+                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
               ),
             ),
           ],

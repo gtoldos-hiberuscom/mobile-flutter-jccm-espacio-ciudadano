@@ -25,12 +25,10 @@ class EmploymentLandingPage extends ConsumerStatefulWidget {
   const EmploymentLandingPage({super.key});
 
   @override
-  ConsumerState<EmploymentLandingPage> createState() =>
-      _EmploymentLandingPageState();
+  ConsumerState<EmploymentLandingPage> createState() => _EmploymentLandingPageState();
 }
 
-class _EmploymentLandingPageState
-    extends ConsumerState<EmploymentLandingPage> {
+class _EmploymentLandingPageState extends ConsumerState<EmploymentLandingPage> {
   static const String _domainId = 'employment';
   bool _viewedLogged = false;
 
@@ -42,9 +40,7 @@ class _EmploymentLandingPageState
         return;
       }
       _viewedLogged = true;
-      ref
-          .read(analyticsServiceProvider)
-          .logEvent(const DomainLandingViewedEvent(domain: _domainId));
+      ref.read(analyticsServiceProvider).logEvent(const DomainLandingViewedEvent(domain: _domainId));
     });
   }
 
@@ -55,8 +51,7 @@ class _EmploymentLandingPageState
     return Scaffold(
       appBar: AppBar(title: Text(l10n.employmentTitle)),
       body: RefreshIndicator(
-        onRefresh: () =>
-            ref.read(employmentLandingProvider.notifier).refresh(),
+        onRefresh: () => ref.read(employmentLandingProvider.notifier).refresh(),
         child: asyncSnapshot.when(
           loading: () => ListView(
             children: [
@@ -72,9 +67,7 @@ class _EmploymentLandingPageState
                 height: MediaQuery.of(context).size.height * 0.5,
                 child: ErrorStateWidget(
                   message: l10n.domainGenericLoadError,
-                  onRetry: () => ref
-                      .read(employmentLandingProvider.notifier)
-                      .refresh(),
+                  onRetry: () => ref.read(employmentLandingProvider.notifier).refresh(),
                 ),
               ),
             ],
@@ -130,10 +123,12 @@ class _EmploymentLandingPageState
             linkId: 'empleo_clm',
           ),
         ),
-        const ExternalLinksSection(linkIds: <String>[
-          'empleo_clm',
-          'empleo_publico_clm',
-        ]),
+        const ExternalLinksSection(
+          linkIds: <String>[
+            'empleo_clm',
+            'empleo_publico_clm',
+          ],
+        ),
       ],
     );
   }

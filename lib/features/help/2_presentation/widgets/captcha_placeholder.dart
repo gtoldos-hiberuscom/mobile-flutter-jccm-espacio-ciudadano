@@ -26,9 +26,7 @@ class CaptchaPlaceholder extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final borderColor = errorText != null
-        ? theme.colorScheme.error
-        : theme.colorScheme.outline;
+    final borderColor = errorText != null ? theme.colorScheme.error : theme.colorScheme.outline;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -30,14 +30,7 @@ final class FaqEntry {
   final String category;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is FaqEntry &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          questionKey == other.questionKey &&
-          answerKey == other.answerKey &&
-          category == other.category;
+  bool operator ==(final Object other) => identical(this, other) || other is FaqEntry && runtimeType == other.runtimeType && id == other.id && questionKey == other.questionKey && answerKey == other.answerKey && category == other.category;
 
   @override
   int get hashCode => Object.hash(id, questionKey, answerKey, category);

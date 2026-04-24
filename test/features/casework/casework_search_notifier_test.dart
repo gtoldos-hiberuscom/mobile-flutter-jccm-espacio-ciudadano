@@ -16,8 +16,7 @@ class _StubRepo implements CaseworkRepository {
   final CaseworkSearchField? throwOn;
 
   @override
-  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async =>
-      <CaseworkItem>[];
+  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async => <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByNif(final String identification) async {
@@ -57,14 +56,14 @@ ProviderContainer _container(final CaseworkRepository repo) {
 }
 
 CaseworkItem _item(final String id) => CaseworkItem(
-      id: id,
-      type: CaseworkTab.expedientes,
-      number: 'EXP/2025/$id',
-      date: DateTime(2025, 6),
-      organism: 'Org',
-      subject: 'Subject',
-      status: CaseworkItemStatus.enTramite,
-    );
+  id: id,
+  type: CaseworkTab.expedientes,
+  number: 'EXP/2025/$id',
+  date: DateTime(2025, 6),
+  organism: 'Org',
+  subject: 'Subject',
+  status: CaseworkItemStatus.enTramite,
+);
 
 void main() {
   group('CaseworkSearchNotifier', () {
@@ -80,15 +79,13 @@ void main() {
       await c.read(caseworkSearchProvider.notifier).submit();
       final state = c.read(caseworkSearchProvider);
       expect(state.showValidation, isTrue);
-      expect(state.validation.generalError,
-          CaseworkSearchValidationError.noInputProvided);
+      expect(state.validation.generalError, CaseworkSearchValidationError.noInputProvided);
       expect(state.result.status, CaseworkSearchStatus.idle);
     });
 
     test('valid NIF query transitions idle → results', () async {
       final c = _container(_StubRepo(byNif: <CaseworkItem>[_item('1')]));
-      final n = c.read(caseworkSearchProvider.notifier)
-        ..updateField(CaseworkSearchField.identification, '12345678Z');
+      final n = c.read(caseworkSearchProvider.notifier)..updateField(CaseworkSearchField.identification, '12345678Z');
       await n.submit();
       final state = c.read(caseworkSearchProvider);
       expect(state.result.status, CaseworkSearchStatus.results);
@@ -98,8 +95,7 @@ void main() {
 
     test('expediente search yielding zero items maps to noResults', () async {
       final c = _container(_StubRepo());
-      final n = c.read(caseworkSearchProvider.notifier)
-        ..updateField(CaseworkSearchField.expedienteNumber, 'EXP/2025/00123');
+      final n = c.read(caseworkSearchProvider.notifier)..updateField(CaseworkSearchField.expedienteNumber, 'EXP/2025/00123');
       await n.submit();
       final state = c.read(caseworkSearchProvider);
       expect(state.result.status, CaseworkSearchStatus.noResults);
@@ -111,8 +107,7 @@ void main() {
       final c = _container(
         _StubRepo(throwOn: CaseworkSearchField.registroNumber),
       );
-      final n = c.read(caseworkSearchProvider.notifier)
-        ..updateField(CaseworkSearchField.registroNumber, 'REG/E/45612');
+      final n = c.read(caseworkSearchProvider.notifier)..updateField(CaseworkSearchField.registroNumber, 'REG/E/45612');
       await n.submit();
       final state = c.read(caseworkSearchProvider);
       expect(state.result.status, CaseworkSearchStatus.error);
@@ -121,8 +116,7 @@ void main() {
 
     test('reset clears the state back to idle', () async {
       final c = _container(_StubRepo(byNif: <CaseworkItem>[_item('1')]));
-      final n = c.read(caseworkSearchProvider.notifier)
-        ..updateField(CaseworkSearchField.identification, '12345678Z');
+      final n = c.read(caseworkSearchProvider.notifier)..updateField(CaseworkSearchField.identification, '12345678Z');
       await n.submit();
       n.reset();
       final state = c.read(caseworkSearchProvider);
@@ -139,8 +133,7 @@ void main() {
       expect(items, hasLength(3));
     });
 
-    test('searchByExpedienteNumber returns zero items (no-results state)',
-        () async {
+    test('searchByExpedienteNumber returns zero items (no-results state)', () async {
       const repo = CaseworkRepositoryImpl();
       final items = await repo.searchByExpedienteNumber('EXP/2025/00123');
       expect(items, isEmpty);

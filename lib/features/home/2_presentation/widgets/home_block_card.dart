@@ -100,8 +100,7 @@ class HomeBlockCard extends StatelessWidget {
                 const SizedBox(height: AppDimensions.space8),
                 Text(
                   lastUpdatedLabel,
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(color: AppColors.textSecondary),
+                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
                 ),
               ],
             ),
@@ -126,12 +125,10 @@ class HomeBlockCard extends StatelessWidget {
                 style: theme.textTheme.bodyMedium,
               ),
             if (count != null) ...[
-              if (headline != null && headline.isNotEmpty)
-                const SizedBox(height: AppDimensions.space4),
+              if (headline != null && headline.isNotEmpty) const SizedBox(height: AppDimensions.space4),
               Text(
                 l10n.homeBlockCount(count),
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: AppColors.textSecondary),
+                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
               ),
             ],
           ],

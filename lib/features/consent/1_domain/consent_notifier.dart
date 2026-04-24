@@ -23,8 +23,7 @@ part 'consent_notifier.g.dart';
 class ConsentNotifier extends _$ConsentNotifier {
   @override
   Future<ConsentState> build() async {
-    final result =
-        await ref.read(consentRepositoryProvider).checkConsentAccepted();
+    final result = await ref.read(consentRepositoryProvider).checkConsentAccepted();
     return switch (result) {
       Success(:final value) => value,
       Failure() => const ConsentPending(),

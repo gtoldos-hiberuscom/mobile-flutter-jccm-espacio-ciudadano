@@ -50,26 +50,17 @@ final class DataConsent {
     final bool? accepted,
     final DateTime? lastUpdatedAt,
     final String? version,
-  }) =>
-      DataConsent(
-        id: id,
-        type: type,
-        accepted: accepted ?? this.accepted,
-        lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
-        version: version ?? this.version,
-      );
+  }) => DataConsent(
+    id: id,
+    type: type,
+    accepted: accepted ?? this.accepted,
+    lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
+    version: version ?? this.version,
+  );
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is DataConsent &&
-          other.id == id &&
-          other.type == type &&
-          other.accepted == accepted &&
-          other.lastUpdatedAt == lastUpdatedAt &&
-          other.version == version;
+  bool operator ==(final Object other) => identical(this, other) || other is DataConsent && other.id == id && other.type == type && other.accepted == accepted && other.lastUpdatedAt == lastUpdatedAt && other.version == version;
 
   @override
-  int get hashCode =>
-      Object.hash(id, type, accepted, lastUpdatedAt, version);
+  int get hashCode => Object.hash(id, type, accepted, lastUpdatedAt, version);
 }

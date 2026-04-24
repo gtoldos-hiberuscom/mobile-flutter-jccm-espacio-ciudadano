@@ -22,8 +22,7 @@ part 'cip_summary_notifier.g.dart';
 @riverpod
 class CipSummaryNotifier extends _$CipSummaryNotifier {
   @override
-  Future<CipSummary> build() async =>
-      ref.watch(cipRepositoryProvider).loadCip();
+  Future<CipSummary> build() async => ref.watch(cipRepositoryProvider).loadCip();
 
   /// Forces a fresh fetch of the CIP summary.
   Future<void> refresh() async {

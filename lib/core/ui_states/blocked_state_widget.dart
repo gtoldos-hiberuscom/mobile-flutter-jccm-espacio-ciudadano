@@ -43,8 +43,7 @@ class BlockedStateWidget extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 subtitle!,
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.outline),
+                style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.outline),
                 textAlign: TextAlign.center,
               ),
             ],

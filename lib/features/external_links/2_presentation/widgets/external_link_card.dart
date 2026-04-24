@@ -32,8 +32,7 @@ class ExternalLinkCard extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final ExternalLink? link =
-        ref.watch(externalLinkCatalogProvider).findById(linkId);
+    final ExternalLink? link = ref.watch(externalLinkCatalogProvider).findById(linkId);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.space16),

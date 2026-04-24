@@ -30,14 +30,13 @@ void main() {
       final String id,
       final DateTime when, {
       final AgendaCategory category = AgendaCategory.salud,
-    }) =>
-        AgendaEvent(
-          id: id,
-          rawTitle: 'event-$id',
-          startsAt: when,
-          category: category,
-          source: AgendaEventSource.manual,
-        );
+    }) => AgendaEvent(
+      id: id,
+      rawTitle: 'event-$id',
+      startsAt: when,
+      category: category,
+      source: AgendaEventSource.manual,
+    );
 
     final snapshot = AgendaSnapshot(
       events: <AgendaEvent>[
@@ -53,12 +52,12 @@ void main() {
     );
 
     ProviderContainer makeContainer() => ProviderContainer(
-          overrides: [
-            agendaRepositoryProvider.overrideWith(
-              (final ref) => _FakeAgendaRepository(snapshot),
-            ),
-          ],
-        );
+      overrides: [
+        agendaRepositoryProvider.overrideWith(
+          (final ref) => _FakeAgendaRepository(snapshot),
+        ),
+      ],
+    );
 
     test('initial state exposes the full snapshot under filter all', () async {
       final container = makeContainer();
@@ -118,9 +117,7 @@ void main() {
       addTearDown(container.dispose);
       await container.read(agendaProvider.future);
       // Anchor calendar to "today's" month.
-      container
-          .read(agendaProvider.notifier)
-          .setMonth(DateTime(today.year, today.month));
+      container.read(agendaProvider.notifier).setMonth(DateTime(today.year, today.month));
       final state = container.read(agendaProvider).requireValue;
       final days = state.daysWithEvents();
       // today-a + today-b collapse to a single bucket.

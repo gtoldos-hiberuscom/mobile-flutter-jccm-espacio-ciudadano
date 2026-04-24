@@ -152,11 +152,8 @@ class _CaseworkSearchPageState extends ConsumerState<CaseworkSearchPage> {
               const SizedBox(height: AppDimensions.space16),
               AppButton(
                 label: l10n.caseworkSearchSubmit,
-                onPressed: state.result.status == CaseworkSearchStatus.searching
-                    ? null
-                    : notifier.submit,
-                isLoading:
-                    state.result.status == CaseworkSearchStatus.searching,
+                onPressed: state.result.status == CaseworkSearchStatus.searching ? null : notifier.submit,
+                isLoading: state.result.status == CaseworkSearchStatus.searching,
               ),
               const SizedBox(height: AppDimensions.space24),
               _buildResults(context, state, l10n, notifier),
@@ -176,19 +173,19 @@ class _CaseworkSearchPageState extends ConsumerState<CaseworkSearchPage> {
     final String? errorText,
     final TextInputAction textInputAction = TextInputAction.next,
     final void Function(String)? onSubmitted,
-  }) =>
-      TextField(
-        controller: controller,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
-        textInputAction: textInputAction,
-        decoration: InputDecoration(
-          labelText: label,
-          helperText: helper,
-          errorText: errorText,
-          border: const OutlineInputBorder(),
-        ),
-      );  Widget _buildResults(
+  }) => TextField(
+    controller: controller,
+    onChanged: onChanged,
+    onSubmitted: onSubmitted,
+    textInputAction: textInputAction,
+    decoration: InputDecoration(
+      labelText: label,
+      helperText: helper,
+      errorText: errorText,
+      border: const OutlineInputBorder(),
+    ),
+  );
+  Widget _buildResults(
     final BuildContext context,
     final CaseworkSearchState state,
     final AppLocalizations l10n,
@@ -223,48 +220,47 @@ class _CaseworkSearchPageState extends ConsumerState<CaseworkSearchPage> {
     final CaseworkSearchState state,
     final AppLocalizations l10n,
     final CaseworkSearchNotifier notifier,
-  ) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-              vertical: AppDimensions.space8,
-            ),
-            child: Text(
-              l10n.caseworkSearchResultsCount(state.result.items.length),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-          for (final item in state.result.items)
-            CaseworkItemTile(
-              item: item,
-              onTap: () => _openDetail(context, item),
-            ),
-          // TODO(STORY-37): wire aportación documental CTA through the
-          // search result once STORY-37 / STORY-38 land.
-          Padding(
-            padding: const EdgeInsets.all(AppDimensions.space16),
-            child: AppButton(
-              label: l10n.caseworkSearchAportar,
-              variant: AppButtonVariant.outlined,
-              onPressed: () => _showAportarPlaceholder(context, l10n),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-              vertical: AppDimensions.space8,
-            ),
-            child: AppButton(
-              label: l10n.caseworkSearchAnother,
-              variant: AppButtonVariant.text,
-              onPressed: notifier.reset,
-            ),
-          ),
-        ],
-      );
+  ) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space16,
+          vertical: AppDimensions.space8,
+        ),
+        child: Text(
+          l10n.caseworkSearchResultsCount(state.result.items.length),
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ),
+      for (final item in state.result.items)
+        CaseworkItemTile(
+          item: item,
+          onTap: () => _openDetail(context, item),
+        ),
+      // TODO(STORY-37): wire aportación documental CTA through the
+      // search result once STORY-37 / STORY-38 land.
+      Padding(
+        padding: const EdgeInsets.all(AppDimensions.space16),
+        child: AppButton(
+          label: l10n.caseworkSearchAportar,
+          variant: AppButtonVariant.outlined,
+          onPressed: () => _showAportarPlaceholder(context, l10n),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space16,
+          vertical: AppDimensions.space8,
+        ),
+        child: AppButton(
+          label: l10n.caseworkSearchAnother,
+          variant: AppButtonVariant.text,
+          onPressed: notifier.reset,
+        ),
+      ),
+    ],
+  );
 
   void _openDetail(final BuildContext context, final CaseworkItem item) {
     GoRouter.of(context).go('/casework/item/${item.id}');

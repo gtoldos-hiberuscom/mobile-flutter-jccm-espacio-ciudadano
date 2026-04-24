@@ -6,5 +6,4 @@ part 'data_consent_repository_provider.g.dart';
 
 /// DI composition for [DataConsentRepository].
 @riverpod
-DataConsentRepository dataConsentRepository(final Ref ref) =>
-    const DataConsentRepositoryImpl();
+DataConsentRepository dataConsentRepository(final Ref ref) => const DataConsentRepositoryImpl();

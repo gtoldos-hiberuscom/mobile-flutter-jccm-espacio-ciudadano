@@ -40,8 +40,7 @@ void main() {
       expect(value.lastUpdatedAt, DateTime(2026, 5, 4));
     });
 
-    test('parse-error path is propagated as CipLoadState.parseError',
-        () async {
+    test('parse-error path is propagated as CipLoadState.parseError', () async {
       final parseError = CipSummary(
         id: 'cip-parse-error',
         cipCode: '',
@@ -51,8 +50,7 @@ void main() {
       );
       final container = ProviderContainer(
         overrides: [
-          cipRepositoryProvider
-              .overrideWith((final ref) => _SequencedRepo([parseError])),
+          cipRepositoryProvider.overrideWith((final ref) => _SequencedRepo([parseError])),
         ],
       );
       addTearDown(container.dispose);

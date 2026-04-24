@@ -11,34 +11,34 @@ final class SocialWelfareRepositoryImpl implements SocialWelfareRepository {
 
   @override
   Future<SocialWelfareSnapshot> loadSnapshot() async => SocialWelfareSnapshot(
-        familyNumerosa: SocialWelfareSection<FamilyNumerosaTitle>.loaded(
-          FamilyNumerosaTitle(
-            numero: 'CLM-FN-2024-0123',
-            categoria: 'general',
-            fechaCaducidad: DateTime(2029, 12, 31),
-            beneficiarios: <FamilyNumerosaBeneficiary>[
-              FamilyNumerosaBeneficiary(
-                relacion: 'titular',
-                fechaNacimiento: DateTime(1985, 6, 12),
-              ),
-              FamilyNumerosaBeneficiary(
-                relacion: 'conyuge',
-                fechaNacimiento: DateTime(1986, 9, 4),
-              ),
-              FamilyNumerosaBeneficiary(
-                relacion: 'hijo',
-                fechaNacimiento: DateTime(2014, 1, 22),
-              ),
-              FamilyNumerosaBeneficiary(
-                relacion: 'hijo',
-                fechaNacimiento: DateTime(2017, 8, 30),
-              ),
-              FamilyNumerosaBeneficiary(
-                relacion: 'hijo',
-                fechaNacimiento: DateTime(2021, 3, 15),
-              ),
-            ],
+    familyNumerosa: SocialWelfareSection<FamilyNumerosaTitle>.loaded(
+      FamilyNumerosaTitle(
+        numero: 'CLM-FN-2024-0123',
+        categoria: 'general',
+        fechaCaducidad: DateTime(2029, 12, 31),
+        beneficiarios: <FamilyNumerosaBeneficiary>[
+          FamilyNumerosaBeneficiary(
+            relacion: 'titular',
+            fechaNacimiento: DateTime(1985, 6, 12),
           ),
-        ),
-      );
+          FamilyNumerosaBeneficiary(
+            relacion: 'conyuge',
+            fechaNacimiento: DateTime(1986, 9, 4),
+          ),
+          FamilyNumerosaBeneficiary(
+            relacion: 'hijo',
+            fechaNacimiento: DateTime(2014, 1, 22),
+          ),
+          FamilyNumerosaBeneficiary(
+            relacion: 'hijo',
+            fechaNacimiento: DateTime(2017, 8, 30),
+          ),
+          FamilyNumerosaBeneficiary(
+            relacion: 'hijo',
+            fechaNacimiento: DateTime(2021, 3, 15),
+          ),
+        ],
+      ),
+    ),
+  );
 }

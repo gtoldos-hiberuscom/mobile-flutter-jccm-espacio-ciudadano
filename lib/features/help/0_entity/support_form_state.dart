@@ -67,14 +67,11 @@ final class SupportFormState {
     final Map<SupportFormField, SupportValidationError>? errors,
     final String? submissionErrorKey,
     final bool clearSubmissionError = false,
-  }) =>
-      SupportFormState(
-        request: request ?? this.request,
-        emailConfirm: emailConfirm ?? this.emailConfirm,
-        status: status ?? this.status,
-        errors: errors ?? this.errors,
-        submissionErrorKey: clearSubmissionError
-            ? null
-            : (submissionErrorKey ?? this.submissionErrorKey),
-      );
+  }) => SupportFormState(
+    request: request ?? this.request,
+    emailConfirm: emailConfirm ?? this.emailConfirm,
+    status: status ?? this.status,
+    errors: errors ?? this.errors,
+    submissionErrorKey: clearSubmissionError ? null : (submissionErrorKey ?? this.submissionErrorKey),
+  );
 }

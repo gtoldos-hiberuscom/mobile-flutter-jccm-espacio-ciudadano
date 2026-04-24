@@ -42,8 +42,8 @@ class UserDrawerMenu extends StatelessWidget {
                   Text(
                     profile.idAgente,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      color: AppColors.textSecondary,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

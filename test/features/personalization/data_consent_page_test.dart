@@ -9,9 +9,9 @@ import 'package:jccm_espacio_ciudadano/features/personalization/3_data/data_cons
 
 class _FakeDataConsentRepository implements DataConsentRepository {
   _FakeDataConsentRepository({required this.items})
-      : _state = <String, bool>{
-          for (final c in items) c.id: c.accepted,
-        };
+    : _state = <String, bool>{
+        for (final c in items) c.id: c.accepted,
+      };
 
   final List<DataConsent> items;
   Map<String, bool> _state;
@@ -21,17 +21,16 @@ class _FakeDataConsentRepository implements DataConsentRepository {
   @override
   Future<DataConsentLoadResult> loadClausulas(
     final String idAgente,
-  ) async =>
-      DataConsentLoadResult(
-        items: <DataConsent>[
-          for (final c in items)
-            DataConsent(
-              id: c.id,
-              type: c.type,
-              accepted: _state[c.id] ?? false,
-            ),
-        ],
-      );
+  ) async => DataConsentLoadResult(
+    items: <DataConsent>[
+      for (final c in items)
+        DataConsent(
+          id: c.id,
+          type: c.type,
+          accepted: _state[c.id] ?? false,
+        ),
+    ],
+  );
 
   @override
   Future<void> saveClausulas(
@@ -86,9 +85,7 @@ Widget _harness(final _FakeDataConsentRepository repo) {
 }
 
 void main() {
-  testWidgets(
-      'renders three switch tiles reflecting the persisted acceptance',
-      (final tester) async {
+  testWidgets('renders three switch tiles reflecting the persisted acceptance', (final tester) async {
     final repo = _FakeDataConsentRepository(items: _catalog);
 
     await tester.pumpWidget(_harness(repo));
@@ -131,8 +128,7 @@ void main() {
     expect(saveAfterToggle.onPressed, isNotNull);
   });
 
-  testWidgets('revoke action requires explicit confirmation before clearing',
-      (final tester) async {
+  testWidgets('revoke action requires explicit confirmation before clearing', (final tester) async {
     final repo = _FakeDataConsentRepository(items: _catalog);
 
     await tester.pumpWidget(_harness(repo));

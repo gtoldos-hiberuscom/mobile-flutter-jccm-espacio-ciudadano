@@ -33,12 +33,7 @@ final class LifeEvent {
   final LifeEventCategory category;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is LifeEvent &&
-          other.id == id &&
-          other.label == label &&
-          other.category == category;
+  bool operator ==(final Object other) => identical(this, other) || other is LifeEvent && other.id == id && other.label == label && other.category == category;
 
   @override
   int get hashCode => Object.hash(id, label, category);

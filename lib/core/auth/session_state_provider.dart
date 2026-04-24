@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Session state for the currently authenticated user.
 ///
-/// `null`  → not logged in  
+/// `null`  → not logged in
 /// non-null string → opaque session token / user identifier
 ///
 /// This is a keepAlive placeholder that will be replaced by the full auth
@@ -26,7 +26,6 @@ class SessionStateNotifier extends Notifier<String?> {
 /// Kept alive for the full lifetime of the app so guards always have access
 /// to the current authentication state without recreating the notifier on
 /// every navigation event.
-final sessionStateProvider =
-    NotifierProvider<SessionStateNotifier, String?>(
+final sessionStateProvider = NotifierProvider<SessionStateNotifier, String?>(
   SessionStateNotifier.new,
 );

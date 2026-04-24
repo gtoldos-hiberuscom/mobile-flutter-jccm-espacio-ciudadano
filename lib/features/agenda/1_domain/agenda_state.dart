@@ -17,10 +17,10 @@ final class AgendaState {
 
   /// Builds the initial state anchored to the start of the current month.
   factory AgendaState.initial(final DateTime now) => AgendaState(
-        snapshot: AgendaSnapshot.empty(),
-        period: AgendaPeriodFilter.all,
-        calendarMonth: DateTime(now.year, now.month),
-      );
+    snapshot: AgendaSnapshot.empty(),
+    period: AgendaPeriodFilter.all,
+    calendarMonth: DateTime(now.year, now.month),
+  );
 
   final AgendaSnapshot snapshot;
   final AgendaPeriodFilter period;
@@ -38,14 +38,12 @@ final class AgendaState {
     final DateTime? calendarMonth,
     final DateTime? selectedDay,
     final bool clearSelectedDay = false,
-  }) =>
-      AgendaState(
-        snapshot: snapshot ?? this.snapshot,
-        period: period ?? this.period,
-        calendarMonth: calendarMonth ?? this.calendarMonth,
-        selectedDay:
-            clearSelectedDay ? null : (selectedDay ?? this.selectedDay),
-      );
+  }) => AgendaState(
+    snapshot: snapshot ?? this.snapshot,
+    period: period ?? this.period,
+    calendarMonth: calendarMonth ?? this.calendarMonth,
+    selectedDay: clearSelectedDay ? null : (selectedDay ?? this.selectedDay),
+  );
 
   /// Events filtered by [period], sorted ascending by [AgendaEvent.startsAt],
   /// and optionally narrowed to [selectedDay].
@@ -57,9 +55,7 @@ final class AgendaState {
       }
       if (selectedDay != null) {
         final day = selectedDay!;
-        if (event.startsAt.year != day.year ||
-            event.startsAt.month != day.month ||
-            event.startsAt.day != day.day) {
+        if (event.startsAt.year != day.year || event.startsAt.month != day.month || event.startsAt.day != day.day) {
           continue;
         }
       }
@@ -74,8 +70,7 @@ final class AgendaState {
   Set<DateTime> daysWithEvents() {
     final result = <DateTime>{};
     for (final event in snapshot.events) {
-      if (event.startsAt.year == calendarMonth.year &&
-          event.startsAt.month == calendarMonth.month) {
+      if (event.startsAt.year == calendarMonth.year && event.startsAt.month == calendarMonth.month) {
         result.add(event.day);
       }
     }

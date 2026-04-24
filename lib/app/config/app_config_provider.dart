@@ -20,5 +20,5 @@ part 'app_config_provider.g.dart';
 /// ```
 @Riverpod(keepAlive: true)
 AppConfig appConfig(final Ref ref) => throw UnimplementedError(
-      'appConfigProvider must be overridden in ProviderScope at bootstrap.',
-    );
+  'appConfigProvider must be overridden in ProviderScope at bootstrap.',
+);

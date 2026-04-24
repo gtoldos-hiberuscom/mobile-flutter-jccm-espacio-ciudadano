@@ -12,14 +12,7 @@ part of 'employment_repository_provider.dart';
 @ProviderFor(employmentRepository)
 const employmentRepositoryProvider = EmploymentRepositoryProvider._();
 
-final class EmploymentRepositoryProvider
-    extends
-        $FunctionalProvider<
-          EmploymentRepository,
-          EmploymentRepository,
-          EmploymentRepository
-        >
-    with $Provider<EmploymentRepository> {
+final class EmploymentRepositoryProvider extends $FunctionalProvider<EmploymentRepository, EmploymentRepository, EmploymentRepository> with $Provider<EmploymentRepository> {
   const EmploymentRepositoryProvider._()
     : super(
         from: null,
@@ -54,5 +47,4 @@ final class EmploymentRepositoryProvider
   }
 }
 
-String _$employmentRepositoryHash() =>
-    r'f5a8dbb084208397913bfac15abc3e100d73df7b';
+String _$employmentRepositoryHash() => r'f5a8dbb084208397913bfac15abc3e100d73df7b';

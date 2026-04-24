@@ -31,11 +31,11 @@ final class CipSummary {
 
   /// Empty placeholder snapshot used while the notifier is still loading.
   factory CipSummary.empty() => CipSummary(
-        id: '',
-        cipCode: '',
-        lastUpdatedAt: DateTime.fromMillisecondsSinceEpoch(0),
-        loadState: CipLoadState.loading,
-      );
+    id: '',
+    cipCode: '',
+    lastUpdatedAt: DateTime.fromMillisecondsSinceEpoch(0),
+    loadState: CipLoadState.loading,
+  );
 
   /// Stable identifier for analytics / instrumentation. Never PII.
   final String id;

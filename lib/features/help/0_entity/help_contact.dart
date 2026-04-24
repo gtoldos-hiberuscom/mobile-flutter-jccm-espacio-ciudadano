@@ -38,19 +38,10 @@ final class HelpContact {
   final String? externalLinkId;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is HelpContact &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          labelKey == other.labelKey &&
-          value == other.value &&
-          type == other.type &&
-          externalLinkId == other.externalLinkId;
+  bool operator ==(final Object other) => identical(this, other) || other is HelpContact && runtimeType == other.runtimeType && id == other.id && labelKey == other.labelKey && value == other.value && type == other.type && externalLinkId == other.externalLinkId;
 
   @override
-  int get hashCode =>
-      Object.hash(id, labelKey, value, type, externalLinkId);
+  int get hashCode => Object.hash(id, labelKey, value, type, externalLinkId);
 
   @override
   String toString() => 'HelpContact(id: $id, type: $type)';

@@ -11,6 +11,5 @@ class UserProfile {
   final String? email;
 
   /// Returns the first character of [displayName] (or [idAgente]) uppercased.
-  String get initials =>
-      (displayName ?? idAgente).substring(0, 1).toUpperCase();
+  String get initials => (displayName ?? idAgente).substring(0, 1).toUpperCase();
 }

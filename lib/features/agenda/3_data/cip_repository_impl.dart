@@ -28,9 +28,9 @@ final class CipRepositoryImpl implements CipRepository {
     final SescamCipParser parser = const SescamCipParser(),
     final DateTime Function() clock = DateTime.now,
     final String Function()? rawPayloadProvider,
-  })  : _parser = parser,
-        _clock = clock,
-        _rawPayloadProvider = rawPayloadProvider;
+  }) : _parser = parser,
+       _clock = clock,
+       _rawPayloadProvider = rawPayloadProvider;
 
   final SescamCipParser _parser;
   final DateTime Function() _clock;
@@ -84,15 +84,13 @@ final class CipRepositoryImpl implements CipRepository {
     return _fromPayload(stub, now);
   }
 
-  CipSummary _fromPayload(final SescamCipPayload payload, final DateTime now) =>
-      CipSummary(
-        id: 'cip-${payload.cip}',
-        cipCode: payload.cip,
-        titular: payload.titular,
-        centroSalud: payload.centroSalud,
-        region: payload.regionSanitaria,
-        lastUpdatedAt: now,
-        loadState:
-            payload.cip.isEmpty ? CipLoadState.empty : CipLoadState.loaded,
-      );
+  CipSummary _fromPayload(final SescamCipPayload payload, final DateTime now) => CipSummary(
+    id: 'cip-${payload.cip}',
+    cipCode: payload.cip,
+    titular: payload.titular,
+    centroSalud: payload.centroSalud,
+    region: payload.regionSanitaria,
+    lastUpdatedAt: now,
+    loadState: payload.cip.isEmpty ? CipLoadState.empty : CipLoadState.loaded,
+  );
 }

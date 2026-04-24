@@ -11,12 +11,12 @@ final class EmploymentRepositoryImpl implements EmploymentRepository {
 
   @override
   Future<EmploymentSnapshot> loadSnapshot() async => EmploymentSnapshot(
-        seekerStatus: EmploymentSection<EmploymentSeekerStatus>.loaded(
-          EmploymentSeekerStatus(
-            estado: 'inscrito',
-            fechaInscripcion: DateTime(2025, 11, 12),
-            fechaContinuidad: DateTime(2026, 4, 12),
-          ),
-        ),
-      );
+    seekerStatus: EmploymentSection<EmploymentSeekerStatus>.loaded(
+      EmploymentSeekerStatus(
+        estado: 'inscrito',
+        fechaInscripcion: DateTime(2025, 11, 12),
+        fechaContinuidad: DateTime(2026, 4, 12),
+      ),
+    ),
+  );
 }

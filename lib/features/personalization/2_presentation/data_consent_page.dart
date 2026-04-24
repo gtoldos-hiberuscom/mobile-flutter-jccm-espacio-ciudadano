@@ -67,8 +67,7 @@ class _DataConsentPageState extends ConsumerState<DataConsentPage> {
         if (value == null) {
           return;
         }
-        if (value.state == DataConsentLoadState.saved &&
-            _previousState != DataConsentLoadState.saved) {
+        if (value.state == DataConsentLoadState.saved && _previousState != DataConsentLoadState.saved) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -76,13 +75,10 @@ class _DataConsentPageState extends ConsumerState<DataConsentPage> {
             );
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              ref
-                  .read(dataConsentProvider(idAgente).notifier)
-                  .acknowledgeSaved();
+              ref.read(dataConsentProvider(idAgente).notifier).acknowledgeSaved();
             }
           });
-        } else if (value.state == DataConsentLoadState.error &&
-            _previousState != DataConsentLoadState.error) {
+        } else if (value.state == DataConsentLoadState.error && _previousState != DataConsentLoadState.error) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -100,9 +96,7 @@ class _DataConsentPageState extends ConsumerState<DataConsentPage> {
           asyncSnapshot.maybeWhen<Widget>(
             data: (final snapshot) => _SaveAction(
               snapshot: snapshot,
-              onSave: () => ref
-                  .read(dataConsentProvider(idAgente).notifier)
-                  .save(),
+              onSave: () => ref.read(dataConsentProvider(idAgente).notifier).save(),
             ),
             orElse: () => const SizedBox.shrink(),
           ),
@@ -112,15 +106,11 @@ class _DataConsentPageState extends ConsumerState<DataConsentPage> {
         loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
         error: (final err, final _) => ErrorStateWidget(
           message: l10n.dataConsentLoadError,
-          onRetry: () => ref
-              .read(dataConsentProvider(idAgente).notifier)
-              .refresh(),
+          onRetry: () => ref.read(dataConsentProvider(idAgente).notifier).refresh(),
         ),
         data: (final snapshot) => _DataConsentBody(
           snapshot: snapshot,
-          onToggle: (final id) => ref
-              .read(dataConsentProvider(idAgente).notifier)
-              .toggle(id),
+          onToggle: (final id) => ref.read(dataConsentProvider(idAgente).notifier).toggle(id),
           onRevoke: () => _confirmRevoke(context, l10n, idAgente),
         ),
       ),
@@ -150,9 +140,7 @@ class _DataConsentPageState extends ConsumerState<DataConsentPage> {
       ),
     );
     if (confirmed ?? false) {
-      await ref
-          .read(dataConsentProvider(idAgente).notifier)
-          .revokeAll();
+      await ref.read(dataConsentProvider(idAgente).notifier).revokeAll();
     }
   }
 }
@@ -179,8 +167,7 @@ class _SaveAction extends StatelessWidget {
         ),
       );
     }
-    final canSave = snapshot.isDirty &&
-        snapshot.state != DataConsentLoadState.saving;
+    final canSave = snapshot.isDirty && snapshot.state != DataConsentLoadState.saving;
     return TextButton(
       onPressed: canSave ? onSave : null,
       child: Text(l10n.dataConsentSaveAction),
@@ -203,8 +190,7 @@ class _DataConsentBody extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    if (snapshot.state == DataConsentLoadState.empty ||
-        snapshot.items.isEmpty) {
+    if (snapshot.state == DataConsentLoadState.empty || snapshot.items.isEmpty) {
       return EmptyStateWidget(message: l10n.dataConsentEmpty);
     }
     final disabled = snapshot.state == DataConsentLoadState.saving;

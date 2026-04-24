@@ -17,9 +17,7 @@ class CharacterCounter extends StatelessWidget {
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
     final isOver = current > max;
-    final color = isOver
-        ? theme.colorScheme.error
-        : theme.colorScheme.onSurfaceVariant;
+    final color = isOver ? theme.colorScheme.error : theme.colorScheme.onSurfaceVariant;
     return Padding(
       padding: const EdgeInsets.only(top: AppDimensions.space4),
       child: Align(

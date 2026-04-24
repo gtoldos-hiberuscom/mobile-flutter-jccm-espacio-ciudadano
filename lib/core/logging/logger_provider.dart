@@ -18,7 +18,5 @@ part 'logger_provider.g.dart';
 /// call-sites.
 @Riverpod(keepAlive: true)
 AppLogger appLogger(final Ref ref) {
-  return kReleaseMode
-      ? const ConsoleLogger(level: LogLevel.error)
-      : const ConsoleLogger();
+  return kReleaseMode ? const ConsoleLogger(level: LogLevel.error) : const ConsoleLogger();
 }

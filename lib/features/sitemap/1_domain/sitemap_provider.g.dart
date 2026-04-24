@@ -23,14 +23,7 @@ const sitemapRepositoryProvider = SitemapRepositoryProvider._();
 /// authoritative — STORY-62 must not re-hard-code outbound URLs that
 /// already live in `ExternalLinkCatalog` (STORY-28 contract).
 
-final class SitemapRepositoryProvider
-    extends
-        $FunctionalProvider<
-          SitemapRepository,
-          SitemapRepository,
-          SitemapRepository
-        >
-    with $Provider<SitemapRepository> {
+final class SitemapRepositoryProvider extends $FunctionalProvider<SitemapRepository, SitemapRepository, SitemapRepository> with $Provider<SitemapRepository> {
   /// DI composition for the sitemap repository.
   ///
   /// Reads the external-links catalog so the tree's external nodes stay

@@ -37,10 +37,7 @@ class UpcomingEventsSummary extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
-    final upcoming = snapshot.events
-        .where((final e) => !e.startsAt.isBefore(now))
-        .toList(growable: false)
-      ..sort((final a, final b) => a.startsAt.compareTo(b.startsAt));
+    final upcoming = snapshot.events.where((final e) => !e.startsAt.isBefore(now)).toList(growable: false)..sort((final a, final b) => a.startsAt.compareTo(b.startsAt));
     final visible = upcoming.take(maxItems).toList(growable: false);
 
     if (visible.isEmpty) {
@@ -51,8 +48,7 @@ class UpcomingEventsSummary extends StatelessWidget {
         ),
         child: Text(
           l10n.homeUpcomingEventsEmpty,
-          style: theme.textTheme.bodyMedium
-              ?.copyWith(color: AppColors.textSecondary),
+          style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
         ),
       );
     }

@@ -5,13 +5,13 @@ import 'package:jccm_espacio_ciudadano/features/help/2_presentation/support_form
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 Widget _harness() => const ProviderScope(
-      child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: Locale('es'),
-        home: SupportFormPage(),
-      ),
-    );
+  child: MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: Locale('es'),
+    home: SupportFormPage(),
+  ),
+);
 
 void _useLargeViewport(final WidgetTester tester) {
   tester.view.physicalSize = const Size(1080, 4000);
@@ -21,8 +21,7 @@ void _useLargeViewport(final WidgetTester tester) {
 }
 
 void main() {
-  testWidgets('renders all required fields and submit button',
-      (final tester) async {
+  testWidgets('renders all required fields and submit button', (final tester) async {
     _useLargeViewport(tester);
     await tester.pumpWidget(_harness());
     await tester.pumpAndSettle();
@@ -43,8 +42,7 @@ void main() {
     expect(find.byKey(const Key('support_submit_btn')), findsOneWidget);
   });
 
-  testWidgets('submitting an empty form keeps the page (no success snackbar)',
-      (final tester) async {
+  testWidgets('submitting an empty form keeps the page (no success snackbar)', (final tester) async {
     _useLargeViewport(tester);
     await tester.pumpWidget(_harness());
     await tester.pumpAndSettle();
@@ -59,8 +57,7 @@ void main() {
     expect(find.byKey(const Key('support_submit_btn')), findsOneWidget);
   });
 
-  testWidgets('happy path submits and shows confirmation screen',
-      (final tester) async {
+  testWidgets('happy path submits and shows confirmation screen', (final tester) async {
     _useLargeViewport(tester);
     await tester.pumpWidget(_harness());
     await tester.pumpAndSettle();

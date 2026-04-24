@@ -6,16 +6,15 @@ import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/up
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 AgendaEvent _event(final String id, final DateTime when) => AgendaEvent(
-      id: id,
-      rawTitle: 'event-$id',
-      startsAt: when,
-      category: AgendaCategory.salud,
-      source: AgendaEventSource.manual,
-    );
+  id: id,
+  rawTitle: 'event-$id',
+  startsAt: when,
+  category: AgendaCategory.salud,
+  source: AgendaEventSource.manual,
+);
 
 void main() {
-  testWidgets(
-      'UpcomingEventsSummary renders the top-3 upcoming events in '
+  testWidgets('UpcomingEventsSummary renders the top-3 upcoming events in '
       'ascending startsAt order', (final tester) async {
     final now = DateTime(2026, 5, 4, 10);
     final snapshot = AgendaSnapshot(
@@ -30,14 +29,16 @@ void main() {
       loadState: AgendaLoadState.loaded,
     );
 
-    await tester.pumpWidget(MaterialApp(
-      locale: const Locale('es'),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: UpcomingEventsSummary(snapshot: snapshot, now: now),
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: UpcomingEventsSummary(snapshot: snapshot, now: now),
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     expect(

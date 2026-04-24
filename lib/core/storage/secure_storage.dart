@@ -32,8 +32,7 @@ final class FlutterSecureStorageImpl implements SecureStorage {
   Future<String?> read(final String key) => _storage.read(key: key);
 
   @override
-  Future<void> write(final String key, final String value) =>
-      _storage.write(key: key, value: value);
+  Future<void> write(final String key, final String value) => _storage.write(key: key, value: value);
 
   @override
   Future<void> delete(final String key) => _storage.delete(key: key);

@@ -16,22 +16,20 @@ class _FakeCipRepository implements CipRepository {
 }
 
 Widget _wrap({required final CipSummary snapshot}) => ProviderScope(
-      overrides: [
-        cipRepositoryProvider
-            .overrideWith((final ref) => _FakeCipRepository(snapshot)),
-      ],
-      child: const MaterialApp(
-        locale: Locale('es'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(body: CipCard()),
-      ),
-    );
+  overrides: [
+    cipRepositoryProvider.overrideWith((final ref) => _FakeCipRepository(snapshot)),
+  ],
+  child: const MaterialApp(
+    locale: Locale('es'),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: Scaffold(body: CipCard()),
+  ),
+);
 
 void main() {
   group('CipCard', () {
-    testWidgets('renders CIP value and the read-only subtitle when loaded',
-        (final tester) async {
+    testWidgets('renders CIP value and the read-only subtitle when loaded', (final tester) async {
       final loaded = CipSummary(
         id: 'cip-CLM01234567',
         cipCode: 'CLM01234567',
@@ -57,8 +55,7 @@ void main() {
       );
     });
 
-    testWidgets('renders the parse-error surface with retry CTA',
-        (final tester) async {
+    testWidgets('renders the parse-error surface with retry CTA', (final tester) async {
       final parseError = CipSummary(
         id: 'cip-parse-error',
         cipCode: '',
@@ -79,8 +76,7 @@ void main() {
   });
 
   group('cipSummaryProvider', () {
-    test('hydrates the loaded snapshot returned by the repository',
-        () async {
+    test('hydrates the loaded snapshot returned by the repository', () async {
       final fixed = DateTime(2026, 5, 4, 10);
       final snapshot = CipSummary(
         id: 'cip-CLM00001',
@@ -90,8 +86,7 @@ void main() {
       );
       final container = ProviderContainer(
         overrides: [
-          cipRepositoryProvider
-              .overrideWith((final ref) => _FakeCipRepository(snapshot)),
+          cipRepositoryProvider.overrideWith((final ref) => _FakeCipRepository(snapshot)),
         ],
       );
       addTearDown(container.dispose);

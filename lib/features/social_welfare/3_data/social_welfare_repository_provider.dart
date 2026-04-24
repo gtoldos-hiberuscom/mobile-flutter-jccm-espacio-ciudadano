@@ -5,5 +5,4 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'social_welfare_repository_provider.g.dart';
 
 @riverpod
-SocialWelfareRepository socialWelfareRepository(final Ref ref) =>
-    const SocialWelfareRepositoryImpl();
+SocialWelfareRepository socialWelfareRepository(final Ref ref) => const SocialWelfareRepositoryImpl();

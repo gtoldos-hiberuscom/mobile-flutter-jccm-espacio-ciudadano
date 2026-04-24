@@ -213,8 +213,8 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => OutlinedButton.icon(
-        onPressed: enabled ? onPressed : null,
-        icon: Icon(icon, size: 18),
-        label: Text(label),
-      );
+    onPressed: enabled ? onPressed : null,
+    icon: Icon(icon, size: 18),
+    label: Text(label),
+  );
 }

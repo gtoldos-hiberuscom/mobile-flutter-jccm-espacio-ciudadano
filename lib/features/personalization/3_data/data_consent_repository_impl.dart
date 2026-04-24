@@ -36,8 +36,7 @@ final class DataConsentRepositoryImpl implements DataConsentRepository {
 
   /// Per-citizen acceptance map — kept in memory so consecutive reads after
   /// `saveClausulas` / `revokeAll` reflect the latest mutation.
-  static final Map<String, Map<String, bool>> _persisted =
-      <String, Map<String, bool>>{};
+  static final Map<String, Map<String, bool>> _persisted = <String, Map<String, bool>>{};
 
   static const String _mockVersion = '2026-04-21';
 

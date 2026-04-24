@@ -114,8 +114,7 @@ final goRouterProvider = Provider<GoRouter>(
         ),
         GoRoute(
           path: Routes.supportForm,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const SupportFormPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const SupportFormPage(),
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────

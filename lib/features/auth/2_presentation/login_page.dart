@@ -37,8 +37,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   // The Cl@ve portal URL — in Sprint 1 this is a well-known placeholder.
   // Sprint 2 (TASK-21) will retrieve this from AppConfig / backend.
-  static const String _clavePortalUrl =
-      'https://clave.gob.es/clave_Home/inicio.html';
+  static const String _clavePortalUrl = 'https://clave.gob.es/clave_Home/inicio.html';
 
   bool _hasInitiated = false;
   bool _hasError = false;
@@ -71,9 +70,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     // Derive display state from the async notifier value.
     final currentAuthState = authState.value;
     final isError = (currentAuthState is AuthError) || _hasError;
-    final errorMsg = currentAuthState is AuthError
-        ? currentAuthState.message
-        : _errorMessage;
+    final errorMsg = currentAuthState is AuthError ? currentAuthState.message : _errorMessage;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -84,8 +81,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         title: Text(
           l10n.loginPageTitle,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppColors.primary,
-              ),
+            color: AppColors.primary,
+          ),
         ),
         centerTitle: true,
       ),
@@ -136,8 +133,7 @@ class _LoadingContent extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               color: AppColors.primaryContainer,
-              borderRadius:
-                  BorderRadius.circular(AppDimensions.radiusXLarge),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXLarge),
             ),
             child: const Icon(
               Icons.lock_outlined,
@@ -162,8 +158,8 @@ class _LoadingContent extends StatelessWidget {
           child: Text(
             statusMessage,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -174,8 +170,8 @@ class _LoadingContent extends StatelessWidget {
           'Se abrirá el portal Cl@ve en el navegador para completar '
           'la autenticación. Vuelve a la aplicación cuando termines.',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textDisabled,
-              ),
+            color: AppColors.textDisabled,
+          ),
           textAlign: TextAlign.center,
         ),
       ],

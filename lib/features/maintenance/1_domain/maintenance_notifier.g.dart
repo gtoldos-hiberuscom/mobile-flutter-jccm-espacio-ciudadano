@@ -12,8 +12,7 @@ part of 'maintenance_notifier.dart';
 @ProviderFor(MaintenanceNotifier)
 const maintenanceNotifierProvider = MaintenanceNotifierProvider._();
 
-final class MaintenanceNotifierProvider
-    extends $NotifierProvider<MaintenanceNotifier, MaintenanceState> {
+final class MaintenanceNotifierProvider extends $NotifierProvider<MaintenanceNotifier, MaintenanceState> {
   const MaintenanceNotifierProvider._()
     : super(
         from: null,
@@ -42,14 +41,7 @@ abstract class _$MaintenanceNotifier extends $Notifier<MaintenanceState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<MaintenanceState, MaintenanceState>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<MaintenanceState, MaintenanceState>,
-              MaintenanceState,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<MaintenanceState, MaintenanceState>, MaintenanceState, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

@@ -48,12 +48,10 @@ class CipCard extends ConsumerWidget {
         key: const ValueKey('cip-card-error'),
         child: ErrorStateWidget(
           message: l10n.cipCardError,
-          onRetry: () =>
-              ref.read(cipSummaryProvider.notifier).refresh(),
+          onRetry: () => ref.read(cipSummaryProvider.notifier).refresh(),
         ),
       ),
-      data: (final cip) =>
-          _buildForState(context, ref, cip, l10n, compact: compact),
+      data: (final cip) => _buildForState(context, ref, cip, l10n, compact: compact),
     );
   }
 
@@ -83,11 +81,8 @@ class CipCard extends ConsumerWidget {
         return _CipCardShell(
           key: ValueKey('cip-card-${cip.loadState.name}'),
           child: ErrorStateWidget(
-            message: cip.loadState == CipLoadState.parseError
-                ? l10n.cipCardParseError
-                : l10n.cipCardError,
-            onRetry: () =>
-                ref.read(cipSummaryProvider.notifier).refresh(),
+            message: cip.loadState == CipLoadState.parseError ? l10n.cipCardParseError : l10n.cipCardError,
+            onRetry: () => ref.read(cipSummaryProvider.notifier).refresh(),
           ),
         );
       case CipLoadState.loaded:
@@ -195,8 +190,7 @@ class _LoadedBody extends StatelessWidget {
             padding: const EdgeInsets.only(top: AppDimensions.space4),
             child: Text(
               cip.centroSalud!,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: AppColors.textSecondary),
+              style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
             ),
           ),
         if (!compact && cip.region != null && cip.region!.isNotEmpty)
@@ -204,8 +198,7 @@ class _LoadedBody extends StatelessWidget {
             padding: const EdgeInsets.only(top: AppDimensions.space2),
             child: Text(
               cip.region!,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: AppColors.textSecondary),
+              style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
             ),
           ),
         const SizedBox(height: AppDimensions.space8),
@@ -214,16 +207,14 @@ class _LoadedBody extends StatelessWidget {
         Text(
           l10n.cipCardReadOnlySubtitle,
           key: const ValueKey('cip-card-readonly-subtitle'),
-          style: theme.textTheme.bodySmall
-              ?.copyWith(color: AppColors.textSecondary),
+          style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
         ),
         const SizedBox(height: AppDimensions.space4),
         // Contract gap subtitle (TASK-27 / TASK-32) — explicit gap for
         // health capabilities visible in design but not yet confirmed.
         Text(
           l10n.cipCardContractGap,
-          style: theme.textTheme.labelSmall
-              ?.copyWith(color: AppColors.textSecondary),
+          style: theme.textTheme.labelSmall?.copyWith(color: AppColors.textSecondary),
         ),
       ],
     );
@@ -235,13 +226,13 @@ class _SkeletonRow extends StatelessWidget {
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
     Widget bar(final double width) => Container(
-          height: AppDimensions.space12,
-          width: width,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
-          ),
-        );
+      height: AppDimensions.space12,
+      width: width,
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
+      ),
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

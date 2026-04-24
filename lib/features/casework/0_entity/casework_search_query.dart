@@ -103,12 +103,11 @@ final class CaseworkSearchQuery {
     final String? identification,
     final String? expedienteNumber,
     final String? registroNumber,
-  }) =>
-      CaseworkSearchQuery(
-        identification: identification ?? this.identification,
-        expedienteNumber: expedienteNumber ?? this.expedienteNumber,
-        registroNumber: registroNumber ?? this.registroNumber,
-      );
+  }) => CaseworkSearchQuery(
+    identification: identification ?? this.identification,
+    expedienteNumber: expedienteNumber ?? this.expedienteNumber,
+    registroNumber: registroNumber ?? this.registroNumber,
+  );
 
   /// Validates the query against the format rules described in the class
   /// docstring.
@@ -124,20 +123,17 @@ final class CaseworkSearchQuery {
 
     final id = valueFor(CaseworkSearchField.identification);
     if (id.isNotEmpty && !_isValidIdentification(id)) {
-      errors[CaseworkSearchField.identification] =
-          CaseworkSearchValidationError.invalidIdentification;
+      errors[CaseworkSearchField.identification] = CaseworkSearchValidationError.invalidIdentification;
     }
 
     final exp = valueFor(CaseworkSearchField.expedienteNumber);
     if (exp.isNotEmpty && !_isValidNumber(exp)) {
-      errors[CaseworkSearchField.expedienteNumber] =
-          CaseworkSearchValidationError.invalidNumberFormat;
+      errors[CaseworkSearchField.expedienteNumber] = CaseworkSearchValidationError.invalidNumberFormat;
     }
 
     final reg = valueFor(CaseworkSearchField.registroNumber);
     if (reg.isNotEmpty && !_isValidNumber(reg)) {
-      errors[CaseworkSearchField.registroNumber] =
-          CaseworkSearchValidationError.invalidNumberFormat;
+      errors[CaseworkSearchField.registroNumber] = CaseworkSearchValidationError.invalidNumberFormat;
     }
 
     return CaseworkSearchValidation(errors: errors);
@@ -160,9 +156,7 @@ final class CaseworkSearchQuery {
 
   static bool _isValidIdentification(final String value) {
     final upper = value.toUpperCase();
-    return _nif.hasMatch(upper) ||
-        _nie.hasMatch(upper) ||
-        _passport.hasMatch(upper);
+    return _nif.hasMatch(upper) || _nie.hasMatch(upper) || _passport.hasMatch(upper);
   }
 
   static bool _isValidNumber(final String value) => _number.hasMatch(value);

@@ -35,20 +35,17 @@ class _ConfigurableRepo implements CaseworkRepository {
   }
 
   @override
-  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
-      const <CaseworkItem>[];
+  Future<List<CaseworkItem>> searchByNif(final String identification) async => const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByExpedienteNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByRegistroNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
 }
 
 ProviderContainer _container(final CaseworkRepository repo) {
@@ -72,8 +69,7 @@ void main() {
       expect(snap.salidasRegistro.status, CaseworkSectionStatus.loaded);
     });
 
-    test('a failing tab surfaces an error section without breaking siblings',
-        () async {
+    test('a failing tab surfaces an error section without breaking siblings', () async {
       final c = _container(
         _ConfigurableRepo(failing: CaseworkTab.entradasRegistro),
       );
@@ -95,9 +91,7 @@ void main() {
     test('selectTab updates the snapshot without re-fetching', () async {
       final c = _container(_ConfigurableRepo());
       await c.read(caseworkWorkspaceProvider.future);
-      c
-          .read(caseworkWorkspaceProvider.notifier)
-          .selectTab(CaseworkTab.salidasRegistro);
+      c.read(caseworkWorkspaceProvider.notifier).selectTab(CaseworkTab.salidasRegistro);
       final state = c.read(caseworkWorkspaceProvider).requireValue;
       expect(state.selectedTab, CaseworkTab.salidasRegistro);
     });
@@ -124,9 +118,7 @@ void main() {
       final c = _container(repo);
       var snap = await c.read(caseworkWorkspaceProvider.future);
       expect(snap.expedientes.status, CaseworkSectionStatus.error);
-      await c
-          .read(caseworkWorkspaceProvider.notifier)
-          .refreshTab(CaseworkTab.expedientes);
+      await c.read(caseworkWorkspaceProvider.notifier).refreshTab(CaseworkTab.expedientes);
       snap = c.read(caseworkWorkspaceProvider).requireValue;
       expect(snap.expedientes.status, CaseworkSectionStatus.loaded);
       expect(snap.expedientes.items, hasLength(1));
@@ -167,18 +159,15 @@ class _CallbackRepo implements CaseworkRepository {
   Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) => _cb(tab);
 
   @override
-  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
-      const <CaseworkItem>[];
+  Future<List<CaseworkItem>> searchByNif(final String identification) async => const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByExpedienteNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByRegistroNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
 }

@@ -30,6 +30,5 @@ class AppConfig {
   final bool debugMode;
 
   @override
-  String toString() =>
-      'AppConfig(env: ${environment.name}, baseUrl: $baseUrl, appName: $appName)';
+  String toString() => 'AppConfig(env: ${environment.name}, baseUrl: $baseUrl, appName: $appName)';
 }

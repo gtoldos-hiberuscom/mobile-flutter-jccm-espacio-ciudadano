@@ -14,8 +14,7 @@ import 'package:jccm_espacio_ciudadano/features/legal/1_domain/legal_documents_r
 final class LegalDocumentsRepositoryImpl implements LegalDocumentsRepository {
   const LegalDocumentsRepositoryImpl();
 
-  static const String _placeholderNotice =
-      'Texto operativo pendiente de validación legal — STORY-61 baseline.';
+  static const String _placeholderNotice = 'Texto operativo pendiente de validación legal — STORY-61 baseline.';
 
   // --- Bodies ---------------------------------------------------------------
 

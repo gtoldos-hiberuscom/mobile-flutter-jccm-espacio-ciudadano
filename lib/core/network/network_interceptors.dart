@@ -63,13 +63,12 @@ final class ErrorInterceptor extends Interceptor {
         return switch (statusCode) {
           401 => const UnauthorizedError(),
           404 => NotFoundError(
-              message: 'Resource not found (404): ${err.requestOptions.path}',
-            ),
+            message: 'Resource not found (404): ${err.requestOptions.path}',
+          ),
           _ => NetworkError(
-              message:
-                  'Server error ${statusCode ?? 'unknown'}: ${err.message ?? ''}',
-              statusCode: statusCode,
-            ),
+            message: 'Server error ${statusCode ?? 'unknown'}: ${err.message ?? ''}',
+            statusCode: statusCode,
+          ),
         };
 
       case DioExceptionType.cancel:
