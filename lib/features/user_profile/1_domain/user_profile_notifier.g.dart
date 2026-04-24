@@ -8,33 +8,17 @@ part of 'user_profile_notifier.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Manages the currently logged-in user's profile.
-///
-/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-///   [UserProfile]; otherwise returns `null`.
-/// - [logout] delegates to [SessionNotifier.logout] then resets state.
 
 @ProviderFor(UserProfileNotifier)
-const userProfileProvider = UserProfileNotifierProvider._();
+const userProfileNotifierProvider = UserProfileNotifierProvider._();
 
-/// Manages the currently logged-in user's profile.
-///
-/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-///   [UserProfile]; otherwise returns `null`.
-/// - [logout] delegates to [SessionNotifier.logout] then resets state.
-final class UserProfileNotifierProvider
-    extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
-  /// Manages the currently logged-in user's profile.
-  ///
-  /// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-  ///   [UserProfile]; otherwise returns `null`.
-  /// - [logout] delegates to [SessionNotifier.logout] then resets state.
+final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
   const UserProfileNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'userProfileProvider',
+        name: r'userProfileNotifierProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -48,14 +32,7 @@ final class UserProfileNotifierProvider
   UserProfileNotifier create() => UserProfileNotifier();
 }
 
-String _$userProfileNotifierHash() =>
-    r'd3fe50aedb1e3de2f8a8d09641617f1076308129';
-
-/// Manages the currently logged-in user's profile.
-///
-/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-///   [UserProfile]; otherwise returns `null`.
-/// - [logout] delegates to [SessionNotifier.logout] then resets state.
+String _$userProfileNotifierHash() => r'e4f2a1b3c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0';
 
 abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   FutureOr<UserProfile?> build();
@@ -64,14 +41,7 @@ abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<UserProfile?>, UserProfile?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>,
-              AsyncValue<UserProfile?>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>, AsyncValue<UserProfile?>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
