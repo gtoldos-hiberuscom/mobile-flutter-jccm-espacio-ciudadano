@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' show AsyncNotifier;
 import 'package:jccm_espacio_ciudadano/core/auth/session_state_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/network/result.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_state.dart';
@@ -60,8 +61,7 @@ class SessionNotifier extends _$SessionNotifier {
     final result = await ref.read(authRepositoryProvider).handleCallback(uri);
     state = switch (result) {
       Success(:final value) => AsyncValue.data(_emitAuthenticated(value)),
-      Failure(:final error) =>
-        AsyncValue.data(AuthError(error.message)),
+      Failure(:final error) => AsyncValue.data(AuthError(error.message)),
     };
   }
 
@@ -88,8 +88,7 @@ class SessionNotifier extends _$SessionNotifier {
     }
 
     state = const AsyncValue.data(AuthLoading());
-    final result =
-        await ref.read(authRepositoryProvider).refreshSession(session);
+    final result = await ref.read(authRepositoryProvider).refreshSession(session);
     state = switch (result) {
       Success() => AsyncValue.data(_emitAuthenticated(session)),
       Failure() => AsyncValue.data(_emitExpired()),
@@ -101,9 +100,7 @@ class SessionNotifier extends _$SessionNotifier {
   AuthAuthenticated _emitAuthenticated(final Session session) {
     // Bridge: keep the legacy sessionStateProvider in sync so the GoRouter
     // guard can read session state without depending on this notifier.
-    ref
-        .read(sessionStateProvider.notifier)
-        .establish(session.idAgente);
+    ref.read(sessionStateProvider.notifier).establish(session.idAgente);
     return AuthAuthenticated(session);
   }
 

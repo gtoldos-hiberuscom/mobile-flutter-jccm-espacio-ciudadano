@@ -24,8 +24,7 @@ class EducationLandingPage extends ConsumerStatefulWidget {
   const EducationLandingPage({super.key});
 
   @override
-  ConsumerState<EducationLandingPage> createState() =>
-      _EducationLandingPageState();
+  ConsumerState<EducationLandingPage> createState() => _EducationLandingPageState();
 }
 
 class _EducationLandingPageState extends ConsumerState<EducationLandingPage> {
@@ -40,9 +39,7 @@ class _EducationLandingPageState extends ConsumerState<EducationLandingPage> {
         return;
       }
       _viewedLogged = true;
-      ref
-          .read(analyticsServiceProvider)
-          .logEvent(const DomainLandingViewedEvent(domain: _domainId));
+      ref.read(analyticsServiceProvider).logEvent(const DomainLandingViewedEvent(domain: _domainId));
     });
   }
 
@@ -54,8 +51,7 @@ class _EducationLandingPageState extends ConsumerState<EducationLandingPage> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.educationTitle)),
       body: RefreshIndicator(
-        onRefresh: () =>
-            ref.read(educationLandingProvider.notifier).refresh(),
+        onRefresh: () => ref.read(educationLandingProvider.notifier).refresh(),
         child: asyncSnapshot.when(
           loading: () => ListView(
             children: [
@@ -71,9 +67,7 @@ class _EducationLandingPageState extends ConsumerState<EducationLandingPage> {
                 height: MediaQuery.of(context).size.height * 0.5,
                 child: ErrorStateWidget(
                   message: l10n.domainGenericLoadError,
-                  onRetry: () => ref
-                      .read(educationLandingProvider.notifier)
-                      .refresh(),
+                  onRetry: () => ref.read(educationLandingProvider.notifier).refresh(),
                 ),
               ),
             ],

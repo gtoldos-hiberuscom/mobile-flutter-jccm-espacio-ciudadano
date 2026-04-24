@@ -44,26 +44,25 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: Column(
-          children: [
-            Expanded(child: child),
-            const _AuthenticatedFooter(),
-          ],
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: _selectedIndex(context),
-          onDestinationSelected: (final int index) =>
-              context.go(_destinations[index].$1),
-          destinations: _destinations
-              .map(
-                (final d) => NavigationDestination(
-                  icon: Icon(d.$2),
-                  label: d.$3,
-                ),
-              )
-              .toList(growable: false),
-        ),
-      );
+    body: Column(
+      children: [
+        Expanded(child: child),
+        const _AuthenticatedFooter(),
+      ],
+    ),
+    bottomNavigationBar: NavigationBar(
+      selectedIndex: _selectedIndex(context),
+      onDestinationSelected: (final int index) => context.go(_destinations[index].$1),
+      destinations: _destinations
+          .map(
+            (final d) => NavigationDestination(
+              icon: Icon(d.$2),
+              label: d.$3,
+            ),
+          )
+          .toList(growable: false),
+    ),
+  );
 }
 
 /// Persistent secondary footer shown above the primary [NavigationBar]

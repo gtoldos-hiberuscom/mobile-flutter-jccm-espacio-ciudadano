@@ -23,12 +23,10 @@ class CaseworkWorkspacePage extends ConsumerStatefulWidget {
   const CaseworkWorkspacePage({super.key});
 
   @override
-  ConsumerState<CaseworkWorkspacePage> createState() =>
-      _CaseworkWorkspacePageState();
+  ConsumerState<CaseworkWorkspacePage> createState() => _CaseworkWorkspacePageState();
 }
 
-class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage>
-    with SingleTickerProviderStateMixin {
+class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage> with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -66,8 +64,7 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage>
         loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
         error: (final err, final st) => ErrorStateWidget(
           message: l10n.caseworkWorkspaceLoadError,
-          onRetry: () =>
-              ref.read(caseworkWorkspaceProvider.notifier).refresh(),
+          onRetry: () => ref.read(caseworkWorkspaceProvider.notifier).refresh(),
         ),
         data: (final snap) => _buildLoaded(context, snap, l10n),
       ),
@@ -102,12 +99,9 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage>
             controller: _tabController,
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            onTap: (final i) => ref
-                .read(caseworkWorkspaceProvider.notifier)
-                .selectTab(CaseworkTab.values[i]),
+            onTap: (final i) => ref.read(caseworkWorkspaceProvider.notifier).selectTab(CaseworkTab.values[i]),
             tabs: <Tab>[
-              for (final tab in CaseworkTab.values)
-                Tab(text: _tabLabel(l10n, tab)),
+              for (final tab in CaseworkTab.values) Tab(text: _tabLabel(l10n, tab)),
             ],
           ),
         ),
@@ -119,9 +113,7 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage>
                 _CaseworkTabView(
                   tab: tab,
                   section: snap.sectionFor(tab),
-                  onRetry: () => ref
-                      .read(caseworkWorkspaceProvider.notifier)
-                      .refreshTab(tab),
+                  onRetry: () => ref.read(caseworkWorkspaceProvider.notifier).refreshTab(tab),
                 ),
             ],
           ),
@@ -174,8 +166,7 @@ class _CaseworkTabView extends StatelessWidget {
               vertical: AppDimensions.space8,
             ),
             itemCount: section.items.length,
-            itemBuilder: (final ctx, final i) =>
-                CaseworkItemTile(item: section.items[i]),
+            itemBuilder: (final ctx, final i) => CaseworkItemTile(item: section.items[i]),
           ),
         );
     }

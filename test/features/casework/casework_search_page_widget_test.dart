@@ -10,47 +10,43 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class _StubRepo implements CaseworkRepository {
   @override
-  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async =>
-      <CaseworkItem>[];
+  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async => <CaseworkItem>[];
 
   @override
-  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
-      <CaseworkItem>[
-        CaseworkItem(
-          id: 'r1',
-          type: CaseworkTab.expedientes,
-          number: 'EXP/2025/00123',
-          date: DateTime(2025, 9, 14),
-          organism: 'Org',
-          subject: 'Subject',
-          status: CaseworkItemStatus.enTramite,
-        ),
-      ];
+  Future<List<CaseworkItem>> searchByNif(final String identification) async => <CaseworkItem>[
+    CaseworkItem(
+      id: 'r1',
+      type: CaseworkTab.expedientes,
+      number: 'EXP/2025/00123',
+      date: DateTime(2025, 9, 14),
+      organism: 'Org',
+      subject: 'Subject',
+      status: CaseworkItemStatus.enTramite,
+    ),
+  ];
 
   @override
   Future<List<CaseworkItem>> searchByExpedienteNumber(
     final String number,
-  ) async =>
-      <CaseworkItem>[];
+  ) async => <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByRegistroNumber(
     final String number,
-  ) async =>
-      throw StateError('boom');
+  ) async => throw StateError('boom');
 }
 
 Widget _wrap(final Widget child) => ProviderScope(
-      overrides: [
-        caseworkRepositoryProvider.overrideWith((final ref) => _StubRepo()),
-      ],
-      child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        home: child,
-      ),
-    );
+  overrides: [
+    caseworkRepositoryProvider.overrideWith((final ref) => _StubRepo()),
+  ],
+  child: MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('es'),
+    home: child,
+  ),
+);
 
 void main() {
   testWidgets(
@@ -84,8 +80,7 @@ void main() {
     },
   );
 
-  testWidgets('happy path renders the result list and the reset CTA',
-      (final tester) async {
+  testWidgets('happy path renders the result list and the reset CTA', (final tester) async {
     await tester.pumpWidget(_wrap(const CaseworkSearchPage()));
     await tester.enterText(
       find.widgetWithText(TextField, 'NIF / NIE / Pasaporte'),

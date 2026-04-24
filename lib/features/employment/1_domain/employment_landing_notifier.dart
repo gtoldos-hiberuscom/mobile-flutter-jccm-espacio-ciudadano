@@ -8,8 +8,7 @@ part 'employment_landing_notifier.g.dart';
 @riverpod
 class EmploymentLandingNotifier extends _$EmploymentLandingNotifier {
   @override
-  Future<EmploymentSnapshot> build() =>
-      ref.watch(employmentRepositoryProvider).loadSnapshot();
+  Future<EmploymentSnapshot> build() => ref.watch(employmentRepositoryProvider).loadSnapshot();
 
   Future<void> refresh() async {
     state = const AsyncValue<EmploymentSnapshot>.loading();

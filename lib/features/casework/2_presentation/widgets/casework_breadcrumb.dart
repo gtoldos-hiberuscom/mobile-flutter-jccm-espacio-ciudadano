@@ -18,8 +18,7 @@ class CaseworkBreadcrumb extends StatelessWidget {
     for (var i = 0; i < segments.length; i++) {
       final seg = segments[i];
       final isLast = i == segments.length - 1;
-      final style = (isLast ? theme.textTheme.titleSmall : theme.textTheme.bodyMedium)
-          ?.copyWith(
+      final style = (isLast ? theme.textTheme.titleSmall : theme.textTheme.bodyMedium)?.copyWith(
         color: isLast ? theme.colorScheme.onSurface : muted,
         fontWeight: isLast ? FontWeight.w600 : FontWeight.w400,
       );

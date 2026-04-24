@@ -10,5 +10,4 @@ part 'home_repository_provider.g.dart';
 /// it) is dropped when the home view is no longer in scope — the dashboard
 /// is expected to refresh whenever the user navigates back.
 @riverpod
-HomeDashboardRepository homeDashboardRepository(final Ref ref) =>
-    const HomeDashboardRepositoryImpl();
+HomeDashboardRepository homeDashboardRepository(final Ref ref) => const HomeDashboardRepositoryImpl();

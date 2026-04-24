@@ -476,6 +476,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaDetailWhen => 'Date';
 
   @override
+  String get agendaDetailCentro => 'Facility';
+
+  @override
+  String get agendaDetailProfesional => 'Professional';
+
+  @override
+  String get agendaDetailTipo => 'Type';
+
+  @override
+  String get agendaDetailDescription => 'Description';
+
+  @override
+  String get agendaDetailJustificante => 'View attendance proof';
+
+  @override
+  String get agendaJustificanteUnavailable => 'The proof will open once the external link is enabled.';
+
+  @override
+  String get agendaTileExpand => 'Show more details';
+
+  @override
+  String get agendaTileCollapse => 'Hide details';
+
+  @override
+  String get agendaTileOpenDetail => 'Open full detail';
+
+  @override
+  String get agendaParseErrorTitle => 'We couldn\'t read your agenda';
+
+  @override
+  String get agendaParseErrorDetail => 'There was a problem interpreting the service response. Please try again in a few minutes.';
+
+  @override
+  String get agendaParseErrorRetry => 'Try again';
+
+  @override
+  String get agendaPartialBanner => 'Some events couldn\'t be loaded. Showing the ones available.';
+
+  @override
   String get stateAffairsTitle => 'State and other matters of interest';
 
   @override
@@ -717,6 +756,138 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
 
   @override
+  String get supportFormTitle => 'Technical support';
+
+  @override
+  String get supportFormIntro => 'Tell us what happened. Our team will get back to you by e-mail.';
+
+  @override
+  String get supportCtaFromHelp => 'Contact support';
+
+  @override
+  String get supportFieldName => 'Name';
+
+  @override
+  String get supportFieldEmail => 'E-mail';
+
+  @override
+  String get supportFieldEmailConfirm => 'Confirm e-mail';
+
+  @override
+  String get supportFieldSubject => 'Subject';
+
+  @override
+  String get supportFieldDescription => 'Description';
+
+  @override
+  String get supportAttachmentLabel => 'Attachment (optional)';
+
+  @override
+  String get supportAttachmentHint => 'You may attach a single file (screenshots, documents).';
+
+  @override
+  String get supportAttachmentPick => 'Pick file';
+
+  @override
+  String get supportAttachmentChange => 'Change file';
+
+  @override
+  String get supportAttachmentRemove => 'Remove attachment';
+
+  @override
+  String get supportConsentLabel => 'I authorise the processing of my data to handle my request.';
+
+  @override
+  String get supportCaptchaLabel => 'I am not a robot';
+
+  @override
+  String get supportCaptchaMockBadge => 'MOCK';
+
+  @override
+  String get supportSubmitButton => 'Send request';
+
+  @override
+  String get supportConfirmationTitle => 'Request sent';
+
+  @override
+  String get supportConfirmationMessage => 'We\'ve received your request. We\'ll confirm by e-mail.';
+
+  @override
+  String get supportConfirmationNewRequest => 'Send another request';
+
+  @override
+  String get supportSubmissionError => 'We couldn\'t send your request. Please try again.';
+
+  @override
+  String get supportErrorNameRequired => 'Please enter your name.';
+
+  @override
+  String get supportErrorEmailRequired => 'Please enter your e-mail.';
+
+  @override
+  String get supportErrorEmailInvalid => 'Please enter a valid e-mail address.';
+
+  @override
+  String get supportErrorEmailConfirmRequired => 'Please confirm your e-mail.';
+
+  @override
+  String get supportErrorEmailMismatch => 'E-mails don\'t match.';
+
+  @override
+  String get supportErrorSubjectRequired => 'Please add a subject.';
+
+  @override
+  String get supportErrorSubjectTooLong => 'Subject can\'t exceed 100 characters.';
+
+  @override
+  String get supportErrorDescriptionRequired => 'Please describe your request.';
+
+  @override
+  String get supportErrorDescriptionTooLong => 'Description exceeds the allowed length.';
+
+  @override
+  String get supportErrorConsentRequired => 'You must authorise the processing of your data.';
+
+  @override
+  String get supportErrorCaptchaRequired => 'Please confirm you are not a robot.';
+
+  @override
+  String get cipCardTitle => 'Health card (CIP)';
+
+  @override
+  String get cipCardCopyTooltip => 'Copy CIP';
+
+  @override
+  String get cipCardCopied => 'CIP copied to clipboard';
+
+  @override
+  String get cipCardReadOnlySubtitle => 'Read-only — the health card cannot be downloaded from the app.';
+
+  @override
+  String get cipCardContractGap => 'Other health capabilities (visits, prescriptions) are subject to contract confirmation.';
+
+  @override
+  String get cipCardEmpty => 'No health card is associated with your profile yet.';
+
+  @override
+  String get cipCardError => 'We couldn\'t load your health card.';
+
+  @override
+  String get cipCardParseError => 'We couldn\'t read the health card response.';
+
+  @override
+  String get saludSurfaceTitle => 'Health';
+
+  @override
+  String get saludSurfaceCta => 'View agenda';
+
+  @override
+  String get homeUpcomingEventsTitle => 'Upcoming events';
+
+  @override
+  String get homeUpcomingEventsEmpty => 'You have no upcoming events.';
+
+  @override
   String get caseworkWorkspaceTitle => 'My casework';
 
   @override
@@ -847,4 +1018,181 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get caseworkItemDetailPlaceholderPending => 'The real detail screen will be enabled by STORY-35 / STORY-36.';
+
+  @override
+  String get digitalCardsPageTitle => 'My digital cards';
+
+  @override
+  String get digitalCardsTypeFamiliaNumerosa => 'Large-family card';
+
+  @override
+  String get digitalCardsTypeJoven => 'Youth card';
+
+  @override
+  String get digitalCardsTypeDiscapacidad => 'Disability card';
+
+  @override
+  String get digitalCardsStatusAvailable => 'Available';
+
+  @override
+  String get digitalCardsStatusNotValid => 'Not valid';
+
+  @override
+  String get digitalCardsStatusNotDownloadable => 'Not downloadable';
+
+  @override
+  String get digitalCardsStatusNotAvailable => 'Not available';
+
+  @override
+  String get digitalCardsMessageNotValid => 'This card is not valid. QR, PKPASS and PDF aren\'t available.';
+
+  @override
+  String get digitalCardsMessageNotDownloadable => 'This card can\'t be downloaded right now.';
+
+  @override
+  String get digitalCardsMessageNotAvailable => 'You don\'t have this card available.';
+
+  @override
+  String get digitalCardsActionQr => 'Show QR';
+
+  @override
+  String get digitalCardsActionPkpass => 'Add to Wallet';
+
+  @override
+  String get digitalCardsActionPdf => 'Download PDF';
+
+  @override
+  String get digitalCardsActionComingSoon => 'Coming soon.';
+
+  @override
+  String get digitalCardsEmptyMessage => 'You don\'t have any digital cards yet.';
+
+  @override
+  String get digitalCardsErrorMessage => 'We couldn\'t load your digital cards.';
+
+  @override
+  String get digitalCardsCipMiniTitle => 'Health card (CIP)';
+
+  @override
+  String get digitalCardsCipMiniReadOnly => 'Read only';
+
+  @override
+  String get digitalCardsCipMiniOpenAction => 'Open health card';
+
+  @override
+  String get lifeEventsTitle => 'My life events';
+
+  @override
+  String get lifeEventsHeaderDescription => 'Select the life events that best describe your situation to receive personalized recommendations.';
+
+  @override
+  String get lifeEventsSaveAction => 'Save';
+
+  @override
+  String get lifeEventsResetAction => 'Reset preferences';
+
+  @override
+  String get lifeEventsResetConfirmTitle => 'Reset your preferences';
+
+  @override
+  String get lifeEventsResetConfirmBody => 'All selected life events will be removed. This action cannot be undone.';
+
+  @override
+  String get lifeEventsResetConfirm => 'Reset';
+
+  @override
+  String get lifeEventsResetCancel => 'Cancel';
+
+  @override
+  String get lifeEventsSavedFeedback => 'Your preferences have been saved.';
+
+  @override
+  String get lifeEventsErrorFeedback => 'We couldn\'t save your preferences. Please try again.';
+
+  @override
+  String get lifeEventsLoadError => 'We couldn\'t load the life events.';
+
+  @override
+  String get lifeEventsEmpty => 'There are no life events available at the moment.';
+
+  @override
+  String get lifeEventsCategoryFamilia => 'Family';
+
+  @override
+  String get lifeEventsCategorySalud => 'Health';
+
+  @override
+  String get lifeEventsCategoryEmpleo => 'Employment';
+
+  @override
+  String get lifeEventsCategoryVivienda => 'Housing';
+
+  @override
+  String get lifeEventsCategoryEducacion => 'Education';
+
+  @override
+  String get dataConsentTitle => 'My authorizations';
+
+  @override
+  String get dataConsentHeaderDescription => 'Manage which data can be used to offer you personalized services and recommendations. You can change your decision at any time.';
+
+  @override
+  String get dataConsentSaveAction => 'Save';
+
+  @override
+  String get dataConsentRevokeAction => 'Revoke all authorizations';
+
+  @override
+  String get dataConsentRevokeConfirmTitle => 'Revoke your authorizations';
+
+  @override
+  String get dataConsentRevokeConfirmBody => 'All your authorizations will be removed and we will stop personalizing content until you accept them again.';
+
+  @override
+  String get dataConsentRevokeConfirm => 'Revoke';
+
+  @override
+  String get dataConsentRevokeCancel => 'Cancel';
+
+  @override
+  String get dataConsentSavedFeedback => 'Your authorizations have been updated successfully.';
+
+  @override
+  String get dataConsentErrorFeedback => 'We could not update your authorizations. Please try again.';
+
+  @override
+  String get dataConsentLoadError => 'We could not load your authorizations.';
+
+  @override
+  String get dataConsentEmpty => 'There are no authorizations available at this time.';
+
+  @override
+  String get dataConsentTypeJccmTitle => 'Data from the Government of Castilla-La Mancha';
+
+  @override
+  String get dataConsentTypeJccmSubtitle => 'Allow JCCM to use your administrative data to offer you personalized services and procedures.';
+
+  @override
+  String get dataConsentTypeOtrasAdminTitle => 'Data from other public administrations';
+
+  @override
+  String get dataConsentTypeOtrasAdminSubtitle => 'Allow us to consult data from other public administrations so you don\'t have to provide it manually.';
+
+  @override
+  String get dataConsentTypePerfiladoTitle => 'Profiling for recommendations';
+
+  @override
+  String get dataConsentTypePerfiladoSubtitle => 'Allow us to analyze your activity to recommend procedures, grants and relevant content.';
+
+  @override
+  String get dataConsentPrivacyReferenceTitle => 'Data protection information';
+
+  @override
+  String get dataConsentPrivacyReferenceBody => 'These authorizations are based on the data protection information accepted when you signed in.';
+
+  @override
+  String get dataConsentPrivacyReferenceCta => 'View data protection information';
+
+  @override
+  String get dataConsentNavCta => 'My authorizations';
 }

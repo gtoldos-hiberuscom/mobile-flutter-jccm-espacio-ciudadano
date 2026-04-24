@@ -2,12 +2,12 @@
 id: 31
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 4
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-24T11:00:12+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Contemplar la tarjeta sanitaria/CIP y los accesos rápidos de salud reutilizados desde portada y agenda.
 
 ## Acceptance Criteria
-- [ ] Se contempla visualización del CIP o tarjeta sanitaria como dato destacado de salud.
-- [ ] Se contempla reutilización del resumen de próximos eventos desde la portada hacia la agenda completa.
-- [ ] Se contempla integración con la sección de salud del dashboard y sus accesos.
-- [ ] Se explicitan gaps de contrato para capacidades de salud visibles en diseño pero no confirmadas.
+- [x] Se contempla visualización del CIP o tarjeta sanitaria como dato destacado de salud.
+- [x] Se contempla reutilización del resumen de próximos eventos desde la portada hacia la agenda completa.
+- [x] Se contempla integración con la sección de salud del dashboard y sus accesos.
+- [x] Se explicitan gaps de contrato para capacidades de salud visibles en diseño pero no confirmadas.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -76,3 +76,6 @@ Contemplar la tarjeta sanitaria/CIP y los accesos rápidos de salud reutilizados
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-24T11:00:12+02:00 | by Copilot | To Do → In Progress (Sprint 4).
+- 2026-04-24T11:00:12+02:00 | by Copilot | Implementation done. Added `CipSummary` entity + `CipRepository` (co-located in `lib/features/agenda/`) + `cipSummaryProvider` notifier and the read-only `CipCard` widget rendered both at the top of the agenda page and inside `lib/features/home/2_presentation/widgets/salud_surface_card.dart`. Added `UpcomingEventsSummary` widget consumed by both the agenda header and the home `upcomingEvents` block (AC2). Per the TASK-71 surface decision (CIP_REUSE) the CIP is rendered read-only with no PKPass / QR / PDF affordance and no wallet semantics. Per the TASK-32 SESCAM payload strategy the repository wraps `SescamCipParser`; the real network path is gated by `kSescamLiveParsingEnabled` (currently `false`) and short-circuits to a deterministic stub payload. Contract-gap caption (TASK-27 / TASK-32) is rendered inside the card. Added 4 new tests (cip_card widget loaded + parse-error, cip_summary_notifier loading→loaded + parse-error path + refresh, upcoming_events_summary top-3 ordered). `flutter analyze lib/features/agenda/ lib/features/home/ test/features/agenda/ test/features/home/` → 0 issues. `flutter test test/features/agenda/ test/features/home/` → 45 tests passed.
+- 2026-04-24T11:00:12+02:00 | by Copilot | In Progress → Done.

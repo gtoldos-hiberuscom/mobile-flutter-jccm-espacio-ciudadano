@@ -54,7 +54,8 @@ class ExternalLinkButton extends ConsumerWidget {
       child: AppButton(
         label: label,
         variant: variant,
-        icon: icon ??
+        icon:
+            icon ??
             const Icon(
               Icons.open_in_new,
               size: AppDimensions.iconSmall,

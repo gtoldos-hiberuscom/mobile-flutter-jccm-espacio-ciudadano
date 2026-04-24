@@ -36,15 +36,15 @@ final class SharedPreferencesAppStorage implements AppStorage {
 
   @override
   Future<bool> write(final String key, final Object value) => switch (value) {
-        final String v => _prefs.setString(key, v),
-        final bool v => _prefs.setBool(key, v),
-        final int v => _prefs.setInt(key, v),
-        final double v => _prefs.setDouble(key, v),
-        final List<String> v => _prefs.setStringList(key, v),
-        _ => throw ArgumentError(
-            'Unsupported type for AppStorage.write: ${value.runtimeType}',
-          ),
-      };
+    final String v => _prefs.setString(key, v),
+    final bool v => _prefs.setBool(key, v),
+    final int v => _prefs.setInt(key, v),
+    final double v => _prefs.setDouble(key, v),
+    final List<String> v => _prefs.setStringList(key, v),
+    _ => throw ArgumentError(
+      'Unsupported type for AppStorage.write: ${value.runtimeType}',
+    ),
+  };
 
   @override
   Future<bool> remove(final String key) => _prefs.remove(key);
@@ -60,5 +60,5 @@ final class SharedPreferencesAppStorage implements AppStorage {
 /// asynchronously; this provider must be overridden at bootstrap.
 @Riverpod(keepAlive: true)
 AppStorage appStorage(final Ref ref) => throw UnimplementedError(
-      'appStorage must be overridden in ProviderScope at bootstrap.',
-    );
+  'appStorage must be overridden in ProviderScope at bootstrap.',
+);

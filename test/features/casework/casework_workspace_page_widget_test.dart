@@ -12,60 +12,55 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class _StubRepo implements CaseworkRepository {
   @override
-  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async =>
-      <CaseworkItem>[
-        CaseworkItem(
-          id: '$tab-1',
-          type: tab,
-          number: 'NUM-${tab.name}',
-          date: DateTime(2025, 6, 15),
-          organism: 'Organismo X',
-          subject: 'Asunto de prueba ${tab.name}',
-          status: CaseworkItemStatus.enTramite,
-        ),
-      ];
+  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async => <CaseworkItem>[
+    CaseworkItem(
+      id: '$tab-1',
+      type: tab,
+      number: 'NUM-${tab.name}',
+      date: DateTime(2025, 6, 15),
+      organism: 'Organismo X',
+      subject: 'Asunto de prueba ${tab.name}',
+      status: CaseworkItemStatus.enTramite,
+    ),
+  ];
 
   @override
-  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
-      const <CaseworkItem>[];
+  Future<List<CaseworkItem>> searchByNif(final String identification) async => const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByExpedienteNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByRegistroNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
 }
 
 Widget _wrapWithStub(final Widget child) => ProviderScope(
-      overrides: [
-        caseworkRepositoryProvider.overrideWith((final ref) => _StubRepo()),
-      ],
-      child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        home: child,
-      ),
-    );
+  overrides: [
+    caseworkRepositoryProvider.overrideWith((final ref) => _StubRepo()),
+  ],
+  child: MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('es'),
+    home: child,
+  ),
+);
 
 Widget _wrap(final Widget child) => ProviderScope(
-      child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        home: child,
-      ),
-    );
+  child: MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('es'),
+    home: child,
+  ),
+);
 
 void main() {
-  testWidgets('CaseworkItemTile renders number, subject and status badge',
-      (final tester) async {
+  testWidgets('CaseworkItemTile renders number, subject and status badge', (final tester) async {
     final item = CaseworkItem(
       id: 'x',
       type: CaseworkTab.expedientes,
@@ -85,9 +80,7 @@ void main() {
     expect(find.textContaining('15/06/2025'), findsOneWidget);
   });
 
-  testWidgets(
-    'CaseworkWorkspacePage renders 3 tabs and switching tabs updates the notifier',
-    (final tester) async {
+  testWidgets('CaseworkWorkspacePage renders 3 tabs and switching tabs updates the notifier', (final tester) async {
     await tester.pumpWidget(_wrapWithStub(const CaseworkWorkspacePage()));
     await tester.pumpAndSettle();
 
@@ -115,9 +108,7 @@ void main() {
     final container = ProviderScope.containerOf(
       tester.element(find.byType(CaseworkWorkspacePage)),
     );
-    final state = container
-        .read(caseworkWorkspaceProvider)
-        .requireValue;
+    final state = container.read(caseworkWorkspaceProvider).requireValue;
     expect(state.selectedTab, CaseworkTab.salidasRegistro);
 
     // The tile for the selected tab is now rendered.

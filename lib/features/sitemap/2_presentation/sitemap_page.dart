@@ -28,9 +28,7 @@ class SitemapPage extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.sitemapPageTitle)),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-        children: tree
-            .map((final node) => _SitemapGroup(node: node))
-            .toList(growable: false),
+        children: tree.map((final node) => _SitemapGroup(node: node)).toList(growable: false),
       ),
     );
   }
@@ -50,9 +48,7 @@ class _SitemapGroup extends ConsumerWidget {
         title,
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      children: node.children
-          .map((final child) => _SitemapLeaf(node: child))
-          .toList(growable: false),
+      children: node.children.map((final child) => _SitemapLeaf(node: child)).toList(growable: false),
     );
   }
 }
@@ -67,8 +63,7 @@ class _SitemapLeaf extends ConsumerWidget {
     final title = resolveSitemapKey(l10n, node.titleKey);
 
     if (node.isExternal) {
-      final ExternalLink? link =
-          ref.watch(externalLinkCatalogProvider).findById(node.externalLinkId!);
+      final ExternalLink? link = ref.watch(externalLinkCatalogProvider).findById(node.externalLinkId!);
       if (link == null) {
         return const SizedBox.shrink();
       }

@@ -20,7 +20,7 @@ class UserDrawerMenu extends StatelessWidget {
   final VoidCallback onClose;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final name = profile.displayName ?? profile.idAgente;
 
@@ -42,8 +42,8 @@ class UserDrawerMenu extends StatelessWidget {
                   Text(
                     profile.idAgente,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      color: AppColors.textSecondary,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -86,10 +86,10 @@ class UserDrawerMenu extends StatelessWidget {
             Semantics(
               label: l10n.userMenuLogout,
               child: ListTile(
-                leading: Icon(Icons.logout, color: AppColors.error),
+                leading: const Icon(Icons.logout, color: AppColors.error),
                 title: Text(
                   l10n.userMenuLogout,
-                  style: TextStyle(color: AppColors.error),
+                  style: const TextStyle(color: AppColors.error),
                 ),
                 onTap: onLogout,
               ),

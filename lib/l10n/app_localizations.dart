@@ -986,6 +986,84 @@ abstract class AppLocalizations {
   /// **'Fecha'**
   String get agendaDetailWhen;
 
+  /// Agenda — etiqueta del campo centro en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro'**
+  String get agendaDetailCentro;
+
+  /// Agenda — etiqueta del campo profesional en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Profesional'**
+  String get agendaDetailProfesional;
+
+  /// Agenda — etiqueta del campo tipo en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo'**
+  String get agendaDetailTipo;
+
+  /// Agenda — etiqueta de la descripción larga en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get agendaDetailDescription;
+
+  /// Agenda — CTA para abrir el justificante de asistencia.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver justificante de asistencia'**
+  String get agendaDetailJustificante;
+
+  /// Agenda — aviso al pulsar el justificante mientras el enlace externo no está habilitado.
+  ///
+  /// In es, this message translates to:
+  /// **'El justificante se podrá abrir cuando se habilite el enlace externo.'**
+  String get agendaJustificanteUnavailable;
+
+  /// Agenda — affordance para expandir el detalle inline en la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver más detalles'**
+  String get agendaTileExpand;
+
+  /// Agenda — affordance para colapsar el detalle inline en la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Ocultar detalles'**
+  String get agendaTileCollapse;
+
+  /// Agenda — CTA para navegar al detalle completo del evento.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir detalle completo'**
+  String get agendaTileOpenDetail;
+
+  /// Agenda — título del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido leer tu agenda'**
+  String get agendaParseErrorTitle;
+
+  /// Agenda — detalle del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'Hubo un problema al interpretar la respuesta del servicio. Vuelve a intentarlo en unos minutos.'**
+  String get agendaParseErrorDetail;
+
+  /// Agenda — CTA de reintento del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'Intentar de nuevo'**
+  String get agendaParseErrorRetry;
+
+  /// Agenda — aviso de datos parciales sobre la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Algunos eventos no se han podido cargar. Mostramos los disponibles.'**
+  String get agendaPartialBanner;
+
   /// Estado — título de la landing.
   ///
   /// In es, this message translates to:
@@ -1436,6 +1514,270 @@ abstract class AppLocalizations {
   /// **'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.'**
   String get socialWelfareDependenciaDescription;
 
+  /// Título de la pantalla de formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Soporte técnico'**
+  String get supportFormTitle;
+
+  /// Texto introductorio del formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuéntanos qué ha pasado. Nuestro equipo te responderá por correo electrónico.'**
+  String get supportFormIntro;
+
+  /// CTA en el centro de ayuda para abrir el formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Contactar con soporte'**
+  String get supportCtaFromHelp;
+
+  /// Etiqueta del campo Nombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get supportFieldName;
+
+  /// Etiqueta del campo Email.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get supportFieldEmail;
+
+  /// Etiqueta del campo Confirmar email.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmación del correo electrónico'**
+  String get supportFieldEmailConfirm;
+
+  /// Etiqueta del campo Asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Asunto'**
+  String get supportFieldSubject;
+
+  /// Etiqueta del campo Descripción.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get supportFieldDescription;
+
+  /// Etiqueta de la sección de adjuntos.
+  ///
+  /// In es, this message translates to:
+  /// **'Adjunto (opcional)'**
+  String get supportAttachmentLabel;
+
+  /// Texto de ayuda del adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes adjuntar un único archivo (capturas, documentos).'**
+  String get supportAttachmentHint;
+
+  /// Botón para seleccionar adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar archivo'**
+  String get supportAttachmentPick;
+
+  /// Botón para cambiar el adjunto seleccionado.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar archivo'**
+  String get supportAttachmentChange;
+
+  /// Acción para quitar el adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar adjunto'**
+  String get supportAttachmentRemove;
+
+  /// Texto del checkbox de consentimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Autorizo el tratamiento de mis datos para gestionar mi solicitud.'**
+  String get supportConsentLabel;
+
+  /// Etiqueta del checkbox antibot.
+  ///
+  /// In es, this message translates to:
+  /// **'No soy un robot'**
+  String get supportCaptchaLabel;
+
+  /// Insignia que indica que el captcha es un mock.
+  ///
+  /// In es, this message translates to:
+  /// **'MOCK'**
+  String get supportCaptchaMockBadge;
+
+  /// Botón de envío del formulario.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar solicitud'**
+  String get supportSubmitButton;
+
+  /// Título de la pantalla de confirmación.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud enviada'**
+  String get supportConfirmationTitle;
+
+  /// Mensaje de confirmación tras el envío.
+  ///
+  /// In es, this message translates to:
+  /// **'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.'**
+  String get supportConfirmationMessage;
+
+  /// Botón para enviar otra solicitud.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar otra solicitud'**
+  String get supportConfirmationNewRequest;
+
+  /// Mensaje genérico de error de envío.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido enviar tu solicitud. Inténtalo de nuevo.'**
+  String get supportSubmissionError;
+
+  /// Error: nombre requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica tu nombre.'**
+  String get supportErrorNameRequired;
+
+  /// Error: email requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica tu correo electrónico.'**
+  String get supportErrorEmailRequired;
+
+  /// Error: email no válido.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un correo electrónico válido.'**
+  String get supportErrorEmailInvalid;
+
+  /// Error: confirmación de email requerida.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma tu correo electrónico.'**
+  String get supportErrorEmailConfirmRequired;
+
+  /// Error: emails no coinciden.
+  ///
+  /// In es, this message translates to:
+  /// **'Los correos no coinciden.'**
+  String get supportErrorEmailMismatch;
+
+  /// Error: asunto requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica un asunto.'**
+  String get supportErrorSubjectRequired;
+
+  /// Error: asunto demasiado largo.
+  ///
+  /// In es, this message translates to:
+  /// **'El asunto no puede superar los 100 caracteres.'**
+  String get supportErrorSubjectTooLong;
+
+  /// Error: descripción requerida.
+  ///
+  /// In es, this message translates to:
+  /// **'Describe tu solicitud.'**
+  String get supportErrorDescriptionRequired;
+
+  /// Error: descripción demasiado larga.
+  ///
+  /// In es, this message translates to:
+  /// **'La descripción supera el límite permitido.'**
+  String get supportErrorDescriptionTooLong;
+
+  /// Error: consentimiento requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes autorizar el tratamiento de tus datos.'**
+  String get supportErrorConsentRequired;
+
+  /// Error: captcha requerido.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma que no eres un robot.'**
+  String get supportErrorCaptchaRequired;
+
+  /// CIP — título del bloque destacado de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta sanitaria (CIP)'**
+  String get cipCardTitle;
+
+  /// CIP — tooltip del botón copiar al portapapeles.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar CIP'**
+  String get cipCardCopyTooltip;
+
+  /// CIP — confirmación tras copiar el código.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP copiado al portapapeles'**
+  String get cipCardCopied;
+
+  /// CIP — leyenda obligatoria de sólo lectura (TASK-71).
+  ///
+  /// In es, this message translates to:
+  /// **'Sólo lectura — la tarjeta sanitaria no es descargable desde la app.'**
+  String get cipCardReadOnlySubtitle;
+
+  /// CIP — gap de contrato visible en diseño (TASK-27 / TASK-32).
+  ///
+  /// In es, this message translates to:
+  /// **'Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.'**
+  String get cipCardContractGap;
+
+  /// CIP — mensaje cuando no hay CIP disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no hay tarjeta sanitaria asociada a tu perfil.'**
+  String get cipCardEmpty;
+
+  /// CIP — mensaje de error genérico.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tu tarjeta sanitaria.'**
+  String get cipCardError;
+
+  /// CIP — mensaje de error de parseo (TASK-32).
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido leer la respuesta de la tarjeta sanitaria.'**
+  String get cipCardParseError;
+
+  /// Home — título de la superficie destacada de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get saludSurfaceTitle;
+
+  /// Home — CTA de la superficie de salud que lleva a la agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver agenda'**
+  String get saludSurfaceCta;
+
+  /// Resumen de próximos eventos — título compartido entre home y agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos eventos'**
+  String get homeUpcomingEventsTitle;
+
+  /// Resumen de próximos eventos — mensaje cuando no hay eventos.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes eventos próximos.'**
+  String get homeUpcomingEventsEmpty;
+
   /// Casework — título del workspace.
   ///
   /// In es, this message translates to:
@@ -1675,6 +2017,360 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'El detalle real se habilita en STORY-35 / STORY-36.'**
   String get caseworkItemDetailPlaceholderPending;
+
+  /// Título de la pantalla de catálogo de carnets digitales (STORY-48).
+  ///
+  /// In es, this message translates to:
+  /// **'Mis carnets digitales'**
+  String get digitalCardsPageTitle;
+
+  /// Carnets — etiqueta del tipo familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de familia numerosa'**
+  String get digitalCardsTypeFamiliaNumerosa;
+
+  /// Carnets — etiqueta del tipo carnet joven.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet joven'**
+  String get digitalCardsTypeJoven;
+
+  /// Carnets — etiqueta del tipo discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de discapacidad'**
+  String get digitalCardsTypeDiscapacidad;
+
+  /// Carnets — badge para estado disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible'**
+  String get digitalCardsStatusAvailable;
+
+  /// Carnets — badge para estado no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'No vigente'**
+  String get digitalCardsStatusNotValid;
+
+  /// Carnets — badge para estado no descargable.
+  ///
+  /// In es, this message translates to:
+  /// **'No descargable'**
+  String get digitalCardsStatusNotDownloadable;
+
+  /// Carnets — badge para estado no disponible / sin datos.
+  ///
+  /// In es, this message translates to:
+  /// **'No disponible'**
+  String get digitalCardsStatusNotAvailable;
+
+  /// Carnets — mensaje explícito para el estado no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'Este carnet no está vigente. No es posible obtener QR, PKPASS ni PDF.'**
+  String get digitalCardsMessageNotValid;
+
+  /// Carnets — mensaje explícito para el estado no descargable.
+  ///
+  /// In es, this message translates to:
+  /// **'Este carnet no es descargable en este momento.'**
+  String get digitalCardsMessageNotDownloadable;
+
+  /// Carnets — mensaje explícito para el estado no disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes este carnet disponible.'**
+  String get digitalCardsMessageNotAvailable;
+
+  /// Carnets — acción para mostrar el código QR.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver QR'**
+  String get digitalCardsActionQr;
+
+  /// Carnets — acción para añadir el carnet a la cartera (PKPASS).
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir a Wallet'**
+  String get digitalCardsActionPkpass;
+
+  /// Carnets — acción para descargar el PDF.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar PDF'**
+  String get digitalCardsActionPdf;
+
+  /// Carnets — mensaje stub mientras TASK-53 cablea las descargas reales.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible próximamente.'**
+  String get digitalCardsActionComingSoon;
+
+  /// Carnets — estado vacío del catálogo.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no tienes carnets digitales asociados.'**
+  String get digitalCardsEmptyMessage;
+
+  /// Carnets — estado de error del catálogo.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus carnets digitales.'**
+  String get digitalCardsErrorMessage;
+
+  /// Carnets — título del mini-card CIP de sólo lectura (TASK-71).
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta sanitaria (CIP)'**
+  String get digitalCardsCipMiniTitle;
+
+  /// Carnets — subtítulo que indica que la tarjeta sanitaria es de sólo lectura.
+  ///
+  /// In es, this message translates to:
+  /// **'Sólo lectura'**
+  String get digitalCardsCipMiniReadOnly;
+
+  /// Carnets — CTA para abrir la tarjeta sanitaria en la pantalla de salud (STORY-31).
+  ///
+  /// In es, this message translates to:
+  /// **'Ver tarjeta sanitaria'**
+  String get digitalCardsCipMiniOpenAction;
+
+  /// Personalization — title of the hechos vitales selection screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis hechos vitales'**
+  String get lifeEventsTitle;
+
+  /// Personalization — descriptive header on the hechos vitales screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.'**
+  String get lifeEventsHeaderDescription;
+
+  /// Personalization — explicit save button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get lifeEventsSaveAction;
+
+  /// Personalization — reset preferences button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar preferencias'**
+  String get lifeEventsResetAction;
+
+  /// Personalization — confirmation dialog title for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar tus preferencias'**
+  String get lifeEventsResetConfirmTitle;
+
+  /// Personalization — confirmation dialog body for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.'**
+  String get lifeEventsResetConfirmBody;
+
+  /// Personalization — confirm reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar'**
+  String get lifeEventsResetConfirm;
+
+  /// Personalization — cancel reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get lifeEventsResetCancel;
+
+  /// Personalization — snackbar after a successful save.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus preferencias se han guardado correctamente.'**
+  String get lifeEventsSavedFeedback;
+
+  /// Personalization — snackbar after a save / reset failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido guardar tus preferencias. Inténtalo de nuevo.'**
+  String get lifeEventsErrorFeedback;
+
+  /// Personalization — error state when the catalog fails to load.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los hechos vitales.'**
+  String get lifeEventsLoadError;
+
+  /// Personalization — empty state for the catalog.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay hechos vitales disponibles en este momento.'**
+  String get lifeEventsEmpty;
+
+  /// Personalization — familia category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Familia'**
+  String get lifeEventsCategoryFamilia;
+
+  /// Personalization — salud category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get lifeEventsCategorySalud;
+
+  /// Personalization — empleo category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get lifeEventsCategoryEmpleo;
+
+  /// Personalization — vivienda category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Vivienda'**
+  String get lifeEventsCategoryVivienda;
+
+  /// Personalization — educación category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get lifeEventsCategoryEducacion;
+
+  /// Data consent — title of the citizen authorizations screen (STORY-55).
+  ///
+  /// In es, this message translates to:
+  /// **'Mis autorizaciones'**
+  String get dataConsentTitle;
+
+  /// Data consent — descriptive header on the authorizations screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona qué datos pueden utilizarse para ofrecerte servicios y recomendaciones personalizadas. Puedes cambiar tu decisión en cualquier momento.'**
+  String get dataConsentHeaderDescription;
+
+  /// Data consent — explicit save button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get dataConsentSaveAction;
+
+  /// Data consent — revoke-all button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar todas las autorizaciones'**
+  String get dataConsentRevokeAction;
+
+  /// Data consent — confirmation dialog title for revoke-all.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar tus autorizaciones'**
+  String get dataConsentRevokeConfirmTitle;
+
+  /// Data consent — confirmation dialog body for revoke-all.
+  ///
+  /// In es, this message translates to:
+  /// **'Se eliminarán todas tus autorizaciones y dejaremos de personalizar contenidos hasta que vuelvas a aceptarlas.'**
+  String get dataConsentRevokeConfirmBody;
+
+  /// Data consent — confirm revoke button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar'**
+  String get dataConsentRevokeConfirm;
+
+  /// Data consent — cancel revoke button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get dataConsentRevokeCancel;
+
+  /// Data consent — snackbar after a successful save / revoke.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus autorizaciones se han actualizado correctamente.'**
+  String get dataConsentSavedFeedback;
+
+  /// Data consent — snackbar after a save / revoke failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido actualizar tus autorizaciones. Inténtalo de nuevo.'**
+  String get dataConsentErrorFeedback;
+
+  /// Data consent — error state when the catalog fails to load.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus autorizaciones.'**
+  String get dataConsentLoadError;
+
+  /// Data consent — empty state for the catalog.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay autorizaciones disponibles en este momento.'**
+  String get dataConsentEmpty;
+
+  /// Data consent — JCCM authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de la Junta de Comunidades de Castilla-La Mancha'**
+  String get dataConsentTypeJccmTitle;
+
+  /// Data consent — JCCM authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite que la JCCM utilice tus datos administrativos para ofrecerte trámites y servicios personalizados.'**
+  String get dataConsentTypeJccmSubtitle;
+
+  /// Data consent — interoperability authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de otras administraciones'**
+  String get dataConsentTypeOtrasAdminTitle;
+
+  /// Data consent — interoperability authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite consultar datos de otras administraciones públicas para evitar que tengas que aportarlos manualmente.'**
+  String get dataConsentTypeOtrasAdminSubtitle;
+
+  /// Data consent — profiling authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfilado para recomendaciones'**
+  String get dataConsentTypePerfiladoTitle;
+
+  /// Data consent — profiling authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite analizar tu actividad para recomendarte trámites, ayudas y contenidos relevantes.'**
+  String get dataConsentTypePerfiladoSubtitle;
+
+  /// Data consent — privacy reference section title.
+  ///
+  /// In es, this message translates to:
+  /// **'Información de protección de datos'**
+  String get dataConsentPrivacyReferenceTitle;
+
+  /// Data consent — privacy reference body.
+  ///
+  /// In es, this message translates to:
+  /// **'Estas autorizaciones se basan en la información de protección de datos aceptada al iniciar sesión.'**
+  String get dataConsentPrivacyReferenceBody;
+
+  /// Data consent — link CTA pointing to the onboarding consent screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver información de protección de datos'**
+  String get dataConsentPrivacyReferenceCta;
+
+  /// Data consent — CTA label that takes the citizen from life-events to the consent screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis autorizaciones'**
+  String get dataConsentNavCta;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

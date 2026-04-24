@@ -9,7 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/agenda_notifier.
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/agenda_category_ui.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-/// Detail page for a single [AgendaEvent] (STORY-29).
+/// Detail page for a single [AgendaEvent] (STORY-29 / STORY-30).
 ///
 /// Reads the current snapshot from [agendaProvider] — when the
 /// event is missing (snapshot mismatch, deep-link to a stale id) the
@@ -41,8 +41,7 @@ class AgendaEventDetailPage extends ConsumerWidget {
       ),
       body: asyncState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (final _, final stackTrace) =>
-            EmptyStateWidget(message: l10n.agendaDetailNotFound),
+        error: (final _, final stackTrace) => EmptyStateWidget(message: l10n.agendaDetailNotFound),
         data: (final state) {
           final event = state.snapshot.events.firstWhere(
             (final e) => e.id == eventId,
@@ -76,9 +75,7 @@ class _DetailBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final title = event.rawTitle ?? event.titleKey ?? '';
-    final endLabel = event.endsAt != null
-        ? ' – ${event.endsAt!.formatHhMm()}'
-        : '';
+    final endLabel = event.endsAt != null ? ' – ${event.endsAt!.formatHhMm()}' : '';
     return ListView(
       padding: const EdgeInsets.all(AppDimensions.space16),
       children: [
@@ -110,6 +107,24 @@ class _DetailBody extends StatelessWidget {
           label: l10n.agendaDetailWhen,
           value: '${event.startsAt.formatDdMmYyyyHhMm()}$endLabel',
         ),
+        if (event.tipo != null && event.tipo!.isNotEmpty)
+          _DetailRow(
+            icon: Icons.local_activity_outlined,
+            label: l10n.agendaDetailTipo,
+            value: event.tipo!,
+          ),
+        if (event.centro != null && event.centro!.isNotEmpty)
+          _DetailRow(
+            icon: Icons.apartment_outlined,
+            label: l10n.agendaDetailCentro,
+            value: event.centro!,
+          ),
+        if (event.profesional != null && event.profesional!.isNotEmpty)
+          _DetailRow(
+            icon: Icons.person_outline,
+            label: l10n.agendaDetailProfesional,
+            value: event.profesional!,
+          ),
         if (event.location != null && event.location!.isNotEmpty)
           _DetailRow(
             icon: Icons.place_outlined,
@@ -119,8 +134,31 @@ class _DetailBody extends StatelessWidget {
         if (event.description != null && event.description!.isNotEmpty) ...[
           const SizedBox(height: AppDimensions.space16),
           Text(
+            l10n.agendaDetailDescription,
+            style: theme.textTheme.labelLarge,
+          ),
+          const SizedBox(height: AppDimensions.space4),
+          Text(
             event.description!,
             style: theme.textTheme.bodyMedium,
+          ),
+        ],
+        if (event.justificanteUrl != null) ...[
+          const SizedBox(height: AppDimensions.space24),
+          // TODO(TASK-53): route the justificante through ExternalLinkCatalog
+          // when the URL is allow-listed; until then show a placeholder
+          // snackbar so the CTA stays inert but discoverable.
+          OutlinedButton.icon(
+            key: const ValueKey('agenda-justificante-cta'),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(l10n.agendaJustificanteUnavailable),
+                ),
+              );
+            },
+            icon: const Icon(Icons.picture_as_pdf_outlined),
+            label: Text(l10n.agendaDetailJustificante),
           ),
         ],
       ],

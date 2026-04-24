@@ -31,8 +31,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ConsentPage extends ConsumerWidget {
   const ConsentPage({super.key});
 
-  static const String _privacyPolicyUrl =
-      'https://www.jccm.es/proteccion-datos';
+  static const String _privacyPolicyUrl = 'https://www.jccm.es/proteccion-datos';
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -106,8 +105,7 @@ class ConsentPage extends ConsumerWidget {
                         ),
                         child: Text(
                           consentAsync.error?.toString() ?? '',
-                          style: textTheme.bodySmall
-                              ?.copyWith(color: AppColors.error),
+                          style: textTheme.bodySmall?.copyWith(color: AppColors.error),
                           textAlign: TextAlign.center,
                         ),
                       )
@@ -150,8 +148,7 @@ class _ConsentHeader extends StatelessWidget {
               height: 72,
               decoration: BoxDecoration(
                 color: AppColors.primaryContainer,
-                borderRadius:
-                    BorderRadius.circular(AppDimensions.radiusXLarge),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXLarge),
               ),
               child: const Icon(
                 Icons.account_balance_outlined,
@@ -217,10 +214,10 @@ class _PrivacyPolicyLink extends StatelessWidget {
               Text(
                 l10n.consentPagePrivacyLink,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.primary,
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  color: AppColors.primary,
+                  decoration: TextDecoration.underline,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -260,8 +257,7 @@ class _ConsentActions extends StatelessWidget {
             label: l10n.consentAcceptButton,
             semanticsLabel: l10n.consentAcceptButton,
             isLoading: isLoading,
-            onPressed:
-                isLoading ? null : () => unawaited(ref.read(consentProvider.notifier).accept()),
+            onPressed: isLoading ? null : () => unawaited(ref.read(consentProvider.notifier).accept()),
           ),
           const SizedBox(height: AppDimensions.space12),
           AppButton(
@@ -269,8 +265,7 @@ class _ConsentActions extends StatelessWidget {
             semanticsLabel: l10n.consentRejectButton,
             variant: AppButtonVariant.outlined,
             isLoading: isLoading,
-            onPressed:
-                isLoading ? null : () => unawaited(ref.read(consentProvider.notifier).reject()),
+            onPressed: isLoading ? null : () => unawaited(ref.read(consentProvider.notifier).reject()),
           ),
         ],
       ),

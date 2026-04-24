@@ -17,8 +17,7 @@ void main() {
         expedienteNumber: '\t',
         registroNumber: '  ',
       );
-      expect(q.validate().generalError,
-          CaseworkSearchValidationError.noInputProvided);
+      expect(q.validate().generalError, CaseworkSearchValidationError.noInputProvided);
     });
 
     test('accepts a valid NIF', () {
@@ -41,12 +40,10 @@ void main() {
       const q = CaseworkSearchQuery(identification: '1234');
       final v = q.validate();
       expect(v.isValid, isFalse);
-      expect(v.errors[CaseworkSearchField.identification],
-          CaseworkSearchValidationError.invalidIdentification);
+      expect(v.errors[CaseworkSearchField.identification], CaseworkSearchValidationError.invalidIdentification);
     });
 
-    test('accepts an expediente number with letters/digits/dashes/slashes',
-        () {
+    test('accepts an expediente number with letters/digits/dashes/slashes', () {
       const q = CaseworkSearchQuery(expedienteNumber: 'EXP/2025/00123');
       expect(q.validate().isValid, isTrue);
       expect(q.firstFilledField, CaseworkSearchField.expedienteNumber);
@@ -56,8 +53,7 @@ void main() {
       const q = CaseworkSearchQuery(expedienteNumber: 'EXP 2025#1');
       final v = q.validate();
       expect(v.isValid, isFalse);
-      expect(v.errors[CaseworkSearchField.expedienteNumber],
-          CaseworkSearchValidationError.invalidNumberFormat);
+      expect(v.errors[CaseworkSearchField.expedienteNumber], CaseworkSearchValidationError.invalidNumberFormat);
     });
 
     test('accepts a registro number with the same alphabet', () {
@@ -66,8 +62,7 @@ void main() {
       expect(q.firstFilledField, CaseworkSearchField.registroNumber);
     });
 
-    test(
-        'identification takes precedence over the other fields when several '
+    test('identification takes precedence over the other fields when several '
         'are filled', () {
       const q = CaseworkSearchQuery(
         identification: '12345678Z',

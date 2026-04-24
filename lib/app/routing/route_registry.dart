@@ -30,6 +30,7 @@ abstract final class Routes {
   static const String legalNotice = '/legal/notice';
   static const String sitemap = '/sitemap';
   static const String help = '/help';
+  static const String supportForm = '/help/support';
 
   // ── Authenticated ─────────────────────────────────────────────────────────
   static const String home = '/home';
@@ -59,6 +60,10 @@ abstract final class Routes {
   // ── Consent ───────────────────────────────────────────────────────────────
   static const String consent = '/consent';
 
+  // ── Personalization ───────────────────────────────────────────────────────
+  /// Mis autorizaciones — citizen data-consent screen (STORY-55).
+  static const String preferencesConsent = '/preferences/consent';
+
   // ── Route sets for guard classification ───────────────────────────────────
 
   /// Paths that require an active session.
@@ -75,9 +80,9 @@ abstract final class Routes {
     employment,
     socialWelfare,
     stateAffairs,
+    preferencesConsent,
   };
 
   /// Returns true when [path] requires authentication.
-  static bool requiresAuth(final String path) =>
-      _authenticated.any(path.startsWith);
+  static bool requiresAuth(final String path) => _authenticated.any(path.startsWith);
 }

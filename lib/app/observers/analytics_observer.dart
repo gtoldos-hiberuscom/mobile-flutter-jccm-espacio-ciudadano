@@ -11,8 +11,7 @@ import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
 /// The observer delegates to [AnalyticsService] which is itself a no-op in
 /// release builds until a real SDK is wired up in a future sprint.
 final class AnalyticsObserver extends NavigatorObserver {
-  AnalyticsObserver({required final AnalyticsService analyticsService})
-      : _analytics = analyticsService;
+  AnalyticsObserver({required final AnalyticsService analyticsService}) : _analytics = analyticsService;
 
   final AnalyticsService _analytics;
 

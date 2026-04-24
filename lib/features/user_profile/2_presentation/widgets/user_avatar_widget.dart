@@ -13,7 +13,7 @@ class UserAvatarWidget extends StatelessWidget {
   final double radius;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Semantics(
       label: initials,
       child: CircleAvatar(

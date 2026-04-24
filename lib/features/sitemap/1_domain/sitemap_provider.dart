@@ -11,5 +11,4 @@ part 'sitemap_provider.g.dart';
 /// authoritative — STORY-62 must not re-hard-code outbound URLs that
 /// already live in `ExternalLinkCatalog` (STORY-28 contract).
 @Riverpod(keepAlive: true)
-SitemapRepository sitemapRepository(final Ref ref) =>
-    SitemapRepositoryImpl(catalog: ref.watch(externalLinkCatalogProvider));
+SitemapRepository sitemapRepository(final Ref ref) => SitemapRepositoryImpl(catalog: ref.watch(externalLinkCatalogProvider));

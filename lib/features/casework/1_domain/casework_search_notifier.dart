@@ -42,13 +42,12 @@ final class CaseworkSearchState {
     final CaseworkSearchValidation? validation,
     final CaseworkSearchResult? result,
     final bool? showValidation,
-  }) =>
-      CaseworkSearchState(
-        query: query ?? this.query,
-        validation: validation ?? this.validation,
-        result: result ?? this.result,
-        showValidation: showValidation ?? this.showValidation,
-      );
+  }) => CaseworkSearchState(
+    query: query ?? this.query,
+    validation: validation ?? this.validation,
+    result: result ?? this.result,
+    showValidation: showValidation ?? this.showValidation,
+  );
 }
 
 /// Owns the casework search screen state (STORY-39).
@@ -66,12 +65,9 @@ class CaseworkSearchNotifier extends _$CaseworkSearchNotifier {
 
   void updateField(final CaseworkSearchField field, final String value) {
     final query = switch (field) {
-      CaseworkSearchField.identification =>
-        state.query.copyWith(identification: value),
-      CaseworkSearchField.expedienteNumber =>
-        state.query.copyWith(expedienteNumber: value),
-      CaseworkSearchField.registroNumber =>
-        state.query.copyWith(registroNumber: value),
+      CaseworkSearchField.identification => state.query.copyWith(identification: value),
+      CaseworkSearchField.expedienteNumber => state.query.copyWith(expedienteNumber: value),
+      CaseworkSearchField.registroNumber => state.query.copyWith(registroNumber: value),
     };
     state = state.copyWith(
       query: query,

@@ -14,5 +14,4 @@ HelpRepository helpRepository(final Ref ref) => const HelpRepositoryImpl();
 
 /// Synchronous provider exposing the help-center [HelpContent].
 @Riverpod(keepAlive: true)
-HelpContent helpContent(final Ref ref) =>
-    ref.watch(helpRepositoryProvider).loadContent();
+HelpContent helpContent(final Ref ref) => ref.watch(helpRepositoryProvider).loadContent();

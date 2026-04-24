@@ -66,47 +66,47 @@ class AppButton extends StatelessWidget {
             child: CircularProgressIndicator(strokeWidth: 2),
           )
         : icon != null
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  icon!,
-                  const SizedBox(width: AppDimensions.space8),
-                  Text(label),
-                ],
-              )
-            : Text(label);
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              icon!,
+              const SizedBox(width: AppDimensions.space8),
+              Text(label),
+            ],
+          )
+        : Text(label);
 
     final Widget button = switch (variant) {
       AppButtonVariant.primary => ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(
-              AppDimensions.minTouchTarget,
-              AppDimensions.minTouchTarget,
-            ),
+        onPressed: isLoading ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(
+            AppDimensions.minTouchTarget,
+            AppDimensions.minTouchTarget,
           ),
-          child: child,
         ),
+        child: child,
+      ),
       AppButtonVariant.outlined => OutlinedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size(
-              AppDimensions.minTouchTarget,
-              AppDimensions.minTouchTarget,
-            ),
+        onPressed: isLoading ? null : onPressed,
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(
+            AppDimensions.minTouchTarget,
+            AppDimensions.minTouchTarget,
           ),
-          child: child,
         ),
+        child: child,
+      ),
       AppButtonVariant.text => TextButton(
-          onPressed: isLoading ? null : onPressed,
-          style: TextButton.styleFrom(
-            minimumSize: const Size(
-              AppDimensions.minTouchTarget,
-              AppDimensions.minTouchTarget,
-            ),
+        onPressed: isLoading ? null : onPressed,
+        style: TextButton.styleFrom(
+          minimumSize: const Size(
+            AppDimensions.minTouchTarget,
+            AppDimensions.minTouchTarget,
           ),
-          child: child,
         ),
+        child: child,
+      ),
     };
 
     return Semantics(

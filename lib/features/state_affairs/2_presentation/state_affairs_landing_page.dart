@@ -28,12 +28,10 @@ class StateAffairsLandingPage extends ConsumerStatefulWidget {
   const StateAffairsLandingPage({super.key});
 
   @override
-  ConsumerState<StateAffairsLandingPage> createState() =>
-      _StateAffairsLandingPageState();
+  ConsumerState<StateAffairsLandingPage> createState() => _StateAffairsLandingPageState();
 }
 
-class _StateAffairsLandingPageState
-    extends ConsumerState<StateAffairsLandingPage> {
+class _StateAffairsLandingPageState extends ConsumerState<StateAffairsLandingPage> {
   static const String _domainId = 'state_affairs';
   static const int _propertiesPageSize = 5;
 
@@ -48,9 +46,7 @@ class _StateAffairsLandingPageState
         return;
       }
       _viewedLogged = true;
-      ref
-          .read(analyticsServiceProvider)
-          .logEvent(const DomainLandingViewedEvent(domain: _domainId));
+      ref.read(analyticsServiceProvider).logEvent(const DomainLandingViewedEvent(domain: _domainId));
     });
   }
 
@@ -62,9 +58,7 @@ class _StateAffairsLandingPageState
     return Scaffold(
       appBar: AppBar(title: Text(l10n.stateAffairsTitle)),
       body: RefreshIndicator(
-        onRefresh: () => ref
-            .read(stateAffairsLandingProvider.notifier)
-            .refresh(),
+        onRefresh: () => ref.read(stateAffairsLandingProvider.notifier).refresh(),
         child: asyncSnapshot.when(
           loading: () => ListView(
             children: [
@@ -80,9 +74,7 @@ class _StateAffairsLandingPageState
                 height: MediaQuery.of(context).size.height * 0.5,
                 child: ErrorStateWidget(
                   message: l10n.domainGenericLoadError,
-                  onRetry: () => ref
-                      .read(stateAffairsLandingProvider.notifier)
-                      .refresh(),
+                  onRetry: () => ref.read(stateAffairsLandingProvider.notifier).refresh(),
                 ),
               ),
             ],
@@ -156,10 +148,12 @@ class _StateAffairsLandingPageState
             ),
           ),
         ),
-        const ExternalLinksSection(linkIds: <String>[
-          'sede_dgt',
-          'carpeta_ciudadana_age',
-        ]),
+        const ExternalLinksSection(
+          linkIds: <String>[
+            'sede_dgt',
+            'carpeta_ciudadana_age',
+          ],
+        ),
       ],
     );
   }
@@ -259,8 +253,7 @@ class _PropertiesCard extends StatelessWidget {
           hasMore: hasMore,
           onLoadMore: onLoadMore,
           padding: EdgeInsets.zero,
-          itemBuilder: (final context, final p, final index) =>
-              _PropertyTile(property: p),
+          itemBuilder: (final context, final p, final index) => _PropertyTile(property: p),
         );
     }
   }
@@ -281,13 +274,17 @@ class _PropertyTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(l10n.stateAffairsPropertiesTitularidad(property.titularidad)),
-            Text(l10n.stateAffairsPropertiesSurface(
-              property.superficieM2.toStringAsFixed(0),
-            )),
+            Text(
+              l10n.stateAffairsPropertiesSurface(
+                property.superficieM2.toStringAsFixed(0),
+              ),
+            ),
             if (property.referenciaCatastral != null)
-              Text(l10n.stateAffairsPropertiesReference(
-                property.referenciaCatastral!,
-              )),
+              Text(
+                l10n.stateAffairsPropertiesReference(
+                  property.referenciaCatastral!,
+                ),
+              ),
           ],
         ),
       ),

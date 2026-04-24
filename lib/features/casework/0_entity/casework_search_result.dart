@@ -40,31 +40,26 @@ final class CaseworkSearchResult {
 
   factory CaseworkSearchResult.searching({
     required final CaseworkSearchField field,
-  }) =>
-      CaseworkSearchResult(
-        status: CaseworkSearchStatus.searching,
-        executedField: field,
-      );
+  }) => CaseworkSearchResult(
+    status: CaseworkSearchStatus.searching,
+    executedField: field,
+  );
 
   factory CaseworkSearchResult.success({
     required final CaseworkSearchField field,
     required final List<CaseworkItem> items,
-  }) =>
-      CaseworkSearchResult(
-        status: items.isEmpty
-            ? CaseworkSearchStatus.noResults
-            : CaseworkSearchStatus.results,
-        items: items,
-        executedField: field,
-      );
+  }) => CaseworkSearchResult(
+    status: items.isEmpty ? CaseworkSearchStatus.noResults : CaseworkSearchStatus.results,
+    items: items,
+    executedField: field,
+  );
 
   factory CaseworkSearchResult.failure({
     required final CaseworkSearchField field,
-  }) =>
-      CaseworkSearchResult(
-        status: CaseworkSearchStatus.error,
-        executedField: field,
-      );
+  }) => CaseworkSearchResult(
+    status: CaseworkSearchStatus.error,
+    executedField: field,
+  );
 
   final CaseworkSearchStatus status;
   final List<CaseworkItem> items;

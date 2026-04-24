@@ -16,8 +16,7 @@ part 'external_links_provider.g.dart';
 /// happens here — presentation widgets must not import the
 /// `3_data/` implementation directly (canon §13).
 @Riverpod(keepAlive: true)
-ExternalLinkCatalog externalLinkCatalog(final Ref ref) =>
-    const ExternalLinkCatalogImpl();
+ExternalLinkCatalog externalLinkCatalog(final Ref ref) => const ExternalLinkCatalogImpl();
 
 /// Provides the application-wide [ExternalLinkLauncher].
 ///
@@ -25,9 +24,8 @@ ExternalLinkCatalog externalLinkCatalog(final Ref ref) =>
 /// override this provider with a fake implementation that does not touch
 /// the real `url_launcher` plugin.
 @Riverpod(keepAlive: true)
-ExternalLinkLauncher externalLinkLauncher(final Ref ref) =>
-    UrlLauncherExternalLinkLauncher(
-      catalog: ref.watch(externalLinkCatalogProvider),
-      analytics: ref.watch(analyticsServiceProvider),
-      logger: ref.watch(appLoggerProvider),
-    );
+ExternalLinkLauncher externalLinkLauncher(final Ref ref) => UrlLauncherExternalLinkLauncher(
+  catalog: ref.watch(externalLinkCatalogProvider),
+  analytics: ref.watch(analyticsServiceProvider),
+  logger: ref.watch(appLoggerProvider),
+);

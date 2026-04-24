@@ -11,10 +11,10 @@ import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 ///
 /// Use when a widget is intrinsically smaller than 48 dp (e.g. icons, chips).
 Widget withMinTouchTarget(final Widget child) => SizedBox(
-      width: AppDimensions.minTouchTarget,
-      height: AppDimensions.minTouchTarget,
-      child: child,
-    );
+  width: AppDimensions.minTouchTarget,
+  height: AppDimensions.minTouchTarget,
+  child: child,
+);
 
 /// Wraps [child] in a [Semantics] node with the given [label] and optional
 /// [hint] text.
@@ -27,16 +27,14 @@ Widget withSemantics({
   final String? hint,
   final bool button = false,
   final bool excludeSemantics = false,
-}) =>
-    Semantics(
-      label: label,
-      hint: hint,
-      button: button,
-      excludeSemantics: excludeSemantics,
-      child: child,
-    );
+}) => Semantics(
+  label: label,
+  hint: hint,
+  button: button,
+  excludeSemantics: excludeSemantics,
+  child: child,
+);
 
 /// Returns an [ExcludeSemantics] wrapper for decorative / redundant widgets
 /// that should be invisible to screen readers.
-Widget excludeFromSemantics(final Widget child) =>
-    ExcludeSemantics(child: child);
+Widget excludeFromSemantics(final Widget child) => ExcludeSemantics(child: child);

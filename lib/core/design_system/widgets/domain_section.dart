@@ -47,7 +47,7 @@ class DomainSection extends StatelessWidget {
               ),
               if (infoTooltip != null) ...[
                 Tooltip(
-                  message: infoTooltip!,
+                  message: infoTooltip,
                   child: Icon(
                     Icons.info_outline,
                     size: AppDimensions.iconSmall,

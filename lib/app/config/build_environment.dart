@@ -2,7 +2,8 @@
 enum BuildEnvironment {
   development,
   preproduction,
-  production;
+  production
+  ;
 
   /// Returns true when running in a non-production environment.
   bool get isDebugCapable => this != BuildEnvironment.production;

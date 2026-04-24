@@ -28,13 +28,7 @@ final class LegalDocument {
   final String bodyMarkdown;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is LegalDocument &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          titleKey == other.titleKey &&
-          bodyMarkdown == other.bodyMarkdown;
+  bool operator ==(final Object other) => identical(this, other) || other is LegalDocument && runtimeType == other.runtimeType && id == other.id && titleKey == other.titleKey && bodyMarkdown == other.bodyMarkdown;
 
   @override
   int get hashCode => Object.hash(id, titleKey, bodyMarkdown);

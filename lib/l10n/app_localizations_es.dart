@@ -477,6 +477,45 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaDetailWhen => 'Fecha';
 
   @override
+  String get agendaDetailCentro => 'Centro';
+
+  @override
+  String get agendaDetailProfesional => 'Profesional';
+
+  @override
+  String get agendaDetailTipo => 'Tipo';
+
+  @override
+  String get agendaDetailDescription => 'Descripción';
+
+  @override
+  String get agendaDetailJustificante => 'Ver justificante de asistencia';
+
+  @override
+  String get agendaJustificanteUnavailable => 'El justificante se podrá abrir cuando se habilite el enlace externo.';
+
+  @override
+  String get agendaTileExpand => 'Ver más detalles';
+
+  @override
+  String get agendaTileCollapse => 'Ocultar detalles';
+
+  @override
+  String get agendaTileOpenDetail => 'Abrir detalle completo';
+
+  @override
+  String get agendaParseErrorTitle => 'No hemos podido leer tu agenda';
+
+  @override
+  String get agendaParseErrorDetail => 'Hubo un problema al interpretar la respuesta del servicio. Vuelve a intentarlo en unos minutos.';
+
+  @override
+  String get agendaParseErrorRetry => 'Intentar de nuevo';
+
+  @override
+  String get agendaPartialBanner => 'Algunos eventos no se han podido cargar. Mostramos los disponibles.';
+
+  @override
   String get stateAffairsTitle => 'Estado y otros temas de interés';
 
   @override
@@ -718,6 +757,138 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
 
   @override
+  String get supportFormTitle => 'Soporte técnico';
+
+  @override
+  String get supportFormIntro => 'Cuéntanos qué ha pasado. Nuestro equipo te responderá por correo electrónico.';
+
+  @override
+  String get supportCtaFromHelp => 'Contactar con soporte';
+
+  @override
+  String get supportFieldName => 'Nombre';
+
+  @override
+  String get supportFieldEmail => 'Correo electrónico';
+
+  @override
+  String get supportFieldEmailConfirm => 'Confirmación del correo electrónico';
+
+  @override
+  String get supportFieldSubject => 'Asunto';
+
+  @override
+  String get supportFieldDescription => 'Descripción';
+
+  @override
+  String get supportAttachmentLabel => 'Adjunto (opcional)';
+
+  @override
+  String get supportAttachmentHint => 'Puedes adjuntar un único archivo (capturas, documentos).';
+
+  @override
+  String get supportAttachmentPick => 'Seleccionar archivo';
+
+  @override
+  String get supportAttachmentChange => 'Cambiar archivo';
+
+  @override
+  String get supportAttachmentRemove => 'Quitar adjunto';
+
+  @override
+  String get supportConsentLabel => 'Autorizo el tratamiento de mis datos para gestionar mi solicitud.';
+
+  @override
+  String get supportCaptchaLabel => 'No soy un robot';
+
+  @override
+  String get supportCaptchaMockBadge => 'MOCK';
+
+  @override
+  String get supportSubmitButton => 'Enviar solicitud';
+
+  @override
+  String get supportConfirmationTitle => 'Solicitud enviada';
+
+  @override
+  String get supportConfirmationMessage => 'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.';
+
+  @override
+  String get supportConfirmationNewRequest => 'Enviar otra solicitud';
+
+  @override
+  String get supportSubmissionError => 'No hemos podido enviar tu solicitud. Inténtalo de nuevo.';
+
+  @override
+  String get supportErrorNameRequired => 'Indica tu nombre.';
+
+  @override
+  String get supportErrorEmailRequired => 'Indica tu correo electrónico.';
+
+  @override
+  String get supportErrorEmailInvalid => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get supportErrorEmailConfirmRequired => 'Confirma tu correo electrónico.';
+
+  @override
+  String get supportErrorEmailMismatch => 'Los correos no coinciden.';
+
+  @override
+  String get supportErrorSubjectRequired => 'Indica un asunto.';
+
+  @override
+  String get supportErrorSubjectTooLong => 'El asunto no puede superar los 100 caracteres.';
+
+  @override
+  String get supportErrorDescriptionRequired => 'Describe tu solicitud.';
+
+  @override
+  String get supportErrorDescriptionTooLong => 'La descripción supera el límite permitido.';
+
+  @override
+  String get supportErrorConsentRequired => 'Debes autorizar el tratamiento de tus datos.';
+
+  @override
+  String get supportErrorCaptchaRequired => 'Confirma que no eres un robot.';
+
+  @override
+  String get cipCardTitle => 'Tarjeta sanitaria (CIP)';
+
+  @override
+  String get cipCardCopyTooltip => 'Copiar CIP';
+
+  @override
+  String get cipCardCopied => 'CIP copiado al portapapeles';
+
+  @override
+  String get cipCardReadOnlySubtitle => 'Sólo lectura — la tarjeta sanitaria no es descargable desde la app.';
+
+  @override
+  String get cipCardContractGap => 'Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.';
+
+  @override
+  String get cipCardEmpty => 'Aún no hay tarjeta sanitaria asociada a tu perfil.';
+
+  @override
+  String get cipCardError => 'No hemos podido cargar tu tarjeta sanitaria.';
+
+  @override
+  String get cipCardParseError => 'No hemos podido leer la respuesta de la tarjeta sanitaria.';
+
+  @override
+  String get saludSurfaceTitle => 'Salud';
+
+  @override
+  String get saludSurfaceCta => 'Ver agenda';
+
+  @override
+  String get homeUpcomingEventsTitle => 'Próximos eventos';
+
+  @override
+  String get homeUpcomingEventsEmpty => 'No tienes eventos próximos.';
+
+  @override
   String get caseworkWorkspaceTitle => 'Mis gestiones';
 
   @override
@@ -848,4 +1019,181 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get caseworkItemDetailPlaceholderPending => 'El detalle real se habilita en STORY-35 / STORY-36.';
+
+  @override
+  String get digitalCardsPageTitle => 'Mis carnets digitales';
+
+  @override
+  String get digitalCardsTypeFamiliaNumerosa => 'Carnet de familia numerosa';
+
+  @override
+  String get digitalCardsTypeJoven => 'Carnet joven';
+
+  @override
+  String get digitalCardsTypeDiscapacidad => 'Carnet de discapacidad';
+
+  @override
+  String get digitalCardsStatusAvailable => 'Disponible';
+
+  @override
+  String get digitalCardsStatusNotValid => 'No vigente';
+
+  @override
+  String get digitalCardsStatusNotDownloadable => 'No descargable';
+
+  @override
+  String get digitalCardsStatusNotAvailable => 'No disponible';
+
+  @override
+  String get digitalCardsMessageNotValid => 'Este carnet no está vigente. No es posible obtener QR, PKPASS ni PDF.';
+
+  @override
+  String get digitalCardsMessageNotDownloadable => 'Este carnet no es descargable en este momento.';
+
+  @override
+  String get digitalCardsMessageNotAvailable => 'No tienes este carnet disponible.';
+
+  @override
+  String get digitalCardsActionQr => 'Ver QR';
+
+  @override
+  String get digitalCardsActionPkpass => 'Añadir a Wallet';
+
+  @override
+  String get digitalCardsActionPdf => 'Descargar PDF';
+
+  @override
+  String get digitalCardsActionComingSoon => 'Disponible próximamente.';
+
+  @override
+  String get digitalCardsEmptyMessage => 'Aún no tienes carnets digitales asociados.';
+
+  @override
+  String get digitalCardsErrorMessage => 'No hemos podido cargar tus carnets digitales.';
+
+  @override
+  String get digitalCardsCipMiniTitle => 'Tarjeta sanitaria (CIP)';
+
+  @override
+  String get digitalCardsCipMiniReadOnly => 'Sólo lectura';
+
+  @override
+  String get digitalCardsCipMiniOpenAction => 'Ver tarjeta sanitaria';
+
+  @override
+  String get lifeEventsTitle => 'Mis hechos vitales';
+
+  @override
+  String get lifeEventsHeaderDescription => 'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.';
+
+  @override
+  String get lifeEventsSaveAction => 'Guardar';
+
+  @override
+  String get lifeEventsResetAction => 'Borrar preferencias';
+
+  @override
+  String get lifeEventsResetConfirmTitle => 'Borrar tus preferencias';
+
+  @override
+  String get lifeEventsResetConfirmBody => 'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.';
+
+  @override
+  String get lifeEventsResetConfirm => 'Borrar';
+
+  @override
+  String get lifeEventsResetCancel => 'Cancelar';
+
+  @override
+  String get lifeEventsSavedFeedback => 'Tus preferencias se han guardado correctamente.';
+
+  @override
+  String get lifeEventsErrorFeedback => 'No hemos podido guardar tus preferencias. Inténtalo de nuevo.';
+
+  @override
+  String get lifeEventsLoadError => 'No hemos podido cargar los hechos vitales.';
+
+  @override
+  String get lifeEventsEmpty => 'No hay hechos vitales disponibles en este momento.';
+
+  @override
+  String get lifeEventsCategoryFamilia => 'Familia';
+
+  @override
+  String get lifeEventsCategorySalud => 'Salud';
+
+  @override
+  String get lifeEventsCategoryEmpleo => 'Empleo';
+
+  @override
+  String get lifeEventsCategoryVivienda => 'Vivienda';
+
+  @override
+  String get lifeEventsCategoryEducacion => 'Educación';
+
+  @override
+  String get dataConsentTitle => 'Mis autorizaciones';
+
+  @override
+  String get dataConsentHeaderDescription => 'Gestiona qué datos pueden utilizarse para ofrecerte servicios y recomendaciones personalizadas. Puedes cambiar tu decisión en cualquier momento.';
+
+  @override
+  String get dataConsentSaveAction => 'Guardar';
+
+  @override
+  String get dataConsentRevokeAction => 'Revocar todas las autorizaciones';
+
+  @override
+  String get dataConsentRevokeConfirmTitle => 'Revocar tus autorizaciones';
+
+  @override
+  String get dataConsentRevokeConfirmBody => 'Se eliminarán todas tus autorizaciones y dejaremos de personalizar contenidos hasta que vuelvas a aceptarlas.';
+
+  @override
+  String get dataConsentRevokeConfirm => 'Revocar';
+
+  @override
+  String get dataConsentRevokeCancel => 'Cancelar';
+
+  @override
+  String get dataConsentSavedFeedback => 'Tus autorizaciones se han actualizado correctamente.';
+
+  @override
+  String get dataConsentErrorFeedback => 'No hemos podido actualizar tus autorizaciones. Inténtalo de nuevo.';
+
+  @override
+  String get dataConsentLoadError => 'No hemos podido cargar tus autorizaciones.';
+
+  @override
+  String get dataConsentEmpty => 'No hay autorizaciones disponibles en este momento.';
+
+  @override
+  String get dataConsentTypeJccmTitle => 'Datos de la Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get dataConsentTypeJccmSubtitle => 'Permite que la JCCM utilice tus datos administrativos para ofrecerte trámites y servicios personalizados.';
+
+  @override
+  String get dataConsentTypeOtrasAdminTitle => 'Datos de otras administraciones';
+
+  @override
+  String get dataConsentTypeOtrasAdminSubtitle => 'Permite consultar datos de otras administraciones públicas para evitar que tengas que aportarlos manualmente.';
+
+  @override
+  String get dataConsentTypePerfiladoTitle => 'Perfilado para recomendaciones';
+
+  @override
+  String get dataConsentTypePerfiladoSubtitle => 'Permite analizar tu actividad para recomendarte trámites, ayudas y contenidos relevantes.';
+
+  @override
+  String get dataConsentPrivacyReferenceTitle => 'Información de protección de datos';
+
+  @override
+  String get dataConsentPrivacyReferenceBody => 'Estas autorizaciones se basan en la información de protección de datos aceptada al iniciar sesión.';
+
+  @override
+  String get dataConsentPrivacyReferenceCta => 'Ver información de protección de datos';
+
+  @override
+  String get dataConsentNavCta => 'Mis autorizaciones';
 }

@@ -101,11 +101,11 @@ final class ConsoleLogger implements AppLogger {
   }
 
   static String _prefix(final LogLevel l) => switch (l) {
-        LogLevel.debug => '[DEBUG]',
-        LogLevel.info => '[INFO]',
-        LogLevel.warning => '[WARN]',
-        LogLevel.error => '[ERROR]',
-      };
+    LogLevel.debug => '[DEBUG]',
+    LogLevel.info => '[INFO]',
+    LogLevel.warning => '[WARN]',
+    LogLevel.error => '[ERROR]',
+  };
 
   /// Returns a copy of [context] with PII values replaced by `'[REDACTED]'`.
   ///
@@ -117,8 +117,7 @@ final class ConsoleLogger implements AppLogger {
       return null;
     }
     return {
-      for (final entry in context.entries)
-        entry.key: _isPiiKey(entry.key) ? '[REDACTED]' : entry.value,
+      for (final entry in context.entries) entry.key: _isPiiKey(entry.key) ? '[REDACTED]' : entry.value,
     };
   }
 

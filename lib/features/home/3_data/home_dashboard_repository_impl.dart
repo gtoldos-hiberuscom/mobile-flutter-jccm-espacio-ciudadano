@@ -18,8 +18,8 @@ final class HomeDashboardRepositoryImpl implements HomeDashboardRepository {
   const HomeDashboardRepositoryImpl({
     final Duration latency = const Duration(milliseconds: 250),
     final DateTime Function() clock = DateTime.now,
-  })  : _latency = latency,
-        _clock = clock;
+  }) : _latency = latency,
+       _clock = clock;
 
   final Duration _latency;
   final DateTime Function() _clock;

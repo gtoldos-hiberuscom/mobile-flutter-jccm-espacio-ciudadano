@@ -4,7 +4,7 @@ import 'package:jccm_espacio_ciudadano/features/education/1_domain/education_rep
 
 /// Mock implementation of [EducationRepository] for STORY-23.
 ///
-/// TODO(STORY-23): replace with the real Dio-backed implementation
+// TODO(STORY-23): replace with the real Dio-backed implementation
 /// hitting `/educacion/titulos-universitarios/{numDocumento}` and
 /// `/educacion/titulos-no-universitarios/{numDocumento}`.
 final class EducationRepositoryImpl implements EducationRepository {

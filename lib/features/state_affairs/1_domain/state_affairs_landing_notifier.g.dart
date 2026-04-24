@@ -24,12 +24,7 @@ const stateAffairsLandingProvider = StateAffairsLandingNotifierProvider._();
 /// exposes a [refresh] hook for `RefreshIndicator`. Per-section status
 /// is encoded in the snapshot itself, so individual UI cards can render
 /// loading / empty / error independently.
-final class StateAffairsLandingNotifierProvider
-    extends
-        $AsyncNotifierProvider<
-          StateAffairsLandingNotifier,
-          StateAffairsSnapshot
-        > {
+final class StateAffairsLandingNotifierProvider extends $AsyncNotifierProvider<StateAffairsLandingNotifier, StateAffairsSnapshot> {
   /// Owns the Estado y otros temas de interés landing state (STORY-26).
   ///
   /// Loads a [StateAffairsSnapshot] from the repository on `build()` and
@@ -55,8 +50,7 @@ final class StateAffairsLandingNotifierProvider
   StateAffairsLandingNotifier create() => StateAffairsLandingNotifier();
 }
 
-String _$stateAffairsLandingNotifierHash() =>
-    r'8aebe389e47ed106ced966fc8c4f2bcdd15dd3b2';
+String _$stateAffairsLandingNotifierHash() => r'8aebe389e47ed106ced966fc8c4f2bcdd15dd3b2';
 
 /// Owns the Estado y otros temas de interés landing state (STORY-26).
 ///
@@ -65,27 +59,14 @@ String _$stateAffairsLandingNotifierHash() =>
 /// is encoded in the snapshot itself, so individual UI cards can render
 /// loading / empty / error independently.
 
-abstract class _$StateAffairsLandingNotifier
-    extends $AsyncNotifier<StateAffairsSnapshot> {
+abstract class _$StateAffairsLandingNotifier extends $AsyncNotifier<StateAffairsSnapshot> {
   FutureOr<StateAffairsSnapshot> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref =
-        this.ref
-            as $Ref<AsyncValue<StateAffairsSnapshot>, StateAffairsSnapshot>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<
-                AsyncValue<StateAffairsSnapshot>,
-                StateAffairsSnapshot
-              >,
-              AsyncValue<StateAffairsSnapshot>,
-              Object?,
-              Object?
-            >;
+    final ref = this.ref as $Ref<AsyncValue<StateAffairsSnapshot>, StateAffairsSnapshot>;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<StateAffairsSnapshot>, StateAffairsSnapshot>, AsyncValue<StateAffairsSnapshot>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

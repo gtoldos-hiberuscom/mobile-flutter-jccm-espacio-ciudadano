@@ -1,3 +1,4 @@
+import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart' show AppError;
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session.dart';
 
 /// Sealed hierarchy representing every possible state of the authentication

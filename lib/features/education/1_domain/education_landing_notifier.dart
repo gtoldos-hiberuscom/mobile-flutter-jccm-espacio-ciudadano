@@ -8,8 +8,7 @@ part 'education_landing_notifier.g.dart';
 @riverpod
 class EducationLandingNotifier extends _$EducationLandingNotifier {
   @override
-  Future<EducationSnapshot> build() =>
-      ref.watch(educationRepositoryProvider).loadSnapshot();
+  Future<EducationSnapshot> build() => ref.watch(educationRepositoryProvider).loadSnapshot();
 
   Future<void> refresh() async {
     state = const AsyncValue<EducationSnapshot>.loading();

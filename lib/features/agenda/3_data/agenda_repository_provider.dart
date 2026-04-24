@@ -9,5 +9,4 @@ part 'agenda_repository_provider.g.dart';
 /// Not kept alive on purpose: the agenda is expected to refresh whenever
 /// the user navigates back into the agenda surface (canon §16).
 @riverpod
-AgendaRepository agendaRepository(final Ref ref) =>
-    const AgendaRepositoryImpl();
+AgendaRepository agendaRepository(final Ref ref) => const AgendaRepositoryImpl();

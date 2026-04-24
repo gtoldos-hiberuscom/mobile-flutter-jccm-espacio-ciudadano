@@ -1,4 +1,3 @@
-library;
 
 export 'package:jccm_espacio_ciudadano/features/user_profile/0_entity/user_profile.dart';
 export 'package:jccm_espacio_ciudadano/features/user_profile/1_domain/user_profile_notifier.dart';

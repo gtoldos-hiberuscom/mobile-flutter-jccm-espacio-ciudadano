@@ -6,5 +6,4 @@ part 'casework_repository_provider.g.dart';
 
 /// DI composition for [CaseworkRepository].
 @riverpod
-CaseworkRepository caseworkRepository(final Ref ref) =>
-    const CaseworkRepositoryImpl();
+CaseworkRepository caseworkRepository(final Ref ref) => const CaseworkRepositoryImpl();

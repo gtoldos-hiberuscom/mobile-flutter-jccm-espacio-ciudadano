@@ -12,8 +12,7 @@ part of 'user_profile_notifier.dart';
 @ProviderFor(UserProfileNotifier)
 const userProfileNotifierProvider = UserProfileNotifierProvider._();
 
-final class UserProfileNotifierProvider
-    extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
+final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
   const UserProfileNotifierProvider._()
     : super(
         from: null,
@@ -42,14 +41,7 @@ abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<UserProfile?>, UserProfile?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>,
-              AsyncValue<UserProfile?>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>, AsyncValue<UserProfile?>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
