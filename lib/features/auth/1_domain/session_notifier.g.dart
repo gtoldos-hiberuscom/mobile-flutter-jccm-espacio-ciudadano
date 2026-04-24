@@ -52,7 +52,8 @@ const sessionProvider = SessionNotifierProvider._();
 /// ## PII policy
 /// Token values and [Session.idAgente] are never logged. All `debugPrint`
 /// calls are omitted from this file intentionally.
-final class SessionNotifierProvider extends $AsyncNotifierProvider<SessionNotifier, AuthState> {
+final class SessionNotifierProvider
+    extends $AsyncNotifierProvider<SessionNotifier, AuthState> {
   /// Riverpod [AsyncNotifier] that manages the full authentication lifecycle.
   ///
   /// ## State machine
@@ -122,7 +123,14 @@ abstract class _$SessionNotifier extends $AsyncNotifier<AuthState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<AuthState>, AuthState>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<AuthState>, AuthState>, AsyncValue<AuthState>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<AuthState>, AuthState>,
+              AsyncValue<AuthState>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

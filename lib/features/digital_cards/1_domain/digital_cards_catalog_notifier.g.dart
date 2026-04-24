@@ -22,7 +22,12 @@ const digitalCardsCatalogProvider = DigitalCardsCatalogNotifierProvider._();
 /// On `build()` it asks the repository for a catalogue snapshot; the UI
 /// renders loading/loaded/empty/error from the resulting
 /// [DigitalCardsCatalog]. Refresh forces a new fetch.
-final class DigitalCardsCatalogNotifierProvider extends $AsyncNotifierProvider<DigitalCardsCatalogNotifier, DigitalCardsCatalog> {
+final class DigitalCardsCatalogNotifierProvider
+    extends
+        $AsyncNotifierProvider<
+          DigitalCardsCatalogNotifier,
+          DigitalCardsCatalog
+        > {
   /// Owns the digital cards catalogue screen state (STORY-48).
   ///
   /// On `build()` it asks the repository for a catalogue snapshot; the UI
@@ -47,7 +52,8 @@ final class DigitalCardsCatalogNotifierProvider extends $AsyncNotifierProvider<D
   DigitalCardsCatalogNotifier create() => DigitalCardsCatalogNotifier();
 }
 
-String _$digitalCardsCatalogNotifierHash() => r'78ebb3df191535bfd0cb8e596496b374d8dc33a1';
+String _$digitalCardsCatalogNotifierHash() =>
+    r'78ebb3df191535bfd0cb8e596496b374d8dc33a1';
 
 /// Owns the digital cards catalogue screen state (STORY-48).
 ///
@@ -55,14 +61,23 @@ String _$digitalCardsCatalogNotifierHash() => r'78ebb3df191535bfd0cb8e596496b374
 /// renders loading/loaded/empty/error from the resulting
 /// [DigitalCardsCatalog]. Refresh forces a new fetch.
 
-abstract class _$DigitalCardsCatalogNotifier extends $AsyncNotifier<DigitalCardsCatalog> {
+abstract class _$DigitalCardsCatalogNotifier
+    extends $AsyncNotifier<DigitalCardsCatalog> {
   FutureOr<DigitalCardsCatalog> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<DigitalCardsCatalog>, DigitalCardsCatalog>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<DigitalCardsCatalog>, DigitalCardsCatalog>, AsyncValue<DigitalCardsCatalog>, Object?, Object?>;
+    final ref =
+        this.ref as $Ref<AsyncValue<DigitalCardsCatalog>, DigitalCardsCatalog>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<DigitalCardsCatalog>, DigitalCardsCatalog>,
+              AsyncValue<DigitalCardsCatalog>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

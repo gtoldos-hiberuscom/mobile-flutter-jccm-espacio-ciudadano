@@ -23,7 +23,14 @@ const homeDashboardRepositoryProvider = HomeDashboardRepositoryProvider._();
 /// it) is dropped when the home view is no longer in scope — the dashboard
 /// is expected to refresh whenever the user navigates back.
 
-final class HomeDashboardRepositoryProvider extends $FunctionalProvider<HomeDashboardRepository, HomeDashboardRepository, HomeDashboardRepository> with $Provider<HomeDashboardRepository> {
+final class HomeDashboardRepositoryProvider
+    extends
+        $FunctionalProvider<
+          HomeDashboardRepository,
+          HomeDashboardRepository,
+          HomeDashboardRepository
+        >
+    with $Provider<HomeDashboardRepository> {
   /// Provides the [HomeDashboardRepository] implementation.
   ///
   /// Not kept alive on purpose: the repository (and any cached state inside
@@ -63,4 +70,5 @@ final class HomeDashboardRepositoryProvider extends $FunctionalProvider<HomeDash
   }
 }
 
-String _$homeDashboardRepositoryHash() => r'4bfed7d80dfafc0bc5dd946162f118499792ec68';
+String _$homeDashboardRepositoryHash() =>
+    r'4bfed7d80dfafc0bc5dd946162f118499792ec68';

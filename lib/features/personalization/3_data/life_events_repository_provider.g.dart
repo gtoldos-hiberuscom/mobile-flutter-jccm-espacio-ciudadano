@@ -15,7 +15,14 @@ const lifeEventsRepositoryProvider = LifeEventsRepositoryProvider._();
 
 /// DI composition for [LifeEventsRepository].
 
-final class LifeEventsRepositoryProvider extends $FunctionalProvider<LifeEventsRepository, LifeEventsRepository, LifeEventsRepository> with $Provider<LifeEventsRepository> {
+final class LifeEventsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          LifeEventsRepository,
+          LifeEventsRepository,
+          LifeEventsRepository
+        >
+    with $Provider<LifeEventsRepository> {
   /// DI composition for [LifeEventsRepository].
   const LifeEventsRepositoryProvider._()
     : super(
@@ -51,4 +58,5 @@ final class LifeEventsRepositoryProvider extends $FunctionalProvider<LifeEventsR
   }
 }
 
-String _$lifeEventsRepositoryHash() => r'1042d64f3a5a20b71df7ae878b3e842d208a95ec';
+String _$lifeEventsRepositoryHash() =>
+    r'1042d64f3a5a20b71df7ae878b3e842d208a95ec';
