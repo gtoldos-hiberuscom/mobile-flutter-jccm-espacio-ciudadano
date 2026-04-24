@@ -2137,6 +2137,240 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ver tarjeta sanitaria'**
   String get digitalCardsCipMiniOpenAction;
+
+  /// Personalization — title of the hechos vitales selection screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis hechos vitales'**
+  String get lifeEventsTitle;
+
+  /// Personalization — descriptive header on the hechos vitales screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.'**
+  String get lifeEventsHeaderDescription;
+
+  /// Personalization — explicit save button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get lifeEventsSaveAction;
+
+  /// Personalization — reset preferences button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar preferencias'**
+  String get lifeEventsResetAction;
+
+  /// Personalization — confirmation dialog title for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar tus preferencias'**
+  String get lifeEventsResetConfirmTitle;
+
+  /// Personalization — confirmation dialog body for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.'**
+  String get lifeEventsResetConfirmBody;
+
+  /// Personalization — confirm reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar'**
+  String get lifeEventsResetConfirm;
+
+  /// Personalization — cancel reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get lifeEventsResetCancel;
+
+  /// Personalization — snackbar after a successful save.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus preferencias se han guardado correctamente.'**
+  String get lifeEventsSavedFeedback;
+
+  /// Personalization — snackbar after a save / reset failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido guardar tus preferencias. Inténtalo de nuevo.'**
+  String get lifeEventsErrorFeedback;
+
+  /// Personalization — error state when the catalog fails to load.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los hechos vitales.'**
+  String get lifeEventsLoadError;
+
+  /// Personalization — empty state for the catalog.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay hechos vitales disponibles en este momento.'**
+  String get lifeEventsEmpty;
+
+  /// Personalization — familia category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Familia'**
+  String get lifeEventsCategoryFamilia;
+
+  /// Personalization — salud category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get lifeEventsCategorySalud;
+
+  /// Personalization — empleo category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get lifeEventsCategoryEmpleo;
+
+  /// Personalization — vivienda category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Vivienda'**
+  String get lifeEventsCategoryVivienda;
+
+  /// Personalization — educación category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get lifeEventsCategoryEducacion;
+
+  /// Data consent — title of the citizen authorizations screen (STORY-55).
+  ///
+  /// In es, this message translates to:
+  /// **'Mis autorizaciones'**
+  String get dataConsentTitle;
+
+  /// Data consent — descriptive header on the authorizations screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona qué datos pueden utilizarse para ofrecerte servicios y recomendaciones personalizadas. Puedes cambiar tu decisión en cualquier momento.'**
+  String get dataConsentHeaderDescription;
+
+  /// Data consent — explicit save button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get dataConsentSaveAction;
+
+  /// Data consent — revoke-all button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar todas las autorizaciones'**
+  String get dataConsentRevokeAction;
+
+  /// Data consent — confirmation dialog title for revoke-all.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar tus autorizaciones'**
+  String get dataConsentRevokeConfirmTitle;
+
+  /// Data consent — confirmation dialog body for revoke-all.
+  ///
+  /// In es, this message translates to:
+  /// **'Se eliminarán todas tus autorizaciones y dejaremos de personalizar contenidos hasta que vuelvas a aceptarlas.'**
+  String get dataConsentRevokeConfirmBody;
+
+  /// Data consent — confirm revoke button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar'**
+  String get dataConsentRevokeConfirm;
+
+  /// Data consent — cancel revoke button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get dataConsentRevokeCancel;
+
+  /// Data consent — snackbar after a successful save / revoke.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus autorizaciones se han actualizado correctamente.'**
+  String get dataConsentSavedFeedback;
+
+  /// Data consent — snackbar after a save / revoke failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido actualizar tus autorizaciones. Inténtalo de nuevo.'**
+  String get dataConsentErrorFeedback;
+
+  /// Data consent — error state when the catalog fails to load.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus autorizaciones.'**
+  String get dataConsentLoadError;
+
+  /// Data consent — empty state for the catalog.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay autorizaciones disponibles en este momento.'**
+  String get dataConsentEmpty;
+
+  /// Data consent — JCCM authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de la Junta de Comunidades de Castilla-La Mancha'**
+  String get dataConsentTypeJccmTitle;
+
+  /// Data consent — JCCM authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite que la JCCM utilice tus datos administrativos para ofrecerte trámites y servicios personalizados.'**
+  String get dataConsentTypeJccmSubtitle;
+
+  /// Data consent — interoperability authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de otras administraciones'**
+  String get dataConsentTypeOtrasAdminTitle;
+
+  /// Data consent — interoperability authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite consultar datos de otras administraciones públicas para evitar que tengas que aportarlos manualmente.'**
+  String get dataConsentTypeOtrasAdminSubtitle;
+
+  /// Data consent — profiling authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfilado para recomendaciones'**
+  String get dataConsentTypePerfiladoTitle;
+
+  /// Data consent — profiling authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite analizar tu actividad para recomendarte trámites, ayudas y contenidos relevantes.'**
+  String get dataConsentTypePerfiladoSubtitle;
+
+  /// Data consent — privacy reference section title.
+  ///
+  /// In es, this message translates to:
+  /// **'Información de protección de datos'**
+  String get dataConsentPrivacyReferenceTitle;
+
+  /// Data consent — privacy reference body.
+  ///
+  /// In es, this message translates to:
+  /// **'Estas autorizaciones se basan en la información de protección de datos aceptada al iniciar sesión.'**
+  String get dataConsentPrivacyReferenceBody;
+
+  /// Data consent — link CTA pointing to the onboarding consent screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver información de protección de datos'**
+  String get dataConsentPrivacyReferenceCta;
+
+  /// Data consent — CTA label that takes the citizen from life-events to the consent screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis autorizaciones'**
+  String get dataConsentNavCta;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

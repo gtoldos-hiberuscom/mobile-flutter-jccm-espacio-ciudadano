@@ -1079,4 +1079,121 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get digitalCardsCipMiniOpenAction => 'Ver tarjeta sanitaria';
+
+  @override
+  String get lifeEventsTitle => 'Mis hechos vitales';
+
+  @override
+  String get lifeEventsHeaderDescription => 'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.';
+
+  @override
+  String get lifeEventsSaveAction => 'Guardar';
+
+  @override
+  String get lifeEventsResetAction => 'Borrar preferencias';
+
+  @override
+  String get lifeEventsResetConfirmTitle => 'Borrar tus preferencias';
+
+  @override
+  String get lifeEventsResetConfirmBody => 'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.';
+
+  @override
+  String get lifeEventsResetConfirm => 'Borrar';
+
+  @override
+  String get lifeEventsResetCancel => 'Cancelar';
+
+  @override
+  String get lifeEventsSavedFeedback => 'Tus preferencias se han guardado correctamente.';
+
+  @override
+  String get lifeEventsErrorFeedback => 'No hemos podido guardar tus preferencias. Inténtalo de nuevo.';
+
+  @override
+  String get lifeEventsLoadError => 'No hemos podido cargar los hechos vitales.';
+
+  @override
+  String get lifeEventsEmpty => 'No hay hechos vitales disponibles en este momento.';
+
+  @override
+  String get lifeEventsCategoryFamilia => 'Familia';
+
+  @override
+  String get lifeEventsCategorySalud => 'Salud';
+
+  @override
+  String get lifeEventsCategoryEmpleo => 'Empleo';
+
+  @override
+  String get lifeEventsCategoryVivienda => 'Vivienda';
+
+  @override
+  String get lifeEventsCategoryEducacion => 'Educación';
+
+  @override
+  String get dataConsentTitle => 'Mis autorizaciones';
+
+  @override
+  String get dataConsentHeaderDescription => 'Gestiona qué datos pueden utilizarse para ofrecerte servicios y recomendaciones personalizadas. Puedes cambiar tu decisión en cualquier momento.';
+
+  @override
+  String get dataConsentSaveAction => 'Guardar';
+
+  @override
+  String get dataConsentRevokeAction => 'Revocar todas las autorizaciones';
+
+  @override
+  String get dataConsentRevokeConfirmTitle => 'Revocar tus autorizaciones';
+
+  @override
+  String get dataConsentRevokeConfirmBody => 'Se eliminarán todas tus autorizaciones y dejaremos de personalizar contenidos hasta que vuelvas a aceptarlas.';
+
+  @override
+  String get dataConsentRevokeConfirm => 'Revocar';
+
+  @override
+  String get dataConsentRevokeCancel => 'Cancelar';
+
+  @override
+  String get dataConsentSavedFeedback => 'Tus autorizaciones se han actualizado correctamente.';
+
+  @override
+  String get dataConsentErrorFeedback => 'No hemos podido actualizar tus autorizaciones. Inténtalo de nuevo.';
+
+  @override
+  String get dataConsentLoadError => 'No hemos podido cargar tus autorizaciones.';
+
+  @override
+  String get dataConsentEmpty => 'No hay autorizaciones disponibles en este momento.';
+
+  @override
+  String get dataConsentTypeJccmTitle => 'Datos de la Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get dataConsentTypeJccmSubtitle => 'Permite que la JCCM utilice tus datos administrativos para ofrecerte trámites y servicios personalizados.';
+
+  @override
+  String get dataConsentTypeOtrasAdminTitle => 'Datos de otras administraciones';
+
+  @override
+  String get dataConsentTypeOtrasAdminSubtitle => 'Permite consultar datos de otras administraciones públicas para evitar que tengas que aportarlos manualmente.';
+
+  @override
+  String get dataConsentTypePerfiladoTitle => 'Perfilado para recomendaciones';
+
+  @override
+  String get dataConsentTypePerfiladoSubtitle => 'Permite analizar tu actividad para recomendarte trámites, ayudas y contenidos relevantes.';
+
+  @override
+  String get dataConsentPrivacyReferenceTitle => 'Información de protección de datos';
+
+  @override
+  String get dataConsentPrivacyReferenceBody => 'Estas autorizaciones se basan en la información de protección de datos aceptada al iniciar sesión.';
+
+  @override
+  String get dataConsentPrivacyReferenceCta => 'Ver información de protección de datos';
+
+  @override
+  String get dataConsentNavCta => 'Mis autorizaciones';
 }
