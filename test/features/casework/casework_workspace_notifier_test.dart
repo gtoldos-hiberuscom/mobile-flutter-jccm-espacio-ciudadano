@@ -33,6 +33,22 @@ class _ConfigurableRepo implements CaseworkRepository {
       ),
     ];
   }
+
+  @override
+  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
+      const <CaseworkItem>[];
+
+  @override
+  Future<List<CaseworkItem>> searchByExpedienteNumber(
+    final String number,
+  ) async =>
+      const <CaseworkItem>[];
+
+  @override
+  Future<List<CaseworkItem>> searchByRegistroNumber(
+    final String number,
+  ) async =>
+      const <CaseworkItem>[];
 }
 
 ProviderContainer _container(final CaseworkRepository repo) {
@@ -149,4 +165,20 @@ class _CallbackRepo implements CaseworkRepository {
   final Future<List<CaseworkItem>> Function(CaseworkTab) _cb;
   @override
   Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) => _cb(tab);
+
+  @override
+  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
+      const <CaseworkItem>[];
+
+  @override
+  Future<List<CaseworkItem>> searchByExpedienteNumber(
+    final String number,
+  ) async =>
+      const <CaseworkItem>[];
+
+  @override
+  Future<List<CaseworkItem>> searchByRegistroNumber(
+    final String number,
+  ) async =>
+      const <CaseworkItem>[];
 }

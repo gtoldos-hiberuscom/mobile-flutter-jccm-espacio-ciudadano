@@ -674,5 +674,61 @@
     "placeholders": {
       "date": {"type": "String"}
     }
-  }
+  },
+  "caseworkSearchTitle": "Buscar expedientes y registros",
+  "@caseworkSearchTitle": {"description": "Casework search — título de la pantalla."},
+  "caseworkSearchOpenCta": "Buscar expedientes y registros",
+  "@caseworkSearchOpenCta": {"description": "Casework search — CTA en el workspace para abrir la búsqueda."},
+  "caseworkSearchIntro": "Rellena al menos uno de los campos para localizar tu expediente o registro.",
+  "@caseworkSearchIntro": {"description": "Casework search — texto introductorio del formulario."},
+  "caseworkSearchFieldIdentificationLabel": "NIF / NIE / Pasaporte",
+  "@caseworkSearchFieldIdentificationLabel": {"description": "Casework search — etiqueta del campo identificación."},
+  "caseworkSearchFieldIdentificationHelper": "Ej.: 12345678Z, X1234567A o pasaporte alfanumérico.",
+  "@caseworkSearchFieldIdentificationHelper": {"description": "Casework search — helper del campo identificación."},
+  "caseworkSearchFieldExpedienteLabel": "Número de expediente",
+  "@caseworkSearchFieldExpedienteLabel": {"description": "Casework search — etiqueta del campo expediente."},
+  "caseworkSearchFieldExpedienteHelper": "Ej.: EXP/2025/00123",
+  "@caseworkSearchFieldExpedienteHelper": {"description": "Casework search — helper del campo expediente."},
+  "caseworkSearchFieldRegistroLabel": "Número de registro",
+  "@caseworkSearchFieldRegistroLabel": {"description": "Casework search — etiqueta del campo registro."},
+  "caseworkSearchFieldRegistroHelper": "Ej.: REG/E/45612",
+  "@caseworkSearchFieldRegistroHelper": {"description": "Casework search — helper del campo registro."},
+  "caseworkSearchSubmit": "Buscar",
+  "@caseworkSearchSubmit": {"description": "Casework search — etiqueta del botón de búsqueda."},
+  "caseworkSearchAnother": "Buscar otra cosa",
+  "@caseworkSearchAnother": {"description": "Casework search — CTA para reiniciar la búsqueda."},
+  "caseworkSearchAportar": "Aportar documentación al resultado",
+  "@caseworkSearchAportar": {"description": "Casework search — CTA placeholder para aportación documental."},
+  "caseworkSearchAportarPending": "La aportación documental se habilita en STORY-37 / STORY-38.",
+  "@caseworkSearchAportarPending": {"description": "Casework search — mensaje provisional de aportación pendiente."},
+  "caseworkSearchErrorAtLeastOne": "Introduce al menos uno de los tres campos para buscar.",
+  "@caseworkSearchErrorAtLeastOne": {"description": "Casework search — error: ningún campo informado."},
+  "caseworkSearchErrorInvalidIdentification": "Formato no válido. Usa NIF (8 dígitos + letra), NIE (X/Y/Z + 7 dígitos + letra) o pasaporte alfanumérico de 6 a 9 caracteres.",
+  "@caseworkSearchErrorInvalidIdentification": {"description": "Casework search — error de identificación inválida."},
+  "caseworkSearchErrorInvalidNumber": "Formato no válido. Solo letras, números, guiones y barras.",
+  "@caseworkSearchErrorInvalidNumber": {"description": "Casework search — error de número inválido."},
+  "caseworkSearchNoResults": "Sin coincidencias",
+  "@caseworkSearchNoResults": {"description": "Casework search — estado sin resultados."},
+  "caseworkSearchNoResultsHint": "Revisa los datos introducidos y vuelve a intentarlo.",
+  "@caseworkSearchNoResultsHint": {"description": "Casework search — pista cuando no hay resultados."},
+  "caseworkSearchError": "No hemos podido completar la búsqueda. Inténtalo de nuevo.",
+  "@caseworkSearchError": {"description": "Casework search — error al ejecutar la búsqueda."},
+  "caseworkSearchResultsCount": "{count, plural, one{1 resultado} other{{count} resultados}}",
+  "@caseworkSearchResultsCount": {
+    "description": "Casework search — recuento de resultados.",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "caseworkItemDetailPlaceholderTitle": "Detalle del expediente",
+  "@caseworkItemDetailPlaceholderTitle": {"description": "Casework — título del detalle (placeholder)."},
+  "caseworkItemDetailPlaceholderBody": "Detalle del elemento {id}",
+  "@caseworkItemDetailPlaceholderBody": {
+    "description": "Casework — cuerpo del detalle (placeholder).",
+    "placeholders": {
+      "id": {"type": "String"}
+    }
+  },
+  "caseworkItemDetailPlaceholderPending": "El detalle real se habilita en STORY-35 / STORY-36.",
+  "@caseworkItemDetailPlaceholderPending": {"description": "Casework — mensaje provisional del detalle."}
 }

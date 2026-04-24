@@ -37,6 +37,8 @@ abstract final class Routes {
   static const String agenda = '/agenda';
   static const String agendaDetail = '/agenda/:id';
   static const String casework = '/casework';
+  static const String caseworkSearch = '/casework/search';
+  static const String caseworkItemDetail = '/casework/item/:id';
   static const String notifications = '/notifications';
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
@@ -51,7 +52,16 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage>
     final asyncSnapshot = ref.watch(caseworkWorkspaceProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.caseworkWorkspaceTitle)),
+      appBar: AppBar(
+        title: Text(l10n.caseworkWorkspaceTitle),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: l10n.caseworkSearchOpenCta,
+            onPressed: () => GoRouter.of(context).go('/casework/search'),
+          ),
+        ],
+      ),
       body: asyncSnapshot.when(
         loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
         error: (final err, final st) => ErrorStateWidget(

@@ -768,4 +768,83 @@ class AppLocalizationsEn extends AppLocalizations {
   String caseworkItemDateLabel(String date) {
     return 'Date: $date';
   }
+
+  @override
+  String get caseworkSearchTitle => 'Search casework files and registry entries';
+
+  @override
+  String get caseworkSearchOpenCta => 'Search casework files and registry entries';
+
+  @override
+  String get caseworkSearchIntro => 'Fill at least one field to find your casework file or registry entry.';
+
+  @override
+  String get caseworkSearchFieldIdentificationLabel => 'ID document (NIF / NIE / Passport)';
+
+  @override
+  String get caseworkSearchFieldIdentificationHelper => 'E.g. 12345678Z, X1234567A or alphanumeric passport.';
+
+  @override
+  String get caseworkSearchFieldExpedienteLabel => 'Casework file number';
+
+  @override
+  String get caseworkSearchFieldExpedienteHelper => 'E.g. EXP/2025/00123';
+
+  @override
+  String get caseworkSearchFieldRegistroLabel => 'Registry number';
+
+  @override
+  String get caseworkSearchFieldRegistroHelper => 'E.g. REG/E/45612';
+
+  @override
+  String get caseworkSearchSubmit => 'Search';
+
+  @override
+  String get caseworkSearchAnother => 'Search something else';
+
+  @override
+  String get caseworkSearchAportar => 'Submit documents to this result';
+
+  @override
+  String get caseworkSearchAportarPending => 'Document submission will be enabled by STORY-37 / STORY-38.';
+
+  @override
+  String get caseworkSearchErrorAtLeastOne => 'Please fill at least one of the three fields.';
+
+  @override
+  String get caseworkSearchErrorInvalidIdentification => 'Invalid format. Use NIF (8 digits + letter), NIE (X/Y/Z + 7 digits + letter) or alphanumeric passport (6–9 chars).';
+
+  @override
+  String get caseworkSearchErrorInvalidNumber => 'Invalid format. Only letters, digits, dashes and slashes are allowed.';
+
+  @override
+  String get caseworkSearchNoResults => 'No matches';
+
+  @override
+  String get caseworkSearchNoResultsHint => 'Check the data you entered and try again.';
+
+  @override
+  String get caseworkSearchError => 'We could not complete the search. Please try again.';
+
+  @override
+  String caseworkSearchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count results',
+      one: '1 result',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkItemDetailPlaceholderTitle => 'Casework file detail';
+
+  @override
+  String caseworkItemDetailPlaceholderBody(String id) {
+    return 'Detail for item $id';
+  }
+
+  @override
+  String get caseworkItemDetailPlaceholderPending => 'The real detail screen will be enabled by STORY-35 / STORY-36.';
 }
