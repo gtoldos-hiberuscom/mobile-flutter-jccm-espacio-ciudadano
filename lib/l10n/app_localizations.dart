@@ -2479,6 +2479,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Detalle pendiente de habilitar en STORY-44.'**
   String get notificationDetailPlaceholderPending;
+
+  /// Notifications contact — título de la pantalla de alta de contacto (STORY-42).
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto'**
+  String get notificationContactPageTitle;
+
+  /// Notifications contact — copy explicativo sobre el uso futuro del contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesitamos un teléfono móvil o un correo electrónico para avisarte de las notificaciones electrónicas que recibas. Solo usaremos estos datos para enviarte avisos relacionados con tus notificaciones.'**
+  String get notificationContactExplanation;
+
+  /// Notifications contact — etiqueta del campo teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'Teléfono móvil'**
+  String get notificationContactPhoneLabel;
+
+  /// Notifications contact — placeholder del campo teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'600 123 456'**
+  String get notificationContactPhoneHint;
+
+  /// Notifications contact — texto auxiliar del campo teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica un número con prefijo internacional si no es de España.'**
+  String get notificationContactPhoneHelper;
+
+  /// Notifications contact — etiqueta del campo correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get notificationContactEmailLabel;
+
+  /// Notifications contact — placeholder del campo correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'ejemplo@correo.com'**
+  String get notificationContactEmailHint;
+
+  /// Notifications contact — texto auxiliar del campo correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Usaremos este correo solo para avisos de notificaciones.'**
+  String get notificationContactEmailHelper;
+
+  /// Notifications contact — botón principal del formulario.
+  ///
+  /// In es, this message translates to:
+  /// **'Registrar'**
+  String get notificationContactSubmitCta;
+
+  /// Notifications contact — mensaje del estado de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando datos de contacto…'**
+  String get notificationContactLoading;
+
+  /// Notifications contact — mensaje del estado de error global.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus datos de contacto.'**
+  String get notificationContactErrorLoading;
+
+  /// Notifications contact — error de validación del teléfono móvil.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un teléfono móvil válido.'**
+  String get notificationContactErrorPhoneInvalid;
+
+  /// Notifications contact — error de validación del correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un correo electrónico válido.'**
+  String get notificationContactErrorEmailInvalid;
+
+  /// Notifications contact — error cuando no se proporciona ningún canal.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica al menos un teléfono móvil o un correo electrónico.'**
+  String get notificationContactErrorBothEmpty;
+
+  /// Notifications contact — mensaje de éxito tras el alta.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos de contacto se han registrado correctamente.'**
+  String get notificationContactSuccessMessage;
+
+  /// Notifications contact — mensaje del banner que aparece cuando faltan datos de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Configura tus datos de contacto para recibir notificaciones.'**
+  String get notificationContactGateBannerMessage;
+
+  /// Notifications contact — CTA del banner que abre el formulario de alta.
+  ///
+  /// In es, this message translates to:
+  /// **'Configurar ahora'**
+  String get notificationContactGateBannerCta;
 }
 
 class _AppLocalizationsDelegate

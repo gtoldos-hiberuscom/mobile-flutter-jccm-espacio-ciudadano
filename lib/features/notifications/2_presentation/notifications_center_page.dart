@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notificat
 import 'package:jccm_espacio_ciudadano/features/notifications/1_domain/notifications_center_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/widgets/notification_filter_bar.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/widgets/notification_item_tile.dart';
+import 'package:jccm_espacio_ciudadano/features/notifications/contact/2_presentation/widgets/notification_contact_gate_banner.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Citizen notifications inbox (STORY-41).
@@ -39,6 +40,7 @@ class NotificationsCenterPage extends ConsumerWidget {
         ),
         data: (final state) => Column(
           children: <Widget>[
+            const NotificationContactGateBanner(),
             NotificationFilterBar(
               activeFilters: state.filters,
               onChanged: notifier.setFilters,

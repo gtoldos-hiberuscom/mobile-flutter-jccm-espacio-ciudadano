@@ -1345,4 +1345,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationDetailPlaceholderPending =>
       'Detail screen will be enabled in STORY-44.';
+
+  @override
+  String get notificationContactPageTitle => 'Contact details';
+
+  @override
+  String get notificationContactExplanation =>
+      'We need a mobile phone number or an email address to alert you about the electronic notifications you receive. We will only use this data to send you notification-related alerts.';
+
+  @override
+  String get notificationContactPhoneLabel => 'Mobile phone';
+
+  @override
+  String get notificationContactPhoneHint => '600 123 456';
+
+  @override
+  String get notificationContactPhoneHelper =>
+      'Use the international prefix if the number is not from Spain.';
+
+  @override
+  String get notificationContactEmailLabel => 'Email address';
+
+  @override
+  String get notificationContactEmailHint => 'example@email.com';
+
+  @override
+  String get notificationContactEmailHelper =>
+      'We will only use this email for notification alerts.';
+
+  @override
+  String get notificationContactSubmitCta => 'Register';
+
+  @override
+  String get notificationContactLoading => 'Loading contact details…';
+
+  @override
+  String get notificationContactErrorLoading =>
+      'We couldn\'t load your contact details.';
+
+  @override
+  String get notificationContactErrorPhoneInvalid =>
+      'Enter a valid mobile phone number.';
+
+  @override
+  String get notificationContactErrorEmailInvalid =>
+      'Enter a valid email address.';
+
+  @override
+  String get notificationContactErrorBothEmpty =>
+      'Provide at least a mobile phone or an email address.';
+
+  @override
+  String get notificationContactSuccessMessage =>
+      'Your contact details have been registered.';
+
+  @override
+  String get notificationContactGateBannerMessage =>
+      'Set up your contact details to receive notifications.';
+
+  @override
+  String get notificationContactGateBannerCta => 'Set up now';
 }
