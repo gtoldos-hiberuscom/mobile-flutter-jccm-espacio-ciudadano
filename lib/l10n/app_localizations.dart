@@ -986,6 +986,84 @@ abstract class AppLocalizations {
   /// **'Fecha'**
   String get agendaDetailWhen;
 
+  /// Agenda — etiqueta del campo centro en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro'**
+  String get agendaDetailCentro;
+
+  /// Agenda — etiqueta del campo profesional en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Profesional'**
+  String get agendaDetailProfesional;
+
+  /// Agenda — etiqueta del campo tipo en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo'**
+  String get agendaDetailTipo;
+
+  /// Agenda — etiqueta de la descripción larga en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get agendaDetailDescription;
+
+  /// Agenda — CTA para abrir el justificante de asistencia.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver justificante de asistencia'**
+  String get agendaDetailJustificante;
+
+  /// Agenda — aviso al pulsar el justificante mientras el enlace externo no está habilitado.
+  ///
+  /// In es, this message translates to:
+  /// **'El justificante se podrá abrir cuando se habilite el enlace externo.'**
+  String get agendaJustificanteUnavailable;
+
+  /// Agenda — affordance para expandir el detalle inline en la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver más detalles'**
+  String get agendaTileExpand;
+
+  /// Agenda — affordance para colapsar el detalle inline en la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Ocultar detalles'**
+  String get agendaTileCollapse;
+
+  /// Agenda — CTA para navegar al detalle completo del evento.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir detalle completo'**
+  String get agendaTileOpenDetail;
+
+  /// Agenda — título del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido leer tu agenda'**
+  String get agendaParseErrorTitle;
+
+  /// Agenda — detalle del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'Hubo un problema al interpretar la respuesta del servicio. Vuelve a intentarlo en unos minutos.'**
+  String get agendaParseErrorDetail;
+
+  /// Agenda — CTA de reintento del estado de error de parseo.
+  ///
+  /// In es, this message translates to:
+  /// **'Intentar de nuevo'**
+  String get agendaParseErrorRetry;
+
+  /// Agenda — aviso de datos parciales sobre la lista.
+  ///
+  /// In es, this message translates to:
+  /// **'Algunos eventos no se han podido cargar. Mostramos los disponibles.'**
+  String get agendaPartialBanner;
+
   /// Estado — título de la landing.
   ///
   /// In es, this message translates to:
