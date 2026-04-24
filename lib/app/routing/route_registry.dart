@@ -42,6 +42,9 @@ abstract final class Routes {
   static const String caseworkItemDetail = '/casework/item/:id';
   /// Upload-evidence screen for a given expediente (STORY-38).
   static const String caseworkUpload = '/casework/item/:id/upload';
+  /// Registro de entrada / salida detail screen (STORY-36).
+  /// `kind` is one of `entrada|salida`; `numreg` must be URL-encoded.
+  static const String caseworkRegistroDetail = '/casework/registro/:kind/:numreg';
   static const String notifications = '/notifications';
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';
