@@ -2,12 +2,12 @@
 id: 60
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 4
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-24T10:48:01+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir la experiencia de soporte técnico observada en diseño para incidencias de la plataforma, incluyendo el formulario, sus validaciones, adjuntos, consentimiento de uso de datos, protección antibot y la confirmación posterior por correo.
 
 ## Acceptance Criteria
-- [ ] Se contempla formulario con nombre, email, confirmación de email, asunto y descripción.
-- [ ] Se contemplan validaciones de obligatorio, límite de 100 caracteres para asunto y contador/límite para descripción.
-- [ ] Se contempla adjunto opcional, checkbox de autorización de uso de datos y captcha/antibot.
-- [ ] Se contempla confirmación de envío y comunicación posterior por correo.
+- [x] Se contempla formulario con nombre, email, confirmación de email, asunto y descripción.
+- [x] Se contemplan validaciones de obligatorio, límite de 100 caracteres para asunto y contador/límite para descripción.
+- [x] Se contempla adjunto opcional, checkbox de autorización de uso de datos y captcha/antibot.
+- [x] Se contempla confirmación de envío y comunicación posterior por correo.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -75,3 +75,5 @@ Cubrir la experiencia de soporte técnico observada en diseño para incidencias 
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-24T10:48:01+02:00 | by Copilot | To Do → In Progress (Sprint 4 — implementación del formulario de soporte).
+- 2026-04-24T10:48:01+02:00 | by Copilot | In Progress → Done. Implementado `lib/features/help/` con 0_entity (`SupportRequest`, `PickedAttachment`, `SupportFormState`, `SupportValidationError`), 1_domain (`SupportRepository`, `AttachmentPicker`, `SupportFormValidator`, `SupportFormNotifier`), 3_data (`SupportRepositoryImpl` mock + `StubAttachmentPicker`) y 2_presentation (`SupportFormPage` con `Form`/`TextFormField`s, `widgets/captcha_placeholder.dart`, `widgets/attachment_picker_field.dart`, `widgets/character_counter.dart`). Ruta `/help/support` registrada en `lib/app/routing/app_router.dart` y enlazada desde el centro de ayuda. ARB `support*` en es/en. `flutter analyze lib/features/help/ test/features/help/` → 0 issues; `flutter test test/features/help/` → 20 tests passed (validador, notifier, widget). Backend real diferido a [TASK-63] (`SupportRepositoryImpl` mock con 500 ms y `// TODO(TASK-63)` explícito); captcha real diferido a [TASK-63] (mock `CaptchaPlaceholder` con badge "MOCK" y `// TODO(TASK-63)`); selector real de adjuntos diferido a [TASK-63] (`StubAttachmentPicker` sin nuevas dependencias).

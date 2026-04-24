@@ -14,6 +14,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.d
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/help/2_presentation/help_page.dart';
+import 'package:jccm_espacio_ciudadano/features/help/2_presentation/support_form_page.dart';
 import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
@@ -113,6 +114,11 @@ final goRouterProvider = Provider<GoRouter>(
           path: Routes.help,
           builder: (final BuildContext context, final GoRouterState state) =>
               const HelpPage(),
+        ),
+        GoRoute(
+          path: Routes.supportForm,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const SupportFormPage(),
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────
