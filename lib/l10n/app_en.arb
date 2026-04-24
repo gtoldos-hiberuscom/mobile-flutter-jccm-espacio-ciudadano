@@ -964,5 +964,50 @@
   "dataConsentPrivacyReferenceCta": "View data protection information",
   "@dataConsentPrivacyReferenceCta": {"description": "Data consent — link CTA pointing to the onboarding consent screen."},
   "dataConsentNavCta": "My authorizations",
-  "@dataConsentNavCta": {"description": "Data consent — CTA label that takes the citizen from life-events to the consent screen."}
+  "@dataConsentNavCta": {"description": "Data consent — CTA label that takes the citizen from life-events to the consent screen."},
+  "notificationsCenterTitle": "My notifications",
+  "@notificationsCenterTitle": {"description": "Notifications — notifications center title (STORY-41)."},
+  "notificationsLoading": "Loading notifications…",
+  "@notificationsLoading": {"description": "Notifications — listing loading message."},
+  "notificationsErrorMessage": "We could not load your notifications.",
+  "@notificationsErrorMessage": {"description": "Notifications — global error message."},
+  "notificationsLoadMoreError": "We could not load more notifications. Please try again.",
+  "@notificationsLoadMoreError": {"description": "Notifications — incremental load error notice."},
+  "notificationsEmptyTitle": "No notifications",
+  "@notificationsEmptyTitle": {"description": "Notifications — empty list title."},
+  "notificationsEmptySubtitle": "We did not find notifications matching the active filters.",
+  "@notificationsEmptySubtitle": {"description": "Notifications — empty list subtitle."},
+  "notificationsFilterAll": "All",
+  "@notificationsFilterAll": {"description": "Notifications — filter label that shows every status."},
+  "notificationsItemHasDocuments": "Has attached documents",
+  "@notificationsItemHasDocuments": {"description": "Notifications — flag rendered on items that carry documents."},
+  "notificationsPaginationFooter": "Showing {loaded} of {total}",
+  "@notificationsPaginationFooter": {
+    "description": "Notifications — pagination footer with loaded/total counters.",
+    "placeholders": {
+      "loaded": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "notificationStatusPendiente": "Pending",
+  "@notificationStatusPendiente": {"description": "Notifications — pending status label."},
+  "notificationStatusAceptada": "Accepted",
+  "@notificationStatusAceptada": {"description": "Notifications — accepted status label."},
+  "notificationStatusRechazada": "Rejected",
+  "@notificationStatusRechazada": {"description": "Notifications — rejected status label."},
+  "notificationStatusCaducada": "Expired",
+  "@notificationStatusCaducada": {"description": "Notifications — expired status label."},
+  "notificationStatusUnknown": "Unclassified",
+  "@notificationStatusUnknown": {"description": "Notifications — unknown/tolerant-parser status label."},
+  "notificationDetailPlaceholderTitle": "Notification detail",
+  "@notificationDetailPlaceholderTitle": {"description": "Notifications — placeholder detail screen title."},
+  "notificationDetailPlaceholderBody": "Notification {id}",
+  "@notificationDetailPlaceholderBody": {
+    "description": "Notifications — placeholder body with the notification identifier.",
+    "placeholders": {
+      "id": {"type": "String"}
+    }
+  },
+  "notificationDetailPlaceholderPending": "Detail screen will be enabled in STORY-44.",
+  "@notificationDetailPlaceholderPending": {"description": "Notifications — placeholder pending message."}
 }

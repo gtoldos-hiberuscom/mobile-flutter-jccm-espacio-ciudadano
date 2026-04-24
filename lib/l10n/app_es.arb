@@ -964,5 +964,50 @@
   "dataConsentPrivacyReferenceCta": "Ver información de protección de datos",
   "@dataConsentPrivacyReferenceCta": {"description": "Data consent — link CTA pointing to the onboarding consent screen."},
   "dataConsentNavCta": "Mis autorizaciones",
-  "@dataConsentNavCta": {"description": "Data consent — CTA label that takes the citizen from life-events to the consent screen."}
+  "@dataConsentNavCta": {"description": "Data consent — CTA label that takes the citizen from life-events to the consent screen."},
+  "notificationsCenterTitle": "Mis notificaciones",
+  "@notificationsCenterTitle": {"description": "Notifications — título del centro de notificaciones (STORY-41)."},
+  "notificationsLoading": "Cargando notificaciones…",
+  "@notificationsLoading": {"description": "Notifications — mensaje del estado de carga del listado."},
+  "notificationsErrorMessage": "No hemos podido cargar tus notificaciones.",
+  "@notificationsErrorMessage": {"description": "Notifications — mensaje del estado de error global."},
+  "notificationsLoadMoreError": "No hemos podido cargar más notificaciones. Inténtalo de nuevo.",
+  "@notificationsLoadMoreError": {"description": "Notifications — aviso bajo el listado cuando falla la carga incremental."},
+  "notificationsEmptyTitle": "No hay notificaciones",
+  "@notificationsEmptyTitle": {"description": "Notifications — título del estado vacío del listado."},
+  "notificationsEmptySubtitle": "No hemos encontrado notificaciones para los filtros aplicados.",
+  "@notificationsEmptySubtitle": {"description": "Notifications — subtítulo del estado vacío del listado."},
+  "notificationsFilterAll": "Todas",
+  "@notificationsFilterAll": {"description": "Notifications — etiqueta del filtro que muestra todos los estados."},
+  "notificationsItemHasDocuments": "Documentos asociados",
+  "@notificationsItemHasDocuments": {"description": "Notifications — indicador de que la notificación tiene documentos."},
+  "notificationsPaginationFooter": "Mostrando {loaded} de {total}",
+  "@notificationsPaginationFooter": {
+    "description": "Notifications — pie del listado con el progreso de la paginación.",
+    "placeholders": {
+      "loaded": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "notificationStatusPendiente": "Pendiente",
+  "@notificationStatusPendiente": {"description": "Notifications — etiqueta del estado pendiente."},
+  "notificationStatusAceptada": "Aceptada",
+  "@notificationStatusAceptada": {"description": "Notifications — etiqueta del estado aceptada."},
+  "notificationStatusRechazada": "Rechazada",
+  "@notificationStatusRechazada": {"description": "Notifications — etiqueta del estado rechazada."},
+  "notificationStatusCaducada": "Caducada",
+  "@notificationStatusCaducada": {"description": "Notifications — etiqueta del estado caducada."},
+  "notificationStatusUnknown": "Sin clasificar",
+  "@notificationStatusUnknown": {"description": "Notifications — etiqueta del estado desconocido (parser tolerante)."},
+  "notificationDetailPlaceholderTitle": "Detalle de notificación",
+  "@notificationDetailPlaceholderTitle": {"description": "Notifications — título de la pantalla provisional de detalle."},
+  "notificationDetailPlaceholderBody": "Notificación {id}",
+  "@notificationDetailPlaceholderBody": {
+    "description": "Notifications — cuerpo provisional con el identificador de la notificación.",
+    "placeholders": {
+      "id": {"type": "String"}
+    }
+  },
+  "notificationDetailPlaceholderPending": "Detalle pendiente de habilitar en STORY-44.",
+  "@notificationDetailPlaceholderPending": {"description": "Notifications — mensaje provisional para el detalle real."}
 }

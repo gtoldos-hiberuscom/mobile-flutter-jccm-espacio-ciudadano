@@ -63,7 +63,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentPageSubtitle => 'Personal data protection';
 
   @override
-  String get consentPageBody => 'In accordance with Regulation (EU) 2016/679 of the European Parliament and of the Council (GDPR) and Organic Law 3/2018 on Personal Data Protection and guarantee of digital rights (LOPDGDD), the Government of Castilla-La Mancha informs you that the personal data collected through this application will be processed under the responsibility of the Government of Castilla-La Mancha, in order to provide you with the e-government services included in the Citizen Space.\n\nIn accordance with Law 3/2017 of the Government of Castilla-La Mancha, you have the right to access, rectify and delete your data, as well as to exercise the other rights recognised in applicable regulations, by writing to the Secretary General of the Government of Castilla-La Mancha.\n\nTo continue using the application you must accept these terms of use and data protection conditions. If you do not accept, the application will close.';
+  String get consentPageBody =>
+      'In accordance with Regulation (EU) 2016/679 of the European Parliament and of the Council (GDPR) and Organic Law 3/2018 on Personal Data Protection and guarantee of digital rights (LOPDGDD), the Government of Castilla-La Mancha informs you that the personal data collected through this application will be processed under the responsibility of the Government of Castilla-La Mancha, in order to provide you with the e-government services included in the Citizen Space.\n\nIn accordance with Law 3/2017 of the Government of Castilla-La Mancha, you have the right to access, rectify and delete your data, as well as to exercise the other rights recognised in applicable regulations, by writing to the Secretary General of the Government of Castilla-La Mancha.\n\nTo continue using the application you must accept these terms of use and data protection conditions. If you do not accept, the application will close.';
 
   @override
   String get consentPagePrivacyLink => 'View full privacy policy';
@@ -179,7 +180,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeBlockCount(int count) {
-    final intl.NumberFormat countNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String countString = countNumberFormat.format(count);
 
     String _temp0 = intl.Intl.pluralLogic(
@@ -204,7 +206,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalLinkA11yHint => 'Opens in external browser';
 
   @override
-  String get externalLinkOpenFailed => 'The link could not be opened. Please try again later.';
+  String get externalLinkOpenFailed =>
+      'The link could not be opened. Please try again later.';
 
   @override
   String get externalLinkEducamosClmLabel => 'Educamos CLM';
@@ -213,7 +216,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalLinkEmpleoClmLabel => 'Castilla-La Mancha Employment';
 
   @override
-  String get externalLinkEmpleoPublicoClmLabel => 'Castilla-La Mancha Public Employment';
+  String get externalLinkEmpleoPublicoClmLabel =>
+      'Castilla-La Mancha Public Employment';
 
   @override
   String get externalLinkSedeDgtLabel => 'DGT e-office';
@@ -264,49 +268,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpFaqLoginClaveQ => 'How do I sign in with Cl@ve?';
 
   @override
-  String get helpFaqLoginClaveA => 'Tap \"Sign in with Cl@ve\" on the welcome screen. The official identification system opens; once authenticated you return to the app.';
+  String get helpFaqLoginClaveA =>
+      'Tap \"Sign in with Cl@ve\" on the welcome screen. The official identification system opens; once authenticated you return to the app.';
 
   @override
   String get helpFaqLoginProblemsQ => 'I can\'t sign in, what should I do?';
 
   @override
-  String get helpFaqLoginProblemsA => 'Check your connection and that your Cl@ve credential is still valid. If the issue persists, contact 012.';
+  String get helpFaqLoginProblemsA =>
+      'Check your connection and that your Cl@ve credential is still valid. If the issue persists, contact 012.';
 
   @override
   String get helpFaqDataProtectionQ => 'What happens with my personal data?';
 
   @override
-  String get helpFaqDataProtectionA => 'Your data is processed under GDPR and LOPDGDD. See the privacy policy for purposes, retention and your rights.';
+  String get helpFaqDataProtectionA =>
+      'Your data is processed under GDPR and LOPDGDD. See the privacy policy for purposes, retention and your rights.';
 
   @override
   String get helpFaqNotificationsQ => 'How do I receive notifications?';
 
   @override
-  String get helpFaqNotificationsA => 'Enable alerts in your profile and allow system notifications. You will be notified of changes in your case files.';
+  String get helpFaqNotificationsA =>
+      'Enable alerts in your profile and allow system notifications. You will be notified of changes in your case files.';
 
   @override
   String get helpFaqDocumentsQ => 'Can I download official documents?';
 
   @override
-  String get helpFaqDocumentsA => 'Yes. From each case file detail you can download or share the available documents.';
+  String get helpFaqDocumentsA =>
+      'Yes. From each case file detail you can download or share the available documents.';
 
   @override
   String get helpFaqOfflineQ => 'Does the app work offline?';
 
   @override
-  String get helpFaqOfflineA => 'Some features (cards and legal content) work offline. Anything that needs fresh data requires connectivity.';
+  String get helpFaqOfflineA =>
+      'Some features (cards and legal content) work offline. Anything that needs fresh data requires connectivity.';
 
   @override
   String get helpGuideFirstStepsTitle => 'First steps';
 
   @override
-  String get helpGuideFirstStepsBody => 'Learn how to navigate Home, Case files, Notifications and Cards. Personalise your profile for a tailored experience.';
+  String get helpGuideFirstStepsBody =>
+      'Learn how to navigate Home, Case files, Notifications and Cards. Personalise your profile for a tailored experience.';
 
   @override
   String get helpGuideCarpetaAgeTitle => 'State Citizen Folder';
 
   @override
-  String get helpGuideCarpetaAgeBody => 'If your case depends on the Spanish State Administration, open the AGE Citizen Folder directly.';
+  String get helpGuideCarpetaAgeBody =>
+      'If your case depends on the Spanish State Administration, open the AGE Citizen Folder directly.';
 
   @override
   String get helpContact012PhoneLabel => '012 phone support';
@@ -333,7 +345,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legalNotFoundTitle => 'Document not found';
 
   @override
-  String get legalNotFoundMessage => 'The requested document could not be loaded.';
+  String get legalNotFoundMessage =>
+      'The requested document could not be loaded.';
 
   @override
   String get sitemapPageTitle => 'Sitemap';
@@ -467,7 +480,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaDetailBack => 'Back';
 
   @override
-  String get agendaDetailNotFound => 'The requested event is no longer available.';
+  String get agendaDetailNotFound =>
+      'The requested event is no longer available.';
 
   @override
   String get agendaDetailLocation => 'Location';
@@ -491,7 +505,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaDetailJustificante => 'View attendance proof';
 
   @override
-  String get agendaJustificanteUnavailable => 'The proof will open once the external link is enabled.';
+  String get agendaJustificanteUnavailable =>
+      'The proof will open once the external link is enabled.';
 
   @override
   String get agendaTileExpand => 'Show more details';
@@ -506,19 +521,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaParseErrorTitle => 'We couldn\'t read your agenda';
 
   @override
-  String get agendaParseErrorDetail => 'There was a problem interpreting the service response. Please try again in a few minutes.';
+  String get agendaParseErrorDetail =>
+      'There was a problem interpreting the service response. Please try again in a few minutes.';
 
   @override
   String get agendaParseErrorRetry => 'Try again';
 
   @override
-  String get agendaPartialBanner => 'Some events couldn\'t be loaded. Showing the ones available.';
+  String get agendaPartialBanner =>
+      'Some events couldn\'t be loaded. Showing the ones available.';
 
   @override
   String get stateAffairsTitle => 'State and other matters of interest';
 
   @override
-  String get stateAffairsHeaderDescription => 'Information from national registries (INE/Padrón, Catastro, DGT). Data may not be updated in real time.';
+  String get stateAffairsHeaderDescription =>
+      'Information from national registries (INE/Padrón, Catastro, DGT). Data may not be updated in real time.';
 
   @override
   String get stateAffairsResidenceTitle => 'Residence';
@@ -553,7 +571,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stateAffairsPropertiesSource => 'Source: Catastro';
 
   @override
-  String get stateAffairsPropertiesEmpty => 'No real-estate assets are registered under your name.';
+  String get stateAffairsPropertiesEmpty =>
+      'No real-estate assets are registered under your name.';
 
   @override
   String get stateAffairsPropertiesError => 'We could not load Catastro data.';
@@ -580,7 +599,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stateAffairsVehiclesSource => 'Source: DGT';
 
   @override
-  String get stateAffairsVehiclesEmpty => 'No vehicles are registered under your name.';
+  String get stateAffairsVehiclesEmpty =>
+      'No vehicles are registered under your name.';
 
   @override
   String get stateAffairsVehiclesError => 'We could not load DGT data.';
@@ -596,13 +616,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get stateAffairsDataDisclaimer => 'Data is sourced from DGT, INE and Catastro and may not be updated in real time.';
+  String get stateAffairsDataDisclaimer =>
+      'Data is sourced from DGT, INE and Catastro and may not be updated in real time.';
 
   @override
   String get domainExternalLinksTitle => 'External links';
 
   @override
-  String get domainGenericLoadError => 'We could not load the requested information.';
+  String get domainGenericLoadError =>
+      'We could not load the requested information.';
 
   @override
   String get domainComingSoonBadge => 'Coming soon';
@@ -611,25 +633,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationTitle => 'Education';
 
   @override
-  String get educationHeaderDescription => 'Check your academic titles and reach the official Castilla-La Mancha education services.';
+  String get educationHeaderDescription =>
+      'Check your academic titles and reach the official Castilla-La Mancha education services.';
 
   @override
   String get educationUniversityTitlesTitle => 'University titles';
 
   @override
-  String get educationUniversityTitlesEmpty => 'No university titles are registered under your name.';
+  String get educationUniversityTitlesEmpty =>
+      'No university titles are registered under your name.';
 
   @override
-  String get educationUniversityTitlesError => 'We could not load your university titles.';
+  String get educationUniversityTitlesError =>
+      'We could not load your university titles.';
 
   @override
   String get educationNonUniversityTitlesTitle => 'Non-university titles';
 
   @override
-  String get educationNonUniversityTitlesEmpty => 'No non-university titles are registered under your name.';
+  String get educationNonUniversityTitlesEmpty =>
+      'No non-university titles are registered under your name.';
 
   @override
-  String get educationNonUniversityTitlesError => 'We could not load your non-university titles.';
+  String get educationNonUniversityTitlesError =>
+      'We could not load your non-university titles.';
 
   @override
   String educationTitleYear(String year) {
@@ -640,16 +667,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationScholarshipTitle => 'Scholarship status';
 
   @override
-  String get educationScholarshipDescription => 'This information will be available soon. It depends on an additional service that is not yet integrated.';
+  String get educationScholarshipDescription =>
+      'This information will be available soon. It depends on an additional service that is not yet integrated.';
 
   @override
-  String get educationScholarshipTooltip => 'Capability pending a specific scholarship endpoint. Awaiting contract validation (TASK-27).';
+  String get educationScholarshipTooltip =>
+      'Capability pending a specific scholarship endpoint. Awaiting contract validation (TASK-27).';
 
   @override
   String get employmentTitle => 'Employment';
 
   @override
-  String get employmentHeaderDescription => 'Check your job-seeker status and reach the official Empleo CLM portals.';
+  String get employmentHeaderDescription =>
+      'Check your job-seeker status and reach the official Empleo CLM portals.';
 
   @override
   String get employmentSeekerTitle => 'Job-seeker status';
@@ -658,10 +688,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get employmentSeekerSource => 'Source: SEPE';
 
   @override
-  String get employmentSeekerEmpty => 'No job-seeker records are registered under your name.';
+  String get employmentSeekerEmpty =>
+      'No job-seeker records are registered under your name.';
 
   @override
-  String get employmentSeekerError => 'We could not load your job-seeker status.';
+  String get employmentSeekerError =>
+      'We could not load your job-seeker status.';
 
   @override
   String get employmentSeekerEstadoLabel => 'Current status';
@@ -685,25 +717,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get employmentOffersTitle => 'Offer subscriptions';
 
   @override
-  String get employmentOffersDescription => 'Browsing and managing your offer subscriptions takes place directly on the Empleo CLM portal.';
+  String get employmentOffersDescription =>
+      'Browsing and managing your offer subscriptions takes place directly on the Empleo CLM portal.';
 
   @override
   String get socialWelfareTitle => 'Social Welfare';
 
   @override
-  String get socialWelfareHeaderDescription => 'Check your familia numerosa title and reach the official Castilla-La Mancha social welfare services.';
+  String get socialWelfareHeaderDescription =>
+      'Check your familia numerosa title and reach the official Castilla-La Mancha social welfare services.';
 
   @override
   String get socialWelfareFamilyTitle => 'Large family';
 
   @override
-  String get socialWelfareFamilySource => 'Source: Junta de Comunidades de Castilla-La Mancha';
+  String get socialWelfareFamilySource =>
+      'Source: Junta de Comunidades de Castilla-La Mancha';
 
   @override
-  String get socialWelfareFamilyEmpty => 'No large-family title is registered under your name.';
+  String get socialWelfareFamilyEmpty =>
+      'No large-family title is registered under your name.';
 
   @override
-  String get socialWelfareFamilyError => 'We could not load your large-family title.';
+  String get socialWelfareFamilyError =>
+      'We could not load your large-family title.';
 
   @override
   String get socialWelfareFamilyNumberLabel => 'Title number';
@@ -741,25 +778,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialWelfareTermalismoTitle => 'Thermal-spa programs';
 
   @override
-  String get socialWelfareTermalismoDescription => 'The Castilla-La Mancha thermal-spa program is managed through the official Social Welfare portal.';
+  String get socialWelfareTermalismoDescription =>
+      'The Castilla-La Mancha thermal-spa program is managed through the official Social Welfare portal.';
 
   @override
   String get socialWelfareParkingTitle => 'Parking card';
 
   @override
-  String get socialWelfareParkingDescription => 'Requesting and managing the disability parking card is handled in the corresponding e-office.';
+  String get socialWelfareParkingDescription =>
+      'Requesting and managing the disability parking card is handled in the corresponding e-office.';
 
   @override
   String get socialWelfareDependenciaTitle => 'Dependency support';
 
   @override
-  String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
+  String get socialWelfareDependenciaDescription =>
+      'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
 
   @override
   String get supportFormTitle => 'Technical support';
 
   @override
-  String get supportFormIntro => 'Tell us what happened. Our team will get back to you by e-mail.';
+  String get supportFormIntro =>
+      'Tell us what happened. Our team will get back to you by e-mail.';
 
   @override
   String get supportCtaFromHelp => 'Contact support';
@@ -783,7 +824,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportAttachmentLabel => 'Attachment (optional)';
 
   @override
-  String get supportAttachmentHint => 'You may attach a single file (screenshots, documents).';
+  String get supportAttachmentHint =>
+      'You may attach a single file (screenshots, documents).';
 
   @override
   String get supportAttachmentPick => 'Pick file';
@@ -795,7 +837,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportAttachmentRemove => 'Remove attachment';
 
   @override
-  String get supportConsentLabel => 'I authorise the processing of my data to handle my request.';
+  String get supportConsentLabel =>
+      'I authorise the processing of my data to handle my request.';
 
   @override
   String get supportCaptchaLabel => 'I am not a robot';
@@ -810,13 +853,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportConfirmationTitle => 'Request sent';
 
   @override
-  String get supportConfirmationMessage => 'We\'ve received your request. We\'ll confirm by e-mail.';
+  String get supportConfirmationMessage =>
+      'We\'ve received your request. We\'ll confirm by e-mail.';
 
   @override
   String get supportConfirmationNewRequest => 'Send another request';
 
   @override
-  String get supportSubmissionError => 'We couldn\'t send your request. Please try again.';
+  String get supportSubmissionError =>
+      'We couldn\'t send your request. Please try again.';
 
   @override
   String get supportErrorNameRequired => 'Please enter your name.';
@@ -837,19 +882,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportErrorSubjectRequired => 'Please add a subject.';
 
   @override
-  String get supportErrorSubjectTooLong => 'Subject can\'t exceed 100 characters.';
+  String get supportErrorSubjectTooLong =>
+      'Subject can\'t exceed 100 characters.';
 
   @override
   String get supportErrorDescriptionRequired => 'Please describe your request.';
 
   @override
-  String get supportErrorDescriptionTooLong => 'Description exceeds the allowed length.';
+  String get supportErrorDescriptionTooLong =>
+      'Description exceeds the allowed length.';
 
   @override
-  String get supportErrorConsentRequired => 'You must authorise the processing of your data.';
+  String get supportErrorConsentRequired =>
+      'You must authorise the processing of your data.';
 
   @override
-  String get supportErrorCaptchaRequired => 'Please confirm you are not a robot.';
+  String get supportErrorCaptchaRequired =>
+      'Please confirm you are not a robot.';
 
   @override
   String get cipCardTitle => 'Health card (CIP)';
@@ -861,13 +910,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cipCardCopied => 'CIP copied to clipboard';
 
   @override
-  String get cipCardReadOnlySubtitle => 'Read-only — the health card cannot be downloaded from the app.';
+  String get cipCardReadOnlySubtitle =>
+      'Read-only — the health card cannot be downloaded from the app.';
 
   @override
-  String get cipCardContractGap => 'Other health capabilities (visits, prescriptions) are subject to contract confirmation.';
+  String get cipCardContractGap =>
+      'Other health capabilities (visits, prescriptions) are subject to contract confirmation.';
 
   @override
-  String get cipCardEmpty => 'No health card is associated with your profile yet.';
+  String get cipCardEmpty =>
+      'No health card is associated with your profile yet.';
 
   @override
   String get cipCardError => 'We couldn\'t load your health card.';
@@ -906,22 +958,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get caseworkTabSalidasRegistro => 'My registry outbox';
 
   @override
-  String get caseworkExpedientesEmpty => 'No casework files registered under your name.';
+  String get caseworkExpedientesEmpty =>
+      'No casework files registered under your name.';
 
   @override
-  String get caseworkEntradasRegistroEmpty => 'No registry entries are registered under your name.';
+  String get caseworkEntradasRegistroEmpty =>
+      'No registry entries are registered under your name.';
 
   @override
-  String get caseworkSalidasRegistroEmpty => 'No registry exits are registered under your name.';
+  String get caseworkSalidasRegistroEmpty =>
+      'No registry exits are registered under your name.';
 
   @override
-  String get caseworkExpedientesError => 'We could not load your casework files.';
+  String get caseworkExpedientesError =>
+      'We could not load your casework files.';
 
   @override
-  String get caseworkEntradasRegistroError => 'We could not load your registry entries.';
+  String get caseworkEntradasRegistroError =>
+      'We could not load your registry entries.';
 
   @override
-  String get caseworkSalidasRegistroError => 'We could not load your registry exits.';
+  String get caseworkSalidasRegistroError =>
+      'We could not load your registry exits.';
 
   @override
   String get caseworkStatusEnTramite => 'In progress';
@@ -941,19 +999,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get caseworkSearchTitle => 'Search casework files and registry entries';
+  String get caseworkSearchTitle =>
+      'Search casework files and registry entries';
 
   @override
-  String get caseworkSearchOpenCta => 'Search casework files and registry entries';
+  String get caseworkSearchOpenCta =>
+      'Search casework files and registry entries';
 
   @override
-  String get caseworkSearchIntro => 'Fill at least one field to find your casework file or registry entry.';
+  String get caseworkSearchIntro =>
+      'Fill at least one field to find your casework file or registry entry.';
 
   @override
-  String get caseworkSearchFieldIdentificationLabel => 'ID document (NIF / NIE / Passport)';
+  String get caseworkSearchFieldIdentificationLabel =>
+      'ID document (NIF / NIE / Passport)';
 
   @override
-  String get caseworkSearchFieldIdentificationHelper => 'E.g. 12345678Z, X1234567A or alphanumeric passport.';
+  String get caseworkSearchFieldIdentificationHelper =>
+      'E.g. 12345678Z, X1234567A or alphanumeric passport.';
 
   @override
   String get caseworkSearchFieldExpedienteLabel => 'Casework file number';
@@ -977,25 +1040,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get caseworkSearchAportar => 'Submit documents to this result';
 
   @override
-  String get caseworkSearchAportarPending => 'Document submission will be enabled by STORY-37 / STORY-38.';
+  String get caseworkSearchAportarPending =>
+      'Document submission will be enabled by STORY-37 / STORY-38.';
 
   @override
-  String get caseworkSearchErrorAtLeastOne => 'Please fill at least one of the three fields.';
+  String get caseworkSearchErrorAtLeastOne =>
+      'Please fill at least one of the three fields.';
 
   @override
-  String get caseworkSearchErrorInvalidIdentification => 'Invalid format. Use NIF (8 digits + letter), NIE (X/Y/Z + 7 digits + letter) or alphanumeric passport (6–9 chars).';
+  String get caseworkSearchErrorInvalidIdentification =>
+      'Invalid format. Use NIF (8 digits + letter), NIE (X/Y/Z + 7 digits + letter) or alphanumeric passport (6–9 chars).';
 
   @override
-  String get caseworkSearchErrorInvalidNumber => 'Invalid format. Only letters, digits, dashes and slashes are allowed.';
+  String get caseworkSearchErrorInvalidNumber =>
+      'Invalid format. Only letters, digits, dashes and slashes are allowed.';
 
   @override
   String get caseworkSearchNoResults => 'No matches';
 
   @override
-  String get caseworkSearchNoResultsHint => 'Check the data you entered and try again.';
+  String get caseworkSearchNoResultsHint =>
+      'Check the data you entered and try again.';
 
   @override
-  String get caseworkSearchError => 'We could not complete the search. Please try again.';
+  String get caseworkSearchError =>
+      'We could not complete the search. Please try again.';
 
   @override
   String caseworkSearchResultsCount(int count) {
@@ -1017,7 +1086,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get caseworkItemDetailPlaceholderPending => 'The real detail screen will be enabled by STORY-35 / STORY-36.';
+  String get caseworkItemDetailPlaceholderPending =>
+      'The real detail screen will be enabled by STORY-35 / STORY-36.';
 
   @override
   String get digitalCardsPageTitle => 'My digital cards';
@@ -1044,13 +1114,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsStatusNotAvailable => 'Not available';
 
   @override
-  String get digitalCardsMessageNotValid => 'This card is not valid. QR, PKPASS and PDF aren\'t available.';
+  String get digitalCardsMessageNotValid =>
+      'This card is not valid. QR, PKPASS and PDF aren\'t available.';
 
   @override
-  String get digitalCardsMessageNotDownloadable => 'This card can\'t be downloaded right now.';
+  String get digitalCardsMessageNotDownloadable =>
+      'This card can\'t be downloaded right now.';
 
   @override
-  String get digitalCardsMessageNotAvailable => 'You don\'t have this card available.';
+  String get digitalCardsMessageNotAvailable =>
+      'You don\'t have this card available.';
 
   @override
   String get digitalCardsActionQr => 'Show QR';
@@ -1065,10 +1138,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsActionComingSoon => 'Coming soon.';
 
   @override
-  String get digitalCardsEmptyMessage => 'You don\'t have any digital cards yet.';
+  String get digitalCardsEmptyMessage =>
+      'You don\'t have any digital cards yet.';
 
   @override
-  String get digitalCardsErrorMessage => 'We couldn\'t load your digital cards.';
+  String get digitalCardsErrorMessage =>
+      'We couldn\'t load your digital cards.';
 
   @override
   String get digitalCardsCipMiniTitle => 'Health card (CIP)';
@@ -1083,7 +1158,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifeEventsTitle => 'My life events';
 
   @override
-  String get lifeEventsHeaderDescription => 'Select the life events that best describe your situation to receive personalized recommendations.';
+  String get lifeEventsHeaderDescription =>
+      'Select the life events that best describe your situation to receive personalized recommendations.';
 
   @override
   String get lifeEventsSaveAction => 'Save';
@@ -1095,7 +1171,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifeEventsResetConfirmTitle => 'Reset your preferences';
 
   @override
-  String get lifeEventsResetConfirmBody => 'All selected life events will be removed. This action cannot be undone.';
+  String get lifeEventsResetConfirmBody =>
+      'All selected life events will be removed. This action cannot be undone.';
 
   @override
   String get lifeEventsResetConfirm => 'Reset';
@@ -1107,13 +1184,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifeEventsSavedFeedback => 'Your preferences have been saved.';
 
   @override
-  String get lifeEventsErrorFeedback => 'We couldn\'t save your preferences. Please try again.';
+  String get lifeEventsErrorFeedback =>
+      'We couldn\'t save your preferences. Please try again.';
 
   @override
   String get lifeEventsLoadError => 'We couldn\'t load the life events.';
 
   @override
-  String get lifeEventsEmpty => 'There are no life events available at the moment.';
+  String get lifeEventsEmpty =>
+      'There are no life events available at the moment.';
 
   @override
   String get lifeEventsCategoryFamilia => 'Family';
@@ -1134,7 +1213,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dataConsentTitle => 'My authorizations';
 
   @override
-  String get dataConsentHeaderDescription => 'Manage which data can be used to offer you personalized services and recommendations. You can change your decision at any time.';
+  String get dataConsentHeaderDescription =>
+      'Manage which data can be used to offer you personalized services and recommendations. You can change your decision at any time.';
 
   @override
   String get dataConsentSaveAction => 'Save';
@@ -1146,7 +1226,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dataConsentRevokeConfirmTitle => 'Revoke your authorizations';
 
   @override
-  String get dataConsentRevokeConfirmBody => 'All your authorizations will be removed and we will stop personalizing content until you accept them again.';
+  String get dataConsentRevokeConfirmBody =>
+      'All your authorizations will be removed and we will stop personalizing content until you accept them again.';
 
   @override
   String get dataConsentRevokeConfirm => 'Revoke';
@@ -1155,44 +1236,113 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dataConsentRevokeCancel => 'Cancel';
 
   @override
-  String get dataConsentSavedFeedback => 'Your authorizations have been updated successfully.';
+  String get dataConsentSavedFeedback =>
+      'Your authorizations have been updated successfully.';
 
   @override
-  String get dataConsentErrorFeedback => 'We could not update your authorizations. Please try again.';
+  String get dataConsentErrorFeedback =>
+      'We could not update your authorizations. Please try again.';
 
   @override
   String get dataConsentLoadError => 'We could not load your authorizations.';
 
   @override
-  String get dataConsentEmpty => 'There are no authorizations available at this time.';
+  String get dataConsentEmpty =>
+      'There are no authorizations available at this time.';
 
   @override
-  String get dataConsentTypeJccmTitle => 'Data from the Government of Castilla-La Mancha';
+  String get dataConsentTypeJccmTitle =>
+      'Data from the Government of Castilla-La Mancha';
 
   @override
-  String get dataConsentTypeJccmSubtitle => 'Allow JCCM to use your administrative data to offer you personalized services and procedures.';
+  String get dataConsentTypeJccmSubtitle =>
+      'Allow JCCM to use your administrative data to offer you personalized services and procedures.';
 
   @override
-  String get dataConsentTypeOtrasAdminTitle => 'Data from other public administrations';
+  String get dataConsentTypeOtrasAdminTitle =>
+      'Data from other public administrations';
 
   @override
-  String get dataConsentTypeOtrasAdminSubtitle => 'Allow us to consult data from other public administrations so you don\'t have to provide it manually.';
+  String get dataConsentTypeOtrasAdminSubtitle =>
+      'Allow us to consult data from other public administrations so you don\'t have to provide it manually.';
 
   @override
   String get dataConsentTypePerfiladoTitle => 'Profiling for recommendations';
 
   @override
-  String get dataConsentTypePerfiladoSubtitle => 'Allow us to analyze your activity to recommend procedures, grants and relevant content.';
+  String get dataConsentTypePerfiladoSubtitle =>
+      'Allow us to analyze your activity to recommend procedures, grants and relevant content.';
 
   @override
   String get dataConsentPrivacyReferenceTitle => 'Data protection information';
 
   @override
-  String get dataConsentPrivacyReferenceBody => 'These authorizations are based on the data protection information accepted when you signed in.';
+  String get dataConsentPrivacyReferenceBody =>
+      'These authorizations are based on the data protection information accepted when you signed in.';
 
   @override
-  String get dataConsentPrivacyReferenceCta => 'View data protection information';
+  String get dataConsentPrivacyReferenceCta =>
+      'View data protection information';
 
   @override
   String get dataConsentNavCta => 'My authorizations';
+
+  @override
+  String get notificationsCenterTitle => 'My notifications';
+
+  @override
+  String get notificationsLoading => 'Loading notifications…';
+
+  @override
+  String get notificationsErrorMessage =>
+      'We could not load your notifications.';
+
+  @override
+  String get notificationsLoadMoreError =>
+      'We could not load more notifications. Please try again.';
+
+  @override
+  String get notificationsEmptyTitle => 'No notifications';
+
+  @override
+  String get notificationsEmptySubtitle =>
+      'We did not find notifications matching the active filters.';
+
+  @override
+  String get notificationsFilterAll => 'All';
+
+  @override
+  String get notificationsItemHasDocuments => 'Has attached documents';
+
+  @override
+  String notificationsPaginationFooter(int loaded, int total) {
+    return 'Showing $loaded of $total';
+  }
+
+  @override
+  String get notificationStatusPendiente => 'Pending';
+
+  @override
+  String get notificationStatusAceptada => 'Accepted';
+
+  @override
+  String get notificationStatusRechazada => 'Rejected';
+
+  @override
+  String get notificationStatusCaducada => 'Expired';
+
+  @override
+  String get notificationStatusUnknown => 'Unclassified';
+
+  @override
+  String get notificationDetailPlaceholderTitle => 'Notification detail';
+
+  @override
+  String notificationDetailPlaceholderBody(String id) {
+    return 'Notification $id';
+  }
+
+  @override
+  String get notificationDetailPlaceholderPending =>
+      'Detail screen will be enabled in STORY-44.';
 }
