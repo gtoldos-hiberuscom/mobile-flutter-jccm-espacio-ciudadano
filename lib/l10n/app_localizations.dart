@@ -2000,23 +2000,149 @@ abstract class AppLocalizations {
   /// **'{count, plural, one{1 resultado} other{{count} resultados}}'**
   String caseworkSearchResultsCount(int count);
 
-  /// Casework — título del detalle (placeholder).
+  /// Casework — título de la pantalla de detalle (STORY-35).
   ///
   /// In es, this message translates to:
   /// **'Detalle del expediente'**
-  String get caseworkItemDetailPlaceholderTitle;
+  String get caseworkExpedienteDetailTitle;
 
-  /// Casework — cuerpo del detalle (placeholder).
+  /// Casework — tooltip botón volver detalle.
   ///
   /// In es, this message translates to:
-  /// **'Detalle del elemento {id}'**
-  String caseworkItemDetailPlaceholderBody(String id);
+  /// **'Volver a Mis gestiones'**
+  String get caseworkExpedienteDetailBack;
 
-  /// Casework — mensaje provisional del detalle.
+  /// Casework — mensaje de carga detalle.
   ///
   /// In es, this message translates to:
-  /// **'El detalle real se habilita en STORY-35 / STORY-36.'**
-  String get caseworkItemDetailPlaceholderPending;
+  /// **'Cargando detalle del expediente…'**
+  String get caseworkExpedienteDetailLoading;
+
+  /// Casework — título de error en detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar el expediente.'**
+  String get caseworkExpedienteDetailErrorTitle;
+
+  /// Casework — cuerpo de error en detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Vuelve a intentarlo en unos minutos.'**
+  String get caseworkExpedienteDetailErrorBody;
+
+  /// Casework — título del bloque de metadata.
+  ///
+  /// In es, this message translates to:
+  /// **'Información del expediente'**
+  String get caseworkExpedienteDetailMetadataTitle;
+
+  /// Casework — etiqueta número de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get caseworkExpedienteDetailNumero;
+
+  /// Casework — etiqueta código del asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Código del asunto'**
+  String get caseworkExpedienteDetailAsuntoCodigo;
+
+  /// Casework — etiqueta asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Asunto'**
+  String get caseworkExpedienteDetailAsunto;
+
+  /// Casework — etiqueta consejería.
+  ///
+  /// In es, this message translates to:
+  /// **'Consejería'**
+  String get caseworkExpedienteDetailConsejeria;
+
+  /// Casework — etiqueta oficina tramitadora.
+  ///
+  /// In es, this message translates to:
+  /// **'Oficina tramitadora'**
+  String get caseworkExpedienteDetailOficina;
+
+  /// Casework — etiqueta procedimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Procedimiento'**
+  String get caseworkExpedienteDetailProcedimiento;
+
+  /// Casework — etiqueta fecha de inicio.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de inicio'**
+  String get caseworkExpedienteDetailFechaInicio;
+
+  /// Casework — etiqueta última actualización.
+  ///
+  /// In es, this message translates to:
+  /// **'Última actualización'**
+  String get caseworkExpedienteDetailFechaActualizacion;
+
+  /// Casework — etiqueta accesible del estado.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado'**
+  String get caseworkExpedienteDetailEstadoLabel;
+
+  /// Casework — estado abierto.
+  ///
+  /// In es, this message translates to:
+  /// **'Abierto'**
+  String get caseworkExpedienteDetailEstadoAbierto;
+
+  /// Casework — estado cerrado.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrado'**
+  String get caseworkExpedienteDetailEstadoCerrado;
+
+  /// Casework — fallback de estado desconocido (TASK-40 Q1).
+  ///
+  /// In es, this message translates to:
+  /// **'Estado desconocido'**
+  String get caseworkExpedienteDetailEstadoUnknown;
+
+  /// Casework — título sección de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Ficheros asociados'**
+  String get caseworkExpedienteDetailFilesTitle;
+
+  /// Casework — vacío sección de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay ficheros asociados a este expediente.'**
+  String get caseworkExpedienteDetailFilesEmpty;
+
+  /// Casework — tooltip descarga fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar fichero'**
+  String get caseworkExpedienteDetailFicheroDownloadTooltip;
+
+  /// Casework — mensaje placeholder descarga fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'La descarga del fichero se habilitará en una próxima versión.'**
+  String get caseworkExpedienteDetailFicheroDownloadStub;
+
+  /// Casework — título zona operativa de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get caseworkExpedienteDetailOperationsTitle;
+
+  /// Casework — banner expediente cerrado.
+  ///
+  /// In es, this message translates to:
+  /// **'Expediente cerrado, no se admiten aportaciones.'**
+  String get caseworkExpedienteDetailClosedBanner;
 
   /// Título de la pantalla de catálogo de carnets digitales (STORY-48).
   ///

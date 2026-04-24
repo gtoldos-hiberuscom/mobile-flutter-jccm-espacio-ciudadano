@@ -1009,15 +1009,76 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get caseworkItemDetailPlaceholderTitle => 'Casework file detail';
+  String get caseworkExpedienteDetailTitle => 'Casework file detail';
 
   @override
-  String caseworkItemDetailPlaceholderBody(String id) {
-    return 'Detail for item $id';
-  }
+  String get caseworkExpedienteDetailBack => 'Back to my casework';
 
   @override
-  String get caseworkItemDetailPlaceholderPending => 'The real detail screen will be enabled by STORY-35 / STORY-36.';
+  String get caseworkExpedienteDetailLoading => 'Loading casework detail…';
+
+  @override
+  String get caseworkExpedienteDetailErrorTitle => 'We could not load this casework file.';
+
+  @override
+  String get caseworkExpedienteDetailErrorBody => 'Please try again in a few minutes.';
+
+  @override
+  String get caseworkExpedienteDetailMetadataTitle => 'File information';
+
+  @override
+  String get caseworkExpedienteDetailNumero => 'File number';
+
+  @override
+  String get caseworkExpedienteDetailAsuntoCodigo => 'Subject code';
+
+  @override
+  String get caseworkExpedienteDetailAsunto => 'Subject';
+
+  @override
+  String get caseworkExpedienteDetailConsejeria => 'Department';
+
+  @override
+  String get caseworkExpedienteDetailOficina => 'Processing office';
+
+  @override
+  String get caseworkExpedienteDetailProcedimiento => 'Procedure';
+
+  @override
+  String get caseworkExpedienteDetailFechaInicio => 'Start date';
+
+  @override
+  String get caseworkExpedienteDetailFechaActualizacion => 'Last update';
+
+  @override
+  String get caseworkExpedienteDetailEstadoLabel => 'State';
+
+  @override
+  String get caseworkExpedienteDetailEstadoAbierto => 'Open';
+
+  @override
+  String get caseworkExpedienteDetailEstadoCerrado => 'Closed';
+
+  @override
+  String get caseworkExpedienteDetailEstadoUnknown => 'Unknown state';
+
+  @override
+  String get caseworkExpedienteDetailFilesTitle => 'Associated files';
+
+  @override
+  String get caseworkExpedienteDetailFilesEmpty => 'No files are associated with this casework file.';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadTooltip => 'Download file';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadStub => 'File download will be enabled in a future release.';
+
+  @override
+  String get caseworkExpedienteDetailOperationsTitle => 'Submit documentation';
+
+  @override
+  String get caseworkExpedienteDetailClosedBanner => 'This casework file is closed; submissions are no longer accepted.';
 
   @override
   String get digitalCardsPageTitle => 'My digital cards';

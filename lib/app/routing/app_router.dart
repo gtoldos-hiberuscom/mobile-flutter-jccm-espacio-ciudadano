@@ -14,9 +14,9 @@ import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_eve
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
-import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_item_detail_placeholder_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/detail/2_presentation/expediente_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/uploads/2_presentation/upload_evidence_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_catalog_page.dart';
@@ -198,8 +198,8 @@ final goRouterProvider = Provider<GoRouter>(
                 ),
                 GoRoute(
                   path: 'item/:id',
-                  builder: (final BuildContext context, final GoRouterState state) => CaseworkItemDetailPlaceholderPage(
-                    itemId: state.pathParameters['id'] ?? '',
+                  builder: (final BuildContext context, final GoRouterState state) => ExpedienteDetailPage(
+                    expedienteRef: state.pathParameters['id'] ?? '',
                   ),
                   routes: [
                     GoRoute(
