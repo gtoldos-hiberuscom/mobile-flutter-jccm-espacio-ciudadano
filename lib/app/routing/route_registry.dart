@@ -57,6 +57,10 @@ abstract final class Routes {
   // ── Consent ───────────────────────────────────────────────────────────────
   static const String consent = '/consent';
 
+  // ── Personalization ───────────────────────────────────────────────────────
+  /// Mis autorizaciones — citizen data-consent screen (STORY-55).
+  static const String preferencesConsent = '/preferences/consent';
+
   // ── Route sets for guard classification ───────────────────────────────────
 
   /// Paths that require an active session.
@@ -73,6 +77,7 @@ abstract final class Routes {
     employment,
     socialWelfare,
     stateAffairs,
+    preferencesConsent,
   };
 
   /// Returns true when [path] requires authentication.
