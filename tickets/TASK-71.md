@@ -2,7 +2,7 @@
 id: 71
 jira_key:
 type: Task
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -18,7 +18,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T08:00:00+02:00
+updated_at: 2026-04-22T08:10:00+02:00
 due_date:
 jira_url:
 ---
@@ -76,3 +76,4 @@ Validar y reconciliar con el alcance oficial las superficies de tarjeta sanitari
 - 2026-04-21T23:50:13+02:00 | by Copilot | Normalized dependency references after backlog audit.
 - 2026-04-22T08:00:00+02:00 | by plan-manager | Sprint 4 start: To Do → In Progress; sprint set to Sprint 4.
 - 2026-04-22T08:05:00+02:00 | by plan-manager | Discovery completed in `documentation/discovery/TASK-71-cards-surfaces-decision.md`. Decisions: Tarjeta Sanitaria → CIP_REUSE (no wallet semantics, owned by STORY-31, rendered as read-only mini-card in STORY-48 catalogue); Tarjeta de Biblioteca → OUT_OF_MVP (default omit; "Próximamente" placeholder only if product opts in). STORY-22 retro-confirmed as compatible (no code change). Open follow-ups for product on biblioteca scope and TASK-53 scheduling for full carnet payload binding.
+- 2026-04-22T08:10:00+02:00 | by plan-manager | All AC satisfied; In Progress → Done. Task branch `task/EPIC-7-digital-cards-wallet/TASK-71-cards-surfaces-discovery/document-cards-surfaces` integrates upward via merge commits.
