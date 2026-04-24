@@ -22,6 +22,7 @@ import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.da
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/data_consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
 import 'package:jccm_espacio_ciudadano/features/social_welfare/2_presentation/social_welfare_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/state_affairs/2_presentation/state_affairs_landing_page.dart';
@@ -200,6 +201,10 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.support,
               builder: (final BuildContext context, final GoRouterState state) => const SupportPlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.preferencesConsent,
+              builder: (final BuildContext context, final GoRouterState state) => const DataConsentPage(),
             ),
           ],
         ),
