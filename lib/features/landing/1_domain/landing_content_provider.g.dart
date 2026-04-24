@@ -23,7 +23,9 @@ const landingContentProvider = LandingContentProvider._();
 /// `keepAlive` defaults to `false` so the provider is disposed when no longer
 /// watched, which is acceptable for a screen-level provider.
 
-final class LandingContentProvider extends $FunctionalProvider<LandingContent, LandingContent, LandingContent> with $Provider<LandingContent> {
+final class LandingContentProvider
+    extends $FunctionalProvider<LandingContent, LandingContent, LandingContent>
+    with $Provider<LandingContent> {
   /// Provides the static [LandingContent] for the public landing screen.
   ///
   /// Content is hardcoded for this sprint — no network call is required.
@@ -45,7 +47,8 @@ final class LandingContentProvider extends $FunctionalProvider<LandingContent, L
 
   @$internal
   @override
-  $ProviderElement<LandingContent> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<LandingContent> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   LandingContent create(Ref ref) {

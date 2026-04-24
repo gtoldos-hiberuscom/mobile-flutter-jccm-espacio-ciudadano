@@ -37,7 +37,8 @@ const dioProvider = DioProvider._();
 /// final response = await dio.get('/citizen/notifications');
 /// ```
 
-final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio> with $Provider<Dio> {
+final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
+    with $Provider<Dio> {
   /// Riverpod provider that exposes the singleton [Dio] HTTP client.
   ///
   /// The [Dio] instance is kept alive for the lifetime of the app and is
@@ -66,7 +67,8 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio> with $Provide
 
   @$internal
   @override
-  $ProviderElement<Dio> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<Dio> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   Dio create(Ref ref) {

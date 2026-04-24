@@ -27,7 +27,14 @@ const externalLinkCatalogProvider = ExternalLinkCatalogProvider._();
 /// happens here — presentation widgets must not import the
 /// `3_data/` implementation directly (canon §13).
 
-final class ExternalLinkCatalogProvider extends $FunctionalProvider<ExternalLinkCatalog, ExternalLinkCatalog, ExternalLinkCatalog> with $Provider<ExternalLinkCatalog> {
+final class ExternalLinkCatalogProvider
+    extends
+        $FunctionalProvider<
+          ExternalLinkCatalog,
+          ExternalLinkCatalog,
+          ExternalLinkCatalog
+        >
+    with $Provider<ExternalLinkCatalog> {
   /// Provides the application-wide [ExternalLinkCatalog] (allow-list of
   /// outbound destinations).
   ///
@@ -69,7 +76,8 @@ final class ExternalLinkCatalogProvider extends $FunctionalProvider<ExternalLink
   }
 }
 
-String _$externalLinkCatalogHash() => r'6e5a0b1c86ef059450ac3fa544c5929d5dc6dcf5';
+String _$externalLinkCatalogHash() =>
+    r'6e5a0b1c86ef059450ac3fa544c5929d5dc6dcf5';
 
 /// Provides the application-wide [ExternalLinkLauncher].
 ///
@@ -86,7 +94,14 @@ const externalLinkLauncherProvider = ExternalLinkLauncherProvider._();
 /// override this provider with a fake implementation that does not touch
 /// the real `url_launcher` plugin.
 
-final class ExternalLinkLauncherProvider extends $FunctionalProvider<ExternalLinkLauncher, ExternalLinkLauncher, ExternalLinkLauncher> with $Provider<ExternalLinkLauncher> {
+final class ExternalLinkLauncherProvider
+    extends
+        $FunctionalProvider<
+          ExternalLinkLauncher,
+          ExternalLinkLauncher,
+          ExternalLinkLauncher
+        >
+    with $Provider<ExternalLinkLauncher> {
   /// Provides the application-wide [ExternalLinkLauncher].
   ///
   /// Composed against the catalog, analytics service and logger. Tests can
@@ -126,4 +141,5 @@ final class ExternalLinkLauncherProvider extends $FunctionalProvider<ExternalLin
   }
 }
 
-String _$externalLinkLauncherHash() => r'87d2d086e32ffc890a4adaff03279ac74800f7e3';
+String _$externalLinkLauncherHash() =>
+    r'87d2d086e32ffc890a4adaff03279ac74800f7e3';

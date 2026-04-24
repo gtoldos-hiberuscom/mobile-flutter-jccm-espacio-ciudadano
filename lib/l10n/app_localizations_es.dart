@@ -1644,4 +1644,46 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get notificationContactGateBannerCta => 'Configurar ahora';
+
+  @override
+  String get walletActionOpen => 'Abrir';
+
+  @override
+  String get walletActionShare => 'Compartir';
+
+  @override
+  String get walletActionAddToWallet => 'Añadir a Wallet';
+
+  @override
+  String get walletPreviewPdfPlaceholder => 'Documento PDF';
+
+  @override
+  String get walletPreviewPkpassPlaceholder => 'Pase para Wallet';
+
+  @override
+  String get walletPreviewQrUnavailable => 'Vista previa del QR no disponible';
+
+  @override
+  String get walletPreviewQrImageSemantic => 'Imagen del código QR';
+
+  @override
+  String get walletPreviewQrTextSemantic => 'Contenido del código QR en texto';
+
+  @override
+  String get walletErrorInvalidArtifact => 'El archivo recibido no es válido. Inténtalo de nuevo.';
+
+  @override
+  String get walletErrorSystem => 'No hemos podido completar la acción. Inténtalo de nuevo.';
+
+  @override
+  String get walletErrorNoCapability => 'Esta acción no está disponible en tu dispositivo.';
+
+  @override
+  String get walletErrorEmptyPayload => 'El archivo está vacío.';
+
+  @override
+  String get walletErrorTooLarge => 'El archivo supera el tamaño permitido.';
+
+  @override
+  String get walletErrorUnsupportedSource => 'El formato recibido no es compatible.';
 }
