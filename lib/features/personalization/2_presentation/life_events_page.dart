@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/auth/session_state_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
@@ -219,6 +221,23 @@ class _LifeEventsBody extends StatelessWidget {
                 child: Text(
                   l10n.lifeEventsHeaderDescription,
                   style: theme.textTheme.bodyMedium,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space8,
+                ),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TextButton.icon(
+                    key: const ValueKey<String>(
+                      'life-events-data-consent-cta',
+                    ),
+                    onPressed: () =>
+                        context.go(Routes.preferencesConsent),
+                    icon: const Icon(Icons.shield_outlined),
+                    label: Text(l10n.dataConsentNavCta),
+                  ),
                 ),
               ),
               for (final entry in grouped.entries) ...<Widget>[

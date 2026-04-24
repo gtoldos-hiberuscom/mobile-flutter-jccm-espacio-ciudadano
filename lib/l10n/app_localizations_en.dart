@@ -766,4 +766,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lifeEventsCategoryEducacion => 'Education';
+
+  @override
+  String get dataConsentTitle => 'My authorizations';
+
+  @override
+  String get dataConsentHeaderDescription => 'Manage which data can be used to offer you personalized services and recommendations. You can change your decision at any time.';
+
+  @override
+  String get dataConsentSaveAction => 'Save';
+
+  @override
+  String get dataConsentRevokeAction => 'Revoke all authorizations';
+
+  @override
+  String get dataConsentRevokeConfirmTitle => 'Revoke your authorizations';
+
+  @override
+  String get dataConsentRevokeConfirmBody => 'All your authorizations will be removed and we will stop personalizing content until you accept them again.';
+
+  @override
+  String get dataConsentRevokeConfirm => 'Revoke';
+
+  @override
+  String get dataConsentRevokeCancel => 'Cancel';
+
+  @override
+  String get dataConsentSavedFeedback => 'Your authorizations have been updated successfully.';
+
+  @override
+  String get dataConsentErrorFeedback => 'We could not update your authorizations. Please try again.';
+
+  @override
+  String get dataConsentLoadError => 'We could not load your authorizations.';
+
+  @override
+  String get dataConsentEmpty => 'There are no authorizations available at this time.';
+
+  @override
+  String get dataConsentTypeJccmTitle => 'Data from the Government of Castilla-La Mancha';
+
+  @override
+  String get dataConsentTypeJccmSubtitle => 'Allow JCCM to use your administrative data to offer you personalized services and procedures.';
+
+  @override
+  String get dataConsentTypeOtrasAdminTitle => 'Data from other public administrations';
+
+  @override
+  String get dataConsentTypeOtrasAdminSubtitle => 'Allow us to consult data from other public administrations so you don\'t have to provide it manually.';
+
+  @override
+  String get dataConsentTypePerfiladoTitle => 'Profiling for recommendations';
+
+  @override
+  String get dataConsentTypePerfiladoSubtitle => 'Allow us to analyze your activity to recommend procedures, grants and relevant content.';
+
+  @override
+  String get dataConsentPrivacyReferenceTitle => 'Data protection information';
+
+  @override
+  String get dataConsentPrivacyReferenceBody => 'These authorizations are based on the data protection information accepted when you signed in.';
+
+  @override
+  String get dataConsentPrivacyReferenceCta => 'View data protection information';
+
+  @override
+  String get dataConsentNavCta => 'My authorizations';
 }

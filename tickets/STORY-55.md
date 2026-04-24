@@ -2,12 +2,12 @@
 id: 55
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 4
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T11:30:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir la gestión de autorizaciones necesarias para mostrar datos y generar recomendaciones personalizadas, incluyendo guardado explícito, revocación desde preferencias y reutilización de la información de protección de datos aceptada al inicio.
 
 ## Acceptance Criteria
-- [ ] Se contempla pantalla/sección de autorizaciones con guardado explícito.
-- [ ] Se contemplan autorizaciones para datos JCCM, otras administraciones y perfilado de recomendaciones.
-- [ ] Se contempla revocación o borrado de preferencias desde el mismo ámbito funcional.
-- [ ] Se reutiliza o referencia la información de protección de datos aceptada al inicio.
+- [x] Se contempla pantalla/sección de autorizaciones con guardado explícito.
+- [x] Se contemplan autorizaciones para datos JCCM, otras administraciones y perfilado de recomendaciones.
+- [x] Se contempla revocación o borrado de preferencias desde el mismo ámbito funcional.
+- [x] Se reutiliza o referencia la información de protección de datos aceptada al inicio.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -76,3 +76,5 @@ Cubrir la gestión de autorizaciones necesarias para mostrar datos y generar rec
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T11:25:00+02:00 | by Copilot | To Do → In Progress. Sprint 4 implementation started on branch task/EPIC-8-personalization/STORY-55-data-consent/implement-data-consent.
+- 2026-04-22T11:30:00+02:00 | by Copilot | In Progress → Done. Implemented `lib/features/personalization/` data-consent slice (entity + state, repository contract, Riverpod notifier, mock repository impl, `DataConsentPage` with three SwitchListTiles, explicit Save action, revoke-all confirmation dialog and CTA linking to the existing onboarding `ConsentPage` at `/consent` for protección-de-datos reference). Added `Routes.preferencesConsent` (`/preferences/consent`) inside the authenticated shell and a CTA on `LifeEventsPage`. l10n keys added under the `dataConsent*` prefix in `app_es.arb` / `app_en.arb`. Notifier reuses STORY-54 idAgente strategy (`sessionStateProvider` → `LifeEventsPage.stubIdAgente`). Dio wiring for `/hechos-vitales/clausulas/{idAgente}`, `PATCH /hechos-vitales/clausulas` and `DELETE /hechos-vitales/preferencias/{idAgente}` deferred to a follow-up story (depends on TASK-21 idAgente closure) — see `TODO(future-sprint)` in `data_consent_repository_impl.dart`. Tests: `flutter test test/features/personalization/` → 15/15 pass (5 notifier + 2 widget added on top of STORY-54). Analyzer: 0 errors / 0 warnings on `lib/features/personalization/`.
