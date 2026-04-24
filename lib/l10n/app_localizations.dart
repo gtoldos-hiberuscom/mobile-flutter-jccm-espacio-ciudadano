@@ -62,7 +62,8 @@ import 'app_localizations_es.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +71,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,15 +84,19 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('es')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('es'),
+  ];
 
   /// El título de la aplicación que se muestra en el lanzador.
   ///
@@ -2767,9 +2773,268 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Esta pantalla muestra el detalle del registro en modo consulta. No es posible aportar documentación desde aquí.'**
   String get caseworkRegistroDetailReadOnlyBanner;
+
+  /// Casework workspace — entrypoint button that opens the third-party aportación wizard (STORY-37).
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get caseworkAportacionOpenCta;
+
+  /// Casework aportación wizard — page title.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación de documentos'**
+  String get caseworkAportacionTitle;
+
+  /// Casework aportación wizard — breadcrumb segment.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación'**
+  String get caseworkAportacionBreadcrumb;
+
+  /// Casework aportación wizard — AppBar back tooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Paso anterior'**
+  String get caseworkAportacionBack;
+
+  /// Casework aportación wizard — AppBar exit tooltip on the intro step.
+  ///
+  /// In es, this message translates to:
+  /// **'Salir del flujo'**
+  String get caseworkAportacionExit;
+
+  /// Casework aportación wizard — step indicator.
+  ///
+  /// In es, this message translates to:
+  /// **'Paso {current} de {total}'**
+  String caseworkAportacionStepIndicator(int current, int total);
+
+  /// Casework aportación wizard — step label for intro.
+  ///
+  /// In es, this message translates to:
+  /// **'Introducción'**
+  String get caseworkAportacionStepIntro;
+
+  /// Casework aportación wizard — step label for identification.
+  ///
+  /// In es, this message translates to:
+  /// **'Identificación'**
+  String get caseworkAportacionStepIdentificacion;
+
+  /// Casework aportación wizard — step label for search.
+  ///
+  /// In es, this message translates to:
+  /// **'Búsqueda'**
+  String get caseworkAportacionStepSearch;
+
+  /// Casework aportación wizard — step label for detail.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle'**
+  String get caseworkAportacionStepDetail;
+
+  /// Casework aportación wizard — step label for completion.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmación'**
+  String get caseworkAportacionStepComplete;
+
+  /// Casework aportación wizard — intro headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Aporta documentación a un expediente'**
+  String get caseworkAportacionIntroHeadline;
+
+  /// Casework aportación wizard — intro body.
+  ///
+  /// In es, this message translates to:
+  /// **'Este flujo te permite aportar documentación adicional a un expediente abierto en nombre de la persona interesada. Identifícate, localiza el expediente y adjunta los ficheros.'**
+  String get caseworkAportacionIntroBody;
+
+  /// Casework aportación wizard — restrictions section title.
+  ///
+  /// In es, this message translates to:
+  /// **'Antes de continuar'**
+  String get caseworkAportacionIntroRestrictionsTitle;
+
+  /// Casework aportación wizard — restriction bullet 1.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo puedes aportar documentación a expedientes que estén abiertos.'**
+  String get caseworkAportacionIntroRestriction1;
+
+  /// Casework aportación wizard — restriction bullet 2.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesitas el número de expediente o el número de registro asociado.'**
+  String get caseworkAportacionIntroRestriction2;
+
+  /// Casework aportación wizard — restriction bullet 3.
+  ///
+  /// In es, this message translates to:
+  /// **'Los ficheros aportados quedan vinculados a la persona interesada que indiques.'**
+  String get caseworkAportacionIntroRestriction3;
+
+  /// Casework aportación wizard — intro continue CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar'**
+  String get caseworkAportacionIntroContinueCta;
+
+  /// Casework aportación wizard — identification headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Identifica al interesado'**
+  String get caseworkAportacionIdentificationHeadline;
+
+  /// Casework aportación wizard — identification body.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica el tipo y número de documento de la persona titular del expediente.'**
+  String get caseworkAportacionIdentificationBody;
+
+  /// Casework aportación wizard — identification type label.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de documento'**
+  String get caseworkAportacionIdentificationTypeLabel;
+
+  /// Casework aportación wizard — identification type NIF.
+  ///
+  /// In es, this message translates to:
+  /// **'NIF'**
+  String get caseworkAportacionIdentificationTypeNif;
+
+  /// Casework aportación wizard — identification type NIE.
+  ///
+  /// In es, this message translates to:
+  /// **'NIE'**
+  String get caseworkAportacionIdentificationTypeNie;
+
+  /// Casework aportación wizard — identification type passport.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasaporte'**
+  String get caseworkAportacionIdentificationTypePassport;
+
+  /// Casework aportación wizard — identification type CIF.
+  ///
+  /// In es, this message translates to:
+  /// **'CIF'**
+  String get caseworkAportacionIdentificationTypeCif;
+
+  /// Casework aportación wizard — identification number label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de documento'**
+  String get caseworkAportacionIdentificationNumberLabel;
+
+  /// Casework aportación wizard — identification number hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej. 12345678A'**
+  String get caseworkAportacionIdentificationNumberHint;
+
+  /// Casework aportación wizard — identification next CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Siguiente'**
+  String get caseworkAportacionIdentificationNextCta;
+
+  /// Casework aportación wizard — search headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Localiza el expediente'**
+  String get caseworkAportacionSearchHeadline;
+
+  /// Casework aportación wizard — search body.
+  ///
+  /// In es, this message translates to:
+  /// **'Busca por número de expediente o número de registro asociado.'**
+  String get caseworkAportacionSearchBody;
+
+  /// Casework aportación wizard — search tab expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Por nº de expediente'**
+  String get caseworkAportacionSearchTabExpediente;
+
+  /// Casework aportación wizard — search tab registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Por nº de registro'**
+  String get caseworkAportacionSearchTabRegistro;
+
+  /// Casework aportación wizard — search expediente label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get caseworkAportacionSearchExpedienteLabel;
+
+  /// Casework aportación wizard — search expediente hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej. EXP/2025/00123'**
+  String get caseworkAportacionSearchExpedienteHint;
+
+  /// Casework aportación wizard — search registro label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de registro'**
+  String get caseworkAportacionSearchRegistroLabel;
+
+  /// Casework aportación wizard — search registro hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej. REG/E/45612'**
+  String get caseworkAportacionSearchRegistroHint;
+
+  /// Casework aportación wizard — search submit CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar'**
+  String get caseworkAportacionSearchSubmitCta;
+
+  /// Casework aportación wizard — invalid identification failure.
+  ///
+  /// In es, this message translates to:
+  /// **'El número de documento no es válido para el tipo seleccionado.'**
+  String get caseworkAportacionFailureInvalidIdentification;
+
+  /// Casework aportación wizard — not found failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado ningún expediente con esos datos.'**
+  String get caseworkAportacionFailureNotFound;
+
+  /// Casework aportación wizard — network failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido completar la búsqueda. Inténtalo de nuevo más tarde.'**
+  String get caseworkAportacionFailureNetworkError;
+
+  /// Casework aportación wizard — completion headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación enviada'**
+  String get caseworkAportacionCompleteHeadline;
+
+  /// Casework aportación wizard — completion body.
+  ///
+  /// In es, this message translates to:
+  /// **'La documentación se ha aportado correctamente al expediente {expediente}. Conserva el justificante por si necesitas consultarlo.'**
+  String caseworkAportacionCompleteBody(String expediente);
+
+  /// Casework aportación wizard — back to workspace CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a Mis gestiones'**
+  String get caseworkAportacionCompleteHomeCta;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -2778,7 +3043,8 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

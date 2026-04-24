@@ -60,6 +60,12 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage> w
             tooltip: l10n.caseworkSearchOpenCta,
             onPressed: () => GoRouter.of(context).go('/casework/search'),
           ),
+          IconButton(
+            icon: const Icon(Icons.upload_file_outlined),
+            tooltip: l10n.caseworkAportacionOpenCta,
+            onPressed: () =>
+                GoRouter.of(context).go('/casework/aportacion'),
+          ),
         ],
       ),
       body: asyncSnapshot.when(
