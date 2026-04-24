@@ -1435,6 +1435,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.'**
   String get socialWelfareDependenciaDescription;
+
+  /// Personalization — title of the hechos vitales selection screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis hechos vitales'**
+  String get lifeEventsTitle;
+
+  /// Personalization — descriptive header on the hechos vitales screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.'**
+  String get lifeEventsHeaderDescription;
+
+  /// Personalization — explicit save button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get lifeEventsSaveAction;
+
+  /// Personalization — reset preferences button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar preferencias'**
+  String get lifeEventsResetAction;
+
+  /// Personalization — confirmation dialog title for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar tus preferencias'**
+  String get lifeEventsResetConfirmTitle;
+
+  /// Personalization — confirmation dialog body for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.'**
+  String get lifeEventsResetConfirmBody;
+
+  /// Personalization — confirm reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar'**
+  String get lifeEventsResetConfirm;
+
+  /// Personalization — cancel reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get lifeEventsResetCancel;
+
+  /// Personalization — snackbar after a successful save.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus preferencias se han guardado correctamente.'**
+  String get lifeEventsSavedFeedback;
+
+  /// Personalization — snackbar after a save / reset failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido guardar tus preferencias. Inténtalo de nuevo.'**
+  String get lifeEventsErrorFeedback;
+
+  /// Personalization — error state when the catalog fails to load.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los hechos vitales.'**
+  String get lifeEventsLoadError;
+
+  /// Personalization — empty state for the catalog.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay hechos vitales disponibles en este momento.'**
+  String get lifeEventsEmpty;
+
+  /// Personalization — familia category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Familia'**
+  String get lifeEventsCategoryFamilia;
+
+  /// Personalization — salud category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get lifeEventsCategorySalud;
+
+  /// Personalization — empleo category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get lifeEventsCategoryEmpleo;
+
+  /// Personalization — vivienda category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Vivienda'**
+  String get lifeEventsCategoryVivienda;
+
+  /// Personalization — educación category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get lifeEventsCategoryEducacion;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

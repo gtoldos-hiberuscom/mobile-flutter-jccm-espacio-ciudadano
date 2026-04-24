@@ -716,4 +716,55 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get lifeEventsTitle => 'Mis hechos vitales';
+
+  @override
+  String get lifeEventsHeaderDescription => 'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.';
+
+  @override
+  String get lifeEventsSaveAction => 'Guardar';
+
+  @override
+  String get lifeEventsResetAction => 'Borrar preferencias';
+
+  @override
+  String get lifeEventsResetConfirmTitle => 'Borrar tus preferencias';
+
+  @override
+  String get lifeEventsResetConfirmBody => 'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.';
+
+  @override
+  String get lifeEventsResetConfirm => 'Borrar';
+
+  @override
+  String get lifeEventsResetCancel => 'Cancelar';
+
+  @override
+  String get lifeEventsSavedFeedback => 'Tus preferencias se han guardado correctamente.';
+
+  @override
+  String get lifeEventsErrorFeedback => 'No hemos podido guardar tus preferencias. Inténtalo de nuevo.';
+
+  @override
+  String get lifeEventsLoadError => 'No hemos podido cargar los hechos vitales.';
+
+  @override
+  String get lifeEventsEmpty => 'No hay hechos vitales disponibles en este momento.';
+
+  @override
+  String get lifeEventsCategoryFamilia => 'Familia';
+
+  @override
+  String get lifeEventsCategorySalud => 'Salud';
+
+  @override
+  String get lifeEventsCategoryEmpleo => 'Empleo';
+
+  @override
+  String get lifeEventsCategoryVivienda => 'Vivienda';
+
+  @override
+  String get lifeEventsCategoryEducacion => 'Educación';
 }
