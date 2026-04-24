@@ -26,12 +26,12 @@ void main() {
     );
 
     ProviderContainer container() => ProviderContainer(
-          overrides: [
-            employmentRepositoryProvider.overrideWith(
-              (final ref) => _FakeEmploymentRepository(snapshot),
-            ),
-          ],
-        );
+      overrides: [
+        employmentRepositoryProvider.overrideWith(
+          (final ref) => _FakeEmploymentRepository(snapshot),
+        ),
+      ],
+    );
 
     test('initial build exposes the mock snapshot shape', () async {
       final c = container();

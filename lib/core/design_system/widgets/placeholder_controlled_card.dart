@@ -60,8 +60,7 @@ class PlaceholderControlledCard extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: theme.colorScheme.secondaryContainer,
-                borderRadius:
-                    BorderRadius.circular(AppDimensions.radiusSmall),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
               ),
               child: Text(
                 badge,

@@ -94,22 +94,20 @@ final class SescamParseError {
   final String? reason;
   final String? rawPreview;
 
-  factory SescamParseError.empty() =>
-      const SescamParseError(kind: SescamParseErrorKind.empty);
+  factory SescamParseError.empty() => const SescamParseError(kind: SescamParseErrorKind.empty);
 
   factory SescamParseError.unknownShape(final String raw) => SescamParseError(
-        kind: SescamParseErrorKind.unknownShape,
-        reason: 'unknown_shape',
-        rawPreview: raw.length > 256 ? raw.substring(0, 256) : raw,
-      );
+    kind: SescamParseErrorKind.unknownShape,
+    reason: 'unknown_shape',
+    rawPreview: raw.length > 256 ? raw.substring(0, 256) : raw,
+  );
 
-  factory SescamParseError.partial(final String reason) =>
-      SescamParseError(kind: SescamParseErrorKind.partial, reason: reason);
+  factory SescamParseError.partial(final String reason) => SescamParseError(kind: SescamParseErrorKind.partial, reason: reason);
 
   factory SescamParseError.serverKo(final String? mensaje) => SescamParseError(
-        kind: SescamParseErrorKind.serverEnvelopeKo,
-        reason: mensaje,
-      );
+    kind: SescamParseErrorKind.serverEnvelopeKo,
+    reason: mensaje,
+  );
 }
 
 // ── Result ───────────────────────────────────────────────────────────────
@@ -122,10 +120,8 @@ final class SescamParseResult<T> {
 
   bool get isOk => error == null;
 
-  factory SescamParseResult.ok(final T value) =>
-      SescamParseResult<T>._(value: value);
-  factory SescamParseResult.err(final SescamParseError error) =>
-      SescamParseResult<T>._(error: error);
+  factory SescamParseResult.ok(final T value) => SescamParseResult<T>._(value: value);
+  factory SescamParseResult.err(final SescamParseError error) => SescamParseResult<T>._(error: error);
 }
 
 // ── Parsers ──────────────────────────────────────────────────────────────
@@ -141,30 +137,22 @@ class SescamCitasParser {
 
     final fromJsonObject = _tryJsonObject(payload);
     if (fromJsonObject != null) {
-
       return fromJsonObject;
-
     }
 
     final fromJsonArray = _tryJsonArray(payload);
     if (fromJsonArray != null) {
-
       return fromJsonArray;
-
     }
 
     final fromLines = _tryLineSeparated(payload);
     if (fromLines != null) {
-
       return fromLines;
-
     }
 
     final fromBase64 = _tryBase64(payload);
     if (fromBase64 != null) {
-
       return fromBase64;
-
     }
 
     return SescamParseResult.err(SescamParseError.unknownShape(payload));
@@ -174,9 +162,7 @@ class SescamCitasParser {
     try {
       final decoded = jsonDecode(raw);
       if (decoded is! Map<String, dynamic>) {
-
         return null;
-
       }
       final estado = decoded['estado']?.toString();
       final mensaje = decoded['mensaje']?.toString();
@@ -184,13 +170,7 @@ class SescamCitasParser {
         return SescamParseResult.err(SescamParseError.serverKo(mensaje));
       }
       final rawCitas = decoded['citas'];
-      final citas = rawCitas is List
-          ? rawCitas
-              .whereType<Map<String, dynamic>>()
-              .map(_decodeCita)
-              .whereType<SescamCita>()
-              .toList(growable: false)
-          : const <SescamCita>[];
+      final citas = rawCitas is List ? rawCitas.whereType<Map<String, dynamic>>().map(_decodeCita).whereType<SescamCita>().toList(growable: false) : const <SescamCita>[];
       return SescamParseResult.ok(
         SescamCitasPayload(citas: citas, estado: estado, mensaje: mensaje),
       );
@@ -203,15 +183,9 @@ class SescamCitasParser {
     try {
       final decoded = jsonDecode(raw);
       if (decoded is! List) {
-
         return null;
-
       }
-      final citas = decoded
-          .whereType<Map<String, dynamic>>()
-          .map(_decodeCita)
-          .whereType<SescamCita>()
-          .toList(growable: false);
+      final citas = decoded.whereType<Map<String, dynamic>>().map(_decodeCita).whereType<SescamCita>().toList(growable: false);
       return SescamParseResult.ok(SescamCitasPayload(citas: citas));
     } on FormatException {
       return null;
@@ -219,14 +193,9 @@ class SescamCitasParser {
   }
 
   SescamParseResult<SescamCitasPayload>? _tryLineSeparated(final String raw) {
-    final lines = raw
-        .split(RegExp(r'\r?\n'))
-        .where((final l) => l.trim().isNotEmpty)
-        .toList(growable: false);
+    final lines = raw.split(RegExp(r'\r?\n')).where((final l) => l.trim().isNotEmpty).toList(growable: false);
     if (lines.isEmpty) {
-
       return null;
-
     }
     if (!lines.any((final l) => l.contains(';') || l.contains('|'))) {
       return null;
@@ -237,31 +206,29 @@ class SescamCitasParser {
       if (cells.isEmpty) {
         continue;
       }
-      citas.add(SescamCita(
-        id: 'cita-line-$i',
-        fecha: cells.isNotEmpty ? _parseDate(cells[0]) : null,
-        hora: cells.length > 1 ? cells[1].trim() : null,
-        centro: cells.length > 2 ? cells[2].trim() : null,
-        servicio: cells.length > 3 ? cells[3].trim() : null,
-        profesional: cells.length > 4 ? cells[4].trim() : null,
-      ));
+      citas.add(
+        SescamCita(
+          id: 'cita-line-$i',
+          fecha: cells.isNotEmpty ? _parseDate(cells[0]) : null,
+          hora: cells.length > 1 ? cells[1].trim() : null,
+          centro: cells.length > 2 ? cells[2].trim() : null,
+          servicio: cells.length > 3 ? cells[3].trim() : null,
+          profesional: cells.length > 4 ? cells[4].trim() : null,
+        ),
+      );
     }
     return SescamParseResult.ok(SescamCitasPayload(citas: citas));
   }
 
   SescamParseResult<SescamCitasPayload>? _tryBase64(final String raw) {
     if (!_looksLikeBase64(raw)) {
-
       return null;
-
     }
     try {
       final decoded = utf8.decode(base64.decode(raw));
       final inner = parse(decoded);
       if (inner.isOk) {
-
         return inner;
-
       }
       return null;
     } on FormatException {
@@ -315,14 +282,15 @@ class SescamCipParser {
         }
         final cip = decoded['cip']?.toString();
         if (cip != null && cip.isNotEmpty) {
-          return SescamParseResult.ok(SescamCipPayload(
-            cip: cip,
-            titular: decoded['titular']?.toString(),
-            fechaNacimiento:
-                _parseDate(decoded['fechaNacimiento']?.toString()),
-            centroSalud: decoded['centroSalud']?.toString(),
-            regionSanitaria: decoded['regionSanitaria']?.toString(),
-          ));
+          return SescamParseResult.ok(
+            SescamCipPayload(
+              cip: cip,
+              titular: decoded['titular']?.toString(),
+              fechaNacimiento: _parseDate(decoded['fechaNacimiento']?.toString()),
+              centroSalud: decoded['centroSalud']?.toString(),
+              regionSanitaria: decoded['regionSanitaria']?.toString(),
+            ),
+          );
         }
       }
     } on FormatException {
@@ -339,9 +307,7 @@ class SescamCipParser {
         final decoded = utf8.decode(base64.decode(payload));
         final inner = parse(decoded);
         if (inner.isOk) {
-
           return inner;
-
         }
       } on FormatException {
         // ignore
@@ -356,15 +322,11 @@ class SescamCipParser {
 
 DateTime? _parseDate(final String? raw) {
   if (raw == null || raw.isEmpty) {
-
     return null;
-
   }
   final iso = DateTime.tryParse(raw);
   if (iso != null) {
-
     return iso;
-
   }
   final m = RegExp(r'^(\d{2})[/-](\d{2})[/-](\d{4})$').firstMatch(raw);
   if (m != null) {
@@ -382,9 +344,7 @@ DateTime? _parseDate(final String? raw) {
 
 bool _looksLikeBase64(final String raw) {
   if (raw.length < 8 || raw.length % 4 != 0) {
-
     return false;
-
   }
   return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(raw);
 }

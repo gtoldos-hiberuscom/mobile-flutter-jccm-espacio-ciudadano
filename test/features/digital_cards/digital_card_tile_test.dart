@@ -6,21 +6,20 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/wid
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 Widget _wrap(final Widget child) => MaterialApp(
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('es'),
-      home: Scaffold(body: child),
-    );
+  localizationsDelegates: const [
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: AppLocalizations.supportedLocales,
+  locale: const Locale('es'),
+  home: Scaffold(body: child),
+);
 
 void main() {
   group('DigitalCardTile', () {
-    testWidgets('available status — QR/PKPASS/PDF actions are enabled',
-        (final tester) async {
+    testWidgets('available status — QR/PKPASS/PDF actions are enabled', (final tester) async {
       DigitalCardAction? invoked;
       await tester.pumpWidget(
         _wrap(
@@ -37,17 +36,15 @@ void main() {
       await tester.pumpAndSettle();
 
       final qr = find.byKey(const ValueKey('digitalCardsAction-qr-available-1'));
-      final pkpass =
-          find.byKey(const ValueKey('digitalCardsAction-pkpass-available-1'));
-      final pdf =
-          find.byKey(const ValueKey('digitalCardsAction-pdf-available-1'));
+      final pkpass = find.byKey(const ValueKey('digitalCardsAction-pkpass-available-1'));
+      final pdf = find.byKey(const ValueKey('digitalCardsAction-pdf-available-1'));
       expect(qr, findsOneWidget);
       expect(pkpass, findsOneWidget);
       expect(pdf, findsOneWidget);
 
       OutlinedButton buttonOf(final Finder f) => tester.widget<OutlinedButton>(
-            find.descendant(of: f, matching: find.byType(OutlinedButton)),
-          );
+        find.descendant(of: f, matching: find.byType(OutlinedButton)),
+      );
 
       expect(buttonOf(qr).onPressed, isNotNull);
       expect(buttonOf(pkpass).onPressed, isNotNull);
@@ -57,8 +54,7 @@ void main() {
       expect(invoked, DigitalCardAction.qr);
     });
 
-    testWidgets('notValid status — actions are disabled and message shown',
-        (final tester) async {
+    testWidgets('notValid status — actions are disabled and message shown', (final tester) async {
       await tester.pumpWidget(
         _wrap(
           DigitalCardTile(
@@ -81,9 +77,7 @@ void main() {
       expect(find.textContaining('no está vigente'), findsOneWidget);
     });
 
-    testWidgets(
-        'notDownloadable status — actions are disabled and message shown',
-        (final tester) async {
+    testWidgets('notDownloadable status — actions are disabled and message shown', (final tester) async {
       await tester.pumpWidget(
         _wrap(
           DigitalCardTile(

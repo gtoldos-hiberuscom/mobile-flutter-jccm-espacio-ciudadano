@@ -10,18 +10,15 @@ void main() {
 
   group('SescamToAgendaMapper.mapKind', () {
     test('empty payload is treated as a loaded empty agenda', () {
-      expect(SescamToAgendaMapper.mapKind(SescamParseErrorKind.empty),
-          AgendaLoadState.loaded);
+      expect(SescamToAgendaMapper.mapKind(SescamParseErrorKind.empty), AgendaLoadState.loaded);
     });
 
     test('unknown shape becomes parseError', () {
-      expect(SescamToAgendaMapper.mapKind(SescamParseErrorKind.unknownShape),
-          AgendaLoadState.parseError);
+      expect(SescamToAgendaMapper.mapKind(SescamParseErrorKind.unknownShape), AgendaLoadState.parseError);
     });
 
     test('partial becomes partial', () {
-      expect(SescamToAgendaMapper.mapKind(SescamParseErrorKind.partial),
-          AgendaLoadState.partial);
+      expect(SescamToAgendaMapper.mapKind(SescamParseErrorKind.partial), AgendaLoadState.partial);
     });
 
     test('serverEnvelopeKo becomes recoverable error', () {

@@ -46,8 +46,7 @@ void main() {
       expect(state.status, SupportSubmissionStatus.validating);
     });
 
-    test('on valid input transitions to success and calls repository',
-        () async {
+    test('on valid input transitions to success and calls repository', () async {
       final repo = _StubRepo(result: const Success<void>(null));
       final c = _container(repo: repo);
       addTearDown(c.dispose);
@@ -65,12 +64,10 @@ void main() {
 
       expect(repo.calls, 1);
       expect(repo.lastRequest?.email, 'ana@example.com');
-      expect(c.read(supportFormProvider).status,
-          SupportSubmissionStatus.success);
+      expect(c.read(supportFormProvider).status, SupportSubmissionStatus.success);
     });
 
-    test('on repository failure transitions to error with submission key',
-        () async {
+    test('on repository failure transitions to error with submission key', () async {
       final repo = _StubRepo(
         result: const Failure<void>(
           NetworkError(message: 'down', statusCode: 503),

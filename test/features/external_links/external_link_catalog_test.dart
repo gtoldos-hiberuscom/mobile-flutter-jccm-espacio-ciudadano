@@ -24,10 +24,8 @@ void main() {
 
     test('every entry uses https and has a non-empty host', () {
       for (final link in catalog.all()) {
-        expect(link.url.scheme, 'https',
-            reason: 'link ${link.id} must use https');
-        expect(link.url.host, isNotEmpty,
-            reason: 'link ${link.id} must have a host');
+        expect(link.url.scheme, 'https', reason: 'link ${link.id} must use https');
+        expect(link.url.host, isNotEmpty, reason: 'link ${link.id} must have a host');
       }
     });
 

@@ -33,9 +33,7 @@ const appLoggerProvider = AppLoggerProvider._();
 /// crash-reporting adapter (e.g. Firebase Crashlytics) without changing
 /// call-sites.
 
-final class AppLoggerProvider
-    extends $FunctionalProvider<AppLogger, AppLogger, AppLogger>
-    with $Provider<AppLogger> {
+final class AppLoggerProvider extends $FunctionalProvider<AppLogger, AppLogger, AppLogger> with $Provider<AppLogger> {
   /// Provides the application-level [AppLogger] singleton.
   ///
   /// - **Debug builds**: returns a [ConsoleLogger] at [LogLevel.debug] so all
@@ -62,8 +60,7 @@ final class AppLoggerProvider
 
   @$internal
   @override
-  $ProviderElement<AppLogger> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<AppLogger> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   AppLogger create(Ref ref) {

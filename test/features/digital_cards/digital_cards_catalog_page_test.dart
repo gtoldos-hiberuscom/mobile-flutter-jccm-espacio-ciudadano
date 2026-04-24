@@ -19,9 +19,7 @@ class _FakeRepository implements DigitalCardsRepository {
 }
 
 void main() {
-  testWidgets(
-      'DigitalCardsCatalogPage renders the CIP read-only mini card at top',
-      (final tester) async {
+  testWidgets('DigitalCardsCatalogPage renders the CIP read-only mini card at top', (final tester) async {
     final catalog = DigitalCardsCatalog(
       cards: const <DigitalCard>[
         DigitalCard(
@@ -57,8 +55,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final cipFinder = find.byKey(const ValueKey('digitalCardsCipMiniCard'));
-    final tileFinder =
-        find.byKey(const ValueKey('digitalCardsTile-page-card-1'));
+    final tileFinder = find.byKey(const ValueKey('digitalCardsTile-page-card-1'));
     expect(cipFinder, findsOneWidget);
     expect(tileFinder, findsOneWidget);
 

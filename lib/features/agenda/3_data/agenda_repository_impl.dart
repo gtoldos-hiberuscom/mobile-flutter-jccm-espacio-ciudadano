@@ -38,8 +38,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         centro: 'Hospital General de Toledo',
         profesional: 'Dra. M. Pérez',
         tipo: 'Cardiología',
-        justificanteUrl:
-            'https://sescam.castillalamancha.es/justificantes/past-1.pdf',
+        justificanteUrl: 'https://sescam.castillalamancha.es/justificantes/past-1.pdf',
       ),
       AgendaEvent(
         id: 'past-2',

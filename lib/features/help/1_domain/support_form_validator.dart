@@ -41,40 +41,31 @@ final class SupportFormValidator {
 
     final confirm = emailConfirm.trim();
     if (confirm.isEmpty) {
-      errors[SupportFormField.emailConfirm] =
-          SupportValidationError.emailConfirmRequired;
-    } else if (!errors.containsKey(SupportFormField.email) &&
-        confirm.toLowerCase() != email.toLowerCase()) {
-      errors[SupportFormField.emailConfirm] =
-          SupportValidationError.emailMismatch;
+      errors[SupportFormField.emailConfirm] = SupportValidationError.emailConfirmRequired;
+    } else if (!errors.containsKey(SupportFormField.email) && confirm.toLowerCase() != email.toLowerCase()) {
+      errors[SupportFormField.emailConfirm] = SupportValidationError.emailMismatch;
     }
 
     final subject = request.subject.trim();
     if (subject.isEmpty) {
-      errors[SupportFormField.subject] =
-          SupportValidationError.subjectRequired;
+      errors[SupportFormField.subject] = SupportValidationError.subjectRequired;
     } else if (subject.length > subjectMaxLength) {
-      errors[SupportFormField.subject] =
-          SupportValidationError.subjectTooLong;
+      errors[SupportFormField.subject] = SupportValidationError.subjectTooLong;
     }
 
     final description = request.description.trim();
     if (description.isEmpty) {
-      errors[SupportFormField.description] =
-          SupportValidationError.descriptionRequired;
+      errors[SupportFormField.description] = SupportValidationError.descriptionRequired;
     } else if (description.length > descriptionMaxLength) {
-      errors[SupportFormField.description] =
-          SupportValidationError.descriptionTooLong;
+      errors[SupportFormField.description] = SupportValidationError.descriptionTooLong;
     }
 
     if (!request.dataConsent) {
-      errors[SupportFormField.consent] =
-          SupportValidationError.consentRequired;
+      errors[SupportFormField.consent] = SupportValidationError.consentRequired;
     }
 
     if (!request.captchaPassed) {
-      errors[SupportFormField.captcha] =
-          SupportValidationError.captchaRequired;
+      errors[SupportFormField.captcha] = SupportValidationError.captchaRequired;
     }
 
     return errors;

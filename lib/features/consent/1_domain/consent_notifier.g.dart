@@ -40,8 +40,7 @@ const consentProvider = ConsentNotifierProvider._();
 ///
 /// Kept alive for the full app lifetime so the router guard always reads a
 /// stable, up-to-date consent state without recreating the notifier.
-final class ConsentNotifierProvider
-    extends $AsyncNotifierProvider<ConsentNotifier, ConsentState> {
+final class ConsentNotifierProvider extends $AsyncNotifierProvider<ConsentNotifier, ConsentState> {
   /// Riverpod [AsyncNotifier] that manages the full consent lifecycle.
   ///
   /// ## Lifecycle
@@ -99,14 +98,7 @@ abstract class _$ConsentNotifier extends $AsyncNotifier<ConsentState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<ConsentState>, ConsentState>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<ConsentState>, ConsentState>,
-              AsyncValue<ConsentState>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<ConsentState>, ConsentState>, AsyncValue<ConsentState>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

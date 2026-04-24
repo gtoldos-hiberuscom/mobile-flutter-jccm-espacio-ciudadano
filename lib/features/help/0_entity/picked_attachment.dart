@@ -26,18 +26,11 @@ final class PickedAttachment {
   final String? mimeType;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is PickedAttachment &&
-          runtimeType == other.runtimeType &&
-          name == other.name &&
-          sizeBytes == other.sizeBytes &&
-          mimeType == other.mimeType;
+  bool operator ==(final Object other) => identical(this, other) || other is PickedAttachment && runtimeType == other.runtimeType && name == other.name && sizeBytes == other.sizeBytes && mimeType == other.mimeType;
 
   @override
   int get hashCode => Object.hash(name, sizeBytes, mimeType);
 
   @override
-  String toString() =>
-      'PickedAttachment(name: $name, sizeBytes: $sizeBytes, mimeType: $mimeType)';
+  String toString() => 'PickedAttachment(name: $name, sizeBytes: $sizeBytes, mimeType: $mimeType)';
 }

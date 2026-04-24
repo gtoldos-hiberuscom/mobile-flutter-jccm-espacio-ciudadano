@@ -9,5 +9,4 @@ part 'state_affairs_repository_provider.g.dart';
 /// Not kept alive on purpose — the snapshot is expected to refresh
 /// whenever the user re-enters the landing (canon §16).
 @riverpod
-StateAffairsRepository stateAffairsRepository(final Ref ref) =>
-    const StateAffairsRepositoryImpl();
+StateAffairsRepository stateAffairsRepository(final Ref ref) => const StateAffairsRepositoryImpl();

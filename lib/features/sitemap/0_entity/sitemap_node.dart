@@ -18,9 +18,9 @@ final class SitemapNode {
     this.externalLinkId,
     this.children = const <SitemapNode>[],
   }) : assert(
-          !(route != null && externalLinkId != null),
-          'A node cannot point to both an internal route and an external link.',
-        );
+         !(route != null && externalLinkId != null),
+         'A node cannot point to both an internal route and an external link.',
+       );
 
   /// Stable identifier — used by tests, analytics and tree diffs.
   final String id;
@@ -43,6 +43,5 @@ final class SitemapNode {
   bool get isInternal => route != null;
 
   @override
-  String toString() =>
-      'SitemapNode(id: $id, route: $route, ext: $externalLinkId, children: ${children.length})';
+  String toString() => 'SitemapNode(id: $id, route: $route, ext: $externalLinkId, children: ${children.length})';
 }

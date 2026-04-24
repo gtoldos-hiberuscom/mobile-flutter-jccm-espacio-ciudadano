@@ -69,8 +69,7 @@ class LandingPage extends ConsumerWidget {
                   crossAxisSpacing: AppDimensions.space12,
                   childAspectRatio: 0.9,
                 ),
-                itemBuilder: (final context, final index) =>
-                    LandingFeatureCard(item: content.features[index]),
+                itemBuilder: (final context, final index) => LandingFeatureCard(item: content.features[index]),
               ),
               const SizedBox(height: AppDimensions.space40),
 
@@ -135,8 +134,7 @@ class _HeroSection extends StatelessWidget {
             height: 96,
             decoration: BoxDecoration(
               color: AppColors.primaryContainer,
-              borderRadius:
-                  BorderRadius.circular(AppDimensions.radiusXLarge),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXLarge),
             ),
             child: const Icon(
               Icons.account_balance_outlined,
@@ -214,9 +212,9 @@ class _FooterLink extends StatelessWidget {
           child: Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.primary,
-                  decoration: TextDecoration.underline,
-                ),
+              color: AppColors.primary,
+              decoration: TextDecoration.underline,
+            ),
           ),
         ),
       ),

@@ -39,11 +39,7 @@ class _AgendaEventTileState extends State<AgendaEventTile> {
     final l10n = AppLocalizations.of(context);
     final categoryLabel = AgendaCategoryUi.labelFor(context, widget.event.category);
     final title = widget.event.rawTitle ?? widget.event.titleKey ?? '';
-    final hasInlineDetail = widget.event.centro != null ||
-        widget.event.profesional != null ||
-        widget.event.tipo != null ||
-        (widget.event.description != null &&
-            widget.event.description!.isNotEmpty);
+    final hasInlineDetail = widget.event.centro != null || widget.event.profesional != null || widget.event.tipo != null || (widget.event.description != null && widget.event.description!.isNotEmpty);
 
     return Semantics(
       container: true,
@@ -65,12 +61,8 @@ class _AgendaEventTileState extends State<AgendaEventTile> {
             trailing: hasInlineDetail
                 ? IconButton(
                     key: const ValueKey('agenda-tile-expand'),
-                    tooltip: _expanded
-                        ? l10n.agendaTileCollapse
-                        : l10n.agendaTileExpand,
-                    icon: Icon(_expanded
-                        ? Icons.expand_less
-                        : Icons.expand_more),
+                    tooltip: _expanded ? l10n.agendaTileCollapse : l10n.agendaTileExpand,
+                    icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
                     onPressed: _toggle,
                   )
                 : const Icon(Icons.chevron_right),
@@ -107,8 +99,7 @@ class _AgendaEventTileState extends State<AgendaEventTile> {
                     label: l10n.agendaDetailWhen,
                     value: widget.event.startsAt.formatDdMmYyyyHhMm(),
                   ),
-                  if (widget.event.description != null &&
-                      widget.event.description!.isNotEmpty) ...[
+                  if (widget.event.description != null && widget.event.description!.isNotEmpty) ...[
                     const SizedBox(height: AppDimensions.space8),
                     Text(
                       widget.event.description!,

@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/extensions/date_time_format.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart' show ExternalLinkCatalog;
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_link_card.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_links_section.dart';
 import 'package:jccm_espacio_ciudadano/features/social_welfare/0_entity/family_numerosa_title.dart';
@@ -27,12 +28,10 @@ class SocialWelfareLandingPage extends ConsumerStatefulWidget {
   const SocialWelfareLandingPage({super.key});
 
   @override
-  ConsumerState<SocialWelfareLandingPage> createState() =>
-      _SocialWelfareLandingPageState();
+  ConsumerState<SocialWelfareLandingPage> createState() => _SocialWelfareLandingPageState();
 }
 
-class _SocialWelfareLandingPageState
-    extends ConsumerState<SocialWelfareLandingPage> {
+class _SocialWelfareLandingPageState extends ConsumerState<SocialWelfareLandingPage> {
   static const String _domainId = 'social_welfare';
   bool _viewedLogged = false;
 
@@ -44,9 +43,7 @@ class _SocialWelfareLandingPageState
         return;
       }
       _viewedLogged = true;
-      ref
-          .read(analyticsServiceProvider)
-          .logEvent(const DomainLandingViewedEvent(domain: _domainId));
+      ref.read(analyticsServiceProvider).logEvent(const DomainLandingViewedEvent(domain: _domainId));
     });
   }
 
@@ -57,8 +54,7 @@ class _SocialWelfareLandingPageState
     return Scaffold(
       appBar: AppBar(title: Text(l10n.socialWelfareTitle)),
       body: RefreshIndicator(
-        onRefresh: () =>
-            ref.read(socialWelfareLandingProvider.notifier).refresh(),
+        onRefresh: () => ref.read(socialWelfareLandingProvider.notifier).refresh(),
         child: asyncSnapshot.when(
           loading: () => ListView(
             children: [
@@ -74,9 +70,7 @@ class _SocialWelfareLandingPageState
                 height: MediaQuery.of(context).size.height * 0.5,
                 child: ErrorStateWidget(
                   message: l10n.domainGenericLoadError,
-                  onRetry: () => ref
-                      .read(socialWelfareLandingProvider.notifier)
-                      .refresh(),
+                  onRetry: () => ref.read(socialWelfareLandingProvider.notifier).refresh(),
                 ),
               ),
             ],
@@ -153,10 +147,12 @@ class _SocialWelfareLandingPageState
             linkId: 'bienestar_social_clm',
           ),
         ),
-        const ExternalLinksSection(linkIds: <String>[
-          'historia_social_unica',
-          'infancia_familias',
-        ]),
+        const ExternalLinksSection(
+          linkIds: <String>[
+            'historia_social_unica',
+            'infancia_familias',
+          ],
+        ),
       ],
     );
   }

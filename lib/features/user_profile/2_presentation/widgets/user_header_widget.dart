@@ -15,7 +15,7 @@ class UserHeaderWidget extends StatelessWidget {
   final VoidCallback? onProfileTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final name = profile.displayName ?? profile.idAgente;
 

@@ -24,8 +24,7 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final snapshot =
-          await container.read(homeDashboardProvider.future);
+      final snapshot = await container.read(homeDashboardProvider.future);
 
       // All canonical block ids must be present.
       expect(
@@ -78,8 +77,7 @@ class _CountingHomeDashboardRepository implements HomeDashboardRepository {
   _CountingHomeDashboardRepository({required this.onLoad});
 
   final void Function() onLoad;
-  final HomeDashboardRepositoryImpl _delegate =
-      const HomeDashboardRepositoryImpl(latency: Duration.zero);
+  final HomeDashboardRepositoryImpl _delegate = const HomeDashboardRepositoryImpl(latency: Duration.zero);
 
   @override
   Future<HomeDashboardSnapshot> loadDashboard() {

@@ -6,11 +6,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// Type parameter [T] is the list item type.
 class PaginatedListView<T> extends StatelessWidget {
   const PaginatedListView({
-    super.key,
-    required this.items,
-    required this.itemBuilder,
-    required this.hasMore,
-    required this.onLoadMore,
+    required this.items, required this.itemBuilder, required this.hasMore, required this.onLoadMore, super.key,
     this.isLoadingMore = false,
     this.onRefresh,
     this.emptyState,
@@ -38,8 +34,8 @@ class PaginatedListView<T> extends StatelessWidget {
   final EdgeInsets? padding;
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
 
     if (items.isEmpty && emptyState != null) {
       return emptyState!;
@@ -52,7 +48,7 @@ class PaginatedListView<T> extends StatelessWidget {
     Widget listView = ListView.builder(
       padding: padding,
       itemCount: itemCount,
-      itemBuilder: (context, index) {
+      itemBuilder: (final context, final index) {
         if (index < items.length) {
           return itemBuilder(context, items[index], index);
         }

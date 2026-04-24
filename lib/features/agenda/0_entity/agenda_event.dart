@@ -40,9 +40,9 @@ final class AgendaEvent {
     this.tipo,
     this.justificanteUrl,
   }) : assert(
-          titleKey != null || rawTitle != null,
-          'AgendaEvent requires either titleKey or rawTitle',
-        );
+         titleKey != null || rawTitle != null,
+         'AgendaEvent requires either titleKey or rawTitle',
+       );
 
   /// Stable identifier. Used for routing (`/agenda/:id`) and analytics —
   /// must never embed PII.

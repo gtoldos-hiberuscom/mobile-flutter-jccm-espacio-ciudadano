@@ -853,6 +853,174 @@ class AppLocalizationsEs extends AppLocalizations {
   String get supportErrorCaptchaRequired => 'Confirma que no eres un robot.';
 
   @override
+  String get cipCardTitle => 'Tarjeta sanitaria (CIP)';
+
+  @override
+  String get cipCardCopyTooltip => 'Copiar CIP';
+
+  @override
+  String get cipCardCopied => 'CIP copiado al portapapeles';
+
+  @override
+  String get cipCardReadOnlySubtitle => 'Sólo lectura — la tarjeta sanitaria no es descargable desde la app.';
+
+  @override
+  String get cipCardContractGap => 'Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.';
+
+  @override
+  String get cipCardEmpty => 'Aún no hay tarjeta sanitaria asociada a tu perfil.';
+
+  @override
+  String get cipCardError => 'No hemos podido cargar tu tarjeta sanitaria.';
+
+  @override
+  String get cipCardParseError => 'No hemos podido leer la respuesta de la tarjeta sanitaria.';
+
+  @override
+  String get saludSurfaceTitle => 'Salud';
+
+  @override
+  String get saludSurfaceCta => 'Ver agenda';
+
+  @override
+  String get homeUpcomingEventsTitle => 'Próximos eventos';
+
+  @override
+  String get homeUpcomingEventsEmpty => 'No tienes eventos próximos.';
+
+  @override
+  String get caseworkWorkspaceTitle => 'Mis gestiones';
+
+  @override
+  String get caseworkWorkspaceLoadError => 'No hemos podido cargar tus gestiones.';
+
+  @override
+  String get caseworkBreadcrumbHome => 'Inicio';
+
+  @override
+  String get caseworkTabExpedientes => 'Mis expedientes';
+
+  @override
+  String get caseworkTabEntradasRegistro => 'Mis entradas de registro';
+
+  @override
+  String get caseworkTabSalidasRegistro => 'Mis salidas de registro';
+
+  @override
+  String get caseworkExpedientesEmpty => 'No constan expedientes a tu nombre.';
+
+  @override
+  String get caseworkEntradasRegistroEmpty => 'No constan entradas de registro a tu nombre.';
+
+  @override
+  String get caseworkSalidasRegistroEmpty => 'No constan salidas de registro a tu nombre.';
+
+  @override
+  String get caseworkExpedientesError => 'No hemos podido cargar tus expedientes.';
+
+  @override
+  String get caseworkEntradasRegistroError => 'No hemos podido cargar tus entradas de registro.';
+
+  @override
+  String get caseworkSalidasRegistroError => 'No hemos podido cargar tus salidas de registro.';
+
+  @override
+  String get caseworkStatusEnTramite => 'En trámite';
+
+  @override
+  String get caseworkStatusFinalizado => 'Finalizado';
+
+  @override
+  String get caseworkStatusPendiente => 'Pendiente';
+
+  @override
+  String get caseworkStatusRechazado => 'Rechazado';
+
+  @override
+  String caseworkItemDateLabel(String date) {
+    return 'Fecha: $date';
+  }
+
+  @override
+  String get caseworkSearchTitle => 'Buscar expedientes y registros';
+
+  @override
+  String get caseworkSearchOpenCta => 'Buscar expedientes y registros';
+
+  @override
+  String get caseworkSearchIntro => 'Rellena al menos uno de los campos para localizar tu expediente o registro.';
+
+  @override
+  String get caseworkSearchFieldIdentificationLabel => 'NIF / NIE / Pasaporte';
+
+  @override
+  String get caseworkSearchFieldIdentificationHelper => 'Ej.: 12345678Z, X1234567A o pasaporte alfanumérico.';
+
+  @override
+  String get caseworkSearchFieldExpedienteLabel => 'Número de expediente';
+
+  @override
+  String get caseworkSearchFieldExpedienteHelper => 'Ej.: EXP/2025/00123';
+
+  @override
+  String get caseworkSearchFieldRegistroLabel => 'Número de registro';
+
+  @override
+  String get caseworkSearchFieldRegistroHelper => 'Ej.: REG/E/45612';
+
+  @override
+  String get caseworkSearchSubmit => 'Buscar';
+
+  @override
+  String get caseworkSearchAnother => 'Buscar otra cosa';
+
+  @override
+  String get caseworkSearchAportar => 'Aportar documentación al resultado';
+
+  @override
+  String get caseworkSearchAportarPending => 'La aportación documental se habilita en STORY-37 / STORY-38.';
+
+  @override
+  String get caseworkSearchErrorAtLeastOne => 'Introduce al menos uno de los tres campos para buscar.';
+
+  @override
+  String get caseworkSearchErrorInvalidIdentification => 'Formato no válido. Usa NIF (8 dígitos + letra), NIE (X/Y/Z + 7 dígitos + letra) o pasaporte alfanumérico de 6 a 9 caracteres.';
+
+  @override
+  String get caseworkSearchErrorInvalidNumber => 'Formato no válido. Solo letras, números, guiones y barras.';
+
+  @override
+  String get caseworkSearchNoResults => 'Sin coincidencias';
+
+  @override
+  String get caseworkSearchNoResultsHint => 'Revisa los datos introducidos y vuelve a intentarlo.';
+
+  @override
+  String get caseworkSearchError => 'No hemos podido completar la búsqueda. Inténtalo de nuevo.';
+
+  @override
+  String caseworkSearchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count resultados',
+      one: '1 resultado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkItemDetailPlaceholderTitle => 'Detalle del expediente';
+
+  @override
+  String caseworkItemDetailPlaceholderBody(String id) {
+    return 'Detalle del elemento $id';
+  }
+
+  @override
+  String get caseworkItemDetailPlaceholderPending => 'El detalle real se habilita en STORY-35 / STORY-36.';
+
+  @override
   String get digitalCardsPageTitle => 'Mis carnets digitales';
 
   @override
@@ -911,4 +1079,121 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get digitalCardsCipMiniOpenAction => 'Ver tarjeta sanitaria';
+
+  @override
+  String get lifeEventsTitle => 'Mis hechos vitales';
+
+  @override
+  String get lifeEventsHeaderDescription => 'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.';
+
+  @override
+  String get lifeEventsSaveAction => 'Guardar';
+
+  @override
+  String get lifeEventsResetAction => 'Borrar preferencias';
+
+  @override
+  String get lifeEventsResetConfirmTitle => 'Borrar tus preferencias';
+
+  @override
+  String get lifeEventsResetConfirmBody => 'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.';
+
+  @override
+  String get lifeEventsResetConfirm => 'Borrar';
+
+  @override
+  String get lifeEventsResetCancel => 'Cancelar';
+
+  @override
+  String get lifeEventsSavedFeedback => 'Tus preferencias se han guardado correctamente.';
+
+  @override
+  String get lifeEventsErrorFeedback => 'No hemos podido guardar tus preferencias. Inténtalo de nuevo.';
+
+  @override
+  String get lifeEventsLoadError => 'No hemos podido cargar los hechos vitales.';
+
+  @override
+  String get lifeEventsEmpty => 'No hay hechos vitales disponibles en este momento.';
+
+  @override
+  String get lifeEventsCategoryFamilia => 'Familia';
+
+  @override
+  String get lifeEventsCategorySalud => 'Salud';
+
+  @override
+  String get lifeEventsCategoryEmpleo => 'Empleo';
+
+  @override
+  String get lifeEventsCategoryVivienda => 'Vivienda';
+
+  @override
+  String get lifeEventsCategoryEducacion => 'Educación';
+
+  @override
+  String get dataConsentTitle => 'Mis autorizaciones';
+
+  @override
+  String get dataConsentHeaderDescription => 'Gestiona qué datos pueden utilizarse para ofrecerte servicios y recomendaciones personalizadas. Puedes cambiar tu decisión en cualquier momento.';
+
+  @override
+  String get dataConsentSaveAction => 'Guardar';
+
+  @override
+  String get dataConsentRevokeAction => 'Revocar todas las autorizaciones';
+
+  @override
+  String get dataConsentRevokeConfirmTitle => 'Revocar tus autorizaciones';
+
+  @override
+  String get dataConsentRevokeConfirmBody => 'Se eliminarán todas tus autorizaciones y dejaremos de personalizar contenidos hasta que vuelvas a aceptarlas.';
+
+  @override
+  String get dataConsentRevokeConfirm => 'Revocar';
+
+  @override
+  String get dataConsentRevokeCancel => 'Cancelar';
+
+  @override
+  String get dataConsentSavedFeedback => 'Tus autorizaciones se han actualizado correctamente.';
+
+  @override
+  String get dataConsentErrorFeedback => 'No hemos podido actualizar tus autorizaciones. Inténtalo de nuevo.';
+
+  @override
+  String get dataConsentLoadError => 'No hemos podido cargar tus autorizaciones.';
+
+  @override
+  String get dataConsentEmpty => 'No hay autorizaciones disponibles en este momento.';
+
+  @override
+  String get dataConsentTypeJccmTitle => 'Datos de la Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get dataConsentTypeJccmSubtitle => 'Permite que la JCCM utilice tus datos administrativos para ofrecerte trámites y servicios personalizados.';
+
+  @override
+  String get dataConsentTypeOtrasAdminTitle => 'Datos de otras administraciones';
+
+  @override
+  String get dataConsentTypeOtrasAdminSubtitle => 'Permite consultar datos de otras administraciones públicas para evitar que tengas que aportarlos manualmente.';
+
+  @override
+  String get dataConsentTypePerfiladoTitle => 'Perfilado para recomendaciones';
+
+  @override
+  String get dataConsentTypePerfiladoSubtitle => 'Permite analizar tu actividad para recomendarte trámites, ayudas y contenidos relevantes.';
+
+  @override
+  String get dataConsentPrivacyReferenceTitle => 'Información de protección de datos';
+
+  @override
+  String get dataConsentPrivacyReferenceBody => 'Estas autorizaciones se basan en la información de protección de datos aceptada al iniciar sesión.';
+
+  @override
+  String get dataConsentPrivacyReferenceCta => 'Ver información de protección de datos';
+
+  @override
+  String get dataConsentNavCta => 'Mis autorizaciones';
 }

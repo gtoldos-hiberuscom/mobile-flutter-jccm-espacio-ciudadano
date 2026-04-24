@@ -14,12 +14,8 @@ void main() {
 
     test('exposes at least 1 guide and includes phone + email contacts', () {
       expect(content.guides, isNotEmpty);
-      final phones = content.contacts
-          .where((final c) => c.type.name == 'phone')
-          .toList();
-      final emails = content.contacts
-          .where((final c) => c.type.name == 'email')
-          .toList();
+      final phones = content.contacts.where((final c) => c.type.name == 'phone').toList();
+      final emails = content.contacts.where((final c) => c.type.name == 'email').toList();
       expect(phones, isNotEmpty);
       expect(emails, isNotEmpty);
     });
@@ -27,8 +23,7 @@ void main() {
     test('faqsByCategory groups entries while preserving order', () {
       final grouped = content.faqsByCategory();
       // every faq must be reachable through grouping
-      final flatCount =
-          grouped.values.fold<int>(0, (final acc, final l) => acc + l.length);
+      final flatCount = grouped.values.fold<int>(0, (final acc, final l) => acc + l.length);
       expect(flatCount, content.faqs.length);
       for (final entry in grouped.entries) {
         for (final faq in entry.value) {

@@ -39,20 +39,19 @@ void main() {
     );
 
     ProviderContainer container() => ProviderContainer(
-          overrides: [
-            educationRepositoryProvider.overrideWith(
-              (final ref) => _FakeEducationRepository(snapshot),
-            ),
-          ],
-        );
+      overrides: [
+        educationRepositoryProvider.overrideWith(
+          (final ref) => _FakeEducationRepository(snapshot),
+        ),
+      ],
+    );
 
     test('initial build exposes the mock snapshot shape', () async {
       final c = container();
       addTearDown(c.dispose);
       final state = await c.read(educationLandingProvider.future);
       expect(state.universityTitles.status, EducationSectionStatus.loaded);
-      expect(state.universityTitles.value!.first.titulacion,
-          'Grado en Informática');
+      expect(state.universityTitles.value!.first.titulacion, 'Grado en Informática');
       expect(state.nonUniversityTitles.status, EducationSectionStatus.loaded);
       expect(state.nonUniversityTitles.value!.length, 1);
     });

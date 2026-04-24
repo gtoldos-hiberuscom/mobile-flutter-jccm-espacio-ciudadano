@@ -9,5 +9,4 @@ part 'digital_cards_repository_provider.g.dart';
 /// Not kept alive on purpose: navigation back into the cards catalogue
 /// should re-fetch the snapshot.
 @riverpod
-DigitalCardsRepository digitalCardsRepository(final Ref ref) =>
-    const DigitalCardsRepositoryImpl();
+DigitalCardsRepository digitalCardsRepository(final Ref ref) => const DigitalCardsRepositoryImpl();

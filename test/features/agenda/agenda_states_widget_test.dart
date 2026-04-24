@@ -22,36 +22,33 @@ class _StubRepo implements AgendaRepository {
 }
 
 GoRouter _router(final String initial) => GoRouter(
-      initialLocation: initial,
-      routes: [
-        GoRoute(
-          path: '/agenda',
-          builder: (final BuildContext context, final GoRouterState _) =>
-              const AgendaPage(),
-        ),
-        GoRoute(
-          path: '/agenda/:id',
-          builder: (final BuildContext context, final GoRouterState state) =>
-              AgendaEventDetailPage(eventId: state.pathParameters['id']!),
-        ),
-      ],
-    );
+  initialLocation: initial,
+  routes: [
+    GoRoute(
+      path: '/agenda',
+      builder: (final BuildContext context, final GoRouterState _) => const AgendaPage(),
+    ),
+    GoRoute(
+      path: '/agenda/:id',
+      builder: (final BuildContext context, final GoRouterState state) => AgendaEventDetailPage(eventId: state.pathParameters['id']!),
+    ),
+  ],
+);
 
 Widget _app({
   required final AgendaSnapshot snapshot,
   required final String initial,
-}) =>
-    ProviderScope(
-      overrides: [
-        agendaRepositoryProvider.overrideWith((final ref) => _StubRepo(snapshot)),
-      ],
-      child: MaterialApp.router(
-        locale: const Locale('es'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        routerConfig: _router(initial),
-      ),
-    );
+}) => ProviderScope(
+  overrides: [
+    agendaRepositoryProvider.overrideWith((final ref) => _StubRepo(snapshot)),
+  ],
+  child: MaterialApp.router(
+    locale: const Locale('es'),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    routerConfig: _router(initial),
+  ),
+);
 
 void main() {
   group('Agenda STORY-30 surfaces', () {
@@ -75,8 +72,7 @@ void main() {
       expect(find.text('unknown_shape'), findsNothing);
     });
 
-    testWidgets('partial snapshot renders the warning banner above the list',
-        (final tester) async {
+    testWidgets('partial snapshot renders the warning banner above the list', (final tester) async {
       final snapshot = AgendaSnapshot(
         events: <AgendaEvent>[
           AgendaEvent(
@@ -104,8 +100,7 @@ void main() {
     });
 
     testWidgets('justificante CTA is visible only when justificanteUrl is set '
-        'and a tap surfaces the pending-allow-list snackbar',
-        (final tester) async {
+        'and a tap surfaces the pending-allow-list snackbar', (final tester) async {
       final eventWithProof = AgendaEvent(
         id: 'with-proof',
         rawTitle: 'Cita con justificante',
@@ -137,8 +132,7 @@ void main() {
       );
     });
 
-    testWidgets('detail page hides justificante CTA when URL is null',
-        (final tester) async {
+    testWidgets('detail page hides justificante CTA when URL is null', (final tester) async {
       final bare = AgendaEvent(
         id: 'no-proof',
         rawTitle: 'Cita sin justificante',

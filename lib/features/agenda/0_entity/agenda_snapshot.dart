@@ -24,10 +24,10 @@ final class AgendaSnapshot {
 
   /// Empty placeholder snapshot used by the notifier on first build.
   factory AgendaSnapshot.empty() => AgendaSnapshot(
-        events: const <AgendaEvent>[],
-        lastUpdatedAt: DateTime.fromMillisecondsSinceEpoch(0),
-        loadState: AgendaLoadState.loading,
-      );
+    events: const <AgendaEvent>[],
+    lastUpdatedAt: DateTime.fromMillisecondsSinceEpoch(0),
+    loadState: AgendaLoadState.loading,
+  );
 
   final List<AgendaEvent> events;
   final DateTime lastUpdatedAt;

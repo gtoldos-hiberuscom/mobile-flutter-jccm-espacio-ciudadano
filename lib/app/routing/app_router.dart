@@ -14,6 +14,9 @@ import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_eve
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_item_detail_placeholder_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
+import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_catalog_page.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
@@ -24,6 +27,7 @@ import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.da
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/data_consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
 import 'package:jccm_espacio_ciudadano/features/social_welfare/2_presentation/social_welfare_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/state_affairs/2_presentation/state_affairs_landing_page.dart';
@@ -110,8 +114,7 @@ final goRouterProvider = Provider<GoRouter>(
         ),
         GoRoute(
           path: Routes.supportForm,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const SupportFormPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const SupportFormPage(),
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────
@@ -186,7 +189,19 @@ final goRouterProvider = Provider<GoRouter>(
             ),
             GoRoute(
               path: Routes.casework,
-              builder: (final BuildContext context, final GoRouterState state) => const CaseworkPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const CaseworkWorkspacePage(),
+              routes: [
+                GoRoute(
+                  path: 'search',
+                  builder: (final BuildContext context, final GoRouterState state) => const CaseworkSearchPage(),
+                ),
+                GoRoute(
+                  path: 'item/:id',
+                  builder: (final BuildContext context, final GoRouterState state) => CaseworkItemDetailPlaceholderPage(
+                    itemId: state.pathParameters['id'] ?? '',
+                  ),
+                ),
+              ],
             ),
             GoRoute(
               path: Routes.notifications,
@@ -207,6 +222,10 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.support,
               builder: (final BuildContext context, final GoRouterState state) => const SupportPlaceholder(),
+            ),
+            GoRoute(
+              path: Routes.preferencesConsent,
+              builder: (final BuildContext context, final GoRouterState state) => const DataConsentPage(),
             ),
           ],
         ),

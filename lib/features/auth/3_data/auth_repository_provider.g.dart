@@ -21,9 +21,7 @@ const authRepositoryProvider = AuthRepositoryProvider._();
 /// Kept alive for the full app lifetime so the auth lifecycle is always
 /// available without re-creating the notifier on navigation changes.
 
-final class AuthRepositoryProvider
-    extends $FunctionalProvider<AuthRepository, AuthRepository, AuthRepository>
-    with $Provider<AuthRepository> {
+final class AuthRepositoryProvider extends $FunctionalProvider<AuthRepository, AuthRepository, AuthRepository> with $Provider<AuthRepository> {
   /// Provides the singleton [AuthRepository] implementation.
   ///
   /// Kept alive for the full app lifetime so the auth lifecycle is always
@@ -44,8 +42,7 @@ final class AuthRepositoryProvider
 
   @$internal
   @override
-  $ProviderElement<AuthRepository> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<AuthRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   AuthRepository create(Ref ref) {

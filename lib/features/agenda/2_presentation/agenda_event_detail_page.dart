@@ -41,8 +41,7 @@ class AgendaEventDetailPage extends ConsumerWidget {
       ),
       body: asyncState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (final _, final stackTrace) =>
-            EmptyStateWidget(message: l10n.agendaDetailNotFound),
+        error: (final _, final stackTrace) => EmptyStateWidget(message: l10n.agendaDetailNotFound),
         data: (final state) {
           final event = state.snapshot.events.firstWhere(
             (final e) => e.id == eventId,
@@ -76,9 +75,7 @@ class _DetailBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final title = event.rawTitle ?? event.titleKey ?? '';
-    final endLabel = event.endsAt != null
-        ? ' – ${event.endsAt!.formatHhMm()}'
-        : '';
+    final endLabel = event.endsAt != null ? ' – ${event.endsAt!.formatHhMm()}' : '';
     return ListView(
       padding: const EdgeInsets.all(AppDimensions.space16),
       children: [

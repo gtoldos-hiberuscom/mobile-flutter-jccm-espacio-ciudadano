@@ -106,14 +106,14 @@ class _HelpPageState extends ConsumerState<HelpPage> {
       return source;
     }
     final needle = query.trim().toLowerCase();
-    return source.where((final e) {
-      final q = resolveHelpKey(l10n, e.questionKey).toLowerCase();
-      final a = resolveHelpKey(l10n, e.answerKey).toLowerCase();
-      final c = resolveHelpKey(l10n, e.category).toLowerCase();
-      return q.contains(needle) ||
-          a.contains(needle) ||
-          c.contains(needle);
-    }).toList(growable: false);
+    return source
+        .where((final e) {
+          final q = resolveHelpKey(l10n, e.questionKey).toLowerCase();
+          final a = resolveHelpKey(l10n, e.answerKey).toLowerCase();
+          final c = resolveHelpKey(l10n, e.category).toLowerCase();
+          return q.contains(needle) || a.contains(needle) || c.contains(needle);
+        })
+        .toList(growable: false);
   }
 
   Map<String, List<FaqEntry>> _groupByCategory(final List<FaqEntry> faqs) {
@@ -133,12 +133,12 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      );
+    padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
+    child: Text(
+      title,
+      style: Theme.of(context).textTheme.titleLarge,
+    ),
+  );
 }
 
 class _SearchBar extends StatelessWidget {
@@ -154,14 +154,14 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => TextField(
-        controller: controller,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search),
-          hintText: hint,
-          border: const OutlineInputBorder(),
-        ),
-      );
+    controller: controller,
+    onChanged: onChanged,
+    decoration: InputDecoration(
+      prefixIcon: const Icon(Icons.search),
+      hintText: hint,
+      border: const OutlineInputBorder(),
+    ),
+  );
 }
 
 class _FaqCategoryBlock extends StatelessWidget {
@@ -223,9 +223,7 @@ class _GuideTile extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final ExternalLink? link = guide.externalLinkId == null
-        ? null
-        : ref.watch(externalLinkCatalogProvider).findById(guide.externalLinkId!);
+    final ExternalLink? link = guide.externalLinkId == null ? null : ref.watch(externalLinkCatalogProvider).findById(guide.externalLinkId!);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
@@ -270,11 +268,7 @@ class _ContactTile extends ConsumerWidget {
       HelpContactType.url => Icons.public,
     };
 
-    final ExternalLink? link = contact.externalLinkId == null
-        ? null
-        : ref
-            .watch(externalLinkCatalogProvider)
-            .findById(contact.externalLinkId!);
+    final ExternalLink? link = contact.externalLinkId == null ? null : ref.watch(externalLinkCatalogProvider).findById(contact.externalLinkId!);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: AppDimensions.space4),

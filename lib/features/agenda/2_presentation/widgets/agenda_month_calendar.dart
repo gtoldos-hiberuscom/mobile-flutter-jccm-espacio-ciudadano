@@ -57,8 +57,7 @@ class AgendaMonthCalendar extends StatelessWidget {
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
     // 0-based offset of the 1st-of-month relative to the calendar's
     // first weekday (Monday).
-    final leadingOffset =
-        (firstOfMonth.weekday - firstWeekday + 7) % 7;
+    final leadingOffset = (firstOfMonth.weekday - firstWeekday + 7) % 7;
     const totalCells = 42; // 6 weeks
     final cells = <_DayCell>[];
     for (var i = 0; i < totalCells; i++) {
@@ -70,11 +69,7 @@ class AgendaMonthCalendar extends StatelessWidget {
           date: cellDate,
           inMonth: inMonth,
           hasEvents: cellDate != null && daysWithEvents.contains(cellDate),
-          isSelected: cellDate != null &&
-              selectedDay != null &&
-              cellDate.year == selectedDay!.year &&
-              cellDate.month == selectedDay!.month &&
-              cellDate.day == selectedDay!.day,
+          isSelected: cellDate != null && selectedDay != null && cellDate.year == selectedDay!.year && cellDate.month == selectedDay!.month && cellDate.day == selectedDay!.day,
         ),
       );
     }
@@ -129,9 +124,7 @@ class AgendaMonthCalendar extends StatelessWidget {
             for (final cell in cells)
               _CalendarCell(
                 cell: cell,
-                onTap: cell.date != null
-                    ? () => onDaySelected(cell.date!)
-                    : null,
+                onTap: cell.date != null ? () => onDaySelected(cell.date!) : null,
               ),
           ],
         ),
@@ -164,19 +157,10 @@ class _CalendarCell extends StatelessWidget {
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
     final today = DateTime.now();
-    final isToday = cell.date != null &&
-        cell.date!.year == today.year &&
-        cell.date!.month == today.month &&
-        cell.date!.day == today.day;
+    final isToday = cell.date != null && cell.date!.year == today.year && cell.date!.month == today.month && cell.date!.day == today.day;
 
-    final foreground = !cell.inMonth
-        ? theme.colorScheme.outlineVariant
-        : (cell.isSelected
-            ? theme.colorScheme.onPrimary
-            : theme.colorScheme.onSurface);
-    final background = cell.isSelected
-        ? theme.colorScheme.primary
-        : (isToday ? theme.colorScheme.primaryContainer : null);
+    final foreground = !cell.inMonth ? theme.colorScheme.outlineVariant : (cell.isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface);
+    final background = cell.isSelected ? theme.colorScheme.primary : (isToday ? theme.colorScheme.primaryContainer : null);
 
     return Padding(
       padding: const EdgeInsets.all(2),
@@ -203,9 +187,7 @@ class _CalendarCell extends StatelessWidget {
                     width: 6,
                     height: 6,
                     decoration: BoxDecoration(
-                      color: cell.isSelected
-                          ? theme.colorScheme.onPrimary
-                          : theme.colorScheme.primary,
+                      color: cell.isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
                   ),

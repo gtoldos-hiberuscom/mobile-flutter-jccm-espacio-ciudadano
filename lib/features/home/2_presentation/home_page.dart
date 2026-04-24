@@ -8,11 +8,14 @@ import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/agenda_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/widgets/upcoming_events_summary.dart';
 import 'package:jccm_espacio_ciudadano/features/home/0_entity/home_block_id.dart';
 import 'package:jccm_espacio_ciudadano/features/home/0_entity/home_dashboard_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/home/0_entity/home_widget_summary.dart';
 import 'package:jccm_espacio_ciudadano/features/home/1_domain/home_dashboard_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/home/2_presentation/widgets/home_block_card.dart';
+import 'package:jccm_espacio_ciudadano/features/home/2_presentation/widgets/salud_surface_card.dart';
 import 'package:jccm_espacio_ciudadano/features/user_profile/0_entity/user_profile.dart';
 import 'package:jccm_espacio_ciudadano/features/user_profile/1_domain/user_profile_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/user_profile/2_presentation/widgets/user_header_widget.dart';
@@ -39,8 +42,7 @@ class HomePage extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: () =>
-              ref.read(homeDashboardProvider.notifier).refresh(),
+          onRefresh: () => ref.read(homeDashboardProvider.notifier).refresh(),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -58,9 +60,7 @@ class HomePage extends ConsumerWidget {
                   hasScrollBody: false,
                   child: ErrorStateWidget(
                     message: l10n.errorStateDefault,
-                    onRetry: () => ref
-                        .read(homeDashboardProvider.notifier)
-                        .refresh(),
+                    onRetry: () => ref.read(homeDashboardProvider.notifier).refresh(),
                   ),
                 ),
               ),
@@ -80,18 +80,36 @@ class HomePage extends ConsumerWidget {
     final HomeDashboardSnapshot snapshot,
     final AppLocalizations l10n,
   ) {
-    return [
-      for (final block in snapshot.blocks)
+    final widgets = <Widget>[
+      // STORY-31 — Salud entry point. Mounted at the top of the block
+      // list per the TASK-71 surface decision (CIP_REUSE) so the home
+      // dashboard surfaces the CIP read-only and routes the user to
+      // the agenda for the rest of the salud experience.
+      const SaludSurfaceCard(),
+    ];
+    for (final block in snapshot.blocks) {
+      widgets.add(
         HomeBlockCard(
           key: ValueKey(block.blockId),
           title: _titleFor(block.blockId, l10n),
           summary: block,
           icon: _iconFor(block.blockId),
           onTap: () => _onBlockTap(context, ref, block),
-          onRetry: () =>
-              ref.read(homeDashboardProvider.notifier).refresh(),
+          onRetry: () => ref.read(homeDashboardProvider.notifier).refresh(),
         ),
-    ];
+      );
+      // STORY-31 AC2 — append the agenda upcoming-events summary inside
+      // the upcomingEvents block so the home preview matches the agenda
+      // full screen 1-to-1.
+      if (block.blockId == HomeBlockId.upcomingEvents) {
+        widgets.add(
+          _HomeUpcomingEventsPreview(
+            onEventTap: (final id) => context.go('/agenda/$id'),
+          ),
+        );
+      }
+    }
+    return widgets;
   }
 
   void _onBlockTap(
@@ -100,7 +118,9 @@ class HomePage extends ConsumerWidget {
     final HomeWidgetSummary block,
   ) {
     final route = _routeFor(block.blockId);
-    ref.read(analyticsServiceProvider).logEvent(
+    ref
+        .read(analyticsServiceProvider)
+        .logEvent(
           HomeBlockNavigateEvent(block.blockId.name, target: route),
         );
     context.go(route);
@@ -213,17 +233,45 @@ class _Greeting extends StatelessWidget {
           if (profile != null) ...[
             const SizedBox(height: AppDimensions.space4),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
               child: Text(
                 l10n.homeCitizenId(profile.idAgente),
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: AppColors.textSecondary),
+                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
               ),
             ),
           ],
         ],
       ),
+    );
+  }
+}
+
+/// Internal helper that mounts the agenda [UpcomingEventsSummary] under
+/// the home `upcomingEvents` block so the home preview matches the
+/// agenda full screen 1-to-1 (STORY-31, AC2). It watches the agenda
+/// notifier directly — the agenda repository encodes its own partial
+/// states, so a transient loading or empty agenda silently degrades to
+/// the corresponding inline message instead of breaking the dashboard.
+class _HomeUpcomingEventsPreview extends ConsumerWidget {
+  const _HomeUpcomingEventsPreview({required this.onEventTap});
+
+  final ValueChanged<String> onEventTap;
+
+  @override
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final agendaAsync = ref.watch(agendaProvider);
+    return agendaAsync.maybeWhen(
+      data: (final agendaState) => Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space8,
+        ),
+        child: UpcomingEventsSummary(
+          snapshot: agendaState.snapshot,
+          now: DateTime.now(),
+          onEventTap: (final event) => onEventTap(event.id),
+        ),
+      ),
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

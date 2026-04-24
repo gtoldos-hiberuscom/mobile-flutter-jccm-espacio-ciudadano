@@ -54,17 +54,15 @@ final class SupportRequest {
     final bool clearAttachment = false,
     final bool? dataConsent,
     final bool? captchaPassed,
-  }) =>
-      SupportRequest(
-        name: name ?? this.name,
-        email: email ?? this.email,
-        subject: subject ?? this.subject,
-        description: description ?? this.description,
-        attachment:
-            clearAttachment ? null : (attachment ?? this.attachment),
-        dataConsent: dataConsent ?? this.dataConsent,
-        captchaPassed: captchaPassed ?? this.captchaPassed,
-      );
+  }) => SupportRequest(
+    name: name ?? this.name,
+    email: email ?? this.email,
+    subject: subject ?? this.subject,
+    description: description ?? this.description,
+    attachment: clearAttachment ? null : (attachment ?? this.attachment),
+    dataConsent: dataConsent ?? this.dataConsent,
+    captchaPassed: captchaPassed ?? this.captchaPassed,
+  );
 
   static const SupportRequest empty = SupportRequest(
     name: '',

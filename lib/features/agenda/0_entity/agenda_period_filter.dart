@@ -16,7 +16,8 @@ enum AgendaPeriodFilter {
   next365Days,
 
   /// Events strictly in the past (before the start of the current day).
-  past;
+  past
+  ;
 
   /// Returns `true` when [eventDate] passes the filter relative to [now].
   ///

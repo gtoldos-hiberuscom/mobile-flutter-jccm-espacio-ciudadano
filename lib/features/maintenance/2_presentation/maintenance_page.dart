@@ -11,7 +11,7 @@ class MaintenancePage extends StatelessWidget {
   final DateTime? expectedEnd;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
       body: Center(

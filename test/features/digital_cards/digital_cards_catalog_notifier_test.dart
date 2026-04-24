@@ -45,18 +45,17 @@ void main() {
     );
 
     ProviderContainer makeContainer(final Object result) => ProviderContainer(
-          overrides: [
-            digitalCardsRepositoryProvider.overrideWith(
-              (final ref) => _FakeRepository(result),
-            ),
-          ],
-        );
+      overrides: [
+        digitalCardsRepositoryProvider.overrideWith(
+          (final ref) => _FakeRepository(result),
+        ),
+      ],
+    );
 
     test('loaded state exposes all cards from the repository', () async {
       final container = makeContainer(loadedCatalog);
       addTearDown(container.dispose);
-      final catalog =
-          await container.read(digitalCardsCatalogProvider.future);
+      final catalog = await container.read(digitalCardsCatalogProvider.future);
       expect(catalog.state, DigitalCardsCatalogState.loaded);
       expect(catalog.cards, hasLength(1));
       expect(catalog.cards.single.type, DigitalCardType.familiaNumerosa);
@@ -65,8 +64,7 @@ void main() {
     test('empty state exposes zero cards', () async {
       final container = makeContainer(emptyCatalog);
       addTearDown(container.dispose);
-      final catalog =
-          await container.read(digitalCardsCatalogProvider.future);
+      final catalog = await container.read(digitalCardsCatalogProvider.future);
       expect(catalog.state, DigitalCardsCatalogState.empty);
       expect(catalog.cards, isEmpty);
     });

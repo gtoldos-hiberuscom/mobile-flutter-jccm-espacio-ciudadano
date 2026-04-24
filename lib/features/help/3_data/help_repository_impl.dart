@@ -94,8 +94,8 @@ final class HelpRepositoryImpl implements HelpRepository {
 
   @override
   HelpContent loadContent() => HelpContent(
-        faqs: List<FaqEntry>.unmodifiable(_faqs),
-        guides: List<HelpGuide>.unmodifiable(_guides),
-        contacts: List<HelpContact>.unmodifiable(_contacts),
-      );
+    faqs: List<FaqEntry>.unmodifiable(_faqs),
+    guides: List<HelpGuide>.unmodifiable(_guides),
+    contacts: List<HelpContact>.unmodifiable(_contacts),
+  );
 }

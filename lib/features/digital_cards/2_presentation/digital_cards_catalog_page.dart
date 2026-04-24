@@ -33,13 +33,11 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (final _, final stackTrace) => ErrorStateWidget(
           message: l10n.digitalCardsErrorMessage,
-          onRetry: () =>
-              ref.read(digitalCardsCatalogProvider.notifier).refresh(),
+          onRetry: () => ref.read(digitalCardsCatalogProvider.notifier).refresh(),
         ),
         data: (final DigitalCardsCatalog catalog) => _CatalogBody(
           catalog: catalog,
-          onAction: (final cardId, final action) =>
-              _showStubActionSnackbar(context, l10n),
+          onAction: (final cardId, final action) => _showStubActionSnackbar(context, l10n),
         ),
       ),
     );
@@ -74,8 +72,7 @@ class _CatalogBody extends StatelessWidget {
 
     final children = <Widget>[
       const CipReadOnlyMiniCard(),
-      if (catalog.state == DigitalCardsCatalogState.empty ||
-          catalog.cards.isEmpty)
+      if (catalog.state == DigitalCardsCatalogState.empty || catalog.cards.isEmpty)
         Padding(
           padding: const EdgeInsets.all(AppDimensions.space16),
           child: EmptyStateWidget(message: l10n.digitalCardsEmptyMessage),

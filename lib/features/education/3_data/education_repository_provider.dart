@@ -6,5 +6,4 @@ part 'education_repository_provider.g.dart';
 
 /// DI composition for [EducationRepository].
 @riverpod
-EducationRepository educationRepository(final Ref ref) =>
-    const EducationRepositoryImpl();
+EducationRepository educationRepository(final Ref ref) => const EducationRepositoryImpl();

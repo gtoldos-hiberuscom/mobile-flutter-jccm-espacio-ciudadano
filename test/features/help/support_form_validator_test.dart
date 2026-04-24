@@ -13,15 +13,14 @@ void main() {
     final String description = 'Descripción suficiente',
     final bool dataConsent = true,
     final bool captchaPassed = true,
-  }) =>
-      SupportRequest(
-        name: name,
-        email: email,
-        subject: subject,
-        description: description,
-        dataConsent: dataConsent,
-        captchaPassed: captchaPassed,
-      );
+  }) => SupportRequest(
+    name: name,
+    email: email,
+    subject: subject,
+    description: description,
+    dataConsent: dataConsent,
+    captchaPassed: captchaPassed,
+  );
 
   group('SupportFormValidator', () {
     test('valid input returns empty error map', () {
@@ -29,26 +28,18 @@ void main() {
       expect(errors, isEmpty);
     });
 
-    test('all fields empty produces required errors plus consent + captcha',
-        () {
+    test('all fields empty produces required errors plus consent + captcha', () {
       final errors = validator.validate(
         SupportRequest.empty,
         '',
       );
-      expect(errors[SupportFormField.name],
-          SupportValidationError.nameRequired);
-      expect(errors[SupportFormField.email],
-          SupportValidationError.emailRequired);
-      expect(errors[SupportFormField.emailConfirm],
-          SupportValidationError.emailConfirmRequired);
-      expect(errors[SupportFormField.subject],
-          SupportValidationError.subjectRequired);
-      expect(errors[SupportFormField.description],
-          SupportValidationError.descriptionRequired);
-      expect(errors[SupportFormField.consent],
-          SupportValidationError.consentRequired);
-      expect(errors[SupportFormField.captcha],
-          SupportValidationError.captchaRequired);
+      expect(errors[SupportFormField.name], SupportValidationError.nameRequired);
+      expect(errors[SupportFormField.email], SupportValidationError.emailRequired);
+      expect(errors[SupportFormField.emailConfirm], SupportValidationError.emailConfirmRequired);
+      expect(errors[SupportFormField.subject], SupportValidationError.subjectRequired);
+      expect(errors[SupportFormField.description], SupportValidationError.descriptionRequired);
+      expect(errors[SupportFormField.consent], SupportValidationError.consentRequired);
+      expect(errors[SupportFormField.captcha], SupportValidationError.captchaRequired);
     });
 
     test('invalid email format flagged', () {
@@ -58,8 +49,7 @@ void main() {
       );
       // emailInvalid is set; emailConfirm is allowed to be silent because
       // the source email is itself invalid.
-      expect(errors[SupportFormField.email],
-          SupportValidationError.emailInvalid);
+      expect(errors[SupportFormField.email], SupportValidationError.emailInvalid);
     });
 
     test('mismatched email confirmation flagged', () {
@@ -67,8 +57,7 @@ void main() {
         base(),
         'other@example.com',
       );
-      expect(errors[SupportFormField.emailConfirm],
-          SupportValidationError.emailMismatch);
+      expect(errors[SupportFormField.emailConfirm], SupportValidationError.emailMismatch);
     });
 
     test('email confirmation match is case-insensitive', () {
@@ -82,16 +71,13 @@ void main() {
     test('subject longer than 100 chars flagged as too long', () {
       final long = 'A' * 101;
       final errors = validator.validate(base(subject: long), 'ana@example.com');
-      expect(errors[SupportFormField.subject],
-          SupportValidationError.subjectTooLong);
+      expect(errors[SupportFormField.subject], SupportValidationError.subjectTooLong);
     });
 
     test('description longer than 1000 chars flagged as too long', () {
       final long = 'B' * 1001;
-      final errors =
-          validator.validate(base(description: long), 'ana@example.com');
-      expect(errors[SupportFormField.description],
-          SupportValidationError.descriptionTooLong);
+      final errors = validator.validate(base(description: long), 'ana@example.com');
+      expect(errors[SupportFormField.description], SupportValidationError.descriptionTooLong);
     });
 
     test('missing data consent flagged', () {
@@ -99,8 +85,7 @@ void main() {
         base(dataConsent: false),
         'ana@example.com',
       );
-      expect(errors[SupportFormField.consent],
-          SupportValidationError.consentRequired);
+      expect(errors[SupportFormField.consent], SupportValidationError.consentRequired);
     });
 
     test('missing captcha flagged', () {
@@ -108,8 +93,7 @@ void main() {
         base(captchaPassed: false),
         'ana@example.com',
       );
-      expect(errors[SupportFormField.captcha],
-          SupportValidationError.captchaRequired);
+      expect(errors[SupportFormField.captcha], SupportValidationError.captchaRequired);
     });
   });
 }

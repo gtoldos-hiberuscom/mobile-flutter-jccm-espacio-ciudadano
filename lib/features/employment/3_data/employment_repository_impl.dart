@@ -4,19 +4,19 @@ import 'package:jccm_espacio_ciudadano/features/employment/1_domain/employment_r
 
 /// Mock implementation of [EmploymentRepository] for STORY-24.
 ///
-/// TODO(STORY-24): replace with the real Dio-backed implementation
+// TODO(STORY-24): replace with the real Dio-backed implementation
 /// hitting `/sepe/demandante-empleo-fecha-actual/{numDocumento}`.
 final class EmploymentRepositoryImpl implements EmploymentRepository {
   const EmploymentRepositoryImpl();
 
   @override
   Future<EmploymentSnapshot> loadSnapshot() async => EmploymentSnapshot(
-        seekerStatus: EmploymentSection<EmploymentSeekerStatus>.loaded(
-          EmploymentSeekerStatus(
-            estado: 'inscrito',
-            fechaInscripcion: DateTime(2025, 11, 12),
-            fechaContinuidad: DateTime(2026, 4, 12),
-          ),
-        ),
-      );
+    seekerStatus: EmploymentSection<EmploymentSeekerStatus>.loaded(
+      EmploymentSeekerStatus(
+        estado: 'inscrito',
+        fechaInscripcion: DateTime(2025, 11, 12),
+        fechaContinuidad: DateTime(2026, 4, 12),
+      ),
+    ),
+  );
 }

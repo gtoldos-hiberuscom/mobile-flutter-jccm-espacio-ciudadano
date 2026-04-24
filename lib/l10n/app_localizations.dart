@@ -1706,6 +1706,318 @@ abstract class AppLocalizations {
   /// **'Confirma que no eres un robot.'**
   String get supportErrorCaptchaRequired;
 
+  /// CIP — título del bloque destacado de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta sanitaria (CIP)'**
+  String get cipCardTitle;
+
+  /// CIP — tooltip del botón copiar al portapapeles.
+  ///
+  /// In es, this message translates to:
+  /// **'Copiar CIP'**
+  String get cipCardCopyTooltip;
+
+  /// CIP — confirmación tras copiar el código.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP copiado al portapapeles'**
+  String get cipCardCopied;
+
+  /// CIP — leyenda obligatoria de sólo lectura (TASK-71).
+  ///
+  /// In es, this message translates to:
+  /// **'Sólo lectura — la tarjeta sanitaria no es descargable desde la app.'**
+  String get cipCardReadOnlySubtitle;
+
+  /// CIP — gap de contrato visible en diseño (TASK-27 / TASK-32).
+  ///
+  /// In es, this message translates to:
+  /// **'Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.'**
+  String get cipCardContractGap;
+
+  /// CIP — mensaje cuando no hay CIP disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no hay tarjeta sanitaria asociada a tu perfil.'**
+  String get cipCardEmpty;
+
+  /// CIP — mensaje de error genérico.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tu tarjeta sanitaria.'**
+  String get cipCardError;
+
+  /// CIP — mensaje de error de parseo (TASK-32).
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido leer la respuesta de la tarjeta sanitaria.'**
+  String get cipCardParseError;
+
+  /// Home — título de la superficie destacada de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get saludSurfaceTitle;
+
+  /// Home — CTA de la superficie de salud que lleva a la agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver agenda'**
+  String get saludSurfaceCta;
+
+  /// Resumen de próximos eventos — título compartido entre home y agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximos eventos'**
+  String get homeUpcomingEventsTitle;
+
+  /// Resumen de próximos eventos — mensaje cuando no hay eventos.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes eventos próximos.'**
+  String get homeUpcomingEventsEmpty;
+
+  /// Casework — título del workspace.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis gestiones'**
+  String get caseworkWorkspaceTitle;
+
+  /// Casework — error global de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus gestiones.'**
+  String get caseworkWorkspaceLoadError;
+
+  /// Casework — breadcrumb raíz.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get caseworkBreadcrumbHome;
+
+  /// Casework — etiqueta tab expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get caseworkTabExpedientes;
+
+  /// Casework — etiqueta tab entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis entradas de registro'**
+  String get caseworkTabEntradasRegistro;
+
+  /// Casework — etiqueta tab salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis salidas de registro'**
+  String get caseworkTabSalidasRegistro;
+
+  /// Casework — vacío expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan expedientes a tu nombre.'**
+  String get caseworkExpedientesEmpty;
+
+  /// Casework — vacío entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan entradas de registro a tu nombre.'**
+  String get caseworkEntradasRegistroEmpty;
+
+  /// Casework — vacío salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan salidas de registro a tu nombre.'**
+  String get caseworkSalidasRegistroEmpty;
+
+  /// Casework — error expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus expedientes.'**
+  String get caseworkExpedientesError;
+
+  /// Casework — error entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus entradas de registro.'**
+  String get caseworkEntradasRegistroError;
+
+  /// Casework — error salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus salidas de registro.'**
+  String get caseworkSalidasRegistroError;
+
+  /// Casework — estado en trámite.
+  ///
+  /// In es, this message translates to:
+  /// **'En trámite'**
+  String get caseworkStatusEnTramite;
+
+  /// Casework — estado finalizado.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizado'**
+  String get caseworkStatusFinalizado;
+
+  /// Casework — estado pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get caseworkStatusPendiente;
+
+  /// Casework — estado rechazado.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazado'**
+  String get caseworkStatusRechazado;
+
+  /// Casework — etiqueta de fecha del item.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha: {date}'**
+  String caseworkItemDateLabel(String date);
+
+  /// Casework search — título de la pantalla.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar expedientes y registros'**
+  String get caseworkSearchTitle;
+
+  /// Casework search — CTA en el workspace para abrir la búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar expedientes y registros'**
+  String get caseworkSearchOpenCta;
+
+  /// Casework search — texto introductorio del formulario.
+  ///
+  /// In es, this message translates to:
+  /// **'Rellena al menos uno de los campos para localizar tu expediente o registro.'**
+  String get caseworkSearchIntro;
+
+  /// Casework search — etiqueta del campo identificación.
+  ///
+  /// In es, this message translates to:
+  /// **'NIF / NIE / Pasaporte'**
+  String get caseworkSearchFieldIdentificationLabel;
+
+  /// Casework search — helper del campo identificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej.: 12345678Z, X1234567A o pasaporte alfanumérico.'**
+  String get caseworkSearchFieldIdentificationHelper;
+
+  /// Casework search — etiqueta del campo expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get caseworkSearchFieldExpedienteLabel;
+
+  /// Casework search — helper del campo expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej.: EXP/2025/00123'**
+  String get caseworkSearchFieldExpedienteHelper;
+
+  /// Casework search — etiqueta del campo registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de registro'**
+  String get caseworkSearchFieldRegistroLabel;
+
+  /// Casework search — helper del campo registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej.: REG/E/45612'**
+  String get caseworkSearchFieldRegistroHelper;
+
+  /// Casework search — etiqueta del botón de búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar'**
+  String get caseworkSearchSubmit;
+
+  /// Casework search — CTA para reiniciar la búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar otra cosa'**
+  String get caseworkSearchAnother;
+
+  /// Casework search — CTA placeholder para aportación documental.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación al resultado'**
+  String get caseworkSearchAportar;
+
+  /// Casework search — mensaje provisional de aportación pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'La aportación documental se habilita en STORY-37 / STORY-38.'**
+  String get caseworkSearchAportarPending;
+
+  /// Casework search — error: ningún campo informado.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce al menos uno de los tres campos para buscar.'**
+  String get caseworkSearchErrorAtLeastOne;
+
+  /// Casework search — error de identificación inválida.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato no válido. Usa NIF (8 dígitos + letra), NIE (X/Y/Z + 7 dígitos + letra) o pasaporte alfanumérico de 6 a 9 caracteres.'**
+  String get caseworkSearchErrorInvalidIdentification;
+
+  /// Casework search — error de número inválido.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato no válido. Solo letras, números, guiones y barras.'**
+  String get caseworkSearchErrorInvalidNumber;
+
+  /// Casework search — estado sin resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin coincidencias'**
+  String get caseworkSearchNoResults;
+
+  /// Casework search — pista cuando no hay resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Revisa los datos introducidos y vuelve a intentarlo.'**
+  String get caseworkSearchNoResultsHint;
+
+  /// Casework search — error al ejecutar la búsqueda.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido completar la búsqueda. Inténtalo de nuevo.'**
+  String get caseworkSearchError;
+
+  /// Casework search — recuento de resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, one{1 resultado} other{{count} resultados}}'**
+  String caseworkSearchResultsCount(int count);
+
+  /// Casework — título del detalle (placeholder).
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle del expediente'**
+  String get caseworkItemDetailPlaceholderTitle;
+
+  /// Casework — cuerpo del detalle (placeholder).
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle del elemento {id}'**
+  String caseworkItemDetailPlaceholderBody(String id);
+
+  /// Casework — mensaje provisional del detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'El detalle real se habilita en STORY-35 / STORY-36.'**
+  String get caseworkItemDetailPlaceholderPending;
+
   /// Título de la pantalla de catálogo de carnets digitales (STORY-48).
   ///
   /// In es, this message translates to:
@@ -1825,6 +2137,240 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ver tarjeta sanitaria'**
   String get digitalCardsCipMiniOpenAction;
+
+  /// Personalization — title of the hechos vitales selection screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis hechos vitales'**
+  String get lifeEventsTitle;
+
+  /// Personalization — descriptive header on the hechos vitales screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.'**
+  String get lifeEventsHeaderDescription;
+
+  /// Personalization — explicit save button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get lifeEventsSaveAction;
+
+  /// Personalization — reset preferences button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar preferencias'**
+  String get lifeEventsResetAction;
+
+  /// Personalization — confirmation dialog title for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar tus preferencias'**
+  String get lifeEventsResetConfirmTitle;
+
+  /// Personalization — confirmation dialog body for reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.'**
+  String get lifeEventsResetConfirmBody;
+
+  /// Personalization — confirm reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar'**
+  String get lifeEventsResetConfirm;
+
+  /// Personalization — cancel reset button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get lifeEventsResetCancel;
+
+  /// Personalization — snackbar after a successful save.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus preferencias se han guardado correctamente.'**
+  String get lifeEventsSavedFeedback;
+
+  /// Personalization — snackbar after a save / reset failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido guardar tus preferencias. Inténtalo de nuevo.'**
+  String get lifeEventsErrorFeedback;
+
+  /// Personalization — error state when the catalog fails to load.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los hechos vitales.'**
+  String get lifeEventsLoadError;
+
+  /// Personalization — empty state for the catalog.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay hechos vitales disponibles en este momento.'**
+  String get lifeEventsEmpty;
+
+  /// Personalization — familia category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Familia'**
+  String get lifeEventsCategoryFamilia;
+
+  /// Personalization — salud category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get lifeEventsCategorySalud;
+
+  /// Personalization — empleo category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get lifeEventsCategoryEmpleo;
+
+  /// Personalization — vivienda category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Vivienda'**
+  String get lifeEventsCategoryVivienda;
+
+  /// Personalization — educación category header.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get lifeEventsCategoryEducacion;
+
+  /// Data consent — title of the citizen authorizations screen (STORY-55).
+  ///
+  /// In es, this message translates to:
+  /// **'Mis autorizaciones'**
+  String get dataConsentTitle;
+
+  /// Data consent — descriptive header on the authorizations screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona qué datos pueden utilizarse para ofrecerte servicios y recomendaciones personalizadas. Puedes cambiar tu decisión en cualquier momento.'**
+  String get dataConsentHeaderDescription;
+
+  /// Data consent — explicit save button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get dataConsentSaveAction;
+
+  /// Data consent — revoke-all button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar todas las autorizaciones'**
+  String get dataConsentRevokeAction;
+
+  /// Data consent — confirmation dialog title for revoke-all.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar tus autorizaciones'**
+  String get dataConsentRevokeConfirmTitle;
+
+  /// Data consent — confirmation dialog body for revoke-all.
+  ///
+  /// In es, this message translates to:
+  /// **'Se eliminarán todas tus autorizaciones y dejaremos de personalizar contenidos hasta que vuelvas a aceptarlas.'**
+  String get dataConsentRevokeConfirmBody;
+
+  /// Data consent — confirm revoke button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocar'**
+  String get dataConsentRevokeConfirm;
+
+  /// Data consent — cancel revoke button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get dataConsentRevokeCancel;
+
+  /// Data consent — snackbar after a successful save / revoke.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus autorizaciones se han actualizado correctamente.'**
+  String get dataConsentSavedFeedback;
+
+  /// Data consent — snackbar after a save / revoke failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido actualizar tus autorizaciones. Inténtalo de nuevo.'**
+  String get dataConsentErrorFeedback;
+
+  /// Data consent — error state when the catalog fails to load.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus autorizaciones.'**
+  String get dataConsentLoadError;
+
+  /// Data consent — empty state for the catalog.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay autorizaciones disponibles en este momento.'**
+  String get dataConsentEmpty;
+
+  /// Data consent — JCCM authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de la Junta de Comunidades de Castilla-La Mancha'**
+  String get dataConsentTypeJccmTitle;
+
+  /// Data consent — JCCM authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite que la JCCM utilice tus datos administrativos para ofrecerte trámites y servicios personalizados.'**
+  String get dataConsentTypeJccmSubtitle;
+
+  /// Data consent — interoperability authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de otras administraciones'**
+  String get dataConsentTypeOtrasAdminTitle;
+
+  /// Data consent — interoperability authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite consultar datos de otras administraciones públicas para evitar que tengas que aportarlos manualmente.'**
+  String get dataConsentTypeOtrasAdminSubtitle;
+
+  /// Data consent — profiling authorization title.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfilado para recomendaciones'**
+  String get dataConsentTypePerfiladoTitle;
+
+  /// Data consent — profiling authorization description.
+  ///
+  /// In es, this message translates to:
+  /// **'Permite analizar tu actividad para recomendarte trámites, ayudas y contenidos relevantes.'**
+  String get dataConsentTypePerfiladoSubtitle;
+
+  /// Data consent — privacy reference section title.
+  ///
+  /// In es, this message translates to:
+  /// **'Información de protección de datos'**
+  String get dataConsentPrivacyReferenceTitle;
+
+  /// Data consent — privacy reference body.
+  ///
+  /// In es, this message translates to:
+  /// **'Estas autorizaciones se basan en la información de protección de datos aceptada al iniciar sesión.'**
+  String get dataConsentPrivacyReferenceBody;
+
+  /// Data consent — link CTA pointing to the onboarding consent screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver información de protección de datos'**
+  String get dataConsentPrivacyReferenceCta;
+
+  /// Data consent — CTA label that takes the citizen from life-events to the consent screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis autorizaciones'**
+  String get dataConsentNavCta;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

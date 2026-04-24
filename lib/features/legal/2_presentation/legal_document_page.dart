@@ -49,9 +49,7 @@ class LegalDocumentPage extends ConsumerWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: blocks
-                  .map((final b) => _BlockWidget(block: b))
-                  .toList(growable: false),
+              children: blocks.map((final b) => _BlockWidget(block: b)).toList(growable: false),
             ),
           ),
         ),
@@ -101,9 +99,7 @@ List<_LegalBlock> _parseBody(final String markdown) {
     if (allBullets) {
       result.add(
         _BulletBlock(
-          lines
-              .map((final l) => l.trimLeft().substring(2).trim())
-              .toList(growable: false),
+          lines.map((final l) => l.trimLeft().substring(2).trim()).toList(growable: false),
         ),
       );
     } else {
@@ -135,8 +131,7 @@ class _BlockWidget extends StatelessWidget {
             children: items
                 .map(
                   (final item) => Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: AppDimensions.space4),
+                    padding: const EdgeInsets.only(bottom: AppDimensions.space4),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

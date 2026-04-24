@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart' show Routes;
 import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart' show AppButton;
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart' show AppButton;
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_state.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/session_error_widget.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart' show LandingPage;
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Login screen for the Cl@ve authentication flow.
@@ -37,8 +41,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   // The Cl@ve portal URL — in Sprint 1 this is a well-known placeholder.
   // Sprint 2 (TASK-21) will retrieve this from AppConfig / backend.
-  static const String _clavePortalUrl =
-      'https://clave.gob.es/clave_Home/inicio.html';
+  static const String _clavePortalUrl = 'https://clave.gob.es/clave_Home/inicio.html';
 
   bool _hasInitiated = false;
   bool _hasError = false;
@@ -71,9 +74,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     // Derive display state from the async notifier value.
     final currentAuthState = authState.value;
     final isError = (currentAuthState is AuthError) || _hasError;
-    final errorMsg = currentAuthState is AuthError
-        ? currentAuthState.message
-        : _errorMessage;
+    final errorMsg = currentAuthState is AuthError ? currentAuthState.message : _errorMessage;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -84,8 +85,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         title: Text(
           l10n.loginPageTitle,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppColors.primary,
-              ),
+            color: AppColors.primary,
+          ),
         ),
         centerTitle: true,
       ),
@@ -136,8 +137,7 @@ class _LoadingContent extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               color: AppColors.primaryContainer,
-              borderRadius:
-                  BorderRadius.circular(AppDimensions.radiusXLarge),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXLarge),
             ),
             child: const Icon(
               Icons.lock_outlined,
@@ -162,8 +162,8 @@ class _LoadingContent extends StatelessWidget {
           child: Text(
             statusMessage,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+              color: AppColors.textSecondary,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -174,8 +174,8 @@ class _LoadingContent extends StatelessWidget {
           'Se abrirá el portal Cl@ve en el navegador para completar '
           'la autenticación. Vuelve a la aplicación cuando termines.',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textDisabled,
-              ),
+            color: AppColors.textDisabled,
+          ),
           textAlign: TextAlign.center,
         ),
       ],

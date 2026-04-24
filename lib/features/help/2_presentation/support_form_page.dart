@@ -61,8 +61,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 content: Text(l10n.supportConfirmationMessage),
               ),
             );
-        } else if (next.status == SupportSubmissionStatus.error &&
-            next.submissionErrorKey != null) {
+        } else if (next.status == SupportSubmissionStatus.error && next.submissionErrorKey != null) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -81,14 +80,16 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
     });
 
     if (state.isSuccess) {
-      return _SuccessScreen(onClose: () {
-        notifier.reset();
-        _nameCtrl.clear();
-        _emailCtrl.clear();
-        _emailConfirmCtrl.clear();
-        _subjectCtrl.clear();
-        _descriptionCtrl.clear();
-      });
+      return _SuccessScreen(
+        onClose: () {
+          notifier.reset();
+          _nameCtrl.clear();
+          _emailCtrl.clear();
+          _emailConfirmCtrl.clear();
+          _subjectCtrl.clear();
+          _descriptionCtrl.clear();
+        },
+      );
     }
 
     return Scaffold(
@@ -126,8 +127,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
               controller: _emailConfirmCtrl,
               label: l10n.supportFieldEmailConfirm,
               onChanged: notifier.updateEmailConfirm,
-              errorText:
-                  _errorFor(l10n, state, SupportFormField.emailConfirm),
+              errorText: _errorFor(l10n, state, SupportFormField.emailConfirm),
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
             ),
@@ -150,8 +150,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
               controller: _descriptionCtrl,
               label: l10n.supportFieldDescription,
               onChanged: notifier.updateDescription,
-              errorText:
-                  _errorFor(l10n, state, SupportFormField.description),
+              errorText: _errorFor(l10n, state, SupportFormField.description),
               maxLines: 6,
               minLines: 4,
               keyboardType: TextInputType.multiline,
@@ -174,8 +173,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
               value: state.request.dataConsent,
               onChanged: (final v) => notifier.updateConsent(v ?? false),
               title: Text(l10n.supportConsentLabel),
-              subtitle: _errorFor(l10n, state, SupportFormField.consent) ==
-                      null
+              subtitle: _errorFor(l10n, state, SupportFormField.consent) == null
                   ? null
                   : Text(
                       _errorFor(l10n, state, SupportFormField.consent)!,
@@ -233,27 +231,26 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
     final int? maxLines,
     final int? minLines,
     final List<TextInputFormatter>? inputFormatters,
-  }) =>
-      Padding(
-        padding: const EdgeInsets.only(bottom: AppDimensions.space8),
-        child: TextFormField(
-          key: key,
-          controller: controller,
-          onChanged: onChanged,
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          maxLength: maxLength,
-          maxLines: maxLines ?? 1,
-          minLines: minLines,
-          inputFormatters: inputFormatters,
-          decoration: InputDecoration(
-            labelText: label,
-            border: const OutlineInputBorder(),
-            errorText: errorText,
-            counterText: maxLength == null ? '' : null,
-          ),
-        ),
-      );
+  }) => Padding(
+    padding: const EdgeInsets.only(bottom: AppDimensions.space8),
+    child: TextFormField(
+      key: key,
+      controller: controller,
+      onChanged: onChanged,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      maxLength: maxLength,
+      maxLines: maxLines ?? 1,
+      minLines: minLines,
+      inputFormatters: inputFormatters,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+        errorText: errorText,
+        counterText: maxLength == null ? '' : null,
+      ),
+    ),
+  );
 }
 
 class _SuccessScreen extends StatelessWidget {

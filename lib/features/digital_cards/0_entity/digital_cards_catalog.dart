@@ -22,10 +22,10 @@ final class DigitalCardsCatalog {
 
   /// Empty placeholder used by the notifier on first build.
   factory DigitalCardsCatalog.empty() => DigitalCardsCatalog(
-        cards: const <DigitalCard>[],
-        lastUpdatedAt: DateTime.fromMillisecondsSinceEpoch(0),
-        state: DigitalCardsCatalogState.loading,
-      );
+    cards: const <DigitalCard>[],
+    lastUpdatedAt: DateTime.fromMillisecondsSinceEpoch(0),
+    state: DigitalCardsCatalogState.loading,
+  );
 
   final List<DigitalCard> cards;
   final DateTime lastUpdatedAt;

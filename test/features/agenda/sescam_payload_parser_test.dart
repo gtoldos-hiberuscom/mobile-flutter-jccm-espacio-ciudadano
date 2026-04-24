@@ -66,8 +66,7 @@ void main() {
     const parser = SescamCipParser();
 
     test('parses json envelope', () {
-      const raw =
-          '{"estado":"OK","cip":"ABCD12345678","titular":"María","centroSalud":"CS Toledo"}';
+      const raw = '{"estado":"OK","cip":"ABCD12345678","titular":"María","centroSalud":"CS Toledo"}';
       final res = parser.parse(raw);
       expect(res.isOk, isTrue);
       expect(res.value!.cip, 'ABCD12345678');

@@ -50,9 +50,7 @@ class AttachmentPickerField extends ConsumerWidget {
               key: const Key('support_attachment_pick_btn'),
               icon: const Icon(Icons.attach_file),
               label: Text(
-                attachment == null
-                    ? l10n.supportAttachmentPick
-                    : l10n.supportAttachmentChange,
+                attachment == null ? l10n.supportAttachmentPick : l10n.supportAttachmentChange,
               ),
               onPressed: () async {
                 final picked = await picker.pickSingle();
