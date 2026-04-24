@@ -850,4 +850,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get supportErrorCaptchaRequired => 'Please confirm you are not a robot.';
+
+  @override
+  String get digitalCardsPageTitle => 'My digital cards';
+
+  @override
+  String get digitalCardsTypeFamiliaNumerosa => 'Large-family card';
+
+  @override
+  String get digitalCardsTypeJoven => 'Youth card';
+
+  @override
+  String get digitalCardsTypeDiscapacidad => 'Disability card';
+
+  @override
+  String get digitalCardsStatusAvailable => 'Available';
+
+  @override
+  String get digitalCardsStatusNotValid => 'Not valid';
+
+  @override
+  String get digitalCardsStatusNotDownloadable => 'Not downloadable';
+
+  @override
+  String get digitalCardsStatusNotAvailable => 'Not available';
+
+  @override
+  String get digitalCardsMessageNotValid => 'This card is not valid. QR, PKPASS and PDF aren\'t available.';
+
+  @override
+  String get digitalCardsMessageNotDownloadable => 'This card can\'t be downloaded right now.';
+
+  @override
+  String get digitalCardsMessageNotAvailable => 'You don\'t have this card available.';
+
+  @override
+  String get digitalCardsActionQr => 'Show QR';
+
+  @override
+  String get digitalCardsActionPkpass => 'Add to Wallet';
+
+  @override
+  String get digitalCardsActionPdf => 'Download PDF';
+
+  @override
+  String get digitalCardsActionComingSoon => 'Coming soon.';
+
+  @override
+  String get digitalCardsEmptyMessage => 'You don\'t have any digital cards yet.';
+
+  @override
+  String get digitalCardsErrorMessage => 'We couldn\'t load your digital cards.';
+
+  @override
+  String get digitalCardsCipMiniTitle => 'Health card (CIP)';
+
+  @override
+  String get digitalCardsCipMiniReadOnly => 'Read only';
+
+  @override
+  String get digitalCardsCipMiniOpenAction => 'Open health card';
 }
