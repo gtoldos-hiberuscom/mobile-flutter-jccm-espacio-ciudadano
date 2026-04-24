@@ -1435,6 +1435,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.'**
   String get socialWelfareDependenciaDescription;
+
+  /// Casework — título del workspace.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis gestiones'**
+  String get caseworkWorkspaceTitle;
+
+  /// Casework — error global de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus gestiones.'**
+  String get caseworkWorkspaceLoadError;
+
+  /// Casework — breadcrumb raíz.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get caseworkBreadcrumbHome;
+
+  /// Casework — etiqueta tab expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get caseworkTabExpedientes;
+
+  /// Casework — etiqueta tab entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis entradas de registro'**
+  String get caseworkTabEntradasRegistro;
+
+  /// Casework — etiqueta tab salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis salidas de registro'**
+  String get caseworkTabSalidasRegistro;
+
+  /// Casework — vacío expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan expedientes a tu nombre.'**
+  String get caseworkExpedientesEmpty;
+
+  /// Casework — vacío entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan entradas de registro a tu nombre.'**
+  String get caseworkEntradasRegistroEmpty;
+
+  /// Casework — vacío salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan salidas de registro a tu nombre.'**
+  String get caseworkSalidasRegistroEmpty;
+
+  /// Casework — error expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus expedientes.'**
+  String get caseworkExpedientesError;
+
+  /// Casework — error entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus entradas de registro.'**
+  String get caseworkEntradasRegistroError;
+
+  /// Casework — error salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus salidas de registro.'**
+  String get caseworkSalidasRegistroError;
+
+  /// Casework — estado en trámite.
+  ///
+  /// In es, this message translates to:
+  /// **'En trámite'**
+  String get caseworkStatusEnTramite;
+
+  /// Casework — estado finalizado.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizado'**
+  String get caseworkStatusFinalizado;
+
+  /// Casework — estado pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get caseworkStatusPendiente;
+
+  /// Casework — estado rechazado.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazado'**
+  String get caseworkStatusRechazado;
+
+  /// Casework — etiqueta de fecha del item.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha: {date}'**
+  String caseworkItemDateLabel(String date);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

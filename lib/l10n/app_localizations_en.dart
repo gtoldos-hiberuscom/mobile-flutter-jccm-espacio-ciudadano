@@ -715,4 +715,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
+
+  @override
+  String get caseworkWorkspaceTitle => 'My casework';
+
+  @override
+  String get caseworkWorkspaceLoadError => 'We could not load your casework.';
+
+  @override
+  String get caseworkBreadcrumbHome => 'Home';
+
+  @override
+  String get caseworkTabExpedientes => 'My files';
+
+  @override
+  String get caseworkTabEntradasRegistro => 'My registry inbox';
+
+  @override
+  String get caseworkTabSalidasRegistro => 'My registry outbox';
+
+  @override
+  String get caseworkExpedientesEmpty => 'No casework files registered under your name.';
+
+  @override
+  String get caseworkEntradasRegistroEmpty => 'No registry entries are registered under your name.';
+
+  @override
+  String get caseworkSalidasRegistroEmpty => 'No registry exits are registered under your name.';
+
+  @override
+  String get caseworkExpedientesError => 'We could not load your casework files.';
+
+  @override
+  String get caseworkEntradasRegistroError => 'We could not load your registry entries.';
+
+  @override
+  String get caseworkSalidasRegistroError => 'We could not load your registry exits.';
+
+  @override
+  String get caseworkStatusEnTramite => 'In progress';
+
+  @override
+  String get caseworkStatusFinalizado => 'Completed';
+
+  @override
+  String get caseworkStatusPendiente => 'Pending';
+
+  @override
+  String get caseworkStatusRechazado => 'Rejected';
+
+  @override
+  String caseworkItemDateLabel(String date) {
+    return 'Date: $date';
+  }
 }
