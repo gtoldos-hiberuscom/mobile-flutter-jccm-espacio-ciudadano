@@ -716,4 +716,57 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get caseworkWorkspaceTitle => 'Mis gestiones';
+
+  @override
+  String get caseworkWorkspaceLoadError => 'No hemos podido cargar tus gestiones.';
+
+  @override
+  String get caseworkBreadcrumbHome => 'Inicio';
+
+  @override
+  String get caseworkTabExpedientes => 'Mis expedientes';
+
+  @override
+  String get caseworkTabEntradasRegistro => 'Mis entradas de registro';
+
+  @override
+  String get caseworkTabSalidasRegistro => 'Mis salidas de registro';
+
+  @override
+  String get caseworkExpedientesEmpty => 'No constan expedientes a tu nombre.';
+
+  @override
+  String get caseworkEntradasRegistroEmpty => 'No constan entradas de registro a tu nombre.';
+
+  @override
+  String get caseworkSalidasRegistroEmpty => 'No constan salidas de registro a tu nombre.';
+
+  @override
+  String get caseworkExpedientesError => 'No hemos podido cargar tus expedientes.';
+
+  @override
+  String get caseworkEntradasRegistroError => 'No hemos podido cargar tus entradas de registro.';
+
+  @override
+  String get caseworkSalidasRegistroError => 'No hemos podido cargar tus salidas de registro.';
+
+  @override
+  String get caseworkStatusEnTramite => 'En trámite';
+
+  @override
+  String get caseworkStatusFinalizado => 'Finalizado';
+
+  @override
+  String get caseworkStatusPendiente => 'Pendiente';
+
+  @override
+  String get caseworkStatusRechazado => 'Rechazado';
+
+  @override
+  String caseworkItemDateLabel(String date) {
+    return 'Fecha: $date';
+  }
 }
