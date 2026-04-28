@@ -12,8 +12,6 @@ import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_event_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/1_domain/session_notifier.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/login_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/aportacion/2_presentation/aportacion_wizard_page.dart';
@@ -53,7 +51,7 @@ final goRouterProvider = Provider<GoRouter>(
     );
 
     final router = GoRouter(
-      initialLocation: Routes.splash,
+      initialLocation: Routes.landing,
       observers: [lifecycleObserver, analyticsObserver],
       // ── Global redirect ──────────────────────────────────────────────────
       redirect: (final BuildContext context, final GoRouterState state) => guard.redirect(state),
@@ -62,28 +60,11 @@ final goRouterProvider = Provider<GoRouter>(
       errorBuilder: (final BuildContext context, final GoRouterState state) => const NotFoundScreen(),
 
       routes: [
-        // ── Splash ──────────────────────────────────────────────────────────
-        GoRoute(
-          path: Routes.splash,
-          builder: (final BuildContext context, final GoRouterState state) => const SplashScreen(),
-        ),
 
         // ── Landing ─────────────────────────────────────────────────────────
         GoRoute(
           path: Routes.landing,
           builder: (final BuildContext context, final GoRouterState state) => const LandingPage(),
-        ),
-
-        // ── Login flow ───────────────────────────────────────────────────────
-        GoRoute(
-          path: Routes.login,
-          builder: (final BuildContext context, final GoRouterState state) => const LoginPage(),
-          routes: [
-            GoRoute(
-              path: 'callback',
-              builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPlaceholder(),
-            ),
-          ],
         ),
 
         // ── Maintenance ──────────────────────────────────────────────────────
@@ -125,22 +106,7 @@ final goRouterProvider = Provider<GoRouter>(
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────
-        // Custom URL scheme: jccmapp://auth/clave/callback?code=<authorization_code>
-        // GoRouter matches the path portion: /auth/clave/callback
-        // The `code` query parameter is extracted and passed to [SessionNotifier].
-        GoRoute(
-          path: Routes.claveCallback,
-          builder: (final BuildContext context, final GoRouterState routerState) {
-            final callbackUri = routerState.uri;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              final container = ProviderScope.containerOf(context);
-              unawaited(
-                container.read<SessionNotifier>(sessionProvider.notifier).handleCallback(callbackUri),
-              );
-            });
-            return const LoginCallbackPlaceholder();
-          },
-        ),
+
         GoRoute(
           path: Routes.afirmaReturn,
           builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPlaceholder(),

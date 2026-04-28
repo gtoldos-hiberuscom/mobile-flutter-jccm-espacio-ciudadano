@@ -11,44 +11,6 @@ import 'package:flutter/material.dart';
 // feature screen once it is implemented.
 // ──────────────────────────────────────────────────────────────────────────────
 
-/// Animated splash screen shown during app initialisation.
-///
-/// Transitions to LandingScreen or the authenticated home, driven by the
-/// session guard in app_router.dart.
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
-
-  @override
-  Widget build(final BuildContext context) => Scaffold(
-    body: Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const FlutterLogo(size: 72),
-          const SizedBox(height: 24),
-          Text(
-            'Espacio Ciudadano',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-/// Public landing / welcome screen.
-///
-/// Placeholder — replace with the real feature landing page.
-class LandingScreen extends StatelessWidget {
-  const LandingScreen({super.key});
-
-  @override
-  Widget build(final BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Bienvenido')),
-    body: const Center(child: Text('Pantalla de inicio')),
-  );
-}
-
 /// Maintenance mode screen.
 ///
 /// Displayed instead of any other screen when the backend reports a
