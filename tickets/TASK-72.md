@@ -2,7 +2,7 @@
 id: 72
 jira_key: TASK-72
 type: Task
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -15,7 +15,7 @@ labels: ["auth", "refactor", "feature-migration", "use-cases", "clave"]
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-29T00:43:51+02:00
-updated_at: 2026-04-29T00:43:51+02:00
+updated_at: 2026-04-29T01:10:00+02:00
 due_date:
 jira_url:
 ---
@@ -99,7 +99,9 @@ Además se crean los casos de uso `LoginUseCase` y `LogoutUseCase` en la capa de
 ### Comments
 
 - 2026-04-29T00:43:51+02:00 | by Copilot | Task created. Implementation started on `feat/auth_review`. Task branch: `task/EPIC-2-identity-session/TASK-72-auth-feature-migration/migrate-auth-to-feature`.
+- 2026-04-29T01:10:00+02:00 | by Copilot | Implementation complete on branch `task/EPIC-2-identity-session/TASK-72-auth-feature-migration/migrate-auth-to-feature` (commit `75677fc`). Merged into `ticket/EPIC-2-identity-session/TASK-72-auth-feature-migration` and then into `feat/auth_review`. All acceptance criteria satisfied: `lib/core/auth/` cleared of Dart files; `lib/features/auth/` created with `0_entity/` (AuthSession, AuthUser, AuthFailure/AuthException), `1_domain/` (AuthRepository, LoginUseCase, LogoutUseCase), `3_data/` (DTOs, datasource, AuthRepositoryImpl, authRepositoryProvider); `dart analyze lib/features/auth/` → 0 issues; 18 tests passing in `test/features/auth/` (datasource × 4, repository impl × 7, use cases × 7).
 
 ### Change Log
 
 - 2026-04-29T00:43:51+02:00 | by Copilot | Initial ticket creation. Status: In Progress.
+- 2026-04-29T01:10:00+02:00 | status | In Progress → Done | by Copilot
