@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +6,8 @@ import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/3_data/auth_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/landing_content_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/landing_access_step.dart';
@@ -94,7 +97,10 @@ class LandingPage extends ConsumerWidget {
               AppButton(
                 label: l10n.landingCtaButton,
                 semanticsLabel: l10n.landingCtaButton,
-                onPressed: () => context.go(Routes.login),
+                onPressed: () async {
+                  final AuthSession session = await ref.read(authRepositoryProvider).login();
+                  print('Login successful: $session'); // TODO: remove after testing
+                },
               ),
               const SizedBox(height: AppDimensions.space40),
 
