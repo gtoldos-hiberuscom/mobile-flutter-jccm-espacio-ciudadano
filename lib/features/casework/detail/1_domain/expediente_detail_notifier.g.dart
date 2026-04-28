@@ -22,7 +22,8 @@ const expedienteDetailProvider = ExpedienteDetailNotifierFamily._();
 ///
 /// One notifier instance per `numexp` — Riverpod's family semantics
 /// keep navigation between detail pages cheap and isolated.
-final class ExpedienteDetailNotifierProvider extends $AsyncNotifierProvider<ExpedienteDetailNotifier, ExpedienteDetail> {
+final class ExpedienteDetailNotifierProvider
+    extends $AsyncNotifierProvider<ExpedienteDetailNotifier, ExpedienteDetail> {
   /// Owns the async load of an [ExpedienteDetail] keyed by [numexp]
   /// (STORY-35).
   ///
@@ -55,7 +56,8 @@ final class ExpedienteDetailNotifierProvider extends $AsyncNotifierProvider<Expe
 
   @override
   bool operator ==(Object other) {
-    return other is ExpedienteDetailNotifierProvider && other.argument == argument;
+    return other is ExpedienteDetailNotifierProvider &&
+        other.argument == argument;
   }
 
   @override
@@ -64,7 +66,8 @@ final class ExpedienteDetailNotifierProvider extends $AsyncNotifierProvider<Expe
   }
 }
 
-String _$expedienteDetailNotifierHash() => r'104c37b36c4e055d957d7c08b6735c3167c08793';
+String _$expedienteDetailNotifierHash() =>
+    r'104c37b36c4e055d957d7c08b6735c3167c08793';
 
 /// Owns the async load of an [ExpedienteDetail] keyed by [numexp]
 /// (STORY-35).
@@ -72,7 +75,15 @@ String _$expedienteDetailNotifierHash() => r'104c37b36c4e055d957d7c08b6735c3167c
 /// One notifier instance per `numexp` — Riverpod's family semantics
 /// keep navigation between detail pages cheap and isolated.
 
-final class ExpedienteDetailNotifierFamily extends $Family with $ClassFamilyOverride<ExpedienteDetailNotifier, AsyncValue<ExpedienteDetail>, ExpedienteDetail, FutureOr<ExpedienteDetail>, String> {
+final class ExpedienteDetailNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          ExpedienteDetailNotifier,
+          AsyncValue<ExpedienteDetail>,
+          ExpedienteDetail,
+          FutureOr<ExpedienteDetail>,
+          String
+        > {
   const ExpedienteDetailNotifierFamily._()
     : super(
         retry: null,
@@ -88,7 +99,8 @@ final class ExpedienteDetailNotifierFamily extends $Family with $ClassFamilyOver
   /// One notifier instance per `numexp` — Riverpod's family semantics
   /// keep navigation between detail pages cheap and isolated.
 
-  ExpedienteDetailNotifierProvider call(String numexp) => ExpedienteDetailNotifierProvider._(argument: numexp, from: this);
+  ExpedienteDetailNotifierProvider call(String numexp) =>
+      ExpedienteDetailNotifierProvider._(argument: numexp, from: this);
 
   @override
   String toString() => r'expedienteDetailProvider';
@@ -100,7 +112,8 @@ final class ExpedienteDetailNotifierFamily extends $Family with $ClassFamilyOver
 /// One notifier instance per `numexp` — Riverpod's family semantics
 /// keep navigation between detail pages cheap and isolated.
 
-abstract class _$ExpedienteDetailNotifier extends $AsyncNotifier<ExpedienteDetail> {
+abstract class _$ExpedienteDetailNotifier
+    extends $AsyncNotifier<ExpedienteDetail> {
   late final _$args = ref.$arg as String;
   String get numexp => _$args;
 
@@ -109,8 +122,16 @@ abstract class _$ExpedienteDetailNotifier extends $AsyncNotifier<ExpedienteDetai
   @override
   void runBuild() {
     final created = build(_$args);
-    final ref = this.ref as $Ref<AsyncValue<ExpedienteDetail>, ExpedienteDetail>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<ExpedienteDetail>, ExpedienteDetail>, AsyncValue<ExpedienteDetail>, Object?, Object?>;
+    final ref =
+        this.ref as $Ref<AsyncValue<ExpedienteDetail>, ExpedienteDetail>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<ExpedienteDetail>, ExpedienteDetail>,
+              AsyncValue<ExpedienteDetail>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

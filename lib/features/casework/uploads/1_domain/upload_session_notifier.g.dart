@@ -14,7 +14,8 @@ part of 'upload_session_notifier.dart';
 const uploadSessionProvider = UploadSessionNotifierProvider._();
 
 /// Owns the lifecycle of an [UploadSession] for STORY-38.
-final class UploadSessionNotifierProvider extends $NotifierProvider<UploadSessionNotifier, UploadSession> {
+final class UploadSessionNotifierProvider
+    extends $NotifierProvider<UploadSessionNotifier, UploadSession> {
   /// Owns the lifecycle of an [UploadSession] for STORY-38.
   const UploadSessionNotifierProvider._()
     : super(
@@ -43,7 +44,8 @@ final class UploadSessionNotifierProvider extends $NotifierProvider<UploadSessio
   }
 }
 
-String _$uploadSessionNotifierHash() => r'36d8d1600aa36fffc9650728ecb287b23e743286';
+String _$uploadSessionNotifierHash() =>
+    r'36d8d1600aa36fffc9650728ecb287b23e743286';
 
 /// Owns the lifecycle of an [UploadSession] for STORY-38.
 
@@ -54,7 +56,14 @@ abstract class _$UploadSessionNotifier extends $Notifier<UploadSession> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<UploadSession, UploadSession>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<UploadSession, UploadSession>, UploadSession, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<UploadSession, UploadSession>,
+              UploadSession,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

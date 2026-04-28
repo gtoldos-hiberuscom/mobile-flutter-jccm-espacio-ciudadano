@@ -12,7 +12,14 @@ part of 'social_welfare_repository_provider.dart';
 @ProviderFor(socialWelfareRepository)
 const socialWelfareRepositoryProvider = SocialWelfareRepositoryProvider._();
 
-final class SocialWelfareRepositoryProvider extends $FunctionalProvider<SocialWelfareRepository, SocialWelfareRepository, SocialWelfareRepository> with $Provider<SocialWelfareRepository> {
+final class SocialWelfareRepositoryProvider
+    extends
+        $FunctionalProvider<
+          SocialWelfareRepository,
+          SocialWelfareRepository,
+          SocialWelfareRepository
+        >
+    with $Provider<SocialWelfareRepository> {
   const SocialWelfareRepositoryProvider._()
     : super(
         from: null,
@@ -47,4 +54,5 @@ final class SocialWelfareRepositoryProvider extends $FunctionalProvider<SocialWe
   }
 }
 
-String _$socialWelfareRepositoryHash() => r'5335dba5236fbb74552f37c01100b4031e8f96d1';
+String _$socialWelfareRepositoryHash() =>
+    r'5335dba5236fbb74552f37c01100b4031e8f96d1';

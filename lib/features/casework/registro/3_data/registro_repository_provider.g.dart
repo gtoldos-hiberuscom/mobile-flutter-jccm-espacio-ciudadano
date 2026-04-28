@@ -15,7 +15,14 @@ const registroRepositoryProvider = RegistroRepositoryProvider._();
 
 /// DI composition for the STORY-36 [RegistroRepository].
 
-final class RegistroRepositoryProvider extends $FunctionalProvider<RegistroRepository, RegistroRepository, RegistroRepository> with $Provider<RegistroRepository> {
+final class RegistroRepositoryProvider
+    extends
+        $FunctionalProvider<
+          RegistroRepository,
+          RegistroRepository,
+          RegistroRepository
+        >
+    with $Provider<RegistroRepository> {
   /// DI composition for the STORY-36 [RegistroRepository].
   const RegistroRepositoryProvider._()
     : super(
@@ -51,4 +58,5 @@ final class RegistroRepositoryProvider extends $FunctionalProvider<RegistroRepos
   }
 }
 
-String _$registroRepositoryHash() => r'959cd691454cb4c39edceba82630ae8e5c48f25c';
+String _$registroRepositoryHash() =>
+    r'959cd691454cb4c39edceba82630ae8e5c48f25c';
