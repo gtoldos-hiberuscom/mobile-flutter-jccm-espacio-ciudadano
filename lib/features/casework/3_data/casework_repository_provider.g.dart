@@ -15,7 +15,14 @@ const caseworkRepositoryProvider = CaseworkRepositoryProvider._();
 
 /// DI composition for [CaseworkRepository].
 
-final class CaseworkRepositoryProvider extends $FunctionalProvider<CaseworkRepository, CaseworkRepository, CaseworkRepository> with $Provider<CaseworkRepository> {
+final class CaseworkRepositoryProvider
+    extends
+        $FunctionalProvider<
+          CaseworkRepository,
+          CaseworkRepository,
+          CaseworkRepository
+        >
+    with $Provider<CaseworkRepository> {
   /// DI composition for [CaseworkRepository].
   const CaseworkRepositoryProvider._()
     : super(
@@ -51,4 +58,5 @@ final class CaseworkRepositoryProvider extends $FunctionalProvider<CaseworkRepos
   }
 }
 
-String _$caseworkRepositoryHash() => r'8938dbaaa2303ae659abf99b2d08ba9616eb6e16';
+String _$caseworkRepositoryHash() =>
+    r'8938dbaaa2303ae659abf99b2d08ba9616eb6e16';

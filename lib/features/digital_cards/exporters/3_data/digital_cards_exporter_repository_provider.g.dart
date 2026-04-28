@@ -14,14 +14,22 @@ part of 'digital_cards_exporter_repository_provider.dart';
 /// reused across navigations.
 
 @ProviderFor(digitalCardsExporterRepository)
-const digitalCardsExporterRepositoryProvider = DigitalCardsExporterRepositoryProvider._();
+const digitalCardsExporterRepositoryProvider =
+    DigitalCardsExporterRepositoryProvider._();
 
 /// DI composition for [DigitalCardsExporterRepository] (canon §16).
 ///
 /// Kept alive for the lifetime of the app so the temp-file cache can be
 /// reused across navigations.
 
-final class DigitalCardsExporterRepositoryProvider extends $FunctionalProvider<DigitalCardsExporterRepository, DigitalCardsExporterRepository, DigitalCardsExporterRepository> with $Provider<DigitalCardsExporterRepository> {
+final class DigitalCardsExporterRepositoryProvider
+    extends
+        $FunctionalProvider<
+          DigitalCardsExporterRepository,
+          DigitalCardsExporterRepository,
+          DigitalCardsExporterRepository
+        >
+    with $Provider<DigitalCardsExporterRepository> {
   /// DI composition for [DigitalCardsExporterRepository] (canon §16).
   ///
   /// Kept alive for the lifetime of the app so the temp-file cache can be
@@ -62,4 +70,5 @@ final class DigitalCardsExporterRepositoryProvider extends $FunctionalProvider<D
   }
 }
 
-String _$digitalCardsExporterRepositoryHash() => r'361168a0140a7806d21a5cf9bbdc9df0b52a8943';
+String _$digitalCardsExporterRepositoryHash() =>
+    r'361168a0140a7806d21a5cf9bbdc9df0b52a8943';

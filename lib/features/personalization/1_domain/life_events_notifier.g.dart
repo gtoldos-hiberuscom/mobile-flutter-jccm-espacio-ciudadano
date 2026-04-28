@@ -20,7 +20,8 @@ const lifeEventsProvider = LifeEventsNotifierFamily._();
 ///
 /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
 /// story (depends on TASK-21 idAgente closure).
-final class LifeEventsNotifierProvider extends $AsyncNotifierProvider<LifeEventsNotifier, LifeEventsSelection> {
+final class LifeEventsNotifierProvider
+    extends $AsyncNotifierProvider<LifeEventsNotifier, LifeEventsSelection> {
   /// Owns the life-events selection state for a given `idAgente` (STORY-54).
   ///
   /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
@@ -61,14 +62,23 @@ final class LifeEventsNotifierProvider extends $AsyncNotifierProvider<LifeEvents
   }
 }
 
-String _$lifeEventsNotifierHash() => r'8ba3331c64bf10d10683d6e8976230d9498820b3';
+String _$lifeEventsNotifierHash() =>
+    r'8ba3331c64bf10d10683d6e8976230d9498820b3';
 
 /// Owns the life-events selection state for a given `idAgente` (STORY-54).
 ///
 /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
 /// story (depends on TASK-21 idAgente closure).
 
-final class LifeEventsNotifierFamily extends $Family with $ClassFamilyOverride<LifeEventsNotifier, AsyncValue<LifeEventsSelection>, LifeEventsSelection, FutureOr<LifeEventsSelection>, String> {
+final class LifeEventsNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          LifeEventsNotifier,
+          AsyncValue<LifeEventsSelection>,
+          LifeEventsSelection,
+          FutureOr<LifeEventsSelection>,
+          String
+        > {
   const LifeEventsNotifierFamily._()
     : super(
         retry: null,
@@ -83,7 +93,8 @@ final class LifeEventsNotifierFamily extends $Family with $ClassFamilyOverride<L
   /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
   /// story (depends on TASK-21 idAgente closure).
 
-  LifeEventsNotifierProvider call(String idAgente) => LifeEventsNotifierProvider._(argument: idAgente, from: this);
+  LifeEventsNotifierProvider call(String idAgente) =>
+      LifeEventsNotifierProvider._(argument: idAgente, from: this);
 
   @override
   String toString() => r'lifeEventsProvider';
@@ -94,7 +105,8 @@ final class LifeEventsNotifierFamily extends $Family with $ClassFamilyOverride<L
 /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
 /// story (depends on TASK-21 idAgente closure).
 
-abstract class _$LifeEventsNotifier extends $AsyncNotifier<LifeEventsSelection> {
+abstract class _$LifeEventsNotifier
+    extends $AsyncNotifier<LifeEventsSelection> {
   late final _$args = ref.$arg as String;
   String get idAgente => _$args;
 
@@ -103,8 +115,16 @@ abstract class _$LifeEventsNotifier extends $AsyncNotifier<LifeEventsSelection> 
   @override
   void runBuild() {
     final created = build(_$args);
-    final ref = this.ref as $Ref<AsyncValue<LifeEventsSelection>, LifeEventsSelection>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<LifeEventsSelection>, LifeEventsSelection>, AsyncValue<LifeEventsSelection>, Object?, Object?>;
+    final ref =
+        this.ref as $Ref<AsyncValue<LifeEventsSelection>, LifeEventsSelection>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<LifeEventsSelection>, LifeEventsSelection>,
+              AsyncValue<LifeEventsSelection>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

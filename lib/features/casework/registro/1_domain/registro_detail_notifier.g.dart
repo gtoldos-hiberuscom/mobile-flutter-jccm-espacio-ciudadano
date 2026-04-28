@@ -22,7 +22,8 @@ const registroDetailProvider = RegistroDetailNotifierFamily._();
 ///
 /// The notifier is keyed by `(numreg, kind)` so each detail screen owns
 /// its own state and side effects stay isolated per route instance.
-final class RegistroDetailNotifierProvider extends $AsyncNotifierProvider<RegistroDetailNotifier, RegistroDetail> {
+final class RegistroDetailNotifierProvider
+    extends $AsyncNotifierProvider<RegistroDetailNotifier, RegistroDetail> {
   /// Loads and exposes the detail of a registro entrada / salida
   /// (STORY-36) as an `AsyncValue<RegistroDetail>`.
   ///
@@ -55,7 +56,8 @@ final class RegistroDetailNotifierProvider extends $AsyncNotifierProvider<Regist
 
   @override
   bool operator ==(Object other) {
-    return other is RegistroDetailNotifierProvider && other.argument == argument;
+    return other is RegistroDetailNotifierProvider &&
+        other.argument == argument;
   }
 
   @override
@@ -64,7 +66,8 @@ final class RegistroDetailNotifierProvider extends $AsyncNotifierProvider<Regist
   }
 }
 
-String _$registroDetailNotifierHash() => r'cbf79b3f036b0ae994a20c5a5515b33cfc07de24';
+String _$registroDetailNotifierHash() =>
+    r'cbf79b3f036b0ae994a20c5a5515b33cfc07de24';
 
 /// Loads and exposes the detail of a registro entrada / salida
 /// (STORY-36) as an `AsyncValue<RegistroDetail>`.
@@ -72,7 +75,15 @@ String _$registroDetailNotifierHash() => r'cbf79b3f036b0ae994a20c5a5515b33cfc07d
 /// The notifier is keyed by `(numreg, kind)` so each detail screen owns
 /// its own state and side effects stay isolated per route instance.
 
-final class RegistroDetailNotifierFamily extends $Family with $ClassFamilyOverride<RegistroDetailNotifier, AsyncValue<RegistroDetail>, RegistroDetail, FutureOr<RegistroDetail>, (String, RegistroKind)> {
+final class RegistroDetailNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          RegistroDetailNotifier,
+          AsyncValue<RegistroDetail>,
+          RegistroDetail,
+          FutureOr<RegistroDetail>,
+          (String, RegistroKind)
+        > {
   const RegistroDetailNotifierFamily._()
     : super(
         retry: null,
@@ -88,7 +99,8 @@ final class RegistroDetailNotifierFamily extends $Family with $ClassFamilyOverri
   /// The notifier is keyed by `(numreg, kind)` so each detail screen owns
   /// its own state and side effects stay isolated per route instance.
 
-  RegistroDetailNotifierProvider call(String numreg, RegistroKind kind) => RegistroDetailNotifierProvider._(argument: (numreg, kind), from: this);
+  RegistroDetailNotifierProvider call(String numreg, RegistroKind kind) =>
+      RegistroDetailNotifierProvider._(argument: (numreg, kind), from: this);
 
   @override
   String toString() => r'registroDetailProvider';
@@ -111,7 +123,14 @@ abstract class _$RegistroDetailNotifier extends $AsyncNotifier<RegistroDetail> {
   void runBuild() {
     final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<RegistroDetail>, RegistroDetail>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<RegistroDetail>, RegistroDetail>, AsyncValue<RegistroDetail>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<RegistroDetail>, RegistroDetail>,
+              AsyncValue<RegistroDetail>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }
