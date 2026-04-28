@@ -10,12 +10,8 @@ class AppConfig {
     required this.environment,
     required this.baseUrl,
     required this.appName,
-    this.timeout = 30,
+    required this.ssoClientId, required this.ssoRedirectUri, required this.ssoRealm, required this.ssoBaseUrl, this.timeout = 30,
     this.debugMode = false,
-    required this.ssoClientId,
-    required this.ssoRedirectUri,
-    required this.ssoRealm,
-    required this.ssoBaseUrl,
   });
 
   /// The active [BuildEnvironment] for this run.

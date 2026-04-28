@@ -39,34 +39,35 @@ RegistroDetail _detail({
   required final String numero,
   required final RegistroKind kind,
   final List<RegistroFichero> ficheros = const <RegistroFichero>[],
-}) =>
-    RegistroDetail(
-      id: 'id-$numero',
-      numero: numero,
-      fecha: DateTime(2025, 6, 12, 9, 30),
-      kind: kind,
-      consejeriaDestino: 'Consejería Test',
-      asunto: 'Asunto test',
-      oficina: 'Oficina test',
-      ficheros: ficheros,
-    );
+}) => RegistroDetail(
+  id: 'id-$numero',
+  numero: numero,
+  fecha: DateTime(2025, 6, 12, 9, 30),
+  kind: kind,
+  consejeriaDestino: 'Consejería Test',
+  asunto: 'Asunto test',
+  oficina: 'Oficina test',
+  ficheros: ficheros,
+);
 
 void main() {
   test('loads entrada detail successfully', () async {
-    final repo = _FakeRepo(responses: {
-      'entrada:REG/E/45612': () => _detail(
-            numero: 'REG/E/45612',
-            kind: RegistroKind.entrada,
-            ficheros: const <RegistroFichero>[
-              RegistroFichero(
-                id: 'f1',
-                nombre: 'a.pdf',
-                mimeType: 'application/pdf',
-                descargaRef: 'r',
-              ),
-            ],
-          ),
-    });
+    final repo = _FakeRepo(
+      responses: {
+        'entrada:REG/E/45612': () => _detail(
+          numero: 'REG/E/45612',
+          kind: RegistroKind.entrada,
+          ficheros: const <RegistroFichero>[
+            RegistroFichero(
+              id: 'f1',
+              nombre: 'a.pdf',
+              mimeType: 'application/pdf',
+              descargaRef: 'r',
+            ),
+          ],
+        ),
+      },
+    );
     final container = _container(repo);
 
     final value = await container.read(
@@ -79,20 +80,22 @@ void main() {
   });
 
   test('loads salida detail successfully', () async {
-    final repo = _FakeRepo(responses: {
-      'salida:REG/S/12044': () => _detail(
-            numero: 'REG/S/12044',
-            kind: RegistroKind.salida,
-            ficheros: const <RegistroFichero>[
-              RegistroFichero(
-                id: 'f1',
-                nombre: 'r.pdf',
-                mimeType: 'application/pdf',
-                descargaRef: 'r',
-              ),
-            ],
-          ),
-    });
+    final repo = _FakeRepo(
+      responses: {
+        'salida:REG/S/12044': () => _detail(
+          numero: 'REG/S/12044',
+          kind: RegistroKind.salida,
+          ficheros: const <RegistroFichero>[
+            RegistroFichero(
+              id: 'f1',
+              nombre: 'r.pdf',
+              mimeType: 'application/pdf',
+              descargaRef: 'r',
+            ),
+          ],
+        ),
+      },
+    );
     final container = _container(repo);
 
     final value = await container.read(
@@ -104,12 +107,14 @@ void main() {
   });
 
   test('exposes empty ficheros list as data state', () async {
-    final repo = _FakeRepo(responses: {
-      'entrada:REG/E/00000': () => _detail(
-            numero: 'REG/E/00000',
-            kind: RegistroKind.entrada,
-          ),
-    });
+    final repo = _FakeRepo(
+      responses: {
+        'entrada:REG/E/00000': () => _detail(
+          numero: 'REG/E/00000',
+          kind: RegistroKind.entrada,
+        ),
+      },
+    );
     final container = _container(repo);
 
     final value = await container.read(
@@ -125,8 +130,7 @@ void main() {
 
     await expectLater(
       container.read(
-        registroDetailProvider('REG/E/UNKNOWN', RegistroKind.entrada)
-            .future,
+        registroDetailProvider('REG/E/UNKNOWN', RegistroKind.entrada).future,
       ),
       throwsA(isA<StateError>()),
     );

@@ -166,9 +166,11 @@ class UploadSessionNotifier extends _$UploadSessionNotifier {
     if (state.finalized) {
       return;
     }
-    final remaining = state.files.where((final f) => f.id != id).toList(
-      growable: false,
-    );
+    final remaining = state.files
+        .where((final f) => f.id != id)
+        .toList(
+          growable: false,
+        );
     if (remaining.length == state.files.length) {
       return;
     }
@@ -179,9 +181,7 @@ class UploadSessionNotifier extends _$UploadSessionNotifier {
     final UploadSession session,
     final UploadAttachment attachment,
   ) {
-    final next = session.files
-        .map((final f) => f.id == attachment.id ? attachment : f)
-        .toList(growable: false);
+    final next = session.files.map((final f) => f.id == attachment.id ? attachment : f).toList(growable: false);
     return session.copyWith(files: next);
   }
 }

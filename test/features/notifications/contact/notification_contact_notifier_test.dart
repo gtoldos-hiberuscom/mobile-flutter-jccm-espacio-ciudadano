@@ -6,14 +6,13 @@ import 'package:jccm_espacio_ciudadano/features/notifications/contact/3_data/not
 import 'package:jccm_espacio_ciudadano/features/notifications/contact/3_data/notification_contact_repository_provider.dart';
 
 void main() {
-  ProviderContainer makeContainer({final NotificationContact? seed}) =>
-      ProviderContainer(
-        overrides: [
-          notificationContactRepositoryProvider.overrideWith(
-            (final ref) => NotificationContactRepositoryImpl(seed: seed),
-          ),
-        ],
-      );
+  ProviderContainer makeContainer({final NotificationContact? seed}) => ProviderContainer(
+    overrides: [
+      notificationContactRepositoryProvider.overrideWith(
+        (final ref) => NotificationContactRepositoryImpl(seed: seed),
+      ),
+    ],
+  );
 
   group('NotificationContactNotifier', () {
     test('initial build returns null when nothing is registered yet', () async {
@@ -49,13 +48,9 @@ void main() {
       );
       addTearDown(sub.close);
       await container.read(notificationContactProvider.future);
-      await container
-          .read(notificationContactProvider.notifier)
-          .register(phone: '600123456', email: 'user@example.com');
+      await container.read(notificationContactProvider.notifier).register(phone: '600123456', email: 'user@example.com');
 
-      final state = container
-          .read(notificationContactProvider)
-          .requireValue;
+      final state = container.read(notificationContactProvider).requireValue;
       expect(state, isNotNull);
       expect(state!.phoneE164, '600123456');
       expect(state.email, 'user@example.com');
@@ -73,9 +68,7 @@ void main() {
       await container.read(notificationContactProvider.future);
 
       await expectLater(
-        () => container
-            .read(notificationContactProvider.notifier)
-            .register(),
+        () => container.read(notificationContactProvider.notifier).register(),
         throwsA(isA<NotificationContactValidationException>()),
       );
 

@@ -22,7 +22,9 @@ class RegistroDetailNotifier extends _$RegistroDetailNotifier {
   Future<void> refresh() async {
     state = const AsyncValue<RegistroDetail>.loading();
     state = await AsyncValue.guard<RegistroDetail>(
-      () => ref.read(registroRepositoryProvider).loadByNumber(
+      () => ref
+          .read(registroRepositoryProvider)
+          .loadByNumber(
             numreg: numreg,
             kind: kind,
           ),

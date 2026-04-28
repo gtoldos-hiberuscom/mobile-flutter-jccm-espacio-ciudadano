@@ -77,9 +77,9 @@ class RegistroFicheroDivider extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => const Divider(
-        height: 1,
-        thickness: 1,
-        indent: AppDimensions.space16,
-        endIndent: AppDimensions.space16,
-      );
+    height: 1,
+    thickness: 1,
+    indent: AppDimensions.space16,
+    endIndent: AppDimensions.space16,
+  );
 }

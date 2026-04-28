@@ -25,8 +25,7 @@ class ExpedienteDetailPage extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final asyncDetail =
-        ref.watch(expedienteDetailProvider(expedienteRef));
+    final asyncDetail = ref.watch(expedienteDetailProvider(expedienteRef));
 
     return Scaffold(
       appBar: AppBar(
@@ -50,9 +49,7 @@ class ExpedienteDetailPage extends ConsumerWidget {
         error: (final error, final _) => ErrorStateWidget(
           message: l10n.caseworkExpedienteDetailErrorTitle,
           detail: l10n.caseworkExpedienteDetailErrorBody,
-          onRetry: () => ref
-              .read(expedienteDetailProvider(expedienteRef).notifier)
-              .refresh(),
+          onRetry: () => ref.read(expedienteDetailProvider(expedienteRef).notifier).refresh(),
         ),
         data: (final detail) => _LoadedView(detail: detail),
       ),
@@ -95,8 +92,7 @@ class _LoadedView extends StatelessWidget {
           else
             Column(
               children: <Widget>[
-                for (final fichero in detail.ficheros)
-                  ExpedienteFicheroTile(fichero: fichero),
+                for (final fichero in detail.ficheros) ExpedienteFicheroTile(fichero: fichero),
               ],
             ),
           const SizedBox(height: AppDimensions.space24),
@@ -105,10 +101,7 @@ class _LoadedView extends StatelessWidget {
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: AppDimensions.space8),
-          if (detail.estado.permiteAportacion)
-            UploadEvidenceSection(expedienteRef: detail.numero)
-          else
-            _ClosedBanner(),
+          if (detail.estado.permiteAportacion) UploadEvidenceSection(expedienteRef: detail.numero) else _ClosedBanner(),
         ],
       ),
     );

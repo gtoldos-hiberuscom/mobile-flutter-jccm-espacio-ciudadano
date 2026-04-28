@@ -16,11 +16,9 @@ class AportacionFailureBanner extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final message = switch (failure) {
-      AportacionFailure.invalidIdentification =>
-        l10n.caseworkAportacionFailureInvalidIdentification,
+      AportacionFailure.invalidIdentification => l10n.caseworkAportacionFailureInvalidIdentification,
       AportacionFailure.notFound => l10n.caseworkAportacionFailureNotFound,
-      AportacionFailure.networkError =>
-        l10n.caseworkAportacionFailureNetworkError,
+      AportacionFailure.networkError => l10n.caseworkAportacionFailureNetworkError,
     };
     return Container(
       padding: const EdgeInsets.all(AppDimensions.space12),

@@ -18,18 +18,15 @@ class _FakeRepo implements CaseworkRepository {
   final bool registroError;
 
   @override
-  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async =>
-      const <CaseworkItem>[];
+  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async => const <CaseworkItem>[];
 
   @override
-  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
-      const <CaseworkItem>[];
+  Future<List<CaseworkItem>> searchByNif(final String identification) async => const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByExpedienteNumber(
     final String number,
-  ) async =>
-      expedienteResults ?? const <CaseworkItem>[];
+  ) async => expedienteResults ?? const <CaseworkItem>[];
 
   @override
   Future<List<CaseworkItem>> searchByRegistroNumber(
@@ -55,8 +52,7 @@ CaseworkItem _item(final String number) => CaseworkItem(
 ProviderContainer _container({final CaseworkRepository? repo}) {
   final c = ProviderContainer(
     overrides: [
-      if (repo != null)
-        caseworkRepositoryProvider.overrideWith((final ref) => repo),
+      if (repo != null) caseworkRepositoryProvider.overrideWith((final ref) => repo),
     ],
   );
   addTearDown(c.dispose);
@@ -84,8 +80,7 @@ void main() {
       final notifier = c.read(aportacionSessionProvider.notifier);
 
       notifier.confirmIntro();
-      expect(c.read(aportacionSessionProvider).currentStep,
-          AportacionStep.identificacion);
+      expect(c.read(aportacionSessionProvider).currentStep, AportacionStep.identificacion);
 
       notifier.setIdentification(
         const InterestedPartyIdentification(
@@ -129,8 +124,7 @@ void main() {
       await notifier.resolveQuery(
         const AportacionSearchQuery.byExpediente('EXP/2025/00123'),
       );
-      expect(c.read(aportacionSessionProvider).currentStep,
-          AportacionStep.detail);
+      expect(c.read(aportacionSessionProvider).currentStep, AportacionStep.detail);
 
       notifier.back();
       var state = c.read(aportacionSessionProvider);
@@ -147,8 +141,7 @@ void main() {
 
       // Intro is the floor.
       notifier.back();
-      expect(c.read(aportacionSessionProvider).currentStep,
-          AportacionStep.intro);
+      expect(c.read(aportacionSessionProvider).currentStep, AportacionStep.intro);
     });
 
     test('invalid identification raises invalidIdentification failure', () {
@@ -166,8 +159,7 @@ void main() {
       expect(state.failure, AportacionFailure.invalidIdentification);
     });
 
-    test('empty results raise notFound failure and stay on search step',
-        () async {
+    test('empty results raise notFound failure and stay on search step', () async {
       final c = _container(
         repo: _FakeRepo(expedienteResults: const <CaseworkItem>[]),
       );

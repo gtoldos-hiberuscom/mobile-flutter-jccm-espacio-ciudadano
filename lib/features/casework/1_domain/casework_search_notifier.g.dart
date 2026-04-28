@@ -28,8 +28,7 @@ const caseworkSearchProvider = CaseworkSearchNotifierProvider._();
 ///   - re-validates on every change,
 ///   - executes the right repository call when the query is valid,
 ///   - exposes `idle | searching | results | noResults | error` to the UI.
-final class CaseworkSearchNotifierProvider
-    extends $NotifierProvider<CaseworkSearchNotifier, CaseworkSearchState> {
+final class CaseworkSearchNotifierProvider extends $NotifierProvider<CaseworkSearchNotifier, CaseworkSearchState> {
   /// Owns the casework search screen state (STORY-39).
   ///
   /// Validation lives in `0_entity/CaseworkSearchQuery` (pure Dart). The
@@ -65,8 +64,7 @@ final class CaseworkSearchNotifierProvider
   }
 }
 
-String _$caseworkSearchNotifierHash() =>
-    r'288616d31668fbc18a3dd37e8222eca17a3dccc1';
+String _$caseworkSearchNotifierHash() => r'288616d31668fbc18a3dd37e8222eca17a3dccc1';
 
 /// Owns the casework search screen state (STORY-39).
 ///
@@ -84,14 +82,7 @@ abstract class _$CaseworkSearchNotifier extends $Notifier<CaseworkSearchState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<CaseworkSearchState, CaseworkSearchState>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<CaseworkSearchState, CaseworkSearchState>,
-              CaseworkSearchState,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<CaseworkSearchState, CaseworkSearchState>, CaseworkSearchState, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

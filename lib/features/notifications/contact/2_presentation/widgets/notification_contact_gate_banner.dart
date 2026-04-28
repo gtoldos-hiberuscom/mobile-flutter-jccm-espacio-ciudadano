@@ -55,8 +55,7 @@ class NotificationContactGateBanner extends ConsumerWidget {
                       alignment: AlignmentDirectional.centerStart,
                       child: TextButton(
                         key: const Key('notification_contact_gate_banner_cta'),
-                        onPressed: () => GoRouter.of(context)
-                            .go(Routes.notificationContactRegistration),
+                        onPressed: () => GoRouter.of(context).go(Routes.notificationContactRegistration),
                         child: Text(l10n.notificationContactGateBannerCta),
                       ),
                     ),

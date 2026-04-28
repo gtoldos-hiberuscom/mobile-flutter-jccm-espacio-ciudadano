@@ -24,18 +24,18 @@ class _StubRepo implements ExpedienteDetailRepository {
 }
 
 ExpedienteDetail _abiertoFixture() => ExpedienteDetail(
-      id: 'x1',
-      numero: 'EXP/2025/00123',
-      asuntoCodigo: 'AS-1',
-      asunto: 'Asunto',
-      consejeria: 'Consejería',
-      oficinaTramitadora: 'Oficina',
-      procedimiento: 'Procedimiento',
-      fechaInicio: DateTime(2025, 3, 4),
-      fechaUltimaActualizacion: DateTime(2025, 4, 2),
-      estado: ExpedienteEstado.abierto,
-      ficheros: <ExpedienteFichero>[],
-    );
+  id: 'x1',
+  numero: 'EXP/2025/00123',
+  asuntoCodigo: 'AS-1',
+  asunto: 'Asunto',
+  consejeria: 'Consejería',
+  oficinaTramitadora: 'Oficina',
+  procedimiento: 'Procedimiento',
+  fechaInicio: DateTime(2025, 3, 4),
+  fechaUltimaActualizacion: DateTime(2025, 4, 2),
+  estado: ExpedienteEstado.abierto,
+  ficheros: <ExpedienteFichero>[],
+);
 
 ProviderContainer _container(final ExpedienteDetailRepository repo) {
   final c = ProviderContainer(
@@ -60,9 +60,12 @@ void main() {
 
     test('surfaces an error when the repository throws', () async {
       final c = _container(_StubRepo(error: StateError('boom')));
-      final asyncValue = await c.read(
-        expedienteDetailProvider('EXP/0').future,
-      ).then<Object?>((final v) => v).onError<Object>(
+      final asyncValue = await c
+          .read(
+            expedienteDetailProvider('EXP/0').future,
+          )
+          .then<Object?>((final v) => v)
+          .onError<Object>(
             (final e, final _) => e,
           );
       expect(asyncValue, isA<StateError>());

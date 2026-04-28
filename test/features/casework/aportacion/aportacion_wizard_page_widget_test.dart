@@ -19,27 +19,22 @@ class _StubResolver extends AportacionResolver {
   _StubResolver(this._match) : super(_NoopRepo());
   final CaseworkItem? _match;
   @override
-  Future<CaseworkItem?> resolve(final AportacionSearchQuery query) async =>
-      _match;
+  Future<CaseworkItem?> resolve(final AportacionSearchQuery query) async => _match;
 }
 
 class _NoopRepo implements CaseworkRepository {
   @override
-  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async =>
-      const <CaseworkItem>[];
+  Future<List<CaseworkItem>> loadByTab(final CaseworkTab tab) async => const <CaseworkItem>[];
   @override
-  Future<List<CaseworkItem>> searchByNif(final String identification) async =>
-      const <CaseworkItem>[];
+  Future<List<CaseworkItem>> searchByNif(final String identification) async => const <CaseworkItem>[];
   @override
   Future<List<CaseworkItem>> searchByExpedienteNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
   @override
   Future<List<CaseworkItem>> searchByRegistroNumber(
     final String number,
-  ) async =>
-      const <CaseworkItem>[];
+  ) async => const <CaseworkItem>[];
 }
 
 class _StubDetailRepo implements ExpedienteDetailRepository {
@@ -50,37 +45,37 @@ class _StubDetailRepo implements ExpedienteDetailRepository {
 }
 
 ExpedienteDetail _detailFixture() => ExpedienteDetail(
-      id: 'x1',
-      numero: 'EXP/2025/00123',
-      asuntoCodigo: 'AS-1',
-      asunto: 'Solicitud',
-      consejeria: 'Consejería de Bienestar',
-      oficinaTramitadora: 'Oficina de Toledo',
-      procedimiento: 'Ayudas',
-      fechaInicio: DateTime(2025, 3, 4),
-      fechaUltimaActualizacion: DateTime(2025, 4, 18),
-      estado: ExpedienteEstado.cerrado,
-      ficheros: <ExpedienteFichero>[
-        ExpedienteFichero(
-          id: 'f1',
-          nombre: 'documento.pdf',
-          mimeType: 'application/pdf',
-          sizeBytes: 1024,
-          fechaSubida: DateTime(2025, 3, 5),
-          descargaRef: 'ref://x',
-        ),
-      ],
-    );
+  id: 'x1',
+  numero: 'EXP/2025/00123',
+  asuntoCodigo: 'AS-1',
+  asunto: 'Solicitud',
+  consejeria: 'Consejería de Bienestar',
+  oficinaTramitadora: 'Oficina de Toledo',
+  procedimiento: 'Ayudas',
+  fechaInicio: DateTime(2025, 3, 4),
+  fechaUltimaActualizacion: DateTime(2025, 4, 18),
+  estado: ExpedienteEstado.cerrado,
+  ficheros: <ExpedienteFichero>[
+    ExpedienteFichero(
+      id: 'f1',
+      nombre: 'documento.pdf',
+      mimeType: 'application/pdf',
+      sizeBytes: 1024,
+      fechaSubida: DateTime(2025, 3, 5),
+      descargaRef: 'ref://x',
+    ),
+  ],
+);
 
 CaseworkItem _matchItem() => CaseworkItem(
-      id: 'm1',
-      type: CaseworkTab.expedientes,
-      number: 'EXP/2025/00123',
-      date: DateTime(2025, 6, 15),
-      organism: 'Org',
-      subject: 'Asunto',
-      status: CaseworkItemStatus.enTramite,
-    );
+  id: 'm1',
+  type: CaseworkTab.expedientes,
+  number: 'EXP/2025/00123',
+  date: DateTime(2025, 6, 15),
+  organism: 'Org',
+  subject: 'Asunto',
+  status: CaseworkItemStatus.enTramite,
+);
 
 Widget _wrap({final ProviderContainer? container}) {
   final scope = container == null
@@ -95,12 +90,12 @@ Widget _wrap({final ProviderContainer? container}) {
 class _Host extends StatelessWidget {
   const _Host();
   @override
-  Widget build(final BuildContext context) => MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        home: const AportacionWizardPage(),
-      );
+  Widget build(final BuildContext context) => const MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: Locale('es'),
+    home: AportacionWizardPage(),
+  );
 }
 
 ProviderContainer _container({
@@ -109,11 +104,8 @@ ProviderContainer _container({
 }) {
   final c = ProviderContainer(
     overrides: [
-      if (resolver != null)
-        aportacionResolverProvider.overrideWith((final ref) => resolver),
-      if (detailRepo != null)
-        expedienteDetailRepositoryProvider
-            .overrideWith((final ref) => detailRepo),
+      if (resolver != null) aportacionResolverProvider.overrideWith((final ref) => resolver),
+      if (detailRepo != null) expedienteDetailRepositoryProvider.overrideWith((final ref) => detailRepo),
     ],
   );
   addTearDown(c.dispose);
@@ -121,8 +113,7 @@ ProviderContainer _container({
 }
 
 void main() {
-  testWidgets('AportacionWizardPage renders intro step initially',
-      (final tester) async {
+  testWidgets('AportacionWizardPage renders intro step initially', (final tester) async {
     await tester.pumpWidget(_wrap());
     await tester.pumpAndSettle();
     expect(find.text('Aportación de documentos'), findsOneWidget);
@@ -131,8 +122,7 @@ void main() {
     expect(find.text('Paso 1 de 5'), findsOneWidget);
   });
 
-  testWidgets('Wizard advances intro → identification → search → detail',
-      (final tester) async {
+  testWidgets('Wizard advances intro → identification → search → detail', (final tester) async {
     await tester.pumpWidget(
       _wrap(
         container: _container(
@@ -175,8 +165,7 @@ void main() {
     expect(find.byIcon(Icons.lock_outline), findsOneWidget);
   });
 
-  testWidgets('Search step surfaces notFound failure when resolver yields null',
-      (final tester) async {
+  testWidgets('Search step surfaces notFound failure when resolver yields null', (final tester) async {
     await tester.pumpWidget(
       _wrap(container: _container(resolver: _StubResolver(null))),
     );

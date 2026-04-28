@@ -19,10 +19,8 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/exporters/1_domain
 ///
 /// All `// TODO(future-sprint)` markers below are the integration
 /// points to swap when the real packages are wired in.
-final class DigitalCardsExporterRepositoryMockImpl
-    implements DigitalCardsExporterRepository {
-  DigitalCardsExporterRepositoryMockImpl({final Directory? tempRoot})
-    : _tempRoot = tempRoot ?? Directory.systemTemp;
+final class DigitalCardsExporterRepositoryMockImpl implements DigitalCardsExporterRepository {
+  DigitalCardsExporterRepositoryMockImpl({final Directory? tempRoot}) : _tempRoot = tempRoot ?? Directory.systemTemp;
 
   final Directory _tempRoot;
 
@@ -30,8 +28,7 @@ final class DigitalCardsExporterRepositoryMockImpl
   /// `lib/core/storage/temp_cleanup.dart`.
   static const String tempSubdir = 'digital_cards';
 
-  Directory get _digitalCardsDir =>
-      Directory('${_tempRoot.path}${Platform.pathSeparator}$tempSubdir');
+  Directory get _digitalCardsDir => Directory('${_tempRoot.path}${Platform.pathSeparator}$tempSubdir');
 
   @override
   Future<File> writeToTemp({

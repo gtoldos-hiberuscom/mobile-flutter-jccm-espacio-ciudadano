@@ -13,20 +13,17 @@ class AportacionIdentificationStep extends ConsumerStatefulWidget {
   const AportacionIdentificationStep({super.key});
 
   @override
-  ConsumerState<AportacionIdentificationStep> createState() =>
-      _AportacionIdentificationStepState();
+  ConsumerState<AportacionIdentificationStep> createState() => _AportacionIdentificationStepState();
 }
 
-class _AportacionIdentificationStepState
-    extends ConsumerState<AportacionIdentificationStep> {
+class _AportacionIdentificationStepState extends ConsumerState<AportacionIdentificationStep> {
   final _controller = TextEditingController();
   InterestedPartyIdType _idType = InterestedPartyIdType.nif;
 
   @override
   void initState() {
     super.initState();
-    final existing =
-        ref.read(aportacionSessionProvider).identificacion;
+    final existing = ref.read(aportacionSessionProvider).identificacion;
     if (existing != null) {
       _idType = existing.idType;
       _controller.text = existing.idNumber;
@@ -92,29 +89,21 @@ class _AportacionIdentificationStepState
                 ),
             ],
             selected: <InterestedPartyIdType>{_idType},
-            onSelectionChanged: (final s) =>
-                setState(() => _idType = s.first),
+            onSelectionChanged: (final s) => setState(() => _idType = s.first),
           ),
           const SizedBox(height: AppDimensions.space16),
           TextField(
             controller: _controller,
             textCapitalization: TextCapitalization.characters,
             decoration: InputDecoration(
-              labelText:
-                  l10n.caseworkAportacionIdentificationNumberLabel,
-              hintText:
-                  l10n.caseworkAportacionIdentificationNumberHint,
+              labelText: l10n.caseworkAportacionIdentificationNumberLabel,
+              hintText: l10n.caseworkAportacionIdentificationNumberHint,
               border: const OutlineInputBorder(),
-              errorText: failure ==
-                      AportacionFailure.invalidIdentification
-                  ? l10n.caseworkAportacionFailureInvalidIdentification
-                  : null,
+              errorText: failure == AportacionFailure.invalidIdentification ? l10n.caseworkAportacionFailureInvalidIdentification : null,
             ),
           ),
           const SizedBox(height: AppDimensions.space12),
-          if (failure != null &&
-              failure != AportacionFailure.invalidIdentification)
-            AportacionFailureBanner(failure: failure),
+          if (failure != null && failure != AportacionFailure.invalidIdentification) AportacionFailureBanner(failure: failure),
           const SizedBox(height: AppDimensions.space16),
           FilledButton(
             onPressed: () {

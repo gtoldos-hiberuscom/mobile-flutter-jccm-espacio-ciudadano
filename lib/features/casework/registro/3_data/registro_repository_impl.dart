@@ -26,8 +26,7 @@ final class RegistroRepositoryImpl implements RegistroRepository {
     return detail;
   }
 
-  static String _keyOf(final String numreg, final RegistroKind kind) =>
-      '${kind.token}:${numreg.toUpperCase()}';
+  static String _keyOf(final String numreg, final RegistroKind kind) => '${kind.token}:${numreg.toUpperCase()}';
 
   static final Map<String, RegistroDetail> _detalles = <String, RegistroDetail>{
     _keyOf('REG/E/45612', RegistroKind.entrada): RegistroDetail(

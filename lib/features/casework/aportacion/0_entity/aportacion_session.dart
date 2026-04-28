@@ -48,10 +48,8 @@ final class AportacionSession {
     final bool clearIdentificacion = false,
   }) => AportacionSession(
     currentStep: currentStep ?? this.currentStep,
-    identificacion:
-        clearIdentificacion ? null : identificacion ?? this.identificacion,
-    expedienteRef:
-        clearExpedienteRef ? null : expedienteRef ?? this.expedienteRef,
+    identificacion: clearIdentificacion ? null : identificacion ?? this.identificacion,
+    expedienteRef: clearExpedienteRef ? null : expedienteRef ?? this.expedienteRef,
     completed: completed ?? this.completed,
     failure: clearFailure ? null : failure ?? this.failure,
     isResolving: isResolving ?? this.isResolving,

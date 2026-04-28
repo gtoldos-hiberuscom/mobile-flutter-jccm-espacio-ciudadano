@@ -48,21 +48,22 @@ class BinaryArtifactPreview extends StatelessWidget {
         label: l10n.walletPreviewPkpassPlaceholder,
         theme: theme,
       ),
-      BinaryArtifactKind.png => bytes == null || bytes!.isEmpty
-          ? _IconPlaceholder(
-              icon: Icons.image_not_supported,
-              label: l10n.walletPreviewQrUnavailable,
-              theme: theme,
-            )
-          : Semantics(
-              label: l10n.walletPreviewQrImageSemantic,
-              image: true,
-              child: Image.memory(
-                bytes!,
-                fit: BoxFit.contain,
-                gaplessPlayback: true,
+      BinaryArtifactKind.png =>
+        bytes == null || bytes!.isEmpty
+            ? _IconPlaceholder(
+                icon: Icons.image_not_supported,
+                label: l10n.walletPreviewQrUnavailable,
+                theme: theme,
+              )
+            : Semantics(
+                label: l10n.walletPreviewQrImageSemantic,
+                image: true,
+                child: Image.memory(
+                  bytes!,
+                  fit: BoxFit.contain,
+                  gaplessPlayback: true,
+                ),
               ),
-            ),
       // TODO(future-sprint): replace with `QrImageView` once `qr_flutter`
       //   is added to the pubspec; the textual fallback below remains a
       //   safe accessibility net.

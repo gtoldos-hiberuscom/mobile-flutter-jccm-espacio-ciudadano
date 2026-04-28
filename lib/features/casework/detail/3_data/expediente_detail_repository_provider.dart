@@ -6,5 +6,4 @@ part 'expediente_detail_repository_provider.g.dart';
 
 /// DI composition for [ExpedienteDetailRepository] (STORY-35).
 @riverpod
-ExpedienteDetailRepository expedienteDetailRepository(final Ref ref) =>
-    const ExpedienteDetailRepositoryImpl();
+ExpedienteDetailRepository expedienteDetailRepository(final Ref ref) => const ExpedienteDetailRepositoryImpl();

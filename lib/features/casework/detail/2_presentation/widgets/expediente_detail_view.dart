@@ -63,8 +63,7 @@ class ExpedienteDetailView extends StatelessWidget {
           else
             Column(
               children: <Widget>[
-                for (final fichero in detail.ficheros)
-                  ExpedienteFicheroTile(fichero: fichero),
+                for (final fichero in detail.ficheros) ExpedienteFicheroTile(fichero: fichero),
               ],
             ),
           const SizedBox(height: AppDimensions.space24),
@@ -73,12 +72,7 @@ class ExpedienteDetailView extends StatelessWidget {
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: AppDimensions.space8),
-          if (uploadSection != null)
-            uploadSection!
-          else if (detail.estado.permiteAportacion)
-            UploadEvidenceSection(expedienteRef: detail.numero)
-          else
-            const _ClosedBanner(),
+          if (uploadSection != null) uploadSection! else if (detail.estado.permiteAportacion) UploadEvidenceSection(expedienteRef: detail.numero) else const _ClosedBanner(),
         ],
       ),
     );

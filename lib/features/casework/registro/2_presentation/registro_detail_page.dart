@@ -49,9 +49,7 @@ class RegistroDetailPage extends ConsumerWidget {
         loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
         error: (final err, final st) => ErrorStateWidget(
           message: l10n.caseworkRegistroDetailLoadError,
-          onRetry: () => ref
-              .read(registroDetailProvider(numreg, kind).notifier)
-              .refresh(),
+          onRetry: () => ref.read(registroDetailProvider(numreg, kind).notifier).refresh(),
         ),
         data: (final detail) => _DetailBody(detail: detail, kind: kind),
       ),

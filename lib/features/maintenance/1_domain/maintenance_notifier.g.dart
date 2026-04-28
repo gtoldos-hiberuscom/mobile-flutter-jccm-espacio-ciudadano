@@ -24,8 +24,7 @@ const maintenanceProvider = MaintenanceNotifierProvider._();
 /// maintenance window and [clearMaintenance] to deactivate it.
 ///
 /// Real check deferred to a later sprint.
-final class MaintenanceNotifierProvider
-    extends $NotifierProvider<MaintenanceNotifier, MaintenanceState> {
+final class MaintenanceNotifierProvider extends $NotifierProvider<MaintenanceNotifier, MaintenanceState> {
   /// Manages the application maintenance state.
   ///
   /// Starts as [MaintenanceInactive]. Use [setMaintenance] to activate a
@@ -59,8 +58,7 @@ final class MaintenanceNotifierProvider
   }
 }
 
-String _$maintenanceNotifierHash() =>
-    r'70bd3b51ada478df08bcaf09bca368bdafcb8fd4';
+String _$maintenanceNotifierHash() => r'70bd3b51ada478df08bcaf09bca368bdafcb8fd4';
 
 /// Manages the application maintenance state.
 ///
@@ -76,14 +74,7 @@ abstract class _$MaintenanceNotifier extends $Notifier<MaintenanceState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<MaintenanceState, MaintenanceState>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<MaintenanceState, MaintenanceState>,
-              MaintenanceState,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<MaintenanceState, MaintenanceState>, MaintenanceState, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

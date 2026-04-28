@@ -62,8 +62,7 @@ class AportacionWizardPage extends ConsumerWidget {
     final theme = Theme.of(context);
     final session = ref.watch(aportacionSessionProvider);
     final notifier = ref.read(aportacionSessionProvider.notifier);
-    final canGoBack = !session.completed &&
-        session.currentStep != AportacionStep.intro;
+    final canGoBack = !session.completed && session.currentStep != AportacionStep.intro;
 
     return Scaffold(
       appBar: AppBar(

@@ -13,8 +13,7 @@ import 'package:jccm_espacio_ciudadano/features/casework/detail/1_domain/expedie
 /// implementation hitting `/publicacion/selectbynumexp` in a later
 /// sprint.
 // TODO(future-sprint): replace mock with Dio-backed datasource.
-final class ExpedienteDetailRepositoryImpl
-    implements ExpedienteDetailRepository {
+final class ExpedienteDetailRepositoryImpl implements ExpedienteDetailRepository {
   const ExpedienteDetailRepositoryImpl();
 
   @override
@@ -26,8 +25,7 @@ final class ExpedienteDetailRepositoryImpl
     return detail;
   }
 
-  static final Map<String, ExpedienteDetail> _fixtures =
-      <String, ExpedienteDetail>{
+  static final Map<String, ExpedienteDetail> _fixtures = <String, ExpedienteDetail>{
     'EXP/2025/00123': ExpedienteDetail(
       id: 'exp-2025-00123',
       numero: 'EXP/2025/00123',

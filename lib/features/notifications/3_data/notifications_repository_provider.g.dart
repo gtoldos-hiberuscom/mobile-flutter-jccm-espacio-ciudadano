@@ -25,14 +25,7 @@ const notificationsRepositoryProvider = NotificationsRepositoryProvider._();
 /// will benefit from this lifetime when wired against
 /// `ServicioApi.miDetalleOperation`.
 
-final class NotificationsRepositoryProvider
-    extends
-        $FunctionalProvider<
-          NotificationsRepository,
-          NotificationsRepository,
-          NotificationsRepository
-        >
-    with $Provider<NotificationsRepository> {
+final class NotificationsRepositoryProvider extends $FunctionalProvider<NotificationsRepository, NotificationsRepository, NotificationsRepository> with $Provider<NotificationsRepository> {
   /// DI composition for [NotificationsRepository].
   ///
   /// Kept alive so the catalog is built once per session — the mock
@@ -73,5 +66,4 @@ final class NotificationsRepositoryProvider
   }
 }
 
-String _$notificationsRepositoryHash() =>
-    r'887bacc45e6cdc617d5a31c1bac7bcb4ad4622d9';
+String _$notificationsRepositoryHash() => r'887bacc45e6cdc617d5a31c1bac7bcb4ad4622d9';

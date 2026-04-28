@@ -15,8 +15,7 @@ part of 'notification_contact_repository_provider.dart';
 /// will mirror the rest of the notifications data layer.
 
 @ProviderFor(notificationContactRepository)
-const notificationContactRepositoryProvider =
-    NotificationContactRepositoryProvider._();
+const notificationContactRepositoryProvider = NotificationContactRepositoryProvider._();
 
 /// DI composition for [NotificationContactRepository] (STORY-42).
 ///
@@ -24,14 +23,7 @@ const notificationContactRepositoryProvider =
 /// session. When the real Dio adapter lands, the keepAlive lifetime
 /// will mirror the rest of the notifications data layer.
 
-final class NotificationContactRepositoryProvider
-    extends
-        $FunctionalProvider<
-          NotificationContactRepository,
-          NotificationContactRepository,
-          NotificationContactRepository
-        >
-    with $Provider<NotificationContactRepository> {
+final class NotificationContactRepositoryProvider extends $FunctionalProvider<NotificationContactRepository, NotificationContactRepository, NotificationContactRepository> with $Provider<NotificationContactRepository> {
   /// DI composition for [NotificationContactRepository] (STORY-42).
   ///
   /// Kept alive so the in-memory mock survives the lifetime of the
@@ -73,5 +65,4 @@ final class NotificationContactRepositoryProvider
   }
 }
 
-String _$notificationContactRepositoryHash() =>
-    r'9ee51b1ecb8de37190462f9658e99967873e3833';
+String _$notificationContactRepositoryHash() => r'9ee51b1ecb8de37190462f9658e99967873e3833';

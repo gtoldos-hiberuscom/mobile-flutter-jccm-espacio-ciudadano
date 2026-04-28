@@ -6,5 +6,4 @@ part 'registro_repository_provider.g.dart';
 
 /// DI composition for the STORY-36 [RegistroRepository].
 @Riverpod(keepAlive: true)
-RegistroRepository registroRepository(final Ref ref) =>
-    const RegistroRepositoryImpl();
+RegistroRepository registroRepository(final Ref ref) => const RegistroRepositoryImpl();

@@ -5,7 +5,8 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dar
 /// A centred empty-state placeholder with an icon, message and optional action.
 class EmptyStateWidget extends StatelessWidget {
   const EmptyStateWidget({
-    required this.message, super.key,
+    required this.message,
+    super.key,
     this.subtitle,
     this.action,
     this.icon = Icons.inbox_outlined,

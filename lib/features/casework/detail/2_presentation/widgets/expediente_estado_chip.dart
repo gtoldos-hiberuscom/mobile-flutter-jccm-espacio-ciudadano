@@ -14,20 +14,20 @@ class ExpedienteEstadoChip extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final (Color bg, Color fg, String label) = switch (estado) {
       ExpedienteEstado.abierto => (
-          AppColors.successContainer,
-          AppColors.success,
-          l10n.caseworkExpedienteDetailEstadoAbierto,
-        ),
+        AppColors.successContainer,
+        AppColors.success,
+        l10n.caseworkExpedienteDetailEstadoAbierto,
+      ),
       ExpedienteEstado.cerrado => (
-          AppColors.errorContainer,
-          AppColors.error,
-          l10n.caseworkExpedienteDetailEstadoCerrado,
-        ),
+        AppColors.errorContainer,
+        AppColors.error,
+        l10n.caseworkExpedienteDetailEstadoCerrado,
+      ),
       ExpedienteEstado.unknown => (
-          AppColors.surfaceVariant,
-          AppColors.textSecondary,
-          l10n.caseworkExpedienteDetailEstadoUnknown,
-        ),
+        AppColors.surfaceVariant,
+        AppColors.textSecondary,
+        l10n.caseworkExpedienteDetailEstadoUnknown,
+      ),
     };
     return Semantics(
       label: '${l10n.caseworkExpedienteDetailEstadoLabel}: $label',

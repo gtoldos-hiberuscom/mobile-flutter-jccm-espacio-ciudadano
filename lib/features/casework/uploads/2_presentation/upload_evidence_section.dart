@@ -27,8 +27,7 @@ class UploadEvidenceSection extends ConsumerStatefulWidget {
   final UploadFilePicker? picker;
 
   @override
-  ConsumerState<UploadEvidenceSection> createState() =>
-      _UploadEvidenceSectionState();
+  ConsumerState<UploadEvidenceSection> createState() => _UploadEvidenceSectionState();
 }
 
 class _UploadEvidenceSectionState extends ConsumerState<UploadEvidenceSection> {
@@ -38,9 +37,7 @@ class _UploadEvidenceSectionState extends ConsumerState<UploadEvidenceSection> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(uploadSessionProvider.notifier)
-          .start(widget.expedienteRef);
+      ref.read(uploadSessionProvider.notifier).start(widget.expedienteRef);
     });
   }
 
@@ -52,7 +49,8 @@ class _UploadEvidenceSectionState extends ConsumerState<UploadEvidenceSection> {
     final hasHashed = session.files.any(
       (final f) => f.status == UploadAttachmentStatus.hashed,
     );
-    final allUploaded = session.files.isNotEmpty &&
+    final allUploaded =
+        session.files.isNotEmpty &&
         session.files.every(
           (final f) => f.status == UploadAttachmentStatus.uploaded,
         );
@@ -86,17 +84,13 @@ class _UploadEvidenceSectionState extends ConsumerState<UploadEvidenceSection> {
         Row(
           children: <Widget>[
             FilledButton.icon(
-              onPressed: hasHashed && !session.finalized
-                  ? () => notifier.uploadAll(_bytesById)
-                  : null,
+              onPressed: hasHashed && !session.finalized ? () => notifier.uploadAll(_bytesById) : null,
               icon: const Icon(Icons.cloud_upload),
               label: Text(l10n.caseworkUploadUploadAllCta),
             ),
             const SizedBox(width: AppDimensions.space8),
             OutlinedButton.icon(
-              onPressed: allUploaded && !session.finalized
-                  ? notifier.finalizeAndRequestJustificante
-                  : null,
+              onPressed: allUploaded && !session.finalized ? notifier.finalizeAndRequestJustificante : null,
               icon: const Icon(Icons.check),
               label: Text(l10n.caseworkUploadFinalizeCta),
             ),
@@ -123,11 +117,7 @@ class _UploadEvidenceSectionState extends ConsumerState<UploadEvidenceSection> {
     final UploadSessionNotifier notifier,
   ) {
     void onPicked(final List<PickedFile> picked) {
-      final idsBefore = ref
-          .read(uploadSessionProvider)
-          .files
-          .map((final f) => f.id)
-          .toSet();
+      final idsBefore = ref.read(uploadSessionProvider).files.map((final f) => f.id).toSet();
       // Fire-and-forget; the notifier mutates state asynchronously.
       // ignore: discarded_futures
       notifier.addFiles(picked).then((_) {
@@ -137,9 +127,7 @@ class _UploadEvidenceSectionState extends ConsumerState<UploadEvidenceSection> {
             continue;
           }
           final match = picked.firstWhere(
-            (final p) =>
-                p.name == attachment.displayName &&
-                p.sizeBytes == attachment.sizeBytes,
+            (final p) => p.name == attachment.displayName && p.sizeBytes == attachment.sizeBytes,
             orElse: () => picked.first,
           );
           _bytesById[attachment.id] = match.bytes;

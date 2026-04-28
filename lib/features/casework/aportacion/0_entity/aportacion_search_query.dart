@@ -10,13 +10,11 @@ sealed class AportacionSearchQuery {
 
   /// Query by número de expediente. Reuses
   /// `/publicacion/selectbynumexp` via the casework repository.
-  const factory AportacionSearchQuery.byExpediente(final String numexp) =
-      AportacionSearchByExpediente;
+  const factory AportacionSearchQuery.byExpediente(final String numexp) = AportacionSearchByExpediente;
 
   /// Query by número de registro. Reuses
   /// `/publicacion/selectbynumreg` via the casework repository.
-  const factory AportacionSearchQuery.byRegistro(final String numreg) =
-      AportacionSearchByRegistro;
+  const factory AportacionSearchQuery.byRegistro(final String numreg) = AportacionSearchByRegistro;
 
   /// The user-facing value, trimmed.
   String get value;

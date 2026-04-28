@@ -11,5 +11,4 @@ part 'notifications_repository_provider.g.dart';
 /// will benefit from this lifetime when wired against
 /// `ServicioApi.miDetalleOperation`.
 @Riverpod(keepAlive: true)
-NotificationsRepository notificationsRepository(final Ref ref) =>
-    NotificationsRepositoryImpl();
+NotificationsRepository notificationsRepository(final Ref ref) => NotificationsRepositoryImpl();

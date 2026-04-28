@@ -14,9 +14,7 @@ part of 'employment_landing_notifier.dart';
 const employmentLandingProvider = EmploymentLandingNotifierProvider._();
 
 /// Owns the Empleo landing state (STORY-24). Mock-backed in Sprint 3.
-final class EmploymentLandingNotifierProvider
-    extends
-        $AsyncNotifierProvider<EmploymentLandingNotifier, EmploymentSnapshot> {
+final class EmploymentLandingNotifierProvider extends $AsyncNotifierProvider<EmploymentLandingNotifier, EmploymentSnapshot> {
   /// Owns the Empleo landing state (STORY-24). Mock-backed in Sprint 3.
   const EmploymentLandingNotifierProvider._()
     : super(
@@ -37,28 +35,18 @@ final class EmploymentLandingNotifierProvider
   EmploymentLandingNotifier create() => EmploymentLandingNotifier();
 }
 
-String _$employmentLandingNotifierHash() =>
-    r'12fb52b48b05796ceefcd5e82280a0942348313f';
+String _$employmentLandingNotifierHash() => r'12fb52b48b05796ceefcd5e82280a0942348313f';
 
 /// Owns the Empleo landing state (STORY-24). Mock-backed in Sprint 3.
 
-abstract class _$EmploymentLandingNotifier
-    extends $AsyncNotifier<EmploymentSnapshot> {
+abstract class _$EmploymentLandingNotifier extends $AsyncNotifier<EmploymentSnapshot> {
   FutureOr<EmploymentSnapshot> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref =
-        this.ref as $Ref<AsyncValue<EmploymentSnapshot>, EmploymentSnapshot>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<EmploymentSnapshot>, EmploymentSnapshot>,
-              AsyncValue<EmploymentSnapshot>,
-              Object?,
-              Object?
-            >;
+    final ref = this.ref as $Ref<AsyncValue<EmploymentSnapshot>, EmploymentSnapshot>;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<EmploymentSnapshot>, EmploymentSnapshot>, AsyncValue<EmploymentSnapshot>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

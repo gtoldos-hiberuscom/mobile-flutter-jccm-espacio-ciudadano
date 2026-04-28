@@ -61,9 +61,7 @@ class AportacionIntroStep extends ConsumerWidget {
             ),
           const SizedBox(height: AppDimensions.space24),
           FilledButton(
-            onPressed: () => ref
-                .read(aportacionSessionProvider.notifier)
-                .confirmIntro(),
+            onPressed: () => ref.read(aportacionSessionProvider.notifier).confirmIntro(),
             child: Text(l10n.caseworkAportacionIntroContinueCta),
           ),
         ],

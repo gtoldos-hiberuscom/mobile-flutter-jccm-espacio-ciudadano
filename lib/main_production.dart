@@ -18,7 +18,7 @@ Future<void> main() async {
       baseUrl: json['baseUrl'] as String? ?? '',
       appName: json['appName'] as String? ?? 'Espacio Ciudadano',
       timeout: int.tryParse(json['TIMEOUT'] as String? ?? '10') ?? 10,
-            ssoClientId: json['SSO_CLIENT_ID'] as String? ?? '',
+      ssoClientId: json['SSO_CLIENT_ID'] as String? ?? '',
       ssoRedirectUri: json['SSO_REDIRECT_URI'] as String? ?? '',
       ssoRealm: json['SSO_REALM'] as String? ?? '',
       ssoBaseUrl: json['SSO_BASE_URL'] as String? ?? '',

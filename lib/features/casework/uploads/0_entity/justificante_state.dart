@@ -10,10 +10,8 @@ sealed class JustificanteState {
   const JustificanteState();
 
   const factory JustificanteState.pending() = JustificantePending;
-  const factory JustificanteState.unavailable(final String reason) =
-      JustificanteUnavailable;
-  const factory JustificanteState.available(final String downloadRef) =
-      JustificanteAvailable;
+  const factory JustificanteState.unavailable(final String reason) = JustificanteUnavailable;
+  const factory JustificanteState.available(final String downloadRef) = JustificanteAvailable;
 }
 
 final class JustificantePending extends JustificanteState {

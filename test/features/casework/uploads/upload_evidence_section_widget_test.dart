@@ -16,8 +16,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class _StubRepo implements UploadRepository {
   @override
-  Future<String> computeServerHash(final Uint8List bytes) async =>
-      sha256HexOf(bytes);
+  Future<String> computeServerHash(final Uint8List bytes) async => sha256HexOf(bytes);
 
   @override
   Future<UploadAttachment> uploadUnsigned(
@@ -30,10 +29,9 @@ class _StubRepo implements UploadRepository {
   );
 
   @override
-  Future<JustificanteState> requestJustificante(final UploadSession session) =>
-      Future<JustificanteState>.value(
-        const JustificanteState.unavailable('builder-pending-backend-confirmation'),
-      );
+  Future<JustificanteState> requestJustificante(final UploadSession session) => Future<JustificanteState>.value(
+    const JustificanteState.unavailable('builder-pending-backend-confirmation'),
+  );
 }
 
 Future<List<PickedFile>> _stubPicker() async {
@@ -70,8 +68,7 @@ Widget _harness({required final UploadFilePicker picker}) {
 }
 
 void main() {
-  testWidgets('shows the limit hint and unavailable justificante banner',
-      (final tester) async {
+  testWidgets('shows the limit hint and unavailable justificante banner', (final tester) async {
     await tester.pumpWidget(_harness(picker: _stubPicker));
     await tester.pumpAndSettle();
     // Limit hint contains the max files literal "5".
@@ -95,8 +92,7 @@ void main() {
     expect(find.textContaining('Aún no hay'), findsOneWidget);
   });
 
-  testWidgets('justificante panel shows unavailable copy by default',
-      (final tester) async {
+  testWidgets('justificante panel shows unavailable copy by default', (final tester) async {
     await tester.pumpWidget(_harness(picker: _stubPicker));
     await tester.pumpAndSettle();
     // Pending text is shown until the session is finalized.

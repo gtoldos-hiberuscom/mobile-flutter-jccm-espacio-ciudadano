@@ -12,21 +12,17 @@ sealed class BinaryArtifactSource {
   const BinaryArtifactSource();
 
   /// Already-decoded raw bytes (typically Dio returned a `List<int>`).
-  const factory BinaryArtifactSource.bytes(final Uint8List bytes) =
-      BinaryArtifactSourceBytes;
+  const factory BinaryArtifactSource.bytes(final Uint8List bytes) = BinaryArtifactSourceBytes;
 
   /// Base64-encoded payload, possibly with a `data:...;base64,` prefix.
-  const factory BinaryArtifactSource.base64(final String value) =
-      BinaryArtifactSourceBase64;
+  const factory BinaryArtifactSource.base64(final String value) = BinaryArtifactSourceBase64;
 
   /// Plain UTF-8 text (used for raw QR payloads).
-  const factory BinaryArtifactSource.text(final String value) =
-      BinaryArtifactSourceText;
+  const factory BinaryArtifactSource.text(final String value) = BinaryArtifactSourceText;
 
   /// The backend explicitly reported the payload as unavailable. The
   /// [reason] is opaque, never includes PII, and is suitable for logs.
-  const factory BinaryArtifactSource.unavailable(final String reason) =
-      BinaryArtifactSourceUnavailable;
+  const factory BinaryArtifactSource.unavailable(final String reason) = BinaryArtifactSourceUnavailable;
 }
 
 final class BinaryArtifactSourceBytes extends BinaryArtifactSource {

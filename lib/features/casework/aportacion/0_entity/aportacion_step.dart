@@ -17,7 +17,8 @@ enum AportacionStep {
   detail,
 
   /// Final acknowledgement after the upload session is finalized.
-  uploadComplete;
+  uploadComplete
+  ;
 
   /// 1-based index used to render "Paso N de M" indicators.
   int get oneBasedIndex => index + 1;

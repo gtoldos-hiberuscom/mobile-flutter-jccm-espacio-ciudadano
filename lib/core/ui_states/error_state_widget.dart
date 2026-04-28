@@ -6,7 +6,8 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// A centred error state with a message, optional detail, and retry button.
 class ErrorStateWidget extends StatelessWidget {
   const ErrorStateWidget({
-    required this.message, super.key,
+    required this.message,
+    super.key,
     this.detail,
     this.onRetry,
     this.retryLabel,

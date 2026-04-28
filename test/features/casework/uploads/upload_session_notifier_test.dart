@@ -16,8 +16,7 @@ class _FakeRepo implements UploadRepository {
   _FakeRepo();
 
   @override
-  Future<String> computeServerHash(final Uint8List bytes) async =>
-      sha256HexOf(bytes);
+  Future<String> computeServerHash(final Uint8List bytes) async => sha256HexOf(bytes);
 
   @override
   Future<UploadAttachment> uploadUnsigned(
@@ -38,10 +37,9 @@ class _FakeRepo implements UploadRepository {
   }
 
   @override
-  Future<JustificanteState> requestJustificante(final UploadSession session) =>
-      Future<JustificanteState>.value(
-        const JustificanteState.unavailable('test-stub'),
-      );
+  Future<JustificanteState> requestJustificante(final UploadSession session) => Future<JustificanteState>.value(
+    const JustificanteState.unavailable('test-stub'),
+  );
 }
 
 ProviderContainer _container(final UploadRepository repo) {
@@ -117,8 +115,7 @@ void main() {
     ]);
     final session = c.read(uploadSessionProvider);
     final bytesById = <String, Uint8List>{
-      for (final f in session.files)
-        f.id: Uint8List.fromList(List<int>.filled(f.sizeBytes, 1)),
+      for (final f in session.files) f.id: Uint8List.fromList(List<int>.filled(f.sizeBytes, 1)),
     };
     await c.read(uploadSessionProvider.notifier).uploadAll(bytesById);
     final files = c.read(uploadSessionProvider).files;
@@ -130,9 +127,7 @@ void main() {
     final c = _container(_FakeRepo());
     c.read(uploadSessionProvider.notifier).start('exp-1');
     await c.read(uploadSessionProvider.notifier).addFiles(<PickedFile>[_pdf()]);
-    await c
-        .read(uploadSessionProvider.notifier)
-        .finalizeAndRequestJustificante();
+    await c.read(uploadSessionProvider.notifier).finalizeAndRequestJustificante();
     final session = c.read(uploadSessionProvider);
     expect(session.finalized, isFalse);
     expect(session.justificante, isA<JustificantePending>());
@@ -146,9 +141,7 @@ void main() {
     await c.read(uploadSessionProvider.notifier).uploadAll(<String, Uint8List>{
       f.id: Uint8List.fromList(List<int>.filled(f.sizeBytes, 1)),
     });
-    await c
-        .read(uploadSessionProvider.notifier)
-        .finalizeAndRequestJustificante();
+    await c.read(uploadSessionProvider.notifier).finalizeAndRequestJustificante();
     final session = c.read(uploadSessionProvider);
     expect(session.finalized, isTrue);
     expect(session.justificante, isA<JustificanteUnavailable>());

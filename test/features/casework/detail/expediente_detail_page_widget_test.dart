@@ -34,8 +34,7 @@ class _StubRepo implements ExpedienteDetailRepository {
 
 class _StubUploadRepo implements UploadRepository {
   @override
-  Future<String> computeServerHash(final Uint8List bytes) async =>
-      sha256HexOf(bytes);
+  Future<String> computeServerHash(final Uint8List bytes) async => sha256HexOf(bytes);
 
   @override
   Future<UploadAttachment> uploadUnsigned(
@@ -43,40 +42,38 @@ class _StubUploadRepo implements UploadRepository {
     final Uint8List bytes,
     final String expedienteRef,
   ) async => attachment.copyWith(
-        status: UploadAttachmentStatus.uploaded,
-        clearError: true,
-      );
+    status: UploadAttachmentStatus.uploaded,
+    clearError: true,
+  );
 
   @override
-  Future<JustificanteState> requestJustificante(final UploadSession session) =>
-      Future<JustificanteState>.value(
-        const JustificanteState.unavailable('builder-pending-backend'),
-      );
+  Future<JustificanteState> requestJustificante(final UploadSession session) => Future<JustificanteState>.value(
+    const JustificanteState.unavailable('builder-pending-backend'),
+  );
 }
 
-ExpedienteDetail _detail({required final ExpedienteEstado estado}) =>
-    ExpedienteDetail(
-      id: 'x1',
-      numero: 'EXP/2025/00123',
-      asuntoCodigo: 'AS-1',
-      asunto: 'Solicitud',
-      consejeria: 'Consejería de Bienestar',
-      oficinaTramitadora: 'Oficina de Toledo',
-      procedimiento: 'Ayudas',
-      fechaInicio: DateTime(2025, 3, 4),
-      fechaUltimaActualizacion: DateTime(2025, 4, 18),
-      estado: estado,
-      ficheros: <ExpedienteFichero>[
-        ExpedienteFichero(
-          id: 'f1',
-          nombre: 'documento.pdf',
-          mimeType: 'application/pdf',
-          sizeBytes: 1024,
-          fechaSubida: DateTime(2025, 3, 5),
-          descargaRef: 'ref://x',
-        ),
-      ],
-    );
+ExpedienteDetail _detail({required final ExpedienteEstado estado}) => ExpedienteDetail(
+  id: 'x1',
+  numero: 'EXP/2025/00123',
+  asuntoCodigo: 'AS-1',
+  asunto: 'Solicitud',
+  consejeria: 'Consejería de Bienestar',
+  oficinaTramitadora: 'Oficina de Toledo',
+  procedimiento: 'Ayudas',
+  fechaInicio: DateTime(2025, 3, 4),
+  fechaUltimaActualizacion: DateTime(2025, 4, 18),
+  estado: estado,
+  ficheros: <ExpedienteFichero>[
+    ExpedienteFichero(
+      id: 'f1',
+      nombre: 'documento.pdf',
+      mimeType: 'application/pdf',
+      sizeBytes: 1024,
+      fechaSubida: DateTime(2025, 3, 5),
+      descargaRef: 'ref://x',
+    ),
+  ],
+);
 
 Widget _harness({required final ExpedienteDetailRepository repo}) {
   return ProviderScope(
@@ -94,14 +91,15 @@ Widget _harness({required final ExpedienteDetailRepository repo}) {
 }
 
 void main() {
-  testWidgets('abierto detail shows the embedded upload section',
-      (final tester) async {
+  testWidgets('abierto detail shows the embedded upload section', (final tester) async {
     tester.view.physicalSize = const Size(1200, 2000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
-      _harness(repo: _StubRepo(detail: _detail(estado: ExpedienteEstado.abierto))),
+      _harness(
+        repo: _StubRepo(detail: _detail(estado: ExpedienteEstado.abierto)),
+      ),
     );
     await tester.pumpAndSettle();
     expect(find.text('Solicitud'), findsOneWidget);
@@ -110,10 +108,11 @@ void main() {
     expect(find.textContaining('Expediente cerrado'), findsNothing);
   });
 
-  testWidgets('cerrado detail shows the closed banner without upload section',
-      (final tester) async {
+  testWidgets('cerrado detail shows the closed banner without upload section', (final tester) async {
     await tester.pumpWidget(
-      _harness(repo: _StubRepo(detail: _detail(estado: ExpedienteEstado.cerrado))),
+      _harness(
+        repo: _StubRepo(detail: _detail(estado: ExpedienteEstado.cerrado)),
+      ),
     );
     await tester.pumpAndSettle();
     expect(find.text('Cerrado'), findsOneWidget);
@@ -121,8 +120,7 @@ void main() {
     expect(find.textContaining('Expediente cerrado'), findsOneWidget);
   });
 
-  testWidgets('error state surfaces an error message and retry control',
-      (final tester) async {
+  testWidgets('error state surfaces an error message and retry control', (final tester) async {
     await tester.pumpWidget(
       _harness(repo: _StubRepo(error: StateError('boom'))),
     );

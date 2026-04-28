@@ -8,7 +8,8 @@
 enum ExpedienteEstado {
   abierto,
   cerrado,
-  unknown;
+  unknown
+  ;
 
   /// Whether the citizen can submit additional documentation while the
   /// expediente is in this state. Only [ExpedienteEstado.abierto]

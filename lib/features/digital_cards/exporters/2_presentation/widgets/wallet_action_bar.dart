@@ -55,47 +55,38 @@ class WalletActionBar extends StatelessWidget {
     final disabled = isLoading || disabledReason != null;
     final children = <Widget>[];
 
-    if (kind != BinaryArtifactKind.pkpass &&
-        capabilities.contains(WalletCapability.openExternal)) {
+    if (kind != BinaryArtifactKind.pkpass && capabilities.contains(WalletCapability.openExternal)) {
       children.add(
         _BarButton(
           key: const ValueKey('walletActionBar.open'),
           icon: Icons.open_in_new,
           label: l10n.walletActionOpen,
           loading: isLoading,
-          onPressed: disabled
-              ? null
-              : () => onAction(WalletActionBarAction.openExternal),
+          onPressed: disabled ? null : () => onAction(WalletActionBarAction.openExternal),
         ),
       );
     }
 
-    if (capabilities.contains(WalletCapability.shareFallback) ||
-        capabilities.contains(WalletCapability.googleWallet)) {
+    if (capabilities.contains(WalletCapability.shareFallback) || capabilities.contains(WalletCapability.googleWallet)) {
       children.add(
         _BarButton(
           key: const ValueKey('walletActionBar.share'),
           icon: Icons.share,
           label: l10n.walletActionShare,
           loading: isLoading,
-          onPressed: disabled
-              ? null
-              : () => onAction(WalletActionBarAction.share),
+          onPressed: disabled ? null : () => onAction(WalletActionBarAction.share),
         ),
       );
     }
 
-    if (kind == BinaryArtifactKind.pkpass &&
-        capabilities.contains(WalletCapability.appleWallet)) {
+    if (kind == BinaryArtifactKind.pkpass && capabilities.contains(WalletCapability.appleWallet)) {
       children.add(
         _BarButton(
           key: const ValueKey('walletActionBar.addToWallet'),
           icon: Icons.account_balance_wallet,
           label: l10n.walletActionAddToWallet,
           loading: isLoading,
-          onPressed: disabled
-              ? null
-              : () => onAction(WalletActionBarAction.addToWallet),
+          onPressed: disabled ? null : () => onAction(WalletActionBarAction.addToWallet),
         ),
       );
     }

@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +23,6 @@ import 'package:jccm_espacio_ciudadano/features/education/2_presentation/educati
 import 'package:jccm_espacio_ciudadano/features/employment/2_presentation/employment_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/help/2_presentation/help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/help/2_presentation/support_form_page.dart';
-import 'package:jccm_espacio_ciudadano/features/home/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
@@ -58,7 +56,6 @@ final goRouterProvider = Provider<GoRouter>(
       errorBuilder: (final BuildContext context, final GoRouterState state) => const NotFoundScreen(),
 
       routes: [
-
         // ── Landing ─────────────────────────────────────────────────────────
         GoRoute(
           path: Routes.landing,
@@ -104,7 +101,6 @@ final goRouterProvider = Provider<GoRouter>(
         ),
 
         // ── Deep-link callbacks ──────────────────────────────────────────────
-
         GoRoute(
           path: Routes.afirmaReturn,
           builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPlaceholder(),
@@ -125,10 +121,6 @@ final goRouterProvider = Provider<GoRouter>(
                 final Widget child,
               ) => AppScaffold(child: child),
           routes: [
-            GoRoute(
-              path: Routes.home,
-              builder: (final BuildContext context, final GoRouterState state) => const HomePage(),
-            ),
             // ── Thematic landings (placeholder until STORY-23/24/25/26) ────
             GoRoute(
               path: Routes.education,
@@ -187,7 +179,8 @@ final goRouterProvider = Provider<GoRouter>(
                 GoRoute(
                   path: 'registro/:kind/:numreg',
                   builder: (final BuildContext context, final GoRouterState state) {
-                    final kind = RegistroKindToken.fromToken(
+                    final kind =
+                        RegistroKindToken.fromToken(
                           state.pathParameters['kind'],
                         ) ??
                         RegistroKind.entrada;
@@ -204,15 +197,13 @@ final goRouterProvider = Provider<GoRouter>(
               routes: <GoRoute>[
                 GoRoute(
                   path: 'contact/registration',
-                  builder: (final BuildContext context, final GoRouterState state) =>
-                      const NotificationContactRegistrationPage(),
+                  builder: (final BuildContext context, final GoRouterState state) => const NotificationContactRegistrationPage(),
                 ),
                 GoRoute(
                   path: ':id',
-                  builder: (final BuildContext context, final GoRouterState state) =>
-                      NotificationDetailPlaceholderPage(
-                        notificationId: state.pathParameters['id'] ?? '',
-                      ),
+                  builder: (final BuildContext context, final GoRouterState state) => NotificationDetailPlaceholderPage(
+                    notificationId: state.pathParameters['id'] ?? '',
+                  ),
                 ),
               ],
             ),

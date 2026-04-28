@@ -72,21 +72,20 @@ class RegistroMetadataBlock extends StatelessWidget {
     final ThemeData theme, {
     required final String label,
     required final String value,
-  }) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            label,
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space4),
-          Text(value, style: theme.textTheme.bodyMedium),
-        ],
-      );
+  }) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      Text(
+        label,
+        style: theme.textTheme.labelMedium?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      const SizedBox(height: AppDimensions.space4),
+      Text(value, style: theme.textTheme.bodyMedium),
+    ],
+  );
 
   static String _formatDate(final DateTime d) {
     final yyyy = d.year.toString().padLeft(4, '0');

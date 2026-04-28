@@ -14,8 +14,7 @@ class AportacionSearchStep extends ConsumerStatefulWidget {
   const AportacionSearchStep({super.key});
 
   @override
-  ConsumerState<AportacionSearchStep> createState() =>
-      _AportacionSearchStepState();
+  ConsumerState<AportacionSearchStep> createState() => _AportacionSearchStepState();
 }
 
 class _AportacionSearchStepState extends ConsumerState<AportacionSearchStep> {
@@ -31,9 +30,7 @@ class _AportacionSearchStepState extends ConsumerState<AportacionSearchStep> {
   Future<void> _submit() async {
     final raw = _controller.text.trim();
     final notifier = ref.read(aportacionSessionProvider.notifier);
-    final query = _mode == _SearchMode.byExpediente
-        ? AportacionSearchQuery.byExpediente(raw)
-        : AportacionSearchQuery.byRegistro(raw);
+    final query = _mode == _SearchMode.byExpediente ? AportacionSearchQuery.byExpediente(raw) : AportacionSearchQuery.byRegistro(raw);
     await notifier.resolveQuery(query);
   }
 
@@ -81,19 +78,14 @@ class _AportacionSearchStepState extends ConsumerState<AportacionSearchStep> {
           TextField(
             controller: _controller,
             decoration: InputDecoration(
-              labelText: _mode == _SearchMode.byExpediente
-                  ? l10n.caseworkAportacionSearchExpedienteLabel
-                  : l10n.caseworkAportacionSearchRegistroLabel,
-              hintText: _mode == _SearchMode.byExpediente
-                  ? l10n.caseworkAportacionSearchExpedienteHint
-                  : l10n.caseworkAportacionSearchRegistroHint,
+              labelText: _mode == _SearchMode.byExpediente ? l10n.caseworkAportacionSearchExpedienteLabel : l10n.caseworkAportacionSearchRegistroLabel,
+              hintText: _mode == _SearchMode.byExpediente ? l10n.caseworkAportacionSearchExpedienteHint : l10n.caseworkAportacionSearchRegistroHint,
               border: const OutlineInputBorder(),
             ),
             onSubmitted: (_) => _submit(),
           ),
           const SizedBox(height: AppDimensions.space12),
-          if (session.failure != null)
-            AportacionFailureBanner(failure: session.failure!),
+          if (session.failure != null) AportacionFailureBanner(failure: session.failure!),
           const SizedBox(height: AppDimensions.space16),
           FilledButton.icon(
             onPressed: session.isResolving ? null : _submit,

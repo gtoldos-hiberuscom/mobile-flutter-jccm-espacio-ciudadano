@@ -25,15 +25,12 @@ class AportacionDetailStep extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final asyncDetail =
-        ref.watch(expedienteDetailProvider(expedienteRef));
+    final asyncDetail = ref.watch(expedienteDetailProvider(expedienteRef));
 
     ref.listen(uploadSessionProvider, (final previous, final next) {
       final wasFinalized = previous?.finalized ?? false;
       if (!wasFinalized && next.finalized) {
-        ref
-            .read(aportacionSessionProvider.notifier)
-            .onUploadFinalized();
+        ref.read(aportacionSessionProvider.notifier).onUploadFinalized();
       }
     });
 
@@ -44,15 +41,11 @@ class AportacionDetailStep extends ConsumerWidget {
       error: (final error, final _) => ErrorStateWidget(
         message: l10n.caseworkExpedienteDetailErrorTitle,
         detail: l10n.caseworkExpedienteDetailErrorBody,
-        onRetry: () => ref
-            .read(expedienteDetailProvider(expedienteRef).notifier)
-            .refresh(),
+        onRetry: () => ref.read(expedienteDetailProvider(expedienteRef).notifier).refresh(),
       ),
       data: (final detail) => ExpedienteDetailView(
         detail: detail,
-        uploadSection: detail.estado.permiteAportacion
-            ? UploadEvidenceSection(expedienteRef: detail.numero)
-            : null,
+        uploadSection: detail.estado.permiteAportacion ? UploadEvidenceSection(expedienteRef: detail.numero) : null,
       ),
     );
   }

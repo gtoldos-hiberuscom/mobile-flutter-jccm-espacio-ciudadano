@@ -39,18 +39,20 @@ abstract final class Routes {
   static const String agendaDetail = '/agenda/:id';
   static const String casework = '/casework';
   static const String caseworkSearch = '/casework/search';
+
   /// Third-party aportación documental wizard (STORY-37).
   static const String caseworkAportacion = '/casework/aportacion';
   static const String caseworkItemDetail = '/casework/item/:id';
+
   /// Upload-evidence screen for a given expediente (STORY-38).
   static const String caseworkUpload = '/casework/item/:id/upload';
+
   /// Registro de entrada / salida detail screen (STORY-36).
   /// `kind` is one of `entrada|salida`; `numreg` must be URL-encoded.
   static const String caseworkRegistroDetail = '/casework/registro/:kind/:numreg';
   static const String notifications = '/notifications';
   static const String notificationDetail = '/notifications/:id';
-  static const String notificationContactRegistration =
-      '/notifications/contact/registration';
+  static const String notificationContactRegistration = '/notifications/contact/registration';
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';
   static const String support = '/support';

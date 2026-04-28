@@ -24,10 +24,8 @@ class AportacionResolver {
   /// appropriate domain failure.
   Future<CaseworkItem?> resolve(final AportacionSearchQuery query) async {
     final results = switch (query) {
-      AportacionSearchByExpediente(:final numexp) =>
-        await _repository.searchByExpedienteNumber(numexp),
-      AportacionSearchByRegistro(:final numreg) =>
-        await _repository.searchByRegistroNumber(numreg),
+      AportacionSearchByExpediente(:final numexp) => await _repository.searchByExpedienteNumber(numexp),
+      AportacionSearchByRegistro(:final numreg) => await _repository.searchByRegistroNumber(numreg),
     };
     if (results.isEmpty) {
       return null;
@@ -39,5 +37,4 @@ class AportacionResolver {
 /// DI composition for [AportacionResolver]. Tests override this provider
 /// to inject deterministic repository responses.
 @riverpod
-AportacionResolver aportacionResolver(final Ref ref) =>
-    AportacionResolver(ref.watch(caseworkRepositoryProvider));
+AportacionResolver aportacionResolver(final Ref ref) => AportacionResolver(ref.watch(caseworkRepositoryProvider));

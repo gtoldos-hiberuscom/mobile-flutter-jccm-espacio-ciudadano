@@ -19,11 +19,7 @@ class UploadAttachmentTile extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final hashPrefix = attachment.sha256Hex == null
-        ? null
-        : (attachment.sha256Hex!.length < 12
-            ? attachment.sha256Hex
-            : attachment.sha256Hex!.substring(0, 12));
+    final hashPrefix = attachment.sha256Hex == null ? null : (attachment.sha256Hex!.length < 12 ? attachment.sha256Hex : attachment.sha256Hex!.substring(0, 12));
     return Semantics(
       label: '${attachment.displayName} · ${_statusLabel(l10n, attachment.status)}',
       child: Card(

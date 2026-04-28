@@ -17,42 +17,39 @@ class _StubRepo implements RegistroRepository {
   Future<RegistroDetail> loadByNumber({
     required final String numreg,
     required final RegistroKind kind,
-  }) =>
-      _builder(numreg, kind);
+  }) => _builder(numreg, kind);
 }
 
 Widget _wrap({
   required final RegistroRepository repo,
   required final String numreg,
   required final RegistroKind kind,
-}) =>
-    ProviderScope(
-      overrides: [
-        registroRepositoryProvider.overrideWith((final ref) => repo),
-      ],
-      child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        home: RegistroDetailPage(numreg: numreg, kind: kind),
-      ),
-    );
+}) => ProviderScope(
+  overrides: [
+    registroRepositoryProvider.overrideWith((final ref) => repo),
+  ],
+  child: MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: const Locale('es'),
+    home: RegistroDetailPage(numreg: numreg, kind: kind),
+  ),
+);
 
 RegistroDetail _detail({
   required final RegistroKind kind,
   final List<RegistroFichero> ficheros = const <RegistroFichero>[],
-}) =>
-    RegistroDetail(
-      id: 'id-1',
-      numero: kind == RegistroKind.entrada ? 'REG/E/45612' : 'REG/S/12044',
-      fecha: DateTime(2025, 6, 12, 9, 30),
-      kind: kind,
-      consejeriaDestino: 'Consejería de Educación, Cultura y Deportes',
-      asunto: 'Solicitud de admisión en ciclos formativos',
-      oficina: 'Oficina de Registro de Toledo',
-      observaciones: 'Documentación presentada presencialmente.',
-      ficheros: ficheros,
-    );
+}) => RegistroDetail(
+  id: 'id-1',
+  numero: kind == RegistroKind.entrada ? 'REG/E/45612' : 'REG/S/12044',
+  fecha: DateTime(2025, 6, 12, 9, 30),
+  kind: kind,
+  consejeriaDestino: 'Consejería de Educación, Cultura y Deportes',
+  asunto: 'Solicitud de admisión en ciclos formativos',
+  oficina: 'Oficina de Registro de Toledo',
+  observaciones: 'Documentación presentada presencialmente.',
+  ficheros: ficheros,
+);
 
 void main() {
   testWidgets('renders entrada detail with metadata, ficheros and banner', (final tester) async {

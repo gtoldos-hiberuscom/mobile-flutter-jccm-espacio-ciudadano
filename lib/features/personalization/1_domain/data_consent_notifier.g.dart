@@ -22,8 +22,7 @@ const dataConsentProvider = DataConsentNotifierFamily._();
 ///
 /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
 /// story (depends on TASK-21 idAgente closure).
-final class DataConsentNotifierProvider
-    extends $AsyncNotifierProvider<DataConsentNotifier, DataConsentSnapshot> {
+final class DataConsentNotifierProvider extends $AsyncNotifierProvider<DataConsentNotifier, DataConsentSnapshot> {
   /// Owns the data-consent (`clausulas`) state for a given `idAgente`
   /// (STORY-55).
   ///
@@ -65,8 +64,7 @@ final class DataConsentNotifierProvider
   }
 }
 
-String _$dataConsentNotifierHash() =>
-    r'34a5a98a908d60731d51471e346bd5818c8d70df';
+String _$dataConsentNotifierHash() => r'34a5a98a908d60731d51471e346bd5818c8d70df';
 
 /// Owns the data-consent (`clausulas`) state for a given `idAgente`
 /// (STORY-55).
@@ -74,15 +72,7 @@ String _$dataConsentNotifierHash() =>
 /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
 /// story (depends on TASK-21 idAgente closure).
 
-final class DataConsentNotifierFamily extends $Family
-    with
-        $ClassFamilyOverride<
-          DataConsentNotifier,
-          AsyncValue<DataConsentSnapshot>,
-          DataConsentSnapshot,
-          FutureOr<DataConsentSnapshot>,
-          String
-        > {
+final class DataConsentNotifierFamily extends $Family with $ClassFamilyOverride<DataConsentNotifier, AsyncValue<DataConsentSnapshot>, DataConsentSnapshot, FutureOr<DataConsentSnapshot>, String> {
   const DataConsentNotifierFamily._()
     : super(
         retry: null,
@@ -98,8 +88,7 @@ final class DataConsentNotifierFamily extends $Family
   /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
   /// story (depends on TASK-21 idAgente closure).
 
-  DataConsentNotifierProvider call(String idAgente) =>
-      DataConsentNotifierProvider._(argument: idAgente, from: this);
+  DataConsentNotifierProvider call(String idAgente) => DataConsentNotifierProvider._(argument: idAgente, from: this);
 
   @override
   String toString() => r'dataConsentProvider';
@@ -111,8 +100,7 @@ final class DataConsentNotifierFamily extends $Family
 /// Mock-backed in Sprint 4. Real Dio wiring is deferred to a follow-up
 /// story (depends on TASK-21 idAgente closure).
 
-abstract class _$DataConsentNotifier
-    extends $AsyncNotifier<DataConsentSnapshot> {
+abstract class _$DataConsentNotifier extends $AsyncNotifier<DataConsentSnapshot> {
   late final _$args = ref.$arg as String;
   String get idAgente => _$args;
 
@@ -121,16 +109,8 @@ abstract class _$DataConsentNotifier
   @override
   void runBuild() {
     final created = build(_$args);
-    final ref =
-        this.ref as $Ref<AsyncValue<DataConsentSnapshot>, DataConsentSnapshot>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<DataConsentSnapshot>, DataConsentSnapshot>,
-              AsyncValue<DataConsentSnapshot>,
-              Object?,
-              Object?
-            >;
+    final ref = this.ref as $Ref<AsyncValue<DataConsentSnapshot>, DataConsentSnapshot>;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<DataConsentSnapshot>, DataConsentSnapshot>, AsyncValue<DataConsentSnapshot>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
