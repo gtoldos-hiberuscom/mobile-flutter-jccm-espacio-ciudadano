@@ -3,11 +3,15 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/app/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/app/config/build_environment.dart';
-import 'package:jccm_espacio_ciudadano/core/auth/clave_auth_remote_datasource.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_auth_remote_datasource.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_token_response_dto.dart';
 
 void main() {
   group('FlutterAppAuthClaveAuthRemoteDatasource', () {
-    test('login uses AppAuth authorization-code exchange with Cl@ve discovery', () async {
+    test('login uses AppAuth authorization-code exchange with Cl@ve discovery',
+        () async {
       final receivedAt = DateTime.utc(2026, 1, 1, 12);
       final appAuthClient = FakeClaveAppAuthClient(
         authorizationResponse: AuthorizationTokenResponse(
@@ -33,19 +37,29 @@ void main() {
       expect(result.accessToken, 'access-token');
       expect(result.refreshToken, 'refresh-token');
       expect(result.idToken, 'id-token');
-      expect(result.accessTokenExpiresAt, receivedAt.add(const Duration(minutes: 5)));
-      expect(result.refreshTokenExpiresAt, receivedAt.add(const Duration(hours: 1)));
+      expect(
+        result.accessTokenExpiresAt,
+        receivedAt.add(const Duration(minutes: 5)),
+      );
+      expect(
+        result.refreshTokenExpiresAt,
+        receivedAt.add(const Duration(hours: 1)),
+      );
 
       final request = appAuthClient.authorizationTokenRequest;
       expect(request, isNotNull);
       expect(request!.clientId, _config.ssoClientId);
       expect(request.redirectUrl, _config.ssoRedirectUri);
-      expect(request.discoveryUrl, 'https://sso.example.test/auth/realms/usuarios/.well-known/openid-configuration');
+      expect(
+        request.discoveryUrl,
+        'https://sso.example.test/auth/realms/usuarios/.well-known/openid-configuration',
+      );
       expect(request.loginHint, '12345678Z');
-      expect(request.scopes, claveDefaultScopes);
+      expect(request.scopes, authDefaultScopes);
     });
 
-    test('refreshToken uses AppAuth token endpoint with the refresh grant', () async {
+    test('refreshToken uses AppAuth token endpoint with the refresh grant',
+        () async {
       final receivedAt = DateTime.utc(2026, 1, 1, 12);
       final appAuthClient = FakeClaveAppAuthClient(
         tokenResponse: TokenResponse(
@@ -65,7 +79,8 @@ void main() {
         clock: () => receivedAt,
       );
 
-      final result = await datasource.refreshToken(refreshToken: 'old-refresh-token');
+      final result =
+          await datasource.refreshToken(refreshToken: 'old-refresh-token');
 
       expect(result.accessToken, 'new-access-token');
       expect(result.refreshToken, 'new-refresh-token');
@@ -74,12 +89,17 @@ void main() {
       expect(request, isNotNull);
       expect(request!.clientId, _config.ssoClientId);
       expect(request.redirectUrl, _config.ssoRedirectUri);
-      expect(request.discoveryUrl, 'https://sso.example.test/auth/realms/usuarios/.well-known/openid-configuration');
+      expect(
+        request.discoveryUrl,
+        'https://sso.example.test/auth/realms/usuarios/.well-known/openid-configuration',
+      );
       expect(request.refreshToken, 'old-refresh-token');
-      expect(request.scopes, claveDefaultScopes);
+      expect(request.scopes, authDefaultScopes);
     });
 
-    test('logout uses AppAuth end-session with the configured redirect URI', () async {
+    test(
+        'logout uses AppAuth end-session with the configured redirect URI',
+        () async {
       final appAuthClient = FakeClaveAppAuthClient();
       final datasource = FlutterAppAuthClaveAuthRemoteDatasource(
         config: _config,
@@ -93,8 +113,14 @@ void main() {
       expect(request, isNotNull);
       expect(request!.idTokenHint, 'id-token');
       expect(request.postLogoutRedirectUrl, _config.ssoRedirectUri);
-      expect(request.discoveryUrl, 'https://sso.example.test/auth/realms/usuarios/.well-known/openid-configuration');
-      expect(request.additionalParameters, const {'client_id': 'mobile-client'});
+      expect(
+        request.discoveryUrl,
+        'https://sso.example.test/auth/realms/usuarios/.well-known/openid-configuration',
+      );
+      expect(
+        request.additionalParameters,
+        const {'client_id': 'mobile-client'},
+      );
     });
   });
 
@@ -106,10 +132,10 @@ void main() {
           receivedAt: DateTime.utc(2026),
         ),
         throwsA(
-          isA<ClaveAuthException>().having(
+          isA<AuthException>().having(
             (final error) => error.reason,
             'reason',
-            ClaveAuthFailureReason.invalidResponse,
+            AuthFailureReason.invalidResponse,
           ),
         ),
       );
@@ -162,7 +188,16 @@ final class FakeClaveAppAuthClient implements ClaveAppAuthClient {
   @override
   Future<TokenResponse> token(final TokenRequest request) async {
     tokenRequest = request;
-    return _tokenResponse ?? TokenResponse('access-token', null, null, null, 'Bearer', const ['openid'], const {});
+    return _tokenResponse ??
+        TokenResponse(
+          'access-token',
+          null,
+          null,
+          null,
+          'Bearer',
+          const ['openid'],
+          const {},
+        );
   }
 
   @override
