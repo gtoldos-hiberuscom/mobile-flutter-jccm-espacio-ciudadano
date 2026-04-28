@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/observers/analytics_observer.dart';
 import 'package:jccm_espacio_ciudadano/app/observers/app_lifecycle_observer.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/placeholder_screens.dart';
-import 'package:jccm_espacio_ciudadano/app/routing/route_guards.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
@@ -44,7 +43,6 @@ import 'package:jccm_espacio_ciudadano/features/state_affairs/2_presentation/sta
 /// factory, keeping all navigation decisions free of [BuildContext].
 final goRouterProvider = Provider<GoRouter>(
   (final ref) {
-    final guard = SessionGuard(ref);
     final lifecycleObserver = AppLifecycleObserver();
     final analyticsObserver = AnalyticsObserver(
       analyticsService: ref.read(analyticsServiceProvider),
@@ -54,7 +52,7 @@ final goRouterProvider = Provider<GoRouter>(
       initialLocation: Routes.landing,
       observers: [lifecycleObserver, analyticsObserver],
       // ── Global redirect ──────────────────────────────────────────────────
-      redirect: (final BuildContext context, final GoRouterState state) => guard.redirect(state),
+      //redirect: (final BuildContext context, final GoRouterState state) => guard.redirect(state),
 
       // ── 404 fallback ──────────────────────────────────────────────────────
       errorBuilder: (final BuildContext context, final GoRouterState state) => const NotFoundScreen(),

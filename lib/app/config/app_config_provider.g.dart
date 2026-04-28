@@ -70,6 +70,7 @@ final class AppConfigProvider
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
+        
       );
 
   @override
