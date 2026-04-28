@@ -16,7 +16,7 @@ class UserProfileNotifier extends _$UserProfileNotifier {
   @override
   Future<UserProfile?> build() async {
     return null;
-  
+
     // final idAgente = ref.watch(sessionStateProvider);
     // if (idAgente == null) {
     //   return null;

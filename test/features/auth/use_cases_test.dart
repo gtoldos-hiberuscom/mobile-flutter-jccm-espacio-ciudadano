@@ -44,11 +44,13 @@ void main() {
 
       expect(
         () => LoginUseCase(repo)(),
-        throwsA(isA<AuthException>().having(
-          (final e) => e.reason,
-          'reason',
-          AuthFailureReason.cancelled,
-        )),
+        throwsA(
+          isA<AuthException>().having(
+            (final e) => e.reason,
+            'reason',
+            AuthFailureReason.cancelled,
+          ),
+        ),
       );
     });
   });
@@ -82,11 +84,13 @@ void main() {
 
       expect(
         () => LogoutUseCase(repo)(idToken: 'id-token'),
-        throwsA(isA<AuthException>().having(
-          (final e) => e.reason,
-          'reason',
-          AuthFailureReason.remoteFailure,
-        )),
+        throwsA(
+          isA<AuthException>().having(
+            (final e) => e.reason,
+            'reason',
+            AuthFailureReason.remoteFailure,
+          ),
+        ),
       );
     });
   });

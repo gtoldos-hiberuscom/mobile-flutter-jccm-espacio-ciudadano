@@ -22,8 +22,7 @@ const userProfileProvider = UserProfileNotifierProvider._();
 /// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
 ///   [UserProfile]; otherwise returns `null`.
 /// - [logout] clears stored auth data, invalidates the session, and resets state.
-final class UserProfileNotifierProvider
-    extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
+final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
   /// Manages the currently logged-in user's profile.
   ///
   /// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
@@ -48,8 +47,7 @@ final class UserProfileNotifierProvider
   UserProfileNotifier create() => UserProfileNotifier();
 }
 
-String _$userProfileNotifierHash() =>
-    r'52d9bc5015d11b9f3e3d9bd8aeaf3315b843c1bc';
+String _$userProfileNotifierHash() => r'52d9bc5015d11b9f3e3d9bd8aeaf3315b843c1bc';
 
 /// Manages the currently logged-in user's profile.
 ///
@@ -64,14 +62,7 @@ abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<UserProfile?>, UserProfile?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>,
-              AsyncValue<UserProfile?>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>, AsyncValue<UserProfile?>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

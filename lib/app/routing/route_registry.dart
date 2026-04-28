@@ -4,6 +4,7 @@
 ///
 /// Keep all route strings in one place to prevent typos and enable
 /// compile-time refactoring. This file must not import Flutter or Riverpod.
+library;
 
 /// Canonical route path constants for the entire application.
 ///

@@ -51,12 +51,6 @@ class NotFoundScreen extends StatelessWidget {
 
 // ── Authenticated placeholder screens ─────────────────────────────────────────
 
-class HomePlaceholder extends StatelessWidget {
-  const HomePlaceholder({super.key});
-
-  @override
-  Widget build(final BuildContext context) => const Center(child: Text('Inicio (placeholder)'));
-}
 
 /// Placeholder for the thematic landing screens (Educación, Empleo,
 /// Bienestar Social, Estado/Otros) that are wired from the home dashboard.

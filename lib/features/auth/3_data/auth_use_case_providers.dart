@@ -6,9 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_use_case_providers.g.dart';
 
 @riverpod
-LoginUseCase loginUseCase(final Ref ref) =>
-    LoginUseCase(ref.watch(authRepositoryProvider));
+LoginUseCase loginUseCase(final Ref ref) => LoginUseCase(ref.watch(authRepositoryProvider));
 
 @riverpod
-LogoutUseCase logoutUseCase(final Ref ref) =>
-    LogoutUseCase(ref.watch(authRepositoryProvider));
+LogoutUseCase logoutUseCase(final Ref ref) => LogoutUseCase(ref.watch(authRepositoryProvider));

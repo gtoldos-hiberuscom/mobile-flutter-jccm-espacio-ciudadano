@@ -10,7 +10,11 @@ class AppConfig {
     required this.environment,
     required this.baseUrl,
     required this.appName,
-    required this.ssoClientId, required this.ssoRedirectUri, required this.ssoRealm, required this.ssoBaseUrl, this.timeout = 30,
+    required this.ssoClientId,
+    required this.ssoRedirectUri,
+    required this.ssoRealm,
+    required this.ssoBaseUrl,
+    this.timeout = 30,
     this.debugMode = false,
   });
 

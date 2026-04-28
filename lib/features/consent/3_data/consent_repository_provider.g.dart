@@ -21,14 +21,7 @@ const consentRepositoryProvider = ConsentRepositoryProvider._();
 /// Kept alive for the full app lifetime so the consent lifecycle is always
 /// available without re-creating the notifier on navigation changes.
 
-final class ConsentRepositoryProvider
-    extends
-        $FunctionalProvider<
-          ConsentRepository,
-          ConsentRepository,
-          ConsentRepository
-        >
-    with $Provider<ConsentRepository> {
+final class ConsentRepositoryProvider extends $FunctionalProvider<ConsentRepository, ConsentRepository, ConsentRepository> with $Provider<ConsentRepository> {
   /// Provides the singleton [ConsentRepository] implementation.
   ///
   /// Kept alive for the full app lifetime so the consent lifecycle is always

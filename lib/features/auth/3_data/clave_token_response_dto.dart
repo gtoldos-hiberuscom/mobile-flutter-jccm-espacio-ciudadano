@@ -33,9 +33,7 @@ final class ClaveTokenResponseDto {
       idToken: _blankToNull(response.idToken),
       tokenType: _blankToNull(response.tokenType) ?? 'Bearer',
       scopes: List<String>.unmodifiable(response.scopes ?? const []),
-      accessTokenExpiresAt:
-          response.accessTokenExpirationDateTime ??
-          _expiresAt(receivedAt, expiresIn),
+      accessTokenExpiresAt: response.accessTokenExpirationDateTime ?? _expiresAt(receivedAt, expiresIn),
       refreshTokenExpiresAt: _expiresAt(receivedAt, refreshExpiresIn),
       additionalParameters: additionalParameters,
     );

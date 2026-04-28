@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/auth_repository_impl.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_auth_remote_datasource.dart';
@@ -43,11 +41,11 @@ void main() {
     });
 
     test('uses authDefaultScopes when no scopes are given', () async {
-      datasource.loginResult = ClaveTokenResponseDto(
+      datasource.loginResult = const ClaveTokenResponseDto(
         accessToken: 'token',
         tokenType: 'Bearer',
         scopes: authDefaultScopes,
-        additionalParameters: const {},
+        additionalParameters: {},
       );
 
       await repository.login();
@@ -60,11 +58,13 @@ void main() {
 
       expect(
         () => repository.login(),
-        throwsA(isA<AuthException>().having(
-          (final e) => e.reason,
-          'reason',
-          AuthFailureReason.cancelled,
-        )),
+        throwsA(
+          isA<AuthException>().having(
+            (final e) => e.reason,
+            'reason',
+            AuthFailureReason.cancelled,
+          ),
+        ),
       );
     });
   });

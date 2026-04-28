@@ -10,8 +10,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_token_response
 
 void main() {
   group('FlutterAppAuthClaveAuthRemoteDatasource', () {
-    test('login uses AppAuth authorization-code exchange with Cl@ve discovery',
-        () async {
+    test('login uses AppAuth authorization-code exchange with Cl@ve discovery', () async {
       final receivedAt = DateTime.utc(2026, 1, 1, 12);
       final appAuthClient = FakeClaveAppAuthClient(
         authorizationResponse: AuthorizationTokenResponse(
@@ -58,8 +57,7 @@ void main() {
       expect(request.scopes, authDefaultScopes);
     });
 
-    test('refreshToken uses AppAuth token endpoint with the refresh grant',
-        () async {
+    test('refreshToken uses AppAuth token endpoint with the refresh grant', () async {
       final receivedAt = DateTime.utc(2026, 1, 1, 12);
       final appAuthClient = FakeClaveAppAuthClient(
         tokenResponse: TokenResponse(
@@ -79,8 +77,7 @@ void main() {
         clock: () => receivedAt,
       );
 
-      final result =
-          await datasource.refreshToken(refreshToken: 'old-refresh-token');
+      final result = await datasource.refreshToken(refreshToken: 'old-refresh-token');
 
       expect(result.accessToken, 'new-access-token');
       expect(result.refreshToken, 'new-refresh-token');
@@ -97,9 +94,7 @@ void main() {
       expect(request.scopes, authDefaultScopes);
     });
 
-    test(
-        'logout uses AppAuth end-session with the configured redirect URI',
-        () async {
+    test('logout uses AppAuth end-session with the configured redirect URI', () async {
       final appAuthClient = FakeClaveAppAuthClient();
       final datasource = FlutterAppAuthClaveAuthRemoteDatasource(
         config: _config,

@@ -63,8 +63,7 @@ abstract interface class ClaveAuthRemoteDatasource {
   });
 }
 
-final class FlutterAppAuthClaveAuthRemoteDatasource
-    implements ClaveAuthRemoteDatasource {
+final class FlutterAppAuthClaveAuthRemoteDatasource implements ClaveAuthRemoteDatasource {
   FlutterAppAuthClaveAuthRemoteDatasource({
     required final AppConfig config,
     required final Dio dio,
@@ -176,8 +175,7 @@ final class FlutterAppAuthClaveAuthRemoteDatasource
       await _appAuthClient.endSession(
         EndSessionRequest(
           idTokenHint: idToken,
-          postLogoutRedirectUrl:
-              postLogoutRedirectUri ?? _config.ssoRedirectUri,
+          postLogoutRedirectUrl: postLogoutRedirectUri ?? _config.ssoRedirectUri,
           discoveryUrl: _discoveryUrl,
           additionalParameters: {
             'client_id': _config.ssoClientId,
@@ -274,9 +272,7 @@ final class FlutterAppAuthClaveAuthRemoteDatasource
     }
 
     final ssoBaseUri = Uri.tryParse(_config.ssoBaseUrl);
-    if (ssoBaseUri == null ||
-        !ssoBaseUri.hasScheme ||
-        ssoBaseUri.host.isEmpty) {
+    if (ssoBaseUri == null || !ssoBaseUri.hasScheme || ssoBaseUri.host.isEmpty) {
       throw const AuthException.configuration(
         message: 'SSO_BASE_URL must be an absolute URL.',
       );

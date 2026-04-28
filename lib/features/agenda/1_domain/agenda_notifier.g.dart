@@ -26,8 +26,7 @@ const agendaProvider = AgendaNotifierProvider._();
 /// state machine around it. UI mutators ([setPeriod], [setMonth],
 /// [selectDay], [clearSelectedDay]) only mutate the in-memory view-model
 /// — they never re-fetch (use [refresh] for that).
-final class AgendaNotifierProvider
-    extends $AsyncNotifierProvider<AgendaNotifier, AgendaState> {
+final class AgendaNotifierProvider extends $AsyncNotifierProvider<AgendaNotifier, AgendaState> {
   /// Owns the agenda screen state (snapshot + temporal filter + calendar
   /// month + selected day).
   ///
@@ -71,14 +70,7 @@ abstract class _$AgendaNotifier extends $AsyncNotifier<AgendaState> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<AgendaState>, AgendaState>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<AgendaState>, AgendaState>,
-              AsyncValue<AgendaState>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<AgendaState>, AgendaState>, AsyncValue<AgendaState>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

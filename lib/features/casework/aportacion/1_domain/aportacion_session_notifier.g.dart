@@ -22,8 +22,7 @@ const aportacionSessionProvider = AportacionSessionNotifierProvider._();
 /// Each method advances at most one step and is the only mutator of
 /// [AportacionSession]. The notifier never touches Flutter, navigation
 /// or storage — UI side-effects remain in the presentation layer.
-final class AportacionSessionNotifierProvider
-    extends $NotifierProvider<AportacionSessionNotifier, AportacionSession> {
+final class AportacionSessionNotifierProvider extends $NotifierProvider<AportacionSessionNotifier, AportacionSession> {
   /// Owns the third-party aportación wizard state (STORY-37).
   ///
   /// Each method advances at most one step and is the only mutator of
@@ -56,8 +55,7 @@ final class AportacionSessionNotifierProvider
   }
 }
 
-String _$aportacionSessionNotifierHash() =>
-    r'217807127bfcce3150d8daeb370aecb3eb60391c';
+String _$aportacionSessionNotifierHash() => r'217807127bfcce3150d8daeb370aecb3eb60391c';
 
 /// Owns the third-party aportación wizard state (STORY-37).
 ///
@@ -65,22 +63,14 @@ String _$aportacionSessionNotifierHash() =>
 /// [AportacionSession]. The notifier never touches Flutter, navigation
 /// or storage — UI side-effects remain in the presentation layer.
 
-abstract class _$AportacionSessionNotifier
-    extends $Notifier<AportacionSession> {
+abstract class _$AportacionSessionNotifier extends $Notifier<AportacionSession> {
   AportacionSession build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AportacionSession, AportacionSession>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AportacionSession, AportacionSession>,
-              AportacionSession,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AportacionSession, AportacionSession>, AportacionSession, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
