@@ -62,9 +62,10 @@ Future<int> _measureFirstBuildMs(
 }
 
 void _logPerf(final String pageName, final int elapsedMs, final int budgetMs) {
-  // Diagnostic-only stub for commit 1; replaced by a real debugPrint in the
-  // wall-clock logging commit. Keeping it as a no-op call in commit 1 is
-  // intentional: it keeps the test bodies stable across the two commits.
+  // Diagnostic-only: keeps wall-clock numbers visible in test stdout so a
+  // future regression can be triaged without re-instrumenting the harness.
+  // See documentation/qa/performance-budgets.md → "Diagnostic output".
+  debugPrint('[perf] $pageName first build: $elapsedMs ms (budget: $budgetMs ms)');
 }
 
 /// Empty-state recommendations repo — returns no items for every bucket so
@@ -77,13 +78,13 @@ class _EmptyRecommendationsRepo implements RecommendationsRepository {
 
   @override
   Future<RecommendationsPageResult> loadAll({final String? cursor}) async =>
-      const RecommendationsPageResult(items: <Recommendation>[], hasMore: false);
+      RecommendationsPageResult.empty;
 
   @override
   Future<RecommendationsPageResult> loadBucket(
     final RecommendationBucket bucket, {
     final String? cursor,
-  }) async => const RecommendationsPageResult(items: <Recommendation>[], hasMore: false);
+  }) async => RecommendationsPageResult.empty;
 }
 
 /// Empty-state casework repo — returns no items for any tab. Mirrors the
@@ -177,16 +178,16 @@ class _LandingHarness extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: const [
+    return const MaterialApp(
+      localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('es'),
-      home: const LandingPage(),
+      locale: Locale('es'),
+      home: LandingPage(),
     );
   }
 }
