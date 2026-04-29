@@ -1740,4 +1740,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get familiaNumerosaRetry => 'Retry';
+
+  @override
+  String get jovenDetailTitle => 'Youth card';
+
+  @override
+  String jovenCodigoLabel(String code) {
+    return 'Code: $code';
+  }
+
+  @override
+  String jovenExpiresOn(String date) {
+    return 'Valid until $date';
+  }
+
+  @override
+  String get jovenSubtitle => 'Prove your youth status and unlock discounts on culture, transport and leisure across Castilla-La Mancha.';
+
+  @override
+  String get jovenUnavailableTitle => 'Card not available';
+
+  @override
+  String get jovenUnavailableMessage => 'Your youth card is not valid or could not be retrieved.';
+
+  @override
+  String get jovenErrorMessage => 'Your youth card could not be loaded.';
+
+  @override
+  String get jovenRetry => 'Retry';
+
+  @override
+  String get jovenModalDragHandleSemantic => 'Drag to resize the youth card detail';
+
+  @override
+  String get jovenModalCloseAction => 'Close';
 }
