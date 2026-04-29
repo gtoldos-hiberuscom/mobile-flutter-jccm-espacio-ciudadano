@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-29T14:34:17+00:00
+updated_at: 2026-08-25T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -79,3 +79,15 @@ Definir la estrategia de resiliencia transversal para red inestable, datos está
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 (SP-EC-APP-SQ3-07): To Do → In Progress. Wave 1 — core resilience primitives landed on `task/EPIC-10-quality-release/STORY-65-resilience/core-primitives`: `lib/core/connectivity/connectivity_status.dart` (connectivity_plus 6.x stream), `lib/core/connectivity/offline_banner.dart`, `lib/core/network/retry_policy.dart` (exp-backoff + jitter, idempotent methods only, wired into `api_client.dart` behind `kResilienceLayerEnabled`), `lib/core/cache/ttl_cache.dart` + provider. Adopters matrix in `documentation/qa/resilience-adopters.md`. 14 unit tests added under `test/core/{cache,connectivity,network}`.
 - 2026-04-29T14:34:17+00:00 | by plan-manager | Wave 3 — feature adopters landed on `task/EPIC-10-quality-release/STORY-65-resilience/feature-adopters`: agenda, notifications and recommendations pages now wrap their body with `OfflineBanner`. All 149 existing feature tests still pass. Acceptance criteria satisfied: cache (TTL primitive + per-module key prefixes documented), retry (idempotent-only Dio interceptor; pull-to-refresh already present in adopters), políticas diferenciadas (cache memory-only by design; PII boundary documented; persistence deferred to TASK-69), fallback states (offline banner + each adopter keeps showing cached data). Status → Done. Follow-ups for Sprint 8/9 captured in resilience-adopters.md.
+
+### Sprint 8 closure
+- 2026-08-25T12:00:00+02:00 | by plan-manager | Sprint 8 (SP-EC-APP-SQ3-08) closure: Resilience adoption sweep across remaining repo-driven user-facing reads.
+  - Branches: `task/EPIC-10-quality-release/STORY-65-resilience/sprint8-resilience-adoption-sweep` (commit `53fbbd9`) → `ticket/EPIC-10-quality-release/STORY-65-resilience` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence:
+    - OfflineBanner adopted on: casework workspace + expediente detail; digital cards catalog + familia-numerosa, joven and discapacidad detail pages; signature inbox; help (FAQ).
+    - Recommendations page already wrapped in Sprint 7 (verified, no edit).
+    - Final adoption matrix in `documentation/qa/resilience-adopters.md` (Sprint 8 closure section).
+    - Kill-switch validation: `test/integration/resilience_kill_switch_test.dart` exercises the connectivity-driven banner contract via Riverpod overrides (3 cases).
+    - Defect surfaced (Sprint-9 carryover, recommendation only): `lib/features/home/` does not exist in the repo; `Routes.home` is unbound in `lib/app/routing/app_router.dart`. Wrapping deferred until that page lands.
+  - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. `flutter test` 443 passing + 1 perf skip (440 baseline + 3 new kill-switch cases).
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.

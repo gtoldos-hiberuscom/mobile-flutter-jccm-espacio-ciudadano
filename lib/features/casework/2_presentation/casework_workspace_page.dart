@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
@@ -67,13 +68,15 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage> w
           ),
         ],
       ),
-      body: asyncSnapshot.when(
+      body: OfflineBanner(
+        child: asyncSnapshot.when(
         loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
         error: (final err, final st) => ErrorStateWidget(
           message: l10n.caseworkWorkspaceLoadError,
           onRetry: () => ref.read(caseworkWorkspaceProvider.notifier).refresh(),
         ),
         data: (final snap) => _buildLoaded(context, snap, l10n),
+      ),
       ),
     );
   }

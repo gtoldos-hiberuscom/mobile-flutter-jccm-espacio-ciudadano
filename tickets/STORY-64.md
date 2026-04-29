@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-05-04T12:00:00+02:00
+updated_at: 2026-08-25T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -80,3 +80,14 @@ Definir la base de analítica, trazas y monitoring sin exponer datos sensibles d
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-22T01:35:57+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 execution started.
 - 2026-05-04T12:00:00+02:00 | by ticket-manager | Status transitioned from `In Progress` → `Done` after reconciling against merged implementation on `develop`.
+
+### Sprint 8 closure
+- 2026-08-25T12:00:00+02:00 | by plan-manager | Sprint 8 (SP-EC-APP-SQ3-08) closure: Telemetry verification with PII-redaction spot-check.
+  - Branches: `task/EPIC-10-quality-release/STORY-64-observability/sprint8-telemetry-verification` (commit `cea4295`) → `ticket/EPIC-10-quality-release/STORY-64-observability` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence:
+    - Report: `documentation/qa/STORY-64-telemetry-verification-sprint8.md` (10 AnalyticsEvent subclasses enumerated; emission sites mapped to AnalyticsObserver; KPI mapping per event family).
+    - New regression test: `test/qa/telemetry_redaction_test.dart` (5 cases: emission ×2, contract guard against future toString overrides, setCurrentScreen trust boundary, ConsoleLogger context-map redaction).
+    - Finding: telemetry safety today rests on three implicit properties — events carry only stable identifiers (no PII fields), no subclass overrides toString (so console emission renders 'Instance of <Type>'), and kReleaseMode short-circuits emission. ConsoleLogger._redact is the only active redaction path and applies to structured logs, not analytics payloads.
+    - Sprint-9 carryovers (recommendations only, no tickets): field-level analytics redaction wrapper before wiring real SDK (Firebase Analytics reads fields directly, bypassing toString); replace setCurrentScreen String arg with allow-listed slug enum; pin telemetry_redaction_test.dart in CI critical path; add release-mode no-op assertion test.
+  - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. `flutter test` 445 passing + 1 perf skip (440 baseline + 5 new telemetry cases).
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.

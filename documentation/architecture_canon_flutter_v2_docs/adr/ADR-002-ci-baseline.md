@@ -74,3 +74,57 @@ be added in later sprints together with their gating tickets:
 - STORY-67 — pending, secret / signing management.
 - TASK-69 — Inventario PII, hardening de seguridad y ADRs de excepción.
 - TASK-70 — pending, performance budgets and validations.
+
+## Sprint 8 closure addendum
+
+- Date: 2026-04-29
+- Related ticket: [STORY-68], Sprint 8 (SP-EC-APP-SQ3-08).
+
+This addendum closes the items the Sprint 2 baseline explicitly deferred and
+that are now in scope for the Sprint 8 release-readiness window.
+
+### AC2 — Environment promotion
+
+Satisfied via:
+
+- `.github/workflows/promote.yml` — `workflow_dispatch` workflow with `from`
+  and `to` choice inputs. The job validates that the transition is one of
+  `development → preproduction` or `preproduction → production`, runs under a
+  GitHub `environment:` block matching the `to` input (so environment
+  protection rules — required reviewers, secrets, deployment branches — gate
+  the run), and runs `flutter pub get`, `bash scripts/verify_codegen.sh`,
+  `flutter analyze --no-fatal-infos`, `flutter test`, then writes a structured
+  promotion record (from, to, sha, actor, run url, status) to
+  `$GITHUB_STEP_SUMMARY`.
+- `documentation/release/promotion-policy.md` — operational runbook covering
+  the stage chain, approval gates, who can approve, evidence to attach and
+  the rollback path.
+- `release_checklist.md` §2 now points to both artefacts and is no longer a
+  Sprint 2 scaffold.
+
+### AC3 — Versioning, tagging and changelog
+
+Satisfied via:
+
+- `scripts/bump_version.sh` — bash script (`set -euo pipefail`, executable)
+  accepting `major | minor | patch | <X.Y.Z>` plus an optional `--dry-run`
+  flag. It rewrites `pubspec.yaml`'s `version:` line, increments the build
+  number (`+B → +B+1`, reset to `1` on `major`), inserts a new
+  `## [X.Y.Z] - YYYY-MM-DD` section in `CHANGELOG.md` directly under
+  `## [Unreleased]` (Keep a Changelog convention) and prints the proposed
+  `vX.Y.Z` git tag to stdout.
+- `release_checklist.md` §3 (versioning) and §4 (changelog) now point to the
+  script as the canonical mechanism. A new §6 captures the rollback path that
+  matches `promotion-policy.md` §5.
+- The `Release` workflow gains a `Verify codegen (drift gate)` step
+  (`bash scripts/verify_codegen.sh`) between `flutter pub get` and the
+  analyze/test/build sequence so version-bump commits cannot ship with
+  drifted generated output.
+
+### Operational note
+
+Real version bumps and tags are triggered **by humans** during the release
+window sprint, not by CI. `scripts/bump_version.sh` is the canonical
+mechanism — invoking it (and committing its output) is the only sanctioned
+way to bump `pubspec.yaml` and `CHANGELOG.md` in lockstep. The script's
+`--dry-run` mode is the recommended preview before the real bump.

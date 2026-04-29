@@ -1,0 +1,109 @@
+# Environment promotion workflow — jccm_espacio_ciudadano
+# Sprint 8 closure (STORY-68, ADR-002 addendum AC2).
+#
+# Manual workflow_dispatch with a strict promotion chain:
+#   development → preproduction → production
+#
+# The job runs under a GitHub `environment:` matching the `to` input so any
+# protection rule (required reviewers, secrets, deployment branches) configured
+# at the repository level gates the promotion.
+#
+# Operational runbook: documentation/release/promotion-policy.md
+name: Promote environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: 'Source environment'
+        required: true
+        type: choice
+        options:
+          - development
+          - preproduction
+      to:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - preproduction
+          - production
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    name: Promote ${{ inputs.from }} → ${{ inputs.to }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.to }}
+
+    steps:
+      - name: Validate promotion transition
+        run: |
+          FROM='${{ inputs.from }}'
+          TO='${{ inputs.to }}'
+          if [ "$FROM" = "$TO" ]; then
+            echo "::error::from and to must differ (got '$FROM')"
+            exit 1
+          fi
+          case "${FROM}->${TO}" in
+            "development->preproduction"|"preproduction->production")
+              echo "Valid promotion: $FROM -> $TO"
+              ;;
+            *)
+              echo "::error::Illegal promotion path: $FROM -> $TO. Allowed: development->preproduction, preproduction->production."
+              exit 1
+              ;;
+          esac
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify codegen (drift gate)
+        run: bash scripts/verify_codegen.sh
+
+      - name: Flutter analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Promotion summary
+        if: always()
+        run: |
+          {
+            echo "## Promotion record"
+            echo ""
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| From | \`${{ inputs.from }}\` |"
+            echo "| To | \`${{ inputs.to }}\` |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo "| Actor | @${{ github.actor }} |"
+            echo "| Run | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |"
+            echo "| Status | ${{ job.status }} |"
+            echo ""
+            echo "Runbook: \`documentation/release/promotion-policy.md\`."
+          } >> "$GITHUB_STEP_SUMMARY"
