@@ -56,8 +56,16 @@ class _AgendaEventTileState extends State<AgendaEventTile> {
                 size: AppDimensions.iconMedium,
               ),
             ),
-            title: Text(title),
-            subtitle: Text(widget.subtitle),
+            title: Text(
+              title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text(
+              widget.subtitle,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
             trailing: hasInlineDetail
                 ? IconButton(
                     key: const ValueKey('agenda-tile-expand'),
