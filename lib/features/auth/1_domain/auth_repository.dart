@@ -1,41 +1,40 @@
-import 'package:jccm_espacio_ciudadano/core/network/result.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 
-/// Domain contract for all Cl@ve authentication operations.
-///
-/// Implementations live in `3_data/`. This interface must not import any
-/// Flutter, Riverpod, Dio, or concrete storage class — only entities and
-/// [Result].
-///
-/// All methods return [Result] values instead of throwing so that callers
-/// in `1_domain/` can pattern-match failures without catching exceptions.
+/// Default OAuth2 scopes for Cl@ve authentication.
+const List<String> authDefaultScopes = ['openid'];
+
+/// Domain contract for authentication operations.
 abstract interface class AuthRepository {
-  /// Opens the Cl@ve login portal URL in the platform browser.
+  /// Initiates the Cl@ve authorization-code + token exchange flow.
   ///
-  /// Returns a [Failure] because the token is not available synchronously;
-  /// the real session arrives via [handleCallback] after the Cl@ve redirect.
-  Future<Result<Session>> initiateClaveLogin(final String claveLoginUrl);
+  /// Throws [AuthException] on failure.
+  Future<AuthSession> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+  });
 
-  /// Processes the deep-link [callbackUri] received from Cl@ve.
+  /// Refreshes an existing session using a valid refresh token.
   ///
-  /// Extracts the `code` query parameter, exchanges it for tokens (Sprint 2),
-  /// persists the resulting [Session], and returns it.
-  ///
-  /// In Sprint 1 this returns a mock session — real OIDC exchange is tracked
-  /// by TASK-21.
-  Future<Result<Session>> handleCallback(final Uri callbackUri);
+  /// Throws [AuthException] on failure.
+  Future<AuthSession> refreshToken({
+    required final String refreshToken,
+    final List<String> scopes = authDefaultScopes,
+  });
 
-  /// Reads a previously persisted [Session] from secure storage.
+  /// Terminates the session via the Cl@ve end-session endpoint.
   ///
-  /// Returns `Success(null)` when no stored session exists or when the stored
-  /// session is expired. Returns `Failure` only on storage read errors.
-  Future<Result<Session?>> restoreSession();
+  /// Throws [AuthException] on failure.
+  Future<void> logout({
+    required final String idToken,
+    final String? postLogoutRedirectUri,
+  });
 
-  /// Silently renews the access token using the [session]'s refresh token.
+  /// Fetches the authenticated user's identity claims from the userinfo endpoint.
   ///
-  /// Returns a [Failure] in Sprint 1 — real refresh is tracked by TASK-21.
-  Future<Result<void>> refreshSession(final Session session);
-
-  /// Clears all persisted tokens and terminates the active session.
-  Future<Result<void>> logout();
+  /// Throws [AuthException] on failure.
+  Future<AuthUser> fetchUserInfo({
+    required final String accessToken,
+  });
 }

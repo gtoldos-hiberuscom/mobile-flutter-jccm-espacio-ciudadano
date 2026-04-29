@@ -25,16 +25,7 @@ const notificationContactGateProvider = NotificationContactGateProvider._();
 /// banners or hard guards before allowing the citizen to operate
 /// notifications.
 
-final class NotificationContactGateProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<NotificationContactStatus>,
-          NotificationContactStatus,
-          FutureOr<NotificationContactStatus>
-        >
-    with
-        $FutureModifier<NotificationContactStatus>,
-        $FutureProvider<NotificationContactStatus> {
+final class NotificationContactGateProvider extends $FunctionalProvider<AsyncValue<NotificationContactStatus>, NotificationContactStatus, FutureOr<NotificationContactStatus>> with $FutureModifier<NotificationContactStatus>, $FutureProvider<NotificationContactStatus> {
   /// Aggregates the contact-loading state into a [NotificationContactStatus]
   /// usable as a guard surface (STORY-42).
   ///
@@ -67,5 +58,4 @@ final class NotificationContactGateProvider
   }
 }
 
-String _$notificationContactGateHash() =>
-    r'46a536094f0b6957883624ef86a73d2e9d21b2cf';
+String _$notificationContactGateHash() => r'bbae6f2f59168ff9ede78e62983f19a7a996c094';

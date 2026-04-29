@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
-import 'package:jccm_espacio_ciudadano/core/auth/session_state_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
@@ -42,10 +41,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     if (widget.idAgente != null && widget.idAgente!.isNotEmpty) {
       return widget.idAgente!;
     }
-    final sessionToken = ref.read(sessionStateProvider);
-    if (sessionToken != null && sessionToken.isNotEmpty) {
-      return sessionToken;
-    }
+
     return LifeEventsPage.stubIdAgente;
   }
 

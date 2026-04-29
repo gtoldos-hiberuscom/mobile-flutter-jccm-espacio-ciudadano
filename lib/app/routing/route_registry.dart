@@ -1,15 +1,10 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 /// Route path constants used across the application.
 ///
 /// Keep all route strings in one place to prevent typos and enable
 /// compile-time refactoring. This file must not import Flutter or Riverpod.
-// ignore_for_file: avoid_classes_with_only_static_members
-abstract final class RouteRegistry {
-  /// Splash / initial route.
-  static const String root = '/';
-
-  /// Placeholder home route — replace in STORY-13.
-  static const String home = '/home';
-}
+library;
 
 /// Canonical route path constants for the entire application.
 ///
@@ -39,14 +34,24 @@ abstract final class Routes {
   static const String agendaDetail = '/agenda/:id';
   static const String casework = '/casework';
   static const String caseworkSearch = '/casework/search';
+
+  /// Third-party aportación documental wizard (STORY-37).
+  static const String caseworkAportacion = '/casework/aportacion';
   static const String caseworkItemDetail = '/casework/item/:id';
+
+  /// Upload-evidence screen for a given expediente (STORY-38).
+  static const String caseworkUpload = '/casework/item/:id/upload';
+
+  /// Registro de entrada / salida detail screen (STORY-36).
+  /// `kind` is one of `entrada|salida`; `numreg` must be URL-encoded.
+  static const String caseworkRegistroDetail = '/casework/registro/:kind/:numreg';
   static const String notifications = '/notifications';
   static const String notificationDetail = '/notifications/:id';
-  static const String notificationContactRegistration =
-      '/notifications/contact/registration';
+  static const String notificationContactRegistration = '/notifications/contact/registration';
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
+  static const String signatureInbox = '/sign';
 
   // ── Authenticated thematic landings ───────────────────────────────────────
   // Real pages will be implemented in STORY-23/24/25/26 — for now the home
@@ -80,6 +85,7 @@ abstract final class Routes {
     cards,
     recommendations,
     support,
+    signatureInbox,
     education,
     employment,
     socialWelfare,

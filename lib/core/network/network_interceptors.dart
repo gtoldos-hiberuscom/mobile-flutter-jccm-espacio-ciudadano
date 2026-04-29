@@ -22,6 +22,14 @@ final class AuthInterceptor extends Interceptor {
     final RequestOptions options,
     final RequestInterceptorHandler handler,
   ) async {
+    final hasAuthorizationHeader = options.headers.keys.any(
+      (final key) => key.toLowerCase() == HttpHeaders.authorizationHeader,
+    );
+    if (hasAuthorizationHeader) {
+      handler.next(options);
+      return;
+    }
+
     final token = await _storage.read(StorageKeys.accessToken);
     if (token != null && token.isNotEmpty) {
       options.headers[HttpHeaders.authorizationHeader] = 'Bearer $token';

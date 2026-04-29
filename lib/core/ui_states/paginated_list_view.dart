@@ -6,7 +6,11 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// Type parameter [T] is the list item type.
 class PaginatedListView<T> extends StatelessWidget {
   const PaginatedListView({
-    required this.items, required this.itemBuilder, required this.hasMore, required this.onLoadMore, super.key,
+    required this.items,
+    required this.itemBuilder,
+    required this.hasMore,
+    required this.onLoadMore,
+    super.key,
     this.isLoadingMore = false,
     this.onRefresh,
     this.emptyState,

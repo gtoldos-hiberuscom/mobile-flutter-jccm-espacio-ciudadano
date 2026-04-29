@@ -6,7 +6,8 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// Only renders buttons for non-null callbacks.
 class DocumentActionBar extends StatelessWidget {
   const DocumentActionBar({
-    required this.documentName, super.key,
+    required this.documentName,
+    super.key,
     this.onOpen,
     this.onDownload,
     this.onShare,

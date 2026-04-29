@@ -6,7 +6,8 @@ import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 /// Used for maintenance windows, permission-denied and feature-unavailable cases.
 class BlockedStateWidget extends StatelessWidget {
   const BlockedStateWidget({
-    required this.message, super.key,
+    required this.message,
+    super.key,
     this.subtitle,
     this.action,
   });

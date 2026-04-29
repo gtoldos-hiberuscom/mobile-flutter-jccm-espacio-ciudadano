@@ -10,6 +10,10 @@ class AppConfig {
     required this.environment,
     required this.baseUrl,
     required this.appName,
+    required this.ssoClientId,
+    required this.ssoRedirectUri,
+    required this.ssoRealm,
+    required this.ssoBaseUrl,
     this.timeout = 30,
     this.debugMode = false,
   });
@@ -29,6 +33,14 @@ class AppConfig {
   /// Whether verbose/debug logging is enabled.
   final bool debugMode;
 
+  final String ssoClientId;
+
+  final String ssoRedirectUri;
+
+  final String ssoRealm;
+
+  final String ssoBaseUrl;
+
   @override
-  String toString() => 'AppConfig(env: ${environment.name}, baseUrl: $baseUrl, appName: $appName)';
+  String toString() => 'AppConfig(env: ${environment.name}, baseUrl: $baseUrl, appName: $appName, timeout: $timeout, debugMode: $debugMode, ssoClientId: $ssoClientId, ssoRedirectUri: $ssoRedirectUri, ssoRealm: $ssoRealm, ssoBaseUrl: $ssoBaseUrl)';
 }

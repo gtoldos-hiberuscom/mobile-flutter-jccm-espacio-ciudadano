@@ -12,13 +12,11 @@ GoRouter _buildRouter() => GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/notifications',
-      builder: (final context, final state) =>
-          const Scaffold(body: Text('NOTIFICATIONS_HOME')),
+      builder: (final context, final state) => const Scaffold(body: Text('NOTIFICATIONS_HOME')),
     ),
     GoRoute(
       path: '/notifications/contact/registration',
-      builder: (final context, final state) =>
-          const NotificationContactRegistrationPage(),
+      builder: (final context, final state) => const NotificationContactRegistrationPage(),
     ),
   ],
 );
