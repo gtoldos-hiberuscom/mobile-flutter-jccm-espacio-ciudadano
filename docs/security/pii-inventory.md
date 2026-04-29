@@ -38,6 +38,8 @@ be added here before it appears in production code.
 | `refreshToken` | JWT string | 🔴 RED | Used to renew `accessToken`. Same restrictions as `accessToken`. |
 | `idAgente` | String (internal ID) | 🔴 RED | Unique agent identifier tied to authenticated citizen. |
 | User display name | String | 🟡 AMBER | May be displayed in UI; must not appear in logs or analytics. |
+| `nif` (national ID) | String | 🔴 RED | Surfaced in `ClaveUserInfoDto` and ported to `AuthUser` in-memory state. Never log, never cache outside session. |
+| `email` | String | 🟡 AMBER | Surfaced in `AuthUser` (Cl@ve profile) and citizen-contact features. In-memory only. Log as `[REDACTED]`. |
 
 ### 3.2 Health — SESCAM
 
@@ -94,6 +96,7 @@ be added here before it appears in production code.
 | Birth certificate data | Structured object | 🟡 AMBER | Name, date, place of birth. Log as `[REDACTED]`. |
 | Death certificate data | Structured object | 🟡 AMBER | Name, date, place of death. Log as `[REDACTED]`. |
 | Family registration data | Structured object | 🟡 AMBER | Household linkages. Log as `[REDACTED]`. |
+| `fechaNacimiento` (date of birth) | Date | 🟡 AMBER | Surfaced in `social_welfare` and `digital_cards/familia_numerosa` member entities, and parsed in SESCAM payloads. In-memory only. Log as `[REDACTED]`. |
 
 ### 3.9 Documents (Electronic Office)
 
@@ -101,6 +104,19 @@ be added here before it appears in production code.
 |-------|------|---------------|-------|
 | PDF document content | Binary / base64 | 🟡 AMBER | May contain any PII. Never log body — log only document ID and size. |
 | Document metadata | Structured object | 🟡 AMBER | Document title, submission date, type. Log only `documentId` and `type`. |
+
+### 3.10 Notifications / Citizen contact
+
+| Field | Type | Classification | Notes |
+|-------|------|---------------|-------|
+| `email` (contact channel) | String | 🟡 AMBER | Notification delivery address. In-memory only. Log as `[REDACTED]`. |
+| `phone` / `telefono` | String | 🟡 AMBER | Notification delivery number. In-memory only. Log as `[REDACTED]`. |
+
+### 3.11 State Affairs / Cadastral residence
+
+| Field | Type | Classification | Notes |
+|-------|------|---------------|-------|
+| `direccion` (postal address) | String | 🟡 AMBER | Surfaced in `state_affairs` `ResidenceData` and `CadastralProperty` entities. In-memory only. Log as `[REDACTED]`. |
 
 ---
 
@@ -174,6 +190,6 @@ be added here before it appears in production code.
 ## 8. References
 
 - [Security Hardening Guidelines](./security-hardening.md)
-- [ADR-001 — Package version cohort](../adr/ADR-001-package-version-cohort.md)
-- [ADR-003 — Generated client encapsulation](../adr/ADR-003-generated-client-encapsulation.md)
+- [ADR-001 — Package version cohort](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-001-package-version-cohort.md)
+- [ADR-003 — Generated client encapsulation](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-003-generated-client-encapsulation.md)
 - Architecture canon: `documentation/architecture_canon_flutter_v2_docs/` — Annex C, section 24 (Security)

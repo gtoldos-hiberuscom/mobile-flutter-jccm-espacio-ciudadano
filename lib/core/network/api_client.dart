@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/app/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/app/config/build_environment.dart';
 import 'package:jccm_espacio_ciudadano/core/feature_flags/resilience_flag.dart';
+import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/core/network/retry_policy.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
@@ -20,6 +21,7 @@ import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 Dio buildDioClient({
   required final AppConfig config,
   required final SecureStorage secureStorage,
+  required final AppLogger logger,
 }) {
   final timeoutDuration = Duration(seconds: config.timeout);
 
@@ -38,7 +40,7 @@ Dio buildDioClient({
 
   // Order matters: logging → auth → retry → error
   if (config.environment == BuildEnvironment.development) {
-    dio.interceptors.add(const LoggingInterceptor());
+    dio.interceptors.add(LoggingInterceptor(logger));
   }
   dio.interceptors.add(AuthInterceptor(secureStorage));
   // STORY-65 — opt-in retry for idempotent methods only.

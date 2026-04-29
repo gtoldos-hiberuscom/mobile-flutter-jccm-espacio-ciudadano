@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/app/config/app_config_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/logging/logger_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -22,5 +23,10 @@ part 'api_client_provider.g.dart';
 Dio dio(final Ref ref) {
   final config = ref.watch(appConfigProvider);
   final storage = ref.watch(secureStorageProvider);
-  return buildDioClient(config: config, secureStorage: storage);
+  final logger = ref.watch(appLoggerProvider);
+  return buildDioClient(
+    config: config,
+    secureStorage: storage,
+    logger: logger,
+  );
 }

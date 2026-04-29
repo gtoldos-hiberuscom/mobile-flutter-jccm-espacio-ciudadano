@@ -6,16 +6,40 @@ import 'package:jccm_espacio_ciudadano/core/logging/log_level.dart';
 ///
 /// Any context entry whose key contains one of these fragments will have its
 /// value replaced with `'[REDACTED]'` before emission.
-/// Updated from `docs/security/pii-inventory.md` RED/AMBER classifications.
+///
+/// Sourced from `docs/security/pii-inventory.md` RED/AMBER classifications and
+/// from a sweep of DTO/state field names used across the feature layers
+/// (auth, agenda/sescam, social_welfare, state_affairs, digital_cards,
+/// notifications/contact). Fragments are deliberately narrow substrings —
+/// generic words such as `'date'` or `'fecha'` are excluded to avoid
+/// over-redaction of non-PII metadata (e.g., `dateFormat`, `fechaInicio`
+/// of a public event).
+///
+/// Defense-in-depth only: the primary control is "never put raw PII in
+/// the log call" (see `docs/security/security-hardening.md` §5.3).
 const _kPiiKeyFragments = <String>[
+  // Session / authentication
   'token',
   'id',
   'name',
+  // National identifiers
+  'nif',
   'dni',
   'nss',
+  // Vehicles / driving
   'plate',
   'license',
   'matricula',
+  // Contact PII (notifications, support, profile)
+  'email',
+  'phone',
+  'telefono',
+  // Postal / cadastral PII
+  'address',
+  'direccion',
+  // Birth / life-event PII
+  'birth',
+  'nacimiento',
 ];
 
 /// Development-console implementation of [AppLogger].
