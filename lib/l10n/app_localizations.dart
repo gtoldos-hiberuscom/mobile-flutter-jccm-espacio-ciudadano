@@ -4099,6 +4099,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Detalle disponible próximamente'**
   String get recommendationsDetailUnavailable;
+
+  /// STORY-65 — default advisory message displayed by the OfflineBanner when connectivity is reported as offline; adopters keep showing cached data underneath.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin conexión. Mostrando datos guardados.'**
+  String get offlineBannerMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

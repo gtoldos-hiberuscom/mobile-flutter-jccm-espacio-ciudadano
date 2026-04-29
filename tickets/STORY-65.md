@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-08-25T12:00:00+02:00
+updated_at: 2026-09-21T18:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -91,3 +91,17 @@ Definir la estrategia de resiliencia transversal para red inestable, datos está
     - Defect surfaced (Sprint-9 carryover, recommendation only): `lib/features/home/` does not exist in the repo; `Routes.home` is unbound in `lib/app/routing/app_router.dart`. Wrapping deferred until that page lands.
   - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. `flutter test` 443 passing + 1 perf skip (440 baseline + 3 new kill-switch cases).
   - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.
+
+### Sprint 9 closure
+- 2026-09-21T18:00:00+02:00 | by plan-manager | Sprint 9 (SP-EC-APP-SQ3-09) closure: resilience continuation (Deliverable E).
+  - Branch: `task/EPIC-10-quality-release/STORY-65-resilience/sprint9-localize-and-wrap` (commits `9bb8b32`, `e9ec101`) → `ticket/EPIC-10-quality-release/STORY-65-resilience` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence:
+    - OfflineBanner copy localized: new ARB key `offlineBannerMessage` added to `lib/l10n/app_es.arb` ("Sin conexión. Mostrando datos guardados.") and `lib/l10n/app_en.arb` ("Offline. Showing cached data.") with matching `@` description blocks. `flutter gen-l10n` regenerated `lib/l10n/app_localizations.dart` + `app_localizations_es.dart` + `app_localizations_en.dart` (checked in).
+    - `lib/core/connectivity/offline_banner.dart` — fallback message now resolved from `Localizations.of<AppLocalizations>(context, AppLocalizations)?.offlineBannerMessage` with a defensive Spanish hard-coded fallback for the unlikely case the delegate is missing. The `message:` parameter override remains the highest-precedence path.
+    - New widget test `test/core/connectivity/offline_banner_test.dart` — three cases: ES locale renders Spanish fallback, EN locale renders English fallback, `message:` override wins.
+  - Home wrapping (Sprint-9 plan): DEFERRED. Per the cross-deliverable B finding, `Routes.home` is currently a safety redirect to `/sitemap` and there is no `LoggedHomePage`. Wrapping the home page with `OfflineBanner` is therefore deferred until STORY-22 reopens to implement the page; the deferral is recorded inline in the OfflineBanner doc comment and in `documentation/qa/STORY-65-home-wrapping-deferred.md` (cross-references `documentation/qa/STORY-22-home-route-investigation.md` which lives on the EPIC-3 branch family).
+  - Validation:
+    - `flutter analyze --no-fatal-infos` — 0 errors / 1 pre-existing warning (unchanged baseline).
+    - `flutter test` — 451 passing + 1 perf skip on this branch base (3 new offline-banner cases over the 448+1 base).
+    - `dart format --set-exit-if-changed` clean for touched files.
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 9 closure policy.

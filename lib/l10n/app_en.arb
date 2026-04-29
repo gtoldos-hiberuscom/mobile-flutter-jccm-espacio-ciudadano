@@ -2882,5 +2882,9 @@
   "recommendationsDetailUnavailable": "Details coming soon",
   "@recommendationsDetailUnavailable": {
     "description": "Recommendations — SnackBar shown when a card has no detail URI or the URL launcher fails."
+  },
+  "offlineBannerMessage": "Offline. Showing cached data.",
+  "@offlineBannerMessage": {
+    "description": "STORY-65 — default advisory message displayed by the OfflineBanner when connectivity is reported as offline; adopters keep showing cached data underneath."
   }
 }

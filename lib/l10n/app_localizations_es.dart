@@ -2117,4 +2117,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get recommendationsDetailUnavailable => 'Detalle disponible próximamente';
+
+  @override
+  String get offlineBannerMessage => 'Sin conexión. Mostrando datos guardados.';
 }
