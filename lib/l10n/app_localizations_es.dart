@@ -1834,7 +1834,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get signatureSignAction => 'Firmar';
 
   @override
-  String get signatureExternalLaunchPlaceholder => 'El salto a Afirma se habilitará en STORY-46.';
+  String get signatureHandoffPendingToast => 'Te hemos llevado a Afirma. Vuelve aquí cuando termines.';
+
+  @override
+  String get signatureHandoffSignedToast => 'Documento firmado';
+
+  @override
+  String get signatureHandoffCancelledToast => 'Has cancelado la firma.';
+
+  @override
+  String get signatureHandoffErrorToast => 'No hemos podido completar la firma. Inténtalo de nuevo.';
+
+  @override
+  String get signatureHandoffLaunchFailedToast => 'No hemos podido abrir Afirma. Inténtalo de nuevo.';
+
+  @override
+  String get signatureAfirmaReturnTitle => 'Volviendo de Afirma';
+
+  @override
+  String get signatureAfirmaReturnProcessing => 'Procesando firma…';
 
   @override
   String get signatureCertificateValidTitle => 'Certificado válido';
