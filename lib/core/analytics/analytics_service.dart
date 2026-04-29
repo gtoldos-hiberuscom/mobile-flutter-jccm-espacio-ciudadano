@@ -1,4 +1,5 @@
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
+import 'package:jccm_espacio_ciudadano/core/analytics/analytics_screen.dart';
 
 /// Contract for analytics backends.
 ///
@@ -11,9 +12,11 @@ abstract interface class AnalyticsService {
   /// Records a structured [event].
   void logEvent(final AnalyticsEvent event);
 
-  /// Informs the analytics backend of the currently visible screen.
+  /// Informs the analytics backend of the currently visible [screen].
   ///
-  /// [screenName] must be a route slug or a stable screen identifier —
-  /// never a user-facing label derived from user content.
-  void setCurrentScreen(final String screenName);
+  /// The argument is the allow-listed [AnalyticsScreen] enum, **not** a
+  /// free-form string — this is a compile-time guarantee that no caller
+  /// can leak user content (e.g. `/profile/<NIF>`) into the analytics
+  /// pipeline.
+  void setCurrentScreen(final AnalyticsScreen screen);
 }

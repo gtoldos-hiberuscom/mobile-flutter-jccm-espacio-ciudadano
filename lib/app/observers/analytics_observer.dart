@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
+import 'package:jccm_espacio_ciudadano/core/analytics/analytics_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
+import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 
 /// [NavigatorObserver] that forwards route transitions to [AnalyticsService].
 ///
@@ -11,9 +13,14 @@ import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
 /// The observer delegates to [AnalyticsService] which is itself a no-op in
 /// release builds until a real SDK is wired up in a future sprint.
 final class AnalyticsObserver extends NavigatorObserver {
-  AnalyticsObserver({required final AnalyticsService analyticsService}) : _analytics = analyticsService;
+  AnalyticsObserver({
+    required final AnalyticsService analyticsService,
+    required final AppLogger logger,
+  }) : _analytics = analyticsService,
+       _logger = logger;
 
   final AnalyticsService _analytics;
+  final AppLogger _logger;
 
   // ── NavigatorObserver ────────────────────────────────────────────────────────
 
@@ -43,8 +50,19 @@ final class AnalyticsObserver extends NavigatorObserver {
       return;
     }
 
+    final screen = AnalyticsScreen.fromRoute(name);
+    if (screen == AnalyticsScreen.unknown) {
+      // Do NOT forward unrecognised routes to the analytics backend —
+      // they may carry path parameters with PII (e.g. `/profile/<NIF>`).
+      // Surface a warning instead so the allow-list can be extended.
+      _logger.warning(
+        '[AnalyticsObserver] dropping unknown route: not in AnalyticsScreen allow-list',
+      );
+      return;
+    }
+
     _analytics
-      ..setCurrentScreen(name)
-      ..logEvent(PageViewEvent(name));
+      ..setCurrentScreen(screen)
+      ..logEvent(PageViewEvent(screen.slug));
   }
 }

@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/app/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/logging/logger_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_event_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_search_page.dart';
@@ -49,6 +50,7 @@ final goRouterProvider = Provider<GoRouter>(
     final lifecycleObserver = AppLifecycleObserver();
     final analyticsObserver = AnalyticsObserver(
       analyticsService: ref.read(analyticsServiceProvider),
+      logger: ref.read(appLoggerProvider),
     );
 
     final router = GoRouter(
@@ -108,8 +110,7 @@ final goRouterProvider = Provider<GoRouter>(
         // ── Deep-link callbacks ──────────────────────────────────────────────
         GoRoute(
           path: Routes.afirmaReturn,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              AfirmaReturnPage(returnUri: state.uri),
+          builder: (final BuildContext context, final GoRouterState state) => AfirmaReturnPage(returnUri: state.uri),
         ),
 
         // ── Consent ──────────────────────────────────────────────────────────
