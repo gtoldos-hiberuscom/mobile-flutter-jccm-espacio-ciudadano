@@ -159,7 +159,7 @@ logger.debug('Processing DGT request for plate=$vehiclePlate');
 
 ### 6.2 Generated client encapsulation
 
-See [ADR-003](../adr/ADR-003-generated-client-encapsulation.md).
+See [ADR-003](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-003-generated-client-encapsulation.md).
 
 - The `generated/` directory is read-only at development time — never edit generated files manually.
 - No generated DTO may cross the `3_data/` boundary into `1_domain/` or `2_presentation/`.
@@ -168,7 +168,7 @@ See [ADR-003](../adr/ADR-003-generated-client-encapsulation.md).
 ### 6.3 Dependency hygiene
 
 - Keep dependencies up to date; monitor advisories via `dart pub outdated` and GitHub Dependabot.
-- Pinned version cohorts (see [ADR-001](../adr/ADR-001-package-version-cohort.md)) must be
+- Pinned version cohorts (see [ADR-001](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-001-package-version-cohort.md)) must be
   reviewed whenever a blocking constraint is resolved.
 - Do not add transitive dependencies with known CVEs.
 
@@ -202,7 +202,7 @@ Before raising a PR, verify:
 ## 9. References
 
 - [PII Inventory](./pii-inventory.md)
-- [ADR-001 — Package version cohort](../adr/ADR-001-package-version-cohort.md)
-- [ADR-002 — GoRouter provider](../adr/ADR-002-gorouter-provider-not-riverpod.md)
-- [ADR-003 — Generated client encapsulation](../adr/ADR-003-generated-client-encapsulation.md)
+- [ADR-001 — Package version cohort](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-001-package-version-cohort.md)
+- [ADR-004 — GoRouter provider](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-004-gorouter-provider-not-riverpod.md)
+- [ADR-003 — Generated client encapsulation](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-003-generated-client-encapsulation.md)
 - Architecture canon: `documentation/architecture_canon_flutter_v2_docs/` — Annex C, section 24 (Security)

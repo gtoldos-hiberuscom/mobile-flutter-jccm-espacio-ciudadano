@@ -190,6 +190,6 @@ be added here before it appears in production code.
 ## 8. References
 
 - [Security Hardening Guidelines](./security-hardening.md)
-- [ADR-001 — Package version cohort](../adr/ADR-001-package-version-cohort.md)
-- [ADR-003 — Generated client encapsulation](../adr/ADR-003-generated-client-encapsulation.md)
+- [ADR-001 — Package version cohort](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-001-package-version-cohort.md)
+- [ADR-003 — Generated client encapsulation](../../documentation/architecture_canon_flutter_v2_docs/adr/ADR-003-generated-client-encapsulation.md)
 - Architecture canon: `documentation/architecture_canon_flutter_v2_docs/` — Annex C, section 24 (Security)
