@@ -159,3 +159,12 @@ This discovery resolves the "biblioteca" question (OUT_OF_MVP) and the
 "tarjeta sanitaria" question (CIP_REUSE, no wallet semantics) for Sprint 4.
 STORY-31 and STORY-48 may proceed in this sprint applying these decisions.
 STORY-22 is retroactively confirmed as compatible with no code change.
+
+## Sprint 7 closure annotation
+
+Reviewed during Sprint 7 (SP-EC-APP-SQ2-07) under STORY-67 QA-as-code.
+No new defects surfaced that contradict the strategy recorded above.
+The decision matrix in this document remains the authoritative input
+for the corresponding implementation ticket; outstanding items stay
+parked on their owner sprint per the roadmap and are not escalated to
+new tickets at this point.

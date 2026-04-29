@@ -80,3 +80,4 @@ Validar la semántica real de los filtros de segmentación y la relación entre 
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-29T10:15:10+00:00 | by plan-manager | Sprint 6 start; status → In Progress.
 - 2026-04-29T10:15:10+00:00 | by plan-manager | Discovery doc delivered at `documentation/discovery/TASK-58-recommendations-segmentation-strategy.md` (D1–D6 decisions, OP-1..OP-5 open questions). Acceptance criteria satisfied; status → Done. Outputs unblock STORY-56/57 (mock repository contract, empty-state branches, segmentation tab → operacion mapping).
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 closure annotation appended to discovery doc under STORY-67 QA-as-code; no decisions revised, no defects, no new tickets opened.
