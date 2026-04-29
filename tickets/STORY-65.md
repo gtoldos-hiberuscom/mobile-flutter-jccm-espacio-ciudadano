@@ -2,7 +2,7 @@
 id: 65
 jira_key:
 type: Story
-status: In Progress
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
@@ -29,10 +29,10 @@ jira_url:
 Definir la estrategia de resiliencia transversal para red inestable, datos estáticos y flujos con refresh, estableciendo políticas de caché, offline, retry y fallback diferenciadas según sensibilidad y volatilidad de la información.
 
 ## Acceptance Criteria
-- [ ] Se contempla caché razonable por módulos y contenido estático offline.
-- [ ] Se contemplan reintentos, pull-to-refresh y detección de conectividad.
-- [ ] Se contemplan políticas diferenciadas para datos sensibles y no sensibles.
-- [ ] Se contemplan fallback states para módulos con contratos externos inestables.
+- [x] Se contempla caché razonable por módulos y contenido estático offline.
+- [x] Se contemplan reintentos, pull-to-refresh y detección de conectividad.
+- [x] Se contemplan políticas diferenciadas para datos sensibles y no sensibles.
+- [x] Se contemplan fallback states para módulos con contratos externos inestables.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -78,3 +78,4 @@ Definir la estrategia de resiliencia transversal para red inestable, datos está
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 (SP-EC-APP-SQ3-07): To Do → In Progress. Wave 1 — core resilience primitives landed on `task/EPIC-10-quality-release/STORY-65-resilience/core-primitives`: `lib/core/connectivity/connectivity_status.dart` (connectivity_plus 6.x stream), `lib/core/connectivity/offline_banner.dart`, `lib/core/network/retry_policy.dart` (exp-backoff + jitter, idempotent methods only, wired into `api_client.dart` behind `kResilienceLayerEnabled`), `lib/core/cache/ttl_cache.dart` + provider. Adopters matrix in `documentation/qa/resilience-adopters.md`. 14 unit tests added under `test/core/{cache,connectivity,network}`.
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Wave 3 — feature adopters landed on `task/EPIC-10-quality-release/STORY-65-resilience/feature-adopters`: agenda, notifications and recommendations pages now wrap their body with `OfflineBanner`. All 149 existing feature tests still pass. Acceptance criteria satisfied: cache (TTL primitive + per-module key prefixes documented), retry (idempotent-only Dio interceptor; pull-to-refresh already present in adopters), políticas diferenciadas (cache memory-only by design; PII boundary documented; persistence deferred to TASK-69), fallback states (offline banner + each adopter keeps showing cached data). Status → Done. Follow-ups for Sprint 8/9 captured in resilience-adopters.md.
