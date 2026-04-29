@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
@@ -64,7 +65,8 @@ class _SignatureInboxPageState extends ConsumerState<SignatureInboxPage> {
             ],
           ),
         ),
-        body: asyncState.when(
+        body: OfflineBanner(
+          child: asyncState.when(
           loading: () => LoadingStateWidget(message: l10n.signatureLoading),
           error: (final error, final stack) => ErrorStateWidget(
             message: l10n.signatureErrorMessage,
@@ -98,6 +100,7 @@ class _SignatureInboxPageState extends ConsumerState<SignatureInboxPage> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

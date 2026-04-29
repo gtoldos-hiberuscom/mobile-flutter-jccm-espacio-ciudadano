@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/detail/0_entity/expediente_detail.dart';
@@ -42,7 +43,8 @@ class ExpedienteDetailPage extends ConsumerWidget {
         ),
         title: Text(l10n.caseworkExpedienteDetailTitle),
       ),
-      body: asyncDetail.when(
+      body: OfflineBanner(
+        child: asyncDetail.when(
         loading: () => LoadingStateWidget(
           message: l10n.caseworkExpedienteDetailLoading,
         ),
@@ -52,6 +54,7 @@ class ExpedienteDetailPage extends ConsumerWidget {
           onRetry: () => ref.read(expedienteDetailProvider(expedienteRef).notifier).refresh(),
         ),
         data: (final detail) => _LoadedView(detail: detail),
+      ),
       ),
     );
   }
