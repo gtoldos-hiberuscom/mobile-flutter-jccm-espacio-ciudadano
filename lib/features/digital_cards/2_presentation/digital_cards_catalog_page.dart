@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_cards_catalog.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/digital_cards_catalog_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/widgets/cip_read_only_mini_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/widgets/digital_card_tile.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/2_presentation/joven_detail_modal.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Cards catalogue surface (STORY-48).
@@ -38,9 +44,35 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
         data: (final DigitalCardsCatalog catalog) => _CatalogBody(
           catalog: catalog,
           onAction: (final cardId, final action) => _showStubActionSnackbar(context, l10n),
+          onCardTap: (final card) => _handleCardTap(context, card),
         ),
       ),
     );
+  }
+
+  /// Routes the citizen to the per-card detail page when one exists.
+  ///
+  /// Sprint 5 ships only `DigitalCardType.familiaNumerosa` (STORY-49).
+  /// Sibling stories own the missing detail screens — we leave the
+  /// fallback snackbar in place so the user always gets feedback.
+  static void _handleCardTap(final BuildContext context, final DigitalCard card) {
+    switch (card.type) {
+      case DigitalCardType.familiaNumerosa:
+        context.go(Routes.cardFamiliaNumerosaDetail);
+      case DigitalCardType.joven:
+        // STORY-50: the catalogue uses the modal variant per AC.
+        // The full-page surface at `Routes.cardJovenDetail` is reserved
+        // for deep links and future home/menu shortcuts.
+        // TODO(future-sprint): wire a home shortcut entry point that
+        //   navigates to `Routes.cardJovenDetail` when product asks
+        //   for the full-page surface from outside the catalogue.
+        unawaited(JovenDetailModal.show(context));
+      case DigitalCardType.discapacidad:
+        // STORY-51: full-page detail surface (no modal variant — this
+        // carnet only ships PKPass when vigente, no QR/PDF). Mirrors
+        // the navigation pattern used by STORY-49 (familia numerosa).
+        context.go(Routes.cardDiscapacidadDetail);
+    }
   }
 
   static void _showStubActionSnackbar(
@@ -57,10 +89,15 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
 }
 
 class _CatalogBody extends StatelessWidget {
-  const _CatalogBody({required this.catalog, required this.onAction});
+  const _CatalogBody({
+    required this.catalog,
+    required this.onAction,
+    required this.onCardTap,
+  });
 
   final DigitalCardsCatalog catalog;
   final void Function(String cardId, DigitalCardAction action) onAction;
+  final void Function(DigitalCard card) onCardTap;
 
   @override
   Widget build(final BuildContext context) {
@@ -82,6 +119,7 @@ class _CatalogBody extends StatelessWidget {
           DigitalCardTile(
             card: card,
             onAction: (final action) => onAction(card.id, action),
+            onCardTap: () => onCardTap(card),
           ),
     ];
 

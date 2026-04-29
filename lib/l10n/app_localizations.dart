@@ -3691,6 +3691,270 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Caduca el {date}'**
   String signatureCertificateExpiresOn(String date);
+
+  /// Notifications — título de la pantalla provisional de detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de notificación'**
+  String get notificationDetailPlaceholderTitle;
+
+  /// Notifications — cuerpo provisional con el identificador de la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificación {id}'**
+  String notificationDetailPlaceholderBody(String id);
+
+  /// Notifications — mensaje provisional para el detalle real.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle pendiente de habilitar en STORY-44.'**
+  String get notificationDetailPlaceholderPending;
+
+  /// Familia numerosa detail page — AppBar title.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de familia numerosa'**
+  String get familiaNumerosaDetailTitle;
+
+  /// Familia numerosa detail page — printed carnet number row.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de carnet: {number}'**
+  String familiaNumerosaCardNumberLabel(String number);
+
+  /// Familia numerosa categoría — general.
+  ///
+  /// In es, this message translates to:
+  /// **'General'**
+  String get familiaNumerosaCategoriaGeneral;
+
+  /// Familia numerosa categoría — especial.
+  ///
+  /// In es, this message translates to:
+  /// **'Especial'**
+  String get familiaNumerosaCategoriaEspecial;
+
+  /// Familia numerosa categoría — desconocida / no proyectada por el backend.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin clasificar'**
+  String get familiaNumerosaCategoriaUnknown;
+
+  /// Familia numerosa detail — expiry date row.
+  ///
+  /// In es, this message translates to:
+  /// **'Caduca el {date}'**
+  String familiaNumerosaExpiresOn(String date);
+
+  /// Familia numerosa detail — members section header.
+  ///
+  /// In es, this message translates to:
+  /// **'Miembros del carnet'**
+  String get familiaNumerosaMembersTitle;
+
+  /// Familia numerosa detail — fallback when a member has no name.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin nombre'**
+  String get familiaNumerosaMemberFallbackName;
+
+  /// Familia numerosa member parentesco — titular.
+  ///
+  /// In es, this message translates to:
+  /// **'Titular'**
+  String get familiaNumerosaParentescoTitular;
+
+  /// Familia numerosa member parentesco — cónyuge.
+  ///
+  /// In es, this message translates to:
+  /// **'Cónyuge'**
+  String get familiaNumerosaParentescoConyuge;
+
+  /// Familia numerosa member parentesco — hijo.
+  ///
+  /// In es, this message translates to:
+  /// **'Hijo'**
+  String get familiaNumerosaParentescoHijo;
+
+  /// Familia numerosa member parentesco — hija.
+  ///
+  /// In es, this message translates to:
+  /// **'Hija'**
+  String get familiaNumerosaParentescoHija;
+
+  /// Familia numerosa member parentesco — otro / sin clasificar.
+  ///
+  /// In es, this message translates to:
+  /// **'Otro'**
+  String get familiaNumerosaParentescoOtro;
+
+  /// Familia numerosa detail — title shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet no disponible'**
+  String get familiaNumerosaUnavailableTitle;
+
+  /// Familia numerosa detail — body shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu carnet de familia numerosa no está vigente o no se ha podido obtener.'**
+  String get familiaNumerosaUnavailableMessage;
+
+  /// Familia numerosa detail — generic error message.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu carnet de familia numerosa.'**
+  String get familiaNumerosaErrorMessage;
+
+  /// Familia numerosa detail — retry button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get familiaNumerosaRetry;
+
+  /// Carnet Joven detail surface — AppBar / modal title.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet Joven'**
+  String get jovenDetailTitle;
+
+  /// Carnet Joven detail — printed carnet code row.
+  ///
+  /// In es, this message translates to:
+  /// **'Código: {code}'**
+  String jovenCodigoLabel(String code);
+
+  /// Carnet Joven detail — expiry date badge.
+  ///
+  /// In es, this message translates to:
+  /// **'Vigente hasta el {date}'**
+  String jovenExpiresOn(String date);
+
+  /// Carnet Joven detail — descriptive subtitle under the hero card.
+  ///
+  /// In es, this message translates to:
+  /// **'Acredita tu condición de persona joven y accede a descuentos en cultura, transporte y ocio en Castilla-La Mancha.'**
+  String get jovenSubtitle;
+
+  /// Carnet Joven detail — title shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet no disponible'**
+  String get jovenUnavailableTitle;
+
+  /// Carnet Joven detail — body shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu Carnet Joven no está vigente o no se ha podido obtener.'**
+  String get jovenUnavailableMessage;
+
+  /// Carnet Joven detail — generic error message.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu Carnet Joven.'**
+  String get jovenErrorMessage;
+
+  /// Carnet Joven detail — retry button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get jovenRetry;
+
+  /// Carnet Joven modal — accessibility label for the drag handle.
+  ///
+  /// In es, this message translates to:
+  /// **'Arrastra para ajustar la ficha del Carnet Joven'**
+  String get jovenModalDragHandleSemantic;
+
+  /// Carnet Joven modal — close action label / tooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get jovenModalCloseAction;
+
+  /// Carnet Discapacidad detail — AppBar title.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de discapacidad'**
+  String get discapacidadDetailTitle;
+
+  /// Carnet Discapacidad detail — semantic / row label for the grado de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Grado de discapacidad'**
+  String get discapacidadGradoLabel;
+
+  /// Carnet Discapacidad detail — grado badge label.
+  ///
+  /// In es, this message translates to:
+  /// **'{grado}%'**
+  String discapacidadGradoBadge(int grado);
+
+  /// Carnet Discapacidad detail — fallback shown when the grado is missing.
+  ///
+  /// In es, this message translates to:
+  /// **'Grado no disponible'**
+  String get discapacidadGradoUnknown;
+
+  /// Carnet Discapacidad detail — expiry date row.
+  ///
+  /// In es, this message translates to:
+  /// **'Vigente hasta el {date}'**
+  String discapacidadExpiresOn(String date);
+
+  /// Carnet Discapacidad detail — short "vigente" badge.
+  ///
+  /// In es, this message translates to:
+  /// **'Vigente'**
+  String get discapacidadValidBadge;
+
+  /// Carnet Discapacidad detail — title shown when the carnet is no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet no vigente'**
+  String get discapacidadNotValidTitle;
+
+  /// Carnet Discapacidad detail — body shown when the carnet is no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu carnet de discapacidad ya no está vigente. No se puede generar el pase para Wallet.'**
+  String get discapacidadNotValidMessage;
+
+  /// Carnet Discapacidad detail — title shown when no carnet data is available.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin datos disponibles'**
+  String get discapacidadUnavailableTitle;
+
+  /// Carnet Discapacidad detail — body shown when no carnet data is available.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de tu carnet de discapacidad. Vuelve a intentarlo más tarde.'**
+  String get discapacidadUnavailableMessage;
+
+  /// Carnet Discapacidad detail — message shown on a payload-parse error.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido interpretar la respuesta del carnet de discapacidad.'**
+  String get discapacidadParseErrorMessage;
+
+  /// Carnet Discapacidad detail — generic error message.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu carnet de discapacidad.'**
+  String get discapacidadErrorMessage;
+
+  /// Carnet Discapacidad detail — retry button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get discapacidadRetry;
+
+  /// Carnet Discapacidad detail — PKPass action section label.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir a Wallet'**
+  String get discapacidadActionPkpass;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -49,6 +49,23 @@ abstract final class Routes {
   static const String notificationDetail = '/notifications/:id';
   static const String notificationContactRegistration = '/notifications/contact/registration';
   static const String cards = '/cards';
+
+  /// Carnet digital de familia numerosa — per-card detail (STORY-49).
+  static const String cardFamiliaNumerosaDetail = '/cards/familia-numerosa';
+
+  /// Carnet digital joven — per-card detail (STORY-50).
+  ///
+  /// The catalogue surfaces the modal variant of the carnet joven; this
+  /// route exists for deep links and for any future home/menu shortcut
+  /// that prefers the full-page version.
+  static const String cardJovenDetail = '/cards/joven';
+
+  /// Carnet digital de discapacidad — per-card detail (STORY-51).
+  ///
+  /// Surfaces grado de discapacidad and the PKPass action when the
+  /// carnet is vigente; renders explicit no-vigente / sin-datos /
+  /// parse-error fallbacks otherwise.
+  static const String cardDiscapacidadDetail = '/cards/discapacidad';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
   static const String signatureInbox = '/sign';
@@ -83,6 +100,9 @@ abstract final class Routes {
     notifications,
     notificationContactRegistration,
     cards,
+    cardFamiliaNumerosaDetail,
+    cardJovenDetail,
+    cardDiscapacidadDetail,
     recommendations,
     support,
     signatureInbox,

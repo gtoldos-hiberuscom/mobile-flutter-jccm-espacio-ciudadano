@@ -2,12 +2,12 @@
 id: 51
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 6
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T10:15:10+00:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir el caso del carnet o acreditación de discapacidad incluyendo el grado cuando exista, la generación de pass asociado cuando proceda y el tratamiento explícito del estado no vigente o sin datos disponible en diseño.
 
 ## Acceptance Criteria
-- [ ] Se contempla lectura del grado de discapacidad cuando exista.
-- [ ] Se contempla PKPass/formatos asociados si el carnet está vigente.
-- [ ] Se contempla estado no vigente o no disponible con mensaje explícito y sin acciones inválidas.
-- [ ] Se contemplan errores de parsing para payloads string y casos sin datos.
+- [x] Se contempla lectura del grado de discapacidad cuando exista.
+- [x] Se contempla PKPass/formatos asociados si el carnet está vigente.
+- [x] Se contempla estado no vigente o no disponible con mensaje explícito y sin acciones inválidas.
+- [x] Se contemplan errores de parsing para payloads string y casos sin datos.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -75,3 +75,5 @@ Cubrir el caso del carnet o acreditación de discapacidad incluyendo el grado cu
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T10:15:10+00:00 | by plan-manager | Sprint 6 start; status → In Progress.
+- 2026-04-29T10:15:10+00:00 | by plan-manager | Implemented `lib/features/digital_cards/discapacidad/` (entity + parse failure enum, tolerant `DiscapacidadParser` for structured map / bare-string / unparseable inputs, repository + mock with `mockVariant` switch, AsyncNotifier, detail page covering vigente / noVigente / notAvailable / parseError branches with PKPass-only WalletActionBar). Routed at `Routes.cardDiscapacidadDetail = '/cards/discapacidad'`; catalog tile tap on `DigitalCardType.discapacidad` navigates here. Added 13 l10n keys × 2 locales. Tests cover parser, repo (per variant + magic), notifier, page widget per branch (20 new tests). Acceptance criteria satisfied; status → Done.

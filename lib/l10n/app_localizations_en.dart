@@ -1898,4 +1898,150 @@ class AppLocalizationsEn extends AppLocalizations {
   String signatureCertificateExpiresOn(String date) {
     return 'Expires on $date';
   }
+
+  @override
+  String get notificationDetailPlaceholderTitle => 'Notification detail';
+
+  @override
+  String notificationDetailPlaceholderBody(String id) {
+    return 'Notification $id';
+  }
+
+  @override
+  String get notificationDetailPlaceholderPending => 'Detail screen will be enabled in STORY-44.';
+
+  @override
+  String get familiaNumerosaDetailTitle => 'Large family card';
+
+  @override
+  String familiaNumerosaCardNumberLabel(String number) {
+    return 'Card number: $number';
+  }
+
+  @override
+  String get familiaNumerosaCategoriaGeneral => 'General';
+
+  @override
+  String get familiaNumerosaCategoriaEspecial => 'Special';
+
+  @override
+  String get familiaNumerosaCategoriaUnknown => 'Unclassified';
+
+  @override
+  String familiaNumerosaExpiresOn(String date) {
+    return 'Expires on $date';
+  }
+
+  @override
+  String get familiaNumerosaMembersTitle => 'Card members';
+
+  @override
+  String get familiaNumerosaMemberFallbackName => 'No name';
+
+  @override
+  String get familiaNumerosaParentescoTitular => 'Holder';
+
+  @override
+  String get familiaNumerosaParentescoConyuge => 'Spouse';
+
+  @override
+  String get familiaNumerosaParentescoHijo => 'Son';
+
+  @override
+  String get familiaNumerosaParentescoHija => 'Daughter';
+
+  @override
+  String get familiaNumerosaParentescoOtro => 'Other';
+
+  @override
+  String get familiaNumerosaUnavailableTitle => 'Card not available';
+
+  @override
+  String get familiaNumerosaUnavailableMessage => 'Your large-family card is not valid or could not be retrieved.';
+
+  @override
+  String get familiaNumerosaErrorMessage => 'Your large-family card could not be loaded.';
+
+  @override
+  String get familiaNumerosaRetry => 'Retry';
+
+  @override
+  String get jovenDetailTitle => 'Youth card';
+
+  @override
+  String jovenCodigoLabel(String code) {
+    return 'Code: $code';
+  }
+
+  @override
+  String jovenExpiresOn(String date) {
+    return 'Valid until $date';
+  }
+
+  @override
+  String get jovenSubtitle => 'Prove your youth status and unlock discounts on culture, transport and leisure across Castilla-La Mancha.';
+
+  @override
+  String get jovenUnavailableTitle => 'Card not available';
+
+  @override
+  String get jovenUnavailableMessage => 'Your youth card is not valid or could not be retrieved.';
+
+  @override
+  String get jovenErrorMessage => 'Your youth card could not be loaded.';
+
+  @override
+  String get jovenRetry => 'Retry';
+
+  @override
+  String get jovenModalDragHandleSemantic => 'Drag to resize the youth card detail';
+
+  @override
+  String get jovenModalCloseAction => 'Close';
+
+  @override
+  String get discapacidadDetailTitle => 'Disability card';
+
+  @override
+  String get discapacidadGradoLabel => 'Disability degree';
+
+  @override
+  String discapacidadGradoBadge(int grado) {
+    return '$grado%';
+  }
+
+  @override
+  String get discapacidadGradoUnknown => 'Degree not available';
+
+  @override
+  String discapacidadExpiresOn(String date) {
+    return 'Valid until $date';
+  }
+
+  @override
+  String get discapacidadValidBadge => 'Valid';
+
+  @override
+  String get discapacidadNotValidTitle => 'Card not valid';
+
+  @override
+  String get discapacidadNotValidMessage => 'Your disability card is no longer valid. The Wallet pass cannot be generated.';
+
+  @override
+  String get discapacidadUnavailableTitle => 'No data available';
+
+  @override
+  String get discapacidadUnavailableMessage => 'We could not find any disability card data for you. Please try again later.';
+
+  @override
+  String get discapacidadParseErrorMessage => 'We could not interpret the disability card response.';
+
+  @override
+  String get discapacidadErrorMessage => 'Your disability card could not be loaded.';
+
+  @override
+  String get discapacidadRetry => 'Retry';
+
+  @override
+  String get discapacidadActionPkpass => 'Add to Wallet';
 }

@@ -1899,4 +1899,150 @@ class AppLocalizationsEs extends AppLocalizations {
   String signatureCertificateExpiresOn(String date) {
     return 'Caduca el $date';
   }
+
+  @override
+  String get notificationDetailPlaceholderTitle => 'Detalle de notificación';
+
+  @override
+  String notificationDetailPlaceholderBody(String id) {
+    return 'Notificación $id';
+  }
+
+  @override
+  String get notificationDetailPlaceholderPending => 'Detalle pendiente de habilitar en STORY-44.';
+
+  @override
+  String get familiaNumerosaDetailTitle => 'Carnet de familia numerosa';
+
+  @override
+  String familiaNumerosaCardNumberLabel(String number) {
+    return 'Número de carnet: $number';
+  }
+
+  @override
+  String get familiaNumerosaCategoriaGeneral => 'General';
+
+  @override
+  String get familiaNumerosaCategoriaEspecial => 'Especial';
+
+  @override
+  String get familiaNumerosaCategoriaUnknown => 'Sin clasificar';
+
+  @override
+  String familiaNumerosaExpiresOn(String date) {
+    return 'Caduca el $date';
+  }
+
+  @override
+  String get familiaNumerosaMembersTitle => 'Miembros del carnet';
+
+  @override
+  String get familiaNumerosaMemberFallbackName => 'Sin nombre';
+
+  @override
+  String get familiaNumerosaParentescoTitular => 'Titular';
+
+  @override
+  String get familiaNumerosaParentescoConyuge => 'Cónyuge';
+
+  @override
+  String get familiaNumerosaParentescoHijo => 'Hijo';
+
+  @override
+  String get familiaNumerosaParentescoHija => 'Hija';
+
+  @override
+  String get familiaNumerosaParentescoOtro => 'Otro';
+
+  @override
+  String get familiaNumerosaUnavailableTitle => 'Carnet no disponible';
+
+  @override
+  String get familiaNumerosaUnavailableMessage => 'Tu carnet de familia numerosa no está vigente o no se ha podido obtener.';
+
+  @override
+  String get familiaNumerosaErrorMessage => 'No se ha podido cargar tu carnet de familia numerosa.';
+
+  @override
+  String get familiaNumerosaRetry => 'Reintentar';
+
+  @override
+  String get jovenDetailTitle => 'Carnet Joven';
+
+  @override
+  String jovenCodigoLabel(String code) {
+    return 'Código: $code';
+  }
+
+  @override
+  String jovenExpiresOn(String date) {
+    return 'Vigente hasta el $date';
+  }
+
+  @override
+  String get jovenSubtitle => 'Acredita tu condición de persona joven y accede a descuentos en cultura, transporte y ocio en Castilla-La Mancha.';
+
+  @override
+  String get jovenUnavailableTitle => 'Carnet no disponible';
+
+  @override
+  String get jovenUnavailableMessage => 'Tu Carnet Joven no está vigente o no se ha podido obtener.';
+
+  @override
+  String get jovenErrorMessage => 'No se ha podido cargar tu Carnet Joven.';
+
+  @override
+  String get jovenRetry => 'Reintentar';
+
+  @override
+  String get jovenModalDragHandleSemantic => 'Arrastra para ajustar la ficha del Carnet Joven';
+
+  @override
+  String get jovenModalCloseAction => 'Cerrar';
+
+  @override
+  String get discapacidadDetailTitle => 'Carnet de discapacidad';
+
+  @override
+  String get discapacidadGradoLabel => 'Grado de discapacidad';
+
+  @override
+  String discapacidadGradoBadge(int grado) {
+    return '$grado%';
+  }
+
+  @override
+  String get discapacidadGradoUnknown => 'Grado no disponible';
+
+  @override
+  String discapacidadExpiresOn(String date) {
+    return 'Vigente hasta el $date';
+  }
+
+  @override
+  String get discapacidadValidBadge => 'Vigente';
+
+  @override
+  String get discapacidadNotValidTitle => 'Carnet no vigente';
+
+  @override
+  String get discapacidadNotValidMessage => 'Tu carnet de discapacidad ya no está vigente. No se puede generar el pase para Wallet.';
+
+  @override
+  String get discapacidadUnavailableTitle => 'Sin datos disponibles';
+
+  @override
+  String get discapacidadUnavailableMessage => 'No hemos encontrado información de tu carnet de discapacidad. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get discapacidadParseErrorMessage => 'No se ha podido interpretar la respuesta del carnet de discapacidad.';
+
+  @override
+  String get discapacidadErrorMessage => 'No se ha podido cargar tu carnet de discapacidad.';
+
+  @override
+  String get discapacidadRetry => 'Reintentar';
+
+  @override
+  String get discapacidadActionPkpass => 'Añadir a Wallet';
 }

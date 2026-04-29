@@ -2569,5 +2569,222 @@
         "type": "String"
       }
     }
+  },
+  "notificationDetailPlaceholderTitle": "Notification detail",
+  "@notificationDetailPlaceholderTitle": {
+    "description": "Notifications — placeholder detail screen title."
+  },
+  "notificationDetailPlaceholderBody": "Notification {id}",
+  "@notificationDetailPlaceholderBody": {
+    "description": "Notifications — placeholder body with the notification identifier.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDetailPlaceholderPending": "Detail screen will be enabled in STORY-44.",
+  "@notificationDetailPlaceholderPending": {
+    "description": "Notifications — placeholder pending message."
+  },
+  "familiaNumerosaDetailTitle": "Large family card",
+  "@familiaNumerosaDetailTitle": {
+    "description": "Familia numerosa detail page — AppBar title."
+  },
+  "familiaNumerosaCardNumberLabel": "Card number: {number}",
+  "@familiaNumerosaCardNumberLabel": {
+    "description": "Familia numerosa detail page — printed carnet number row.",
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "FN-0451-78"
+      }
+    }
+  },
+  "familiaNumerosaCategoriaGeneral": "General",
+  "@familiaNumerosaCategoriaGeneral": {
+    "description": "Familia numerosa categoría — general."
+  },
+  "familiaNumerosaCategoriaEspecial": "Special",
+  "@familiaNumerosaCategoriaEspecial": {
+    "description": "Familia numerosa categoría — especial."
+  },
+  "familiaNumerosaCategoriaUnknown": "Unclassified",
+  "@familiaNumerosaCategoriaUnknown": {
+    "description": "Familia numerosa categoría — desconocida / no proyectada por el backend."
+  },
+  "familiaNumerosaExpiresOn": "Expires on {date}",
+  "@familiaNumerosaExpiresOn": {
+    "description": "Familia numerosa detail — expiry date row.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "04/12/2027"
+      }
+    }
+  },
+  "familiaNumerosaMembersTitle": "Card members",
+  "@familiaNumerosaMembersTitle": {
+    "description": "Familia numerosa detail — members section header."
+  },
+  "familiaNumerosaMemberFallbackName": "No name",
+  "@familiaNumerosaMemberFallbackName": {
+    "description": "Familia numerosa detail — fallback when a member has no name."
+  },
+  "familiaNumerosaParentescoTitular": "Holder",
+  "@familiaNumerosaParentescoTitular": {
+    "description": "Familia numerosa member parentesco — titular."
+  },
+  "familiaNumerosaParentescoConyuge": "Spouse",
+  "@familiaNumerosaParentescoConyuge": {
+    "description": "Familia numerosa member parentesco — cónyuge."
+  },
+  "familiaNumerosaParentescoHijo": "Son",
+  "@familiaNumerosaParentescoHijo": {
+    "description": "Familia numerosa member parentesco — hijo."
+  },
+  "familiaNumerosaParentescoHija": "Daughter",
+  "@familiaNumerosaParentescoHija": {
+    "description": "Familia numerosa member parentesco — hija."
+  },
+  "familiaNumerosaParentescoOtro": "Other",
+  "@familiaNumerosaParentescoOtro": {
+    "description": "Familia numerosa member parentesco — otro / sin clasificar."
+  },
+  "familiaNumerosaUnavailableTitle": "Card not available",
+  "@familiaNumerosaUnavailableTitle": {
+    "description": "Familia numerosa detail — title shown when the citizen has no vigente carnet."
+  },
+  "familiaNumerosaUnavailableMessage": "Your large-family card is not valid or could not be retrieved.",
+  "@familiaNumerosaUnavailableMessage": {
+    "description": "Familia numerosa detail — body shown when the citizen has no vigente carnet."
+  },
+  "familiaNumerosaErrorMessage": "Your large-family card could not be loaded.",
+  "@familiaNumerosaErrorMessage": {
+    "description": "Familia numerosa detail — generic error message."
+  },
+  "familiaNumerosaRetry": "Retry",
+  "@familiaNumerosaRetry": {
+    "description": "Familia numerosa detail — retry button label."
+  },
+  "jovenDetailTitle": "Youth card",
+  "@jovenDetailTitle": {
+    "description": "Carnet Joven detail surface — AppBar / modal title."
+  },
+  "jovenCodigoLabel": "Code: {code}",
+  "@jovenCodigoLabel": {
+    "description": "Carnet Joven detail — printed carnet code row.",
+    "placeholders": {
+      "code": {
+        "type": "String",
+        "example": "CJ-2025-088771"
+      }
+    }
+  },
+  "jovenExpiresOn": "Valid until {date}",
+  "@jovenExpiresOn": {
+    "description": "Carnet Joven detail — expiry date badge.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "04/12/2027"
+      }
+    }
+  },
+  "jovenSubtitle": "Prove your youth status and unlock discounts on culture, transport and leisure across Castilla-La Mancha.",
+  "@jovenSubtitle": {
+    "description": "Carnet Joven detail — descriptive subtitle under the hero card."
+  },
+  "jovenUnavailableTitle": "Card not available",
+  "@jovenUnavailableTitle": {
+    "description": "Carnet Joven detail — title shown when the citizen has no vigente carnet."
+  },
+  "jovenUnavailableMessage": "Your youth card is not valid or could not be retrieved.",
+  "@jovenUnavailableMessage": {
+    "description": "Carnet Joven detail — body shown when the citizen has no vigente carnet."
+  },
+  "jovenErrorMessage": "Your youth card could not be loaded.",
+  "@jovenErrorMessage": {
+    "description": "Carnet Joven detail — generic error message."
+  },
+  "jovenRetry": "Retry",
+  "@jovenRetry": {
+    "description": "Carnet Joven detail — retry button label."
+  },
+  "jovenModalDragHandleSemantic": "Drag to resize the youth card detail",
+  "@jovenModalDragHandleSemantic": {
+    "description": "Carnet Joven modal — accessibility label for the drag handle."
+  },
+  "jovenModalCloseAction": "Close",
+  "@jovenModalCloseAction": {
+    "description": "Carnet Joven modal — close action label / tooltip."
+  },
+  "discapacidadDetailTitle": "Disability card",
+  "@discapacidadDetailTitle": {
+    "description": "Carnet Discapacidad detail — AppBar title."
+  },
+  "discapacidadGradoLabel": "Disability degree",
+  "@discapacidadGradoLabel": {
+    "description": "Carnet Discapacidad detail — semantic / row label for the grado de discapacidad."
+  },
+  "discapacidadGradoBadge": "{grado}%",
+  "@discapacidadGradoBadge": {
+    "description": "Carnet Discapacidad detail — grado badge label.",
+    "placeholders": {
+      "grado": {
+        "type": "int",
+        "example": "65"
+      }
+    }
+  },
+  "discapacidadGradoUnknown": "Degree not available",
+  "@discapacidadGradoUnknown": {
+    "description": "Carnet Discapacidad detail — fallback shown when the grado is missing."
+  },
+  "discapacidadExpiresOn": "Valid until {date}",
+  "@discapacidadExpiresOn": {
+    "description": "Carnet Discapacidad detail — expiry date row.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "04/12/2027"
+      }
+    }
+  },
+  "discapacidadValidBadge": "Valid",
+  "@discapacidadValidBadge": {
+    "description": "Carnet Discapacidad detail — short \"valid\" badge."
+  },
+  "discapacidadNotValidTitle": "Card not valid",
+  "@discapacidadNotValidTitle": {
+    "description": "Carnet Discapacidad detail — title shown when the carnet is no vigente."
+  },
+  "discapacidadNotValidMessage": "Your disability card is no longer valid. The Wallet pass cannot be generated.",
+  "@discapacidadNotValidMessage": {
+    "description": "Carnet Discapacidad detail — body shown when the carnet is no vigente."
+  },
+  "discapacidadUnavailableTitle": "No data available",
+  "@discapacidadUnavailableTitle": {
+    "description": "Carnet Discapacidad detail — title shown when no carnet data is available."
+  },
+  "discapacidadUnavailableMessage": "We could not find any disability card data for you. Please try again later.",
+  "@discapacidadUnavailableMessage": {
+    "description": "Carnet Discapacidad detail — body shown when no carnet data is available."
+  },
+  "discapacidadParseErrorMessage": "We could not interpret the disability card response.",
+  "@discapacidadParseErrorMessage": {
+    "description": "Carnet Discapacidad detail — message shown on a payload-parse error."
+  },
+  "discapacidadErrorMessage": "Your disability card could not be loaded.",
+  "@discapacidadErrorMessage": {
+    "description": "Carnet Discapacidad detail — generic error message."
+  },
+  "discapacidadRetry": "Retry",
+  "@discapacidadRetry": {
+    "description": "Carnet Discapacidad detail — retry button label."
+  },
+  "discapacidadActionPkpass": "Add to Wallet",
+  "@discapacidadActionPkpass": {
+    "description": "Carnet Discapacidad detail — PKPass action section label."
   }
 }
