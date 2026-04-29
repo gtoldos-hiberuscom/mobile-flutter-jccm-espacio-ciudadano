@@ -3313,6 +3313,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'El formato recibido no es compatible.'**
   String get walletErrorUnsupportedSource;
+
+  /// Recommendations — app bar title for the citizen recommendations list.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis Recomendaciones'**
+  String get recommendationsTitle;
+
+  /// Recommendations — tab label for the unfiltered bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get recommendationsTabAll;
+
+  /// Recommendations — tab label for the recently published bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Últimos días'**
+  String get recommendationsTabRecent;
+
+  /// Recommendations — tab label for the newly assigned bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Novedades'**
+  String get recommendationsTabNew;
+
+  /// Recommendations — tab label for the immediate-processing bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Tramitación inmediata'**
+  String get recommendationsTabImmediate;
+
+  /// Recommendations — badge shown on cards flagged as immediate-processing.
+  ///
+  /// In es, this message translates to:
+  /// **'Tramitación inmediata'**
+  String get recommendationsImmediateBadge;
+
+  /// Recommendations — prefix shown before the deadline label inside a card chip.
+  ///
+  /// In es, this message translates to:
+  /// **'Plazo:'**
+  String get recommendationsDeadlinePrefix;
+
+  /// Recommendations — prefix shown before the responsible unit name inside a card chip.
+  ///
+  /// In es, this message translates to:
+  /// **'Unidad:'**
+  String get recommendationsResponsibleUnitPrefix;
+
+  /// Recommendations — prefix shown before the life event label inside a card chip.
+  ///
+  /// In es, this message translates to:
+  /// **'Hecho vital:'**
+  String get recommendationsLifeEventPrefix;
+
+  /// Recommendations — load-more button label at the bottom of the list.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver más'**
+  String get recommendationsLoadMore;
+
+  /// Recommendations — STORY-56 minimal empty placeholder. STORY-57 will replace this with onboarding / unauthorised variants.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay recomendaciones disponibles para este filtro.'**
+  String get recommendationsEmptyBucket;
+
+  /// Recommendations — generic error message when the list cannot be loaded.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar las recomendaciones.'**
+  String get recommendationsLoadingError;
+
+  /// Recommendations — retry button label in the error state.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get recommendationsLoadingErrorRetry;
+
+  /// Recommendations — SnackBar shown when a card has no detail URI or the URL launcher fails.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle disponible próximamente'**
+  String get recommendationsDetailUnavailable;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

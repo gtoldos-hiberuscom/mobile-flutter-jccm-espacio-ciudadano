@@ -2,12 +2,12 @@
 id: 56
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 6
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T10:15:10+00:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir el listado principal de recomendaciones del ciudadano basado en hechos vitales autorizados, incluyendo filtros/tabs de segmentación, agrupación o contextualización por hecho vital y navegación de listados extensos.
 
 ## Acceptance Criteria
-- [ ] Se contempla listado de trámites recomendados agrupados o contextualizados por hechos vitales seleccionados.
-- [ ] Se contemplan tabs/filtros Todos, Últimos días, Novedades y Tramitación inmediata.
-- [ ] Se contemplan datos de plazos, unidad responsable y contexto del hecho vital asociado.
-- [ ] Se contemplan paginación o navegación de listados largos.
+- [x] Se contempla listado de trámites recomendados agrupados o contextualizados por hechos vitales seleccionados.
+- [x] Se contemplan tabs/filtros Todos, Últimos días, Novedades y Tramitación inmediata.
+- [x] Se contemplan datos de plazos, unidad responsable y contexto del hecho vital asociado.
+- [x] Se contemplan paginación o navegación de listados largos.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -77,3 +77,4 @@ Cubrir el listado principal de recomendaciones del ciudadano basado en hechos vi
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T10:15:10+00:00 | by plan-manager | Sprint 6: Recomendaciones list landed under `lib/features/recommendations/` with full canon layout. Plain Riverpod `AsyncNotifierProvider.family<…, RecommendationBucket>` controller; tolerant DTO + mock repo (14 fixtures, page size 6, cursor=offset) gated by `kRecommendationsLiveBackendEnabled = false`. `RecommendationsPage` binds 4 tabs (Todos / Últimos días / Novedades / Tramitación inmediata) per TASK-58 D1, with cards exposing título, plazo, unidad responsable y hecho vital + auto + manual paging ("Ver más" + scroll-end listener). `Routes.recommendations` now binds the real page. 14 l10n keys × 2 locales. Tests +28 → 302. Pendiente para STORY-57: variantes empty-state (unconfigured / unauthorised / configured-but-empty) y CTAs hacia `Routes.preferencesConsent`. Status → Done.
