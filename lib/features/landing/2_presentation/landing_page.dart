@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/app/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/core/logging/logger_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/auth.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/landing_content_provider.dart';
@@ -96,7 +97,12 @@ class LandingPage extends ConsumerWidget {
                 semanticsLabel: l10n.landingCtaButton,
                 onPressed: () async {
                   final AuthSession session = await ref.read(loginUseCaseProvider)();
-                  print('Login successful: $session'); // TODO: remove after testing
+                  ref.read(appLoggerProvider).info(
+                    'Login successful',
+                    context: <String, Object?>{
+                      'sessionType': session.runtimeType.toString(),
+                    },
+                  );
 
                   //go to sitemap page
                   ref.read(goRouterProvider).go('/sitemap');

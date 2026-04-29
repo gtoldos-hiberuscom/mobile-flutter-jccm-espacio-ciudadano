@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
+import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 
@@ -93,20 +94,29 @@ final class ErrorInterceptor extends Interceptor {
 
 // ─── Logging interceptor ─────────────────────────────────────────────────────
 
-/// Logs request/response details to the console.
+/// Logs request/response details through the application [AppLogger].
 ///
 /// Enabled only when the app runs in the development environment
-/// (see `AppConfig.environment`).
+/// (see `AppConfig.environment`). URLs and methods are passed via the
+/// structured `context` map so that the logger's PII redaction layer
+/// (see `console_logger.dart`) can scrub any sensitive key fragment.
 final class LoggingInterceptor extends Interceptor {
-  const LoggingInterceptor();
+  LoggingInterceptor(this._logger);
+
+  final AppLogger _logger;
 
   @override
   void onRequest(
     final RequestOptions options,
     final RequestInterceptorHandler handler,
   ) {
-    // ignore: avoid_print
-    print('[HTTP] → ${options.method} ${options.uri}');
+    _logger.info(
+      'HTTP →',
+      context: <String, Object?>{
+        'method': options.method,
+        'url': options.uri.toString(),
+      },
+    );
     handler.next(options);
   }
 
@@ -115,9 +125,12 @@ final class LoggingInterceptor extends Interceptor {
     final Response<dynamic> response,
     final ResponseInterceptorHandler handler,
   ) {
-    // ignore: avoid_print
-    print(
-      '[HTTP] ← ${response.statusCode} ${response.requestOptions.uri}',
+    _logger.info(
+      'HTTP ←',
+      context: <String, Object?>{
+        'status': response.statusCode,
+        'url': response.requestOptions.uri.toString(),
+      },
     );
     handler.next(response);
   }
@@ -127,8 +140,14 @@ final class LoggingInterceptor extends Interceptor {
     final DioException err,
     final ErrorInterceptorHandler handler,
   ) {
-    // ignore: avoid_print
-    print('[HTTP] ✗ ${err.type.name} ${err.requestOptions.uri}: ${err.message}');
+    _logger.warning(
+      'HTTP ✗',
+      context: <String, Object?>{
+        'type': err.type.name,
+        'url': err.requestOptions.uri.toString(),
+        'message': err.message,
+      },
+    );
     handler.next(err);
   }
 }

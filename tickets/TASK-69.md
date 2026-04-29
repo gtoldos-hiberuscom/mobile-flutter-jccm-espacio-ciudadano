@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-08-25T12:00:00+02:00
+updated_at: 2026-09-21T18:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -92,3 +92,19 @@ Cerrar el marco de seguridad del proyecto y cualquier excepción arquitectónica
     - Sprint-9 carryover (recommendation, no ticket): HIGH-severity `print('Login successful: $session')` at `lib/features/landing/2_presentation/landing_page.dart:99` leaks the AuthSession object to stdout in debug mode.
   - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. No code touched.
   - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.
+
+### Sprint 9 closure
+- 2026-09-21T18:00:00+02:00 | by plan-manager | Sprint 9 (SP-EC-APP-SQ3-09) closure: hardening continuation (Deliverable C).
+  - Branch: `task/EPIC-10-quality-release/TASK-69-pii-hardening/sprint9-pii-and-adr-consolidation` (commits `9b6546e`, `f518a70`, `9dea57b`) → `ticket/EPIC-10-quality-release/TASK-69-pii-hardening` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence:
+    - `lib/core/network/network_interceptors.dart` — `LoggingInterceptor` no longer `const`; takes injected `AppLogger`; `print(...)` calls replaced with `info` / `warning` carrying URL/method/status as `context` map values (existing redaction layer applies).
+    - `lib/core/network/api_client.dart` + `api_client_provider.dart` — `buildDioClient` now requires `AppLogger`; the Riverpod `dioProvider` resolves `appLoggerProvider` and forwards it.
+    - `lib/core/logging/console_logger.dart` — `_kPiiKeyFragments` extended (per Sprint-9 brief): added `nif`, `email`, `phone`, `telefono`, `address`, `direccion`, `birth`, `nacimiento`. Bucketed comments updated.
+    - `docs/security/pii-inventory.md` — added `nif` and `email` rows in §3.1, `fechaNacimiento` row in §3.8, new sections §3.10 (notifications/contact) and §3.11 (state affairs/cadastral residence).
+    - ADR consolidation: three legacy ADRs in `docs/adr/` migrated under canon path `documentation/architecture_canon_flutter_v2_docs/adr/` via `git mv` (history preserved). The gorouter ADR was renamed to `ADR-004-gorouter-provider-not-riverpod.md` to avoid the numbering collision with the existing canon `ADR-002-ci-baseline.md`. Stub `docs/adr/README.md` now points to the canon location; new minimal `documentation/architecture_canon_flutter_v2_docs/adr/README.md` index added. Inbound links in `docs/security/` rewritten.
+    - Decisions documented in commit bodies: (1) security docs left at `docs/security/` because the canon index is silent on a mandated path; the historical Sprint-8 hardening report under `documentation/security/` was kept as a fixed-point artefact and intentionally not rewritten. (2) ADR-002 numbering collision resolved by renumbering the moved gorouter ADR to ADR-004.
+  - Validation:
+    - `flutter analyze --no-fatal-infos` — 0 errors / 1 pre-existing warning (unchanged baseline).
+    - `flutter test` — 448 + 1 perf skip on this branch base; targeted `test/qa/telemetry_redaction_test.dart` 5/5 passing (extended fragment list does not break the redaction contract).
+    - `dart format --set-exit-if-changed` clean for touched files.
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 9 closure policy.

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
+import 'package:jccm_espacio_ciudadano/core/analytics/analytics_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 
@@ -11,25 +12,36 @@ import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 ///   this class in a future sprint without requiring call-site changes.
 ///
 /// No PII may be logged here — [AnalyticsEvent] subclasses are themselves
-/// responsible for stripping identifying information from their payloads.
+/// responsible for stripping identifying information from their payloads,
+/// and screen identifiers are constrained to the [AnalyticsScreen] enum.
 final class ConsoleAnalyticsService implements AnalyticsService {
-  const ConsoleAnalyticsService({required final AppLogger logger}) : _logger = logger;
+  /// Creates a console analytics service.
+  ///
+  /// [releaseMode] is injectable so the release-mode no-op contract can
+  /// be exercised by tests; it defaults to [kReleaseMode] so production
+  /// behaviour is unchanged.
+  const ConsoleAnalyticsService({
+    required final AppLogger logger,
+    final bool releaseMode = kReleaseMode,
+  }) : _logger = logger,
+       _releaseMode = releaseMode;
 
   final AppLogger _logger;
+  final bool _releaseMode;
 
   @override
   void logEvent(final AnalyticsEvent event) {
-    if (kReleaseMode) {
+    if (_releaseMode) {
       return;
     }
     _logger.debug('[Analytics] event: ${event.runtimeType} | $event');
   }
 
   @override
-  void setCurrentScreen(final String screenName) {
-    if (kReleaseMode) {
+  void setCurrentScreen(final AnalyticsScreen screen) {
+    if (_releaseMode) {
       return;
     }
-    _logger.debug('[Analytics] screen: $screenName');
+    _logger.debug('[Analytics] screen: ${screen.slug}');
   }
 }

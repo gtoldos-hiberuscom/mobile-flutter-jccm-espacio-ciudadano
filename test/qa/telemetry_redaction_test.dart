@@ -17,12 +17,13 @@
 //    that even if a caller passed PII into a field by mistake, the
 //    development-console sink would not leak it.
 //
-// 3. `ConsoleAnalyticsService.setCurrentScreen(screenName)` *does*
-//    interpolate its argument verbatim. The only documented caller
-//    (`AnalyticsObserver`) feeds it a route slug, but this is a known
-//    leak surface if a future caller passes user content. See
-//    `documentation/qa/STORY-64-telemetry-verification-sprint8.md`
-//    Sprint-9 carryover.
+// 3. `AnalyticsService.setCurrentScreen` accepts the allow-listed
+//    [AnalyticsScreen] enum, **not** a free-form string. Sprint 9
+//    closed the previously-documented verbatim-interpolation leak
+//    surface by tightening the API at compile time. Attacker-supplied
+//    PII strings (e.g. `/profile/12345678Z`) cannot match any enum
+//    case and collapse to [AnalyticsScreen.unknown], which the
+//    [AnalyticsObserver] drops with a warning.
 //
 // 4. `ConsoleLogger` redacts **context-map values** whose key contains
 //    a PII fragment (`token|id|name|dni|nss|plate|license|matricula`)
@@ -38,6 +39,7 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
+import 'package:jccm_espacio_ciudadano/core/analytics/analytics_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/console_analytics_service.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
@@ -137,15 +139,38 @@ void main() {
       }
     });
 
-    test('setCurrentScreen: argument is interpolated verbatim (documented leak surface)', () {
-      // The current contract trusts callers to pass route slugs.
-      // We document this by asserting the verbatim behaviour so any
-      // future tightening (e.g. allow-listing slugs) is a deliberate
-      // contract change, not an accidental one.
-      analytics.setCurrentScreen('/profile/$_nif');
+    test(
+      'setCurrentScreen: API only accepts AnalyticsScreen enum (compile-time PII guard)',
+      () {
+        // Compile-time guarantee: the API signature is
+        // `setCurrentScreen(AnalyticsScreen screen)`. A free-form
+        // string cannot be passed at all — this is enforced by the
+        // type system at every call-site. The test below documents
+        // the runtime side of that guarantee: any attacker-supplied
+        // PII string presented as a "route" collapses to the
+        // `AnalyticsScreen.unknown` sentinel, which the observer
+        // drops without forwarding.
+        const piiRoute = '/profile/$_nif';
+        expect(
+          AnalyticsScreen.fromRoute(piiRoute),
+          AnalyticsScreen.unknown,
+          reason:
+              'PII-bearing path "$piiRoute" must not match any allow-listed '
+              'AnalyticsScreen entry — observers must drop it.',
+        );
+        expect(AnalyticsScreen.fromRoute(null), AnalyticsScreen.unknown);
+        expect(AnalyticsScreen.fromRoute(''), AnalyticsScreen.unknown);
 
-      expect(logger.messages.single, contains('/profile/$_nif'));
-    });
+        // And a legitimate, allow-listed slug resolves cleanly and
+        // is forwarded to the wrapped logger as the canonical slug —
+        // no interpolation of user content is possible.
+        analytics.setCurrentScreen(AnalyticsScreen.profile);
+        expect(logger.messages.single, contains(AnalyticsScreen.profile.slug));
+        for (final secret in _piiSamples) {
+          expect(logger.messages.single, isNot(contains(secret)));
+        }
+      },
+    );
   });
 
   group('Telemetry redaction — ConsoleLogger context map', () {
