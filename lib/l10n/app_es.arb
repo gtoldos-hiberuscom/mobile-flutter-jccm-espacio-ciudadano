@@ -2786,5 +2786,101 @@
   "discapacidadActionPkpass": "Añadir a Wallet",
   "@discapacidadActionPkpass": {
     "description": "Carnet Discapacidad detail — PKPass action section label."
+  },
+  "recommendationsTitle": "Mis Recomendaciones",
+  "@recommendationsTitle": {
+    "description": "Recommendations — app bar title for the citizen recommendations list."
+  },
+  "recommendationsTabAll": "Todos",
+  "@recommendationsTabAll": {
+    "description": "Recommendations — tab label for the unfiltered bucket."
+  },
+  "recommendationsTabRecent": "Últimos días",
+  "@recommendationsTabRecent": {
+    "description": "Recommendations — tab label for the recently published bucket."
+  },
+  "recommendationsTabNew": "Novedades",
+  "@recommendationsTabNew": {
+    "description": "Recommendations — tab label for the newly assigned bucket."
+  },
+  "recommendationsTabImmediate": "Tramitación inmediata",
+  "@recommendationsTabImmediate": {
+    "description": "Recommendations — tab label for the immediate-processing bucket."
+  },
+  "recommendationsImmediateBadge": "Tramitación inmediata",
+  "@recommendationsImmediateBadge": {
+    "description": "Recommendations — badge shown on cards flagged as immediate-processing."
+  },
+  "recommendationsDeadlinePrefix": "Plazo:",
+  "@recommendationsDeadlinePrefix": {
+    "description": "Recommendations — prefix shown before the deadline label inside a card chip."
+  },
+  "recommendationsResponsibleUnitPrefix": "Unidad:",
+  "@recommendationsResponsibleUnitPrefix": {
+    "description": "Recommendations — prefix shown before the responsible unit name inside a card chip."
+  },
+  "recommendationsLifeEventPrefix": "Hecho vital:",
+  "@recommendationsLifeEventPrefix": {
+    "description": "Recommendations — prefix shown before the life event label inside a card chip."
+  },
+  "recommendationsLoadMore": "Ver más",
+  "@recommendationsLoadMore": {
+    "description": "Recommendations — load-more button label at the bottom of the list."
+  },
+  "recommendationsEmptyUnconfiguredTitle": "Aún no tienes recomendaciones personalizadas",
+  "@recommendationsEmptyUnconfiguredTitle": {
+    "description": "Recommendations — STORY-57 onboarding empty state title shown when the citizen has not selected any life event yet."
+  },
+  "recommendationsEmptyUnconfiguredBody": "Cuéntanos en qué momento vital estás para sugerirte trámites y servicios relevantes.",
+  "@recommendationsEmptyUnconfiguredBody": {
+    "description": "Recommendations — STORY-57 onboarding empty state body explaining the value of selecting life events."
+  },
+  "recommendationsEmptyUnconfiguredPrimaryCta": "Configurar mis preferencias",
+  "@recommendationsEmptyUnconfiguredPrimaryCta": {
+    "description": "Recommendations — STORY-57 onboarding empty state primary CTA navigating to the preferences/consent surface."
+  },
+  "recommendationsEmptyUnconfiguredSecondaryCta": "Ver mis hechos vitales",
+  "@recommendationsEmptyUnconfiguredSecondaryCta": {
+    "description": "Recommendations — STORY-57 onboarding empty state secondary CTA. The dedicated 'Mis hechos vitales' route does not exist yet, so the page shows a SnackBar fallback."
+  },
+  "recommendationsEmptyUnauthorisedTitle": "Falta autorizar tus preferencias",
+  "@recommendationsEmptyUnauthorisedTitle": {
+    "description": "Recommendations — STORY-57 unauthorised empty state title shown when the citizen has preferences but the consent is missing."
+  },
+  "recommendationsEmptyUnauthorisedBody": "Para mostrarte recomendaciones personalizadas necesitamos tu autorización para tratar tus datos.",
+  "@recommendationsEmptyUnauthorisedBody": {
+    "description": "Recommendations — STORY-57 unauthorised empty state body explaining the missing consent."
+  },
+  "recommendationsEmptyUnauthorisedPrimaryCta": "Revisar consentimientos",
+  "@recommendationsEmptyUnauthorisedPrimaryCta": {
+    "description": "Recommendations — STORY-57 unauthorised empty state primary CTA navigating to the consent surface."
+  },
+  "recommendationsEmptyConfiguredTitle": "Todo listo, sin novedades por ahora",
+  "@recommendationsEmptyConfiguredTitle": {
+    "description": "Recommendations — STORY-57 configured-but-empty title shown when the citizen is fully configured but the backend has no matches for the selected filter."
+  },
+  "recommendationsEmptyConfiguredBody": "Cuando tengamos nuevas recomendaciones para ti las verás aquí. Prueba con otros filtros mientras tanto.",
+  "@recommendationsEmptyConfiguredBody": {
+    "description": "Recommendations — STORY-57 configured-but-empty body explaining why the list is empty."
+  },
+  "recommendationsEmptyConfiguredSecondaryCta": "Ver todos",
+  "@recommendationsEmptyConfiguredSecondaryCta": {
+    "description": "Recommendations — STORY-57 configured-but-empty secondary CTA that switches the active tab back to 'Todos'."
+  },
+  "recommendationsLifeEventsComingSoon": "Mis hechos vitales estará disponible próximamente",
+  "@recommendationsLifeEventsComingSoon": {
+    "description": "Recommendations — STORY-57 SnackBar shown when tapping the 'Ver mis hechos vitales' secondary CTA before that surface ships."
+  },
+  "recommendationsLoadingError": "No hemos podido cargar las recomendaciones.",
+  "@recommendationsLoadingError": {
+    "description": "Recommendations — generic error message when the list cannot be loaded."
+  },
+  "recommendationsLoadingErrorRetry": "Reintentar",
+  "@recommendationsLoadingErrorRetry": {
+    "description": "Recommendations — retry button label in the error state."
+  },
+  "recommendationsDetailUnavailable": "Detalle disponible próximamente",
+  "@recommendationsDetailUnavailable": {
+    "description": "Recommendations — SnackBar shown when a card has no detail URI or the URL launcher fails."
   }
 }

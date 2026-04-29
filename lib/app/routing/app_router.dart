@@ -32,6 +32,7 @@ import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/not
 import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/notifications_center_page.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/contact/2_presentation/notification_contact_registration_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/data_consent_page.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendations_page_route.dart';
 import 'package:jccm_espacio_ciudadano/features/signature/2_presentation/afirma_return_page.dart';
 import 'package:jccm_espacio_ciudadano/features/signature/2_presentation/signature_inbox_page.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
@@ -238,7 +239,7 @@ final goRouterProvider = Provider<GoRouter>(
             ),
             GoRoute(
               path: Routes.recommendations,
-              builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPlaceholder(),
+              builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPage(),
             ),
             GoRoute(
               path: Routes.support,

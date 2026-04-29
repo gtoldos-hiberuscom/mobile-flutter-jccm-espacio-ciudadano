@@ -3955,6 +3955,150 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Añadir a Wallet'**
   String get discapacidadActionPkpass;
+
+  /// Recommendations — app bar title for the citizen recommendations list.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis Recomendaciones'**
+  String get recommendationsTitle;
+
+  /// Recommendations — tab label for the unfiltered bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get recommendationsTabAll;
+
+  /// Recommendations — tab label for the recently published bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Últimos días'**
+  String get recommendationsTabRecent;
+
+  /// Recommendations — tab label for the newly assigned bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Novedades'**
+  String get recommendationsTabNew;
+
+  /// Recommendations — tab label for the immediate-processing bucket.
+  ///
+  /// In es, this message translates to:
+  /// **'Tramitación inmediata'**
+  String get recommendationsTabImmediate;
+
+  /// Recommendations — badge shown on cards flagged as immediate-processing.
+  ///
+  /// In es, this message translates to:
+  /// **'Tramitación inmediata'**
+  String get recommendationsImmediateBadge;
+
+  /// Recommendations — prefix shown before the deadline label inside a card chip.
+  ///
+  /// In es, this message translates to:
+  /// **'Plazo:'**
+  String get recommendationsDeadlinePrefix;
+
+  /// Recommendations — prefix shown before the responsible unit name inside a card chip.
+  ///
+  /// In es, this message translates to:
+  /// **'Unidad:'**
+  String get recommendationsResponsibleUnitPrefix;
+
+  /// Recommendations — prefix shown before the life event label inside a card chip.
+  ///
+  /// In es, this message translates to:
+  /// **'Hecho vital:'**
+  String get recommendationsLifeEventPrefix;
+
+  /// Recommendations — load-more button label at the bottom of the list.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver más'**
+  String get recommendationsLoadMore;
+
+  /// Recommendations — STORY-57 onboarding empty state title shown when the citizen has not selected any life event yet.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no tienes recomendaciones personalizadas'**
+  String get recommendationsEmptyUnconfiguredTitle;
+
+  /// Recommendations — STORY-57 onboarding empty state body explaining the value of selecting life events.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuéntanos en qué momento vital estás para sugerirte trámites y servicios relevantes.'**
+  String get recommendationsEmptyUnconfiguredBody;
+
+  /// Recommendations — STORY-57 onboarding empty state primary CTA navigating to the preferences/consent surface.
+  ///
+  /// In es, this message translates to:
+  /// **'Configurar mis preferencias'**
+  String get recommendationsEmptyUnconfiguredPrimaryCta;
+
+  /// Recommendations — STORY-57 onboarding empty state secondary CTA. The dedicated 'Mis hechos vitales' route does not exist yet, so the page shows a SnackBar fallback.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver mis hechos vitales'**
+  String get recommendationsEmptyUnconfiguredSecondaryCta;
+
+  /// Recommendations — STORY-57 unauthorised empty state title shown when the citizen has preferences but the consent is missing.
+  ///
+  /// In es, this message translates to:
+  /// **'Falta autorizar tus preferencias'**
+  String get recommendationsEmptyUnauthorisedTitle;
+
+  /// Recommendations — STORY-57 unauthorised empty state body explaining the missing consent.
+  ///
+  /// In es, this message translates to:
+  /// **'Para mostrarte recomendaciones personalizadas necesitamos tu autorización para tratar tus datos.'**
+  String get recommendationsEmptyUnauthorisedBody;
+
+  /// Recommendations — STORY-57 unauthorised empty state primary CTA navigating to the consent surface.
+  ///
+  /// In es, this message translates to:
+  /// **'Revisar consentimientos'**
+  String get recommendationsEmptyUnauthorisedPrimaryCta;
+
+  /// Recommendations — STORY-57 configured-but-empty title shown when the citizen is fully configured but the backend has no matches for the selected filter.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo listo, sin novedades por ahora'**
+  String get recommendationsEmptyConfiguredTitle;
+
+  /// Recommendations — STORY-57 configured-but-empty body explaining why the list is empty.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuando tengamos nuevas recomendaciones para ti las verás aquí. Prueba con otros filtros mientras tanto.'**
+  String get recommendationsEmptyConfiguredBody;
+
+  /// Recommendations — STORY-57 configured-but-empty secondary CTA that switches the active tab back to 'Todos'.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver todos'**
+  String get recommendationsEmptyConfiguredSecondaryCta;
+
+  /// Recommendations — STORY-57 SnackBar shown when tapping the 'Ver mis hechos vitales' secondary CTA before that surface ships.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis hechos vitales estará disponible próximamente'**
+  String get recommendationsLifeEventsComingSoon;
+
+  /// Recommendations — generic error message when the list cannot be loaded.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar las recomendaciones.'**
+  String get recommendationsLoadingError;
+
+  /// Recommendations — retry button label in the error state.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get recommendationsLoadingErrorRetry;
+
+  /// Recommendations — SnackBar shown when a card has no detail URI or the URL launcher fails.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle disponible próximamente'**
+  String get recommendationsDetailUnavailable;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -2045,4 +2045,76 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get discapacidadActionPkpass => 'Añadir a Wallet';
+
+  @override
+  String get recommendationsTitle => 'Mis Recomendaciones';
+
+  @override
+  String get recommendationsTabAll => 'Todos';
+
+  @override
+  String get recommendationsTabRecent => 'Últimos días';
+
+  @override
+  String get recommendationsTabNew => 'Novedades';
+
+  @override
+  String get recommendationsTabImmediate => 'Tramitación inmediata';
+
+  @override
+  String get recommendationsImmediateBadge => 'Tramitación inmediata';
+
+  @override
+  String get recommendationsDeadlinePrefix => 'Plazo:';
+
+  @override
+  String get recommendationsResponsibleUnitPrefix => 'Unidad:';
+
+  @override
+  String get recommendationsLifeEventPrefix => 'Hecho vital:';
+
+  @override
+  String get recommendationsLoadMore => 'Ver más';
+
+  @override
+  String get recommendationsEmptyUnconfiguredTitle => 'Aún no tienes recomendaciones personalizadas';
+
+  @override
+  String get recommendationsEmptyUnconfiguredBody => 'Cuéntanos en qué momento vital estás para sugerirte trámites y servicios relevantes.';
+
+  @override
+  String get recommendationsEmptyUnconfiguredPrimaryCta => 'Configurar mis preferencias';
+
+  @override
+  String get recommendationsEmptyUnconfiguredSecondaryCta => 'Ver mis hechos vitales';
+
+  @override
+  String get recommendationsEmptyUnauthorisedTitle => 'Falta autorizar tus preferencias';
+
+  @override
+  String get recommendationsEmptyUnauthorisedBody => 'Para mostrarte recomendaciones personalizadas necesitamos tu autorización para tratar tus datos.';
+
+  @override
+  String get recommendationsEmptyUnauthorisedPrimaryCta => 'Revisar consentimientos';
+
+  @override
+  String get recommendationsEmptyConfiguredTitle => 'Todo listo, sin novedades por ahora';
+
+  @override
+  String get recommendationsEmptyConfiguredBody => 'Cuando tengamos nuevas recomendaciones para ti las verás aquí. Prueba con otros filtros mientras tanto.';
+
+  @override
+  String get recommendationsEmptyConfiguredSecondaryCta => 'Ver todos';
+
+  @override
+  String get recommendationsLifeEventsComingSoon => 'Mis hechos vitales estará disponible próximamente';
+
+  @override
+  String get recommendationsLoadingError => 'No hemos podido cargar las recomendaciones.';
+
+  @override
+  String get recommendationsLoadingErrorRetry => 'Reintentar';
+
+  @override
+  String get recommendationsDetailUnavailable => 'Detalle disponible próximamente';
 }
