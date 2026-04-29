@@ -9,6 +9,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart' show DigitalCardStatus;
@@ -49,7 +50,8 @@ class DiscapacidadDetailPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.discapacidadDetailTitle)),
-      body: asyncCard.when(
+      body: OfflineBanner(
+        child: asyncCard.when(
         loading: () => const LoadingStateWidget(),
         error: (final error, final _) {
           if (error is DiscapacidadUnavailable) {
@@ -63,6 +65,7 @@ class DiscapacidadDetailPage extends ConsumerWidget {
           );
         },
         data: (final card) => _DetailBody(card: card),
+      ),
       ),
     );
   }

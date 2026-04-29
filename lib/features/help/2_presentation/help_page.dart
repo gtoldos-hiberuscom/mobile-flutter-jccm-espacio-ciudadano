@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_links_provider.dart';
@@ -50,7 +51,8 @@ class _HelpPageState extends ConsumerState<HelpPage> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.helpPageTitle)),
-      body: ListView(
+      body: OfflineBanner(
+        child: ListView(
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.space16,
           vertical: AppDimensions.space16,
@@ -93,6 +95,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
           ),
           const SizedBox(height: AppDimensions.space24),
         ],
+      ),
       ),
     );
   }

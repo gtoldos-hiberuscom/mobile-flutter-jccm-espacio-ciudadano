@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
@@ -35,7 +36,8 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.digitalCardsPageTitle)),
-      body: asyncCatalog.when(
+      body: OfflineBanner(
+        child: asyncCatalog.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (final _, final stackTrace) => ErrorStateWidget(
           message: l10n.digitalCardsErrorMessage,
@@ -46,6 +48,7 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
           onAction: (final cardId, final action) => _showStubActionSnackbar(context, l10n),
           onCardTap: (final card) => _handleCardTap(context, card),
         ),
+      ),
       ),
     );
   }

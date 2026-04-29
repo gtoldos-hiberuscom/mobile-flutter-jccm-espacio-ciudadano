@@ -11,6 +11,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/2_presentation/joven_detail_body.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -23,7 +24,7 @@ class JovenDetailPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.jovenDetailTitle)),
-      body: const JovenDetailBody(),
+      body: const OfflineBanner(child: JovenDetailBody()),
     );
   }
 }
