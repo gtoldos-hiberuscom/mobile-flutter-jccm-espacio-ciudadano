@@ -20,6 +20,17 @@ final class EducationRepositoryImpl implements EducationRepository {
   @override
   Future<EducationSnapshot> loadSnapshot() async {
     final numDocumento = await _secureStorage.read(StorageKeys.idAgente) ?? '';
+  
+    //   // Get the access token from secure storage
+    // final accessToken = await _secureStorage.read(StorageKeys.accessToken) ?? '';
+    
+    // // Fetch the authenticated user to get their document number
+    // final authUser = await _authRepository.fetchUserInfo(accessToken: accessToken);
+    // final numDocumento = authUser.idAgente;
+
+    
+
+
 
     final uoFuture = _apiWrapper.getTitulosUniversitarios(
       numDocumento,
