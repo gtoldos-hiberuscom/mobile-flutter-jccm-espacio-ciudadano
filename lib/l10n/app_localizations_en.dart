@@ -1833,7 +1833,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signatureSignAction => 'Sign';
 
   @override
-  String get signatureExternalLaunchPlaceholder => 'The Afirma handoff will be enabled in STORY-46.';
+  String get signatureHandoffPendingToast => 'We\'ve taken you to Afirma. Come back here when you\'re done.';
+
+  @override
+  String get signatureHandoffSignedToast => 'Document signed';
+
+  @override
+  String get signatureHandoffCancelledToast => 'You cancelled the signature.';
+
+  @override
+  String get signatureHandoffErrorToast => 'We couldn\'t complete the signature. Please try again.';
+
+  @override
+  String get signatureHandoffLaunchFailedToast => 'We couldn\'t open Afirma. Please try again.';
+
+  @override
+  String get signatureAfirmaReturnTitle => 'Returning from Afirma';
+
+  @override
+  String get signatureAfirmaReturnProcessing => 'Processing signature…';
 
   @override
   String get signatureCertificateValidTitle => 'Valid certificate';

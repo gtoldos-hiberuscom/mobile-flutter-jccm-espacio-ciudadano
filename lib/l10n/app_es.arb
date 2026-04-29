@@ -2476,9 +2476,33 @@
   "@signatureSignAction": {
     "description": "Signature — CTA principal en cada documento pendiente."
   },
-  "signatureExternalLaunchPlaceholder": "El salto a Afirma se habilitará en STORY-46.",
-  "@signatureExternalLaunchPlaceholder": {
-    "description": "Signature — placeholder mostrado al pulsar Firmar mientras STORY-46 está pendiente."
+  "signatureHandoffPendingToast": "Te hemos llevado a Afirma. Vuelve aquí cuando termines.",
+  "@signatureHandoffPendingToast": {
+    "description": "Signature — toast no bloqueante mostrado tras lanzar el handoff externo a Afirma."
+  },
+  "signatureHandoffSignedToast": "Documento firmado",
+  "@signatureHandoffSignedToast": {
+    "description": "Signature — toast mostrado cuando el deep-link de retorno confirma firma exitosa."
+  },
+  "signatureHandoffCancelledToast": "Has cancelado la firma.",
+  "@signatureHandoffCancelledToast": {
+    "description": "Signature — toast mostrado cuando el deep-link de retorno indica cancelación por el ciudadano."
+  },
+  "signatureHandoffErrorToast": "No hemos podido completar la firma. Inténtalo de nuevo.",
+  "@signatureHandoffErrorToast": {
+    "description": "Signature — toast mostrado cuando el deep-link de retorno indica error en Afirma."
+  },
+  "signatureHandoffLaunchFailedToast": "No hemos podido abrir Afirma. Inténtalo de nuevo.",
+  "@signatureHandoffLaunchFailedToast": {
+    "description": "Signature — toast mostrado cuando el SO rechaza abrir el navegador / Afirma."
+  },
+  "signatureAfirmaReturnTitle": "Volviendo de Afirma",
+  "@signatureAfirmaReturnTitle": {
+    "description": "Signature — título de la pantalla intermedia que recibe el deep-link de retorno de Afirma."
+  },
+  "signatureAfirmaReturnProcessing": "Procesando firma…",
+  "@signatureAfirmaReturnProcessing": {
+    "description": "Signature — texto de la pantalla intermedia mientras se interpreta el resultado del deep-link."
   },
   "signatureCertificateValidTitle": "Certificado válido",
   "@signatureCertificateValidTitle": {

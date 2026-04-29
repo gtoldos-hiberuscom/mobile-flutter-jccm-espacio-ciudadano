@@ -95,9 +95,9 @@ class SignatureDocumentTile extends StatelessWidget {
               const SizedBox(height: AppDimensions.space12),
               Align(
                 alignment: Alignment.centerRight,
-                // TODO(STORY-46): replace placeholder SnackBar with the
-                // real handoff to the external Afirma flow once the
-                // deep-link contract is wired.
+                // STORY-46: the parent inbox page wires this callback to
+                // [SignatureHandoffController.startHandoff] so the citizen
+                // is taken to the external Afirma flow.
                 child: FilledButton.tonalIcon(
                   onPressed: onSign,
                   icon: const Icon(Icons.draw_outlined),

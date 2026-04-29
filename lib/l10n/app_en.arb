@@ -2476,9 +2476,33 @@
   "@signatureSignAction": {
     "description": "Signature — primary CTA on each pending document."
   },
-  "signatureExternalLaunchPlaceholder": "The Afirma handoff will be enabled in STORY-46.",
-  "@signatureExternalLaunchPlaceholder": {
-    "description": "Signature — placeholder shown when tapping Sign while STORY-46 is pending."
+  "signatureHandoffPendingToast": "We've taken you to Afirma. Come back here when you're done.",
+  "@signatureHandoffPendingToast": {
+    "description": "Signature — non-blocking toast shown after launching the external Afirma handoff."
+  },
+  "signatureHandoffSignedToast": "Document signed",
+  "@signatureHandoffSignedToast": {
+    "description": "Signature — toast shown when the return deep-link confirms a successful signature."
+  },
+  "signatureHandoffCancelledToast": "You cancelled the signature.",
+  "@signatureHandoffCancelledToast": {
+    "description": "Signature — toast shown when the return deep-link reports user cancellation."
+  },
+  "signatureHandoffErrorToast": "We couldn't complete the signature. Please try again.",
+  "@signatureHandoffErrorToast": {
+    "description": "Signature — toast shown when the return deep-link reports an Afirma error."
+  },
+  "signatureHandoffLaunchFailedToast": "We couldn't open Afirma. Please try again.",
+  "@signatureHandoffLaunchFailedToast": {
+    "description": "Signature — toast shown when the OS refuses to launch the external Afirma application."
+  },
+  "signatureAfirmaReturnTitle": "Returning from Afirma",
+  "@signatureAfirmaReturnTitle": {
+    "description": "Signature — title of the intermediate screen receiving the Afirma return deep-link."
+  },
+  "signatureAfirmaReturnProcessing": "Processing signature…",
+  "@signatureAfirmaReturnProcessing": {
+    "description": "Signature — body text shown on the intermediate screen while the deep-link is parsed."
   },
   "signatureCertificateValidTitle": "Valid certificate",
   "@signatureCertificateValidTitle": {
