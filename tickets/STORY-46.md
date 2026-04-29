@@ -2,12 +2,12 @@
 id: 46
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 6
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T10:15:10+00:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Modelar el tramo externo del proceso de firma, el handoff a navegador o sistema de firma y el reingreso controlado en la aplicación tras cancelación, error o firma completada.
 
 ## Acceptance Criteria
-- [ ] Se contempla handoff al navegador o sistema externo de firma.
-- [ ] Se contempla retorno a la app mediante deep link o callback equivalente.
-- [ ] Se contemplan casos de cancelación, error y firma completada.
-- [ ] Se contempla sincronización posterior del estado firmado en la app.
+- [x] Se contempla handoff al navegador o sistema externo de firma.
+- [x] Se contempla retorno a la app mediante deep link o callback equivalente.
+- [x] Se contemplan casos de cancelación, error y firma completada.
+- [x] Se contempla sincronización posterior del estado firmado en la app.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -72,3 +72,4 @@ Modelar el tramo externo del proceso de firma, el handoff a navegador o sistema 
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T10:15:10+00:00 | by plan-manager | Sprint 6: Afirma external handoff + secure deep-link return implemented. New `SignatureHandoffRequest`/`SignatureHandoffOutcome` entities, pure `SignatureDeepLinkParser`, plain-Riverpod `signatureHandoffControllerProvider` (startHandoff/completeFromDeepLink/clear), `UrlLauncherSignatureHandoffLauncher` (`url_launcher`, `LaunchMode.externalApplication`), and `AfirmaReturnPage` bound to `Routes.afirmaReturn`. Inbox surfaces SnackBars for pending/signed/cancelled/error/launch-failure with retry. Stub external URL `https://afirma.jccm.es/sign?docId=…&returnTo=jccmespacio://sign/afirma/return?docId=…`. 7 new l10n keys × 2 locales (placeholder removed). Tests +18 → 333 total. TODOs: real Afirma URL contract + iOS/Android custom-scheme registration deferred to integration sprint. Status → Done.
