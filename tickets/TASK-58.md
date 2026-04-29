@@ -2,12 +2,12 @@
 id: 58
 jira_key:
 type: Task
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 6
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T10:15:10+00:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Validar la semántica real de los filtros de segmentación y la relación entre hechos vitales, trámites y plazos, dejando claro cómo se alimentan las recomendaciones y qué depende de idAgente y de las autorizaciones del usuario.
 
 ## Acceptance Criteria
-- [ ] Se aclaran las operaciones de segmentación (ultimos_dias, novedades, inmediatos) y su efecto real.
-- [ ] Se valida el modelo de agrupación por hecho vital y los campos de fechas/unidad responsable.
-- [ ] Se documenta dependencia exacta con idAgente y autorizaciones.
-- [ ] Se deja trazado el impacto sobre STORIES-56 y 57.
+- [x] Se aclaran las operaciones de segmentación (ultimos_dias, novedades, inmediatos) y su efecto real.
+- [x] Se valida el modelo de agrupación por hecho vital y los campos de fechas/unidad responsable.
+- [x] Se documenta dependencia exacta con idAgente y autorizaciones.
+- [x] Se deja trazado el impacto sobre STORIES-56 y 57.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -78,3 +78,5 @@ Validar la semántica real de los filtros de segmentación y la relación entre 
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T10:15:10+00:00 | by plan-manager | Sprint 6 start; status → In Progress.
+- 2026-04-29T10:15:10+00:00 | by plan-manager | Discovery doc delivered at `documentation/discovery/TASK-58-recommendations-segmentation-strategy.md` (D1–D6 decisions, OP-1..OP-5 open questions). Acceptance criteria satisfied; status → Done. Outputs unblock STORY-56/57 (mock repository contract, empty-state branches, segmentation tab → operacion mapping).
