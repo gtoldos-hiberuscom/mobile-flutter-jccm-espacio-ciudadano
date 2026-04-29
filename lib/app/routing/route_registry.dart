@@ -47,6 +47,7 @@ abstract final class Routes {
   static const String cards = '/cards';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
+  static const String signatureInbox = '/sign';
 
   // ── Authenticated thematic landings ───────────────────────────────────────
   // Real pages will be implemented in STORY-23/24/25/26 — for now the home
@@ -80,6 +81,7 @@ abstract final class Routes {
     cards,
     recommendations,
     support,
+    signatureInbox,
     education,
     employment,
     socialWelfare,
