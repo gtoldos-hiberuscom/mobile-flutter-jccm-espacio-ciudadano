@@ -1685,4 +1685,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletErrorUnsupportedSource => 'The received format is not supported.';
+
+  @override
+  String get recommendationsTitle => 'My Recommendations';
+
+  @override
+  String get recommendationsTabAll => 'All';
+
+  @override
+  String get recommendationsTabRecent => 'Recent';
+
+  @override
+  String get recommendationsTabNew => 'New';
+
+  @override
+  String get recommendationsTabImmediate => 'Immediate processing';
+
+  @override
+  String get recommendationsImmediateBadge => 'Immediate processing';
+
+  @override
+  String get recommendationsDeadlinePrefix => 'Deadline:';
+
+  @override
+  String get recommendationsResponsibleUnitPrefix => 'Unit:';
+
+  @override
+  String get recommendationsLifeEventPrefix => 'Life event:';
+
+  @override
+  String get recommendationsLoadMore => 'Load more';
+
+  @override
+  String get recommendationsEmptyBucket => 'There are no recommendations available for this filter.';
+
+  @override
+  String get recommendationsLoadingError => 'We couldn\'t load the recommendations.';
+
+  @override
+  String get recommendationsLoadingErrorRetry => 'Retry';
+
+  @override
+  String get recommendationsDetailUnavailable => 'Details coming soon';
 }
