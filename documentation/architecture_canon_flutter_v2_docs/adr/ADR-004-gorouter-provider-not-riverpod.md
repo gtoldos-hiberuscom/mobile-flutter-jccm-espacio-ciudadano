@@ -1,7 +1,8 @@
-# ADR-002 — GoRouter instantiated as Provider\<GoRouter\>, not @riverpod
+# ADR-004 — GoRouter instantiated as Provider\<GoRouter\>, not @riverpod
 
 **Date:** 2025-07-14  
 **Status:** Accepted  
+**Supersedes:** former `docs/adr/ADR-002-gorouter-provider-not-riverpod.md` (renumbered on Sprint 9 ADR consolidation to avoid collision with `ADR-002-ci-baseline.md`).
 
 ---
 
