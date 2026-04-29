@@ -3566,11 +3566,47 @@ abstract class AppLocalizations {
   /// **'Firmar'**
   String get signatureSignAction;
 
-  /// Signature — placeholder mostrado al pulsar Firmar mientras STORY-46 está pendiente.
+  /// Signature — toast no bloqueante mostrado tras lanzar el handoff externo a Afirma.
   ///
   /// In es, this message translates to:
-  /// **'El salto a Afirma se habilitará en STORY-46.'**
-  String get signatureExternalLaunchPlaceholder;
+  /// **'Te hemos llevado a Afirma. Vuelve aquí cuando termines.'**
+  String get signatureHandoffPendingToast;
+
+  /// Signature — toast mostrado cuando el deep-link de retorno confirma firma exitosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento firmado'**
+  String get signatureHandoffSignedToast;
+
+  /// Signature — toast mostrado cuando el deep-link de retorno indica cancelación por el ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'Has cancelado la firma.'**
+  String get signatureHandoffCancelledToast;
+
+  /// Signature — toast mostrado cuando el deep-link de retorno indica error en Afirma.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido completar la firma. Inténtalo de nuevo.'**
+  String get signatureHandoffErrorToast;
+
+  /// Signature — toast mostrado cuando el SO rechaza abrir el navegador / Afirma.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido abrir Afirma. Inténtalo de nuevo.'**
+  String get signatureHandoffLaunchFailedToast;
+
+  /// Signature — título de la pantalla intermedia que recibe el deep-link de retorno de Afirma.
+  ///
+  /// In es, this message translates to:
+  /// **'Volviendo de Afirma'**
+  String get signatureAfirmaReturnTitle;
+
+  /// Signature — texto de la pantalla intermedia mientras se interpreta el resultado del deep-link.
+  ///
+  /// In es, this message translates to:
+  /// **'Procesando firma…'**
+  String get signatureAfirmaReturnProcessing;
 
   /// Signature — título del banner cuando el certificado es válido.
   ///
