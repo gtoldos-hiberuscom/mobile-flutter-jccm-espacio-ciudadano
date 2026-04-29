@@ -2,12 +2,12 @@
 id: 65
 jira_key:
 type: Story
-status: To Do
+status: In Progress
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 7
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T14:34:17+00:00
 due_date:
 jira_url:
 ---
@@ -77,3 +77,4 @@ Definir la estrategia de resiliencia transversal para red inestable, datos está
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 (SP-EC-APP-SQ3-07): To Do → In Progress. Wave 1 — core resilience primitives landed on `task/EPIC-10-quality-release/STORY-65-resilience/core-primitives`: `lib/core/connectivity/connectivity_status.dart` (connectivity_plus 6.x stream), `lib/core/connectivity/offline_banner.dart`, `lib/core/network/retry_policy.dart` (exp-backoff + jitter, idempotent methods only, wired into `api_client.dart` behind `kResilienceLayerEnabled`), `lib/core/cache/ttl_cache.dart` + provider. Adopters matrix in `documentation/qa/resilience-adopters.md`. 14 unit tests added under `test/core/{cache,connectivity,network}`.
