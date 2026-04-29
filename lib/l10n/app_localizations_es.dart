@@ -1654,6 +1654,60 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationDetailDecisionInFlight => 'Enviando tu decisión…';
 
   @override
+  String notificationDetailReadOn(String date) {
+    return 'Leída el $date';
+  }
+
+  @override
+  String get notificationDetailDocumentsTitle => 'Documentos asociados';
+
+  @override
+  String get notificationDetailDocumentsEmpty => 'No hay documentos asociados a esta notificación.';
+
+  @override
+  String get notificationDetailDocumentDownload => 'Descargar documento';
+
+  @override
+  String get notificationDetailDocumentUnavailableChip => 'No disponible';
+
+  @override
+  String notificationDetailDocumentSizeKb(num kb) {
+    final intl.NumberFormat kbNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String kbString = kbNumberFormat.format(kb);
+
+    return '$kbString KB';
+  }
+
+  @override
+  String notificationDetailDocumentSizeMb(num mb) {
+    final intl.NumberFormat mbNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String mbString = mbNumberFormat.format(mb);
+
+    return '$mbString MB';
+  }
+
+  @override
+  String get notificationDetailDocumentSizeUnknown => 'Tamaño desconocido';
+
+  @override
+  String get notificationDetailDocumentDownloadSuccessToast => 'Documento listo';
+
+  @override
+  String get notificationDetailDocumentDownloadUnavailableToast => 'Documento no disponible';
+
+  @override
+  String get notificationDetailDocumentDownloadErrorToast => 'No se pudo descargar el documento';
+
+  @override
+  String get notificationDetailVariantAceptadaBanner => 'Has aceptado esta notificación. Puedes consultar los documentos asociados.';
+
+  @override
+  String get notificationDetailVariantRechazadaBanner => 'Has rechazado esta notificación. Conservas el acuse de rechazo.';
+
+  @override
+  String get notificationDetailVariantCaducadaBanner => 'El plazo para decidir sobre esta notificación ha caducado.';
+
+  @override
   String get notificationContactPageTitle => 'Datos de contacto';
 
   @override

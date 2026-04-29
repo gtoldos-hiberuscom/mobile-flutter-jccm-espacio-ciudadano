@@ -1,11 +1,13 @@
+import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_document.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_status.dart';
 
-/// Full notification detail value object (STORY-43).
+/// Full notification detail value object (STORY-43, extended in STORY-44).
 ///
 /// Pure Dart — no Flutter / Dio / Riverpod (canon §11). Extends the
 /// summary item surface (see `NotificationItem`) with the long body,
-/// expediente metadata and the decision deadline used by the pending
-/// decision flow.
+/// expediente metadata, the decision deadline used by the pending
+/// decision flow and — STORY-44 — the list of associated documents
+/// plus the moment the citizen marked the notification as read.
 final class NotificationDetail {
   const NotificationDetail({
     required this.id,
@@ -17,6 +19,8 @@ final class NotificationDetail {
     this.expedienteRef,
     this.procedimiento,
     this.decisionDeadline,
+    this.documents = const <NotificationDocument>[],
+    this.readAt,
   });
 
   final String id;
@@ -39,9 +43,18 @@ final class NotificationDetail {
   /// status to [NotificationStatus.caducada].
   final DateTime? decisionDeadline;
 
+  /// Documents attached to the notification (STORY-44). Empty by
+  /// default for the pending flow / when the backend reports none.
+  final List<NotificationDocument> documents;
+
+  /// Moment the citizen marked the notification as read (STORY-44).
+  /// `null` for the pending flow / when the backend has not flipped
+  /// the read flag yet.
+  final DateTime? readAt;
+
   /// Returns a copy with [status] replaced. Used by the notifier after
   /// a successful decision so the header chip reflects the new state
-  /// before navigating back.
+  /// before navigating back. Preserves [documents] and [readAt].
   NotificationDetail copyWithStatus(final NotificationStatus newStatus) => NotificationDetail(
     id: id,
     asunto: asunto,
@@ -52,5 +65,7 @@ final class NotificationDetail {
     expedienteRef: expedienteRef,
     procedimiento: procedimiento,
     decisionDeadline: decisionDeadline,
+    documents: documents,
+    readAt: readAt,
   );
 }

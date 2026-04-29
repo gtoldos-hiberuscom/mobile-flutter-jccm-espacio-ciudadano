@@ -1653,6 +1653,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationDetailDecisionInFlight => 'Submitting your decision…';
 
   @override
+  String notificationDetailReadOn(String date) {
+    return 'Read on $date';
+  }
+
+  @override
+  String get notificationDetailDocumentsTitle => 'Associated documents';
+
+  @override
+  String get notificationDetailDocumentsEmpty => 'There are no documents associated with this notification.';
+
+  @override
+  String get notificationDetailDocumentDownload => 'Download document';
+
+  @override
+  String get notificationDetailDocumentUnavailableChip => 'Unavailable';
+
+  @override
+  String notificationDetailDocumentSizeKb(num kb) {
+    final intl.NumberFormat kbNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String kbString = kbNumberFormat.format(kb);
+
+    return '$kbString KB';
+  }
+
+  @override
+  String notificationDetailDocumentSizeMb(num mb) {
+    final intl.NumberFormat mbNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String mbString = mbNumberFormat.format(mb);
+
+    return '$mbString MB';
+  }
+
+  @override
+  String get notificationDetailDocumentSizeUnknown => 'Unknown size';
+
+  @override
+  String get notificationDetailDocumentDownloadSuccessToast => 'Document ready';
+
+  @override
+  String get notificationDetailDocumentDownloadUnavailableToast => 'Document not available';
+
+  @override
+  String get notificationDetailDocumentDownloadErrorToast => 'We could not download the document';
+
+  @override
+  String get notificationDetailVariantAceptadaBanner => 'You have accepted this notification. You can consult the associated documents.';
+
+  @override
+  String get notificationDetailVariantRechazadaBanner => 'You have rejected this notification. The rejection acknowledgement is preserved.';
+
+  @override
+  String get notificationDetailVariantCaducadaBanner => 'The decision window for this notification has expired.';
+
+  @override
   String get notificationContactPageTitle => 'Contact details';
 
   @override

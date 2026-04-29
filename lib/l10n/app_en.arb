@@ -2235,6 +2235,79 @@
   "@notificationDetailDecisionInFlight": {
     "description": "Notifications detail (STORY-43) — message of the loading overlay shown while submitting."
   },
+  "notificationDetailReadOn": "Read on {date}",
+  "@notificationDetailReadOn": {
+    "description": "Notifications detail (STORY-44) — header caption shown when the notification has a read timestamp.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDetailDocumentsTitle": "Associated documents",
+  "@notificationDetailDocumentsTitle": {
+    "description": "Notifications detail (STORY-44) — title of the documents section in non-pending variants."
+  },
+  "notificationDetailDocumentsEmpty": "There are no documents associated with this notification.",
+  "@notificationDetailDocumentsEmpty": {
+    "description": "Notifications detail (STORY-44) — empty state when the notification has no documents (e.g. expired)."
+  },
+  "notificationDetailDocumentDownload": "Download document",
+  "@notificationDetailDocumentDownload": {
+    "description": "Notifications detail (STORY-44) — tooltip / label of the document download button."
+  },
+  "notificationDetailDocumentUnavailableChip": "Unavailable",
+  "@notificationDetailDocumentUnavailableChip": {
+    "description": "Notifications detail (STORY-44) — chip shown for documents acknowledged but not downloadable."
+  },
+  "notificationDetailDocumentSizeKb": "{kb} KB",
+  "@notificationDetailDocumentSizeKb": {
+    "description": "Notifications detail (STORY-44) — document size label expressed in kilobytes.",
+    "placeholders": {
+      "kb": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "notificationDetailDocumentSizeMb": "{mb} MB",
+  "@notificationDetailDocumentSizeMb": {
+    "description": "Notifications detail (STORY-44) — document size label expressed in megabytes.",
+    "placeholders": {
+      "mb": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "notificationDetailDocumentSizeUnknown": "Unknown size",
+  "@notificationDetailDocumentSizeUnknown": {
+    "description": "Notifications detail (STORY-44) — size label when the backend does not report the byte count."
+  },
+  "notificationDetailDocumentDownloadSuccessToast": "Document ready",
+  "@notificationDetailDocumentDownloadSuccessToast": {
+    "description": "Notifications detail (STORY-44) — snackbar shown after a successful download."
+  },
+  "notificationDetailDocumentDownloadUnavailableToast": "Document not available",
+  "@notificationDetailDocumentDownloadUnavailableToast": {
+    "description": "Notifications detail (STORY-44) — snackbar shown when the backend acknowledges but cannot deliver the document."
+  },
+  "notificationDetailDocumentDownloadErrorToast": "We could not download the document",
+  "@notificationDetailDocumentDownloadErrorToast": {
+    "description": "Notifications detail (STORY-44) — generic error snackbar when a download fails."
+  },
+  "notificationDetailVariantAceptadaBanner": "You have accepted this notification. You can consult the associated documents.",
+  "@notificationDetailVariantAceptadaBanner": {
+    "description": "Notifications detail (STORY-44) — header banner for the accepted variant."
+  },
+  "notificationDetailVariantRechazadaBanner": "You have rejected this notification. The rejection acknowledgement is preserved.",
+  "@notificationDetailVariantRechazadaBanner": {
+    "description": "Notifications detail (STORY-44) — header banner for the rejected variant."
+  },
+  "notificationDetailVariantCaducadaBanner": "The decision window for this notification has expired.",
+  "@notificationDetailVariantCaducadaBanner": {
+    "description": "Notifications detail (STORY-44) — header banner for the expired variant."
+  },
   "notificationContactPageTitle": "Contact details",
   "@notificationContactPageTitle": {
     "description": "Notifications contact — registration screen title (STORY-42)."
