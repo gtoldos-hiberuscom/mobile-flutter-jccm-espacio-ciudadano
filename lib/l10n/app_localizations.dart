@@ -3110,23 +3110,125 @@ abstract class AppLocalizations {
   /// **'Sin clasificar'**
   String get notificationStatusUnknown;
 
-  /// Notifications — título de la pantalla provisional de detalle.
+  /// Notifications detail (STORY-43) — título del AppBar de la pantalla de detalle.
   ///
   /// In es, this message translates to:
   /// **'Detalle de notificación'**
-  String get notificationDetailPlaceholderTitle;
+  String get notificationDetailTitle;
 
-  /// Notifications — cuerpo provisional con el identificador de la notificación.
+  /// Notifications detail (STORY-43) — mensaje del estado de carga.
   ///
   /// In es, this message translates to:
-  /// **'Notificación {id}'**
-  String notificationDetailPlaceholderBody(String id);
+  /// **'Cargando notificación…'**
+  String get notificationDetailLoading;
 
-  /// Notifications — mensaje provisional para el detalle real.
+  /// Notifications detail (STORY-43) — mensaje del estado de error al cargar el detalle.
   ///
   /// In es, this message translates to:
-  /// **'Detalle pendiente de habilitar en STORY-44.'**
-  String get notificationDetailPlaceholderPending;
+  /// **'No hemos podido cargar el detalle de la notificación.'**
+  String get notificationDetailErrorMessage;
+
+  /// Notifications detail (STORY-43) — etiqueta del botón de reintento del estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get notificationDetailRetry;
+
+  /// Notifications detail (STORY-43) — línea de cabecera con el organismo emisor.
+  ///
+  /// In es, this message translates to:
+  /// **'Emitida por: {organismo}'**
+  String notificationDetailHeaderOrganismo(String organismo);
+
+  /// Notifications detail (STORY-43) — línea de cabecera con la fecha de emisión.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de emisión: {date}'**
+  String notificationDetailHeaderEmittedOn(String date);
+
+  /// Notifications detail (STORY-43) — fila de metadatos con la referencia del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Expediente: {ref}'**
+  String notificationDetailHeaderExpediente(String ref);
+
+  /// Notifications detail (STORY-43) — fila de metadatos con el procedimiento administrativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Procedimiento: {procedimiento}'**
+  String notificationDetailHeaderProcedimiento(String procedimiento);
+
+  /// Notifications detail (STORY-43) — fila de metadatos con la fecha límite para aceptar o rechazar.
+  ///
+  /// In es, this message translates to:
+  /// **'Plazo límite para decidir: {date}'**
+  String notificationDetailHeaderDeadline(String date);
+
+  /// Notifications detail (STORY-43) — título de la sección de descripción.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get notificationDetailDescriptionTitle;
+
+  /// Notifications detail (STORY-43) — CTA principal de la barra de decisión.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptar'**
+  String get notificationDetailAcceptCta;
+
+  /// Notifications detail (STORY-43) — CTA secundaria de la barra de decisión.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazar'**
+  String get notificationDetailRejectCta;
+
+  /// Notifications detail (STORY-43) — título del diálogo de confirmación de rechazo.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmar rechazo'**
+  String get notificationDetailRejectDialogTitle;
+
+  /// Notifications detail (STORY-43) — cuerpo del diálogo de confirmación de rechazo.
+  ///
+  /// In es, this message translates to:
+  /// **'Si rechazas esta notificación, la administración tendrá constancia formal del rechazo y la notificación se considerará practicada. Esta acción es irreversible.'**
+  String get notificationDetailRejectDialogBody;
+
+  /// Notifications detail (STORY-43) — CTA destructiva del diálogo de confirmación de rechazo.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazar definitivamente'**
+  String get notificationDetailRejectDialogConfirm;
+
+  /// Notifications detail (STORY-43) — CTA neutra del diálogo de confirmación de rechazo.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get notificationDetailRejectDialogCancel;
+
+  /// Notifications detail (STORY-43) — snackbar mostrado tras aceptar correctamente la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Has aceptado la notificación.'**
+  String get notificationDetailDecisionAcceptedToast;
+
+  /// Notifications detail (STORY-43) — snackbar mostrado tras rechazar correctamente la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Has rechazado la notificación.'**
+  String get notificationDetailDecisionRejectedToast;
+
+  /// Notifications detail (STORY-43) — snackbar mostrado cuando el backend reporta un conflicto (ya decidida o caducada).
+  ///
+  /// In es, this message translates to:
+  /// **'Esta notificación ya no admite cambios. Hemos actualizado su estado.'**
+  String get notificationDetailConflictToast;
+
+  /// Notifications detail (STORY-43) — mensaje del overlay de carga mientras se envía la decisión.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviando tu decisión…'**
+  String get notificationDetailDecisionInFlight;
 
   /// Notifications contact — título de la pantalla de alta de contacto (STORY-42).
   ///
