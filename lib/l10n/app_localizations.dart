@@ -62,8 +62,7 @@ import 'app_localizations_es.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,19 +82,15 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('es'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('es')];
 
   /// El título de la aplicación que se muestra en el lanzador.
   ///
@@ -2581,10 +2575,165 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Configurar ahora'**
   String get notificationContactGateBannerCta;
+
+  /// Signature — título de la bandeja de firma del ciudadano (STORY-45).
+  ///
+  /// In es, this message translates to:
+  /// **'Firma de documentos'**
+  String get signatureInboxTitle;
+
+  /// Signature — etiqueta de la pestaña de documentos pendientes de firma.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendientes'**
+  String get signatureTabPending;
+
+  /// Signature — etiqueta de la pestaña del histórico de documentos firmados.
+  ///
+  /// In es, this message translates to:
+  /// **'Histórico'**
+  String get signatureTabHistory;
+
+  /// Signature — mensaje del estado de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando documentos…'**
+  String get signatureLoading;
+
+  /// Signature — título del estado vacío en la pestaña de pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay documentos pendientes'**
+  String get signatureEmptyPendingTitle;
+
+  /// Signature — subtítulo del estado vacío en la pestaña de pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes documentos esperando tu firma.'**
+  String get signatureEmptyPendingSubtitle;
+
+  /// Signature — título del estado vacío en la pestaña de histórico.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no has firmado documentos'**
+  String get signatureEmptyHistoryTitle;
+
+  /// Signature — subtítulo del estado vacío en la pestaña de histórico.
+  ///
+  /// In es, this message translates to:
+  /// **'Cuando firmes un documento aparecerá aquí.'**
+  String get signatureEmptyHistorySubtitle;
+
+  /// Signature — mensaje del estado de error global de la bandeja.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus documentos para firmar.'**
+  String get signatureErrorMessage;
+
+  /// Signature — etiqueta del botón de reintento del estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get signatureRetry;
+
+  /// Signature — CTA principal en cada documento pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Firmar'**
+  String get signatureSignAction;
+
+  /// Signature — placeholder mostrado al pulsar Firmar mientras STORY-46 está pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'El salto a Afirma se habilitará en STORY-46.'**
+  String get signatureExternalLaunchPlaceholder;
+
+  /// Signature — título del banner cuando el certificado es válido.
+  ///
+  /// In es, this message translates to:
+  /// **'Certificado válido'**
+  String get signatureCertificateValidTitle;
+
+  /// Signature — título del banner cuando no hay certificado disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesitas instalar tu certificado'**
+  String get signatureCertificateMissingTitle;
+
+  /// Signature — título del banner cuando el certificado ha caducado.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu certificado ha caducado'**
+  String get signatureCertificateExpiredTitle;
+
+  /// Signature — título del banner cuando el certificado no es válido.
+  ///
+  /// In es, this message translates to:
+  /// **'El certificado no es válido'**
+  String get signatureCertificateInvalidTitle;
+
+  /// Signature — título del banner cuando solo está disponible la Validación Electrónica Centralizada.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible mediante VEC'**
+  String get signatureCertificateVecTitle;
+
+  /// Signature — título del banner cuando la validación falla o devuelve un estado desconocido.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido validar tu certificado'**
+  String get signatureCertificateUnknownTitle;
+
+  /// Signature — CTA del banner para reintentar la validación.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a validar'**
+  String get signatureCertificateRecheck;
+
+  /// Signature — etiqueta del estado pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get signatureStatusPendiente;
+
+  /// Signature — etiqueta del estado firmado.
+  ///
+  /// In es, this message translates to:
+  /// **'Firmado'**
+  String get signatureStatusFirmado;
+
+  /// Signature — etiqueta del estado caducado.
+  ///
+  /// In es, this message translates to:
+  /// **'Caducado'**
+  String get signatureStatusExpirado;
+
+  /// Signature — etiqueta del estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Con errores'**
+  String get signatureStatusError;
+
+  /// Signature — etiqueta del estado desconocido (parser tolerante).
+  ///
+  /// In es, this message translates to:
+  /// **'Sin clasificar'**
+  String get signatureStatusUnknown;
+
+  /// Signature — etiqueta auxiliar con el tamaño del documento (ya formateado por la presentación).
+  ///
+  /// In es, this message translates to:
+  /// **'{size}'**
+  String signatureDocumentSize(String size);
+
+  /// Signature — texto secundario del banner indicando la fecha de caducidad del certificado.
+  ///
+  /// In es, this message translates to:
+  /// **'Caduca el {date}'**
+  String signatureCertificateExpiresOn(String date);
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -2593,8 +2742,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
