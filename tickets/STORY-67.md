@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-08-25T12:00:00+02:00
+updated_at: 2026-09-21T18:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -91,3 +91,21 @@ Planificar la validación funcional y no funcional final sobre los flujos clave 
     - No UAT-blocking defects discovered.
   - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. No code touched.
   - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.
+
+### Sprint 9 closure
+- 2026-09-21T18:00:00+02:00 | by plan-manager | Sprint 9 (SP-EC-APP-SQ2-09 / SP-EC-APP-SQ3-09) closure: defect-closure & QA continuation. STORY-67 received two Sprint-9 task lineages (defect closure A + QA continuation G).
+  - Branches:
+    - Deliverable A — landing PII leak (HIGH, surfaced by Sprint 8 hardening report): `task/EPIC-10-quality-release/STORY-67-qa/sprint9-landing-pii-leak` (commits `ca2b161`, `e401c90`) → `ticket/EPIC-10-quality-release/STORY-67-qa` → `epic/EPIC-10-quality-release` → `develop`.
+    - Deliverable G — goldens & a11y polish: `task/EPIC-10-quality-release/STORY-67-qa/sprint9-goldens-and-a11y` (commits `1609c30`, `f86a7b9`, `6d65798`) → same upward path.
+  - Evidence (A):
+    - `lib/features/landing/2_presentation/landing_page.dart` — `print('Login successful: $session')` replaced with `ref.read(appLoggerProvider).info('Login successful', context: {'sessionType': session.runtimeType.toString()})`. Session is no longer interpolated into the message; only the runtime type appears in context.
+    - `test/features/landing/landing_login_logging_test.dart` — capturing fake AppLogger + stubbed login use case returning a session with realistic PII fields (`nif: 12345678Z`, `idAgente: AGT-1`, token-shaped string); asserts no PII substring leaks in the captured message + JSON-encoded context, and that `_kPiiKeyFragments` redaction also passes when re-emitted through `ConsoleLogger`.
+  - Evidence (G):
+    - Goldens added: `test/qa/goldens/recommendations_list_golden_test.dart` (Todos tab, deterministic 2-item bucket via repository override) + baseline `recommendations_page_todos.png`; `test/qa/goldens/familia_numerosa_detail_golden_test.dart` (deterministic Sample Holder, fixed expiry) + baseline `familia_numerosa_detail_phone_portrait.png`. Run with `flutter test test/qa/goldens/`.
+    - Home golden DEFERRED to STORY-22 reopen — scaffold `test/qa/goldens/logged_home_golden_test.dart` shipped with `skip: true` and a TODO pointing at `documentation/qa/STORY-22-home-route-investigation.md`.
+    - Agenda dynamic-type fix: `lib/features/agenda/2_presentation/widgets/agenda_event_tile.dart` — title + subtitle gain `maxLines: 2, overflow: TextOverflow.ellipsis`. New `test/features/agenda/agenda_tile_dynamic_type_test.dart` reproduces the original `RenderFlex overflowed by 1040 pixels` at `TextScaler.linear(2.0)` and asserts the fixed tree raises no exception.
+    - Recommendations focus order: DOCUMENTED, not patched — `documentation/qa/STORY-67-recommendations-focus-order.md` traces the root cause (`AutomaticKeepAliveClientMixin` keeping inactive bucket cards in the focus tree) and proposes a Sprint-10 follow-up shape. Code change rejected as exceeding the "minimal fix" gate.
+  - Validation:
+    - `flutter analyze --no-fatal-infos` — 0 errors / 1 pre-existing warning (unchanged baseline at `test/features/recommendations/recommendations_page_widget_test.dart:16` `unused_element_parameter`).
+    - `flutter test` — 453 passing + 2 skipped (perf opt-in + deferred home golden). Default-suite delta from Sprint-8 baseline: +A's 1 + G's 4 = +5 (G adds 1 recommendations golden + 1 familia golden + 2 agenda dynamic-type cases; +1 deferred home skip).
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 9 closure policy. Recommendation surfaced for plan-manager final summary: reopen STORY-22 to implement `LoggedHomePage` and remove the `/home → /sitemap` safety redirect introduced under deliverable B.
