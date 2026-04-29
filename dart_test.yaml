@@ -1,0 +1,11 @@
+# Sprint 7 / TASK-70 — exclude performance budgets from the default
+# `flutter test` run. Run them on demand with:
+#
+#   flutter test --tags performance
+#
+# This keeps the dev loop snappy while still letting CI / release
+# verification opt in.
+
+tags:
+  performance:
+    skip: "Opt-in. Run with: flutter test --tags performance"
