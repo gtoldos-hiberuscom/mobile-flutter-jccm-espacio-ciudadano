@@ -2235,6 +2235,79 @@
   "@notificationDetailDecisionInFlight": {
     "description": "Notifications detail (STORY-43) — mensaje del overlay de carga mientras se envía la decisión."
   },
+  "notificationDetailReadOn": "Leída el {date}",
+  "@notificationDetailReadOn": {
+    "description": "Notifications detail (STORY-44) — leyenda mostrada en la cabecera cuando la notificación tiene fecha de lectura.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDetailDocumentsTitle": "Documentos asociados",
+  "@notificationDetailDocumentsTitle": {
+    "description": "Notifications detail (STORY-44) — título de la sección de documentos en variantes no pendientes."
+  },
+  "notificationDetailDocumentsEmpty": "No hay documentos asociados a esta notificación.",
+  "@notificationDetailDocumentsEmpty": {
+    "description": "Notifications detail (STORY-44) — empty state cuando la notificación no tiene documentos (por ejemplo, caducada)."
+  },
+  "notificationDetailDocumentDownload": "Descargar documento",
+  "@notificationDetailDocumentDownload": {
+    "description": "Notifications detail (STORY-44) — tooltip / etiqueta del botón de descarga de un documento."
+  },
+  "notificationDetailDocumentUnavailableChip": "No disponible",
+  "@notificationDetailDocumentUnavailableChip": {
+    "description": "Notifications detail (STORY-44) — chip mostrado en documentos reconocidos pero no descargables."
+  },
+  "notificationDetailDocumentSizeKb": "{kb} KB",
+  "@notificationDetailDocumentSizeKb": {
+    "description": "Notifications detail (STORY-44) — etiqueta de tamaño de documento expresado en kilobytes.",
+    "placeholders": {
+      "kb": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "notificationDetailDocumentSizeMb": "{mb} MB",
+  "@notificationDetailDocumentSizeMb": {
+    "description": "Notifications detail (STORY-44) — etiqueta de tamaño de documento expresado en megabytes.",
+    "placeholders": {
+      "mb": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "notificationDetailDocumentSizeUnknown": "Tamaño desconocido",
+  "@notificationDetailDocumentSizeUnknown": {
+    "description": "Notifications detail (STORY-44) — etiqueta de tamaño cuando el backend no informa los bytes."
+  },
+  "notificationDetailDocumentDownloadSuccessToast": "Documento listo",
+  "@notificationDetailDocumentDownloadSuccessToast": {
+    "description": "Notifications detail (STORY-44) — snackbar tras una descarga correcta."
+  },
+  "notificationDetailDocumentDownloadUnavailableToast": "Documento no disponible",
+  "@notificationDetailDocumentDownloadUnavailableToast": {
+    "description": "Notifications detail (STORY-44) — snackbar cuando el backend reconoce el documento pero no lo entrega."
+  },
+  "notificationDetailDocumentDownloadErrorToast": "No se pudo descargar el documento",
+  "@notificationDetailDocumentDownloadErrorToast": {
+    "description": "Notifications detail (STORY-44) — snackbar de error genérico al fallar la descarga."
+  },
+  "notificationDetailVariantAceptadaBanner": "Has aceptado esta notificación. Puedes consultar los documentos asociados.",
+  "@notificationDetailVariantAceptadaBanner": {
+    "description": "Notifications detail (STORY-44) — mensaje de cabecera para la variante aceptada."
+  },
+  "notificationDetailVariantRechazadaBanner": "Has rechazado esta notificación. Conservas el acuse de rechazo.",
+  "@notificationDetailVariantRechazadaBanner": {
+    "description": "Notifications detail (STORY-44) — mensaje de cabecera para la variante rechazada."
+  },
+  "notificationDetailVariantCaducadaBanner": "El plazo para decidir sobre esta notificación ha caducado.",
+  "@notificationDetailVariantCaducadaBanner": {
+    "description": "Notifications detail (STORY-44) — mensaje de cabecera para la variante caducada."
+  },
   "notificationContactPageTitle": "Datos de contacto",
   "@notificationContactPageTitle": {
     "description": "Notifications contact — título de la pantalla de alta de contacto (STORY-42)."

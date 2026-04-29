@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_decision.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_detail.dart';
+import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_document_download_result.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/1_domain/notification_detail_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/3_data/notification_detail_repository_provider.dart';
 
@@ -58,6 +59,23 @@ class NotificationDetailNotifier extends AsyncNotifier<NotificationDetail> {
       );
       rethrow;
     }
+  }
+
+  /// Triggers the download of [documentId] for the current
+  /// notification (STORY-44).
+  ///
+  /// Returns the [NotificationDocumentDownloadResult] so the page can
+  /// surface the appropriate snackbar. State is intentionally not
+  /// mutated — the document list is read-only at this point and the
+  /// per-tile loading flag is local to the widget.
+  Future<NotificationDocumentDownloadResult> downloadDocument(
+    final String documentId,
+  ) async {
+    final repo = ref.read(notificationDetailRepositoryProvider);
+    return repo.downloadDocument(
+      notificationId: notificationId,
+      documentId: documentId,
+    );
   }
 }
 

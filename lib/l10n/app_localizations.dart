@@ -3230,6 +3230,90 @@ abstract class AppLocalizations {
   /// **'Enviando tu decisión…'**
   String get notificationDetailDecisionInFlight;
 
+  /// Notifications detail (STORY-44) — leyenda mostrada en la cabecera cuando la notificación tiene fecha de lectura.
+  ///
+  /// In es, this message translates to:
+  /// **'Leída el {date}'**
+  String notificationDetailReadOn(String date);
+
+  /// Notifications detail (STORY-44) — título de la sección de documentos en variantes no pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentos asociados'**
+  String get notificationDetailDocumentsTitle;
+
+  /// Notifications detail (STORY-44) — empty state cuando la notificación no tiene documentos (por ejemplo, caducada).
+  ///
+  /// In es, this message translates to:
+  /// **'No hay documentos asociados a esta notificación.'**
+  String get notificationDetailDocumentsEmpty;
+
+  /// Notifications detail (STORY-44) — tooltip / etiqueta del botón de descarga de un documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar documento'**
+  String get notificationDetailDocumentDownload;
+
+  /// Notifications detail (STORY-44) — chip mostrado en documentos reconocidos pero no descargables.
+  ///
+  /// In es, this message translates to:
+  /// **'No disponible'**
+  String get notificationDetailDocumentUnavailableChip;
+
+  /// Notifications detail (STORY-44) — etiqueta de tamaño de documento expresado en kilobytes.
+  ///
+  /// In es, this message translates to:
+  /// **'{kb} KB'**
+  String notificationDetailDocumentSizeKb(num kb);
+
+  /// Notifications detail (STORY-44) — etiqueta de tamaño de documento expresado en megabytes.
+  ///
+  /// In es, this message translates to:
+  /// **'{mb} MB'**
+  String notificationDetailDocumentSizeMb(num mb);
+
+  /// Notifications detail (STORY-44) — etiqueta de tamaño cuando el backend no informa los bytes.
+  ///
+  /// In es, this message translates to:
+  /// **'Tamaño desconocido'**
+  String get notificationDetailDocumentSizeUnknown;
+
+  /// Notifications detail (STORY-44) — snackbar tras una descarga correcta.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento listo'**
+  String get notificationDetailDocumentDownloadSuccessToast;
+
+  /// Notifications detail (STORY-44) — snackbar cuando el backend reconoce el documento pero no lo entrega.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento no disponible'**
+  String get notificationDetailDocumentDownloadUnavailableToast;
+
+  /// Notifications detail (STORY-44) — snackbar de error genérico al fallar la descarga.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo descargar el documento'**
+  String get notificationDetailDocumentDownloadErrorToast;
+
+  /// Notifications detail (STORY-44) — mensaje de cabecera para la variante aceptada.
+  ///
+  /// In es, this message translates to:
+  /// **'Has aceptado esta notificación. Puedes consultar los documentos asociados.'**
+  String get notificationDetailVariantAceptadaBanner;
+
+  /// Notifications detail (STORY-44) — mensaje de cabecera para la variante rechazada.
+  ///
+  /// In es, this message translates to:
+  /// **'Has rechazado esta notificación. Conservas el acuse de rechazo.'**
+  String get notificationDetailVariantRechazadaBanner;
+
+  /// Notifications detail (STORY-44) — mensaje de cabecera para la variante caducada.
+  ///
+  /// In es, this message translates to:
+  /// **'El plazo para decidir sobre esta notificación ha caducado.'**
+  String get notificationDetailVariantCaducadaBanner;
+
   /// Notifications contact — título de la pantalla de alta de contacto (STORY-42).
   ///
   /// In es, this message translates to:
