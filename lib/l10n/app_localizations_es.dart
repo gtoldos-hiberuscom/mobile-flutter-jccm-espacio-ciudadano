@@ -1584,15 +1584,74 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationStatusUnknown => 'Sin clasificar';
 
   @override
-  String get notificationDetailPlaceholderTitle => 'Detalle de notificación';
+  String get notificationDetailTitle => 'Detalle de notificación';
 
   @override
-  String notificationDetailPlaceholderBody(String id) {
-    return 'Notificación $id';
+  String get notificationDetailLoading => 'Cargando notificación…';
+
+  @override
+  String get notificationDetailErrorMessage => 'No hemos podido cargar el detalle de la notificación.';
+
+  @override
+  String get notificationDetailRetry => 'Reintentar';
+
+  @override
+  String notificationDetailHeaderOrganismo(String organismo) {
+    return 'Emitida por: $organismo';
   }
 
   @override
-  String get notificationDetailPlaceholderPending => 'Detalle pendiente de habilitar en STORY-44.';
+  String notificationDetailHeaderEmittedOn(String date) {
+    return 'Fecha de emisión: $date';
+  }
+
+  @override
+  String notificationDetailHeaderExpediente(String ref) {
+    return 'Expediente: $ref';
+  }
+
+  @override
+  String notificationDetailHeaderProcedimiento(String procedimiento) {
+    return 'Procedimiento: $procedimiento';
+  }
+
+  @override
+  String notificationDetailHeaderDeadline(String date) {
+    return 'Plazo límite para decidir: $date';
+  }
+
+  @override
+  String get notificationDetailDescriptionTitle => 'Descripción';
+
+  @override
+  String get notificationDetailAcceptCta => 'Aceptar';
+
+  @override
+  String get notificationDetailRejectCta => 'Rechazar';
+
+  @override
+  String get notificationDetailRejectDialogTitle => 'Confirmar rechazo';
+
+  @override
+  String get notificationDetailRejectDialogBody => 'Si rechazas esta notificación, la administración tendrá constancia formal del rechazo y la notificación se considerará practicada. Esta acción es irreversible.';
+
+  @override
+  String get notificationDetailRejectDialogConfirm => 'Rechazar definitivamente';
+
+  @override
+  String get notificationDetailRejectDialogCancel => 'Cancelar';
+
+  @override
+  String get notificationDetailDecisionAcceptedToast => 'Has aceptado la notificación.';
+
+  @override
+  String get notificationDetailDecisionRejectedToast => 'Has rechazado la notificación.';
+
+  @override
+  String get notificationDetailConflictToast => 'Esta notificación ya no admite cambios. Hemos actualizado su estado.';
+
+  @override
+  String get notificationDetailDecisionInFlight => 'Enviando tu decisión…';
 
   @override
   String get notificationContactPageTitle => 'Datos de contacto';
