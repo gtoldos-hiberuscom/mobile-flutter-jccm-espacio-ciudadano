@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_bucket.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_config_state.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_empty_variant.dart';
@@ -76,7 +77,8 @@ class RecommendationsPage extends ConsumerWidget {
                 .toList(growable: false),
           ),
         ),
-        body: asyncConfig.when(
+        body: OfflineBanner(
+          child: asyncConfig.when(
           loading: () => const RecommendationsLoadingView(),
           error: (final err, final st) => RecommendationsErrorView(
             onRetry: () => ref.invalidate(recommendationsConfigProvider),
@@ -100,6 +102,7 @@ class RecommendationsPage extends ConsumerWidget {
                   .toList(growable: false),
             );
           },
+        ),
         ),
       ),
     );
