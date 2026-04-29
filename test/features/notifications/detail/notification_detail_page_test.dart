@@ -8,8 +8,8 @@ import 'package:jccm_espacio_ciudadano/features/notifications/3_data/notificatio
 import 'package:jccm_espacio_ciudadano/features/notifications/3_data/notification_detail_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-GoRouter _buildRouter() => GoRouter(
-  initialLocation: '/notifications/NOT-0001',
+GoRouter _buildRouter({final String initialId = 'NOT-0001'}) => GoRouter(
+  initialLocation: '/notifications/$initialId',
   routes: <RouteBase>[
     GoRoute(
       path: '/notifications',
@@ -31,6 +31,8 @@ GoRouter _buildRouter() => GoRouter(
 Widget _wrap({
   final bool conflictOnDecision = false,
   final NotificationStatus conflictCurrentStatus = NotificationStatus.aceptada,
+  final bool failOnDownload = false,
+  final String initialId = 'NOT-0001',
 }) {
   return ProviderScope(
     overrides: [
@@ -39,6 +41,7 @@ Widget _wrap({
           simulatedNetworkDelay: Duration.zero,
           conflictOnDecision: conflictOnDecision,
           conflictCurrentStatus: conflictCurrentStatus,
+          failOnDownload: failOnDownload,
         ),
       ),
     ],
@@ -46,7 +49,7 @@ Widget _wrap({
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: const Locale('es'),
-      routerConfig: _buildRouter(),
+      routerConfig: _buildRouter(initialId: initialId),
     ),
   );
 }
@@ -147,5 +150,63 @@ void main() {
     expect(find.text('Caducada'), findsOneWidget);
     // Decision bar disappears because status is no longer pendiente.
     expect(find.text('Aceptar'), findsNothing);
+  });
+
+  // ── STORY-44 — variant + documents surfaces ─────────────────────────────
+
+  testWidgets('aceptada variant renders documents list and Leída badge', (
+    final tester,
+  ) async {
+    await tester.pumpWidget(_wrap(initialId: 'acc-1'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Aceptada'), findsOneWidget);
+    expect(find.textContaining('Leída el'), findsOneWidget);
+    expect(find.text('Documentos asociados'), findsOneWidget);
+    expect(find.text('Resolucion-firmada.pdf'), findsOneWidget);
+    expect(find.text('Anexos-tecnicos.zip'), findsOneWidget);
+    expect(find.text('No disponible'), findsOneWidget);
+    // No decision bar for non-pending variants.
+    expect(find.text('Aceptar'), findsNothing);
+    expect(find.text('Rechazar'), findsNothing);
+  });
+
+  testWidgets('caducada variant renders the empty documents state', (
+    final tester,
+  ) async {
+    await tester.pumpWidget(_wrap(initialId: 'exp-1'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Caducada'), findsOneWidget);
+    expect(find.text('Documentos asociados'), findsOneWidget);
+    expect(
+      find.text('No hay documentos asociados a esta notificación.'),
+      findsOneWidget,
+    );
+    expect(find.byTooltip('Descargar documento'), findsNothing);
+  });
+
+  testWidgets('tapping download on an available document shows the success snackbar', (
+    final tester,
+  ) async {
+    await tester.pumpWidget(_wrap(initialId: 'rej-1'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Acuse-rechazo.pdf'), findsOneWidget);
+    final downloadButton = find.byTooltip('Descargar documento');
+    expect(downloadButton, findsOneWidget);
+
+    await tester.ensureVisible(downloadButton);
+    await tester.pumpAndSettle();
+    await tester.tap(downloadButton);
+    // pump for setState (loading flag) + repo future + post-state update.
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Documento listo'), findsOneWidget);
   });
 }

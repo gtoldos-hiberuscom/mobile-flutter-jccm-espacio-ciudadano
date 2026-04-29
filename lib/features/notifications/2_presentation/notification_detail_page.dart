@@ -4,24 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_decision.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_detail.dart';
+import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_document.dart';
+import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_document_download_result.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/0_entity/notification_status.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/1_domain/notification_detail_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/widgets/notification_document_tile.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/widgets/notification_status_chip.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-/// Notification detail surface for the **pending** decision flow
-/// (STORY-43).
-///
-/// STORY-44 will extend this page with the aceptada / rechazada /
-/// caducada variants and the document download actions; this iteration
-/// only renders the pending detail and the accept / reject decision
-/// bar (with explicit confirmation modal for the reject path).
+/// Notification detail surface for both the **pending** decision flow
+/// (STORY-43) and the **aceptada / rechazada / caducada** read-only
+/// variants with associated documents (STORY-44).
 class NotificationDetailPage extends ConsumerStatefulWidget {
   const NotificationDetailPage({required this.notificationId, super.key});
 
@@ -33,6 +34,7 @@ class NotificationDetailPage extends ConsumerStatefulWidget {
 
 class _NotificationDetailPageState extends ConsumerState<NotificationDetailPage> {
   bool _isSubmitting = false;
+  final Set<String> _downloadingDocIds = <String>{};
 
   @override
   Widget build(final BuildContext context) {
@@ -58,8 +60,10 @@ class _NotificationDetailPageState extends ConsumerState<NotificationDetailPage>
             _DetailBody(
               detail: detail,
               isSubmitting: _isSubmitting,
+              downloadingDocIds: _downloadingDocIds,
               onAccept: () => _onAcceptPressed(detail),
               onReject: () => _onRejectPressed(detail),
+              onDownload: _onDownloadPressed,
             ),
             if (_isSubmitting)
               ColoredBox(
@@ -139,25 +143,61 @@ class _NotificationDetailPageState extends ConsumerState<NotificationDetailPage>
       }
     }
   }
+
+  Future<void> _onDownloadPressed(final NotificationDocument document) async {
+    if (_downloadingDocIds.contains(document.id)) {
+      return;
+    }
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _downloadingDocIds.add(document.id));
+    NotificationDocumentDownloadResult result;
+    try {
+      result = await ref
+          .read(notificationDetailProvider(widget.notificationId).notifier)
+          .downloadDocument(document.id);
+    } on Object {
+      result = NotificationDocumentDownloadResult.error();
+    }
+    if (!mounted) {
+      return;
+    }
+    final toast = switch (result.status) {
+      NotificationDocumentDownloadStatus.success =>
+        l10n.notificationDetailDocumentDownloadSuccessToast,
+      NotificationDocumentDownloadStatus.unavailable =>
+        l10n.notificationDetailDocumentDownloadUnavailableToast,
+      NotificationDocumentDownloadStatus.error =>
+        l10n.notificationDetailDocumentDownloadErrorToast,
+    };
+    messenger.showSnackBar(SnackBar(content: Text(toast)));
+    setState(() => _downloadingDocIds.remove(document.id));
+  }
 }
 
 class _DetailBody extends StatelessWidget {
   const _DetailBody({
     required this.detail,
     required this.isSubmitting,
+    required this.downloadingDocIds,
     required this.onAccept,
     required this.onReject,
+    required this.onDownload,
   });
 
   final NotificationDetail detail;
   final bool isSubmitting;
+  final Set<String> downloadingDocIds;
   final VoidCallback onAccept;
   final VoidCallback onReject;
+  final ValueChanged<NotificationDocument> onDownload;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final isPending = detail.status == NotificationStatus.pendiente;
+    final showDocuments = !isPending;
 
     return SafeArea(
       child: Column(
@@ -181,11 +221,19 @@ class _DetailBody extends StatelessWidget {
                     detail.descripcion,
                     style: theme.textTheme.bodyMedium,
                   ),
+                  if (showDocuments) ...<Widget>[
+                    const SizedBox(height: AppDimensions.space24),
+                    _DocumentsSection(
+                      detail: detail,
+                      downloadingDocIds: downloadingDocIds,
+                      onDownload: onDownload,
+                    ),
+                  ],
                 ],
               ),
             ),
           ),
-          if (detail.status == NotificationStatus.pendiente)
+          if (isPending)
             _DecisionBar(
               isSubmitting: isSubmitting,
               onAccept: onAccept,
@@ -206,6 +254,9 @@ class _HeaderCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final readAt = detail.readAt;
+    final variantBanner = _variantBannerText(l10n, detail.status);
+    final variantBannerColor = _variantBannerColor(theme, detail.status);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.space16),
@@ -230,15 +281,70 @@ class _HeaderCard extends StatelessWidget {
                 color: theme.colorScheme.outline,
               ),
             ),
+            if (readAt != null) ...<Widget>[
+              const SizedBox(height: AppDimensions.space4),
+              Text(
+                l10n.notificationDetailReadOn(_formatDate(readAt)),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
+              ),
+            ],
             const SizedBox(height: AppDimensions.space12),
             Align(
               alignment: Alignment.centerLeft,
               child: NotificationStatusChip(status: detail.status),
             ),
+            if (variantBanner != null) ...<Widget>[
+              const SizedBox(height: AppDimensions.space12),
+              Container(
+                padding: const EdgeInsets.all(AppDimensions.space12),
+                decoration: BoxDecoration(
+                  color: variantBannerColor.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                  border: Border.all(
+                    color: variantBannerColor.withValues(alpha: 0.40),
+                  ),
+                ),
+                child: Text(
+                  variantBanner,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: variantBannerColor,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  String? _variantBannerText(final AppLocalizations l10n, final NotificationStatus status) {
+    switch (status) {
+      case NotificationStatus.aceptada:
+        return l10n.notificationDetailVariantAceptadaBanner;
+      case NotificationStatus.rechazada:
+        return l10n.notificationDetailVariantRechazadaBanner;
+      case NotificationStatus.caducada:
+        return l10n.notificationDetailVariantCaducadaBanner;
+      case NotificationStatus.pendiente:
+      case NotificationStatus.unknown:
+        return null;
+    }
+  }
+
+  Color _variantBannerColor(final ThemeData theme, final NotificationStatus status) {
+    switch (status) {
+      case NotificationStatus.aceptada:
+        return AppColors.success;
+      case NotificationStatus.rechazada:
+        return AppColors.error;
+      case NotificationStatus.caducada:
+      case NotificationStatus.pendiente:
+      case NotificationStatus.unknown:
+        return theme.colorScheme.outline;
+    }
   }
 }
 
@@ -288,6 +394,50 @@ class _MetadataSection extends StatelessWidget {
     text,
     style: theme.textTheme.bodyMedium,
   );
+}
+
+class _DocumentsSection extends StatelessWidget {
+  const _DocumentsSection({
+    required this.detail,
+    required this.downloadingDocIds,
+    required this.onDownload,
+  });
+
+  final NotificationDetail detail;
+  final Set<String> downloadingDocIds;
+  final ValueChanged<NotificationDocument> onDownload;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final docs = detail.documents;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Text(
+          l10n.notificationDetailDocumentsTitle,
+          style: theme.textTheme.titleMedium,
+        ),
+        const SizedBox(height: AppDimensions.space8),
+        if (docs.isEmpty)
+          EmptyStateWidget(
+            message: l10n.notificationDetailDocumentsEmpty,
+            icon: Icons.folder_off_outlined,
+          )
+        else
+          ...docs.map(
+            (final doc) => NotificationDocumentTile(
+              document: doc,
+              isDownloading: downloadingDocIds.contains(doc.id),
+              onDownload: doc.availability == NotificationDocumentAvailability.available
+                  ? () => onDownload(doc)
+                  : null,
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 class _DecisionBar extends StatelessWidget {
