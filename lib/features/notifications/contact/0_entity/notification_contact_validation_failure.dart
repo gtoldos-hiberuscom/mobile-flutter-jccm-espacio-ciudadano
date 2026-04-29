@@ -6,7 +6,8 @@
 enum NotificationContactValidationFailure {
   phoneInvalid('notificationContactErrorPhoneInvalid'),
   emailInvalid('notificationContactErrorEmailInvalid'),
-  bothEmpty('notificationContactErrorBothEmpty');
+  bothEmpty('notificationContactErrorBothEmpty')
+  ;
 
   const NotificationContactValidationFailure(this.labelKey);
 

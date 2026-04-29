@@ -53,11 +53,7 @@ final class NotificationsRepositoryImpl implements NotificationsRepository {
         hasMore: false,
       );
     }
-    final filtered = request.statusFilter.isEmpty
-        ? _catalog
-        : _catalog
-              .where((final item) => request.statusFilter.contains(item.status))
-              .toList(growable: false);
+    final filtered = request.statusFilter.isEmpty ? _catalog : _catalog.where((final item) => request.statusFilter.contains(item.status)).toList(growable: false);
     final start = request.page * request.pageSize;
     if (start >= filtered.length) {
       return NotificationPageResult(
@@ -100,9 +96,7 @@ final class NotificationsRepositoryImpl implements NotificationsRepository {
     for (var index = 0; index < 18; index++) {
       final status = statuses[index % statuses.length];
       final fechaEmision = reference.subtract(Duration(days: index));
-      final fechaCaducidad = status == NotificationStatus.caducada
-          ? fechaEmision.add(const Duration(days: 7))
-          : fechaEmision.add(const Duration(days: 30));
+      final fechaCaducidad = status == NotificationStatus.caducada ? fechaEmision.add(const Duration(days: 7)) : fechaEmision.add(const Duration(days: 30));
       items.add(
         NotificationItem(
           id: 'NOT-${(index + 1).toString().padLeft(4, '0')}',

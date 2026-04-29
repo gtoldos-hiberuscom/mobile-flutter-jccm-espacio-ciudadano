@@ -59,11 +59,10 @@ class NotificationsCenterPage extends ConsumerWidget {
                   message: l10n.notificationsEmptyTitle,
                   subtitle: l10n.notificationsEmptySubtitle,
                 ),
-                itemBuilder: (final ctx, final item, final _) =>
-                    NotificationItemTile(
-                      item: item,
-                      onTap: () => _openDetail(ctx, item),
-                    ),
+                itemBuilder: (final ctx, final item, final _) => NotificationItemTile(
+                  item: item,
+                  onTap: () => _openDetail(ctx, item),
+                ),
               ),
             ),
             if (state.hasError)

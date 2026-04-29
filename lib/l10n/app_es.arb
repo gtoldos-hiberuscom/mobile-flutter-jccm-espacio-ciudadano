@@ -63,8 +63,7 @@
   "sessionExpired": "Tu sesión ha caducado",
   "@sessionExpired": {
     "description": "Mensaje mostrado cuando la sesión del usuario ha expirado."
-  }
-,
+  },
   "consentPageTitle": "Condiciones de uso",
   "@consentPageTitle": {
     "description": "Título principal de la pantalla de aceptación de condiciones de uso."
@@ -295,815 +294,2095 @@
     "description": "Etiqueta del enlace externo al portal de Infancia y Familias."
   },
   "helpPageTitle": "Centro de ayuda",
-  "@helpPageTitle": {"description": "Título de la pantalla de ayuda."},
+  "@helpPageTitle": {
+    "description": "Título de la pantalla de ayuda."
+  },
   "helpSearchHint": "Buscar en preguntas frecuentes",
-  "@helpSearchHint": {"description": "Texto de ayuda del buscador local del centro de ayuda."},
+  "@helpSearchHint": {
+    "description": "Texto de ayuda del buscador local del centro de ayuda."
+  },
   "helpFaqSectionTitle": "Preguntas frecuentes",
-  "@helpFaqSectionTitle": {"description": "Encabezado de la sección FAQ."},
+  "@helpFaqSectionTitle": {
+    "description": "Encabezado de la sección FAQ."
+  },
   "helpGuidesSectionTitle": "Guías",
-  "@helpGuidesSectionTitle": {"description": "Encabezado de la sección de guías."},
+  "@helpGuidesSectionTitle": {
+    "description": "Encabezado de la sección de guías."
+  },
   "helpContactSectionTitle": "Contacto",
-  "@helpContactSectionTitle": {"description": "Encabezado de la sección de contacto."},
+  "@helpContactSectionTitle": {
+    "description": "Encabezado de la sección de contacto."
+  },
   "helpEmptySearchMessage": "Sin resultados",
-  "@helpEmptySearchMessage": {"description": "Mensaje principal cuando la búsqueda local no encuentra resultados."},
+  "@helpEmptySearchMessage": {
+    "description": "Mensaje principal cuando la búsqueda local no encuentra resultados."
+  },
   "helpEmptySearchSubtitle": "Prueba con otros términos.",
-  "@helpEmptySearchSubtitle": {"description": "Subtítulo del estado vacío de búsqueda."},
+  "@helpEmptySearchSubtitle": {
+    "description": "Subtítulo del estado vacío de búsqueda."
+  },
   "helpCategoryAccess": "Acceso y autenticación",
-  "@helpCategoryAccess": {"description": "Categoría FAQ: acceso y autenticación."},
+  "@helpCategoryAccess": {
+    "description": "Categoría FAQ: acceso y autenticación."
+  },
   "helpCategoryPrivacy": "Privacidad y datos",
-  "@helpCategoryPrivacy": {"description": "Categoría FAQ: privacidad y protección de datos."},
+  "@helpCategoryPrivacy": {
+    "description": "Categoría FAQ: privacidad y protección de datos."
+  },
   "helpCategoryServices": "Servicios y funcionalidades",
-  "@helpCategoryServices": {"description": "Categoría FAQ: uso de los servicios."},
+  "@helpCategoryServices": {
+    "description": "Categoría FAQ: uso de los servicios."
+  },
   "helpFaqLoginClaveQ": "¿Cómo accedo con Cl@ve?",
-  "@helpFaqLoginClaveQ": {"description": "FAQ — pregunta sobre acceso con Cl@ve."},
+  "@helpFaqLoginClaveQ": {
+    "description": "FAQ — pregunta sobre acceso con Cl@ve."
+  },
   "helpFaqLoginClaveA": "Pulsa \"Acceder con Cl@ve\" en la pantalla de inicio. Se abrirá el sistema oficial de identificación. Tras la autenticación volverás a la aplicación.",
-  "@helpFaqLoginClaveA": {"description": "FAQ — respuesta sobre acceso con Cl@ve."},
+  "@helpFaqLoginClaveA": {
+    "description": "FAQ — respuesta sobre acceso con Cl@ve."
+  },
   "helpFaqLoginProblemsQ": "No puedo iniciar sesión, ¿qué hago?",
-  "@helpFaqLoginProblemsQ": {"description": "FAQ — pregunta sobre problemas de acceso."},
+  "@helpFaqLoginProblemsQ": {
+    "description": "FAQ — pregunta sobre problemas de acceso."
+  },
   "helpFaqLoginProblemsA": "Verifica tu conexión y que tu certificado o credencial Cl@ve siga vigente. Si el problema persiste, contacta con el 012.",
-  "@helpFaqLoginProblemsA": {"description": "FAQ — respuesta sobre problemas de acceso."},
+  "@helpFaqLoginProblemsA": {
+    "description": "FAQ — respuesta sobre problemas de acceso."
+  },
   "helpFaqDataProtectionQ": "¿Qué se hace con mis datos personales?",
-  "@helpFaqDataProtectionQ": {"description": "FAQ — pregunta sobre protección de datos."},
+  "@helpFaqDataProtectionQ": {
+    "description": "FAQ — pregunta sobre protección de datos."
+  },
   "helpFaqDataProtectionA": "Tus datos se tratan conforme al RGPD y la LOPDGDD. Consulta la política de privacidad para conocer las finalidades, plazos y derechos.",
-  "@helpFaqDataProtectionA": {"description": "FAQ — respuesta sobre protección de datos."},
+  "@helpFaqDataProtectionA": {
+    "description": "FAQ — respuesta sobre protección de datos."
+  },
   "helpFaqNotificationsQ": "¿Cómo recibo notificaciones?",
-  "@helpFaqNotificationsQ": {"description": "FAQ — pregunta sobre notificaciones."},
+  "@helpFaqNotificationsQ": {
+    "description": "FAQ — pregunta sobre notificaciones."
+  },
   "helpFaqNotificationsA": "Activa los avisos en tu perfil y permite las notificaciones del sistema. Recibirás aviso cuando haya novedades en tus expedientes.",
-  "@helpFaqNotificationsA": {"description": "FAQ — respuesta sobre notificaciones."},
+  "@helpFaqNotificationsA": {
+    "description": "FAQ — respuesta sobre notificaciones."
+  },
   "helpFaqDocumentsQ": "¿Puedo descargar documentos oficiales?",
-  "@helpFaqDocumentsQ": {"description": "FAQ — pregunta sobre descarga de documentos."},
+  "@helpFaqDocumentsQ": {
+    "description": "FAQ — pregunta sobre descarga de documentos."
+  },
   "helpFaqDocumentsA": "Sí. Desde el detalle de cada expediente puedes descargar o compartir los documentos disponibles.",
-  "@helpFaqDocumentsA": {"description": "FAQ — respuesta sobre descarga de documentos."},
+  "@helpFaqDocumentsA": {
+    "description": "FAQ — respuesta sobre descarga de documentos."
+  },
   "helpFaqOfflineQ": "¿La aplicación funciona sin conexión?",
-  "@helpFaqOfflineQ": {"description": "FAQ — pregunta sobre uso sin conexión."},
+  "@helpFaqOfflineQ": {
+    "description": "FAQ — pregunta sobre uso sin conexión."
+  },
   "helpFaqOfflineA": "Algunas funciones (consulta de tarjetas y contenidos legales) se mantienen sin conexión. Las que requieren datos actualizados necesitan conectividad.",
-  "@helpFaqOfflineA": {"description": "FAQ — respuesta sobre uso sin conexión."},
+  "@helpFaqOfflineA": {
+    "description": "FAQ — respuesta sobre uso sin conexión."
+  },
   "helpGuideFirstStepsTitle": "Primeros pasos",
-  "@helpGuideFirstStepsTitle": {"description": "Guía — primeros pasos: título."},
+  "@helpGuideFirstStepsTitle": {
+    "description": "Guía — primeros pasos: título."
+  },
   "helpGuideFirstStepsBody": "Aprende a navegar entre Inicio, Expedientes, Notificaciones y Tarjetas. Personaliza tu perfil para una experiencia adaptada.",
-  "@helpGuideFirstStepsBody": {"description": "Guía — primeros pasos: cuerpo."},
+  "@helpGuideFirstStepsBody": {
+    "description": "Guía — primeros pasos: cuerpo."
+  },
   "helpGuideCarpetaAgeTitle": "Carpeta Ciudadana del Estado",
-  "@helpGuideCarpetaAgeTitle": {"description": "Guía sobre la Carpeta Ciudadana AGE."},
+  "@helpGuideCarpetaAgeTitle": {
+    "description": "Guía sobre la Carpeta Ciudadana AGE."
+  },
   "helpGuideCarpetaAgeBody": "Si tu trámite depende de la Administración General del Estado, accede directamente a la Carpeta Ciudadana AGE.",
-  "@helpGuideCarpetaAgeBody": {"description": "Guía AGE — cuerpo."},
+  "@helpGuideCarpetaAgeBody": {
+    "description": "Guía AGE — cuerpo."
+  },
   "helpContact012PhoneLabel": "Atención telefónica 012",
-  "@helpContact012PhoneLabel": {"description": "Contacto — etiqueta para el teléfono 012."},
+  "@helpContact012PhoneLabel": {
+    "description": "Contacto — etiqueta para el teléfono 012."
+  },
   "helpContactEmailSupportLabel": "Correo de soporte",
-  "@helpContactEmailSupportLabel": {"description": "Contacto — etiqueta para el correo de soporte."},
+  "@helpContactEmailSupportLabel": {
+    "description": "Contacto — etiqueta para el correo de soporte."
+  },
   "helpContactOfficesUrlLabel": "Oficinas de información y registro",
-  "@helpContactOfficesUrlLabel": {"description": "Contacto — etiqueta del recurso web de oficinas de información."},
+  "@helpContactOfficesUrlLabel": {
+    "description": "Contacto — etiqueta del recurso web de oficinas de información."
+  },
   "legalTermsTitle": "Condiciones de uso",
-  "@legalTermsTitle": {"description": "Título de la pantalla de condiciones de uso."},
+  "@legalTermsTitle": {
+    "description": "Título de la pantalla de condiciones de uso."
+  },
   "legalPrivacyTitle": "Protección de datos",
-  "@legalPrivacyTitle": {"description": "Título de la pantalla de protección de datos."},
+  "@legalPrivacyTitle": {
+    "description": "Título de la pantalla de protección de datos."
+  },
   "legalAccessibilityTitle": "Accesibilidad",
-  "@legalAccessibilityTitle": {"description": "Título de la pantalla de accesibilidad."},
+  "@legalAccessibilityTitle": {
+    "description": "Título de la pantalla de accesibilidad."
+  },
   "legalNoticeTitle": "Aviso legal",
-  "@legalNoticeTitle": {"description": "Título de la pantalla de aviso legal."},
+  "@legalNoticeTitle": {
+    "description": "Título de la pantalla de aviso legal."
+  },
   "legalNotFoundTitle": "Documento no encontrado",
-  "@legalNotFoundTitle": {"description": "Título cuando el documento legal solicitado no existe."},
+  "@legalNotFoundTitle": {
+    "description": "Título cuando el documento legal solicitado no existe."
+  },
   "legalNotFoundMessage": "No se ha podido cargar el documento solicitado.",
-  "@legalNotFoundMessage": {"description": "Mensaje cuando un documento legal no existe."},
+  "@legalNotFoundMessage": {
+    "description": "Mensaje cuando un documento legal no existe."
+  },
   "sitemapPageTitle": "Mapa del sitio",
-  "@sitemapPageTitle": {"description": "Título de la pantalla de mapa del sitio."},
+  "@sitemapPageTitle": {
+    "description": "Título de la pantalla de mapa del sitio."
+  },
   "sitemapGroupAuthenticated": "Mi espacio",
-  "@sitemapGroupAuthenticated": {"description": "Sitemap — agrupación de áreas autenticadas."},
+  "@sitemapGroupAuthenticated": {
+    "description": "Sitemap — agrupación de áreas autenticadas."
+  },
   "sitemapGroupThematic": "Áreas temáticas",
-  "@sitemapGroupThematic": {"description": "Sitemap — agrupación de landings temáticas."},
+  "@sitemapGroupThematic": {
+    "description": "Sitemap — agrupación de landings temáticas."
+  },
   "sitemapGroupHelpLegal": "Ayuda y legales",
-  "@sitemapGroupHelpLegal": {"description": "Sitemap — agrupación de ayuda y páginas legales."},
+  "@sitemapGroupHelpLegal": {
+    "description": "Sitemap — agrupación de ayuda y páginas legales."
+  },
   "sitemapGroupExternal": "Recursos externos",
-  "@sitemapGroupExternal": {"description": "Sitemap — agrupación de enlaces externos."},
+  "@sitemapGroupExternal": {
+    "description": "Sitemap — agrupación de enlaces externos."
+  },
   "sitemapHome": "Inicio",
-  "@sitemapHome": {"description": "Sitemap — Inicio."},
+  "@sitemapHome": {
+    "description": "Sitemap — Inicio."
+  },
   "sitemapAgenda": "Agenda",
-  "@sitemapAgenda": {"description": "Sitemap — Agenda."},
+  "@sitemapAgenda": {
+    "description": "Sitemap — Agenda."
+  },
   "sitemapCasework": "Expedientes",
-  "@sitemapCasework": {"description": "Sitemap — Expedientes."},
+  "@sitemapCasework": {
+    "description": "Sitemap — Expedientes."
+  },
   "sitemapNotifications": "Notificaciones",
-  "@sitemapNotifications": {"description": "Sitemap — Notificaciones."},
+  "@sitemapNotifications": {
+    "description": "Sitemap — Notificaciones."
+  },
   "sitemapCards": "Tarjetas",
-  "@sitemapCards": {"description": "Sitemap — Tarjetas."},
+  "@sitemapCards": {
+    "description": "Sitemap — Tarjetas."
+  },
   "sitemapRecommendations": "Recomendaciones",
-  "@sitemapRecommendations": {"description": "Sitemap — Recomendaciones."},
+  "@sitemapRecommendations": {
+    "description": "Sitemap — Recomendaciones."
+  },
   "sitemapSupport": "Soporte",
-  "@sitemapSupport": {"description": "Sitemap — Soporte."},
+  "@sitemapSupport": {
+    "description": "Sitemap — Soporte."
+  },
   "sitemapProfile": "Perfil",
-  "@sitemapProfile": {"description": "Sitemap — Perfil."},
+  "@sitemapProfile": {
+    "description": "Sitemap — Perfil."
+  },
   "sitemapEducation": "Educación",
-  "@sitemapEducation": {"description": "Sitemap — Educación."},
+  "@sitemapEducation": {
+    "description": "Sitemap — Educación."
+  },
   "sitemapEmployment": "Empleo",
-  "@sitemapEmployment": {"description": "Sitemap — Empleo."},
+  "@sitemapEmployment": {
+    "description": "Sitemap — Empleo."
+  },
   "sitemapSocialWelfare": "Bienestar Social",
-  "@sitemapSocialWelfare": {"description": "Sitemap — Bienestar Social."},
+  "@sitemapSocialWelfare": {
+    "description": "Sitemap — Bienestar Social."
+  },
   "sitemapStateAffairs": "Estado y otros",
-  "@sitemapStateAffairs": {"description": "Sitemap — Estado y otros."},
+  "@sitemapStateAffairs": {
+    "description": "Sitemap — Estado y otros."
+  },
   "sitemapHelp": "Centro de ayuda",
-  "@sitemapHelp": {"description": "Sitemap — Centro de ayuda."},
+  "@sitemapHelp": {
+    "description": "Sitemap — Centro de ayuda."
+  },
   "footerHelp": "Ayuda",
-  "@footerHelp": {"description": "Footer — Ayuda."},
+  "@footerHelp": {
+    "description": "Footer — Ayuda."
+  },
   "footerSitemap": "Mapa del sitio",
-  "@footerSitemap": {"description": "Footer — Mapa del sitio."},
+  "@footerSitemap": {
+    "description": "Footer — Mapa del sitio."
+  },
   "footerTerms": "Condiciones",
-  "@footerTerms": {"description": "Footer — Condiciones."},
+  "@footerTerms": {
+    "description": "Footer — Condiciones."
+  },
   "footerPrivacy": "Privacidad",
-  "@footerPrivacy": {"description": "Footer — Privacidad."},
+  "@footerPrivacy": {
+    "description": "Footer — Privacidad."
+  },
   "footerAccessibility": "Accesibilidad",
-  "@footerAccessibility": {"description": "Footer — Accesibilidad."},
+  "@footerAccessibility": {
+    "description": "Footer — Accesibilidad."
+  },
   "footerLegalNotice": "Aviso legal",
-  "@footerLegalNotice": {"description": "Footer — Aviso legal."},
+  "@footerLegalNotice": {
+    "description": "Footer — Aviso legal."
+  },
   "agendaPageTitle": "Agenda",
-  "@agendaPageTitle": {"description": "Agenda — título de la pantalla."},
+  "@agendaPageTitle": {
+    "description": "Agenda — título de la pantalla."
+  },
   "agendaFilterAll": "Todos",
-  "@agendaFilterAll": {"description": "Agenda — filtro temporal: todos los eventos."},
+  "@agendaFilterAll": {
+    "description": "Agenda — filtro temporal: todos los eventos."
+  },
   "agendaFilterNext7Days": "Próximos 7 días",
-  "@agendaFilterNext7Days": {"description": "Agenda — filtro temporal: próximos 7 días."},
+  "@agendaFilterNext7Days": {
+    "description": "Agenda — filtro temporal: próximos 7 días."
+  },
   "agendaFilterNext30Days": "Próximos 30 días",
-  "@agendaFilterNext30Days": {"description": "Agenda — filtro temporal: próximos 30 días."},
+  "@agendaFilterNext30Days": {
+    "description": "Agenda — filtro temporal: próximos 30 días."
+  },
   "agendaFilterNext365Days": "Próximos 365 días",
-  "@agendaFilterNext365Days": {"description": "Agenda — filtro temporal: próximos 365 días."},
+  "@agendaFilterNext365Days": {
+    "description": "Agenda — filtro temporal: próximos 365 días."
+  },
   "agendaFilterPast": "Pasados",
-  "@agendaFilterPast": {"description": "Agenda — filtro temporal: eventos pasados."},
+  "@agendaFilterPast": {
+    "description": "Agenda — filtro temporal: eventos pasados."
+  },
   "agendaViewList": "Lista",
-  "@agendaViewList": {"description": "Agenda — pestaña de vista lista."},
+  "@agendaViewList": {
+    "description": "Agenda — pestaña de vista lista."
+  },
   "agendaViewCalendar": "Calendario",
-  "@agendaViewCalendar": {"description": "Agenda — pestaña de vista calendario."},
+  "@agendaViewCalendar": {
+    "description": "Agenda — pestaña de vista calendario."
+  },
   "agendaEmpty": "No hay eventos para el periodo seleccionado.",
-  "@agendaEmpty": {"description": "Agenda — mensaje cuando no hay eventos visibles."},
+  "@agendaEmpty": {
+    "description": "Agenda — mensaje cuando no hay eventos visibles."
+  },
   "agendaError": "No hemos podido cargar tu agenda.",
-  "@agendaError": {"description": "Agenda — mensaje de error al cargar."},
+  "@agendaError": {
+    "description": "Agenda — mensaje de error al cargar."
+  },
   "agendaLastUpdated": "Última actualización: {timestamp}",
   "@agendaLastUpdated": {
     "description": "Agenda — etiqueta del timestamp de última actualización.",
-    "placeholders": {"timestamp": {"type": "String"}}
+    "placeholders": {
+      "timestamp": {
+        "type": "String"
+      }
+    }
   },
   "agendaCategorySalud": "Salud",
-  "@agendaCategorySalud": {"description": "Agenda — etiqueta de la categoría salud."},
+  "@agendaCategorySalud": {
+    "description": "Agenda — etiqueta de la categoría salud."
+  },
   "agendaCategoryAdministrativo": "Administrativo",
-  "@agendaCategoryAdministrativo": {"description": "Agenda — etiqueta de la categoría administrativo."},
+  "@agendaCategoryAdministrativo": {
+    "description": "Agenda — etiqueta de la categoría administrativo."
+  },
   "agendaCategoryEducacion": "Educación",
-  "@agendaCategoryEducacion": {"description": "Agenda — etiqueta de la categoría educación."},
+  "@agendaCategoryEducacion": {
+    "description": "Agenda — etiqueta de la categoría educación."
+  },
   "agendaCategoryOtros": "Otros",
-  "@agendaCategoryOtros": {"description": "Agenda — etiqueta de la categoría otros."},
+  "@agendaCategoryOtros": {
+    "description": "Agenda — etiqueta de la categoría otros."
+  },
   "agendaPreviousMonth": "Mes anterior",
-  "@agendaPreviousMonth": {"description": "Agenda — botón para ir al mes anterior en el calendario."},
+  "@agendaPreviousMonth": {
+    "description": "Agenda — botón para ir al mes anterior en el calendario."
+  },
   "agendaNextMonth": "Mes siguiente",
-  "@agendaNextMonth": {"description": "Agenda — botón para ir al mes siguiente en el calendario."},
+  "@agendaNextMonth": {
+    "description": "Agenda — botón para ir al mes siguiente en el calendario."
+  },
   "agendaClearDay": "Quitar filtro de día",
-  "@agendaClearDay": {"description": "Agenda — botón para limpiar la selección de día del calendario."},
+  "@agendaClearDay": {
+    "description": "Agenda — botón para limpiar la selección de día del calendario."
+  },
   "agendaDetailBack": "Volver",
-  "@agendaDetailBack": {"description": "Agenda — botón para volver desde el detalle del evento."},
+  "@agendaDetailBack": {
+    "description": "Agenda — botón para volver desde el detalle del evento."
+  },
   "agendaDetailNotFound": "El evento solicitado ya no está disponible.",
-  "@agendaDetailNotFound": {"description": "Agenda — mensaje cuando el evento del detalle no existe."},
+  "@agendaDetailNotFound": {
+    "description": "Agenda — mensaje cuando el evento del detalle no existe."
+  },
   "agendaDetailLocation": "Ubicación",
-  "@agendaDetailLocation": {"description": "Agenda — etiqueta del campo ubicación en el detalle."},
+  "@agendaDetailLocation": {
+    "description": "Agenda — etiqueta del campo ubicación en el detalle."
+  },
   "agendaDetailWhen": "Fecha",
-  "@agendaDetailWhen": {"description": "Agenda — etiqueta del campo fecha en el detalle."},
+  "@agendaDetailWhen": {
+    "description": "Agenda — etiqueta del campo fecha en el detalle."
+  },
   "agendaDetailCentro": "Centro",
-  "@agendaDetailCentro": {"description": "Agenda — etiqueta del campo centro en el detalle."},
+  "@agendaDetailCentro": {
+    "description": "Agenda — etiqueta del campo centro en el detalle."
+  },
   "agendaDetailProfesional": "Profesional",
-  "@agendaDetailProfesional": {"description": "Agenda — etiqueta del campo profesional en el detalle."},
+  "@agendaDetailProfesional": {
+    "description": "Agenda — etiqueta del campo profesional en el detalle."
+  },
   "agendaDetailTipo": "Tipo",
-  "@agendaDetailTipo": {"description": "Agenda — etiqueta del campo tipo en el detalle."},
+  "@agendaDetailTipo": {
+    "description": "Agenda — etiqueta del campo tipo en el detalle."
+  },
   "agendaDetailDescription": "Descripción",
-  "@agendaDetailDescription": {"description": "Agenda — etiqueta de la descripción larga en el detalle."},
+  "@agendaDetailDescription": {
+    "description": "Agenda — etiqueta de la descripción larga en el detalle."
+  },
   "agendaDetailJustificante": "Ver justificante de asistencia",
-  "@agendaDetailJustificante": {"description": "Agenda — CTA para abrir el justificante de asistencia."},
+  "@agendaDetailJustificante": {
+    "description": "Agenda — CTA para abrir el justificante de asistencia."
+  },
   "agendaJustificanteUnavailable": "El justificante se podrá abrir cuando se habilite el enlace externo.",
-  "@agendaJustificanteUnavailable": {"description": "Agenda — aviso al pulsar el justificante mientras el enlace externo no está habilitado."},
+  "@agendaJustificanteUnavailable": {
+    "description": "Agenda — aviso al pulsar el justificante mientras el enlace externo no está habilitado."
+  },
   "agendaTileExpand": "Ver más detalles",
-  "@agendaTileExpand": {"description": "Agenda — affordance para expandir el detalle inline en la lista."},
+  "@agendaTileExpand": {
+    "description": "Agenda — affordance para expandir el detalle inline en la lista."
+  },
   "agendaTileCollapse": "Ocultar detalles",
-  "@agendaTileCollapse": {"description": "Agenda — affordance para colapsar el detalle inline en la lista."},
+  "@agendaTileCollapse": {
+    "description": "Agenda — affordance para colapsar el detalle inline en la lista."
+  },
   "agendaTileOpenDetail": "Abrir detalle completo",
-  "@agendaTileOpenDetail": {"description": "Agenda — CTA para navegar al detalle completo del evento."},
+  "@agendaTileOpenDetail": {
+    "description": "Agenda — CTA para navegar al detalle completo del evento."
+  },
   "agendaParseErrorTitle": "No hemos podido leer tu agenda",
-  "@agendaParseErrorTitle": {"description": "Agenda — título del estado de error de parseo."},
+  "@agendaParseErrorTitle": {
+    "description": "Agenda — título del estado de error de parseo."
+  },
   "agendaParseErrorDetail": "Hubo un problema al interpretar la respuesta del servicio. Vuelve a intentarlo en unos minutos.",
-  "@agendaParseErrorDetail": {"description": "Agenda — detalle del estado de error de parseo."},
+  "@agendaParseErrorDetail": {
+    "description": "Agenda — detalle del estado de error de parseo."
+  },
   "agendaParseErrorRetry": "Intentar de nuevo",
-  "@agendaParseErrorRetry": {"description": "Agenda — CTA de reintento del estado de error de parseo."},
+  "@agendaParseErrorRetry": {
+    "description": "Agenda — CTA de reintento del estado de error de parseo."
+  },
   "agendaPartialBanner": "Algunos eventos no se han podido cargar. Mostramos los disponibles.",
-  "@agendaPartialBanner": {"description": "Agenda — aviso de datos parciales sobre la lista."},
+  "@agendaPartialBanner": {
+    "description": "Agenda — aviso de datos parciales sobre la lista."
+  },
   "stateAffairsTitle": "Estado y otros temas de interés",
-  "@stateAffairsTitle": {"description": "Estado — título de la landing."},
+  "@stateAffairsTitle": {
+    "description": "Estado — título de la landing."
+  },
   "stateAffairsHeaderDescription": "Información procedente de registros estatales (INE/Padrón, Catastro, DGT). Los datos pueden no estar actualizados en tiempo real.",
-  "@stateAffairsHeaderDescription": {"description": "Estado — descripción de cabecera."},
+  "@stateAffairsHeaderDescription": {
+    "description": "Estado — descripción de cabecera."
+  },
   "stateAffairsResidenceTitle": "Domicilio",
-  "@stateAffairsResidenceTitle": {"description": "Estado — título sección domicilio (INE)."},
+  "@stateAffairsResidenceTitle": {
+    "description": "Estado — título sección domicilio (INE)."
+  },
   "stateAffairsResidenceSource": "Fuente: INE / Padrón municipal",
-  "@stateAffairsResidenceSource": {"description": "Estado — atribución de fuente para domicilio."},
+  "@stateAffairsResidenceSource": {
+    "description": "Estado — atribución de fuente para domicilio."
+  },
   "stateAffairsResidenceMunicipio": "Municipio",
-  "@stateAffairsResidenceMunicipio": {"description": "Estado — etiqueta municipio."},
+  "@stateAffairsResidenceMunicipio": {
+    "description": "Estado — etiqueta municipio."
+  },
   "stateAffairsResidenceProvincia": "Provincia",
-  "@stateAffairsResidenceProvincia": {"description": "Estado — etiqueta provincia."},
+  "@stateAffairsResidenceProvincia": {
+    "description": "Estado — etiqueta provincia."
+  },
   "stateAffairsResidenceComunidad": "Comunidad autónoma",
-  "@stateAffairsResidenceComunidad": {"description": "Estado — etiqueta comunidad autónoma."},
+  "@stateAffairsResidenceComunidad": {
+    "description": "Estado — etiqueta comunidad autónoma."
+  },
   "stateAffairsResidenceDireccion": "Dirección",
-  "@stateAffairsResidenceDireccion": {"description": "Estado — etiqueta dirección."},
+  "@stateAffairsResidenceDireccion": {
+    "description": "Estado — etiqueta dirección."
+  },
   "stateAffairsResidenceCp": "Código postal",
-  "@stateAffairsResidenceCp": {"description": "Estado — etiqueta código postal."},
+  "@stateAffairsResidenceCp": {
+    "description": "Estado — etiqueta código postal."
+  },
   "stateAffairsResidenceLastUpdated": "Actualizado: {timestamp}",
   "@stateAffairsResidenceLastUpdated": {
     "description": "Estado — texto de última actualización del padrón.",
-    "placeholders": {"timestamp": {"type": "String"}}
+    "placeholders": {
+      "timestamp": {
+        "type": "String"
+      }
+    }
   },
   "stateAffairsPropertiesTitle": "Bienes inmuebles",
-  "@stateAffairsPropertiesTitle": {"description": "Estado — título sección Catastro."},
+  "@stateAffairsPropertiesTitle": {
+    "description": "Estado — título sección Catastro."
+  },
   "stateAffairsPropertiesSource": "Fuente: Catastro",
-  "@stateAffairsPropertiesSource": {"description": "Estado — atribución de fuente para Catastro."},
+  "@stateAffairsPropertiesSource": {
+    "description": "Estado — atribución de fuente para Catastro."
+  },
   "stateAffairsPropertiesEmpty": "No constan bienes inmuebles a tu nombre.",
-  "@stateAffairsPropertiesEmpty": {"description": "Estado — vacío Catastro."},
+  "@stateAffairsPropertiesEmpty": {
+    "description": "Estado — vacío Catastro."
+  },
   "stateAffairsPropertiesError": "No hemos podido cargar los datos de Catastro.",
-  "@stateAffairsPropertiesError": {"description": "Estado — error Catastro."},
+  "@stateAffairsPropertiesError": {
+    "description": "Estado — error Catastro."
+  },
   "stateAffairsPropertiesTitularidad": "Titularidad: {value}",
   "@stateAffairsPropertiesTitularidad": {
     "description": "Estado — etiqueta titularidad de un inmueble.",
-    "placeholders": {"value": {"type": "String"}}
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   },
   "stateAffairsPropertiesSurface": "Superficie: {m2} m²",
   "@stateAffairsPropertiesSurface": {
     "description": "Estado — etiqueta superficie en m².",
-    "placeholders": {"m2": {"type": "String"}}
+    "placeholders": {
+      "m2": {
+        "type": "String"
+      }
+    }
   },
   "stateAffairsPropertiesReference": "Referencia catastral: {value}",
   "@stateAffairsPropertiesReference": {
     "description": "Estado — etiqueta referencia catastral.",
-    "placeholders": {"value": {"type": "String"}}
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   },
   "stateAffairsVehiclesTitle": "Vehículos",
-  "@stateAffairsVehiclesTitle": {"description": "Estado — título sección DGT."},
+  "@stateAffairsVehiclesTitle": {
+    "description": "Estado — título sección DGT."
+  },
   "stateAffairsVehiclesSource": "Fuente: DGT",
-  "@stateAffairsVehiclesSource": {"description": "Estado — atribución de fuente para DGT."},
+  "@stateAffairsVehiclesSource": {
+    "description": "Estado — atribución de fuente para DGT."
+  },
   "stateAffairsVehiclesEmpty": "No constan vehículos a tu nombre.",
-  "@stateAffairsVehiclesEmpty": {"description": "Estado — vacío DGT."},
+  "@stateAffairsVehiclesEmpty": {
+    "description": "Estado — vacío DGT."
+  },
   "stateAffairsVehiclesError": "No hemos podido cargar los datos de la DGT.",
-  "@stateAffairsVehiclesError": {"description": "Estado — error DGT."},
+  "@stateAffairsVehiclesError": {
+    "description": "Estado — error DGT."
+  },
   "stateAffairsVehiclesPlate": "Matrícula: {value}",
   "@stateAffairsVehiclesPlate": {
     "description": "Estado — etiqueta matrícula vehículo.",
-    "placeholders": {"value": {"type": "String"}}
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   },
   "stateAffairsVehiclesFuel": "Combustible: {value}",
   "@stateAffairsVehiclesFuel": {
     "description": "Estado — etiqueta combustible vehículo.",
-    "placeholders": {"value": {"type": "String"}}
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   },
   "stateAffairsDataDisclaimer": "Los datos proceden de la DGT, INE y Catastro y pueden no estar actualizados en tiempo real.",
-  "@stateAffairsDataDisclaimer": {"description": "Estado — aclaración de procedencia de los datos."},
+  "@stateAffairsDataDisclaimer": {
+    "description": "Estado — aclaración de procedencia de los datos."
+  },
   "domainExternalLinksTitle": "Enlaces externos",
-  "@domainExternalLinksTitle": {"description": "Domains — título de la sección de enlaces externos."},
+  "@domainExternalLinksTitle": {
+    "description": "Domains — título de la sección de enlaces externos."
+  },
   "domainGenericLoadError": "No hemos podido cargar la información solicitada.",
-  "@domainGenericLoadError": {"description": "Domains — error genérico de carga."},
+  "@domainGenericLoadError": {
+    "description": "Domains — error genérico de carga."
+  },
   "domainComingSoonBadge": "Próximamente",
-  "@domainComingSoonBadge": {"description": "Domains — etiqueta para placeholder controlado."},
+  "@domainComingSoonBadge": {
+    "description": "Domains — etiqueta para placeholder controlado."
+  },
   "educationTitle": "Educación",
-  "@educationTitle": {"description": "Educación — título de la landing."},
+  "@educationTitle": {
+    "description": "Educación — título de la landing."
+  },
   "educationHeaderDescription": "Consulta tus títulos académicos y accede a los servicios oficiales de educación de Castilla-La Mancha.",
-  "@educationHeaderDescription": {"description": "Educación — descripción de cabecera."},
+  "@educationHeaderDescription": {
+    "description": "Educación — descripción de cabecera."
+  },
   "educationUniversityTitlesTitle": "Títulos universitarios",
-  "@educationUniversityTitlesTitle": {"description": "Educación — sección títulos universitarios."},
+  "@educationUniversityTitlesTitle": {
+    "description": "Educación — sección títulos universitarios."
+  },
   "educationUniversityTitlesEmpty": "No constan títulos universitarios a tu nombre.",
-  "@educationUniversityTitlesEmpty": {"description": "Educación — vacío títulos universitarios."},
+  "@educationUniversityTitlesEmpty": {
+    "description": "Educación — vacío títulos universitarios."
+  },
   "educationUniversityTitlesError": "No hemos podido cargar tus títulos universitarios.",
-  "@educationUniversityTitlesError": {"description": "Educación — error títulos universitarios."},
+  "@educationUniversityTitlesError": {
+    "description": "Educación — error títulos universitarios."
+  },
   "educationNonUniversityTitlesTitle": "Títulos no universitarios",
-  "@educationNonUniversityTitlesTitle": {"description": "Educación — sección títulos no universitarios."},
+  "@educationNonUniversityTitlesTitle": {
+    "description": "Educación — sección títulos no universitarios."
+  },
   "educationNonUniversityTitlesEmpty": "No constan títulos no universitarios a tu nombre.",
-  "@educationNonUniversityTitlesEmpty": {"description": "Educación — vacío títulos no universitarios."},
+  "@educationNonUniversityTitlesEmpty": {
+    "description": "Educación — vacío títulos no universitarios."
+  },
   "educationNonUniversityTitlesError": "No hemos podido cargar tus títulos no universitarios.",
-  "@educationNonUniversityTitlesError": {"description": "Educación — error títulos no universitarios."},
+  "@educationNonUniversityTitlesError": {
+    "description": "Educación — error títulos no universitarios."
+  },
   "educationTitleYear": "Año: {year}",
   "@educationTitleYear": {
     "description": "Educación — etiqueta año del título.",
-    "placeholders": {"year": {"type": "String"}}
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
   },
   "educationScholarshipTitle": "Condición de becado",
-  "@educationScholarshipTitle": {"description": "Educación — sección condición de becado (placeholder)."},
+  "@educationScholarshipTitle": {
+    "description": "Educación — sección condición de becado (placeholder)."
+  },
   "educationScholarshipDescription": "Esta información estará disponible próximamente. Necesita un servicio adicional que aún no está integrado.",
-  "@educationScholarshipDescription": {"description": "Educación — descripción placeholder condición de becado."},
+  "@educationScholarshipDescription": {
+    "description": "Educación — descripción placeholder condición de becado."
+  },
   "educationScholarshipTooltip": "Capacidad pendiente de un endpoint específico de becas. Pendiente de validación de contrato (TASK-27).",
-  "@educationScholarshipTooltip": {"description": "Educación — tooltip explicativo placeholder condición de becado."},
+  "@educationScholarshipTooltip": {
+    "description": "Educación — tooltip explicativo placeholder condición de becado."
+  },
   "employmentTitle": "Empleo",
-  "@employmentTitle": {"description": "Empleo — título de la landing."},
+  "@employmentTitle": {
+    "description": "Empleo — título de la landing."
+  },
   "employmentHeaderDescription": "Consulta tu situación como demandante de empleo y accede a los portales oficiales de Empleo CLM.",
-  "@employmentHeaderDescription": {"description": "Empleo — descripción de cabecera."},
+  "@employmentHeaderDescription": {
+    "description": "Empleo — descripción de cabecera."
+  },
   "employmentSeekerTitle": "Estado de demandante de empleo",
-  "@employmentSeekerTitle": {"description": "Empleo — sección demandante (SEPE)."},
+  "@employmentSeekerTitle": {
+    "description": "Empleo — sección demandante (SEPE)."
+  },
   "employmentSeekerSource": "Fuente: SEPE",
-  "@employmentSeekerSource": {"description": "Empleo — atribución de fuente SEPE."},
+  "@employmentSeekerSource": {
+    "description": "Empleo — atribución de fuente SEPE."
+  },
   "employmentSeekerEmpty": "No constan datos de demanda de empleo a tu nombre.",
-  "@employmentSeekerEmpty": {"description": "Empleo — vacío demandante."},
+  "@employmentSeekerEmpty": {
+    "description": "Empleo — vacío demandante."
+  },
   "employmentSeekerError": "No hemos podido cargar tu estado de demandante de empleo.",
-  "@employmentSeekerError": {"description": "Empleo — error demandante."},
+  "@employmentSeekerError": {
+    "description": "Empleo — error demandante."
+  },
   "employmentSeekerEstadoLabel": "Estado actual",
-  "@employmentSeekerEstadoLabel": {"description": "Empleo — etiqueta estado actual."},
+  "@employmentSeekerEstadoLabel": {
+    "description": "Empleo — etiqueta estado actual."
+  },
   "employmentSeekerInscripcionLabel": "Fecha de inscripción",
-  "@employmentSeekerInscripcionLabel": {"description": "Empleo — etiqueta fecha inscripción."},
+  "@employmentSeekerInscripcionLabel": {
+    "description": "Empleo — etiqueta fecha inscripción."
+  },
   "employmentSeekerContinuidadLabel": "Fecha de continuidad",
-  "@employmentSeekerContinuidadLabel": {"description": "Empleo — etiqueta fecha continuidad."},
+  "@employmentSeekerContinuidadLabel": {
+    "description": "Empleo — etiqueta fecha continuidad."
+  },
   "employmentSeekerEstadoInscrito": "Inscrito",
-  "@employmentSeekerEstadoInscrito": {"description": "Empleo — estado inscrito."},
+  "@employmentSeekerEstadoInscrito": {
+    "description": "Empleo — estado inscrito."
+  },
   "employmentSeekerEstadoNoInscrito": "No inscrito",
-  "@employmentSeekerEstadoNoInscrito": {"description": "Empleo — estado no inscrito."},
+  "@employmentSeekerEstadoNoInscrito": {
+    "description": "Empleo — estado no inscrito."
+  },
   "employmentSeekerEstadoBajaTemporal": "Baja temporal",
-  "@employmentSeekerEstadoBajaTemporal": {"description": "Empleo — estado baja temporal."},
+  "@employmentSeekerEstadoBajaTemporal": {
+    "description": "Empleo — estado baja temporal."
+  },
   "employmentOffersTitle": "Inscripciones en ofertas",
-  "@employmentOffersTitle": {"description": "Empleo — sección inscripciones en ofertas (external link)."},
+  "@employmentOffersTitle": {
+    "description": "Empleo — sección inscripciones en ofertas (external link)."
+  },
   "employmentOffersDescription": "La consulta y gestión de tus inscripciones en ofertas se realiza directamente en el portal de Empleo CLM.",
-  "@employmentOffersDescription": {"description": "Empleo — copy explicativo inscripciones en ofertas."},
+  "@employmentOffersDescription": {
+    "description": "Empleo — copy explicativo inscripciones en ofertas."
+  },
   "socialWelfareTitle": "Bienestar Social",
-  "@socialWelfareTitle": {"description": "Bienestar — título de la landing."},
+  "@socialWelfareTitle": {
+    "description": "Bienestar — título de la landing."
+  },
   "socialWelfareHeaderDescription": "Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.",
-  "@socialWelfareHeaderDescription": {"description": "Bienestar — descripción de cabecera."},
+  "@socialWelfareHeaderDescription": {
+    "description": "Bienestar — descripción de cabecera."
+  },
   "socialWelfareFamilyTitle": "Familia numerosa",
-  "@socialWelfareFamilyTitle": {"description": "Bienestar — sección familia numerosa."},
+  "@socialWelfareFamilyTitle": {
+    "description": "Bienestar — sección familia numerosa."
+  },
   "socialWelfareFamilySource": "Fuente: Junta de Comunidades de Castilla-La Mancha",
-  "@socialWelfareFamilySource": {"description": "Bienestar — atribución CCAA."},
+  "@socialWelfareFamilySource": {
+    "description": "Bienestar — atribución CCAA."
+  },
   "socialWelfareFamilyEmpty": "No consta título de familia numerosa a tu nombre.",
-  "@socialWelfareFamilyEmpty": {"description": "Bienestar — vacío familia numerosa."},
+  "@socialWelfareFamilyEmpty": {
+    "description": "Bienestar — vacío familia numerosa."
+  },
   "socialWelfareFamilyError": "No hemos podido cargar tu título de familia numerosa.",
-  "@socialWelfareFamilyError": {"description": "Bienestar — error familia numerosa."},
+  "@socialWelfareFamilyError": {
+    "description": "Bienestar — error familia numerosa."
+  },
   "socialWelfareFamilyNumberLabel": "Número de título",
-  "@socialWelfareFamilyNumberLabel": {"description": "Bienestar — etiqueta número de título."},
+  "@socialWelfareFamilyNumberLabel": {
+    "description": "Bienestar — etiqueta número de título."
+  },
   "socialWelfareFamilyCategoriaLabel": "Categoría",
-  "@socialWelfareFamilyCategoriaLabel": {"description": "Bienestar — etiqueta categoría."},
+  "@socialWelfareFamilyCategoriaLabel": {
+    "description": "Bienestar — etiqueta categoría."
+  },
   "socialWelfareFamilyCaducidadLabel": "Fecha de caducidad",
-  "@socialWelfareFamilyCaducidadLabel": {"description": "Bienestar — etiqueta caducidad."},
+  "@socialWelfareFamilyCaducidadLabel": {
+    "description": "Bienestar — etiqueta caducidad."
+  },
   "socialWelfareFamilyCategoriaGeneral": "General",
-  "@socialWelfareFamilyCategoriaGeneral": {"description": "Bienestar — categoría general."},
+  "@socialWelfareFamilyCategoriaGeneral": {
+    "description": "Bienestar — categoría general."
+  },
   "socialWelfareFamilyCategoriaEspecial": "Especial",
-  "@socialWelfareFamilyCategoriaEspecial": {"description": "Bienestar — categoría especial."},
+  "@socialWelfareFamilyCategoriaEspecial": {
+    "description": "Bienestar — categoría especial."
+  },
   "socialWelfareFamilyBeneficiariosTitle": "Beneficiarios",
-  "@socialWelfareFamilyBeneficiariosTitle": {"description": "Bienestar — sub-título beneficiarios."},
+  "@socialWelfareFamilyBeneficiariosTitle": {
+    "description": "Bienestar — sub-título beneficiarios."
+  },
   "socialWelfareFamilyRelacionTitular": "Titular",
-  "@socialWelfareFamilyRelacionTitular": {"description": "Bienestar — relación titular."},
+  "@socialWelfareFamilyRelacionTitular": {
+    "description": "Bienestar — relación titular."
+  },
   "socialWelfareFamilyRelacionConyuge": "Cónyuge",
-  "@socialWelfareFamilyRelacionConyuge": {"description": "Bienestar — relación cónyuge."},
+  "@socialWelfareFamilyRelacionConyuge": {
+    "description": "Bienestar — relación cónyuge."
+  },
   "socialWelfareFamilyRelacionHijo": "Hijo/a",
-  "@socialWelfareFamilyRelacionHijo": {"description": "Bienestar — relación hijo/a."},
+  "@socialWelfareFamilyRelacionHijo": {
+    "description": "Bienestar — relación hijo/a."
+  },
   "socialWelfareFamilyBeneficiarioLine": "{relacion} — nacido el {fecha}",
   "@socialWelfareFamilyBeneficiarioLine": {
     "description": "Bienestar — línea descriptiva de un beneficiario.",
     "placeholders": {
-      "relacion": {"type": "String"},
-      "fecha": {"type": "String"}
+      "relacion": {
+        "type": "String"
+      },
+      "fecha": {
+        "type": "String"
+      }
     }
   },
   "socialWelfareTermalismoTitle": "Termalismo / Balnearios",
-  "@socialWelfareTermalismoTitle": {"description": "Bienestar — sección termalismo (external link)."},
+  "@socialWelfareTermalismoTitle": {
+    "description": "Bienestar — sección termalismo (external link)."
+  },
   "socialWelfareTermalismoDescription": "El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.",
-  "@socialWelfareTermalismoDescription": {"description": "Bienestar — copy termalismo."},
+  "@socialWelfareTermalismoDescription": {
+    "description": "Bienestar — copy termalismo."
+  },
   "socialWelfareParkingTitle": "Tarjeta de estacionamiento",
-  "@socialWelfareParkingTitle": {"description": "Bienestar — sección tarjeta de estacionamiento (external link)."},
+  "@socialWelfareParkingTitle": {
+    "description": "Bienestar — sección tarjeta de estacionamiento (external link)."
+  },
   "socialWelfareParkingDescription": "La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.",
-  "@socialWelfareParkingDescription": {"description": "Bienestar — copy tarjeta estacionamiento."},
+  "@socialWelfareParkingDescription": {
+    "description": "Bienestar — copy tarjeta estacionamiento."
+  },
   "socialWelfareDependenciaTitle": "Atención a la dependencia",
-  "@socialWelfareDependenciaTitle": {"description": "Bienestar — sección atención a la dependencia (external link)."},
+  "@socialWelfareDependenciaTitle": {
+    "description": "Bienestar — sección atención a la dependencia (external link)."
+  },
   "socialWelfareDependenciaDescription": "La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.",
-  "@socialWelfareDependenciaDescription": {"description": "Bienestar — copy dependencia."}
-,  "supportFormTitle": "Soporte técnico",
-  "@supportFormTitle": {"description": "Título de la pantalla de formulario de soporte."},
+  "@socialWelfareDependenciaDescription": {
+    "description": "Bienestar — copy dependencia."
+  },
+  "supportFormTitle": "Soporte técnico",
+  "@supportFormTitle": {
+    "description": "Título de la pantalla de formulario de soporte."
+  },
   "supportFormIntro": "Cuéntanos qué ha pasado. Nuestro equipo te responderá por correo electrónico.",
-  "@supportFormIntro": {"description": "Texto introductorio del formulario de soporte."},
+  "@supportFormIntro": {
+    "description": "Texto introductorio del formulario de soporte."
+  },
   "supportCtaFromHelp": "Contactar con soporte",
-  "@supportCtaFromHelp": {"description": "CTA en el centro de ayuda para abrir el formulario de soporte."},
+  "@supportCtaFromHelp": {
+    "description": "CTA en el centro de ayuda para abrir el formulario de soporte."
+  },
   "supportFieldName": "Nombre",
-  "@supportFieldName": {"description": "Etiqueta del campo Nombre."},
+  "@supportFieldName": {
+    "description": "Etiqueta del campo Nombre."
+  },
   "supportFieldEmail": "Correo electrónico",
-  "@supportFieldEmail": {"description": "Etiqueta del campo Email."},
+  "@supportFieldEmail": {
+    "description": "Etiqueta del campo Email."
+  },
   "supportFieldEmailConfirm": "Confirmación del correo electrónico",
-  "@supportFieldEmailConfirm": {"description": "Etiqueta del campo Confirmar email."},
+  "@supportFieldEmailConfirm": {
+    "description": "Etiqueta del campo Confirmar email."
+  },
   "supportFieldSubject": "Asunto",
-  "@supportFieldSubject": {"description": "Etiqueta del campo Asunto."},
+  "@supportFieldSubject": {
+    "description": "Etiqueta del campo Asunto."
+  },
   "supportFieldDescription": "Descripción",
-  "@supportFieldDescription": {"description": "Etiqueta del campo Descripción."},
+  "@supportFieldDescription": {
+    "description": "Etiqueta del campo Descripción."
+  },
   "supportAttachmentLabel": "Adjunto (opcional)",
-  "@supportAttachmentLabel": {"description": "Etiqueta de la sección de adjuntos."},
+  "@supportAttachmentLabel": {
+    "description": "Etiqueta de la sección de adjuntos."
+  },
   "supportAttachmentHint": "Puedes adjuntar un único archivo (capturas, documentos).",
-  "@supportAttachmentHint": {"description": "Texto de ayuda del adjunto."},
+  "@supportAttachmentHint": {
+    "description": "Texto de ayuda del adjunto."
+  },
   "supportAttachmentPick": "Seleccionar archivo",
-  "@supportAttachmentPick": {"description": "Botón para seleccionar adjunto."},
+  "@supportAttachmentPick": {
+    "description": "Botón para seleccionar adjunto."
+  },
   "supportAttachmentChange": "Cambiar archivo",
-  "@supportAttachmentChange": {"description": "Botón para cambiar el adjunto seleccionado."},
+  "@supportAttachmentChange": {
+    "description": "Botón para cambiar el adjunto seleccionado."
+  },
   "supportAttachmentRemove": "Quitar adjunto",
-  "@supportAttachmentRemove": {"description": "Acción para quitar el adjunto."},
+  "@supportAttachmentRemove": {
+    "description": "Acción para quitar el adjunto."
+  },
   "supportConsentLabel": "Autorizo el tratamiento de mis datos para gestionar mi solicitud.",
-  "@supportConsentLabel": {"description": "Texto del checkbox de consentimiento."},
+  "@supportConsentLabel": {
+    "description": "Texto del checkbox de consentimiento."
+  },
   "supportCaptchaLabel": "No soy un robot",
-  "@supportCaptchaLabel": {"description": "Etiqueta del checkbox antibot."},
+  "@supportCaptchaLabel": {
+    "description": "Etiqueta del checkbox antibot."
+  },
   "supportCaptchaMockBadge": "MOCK",
-  "@supportCaptchaMockBadge": {"description": "Insignia que indica que el captcha es un mock."},
+  "@supportCaptchaMockBadge": {
+    "description": "Insignia que indica que el captcha es un mock."
+  },
   "supportSubmitButton": "Enviar solicitud",
-  "@supportSubmitButton": {"description": "Botón de envío del formulario."},
+  "@supportSubmitButton": {
+    "description": "Botón de envío del formulario."
+  },
   "supportConfirmationTitle": "Solicitud enviada",
-  "@supportConfirmationTitle": {"description": "Título de la pantalla de confirmación."},
+  "@supportConfirmationTitle": {
+    "description": "Título de la pantalla de confirmación."
+  },
   "supportConfirmationMessage": "Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.",
-  "@supportConfirmationMessage": {"description": "Mensaje de confirmación tras el envío."},
+  "@supportConfirmationMessage": {
+    "description": "Mensaje de confirmación tras el envío."
+  },
   "supportConfirmationNewRequest": "Enviar otra solicitud",
-  "@supportConfirmationNewRequest": {"description": "Botón para enviar otra solicitud."},
+  "@supportConfirmationNewRequest": {
+    "description": "Botón para enviar otra solicitud."
+  },
   "supportSubmissionError": "No hemos podido enviar tu solicitud. Inténtalo de nuevo.",
-  "@supportSubmissionError": {"description": "Mensaje genérico de error de envío."},
+  "@supportSubmissionError": {
+    "description": "Mensaje genérico de error de envío."
+  },
   "supportErrorNameRequired": "Indica tu nombre.",
-  "@supportErrorNameRequired": {"description": "Error: nombre requerido."},
+  "@supportErrorNameRequired": {
+    "description": "Error: nombre requerido."
+  },
   "supportErrorEmailRequired": "Indica tu correo electrónico.",
-  "@supportErrorEmailRequired": {"description": "Error: email requerido."},
+  "@supportErrorEmailRequired": {
+    "description": "Error: email requerido."
+  },
   "supportErrorEmailInvalid": "Introduce un correo electrónico válido.",
-  "@supportErrorEmailInvalid": {"description": "Error: email no válido."},
+  "@supportErrorEmailInvalid": {
+    "description": "Error: email no válido."
+  },
   "supportErrorEmailConfirmRequired": "Confirma tu correo electrónico.",
-  "@supportErrorEmailConfirmRequired": {"description": "Error: confirmación de email requerida."},
+  "@supportErrorEmailConfirmRequired": {
+    "description": "Error: confirmación de email requerida."
+  },
   "supportErrorEmailMismatch": "Los correos no coinciden.",
-  "@supportErrorEmailMismatch": {"description": "Error: emails no coinciden."},
+  "@supportErrorEmailMismatch": {
+    "description": "Error: emails no coinciden."
+  },
   "supportErrorSubjectRequired": "Indica un asunto.",
-  "@supportErrorSubjectRequired": {"description": "Error: asunto requerido."},
+  "@supportErrorSubjectRequired": {
+    "description": "Error: asunto requerido."
+  },
   "supportErrorSubjectTooLong": "El asunto no puede superar los 100 caracteres.",
-  "@supportErrorSubjectTooLong": {"description": "Error: asunto demasiado largo."},
+  "@supportErrorSubjectTooLong": {
+    "description": "Error: asunto demasiado largo."
+  },
   "supportErrorDescriptionRequired": "Describe tu solicitud.",
-  "@supportErrorDescriptionRequired": {"description": "Error: descripción requerida."},
+  "@supportErrorDescriptionRequired": {
+    "description": "Error: descripción requerida."
+  },
   "supportErrorDescriptionTooLong": "La descripción supera el límite permitido.",
-  "@supportErrorDescriptionTooLong": {"description": "Error: descripción demasiado larga."},
+  "@supportErrorDescriptionTooLong": {
+    "description": "Error: descripción demasiado larga."
+  },
   "supportErrorConsentRequired": "Debes autorizar el tratamiento de tus datos.",
-  "@supportErrorConsentRequired": {"description": "Error: consentimiento requerido."},
+  "@supportErrorConsentRequired": {
+    "description": "Error: consentimiento requerido."
+  },
   "supportErrorCaptchaRequired": "Confirma que no eres un robot.",
-  "@supportErrorCaptchaRequired": {"description": "Error: captcha requerido."},
+  "@supportErrorCaptchaRequired": {
+    "description": "Error: captcha requerido."
+  },
   "cipCardTitle": "Tarjeta sanitaria (CIP)",
-  "@cipCardTitle": {"description": "CIP — título del bloque destacado de salud."},
+  "@cipCardTitle": {
+    "description": "CIP — título del bloque destacado de salud."
+  },
   "cipCardCopyTooltip": "Copiar CIP",
-  "@cipCardCopyTooltip": {"description": "CIP — tooltip del botón copiar al portapapeles."},
+  "@cipCardCopyTooltip": {
+    "description": "CIP — tooltip del botón copiar al portapapeles."
+  },
   "cipCardCopied": "CIP copiado al portapapeles",
-  "@cipCardCopied": {"description": "CIP — confirmación tras copiar el código."},
+  "@cipCardCopied": {
+    "description": "CIP — confirmación tras copiar el código."
+  },
   "cipCardReadOnlySubtitle": "Sólo lectura — la tarjeta sanitaria no es descargable desde la app.",
-  "@cipCardReadOnlySubtitle": {"description": "CIP — leyenda obligatoria de sólo lectura (TASK-71)."},
+  "@cipCardReadOnlySubtitle": {
+    "description": "CIP — leyenda obligatoria de sólo lectura (TASK-71)."
+  },
   "cipCardContractGap": "Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.",
-  "@cipCardContractGap": {"description": "CIP — gap de contrato visible en diseño (TASK-27 / TASK-32)."},
+  "@cipCardContractGap": {
+    "description": "CIP — gap de contrato visible en diseño (TASK-27 / TASK-32)."
+  },
   "cipCardEmpty": "Aún no hay tarjeta sanitaria asociada a tu perfil.",
-  "@cipCardEmpty": {"description": "CIP — mensaje cuando no hay CIP disponible."},
+  "@cipCardEmpty": {
+    "description": "CIP — mensaje cuando no hay CIP disponible."
+  },
   "cipCardError": "No hemos podido cargar tu tarjeta sanitaria.",
-  "@cipCardError": {"description": "CIP — mensaje de error genérico."},
+  "@cipCardError": {
+    "description": "CIP — mensaje de error genérico."
+  },
   "cipCardParseError": "No hemos podido leer la respuesta de la tarjeta sanitaria.",
-  "@cipCardParseError": {"description": "CIP — mensaje de error de parseo (TASK-32)."},
+  "@cipCardParseError": {
+    "description": "CIP — mensaje de error de parseo (TASK-32)."
+  },
   "saludSurfaceTitle": "Salud",
-  "@saludSurfaceTitle": {"description": "Home — título de la superficie destacada de salud."},
+  "@saludSurfaceTitle": {
+    "description": "Home — título de la superficie destacada de salud."
+  },
   "saludSurfaceCta": "Ver agenda",
-  "@saludSurfaceCta": {"description": "Home — CTA de la superficie de salud que lleva a la agenda."},
+  "@saludSurfaceCta": {
+    "description": "Home — CTA de la superficie de salud que lleva a la agenda."
+  },
   "homeUpcomingEventsTitle": "Próximos eventos",
-  "@homeUpcomingEventsTitle": {"description": "Resumen de próximos eventos — título compartido entre home y agenda."},
+  "@homeUpcomingEventsTitle": {
+    "description": "Resumen de próximos eventos — título compartido entre home y agenda."
+  },
   "homeUpcomingEventsEmpty": "No tienes eventos próximos.",
-  "@homeUpcomingEventsEmpty": {"description": "Resumen de próximos eventos — mensaje cuando no hay eventos."},
-  "@socialWelfareDependenciaDescription": {"description": "Bienestar — copy dependencia."},
+  "@homeUpcomingEventsEmpty": {
+    "description": "Resumen de próximos eventos — mensaje cuando no hay eventos."
+  },
   "caseworkWorkspaceTitle": "Mis gestiones",
-  "@caseworkWorkspaceTitle": {"description": "Casework — título del workspace."},
+  "@caseworkWorkspaceTitle": {
+    "description": "Casework — título del workspace."
+  },
   "caseworkWorkspaceLoadError": "No hemos podido cargar tus gestiones.",
-  "@caseworkWorkspaceLoadError": {"description": "Casework — error global de carga."},
+  "@caseworkWorkspaceLoadError": {
+    "description": "Casework — error global de carga."
+  },
   "caseworkBreadcrumbHome": "Inicio",
-  "@caseworkBreadcrumbHome": {"description": "Casework — breadcrumb raíz."},
+  "@caseworkBreadcrumbHome": {
+    "description": "Casework — breadcrumb raíz."
+  },
   "caseworkTabExpedientes": "Mis expedientes",
-  "@caseworkTabExpedientes": {"description": "Casework — etiqueta tab expedientes."},
+  "@caseworkTabExpedientes": {
+    "description": "Casework — etiqueta tab expedientes."
+  },
   "caseworkTabEntradasRegistro": "Mis entradas de registro",
-  "@caseworkTabEntradasRegistro": {"description": "Casework — etiqueta tab entradas."},
+  "@caseworkTabEntradasRegistro": {
+    "description": "Casework — etiqueta tab entradas."
+  },
   "caseworkTabSalidasRegistro": "Mis salidas de registro",
-  "@caseworkTabSalidasRegistro": {"description": "Casework — etiqueta tab salidas."},
+  "@caseworkTabSalidasRegistro": {
+    "description": "Casework — etiqueta tab salidas."
+  },
   "caseworkExpedientesEmpty": "No constan expedientes a tu nombre.",
-  "@caseworkExpedientesEmpty": {"description": "Casework — vacío expedientes."},
+  "@caseworkExpedientesEmpty": {
+    "description": "Casework — vacío expedientes."
+  },
   "caseworkEntradasRegistroEmpty": "No constan entradas de registro a tu nombre.",
-  "@caseworkEntradasRegistroEmpty": {"description": "Casework — vacío entradas."},
+  "@caseworkEntradasRegistroEmpty": {
+    "description": "Casework — vacío entradas."
+  },
   "caseworkSalidasRegistroEmpty": "No constan salidas de registro a tu nombre.",
-  "@caseworkSalidasRegistroEmpty": {"description": "Casework — vacío salidas."},
+  "@caseworkSalidasRegistroEmpty": {
+    "description": "Casework — vacío salidas."
+  },
   "caseworkExpedientesError": "No hemos podido cargar tus expedientes.",
-  "@caseworkExpedientesError": {"description": "Casework — error expedientes."},
+  "@caseworkExpedientesError": {
+    "description": "Casework — error expedientes."
+  },
   "caseworkEntradasRegistroError": "No hemos podido cargar tus entradas de registro.",
-  "@caseworkEntradasRegistroError": {"description": "Casework — error entradas."},
+  "@caseworkEntradasRegistroError": {
+    "description": "Casework — error entradas."
+  },
   "caseworkSalidasRegistroError": "No hemos podido cargar tus salidas de registro.",
-  "@caseworkSalidasRegistroError": {"description": "Casework — error salidas."},
+  "@caseworkSalidasRegistroError": {
+    "description": "Casework — error salidas."
+  },
   "caseworkStatusEnTramite": "En trámite",
-  "@caseworkStatusEnTramite": {"description": "Casework — estado en trámite."},
+  "@caseworkStatusEnTramite": {
+    "description": "Casework — estado en trámite."
+  },
   "caseworkStatusFinalizado": "Finalizado",
-  "@caseworkStatusFinalizado": {"description": "Casework — estado finalizado."},
+  "@caseworkStatusFinalizado": {
+    "description": "Casework — estado finalizado."
+  },
   "caseworkStatusPendiente": "Pendiente",
-  "@caseworkStatusPendiente": {"description": "Casework — estado pendiente."},
+  "@caseworkStatusPendiente": {
+    "description": "Casework — estado pendiente."
+  },
   "caseworkStatusRechazado": "Rechazado",
-  "@caseworkStatusRechazado": {"description": "Casework — estado rechazado."},
+  "@caseworkStatusRechazado": {
+    "description": "Casework — estado rechazado."
+  },
   "caseworkItemDateLabel": "Fecha: {date}",
   "@caseworkItemDateLabel": {
     "description": "Casework — etiqueta de fecha del item.",
     "placeholders": {
-      "date": {"type": "String"}
+      "date": {
+        "type": "String"
+      }
     }
   },
   "caseworkSearchTitle": "Buscar expedientes y registros",
-  "@caseworkSearchTitle": {"description": "Casework search — título de la pantalla."},
+  "@caseworkSearchTitle": {
+    "description": "Casework search — título de la pantalla."
+  },
   "caseworkSearchOpenCta": "Buscar expedientes y registros",
-  "@caseworkSearchOpenCta": {"description": "Casework search — CTA en el workspace para abrir la búsqueda."},
+  "@caseworkSearchOpenCta": {
+    "description": "Casework search — CTA en el workspace para abrir la búsqueda."
+  },
   "caseworkSearchIntro": "Rellena al menos uno de los campos para localizar tu expediente o registro.",
-  "@caseworkSearchIntro": {"description": "Casework search — texto introductorio del formulario."},
+  "@caseworkSearchIntro": {
+    "description": "Casework search — texto introductorio del formulario."
+  },
   "caseworkSearchFieldIdentificationLabel": "NIF / NIE / Pasaporte",
-  "@caseworkSearchFieldIdentificationLabel": {"description": "Casework search — etiqueta del campo identificación."},
+  "@caseworkSearchFieldIdentificationLabel": {
+    "description": "Casework search — etiqueta del campo identificación."
+  },
   "caseworkSearchFieldIdentificationHelper": "Ej.: 12345678Z, X1234567A o pasaporte alfanumérico.",
-  "@caseworkSearchFieldIdentificationHelper": {"description": "Casework search — helper del campo identificación."},
+  "@caseworkSearchFieldIdentificationHelper": {
+    "description": "Casework search — helper del campo identificación."
+  },
   "caseworkSearchFieldExpedienteLabel": "Número de expediente",
-  "@caseworkSearchFieldExpedienteLabel": {"description": "Casework search — etiqueta del campo expediente."},
+  "@caseworkSearchFieldExpedienteLabel": {
+    "description": "Casework search — etiqueta del campo expediente."
+  },
   "caseworkSearchFieldExpedienteHelper": "Ej.: EXP/2025/00123",
-  "@caseworkSearchFieldExpedienteHelper": {"description": "Casework search — helper del campo expediente."},
+  "@caseworkSearchFieldExpedienteHelper": {
+    "description": "Casework search — helper del campo expediente."
+  },
   "caseworkSearchFieldRegistroLabel": "Número de registro",
-  "@caseworkSearchFieldRegistroLabel": {"description": "Casework search — etiqueta del campo registro."},
+  "@caseworkSearchFieldRegistroLabel": {
+    "description": "Casework search — etiqueta del campo registro."
+  },
   "caseworkSearchFieldRegistroHelper": "Ej.: REG/E/45612",
-  "@caseworkSearchFieldRegistroHelper": {"description": "Casework search — helper del campo registro."},
+  "@caseworkSearchFieldRegistroHelper": {
+    "description": "Casework search — helper del campo registro."
+  },
   "caseworkSearchSubmit": "Buscar",
-  "@caseworkSearchSubmit": {"description": "Casework search — etiqueta del botón de búsqueda."},
+  "@caseworkSearchSubmit": {
+    "description": "Casework search — etiqueta del botón de búsqueda."
+  },
   "caseworkSearchAnother": "Buscar otra cosa",
-  "@caseworkSearchAnother": {"description": "Casework search — CTA para reiniciar la búsqueda."},
+  "@caseworkSearchAnother": {
+    "description": "Casework search — CTA para reiniciar la búsqueda."
+  },
   "caseworkSearchAportar": "Aportar documentación al resultado",
-  "@caseworkSearchAportar": {"description": "Casework search — CTA placeholder para aportación documental."},
+  "@caseworkSearchAportar": {
+    "description": "Casework search — CTA placeholder para aportación documental."
+  },
   "caseworkSearchAportarPending": "La aportación documental se habilita en STORY-37 / STORY-38.",
-  "@caseworkSearchAportarPending": {"description": "Casework search — mensaje provisional de aportación pendiente."},
+  "@caseworkSearchAportarPending": {
+    "description": "Casework search — mensaje provisional de aportación pendiente."
+  },
   "caseworkSearchErrorAtLeastOne": "Introduce al menos uno de los tres campos para buscar.",
-  "@caseworkSearchErrorAtLeastOne": {"description": "Casework search — error: ningún campo informado."},
+  "@caseworkSearchErrorAtLeastOne": {
+    "description": "Casework search — error: ningún campo informado."
+  },
   "caseworkSearchErrorInvalidIdentification": "Formato no válido. Usa NIF (8 dígitos + letra), NIE (X/Y/Z + 7 dígitos + letra) o pasaporte alfanumérico de 6 a 9 caracteres.",
-  "@caseworkSearchErrorInvalidIdentification": {"description": "Casework search — error de identificación inválida."},
+  "@caseworkSearchErrorInvalidIdentification": {
+    "description": "Casework search — error de identificación inválida."
+  },
   "caseworkSearchErrorInvalidNumber": "Formato no válido. Solo letras, números, guiones y barras.",
-  "@caseworkSearchErrorInvalidNumber": {"description": "Casework search — error de número inválido."},
+  "@caseworkSearchErrorInvalidNumber": {
+    "description": "Casework search — error de número inválido."
+  },
   "caseworkSearchNoResults": "Sin coincidencias",
-  "@caseworkSearchNoResults": {"description": "Casework search — estado sin resultados."},
+  "@caseworkSearchNoResults": {
+    "description": "Casework search — estado sin resultados."
+  },
   "caseworkSearchNoResultsHint": "Revisa los datos introducidos y vuelve a intentarlo.",
-  "@caseworkSearchNoResultsHint": {"description": "Casework search — pista cuando no hay resultados."},
+  "@caseworkSearchNoResultsHint": {
+    "description": "Casework search — pista cuando no hay resultados."
+  },
   "caseworkSearchError": "No hemos podido completar la búsqueda. Inténtalo de nuevo.",
-  "@caseworkSearchError": {"description": "Casework search — error al ejecutar la búsqueda."},
+  "@caseworkSearchError": {
+    "description": "Casework search — error al ejecutar la búsqueda."
+  },
   "caseworkSearchResultsCount": "{count, plural, one{1 resultado} other{{count} resultados}}",
   "@caseworkSearchResultsCount": {
     "description": "Casework search — recuento de resultados.",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
-  "caseworkItemDetailPlaceholderTitle": "Detalle del expediente",
-  "@caseworkItemDetailPlaceholderTitle": {"description": "Casework — título del detalle (placeholder)."},
-  "caseworkItemDetailPlaceholderBody": "Detalle del elemento {id}",
-  "@caseworkItemDetailPlaceholderBody": {
-    "description": "Casework — cuerpo del detalle (placeholder).",
-    "placeholders": {
-      "id": {"type": "String"}
-    }
+  "caseworkExpedienteDetailTitle": "Detalle del expediente",
+  "@caseworkExpedienteDetailTitle": {
+    "description": "Casework — título de la pantalla de detalle (STORY-35)."
   },
-  "caseworkItemDetailPlaceholderPending": "El detalle real se habilita en STORY-35 / STORY-36.",
-  "@caseworkItemDetailPlaceholderPending": {"description": "Casework — mensaje provisional del detalle."},
+  "caseworkExpedienteDetailBack": "Volver a Mis gestiones",
+  "@caseworkExpedienteDetailBack": {
+    "description": "Casework — tooltip botón volver detalle."
+  },
+  "caseworkExpedienteDetailLoading": "Cargando detalle del expediente…",
+  "@caseworkExpedienteDetailLoading": {
+    "description": "Casework — mensaje de carga detalle."
+  },
+  "caseworkExpedienteDetailErrorTitle": "No hemos podido cargar el expediente.",
+  "@caseworkExpedienteDetailErrorTitle": {
+    "description": "Casework — título de error en detalle."
+  },
+  "caseworkExpedienteDetailErrorBody": "Vuelve a intentarlo en unos minutos.",
+  "@caseworkExpedienteDetailErrorBody": {
+    "description": "Casework — cuerpo de error en detalle."
+  },
+  "caseworkExpedienteDetailMetadataTitle": "Información del expediente",
+  "@caseworkExpedienteDetailMetadataTitle": {
+    "description": "Casework — título del bloque de metadata."
+  },
+  "caseworkExpedienteDetailNumero": "Número de expediente",
+  "@caseworkExpedienteDetailNumero": {
+    "description": "Casework — etiqueta número de expediente."
+  },
+  "caseworkExpedienteDetailAsuntoCodigo": "Código del asunto",
+  "@caseworkExpedienteDetailAsuntoCodigo": {
+    "description": "Casework — etiqueta código del asunto."
+  },
+  "caseworkExpedienteDetailAsunto": "Asunto",
+  "@caseworkExpedienteDetailAsunto": {
+    "description": "Casework — etiqueta asunto."
+  },
+  "caseworkExpedienteDetailConsejeria": "Consejería",
+  "@caseworkExpedienteDetailConsejeria": {
+    "description": "Casework — etiqueta consejería."
+  },
+  "caseworkExpedienteDetailOficina": "Oficina tramitadora",
+  "@caseworkExpedienteDetailOficina": {
+    "description": "Casework — etiqueta oficina tramitadora."
+  },
+  "caseworkExpedienteDetailProcedimiento": "Procedimiento",
+  "@caseworkExpedienteDetailProcedimiento": {
+    "description": "Casework — etiqueta procedimiento."
+  },
+  "caseworkExpedienteDetailFechaInicio": "Fecha de inicio",
+  "@caseworkExpedienteDetailFechaInicio": {
+    "description": "Casework — etiqueta fecha de inicio."
+  },
+  "caseworkExpedienteDetailFechaActualizacion": "Última actualización",
+  "@caseworkExpedienteDetailFechaActualizacion": {
+    "description": "Casework — etiqueta última actualización."
+  },
+  "caseworkExpedienteDetailEstadoLabel": "Estado",
+  "@caseworkExpedienteDetailEstadoLabel": {
+    "description": "Casework — etiqueta accesible del estado."
+  },
+  "caseworkExpedienteDetailEstadoAbierto": "Abierto",
+  "@caseworkExpedienteDetailEstadoAbierto": {
+    "description": "Casework — estado abierto."
+  },
+  "caseworkExpedienteDetailEstadoCerrado": "Cerrado",
+  "@caseworkExpedienteDetailEstadoCerrado": {
+    "description": "Casework — estado cerrado."
+  },
+  "caseworkExpedienteDetailEstadoUnknown": "Estado desconocido",
+  "@caseworkExpedienteDetailEstadoUnknown": {
+    "description": "Casework — fallback de estado desconocido (TASK-40 Q1)."
+  },
+  "caseworkExpedienteDetailFilesTitle": "Ficheros asociados",
+  "@caseworkExpedienteDetailFilesTitle": {
+    "description": "Casework — título sección de ficheros."
+  },
+  "caseworkExpedienteDetailFilesEmpty": "No hay ficheros asociados a este expediente.",
+  "@caseworkExpedienteDetailFilesEmpty": {
+    "description": "Casework — vacío sección de ficheros."
+  },
+  "caseworkExpedienteDetailFicheroDownloadTooltip": "Descargar fichero",
+  "@caseworkExpedienteDetailFicheroDownloadTooltip": {
+    "description": "Casework — tooltip descarga fichero."
+  },
+  "caseworkExpedienteDetailFicheroDownloadStub": "La descarga del fichero se habilitará en una próxima versión.",
+  "@caseworkExpedienteDetailFicheroDownloadStub": {
+    "description": "Casework — mensaje placeholder descarga fichero."
+  },
+  "caseworkExpedienteDetailOperationsTitle": "Aportar documentación",
+  "@caseworkExpedienteDetailOperationsTitle": {
+    "description": "Casework — título zona operativa de aportación."
+  },
+  "caseworkExpedienteDetailClosedBanner": "Expediente cerrado, no se admiten aportaciones.",
+  "@caseworkExpedienteDetailClosedBanner": {
+    "description": "Casework — banner expediente cerrado."
+  },
   "digitalCardsPageTitle": "Mis carnets digitales",
-  "@digitalCardsPageTitle": {"description": "Título de la pantalla de catálogo de carnets digitales (STORY-48)."},
+  "@digitalCardsPageTitle": {
+    "description": "Título de la pantalla de catálogo de carnets digitales (STORY-48)."
+  },
   "digitalCardsTypeFamiliaNumerosa": "Carnet de familia numerosa",
-  "@digitalCardsTypeFamiliaNumerosa": {"description": "Carnets — etiqueta del tipo familia numerosa."},
+  "@digitalCardsTypeFamiliaNumerosa": {
+    "description": "Carnets — etiqueta del tipo familia numerosa."
+  },
   "digitalCardsTypeJoven": "Carnet joven",
-  "@digitalCardsTypeJoven": {"description": "Carnets — etiqueta del tipo carnet joven."},
+  "@digitalCardsTypeJoven": {
+    "description": "Carnets — etiqueta del tipo carnet joven."
+  },
   "digitalCardsTypeDiscapacidad": "Carnet de discapacidad",
-  "@digitalCardsTypeDiscapacidad": {"description": "Carnets — etiqueta del tipo discapacidad."},
+  "@digitalCardsTypeDiscapacidad": {
+    "description": "Carnets — etiqueta del tipo discapacidad."
+  },
   "digitalCardsStatusAvailable": "Disponible",
-  "@digitalCardsStatusAvailable": {"description": "Carnets — badge para estado disponible."},
+  "@digitalCardsStatusAvailable": {
+    "description": "Carnets — badge para estado disponible."
+  },
   "digitalCardsStatusNotValid": "No vigente",
-  "@digitalCardsStatusNotValid": {"description": "Carnets — badge para estado no vigente."},
+  "@digitalCardsStatusNotValid": {
+    "description": "Carnets — badge para estado no vigente."
+  },
   "digitalCardsStatusNotDownloadable": "No descargable",
-  "@digitalCardsStatusNotDownloadable": {"description": "Carnets — badge para estado no descargable."},
+  "@digitalCardsStatusNotDownloadable": {
+    "description": "Carnets — badge para estado no descargable."
+  },
   "digitalCardsStatusNotAvailable": "No disponible",
-  "@digitalCardsStatusNotAvailable": {"description": "Carnets — badge para estado no disponible / sin datos."},
+  "@digitalCardsStatusNotAvailable": {
+    "description": "Carnets — badge para estado no disponible / sin datos."
+  },
   "digitalCardsMessageNotValid": "Este carnet no está vigente. No es posible obtener QR, PKPASS ni PDF.",
-  "@digitalCardsMessageNotValid": {"description": "Carnets — mensaje explícito para el estado no vigente."},
+  "@digitalCardsMessageNotValid": {
+    "description": "Carnets — mensaje explícito para el estado no vigente."
+  },
   "digitalCardsMessageNotDownloadable": "Este carnet no es descargable en este momento.",
-  "@digitalCardsMessageNotDownloadable": {"description": "Carnets — mensaje explícito para el estado no descargable."},
+  "@digitalCardsMessageNotDownloadable": {
+    "description": "Carnets — mensaje explícito para el estado no descargable."
+  },
   "digitalCardsMessageNotAvailable": "No tienes este carnet disponible.",
-  "@digitalCardsMessageNotAvailable": {"description": "Carnets — mensaje explícito para el estado no disponible."},
+  "@digitalCardsMessageNotAvailable": {
+    "description": "Carnets — mensaje explícito para el estado no disponible."
+  },
   "digitalCardsActionQr": "Ver QR",
-  "@digitalCardsActionQr": {"description": "Carnets — acción para mostrar el código QR."},
+  "@digitalCardsActionQr": {
+    "description": "Carnets — acción para mostrar el código QR."
+  },
   "digitalCardsActionPkpass": "Añadir a Wallet",
-  "@digitalCardsActionPkpass": {"description": "Carnets — acción para añadir el carnet a la cartera (PKPASS)."},
+  "@digitalCardsActionPkpass": {
+    "description": "Carnets — acción para añadir el carnet a la cartera (PKPASS)."
+  },
   "digitalCardsActionPdf": "Descargar PDF",
-  "@digitalCardsActionPdf": {"description": "Carnets — acción para descargar el PDF."},
+  "@digitalCardsActionPdf": {
+    "description": "Carnets — acción para descargar el PDF."
+  },
   "digitalCardsActionComingSoon": "Disponible próximamente.",
-  "@digitalCardsActionComingSoon": {"description": "Carnets — mensaje stub mientras TASK-53 cablea las descargas reales."},
+  "@digitalCardsActionComingSoon": {
+    "description": "Carnets — mensaje stub mientras TASK-53 cablea las descargas reales."
+  },
   "digitalCardsEmptyMessage": "Aún no tienes carnets digitales asociados.",
-  "@digitalCardsEmptyMessage": {"description": "Carnets — estado vacío del catálogo."},
+  "@digitalCardsEmptyMessage": {
+    "description": "Carnets — estado vacío del catálogo."
+  },
   "digitalCardsErrorMessage": "No hemos podido cargar tus carnets digitales.",
-  "@digitalCardsErrorMessage": {"description": "Carnets — estado de error del catálogo."},
+  "@digitalCardsErrorMessage": {
+    "description": "Carnets — estado de error del catálogo."
+  },
   "digitalCardsCipMiniTitle": "Tarjeta sanitaria (CIP)",
-  "@digitalCardsCipMiniTitle": {"description": "Carnets — título del mini-card CIP de sólo lectura (TASK-71)."},
+  "@digitalCardsCipMiniTitle": {
+    "description": "Carnets — título del mini-card CIP de sólo lectura (TASK-71)."
+  },
   "digitalCardsCipMiniReadOnly": "Sólo lectura",
-  "@digitalCardsCipMiniReadOnly": {"description": "Carnets — subtítulo que indica que la tarjeta sanitaria es de sólo lectura."},
+  "@digitalCardsCipMiniReadOnly": {
+    "description": "Carnets — subtítulo que indica que la tarjeta sanitaria es de sólo lectura."
+  },
   "digitalCardsCipMiniOpenAction": "Ver tarjeta sanitaria",
-  "@digitalCardsCipMiniOpenAction": {"description": "Carnets — CTA para abrir la tarjeta sanitaria en la pantalla de salud (STORY-31)."}
-,  "@socialWelfareDependenciaDescription": {"description": "Bienestar — copy dependencia."},
+  "@digitalCardsCipMiniOpenAction": {
+    "description": "Carnets — CTA para abrir la tarjeta sanitaria en la pantalla de salud (STORY-31)."
+  },
   "lifeEventsTitle": "Mis hechos vitales",
-  "@lifeEventsTitle": {"description": "Personalization — title of the hechos vitales selection screen."},
+  "@lifeEventsTitle": {
+    "description": "Personalization — title of the hechos vitales selection screen."
+  },
   "lifeEventsHeaderDescription": "Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.",
-  "@lifeEventsHeaderDescription": {"description": "Personalization — descriptive header on the hechos vitales screen."},
+  "@lifeEventsHeaderDescription": {
+    "description": "Personalization — descriptive header on the hechos vitales screen."
+  },
   "lifeEventsSaveAction": "Guardar",
-  "@lifeEventsSaveAction": {"description": "Personalization — explicit save button label."},
+  "@lifeEventsSaveAction": {
+    "description": "Personalization — explicit save button label."
+  },
   "lifeEventsResetAction": "Borrar preferencias",
-  "@lifeEventsResetAction": {"description": "Personalization — reset preferences button label."},
+  "@lifeEventsResetAction": {
+    "description": "Personalization — reset preferences button label."
+  },
   "lifeEventsResetConfirmTitle": "Borrar tus preferencias",
-  "@lifeEventsResetConfirmTitle": {"description": "Personalization — confirmation dialog title for reset."},
+  "@lifeEventsResetConfirmTitle": {
+    "description": "Personalization — confirmation dialog title for reset."
+  },
   "lifeEventsResetConfirmBody": "Se eliminarán todos los hechos vitales seleccionados. Esta acción no se puede deshacer.",
-  "@lifeEventsResetConfirmBody": {"description": "Personalization — confirmation dialog body for reset."},
+  "@lifeEventsResetConfirmBody": {
+    "description": "Personalization — confirmation dialog body for reset."
+  },
   "lifeEventsResetConfirm": "Borrar",
-  "@lifeEventsResetConfirm": {"description": "Personalization — confirm reset button label."},
+  "@lifeEventsResetConfirm": {
+    "description": "Personalization — confirm reset button label."
+  },
   "lifeEventsResetCancel": "Cancelar",
-  "@lifeEventsResetCancel": {"description": "Personalization — cancel reset button label."},
+  "@lifeEventsResetCancel": {
+    "description": "Personalization — cancel reset button label."
+  },
   "lifeEventsSavedFeedback": "Tus preferencias se han guardado correctamente.",
-  "@lifeEventsSavedFeedback": {"description": "Personalization — snackbar after a successful save."},
+  "@lifeEventsSavedFeedback": {
+    "description": "Personalization — snackbar after a successful save."
+  },
   "lifeEventsErrorFeedback": "No hemos podido guardar tus preferencias. Inténtalo de nuevo.",
-  "@lifeEventsErrorFeedback": {"description": "Personalization — snackbar after a save / reset failure."},
+  "@lifeEventsErrorFeedback": {
+    "description": "Personalization — snackbar after a save / reset failure."
+  },
   "lifeEventsLoadError": "No hemos podido cargar los hechos vitales.",
-  "@lifeEventsLoadError": {"description": "Personalization — error state when the catalog fails to load."},
+  "@lifeEventsLoadError": {
+    "description": "Personalization — error state when the catalog fails to load."
+  },
   "lifeEventsEmpty": "No hay hechos vitales disponibles en este momento.",
-  "@lifeEventsEmpty": {"description": "Personalization — empty state for the catalog."},
+  "@lifeEventsEmpty": {
+    "description": "Personalization — empty state for the catalog."
+  },
   "lifeEventsCategoryFamilia": "Familia",
-  "@lifeEventsCategoryFamilia": {"description": "Personalization — familia category header."},
+  "@lifeEventsCategoryFamilia": {
+    "description": "Personalization — familia category header."
+  },
   "lifeEventsCategorySalud": "Salud",
-  "@lifeEventsCategorySalud": {"description": "Personalization — salud category header."},
+  "@lifeEventsCategorySalud": {
+    "description": "Personalization — salud category header."
+  },
   "lifeEventsCategoryEmpleo": "Empleo",
-  "@lifeEventsCategoryEmpleo": {"description": "Personalization — empleo category header."},
+  "@lifeEventsCategoryEmpleo": {
+    "description": "Personalization — empleo category header."
+  },
   "lifeEventsCategoryVivienda": "Vivienda",
-  "@lifeEventsCategoryVivienda": {"description": "Personalization — vivienda category header."},
+  "@lifeEventsCategoryVivienda": {
+    "description": "Personalization — vivienda category header."
+  },
   "lifeEventsCategoryEducacion": "Educación",
-  "@lifeEventsCategoryEducacion": {"description": "Personalization — educación category header."},
+  "@lifeEventsCategoryEducacion": {
+    "description": "Personalization — educación category header."
+  },
   "dataConsentTitle": "Mis autorizaciones",
-  "@dataConsentTitle": {"description": "Data consent — title of the citizen authorizations screen (STORY-55)."},
+  "@dataConsentTitle": {
+    "description": "Data consent — title of the citizen authorizations screen (STORY-55)."
+  },
   "dataConsentHeaderDescription": "Gestiona qué datos pueden utilizarse para ofrecerte servicios y recomendaciones personalizadas. Puedes cambiar tu decisión en cualquier momento.",
-  "@dataConsentHeaderDescription": {"description": "Data consent — descriptive header on the authorizations screen."},
+  "@dataConsentHeaderDescription": {
+    "description": "Data consent — descriptive header on the authorizations screen."
+  },
   "dataConsentSaveAction": "Guardar",
-  "@dataConsentSaveAction": {"description": "Data consent — explicit save button label."},
+  "@dataConsentSaveAction": {
+    "description": "Data consent — explicit save button label."
+  },
   "dataConsentRevokeAction": "Revocar todas las autorizaciones",
-  "@dataConsentRevokeAction": {"description": "Data consent — revoke-all button label."},
+  "@dataConsentRevokeAction": {
+    "description": "Data consent — revoke-all button label."
+  },
   "dataConsentRevokeConfirmTitle": "Revocar tus autorizaciones",
-  "@dataConsentRevokeConfirmTitle": {"description": "Data consent — confirmation dialog title for revoke-all."},
+  "@dataConsentRevokeConfirmTitle": {
+    "description": "Data consent — confirmation dialog title for revoke-all."
+  },
   "dataConsentRevokeConfirmBody": "Se eliminarán todas tus autorizaciones y dejaremos de personalizar contenidos hasta que vuelvas a aceptarlas.",
-  "@dataConsentRevokeConfirmBody": {"description": "Data consent — confirmation dialog body for revoke-all."},
+  "@dataConsentRevokeConfirmBody": {
+    "description": "Data consent — confirmation dialog body for revoke-all."
+  },
   "dataConsentRevokeConfirm": "Revocar",
-  "@dataConsentRevokeConfirm": {"description": "Data consent — confirm revoke button label."},
+  "@dataConsentRevokeConfirm": {
+    "description": "Data consent — confirm revoke button label."
+  },
   "dataConsentRevokeCancel": "Cancelar",
-  "@dataConsentRevokeCancel": {"description": "Data consent — cancel revoke button label."},
+  "@dataConsentRevokeCancel": {
+    "description": "Data consent — cancel revoke button label."
+  },
   "dataConsentSavedFeedback": "Tus autorizaciones se han actualizado correctamente.",
-  "@dataConsentSavedFeedback": {"description": "Data consent — snackbar after a successful save / revoke."},
+  "@dataConsentSavedFeedback": {
+    "description": "Data consent — snackbar after a successful save / revoke."
+  },
   "dataConsentErrorFeedback": "No hemos podido actualizar tus autorizaciones. Inténtalo de nuevo.",
-  "@dataConsentErrorFeedback": {"description": "Data consent — snackbar after a save / revoke failure."},
+  "@dataConsentErrorFeedback": {
+    "description": "Data consent — snackbar after a save / revoke failure."
+  },
   "dataConsentLoadError": "No hemos podido cargar tus autorizaciones.",
-  "@dataConsentLoadError": {"description": "Data consent — error state when the catalog fails to load."},
+  "@dataConsentLoadError": {
+    "description": "Data consent — error state when the catalog fails to load."
+  },
   "dataConsentEmpty": "No hay autorizaciones disponibles en este momento.",
-  "@dataConsentEmpty": {"description": "Data consent — empty state for the catalog."},
+  "@dataConsentEmpty": {
+    "description": "Data consent — empty state for the catalog."
+  },
   "dataConsentTypeJccmTitle": "Datos de la Junta de Comunidades de Castilla-La Mancha",
-  "@dataConsentTypeJccmTitle": {"description": "Data consent — JCCM authorization title."},
+  "@dataConsentTypeJccmTitle": {
+    "description": "Data consent — JCCM authorization title."
+  },
   "dataConsentTypeJccmSubtitle": "Permite que la JCCM utilice tus datos administrativos para ofrecerte trámites y servicios personalizados.",
-  "@dataConsentTypeJccmSubtitle": {"description": "Data consent — JCCM authorization description."},
+  "@dataConsentTypeJccmSubtitle": {
+    "description": "Data consent — JCCM authorization description."
+  },
   "dataConsentTypeOtrasAdminTitle": "Datos de otras administraciones",
-  "@dataConsentTypeOtrasAdminTitle": {"description": "Data consent — interoperability authorization title."},
+  "@dataConsentTypeOtrasAdminTitle": {
+    "description": "Data consent — interoperability authorization title."
+  },
   "dataConsentTypeOtrasAdminSubtitle": "Permite consultar datos de otras administraciones públicas para evitar que tengas que aportarlos manualmente.",
-  "@dataConsentTypeOtrasAdminSubtitle": {"description": "Data consent — interoperability authorization description."},
+  "@dataConsentTypeOtrasAdminSubtitle": {
+    "description": "Data consent — interoperability authorization description."
+  },
   "dataConsentTypePerfiladoTitle": "Perfilado para recomendaciones",
-  "@dataConsentTypePerfiladoTitle": {"description": "Data consent — profiling authorization title."},
+  "@dataConsentTypePerfiladoTitle": {
+    "description": "Data consent — profiling authorization title."
+  },
   "dataConsentTypePerfiladoSubtitle": "Permite analizar tu actividad para recomendarte trámites, ayudas y contenidos relevantes.",
-  "@dataConsentTypePerfiladoSubtitle": {"description": "Data consent — profiling authorization description."},
+  "@dataConsentTypePerfiladoSubtitle": {
+    "description": "Data consent — profiling authorization description."
+  },
   "dataConsentPrivacyReferenceTitle": "Información de protección de datos",
-  "@dataConsentPrivacyReferenceTitle": {"description": "Data consent — privacy reference section title."},
+  "@dataConsentPrivacyReferenceTitle": {
+    "description": "Data consent — privacy reference section title."
+  },
   "dataConsentPrivacyReferenceBody": "Estas autorizaciones se basan en la información de protección de datos aceptada al iniciar sesión.",
-  "@dataConsentPrivacyReferenceBody": {"description": "Data consent — privacy reference body."},
+  "@dataConsentPrivacyReferenceBody": {
+    "description": "Data consent — privacy reference body."
+  },
   "dataConsentPrivacyReferenceCta": "Ver información de protección de datos",
-  "@dataConsentPrivacyReferenceCta": {"description": "Data consent — link CTA pointing to the onboarding consent screen."},
+  "@dataConsentPrivacyReferenceCta": {
+    "description": "Data consent — link CTA pointing to the onboarding consent screen."
+  },
   "dataConsentNavCta": "Mis autorizaciones",
-  "@dataConsentNavCta": {"description": "Data consent — CTA label that takes the citizen from life-events to the consent screen."},
+  "@dataConsentNavCta": {
+    "description": "Data consent — CTA label that takes the citizen from life-events to the consent screen."
+  },
+  "caseworkUploadPageTitle": "Aportar documentación",
+  "@caseworkUploadPageTitle": {
+    "description": "Casework upload — page title."
+  },
+  "caseworkUploadPickerCta": "Adjuntar archivos",
+  "@caseworkUploadPickerCta": {
+    "description": "Casework upload — picker panel headline."
+  },
+  "caseworkUploadSelectFilesCta": "Seleccionar archivos",
+  "@caseworkUploadSelectFilesCta": {
+    "description": "Casework upload — picker button label."
+  },
+  "caseworkUploadDropZoneSemantic": "Zona para arrastrar y soltar archivos. También se pueden seleccionar pulsando.",
+  "@caseworkUploadDropZoneSemantic": {
+    "description": "Casework upload — semantic label for the drop / picker area."
+  },
+  "caseworkUploadLimitHint": "Máximo {maxFiles} archivos. Hasta {maxMb} MB cada uno.",
+  "@caseworkUploadLimitHint": {
+    "description": "Casework upload — files and size limit hint.",
+    "placeholders": {
+      "maxFiles": {
+        "type": "int"
+      },
+      "maxMb": {
+        "type": "int"
+      }
+    }
+  },
+  "caseworkUploadRemainingHint": "{remaining, plural, =0{No puedes adjuntar más archivos.} =1{Puedes adjuntar 1 archivo más.} other{Puedes adjuntar {remaining} archivos más.}}",
+  "@caseworkUploadRemainingHint": {
+    "description": "Casework upload — remaining slots.",
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "caseworkUploadEmptyList": "Aún no hay archivos adjuntos.",
+  "@caseworkUploadEmptyList": {
+    "description": "Casework upload — empty list state."
+  },
+  "caseworkUploadRemoveFile": "Quitar archivo",
+  "@caseworkUploadRemoveFile": {
+    "description": "Casework upload — remove file tooltip."
+  },
+  "caseworkUploadUploadAllCta": "Subir todos",
+  "@caseworkUploadUploadAllCta": {
+    "description": "Casework upload — upload all CTA."
+  },
+  "caseworkUploadFinalizeCta": "Finalizar y solicitar justificante",
+  "@caseworkUploadFinalizeCta": {
+    "description": "Casework upload — finalize CTA."
+  },
+  "caseworkUploadStatusSelected": "Seleccionado",
+  "@caseworkUploadStatusSelected": {
+    "description": "Casework upload — status: selected."
+  },
+  "caseworkUploadStatusValidating": "Validando",
+  "@caseworkUploadStatusValidating": {
+    "description": "Casework upload — status: validating."
+  },
+  "caseworkUploadStatusHashed": "Hash calculado",
+  "@caseworkUploadStatusHashed": {
+    "description": "Casework upload — status: hashed."
+  },
+  "caseworkUploadStatusUploading": "Subiendo",
+  "@caseworkUploadStatusUploading": {
+    "description": "Casework upload — status: uploading."
+  },
+  "caseworkUploadStatusUploaded": "Subido",
+  "@caseworkUploadStatusUploaded": {
+    "description": "Casework upload — status: uploaded."
+  },
+  "caseworkUploadStatusFailed": "Error",
+  "@caseworkUploadStatusFailed": {
+    "description": "Casework upload — status: failed."
+  },
+  "caseworkUploadErrorUnsupportedMime": "Formato no admitido.",
+  "@caseworkUploadErrorUnsupportedMime": {
+    "description": "Casework upload — error: unsupported mime."
+  },
+  "caseworkUploadErrorTooLarge": "El archivo excede el tamaño máximo.",
+  "@caseworkUploadErrorTooLarge": {
+    "description": "Casework upload — error: too large."
+  },
+  "caseworkUploadErrorTooManyFiles": "Has alcanzado el número máximo de archivos.",
+  "@caseworkUploadErrorTooManyFiles": {
+    "description": "Casework upload — error: too many files."
+  },
+  "caseworkUploadErrorEmptyFile": "El archivo está vacío.",
+  "@caseworkUploadErrorEmptyFile": {
+    "description": "Casework upload — error: empty file."
+  },
+  "caseworkUploadErrorHashMismatch": "La huella del archivo no coincide.",
+  "@caseworkUploadErrorHashMismatch": {
+    "description": "Casework upload — error: hash mismatch."
+  },
+  "caseworkUploadErrorGeneric": "Se produjo un error con el archivo.",
+  "@caseworkUploadErrorGeneric": {
+    "description": "Casework upload — error: generic."
+  },
+  "caseworkUploadJustificantePending": "El justificante se generará cuando finalices el envío.",
+  "@caseworkUploadJustificantePending": {
+    "description": "Casework upload — justificante pending."
+  },
+  "caseworkUploadJustificanteUnavailable": "El justificante todavía no está disponible.",
+  "@caseworkUploadJustificanteUnavailable": {
+    "description": "Casework upload — justificante unavailable headline."
+  },
+  "caseworkUploadJustificanteUnavailableReason": "Motivo: {reason}",
+  "@caseworkUploadJustificanteUnavailableReason": {
+    "description": "Casework upload — justificante unavailable reason.",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "caseworkUploadJustificanteAvailable": "Tu justificante está listo.",
+  "@caseworkUploadJustificanteAvailable": {
+    "description": "Casework upload — justificante available."
+  },
+  "caseworkUploadJustificanteDownloadCta": "Descargar justificante",
+  "@caseworkUploadJustificanteDownloadCta": {
+    "description": "Casework upload — justificante download CTA."
+  },
+  "caseworkUploadJustificanteDownloadStub": "La descarga del justificante se habilitará cuando el backend confirme el formato.",
+  "@caseworkUploadJustificanteDownloadStub": {
+    "description": "Casework upload — stub message when download is triggered."
+  },
+  "caseworkRegistroDetailTitleEntrada": "Detalle de entrada de registro",
+  "@caseworkRegistroDetailTitleEntrada": {
+    "description": "Casework registro detail — page title for entradas."
+  },
+  "caseworkRegistroDetailTitleSalida": "Detalle de salida de registro",
+  "@caseworkRegistroDetailTitleSalida": {
+    "description": "Casework registro detail — page title for salidas."
+  },
+  "caseworkRegistroDetailBreadcrumbHome": "Inicio",
+  "@caseworkRegistroDetailBreadcrumbHome": {
+    "description": "Casework registro detail — breadcrumb root."
+  },
+  "caseworkRegistroDetailBreadcrumbCasework": "Mis gestiones",
+  "@caseworkRegistroDetailBreadcrumbCasework": {
+    "description": "Casework registro detail — breadcrumb workspace segment."
+  },
+  "caseworkRegistroDetailKindEntrada": "Entradas de registro",
+  "@caseworkRegistroDetailKindEntrada": {
+    "description": "Casework registro detail — breadcrumb segment for entradas."
+  },
+  "caseworkRegistroDetailKindSalida": "Salidas de registro",
+  "@caseworkRegistroDetailKindSalida": {
+    "description": "Casework registro detail — breadcrumb segment for salidas."
+  },
+  "caseworkRegistroDetailBackToList": "Volver al listado",
+  "@caseworkRegistroDetailBackToList": {
+    "description": "Casework registro detail — back-to-list tooltip on the AppBar."
+  },
+  "caseworkRegistroDetailLoadError": "No hemos podido cargar el detalle del registro.",
+  "@caseworkRegistroDetailLoadError": {
+    "description": "Casework registro detail — error loading detail."
+  },
+  "caseworkRegistroDetailFieldNumero": "Número de registro",
+  "@caseworkRegistroDetailFieldNumero": {
+    "description": "Casework registro detail — número field label."
+  },
+  "caseworkRegistroDetailFieldFecha": "Fecha",
+  "@caseworkRegistroDetailFieldFecha": {
+    "description": "Casework registro detail — fecha field label."
+  },
+  "caseworkRegistroDetailFieldConsejeria": "Consejería destino",
+  "@caseworkRegistroDetailFieldConsejeria": {
+    "description": "Casework registro detail — consejería destino field label."
+  },
+  "caseworkRegistroDetailFieldOficina": "Oficina de registro",
+  "@caseworkRegistroDetailFieldOficina": {
+    "description": "Casework registro detail — oficina field label."
+  },
+  "caseworkRegistroDetailFieldAsunto": "Asunto",
+  "@caseworkRegistroDetailFieldAsunto": {
+    "description": "Casework registro detail — asunto field label."
+  },
+  "caseworkRegistroDetailFieldObservaciones": "Observaciones",
+  "@caseworkRegistroDetailFieldObservaciones": {
+    "description": "Casework registro detail — observaciones field label."
+  },
+  "caseworkRegistroDetailFicherosTitle": "Documentación adjunta",
+  "@caseworkRegistroDetailFicherosTitle": {
+    "description": "Casework registro detail — ficheros section title."
+  },
+  "caseworkRegistroDetailFicherosEmpty": "Este registro no incluye ficheros adjuntos.",
+  "@caseworkRegistroDetailFicherosEmpty": {
+    "description": "Casework registro detail — ficheros empty state."
+  },
+  "caseworkRegistroDetailReadOnlyBanner": "Esta pantalla muestra el detalle del registro en modo consulta. No es posible aportar documentación desde aquí.",
+  "@caseworkRegistroDetailReadOnlyBanner": {
+    "description": "Casework registro detail — informational banner reminding the user the screen is read-only."
+  },
+  "caseworkAportacionOpenCta": "Aportar documentación",
+  "@caseworkAportacionOpenCta": {
+    "description": "Casework workspace — entrypoint button that opens the third-party aportación wizard (STORY-37)."
+  },
+  "caseworkAportacionTitle": "Aportación de documentos",
+  "@caseworkAportacionTitle": {
+    "description": "Casework aportación wizard — page title."
+  },
+  "caseworkAportacionBreadcrumb": "Aportación",
+  "@caseworkAportacionBreadcrumb": {
+    "description": "Casework aportación wizard — breadcrumb segment."
+  },
+  "caseworkAportacionBack": "Paso anterior",
+  "@caseworkAportacionBack": {
+    "description": "Casework aportación wizard — AppBar back tooltip."
+  },
+  "caseworkAportacionExit": "Salir del flujo",
+  "@caseworkAportacionExit": {
+    "description": "Casework aportación wizard — AppBar exit tooltip on the intro step."
+  },
+  "caseworkAportacionStepIndicator": "Paso {current} de {total}",
+  "@caseworkAportacionStepIndicator": {
+    "description": "Casework aportación wizard — step indicator.",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "caseworkAportacionStepIntro": "Introducción",
+  "@caseworkAportacionStepIntro": {
+    "description": "Casework aportación wizard — step label for intro."
+  },
+  "caseworkAportacionStepIdentificacion": "Identificación",
+  "@caseworkAportacionStepIdentificacion": {
+    "description": "Casework aportación wizard — step label for identification."
+  },
+  "caseworkAportacionStepSearch": "Búsqueda",
+  "@caseworkAportacionStepSearch": {
+    "description": "Casework aportación wizard — step label for search."
+  },
+  "caseworkAportacionStepDetail": "Detalle",
+  "@caseworkAportacionStepDetail": {
+    "description": "Casework aportación wizard — step label for detail."
+  },
+  "caseworkAportacionStepComplete": "Confirmación",
+  "@caseworkAportacionStepComplete": {
+    "description": "Casework aportación wizard — step label for completion."
+  },
+  "caseworkAportacionIntroHeadline": "Aporta documentación a un expediente",
+  "@caseworkAportacionIntroHeadline": {
+    "description": "Casework aportación wizard — intro headline."
+  },
+  "caseworkAportacionIntroBody": "Este flujo te permite aportar documentación adicional a un expediente abierto en nombre de la persona interesada. Identifícate, localiza el expediente y adjunta los ficheros.",
+  "@caseworkAportacionIntroBody": {
+    "description": "Casework aportación wizard — intro body."
+  },
+  "caseworkAportacionIntroRestrictionsTitle": "Antes de continuar",
+  "@caseworkAportacionIntroRestrictionsTitle": {
+    "description": "Casework aportación wizard — restrictions section title."
+  },
+  "caseworkAportacionIntroRestriction1": "Solo puedes aportar documentación a expedientes que estén abiertos.",
+  "@caseworkAportacionIntroRestriction1": {
+    "description": "Casework aportación wizard — restriction bullet 1."
+  },
+  "caseworkAportacionIntroRestriction2": "Necesitas el número de expediente o el número de registro asociado.",
+  "@caseworkAportacionIntroRestriction2": {
+    "description": "Casework aportación wizard — restriction bullet 2."
+  },
+  "caseworkAportacionIntroRestriction3": "Los ficheros aportados quedan vinculados a la persona interesada que indiques.",
+  "@caseworkAportacionIntroRestriction3": {
+    "description": "Casework aportación wizard — restriction bullet 3."
+  },
+  "caseworkAportacionIntroContinueCta": "Continuar",
+  "@caseworkAportacionIntroContinueCta": {
+    "description": "Casework aportación wizard — intro continue CTA."
+  },
+  "caseworkAportacionIdentificationHeadline": "Identifica al interesado",
+  "@caseworkAportacionIdentificationHeadline": {
+    "description": "Casework aportación wizard — identification headline."
+  },
+  "caseworkAportacionIdentificationBody": "Indica el tipo y número de documento de la persona titular del expediente.",
+  "@caseworkAportacionIdentificationBody": {
+    "description": "Casework aportación wizard — identification body."
+  },
+  "caseworkAportacionIdentificationTypeLabel": "Tipo de documento",
+  "@caseworkAportacionIdentificationTypeLabel": {
+    "description": "Casework aportación wizard — identification type label."
+  },
+  "caseworkAportacionIdentificationTypeNif": "NIF",
+  "@caseworkAportacionIdentificationTypeNif": {
+    "description": "Casework aportación wizard — identification type NIF."
+  },
+  "caseworkAportacionIdentificationTypeNie": "NIE",
+  "@caseworkAportacionIdentificationTypeNie": {
+    "description": "Casework aportación wizard — identification type NIE."
+  },
+  "caseworkAportacionIdentificationTypePassport": "Pasaporte",
+  "@caseworkAportacionIdentificationTypePassport": {
+    "description": "Casework aportación wizard — identification type passport."
+  },
+  "caseworkAportacionIdentificationTypeCif": "CIF",
+  "@caseworkAportacionIdentificationTypeCif": {
+    "description": "Casework aportación wizard — identification type CIF."
+  },
+  "caseworkAportacionIdentificationNumberLabel": "Número de documento",
+  "@caseworkAportacionIdentificationNumberLabel": {
+    "description": "Casework aportación wizard — identification number label."
+  },
+  "caseworkAportacionIdentificationNumberHint": "Ej. 12345678A",
+  "@caseworkAportacionIdentificationNumberHint": {
+    "description": "Casework aportación wizard — identification number hint."
+  },
+  "caseworkAportacionIdentificationNextCta": "Siguiente",
+  "@caseworkAportacionIdentificationNextCta": {
+    "description": "Casework aportación wizard — identification next CTA."
+  },
+  "caseworkAportacionSearchHeadline": "Localiza el expediente",
+  "@caseworkAportacionSearchHeadline": {
+    "description": "Casework aportación wizard — search headline."
+  },
+  "caseworkAportacionSearchBody": "Busca por número de expediente o número de registro asociado.",
+  "@caseworkAportacionSearchBody": {
+    "description": "Casework aportación wizard — search body."
+  },
+  "caseworkAportacionSearchTabExpediente": "Por nº de expediente",
+  "@caseworkAportacionSearchTabExpediente": {
+    "description": "Casework aportación wizard — search tab expediente."
+  },
+  "caseworkAportacionSearchTabRegistro": "Por nº de registro",
+  "@caseworkAportacionSearchTabRegistro": {
+    "description": "Casework aportación wizard — search tab registro."
+  },
+  "caseworkAportacionSearchExpedienteLabel": "Número de expediente",
+  "@caseworkAportacionSearchExpedienteLabel": {
+    "description": "Casework aportación wizard — search expediente label."
+  },
+  "caseworkAportacionSearchExpedienteHint": "Ej. EXP/2025/00123",
+  "@caseworkAportacionSearchExpedienteHint": {
+    "description": "Casework aportación wizard — search expediente hint."
+  },
+  "caseworkAportacionSearchRegistroLabel": "Número de registro",
+  "@caseworkAportacionSearchRegistroLabel": {
+    "description": "Casework aportación wizard — search registro label."
+  },
+  "caseworkAportacionSearchRegistroHint": "Ej. REG/E/45612",
+  "@caseworkAportacionSearchRegistroHint": {
+    "description": "Casework aportación wizard — search registro hint."
+  },
+  "caseworkAportacionSearchSubmitCta": "Buscar",
+  "@caseworkAportacionSearchSubmitCta": {
+    "description": "Casework aportación wizard — search submit CTA."
+  },
+  "caseworkAportacionFailureInvalidIdentification": "El número de documento no es válido para el tipo seleccionado.",
+  "@caseworkAportacionFailureInvalidIdentification": {
+    "description": "Casework aportación wizard — invalid identification failure."
+  },
+  "caseworkAportacionFailureNotFound": "No hemos encontrado ningún expediente con esos datos.",
+  "@caseworkAportacionFailureNotFound": {
+    "description": "Casework aportación wizard — not found failure."
+  },
+  "caseworkAportacionFailureNetworkError": "No hemos podido completar la búsqueda. Inténtalo de nuevo más tarde.",
+  "@caseworkAportacionFailureNetworkError": {
+    "description": "Casework aportación wizard — network failure."
+  },
+  "caseworkAportacionCompleteHeadline": "Aportación enviada",
+  "@caseworkAportacionCompleteHeadline": {
+    "description": "Casework aportación wizard — completion headline."
+  },
+  "caseworkAportacionCompleteBody": "La documentación se ha aportado correctamente al expediente {expediente}. Conserva el justificante por si necesitas consultarlo.",
+  "@caseworkAportacionCompleteBody": {
+    "description": "Casework aportación wizard — completion body.",
+    "placeholders": {
+      "expediente": {
+        "type": "String"
+      }
+    }
+  },
+  "caseworkAportacionCompleteHomeCta": "Volver a Mis gestiones",
+  "@caseworkAportacionCompleteHomeCta": {
+    "description": "Casework aportación wizard — back to workspace CTA."
+  },
   "notificationsCenterTitle": "Mis notificaciones",
-  "@notificationsCenterTitle": {"description": "Notifications — título del centro de notificaciones (STORY-41)."},
+  "@notificationsCenterTitle": {
+    "description": "Notifications — título del centro de notificaciones (STORY-41)."
+  },
   "notificationsLoading": "Cargando notificaciones…",
-  "@notificationsLoading": {"description": "Notifications — mensaje del estado de carga del listado."},
+  "@notificationsLoading": {
+    "description": "Notifications — mensaje del estado de carga del listado."
+  },
   "notificationsErrorMessage": "No hemos podido cargar tus notificaciones.",
-  "@notificationsErrorMessage": {"description": "Notifications — mensaje del estado de error global."},
+  "@notificationsErrorMessage": {
+    "description": "Notifications — mensaje del estado de error global."
+  },
   "notificationsLoadMoreError": "No hemos podido cargar más notificaciones. Inténtalo de nuevo.",
-  "@notificationsLoadMoreError": {"description": "Notifications — aviso bajo el listado cuando falla la carga incremental."},
+  "@notificationsLoadMoreError": {
+    "description": "Notifications — aviso bajo el listado cuando falla la carga incremental."
+  },
   "notificationsEmptyTitle": "No hay notificaciones",
-  "@notificationsEmptyTitle": {"description": "Notifications — título del estado vacío del listado."},
+  "@notificationsEmptyTitle": {
+    "description": "Notifications — título del estado vacío del listado."
+  },
   "notificationsEmptySubtitle": "No hemos encontrado notificaciones para los filtros aplicados.",
-  "@notificationsEmptySubtitle": {"description": "Notifications — subtítulo del estado vacío del listado."},
+  "@notificationsEmptySubtitle": {
+    "description": "Notifications — subtítulo del estado vacío del listado."
+  },
   "notificationsFilterAll": "Todas",
-  "@notificationsFilterAll": {"description": "Notifications — etiqueta del filtro que muestra todos los estados."},
+  "@notificationsFilterAll": {
+    "description": "Notifications — etiqueta del filtro que muestra todos los estados."
+  },
   "notificationsItemHasDocuments": "Documentos asociados",
-  "@notificationsItemHasDocuments": {"description": "Notifications — indicador de que la notificación tiene documentos."},
+  "@notificationsItemHasDocuments": {
+    "description": "Notifications — indicador de que la notificación tiene documentos."
+  },
   "notificationsPaginationFooter": "Mostrando {loaded} de {total}",
   "@notificationsPaginationFooter": {
     "description": "Notifications — pie del listado con el progreso de la paginación.",
     "placeholders": {
-      "loaded": {"type": "int"},
-      "total": {"type": "int"}
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "notificationStatusPendiente": "Pendiente",
-  "@notificationStatusPendiente": {"description": "Notifications — etiqueta del estado pendiente."},
+  "@notificationStatusPendiente": {
+    "description": "Notifications — etiqueta del estado pendiente."
+  },
   "notificationStatusAceptada": "Aceptada",
-  "@notificationStatusAceptada": {"description": "Notifications — etiqueta del estado aceptada."},
+  "@notificationStatusAceptada": {
+    "description": "Notifications — etiqueta del estado aceptada."
+  },
   "notificationStatusRechazada": "Rechazada",
-  "@notificationStatusRechazada": {"description": "Notifications — etiqueta del estado rechazada."},
+  "@notificationStatusRechazada": {
+    "description": "Notifications — etiqueta del estado rechazada."
+  },
   "notificationStatusCaducada": "Caducada",
-  "@notificationStatusCaducada": {"description": "Notifications — etiqueta del estado caducada."},
+  "@notificationStatusCaducada": {
+    "description": "Notifications — etiqueta del estado caducada."
+  },
   "notificationStatusUnknown": "Sin clasificar",
-  "@notificationStatusUnknown": {"description": "Notifications — etiqueta del estado desconocido (parser tolerante)."},
+  "@notificationStatusUnknown": {
+    "description": "Notifications — etiqueta del estado desconocido (parser tolerante)."
+  },
   "notificationDetailPlaceholderTitle": "Detalle de notificación",
-  "@notificationDetailPlaceholderTitle": {"description": "Notifications — título de la pantalla provisional de detalle."},
+  "@notificationDetailPlaceholderTitle": {
+    "description": "Notifications — título de la pantalla provisional de detalle."
+  },
   "notificationDetailPlaceholderBody": "Notificación {id}",
   "@notificationDetailPlaceholderBody": {
     "description": "Notifications — cuerpo provisional con el identificador de la notificación.",
     "placeholders": {
-      "id": {"type": "String"}
+      "id": {
+        "type": "String"
+      }
     }
   },
   "notificationDetailPlaceholderPending": "Detalle pendiente de habilitar en STORY-44.",
-  "@notificationDetailPlaceholderPending": {"description": "Notifications — mensaje provisional para el detalle real."},
+  "@notificationDetailPlaceholderPending": {
+    "description": "Notifications — mensaje provisional para el detalle real."
+  },
   "notificationContactPageTitle": "Datos de contacto",
-  "@notificationContactPageTitle": {"description": "Notifications contact — título de la pantalla de alta de contacto (STORY-42)."},
+  "@notificationContactPageTitle": {
+    "description": "Notifications contact — título de la pantalla de alta de contacto (STORY-42)."
+  },
   "notificationContactExplanation": "Necesitamos un teléfono móvil o un correo electrónico para avisarte de las notificaciones electrónicas que recibas. Solo usaremos estos datos para enviarte avisos relacionados con tus notificaciones.",
-  "@notificationContactExplanation": {"description": "Notifications contact — copy explicativo sobre el uso futuro del contacto."},
+  "@notificationContactExplanation": {
+    "description": "Notifications contact — copy explicativo sobre el uso futuro del contacto."
+  },
   "notificationContactPhoneLabel": "Teléfono móvil",
-  "@notificationContactPhoneLabel": {"description": "Notifications contact — etiqueta del campo teléfono móvil."},
+  "@notificationContactPhoneLabel": {
+    "description": "Notifications contact — etiqueta del campo teléfono móvil."
+  },
   "notificationContactPhoneHint": "600 123 456",
-  "@notificationContactPhoneHint": {"description": "Notifications contact — placeholder del campo teléfono móvil."},
+  "@notificationContactPhoneHint": {
+    "description": "Notifications contact — placeholder del campo teléfono móvil."
+  },
   "notificationContactPhoneHelper": "Indica un número con prefijo internacional si no es de España.",
-  "@notificationContactPhoneHelper": {"description": "Notifications contact — texto auxiliar del campo teléfono móvil."},
+  "@notificationContactPhoneHelper": {
+    "description": "Notifications contact — texto auxiliar del campo teléfono móvil."
+  },
   "notificationContactEmailLabel": "Correo electrónico",
-  "@notificationContactEmailLabel": {"description": "Notifications contact — etiqueta del campo correo electrónico."},
+  "@notificationContactEmailLabel": {
+    "description": "Notifications contact — etiqueta del campo correo electrónico."
+  },
   "notificationContactEmailHint": "ejemplo@correo.com",
-  "@notificationContactEmailHint": {"description": "Notifications contact — placeholder del campo correo electrónico."},
+  "@notificationContactEmailHint": {
+    "description": "Notifications contact — placeholder del campo correo electrónico."
+  },
   "notificationContactEmailHelper": "Usaremos este correo solo para avisos de notificaciones.",
-  "@notificationContactEmailHelper": {"description": "Notifications contact — texto auxiliar del campo correo electrónico."},
+  "@notificationContactEmailHelper": {
+    "description": "Notifications contact — texto auxiliar del campo correo electrónico."
+  },
   "notificationContactSubmitCta": "Registrar",
-  "@notificationContactSubmitCta": {"description": "Notifications contact — botón principal del formulario."},
+  "@notificationContactSubmitCta": {
+    "description": "Notifications contact — botón principal del formulario."
+  },
   "notificationContactLoading": "Cargando datos de contacto…",
-  "@notificationContactLoading": {"description": "Notifications contact — mensaje del estado de carga."},
+  "@notificationContactLoading": {
+    "description": "Notifications contact — mensaje del estado de carga."
+  },
   "notificationContactErrorLoading": "No hemos podido cargar tus datos de contacto.",
-  "@notificationContactErrorLoading": {"description": "Notifications contact — mensaje del estado de error global."},
+  "@notificationContactErrorLoading": {
+    "description": "Notifications contact — mensaje del estado de error global."
+  },
   "notificationContactErrorPhoneInvalid": "Introduce un teléfono móvil válido.",
-  "@notificationContactErrorPhoneInvalid": {"description": "Notifications contact — error de validación del teléfono móvil."},
+  "@notificationContactErrorPhoneInvalid": {
+    "description": "Notifications contact — error de validación del teléfono móvil."
+  },
   "notificationContactErrorEmailInvalid": "Introduce un correo electrónico válido.",
-  "@notificationContactErrorEmailInvalid": {"description": "Notifications contact — error de validación del correo electrónico."},
+  "@notificationContactErrorEmailInvalid": {
+    "description": "Notifications contact — error de validación del correo electrónico."
+  },
   "notificationContactErrorBothEmpty": "Indica al menos un teléfono móvil o un correo electrónico.",
-  "@notificationContactErrorBothEmpty": {"description": "Notifications contact — error cuando no se proporciona ningún canal."},
+  "@notificationContactErrorBothEmpty": {
+    "description": "Notifications contact — error cuando no se proporciona ningún canal."
+  },
   "notificationContactSuccessMessage": "Tus datos de contacto se han registrado correctamente.",
-  "@notificationContactSuccessMessage": {"description": "Notifications contact — mensaje de éxito tras el alta."},
+  "@notificationContactSuccessMessage": {
+    "description": "Notifications contact — mensaje de éxito tras el alta."
+  },
   "notificationContactGateBannerMessage": "Configura tus datos de contacto para recibir notificaciones.",
-  "@notificationContactGateBannerMessage": {"description": "Notifications contact — mensaje del banner que aparece cuando faltan datos de contacto."},
+  "@notificationContactGateBannerMessage": {
+    "description": "Notifications contact — mensaje del banner que aparece cuando faltan datos de contacto."
+  },
   "notificationContactGateBannerCta": "Configurar ahora",
-  "@notificationContactGateBannerCta": {"description": "Notifications contact — CTA del banner que abre el formulario de alta."},
+  "@notificationContactGateBannerCta": {
+    "description": "Notifications contact — CTA del banner que abre el formulario de alta."
+  },
+  "walletActionOpen": "Abrir",
+  "@walletActionOpen": {
+    "description": "Digital cards exporter — label for the open-with-system-viewer action."
+  },
+  "walletActionShare": "Compartir",
+  "@walletActionShare": {
+    "description": "Digital cards exporter — label for the share-sheet action."
+  },
+  "walletActionAddToWallet": "Añadir a Wallet",
+  "@walletActionAddToWallet": {
+    "description": "Digital cards exporter — label for the Apple/Google Wallet action."
+  },
+  "walletPreviewPdfPlaceholder": "Documento PDF",
+  "@walletPreviewPdfPlaceholder": {
+    "description": "Digital cards exporter — placeholder caption for a PDF preview tile."
+  },
+  "walletPreviewPkpassPlaceholder": "Pase para Wallet",
+  "@walletPreviewPkpassPlaceholder": {
+    "description": "Digital cards exporter — placeholder caption for a PKPass preview tile."
+  },
+  "walletPreviewQrUnavailable": "Vista previa del QR no disponible",
+  "@walletPreviewQrUnavailable": {
+    "description": "Digital cards exporter — fallback message when the QR image bytes are missing."
+  },
+  "walletPreviewQrImageSemantic": "Imagen del código QR",
+  "@walletPreviewQrImageSemantic": {
+    "description": "Digital cards exporter — accessibility label for the QR image preview."
+  },
+  "walletPreviewQrTextSemantic": "Contenido del código QR en texto",
+  "@walletPreviewQrTextSemantic": {
+    "description": "Digital cards exporter — accessibility label for the QR textual preview."
+  },
+  "walletErrorInvalidArtifact": "El archivo recibido no es válido. Inténtalo de nuevo.",
+  "@walletErrorInvalidArtifact": {
+    "description": "Digital cards exporter — error shown when the binary fails magic / size validation."
+  },
+  "walletErrorSystem": "No hemos podido completar la acción. Inténtalo de nuevo.",
+  "@walletErrorSystem": {
+    "description": "Digital cards exporter — error shown when an OS-level operation fails."
+  },
+  "walletErrorNoCapability": "Esta acción no está disponible en tu dispositivo.",
+  "@walletErrorNoCapability": {
+    "description": "Digital cards exporter — error shown when no platform capability matches the request."
+  },
+  "walletErrorEmptyPayload": "El archivo está vacío.",
+  "@walletErrorEmptyPayload": {
+    "description": "Digital cards exporter — error shown when the payload has zero bytes."
+  },
+  "walletErrorTooLarge": "El archivo supera el tamaño permitido.",
+  "@walletErrorTooLarge": {
+    "description": "Digital cards exporter — error shown when the payload exceeds the safety threshold."
+  },
+  "walletErrorUnsupportedSource": "El formato recibido no es compatible.",
+  "@walletErrorUnsupportedSource": {
+    "description": "Digital cards exporter — error shown when the source variant is unsupported / unavailable."
+  },
   "signatureInboxTitle": "Firma de documentos",
-  "@signatureInboxTitle": {"description": "Signature — título de la bandeja de firma del ciudadano (STORY-45)."},
+  "@signatureInboxTitle": {
+    "description": "Signature — título de la bandeja de firma del ciudadano (STORY-45)."
+  },
   "signatureTabPending": "Pendientes",
-  "@signatureTabPending": {"description": "Signature — etiqueta de la pestaña de documentos pendientes de firma."},
+  "@signatureTabPending": {
+    "description": "Signature — etiqueta de la pestaña de documentos pendientes de firma."
+  },
   "signatureTabHistory": "Histórico",
-  "@signatureTabHistory": {"description": "Signature — etiqueta de la pestaña del histórico de documentos firmados."},
+  "@signatureTabHistory": {
+    "description": "Signature — etiqueta de la pestaña del histórico de documentos firmados."
+  },
   "signatureLoading": "Cargando documentos…",
-  "@signatureLoading": {"description": "Signature — mensaje del estado de carga."},
+  "@signatureLoading": {
+    "description": "Signature — mensaje del estado de carga."
+  },
   "signatureEmptyPendingTitle": "No hay documentos pendientes",
-  "@signatureEmptyPendingTitle": {"description": "Signature — título del estado vacío en la pestaña de pendientes."},
+  "@signatureEmptyPendingTitle": {
+    "description": "Signature — título del estado vacío en la pestaña de pendientes."
+  },
   "signatureEmptyPendingSubtitle": "No tienes documentos esperando tu firma.",
-  "@signatureEmptyPendingSubtitle": {"description": "Signature — subtítulo del estado vacío en la pestaña de pendientes."},
+  "@signatureEmptyPendingSubtitle": {
+    "description": "Signature — subtítulo del estado vacío en la pestaña de pendientes."
+  },
   "signatureEmptyHistoryTitle": "Aún no has firmado documentos",
-  "@signatureEmptyHistoryTitle": {"description": "Signature — título del estado vacío en la pestaña de histórico."},
+  "@signatureEmptyHistoryTitle": {
+    "description": "Signature — título del estado vacío en la pestaña de histórico."
+  },
   "signatureEmptyHistorySubtitle": "Cuando firmes un documento aparecerá aquí.",
-  "@signatureEmptyHistorySubtitle": {"description": "Signature — subtítulo del estado vacío en la pestaña de histórico."},
+  "@signatureEmptyHistorySubtitle": {
+    "description": "Signature — subtítulo del estado vacío en la pestaña de histórico."
+  },
   "signatureErrorMessage": "No hemos podido cargar tus documentos para firmar.",
-  "@signatureErrorMessage": {"description": "Signature — mensaje del estado de error global de la bandeja."},
+  "@signatureErrorMessage": {
+    "description": "Signature — mensaje del estado de error global de la bandeja."
+  },
   "signatureRetry": "Reintentar",
-  "@signatureRetry": {"description": "Signature — etiqueta del botón de reintento del estado de error."},
+  "@signatureRetry": {
+    "description": "Signature — etiqueta del botón de reintento del estado de error."
+  },
   "signatureSignAction": "Firmar",
-  "@signatureSignAction": {"description": "Signature — CTA principal en cada documento pendiente."},
+  "@signatureSignAction": {
+    "description": "Signature — CTA principal en cada documento pendiente."
+  },
   "signatureExternalLaunchPlaceholder": "El salto a Afirma se habilitará en STORY-46.",
-  "@signatureExternalLaunchPlaceholder": {"description": "Signature — placeholder mostrado al pulsar Firmar mientras STORY-46 está pendiente."},
+  "@signatureExternalLaunchPlaceholder": {
+    "description": "Signature — placeholder mostrado al pulsar Firmar mientras STORY-46 está pendiente."
+  },
   "signatureCertificateValidTitle": "Certificado válido",
-  "@signatureCertificateValidTitle": {"description": "Signature — título del banner cuando el certificado es válido."},
+  "@signatureCertificateValidTitle": {
+    "description": "Signature — título del banner cuando el certificado es válido."
+  },
   "signatureCertificateMissingTitle": "Necesitas instalar tu certificado",
-  "@signatureCertificateMissingTitle": {"description": "Signature — título del banner cuando no hay certificado disponible."},
+  "@signatureCertificateMissingTitle": {
+    "description": "Signature — título del banner cuando no hay certificado disponible."
+  },
   "signatureCertificateExpiredTitle": "Tu certificado ha caducado",
-  "@signatureCertificateExpiredTitle": {"description": "Signature — título del banner cuando el certificado ha caducado."},
+  "@signatureCertificateExpiredTitle": {
+    "description": "Signature — título del banner cuando el certificado ha caducado."
+  },
   "signatureCertificateInvalidTitle": "El certificado no es válido",
-  "@signatureCertificateInvalidTitle": {"description": "Signature — título del banner cuando el certificado no es válido."},
+  "@signatureCertificateInvalidTitle": {
+    "description": "Signature — título del banner cuando el certificado no es válido."
+  },
   "signatureCertificateVecTitle": "Disponible mediante VEC",
-  "@signatureCertificateVecTitle": {"description": "Signature — título del banner cuando solo está disponible la Validación Electrónica Centralizada."},
+  "@signatureCertificateVecTitle": {
+    "description": "Signature — título del banner cuando solo está disponible la Validación Electrónica Centralizada."
+  },
   "signatureCertificateUnknownTitle": "No hemos podido validar tu certificado",
-  "@signatureCertificateUnknownTitle": {"description": "Signature — título del banner cuando la validación falla o devuelve un estado desconocido."},
+  "@signatureCertificateUnknownTitle": {
+    "description": "Signature — título del banner cuando la validación falla o devuelve un estado desconocido."
+  },
   "signatureCertificateRecheck": "Volver a validar",
-  "@signatureCertificateRecheck": {"description": "Signature — CTA del banner para reintentar la validación."},
+  "@signatureCertificateRecheck": {
+    "description": "Signature — CTA del banner para reintentar la validación."
+  },
   "signatureStatusPendiente": "Pendiente",
-  "@signatureStatusPendiente": {"description": "Signature — etiqueta del estado pendiente."},
+  "@signatureStatusPendiente": {
+    "description": "Signature — etiqueta del estado pendiente."
+  },
   "signatureStatusFirmado": "Firmado",
-  "@signatureStatusFirmado": {"description": "Signature — etiqueta del estado firmado."},
+  "@signatureStatusFirmado": {
+    "description": "Signature — etiqueta del estado firmado."
+  },
   "signatureStatusExpirado": "Caducado",
-  "@signatureStatusExpirado": {"description": "Signature — etiqueta del estado caducado."},
+  "@signatureStatusExpirado": {
+    "description": "Signature — etiqueta del estado caducado."
+  },
   "signatureStatusError": "Con errores",
-  "@signatureStatusError": {"description": "Signature — etiqueta del estado de error."},
+  "@signatureStatusError": {
+    "description": "Signature — etiqueta del estado de error."
+  },
   "signatureStatusUnknown": "Sin clasificar",
-  "@signatureStatusUnknown": {"description": "Signature — etiqueta del estado desconocido (parser tolerante)."},
+  "@signatureStatusUnknown": {
+    "description": "Signature — etiqueta del estado desconocido (parser tolerante)."
+  },
   "signatureDocumentSize": "{size}",
   "@signatureDocumentSize": {
     "description": "Signature — etiqueta auxiliar con el tamaño del documento (ya formateado por la presentación).",
     "placeholders": {
-      "size": {"type": "String"}
+      "size": {
+        "type": "String"
+      }
     }
   },
   "signatureCertificateExpiresOn": "Caduca el {date}",
   "@signatureCertificateExpiresOn": {
     "description": "Signature — texto secundario del banner indicando la fecha de caducidad del certificado.",
     "placeholders": {
-      "date": {"type": "String"}
+      "date": {
+        "type": "String"
+      }
     }
   }
 }

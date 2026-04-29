@@ -2000,23 +2000,149 @@ abstract class AppLocalizations {
   /// **'{count, plural, one{1 resultado} other{{count} resultados}}'**
   String caseworkSearchResultsCount(int count);
 
-  /// Casework — título del detalle (placeholder).
+  /// Casework — título de la pantalla de detalle (STORY-35).
   ///
   /// In es, this message translates to:
   /// **'Detalle del expediente'**
-  String get caseworkItemDetailPlaceholderTitle;
+  String get caseworkExpedienteDetailTitle;
 
-  /// Casework — cuerpo del detalle (placeholder).
+  /// Casework — tooltip botón volver detalle.
   ///
   /// In es, this message translates to:
-  /// **'Detalle del elemento {id}'**
-  String caseworkItemDetailPlaceholderBody(String id);
+  /// **'Volver a Mis gestiones'**
+  String get caseworkExpedienteDetailBack;
 
-  /// Casework — mensaje provisional del detalle.
+  /// Casework — mensaje de carga detalle.
   ///
   /// In es, this message translates to:
-  /// **'El detalle real se habilita en STORY-35 / STORY-36.'**
-  String get caseworkItemDetailPlaceholderPending;
+  /// **'Cargando detalle del expediente…'**
+  String get caseworkExpedienteDetailLoading;
+
+  /// Casework — título de error en detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar el expediente.'**
+  String get caseworkExpedienteDetailErrorTitle;
+
+  /// Casework — cuerpo de error en detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Vuelve a intentarlo en unos minutos.'**
+  String get caseworkExpedienteDetailErrorBody;
+
+  /// Casework — título del bloque de metadata.
+  ///
+  /// In es, this message translates to:
+  /// **'Información del expediente'**
+  String get caseworkExpedienteDetailMetadataTitle;
+
+  /// Casework — etiqueta número de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get caseworkExpedienteDetailNumero;
+
+  /// Casework — etiqueta código del asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Código del asunto'**
+  String get caseworkExpedienteDetailAsuntoCodigo;
+
+  /// Casework — etiqueta asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Asunto'**
+  String get caseworkExpedienteDetailAsunto;
+
+  /// Casework — etiqueta consejería.
+  ///
+  /// In es, this message translates to:
+  /// **'Consejería'**
+  String get caseworkExpedienteDetailConsejeria;
+
+  /// Casework — etiqueta oficina tramitadora.
+  ///
+  /// In es, this message translates to:
+  /// **'Oficina tramitadora'**
+  String get caseworkExpedienteDetailOficina;
+
+  /// Casework — etiqueta procedimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Procedimiento'**
+  String get caseworkExpedienteDetailProcedimiento;
+
+  /// Casework — etiqueta fecha de inicio.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de inicio'**
+  String get caseworkExpedienteDetailFechaInicio;
+
+  /// Casework — etiqueta última actualización.
+  ///
+  /// In es, this message translates to:
+  /// **'Última actualización'**
+  String get caseworkExpedienteDetailFechaActualizacion;
+
+  /// Casework — etiqueta accesible del estado.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado'**
+  String get caseworkExpedienteDetailEstadoLabel;
+
+  /// Casework — estado abierto.
+  ///
+  /// In es, this message translates to:
+  /// **'Abierto'**
+  String get caseworkExpedienteDetailEstadoAbierto;
+
+  /// Casework — estado cerrado.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrado'**
+  String get caseworkExpedienteDetailEstadoCerrado;
+
+  /// Casework — fallback de estado desconocido (TASK-40 Q1).
+  ///
+  /// In es, this message translates to:
+  /// **'Estado desconocido'**
+  String get caseworkExpedienteDetailEstadoUnknown;
+
+  /// Casework — título sección de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Ficheros asociados'**
+  String get caseworkExpedienteDetailFilesTitle;
+
+  /// Casework — vacío sección de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay ficheros asociados a este expediente.'**
+  String get caseworkExpedienteDetailFilesEmpty;
+
+  /// Casework — tooltip descarga fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar fichero'**
+  String get caseworkExpedienteDetailFicheroDownloadTooltip;
+
+  /// Casework — mensaje placeholder descarga fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'La descarga del fichero se habilitará en una próxima versión.'**
+  String get caseworkExpedienteDetailFicheroDownloadStub;
+
+  /// Casework — título zona operativa de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get caseworkExpedienteDetailOperationsTitle;
+
+  /// Casework — banner expediente cerrado.
+  ///
+  /// In es, this message translates to:
+  /// **'Expediente cerrado, no se admiten aportaciones.'**
+  String get caseworkExpedienteDetailClosedBanner;
 
   /// Título de la pantalla de catálogo de carnets digitales (STORY-48).
   ///
@@ -2372,6 +2498,534 @@ abstract class AppLocalizations {
   /// **'Mis autorizaciones'**
   String get dataConsentNavCta;
 
+  /// Casework upload — page title.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get caseworkUploadPageTitle;
+
+  /// Casework upload — picker panel headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Adjuntar archivos'**
+  String get caseworkUploadPickerCta;
+
+  /// Casework upload — picker button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar archivos'**
+  String get caseworkUploadSelectFilesCta;
+
+  /// Casework upload — semantic label for the drop / picker area.
+  ///
+  /// In es, this message translates to:
+  /// **'Zona para arrastrar y soltar archivos. También se pueden seleccionar pulsando.'**
+  String get caseworkUploadDropZoneSemantic;
+
+  /// Casework upload — files and size limit hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Máximo {maxFiles} archivos. Hasta {maxMb} MB cada uno.'**
+  String caseworkUploadLimitHint(int maxFiles, int maxMb);
+
+  /// Casework upload — remaining slots.
+  ///
+  /// In es, this message translates to:
+  /// **'{remaining, plural, =0{No puedes adjuntar más archivos.} =1{Puedes adjuntar 1 archivo más.} other{Puedes adjuntar {remaining} archivos más.}}'**
+  String caseworkUploadRemainingHint(int remaining);
+
+  /// Casework upload — empty list state.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no hay archivos adjuntos.'**
+  String get caseworkUploadEmptyList;
+
+  /// Casework upload — remove file tooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar archivo'**
+  String get caseworkUploadRemoveFile;
+
+  /// Casework upload — upload all CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir todos'**
+  String get caseworkUploadUploadAllCta;
+
+  /// Casework upload — finalize CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizar y solicitar justificante'**
+  String get caseworkUploadFinalizeCta;
+
+  /// Casework upload — status: selected.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionado'**
+  String get caseworkUploadStatusSelected;
+
+  /// Casework upload — status: validating.
+  ///
+  /// In es, this message translates to:
+  /// **'Validando'**
+  String get caseworkUploadStatusValidating;
+
+  /// Casework upload — status: hashed.
+  ///
+  /// In es, this message translates to:
+  /// **'Hash calculado'**
+  String get caseworkUploadStatusHashed;
+
+  /// Casework upload — status: uploading.
+  ///
+  /// In es, this message translates to:
+  /// **'Subiendo'**
+  String get caseworkUploadStatusUploading;
+
+  /// Casework upload — status: uploaded.
+  ///
+  /// In es, this message translates to:
+  /// **'Subido'**
+  String get caseworkUploadStatusUploaded;
+
+  /// Casework upload — status: failed.
+  ///
+  /// In es, this message translates to:
+  /// **'Error'**
+  String get caseworkUploadStatusFailed;
+
+  /// Casework upload — error: unsupported mime.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato no admitido.'**
+  String get caseworkUploadErrorUnsupportedMime;
+
+  /// Casework upload — error: too large.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo excede el tamaño máximo.'**
+  String get caseworkUploadErrorTooLarge;
+
+  /// Casework upload — error: too many files.
+  ///
+  /// In es, this message translates to:
+  /// **'Has alcanzado el número máximo de archivos.'**
+  String get caseworkUploadErrorTooManyFiles;
+
+  /// Casework upload — error: empty file.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo está vacío.'**
+  String get caseworkUploadErrorEmptyFile;
+
+  /// Casework upload — error: hash mismatch.
+  ///
+  /// In es, this message translates to:
+  /// **'La huella del archivo no coincide.'**
+  String get caseworkUploadErrorHashMismatch;
+
+  /// Casework upload — error: generic.
+  ///
+  /// In es, this message translates to:
+  /// **'Se produjo un error con el archivo.'**
+  String get caseworkUploadErrorGeneric;
+
+  /// Casework upload — justificante pending.
+  ///
+  /// In es, this message translates to:
+  /// **'El justificante se generará cuando finalices el envío.'**
+  String get caseworkUploadJustificantePending;
+
+  /// Casework upload — justificante unavailable headline.
+  ///
+  /// In es, this message translates to:
+  /// **'El justificante todavía no está disponible.'**
+  String get caseworkUploadJustificanteUnavailable;
+
+  /// Casework upload — justificante unavailable reason.
+  ///
+  /// In es, this message translates to:
+  /// **'Motivo: {reason}'**
+  String caseworkUploadJustificanteUnavailableReason(String reason);
+
+  /// Casework upload — justificante available.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu justificante está listo.'**
+  String get caseworkUploadJustificanteAvailable;
+
+  /// Casework upload — justificante download CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar justificante'**
+  String get caseworkUploadJustificanteDownloadCta;
+
+  /// Casework upload — stub message when download is triggered.
+  ///
+  /// In es, this message translates to:
+  /// **'La descarga del justificante se habilitará cuando el backend confirme el formato.'**
+  String get caseworkUploadJustificanteDownloadStub;
+
+  /// Casework registro detail — page title for entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de entrada de registro'**
+  String get caseworkRegistroDetailTitleEntrada;
+
+  /// Casework registro detail — page title for salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de salida de registro'**
+  String get caseworkRegistroDetailTitleSalida;
+
+  /// Casework registro detail — breadcrumb root.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get caseworkRegistroDetailBreadcrumbHome;
+
+  /// Casework registro detail — breadcrumb workspace segment.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis gestiones'**
+  String get caseworkRegistroDetailBreadcrumbCasework;
+
+  /// Casework registro detail — breadcrumb segment for entradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Entradas de registro'**
+  String get caseworkRegistroDetailKindEntrada;
+
+  /// Casework registro detail — breadcrumb segment for salidas.
+  ///
+  /// In es, this message translates to:
+  /// **'Salidas de registro'**
+  String get caseworkRegistroDetailKindSalida;
+
+  /// Casework registro detail — back-to-list tooltip on the AppBar.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver al listado'**
+  String get caseworkRegistroDetailBackToList;
+
+  /// Casework registro detail — error loading detail.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar el detalle del registro.'**
+  String get caseworkRegistroDetailLoadError;
+
+  /// Casework registro detail — número field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de registro'**
+  String get caseworkRegistroDetailFieldNumero;
+
+  /// Casework registro detail — fecha field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha'**
+  String get caseworkRegistroDetailFieldFecha;
+
+  /// Casework registro detail — consejería destino field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Consejería destino'**
+  String get caseworkRegistroDetailFieldConsejeria;
+
+  /// Casework registro detail — oficina field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Oficina de registro'**
+  String get caseworkRegistroDetailFieldOficina;
+
+  /// Casework registro detail — asunto field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Asunto'**
+  String get caseworkRegistroDetailFieldAsunto;
+
+  /// Casework registro detail — observaciones field label.
+  ///
+  /// In es, this message translates to:
+  /// **'Observaciones'**
+  String get caseworkRegistroDetailFieldObservaciones;
+
+  /// Casework registro detail — ficheros section title.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentación adjunta'**
+  String get caseworkRegistroDetailFicherosTitle;
+
+  /// Casework registro detail — ficheros empty state.
+  ///
+  /// In es, this message translates to:
+  /// **'Este registro no incluye ficheros adjuntos.'**
+  String get caseworkRegistroDetailFicherosEmpty;
+
+  /// Casework registro detail — informational banner reminding the user the screen is read-only.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta pantalla muestra el detalle del registro en modo consulta. No es posible aportar documentación desde aquí.'**
+  String get caseworkRegistroDetailReadOnlyBanner;
+
+  /// Casework workspace — entrypoint button that opens the third-party aportación wizard (STORY-37).
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get caseworkAportacionOpenCta;
+
+  /// Casework aportación wizard — page title.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación de documentos'**
+  String get caseworkAportacionTitle;
+
+  /// Casework aportación wizard — breadcrumb segment.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación'**
+  String get caseworkAportacionBreadcrumb;
+
+  /// Casework aportación wizard — AppBar back tooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Paso anterior'**
+  String get caseworkAportacionBack;
+
+  /// Casework aportación wizard — AppBar exit tooltip on the intro step.
+  ///
+  /// In es, this message translates to:
+  /// **'Salir del flujo'**
+  String get caseworkAportacionExit;
+
+  /// Casework aportación wizard — step indicator.
+  ///
+  /// In es, this message translates to:
+  /// **'Paso {current} de {total}'**
+  String caseworkAportacionStepIndicator(int current, int total);
+
+  /// Casework aportación wizard — step label for intro.
+  ///
+  /// In es, this message translates to:
+  /// **'Introducción'**
+  String get caseworkAportacionStepIntro;
+
+  /// Casework aportación wizard — step label for identification.
+  ///
+  /// In es, this message translates to:
+  /// **'Identificación'**
+  String get caseworkAportacionStepIdentificacion;
+
+  /// Casework aportación wizard — step label for search.
+  ///
+  /// In es, this message translates to:
+  /// **'Búsqueda'**
+  String get caseworkAportacionStepSearch;
+
+  /// Casework aportación wizard — step label for detail.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle'**
+  String get caseworkAportacionStepDetail;
+
+  /// Casework aportación wizard — step label for completion.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmación'**
+  String get caseworkAportacionStepComplete;
+
+  /// Casework aportación wizard — intro headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Aporta documentación a un expediente'**
+  String get caseworkAportacionIntroHeadline;
+
+  /// Casework aportación wizard — intro body.
+  ///
+  /// In es, this message translates to:
+  /// **'Este flujo te permite aportar documentación adicional a un expediente abierto en nombre de la persona interesada. Identifícate, localiza el expediente y adjunta los ficheros.'**
+  String get caseworkAportacionIntroBody;
+
+  /// Casework aportación wizard — restrictions section title.
+  ///
+  /// In es, this message translates to:
+  /// **'Antes de continuar'**
+  String get caseworkAportacionIntroRestrictionsTitle;
+
+  /// Casework aportación wizard — restriction bullet 1.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo puedes aportar documentación a expedientes que estén abiertos.'**
+  String get caseworkAportacionIntroRestriction1;
+
+  /// Casework aportación wizard — restriction bullet 2.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesitas el número de expediente o el número de registro asociado.'**
+  String get caseworkAportacionIntroRestriction2;
+
+  /// Casework aportación wizard — restriction bullet 3.
+  ///
+  /// In es, this message translates to:
+  /// **'Los ficheros aportados quedan vinculados a la persona interesada que indiques.'**
+  String get caseworkAportacionIntroRestriction3;
+
+  /// Casework aportación wizard — intro continue CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar'**
+  String get caseworkAportacionIntroContinueCta;
+
+  /// Casework aportación wizard — identification headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Identifica al interesado'**
+  String get caseworkAportacionIdentificationHeadline;
+
+  /// Casework aportación wizard — identification body.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica el tipo y número de documento de la persona titular del expediente.'**
+  String get caseworkAportacionIdentificationBody;
+
+  /// Casework aportación wizard — identification type label.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de documento'**
+  String get caseworkAportacionIdentificationTypeLabel;
+
+  /// Casework aportación wizard — identification type NIF.
+  ///
+  /// In es, this message translates to:
+  /// **'NIF'**
+  String get caseworkAportacionIdentificationTypeNif;
+
+  /// Casework aportación wizard — identification type NIE.
+  ///
+  /// In es, this message translates to:
+  /// **'NIE'**
+  String get caseworkAportacionIdentificationTypeNie;
+
+  /// Casework aportación wizard — identification type passport.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasaporte'**
+  String get caseworkAportacionIdentificationTypePassport;
+
+  /// Casework aportación wizard — identification type CIF.
+  ///
+  /// In es, this message translates to:
+  /// **'CIF'**
+  String get caseworkAportacionIdentificationTypeCif;
+
+  /// Casework aportación wizard — identification number label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de documento'**
+  String get caseworkAportacionIdentificationNumberLabel;
+
+  /// Casework aportación wizard — identification number hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej. 12345678A'**
+  String get caseworkAportacionIdentificationNumberHint;
+
+  /// Casework aportación wizard — identification next CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Siguiente'**
+  String get caseworkAportacionIdentificationNextCta;
+
+  /// Casework aportación wizard — search headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Localiza el expediente'**
+  String get caseworkAportacionSearchHeadline;
+
+  /// Casework aportación wizard — search body.
+  ///
+  /// In es, this message translates to:
+  /// **'Busca por número de expediente o número de registro asociado.'**
+  String get caseworkAportacionSearchBody;
+
+  /// Casework aportación wizard — search tab expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Por nº de expediente'**
+  String get caseworkAportacionSearchTabExpediente;
+
+  /// Casework aportación wizard — search tab registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Por nº de registro'**
+  String get caseworkAportacionSearchTabRegistro;
+
+  /// Casework aportación wizard — search expediente label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get caseworkAportacionSearchExpedienteLabel;
+
+  /// Casework aportación wizard — search expediente hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej. EXP/2025/00123'**
+  String get caseworkAportacionSearchExpedienteHint;
+
+  /// Casework aportación wizard — search registro label.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de registro'**
+  String get caseworkAportacionSearchRegistroLabel;
+
+  /// Casework aportación wizard — search registro hint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej. REG/E/45612'**
+  String get caseworkAportacionSearchRegistroHint;
+
+  /// Casework aportación wizard — search submit CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar'**
+  String get caseworkAportacionSearchSubmitCta;
+
+  /// Casework aportación wizard — invalid identification failure.
+  ///
+  /// In es, this message translates to:
+  /// **'El número de documento no es válido para el tipo seleccionado.'**
+  String get caseworkAportacionFailureInvalidIdentification;
+
+  /// Casework aportación wizard — not found failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado ningún expediente con esos datos.'**
+  String get caseworkAportacionFailureNotFound;
+
+  /// Casework aportación wizard — network failure.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido completar la búsqueda. Inténtalo de nuevo más tarde.'**
+  String get caseworkAportacionFailureNetworkError;
+
+  /// Casework aportación wizard — completion headline.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación enviada'**
+  String get caseworkAportacionCompleteHeadline;
+
+  /// Casework aportación wizard — completion body.
+  ///
+  /// In es, this message translates to:
+  /// **'La documentación se ha aportado correctamente al expediente {expediente}. Conserva el justificante por si necesitas consultarlo.'**
+  String caseworkAportacionCompleteBody(String expediente);
+
+  /// Casework aportación wizard — back to workspace CTA.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver a Mis gestiones'**
+  String get caseworkAportacionCompleteHomeCta;
+
   /// Notifications — título del centro de notificaciones (STORY-41).
   ///
   /// In es, this message translates to:
@@ -2575,6 +3229,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Configurar ahora'**
   String get notificationContactGateBannerCta;
+
+  /// Digital cards exporter — label for the open-with-system-viewer action.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir'**
+  String get walletActionOpen;
+
+  /// Digital cards exporter — label for the share-sheet action.
+  ///
+  /// In es, this message translates to:
+  /// **'Compartir'**
+  String get walletActionShare;
+
+  /// Digital cards exporter — label for the Apple/Google Wallet action.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir a Wallet'**
+  String get walletActionAddToWallet;
+
+  /// Digital cards exporter — placeholder caption for a PDF preview tile.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento PDF'**
+  String get walletPreviewPdfPlaceholder;
+
+  /// Digital cards exporter — placeholder caption for a PKPass preview tile.
+  ///
+  /// In es, this message translates to:
+  /// **'Pase para Wallet'**
+  String get walletPreviewPkpassPlaceholder;
+
+  /// Digital cards exporter — fallback message when the QR image bytes are missing.
+  ///
+  /// In es, this message translates to:
+  /// **'Vista previa del QR no disponible'**
+  String get walletPreviewQrUnavailable;
+
+  /// Digital cards exporter — accessibility label for the QR image preview.
+  ///
+  /// In es, this message translates to:
+  /// **'Imagen del código QR'**
+  String get walletPreviewQrImageSemantic;
+
+  /// Digital cards exporter — accessibility label for the QR textual preview.
+  ///
+  /// In es, this message translates to:
+  /// **'Contenido del código QR en texto'**
+  String get walletPreviewQrTextSemantic;
+
+  /// Digital cards exporter — error shown when the binary fails magic / size validation.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo recibido no es válido. Inténtalo de nuevo.'**
+  String get walletErrorInvalidArtifact;
+
+  /// Digital cards exporter — error shown when an OS-level operation fails.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido completar la acción. Inténtalo de nuevo.'**
+  String get walletErrorSystem;
+
+  /// Digital cards exporter — error shown when no platform capability matches the request.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta acción no está disponible en tu dispositivo.'**
+  String get walletErrorNoCapability;
+
+  /// Digital cards exporter — error shown when the payload has zero bytes.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo está vacío.'**
+  String get walletErrorEmptyPayload;
+
+  /// Digital cards exporter — error shown when the payload exceeds the safety threshold.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo supera el tamaño permitido.'**
+  String get walletErrorTooLarge;
+
+  /// Digital cards exporter — error shown when the source variant is unsupported / unavailable.
+  ///
+  /// In es, this message translates to:
+  /// **'El formato recibido no es compatible.'**
+  String get walletErrorUnsupportedSource;
 
   /// Signature — título de la bandeja de firma del ciudadano (STORY-45).
   ///

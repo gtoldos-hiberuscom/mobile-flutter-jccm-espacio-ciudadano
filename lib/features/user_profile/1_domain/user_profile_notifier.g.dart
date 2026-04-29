@@ -8,17 +8,32 @@ part of 'user_profile_notifier.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Manages the currently logged-in user's profile.
+///
+/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
+///   [UserProfile]; otherwise returns `null`.
+/// - [logout] clears stored auth data, invalidates the session, and resets state.
 
 @ProviderFor(UserProfileNotifier)
-const userProfileNotifierProvider = UserProfileNotifierProvider._();
+const userProfileProvider = UserProfileNotifierProvider._();
 
+/// Manages the currently logged-in user's profile.
+///
+/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
+///   [UserProfile]; otherwise returns `null`.
+/// - [logout] clears stored auth data, invalidates the session, and resets state.
 final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
+  /// Manages the currently logged-in user's profile.
+  ///
+  /// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
+  ///   [UserProfile]; otherwise returns `null`.
+  /// - [logout] clears stored auth data, invalidates the session, and resets state.
   const UserProfileNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'userProfileNotifierProvider',
+        name: r'userProfileProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -32,7 +47,13 @@ final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfi
   UserProfileNotifier create() => UserProfileNotifier();
 }
 
-String _$userProfileNotifierHash() => r'e4f2a1b3c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0';
+String _$userProfileNotifierHash() => r'52d9bc5015d11b9f3e3d9bd8aeaf3315b843c1bc';
+
+/// Manages the currently logged-in user's profile.
+///
+/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
+///   [UserProfile]; otherwise returns `null`.
+/// - [logout] clears stored auth data, invalidates the session, and resets state.
 
 abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   FutureOr<UserProfile?> build();

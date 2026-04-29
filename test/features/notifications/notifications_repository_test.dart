@@ -72,8 +72,7 @@ void main() {
         ),
       );
       final hasOther = result.items.any(
-        (final i) =>
-            i.status != NotificationStatus.aceptada && i.status != NotificationStatus.rechazada,
+        (final i) => i.status != NotificationStatus.aceptada && i.status != NotificationStatus.rechazada,
       );
       expect(hasOther, isFalse);
       expect(result.items, isNotEmpty);

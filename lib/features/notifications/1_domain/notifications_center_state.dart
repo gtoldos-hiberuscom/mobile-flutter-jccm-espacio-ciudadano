@@ -19,17 +19,16 @@ final class NotificationsCenterState {
     required this.hasError,
   });
 
-  factory NotificationsCenterState.initial({final int pageSize = 6}) =>
-      NotificationsCenterState(
-        items: const <NotificationItem>[],
-        filters: const <NotificationStatus>{},
-        currentPage: 0,
-        pageSize: pageSize,
-        totalItems: 0,
-        hasMore: false,
-        isLoadingMore: false,
-        hasError: false,
-      );
+  factory NotificationsCenterState.initial({final int pageSize = 6}) => NotificationsCenterState(
+    items: const <NotificationItem>[],
+    filters: const <NotificationStatus>{},
+    currentPage: 0,
+    pageSize: pageSize,
+    totalItems: 0,
+    hasMore: false,
+    isLoadingMore: false,
+    hasError: false,
+  );
 
   final List<NotificationItem> items;
   final Set<NotificationStatus> filters;

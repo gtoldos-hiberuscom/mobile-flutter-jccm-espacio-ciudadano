@@ -1,7 +1,9 @@
 {
   "APP_FLAVOR": "development",
-  "TIMEOUT": "30",
+  "TIMEOUT": "20",
   "DEBUG_MODE": "true",
-  "baseUrl": "",
-  "appName": "Espacio Ciudadano (Dev)"
+  "SSO_BASE_URL": "https://sso-cerbero-uat.cm-pre.jccm.es/auth",
+  "SSO_REALM": "usuarios",
+  "SSO_CLIENT_ID": "add-espacio_ciudadano_mobile-fo",
+  "SSO_REDIRECT_URI": "es.jccm.espaciociudadano://auth/callback"
 }

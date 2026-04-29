@@ -26,8 +26,7 @@ class NotificationContactForm extends StatefulWidget {
   final bool isSubmitting;
 
   @override
-  State<NotificationContactForm> createState() =>
-      _NotificationContactFormState();
+  State<NotificationContactForm> createState() => _NotificationContactFormState();
 }
 
 class _NotificationContactFormState extends State<NotificationContactForm> {
