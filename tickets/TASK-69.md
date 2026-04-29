@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T12:00:00+02:00
+updated_at: 2026-08-25T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -78,3 +78,17 @@ Cerrar el marco de seguridad del proyecto y cualquier excepción arquitectónica
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-22T12:00:00+02:00 | status | In Progress -> Done | by Copilot
+
+### Sprint 8 closure
+- 2026-08-25T12:00:00+02:00 | by plan-manager | Sprint 8 (SP-EC-APP-SQ3-08) closure: Hardening program final pass — PII inventory, storage, logging, dependencies, ADRs.
+  - Branches: `task/EPIC-10-quality-release/TASK-69-pii-hardening/sprint8-hardening-final-pass` (commit `1132853`) → `ticket/EPIC-10-quality-release/TASK-69-pii-hardening` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence:
+    - Report: `documentation/security/TASK-69-hardening-final-report.md` (281 lines, evidence-based).
+    - PII inventory (`docs/security/pii-inventory.md`) confirmed current vs implemented features.
+    - Storage audit: `flutter_secure_storage` used for tokens/idAgente/sessionExpiresAt; `SharedPreferences` carries no PII.
+    - Logging redaction: `ConsoleLogger._redact` substring-matches PII fragments (`token|id|name|dni|nss|plate|license|matricula`); `debug` is no-op in release.
+    - Dependency snapshot via `flutter pub outdated --no-dev-dependencies` captured; no CVEs; 3 direct-dep major bumps queued for Sprint 9.
+    - ADR list refreshed; every architectural exception has an ADR.
+    - Sprint-9 carryover (recommendation, no ticket): HIGH-severity `print('Login successful: $session')` at `lib/features/landing/2_presentation/landing_page.dart:99` leaks the AuthSession object to stdout in debug mode.
+  - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. No code touched.
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.
