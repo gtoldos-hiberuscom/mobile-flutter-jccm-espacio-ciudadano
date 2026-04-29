@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/extensions/date_time_format.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
@@ -72,7 +73,8 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           ),
         ],
       ),
-      body: asyncState.when(
+      body: OfflineBanner(
+        child: asyncState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (final err, final st) => ErrorStateWidget(
           message: l10n.agendaError,
@@ -92,6 +94,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           }
           return _buildBody(context, s, l10n);
         },
+        ),
       ),
     );
   }
