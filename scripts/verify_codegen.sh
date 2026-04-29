@@ -16,4 +16,7 @@ dart run build_runner build --delete-conflicting-outputs
 echo "==> git diff --exit-code (verifies no uncommitted codegen output)"
 git diff --exit-code
 
+echo "==> verify codegen drift (Sprint 7 / STORY-66)"
+"$REPO_ROOT/scripts/verify_codegen_drift.sh"
+
 echo "Codegen verification OK."

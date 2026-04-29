@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/offline_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
@@ -32,7 +33,8 @@ class NotificationsCenterPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.notificationsCenterTitle)),
-      body: asyncState.when(
+      body: OfflineBanner(
+        child: asyncState.when(
         loading: () => LoadingStateWidget(message: l10n.notificationsLoading),
         error: (final error, final stack) => ErrorStateWidget(
           message: l10n.notificationsErrorMessage,
@@ -94,6 +96,7 @@ class NotificationsCenterPage extends ConsumerWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

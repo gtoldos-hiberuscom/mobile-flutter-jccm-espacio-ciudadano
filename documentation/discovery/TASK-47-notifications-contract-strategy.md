@@ -253,3 +253,12 @@ This document must be revisited as soon as backend confirms the
 `estado` value-set, the accept/reject operation, and any future
 contact-registration endpoint. Each of those confirmations is a
 single-line table update inside this file plus a flag flip in code.
+
+## Sprint 7 closure annotation
+
+Reviewed during Sprint 7 (SP-EC-APP-SQ2-07) under STORY-67 QA-as-code.
+No new defects surfaced that contradict the strategy recorded above.
+The decision matrix in this document remains the authoritative input
+for the corresponding implementation ticket; outstanding items stay
+parked on their owner sprint per the roadmap and are not escalated to
+new tickets at this point.

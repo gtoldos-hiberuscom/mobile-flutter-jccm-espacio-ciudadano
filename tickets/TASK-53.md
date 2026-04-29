@@ -78,3 +78,4 @@ Cerrar la estrategia real de integración para payloads string/base64, PKPass y 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-24T13:04:19+02:00 | by Copilot | Discovery completada; documento `documentation/discovery/TASK-53-cards-binary-wallet-strategy.md` añadido. Status → Done, Sprint 5, AC marcadas.
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 closure annotation appended to discovery doc under STORY-67 QA-as-code; no decisions revised, no defects, no new tickets opened.

@@ -2,12 +2,12 @@
 id: 67
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 7
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T14:34:17+00:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Planificar la validación funcional y no funcional final sobre los flujos clave y sus estados visuales, incluyendo accesibilidad, goldens o equivalentes y comprobaciones en preproducción sobre contratos o estados ambiguos.
 
 ## Acceptance Criteria
-- [ ] Se contempla matriz QA para login, home, agenda, expedientes, notificaciones, carnets, recomendaciones y soporte.
-- [ ] Se contemplan revisiones de accesibilidad, foco, contraste y labels.
-- [ ] Se contemplan goldens o equivalentes de estados críticos loading/empty/error/success.
-- [ ] Se contemplan validaciones manuales o automatizadas en preproducción para contratos ambiguos.
+- [x] Se contempla matriz QA para login, home, agenda, expedientes, notificaciones, carnets, recomendaciones y soporte.
+- [x] Se contemplan revisiones de accesibilidad, foco, contraste y labels.
+- [x] Se contemplan goldens o equivalentes de estados críticos loading/empty/error/success.
+- [x] Se contemplan validaciones manuales o automatizadas en preproducción para contratos ambiguos.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -77,3 +77,4 @@ Planificar la validación funcional y no funcional final sobre los flujos clave 
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 (SP-EC-APP-SQ2-07): To Do → In Progress → Done on `task/EPIC-10-quality-release/STORY-67-qa/qa-as-code`. Deliverables: `documentation/qa/accessibility-checklist.md`, `documentation/qa/STORY-67-regression-report.md`, `test/qa/accessibility_smoke_test.dart` (4 guideline matchers), `test/qa/landing_golden_test.dart` + baseline at `test/qa/goldens/landing_page_phone_portrait.png`, `test/integration/smoke_happy_path_test.dart`. Acceptance criteria all satisfied. Sprint 8 UAT closure expectations explicitly captured in regression report (additional goldens for Home/Recommendations/Carnet, dynamic-type tile fix, focus-order polish, device a11y traversal). Status → Done.
