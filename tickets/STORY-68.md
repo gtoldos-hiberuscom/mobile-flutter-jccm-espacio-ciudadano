@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-05-04T21:00:00+02:00
+updated_at: 2026-08-25T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -87,3 +87,16 @@ Definir el pipeline mínimo y la checklist de salida para builds, tests, version
 - 2026-05-04T21:00:00+02:00 | implementation | Sprint 2 baseline shipped: ci.yml + verify_codegen.sh + release_checklist.md + CHANGELOG.md + ADR-002 | by Copilot
 - 2026-05-04T21:00:00+02:00 | status | In Progress -> Done (Sprint 2 baseline complete; AC2 & AC3 deferred to STORY-66/STORY-67 and the release-automation sprint) | by Copilot
 - 2026-04-22T07:20:32Z | status | To Do -> In Progress | by Copilot | 4 GitHub Actions workflows created and committed on task/EPIC-10-quality-security/STORY-68-cicd-pipeline/implement-cicd (commit c83dde8): ci.yml, release.yml, pr_quality.yml, dependency_review.yml.
+
+### Sprint 8 closure
+- 2026-08-25T12:00:00+02:00 | by plan-manager | Sprint 8 (SP-EC-APP-SQ3-08) closure: Closure of AC2 (env promotion) + AC3 (versioning/tagging/changelog) deferred from Sprint 2.
+  - Branches: `task/EPIC-10-quality-release/STORY-68-ci-baseline/sprint8-env-promotion-and-versioning` (commit `0c48728`) → `ticket/EPIC-10-quality-release/STORY-68-ci-baseline` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence:
+    - .github/workflows/promote.yml — workflow_dispatch promote dev→preprod→prod, environment-protected approvals.
+    - .github/workflows/release.yml — added codegen drift gate (`bash scripts/verify_codegen.sh`) before analyze/test.
+    - scripts/bump_version.sh — semver+build bumper (`major|minor|patch|X.Y.Z`, `--dry-run`), updates pubspec, prepends Keep-a-Changelog section, prints `vX.Y.Z` tag.
+    - documentation/release/promotion-policy.md — runbook (stage chain, approval gates, rollback).
+    - documentation/release/release_checklist.md — §2/§3/§4/§6 promoted from scaffold to closed; rollback notes added.
+    - documentation/architecture_canon_flutter_v2_docs/adr/ADR-002-ci-baseline.md — `## Sprint 8 closure addendum` confirming AC2 + AC3 satisfied.
+  - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. `bash scripts/bump_version.sh --dry-run patch` ok. YAML parse on both workflow files ok. No code under `lib/` touched.
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.

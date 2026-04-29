@@ -56,6 +56,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # Sprint 8 closure (STORY-68 / ADR-002 addendum):
+      # Fail fast if generated code drifts from the working tree before we spend
+      # time on analyze/test/build. The script re-runs pub get + build_runner
+      # and checks `git diff --exit-code`.
+      - name: Verify codegen (drift gate)
+        run: bash scripts/verify_codegen.sh
+
       - name: Run build_runner (code generation)
         run: dart run build_runner build --delete-conflicting-outputs
 
