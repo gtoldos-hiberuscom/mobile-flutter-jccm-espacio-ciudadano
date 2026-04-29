@@ -17,6 +17,7 @@ class DigitalCardTile extends StatelessWidget {
     required this.card,
     required this.onAction,
     super.key,
+    this.onCardTap,
   });
 
   final DigitalCard card;
@@ -25,6 +26,12 @@ class DigitalCardTile extends StatelessWidget {
   /// The tile only invokes this callback when [DigitalCard.actionsEnabled]
   /// is true; the page is responsible for the snackbar / disabled message.
   final void Function(DigitalCardAction action) onAction;
+
+  /// Optional whole-tile tap handler. When non-null, the card surface
+  /// (everything except the action buttons) becomes tappable and routes
+  /// the user to the per-card detail page (STORY-49 owns this for
+  /// `DigitalCardType.familiaNumerosa`; STORY-50/51 will follow).
+  final VoidCallback? onCardTap;
 
   @override
   Widget build(final BuildContext context) {
@@ -46,33 +53,46 @@ class DigitalCardTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    title,
-                    style: theme.textTheme.titleMedium,
+            // The whole metadata area (title + holder + status message)
+            // is tappable when [onCardTap] is provided so the user can
+            // open the per-card detail page. Action buttons remain
+            // independent so they can keep firing the [onAction] callback.
+            InkWell(
+              key: ValueKey('digitalCardsTileTap-${card.id}'),
+              onTap: onCardTap,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ),
+                      _StatusBadge(label: statusLabel, status: card.status),
+                    ],
                   ),
-                ),
-                _StatusBadge(label: statusLabel, status: card.status),
-              ],
+                  if (card.holderName != null) ...<Widget>[
+                    const SizedBox(height: AppDimensions.space4),
+                    Text(
+                      card.holderName!,
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ],
+                  if (statusMessage != null) ...<Widget>[
+                    const SizedBox(height: AppDimensions.space4),
+                    Text(
+                      statusMessage,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-            if (card.holderName != null) ...<Widget>[
-              const SizedBox(height: AppDimensions.space4),
-              Text(
-                card.holderName!,
-                style: theme.textTheme.bodyMedium,
-              ),
-            ],
-            if (statusMessage != null) ...<Widget>[
-              const SizedBox(height: AppDimensions.space4),
-              Text(
-                statusMessage,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
             const SizedBox(height: AppDimensions.space8),
             Wrap(
               spacing: AppDimensions.space8,

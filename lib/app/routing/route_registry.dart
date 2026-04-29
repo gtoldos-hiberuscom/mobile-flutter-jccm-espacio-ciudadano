@@ -49,6 +49,9 @@ abstract final class Routes {
   static const String notificationDetail = '/notifications/:id';
   static const String notificationContactRegistration = '/notifications/contact/registration';
   static const String cards = '/cards';
+
+  /// Carnet digital de familia numerosa — per-card detail (STORY-49).
+  static const String cardFamiliaNumerosaDetail = '/cards/familia-numerosa';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
 
@@ -82,6 +85,7 @@ abstract final class Routes {
     notifications,
     notificationContactRegistration,
     cards,
+    cardFamiliaNumerosaDetail,
     recommendations,
     support,
     education,

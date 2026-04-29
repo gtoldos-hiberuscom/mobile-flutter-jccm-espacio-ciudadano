@@ -1686,4 +1686,59 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get walletErrorUnsupportedSource => 'El formato recibido no es compatible.';
+
+  @override
+  String get familiaNumerosaDetailTitle => 'Carnet de familia numerosa';
+
+  @override
+  String familiaNumerosaCardNumberLabel(String number) {
+    return 'Número de carnet: $number';
+  }
+
+  @override
+  String get familiaNumerosaCategoriaGeneral => 'General';
+
+  @override
+  String get familiaNumerosaCategoriaEspecial => 'Especial';
+
+  @override
+  String get familiaNumerosaCategoriaUnknown => 'Sin clasificar';
+
+  @override
+  String familiaNumerosaExpiresOn(String date) {
+    return 'Caduca el $date';
+  }
+
+  @override
+  String get familiaNumerosaMembersTitle => 'Miembros del carnet';
+
+  @override
+  String get familiaNumerosaMemberFallbackName => 'Sin nombre';
+
+  @override
+  String get familiaNumerosaParentescoTitular => 'Titular';
+
+  @override
+  String get familiaNumerosaParentescoConyuge => 'Cónyuge';
+
+  @override
+  String get familiaNumerosaParentescoHijo => 'Hijo';
+
+  @override
+  String get familiaNumerosaParentescoHija => 'Hija';
+
+  @override
+  String get familiaNumerosaParentescoOtro => 'Otro';
+
+  @override
+  String get familiaNumerosaUnavailableTitle => 'Carnet no disponible';
+
+  @override
+  String get familiaNumerosaUnavailableMessage => 'Tu carnet de familia numerosa no está vigente o no se ha podido obtener.';
+
+  @override
+  String get familiaNumerosaErrorMessage => 'No se ha podido cargar tu carnet de familia numerosa.';
+
+  @override
+  String get familiaNumerosaRetry => 'Reintentar';
 }
