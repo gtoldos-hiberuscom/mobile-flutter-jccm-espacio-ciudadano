@@ -77,10 +77,7 @@ class WalletActionController extends _$WalletActionController {
       final file = await repo.writeToTemp(bytes: bytes, fileName: fileName);
 
       // Ordered capability chain.
-      if (artifact.sourceKind == BinaryArtifactKind.pkpass &&
-          requested.contains(WalletCapability.appleWallet) &&
-          ref.read(walletRuntimePlatformProvider) ==
-              WalletRuntimePlatform.ios) {
+      if (artifact.sourceKind == BinaryArtifactKind.pkpass && requested.contains(WalletCapability.appleWallet) && ref.read(walletRuntimePlatformProvider) == WalletRuntimePlatform.ios) {
         final ok = await repo.addToAppleWallet(file);
         if (ok) {
           final r = WalletActionResult.success(
@@ -92,8 +89,7 @@ class WalletActionController extends _$WalletActionController {
         }
       }
 
-      if (artifact.sourceKind != BinaryArtifactKind.pkpass &&
-          requested.contains(WalletCapability.openExternal)) {
+      if (artifact.sourceKind != BinaryArtifactKind.pkpass && requested.contains(WalletCapability.openExternal)) {
         final ok = await repo.openExternal(file, kind: artifact.sourceKind);
         if (ok) {
           final r = WalletActionResult.success(
@@ -105,8 +101,7 @@ class WalletActionController extends _$WalletActionController {
         }
       }
 
-      if (requested.contains(WalletCapability.shareFallback) ||
-          requested.contains(WalletCapability.googleWallet)) {
+      if (requested.contains(WalletCapability.shareFallback) || requested.contains(WalletCapability.googleWallet)) {
         final ok = await repo.share(file);
         if (ok) {
           final r = WalletActionResult.success(

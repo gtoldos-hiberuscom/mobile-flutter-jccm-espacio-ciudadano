@@ -14,7 +14,8 @@ enum BinaryArtifactKind {
   pdf,
   png,
   pkpass,
-  qrText;
+  qrText
+  ;
 
   /// File extension used by the deterministic file naming helper.
   String get fileExtension => switch (this) {

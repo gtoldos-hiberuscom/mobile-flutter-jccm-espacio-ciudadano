@@ -34,14 +34,13 @@ final class WalletActionResult {
   const WalletActionResult.validation(
     final BinaryArtifactValidationFailure failure,
   ) : this(
-         success: false,
-         validationFailure: failure,
-         errorMessage: 'walletErrorInvalidArtifact',
-       );
+        success: false,
+        validationFailure: failure,
+        errorMessage: 'walletErrorInvalidArtifact',
+      );
 
   /// Convenience constructor for runtime failures (IO, no capability matched).
-  const WalletActionResult.failure(final String message)
-    : this(success: false, errorMessage: message);
+  const WalletActionResult.failure(final String message) : this(success: false, errorMessage: message);
 
   final bool success;
   final WalletCapability? capabilityUsed;

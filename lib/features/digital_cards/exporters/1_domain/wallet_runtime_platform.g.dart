@@ -12,14 +12,7 @@ part of 'wallet_runtime_platform.dart';
 @ProviderFor(walletRuntimePlatform)
 const walletRuntimePlatformProvider = WalletRuntimePlatformProvider._();
 
-final class WalletRuntimePlatformProvider
-    extends
-        $FunctionalProvider<
-          WalletRuntimePlatform,
-          WalletRuntimePlatform,
-          WalletRuntimePlatform
-        >
-    with $Provider<WalletRuntimePlatform> {
+final class WalletRuntimePlatformProvider extends $FunctionalProvider<WalletRuntimePlatform, WalletRuntimePlatform, WalletRuntimePlatform> with $Provider<WalletRuntimePlatform> {
   const WalletRuntimePlatformProvider._()
     : super(
         from: null,
@@ -54,5 +47,4 @@ final class WalletRuntimePlatformProvider
   }
 }
 
-String _$walletRuntimePlatformHash() =>
-    r'cca0736cac31bfe141b9f4c16746f0114f1e5339';
+String _$walletRuntimePlatformHash() => r'cca0736cac31bfe141b9f4c16746f0114f1e5339';

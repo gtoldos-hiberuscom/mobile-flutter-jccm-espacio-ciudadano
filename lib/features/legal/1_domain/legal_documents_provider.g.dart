@@ -21,14 +21,7 @@ const legalDocumentsRepositoryProvider = LegalDocumentsRepositoryProvider._();
 /// `keepAlive: true` because the catalog is immutable and shared across
 /// every legal route (terms, privacy, accessibility, legal notice).
 
-final class LegalDocumentsRepositoryProvider
-    extends
-        $FunctionalProvider<
-          LegalDocumentsRepository,
-          LegalDocumentsRepository,
-          LegalDocumentsRepository
-        >
-    with $Provider<LegalDocumentsRepository> {
+final class LegalDocumentsRepositoryProvider extends $FunctionalProvider<LegalDocumentsRepository, LegalDocumentsRepository, LegalDocumentsRepository> with $Provider<LegalDocumentsRepository> {
   /// DI composition for the legal-documents repository.
   ///
   /// `keepAlive: true` because the catalog is immutable and shared across
@@ -67,5 +60,4 @@ final class LegalDocumentsRepositoryProvider
   }
 }
 
-String _$legalDocumentsRepositoryHash() =>
-    r'd66508ba9a762944ebc753b0e5ca5bb729d46d9e';
+String _$legalDocumentsRepositoryHash() => r'd66508ba9a762944ebc753b0e5ca5bb729d46d9e';

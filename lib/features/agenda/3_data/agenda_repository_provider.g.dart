@@ -21,14 +21,7 @@ const agendaRepositoryProvider = AgendaRepositoryProvider._();
 /// Not kept alive on purpose: the agenda is expected to refresh whenever
 /// the user navigates back into the agenda surface (canon §16).
 
-final class AgendaRepositoryProvider
-    extends
-        $FunctionalProvider<
-          AgendaRepository,
-          AgendaRepository,
-          AgendaRepository
-        >
-    with $Provider<AgendaRepository> {
+final class AgendaRepositoryProvider extends $FunctionalProvider<AgendaRepository, AgendaRepository, AgendaRepository> with $Provider<AgendaRepository> {
   /// DI composition for [AgendaRepository].
   ///
   /// Not kept alive on purpose: the agenda is expected to refresh whenever
@@ -49,8 +42,7 @@ final class AgendaRepositoryProvider
 
   @$internal
   @override
-  $ProviderElement<AgendaRepository> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<AgendaRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   AgendaRepository create(Ref ref) {

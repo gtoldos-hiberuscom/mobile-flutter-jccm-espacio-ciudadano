@@ -1009,15 +1009,76 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get caseworkItemDetailPlaceholderTitle => 'Casework file detail';
+  String get caseworkExpedienteDetailTitle => 'Casework file detail';
 
   @override
-  String caseworkItemDetailPlaceholderBody(String id) {
-    return 'Detail for item $id';
-  }
+  String get caseworkExpedienteDetailBack => 'Back to my casework';
 
   @override
-  String get caseworkItemDetailPlaceholderPending => 'The real detail screen will be enabled by STORY-35 / STORY-36.';
+  String get caseworkExpedienteDetailLoading => 'Loading casework detail…';
+
+  @override
+  String get caseworkExpedienteDetailErrorTitle => 'We could not load this casework file.';
+
+  @override
+  String get caseworkExpedienteDetailErrorBody => 'Please try again in a few minutes.';
+
+  @override
+  String get caseworkExpedienteDetailMetadataTitle => 'File information';
+
+  @override
+  String get caseworkExpedienteDetailNumero => 'File number';
+
+  @override
+  String get caseworkExpedienteDetailAsuntoCodigo => 'Subject code';
+
+  @override
+  String get caseworkExpedienteDetailAsunto => 'Subject';
+
+  @override
+  String get caseworkExpedienteDetailConsejeria => 'Department';
+
+  @override
+  String get caseworkExpedienteDetailOficina => 'Processing office';
+
+  @override
+  String get caseworkExpedienteDetailProcedimiento => 'Procedure';
+
+  @override
+  String get caseworkExpedienteDetailFechaInicio => 'Start date';
+
+  @override
+  String get caseworkExpedienteDetailFechaActualizacion => 'Last update';
+
+  @override
+  String get caseworkExpedienteDetailEstadoLabel => 'State';
+
+  @override
+  String get caseworkExpedienteDetailEstadoAbierto => 'Open';
+
+  @override
+  String get caseworkExpedienteDetailEstadoCerrado => 'Closed';
+
+  @override
+  String get caseworkExpedienteDetailEstadoUnknown => 'Unknown state';
+
+  @override
+  String get caseworkExpedienteDetailFilesTitle => 'Associated files';
+
+  @override
+  String get caseworkExpedienteDetailFilesEmpty => 'No files are associated with this casework file.';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadTooltip => 'Download file';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadStub => 'File download will be enabled in a future release.';
+
+  @override
+  String get caseworkExpedienteDetailOperationsTitle => 'Submit documentation';
+
+  @override
+  String get caseworkExpedienteDetailClosedBanner => 'This casework file is closed; submissions are no longer accepted.';
 
   @override
   String get digitalCardsPageTitle => 'My digital cards';
@@ -1195,6 +1256,393 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dataConsentNavCta => 'My authorizations';
+
+  @override
+  String get caseworkUploadPageTitle => 'Submit documentation';
+
+  @override
+  String get caseworkUploadPickerCta => 'Attach files';
+
+  @override
+  String get caseworkUploadSelectFilesCta => 'Select files';
+
+  @override
+  String get caseworkUploadDropZoneSemantic => 'Drop area for attachments. You can also tap to pick files.';
+
+  @override
+  String caseworkUploadLimitHint(int maxFiles, int maxMb) {
+    return 'Up to $maxFiles files, $maxMb MB each.';
+  }
+
+  @override
+  String caseworkUploadRemainingHint(int remaining) {
+    String _temp0 = intl.Intl.pluralLogic(
+      remaining,
+      locale: localeName,
+      other: 'You can attach $remaining more files.',
+      one: 'You can attach 1 more file.',
+      zero: 'You cannot attach more files.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkUploadEmptyList => 'No files attached yet.';
+
+  @override
+  String get caseworkUploadRemoveFile => 'Remove file';
+
+  @override
+  String get caseworkUploadUploadAllCta => 'Upload all';
+
+  @override
+  String get caseworkUploadFinalizeCta => 'Finish and request receipt';
+
+  @override
+  String get caseworkUploadStatusSelected => 'Selected';
+
+  @override
+  String get caseworkUploadStatusValidating => 'Validating';
+
+  @override
+  String get caseworkUploadStatusHashed => 'Hash computed';
+
+  @override
+  String get caseworkUploadStatusUploading => 'Uploading';
+
+  @override
+  String get caseworkUploadStatusUploaded => 'Uploaded';
+
+  @override
+  String get caseworkUploadStatusFailed => 'Error';
+
+  @override
+  String get caseworkUploadErrorUnsupportedMime => 'Unsupported file format.';
+
+  @override
+  String get caseworkUploadErrorTooLarge => 'The file exceeds the maximum size.';
+
+  @override
+  String get caseworkUploadErrorTooManyFiles => 'You have reached the maximum number of files.';
+
+  @override
+  String get caseworkUploadErrorEmptyFile => 'The file is empty.';
+
+  @override
+  String get caseworkUploadErrorHashMismatch => 'The file fingerprint does not match.';
+
+  @override
+  String get caseworkUploadErrorGeneric => 'There was an error with the file.';
+
+  @override
+  String get caseworkUploadJustificantePending => 'The receipt will be generated once you finish the submission.';
+
+  @override
+  String get caseworkUploadJustificanteUnavailable => 'The receipt is not available yet.';
+
+  @override
+  String caseworkUploadJustificanteUnavailableReason(String reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
+  String get caseworkUploadJustificanteAvailable => 'Your receipt is ready.';
+
+  @override
+  String get caseworkUploadJustificanteDownloadCta => 'Download receipt';
+
+  @override
+  String get caseworkUploadJustificanteDownloadStub => 'Receipt download will be enabled once the backend confirms the format.';
+
+  @override
+  String get caseworkRegistroDetailTitleEntrada => 'Registry entry detail';
+
+  @override
+  String get caseworkRegistroDetailTitleSalida => 'Registry exit detail';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbHome => 'Home';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbCasework => 'My files';
+
+  @override
+  String get caseworkRegistroDetailKindEntrada => 'Registry inbox';
+
+  @override
+  String get caseworkRegistroDetailKindSalida => 'Registry outbox';
+
+  @override
+  String get caseworkRegistroDetailBackToList => 'Back to list';
+
+  @override
+  String get caseworkRegistroDetailLoadError => 'We could not load the registry detail.';
+
+  @override
+  String get caseworkRegistroDetailFieldNumero => 'Registry number';
+
+  @override
+  String get caseworkRegistroDetailFieldFecha => 'Date';
+
+  @override
+  String get caseworkRegistroDetailFieldConsejeria => 'Destination department';
+
+  @override
+  String get caseworkRegistroDetailFieldOficina => 'Registry office';
+
+  @override
+  String get caseworkRegistroDetailFieldAsunto => 'Subject';
+
+  @override
+  String get caseworkRegistroDetailFieldObservaciones => 'Notes';
+
+  @override
+  String get caseworkRegistroDetailFicherosTitle => 'Attached documentation';
+
+  @override
+  String get caseworkRegistroDetailFicherosEmpty => 'This registry entry has no attached files.';
+
+  @override
+  String get caseworkRegistroDetailReadOnlyBanner => 'This screen shows the registry entry in read-only mode. You cannot submit documentation from here.';
+
+  @override
+  String get caseworkAportacionOpenCta => 'Submit documentation';
+
+  @override
+  String get caseworkAportacionTitle => 'Submit documentation';
+
+  @override
+  String get caseworkAportacionBreadcrumb => 'Submission';
+
+  @override
+  String get caseworkAportacionBack => 'Previous step';
+
+  @override
+  String get caseworkAportacionExit => 'Exit flow';
+
+  @override
+  String caseworkAportacionStepIndicator(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get caseworkAportacionStepIntro => 'Introduction';
+
+  @override
+  String get caseworkAportacionStepIdentificacion => 'Identification';
+
+  @override
+  String get caseworkAportacionStepSearch => 'Search';
+
+  @override
+  String get caseworkAportacionStepDetail => 'Detail';
+
+  @override
+  String get caseworkAportacionStepComplete => 'Confirmation';
+
+  @override
+  String get caseworkAportacionIntroHeadline => 'Submit documentation to a file';
+
+  @override
+  String get caseworkAportacionIntroBody => 'This flow lets you submit additional documentation to an open file on behalf of the interested person. Identify yourself, locate the file and attach the documents.';
+
+  @override
+  String get caseworkAportacionIntroRestrictionsTitle => 'Before you continue';
+
+  @override
+  String get caseworkAportacionIntroRestriction1 => 'You can only submit documentation to files that are open.';
+
+  @override
+  String get caseworkAportacionIntroRestriction2 => 'You need the file number or its associated registry number.';
+
+  @override
+  String get caseworkAportacionIntroRestriction3 => 'Submitted documents are linked to the interested person you identify.';
+
+  @override
+  String get caseworkAportacionIntroContinueCta => 'Continue';
+
+  @override
+  String get caseworkAportacionIdentificationHeadline => 'Identify the interested person';
+
+  @override
+  String get caseworkAportacionIdentificationBody => 'Provide the document type and number of the file owner.';
+
+  @override
+  String get caseworkAportacionIdentificationTypeLabel => 'Document type';
+
+  @override
+  String get caseworkAportacionIdentificationTypeNif => 'NIF';
+
+  @override
+  String get caseworkAportacionIdentificationTypeNie => 'NIE';
+
+  @override
+  String get caseworkAportacionIdentificationTypePassport => 'Passport';
+
+  @override
+  String get caseworkAportacionIdentificationTypeCif => 'CIF';
+
+  @override
+  String get caseworkAportacionIdentificationNumberLabel => 'Document number';
+
+  @override
+  String get caseworkAportacionIdentificationNumberHint => 'e.g. 12345678A';
+
+  @override
+  String get caseworkAportacionIdentificationNextCta => 'Next';
+
+  @override
+  String get caseworkAportacionSearchHeadline => 'Locate the file';
+
+  @override
+  String get caseworkAportacionSearchBody => 'Search by file number or by its associated registry number.';
+
+  @override
+  String get caseworkAportacionSearchTabExpediente => 'By file no.';
+
+  @override
+  String get caseworkAportacionSearchTabRegistro => 'By registry no.';
+
+  @override
+  String get caseworkAportacionSearchExpedienteLabel => 'File number';
+
+  @override
+  String get caseworkAportacionSearchExpedienteHint => 'e.g. EXP/2025/00123';
+
+  @override
+  String get caseworkAportacionSearchRegistroLabel => 'Registry number';
+
+  @override
+  String get caseworkAportacionSearchRegistroHint => 'e.g. REG/E/45612';
+
+  @override
+  String get caseworkAportacionSearchSubmitCta => 'Search';
+
+  @override
+  String get caseworkAportacionFailureInvalidIdentification => 'The document number is not valid for the selected type.';
+
+  @override
+  String get caseworkAportacionFailureNotFound => 'We could not find any file matching that input.';
+
+  @override
+  String get caseworkAportacionFailureNetworkError => 'We could not complete the search. Please try again later.';
+
+  @override
+  String get caseworkAportacionCompleteHeadline => 'Submission completed';
+
+  @override
+  String caseworkAportacionCompleteBody(String expediente) {
+    return 'Your documentation has been submitted to file $expediente. Keep the receipt for your records.';
+  }
+
+  @override
+  String get caseworkAportacionCompleteHomeCta => 'Back to my files';
+
+  @override
+  String get notificationsCenterTitle => 'My notifications';
+
+  @override
+  String get notificationsLoading => 'Loading notifications…';
+
+  @override
+  String get notificationsErrorMessage => 'We could not load your notifications.';
+
+  @override
+  String get notificationsLoadMoreError => 'We could not load more notifications. Please try again.';
+
+  @override
+  String get notificationsEmptyTitle => 'No notifications';
+
+  @override
+  String get notificationsEmptySubtitle => 'We did not find notifications matching the active filters.';
+
+  @override
+  String get notificationsFilterAll => 'All';
+
+  @override
+  String get notificationsItemHasDocuments => 'Has attached documents';
+
+  @override
+  String notificationsPaginationFooter(int loaded, int total) {
+    return 'Showing $loaded of $total';
+  }
+
+  @override
+  String get notificationStatusPendiente => 'Pending';
+
+  @override
+  String get notificationStatusAceptada => 'Accepted';
+
+  @override
+  String get notificationStatusRechazada => 'Rejected';
+
+  @override
+  String get notificationStatusCaducada => 'Expired';
+
+  @override
+  String get notificationStatusUnknown => 'Unclassified';
+
+  @override
+  String get notificationDetailPlaceholderTitle => 'Notification detail';
+
+  @override
+  String notificationDetailPlaceholderBody(String id) {
+    return 'Notification $id';
+  }
+
+  @override
+  String get notificationDetailPlaceholderPending => 'Detail screen will be enabled in STORY-44.';
+
+  @override
+  String get notificationContactPageTitle => 'Contact details';
+
+  @override
+  String get notificationContactExplanation => 'We need a mobile phone number or an email address to alert you about the electronic notifications you receive. We will only use this data to send you notification-related alerts.';
+
+  @override
+  String get notificationContactPhoneLabel => 'Mobile phone';
+
+  @override
+  String get notificationContactPhoneHint => '600 123 456';
+
+  @override
+  String get notificationContactPhoneHelper => 'Use the international prefix if the number is not from Spain.';
+
+  @override
+  String get notificationContactEmailLabel => 'Email address';
+
+  @override
+  String get notificationContactEmailHint => 'example@email.com';
+
+  @override
+  String get notificationContactEmailHelper => 'We will only use this email for notification alerts.';
+
+  @override
+  String get notificationContactSubmitCta => 'Register';
+
+  @override
+  String get notificationContactLoading => 'Loading contact details…';
+
+  @override
+  String get notificationContactErrorLoading => 'We couldn\'t load your contact details.';
+
+  @override
+  String get notificationContactErrorPhoneInvalid => 'Enter a valid mobile phone number.';
+
+  @override
+  String get notificationContactErrorEmailInvalid => 'Enter a valid email address.';
+
+  @override
+  String get notificationContactErrorBothEmpty => 'Provide at least a mobile phone or an email address.';
+
+  @override
+  String get notificationContactSuccessMessage => 'Your contact details have been registered.';
+
+  @override
+  String get notificationContactGateBannerMessage => 'Set up your contact details to receive notifications.';
+
+  @override
+  String get notificationContactGateBannerCta => 'Set up now';
 
   @override
   String get walletActionOpen => 'Open';
