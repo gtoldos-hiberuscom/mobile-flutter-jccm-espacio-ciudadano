@@ -52,6 +52,13 @@ abstract final class Routes {
 
   /// Carnet digital de familia numerosa — per-card detail (STORY-49).
   static const String cardFamiliaNumerosaDetail = '/cards/familia-numerosa';
+
+  /// Carnet digital joven — per-card detail (STORY-50).
+  ///
+  /// The catalogue surfaces the modal variant of the carnet joven; this
+  /// route exists for deep links and for any future home/menu shortcut
+  /// that prefers the full-page version.
+  static const String cardJovenDetail = '/cards/joven';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
 
@@ -86,6 +93,7 @@ abstract final class Routes {
     notificationContactRegistration,
     cards,
     cardFamiliaNumerosaDetail,
+    cardJovenDetail,
     recommendations,
     support,
     education,

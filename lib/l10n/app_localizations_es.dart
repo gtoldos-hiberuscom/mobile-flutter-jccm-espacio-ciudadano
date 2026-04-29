@@ -1741,4 +1741,38 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get familiaNumerosaRetry => 'Reintentar';
+
+  @override
+  String get jovenDetailTitle => 'Carnet Joven';
+
+  @override
+  String jovenCodigoLabel(String code) {
+    return 'Código: $code';
+  }
+
+  @override
+  String jovenExpiresOn(String date) {
+    return 'Vigente hasta el $date';
+  }
+
+  @override
+  String get jovenSubtitle => 'Acredita tu condición de persona joven y accede a descuentos en cultura, transporte y ocio en Castilla-La Mancha.';
+
+  @override
+  String get jovenUnavailableTitle => 'Carnet no disponible';
+
+  @override
+  String get jovenUnavailableMessage => 'Tu Carnet Joven no está vigente o no se ha podido obtener.';
+
+  @override
+  String get jovenErrorMessage => 'No se ha podido cargar tu Carnet Joven.';
+
+  @override
+  String get jovenRetry => 'Reintentar';
+
+  @override
+  String get jovenModalDragHandleSemantic => 'Arrastra para ajustar la ficha del Carnet Joven';
+
+  @override
+  String get jovenModalCloseAction => 'Cerrar';
 }

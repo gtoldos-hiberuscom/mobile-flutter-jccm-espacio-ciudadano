@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_c
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/digital_cards_catalog_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/widgets/cip_read_only_mini_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/widgets/digital_card_tile.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/2_presentation/joven_detail_modal.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Cards catalogue surface (STORY-48).
@@ -57,8 +60,13 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
       case DigitalCardType.familiaNumerosa:
         context.go(Routes.cardFamiliaNumerosaDetail);
       case DigitalCardType.joven:
-        // TODO(STORY-50): navigate to the carnet joven detail page.
-        _showStubActionSnackbar(context, AppLocalizations.of(context));
+        // STORY-50: the catalogue uses the modal variant per AC.
+        // The full-page surface at `Routes.cardJovenDetail` is reserved
+        // for deep links and future home/menu shortcuts.
+        // TODO(future-sprint): wire a home shortcut entry point that
+        //   navigates to `Routes.cardJovenDetail` when product asks
+        //   for the full-page surface from outside the catalogue.
+        unawaited(JovenDetailModal.show(context));
       case DigitalCardType.discapacidad:
         // TODO(STORY-51): navigate to the carnet discapacidad detail page.
         _showStubActionSnackbar(context, AppLocalizations.of(context));

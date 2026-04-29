@@ -3415,6 +3415,66 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Reintentar'**
   String get familiaNumerosaRetry;
+
+  /// Carnet Joven detail surface — AppBar / modal title.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet Joven'**
+  String get jovenDetailTitle;
+
+  /// Carnet Joven detail — printed carnet code row.
+  ///
+  /// In es, this message translates to:
+  /// **'Código: {code}'**
+  String jovenCodigoLabel(String code);
+
+  /// Carnet Joven detail — expiry date badge.
+  ///
+  /// In es, this message translates to:
+  /// **'Vigente hasta el {date}'**
+  String jovenExpiresOn(String date);
+
+  /// Carnet Joven detail — descriptive subtitle under the hero card.
+  ///
+  /// In es, this message translates to:
+  /// **'Acredita tu condición de persona joven y accede a descuentos en cultura, transporte y ocio en Castilla-La Mancha.'**
+  String get jovenSubtitle;
+
+  /// Carnet Joven detail — title shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet no disponible'**
+  String get jovenUnavailableTitle;
+
+  /// Carnet Joven detail — body shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu Carnet Joven no está vigente o no se ha podido obtener.'**
+  String get jovenUnavailableMessage;
+
+  /// Carnet Joven detail — generic error message.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu Carnet Joven.'**
+  String get jovenErrorMessage;
+
+  /// Carnet Joven detail — retry button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get jovenRetry;
+
+  /// Carnet Joven modal — accessibility label for the drag handle.
+  ///
+  /// In es, this message translates to:
+  /// **'Arrastra para ajustar la ficha del Carnet Joven'**
+  String get jovenModalDragHandleSemantic;
+
+  /// Carnet Joven modal — close action label / tooltip.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get jovenModalCloseAction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
