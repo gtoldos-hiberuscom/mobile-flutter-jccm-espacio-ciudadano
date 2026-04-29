@@ -2,12 +2,12 @@
 id: 63
 jira_key:
 type: Task
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 7
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T14:34:17+00:00
 due_date:
 jira_url:
 ---
@@ -74,3 +74,4 @@ Aclarar cómo se implementa realmente el formulario de soporte técnico mostrado
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 (SP-EC-APP-SQ3-07): To Do → In Progress. Discovery executed end-to-end on `task/EPIC-9-help-static/TASK-63-support-integration/discovery-doc`. Deliverable: `documentation/discovery/TASK-63-support-integration-strategy.md` (Track A `/soporte/incidencia` recommended; Track B `mailto:` fallback documented; Turnstile selected; SHA-256 attachment integrity; PII redaction extension to `LoggingInterceptor`; SLA proposal). All four ACs satisfied (see §7 of discovery doc). Four open questions escalated to Sprint 8. STORY-60 stays Done; wiring deferred. Status → Done.
