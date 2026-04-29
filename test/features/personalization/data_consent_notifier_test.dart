@@ -11,8 +11,8 @@ class _FakeDataConsentRepository implements DataConsentRepository {
     required this.items,
     this.failOnSave = false,
   }) : _state = <String, bool>{
-          for (final c in items) c.id: c.accepted,
-        };
+         for (final c in items) c.id: c.accepted,
+       };
 
   final List<DataConsent> items;
   final bool failOnSave;
@@ -24,19 +24,18 @@ class _FakeDataConsentRepository implements DataConsentRepository {
   @override
   Future<DataConsentLoadResult> loadClausulas(
     final String idAgente,
-  ) async =>
-      DataConsentLoadResult(
-        items: <DataConsent>[
-          for (final c in items)
-            DataConsent(
-              id: c.id,
-              type: c.type,
-              accepted: _state[c.id] ?? false,
-              version: c.version,
-              lastUpdatedAt: c.lastUpdatedAt,
-            ),
-        ],
-      );
+  ) async => DataConsentLoadResult(
+    items: <DataConsent>[
+      for (final c in items)
+        DataConsent(
+          id: c.id,
+          type: c.type,
+          accepted: _state[c.id] ?? false,
+          version: c.version,
+          lastUpdatedAt: c.lastUpdatedAt,
+        ),
+    ],
+  );
 
   @override
   Future<void> saveClausulas(
@@ -80,12 +79,11 @@ const _catalog = <DataConsent>[
   ),
 ];
 
-ProviderContainer _container(final _FakeDataConsentRepository repo) =>
-    ProviderContainer(
-      overrides: [
-        dataConsentRepositoryProvider.overrideWith((final _) => repo),
-      ],
-    );
+ProviderContainer _container(final _FakeDataConsentRepository repo) => ProviderContainer(
+  overrides: [
+    dataConsentRepositoryProvider.overrideWith((final _) => repo),
+  ],
+);
 
 void main() {
   group('DataConsentNotifier', () {
@@ -104,15 +102,13 @@ void main() {
       expect(snapshot.isDirty, isFalse);
     });
 
-    test('toggle flips a single consent and marks the snapshot dirty',
-        () async {
+    test('toggle flips a single consent and marks the snapshot dirty', () async {
       final repo = _FakeDataConsentRepository(items: _catalog);
       final c = _container(repo);
       addTearDown(c.dispose);
 
       await c.read(dataConsentProvider('agent-1').future);
-      final notifier = c.read(dataConsentProvider('agent-1').notifier)
-        ..toggle('consent-otras-admin');
+      final notifier = c.read(dataConsentProvider('agent-1').notifier)..toggle('consent-otras-admin');
 
       var current = c.read(dataConsentProvider('agent-1')).requireValue;
       expect(current.draft['consent-otras-admin'], isTrue);
@@ -124,15 +120,13 @@ void main() {
       expect(current.draft.containsKey('does-not-exist'), isFalse);
     });
 
-    test('save persists draft, refreshes baseline and emits saved → loaded',
-        () async {
+    test('save persists draft, refreshes baseline and emits saved → loaded', () async {
       final repo = _FakeDataConsentRepository(items: _catalog);
       final c = _container(repo);
       addTearDown(c.dispose);
 
       await c.read(dataConsentProvider('agent-1').future);
-      final notifier = c.read(dataConsentProvider('agent-1').notifier)
-        ..toggle('consent-perfilado');
+      final notifier = c.read(dataConsentProvider('agent-1').notifier)..toggle('consent-perfilado');
       await notifier.save();
 
       var current = c.read(dataConsentProvider('agent-1')).requireValue;
@@ -163,9 +157,7 @@ void main() {
       addTearDown(c.dispose);
 
       await c.read(dataConsentProvider('agent-1').future);
-      c
-          .read(dataConsentProvider('agent-1').notifier)
-          .toggle('consent-otras-admin');
+      c.read(dataConsentProvider('agent-1').notifier).toggle('consent-otras-admin');
       await c.read(dataConsentProvider('agent-1').notifier).save();
 
       final current = c.read(dataConsentProvider('agent-1')).requireValue;

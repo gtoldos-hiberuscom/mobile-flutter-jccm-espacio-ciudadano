@@ -61,8 +61,7 @@ abstract base class GeneratedApiWrapper {
       if (data == null) {
         return Failure<T>(
           NotFoundError(
-            message:
-                'Empty response body for ${response.requestOptions.path}',
+            message: 'Empty response body for ${response.requestOptions.path}',
           ),
         );
       }
@@ -98,8 +97,7 @@ abstract base class GeneratedApiWrapper {
   ///   • `IntermediacionApi.obtenerDatosFamiliaNumerosa`
   Future<Result<String>> safeStringCall(
     final Future<Response<String>> Function() call,
-  ) =>
-      safeCall<String>(call);
+  ) => safeCall<String>(call);
 
   // ── Binary-content specialisation ──────────────────────────────────────────
 
@@ -110,8 +108,7 @@ abstract base class GeneratedApiWrapper {
   /// wrapper only guarantees the bytes are non-null.
   Future<Result<List<int>>> safeBinaryCall(
     final Future<Response<List<int>>> Function() call,
-  ) =>
-      safeCall<List<int>>(call);
+  ) => safeCall<List<int>>(call);
 
   // ── Private helpers ────────────────────────────────────────────────────────
 
@@ -132,14 +129,12 @@ abstract base class GeneratedApiWrapper {
         return switch (statusCode) {
           401 => const UnauthorizedError(),
           404 => NotFoundError(
-              message:
-                  'Resource not found (404): ${e.requestOptions.path}',
-            ),
+            message: 'Resource not found (404): ${e.requestOptions.path}',
+          ),
           _ => NetworkError(
-              message:
-                  'Server error ${statusCode ?? 'unknown'}: ${e.message ?? ''}',
-              statusCode: statusCode,
-            ),
+            message: 'Server error ${statusCode ?? 'unknown'}: ${e.message ?? ''}',
+            statusCode: statusCode,
+          ),
         };
 
       case DioExceptionType.cancel:

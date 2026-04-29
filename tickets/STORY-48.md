@@ -2,12 +2,12 @@
 id: 48
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 4
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T10:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir la pantalla principal de carnets digitales con listado de credenciales, disponibilidad por tipo de carnet, estados bloqueados/no vigentes y acceso a los formatos descargables o navegables desde la tarjeta o su ficha.
 
 ## Acceptance Criteria
-- [ ] Se contemplan al menos familia numerosa, carnet joven y discapacidad.
-- [ ] Se contemplan estados disponible, no vigente y no descargable.
-- [ ] Se contemplan accesos a QR, PKPASS y PDF desde la propia tarjeta o ficha.
-- [ ] Se contemplan mensajes vacíos/error y navegación desde portada/home.
+- [x] Se contemplan al menos familia numerosa, carnet joven y discapacidad.
+- [x] Se contemplan estados disponible, no vigente y no descargable.
+- [x] Se contemplan accesos a QR, PKPASS y PDF desde la propia tarjeta o ficha.
+- [x] Se contemplan mensajes vacíos/error y navegación desde portada/home.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -78,3 +78,4 @@ Cubrir la pantalla principal de carnets digitales con listado de credenciales, d
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T10:00:00+02:00 | by Copilot | Implement cards catalogue (STORY-48). Applied TASK-71 decisions: CIP rendered as a read-only mini-card at the top of the catalogue (no QR/PKPASS/PDF actions), Tarjeta de Biblioteca OUT_OF_MVP (omitted). Live wiring against `/carnet-digital/*` operations (real QR/PKPASS/PDF downloads) deferred to TASK-53; Sprint 4 ships stub CTAs that surface a localised "disponible próximamente" snackbar. Home digital-cards block now navigates to the real `/cards` catalogue page instead of the placeholder. Sync moves status To Do → Done and sprint = Sprint 4.

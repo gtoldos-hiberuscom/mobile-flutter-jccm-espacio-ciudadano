@@ -32,6 +32,5 @@ extension DateTimeFormat on DateTime {
     return '${_twoDigits(local.hour)}:${_twoDigits(local.minute)}';
   }
 
-  static String _twoDigits(final int value) =>
-      value.toString().padLeft(2, '0');
+  static String _twoDigits(final int value) => value.toString().padLeft(2, '0');
 }

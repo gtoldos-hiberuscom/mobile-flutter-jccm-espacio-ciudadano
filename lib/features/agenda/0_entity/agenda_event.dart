@@ -35,10 +35,14 @@ final class AgendaEvent {
     this.description,
     this.endsAt,
     this.location,
+    this.centro,
+    this.profesional,
+    this.tipo,
+    this.justificanteUrl,
   }) : assert(
-          titleKey != null || rawTitle != null,
-          'AgendaEvent requires either titleKey or rawTitle',
-        );
+         titleKey != null || rawTitle != null,
+         'AgendaEvent requires either titleKey or rawTitle',
+       );
 
   /// Stable identifier. Used for routing (`/agenda/:id`) and analytics —
   /// must never embed PII.
@@ -58,6 +62,23 @@ final class AgendaEvent {
   final String? location;
   final AgendaCategory category;
   final AgendaEventSource source;
+
+  /// Optional centro / facility (e.g. "Hospital General de Toledo").
+  /// Surfaced on the event detail page (STORY-30).
+  final String? centro;
+
+  /// Optional professional name (e.g. "Dra. Pérez").
+  final String? profesional;
+
+  /// Optional appointment / event type / specialty (e.g. "Cardiología",
+  /// "Análisis de sangre"). Distinct from [AgendaCategory] which is the
+  /// macrobucket used by UI grouping.
+  final String? tipo;
+
+  /// Optional URL of the attendance proof ("justificante de asistencia").
+  /// When non-null the detail page renders a CTA. The CTA is currently a
+  /// placeholder until external-link allow-listing lands (TASK-53).
+  final String? justificanteUrl;
 
   /// Day component (UTC-agnostic, local time) used by the calendar grid
   /// to bucket events per day.

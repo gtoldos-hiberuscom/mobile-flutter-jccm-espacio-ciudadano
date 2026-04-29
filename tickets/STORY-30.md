@@ -2,12 +2,12 @@
 id: 30
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 4
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-22T18:30:00+02:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir la expansión de eventos y la lectura de su detalle operativo, incluyendo justificantes y estados UX asociados.
 
 ## Acceptance Criteria
-- [ ] Se contempla expand/collapse del detalle de cada cita o evento.
-- [ ] Se contemplan descripciones largas, centro, profesional, tipo, fecha y hora.
-- [ ] Se contempla acceso a justificante de asistencia cuando aplique.
-- [ ] Se contemplan empty/error/parse-error/partial-data states de la agenda.
+- [x] Se contempla expand/collapse del detalle de cada cita o evento.
+- [x] Se contemplan descripciones largas, centro, profesional, tipo, fecha y hora.
+- [x] Se contempla acceso a justificante de asistencia cuando aplique.
+- [x] Se contemplan empty/error/parse-error/partial-data states de la agenda.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -71,3 +71,5 @@ Cubrir la expansión de eventos y la lectura de su detalle operativo, incluyendo
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-22T18:25:00+02:00 | by plan-manager | Sprint 4: To Do → In Progress; sprint set.
+- 2026-04-22T18:30:00+02:00 | by plan-manager | Implementation: e8bdbf5989e0ef761565e02c7dd0f680c92428b5. Extended AgendaEvent with detail fields, added expand/collapse and parse-error/partial UI states, wired justificante CTA (placeholder pending allow-list), tests pass. AC met. In Progress → Done.

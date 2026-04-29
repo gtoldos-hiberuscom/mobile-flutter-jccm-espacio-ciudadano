@@ -13,20 +13,16 @@ final class StateAffairsSection<T> {
     this.value,
   });
 
-  factory StateAffairsSection.loading() =>
-      const StateAffairsSection(status: StateAffairsSectionStatus.loading);
+  factory StateAffairsSection.loading() => const StateAffairsSection(status: StateAffairsSectionStatus.loading);
 
-  factory StateAffairsSection.loaded(final T value) =>
-      StateAffairsSection<T>(
-        status: StateAffairsSectionStatus.loaded,
-        value: value,
-      );
+  factory StateAffairsSection.loaded(final T value) => StateAffairsSection<T>(
+    status: StateAffairsSectionStatus.loaded,
+    value: value,
+  );
 
-  factory StateAffairsSection.empty() =>
-      const StateAffairsSection(status: StateAffairsSectionStatus.empty);
+  factory StateAffairsSection.empty() => const StateAffairsSection(status: StateAffairsSectionStatus.empty);
 
-  factory StateAffairsSection.error() =>
-      const StateAffairsSection(status: StateAffairsSectionStatus.error);
+  factory StateAffairsSection.error() => const StateAffairsSection(status: StateAffairsSectionStatus.error);
 
   final StateAffairsSectionStatus status;
   final T? value;
@@ -42,10 +38,10 @@ final class StateAffairsSnapshot {
   });
 
   factory StateAffairsSnapshot.loading() => StateAffairsSnapshot(
-        residence: StateAffairsSection<ResidenceData>.loading(),
-        properties: StateAffairsSection<List<CadastralProperty>>.loading(),
-        vehicles: StateAffairsSection<List<Vehicle>>.loading(),
-      );
+    residence: StateAffairsSection<ResidenceData>.loading(),
+    properties: StateAffairsSection<List<CadastralProperty>>.loading(),
+    vehicles: StateAffairsSection<List<Vehicle>>.loading(),
+  );
 
   final StateAffairsSection<ResidenceData> residence;
   final StateAffairsSection<List<CadastralProperty>> properties;

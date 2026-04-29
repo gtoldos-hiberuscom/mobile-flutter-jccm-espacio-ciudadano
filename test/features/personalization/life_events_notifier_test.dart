@@ -21,11 +21,10 @@ class _FakeLifeEventsRepository implements LifeEventsRepository {
   int resetCalls = 0;
 
   @override
-  Future<LifeEventsLoadResult> loadHechos(final String idAgente) async =>
-      LifeEventsLoadResult(
-        items: items,
-        selectedIds: Set<String>.unmodifiable(_selected),
-      );
+  Future<LifeEventsLoadResult> loadHechos(final String idAgente) async => LifeEventsLoadResult(
+    items: items,
+    selectedIds: Set<String>.unmodifiable(_selected),
+  );
 
   @override
   Future<void> saveHechos(
@@ -64,12 +63,11 @@ const _catalog = <LifeEvent>[
   ),
 ];
 
-ProviderContainer _container(final _FakeLifeEventsRepository repo) =>
-    ProviderContainer(
-      overrides: [
-        lifeEventsRepositoryProvider.overrideWith((final _) => repo),
-      ],
-    );
+ProviderContainer _container(final _FakeLifeEventsRepository repo) => ProviderContainer(
+  overrides: [
+    lifeEventsRepositoryProvider.overrideWith((final _) => repo),
+  ],
+);
 
 void main() {
   group('LifeEventsNotifier', () {
@@ -99,12 +97,10 @@ void main() {
       addTearDown(c.dispose);
 
       await c.read(lifeEventsProvider('agent-1').future);
-      final notifier = c.read(lifeEventsProvider('agent-1').notifier)
-        ..toggle('emp-desempleo');
+      final notifier = c.read(lifeEventsProvider('agent-1').notifier)..toggle('emp-desempleo');
 
       var current = c.read(lifeEventsProvider('agent-1')).requireValue;
-      expect(current.selectedIds,
-          <String>{'fam-nacimiento', 'emp-desempleo'});
+      expect(current.selectedIds, <String>{'fam-nacimiento', 'emp-desempleo'});
       expect(current.isDirty, isTrue);
 
       notifier.toggle('fam-nacimiento');
@@ -113,8 +109,7 @@ void main() {
       expect(current.isDirty, isTrue);
     });
 
-    test('save persists selection, refreshes baseline and emits saved → loaded',
-        () async {
+    test('save persists selection, refreshes baseline and emits saved → loaded', () async {
       final repo = _FakeLifeEventsRepository(
         items: _catalog,
         initialSelection: <String>{'fam-nacimiento'},
@@ -123,15 +118,13 @@ void main() {
       addTearDown(c.dispose);
 
       await c.read(lifeEventsProvider('agent-1').future);
-      final notifier = c.read(lifeEventsProvider('agent-1').notifier)
-        ..toggle('sal-discapacidad');
+      final notifier = c.read(lifeEventsProvider('agent-1').notifier)..toggle('sal-discapacidad');
       await notifier.save();
 
       var current = c.read(lifeEventsProvider('agent-1')).requireValue;
       expect(current.state, LifeEventsLoadState.saved);
       expect(repo.saveCalls, 1);
-      expect(current.baselineIds,
-          <String>{'fam-nacimiento', 'sal-discapacidad'});
+      expect(current.baselineIds, <String>{'fam-nacimiento', 'sal-discapacidad'});
       expect(current.isDirty, isFalse);
 
       notifier.acknowledgeSaved();

@@ -23,9 +23,7 @@ const appStorageProvider = AppStorageProvider._();
 /// The underlying SharedPreferences instance must be obtained
 /// asynchronously; this provider must be overridden at bootstrap.
 
-final class AppStorageProvider
-    extends $FunctionalProvider<AppStorage, AppStorage, AppStorage>
-    with $Provider<AppStorage> {
+final class AppStorageProvider extends $FunctionalProvider<AppStorage, AppStorage, AppStorage> with $Provider<AppStorage> {
   /// Riverpod provider that exposes a singleton [AppStorage] instance.
   ///
   /// Kept alive for the lifetime of the app.
@@ -47,8 +45,7 @@ final class AppStorageProvider
 
   @$internal
   @override
-  $ProviderElement<AppStorage> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<AppStorage> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   AppStorage create(Ref ref) {

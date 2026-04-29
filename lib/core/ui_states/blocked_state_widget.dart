@@ -6,8 +6,8 @@ import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 /// Used for maintenance windows, permission-denied and feature-unavailable cases.
 class BlockedStateWidget extends StatelessWidget {
   const BlockedStateWidget({
-    super.key,
     required this.message,
+    super.key,
     this.subtitle,
     this.action,
   });
@@ -19,7 +19,7 @@ class BlockedStateWidget extends StatelessWidget {
   final Widget? action;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final theme = Theme.of(context);
 
     return Center(
@@ -28,7 +28,7 @@ class BlockedStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Icons.lock_outlined,
               size: 48,
               color: AppColors.warning,
@@ -43,8 +43,7 @@ class BlockedStateWidget extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 subtitle!,
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.outline),
+                style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.outline),
                 textAlign: TextAlign.center,
               ),
             ],

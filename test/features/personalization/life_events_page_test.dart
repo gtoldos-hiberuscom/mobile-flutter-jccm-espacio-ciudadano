@@ -19,11 +19,10 @@ class _FakeLifeEventsRepository implements LifeEventsRepository {
   int resetCalls = 0;
 
   @override
-  Future<LifeEventsLoadResult> loadHechos(final String idAgente) async =>
-      LifeEventsLoadResult(
-        items: items,
-        selectedIds: Set<String>.unmodifiable(_selected),
-      );
+  Future<LifeEventsLoadResult> loadHechos(final String idAgente) async => LifeEventsLoadResult(
+    items: items,
+    selectedIds: Set<String>.unmodifiable(_selected),
+  );
 
   @override
   Future<void> saveHechos(
@@ -68,8 +67,7 @@ Widget _harness(final _FakeLifeEventsRepository repo) {
 }
 
 void main() {
-  testWidgets('renders the catalog grouped by category and reflects selection',
-      (final tester) async {
+  testWidgets('renders the catalog grouped by category and reflects selection', (final tester) async {
     final repo = _FakeLifeEventsRepository(
       items: _catalog,
       initialSelection: <String>{'fam-nacimiento'},
@@ -102,8 +100,7 @@ void main() {
     expect(unselected.value, isFalse);
   });
 
-  testWidgets('reset action requires explicit confirmation before clearing',
-      (final tester) async {
+  testWidgets('reset action requires explicit confirmation before clearing', (final tester) async {
     final repo = _FakeLifeEventsRepository(
       items: _catalog,
       initialSelection: <String>{'fam-nacimiento'},

@@ -7,8 +7,7 @@ part 'social_welfare_landing_notifier.g.dart';
 @riverpod
 class SocialWelfareLandingNotifier extends _$SocialWelfareLandingNotifier {
   @override
-  Future<SocialWelfareSnapshot> build() =>
-      ref.watch(socialWelfareRepositoryProvider).loadSnapshot();
+  Future<SocialWelfareSnapshot> build() => ref.watch(socialWelfareRepositoryProvider).loadSnapshot();
 
   Future<void> refresh() async {
     state = const AsyncValue<SocialWelfareSnapshot>.loading();

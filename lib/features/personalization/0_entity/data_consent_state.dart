@@ -36,11 +36,11 @@ final class DataConsentSnapshot {
 
   /// Initial empty value used by the notifier before the first load.
   factory DataConsentSnapshot.initial() => const DataConsentSnapshot(
-        items: <DataConsent>[],
-        draft: <String, bool>{},
-        baseline: <String, bool>{},
-        state: DataConsentLoadState.initial,
-      );
+    items: <DataConsent>[],
+    draft: <String, bool>{},
+    baseline: <String, bool>{},
+    state: DataConsentLoadState.initial,
+  );
 
   final List<DataConsent> items;
 

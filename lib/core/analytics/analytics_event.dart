@@ -1,3 +1,6 @@
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_period_filter.dart' show AgendaPeriodFilter;
+import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart' show ExternalLinkCatalog;
+
 /// Typed, PII-free analytics event hierarchy.
 ///
 /// All subclasses must contain only generic type labels — never actual

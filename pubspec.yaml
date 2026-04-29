@@ -7,7 +7,9 @@ environment:
   sdk: ^3.10.1
 
 dependencies:
+  crypto: ^3.0.6
   dio: ^5.9.2
+  file_selector: ^1.0.3
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -21,6 +23,10 @@ dependencies:
   shared_preferences: ^2.5.5
   url_launcher: ^6.3.2
 
+  intl: any
+  flutter_appauth: ^12.0.0
+  espacio_ciudadano_api:
+    path: generated/dart_dio_client
 dev_dependencies:
   build_runner: ^2.13.1
   custom_lint: ^0.8.1

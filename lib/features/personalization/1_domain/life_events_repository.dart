@@ -17,7 +17,7 @@ final class LifeEventsLoadResult {
 
 /// Domain contract for the life-events selection screen (STORY-54).
 ///
-/// TODO(STORY-54): Sprint-4 implementation returns mocked data. Real
+// TODO(STORY-54): Sprint-4 implementation returns mocked data. Real
 /// wiring against `/hechos-vitales/hechos/{idAgente}` (GET catalog),
 /// `PATCH /hechos-vitales/hechos` (persist selection) and
 /// `/hechos-vitales/preferencias/{idAgente}` (DELETE reset) is owned by a

@@ -22,6 +22,14 @@ final class AuthInterceptor extends Interceptor {
     final RequestOptions options,
     final RequestInterceptorHandler handler,
   ) async {
+    final hasAuthorizationHeader = options.headers.keys.any(
+      (final key) => key.toLowerCase() == HttpHeaders.authorizationHeader,
+    );
+    if (hasAuthorizationHeader) {
+      handler.next(options);
+      return;
+    }
+
     final token = await _storage.read(StorageKeys.accessToken);
     if (token != null && token.isNotEmpty) {
       options.headers[HttpHeaders.authorizationHeader] = 'Bearer $token';
@@ -63,13 +71,12 @@ final class ErrorInterceptor extends Interceptor {
         return switch (statusCode) {
           401 => const UnauthorizedError(),
           404 => NotFoundError(
-              message: 'Resource not found (404): ${err.requestOptions.path}',
-            ),
+            message: 'Resource not found (404): ${err.requestOptions.path}',
+          ),
           _ => NetworkError(
-              message:
-                  'Server error ${statusCode ?? 'unknown'}: ${err.message ?? ''}',
-              statusCode: statusCode,
-            ),
+            message: 'Server error ${statusCode ?? 'unknown'}: ${err.message ?? ''}',
+            statusCode: statusCode,
+          ),
         };
 
       case DioExceptionType.cancel:

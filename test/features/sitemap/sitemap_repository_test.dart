@@ -14,10 +14,9 @@ Iterable<SitemapNode> _flatten(final SitemapNode node) sync* {
 void main() {
   group('SitemapRepositoryImpl', () {
     const catalog = ExternalLinkCatalogImpl();
-    final repo = SitemapRepositoryImpl(catalog: catalog);
+    const repo = SitemapRepositoryImpl(catalog: catalog);
     final tree = repo.loadTree();
-    final allNodes =
-        tree.expand(_flatten).toList(growable: false);
+    final allNodes = tree.expand(_flatten).toList(growable: false);
     final ids = allNodes.map((final n) => n.id).toSet();
 
     test('top-level groups are present', () {
@@ -72,14 +71,11 @@ void main() {
     });
 
     test('external nodes delegate to the catalog by id', () {
-      final externalGroup =
-          tree.firstWhere((final n) => n.id == 'group_external');
-      final externalIds =
-          externalGroup.children.map((final n) => n.externalLinkId).toSet();
+      final externalGroup = tree.firstWhere((final n) => n.id == 'group_external');
+      final externalIds = externalGroup.children.map((final n) => n.externalLinkId).toSet();
       // every external id must exist in the catalog (no hard-coded URLs)
       for (final id in externalIds) {
-        expect(catalog.findById(id!), isNotNull,
-            reason: 'sitemap external id "$id" must exist in the catalog');
+        expect(catalog.findById(id!), isNotNull, reason: 'sitemap external id "$id" must exist in the catalog');
       }
       // and every catalog entry should be reachable from the sitemap
       final catalogIds = catalog.all().map((final l) => l.id).toSet();

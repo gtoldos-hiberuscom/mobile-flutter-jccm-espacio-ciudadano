@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart' show ExternalLinkCatalog;
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_link_button.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_link_label.dart';
@@ -32,8 +33,7 @@ class ExternalLinkCard extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final ExternalLink? link =
-        ref.watch(externalLinkCatalogProvider).findById(linkId);
+    final ExternalLink? link = ref.watch(externalLinkCatalogProvider).findById(linkId);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.space16),

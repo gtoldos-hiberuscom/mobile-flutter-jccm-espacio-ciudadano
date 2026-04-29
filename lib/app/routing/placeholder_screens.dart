@@ -11,44 +11,6 @@ import 'package:flutter/material.dart';
 // feature screen once it is implemented.
 // ──────────────────────────────────────────────────────────────────────────────
 
-/// Animated splash screen shown during app initialisation.
-///
-/// Transitions to LandingScreen or the authenticated home, driven by the
-/// session guard in app_router.dart.
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
-
-  @override
-  Widget build(final BuildContext context) => Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const FlutterLogo(size: 72),
-              const SizedBox(height: 24),
-              Text(
-                'Espacio Ciudadano',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ],
-          ),
-        ),
-      );
-}
-
-/// Public landing / welcome screen.
-///
-/// Placeholder — replace with the real feature landing page.
-class LandingScreen extends StatelessWidget {
-  const LandingScreen({super.key});
-
-  @override
-  Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Bienvenido')),
-        body: const Center(child: Text('Pantalla de inicio')),
-      );
-}
-
 /// Maintenance mode screen.
 ///
 /// Displayed instead of any other screen when the backend reports a
@@ -58,22 +20,22 @@ class MaintenanceScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.build_circle_outlined, size: 64),
-              const SizedBox(height: 16),
-              Text(
-                'En mantenimiento',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
-              const Text('Vuelva a intentarlo más tarde.'),
-            ],
+    body: Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.build_circle_outlined, size: 64),
+          const SizedBox(height: 16),
+          Text(
+            'En mantenimiento',
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
-        ),
-      );
+          const SizedBox(height: 8),
+          const Text('Vuelva a intentarlo más tarde.'),
+        ],
+      ),
+    ),
+  );
 }
 
 /// Generic 404 / not-found screen.
@@ -82,20 +44,13 @@ class NotFoundScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Página no encontrada')),
-        body: const Center(child: Text('404 — La ruta solicitada no existe.')),
-      );
+    appBar: AppBar(title: const Text('Página no encontrada')),
+    body: const Center(child: Text('404 — La ruta solicitada no existe.')),
+  );
 }
 
 // ── Authenticated placeholder screens ─────────────────────────────────────────
 
-class HomePlaceholder extends StatelessWidget {
-  const HomePlaceholder({super.key});
-
-  @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Inicio (placeholder)'));
-}
 
 /// Placeholder for the thematic landing screens (Educación, Empleo,
 /// Bienestar Social, Estado/Otros) that are wired from the home dashboard.
@@ -110,65 +65,58 @@ class DomainLandingPlaceholder extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: Center(child: Text('$title (placeholder)')),
-      );
+    appBar: AppBar(title: Text(title)),
+    body: Center(child: Text('$title (placeholder)')),
+  );
 }
 
 class AgendaPlaceholder extends StatelessWidget {
   const AgendaPlaceholder({super.key});
 
   @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Agenda (placeholder)'));
+  Widget build(final BuildContext context) => const Center(child: Text('Agenda (placeholder)'));
 }
 
 class CaseworkPlaceholder extends StatelessWidget {
   const CaseworkPlaceholder({super.key});
 
   @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Expedientes (placeholder)'));
+  Widget build(final BuildContext context) => const Center(child: Text('Expedientes (placeholder)'));
 }
 
 class NotificationsPlaceholder extends StatelessWidget {
   const NotificationsPlaceholder({super.key});
 
   @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Notificaciones (placeholder)'));
+  Widget build(final BuildContext context) => const Center(child: Text('Notificaciones (placeholder)'));
 }
 
 class CardsPlaceholder extends StatelessWidget {
   const CardsPlaceholder({super.key});
 
   @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Tarjetas (placeholder)'));
+  Widget build(final BuildContext context) => const Center(child: Text('Tarjetas (placeholder)'));
 }
 
 class ProfilePlaceholder extends StatelessWidget {
   const ProfilePlaceholder({super.key});
 
   @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Perfil (placeholder)'));
+  Widget build(final BuildContext context) => const Center(child: Text('Perfil (placeholder)'));
 }
 
 class RecommendationsPlaceholder extends StatelessWidget {
   const RecommendationsPlaceholder({super.key});
 
   @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Recomendaciones (placeholder)'));
+  Widget build(final BuildContext context) => const Center(child: Text('Recomendaciones (placeholder)'));
 }
 
 class SupportPlaceholder extends StatelessWidget {
   const SupportPlaceholder({super.key});
 
   @override
-  Widget build(final BuildContext context) =>
-      const Center(child: Text('Soporte (placeholder)'));
+  Widget build(final BuildContext context) => const Center(child: Text('Soporte (placeholder)'));
 }
 
 // ── Public / legal placeholder screens ────────────────────────────────────────
@@ -178,9 +126,9 @@ class LoginPlaceholder extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Acceso')),
-        body: const Center(child: Text('Login (placeholder)')),
-      );
+    appBar: AppBar(title: const Text('Acceso')),
+    body: const Center(child: Text('Login (placeholder)')),
+  );
 }
 
 class LegalPlaceholder extends StatelessWidget {
@@ -189,9 +137,9 @@ class LegalPlaceholder extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: Center(child: Text('$title (placeholder)')),
-      );
+    appBar: AppBar(title: Text(title)),
+    body: Center(child: Text('$title (placeholder)')),
+  );
 }
 
 class HelpPlaceholder extends StatelessWidget {
@@ -199,9 +147,9 @@ class HelpPlaceholder extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Ayuda')),
-        body: const Center(child: Text('Ayuda (placeholder)')),
-      );
+    appBar: AppBar(title: const Text('Ayuda')),
+    body: const Center(child: Text('Ayuda (placeholder)')),
+  );
 }
 
 class SitemapPlaceholder extends StatelessWidget {
@@ -209,9 +157,9 @@ class SitemapPlaceholder extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Mapa del sitio')),
-        body: const Center(child: Text('Mapa del sitio (placeholder)')),
-      );
+    appBar: AppBar(title: const Text('Mapa del sitio')),
+    body: const Center(child: Text('Mapa del sitio (placeholder)')),
+  );
 }
 
 /// Placeholder for the deep-link login callback screen.
@@ -220,6 +168,6 @@ class LoginCallbackPlaceholder extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+    body: Center(child: CircularProgressIndicator()),
+  );
 }

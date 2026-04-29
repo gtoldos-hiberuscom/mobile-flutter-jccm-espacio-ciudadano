@@ -21,9 +21,7 @@ const helpRepositoryProvider = HelpRepositoryProvider._();
 /// `keepAlive: true` because the content is immutable and reused by both
 /// the help page and (potentially) the sitemap entry.
 
-final class HelpRepositoryProvider
-    extends $FunctionalProvider<HelpRepository, HelpRepository, HelpRepository>
-    with $Provider<HelpRepository> {
+final class HelpRepositoryProvider extends $FunctionalProvider<HelpRepository, HelpRepository, HelpRepository> with $Provider<HelpRepository> {
   /// DI composition for the help-center repository.
   ///
   /// `keepAlive: true` because the content is immutable and reused by both
@@ -44,8 +42,7 @@ final class HelpRepositoryProvider
 
   @$internal
   @override
-  $ProviderElement<HelpRepository> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<HelpRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   HelpRepository create(Ref ref) {
@@ -70,9 +67,7 @@ const helpContentProvider = HelpContentProvider._();
 
 /// Synchronous provider exposing the help-center [HelpContent].
 
-final class HelpContentProvider
-    extends $FunctionalProvider<HelpContent, HelpContent, HelpContent>
-    with $Provider<HelpContent> {
+final class HelpContentProvider extends $FunctionalProvider<HelpContent, HelpContent, HelpContent> with $Provider<HelpContent> {
   /// Synchronous provider exposing the help-center [HelpContent].
   const HelpContentProvider._()
     : super(
@@ -90,8 +85,7 @@ final class HelpContentProvider
 
   @$internal
   @override
-  $ProviderElement<HelpContent> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<HelpContent> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   HelpContent create(Ref ref) {

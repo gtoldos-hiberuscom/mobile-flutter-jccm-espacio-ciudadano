@@ -9,5 +9,4 @@ part 'legal_documents_provider.g.dart';
 /// `keepAlive: true` because the catalog is immutable and shared across
 /// every legal route (terms, privacy, accessibility, legal notice).
 @Riverpod(keepAlive: true)
-LegalDocumentsRepository legalDocumentsRepository(final Ref ref) =>
-    const LegalDocumentsRepositoryImpl();
+LegalDocumentsRepository legalDocumentsRepository(final Ref ref) => const LegalDocumentsRepositoryImpl();

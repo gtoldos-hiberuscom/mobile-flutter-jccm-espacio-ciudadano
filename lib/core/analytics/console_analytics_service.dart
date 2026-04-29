@@ -13,8 +13,7 @@ import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 /// No PII may be logged here — [AnalyticsEvent] subclasses are themselves
 /// responsible for stripping identifying information from their payloads.
 final class ConsoleAnalyticsService implements AnalyticsService {
-  const ConsoleAnalyticsService({required final AppLogger logger})
-      : _logger = logger;
+  const ConsoleAnalyticsService({required final AppLogger logger}) : _logger = logger;
 
   final AppLogger _logger;
 

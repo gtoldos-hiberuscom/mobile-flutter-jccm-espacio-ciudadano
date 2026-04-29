@@ -6,5 +6,4 @@ part 'life_events_repository_provider.g.dart';
 
 /// DI composition for [LifeEventsRepository].
 @riverpod
-LifeEventsRepository lifeEventsRepository(final Ref ref) =>
-    const LifeEventsRepositoryImpl();
+LifeEventsRepository lifeEventsRepository(final Ref ref) => const LifeEventsRepositoryImpl();

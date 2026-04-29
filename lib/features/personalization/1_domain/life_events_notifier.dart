@@ -25,9 +25,7 @@ class LifeEventsNotifier extends _$LifeEventsNotifier {
       items: result.items,
       selectedIds: selected,
       baselineIds: baseline,
-      state: result.items.isEmpty
-          ? LifeEventsLoadState.empty
-          : LifeEventsLoadState.loaded,
+      state: result.items.isEmpty ? LifeEventsLoadState.empty : LifeEventsLoadState.loaded,
     );
   }
 
@@ -64,9 +62,7 @@ class LifeEventsNotifier extends _$LifeEventsNotifier {
       ),
     );
     try {
-      await ref
-          .read(lifeEventsRepositoryProvider)
-          .saveHechos(idAgente, current.selectedIds);
+      await ref.read(lifeEventsRepositoryProvider).saveHechos(idAgente, current.selectedIds);
       state = AsyncValue<LifeEventsSelection>.data(
         current.copyWith(
           baselineIds: Set<String>.from(current.selectedIds),
@@ -109,9 +105,7 @@ class LifeEventsNotifier extends _$LifeEventsNotifier {
       ),
     );
     try {
-      await ref
-          .read(lifeEventsRepositoryProvider)
-          .resetPreferencias(idAgente);
+      await ref.read(lifeEventsRepositoryProvider).resetPreferencias(idAgente);
       state = AsyncValue<LifeEventsSelection>.data(
         current.copyWith(
           selectedIds: <String>{},

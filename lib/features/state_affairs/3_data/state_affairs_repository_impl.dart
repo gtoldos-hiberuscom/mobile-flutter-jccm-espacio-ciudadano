@@ -11,7 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/state_affairs/1_domain/state_aff
 /// `error` status to demonstrate the per-section error handling
 /// (the DGT feed is the most fragile of the three sources in production).
 ///
-/// TODO(STORY-26): replace with the real Dio-backed implementation
+// TODO(STORY-26): replace with the real Dio-backed implementation
 /// hitting `/ine/datos-residencia/{numDocumento}`,
 /// `/catastro/datos-catastrales/{numDocumento}` and
 /// `/dgt/lista-vehiculos/{numDocumento}`.

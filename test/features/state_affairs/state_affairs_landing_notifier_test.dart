@@ -42,18 +42,17 @@ void main() {
     );
 
     ProviderContainer container() => ProviderContainer(
-          overrides: [
-            stateAffairsRepositoryProvider.overrideWith(
-              (final ref) => _FakeStateAffairsRepository(snapshot),
-            ),
-          ],
-        );
+      overrides: [
+        stateAffairsRepositoryProvider.overrideWith(
+          (final ref) => _FakeStateAffairsRepository(snapshot),
+        ),
+      ],
+    );
 
     test('initial build exposes the mock snapshot shape', () async {
       final c = container();
       addTearDown(c.dispose);
-      final state =
-          await c.read(stateAffairsLandingProvider.future);
+      final state = await c.read(stateAffairsLandingProvider.future);
       expect(state.residence.status, StateAffairsSectionStatus.loaded);
       expect(state.residence.value!.municipio, 'Toledo');
       expect(state.properties.status, StateAffairsSectionStatus.loaded);
@@ -65,11 +64,8 @@ void main() {
       final c = container();
       addTearDown(c.dispose);
       await c.read(stateAffairsLandingProvider.future);
-      await c
-          .read(stateAffairsLandingProvider.notifier)
-          .refresh();
-      final state =
-          c.read(stateAffairsLandingProvider).requireValue;
+      await c.read(stateAffairsLandingProvider.notifier).refresh();
+      final state = c.read(stateAffairsLandingProvider).requireValue;
       expect(state.residence.value!.municipio, 'Toledo');
     });
   });

@@ -25,10 +25,8 @@ final class ConsentRepositoryImpl implements ConsentRepository {
   @override
   Future<Result<ConsentState>> checkConsentAccepted() async {
     try {
-      final value =
-          await _secureStorage.read(StorageKeys.consentAccepted);
-      final state =
-          value == '1' ? const ConsentAccepted() : const ConsentPending();
+      final value = await _secureStorage.read(StorageKeys.consentAccepted);
+      final state = value == '1' ? const ConsentAccepted() : const ConsentPending();
       return Success(state);
     } catch (_) {
       return const Failure(

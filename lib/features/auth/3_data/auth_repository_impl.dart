@@ -1,186 +1,74 @@
-import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
-import 'package:jccm_espacio_ciudadano/core/network/result.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_auth_remote_datasource.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_token_response_dto.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_user_info_dto.dart';
 
-/// Concrete implementation of [AuthRepository].
-///
-/// ## Sprint 1 status
-/// - [initiateClaveLogin]: opens Cl@ve URL via `url_launcher`.
-/// - [handleCallback]: returns a **mock** session (real OIDC tracked in TASK-21).
-/// - [restoreSession]: reads and reconstructs a [Session] from [SecureStorage].
-/// - [refreshSession]: stub — refresh not implemented until Sprint 2 (TASK-21).
-/// - [logout]: clears all tokens via [SecureStorage.clear].
-///
-/// ## PII policy
-/// Token values and [StorageKeys.idAgente] are never written to logs.
-/// All storage writes go through [SecureStorage], never plain SharedPreferences.
+/// Implements [AuthRepository] by delegating to [ClaveAuthRemoteDatasource]
+/// and mapping Cl@ve-specific DTOs to clean domain entities.
 final class AuthRepositoryImpl implements AuthRepository {
-  const AuthRepositoryImpl(this._secureStorage);
+  const AuthRepositoryImpl(this._datasource);
 
-  final SecureStorage _secureStorage;
+  final ClaveAuthRemoteDatasource _datasource;
 
-  // ── initiateClaveLogin ─────────────────────────────────────────────────────
-
-  /// Opens [claveLoginUrl] in the platform browser.
-  ///
-  /// Returns a [Failure] because the actual token is delivered asynchronously
-  /// via the deep-link callback — it is NOT available at this point.
   @override
-  Future<Result<Session>> initiateClaveLogin(
-    final String claveLoginUrl,
-  ) async {
-    try {
-      final uri = Uri.parse(claveLoginUrl);
-      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-      if (!launched) {
-        return const Failure(
-          UnknownError(message: 'No se pudo abrir el portal Cl@ve.'),
-        );
-      }
-      // Success means the browser opened. The session arrives via callback.
-      return const Failure(
-        UnknownError(
-          message: 'Waiting for Cl@ve callback — token not yet available.',
-        ),
-      );
-    } catch (_) {
-      return const Failure(
-        UnknownError(message: 'Error al abrir el portal Cl@ve.'),
-      );
-    }
+  Future<AuthSession> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+  }) async {
+    final dto = await _datasource.login(scopes: scopes, loginHint: loginHint);
+    return _mapSession(dto);
   }
 
-  // ── handleCallback ────────────────────────────────────────────────────────
-
-  // TASK-21: Replace mock session with real OIDC token exchange:
-  // 1. POST authorization code to Cl@ve token endpoint
-  // 2. Receive id_token + access_token
-  // 3. Decode id_token with JwtDecoder.decode()
-  // 4. Validate: claims.validateAudience(appClientId), !claims.isExpired
-  // 5. Map claims to Session: idAgente = claims.idAgente, displayName = claims.displayName
-  //
-  // Prerequisites (see docs/architecture/TASK-21-jwt-claims-validation.md §6):
-  // - Cl@ve OIDC discovery endpoint URL confirmed
-  // - client_id and redirect URI registered in Cl@ve sandbox
-  // - nif/idAgente claim name confirmed
-  // - token exchange endpoint URL confirmed
-
-  /// Processes the Cl@ve deep-link callback URI.
-  ///
-  /// Sprint 1: creates a **mock** session from the `code` parameter.
-  /// Sprint 2 (TASK-21): replace with real OIDC `code → token` exchange and
-  /// JWT claims validation.
   @override
-  Future<Result<Session>> handleCallback(final Uri callbackUri) async {
-    final code = callbackUri.queryParameters['code'];
-    if (code == null || code.isEmpty) {
-      return const Failure(
-        UnknownError(message: 'Código de autorización ausente en el callback.'),
-      );
-    }
-
-    // ── Sprint 1 mock session ─────────────────────────────────────────────
-    // TASK-21 will replace this with real OIDC token exchange + JWT validation.
-    final mockSession = Session(
-      accessToken: 'mock-access-token-$code',
-      refreshToken: null,
-      idAgente: 'mock-user',
-      displayName: 'Usuario Mock',
-      expiresAt: DateTime.now().add(const Duration(hours: 8)),
-      claims: const ['openid', 'profile'],
+  Future<AuthSession> refreshToken({
+    required final String refreshToken,
+    final List<String> scopes = authDefaultScopes,
+  }) async {
+    final dto = await _datasource.refreshToken(
+      refreshToken: refreshToken,
+      scopes: scopes,
     );
-
-    await _persistSession(mockSession);
-    return Success(mockSession);
+    return _mapSession(dto);
   }
 
-  // ── restoreSession ────────────────────────────────────────────────────────
-
-  /// Reads token data from [SecureStorage] and reconstructs a [Session].
-  ///
-  /// Returns `Success(null)` if:
-  /// - No tokens are stored.
-  /// - The stored session is expired.
   @override
-  Future<Result<Session?>> restoreSession() async {
-    try {
-      final accessToken = await _secureStorage.read(StorageKeys.accessToken);
-      final idAgente = await _secureStorage.read(StorageKeys.idAgente);
-      final expiresAtRaw =
-          await _secureStorage.read(StorageKeys.sessionExpiresAt);
-
-      if (accessToken == null || idAgente == null || expiresAtRaw == null) {
-        return const Success(null);
-      }
-
-      final expiresAt = DateTime.tryParse(expiresAtRaw);
-      if (expiresAt == null) {
-        return const Success(null);
-      }
-
-      final refreshToken = await _secureStorage.read(StorageKeys.refreshToken);
-
-      final session = Session(
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        idAgente: idAgente,
-        expiresAt: expiresAt,
-        claims: const [],
-      );
-
-      if (session.isExpired) {
-        return const Success(null);
-      }
-
-      return Success(session);
-    } catch (_) {
-      return const Success(null);
-    }
-  }
-
-  // ── refreshSession ────────────────────────────────────────────────────────
-
-  /// Silent token refresh — stub for Sprint 1.
-  ///
-  /// TASK-21 tracks the real implementation.
-  @override
-  Future<Result<void>> refreshSession(final Session session) async {
-    return const Failure(
-      UnknownError(message: 'Token refresh not implemented in Sprint 1.'),
+  Future<void> logout({
+    required final String idToken,
+    final String? postLogoutRedirectUri,
+  }) {
+    return _datasource.logout(
+      idToken: idToken,
+      postLogoutRedirectUri: postLogoutRedirectUri,
     );
   }
 
-  // ── logout ────────────────────────────────────────────────────────────────
-
-  /// Removes all persisted tokens from [SecureStorage].
   @override
-  Future<Result<void>> logout() async {
-    try {
-      await _secureStorage.clear();
-      return const Success(null);
-    } catch (_) {
-      return const Failure(UnknownError(message: 'Error al cerrar sesión.'));
-    }
+  Future<AuthUser> fetchUserInfo({required final String accessToken}) async {
+    final dto = await _datasource.fetchUserInfo(accessToken: accessToken);
+    return _mapUser(dto);
   }
 
-  // ── Private helpers ───────────────────────────────────────────────────────
-
-  Future<void> _persistSession(final Session session) async {
-    await _secureStorage.write(StorageKeys.accessToken, session.accessToken);
-    await _secureStorage.write(StorageKeys.idAgente, session.idAgente);
-    await _secureStorage.write(
-      StorageKeys.sessionExpiresAt,
-      session.expiresAt.toIso8601String(),
+  static AuthSession _mapSession(final ClaveTokenResponseDto dto) {
+    return AuthSession(
+      accessToken: dto.accessToken,
+      refreshToken: dto.refreshToken,
+      idToken: dto.idToken,
+      tokenType: dto.tokenType,
+      accessTokenExpiresAt: dto.accessTokenExpiresAt,
+      refreshTokenExpiresAt: dto.refreshTokenExpiresAt,
+      scopes: dto.scopes,
     );
-    if (session.refreshToken != null) {
-      await _secureStorage.write(
-        StorageKeys.refreshToken,
-        session.refreshToken!,
-      );
-    }
+  }
+
+  static AuthUser _mapUser(final ClaveUserInfoDto dto) {
+    return AuthUser(
+      sub: dto.sub,
+      nif: dto.nif,
+      givenName: dto.givenName,
+      familyName: dto.familyName,
+      email: dto.email,
+    );
   }
 }

@@ -22,13 +22,12 @@ void main() {
 
     UrlLauncherExternalLinkLauncher buildLauncher({
       required final LaunchUrlFn launch,
-    }) =>
-        UrlLauncherExternalLinkLauncher(
-          catalog: catalog,
-          analytics: analytics,
-          logger: logger,
-          launchUrlFn: launch,
-        );
+    }) => UrlLauncherExternalLinkLauncher(
+      catalog: catalog,
+      analytics: analytics,
+      logger: logger,
+      launchUrlFn: launch,
+    );
 
     test('rejects non-https schemes without calling the platform', () async {
       var called = false;
@@ -89,8 +88,7 @@ void main() {
 
     test('rejects ids not present in the catalog', () async {
       final launcher = buildLauncher(
-        launch: (final url, {final mode = LaunchMode.platformDefault}) async =>
-            true,
+        launch: (final url, {final mode = LaunchMode.platformDefault}) async => true,
       );
 
       final link = ExternalLink(
@@ -109,8 +107,7 @@ void main() {
       );
     });
 
-    test('returns success and emits opened event when platform accepts',
-        () async {
+    test('returns success and emits opened event when platform accepts', () async {
       var seenMode = LaunchMode.platformDefault;
       final launcher = buildLauncher(
         launch: (final url, {final mode = LaunchMode.platformDefault}) async {
@@ -133,8 +130,7 @@ void main() {
 
     test('returns platformRejected when launchUrl returns false', () async {
       final launcher = buildLauncher(
-        launch: (final url, {final mode = LaunchMode.platformDefault}) async =>
-            false,
+        launch: (final url, {final mode = LaunchMode.platformDefault}) async => false,
       );
 
       final link = catalog.findById('sede_dgt')!;
@@ -168,11 +164,9 @@ void main() {
       expect(analytics.failedReasons, contains('unknown'));
     });
 
-    test('analytics payload never contains the full URL or query string',
-        () async {
+    test('analytics payload never contains the full URL or query string', () async {
       final launcher = buildLauncher(
-        launch: (final url, {final mode = LaunchMode.platformDefault}) async =>
-            true,
+        launch: (final url, {final mode = LaunchMode.platformDefault}) async => true,
       );
 
       final link = catalog.findById('educamos_clm')!;
@@ -191,16 +185,9 @@ void main() {
 class _RecordingAnalytics implements AnalyticsService {
   final List<AnalyticsEvent> events = <AnalyticsEvent>[];
 
-  List<String> get openedSuccess => events
-      .whereType<ExternalLinkOpenedEvent>()
-      .where((final e) => e.success)
-      .map((final e) => e.linkId)
-      .toList();
+  List<String> get openedSuccess => events.whereType<ExternalLinkOpenedEvent>().where((final e) => e.success).map((final e) => e.linkId).toList();
 
-  List<String> get failedReasons => events
-      .whereType<ExternalLinkOpenFailedEvent>()
-      .map((final e) => e.reason)
-      .toList();
+  List<String> get failedReasons => events.whereType<ExternalLinkOpenFailedEvent>().map((final e) => e.reason).toList();
 
   @override
   void logEvent(final AnalyticsEvent event) => events.add(event);

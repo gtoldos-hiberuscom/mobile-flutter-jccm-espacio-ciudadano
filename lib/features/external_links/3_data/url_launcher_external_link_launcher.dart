@@ -10,10 +10,11 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 /// Mirrors `package:url_launcher`'s `launchUrl` so tests can substitute a
 /// fake without depending on the real plugin (canon §27, testable seams).
-typedef LaunchUrlFn = Future<bool> Function(
-  Uri url, {
-  LaunchMode mode,
-});
+typedef LaunchUrlFn =
+    Future<bool> Function(
+      Uri url, {
+      LaunchMode mode,
+    });
 
 /// `url_launcher`-backed implementation of [ExternalLinkLauncher].
 ///
@@ -33,10 +34,10 @@ final class UrlLauncherExternalLinkLauncher implements ExternalLinkLauncher {
     required final AnalyticsService analytics,
     required final AppLogger logger,
     final LaunchUrlFn launchUrlFn = launchUrl,
-  })  : _catalog = catalog,
-        _analytics = analytics,
-        _logger = logger,
-        _launchUrlFn = launchUrlFn;
+  }) : _catalog = catalog,
+       _analytics = analytics,
+       _logger = logger,
+       _launchUrlFn = launchUrlFn;
 
   final ExternalLinkCatalog _catalog;
   final AnalyticsService _analytics;

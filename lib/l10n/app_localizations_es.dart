@@ -477,6 +477,45 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaDetailWhen => 'Fecha';
 
   @override
+  String get agendaDetailCentro => 'Centro';
+
+  @override
+  String get agendaDetailProfesional => 'Profesional';
+
+  @override
+  String get agendaDetailTipo => 'Tipo';
+
+  @override
+  String get agendaDetailDescription => 'Descripción';
+
+  @override
+  String get agendaDetailJustificante => 'Ver justificante de asistencia';
+
+  @override
+  String get agendaJustificanteUnavailable => 'El justificante se podrá abrir cuando se habilite el enlace externo.';
+
+  @override
+  String get agendaTileExpand => 'Ver más detalles';
+
+  @override
+  String get agendaTileCollapse => 'Ocultar detalles';
+
+  @override
+  String get agendaTileOpenDetail => 'Abrir detalle completo';
+
+  @override
+  String get agendaParseErrorTitle => 'No hemos podido leer tu agenda';
+
+  @override
+  String get agendaParseErrorDetail => 'Hubo un problema al interpretar la respuesta del servicio. Vuelve a intentarlo en unos minutos.';
+
+  @override
+  String get agendaParseErrorRetry => 'Intentar de nuevo';
+
+  @override
+  String get agendaPartialBanner => 'Algunos eventos no se han podido cargar. Mostramos los disponibles.';
+
+  @override
   String get stateAffairsTitle => 'Estado y otros temas de interés';
 
   @override
@@ -718,6 +757,391 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
 
   @override
+  String get supportFormTitle => 'Soporte técnico';
+
+  @override
+  String get supportFormIntro => 'Cuéntanos qué ha pasado. Nuestro equipo te responderá por correo electrónico.';
+
+  @override
+  String get supportCtaFromHelp => 'Contactar con soporte';
+
+  @override
+  String get supportFieldName => 'Nombre';
+
+  @override
+  String get supportFieldEmail => 'Correo electrónico';
+
+  @override
+  String get supportFieldEmailConfirm => 'Confirmación del correo electrónico';
+
+  @override
+  String get supportFieldSubject => 'Asunto';
+
+  @override
+  String get supportFieldDescription => 'Descripción';
+
+  @override
+  String get supportAttachmentLabel => 'Adjunto (opcional)';
+
+  @override
+  String get supportAttachmentHint => 'Puedes adjuntar un único archivo (capturas, documentos).';
+
+  @override
+  String get supportAttachmentPick => 'Seleccionar archivo';
+
+  @override
+  String get supportAttachmentChange => 'Cambiar archivo';
+
+  @override
+  String get supportAttachmentRemove => 'Quitar adjunto';
+
+  @override
+  String get supportConsentLabel => 'Autorizo el tratamiento de mis datos para gestionar mi solicitud.';
+
+  @override
+  String get supportCaptchaLabel => 'No soy un robot';
+
+  @override
+  String get supportCaptchaMockBadge => 'MOCK';
+
+  @override
+  String get supportSubmitButton => 'Enviar solicitud';
+
+  @override
+  String get supportConfirmationTitle => 'Solicitud enviada';
+
+  @override
+  String get supportConfirmationMessage => 'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.';
+
+  @override
+  String get supportConfirmationNewRequest => 'Enviar otra solicitud';
+
+  @override
+  String get supportSubmissionError => 'No hemos podido enviar tu solicitud. Inténtalo de nuevo.';
+
+  @override
+  String get supportErrorNameRequired => 'Indica tu nombre.';
+
+  @override
+  String get supportErrorEmailRequired => 'Indica tu correo electrónico.';
+
+  @override
+  String get supportErrorEmailInvalid => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get supportErrorEmailConfirmRequired => 'Confirma tu correo electrónico.';
+
+  @override
+  String get supportErrorEmailMismatch => 'Los correos no coinciden.';
+
+  @override
+  String get supportErrorSubjectRequired => 'Indica un asunto.';
+
+  @override
+  String get supportErrorSubjectTooLong => 'El asunto no puede superar los 100 caracteres.';
+
+  @override
+  String get supportErrorDescriptionRequired => 'Describe tu solicitud.';
+
+  @override
+  String get supportErrorDescriptionTooLong => 'La descripción supera el límite permitido.';
+
+  @override
+  String get supportErrorConsentRequired => 'Debes autorizar el tratamiento de tus datos.';
+
+  @override
+  String get supportErrorCaptchaRequired => 'Confirma que no eres un robot.';
+
+  @override
+  String get cipCardTitle => 'Tarjeta sanitaria (CIP)';
+
+  @override
+  String get cipCardCopyTooltip => 'Copiar CIP';
+
+  @override
+  String get cipCardCopied => 'CIP copiado al portapapeles';
+
+  @override
+  String get cipCardReadOnlySubtitle => 'Sólo lectura — la tarjeta sanitaria no es descargable desde la app.';
+
+  @override
+  String get cipCardContractGap => 'Otras capacidades de salud (consultas, recetas) están sujetas a confirmación de contrato.';
+
+  @override
+  String get cipCardEmpty => 'Aún no hay tarjeta sanitaria asociada a tu perfil.';
+
+  @override
+  String get cipCardError => 'No hemos podido cargar tu tarjeta sanitaria.';
+
+  @override
+  String get cipCardParseError => 'No hemos podido leer la respuesta de la tarjeta sanitaria.';
+
+  @override
+  String get saludSurfaceTitle => 'Salud';
+
+  @override
+  String get saludSurfaceCta => 'Ver agenda';
+
+  @override
+  String get homeUpcomingEventsTitle => 'Próximos eventos';
+
+  @override
+  String get homeUpcomingEventsEmpty => 'No tienes eventos próximos.';
+
+  @override
+  String get caseworkWorkspaceTitle => 'Mis gestiones';
+
+  @override
+  String get caseworkWorkspaceLoadError => 'No hemos podido cargar tus gestiones.';
+
+  @override
+  String get caseworkBreadcrumbHome => 'Inicio';
+
+  @override
+  String get caseworkTabExpedientes => 'Mis expedientes';
+
+  @override
+  String get caseworkTabEntradasRegistro => 'Mis entradas de registro';
+
+  @override
+  String get caseworkTabSalidasRegistro => 'Mis salidas de registro';
+
+  @override
+  String get caseworkExpedientesEmpty => 'No constan expedientes a tu nombre.';
+
+  @override
+  String get caseworkEntradasRegistroEmpty => 'No constan entradas de registro a tu nombre.';
+
+  @override
+  String get caseworkSalidasRegistroEmpty => 'No constan salidas de registro a tu nombre.';
+
+  @override
+  String get caseworkExpedientesError => 'No hemos podido cargar tus expedientes.';
+
+  @override
+  String get caseworkEntradasRegistroError => 'No hemos podido cargar tus entradas de registro.';
+
+  @override
+  String get caseworkSalidasRegistroError => 'No hemos podido cargar tus salidas de registro.';
+
+  @override
+  String get caseworkStatusEnTramite => 'En trámite';
+
+  @override
+  String get caseworkStatusFinalizado => 'Finalizado';
+
+  @override
+  String get caseworkStatusPendiente => 'Pendiente';
+
+  @override
+  String get caseworkStatusRechazado => 'Rechazado';
+
+  @override
+  String caseworkItemDateLabel(String date) {
+    return 'Fecha: $date';
+  }
+
+  @override
+  String get caseworkSearchTitle => 'Buscar expedientes y registros';
+
+  @override
+  String get caseworkSearchOpenCta => 'Buscar expedientes y registros';
+
+  @override
+  String get caseworkSearchIntro => 'Rellena al menos uno de los campos para localizar tu expediente o registro.';
+
+  @override
+  String get caseworkSearchFieldIdentificationLabel => 'NIF / NIE / Pasaporte';
+
+  @override
+  String get caseworkSearchFieldIdentificationHelper => 'Ej.: 12345678Z, X1234567A o pasaporte alfanumérico.';
+
+  @override
+  String get caseworkSearchFieldExpedienteLabel => 'Número de expediente';
+
+  @override
+  String get caseworkSearchFieldExpedienteHelper => 'Ej.: EXP/2025/00123';
+
+  @override
+  String get caseworkSearchFieldRegistroLabel => 'Número de registro';
+
+  @override
+  String get caseworkSearchFieldRegistroHelper => 'Ej.: REG/E/45612';
+
+  @override
+  String get caseworkSearchSubmit => 'Buscar';
+
+  @override
+  String get caseworkSearchAnother => 'Buscar otra cosa';
+
+  @override
+  String get caseworkSearchAportar => 'Aportar documentación al resultado';
+
+  @override
+  String get caseworkSearchAportarPending => 'La aportación documental se habilita en STORY-37 / STORY-38.';
+
+  @override
+  String get caseworkSearchErrorAtLeastOne => 'Introduce al menos uno de los tres campos para buscar.';
+
+  @override
+  String get caseworkSearchErrorInvalidIdentification => 'Formato no válido. Usa NIF (8 dígitos + letra), NIE (X/Y/Z + 7 dígitos + letra) o pasaporte alfanumérico de 6 a 9 caracteres.';
+
+  @override
+  String get caseworkSearchErrorInvalidNumber => 'Formato no válido. Solo letras, números, guiones y barras.';
+
+  @override
+  String get caseworkSearchNoResults => 'Sin coincidencias';
+
+  @override
+  String get caseworkSearchNoResultsHint => 'Revisa los datos introducidos y vuelve a intentarlo.';
+
+  @override
+  String get caseworkSearchError => 'No hemos podido completar la búsqueda. Inténtalo de nuevo.';
+
+  @override
+  String caseworkSearchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count resultados',
+      one: '1 resultado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkExpedienteDetailTitle => 'Detalle del expediente';
+
+  @override
+  String get caseworkExpedienteDetailBack => 'Volver a Mis gestiones';
+
+  @override
+  String get caseworkExpedienteDetailLoading => 'Cargando detalle del expediente…';
+
+  @override
+  String get caseworkExpedienteDetailErrorTitle => 'No hemos podido cargar el expediente.';
+
+  @override
+  String get caseworkExpedienteDetailErrorBody => 'Vuelve a intentarlo en unos minutos.';
+
+  @override
+  String get caseworkExpedienteDetailMetadataTitle => 'Información del expediente';
+
+  @override
+  String get caseworkExpedienteDetailNumero => 'Número de expediente';
+
+  @override
+  String get caseworkExpedienteDetailAsuntoCodigo => 'Código del asunto';
+
+  @override
+  String get caseworkExpedienteDetailAsunto => 'Asunto';
+
+  @override
+  String get caseworkExpedienteDetailConsejeria => 'Consejería';
+
+  @override
+  String get caseworkExpedienteDetailOficina => 'Oficina tramitadora';
+
+  @override
+  String get caseworkExpedienteDetailProcedimiento => 'Procedimiento';
+
+  @override
+  String get caseworkExpedienteDetailFechaInicio => 'Fecha de inicio';
+
+  @override
+  String get caseworkExpedienteDetailFechaActualizacion => 'Última actualización';
+
+  @override
+  String get caseworkExpedienteDetailEstadoLabel => 'Estado';
+
+  @override
+  String get caseworkExpedienteDetailEstadoAbierto => 'Abierto';
+
+  @override
+  String get caseworkExpedienteDetailEstadoCerrado => 'Cerrado';
+
+  @override
+  String get caseworkExpedienteDetailEstadoUnknown => 'Estado desconocido';
+
+  @override
+  String get caseworkExpedienteDetailFilesTitle => 'Ficheros asociados';
+
+  @override
+  String get caseworkExpedienteDetailFilesEmpty => 'No hay ficheros asociados a este expediente.';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadTooltip => 'Descargar fichero';
+
+  @override
+  String get caseworkExpedienteDetailFicheroDownloadStub => 'La descarga del fichero se habilitará en una próxima versión.';
+
+  @override
+  String get caseworkExpedienteDetailOperationsTitle => 'Aportar documentación';
+
+  @override
+  String get caseworkExpedienteDetailClosedBanner => 'Expediente cerrado, no se admiten aportaciones.';
+
+  @override
+  String get digitalCardsPageTitle => 'Mis carnets digitales';
+
+  @override
+  String get digitalCardsTypeFamiliaNumerosa => 'Carnet de familia numerosa';
+
+  @override
+  String get digitalCardsTypeJoven => 'Carnet joven';
+
+  @override
+  String get digitalCardsTypeDiscapacidad => 'Carnet de discapacidad';
+
+  @override
+  String get digitalCardsStatusAvailable => 'Disponible';
+
+  @override
+  String get digitalCardsStatusNotValid => 'No vigente';
+
+  @override
+  String get digitalCardsStatusNotDownloadable => 'No descargable';
+
+  @override
+  String get digitalCardsStatusNotAvailable => 'No disponible';
+
+  @override
+  String get digitalCardsMessageNotValid => 'Este carnet no está vigente. No es posible obtener QR, PKPASS ni PDF.';
+
+  @override
+  String get digitalCardsMessageNotDownloadable => 'Este carnet no es descargable en este momento.';
+
+  @override
+  String get digitalCardsMessageNotAvailable => 'No tienes este carnet disponible.';
+
+  @override
+  String get digitalCardsActionQr => 'Ver QR';
+
+  @override
+  String get digitalCardsActionPkpass => 'Añadir a Wallet';
+
+  @override
+  String get digitalCardsActionPdf => 'Descargar PDF';
+
+  @override
+  String get digitalCardsActionComingSoon => 'Disponible próximamente.';
+
+  @override
+  String get digitalCardsEmptyMessage => 'Aún no tienes carnets digitales asociados.';
+
+  @override
+  String get digitalCardsErrorMessage => 'No hemos podido cargar tus carnets digitales.';
+
+  @override
+  String get digitalCardsCipMiniTitle => 'Tarjeta sanitaria (CIP)';
+
+  @override
+  String get digitalCardsCipMiniReadOnly => 'Sólo lectura';
+
+  @override
+  String get digitalCardsCipMiniOpenAction => 'Ver tarjeta sanitaria';
+
+  @override
   String get lifeEventsTitle => 'Mis hechos vitales';
 
   @override
@@ -833,4 +1257,433 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dataConsentNavCta => 'Mis autorizaciones';
+
+  @override
+  String get caseworkUploadPageTitle => 'Aportar documentación';
+
+  @override
+  String get caseworkUploadPickerCta => 'Adjuntar archivos';
+
+  @override
+  String get caseworkUploadSelectFilesCta => 'Seleccionar archivos';
+
+  @override
+  String get caseworkUploadDropZoneSemantic => 'Zona para arrastrar y soltar archivos. También se pueden seleccionar pulsando.';
+
+  @override
+  String caseworkUploadLimitHint(int maxFiles, int maxMb) {
+    return 'Máximo $maxFiles archivos. Hasta $maxMb MB cada uno.';
+  }
+
+  @override
+  String caseworkUploadRemainingHint(int remaining) {
+    String _temp0 = intl.Intl.pluralLogic(
+      remaining,
+      locale: localeName,
+      other: 'Puedes adjuntar $remaining archivos más.',
+      one: 'Puedes adjuntar 1 archivo más.',
+      zero: 'No puedes adjuntar más archivos.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get caseworkUploadEmptyList => 'Aún no hay archivos adjuntos.';
+
+  @override
+  String get caseworkUploadRemoveFile => 'Quitar archivo';
+
+  @override
+  String get caseworkUploadUploadAllCta => 'Subir todos';
+
+  @override
+  String get caseworkUploadFinalizeCta => 'Finalizar y solicitar justificante';
+
+  @override
+  String get caseworkUploadStatusSelected => 'Seleccionado';
+
+  @override
+  String get caseworkUploadStatusValidating => 'Validando';
+
+  @override
+  String get caseworkUploadStatusHashed => 'Hash calculado';
+
+  @override
+  String get caseworkUploadStatusUploading => 'Subiendo';
+
+  @override
+  String get caseworkUploadStatusUploaded => 'Subido';
+
+  @override
+  String get caseworkUploadStatusFailed => 'Error';
+
+  @override
+  String get caseworkUploadErrorUnsupportedMime => 'Formato no admitido.';
+
+  @override
+  String get caseworkUploadErrorTooLarge => 'El archivo excede el tamaño máximo.';
+
+  @override
+  String get caseworkUploadErrorTooManyFiles => 'Has alcanzado el número máximo de archivos.';
+
+  @override
+  String get caseworkUploadErrorEmptyFile => 'El archivo está vacío.';
+
+  @override
+  String get caseworkUploadErrorHashMismatch => 'La huella del archivo no coincide.';
+
+  @override
+  String get caseworkUploadErrorGeneric => 'Se produjo un error con el archivo.';
+
+  @override
+  String get caseworkUploadJustificantePending => 'El justificante se generará cuando finalices el envío.';
+
+  @override
+  String get caseworkUploadJustificanteUnavailable => 'El justificante todavía no está disponible.';
+
+  @override
+  String caseworkUploadJustificanteUnavailableReason(String reason) {
+    return 'Motivo: $reason';
+  }
+
+  @override
+  String get caseworkUploadJustificanteAvailable => 'Tu justificante está listo.';
+
+  @override
+  String get caseworkUploadJustificanteDownloadCta => 'Descargar justificante';
+
+  @override
+  String get caseworkUploadJustificanteDownloadStub => 'La descarga del justificante se habilitará cuando el backend confirme el formato.';
+
+  @override
+  String get caseworkRegistroDetailTitleEntrada => 'Detalle de entrada de registro';
+
+  @override
+  String get caseworkRegistroDetailTitleSalida => 'Detalle de salida de registro';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbHome => 'Inicio';
+
+  @override
+  String get caseworkRegistroDetailBreadcrumbCasework => 'Mis gestiones';
+
+  @override
+  String get caseworkRegistroDetailKindEntrada => 'Entradas de registro';
+
+  @override
+  String get caseworkRegistroDetailKindSalida => 'Salidas de registro';
+
+  @override
+  String get caseworkRegistroDetailBackToList => 'Volver al listado';
+
+  @override
+  String get caseworkRegistroDetailLoadError => 'No hemos podido cargar el detalle del registro.';
+
+  @override
+  String get caseworkRegistroDetailFieldNumero => 'Número de registro';
+
+  @override
+  String get caseworkRegistroDetailFieldFecha => 'Fecha';
+
+  @override
+  String get caseworkRegistroDetailFieldConsejeria => 'Consejería destino';
+
+  @override
+  String get caseworkRegistroDetailFieldOficina => 'Oficina de registro';
+
+  @override
+  String get caseworkRegistroDetailFieldAsunto => 'Asunto';
+
+  @override
+  String get caseworkRegistroDetailFieldObservaciones => 'Observaciones';
+
+  @override
+  String get caseworkRegistroDetailFicherosTitle => 'Documentación adjunta';
+
+  @override
+  String get caseworkRegistroDetailFicherosEmpty => 'Este registro no incluye ficheros adjuntos.';
+
+  @override
+  String get caseworkRegistroDetailReadOnlyBanner => 'Esta pantalla muestra el detalle del registro en modo consulta. No es posible aportar documentación desde aquí.';
+
+  @override
+  String get caseworkAportacionOpenCta => 'Aportar documentación';
+
+  @override
+  String get caseworkAportacionTitle => 'Aportación de documentos';
+
+  @override
+  String get caseworkAportacionBreadcrumb => 'Aportación';
+
+  @override
+  String get caseworkAportacionBack => 'Paso anterior';
+
+  @override
+  String get caseworkAportacionExit => 'Salir del flujo';
+
+  @override
+  String caseworkAportacionStepIndicator(int current, int total) {
+    return 'Paso $current de $total';
+  }
+
+  @override
+  String get caseworkAportacionStepIntro => 'Introducción';
+
+  @override
+  String get caseworkAportacionStepIdentificacion => 'Identificación';
+
+  @override
+  String get caseworkAportacionStepSearch => 'Búsqueda';
+
+  @override
+  String get caseworkAportacionStepDetail => 'Detalle';
+
+  @override
+  String get caseworkAportacionStepComplete => 'Confirmación';
+
+  @override
+  String get caseworkAportacionIntroHeadline => 'Aporta documentación a un expediente';
+
+  @override
+  String get caseworkAportacionIntroBody => 'Este flujo te permite aportar documentación adicional a un expediente abierto en nombre de la persona interesada. Identifícate, localiza el expediente y adjunta los ficheros.';
+
+  @override
+  String get caseworkAportacionIntroRestrictionsTitle => 'Antes de continuar';
+
+  @override
+  String get caseworkAportacionIntroRestriction1 => 'Solo puedes aportar documentación a expedientes que estén abiertos.';
+
+  @override
+  String get caseworkAportacionIntroRestriction2 => 'Necesitas el número de expediente o el número de registro asociado.';
+
+  @override
+  String get caseworkAportacionIntroRestriction3 => 'Los ficheros aportados quedan vinculados a la persona interesada que indiques.';
+
+  @override
+  String get caseworkAportacionIntroContinueCta => 'Continuar';
+
+  @override
+  String get caseworkAportacionIdentificationHeadline => 'Identifica al interesado';
+
+  @override
+  String get caseworkAportacionIdentificationBody => 'Indica el tipo y número de documento de la persona titular del expediente.';
+
+  @override
+  String get caseworkAportacionIdentificationTypeLabel => 'Tipo de documento';
+
+  @override
+  String get caseworkAportacionIdentificationTypeNif => 'NIF';
+
+  @override
+  String get caseworkAportacionIdentificationTypeNie => 'NIE';
+
+  @override
+  String get caseworkAportacionIdentificationTypePassport => 'Pasaporte';
+
+  @override
+  String get caseworkAportacionIdentificationTypeCif => 'CIF';
+
+  @override
+  String get caseworkAportacionIdentificationNumberLabel => 'Número de documento';
+
+  @override
+  String get caseworkAportacionIdentificationNumberHint => 'Ej. 12345678A';
+
+  @override
+  String get caseworkAportacionIdentificationNextCta => 'Siguiente';
+
+  @override
+  String get caseworkAportacionSearchHeadline => 'Localiza el expediente';
+
+  @override
+  String get caseworkAportacionSearchBody => 'Busca por número de expediente o número de registro asociado.';
+
+  @override
+  String get caseworkAportacionSearchTabExpediente => 'Por nº de expediente';
+
+  @override
+  String get caseworkAportacionSearchTabRegistro => 'Por nº de registro';
+
+  @override
+  String get caseworkAportacionSearchExpedienteLabel => 'Número de expediente';
+
+  @override
+  String get caseworkAportacionSearchExpedienteHint => 'Ej. EXP/2025/00123';
+
+  @override
+  String get caseworkAportacionSearchRegistroLabel => 'Número de registro';
+
+  @override
+  String get caseworkAportacionSearchRegistroHint => 'Ej. REG/E/45612';
+
+  @override
+  String get caseworkAportacionSearchSubmitCta => 'Buscar';
+
+  @override
+  String get caseworkAportacionFailureInvalidIdentification => 'El número de documento no es válido para el tipo seleccionado.';
+
+  @override
+  String get caseworkAportacionFailureNotFound => 'No hemos encontrado ningún expediente con esos datos.';
+
+  @override
+  String get caseworkAportacionFailureNetworkError => 'No hemos podido completar la búsqueda. Inténtalo de nuevo más tarde.';
+
+  @override
+  String get caseworkAportacionCompleteHeadline => 'Aportación enviada';
+
+  @override
+  String caseworkAportacionCompleteBody(String expediente) {
+    return 'La documentación se ha aportado correctamente al expediente $expediente. Conserva el justificante por si necesitas consultarlo.';
+  }
+
+  @override
+  String get caseworkAportacionCompleteHomeCta => 'Volver a Mis gestiones';
+
+  @override
+  String get notificationsCenterTitle => 'Mis notificaciones';
+
+  @override
+  String get notificationsLoading => 'Cargando notificaciones…';
+
+  @override
+  String get notificationsErrorMessage => 'No hemos podido cargar tus notificaciones.';
+
+  @override
+  String get notificationsLoadMoreError => 'No hemos podido cargar más notificaciones. Inténtalo de nuevo.';
+
+  @override
+  String get notificationsEmptyTitle => 'No hay notificaciones';
+
+  @override
+  String get notificationsEmptySubtitle => 'No hemos encontrado notificaciones para los filtros aplicados.';
+
+  @override
+  String get notificationsFilterAll => 'Todas';
+
+  @override
+  String get notificationsItemHasDocuments => 'Documentos asociados';
+
+  @override
+  String notificationsPaginationFooter(int loaded, int total) {
+    return 'Mostrando $loaded de $total';
+  }
+
+  @override
+  String get notificationStatusPendiente => 'Pendiente';
+
+  @override
+  String get notificationStatusAceptada => 'Aceptada';
+
+  @override
+  String get notificationStatusRechazada => 'Rechazada';
+
+  @override
+  String get notificationStatusCaducada => 'Caducada';
+
+  @override
+  String get notificationStatusUnknown => 'Sin clasificar';
+
+  @override
+  String get notificationDetailPlaceholderTitle => 'Detalle de notificación';
+
+  @override
+  String notificationDetailPlaceholderBody(String id) {
+    return 'Notificación $id';
+  }
+
+  @override
+  String get notificationDetailPlaceholderPending => 'Detalle pendiente de habilitar en STORY-44.';
+
+  @override
+  String get notificationContactPageTitle => 'Datos de contacto';
+
+  @override
+  String get notificationContactExplanation => 'Necesitamos un teléfono móvil o un correo electrónico para avisarte de las notificaciones electrónicas que recibas. Solo usaremos estos datos para enviarte avisos relacionados con tus notificaciones.';
+
+  @override
+  String get notificationContactPhoneLabel => 'Teléfono móvil';
+
+  @override
+  String get notificationContactPhoneHint => '600 123 456';
+
+  @override
+  String get notificationContactPhoneHelper => 'Indica un número con prefijo internacional si no es de España.';
+
+  @override
+  String get notificationContactEmailLabel => 'Correo electrónico';
+
+  @override
+  String get notificationContactEmailHint => 'ejemplo@correo.com';
+
+  @override
+  String get notificationContactEmailHelper => 'Usaremos este correo solo para avisos de notificaciones.';
+
+  @override
+  String get notificationContactSubmitCta => 'Registrar';
+
+  @override
+  String get notificationContactLoading => 'Cargando datos de contacto…';
+
+  @override
+  String get notificationContactErrorLoading => 'No hemos podido cargar tus datos de contacto.';
+
+  @override
+  String get notificationContactErrorPhoneInvalid => 'Introduce un teléfono móvil válido.';
+
+  @override
+  String get notificationContactErrorEmailInvalid => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get notificationContactErrorBothEmpty => 'Indica al menos un teléfono móvil o un correo electrónico.';
+
+  @override
+  String get notificationContactSuccessMessage => 'Tus datos de contacto se han registrado correctamente.';
+
+  @override
+  String get notificationContactGateBannerMessage => 'Configura tus datos de contacto para recibir notificaciones.';
+
+  @override
+  String get notificationContactGateBannerCta => 'Configurar ahora';
+
+  @override
+  String get walletActionOpen => 'Abrir';
+
+  @override
+  String get walletActionShare => 'Compartir';
+
+  @override
+  String get walletActionAddToWallet => 'Añadir a Wallet';
+
+  @override
+  String get walletPreviewPdfPlaceholder => 'Documento PDF';
+
+  @override
+  String get walletPreviewPkpassPlaceholder => 'Pase para Wallet';
+
+  @override
+  String get walletPreviewQrUnavailable => 'Vista previa del QR no disponible';
+
+  @override
+  String get walletPreviewQrImageSemantic => 'Imagen del código QR';
+
+  @override
+  String get walletPreviewQrTextSemantic => 'Contenido del código QR en texto';
+
+  @override
+  String get walletErrorInvalidArtifact => 'El archivo recibido no es válido. Inténtalo de nuevo.';
+
+  @override
+  String get walletErrorSystem => 'No hemos podido completar la acción. Inténtalo de nuevo.';
+
+  @override
+  String get walletErrorNoCapability => 'Esta acción no está disponible en tu dispositivo.';
+
+  @override
+  String get walletErrorEmptyPayload => 'El archivo está vacío.';
+
+  @override
+  String get walletErrorTooLarge => 'El archivo supera el tamaño permitido.';
+
+  @override
+  String get walletErrorUnsupportedSource => 'El formato recibido no es compatible.';
 }

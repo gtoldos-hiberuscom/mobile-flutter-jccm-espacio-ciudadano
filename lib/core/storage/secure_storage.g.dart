@@ -19,9 +19,7 @@ const secureStorageProvider = SecureStorageProvider._();
 ///
 /// Kept alive for the lifetime of the app — tokens must always be reachable.
 
-final class SecureStorageProvider
-    extends $FunctionalProvider<SecureStorage, SecureStorage, SecureStorage>
-    with $Provider<SecureStorage> {
+final class SecureStorageProvider extends $FunctionalProvider<SecureStorage, SecureStorage, SecureStorage> with $Provider<SecureStorage> {
   /// Riverpod provider that exposes a singleton [SecureStorage] instance.
   ///
   /// Kept alive for the lifetime of the app — tokens must always be reachable.
@@ -41,8 +39,7 @@ final class SecureStorageProvider
 
   @$internal
   @override
-  $ProviderElement<SecureStorage> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<SecureStorage> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   SecureStorage create(Ref ref) {

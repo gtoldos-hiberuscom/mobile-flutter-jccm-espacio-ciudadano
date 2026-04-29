@@ -28,14 +28,7 @@ final class HelpGuide {
   final String? externalLinkId;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is HelpGuide &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          titleKey == other.titleKey &&
-          bodyKey == other.bodyKey &&
-          externalLinkId == other.externalLinkId;
+  bool operator ==(final Object other) => identical(this, other) || other is HelpGuide && runtimeType == other.runtimeType && id == other.id && titleKey == other.titleKey && bodyKey == other.bodyKey && externalLinkId == other.externalLinkId;
 
   @override
   int get hashCode => Object.hash(id, titleKey, bodyKey, externalLinkId);

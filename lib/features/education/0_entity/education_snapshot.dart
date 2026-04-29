@@ -7,17 +7,13 @@ enum EducationSectionStatus { loading, loaded, empty, error }
 final class EducationSection<T> {
   const EducationSection({required this.status, this.value});
 
-  factory EducationSection.loading() =>
-      const EducationSection(status: EducationSectionStatus.loading);
+  factory EducationSection.loading() => const EducationSection(status: EducationSectionStatus.loading);
 
-  factory EducationSection.loaded(final T value) =>
-      EducationSection<T>(status: EducationSectionStatus.loaded, value: value);
+  factory EducationSection.loaded(final T value) => EducationSection<T>(status: EducationSectionStatus.loaded, value: value);
 
-  factory EducationSection.empty() =>
-      const EducationSection(status: EducationSectionStatus.empty);
+  factory EducationSection.empty() => const EducationSection(status: EducationSectionStatus.empty);
 
-  factory EducationSection.error() =>
-      const EducationSection(status: EducationSectionStatus.error);
+  factory EducationSection.error() => const EducationSection(status: EducationSectionStatus.error);
 
   final EducationSectionStatus status;
   final T? value;

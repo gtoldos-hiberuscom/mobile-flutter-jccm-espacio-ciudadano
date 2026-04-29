@@ -36,19 +36,11 @@ final class ExternalLink {
   final ExternalLinkCategory category;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is ExternalLink &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          displayKey == other.displayKey &&
-          url == other.url &&
-          category == other.category;
+  bool operator ==(final Object other) => identical(this, other) || other is ExternalLink && runtimeType == other.runtimeType && id == other.id && displayKey == other.displayKey && url == other.url && category == other.category;
 
   @override
   int get hashCode => Object.hash(id, displayKey, url, category);
 
   @override
-  String toString() =>
-      'ExternalLink(id: $id, category: $category, host: ${url.host})';
+  String toString() => 'ExternalLink(id: $id, category: $category, host: ${url.host})';
 }

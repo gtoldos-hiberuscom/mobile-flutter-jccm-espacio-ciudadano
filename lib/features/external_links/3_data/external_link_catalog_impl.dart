@@ -76,10 +76,9 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
   List<ExternalLink> all() => List<ExternalLink>.unmodifiable(_entries);
 
   @override
-  List<ExternalLink> byCategory(final ExternalLinkCategory category) =>
-      List<ExternalLink>.unmodifiable(
-        _entries.where((final ExternalLink e) => e.category == category),
-      );
+  List<ExternalLink> byCategory(final ExternalLinkCategory category) => List<ExternalLink>.unmodifiable(
+    _entries.where((final ExternalLink e) => e.category == category),
+  );
 
   @override
   ExternalLink? findById(final String id) {

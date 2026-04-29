@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/auth.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/landing_content_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/landing_access_step.dart';
@@ -69,8 +69,7 @@ class LandingPage extends ConsumerWidget {
                   crossAxisSpacing: AppDimensions.space12,
                   childAspectRatio: 0.9,
                 ),
-                itemBuilder: (final context, final index) =>
-                    LandingFeatureCard(item: content.features[index]),
+                itemBuilder: (final context, final index) => LandingFeatureCard(item: content.features[index]),
               ),
               const SizedBox(height: AppDimensions.space40),
 
@@ -95,7 +94,13 @@ class LandingPage extends ConsumerWidget {
               AppButton(
                 label: l10n.landingCtaButton,
                 semanticsLabel: l10n.landingCtaButton,
-                onPressed: () => context.go(Routes.login),
+                onPressed: () async {
+                  final AuthSession session = await ref.read(loginUseCaseProvider)();
+                  print('Login successful: $session'); // TODO: remove after testing
+
+                  //go to sitemap page
+                  ref.read(goRouterProvider).go('/sitemap');
+                },
               ),
               const SizedBox(height: AppDimensions.space40),
 
@@ -135,8 +140,7 @@ class _HeroSection extends StatelessWidget {
             height: 96,
             decoration: BoxDecoration(
               color: AppColors.primaryContainer,
-              borderRadius:
-                  BorderRadius.circular(AppDimensions.radiusXLarge),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXLarge),
             ),
             child: const Icon(
               Icons.account_balance_outlined,
@@ -214,9 +218,9 @@ class _FooterLink extends StatelessWidget {
           child: Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.primary,
-                  decoration: TextDecoration.underline,
-                ),
+              color: AppColors.primary,
+              decoration: TextDecoration.underline,
+            ),
           ),
         ),
       ),
