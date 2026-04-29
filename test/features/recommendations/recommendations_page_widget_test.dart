@@ -131,7 +131,7 @@ void main() {
     expect(find.text('Recent entry'), findsOneWidget);
   });
 
-  testWidgets('renders the empty placeholder when a bucket has no items', (
+  testWidgets('renders the configured-but-empty variant when a bucket has no items', (
     final tester,
   ) async {
     final repo = _FakeRepo(
@@ -147,9 +147,6 @@ void main() {
 
     await tester.pumpWidget(_wrap(const RecommendationsPage(), repo));
     await tester.pumpAndSettle();
-    expect(
-      find.text('No hay recomendaciones disponibles para este filtro.'),
-      findsWidgets,
-    );
+    expect(find.text('Todo listo, sin novedades por ahora'), findsOneWidget);
   });
 }

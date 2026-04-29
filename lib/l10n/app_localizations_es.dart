@@ -1718,7 +1718,37 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsLoadMore => 'Ver más';
 
   @override
-  String get recommendationsEmptyBucket => 'No hay recomendaciones disponibles para este filtro.';
+  String get recommendationsEmptyUnconfiguredTitle => 'Aún no tienes recomendaciones personalizadas';
+
+  @override
+  String get recommendationsEmptyUnconfiguredBody => 'Cuéntanos en qué momento vital estás para sugerirte trámites y servicios relevantes.';
+
+  @override
+  String get recommendationsEmptyUnconfiguredPrimaryCta => 'Configurar mis preferencias';
+
+  @override
+  String get recommendationsEmptyUnconfiguredSecondaryCta => 'Ver mis hechos vitales';
+
+  @override
+  String get recommendationsEmptyUnauthorisedTitle => 'Falta autorizar tus preferencias';
+
+  @override
+  String get recommendationsEmptyUnauthorisedBody => 'Para mostrarte recomendaciones personalizadas necesitamos tu autorización para tratar tus datos.';
+
+  @override
+  String get recommendationsEmptyUnauthorisedPrimaryCta => 'Revisar consentimientos';
+
+  @override
+  String get recommendationsEmptyConfiguredTitle => 'Todo listo, sin novedades por ahora';
+
+  @override
+  String get recommendationsEmptyConfiguredBody => 'Cuando tengamos nuevas recomendaciones para ti las verás aquí. Prueba con otros filtros mientras tanto.';
+
+  @override
+  String get recommendationsEmptyConfiguredSecondaryCta => 'Ver todos';
+
+  @override
+  String get recommendationsLifeEventsComingSoon => 'Mis hechos vitales estará disponible próximamente';
 
   @override
   String get recommendationsLoadingError => 'No hemos podido cargar las recomendaciones.';
