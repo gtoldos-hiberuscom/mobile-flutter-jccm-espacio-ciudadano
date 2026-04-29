@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-29T14:34:17+00:00
+updated_at: 2026-08-25T12:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -77,3 +77,15 @@ Fijar y comprobar umbrales razonables de rendimiento para startup, listados, doc
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 (SP-EC-APP-SQ3-07): To Do → In Progress → Done on `task/EPIC-10-quality-release/TASK-70-performance/budgets-and-harness`. Added `documentation/qa/performance-budgets.md` (TTI, widget-build, scroll FPS, document UX, image cache budgets with rationale and Sprint 8/9 follow-ups), `test/performance/page_build_budgets_test.dart` (LandingPage first-build budget = 150 ms; tagged `performance` and skipped from default `flutter test` via new `dart_test.yaml`). RecommendationsPage and CaseworkWorkspace harness deferred to Sprint 8 closure (override matrix complexity), explicitly documented in the perf doc. Status → Done.
+
+### Sprint 8 closure
+- 2026-08-25T12:00:00+02:00 | by plan-manager | Sprint 8 (SP-EC-APP-SQ3-08) closure: Performance budgets verified on UAT candidate.
+  - Branches: `task/EPIC-10-quality-release/TASK-70-performance/sprint8-performance-verification` (commit `c00c4c0`) → `ticket/EPIC-10-quality-release/TASK-70-performance` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence:
+    - Report: `documentation/qa/TASK-70-performance-verification-sprint8.md` (env, budgets, results, regressions, recommendations).
+    - `RELEASES.md` — performance verification log entry per environment.
+    - Harness invocation: `flutter test --tags performance --run-skipped` → +1 ~0 -0 (PASS). LandingPage first-build budget ≤150 ms held.
+    - Default `flutter test` baseline preserved (440 + 1 perf skip).
+    - Sprint-9 carryovers (recommendations only, no tickets): extend harness to RecommendationsPage and CaseworkWorkspacePage; add CI-runner-pinned budget; profile-mode device TTI; align performance-budgets.md invocation snippet with `--run-skipped` requirement.
+  - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. Default `flutter test` 440 + 1 skip preserved.
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.
