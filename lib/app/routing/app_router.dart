@@ -127,6 +127,12 @@ final goRouterProvider = Provider<GoRouter>(
                 final Widget child,
               ) => AppScaffold(child: child),
           routes: [
+            // Sprint 9 / STORY-22 carry-over: Routes.home is referenced by sitemap, consent and the bottom-nav but the home page itself is not implemented (see documentation/qa/STORY-22-home-route-investigation.md). Until a real LoggedHomePage lands, /home redirects to /sitemap to avoid the NotFoundScreen.
+            GoRoute(
+              path: Routes.home,
+              redirect: (final BuildContext context, final GoRouterState state) => Routes.sitemap,
+            ),
+
             // ── Thematic landings (placeholder until STORY-23/24/25/26) ────
             GoRoute(
               path: Routes.education,
