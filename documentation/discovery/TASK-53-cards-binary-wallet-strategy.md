@@ -257,3 +257,12 @@ will own. STORIES 49–51 may proceed in implementation against the matrix
 above; STORY-52 owns the shared wallet pipeline. Real-sample validation and
 the open backend questions remain to be closed before any of those stories
 exit Sprint 5.
+
+## Sprint 7 closure annotation
+
+Reviewed during Sprint 7 (SP-EC-APP-SQ2-07) under STORY-67 QA-as-code.
+No new defects surfaced that contradict the strategy recorded above.
+The decision matrix in this document remains the authoritative input
+for the corresponding implementation ticket; outstanding items stay
+parked on their owner sprint per the roadmap and are not escalated to
+new tickets at this point.
