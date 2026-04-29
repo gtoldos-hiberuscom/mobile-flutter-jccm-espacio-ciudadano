@@ -2,12 +2,12 @@
 id: 70
 jira_key:
 type: Task
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 7
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T14:34:17+00:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Fijar y comprobar umbrales razonables de rendimiento para startup, listados, documentos y rebuilds críticos, dejando trazadas métricas y validaciones necesarias antes de release.
 
 ## Acceptance Criteria
-- [ ] Se definen objetivos de startup, carga de pantallas críticas y scrolling.
-- [ ] Se contemplan impactos de documentos binarios, listas paginadas y parsing costoso.
-- [ ] Se contemplan medidas para minimizar rebuilds y operaciones costosas en UI.
-- [ ] Se dejan trazadas validaciones o métricas necesarias antes de release.
+- [x] Se definen objetivos de startup, carga de pantallas críticas y scrolling.
+- [x] Se contemplan impactos de documentos binarios, listas paginadas y parsing costoso.
+- [x] Se contemplan medidas para minimizar rebuilds y operaciones costosas en UI.
+- [x] Se dejan trazadas validaciones o métricas necesarias antes de release.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -76,3 +76,4 @@ Fijar y comprobar umbrales razonables de rendimiento para startup, listados, doc
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 (SP-EC-APP-SQ3-07): To Do → In Progress → Done on `task/EPIC-10-quality-release/TASK-70-performance/budgets-and-harness`. Added `documentation/qa/performance-budgets.md` (TTI, widget-build, scroll FPS, document UX, image cache budgets with rationale and Sprint 8/9 follow-ups), `test/performance/page_build_budgets_test.dart` (LandingPage first-build budget = 150 ms; tagged `performance` and skipped from default `flutter test` via new `dart_test.yaml`). RecommendationsPage and CaseworkWorkspace harness deferred to Sprint 8 closure (override matrix complexity), explicitly documented in the perf doc. Status → Done.
