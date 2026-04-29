@@ -1685,4 +1685,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletErrorUnsupportedSource => 'The received format is not supported.';
+
+  @override
+  String get familiaNumerosaDetailTitle => 'Large family card';
+
+  @override
+  String familiaNumerosaCardNumberLabel(String number) {
+    return 'Card number: $number';
+  }
+
+  @override
+  String get familiaNumerosaCategoriaGeneral => 'General';
+
+  @override
+  String get familiaNumerosaCategoriaEspecial => 'Special';
+
+  @override
+  String get familiaNumerosaCategoriaUnknown => 'Unclassified';
+
+  @override
+  String familiaNumerosaExpiresOn(String date) {
+    return 'Expires on $date';
+  }
+
+  @override
+  String get familiaNumerosaMembersTitle => 'Card members';
+
+  @override
+  String get familiaNumerosaMemberFallbackName => 'No name';
+
+  @override
+  String get familiaNumerosaParentescoTitular => 'Holder';
+
+  @override
+  String get familiaNumerosaParentescoConyuge => 'Spouse';
+
+  @override
+  String get familiaNumerosaParentescoHijo => 'Son';
+
+  @override
+  String get familiaNumerosaParentescoHija => 'Daughter';
+
+  @override
+  String get familiaNumerosaParentescoOtro => 'Other';
+
+  @override
+  String get familiaNumerosaUnavailableTitle => 'Card not available';
+
+  @override
+  String get familiaNumerosaUnavailableMessage => 'Your large-family card is not valid or could not be retrieved.';
+
+  @override
+  String get familiaNumerosaErrorMessage => 'Your large-family card could not be loaded.';
+
+  @override
+  String get familiaNumerosaRetry => 'Retry';
 }

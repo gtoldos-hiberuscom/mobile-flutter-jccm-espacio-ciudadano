@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_cards_catalog.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/digital_cards_catalog_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/widgets/cip_read_only_mini_card.dart';
@@ -38,9 +41,28 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
         data: (final DigitalCardsCatalog catalog) => _CatalogBody(
           catalog: catalog,
           onAction: (final cardId, final action) => _showStubActionSnackbar(context, l10n),
+          onCardTap: (final card) => _handleCardTap(context, card),
         ),
       ),
     );
+  }
+
+  /// Routes the citizen to the per-card detail page when one exists.
+  ///
+  /// Sprint 5 ships only `DigitalCardType.familiaNumerosa` (STORY-49).
+  /// Sibling stories own the missing detail screens — we leave the
+  /// fallback snackbar in place so the user always gets feedback.
+  static void _handleCardTap(final BuildContext context, final DigitalCard card) {
+    switch (card.type) {
+      case DigitalCardType.familiaNumerosa:
+        context.go(Routes.cardFamiliaNumerosaDetail);
+      case DigitalCardType.joven:
+        // TODO(STORY-50): navigate to the carnet joven detail page.
+        _showStubActionSnackbar(context, AppLocalizations.of(context));
+      case DigitalCardType.discapacidad:
+        // TODO(STORY-51): navigate to the carnet discapacidad detail page.
+        _showStubActionSnackbar(context, AppLocalizations.of(context));
+    }
   }
 
   static void _showStubActionSnackbar(
@@ -57,10 +79,15 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
 }
 
 class _CatalogBody extends StatelessWidget {
-  const _CatalogBody({required this.catalog, required this.onAction});
+  const _CatalogBody({
+    required this.catalog,
+    required this.onAction,
+    required this.onCardTap,
+  });
 
   final DigitalCardsCatalog catalog;
   final void Function(String cardId, DigitalCardAction action) onAction;
+  final void Function(DigitalCard card) onCardTap;
 
   @override
   Widget build(final BuildContext context) {
@@ -82,6 +109,7 @@ class _CatalogBody extends StatelessWidget {
           DigitalCardTile(
             card: card,
             onAction: (final action) => onAction(card.id, action),
+            onCardTap: () => onCardTap(card),
           ),
     ];
 

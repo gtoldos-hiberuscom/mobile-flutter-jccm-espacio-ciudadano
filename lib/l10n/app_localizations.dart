@@ -3313,6 +3313,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'El formato recibido no es compatible.'**
   String get walletErrorUnsupportedSource;
+
+  /// Familia numerosa detail page — AppBar title.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de familia numerosa'**
+  String get familiaNumerosaDetailTitle;
+
+  /// Familia numerosa detail page — printed carnet number row.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de carnet: {number}'**
+  String familiaNumerosaCardNumberLabel(String number);
+
+  /// Familia numerosa categoría — general.
+  ///
+  /// In es, this message translates to:
+  /// **'General'**
+  String get familiaNumerosaCategoriaGeneral;
+
+  /// Familia numerosa categoría — especial.
+  ///
+  /// In es, this message translates to:
+  /// **'Especial'**
+  String get familiaNumerosaCategoriaEspecial;
+
+  /// Familia numerosa categoría — desconocida / no proyectada por el backend.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin clasificar'**
+  String get familiaNumerosaCategoriaUnknown;
+
+  /// Familia numerosa detail — expiry date row.
+  ///
+  /// In es, this message translates to:
+  /// **'Caduca el {date}'**
+  String familiaNumerosaExpiresOn(String date);
+
+  /// Familia numerosa detail — members section header.
+  ///
+  /// In es, this message translates to:
+  /// **'Miembros del carnet'**
+  String get familiaNumerosaMembersTitle;
+
+  /// Familia numerosa detail — fallback when a member has no name.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin nombre'**
+  String get familiaNumerosaMemberFallbackName;
+
+  /// Familia numerosa member parentesco — titular.
+  ///
+  /// In es, this message translates to:
+  /// **'Titular'**
+  String get familiaNumerosaParentescoTitular;
+
+  /// Familia numerosa member parentesco — cónyuge.
+  ///
+  /// In es, this message translates to:
+  /// **'Cónyuge'**
+  String get familiaNumerosaParentescoConyuge;
+
+  /// Familia numerosa member parentesco — hijo.
+  ///
+  /// In es, this message translates to:
+  /// **'Hijo'**
+  String get familiaNumerosaParentescoHijo;
+
+  /// Familia numerosa member parentesco — hija.
+  ///
+  /// In es, this message translates to:
+  /// **'Hija'**
+  String get familiaNumerosaParentescoHija;
+
+  /// Familia numerosa member parentesco — otro / sin clasificar.
+  ///
+  /// In es, this message translates to:
+  /// **'Otro'**
+  String get familiaNumerosaParentescoOtro;
+
+  /// Familia numerosa detail — title shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet no disponible'**
+  String get familiaNumerosaUnavailableTitle;
+
+  /// Familia numerosa detail — body shown when the citizen has no vigente carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu carnet de familia numerosa no está vigente o no se ha podido obtener.'**
+  String get familiaNumerosaUnavailableMessage;
+
+  /// Familia numerosa detail — generic error message.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu carnet de familia numerosa.'**
+  String get familiaNumerosaErrorMessage;
+
+  /// Familia numerosa detail — retry button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get familiaNumerosaRetry;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
