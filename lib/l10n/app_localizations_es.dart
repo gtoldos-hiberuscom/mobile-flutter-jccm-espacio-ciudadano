@@ -1775,4 +1775,50 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get jovenModalCloseAction => 'Cerrar';
+
+  @override
+  String get discapacidadDetailTitle => 'Carnet de discapacidad';
+
+  @override
+  String get discapacidadGradoLabel => 'Grado de discapacidad';
+
+  @override
+  String discapacidadGradoBadge(int grado) {
+    return '$grado%';
+  }
+
+  @override
+  String get discapacidadGradoUnknown => 'Grado no disponible';
+
+  @override
+  String discapacidadExpiresOn(String date) {
+    return 'Vigente hasta el $date';
+  }
+
+  @override
+  String get discapacidadValidBadge => 'Vigente';
+
+  @override
+  String get discapacidadNotValidTitle => 'Carnet no vigente';
+
+  @override
+  String get discapacidadNotValidMessage => 'Tu carnet de discapacidad ya no está vigente. No se puede generar el pase para Wallet.';
+
+  @override
+  String get discapacidadUnavailableTitle => 'Sin datos disponibles';
+
+  @override
+  String get discapacidadUnavailableMessage => 'No hemos encontrado información de tu carnet de discapacidad. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get discapacidadParseErrorMessage => 'No se ha podido interpretar la respuesta del carnet de discapacidad.';
+
+  @override
+  String get discapacidadErrorMessage => 'No se ha podido cargar tu carnet de discapacidad.';
+
+  @override
+  String get discapacidadRetry => 'Reintentar';
+
+  @override
+  String get discapacidadActionPkpass => 'Añadir a Wallet';
 }

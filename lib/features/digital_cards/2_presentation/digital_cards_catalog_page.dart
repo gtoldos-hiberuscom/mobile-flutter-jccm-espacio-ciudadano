@@ -68,8 +68,10 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
         //   for the full-page surface from outside the catalogue.
         unawaited(JovenDetailModal.show(context));
       case DigitalCardType.discapacidad:
-        // TODO(STORY-51): navigate to the carnet discapacidad detail page.
-        _showStubActionSnackbar(context, AppLocalizations.of(context));
+        // STORY-51: full-page detail surface (no modal variant — this
+        // carnet only ships PKPass when vigente, no QR/PDF). Mirrors
+        // the navigation pattern used by STORY-49 (familia numerosa).
+        context.go(Routes.cardDiscapacidadDetail);
     }
   }
 
