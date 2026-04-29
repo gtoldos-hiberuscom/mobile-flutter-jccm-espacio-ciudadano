@@ -222,3 +222,12 @@ flag (`kRecommendationsLiveBackendEnabled = false`).
 - A future ticket should track the live wiring of
   `RecommendationsRepository` against the generated Dio client when
   OP-1..OP-4 are resolved.
+
+## Sprint 7 closure annotation
+
+Reviewed during Sprint 7 (SP-EC-APP-SQ2-07) under STORY-67 QA-as-code.
+No new defects surfaced that contradict the strategy recorded above.
+The decision matrix in this document remains the authoritative input
+for the corresponding implementation ticket; outstanding items stay
+parked on their owner sprint per the roadmap and are not escalated to
+new tickets at this point.

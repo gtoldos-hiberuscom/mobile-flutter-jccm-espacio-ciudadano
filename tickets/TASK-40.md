@@ -90,3 +90,4 @@ Cerrar el alcance real de los endpoints de procedimiento y registro presentes en
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-06-17T10:00:00+02:00 | by plan-manager | TASK-40 discovery completed; decision artifact at documentation/discovery/TASK-40-procedimiento-evidence-strategy.md.
+- 2026-04-29T14:34:17+00:00 | by plan-manager | Sprint 7 closure annotation appended to discovery doc under STORY-67 QA-as-code; no decisions revised, no defects, no new tickets opened.

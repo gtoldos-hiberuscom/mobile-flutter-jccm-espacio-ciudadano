@@ -284,3 +284,12 @@ The natural follow-up tickets implied by this discovery are:
    `selectbynif*` vs `misexpedientes`, blocked on Q2.
 3. A `RegistrarFicheroRequest` builder task to lift the justificante
    adapter from `unavailable` to live, blocked on Q3 and Q4.
+
+## Sprint 7 closure annotation
+
+Reviewed during Sprint 7 (SP-EC-APP-SQ2-07) under STORY-67 QA-as-code.
+No new defects surfaced that contradict the strategy recorded above.
+The decision matrix in this document remains the authoritative input
+for the corresponding implementation ticket; outstanding items stay
+parked on their owner sprint per the roadmap and are not escalated to
+new tickets at this point.
