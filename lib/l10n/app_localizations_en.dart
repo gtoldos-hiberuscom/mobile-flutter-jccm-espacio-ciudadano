@@ -1583,15 +1583,128 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationStatusUnknown => 'Unclassified';
 
   @override
-  String get notificationDetailPlaceholderTitle => 'Notification detail';
+  String get notificationDetailTitle => 'Notification detail';
 
   @override
-  String notificationDetailPlaceholderBody(String id) {
-    return 'Notification $id';
+  String get notificationDetailLoading => 'Loading notification…';
+
+  @override
+  String get notificationDetailErrorMessage => 'We couldn\'t load the notification detail.';
+
+  @override
+  String get notificationDetailRetry => 'Retry';
+
+  @override
+  String notificationDetailHeaderOrganismo(String organismo) {
+    return 'Issued by: $organismo';
   }
 
   @override
-  String get notificationDetailPlaceholderPending => 'Detail screen will be enabled in STORY-44.';
+  String notificationDetailHeaderEmittedOn(String date) {
+    return 'Issued on: $date';
+  }
+
+  @override
+  String notificationDetailHeaderExpediente(String ref) {
+    return 'File reference: $ref';
+  }
+
+  @override
+  String notificationDetailHeaderProcedimiento(String procedimiento) {
+    return 'Procedure: $procedimiento';
+  }
+
+  @override
+  String notificationDetailHeaderDeadline(String date) {
+    return 'Decision deadline: $date';
+  }
+
+  @override
+  String get notificationDetailDescriptionTitle => 'Description';
+
+  @override
+  String get notificationDetailAcceptCta => 'Accept';
+
+  @override
+  String get notificationDetailRejectCta => 'Reject';
+
+  @override
+  String get notificationDetailRejectDialogTitle => 'Confirm rejection';
+
+  @override
+  String get notificationDetailRejectDialogBody => 'If you reject this notification, the administration will have a formal record of the rejection and the notification will be considered served. This action is irreversible.';
+
+  @override
+  String get notificationDetailRejectDialogConfirm => 'Reject permanently';
+
+  @override
+  String get notificationDetailRejectDialogCancel => 'Cancel';
+
+  @override
+  String get notificationDetailDecisionAcceptedToast => 'You have accepted the notification.';
+
+  @override
+  String get notificationDetailDecisionRejectedToast => 'You have rejected the notification.';
+
+  @override
+  String get notificationDetailConflictToast => 'This notification can no longer be modified. We have refreshed its status.';
+
+  @override
+  String get notificationDetailDecisionInFlight => 'Submitting your decision…';
+
+  @override
+  String notificationDetailReadOn(String date) {
+    return 'Read on $date';
+  }
+
+  @override
+  String get notificationDetailDocumentsTitle => 'Associated documents';
+
+  @override
+  String get notificationDetailDocumentsEmpty => 'There are no documents associated with this notification.';
+
+  @override
+  String get notificationDetailDocumentDownload => 'Download document';
+
+  @override
+  String get notificationDetailDocumentUnavailableChip => 'Unavailable';
+
+  @override
+  String notificationDetailDocumentSizeKb(num kb) {
+    final intl.NumberFormat kbNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String kbString = kbNumberFormat.format(kb);
+
+    return '$kbString KB';
+  }
+
+  @override
+  String notificationDetailDocumentSizeMb(num mb) {
+    final intl.NumberFormat mbNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String mbString = mbNumberFormat.format(mb);
+
+    return '$mbString MB';
+  }
+
+  @override
+  String get notificationDetailDocumentSizeUnknown => 'Unknown size';
+
+  @override
+  String get notificationDetailDocumentDownloadSuccessToast => 'Document ready';
+
+  @override
+  String get notificationDetailDocumentDownloadUnavailableToast => 'Document not available';
+
+  @override
+  String get notificationDetailDocumentDownloadErrorToast => 'We could not download the document';
+
+  @override
+  String get notificationDetailVariantAceptadaBanner => 'You have accepted this notification. You can consult the associated documents.';
+
+  @override
+  String get notificationDetailVariantRechazadaBanner => 'You have rejected this notification. The rejection acknowledgement is preserved.';
+
+  @override
+  String get notificationDetailVariantCaducadaBanner => 'The decision window for this notification has expired.';
 
   @override
   String get notificationContactPageTitle => 'Contact details';
@@ -1685,4 +1798,104 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletErrorUnsupportedSource => 'The received format is not supported.';
+
+  @override
+  String get signatureInboxTitle => 'Document signing';
+
+  @override
+  String get signatureTabPending => 'Pending';
+
+  @override
+  String get signatureTabHistory => 'History';
+
+  @override
+  String get signatureLoading => 'Loading documents…';
+
+  @override
+  String get signatureEmptyPendingTitle => 'No pending documents';
+
+  @override
+  String get signatureEmptyPendingSubtitle => 'You don\'t have any documents waiting for your signature.';
+
+  @override
+  String get signatureEmptyHistoryTitle => 'You haven\'t signed any documents yet';
+
+  @override
+  String get signatureEmptyHistorySubtitle => 'When you sign a document it will appear here.';
+
+  @override
+  String get signatureErrorMessage => 'We couldn\'t load your documents to sign.';
+
+  @override
+  String get signatureRetry => 'Try again';
+
+  @override
+  String get signatureSignAction => 'Sign';
+
+  @override
+  String get signatureHandoffPendingToast => 'We\'ve taken you to Afirma. Come back here when you\'re done.';
+
+  @override
+  String get signatureHandoffSignedToast => 'Document signed';
+
+  @override
+  String get signatureHandoffCancelledToast => 'You cancelled the signature.';
+
+  @override
+  String get signatureHandoffErrorToast => 'We couldn\'t complete the signature. Please try again.';
+
+  @override
+  String get signatureHandoffLaunchFailedToast => 'We couldn\'t open Afirma. Please try again.';
+
+  @override
+  String get signatureAfirmaReturnTitle => 'Returning from Afirma';
+
+  @override
+  String get signatureAfirmaReturnProcessing => 'Processing signature…';
+
+  @override
+  String get signatureCertificateValidTitle => 'Valid certificate';
+
+  @override
+  String get signatureCertificateMissingTitle => 'You need to install your certificate';
+
+  @override
+  String get signatureCertificateExpiredTitle => 'Your certificate has expired';
+
+  @override
+  String get signatureCertificateInvalidTitle => 'Your certificate is not valid';
+
+  @override
+  String get signatureCertificateVecTitle => 'Available via VEC';
+
+  @override
+  String get signatureCertificateUnknownTitle => 'We couldn\'t validate your certificate';
+
+  @override
+  String get signatureCertificateRecheck => 'Re-validate';
+
+  @override
+  String get signatureStatusPendiente => 'Pending';
+
+  @override
+  String get signatureStatusFirmado => 'Signed';
+
+  @override
+  String get signatureStatusExpirado => 'Expired';
+
+  @override
+  String get signatureStatusError => 'With errors';
+
+  @override
+  String get signatureStatusUnknown => 'Unclassified';
+
+  @override
+  String signatureDocumentSize(String size) {
+    return '$size';
+  }
+
+  @override
+  String signatureCertificateExpiresOn(String date) {
+    return 'Expires on $date';
+  }
 }

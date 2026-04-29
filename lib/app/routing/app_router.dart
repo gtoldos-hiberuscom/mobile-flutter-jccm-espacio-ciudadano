@@ -25,10 +25,12 @@ import 'package:jccm_espacio_ciudadano/features/help/2_presentation/support_form
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
-import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/notification_detail_placeholder_page.dart';
+import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/notification_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/notifications_center_page.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/contact/2_presentation/notification_contact_registration_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/data_consent_page.dart';
+import 'package:jccm_espacio_ciudadano/features/signature/2_presentation/afirma_return_page.dart';
+import 'package:jccm_espacio_ciudadano/features/signature/2_presentation/signature_inbox_page.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
 import 'package:jccm_espacio_ciudadano/features/social_welfare/2_presentation/social_welfare_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/state_affairs/2_presentation/state_affairs_landing_page.dart';
@@ -102,7 +104,8 @@ final goRouterProvider = Provider<GoRouter>(
         // ── Deep-link callbacks ──────────────────────────────────────────────
         GoRoute(
           path: Routes.afirmaReturn,
-          builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPlaceholder(),
+          builder: (final BuildContext context, final GoRouterState state) =>
+              AfirmaReturnPage(returnUri: state.uri),
         ),
 
         // ── Consent ──────────────────────────────────────────────────────────
@@ -200,8 +203,8 @@ final goRouterProvider = Provider<GoRouter>(
                 ),
                 GoRoute(
                   path: ':id',
-                  builder: (final BuildContext context, final GoRouterState state) => NotificationDetailPlaceholderPage(
-                    notificationId: state.pathParameters['id'] ?? '',
+                  builder: (final BuildContext context, final GoRouterState state) => NotificationDetailPage(
+                    notificationId: state.pathParameters['id']!,
                   ),
                 ),
               ],
@@ -209,6 +212,10 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.cards,
               builder: (final BuildContext context, final GoRouterState state) => const DigitalCardsCatalogPage(),
+            ),
+            GoRoute(
+              path: Routes.signatureInbox,
+              builder: (final BuildContext context, final GoRouterState state) => const SignatureInboxPage(),
             ),
             GoRoute(
               path: Routes.profile,
