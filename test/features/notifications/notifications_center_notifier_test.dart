@@ -38,9 +38,7 @@ void main() {
       addTearDown(container.dispose);
       await container.read(notificationsCenterProvider.future);
 
-      await container
-          .read(notificationsCenterProvider.notifier)
-          .setFilters(const <NotificationStatus>{NotificationStatus.pendiente});
+      await container.read(notificationsCenterProvider.notifier).setFilters(const <NotificationStatus>{NotificationStatus.pendiente});
 
       final state = container.read(notificationsCenterProvider).requireValue;
       expect(state.currentPage, 0);
@@ -94,10 +92,12 @@ void main() {
       final container = makeContainer(forceErrorOnPage: 0);
       addTearDown(container.dispose);
 
-      final result = await container.read(notificationsCenterProvider.future).then<Object?>(
-        (final v) => v,
-        onError: (final Object e, final _) => e,
-      );
+      final result = await container
+          .read(notificationsCenterProvider.future)
+          .then<Object?>(
+            (final v) => v,
+            onError: (final Object e, final _) => e,
+          );
       expect(result, isA<StateError>());
     });
   });

@@ -18,16 +18,10 @@ final class NotificationContact {
   final String? email;
 
   /// `true` when the entity holds at least one non-empty channel.
-  bool get hasAnyChannel =>
-      (phoneE164 != null && phoneE164!.trim().isNotEmpty) ||
-      (email != null && email!.trim().isNotEmpty);
+  bool get hasAnyChannel => (phoneE164 != null && phoneE164!.trim().isNotEmpty) || (email != null && email!.trim().isNotEmpty);
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      (other is NotificationContact &&
-          other.phoneE164 == phoneE164 &&
-          other.email == email);
+  bool operator ==(final Object other) => identical(this, other) || (other is NotificationContact && other.phoneE164 == phoneE164 && other.email == email);
 
   @override
   int get hashCode => Object.hash(phoneE164, email);

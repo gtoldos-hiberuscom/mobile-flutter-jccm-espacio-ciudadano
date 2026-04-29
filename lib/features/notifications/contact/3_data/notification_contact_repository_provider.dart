@@ -10,5 +10,4 @@ part 'notification_contact_repository_provider.g.dart';
 /// session. When the real Dio adapter lands, the keepAlive lifetime
 /// will mirror the rest of the notifications data layer.
 @Riverpod(keepAlive: true)
-NotificationContactRepository notificationContactRepository(final Ref ref) =>
-    NotificationContactRepositoryImpl();
+NotificationContactRepository notificationContactRepository(final Ref ref) => NotificationContactRepositoryImpl();

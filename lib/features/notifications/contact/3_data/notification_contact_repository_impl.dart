@@ -17,10 +17,8 @@ import 'package:jccm_espacio_ciudadano/features/notifications/contact/1_domain/n
 // `kNotificationContactLiveBackendEnabled`). The real adapter will
 // likely live behind a new `ContactoApi` operation and reuse the
 // existing Dio composition root.
-final class NotificationContactRepositoryImpl
-    implements NotificationContactRepository {
-  NotificationContactRepositoryImpl({final NotificationContact? seed})
-    : _current = seed;
+final class NotificationContactRepositoryImpl implements NotificationContactRepository {
+  NotificationContactRepositoryImpl({final NotificationContact? seed}) : _current = seed;
 
   NotificationContact? _current;
 

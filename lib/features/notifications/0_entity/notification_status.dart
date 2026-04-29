@@ -13,7 +13,8 @@ enum NotificationStatus {
   aceptada('notificationStatusAceptada'),
   rechazada('notificationStatusRechazada'),
   caducada('notificationStatusCaducada'),
-  unknown('notificationStatusUnknown');
+  unknown('notificationStatusUnknown')
+  ;
 
   const NotificationStatus(this.labelKey);
 

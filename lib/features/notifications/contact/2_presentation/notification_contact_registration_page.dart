@@ -20,12 +20,10 @@ class NotificationContactRegistrationPage extends ConsumerStatefulWidget {
   const NotificationContactRegistrationPage({super.key});
 
   @override
-  ConsumerState<NotificationContactRegistrationPage> createState() =>
-      _NotificationContactRegistrationPageState();
+  ConsumerState<NotificationContactRegistrationPage> createState() => _NotificationContactRegistrationPageState();
 }
 
-class _NotificationContactRegistrationPageState
-    extends ConsumerState<NotificationContactRegistrationPage> {
+class _NotificationContactRegistrationPageState extends ConsumerState<NotificationContactRegistrationPage> {
   bool _isSubmitting = false;
 
   Future<void> _handleSubmit({final String? phone, final String? email}) async {
@@ -37,9 +35,7 @@ class _NotificationContactRegistrationPageState
     final router = GoRouter.of(context);
     setState(() => _isSubmitting = true);
     try {
-      await ref
-          .read(notificationContactProvider.notifier)
-          .register(phone: phone, email: email);
+      await ref.read(notificationContactProvider.notifier).register(phone: phone, email: email);
       if (!mounted) {
         return;
       }
@@ -96,8 +92,7 @@ class _NotificationContactRegistrationPageState
         loading: () => LoadingStateWidget(message: l10n.notificationContactLoading),
         error: (final error, final _) => ErrorStateWidget(
           message: l10n.notificationContactErrorLoading,
-          onRetry: () =>
-              ref.invalidate(notificationContactProvider),
+          onRetry: () => ref.invalidate(notificationContactProvider),
         ),
         data: (final current) => SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.space16),

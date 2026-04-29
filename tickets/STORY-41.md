@@ -7,7 +7,7 @@ priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint: 5
+sprint: Sprint 5
 reporter:
 assignee:
 story_points:
