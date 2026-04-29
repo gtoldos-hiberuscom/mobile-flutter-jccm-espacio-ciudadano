@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-08-25T12:00:00+02:00
+updated_at: 2026-09-21T18:00:00+02:00
 due_date:
 jira_url:
 ---
@@ -91,3 +91,24 @@ Definir la base de analítica, trazas y monitoring sin exponer datos sensibles d
     - Sprint-9 carryovers (recommendations only, no tickets): field-level analytics redaction wrapper before wiring real SDK (Firebase Analytics reads fields directly, bypassing toString); replace setCurrentScreen String arg with allow-listed slug enum; pin telemetry_redaction_test.dart in CI critical path; add release-mode no-op assertion test.
   - Validation: `flutter analyze --no-fatal-infos` 0 errors / 1 pre-existing warning. `flutter test` 445 passing + 1 perf skip (440 baseline + 5 new telemetry cases).
   - Status unchanged (Done). Ticket Notes-only update per Sprint 8 closure policy.
+
+### Sprint 9 closure
+- 2026-09-21T18:00:00+02:00 | by plan-manager | Sprint 9 (SP-EC-APP-SQ3-09) closure: telemetry continuation (Deliverable F).
+  - Branch: `task/EPIC-10-quality-release/STORY-64-observability/sprint9-screen-enum-and-redaction-wrapper` (commits `bf9a515`, `275e146`, `4283a0a`) → `ticket/EPIC-10-quality-release/STORY-64-observability` → `epic/EPIC-10-quality-release` → `develop`.
+  - Evidence — Field-level analytics redaction wrapper (Sprint-8 carryover #1):
+    - `lib/core/security/pii_key_fragments.dart` (new) — single source of truth for `piiKeyFragments`, `redactedMarker` and the `redactFields(Map)` helper. `lib/core/logging/console_logger.dart` now delegates its redaction to the new module (no behavioural change to existing logs).
+    - `lib/core/analytics/redacted_analytics_service.dart` (new) — decorator wrapping any `AnalyticsService`. Adapters that, in the future, read `AnalyticsEvent` fields directly (e.g., a Firebase Analytics adapter that bypasses `toString()`) MUST go through this wrapper. Default `AnalyticsEventFieldExtractor` is a no-op shield (returns `const {}`); custom extractors get their output redacted via `redactFields` before reaching the wrapped service.
+    - Test `test/core/analytics/redacted_analytics_service_test.dart` (3 cases): no-op default, custom extractor with PII keys (`userDni`, `idAgente`) redacted to `[REDACTED]` while benign `screen` field passes through, and screen forwarding.
+  - Evidence — Allow-listed screen slug enum (Sprint-8 carryover #2):
+    - `lib/core/analytics/analytics_screen.dart` (new) — sealed enum mirroring `Routes` 1:1 with an `unknown` sentinel. `AnalyticsScreen.fromRoute(String? routeName)` returns `unknown` for any unrecognised path.
+    - `AnalyticsService.setCurrentScreen` signature changed from `String` to `AnalyticsScreen`. `ConsoleAnalyticsService`, `AnalyticsObserver`, and the `_RecordingAnalytics` test stub in `test/features/external_links/external_link_launcher_test.dart` updated. `AnalyticsObserver` now takes an `AppLogger` dependency and emits a `warning` (then skips the call) for unknown routes — never pollutes the backend.
+    - `test/qa/telemetry_redaction_test.dart` Line ~140 leak-surface case rewritten as a positive compile-time-guard assertion: `AnalyticsScreen.fromRoute('/profile/<NIF>')` returns `unknown`; the API can no longer accept a free-form string.
+  - Evidence — Release-mode no-op assertion (Sprint-8 carryover #4):
+    - `ConsoleAnalyticsService` now accepts an injected `bool releaseMode = kReleaseMode` for testability.
+    - Test `test/core/analytics/analytics_observer_release_noop_test.dart` (2 cases) uses a strict logger that fails on any emission to assert zero log calls when `releaseMode: true`; complementary debug-mode case confirms the control path still emits.
+  - Cross-deliverable note (NIF/CIF/NIE coverage): the implementer of F intentionally restricted PII-key examples to `userDni` (matches `dni`) and `idAgente` (matches `id`) because the fragment list at the time was unchanged. Sprint-9 deliverable C (TASK-69) extended `_kPiiKeyFragments` with `nif`, `email`, `phone`, `telefono`, `address`, `direccion`, `birth`, `nacimiento`. Once both task branches integrate via the epic branch, the F redaction wrapper automatically picks up the extended fragment list (single source of truth in `lib/core/security/pii_key_fragments.dart`). The merge of C and F at the epic level produced a structural conflict in the fragment list / `console_logger.dart` that the plan-manager resolved by keeping F's extracted module structure with the union of both fragment sets.
+  - Validation:
+    - `flutter analyze --no-fatal-infos` — 0 errors / 1 pre-existing warning (unchanged baseline).
+    - `flutter test` — 453 passing + 1 perf skip on this branch base (5 new analytics cases over the 448+1 base).
+    - `dart format --set-exit-if-changed` clean for touched files.
+  - Status unchanged (Done). Ticket Notes-only update per Sprint 9 closure policy.

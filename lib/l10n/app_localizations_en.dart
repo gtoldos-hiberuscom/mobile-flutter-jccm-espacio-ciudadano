@@ -2116,4 +2116,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recommendationsDetailUnavailable => 'Details coming soon';
+
+  @override
+  String get offlineBannerMessage => 'Offline. Showing cached data.';
 }
