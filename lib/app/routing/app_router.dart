@@ -25,7 +25,7 @@ import 'package:jccm_espacio_ciudadano/features/help/2_presentation/support_form
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
-import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/notification_detail_placeholder_page.dart';
+import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/notification_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/2_presentation/notifications_center_page.dart';
 import 'package:jccm_espacio_ciudadano/features/notifications/contact/2_presentation/notification_contact_registration_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/data_consent_page.dart';
@@ -201,8 +201,8 @@ final goRouterProvider = Provider<GoRouter>(
                 ),
                 GoRoute(
                   path: ':id',
-                  builder: (final BuildContext context, final GoRouterState state) => NotificationDetailPlaceholderPage(
-                    notificationId: state.pathParameters['id'] ?? '',
+                  builder: (final BuildContext context, final GoRouterState state) => NotificationDetailPage(
+                    notificationId: state.pathParameters['id']!,
                   ),
                 ),
               ],

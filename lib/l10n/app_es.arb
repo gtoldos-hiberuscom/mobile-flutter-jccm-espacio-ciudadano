@@ -2130,22 +2130,110 @@
   "@notificationStatusUnknown": {
     "description": "Notifications — etiqueta del estado desconocido (parser tolerante)."
   },
-  "notificationDetailPlaceholderTitle": "Detalle de notificación",
-  "@notificationDetailPlaceholderTitle": {
-    "description": "Notifications — título de la pantalla provisional de detalle."
+  "notificationDetailTitle": "Detalle de notificación",
+  "@notificationDetailTitle": {
+    "description": "Notifications detail (STORY-43) — título del AppBar de la pantalla de detalle."
   },
-  "notificationDetailPlaceholderBody": "Notificación {id}",
-  "@notificationDetailPlaceholderBody": {
-    "description": "Notifications — cuerpo provisional con el identificador de la notificación.",
+  "notificationDetailLoading": "Cargando notificación…",
+  "@notificationDetailLoading": {
+    "description": "Notifications detail (STORY-43) — mensaje del estado de carga."
+  },
+  "notificationDetailErrorMessage": "No hemos podido cargar el detalle de la notificación.",
+  "@notificationDetailErrorMessage": {
+    "description": "Notifications detail (STORY-43) — mensaje del estado de error al cargar el detalle."
+  },
+  "notificationDetailRetry": "Reintentar",
+  "@notificationDetailRetry": {
+    "description": "Notifications detail (STORY-43) — etiqueta del botón de reintento del estado de error."
+  },
+  "notificationDetailHeaderOrganismo": "Emitida por: {organismo}",
+  "@notificationDetailHeaderOrganismo": {
+    "description": "Notifications detail (STORY-43) — línea de cabecera con el organismo emisor.",
     "placeholders": {
-      "id": {
+      "organismo": {
         "type": "String"
       }
     }
   },
-  "notificationDetailPlaceholderPending": "Detalle pendiente de habilitar en STORY-44.",
-  "@notificationDetailPlaceholderPending": {
-    "description": "Notifications — mensaje provisional para el detalle real."
+  "notificationDetailHeaderEmittedOn": "Fecha de emisión: {date}",
+  "@notificationDetailHeaderEmittedOn": {
+    "description": "Notifications detail (STORY-43) — línea de cabecera con la fecha de emisión.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDetailHeaderExpediente": "Expediente: {ref}",
+  "@notificationDetailHeaderExpediente": {
+    "description": "Notifications detail (STORY-43) — fila de metadatos con la referencia del expediente.",
+    "placeholders": {
+      "ref": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDetailHeaderProcedimiento": "Procedimiento: {procedimiento}",
+  "@notificationDetailHeaderProcedimiento": {
+    "description": "Notifications detail (STORY-43) — fila de metadatos con el procedimiento administrativo.",
+    "placeholders": {
+      "procedimiento": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDetailHeaderDeadline": "Plazo límite para decidir: {date}",
+  "@notificationDetailHeaderDeadline": {
+    "description": "Notifications detail (STORY-43) — fila de metadatos con la fecha límite para aceptar o rechazar.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationDetailDescriptionTitle": "Descripción",
+  "@notificationDetailDescriptionTitle": {
+    "description": "Notifications detail (STORY-43) — título de la sección de descripción."
+  },
+  "notificationDetailAcceptCta": "Aceptar",
+  "@notificationDetailAcceptCta": {
+    "description": "Notifications detail (STORY-43) — CTA principal de la barra de decisión."
+  },
+  "notificationDetailRejectCta": "Rechazar",
+  "@notificationDetailRejectCta": {
+    "description": "Notifications detail (STORY-43) — CTA secundaria de la barra de decisión."
+  },
+  "notificationDetailRejectDialogTitle": "Confirmar rechazo",
+  "@notificationDetailRejectDialogTitle": {
+    "description": "Notifications detail (STORY-43) — título del diálogo de confirmación de rechazo."
+  },
+  "notificationDetailRejectDialogBody": "Si rechazas esta notificación, la administración tendrá constancia formal del rechazo y la notificación se considerará practicada. Esta acción es irreversible.",
+  "@notificationDetailRejectDialogBody": {
+    "description": "Notifications detail (STORY-43) — cuerpo del diálogo de confirmación de rechazo."
+  },
+  "notificationDetailRejectDialogConfirm": "Rechazar definitivamente",
+  "@notificationDetailRejectDialogConfirm": {
+    "description": "Notifications detail (STORY-43) — CTA destructiva del diálogo de confirmación de rechazo."
+  },
+  "notificationDetailRejectDialogCancel": "Cancelar",
+  "@notificationDetailRejectDialogCancel": {
+    "description": "Notifications detail (STORY-43) — CTA neutra del diálogo de confirmación de rechazo."
+  },
+  "notificationDetailDecisionAcceptedToast": "Has aceptado la notificación.",
+  "@notificationDetailDecisionAcceptedToast": {
+    "description": "Notifications detail (STORY-43) — snackbar mostrado tras aceptar correctamente la notificación."
+  },
+  "notificationDetailDecisionRejectedToast": "Has rechazado la notificación.",
+  "@notificationDetailDecisionRejectedToast": {
+    "description": "Notifications detail (STORY-43) — snackbar mostrado tras rechazar correctamente la notificación."
+  },
+  "notificationDetailConflictToast": "Esta notificación ya no admite cambios. Hemos actualizado su estado.",
+  "@notificationDetailConflictToast": {
+    "description": "Notifications detail (STORY-43) — snackbar mostrado cuando el backend reporta un conflicto (ya decidida o caducada)."
+  },
+  "notificationDetailDecisionInFlight": "Enviando tu decisión…",
+  "@notificationDetailDecisionInFlight": {
+    "description": "Notifications detail (STORY-43) — mensaje del overlay de carga mientras se envía la decisión."
   },
   "notificationContactPageTitle": "Datos de contacto",
   "@notificationContactPageTitle": {
