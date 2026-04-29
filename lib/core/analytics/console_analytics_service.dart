@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
+import 'package:jccm_espacio_ciudadano/core/analytics/analytics_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 
@@ -11,7 +12,8 @@ import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 ///   this class in a future sprint without requiring call-site changes.
 ///
 /// No PII may be logged here — [AnalyticsEvent] subclasses are themselves
-/// responsible for stripping identifying information from their payloads.
+/// responsible for stripping identifying information from their payloads,
+/// and screen identifiers are constrained to the [AnalyticsScreen] enum.
 final class ConsoleAnalyticsService implements AnalyticsService {
   const ConsoleAnalyticsService({required final AppLogger logger}) : _logger = logger;
 
@@ -26,10 +28,10 @@ final class ConsoleAnalyticsService implements AnalyticsService {
   }
 
   @override
-  void setCurrentScreen(final String screenName) {
+  void setCurrentScreen(final AnalyticsScreen screen) {
     if (kReleaseMode) {
       return;
     }
-    _logger.debug('[Analytics] screen: $screenName');
+    _logger.debug('[Analytics] screen: ${screen.slug}');
   }
 }

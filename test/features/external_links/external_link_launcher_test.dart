@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
+import 'package:jccm_espacio_ciudadano/core/analytics/analytics_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
@@ -193,7 +194,7 @@ class _RecordingAnalytics implements AnalyticsService {
   void logEvent(final AnalyticsEvent event) => events.add(event);
 
   @override
-  void setCurrentScreen(final String screenName) {}
+  void setCurrentScreen(final AnalyticsScreen screen) {}
 }
 
 class _NoopLogger implements AppLogger {
