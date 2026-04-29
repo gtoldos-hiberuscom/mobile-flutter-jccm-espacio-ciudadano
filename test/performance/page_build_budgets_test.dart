@@ -22,7 +22,6 @@ import 'package:jccm_espacio_ciudadano/features/casework/1_domain/casework_repos
 import 'package:jccm_espacio_ciudadano/features/casework/2_presentation/casework_workspace_page.dart';
 import 'package:jccm_espacio_ciudadano/features/casework/3_data/casework_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
-import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_bucket.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_config_state.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_page_result.dart';
