@@ -5,23 +5,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_bucket.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_config_state.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_empty_variant.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/widgets/recommendation_card.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/widgets/recommendations_empty_view.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/widgets/recommendations_error_view.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/widgets/recommendations_loading_view.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-/// *Mis Recomendaciones* (STORY-56).
+/// *Mis Recomendaciones* (STORY-56 + STORY-57).
 ///
 /// Renders four tabs (Todos / Últimos días / Novedades / Tramitación
 /// inmediata) over the same per-bucket Riverpod controller. Tab bodies
 /// auto-load on first visit and append pages on scroll near the end.
 ///
-/// STORY-57 will replace the current empty placeholder with the
-/// onboarding / unauthorised variants — the empty-state widget here is
-/// intentionally minimal and routed through a single extension point
-/// (`_RecommendationsBucketView._buildEmpty`) for that to plug in.
+/// STORY-57 owns the empty-state surface — the page short-circuits to
+/// [RecommendationsEmptyView] when the citizen is not yet configured /
+/// has not authorised, and per-bucket empty results render the
+/// "configured but empty" variant inline. Transitions back into a
+/// populated list (e.g. after the citizen completes the consent flow)
+/// are handled by invalidating the per-bucket controllers when
+/// `recommendationsConfigProvider` flips to
+/// [RecommendationsConfigState.configured].
 class RecommendationsPage extends ConsumerWidget {
   const RecommendationsPage({super.key});
 
@@ -35,6 +41,25 @@ class RecommendationsPage extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+
+    // STORY-57 — when the config flips into `configured` (e.g. the user
+    // came back from the preferences/consent flow), invalidate every
+    // per-bucket controller so the list auto-loads on the next build.
+    ref.listen<AsyncValue<RecommendationsConfigState>>(
+      recommendationsConfigProvider,
+      (final previous, final next) {
+        final wasConfigured =
+            previous?.value == RecommendationsConfigState.configured;
+        final isConfigured =
+            next.value == RecommendationsConfigState.configured;
+        if (!wasConfigured && isConfigured) {
+          for (final bucket in _buckets) {
+            ref.invalidate(recommendationsControllerProvider(bucket));
+          }
+        }
+      },
+    );
+
     final asyncConfig = ref.watch(recommendationsConfigProvider);
 
     return DefaultTabController(
@@ -58,10 +83,16 @@ class RecommendationsPage extends ConsumerWidget {
             detail: err.toString(),
           ),
           data: (final config) {
-            // STORY-57 will branch on unconfigured / unauthorised here.
-            // STORY-56 simply short-circuits to the empty placeholder.
             if (config != RecommendationsConfigState.configured) {
-              return _EmptyPlaceholder(message: l10n.recommendationsEmptyBucket);
+              // Onboarding / unauthorised — no point in firing the
+              // per-bucket fetches. Render the empty view directly so
+              // both the SnackBar fallback and the GoRouter navigation
+              // are reachable above the TabBarView surface.
+              final variant = RecommendationsEmptyVariant.from(
+                config: config,
+                bucketHasItems: false,
+              );
+              return RecommendationsEmptyView(variant: variant);
             }
             return TabBarView(
               children: _buckets
@@ -127,7 +158,21 @@ class _RecommendationsBucketViewState
       ),
       data: (final bucketState) {
         if (bucketState.items.isEmpty) {
-          return _buildEmpty(l10n);
+          // STORY-57 — citizen is configured but the backend returned no
+          // matches for this bucket. We pass the page-resolved config
+          // explicitly through [RecommendationsEmptyVariant.from] so the
+          // truth-table stays in one place even though we know we are
+          // on the `configured` branch here.
+          final variant = RecommendationsEmptyVariant.from(
+            config: RecommendationsConfigState.configured,
+            bucketHasItems: false,
+          );
+          return RecommendationsEmptyView(
+            variant: variant,
+            onSeeAll: widget.bucket == RecommendationBucket.todos
+                ? null
+                : () => DefaultTabController.of(context).animateTo(0),
+          );
         }
         return NotificationListener<ScrollEndNotification>(
           onNotification: (final notification) {
@@ -167,30 +212,4 @@ class _RecommendationsBucketViewState
       },
     );
   }
-
-  /// STORY-57 extension point — replace this with the onboarding /
-  /// unauthorised variants when that story lands.
-  Widget _buildEmpty(final AppLocalizations l10n) => Center(
-    child: Padding(
-      padding: const EdgeInsets.all(AppDimensions.space32),
-      child: Text(
-        l10n.recommendationsEmptyBucket,
-        textAlign: TextAlign.center,
-      ),
-    ),
-  );
-}
-
-class _EmptyPlaceholder extends StatelessWidget {
-  const _EmptyPlaceholder({required this.message});
-
-  final String message;
-
-  @override
-  Widget build(final BuildContext context) => Center(
-    child: Padding(
-      padding: const EdgeInsets.all(AppDimensions.space32),
-      child: Text(message, textAlign: TextAlign.center),
-    ),
-  );
 }

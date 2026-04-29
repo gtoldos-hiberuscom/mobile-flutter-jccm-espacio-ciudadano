@@ -2,12 +2,12 @@
 id: 57
 jira_key:
 type: Story
-status: To Do
+status: Done
 priority:
 project: Carpeta Ciudadana CLM
 epic_link:
 parent:
-sprint:
+sprint: Sprint 6
 reporter:
 assignee:
 story_points:
@@ -20,7 +20,7 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-04-29T10:15:10+00:00
 due_date:
 jira_url:
 ---
@@ -29,10 +29,10 @@ jira_url:
 Cubrir el caso en el que el usuario todavía no dispone de recomendaciones útiles o no ha completado la configuración previa, guiándolo desde el estado vacío hacia Mis preferencias y Mis hechos vitales hasta alcanzar un estado con datos.
 
 ## Acceptance Criteria
-- [ ] Se contempla mensaje explicativo cuando todavía no hay hechos vitales o permisos suficientes.
-- [ ] Se contempla CTA hacia Mis preferencias / Mis hechos vitales.
-- [ ] Se contempla transición desde estado vacío a estado con datos una vez completada la configuración.
-- [ ] Se contemplan casos de backend sin resultados aun teniendo permisos activos.
+- [x] Se contempla mensaje explicativo cuando todavía no hay hechos vitales o permisos suficientes.
+- [x] Se contempla CTA hacia Mis preferencias / Mis hechos vitales.
+- [x] Se contempla transición desde estado vacío a estado con datos una vez completada la configuración.
+- [x] Se contemplan casos de backend sin resultados aun teniendo permisos activos.
 
 ## Technical Details
 - Platform(s): Multi-platform
@@ -76,3 +76,4 @@ Cubrir el caso en el que el usuario todavía no dispone de recomendaciones útil
 
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
+- 2026-04-29T10:15:10+00:00 | by plan-manager | Sprint 6: Empty/onboarding variants para recomendaciones (TASK-58 §D5). Nuevo `RecommendationsEmptyVariant { unconfigured, unauthorised, configuredButEmpty }` con mapping puro `from(config, bucketHasItems)`, `RecommendationsConfigSource` (mock + provider + flag `kRecommendationsMockConfigState`) y `RecommendationsEmptyView`. Surface principal pinta variante completa para unconfigured/unauthorised; configured-but-empty se pinta por bucket con CTA "Ver todos" (DefaultTabController.animateTo(0)). `ref.listen` invalida controllers al transicionar a `configured`. CTAs principales navegan a `Routes.preferencesConsent`; secundaria "Mis hechos vitales" deja TODO + SnackBar `recommendationsLifeEventsComingSoon`. 11 nuevas l10n keys × 2 locales (drop de `recommendationsEmptyBucket`). Tests +12 → 314. Status → Done.
