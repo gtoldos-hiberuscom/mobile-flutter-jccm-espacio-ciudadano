@@ -59,6 +59,13 @@ abstract final class Routes {
   /// route exists for deep links and for any future home/menu shortcut
   /// that prefers the full-page version.
   static const String cardJovenDetail = '/cards/joven';
+
+  /// Carnet digital de discapacidad — per-card detail (STORY-51).
+  ///
+  /// Surfaces grado de discapacidad and the PKPass action when the
+  /// carnet is vigente; renders explicit no-vigente / sin-datos /
+  /// parse-error fallbacks otherwise.
+  static const String cardDiscapacidadDetail = '/cards/discapacidad';
   static const String recommendations = '/recommendations';
   static const String support = '/support';
 
@@ -94,6 +101,7 @@ abstract final class Routes {
     cards,
     cardFamiliaNumerosaDetail,
     cardJovenDetail,
+    cardDiscapacidadDetail,
     recommendations,
     support,
     education,

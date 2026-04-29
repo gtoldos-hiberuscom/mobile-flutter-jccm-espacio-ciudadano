@@ -3475,6 +3475,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Cerrar'**
   String get jovenModalCloseAction;
+
+  /// Carnet Discapacidad detail — AppBar title.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet de discapacidad'**
+  String get discapacidadDetailTitle;
+
+  /// Carnet Discapacidad detail — semantic / row label for the grado de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Grado de discapacidad'**
+  String get discapacidadGradoLabel;
+
+  /// Carnet Discapacidad detail — grado badge label.
+  ///
+  /// In es, this message translates to:
+  /// **'{grado}%'**
+  String discapacidadGradoBadge(int grado);
+
+  /// Carnet Discapacidad detail — fallback shown when the grado is missing.
+  ///
+  /// In es, this message translates to:
+  /// **'Grado no disponible'**
+  String get discapacidadGradoUnknown;
+
+  /// Carnet Discapacidad detail — expiry date row.
+  ///
+  /// In es, this message translates to:
+  /// **'Vigente hasta el {date}'**
+  String discapacidadExpiresOn(String date);
+
+  /// Carnet Discapacidad detail — short "vigente" badge.
+  ///
+  /// In es, this message translates to:
+  /// **'Vigente'**
+  String get discapacidadValidBadge;
+
+  /// Carnet Discapacidad detail — title shown when the carnet is no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet no vigente'**
+  String get discapacidadNotValidTitle;
+
+  /// Carnet Discapacidad detail — body shown when the carnet is no vigente.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu carnet de discapacidad ya no está vigente. No se puede generar el pase para Wallet.'**
+  String get discapacidadNotValidMessage;
+
+  /// Carnet Discapacidad detail — title shown when no carnet data is available.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin datos disponibles'**
+  String get discapacidadUnavailableTitle;
+
+  /// Carnet Discapacidad detail — body shown when no carnet data is available.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de tu carnet de discapacidad. Vuelve a intentarlo más tarde.'**
+  String get discapacidadUnavailableMessage;
+
+  /// Carnet Discapacidad detail — message shown on a payload-parse error.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido interpretar la respuesta del carnet de discapacidad.'**
+  String get discapacidadParseErrorMessage;
+
+  /// Carnet Discapacidad detail — generic error message.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu carnet de discapacidad.'**
+  String get discapacidadErrorMessage;
+
+  /// Carnet Discapacidad detail — retry button label.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get discapacidadRetry;
+
+  /// Carnet Discapacidad detail — PKPass action section label.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir a Wallet'**
+  String get discapacidadActionPkpass;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

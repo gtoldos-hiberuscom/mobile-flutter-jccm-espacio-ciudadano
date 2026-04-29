@@ -1774,4 +1774,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get jovenModalCloseAction => 'Close';
+
+  @override
+  String get discapacidadDetailTitle => 'Disability card';
+
+  @override
+  String get discapacidadGradoLabel => 'Disability degree';
+
+  @override
+  String discapacidadGradoBadge(int grado) {
+    return '$grado%';
+  }
+
+  @override
+  String get discapacidadGradoUnknown => 'Degree not available';
+
+  @override
+  String discapacidadExpiresOn(String date) {
+    return 'Valid until $date';
+  }
+
+  @override
+  String get discapacidadValidBadge => 'Valid';
+
+  @override
+  String get discapacidadNotValidTitle => 'Card not valid';
+
+  @override
+  String get discapacidadNotValidMessage => 'Your disability card is no longer valid. The Wallet pass cannot be generated.';
+
+  @override
+  String get discapacidadUnavailableTitle => 'No data available';
+
+  @override
+  String get discapacidadUnavailableMessage => 'We could not find any disability card data for you. Please try again later.';
+
+  @override
+  String get discapacidadParseErrorMessage => 'We could not interpret the disability card response.';
+
+  @override
+  String get discapacidadErrorMessage => 'Your disability card could not be loaded.';
+
+  @override
+  String get discapacidadRetry => 'Retry';
+
+  @override
+  String get discapacidadActionPkpass => 'Add to Wallet';
 }
