@@ -10,24 +10,28 @@ part of 'user_profile_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 /// Manages the currently logged-in user's profile.
 ///
-/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-///   [UserProfile]; otherwise returns `null`.
-/// - [logout] clears stored auth data, invalidates the session, and resets state.
+/// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
+///   [authSessionNotifierProvider]. Returns `null` when there is no session.
+/// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
+///   secure storage and resets session state.
 
 @ProviderFor(UserProfileNotifier)
 const userProfileProvider = UserProfileNotifierProvider._();
 
 /// Manages the currently logged-in user's profile.
 ///
-/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-///   [UserProfile]; otherwise returns `null`.
-/// - [logout] clears stored auth data, invalidates the session, and resets state.
-final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
+/// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
+///   [authSessionNotifierProvider]. Returns `null` when there is no session.
+/// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
+///   secure storage and resets session state.
+final class UserProfileNotifierProvider
+    extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
   /// Manages the currently logged-in user's profile.
   ///
-  /// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-  ///   [UserProfile]; otherwise returns `null`.
-  /// - [logout] clears stored auth data, invalidates the session, and resets state.
+  /// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
+  ///   [authSessionNotifierProvider]. Returns `null` when there is no session.
+  /// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
+  ///   secure storage and resets session state.
   const UserProfileNotifierProvider._()
     : super(
         from: null,
@@ -47,13 +51,15 @@ final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfi
   UserProfileNotifier create() => UserProfileNotifier();
 }
 
-String _$userProfileNotifierHash() => r'52d9bc5015d11b9f3e3d9bd8aeaf3315b843c1bc';
+String _$userProfileNotifierHash() =>
+    r'eae985ce75f2592f114f14c2c8d6651e6a3698c2';
 
 /// Manages the currently logged-in user's profile.
 ///
-/// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
-///   [UserProfile]; otherwise returns `null`.
-/// - [logout] clears stored auth data, invalidates the session, and resets state.
+/// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
+///   [authSessionNotifierProvider]. Returns `null` when there is no session.
+/// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
+///   secure storage and resets session state.
 
 abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   FutureOr<UserProfile?> build();
@@ -62,7 +68,14 @@ abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<UserProfile?>, UserProfile?>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>, AsyncValue<UserProfile?>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>,
+              AsyncValue<UserProfile?>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

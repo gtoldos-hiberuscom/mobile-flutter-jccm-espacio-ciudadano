@@ -21,7 +21,14 @@ const digitalCardsRepositoryProvider = DigitalCardsRepositoryProvider._();
 /// Not kept alive on purpose: navigation back into the cards catalogue
 /// should re-fetch the snapshot.
 
-final class DigitalCardsRepositoryProvider extends $FunctionalProvider<DigitalCardsRepository, DigitalCardsRepository, DigitalCardsRepository> with $Provider<DigitalCardsRepository> {
+final class DigitalCardsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          DigitalCardsRepository,
+          DigitalCardsRepository,
+          DigitalCardsRepository
+        >
+    with $Provider<DigitalCardsRepository> {
   /// DI composition for [DigitalCardsRepository] (canon §16).
   ///
   /// Not kept alive on purpose: navigation back into the cards catalogue
@@ -60,4 +67,5 @@ final class DigitalCardsRepositoryProvider extends $FunctionalProvider<DigitalCa
   }
 }
 
-String _$digitalCardsRepositoryHash() => r'9eb5ec2bfc5158290bbdfb201fca70194ef8441a';
+String _$digitalCardsRepositoryHash() =>
+    r'9eb5ec2bfc5158290bbdfb201fca70194ef8441a';

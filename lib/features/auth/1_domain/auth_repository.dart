@@ -37,4 +37,13 @@ abstract interface class AuthRepository {
   Future<AuthUser> fetchUserInfo({
     required final String accessToken,
   });
+
+  /// Decodes an OIDC `id_token` (compact JWT) and builds an [AuthUser] from
+  /// its payload claims (`sub`, `nif` or `idAgente`, `given_name`,
+  /// `family_name`, `email`).
+  ///
+  /// Pure transformation — no I/O, no signature verification (the token has
+  /// already been validated by the AppAuth library at the OIDC endpoint).
+  /// Returns `null` when the token cannot be decoded or lacks a `sub` claim.
+  AuthUser? decodeIdTokenUser(final String idToken);
 }

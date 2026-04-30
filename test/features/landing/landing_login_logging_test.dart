@@ -28,6 +28,7 @@ import 'package:jccm_espacio_ciudadano/app/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/console_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/logger_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/auth.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -81,9 +82,8 @@ void main() {
         ProviderScope(
           overrides: [
             appLoggerProvider.overrideWithValue(logger),
-            loginUseCaseProvider.overrideWith(
-              (final ref) => LoginUseCase(fakeRepo),
-            ),
+            authRepositoryProvider.overrideWithValue(fakeRepo),
+            secureStorageProvider.overrideWithValue(_InMemorySecureStorage()),
             goRouterProvider.overrideWith((final ref) => router),
           ],
           child: MaterialApp.router(
@@ -126,12 +126,15 @@ void main() {
       // The login use case should have been invoked.
       expect(fakeRepo.loginCalls, 1);
 
-      // Exactly one info log should have been emitted with the redacted
-      // contract message.
-      expect(logger.entries, hasLength(1));
-      final entry = logger.entries.single;
+      // The CTA must emit exactly one info log carrying the redacted
+      // contract message. Other internal info logs (e.g. notifier
+      // diagnostics) are allowed and asserted against PII leakage below.
+      final ctaEntries = logger.entries
+          .where((final e) => e.message == 'Login successful')
+          .toList();
+      expect(ctaEntries, hasLength(1));
+      final entry = ctaEntries.single;
       expect(entry.level, 'info');
-      expect(entry.message, 'Login successful');
 
       // The message must NOT contain any session field interpolation —
       // not the AuthSession runtime values, not its toString() output.
@@ -159,11 +162,12 @@ void main() {
         );
       }
 
-      // Sanity: the structural marker we DO log (sessionType) is allowed,
-      // does not match `_kPiiKeyFragments`, and renders the type name only.
+      // Sanity: the structural marker we DO log (`hasIdAgente`) is a
+      // boolean, does not match `_kPiiKeyFragments`, and never carries
+      // the actual identifier value.
       expect(entry.context, isNotNull);
-      expect(entry.context, contains('sessionType'));
-      expect(entry.context!['sessionType'], 'AuthSession');
+      expect(entry.context, contains('hasIdAgente'));
+      expect(entry.context!['hasIdAgente'], isA<bool>());
 
       // Cross-check against the real ConsoleLogger redaction sink: even
       // when emitted through ConsoleLogger, no PII reaches the rendered
@@ -263,6 +267,11 @@ class _FakeAuthRepository implements AuthRepository {
   Future<AuthUser> fetchUserInfo({required final String accessToken}) async {
     throw UnimplementedError();
   }
+
+  @override
+  AuthUser? decodeIdTokenUser(final String idToken) {
+    return const AuthUser(sub: 'fake-sub', nif: 'fake-nif');
+  }
 }
 
 Future<void> _runWithCapturedPrint(
@@ -276,4 +285,26 @@ Future<void> _runWithCapturedPrint(
           sink.add(line),
     ),
   );
+}
+
+class _InMemorySecureStorage implements SecureStorage {
+  final Map<String, String> _store = <String, String>{};
+
+  @override
+  Future<String?> read(final String key) async => _store[key];
+
+  @override
+  Future<void> write(final String key, final String value) async {
+    _store[key] = value;
+  }
+
+  @override
+  Future<void> delete(final String key) async {
+    _store.remove(key);
+  }
+
+  @override
+  Future<void> clear() async {
+    _store.clear();
+  }
 }

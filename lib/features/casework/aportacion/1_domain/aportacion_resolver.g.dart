@@ -17,7 +17,14 @@ const aportacionResolverProvider = AportacionResolverProvider._();
 /// DI composition for [AportacionResolver]. Tests override this provider
 /// to inject deterministic repository responses.
 
-final class AportacionResolverProvider extends $FunctionalProvider<AportacionResolver, AportacionResolver, AportacionResolver> with $Provider<AportacionResolver> {
+final class AportacionResolverProvider
+    extends
+        $FunctionalProvider<
+          AportacionResolver,
+          AportacionResolver,
+          AportacionResolver
+        >
+    with $Provider<AportacionResolver> {
   /// DI composition for [AportacionResolver]. Tests override this provider
   /// to inject deterministic repository responses.
   const AportacionResolverProvider._()
@@ -54,4 +61,5 @@ final class AportacionResolverProvider extends $FunctionalProvider<AportacionRes
   }
 }
 
-String _$aportacionResolverHash() => r'a974ffb3c744f870dd37704345ffca1b8af7dbb6';
+String _$aportacionResolverHash() =>
+    r'a974ffb3c744f870dd37704345ffca1b8af7dbb6';

@@ -15,7 +15,14 @@ const uploadRepositoryProvider = UploadRepositoryProvider._();
 
 /// DI composition for the STORY-38 [UploadRepository].
 
-final class UploadRepositoryProvider extends $FunctionalProvider<UploadRepository, UploadRepository, UploadRepository> with $Provider<UploadRepository> {
+final class UploadRepositoryProvider
+    extends
+        $FunctionalProvider<
+          UploadRepository,
+          UploadRepository,
+          UploadRepository
+        >
+    with $Provider<UploadRepository> {
   /// DI composition for the STORY-38 [UploadRepository].
   const UploadRepositoryProvider._()
     : super(
@@ -33,7 +40,8 @@ final class UploadRepositoryProvider extends $FunctionalProvider<UploadRepositor
 
   @$internal
   @override
-  $ProviderElement<UploadRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<UploadRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   UploadRepository create(Ref ref) {

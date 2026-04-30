@@ -43,7 +43,9 @@ const appConfigProvider = AppConfigProvider._();
 /// )
 /// ```
 
-final class AppConfigProvider extends $FunctionalProvider<AppConfig, AppConfig, AppConfig> with $Provider<AppConfig> {
+final class AppConfigProvider
+    extends $FunctionalProvider<AppConfig, AppConfig, AppConfig>
+    with $Provider<AppConfig> {
   /// Provides the [AppConfig] that was resolved at application startup.
   ///
   /// This provider is intentionally left unimplemented here and **must** be
@@ -75,7 +77,8 @@ final class AppConfigProvider extends $FunctionalProvider<AppConfig, AppConfig, 
 
   @$internal
   @override
-  $ProviderElement<AppConfig> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AppConfig> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   AppConfig create(Ref ref) {

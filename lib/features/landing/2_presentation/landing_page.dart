@@ -96,11 +96,12 @@ class LandingPage extends ConsumerWidget {
                 label: l10n.landingCtaButton,
                 semanticsLabel: l10n.landingCtaButton,
                 onPressed: () async {
-                  final AuthSession session = await ref.read(loginUseCaseProvider)();
+                  final AuthenticatedSession authenticated =
+                      await ref.read(authSessionProvider.notifier).signIn();
                   ref.read(appLoggerProvider).info(
                     'Login successful',
                     context: <String, Object?>{
-                      'sessionType': session.runtimeType.toString(),
+                      'hasIdAgente': authenticated.user.idAgente.isNotEmpty,
                     },
                   );
 

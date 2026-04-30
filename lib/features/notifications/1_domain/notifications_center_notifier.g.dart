@@ -28,7 +28,12 @@ const notificationsCenterProvider = NotificationsCenterNotifierProvider._();
 /// filter set. Errors do not blank the previously loaded items — they
 /// surface through `hasError` so the user can keep browsing what is
 /// already on screen and retry the failing page.
-final class NotificationsCenterNotifierProvider extends $AsyncNotifierProvider<NotificationsCenterNotifier, NotificationsCenterState> {
+final class NotificationsCenterNotifierProvider
+    extends
+        $AsyncNotifierProvider<
+          NotificationsCenterNotifier,
+          NotificationsCenterState
+        > {
   /// Owns the notifications center screen state (STORY-41).
   ///
   /// On `build()` it requests page 0 with no status filter (all statuses).
@@ -56,7 +61,8 @@ final class NotificationsCenterNotifierProvider extends $AsyncNotifierProvider<N
   NotificationsCenterNotifier create() => NotificationsCenterNotifier();
 }
 
-String _$notificationsCenterNotifierHash() => r'0ca7d813cbe90aec03032f34244817fb93602299';
+String _$notificationsCenterNotifierHash() =>
+    r'0ca7d813cbe90aec03032f34244817fb93602299';
 
 /// Owns the notifications center screen state (STORY-41).
 ///
@@ -67,14 +73,30 @@ String _$notificationsCenterNotifierHash() => r'0ca7d813cbe90aec03032f34244817fb
 /// surface through `hasError` so the user can keep browsing what is
 /// already on screen and retry the failing page.
 
-abstract class _$NotificationsCenterNotifier extends $AsyncNotifier<NotificationsCenterState> {
+abstract class _$NotificationsCenterNotifier
+    extends $AsyncNotifier<NotificationsCenterState> {
   FutureOr<NotificationsCenterState> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<NotificationsCenterState>, NotificationsCenterState>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<NotificationsCenterState>, NotificationsCenterState>, AsyncValue<NotificationsCenterState>, Object?, Object?>;
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<NotificationsCenterState>,
+              NotificationsCenterState
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<NotificationsCenterState>,
+                NotificationsCenterState
+              >,
+              AsyncValue<NotificationsCenterState>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

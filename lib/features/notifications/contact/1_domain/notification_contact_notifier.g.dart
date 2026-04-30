@@ -34,7 +34,12 @@ const notificationContactProvider = NotificationContactNotifierProvider._();
 /// Backend wiring is deferred — see
 /// `documentation/discovery/TASK-47-notifications-contract-strategy.md`
 /// and `kNotificationContactLiveBackendEnabled`.
-final class NotificationContactNotifierProvider extends $AsyncNotifierProvider<NotificationContactNotifier, NotificationContact?> {
+final class NotificationContactNotifierProvider
+    extends
+        $AsyncNotifierProvider<
+          NotificationContactNotifier,
+          NotificationContact?
+        > {
   /// Owns the notification-contact registration screen state (STORY-42).
   ///
   /// `build()` resolves the current contact from the repository (the
@@ -65,7 +70,8 @@ final class NotificationContactNotifierProvider extends $AsyncNotifierProvider<N
   NotificationContactNotifier create() => NotificationContactNotifier();
 }
 
-String _$notificationContactNotifierHash() => r'a98b0c6235d75b0b4a86a02a6f7d5bc735b6af7b';
+String _$notificationContactNotifierHash() =>
+    r'a98b0c6235d75b0b4a86a02a6f7d5bc735b6af7b';
 
 /// Owns the notification-contact registration screen state (STORY-42).
 ///
@@ -79,14 +85,27 @@ String _$notificationContactNotifierHash() => r'a98b0c6235d75b0b4a86a02a6f7d5bc7
 /// `documentation/discovery/TASK-47-notifications-contract-strategy.md`
 /// and `kNotificationContactLiveBackendEnabled`.
 
-abstract class _$NotificationContactNotifier extends $AsyncNotifier<NotificationContact?> {
+abstract class _$NotificationContactNotifier
+    extends $AsyncNotifier<NotificationContact?> {
   FutureOr<NotificationContact?> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<NotificationContact?>, NotificationContact?>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<NotificationContact?>, NotificationContact?>, AsyncValue<NotificationContact?>, Object?, Object?>;
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<NotificationContact?>, NotificationContact?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<NotificationContact?>,
+                NotificationContact?
+              >,
+              AsyncValue<NotificationContact?>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

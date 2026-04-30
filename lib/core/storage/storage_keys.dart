@@ -12,6 +12,11 @@ abstract final class StorageKeys {
   /// JWT refresh token for silent re-authentication.
   static const String refreshToken = 'refresh_token';
 
+  /// OIDC id_token (JWT) — kept to rehydrate user identity claims (NIF, name,
+  /// email) on cold start and to pass as `id_token_hint` to the end-session
+  /// endpoint. Sensitive: stored in `SecureStorage` only.
+  static const String idToken = 'id_token';
+
   /// Federated user identifier from the Cl@ve identity assertion (DNI / NIE).
   static const String idAgente = 'id_agente';
 

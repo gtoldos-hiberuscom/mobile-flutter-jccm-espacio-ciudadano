@@ -15,7 +15,14 @@ const dataConsentRepositoryProvider = DataConsentRepositoryProvider._();
 
 /// DI composition for [DataConsentRepository].
 
-final class DataConsentRepositoryProvider extends $FunctionalProvider<DataConsentRepository, DataConsentRepository, DataConsentRepository> with $Provider<DataConsentRepository> {
+final class DataConsentRepositoryProvider
+    extends
+        $FunctionalProvider<
+          DataConsentRepository,
+          DataConsentRepository,
+          DataConsentRepository
+        >
+    with $Provider<DataConsentRepository> {
   /// DI composition for [DataConsentRepository].
   const DataConsentRepositoryProvider._()
     : super(
@@ -51,4 +58,5 @@ final class DataConsentRepositoryProvider extends $FunctionalProvider<DataConsen
   }
 }
 
-String _$dataConsentRepositoryHash() => r'45ac7ecd28b3eebe530aa88ff17b06865b63e408';
+String _$dataConsentRepositoryHash() =>
+    r'45ac7ecd28b3eebe530aa88ff17b06865b63e408';

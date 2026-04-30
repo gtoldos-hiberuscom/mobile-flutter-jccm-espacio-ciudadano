@@ -153,4 +153,9 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<AuthUser> fetchUserInfo({required final String accessToken}) async {
     return const AuthUser(sub: 'sub');
   }
+
+  @override
+  AuthUser? decodeIdTokenUser(final String idToken) {
+    return const AuthUser(sub: 'sub');
+  }
 }

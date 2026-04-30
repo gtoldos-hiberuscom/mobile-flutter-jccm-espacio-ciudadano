@@ -14,7 +14,9 @@ part of 'education_landing_notifier.dart';
 const educationLandingProvider = EducationLandingNotifierProvider._();
 
 /// Owns the Educación landing state (STORY-23). Mock-backed in Sprint 3.
-final class EducationLandingNotifierProvider extends $AsyncNotifierProvider<EducationLandingNotifier, EducationSnapshot> {
+final class EducationLandingNotifierProvider
+    extends
+        $AsyncNotifierProvider<EducationLandingNotifier, EducationSnapshot> {
   /// Owns the Educación landing state (STORY-23). Mock-backed in Sprint 3.
   const EducationLandingNotifierProvider._()
     : super(
@@ -35,18 +37,28 @@ final class EducationLandingNotifierProvider extends $AsyncNotifierProvider<Educ
   EducationLandingNotifier create() => EducationLandingNotifier();
 }
 
-String _$educationLandingNotifierHash() => r'48cc118d89f73d63029e720ef7b81bd87af1e1ff';
+String _$educationLandingNotifierHash() =>
+    r'48cc118d89f73d63029e720ef7b81bd87af1e1ff';
 
 /// Owns the Educación landing state (STORY-23). Mock-backed in Sprint 3.
 
-abstract class _$EducationLandingNotifier extends $AsyncNotifier<EducationSnapshot> {
+abstract class _$EducationLandingNotifier
+    extends $AsyncNotifier<EducationSnapshot> {
   FutureOr<EducationSnapshot> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<EducationSnapshot>, EducationSnapshot>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<EducationSnapshot>, EducationSnapshot>, AsyncValue<EducationSnapshot>, Object?, Object?>;
+    final ref =
+        this.ref as $Ref<AsyncValue<EducationSnapshot>, EducationSnapshot>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<EducationSnapshot>, EducationSnapshot>,
+              AsyncValue<EducationSnapshot>,
+              Object?,
+              Object?
+            >;
     element.handleValue(ref, created);
   }
 }

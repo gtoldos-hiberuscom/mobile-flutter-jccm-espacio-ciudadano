@@ -12,7 +12,9 @@ part of 'auth_use_case_providers.dart';
 @ProviderFor(loginUseCase)
 const loginUseCaseProvider = LoginUseCaseProvider._();
 
-final class LoginUseCaseProvider extends $FunctionalProvider<LoginUseCase, LoginUseCase, LoginUseCase> with $Provider<LoginUseCase> {
+final class LoginUseCaseProvider
+    extends $FunctionalProvider<LoginUseCase, LoginUseCase, LoginUseCase>
+    with $Provider<LoginUseCase> {
   const LoginUseCaseProvider._()
     : super(
         from: null,
@@ -29,7 +31,8 @@ final class LoginUseCaseProvider extends $FunctionalProvider<LoginUseCase, Login
 
   @$internal
   @override
-  $ProviderElement<LoginUseCase> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<LoginUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   LoginUseCase create(Ref ref) {
@@ -50,7 +53,9 @@ String _$loginUseCaseHash() => r'a705ea49a63447afa4db2d5b3a513e9f3bdae014';
 @ProviderFor(logoutUseCase)
 const logoutUseCaseProvider = LogoutUseCaseProvider._();
 
-final class LogoutUseCaseProvider extends $FunctionalProvider<LogoutUseCase, LogoutUseCase, LogoutUseCase> with $Provider<LogoutUseCase> {
+final class LogoutUseCaseProvider
+    extends $FunctionalProvider<LogoutUseCase, LogoutUseCase, LogoutUseCase>
+    with $Provider<LogoutUseCase> {
   const LogoutUseCaseProvider._()
     : super(
         from: null,
@@ -67,7 +72,8 @@ final class LogoutUseCaseProvider extends $FunctionalProvider<LogoutUseCase, Log
 
   @$internal
   @override
-  $ProviderElement<LogoutUseCase> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<LogoutUseCase> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   LogoutUseCase create(Ref ref) {
