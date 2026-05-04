@@ -70,13 +70,13 @@ class _CaseworkWorkspacePageState extends ConsumerState<CaseworkWorkspacePage> w
       ),
       body: OfflineBanner(
         child: asyncSnapshot.when(
-        loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
-        error: (final err, final st) => ErrorStateWidget(
-          message: l10n.caseworkWorkspaceLoadError,
-          onRetry: () => ref.read(caseworkWorkspaceProvider.notifier).refresh(),
+          loading: () => LoadingStateWidget(message: l10n.loadingStateDefault),
+          error: (final err, final st) => ErrorStateWidget(
+            message: l10n.caseworkWorkspaceLoadError,
+            onRetry: () => ref.read(caseworkWorkspaceProvider.notifier).refresh(),
+          ),
+          data: (final snap) => _buildLoaded(context, snap, l10n),
         ),
-        data: (final snap) => _buildLoaded(context, snap, l10n),
-      ),
       ),
     );
   }

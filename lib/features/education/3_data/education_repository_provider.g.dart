@@ -15,14 +15,7 @@ const educationRepositoryProvider = EducationRepositoryProvider._();
 
 /// DI composition for [EducationRepository].
 
-final class EducationRepositoryProvider
-    extends
-        $FunctionalProvider<
-          EducationRepository,
-          EducationRepository,
-          EducationRepository
-        >
-    with $Provider<EducationRepository> {
+final class EducationRepositoryProvider extends $FunctionalProvider<EducationRepository, EducationRepository, EducationRepository> with $Provider<EducationRepository> {
   /// DI composition for [EducationRepository].
   const EducationRepositoryProvider._()
     : super(
@@ -58,5 +51,4 @@ final class EducationRepositoryProvider
   }
 }
 
-String _$educationRepositoryHash() =>
-    r'b54046b7b0bedd162b6f2bd1156525a41bac3afe';
+String _$educationRepositoryHash() => r'b54046b7b0bedd162b6f2bd1156525a41bac3afe';

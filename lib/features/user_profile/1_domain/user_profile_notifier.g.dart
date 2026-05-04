@@ -24,8 +24,7 @@ const userProfileProvider = UserProfileNotifierProvider._();
 ///   `authSessionProvider`. Returns `null` when there is no session.
 /// - [logout] delegates to [LogoutUseCase], which terminates the Cl@ve
 ///   session and clears the persisted local data.
-final class UserProfileNotifierProvider
-    extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
+final class UserProfileNotifierProvider extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
   /// Manages the currently logged-in user's profile.
   ///
   /// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
@@ -51,8 +50,7 @@ final class UserProfileNotifierProvider
   UserProfileNotifier create() => UserProfileNotifier();
 }
 
-String _$userProfileNotifierHash() =>
-    r'd4f1447a2bb4aefa544b96b6cc096fdc7762151f';
+String _$userProfileNotifierHash() => r'd4f1447a2bb4aefa544b96b6cc096fdc7762151f';
 
 /// Manages the currently logged-in user's profile.
 ///
@@ -68,14 +66,7 @@ abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<AsyncValue<UserProfile?>, UserProfile?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>,
-              AsyncValue<UserProfile?>,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<UserProfile?>, UserProfile?>, AsyncValue<UserProfile?>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

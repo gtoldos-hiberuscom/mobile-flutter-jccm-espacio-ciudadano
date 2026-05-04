@@ -72,12 +72,10 @@ void _logPerf(final String pageName, final int elapsedMs, final int budgetMs) {
 /// the BUILD cost, not real data.
 class _EmptyRecommendationsRepo implements RecommendationsRepository {
   @override
-  Future<RecommendationsConfigState> loadConfigState() async =>
-      RecommendationsConfigState.configured;
+  Future<RecommendationsConfigState> loadConfigState() async => RecommendationsConfigState.configured;
 
   @override
-  Future<RecommendationsPageResult> loadAll({final String? cursor}) async =>
-      RecommendationsPageResult.empty;
+  Future<RecommendationsPageResult> loadAll({final String? cursor}) async => RecommendationsPageResult.empty;
 
   @override
   Future<RecommendationsPageResult> loadBucket(
@@ -115,7 +113,8 @@ void main() {
       expect(
         elapsed,
         lessThanOrEqualTo(150),
-        reason: 'LandingPage first build took ${elapsed}ms — exceeds the '
+        reason:
+            'LandingPage first build took ${elapsed}ms — exceeds the '
             'TASK-70 budget. See documentation/qa/performance-budgets.md '
             'and investigate before relaxing the budget.',
       );
@@ -139,7 +138,8 @@ void main() {
       expect(
         elapsed,
         lessThanOrEqualTo(150),
-        reason: 'RecommendationsPage first build took ${elapsed}ms — exceeds the '
+        reason:
+            'RecommendationsPage first build took ${elapsed}ms — exceeds the '
             'TASK-70 budget. See documentation/qa/performance-budgets.md '
             'and investigate before relaxing the budget.',
       );
@@ -163,7 +163,8 @@ void main() {
       expect(
         elapsed,
         lessThanOrEqualTo(150),
-        reason: 'CaseworkWorkspacePage first build took ${elapsed}ms — exceeds the '
+        reason:
+            'CaseworkWorkspacePage first build took ${elapsed}ms — exceeds the '
             'TASK-70 budget. See documentation/qa/performance-budgets.md '
             'and investigate before relaxing the budget.',
       );

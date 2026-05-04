@@ -17,8 +17,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/familia_numerosa/3
 /// the `FamiliaNumerosaUnavailable` exception bubbles through
 /// `AsyncValue.error` so the page can downgrade to the explicit
 /// unavailable surface.
-final familiaNumerosaDetailNotifierProvider =
-    AsyncNotifierProvider<FamiliaNumerosaDetailNotifier, FamiliaNumerosaCard>(
+final familiaNumerosaDetailNotifierProvider = AsyncNotifierProvider<FamiliaNumerosaDetailNotifier, FamiliaNumerosaCard>(
   FamiliaNumerosaDetailNotifier.new,
 );
 

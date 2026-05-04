@@ -25,8 +25,7 @@ class _FakeRepo implements RecommendationsRepository {
   Future<RecommendationsConfigState> loadConfigState() async => configState;
 
   @override
-  Future<RecommendationsPageResult> loadAll({final String? cursor}) =>
-      _serve(RecommendationBucket.todos);
+  Future<RecommendationsPageResult> loadAll({final String? cursor}) => _serve(RecommendationBucket.todos);
 
   @override
   Future<RecommendationsPageResult> loadBucket(
@@ -71,7 +70,10 @@ void main() {
       byBucket: {
         RecommendationBucket.todos: [
           RecommendationsPageResult(
-            items: [_rec('a', title: 'Card A'), _rec('b', title: 'Card B')],
+            items: [
+              _rec('a', title: 'Card A'),
+              _rec('b', title: 'Card B'),
+            ],
             hasMore: true,
             nextCursor: '2',
           ),

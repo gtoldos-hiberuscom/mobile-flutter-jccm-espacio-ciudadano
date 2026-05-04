@@ -35,68 +35,68 @@ class NotificationsCenterPage extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.notificationsCenterTitle)),
       body: OfflineBanner(
         child: asyncState.when(
-        loading: () => LoadingStateWidget(message: l10n.notificationsLoading),
-        error: (final error, final stack) => ErrorStateWidget(
-          message: l10n.notificationsErrorMessage,
-          onRetry: notifier.refresh,
-        ),
-        data: (final state) => Column(
-          children: <Widget>[
-            const NotificationContactGateBanner(),
-            NotificationFilterBar(
-              activeFilters: state.filters,
-              onChanged: notifier.setFilters,
-            ),
-            Expanded(
-              child: PaginatedListView<NotificationItem>(
-                items: state.items,
-                hasMore: state.hasMore,
-                isLoadingMore: state.isLoadingMore,
-                onLoadMore: notifier.loadMore,
-                onRefresh: notifier.refresh,
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppDimensions.space8,
-                ),
-                emptyState: EmptyStateWidget(
-                  message: l10n.notificationsEmptyTitle,
-                  subtitle: l10n.notificationsEmptySubtitle,
-                ),
-                itemBuilder: (final ctx, final item, final _) => NotificationItemTile(
-                  item: item,
-                  onTap: () => _openDetail(ctx, item),
+          loading: () => LoadingStateWidget(message: l10n.notificationsLoading),
+          error: (final error, final stack) => ErrorStateWidget(
+            message: l10n.notificationsErrorMessage,
+            onRetry: notifier.refresh,
+          ),
+          data: (final state) => Column(
+            children: <Widget>[
+              const NotificationContactGateBanner(),
+              NotificationFilterBar(
+                activeFilters: state.filters,
+                onChanged: notifier.setFilters,
+              ),
+              Expanded(
+                child: PaginatedListView<NotificationItem>(
+                  items: state.items,
+                  hasMore: state.hasMore,
+                  isLoadingMore: state.isLoadingMore,
+                  onLoadMore: notifier.loadMore,
+                  onRefresh: notifier.refresh,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppDimensions.space8,
+                  ),
+                  emptyState: EmptyStateWidget(
+                    message: l10n.notificationsEmptyTitle,
+                    subtitle: l10n.notificationsEmptySubtitle,
+                  ),
+                  itemBuilder: (final ctx, final item, final _) => NotificationItemTile(
+                    item: item,
+                    onTap: () => _openDetail(ctx, item),
+                  ),
                 ),
               ),
-            ),
-            if (state.hasError)
+              if (state.hasError)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.space16,
+                    vertical: AppDimensions.space8,
+                  ),
+                  child: Text(
+                    l10n.notificationsLoadMoreError,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDimensions.space16,
                   vertical: AppDimensions.space8,
                 ),
                 child: Text(
-                  l10n.notificationsLoadMoreError,
-                  style: Theme.of(context).textTheme.bodySmall,
+                  l10n.notificationsPaginationFooter(
+                    state.items.length,
+                    state.totalItems,
+                  ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space8,
-              ),
-              child: Text(
-                l10n.notificationsPaginationFooter(
-                  state.items.length,
-                  state.totalItems,
-                ),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );

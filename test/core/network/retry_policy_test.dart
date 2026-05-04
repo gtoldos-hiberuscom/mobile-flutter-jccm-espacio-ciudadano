@@ -21,9 +21,13 @@ class _CountingAdapter implements HttpClientAdapter {
   ) async {
     final status = _statusSequence[callCount.clamp(0, _statusSequence.length - 1)];
     callCount += 1;
-    return ResponseBody.fromString('{}', status, headers: {
-      'content-type': ['application/json'],
-    });
+    return ResponseBody.fromString(
+      '{}',
+      status,
+      headers: {
+        'content-type': ['application/json'],
+      },
+    );
   }
 }
 
@@ -39,13 +43,17 @@ void main() {
   group('RetryInterceptor', () {
     test('retries GET on 503 up to maxRetries then succeeds', () async {
       final adapter = _CountingAdapter([503, 503, 200]);
-      final dio = _dioWith(adapter, Dio(), (final d) => RetryInterceptor(
-            dio: d,
-            maxRetries: 3,
-            baseDelay: const Duration(milliseconds: 1),
-            maxDelay: const Duration(milliseconds: 2),
-            random: Random(0),
-          ));
+      final dio = _dioWith(
+        adapter,
+        Dio(),
+        (final d) => RetryInterceptor(
+          dio: d,
+          maxRetries: 3,
+          baseDelay: const Duration(milliseconds: 1),
+          maxDelay: const Duration(milliseconds: 2),
+          random: Random(0),
+        ),
+      );
       final res = await dio.get<dynamic>('/x');
       expect(res.statusCode, 200);
       // Initial call + 2 retries = 3
@@ -54,13 +62,17 @@ void main() {
 
     test('does not retry POST', () async {
       final adapter = _CountingAdapter([503]);
-      final dio = _dioWith(adapter, Dio(), (final d) => RetryInterceptor(
-            dio: d,
-            maxRetries: 3,
-            baseDelay: const Duration(milliseconds: 1),
-            maxDelay: const Duration(milliseconds: 2),
-            random: Random(0),
-          ));
+      final dio = _dioWith(
+        adapter,
+        Dio(),
+        (final d) => RetryInterceptor(
+          dio: d,
+          maxRetries: 3,
+          baseDelay: const Duration(milliseconds: 1),
+          maxDelay: const Duration(milliseconds: 2),
+          random: Random(0),
+        ),
+      );
       await expectLater(
         dio.post<dynamic>('/x'),
         throwsA(isA<DioException>()),
@@ -70,13 +82,17 @@ void main() {
 
     test('does not retry on 400 (non-transient)', () async {
       final adapter = _CountingAdapter([400]);
-      final dio = _dioWith(adapter, Dio(), (final d) => RetryInterceptor(
-            dio: d,
-            maxRetries: 3,
-            baseDelay: const Duration(milliseconds: 1),
-            maxDelay: const Duration(milliseconds: 2),
-            random: Random(0),
-          ));
+      final dio = _dioWith(
+        adapter,
+        Dio(),
+        (final d) => RetryInterceptor(
+          dio: d,
+          maxRetries: 3,
+          baseDelay: const Duration(milliseconds: 1),
+          maxDelay: const Duration(milliseconds: 2),
+          random: Random(0),
+        ),
+      );
       await expectLater(
         dio.get<dynamic>('/x'),
         throwsA(isA<DioException>()),
@@ -86,13 +102,17 @@ void main() {
 
     test('gives up after maxRetries on persistent failure', () async {
       final adapter = _CountingAdapter([503, 503, 503, 503, 503]);
-      final dio = _dioWith(adapter, Dio(), (final d) => RetryInterceptor(
-            dio: d,
-            maxRetries: 2,
-            baseDelay: const Duration(milliseconds: 1),
-            maxDelay: const Duration(milliseconds: 2),
-            random: Random(0),
-          ));
+      final dio = _dioWith(
+        adapter,
+        Dio(),
+        (final d) => RetryInterceptor(
+          dio: d,
+          maxRetries: 2,
+          baseDelay: const Duration(milliseconds: 1),
+          maxDelay: const Duration(milliseconds: 2),
+          random: Random(0),
+        ),
+      );
       await expectLater(
         dio.get<dynamic>('/x'),
         throwsA(isA<DioException>()),

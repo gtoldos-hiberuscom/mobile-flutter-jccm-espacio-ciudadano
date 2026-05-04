@@ -9,7 +9,8 @@ enum CertificateValidationState {
   expired('signatureCertificateExpiredTitle'),
   invalid('signatureCertificateInvalidTitle'),
   vecAvailable('signatureCertificateVecTitle'),
-  unknown('signatureCertificateUnknownTitle');
+  unknown('signatureCertificateUnknownTitle')
+  ;
 
   const CertificateValidationState(this.labelKey);
 
@@ -38,7 +39,5 @@ final class CertificateValidation {
 
   /// Convenience flag — true when the citizen is allowed to proceed to
   /// the external Afirma flow.
-  bool get canSign =>
-      state == CertificateValidationState.valid ||
-      state == CertificateValidationState.vecAvailable;
+  bool get canSign => state == CertificateValidationState.valid || state == CertificateValidationState.vecAvailable;
 }

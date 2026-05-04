@@ -10,18 +10,20 @@ final class EducacionApiWrapper extends GeneratedApiWrapper {
   Future<Result<DTEDUTUORES>> getTitulosUniversitarios(
     final String numDocumento,
     final DTEDUTUOREQ body,
-  ) =>
-      safeCall(() => _api.getTitulosUniversitarios(
-            numDocumento: numDocumento,
-            dTEDUTUOREQBody: body,
-          ));
+  ) => safeCall(
+    () => _api.getTitulosUniversitarios(
+      numDocumento: numDocumento,
+      dTEDUTUOREQBody: body,
+    ),
+  );
 
   Future<Result<DTEDUTNURES>> getTitulosNoUniversitarios(
     final String numDocumento,
     final DTEDUTNUREQ body,
-  ) =>
-      safeCall(() => _api.getTitulosNoUniversitarios(
-            numDocumento: numDocumento,
-            dTEDUTNUREQBody: body,
-          ));
+  ) => safeCall(
+    () => _api.getTitulosNoUniversitarios(
+      numDocumento: numDocumento,
+      dTEDUTNUREQBody: body,
+    ),
+  );
 }

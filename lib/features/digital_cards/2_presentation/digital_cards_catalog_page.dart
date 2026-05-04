@@ -38,17 +38,17 @@ class DigitalCardsCatalogPage extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.digitalCardsPageTitle)),
       body: OfflineBanner(
         child: asyncCatalog.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (final _, final stackTrace) => ErrorStateWidget(
-          message: l10n.digitalCardsErrorMessage,
-          onRetry: () => ref.read(digitalCardsCatalogProvider.notifier).refresh(),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (final _, final stackTrace) => ErrorStateWidget(
+            message: l10n.digitalCardsErrorMessage,
+            onRetry: () => ref.read(digitalCardsCatalogProvider.notifier).refresh(),
+          ),
+          data: (final DigitalCardsCatalog catalog) => _CatalogBody(
+            catalog: catalog,
+            onAction: (final cardId, final action) => _showStubActionSnackbar(context, l10n),
+            onCardTap: (final card) => _handleCardTap(context, card),
+          ),
         ),
-        data: (final DigitalCardsCatalog catalog) => _CatalogBody(
-          catalog: catalog,
-          onAction: (final cardId, final action) => _showStubActionSnackbar(context, l10n),
-          onCardTap: (final card) => _handleCardTap(context, card),
-        ),
-      ),
       ),
     );
   }

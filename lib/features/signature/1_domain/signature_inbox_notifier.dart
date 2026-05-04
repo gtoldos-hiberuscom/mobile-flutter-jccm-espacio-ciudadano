@@ -41,11 +41,10 @@ class SignatureInboxNotifier extends AsyncNotifier<SignatureInboxResult> {
 }
 
 /// Notifier provider exposing the signature inbox state.
-final signatureInboxProvider =
-    AsyncNotifierProvider<SignatureInboxNotifier, SignatureInboxResult>(
-      SignatureInboxNotifier.new,
-      name: 'signatureInboxProvider',
-    );
+final signatureInboxProvider = AsyncNotifierProvider<SignatureInboxNotifier, SignatureInboxResult>(
+  SignatureInboxNotifier.new,
+  name: 'signatureInboxProvider',
+);
 
 /// Async provider exposing the latest certificate / VEC validation
 /// outcome (STORY-45).

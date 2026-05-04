@@ -40,14 +40,10 @@ void main() {
       addTearDown(container.dispose);
       await container.read(notificationDetailProvider('NOT-0001').future);
 
-      final outcome = await container
-          .read(notificationDetailProvider('NOT-0001').notifier)
-          .submitDecision(NotificationDecisionAction.accept);
+      final outcome = await container.read(notificationDetailProvider('NOT-0001').notifier).submitDecision(NotificationDecisionAction.accept);
 
       expect(outcome.resultStatus, NotificationStatus.aceptada);
-      final updated = container
-          .read(notificationDetailProvider('NOT-0001'))
-          .requireValue;
+      final updated = container.read(notificationDetailProvider('NOT-0001')).requireValue;
       expect(updated.status, NotificationStatus.aceptada);
     });
 
@@ -56,14 +52,10 @@ void main() {
       addTearDown(container.dispose);
       await container.read(notificationDetailProvider('NOT-0001').future);
 
-      final outcome = await container
-          .read(notificationDetailProvider('NOT-0001').notifier)
-          .submitDecision(NotificationDecisionAction.reject);
+      final outcome = await container.read(notificationDetailProvider('NOT-0001').notifier).submitDecision(NotificationDecisionAction.reject);
 
       expect(outcome.resultStatus, NotificationStatus.rechazada);
-      final updated = container
-          .read(notificationDetailProvider('NOT-0001'))
-          .requireValue;
+      final updated = container.read(notificationDetailProvider('NOT-0001')).requireValue;
       expect(updated.status, NotificationStatus.rechazada);
     });
 
@@ -76,14 +68,10 @@ void main() {
       await container.read(notificationDetailProvider('NOT-0001').future);
 
       await expectLater(
-        () => container
-            .read(notificationDetailProvider('NOT-0001').notifier)
-            .submitDecision(NotificationDecisionAction.accept),
+        () => container.read(notificationDetailProvider('NOT-0001').notifier).submitDecision(NotificationDecisionAction.accept),
         throwsA(isA<NotificationDecisionConflict>()),
       );
-      final updated = container
-          .read(notificationDetailProvider('NOT-0001'))
-          .requireValue;
+      final updated = container.read(notificationDetailProvider('NOT-0001')).requireValue;
       expect(updated.status, NotificationStatus.caducada);
     });
   });

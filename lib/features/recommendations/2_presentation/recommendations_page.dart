@@ -49,10 +49,8 @@ class RecommendationsPage extends ConsumerWidget {
     ref.listen<AsyncValue<RecommendationsConfigState>>(
       recommendationsConfigProvider,
       (final previous, final next) {
-        final wasConfigured =
-            previous?.value == RecommendationsConfigState.configured;
-        final isConfigured =
-            next.value == RecommendationsConfigState.configured;
+        final wasConfigured = previous?.value == RecommendationsConfigState.configured;
+        final isConfigured = next.value == RecommendationsConfigState.configured;
         if (!wasConfigured && isConfigured) {
           for (final bucket in _buckets) {
             ref.invalidate(recommendationsControllerProvider(bucket));
@@ -79,30 +77,28 @@ class RecommendationsPage extends ConsumerWidget {
         ),
         body: OfflineBanner(
           child: asyncConfig.when(
-          loading: () => const RecommendationsLoadingView(),
-          error: (final err, final st) => RecommendationsErrorView(
-            onRetry: () => ref.invalidate(recommendationsConfigProvider),
-            detail: err.toString(),
-          ),
-          data: (final config) {
-            if (config != RecommendationsConfigState.configured) {
-              // Onboarding / unauthorised — no point in firing the
-              // per-bucket fetches. Render the empty view directly so
-              // both the SnackBar fallback and the GoRouter navigation
-              // are reachable above the TabBarView surface.
-              final variant = RecommendationsEmptyVariant.from(
-                config: config,
-                bucketHasItems: false,
+            loading: () => const RecommendationsLoadingView(),
+            error: (final err, final st) => RecommendationsErrorView(
+              onRetry: () => ref.invalidate(recommendationsConfigProvider),
+              detail: err.toString(),
+            ),
+            data: (final config) {
+              if (config != RecommendationsConfigState.configured) {
+                // Onboarding / unauthorised — no point in firing the
+                // per-bucket fetches. Render the empty view directly so
+                // both the SnackBar fallback and the GoRouter navigation
+                // are reachable above the TabBarView surface.
+                final variant = RecommendationsEmptyVariant.from(
+                  config: config,
+                  bucketHasItems: false,
+                );
+                return RecommendationsEmptyView(variant: variant);
+              }
+              return TabBarView(
+                children: _buckets.map((final b) => RecommendationsBucketView(bucket: b)).toList(growable: false),
               );
-              return RecommendationsEmptyView(variant: variant);
-            }
-            return TabBarView(
-              children: _buckets
-                  .map((final b) => RecommendationsBucketView(bucket: b))
-                  .toList(growable: false),
-            );
-          },
-        ),
+            },
+          ),
         ),
       ),
     );
@@ -130,13 +126,10 @@ class RecommendationsBucketView extends ConsumerStatefulWidget {
   final RecommendationBucket bucket;
 
   @override
-  ConsumerState<RecommendationsBucketView> createState() =>
-      _RecommendationsBucketViewState();
+  ConsumerState<RecommendationsBucketView> createState() => _RecommendationsBucketViewState();
 }
 
-class _RecommendationsBucketViewState
-    extends ConsumerState<RecommendationsBucketView>
-    with AutomaticKeepAliveClientMixin {
+class _RecommendationsBucketViewState extends ConsumerState<RecommendationsBucketView> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -172,9 +165,7 @@ class _RecommendationsBucketViewState
           );
           return RecommendationsEmptyView(
             variant: variant,
-            onSeeAll: widget.bucket == RecommendationBucket.todos
-                ? null
-                : () => DefaultTabController.of(context).animateTo(0),
+            onSeeAll: widget.bucket == RecommendationBucket.todos ? null : () => DefaultTabController.of(context).animateTo(0),
           );
         }
         return NotificationListener<ScrollEndNotification>(
@@ -184,8 +175,7 @@ class _RecommendationsBucketViewState
               return false;
             }
             // Trigger load-more when within 200px of the bottom.
-            if (metrics.pixels >= metrics.maxScrollExtent - 200 &&
-                bucketState.hasMore) {
+            if (metrics.pixels >= metrics.maxScrollExtent - 200 && bucketState.hasMore) {
               unawaited(controller.loadMore());
             }
             return false;

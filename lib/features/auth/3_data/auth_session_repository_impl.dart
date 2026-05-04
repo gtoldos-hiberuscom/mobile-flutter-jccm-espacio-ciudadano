@@ -18,8 +18,7 @@ final class AuthSessionRepositoryImpl implements AuthSessionRepository {
   AuthSessionRepositoryImpl(this._secureStorage);
 
   final SecureStorage _secureStorage;
-  final StreamController<AuthSessionState> _controller =
-      StreamController<AuthSessionState>.broadcast();
+  final StreamController<AuthSessionState> _controller = StreamController<AuthSessionState>.broadcast();
 
   @override
   Stream<AuthSessionState> watch() => _controller.stream;
@@ -72,10 +71,7 @@ final class AuthSessionRepositoryImpl implements AuthSessionRepository {
 
     await Future.wait<void>(<Future<void>>[
       _secureStorage.write(StorageKeys.accessToken, session.accessToken),
-      if (session.refreshToken != null)
-        _secureStorage.write(StorageKeys.refreshToken, session.refreshToken!)
-      else
-        _secureStorage.delete(StorageKeys.refreshToken),
+      if (session.refreshToken != null) _secureStorage.write(StorageKeys.refreshToken, session.refreshToken!) else _secureStorage.delete(StorageKeys.refreshToken),
       _secureStorage.write(StorageKeys.idToken, idToken),
       _secureStorage.write(StorageKeys.idAgente, user.idAgente),
       if (session.accessTokenExpiresAt != null)

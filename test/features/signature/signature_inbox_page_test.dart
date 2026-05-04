@@ -11,8 +11,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 Widget _wrap({
   required final Widget child,
-  final CertificateValidationState certificateState =
-      CertificateValidationState.valid,
+  final CertificateValidationState certificateState = CertificateValidationState.valid,
 }) => ProviderScope(
   overrides: [
     signatureRepositoryProvider.overrideWith(

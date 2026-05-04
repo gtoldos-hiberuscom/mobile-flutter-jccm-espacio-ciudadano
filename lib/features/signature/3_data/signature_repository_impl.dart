@@ -70,8 +70,7 @@ final class SignatureRepositoryImpl implements SignatureRepository {
     if (forceCertificateError) {
       throw StateError('mock: forced certificate validation error');
     }
-    final state =
-        fixedCertificateState ?? _cycleStates[_certificateCounter++ % _cycleStates.length];
+    final state = fixedCertificateState ?? _cycleStates[_certificateCounter++ % _cycleStates.length];
     switch (state) {
       case CertificateValidationState.valid:
         return CertificateValidation(
@@ -97,12 +96,11 @@ final class SignatureRepositoryImpl implements SignatureRepository {
     }
   }
 
-  static const List<CertificateValidationState> _cycleStates =
-      <CertificateValidationState>[
-        CertificateValidationState.valid,
-        CertificateValidationState.vecAvailable,
-        CertificateValidationState.expired,
-      ];
+  static const List<CertificateValidationState> _cycleStates = <CertificateValidationState>[
+    CertificateValidationState.valid,
+    CertificateValidationState.vecAvailable,
+    CertificateValidationState.expired,
+  ];
 
   static List<SignatureDocument> _buildPendingCatalog() {
     final reference = DateTime(2026, 5, 4, 10);

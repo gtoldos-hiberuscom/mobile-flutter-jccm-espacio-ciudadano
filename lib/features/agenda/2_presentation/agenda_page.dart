@@ -75,25 +75,25 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
       ),
       body: OfflineBanner(
         child: asyncState.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (final err, final st) => ErrorStateWidget(
-          message: l10n.agendaError,
-          onRetry: () => ref.read(agendaProvider.notifier).refresh(),
-        ),
-        data: (final s) {
-          // Parse-error → recoverable surface with explicit "intentar de
-          // nuevo" CTA. Never expose the raw reason (canon §24).
-          if (s.snapshot.loadState == AgendaLoadState.parseError) {
-            return ErrorStateWidget(
-              key: const ValueKey('agenda-parse-error'),
-              message: l10n.agendaParseErrorTitle,
-              detail: l10n.agendaParseErrorDetail,
-              retryLabel: l10n.agendaParseErrorRetry,
-              onRetry: () => ref.read(agendaProvider.notifier).refresh(),
-            );
-          }
-          return _buildBody(context, s, l10n);
-        },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (final err, final st) => ErrorStateWidget(
+            message: l10n.agendaError,
+            onRetry: () => ref.read(agendaProvider.notifier).refresh(),
+          ),
+          data: (final s) {
+            // Parse-error → recoverable surface with explicit "intentar de
+            // nuevo" CTA. Never expose the raw reason (canon §24).
+            if (s.snapshot.loadState == AgendaLoadState.parseError) {
+              return ErrorStateWidget(
+                key: const ValueKey('agenda-parse-error'),
+                message: l10n.agendaParseErrorTitle,
+                detail: l10n.agendaParseErrorDetail,
+                retryLabel: l10n.agendaParseErrorRetry,
+                onRetry: () => ref.read(agendaProvider.notifier).refresh(),
+              );
+            }
+            return _buildBody(context, s, l10n);
+          },
         ),
       ),
     );

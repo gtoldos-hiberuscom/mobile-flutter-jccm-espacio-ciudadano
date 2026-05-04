@@ -53,49 +53,49 @@ class _HelpPageState extends ConsumerState<HelpPage> {
       appBar: AppBar(title: Text(l10n.helpPageTitle)),
       body: OfflineBanner(
         child: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space16,
-        ),
-        children: [
-          _SearchBar(
-            controller: _searchController,
-            hint: l10n.helpSearchHint,
-            onChanged: (final v) => setState(() => _query = v),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.space16,
+            vertical: AppDimensions.space16,
           ),
-          const SizedBox(height: AppDimensions.space16),
-          _SectionHeader(title: l10n.helpFaqSectionTitle),
-          if (grouped.isEmpty)
-            EmptyStateWidget(
-              icon: Icons.search_off,
-              message: l10n.helpEmptySearchMessage,
-              subtitle: l10n.helpEmptySearchSubtitle,
-            )
-          else
-            ...grouped.entries.map(
-              (final entry) => _FaqCategoryBlock(
-                categoryLabel: resolveHelpKey(l10n, entry.key),
-                entries: entry.value,
+          children: [
+            _SearchBar(
+              controller: _searchController,
+              hint: l10n.helpSearchHint,
+              onChanged: (final v) => setState(() => _query = v),
+            ),
+            const SizedBox(height: AppDimensions.space16),
+            _SectionHeader(title: l10n.helpFaqSectionTitle),
+            if (grouped.isEmpty)
+              EmptyStateWidget(
+                icon: Icons.search_off,
+                message: l10n.helpEmptySearchMessage,
+                subtitle: l10n.helpEmptySearchSubtitle,
+              )
+            else
+              ...grouped.entries.map(
+                (final entry) => _FaqCategoryBlock(
+                  categoryLabel: resolveHelpKey(l10n, entry.key),
+                  entries: entry.value,
+                ),
+              ),
+            const SizedBox(height: AppDimensions.space24),
+            _SectionHeader(title: l10n.helpGuidesSectionTitle),
+            ...content.guides.map((final g) => _GuideTile(guide: g)),
+            const SizedBox(height: AppDimensions.space24),
+            _SectionHeader(title: l10n.helpContactSectionTitle),
+            ...content.contacts.map((final c) => _ContactTile(contact: c)),
+            const SizedBox(height: AppDimensions.space16),
+            Center(
+              child: FilledButton.icon(
+                key: const Key('help_support_cta'),
+                icon: const Icon(Icons.support_agent),
+                label: Text(l10n.supportCtaFromHelp),
+                onPressed: () => context.go(Routes.supportForm),
               ),
             ),
-          const SizedBox(height: AppDimensions.space24),
-          _SectionHeader(title: l10n.helpGuidesSectionTitle),
-          ...content.guides.map((final g) => _GuideTile(guide: g)),
-          const SizedBox(height: AppDimensions.space24),
-          _SectionHeader(title: l10n.helpContactSectionTitle),
-          ...content.contacts.map((final c) => _ContactTile(contact: c)),
-          const SizedBox(height: AppDimensions.space16),
-          Center(
-            child: FilledButton.icon(
-              key: const Key('help_support_cta'),
-              icon: const Icon(Icons.support_agent),
-              label: Text(l10n.supportCtaFromHelp),
-              onPressed: () => context.go(Routes.supportForm),
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space24),
-        ],
-      ),
+            const SizedBox(height: AppDimensions.space24),
+          ],
+        ),
       ),
     );
   }

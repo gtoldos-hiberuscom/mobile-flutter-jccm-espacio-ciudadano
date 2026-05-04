@@ -51,7 +51,6 @@ class NotFoundScreen extends StatelessWidget {
 
 // ── Authenticated placeholder screens ─────────────────────────────────────────
 
-
 /// Placeholder for the thematic landing screens (Educación, Empleo,
 /// Bienestar Social, Estado/Otros) that are wired from the home dashboard.
 ///

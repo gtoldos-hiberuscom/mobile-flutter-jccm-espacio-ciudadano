@@ -13,15 +13,15 @@ sealed class AuthSessionState {
 
   /// Convenience accessor: returns the [AuthTokens] when authenticated.
   AuthTokens? get sessionOrNull => switch (this) {
-        AuthenticatedSession(:final session) => session,
-        _ => null,
-      };
+    AuthenticatedSession(:final session) => session,
+    _ => null,
+  };
 
   /// Convenience accessor: returns the [AuthUser] when authenticated.
   AuthUser? get userOrNull => switch (this) {
-        AuthenticatedSession(:final user) => user,
-        _ => null,
-      };
+    AuthenticatedSession(:final user) => user,
+    _ => null,
+  };
 
   /// Convenience accessor: returns the citizen's `idAgente` (NIF / sub) when
   /// authenticated, otherwise `null`. Use this from feature code that needs

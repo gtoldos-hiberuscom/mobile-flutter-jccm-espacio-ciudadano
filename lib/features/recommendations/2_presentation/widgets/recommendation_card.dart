@@ -68,20 +68,17 @@ class RecommendationCard extends StatelessWidget {
                     ),
                   if (recommendation.responsibleUnit != null)
                     _Chip(
-                      label:
-                          '${l10n.recommendationsResponsibleUnitPrefix} ${recommendation.responsibleUnit!}',
+                      label: '${l10n.recommendationsResponsibleUnitPrefix} ${recommendation.responsibleUnit!}',
                       icon: Icons.account_balance_outlined,
                     ),
                   if (recommendation.deadlineLabel != null)
                     _Chip(
-                      label:
-                          '${l10n.recommendationsDeadlinePrefix} ${recommendation.deadlineLabel!}',
+                      label: '${l10n.recommendationsDeadlinePrefix} ${recommendation.deadlineLabel!}',
                       icon: Icons.schedule_outlined,
                     ),
                   if (recommendation.lifeEventLabel != null)
                     _Chip(
-                      label:
-                          '${l10n.recommendationsLifeEventPrefix} ${recommendation.lifeEventLabel!}',
+                      label: '${l10n.recommendationsLifeEventPrefix} ${recommendation.lifeEventLabel!}',
                       icon: Icons.label_outline,
                     ),
                 ],
@@ -105,8 +102,7 @@ class RecommendationCard extends StatelessWidget {
       );
       return;
     }
-    final launcher = urlLauncher ??
-        (final Uri u) => launchUrl(u, mode: LaunchMode.externalApplication);
+    final launcher = urlLauncher ?? (final Uri u) => launchUrl(u, mode: LaunchMode.externalApplication);
     final ok = await launcher(uri);
     if (!ok) {
       messenger?.showSnackBar(

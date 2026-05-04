@@ -23,8 +23,7 @@ class _FakeRecommendationsRepository implements RecommendationsRepository {
   int callCount = 0;
 
   @override
-  Future<RecommendationsPageResult> loadAll({final String? cursor}) async =>
-      _serve(cursor);
+  Future<RecommendationsPageResult> loadAll({final String? cursor}) async => _serve(cursor);
 
   @override
   Future<RecommendationsPageResult> loadBucket(
@@ -33,8 +32,7 @@ class _FakeRecommendationsRepository implements RecommendationsRepository {
   }) async => _serve(cursor);
 
   @override
-  Future<RecommendationsConfigState> loadConfigState() async =>
-      RecommendationsConfigState.configured;
+  Future<RecommendationsConfigState> loadConfigState() async => RecommendationsConfigState.configured;
 
   Future<RecommendationsPageResult> _serve(final String? cursor) async {
     if (failInitial && cursor == null) {
@@ -109,18 +107,14 @@ void main() {
       );
       await notifier.loadMore();
 
-      final state = container
-          .read(recommendationsControllerProvider(RecommendationBucket.todos))
-          .requireValue;
+      final state = container.read(recommendationsControllerProvider(RecommendationBucket.todos)).requireValue;
       expect(state.items.map((final r) => r.id), ['a', 'b', 'c']);
       expect(state.hasMore, isFalse);
       expect(state.nextCursor, isNull);
 
       // Subsequent loadMore is a no-op.
       await notifier.loadMore();
-      final after = container
-          .read(recommendationsControllerProvider(RecommendationBucket.todos))
-          .requireValue;
+      final after = container.read(recommendationsControllerProvider(RecommendationBucket.todos)).requireValue;
       expect(after.items, hasLength(3));
     });
 

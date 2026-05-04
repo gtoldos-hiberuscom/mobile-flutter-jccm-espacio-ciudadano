@@ -96,14 +96,15 @@ class LandingPage extends ConsumerWidget {
                 label: l10n.landingCtaButton,
                 semanticsLabel: l10n.landingCtaButton,
                 onPressed: () async {
-                  final AuthenticatedSession authenticated =
-                      await ref.read(loginUseCaseProvider)();
-                  ref.read(appLoggerProvider).info(
-                    'Login successful',
-                    context: <String, Object?>{
-                      'hasIdAgente': authenticated.user.idAgente.isNotEmpty,
-                    },
-                  );
+                  final AuthenticatedSession authenticated = await ref.read(loginUseCaseProvider)();
+                  ref
+                      .read(appLoggerProvider)
+                      .info(
+                        'Login successful',
+                        context: <String, Object?>{
+                          'hasIdAgente': authenticated.user.idAgente.isNotEmpty,
+                        },
+                      );
 
                   //go to sitemap page
                   ref.read(goRouterProvider).go('/sitemap');

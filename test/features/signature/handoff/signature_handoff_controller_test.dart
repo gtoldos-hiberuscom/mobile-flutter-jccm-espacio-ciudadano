@@ -44,24 +44,21 @@ class _CountingRepository implements SignatureRepository {
   }
 
   @override
-  Future<CertificateValidation> validateCertificate() =>
-      _inner.validateCertificate();
+  Future<CertificateValidation> validateCertificate() => _inner.validateCertificate();
 
   @override
-  Future<List<SignatureDocument>> loadSignedHistory() =>
-      _inner.loadSignedHistory();
+  Future<List<SignatureDocument>> loadSignedHistory() => _inner.loadSignedHistory();
 }
 
-SignatureHandoffRequest _request(final String docId) =>
-    SignatureHandoffRequest(
-      documentId: docId,
-      documentTitle: 'Doc $docId',
-      externalUri: Uri.parse('https://afirma.jccm.es/sign?docId=$docId'),
-      returnDeepLink: Uri.parse(
-        'jccmespacio://sign/afirma/return?docId=$docId',
-      ),
-      requestedAt: DateTime(2026, 4, 21, 10),
-    );
+SignatureHandoffRequest _request(final String docId) => SignatureHandoffRequest(
+  documentId: docId,
+  documentTitle: 'Doc $docId',
+  externalUri: Uri.parse('https://afirma.jccm.es/sign?docId=$docId'),
+  returnDeepLink: Uri.parse(
+    'jccmespacio://sign/afirma/return?docId=$docId',
+  ),
+  requestedAt: DateTime(2026, 4, 21, 10),
+);
 
 void main() {
   group('SignatureHandoffController', () {

@@ -15,8 +15,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/discapacidad/3_dat
 /// On `build()` it delegates to [DiscapacidadRepository.loadCard]; the
 /// `DiscapacidadUnavailable` exception bubbles through `AsyncValue.error`
 /// so the page can downgrade to the explicit unavailable surface.
-final discapacidadDetailNotifierProvider =
-    AsyncNotifierProvider<DiscapacidadDetailNotifier, DiscapacidadCard>(
+final discapacidadDetailNotifierProvider = AsyncNotifierProvider<DiscapacidadDetailNotifier, DiscapacidadCard>(
   DiscapacidadDetailNotifier.new,
 );
 

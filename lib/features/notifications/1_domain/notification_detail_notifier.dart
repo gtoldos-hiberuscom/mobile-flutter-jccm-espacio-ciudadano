@@ -80,8 +80,7 @@ class NotificationDetailNotifier extends AsyncNotifier<NotificationDetail> {
 }
 
 /// Family provider keyed by notification id (STORY-43).
-final notificationDetailProvider =
-    AsyncNotifierProvider.family<NotificationDetailNotifier, NotificationDetail, String>(
-      NotificationDetailNotifier.new,
-      name: 'notificationDetailProvider',
-    );
+final notificationDetailProvider = AsyncNotifierProvider.family<NotificationDetailNotifier, NotificationDetail, String>(
+  NotificationDetailNotifier.new,
+  name: 'notificationDetailProvider',
+);

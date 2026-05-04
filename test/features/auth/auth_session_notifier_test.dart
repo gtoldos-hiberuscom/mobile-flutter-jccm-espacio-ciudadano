@@ -48,13 +48,15 @@ void main() {
 
       final repo = container.read(authSessionRepositoryProvider);
       final idToken = _makeIdToken(<String, dynamic>{'sub': 's', 'nif': '11111111H'});
-      await repo.save(AuthTokens(
-        accessToken: 'a',
-        refreshToken: 'r',
-        idToken: idToken,
-        tokenType: 'Bearer',
-        scopes: const ['openid'],
-      ));
+      await repo.save(
+        AuthTokens(
+          accessToken: 'a',
+          refreshToken: 'r',
+          idToken: idToken,
+          tokenType: 'Bearer',
+          scopes: const ['openid'],
+        ),
+      );
 
       // Allow the broadcast stream listener to flush.
       await Future<void>.delayed(Duration.zero);
@@ -97,14 +99,16 @@ void main() {
         'family_name': 'Lovelace',
         'email': 'ada@example.com',
       });
-      final result = await repo.save(AuthTokens(
-        accessToken: 'access-1',
-        refreshToken: 'refresh-1',
-        idToken: idToken,
-        tokenType: 'Bearer',
-        scopes: const ['openid'],
-        accessTokenExpiresAt: DateTime.utc(2099),
-      ));
+      final result = await repo.save(
+        AuthTokens(
+          accessToken: 'access-1',
+          refreshToken: 'refresh-1',
+          idToken: idToken,
+          tokenType: 'Bearer',
+          scopes: const ['openid'],
+          accessTokenExpiresAt: DateTime.utc(2099),
+        ),
+      );
 
       expect(result.user.idAgente, '12345678Z');
       expect(result.user.displayName, 'Ada Lovelace');
@@ -175,6 +179,7 @@ String _makeIdToken(final Map<String, dynamic> payload) {
     final encoded = base64Url.encode(utf8.encode(json.encode(claims)));
     return encoded.replaceAll('=', '');
   }
+
   final header = segment(<String, dynamic>{'alg': 'none', 'typ': 'JWT'});
   final body = segment(payload);
   return '$header.$body.signature-not-verified';

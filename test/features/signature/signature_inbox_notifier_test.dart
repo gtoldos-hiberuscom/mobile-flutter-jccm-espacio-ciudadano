@@ -15,8 +15,7 @@ void main() {
         signatureRepositoryProvider.overrideWith(
           (final ref) => SignatureRepositoryImpl(
             forceInboxError: forceInboxError,
-            fixedCertificateState:
-                fixedCertificateState ?? CertificateValidationState.valid,
+            fixedCertificateState: fixedCertificateState ?? CertificateValidationState.valid,
           ),
         ),
       ],

@@ -114,15 +114,11 @@ class _NotificationDetailPageState extends ConsumerState<NotificationDetailPage>
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _isSubmitting = true);
     try {
-      final outcome = await ref
-          .read(notificationDetailProvider(widget.notificationId).notifier)
-          .submitDecision(action);
+      final outcome = await ref.read(notificationDetailProvider(widget.notificationId).notifier).submitDecision(action);
       if (!mounted) {
         return;
       }
-      final toast = outcome.resultStatus == NotificationStatus.aceptada
-          ? l10n.notificationDetailDecisionAcceptedToast
-          : l10n.notificationDetailDecisionRejectedToast;
+      final toast = outcome.resultStatus == NotificationStatus.aceptada ? l10n.notificationDetailDecisionAcceptedToast : l10n.notificationDetailDecisionRejectedToast;
       messenger.showSnackBar(SnackBar(content: Text(toast)));
       // Give the user a moment to read the toast before popping.
       await Future<void>.delayed(const Duration(milliseconds: 800));
@@ -153,9 +149,7 @@ class _NotificationDetailPageState extends ConsumerState<NotificationDetailPage>
     setState(() => _downloadingDocIds.add(document.id));
     NotificationDocumentDownloadResult result;
     try {
-      result = await ref
-          .read(notificationDetailProvider(widget.notificationId).notifier)
-          .downloadDocument(document.id);
+      result = await ref.read(notificationDetailProvider(widget.notificationId).notifier).downloadDocument(document.id);
     } on Object {
       result = NotificationDocumentDownloadResult.error();
     }
@@ -163,12 +157,9 @@ class _NotificationDetailPageState extends ConsumerState<NotificationDetailPage>
       return;
     }
     final toast = switch (result.status) {
-      NotificationDocumentDownloadStatus.success =>
-        l10n.notificationDetailDocumentDownloadSuccessToast,
-      NotificationDocumentDownloadStatus.unavailable =>
-        l10n.notificationDetailDocumentDownloadUnavailableToast,
-      NotificationDocumentDownloadStatus.error =>
-        l10n.notificationDetailDocumentDownloadErrorToast,
+      NotificationDocumentDownloadStatus.success => l10n.notificationDetailDocumentDownloadSuccessToast,
+      NotificationDocumentDownloadStatus.unavailable => l10n.notificationDetailDocumentDownloadUnavailableToast,
+      NotificationDocumentDownloadStatus.error => l10n.notificationDetailDocumentDownloadErrorToast,
     };
     messenger.showSnackBar(SnackBar(content: Text(toast)));
     setState(() => _downloadingDocIds.remove(document.id));
@@ -359,22 +350,28 @@ class _MetadataSection extends StatelessWidget {
     final theme = Theme.of(context);
     final entries = <Widget>[];
     if (detail.expedienteRef != null) {
-      entries.add(_metadataRow(
-        theme,
-        l10n.notificationDetailHeaderExpediente(detail.expedienteRef!),
-      ));
+      entries.add(
+        _metadataRow(
+          theme,
+          l10n.notificationDetailHeaderExpediente(detail.expedienteRef!),
+        ),
+      );
     }
     if (detail.procedimiento != null) {
-      entries.add(_metadataRow(
-        theme,
-        l10n.notificationDetailHeaderProcedimiento(detail.procedimiento!),
-      ));
+      entries.add(
+        _metadataRow(
+          theme,
+          l10n.notificationDetailHeaderProcedimiento(detail.procedimiento!),
+        ),
+      );
     }
     if (detail.decisionDeadline != null) {
-      entries.add(_metadataRow(
-        theme,
-        l10n.notificationDetailHeaderDeadline(_formatDate(detail.decisionDeadline!)),
-      ));
+      entries.add(
+        _metadataRow(
+          theme,
+          l10n.notificationDetailHeaderDeadline(_formatDate(detail.decisionDeadline!)),
+        ),
+      );
     }
     if (entries.isEmpty) {
       return const SizedBox.shrink();
@@ -430,9 +427,7 @@ class _DocumentsSection extends StatelessWidget {
             (final doc) => NotificationDocumentTile(
               document: doc,
               isDownloading: downloadingDocIds.contains(doc.id),
-              onDownload: doc.availability == NotificationDocumentAvailability.available
-                  ? () => onDownload(doc)
-                  : null,
+              onDownload: doc.availability == NotificationDocumentAvailability.available ? () => onDownload(doc) : null,
             ),
           ),
       ],

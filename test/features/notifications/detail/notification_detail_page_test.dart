@@ -132,10 +132,12 @@ void main() {
   testWidgets('conflict surfaces the conflict snackbar and refreshes the chip', (
     final tester,
   ) async {
-    await tester.pumpWidget(_wrap(
-      conflictOnDecision: true,
-      conflictCurrentStatus: NotificationStatus.caducada,
-    ));
+    await tester.pumpWidget(
+      _wrap(
+        conflictOnDecision: true,
+        conflictCurrentStatus: NotificationStatus.caducada,
+      ),
+    );
     await tester.pump();
     await tester.pump();
 

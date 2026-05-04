@@ -112,9 +112,4 @@ class RecommendationsController extends AsyncNotifier<RecommendationsBucketState
 }
 
 /// Family provider keyed by [RecommendationBucket].
-final recommendationsControllerProvider =
-    AsyncNotifierProvider.family<
-      RecommendationsController,
-      RecommendationsBucketState,
-      RecommendationBucket
-    >(RecommendationsController.new);
+final recommendationsControllerProvider = AsyncNotifierProvider.family<RecommendationsController, RecommendationsBucketState, RecommendationBucket>(RecommendationsController.new);

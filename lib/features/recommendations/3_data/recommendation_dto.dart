@@ -46,14 +46,11 @@ final class RecommendationDto {
       title: title,
       summary: _asString(map['summary']) ?? _asString(map['descripcion']),
       lifeEventId: _asString(map['lifeEventId']) ?? _asString(map['idHecho']),
-      lifeEventLabel:
-          _asString(map['lifeEventLabel']) ?? _asString(map['nombreHecho']),
-      responsibleUnit: _asString(map['responsibleUnit']) ??
-          _asString(map['nombreUnidadResponsable']),
+      lifeEventLabel: _asString(map['lifeEventLabel']) ?? _asString(map['nombreHecho']),
+      responsibleUnit: _asString(map['responsibleUnit']) ?? _asString(map['nombreUnidadResponsable']),
       deadlineLabel: _asString(map['deadlineLabel']) ?? _asString(map['plazo']),
       publishedAt: _asDate(map['publishedAt']) ?? _asDate(map['fechaPublicacion']),
-      isImmediateProcessing:
-          _asBool(map['isImmediateProcessing']) ?? _asBool(map['inmediato']) ?? false,
+      isImmediateProcessing: _asBool(map['isImmediateProcessing']) ?? _asBool(map['inmediato']) ?? false,
       detailUri: _asUri(map['detailUri']) ?? _asUri(map['urlDetalle']),
     );
   }

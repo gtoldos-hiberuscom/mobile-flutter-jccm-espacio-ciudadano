@@ -27,19 +27,21 @@ void main() {
 
     test('invalidate removes a single entry', () {
       final cache = TtlCache();
-      cache..write('a', 1, ttl: const Duration(minutes: 1))
-           ..write('b', 2, ttl: const Duration(minutes: 1))
-           ..invalidate('a');
+      cache
+        ..write('a', 1, ttl: const Duration(minutes: 1))
+        ..write('b', 2, ttl: const Duration(minutes: 1))
+        ..invalidate('a');
       expect(cache.read<int>('a'), isNull);
       expect(cache.read<int>('b'), 2);
     });
 
     test('invalidatePrefix scopes namespace eviction', () {
       final cache = TtlCache();
-      cache..write('agenda:list', 1, ttl: const Duration(minutes: 1))
-           ..write('agenda:detail:1', 2, ttl: const Duration(minutes: 1))
-           ..write('notifications:inbox', 3, ttl: const Duration(minutes: 1))
-           ..invalidatePrefix('agenda:');
+      cache
+        ..write('agenda:list', 1, ttl: const Duration(minutes: 1))
+        ..write('agenda:detail:1', 2, ttl: const Duration(minutes: 1))
+        ..write('notifications:inbox', 3, ttl: const Duration(minutes: 1))
+        ..invalidatePrefix('agenda:');
       expect(cache.read<int>('agenda:list'), isNull);
       expect(cache.read<int>('agenda:detail:1'), isNull);
       expect(cache.read<int>('notifications:inbox'), 3);

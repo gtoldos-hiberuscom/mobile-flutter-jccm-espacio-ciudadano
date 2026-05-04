@@ -61,19 +61,7 @@ final class Recommendation {
   final Uri? detailUri;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is Recommendation &&
-          other.id == id &&
-          other.title == title &&
-          other.summary == summary &&
-          other.lifeEventId == lifeEventId &&
-          other.lifeEventLabel == lifeEventLabel &&
-          other.responsibleUnit == responsibleUnit &&
-          other.deadlineLabel == deadlineLabel &&
-          other.publishedAt == publishedAt &&
-          other.isImmediateProcessing == isImmediateProcessing &&
-          other.detailUri == detailUri;
+  bool operator ==(final Object other) => identical(this, other) || other is Recommendation && other.id == id && other.title == title && other.summary == summary && other.lifeEventId == lifeEventId && other.lifeEventLabel == lifeEventLabel && other.responsibleUnit == responsibleUnit && other.deadlineLabel == deadlineLabel && other.publishedAt == publishedAt && other.isImmediateProcessing == isImmediateProcessing && other.detailUri == detailUri;
 
   @override
   int get hashCode => Object.hash(

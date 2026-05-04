@@ -22,8 +22,7 @@ const authSessionProvider = AuthSessionNotifierProvider._();
 /// Pure exposition: no business logic, no I/O. The notifier subscribes to
 /// `AuthSessionRepository.watch()` and rebuilds whenever a use case
 /// (`LoginUseCase`, `LogoutUseCase`) mutates the persisted session.
-final class AuthSessionNotifierProvider
-    extends $AsyncNotifierProvider<AuthSessionNotifier, AuthSessionState> {
+final class AuthSessionNotifierProvider extends $AsyncNotifierProvider<AuthSessionNotifier, AuthSessionState> {
   /// Reactive view of the persisted [AuthSessionState].
   ///
   /// Pure exposition: no business logic, no I/O. The notifier subscribes to
@@ -48,8 +47,7 @@ final class AuthSessionNotifierProvider
   AuthSessionNotifier create() => AuthSessionNotifier();
 }
 
-String _$authSessionNotifierHash() =>
-    r'0bf72bf96773ce4aa505595c50ddf7c0941cdee9';
+String _$authSessionNotifierHash() => r'0bf72bf96773ce4aa505595c50ddf7c0941cdee9';
 
 /// Reactive view of the persisted [AuthSessionState].
 ///
@@ -63,16 +61,8 @@ abstract class _$AuthSessionNotifier extends $AsyncNotifier<AuthSessionState> {
   @override
   void runBuild() {
     final created = build();
-    final ref =
-        this.ref as $Ref<AsyncValue<AuthSessionState>, AuthSessionState>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<AuthSessionState>, AuthSessionState>,
-              AsyncValue<AuthSessionState>,
-              Object?,
-              Object?
-            >;
+    final ref = this.ref as $Ref<AsyncValue<AuthSessionState>, AuthSessionState>;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<AuthSessionState>, AuthSessionState>, AsyncValue<AuthSessionState>, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }
@@ -84,9 +74,7 @@ const currentAuthSessionProvider = CurrentAuthSessionProvider._();
 
 /// Convenience: returns the active [AuthTokens] or \`null\`.
 
-final class CurrentAuthSessionProvider
-    extends $FunctionalProvider<AuthTokens?, AuthTokens?, AuthTokens?>
-    with $Provider<AuthTokens?> {
+final class CurrentAuthSessionProvider extends $FunctionalProvider<AuthTokens?, AuthTokens?, AuthTokens?> with $Provider<AuthTokens?> {
   /// Convenience: returns the active [AuthTokens] or \`null\`.
   const CurrentAuthSessionProvider._()
     : super(
@@ -104,8 +92,7 @@ final class CurrentAuthSessionProvider
 
   @$internal
   @override
-  $ProviderElement<AuthTokens?> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<AuthTokens?> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   AuthTokens? create(Ref ref) {
@@ -121,8 +108,7 @@ final class CurrentAuthSessionProvider
   }
 }
 
-String _$currentAuthSessionHash() =>
-    r'887d42c8ade48e2a39e6e1c3343227e1738befe2';
+String _$currentAuthSessionHash() => r'887d42c8ade48e2a39e6e1c3343227e1738befe2';
 
 /// Convenience: returns the active [AuthUser] or \`null\`.
 
@@ -131,9 +117,7 @@ const currentAuthUserProvider = CurrentAuthUserProvider._();
 
 /// Convenience: returns the active [AuthUser] or \`null\`.
 
-final class CurrentAuthUserProvider
-    extends $FunctionalProvider<AuthUser?, AuthUser?, AuthUser?>
-    with $Provider<AuthUser?> {
+final class CurrentAuthUserProvider extends $FunctionalProvider<AuthUser?, AuthUser?, AuthUser?> with $Provider<AuthUser?> {
   /// Convenience: returns the active [AuthUser] or \`null\`.
   const CurrentAuthUserProvider._()
     : super(
@@ -151,8 +135,7 @@ final class CurrentAuthUserProvider
 
   @$internal
   @override
-  $ProviderElement<AuthUser?> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<AuthUser?> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   AuthUser? create(Ref ref) {
@@ -183,9 +166,7 @@ const currentIdAgenteProvider = CurrentIdAgenteProvider._();
 /// Canonical entry point for feature code that needs the document
 /// identifier — recommendations, hechos vitales, firma, etc.
 
-final class CurrentIdAgenteProvider
-    extends $FunctionalProvider<String?, String?, String?>
-    with $Provider<String?> {
+final class CurrentIdAgenteProvider extends $FunctionalProvider<String?, String?, String?> with $Provider<String?> {
   /// Convenience: returns the citizen's \`idAgente\` (NIF / sub) or \`null\`.
   ///
   /// Canonical entry point for feature code that needs the document
@@ -206,8 +187,7 @@ final class CurrentIdAgenteProvider
 
   @$internal
   @override
-  $ProviderElement<String?> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<String?> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   String? create(Ref ref) {

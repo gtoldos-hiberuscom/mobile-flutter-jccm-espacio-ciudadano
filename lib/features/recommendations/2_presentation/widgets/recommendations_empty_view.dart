@@ -75,9 +75,7 @@ class RecommendationsEmptyView extends StatelessWidget {
           icon: Icons.check_circle_outline,
           title: l10n.recommendationsEmptyConfiguredTitle,
           body: l10n.recommendationsEmptyConfiguredBody,
-          secondaryLabel: onSeeAll == null
-              ? null
-              : l10n.recommendationsEmptyConfiguredSecondaryCta,
+          secondaryLabel: onSeeAll == null ? null : l10n.recommendationsEmptyConfiguredSecondaryCta,
           onSecondary: onSeeAll,
         );
     }

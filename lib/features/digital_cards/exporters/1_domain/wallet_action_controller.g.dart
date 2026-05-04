@@ -34,8 +34,7 @@ const walletActionControllerProvider = WalletActionControllerProvider._();
 /// `ref.listen` after the awaited future resolves, and so async work
 /// started from a transiently-listened page does not get torn down
 /// mid-flight.
-final class WalletActionControllerProvider
-    extends $NotifierProvider<WalletActionController, WalletActionResult?> {
+final class WalletActionControllerProvider extends $NotifierProvider<WalletActionController, WalletActionResult?> {
   /// Owns the cross-cutting wallet pipeline (STORY-52, AC1–AC4).
   ///
   /// `persistAndAct` validates the artifact, persists it to the
@@ -74,8 +73,7 @@ final class WalletActionControllerProvider
   }
 }
 
-String _$walletActionControllerHash() =>
-    r'52db0855409b6e098546e1073c80c8e45d3d3fc6';
+String _$walletActionControllerHash() => r'52db0855409b6e098546e1073c80c8e45d3d3fc6';
 
 /// Owns the cross-cutting wallet pipeline (STORY-52, AC1–AC4).
 ///
@@ -96,14 +94,7 @@ abstract class _$WalletActionController extends $Notifier<WalletActionResult?> {
   void runBuild() {
     final created = build();
     final ref = this.ref as $Ref<WalletActionResult?, WalletActionResult?>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<WalletActionResult?, WalletActionResult?>,
-              WalletActionResult?,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<WalletActionResult?, WalletActionResult?>, WalletActionResult?, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

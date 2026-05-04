@@ -50,9 +50,11 @@ class RecommendationsRepositoryMock implements RecommendationsRepository {
     if (bucket == RecommendationBucket.todos) {
       return loadAll(cursor: cursor);
     }
-    final filtered = _items.where((final r) => _matches(r, bucket)).toList(
-      growable: false,
-    );
+    final filtered = _items
+        .where((final r) => _matches(r, bucket))
+        .toList(
+          growable: false,
+        );
     return _page(filtered, cursor);
   }
 

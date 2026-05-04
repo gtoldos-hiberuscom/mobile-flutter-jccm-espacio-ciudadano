@@ -14,7 +14,8 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recomme
 enum RecommendationsEmptyVariant {
   unconfigured,
   unauthorised,
-  configuredButEmpty;
+  configuredButEmpty
+  ;
 
   /// Pure mapping helper.
   ///

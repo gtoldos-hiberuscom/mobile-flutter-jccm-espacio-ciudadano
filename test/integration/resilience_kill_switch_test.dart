@@ -59,9 +59,11 @@ void main() {
     'OfflineBanner stays collapsed when connectivity reports online',
     (final tester) async {
       await tester.pumpWidget(
-        _harness(connectivity: const <ConnectivityResult>[
-          ConnectivityResult.wifi,
-        ]),
+        _harness(
+          connectivity: const <ConnectivityResult>[
+            ConnectivityResult.wifi,
+          ],
+        ),
       );
       await tester.pumpAndSettle();
 
@@ -77,9 +79,11 @@ void main() {
     'OfflineBanner surfaces the indicator when connectivity reports offline',
     (final tester) async {
       await tester.pumpWidget(
-        _harness(connectivity: const <ConnectivityResult>[
-          ConnectivityResult.none,
-        ]),
+        _harness(
+          connectivity: const <ConnectivityResult>[
+            ConnectivityResult.none,
+          ],
+        ),
       );
       await tester.pumpAndSettle();
 

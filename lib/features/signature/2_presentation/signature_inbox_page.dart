@@ -32,8 +32,7 @@ class SignatureInboxPage extends ConsumerStatefulWidget {
   const SignatureInboxPage({super.key});
 
   @override
-  ConsumerState<SignatureInboxPage> createState() =>
-      _SignatureInboxPageState();
+  ConsumerState<SignatureInboxPage> createState() => _SignatureInboxPageState();
 }
 
 class _SignatureInboxPageState extends ConsumerState<SignatureInboxPage> {
@@ -67,40 +66,40 @@ class _SignatureInboxPageState extends ConsumerState<SignatureInboxPage> {
         ),
         body: OfflineBanner(
           child: asyncState.when(
-          loading: () => LoadingStateWidget(message: l10n.signatureLoading),
-          error: (final error, final stack) => ErrorStateWidget(
-            message: l10n.signatureErrorMessage,
-            retryLabel: l10n.signatureRetry,
-            onRetry: notifier.refresh,
-          ),
-          data: (final state) => Column(
-            children: <Widget>[
-              const CertificateStatusBanner(),
-              Expanded(
-                child: TabBarView(
-                  children: <Widget>[
-                    _DocumentsList(
-                      key: const ValueKey<String>('signature-pending-list'),
-                      items: state.pending,
-                      emptyTitle: l10n.signatureEmptyPendingTitle,
-                      emptySubtitle: l10n.signatureEmptyPendingSubtitle,
-                      onRefresh: notifier.refresh,
-                      onSign: _onSignPressed,
-                    ),
-                    _DocumentsList(
-                      key: const ValueKey<String>('signature-signed-list'),
-                      items: state.signed,
-                      emptyTitle: l10n.signatureEmptyHistoryTitle,
-                      emptySubtitle: l10n.signatureEmptyHistorySubtitle,
-                      onRefresh: notifier.refresh,
-                      onSign: null,
-                    ),
-                  ],
+            loading: () => LoadingStateWidget(message: l10n.signatureLoading),
+            error: (final error, final stack) => ErrorStateWidget(
+              message: l10n.signatureErrorMessage,
+              retryLabel: l10n.signatureRetry,
+              onRetry: notifier.refresh,
+            ),
+            data: (final state) => Column(
+              children: <Widget>[
+                const CertificateStatusBanner(),
+                Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      _DocumentsList(
+                        key: const ValueKey<String>('signature-pending-list'),
+                        items: state.pending,
+                        emptyTitle: l10n.signatureEmptyPendingTitle,
+                        emptySubtitle: l10n.signatureEmptyPendingSubtitle,
+                        onRefresh: notifier.refresh,
+                        onSign: _onSignPressed,
+                      ),
+                      _DocumentsList(
+                        key: const ValueKey<String>('signature-signed-list'),
+                        items: state.signed,
+                        emptyTitle: l10n.signatureEmptyHistoryTitle,
+                        emptySubtitle: l10n.signatureEmptyHistorySubtitle,
+                        onRefresh: notifier.refresh,
+                        onSign: null,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );
@@ -150,9 +149,7 @@ class _SignatureInboxPageState extends ConsumerState<SignatureInboxPage> {
     if (next == null) {
       return;
     }
-    if (previous?.status == next.status &&
-        previous?.documentId == next.documentId &&
-        previous?.completedAt == next.completedAt) {
+    if (previous?.status == next.status && previous?.documentId == next.documentId && previous?.completedAt == next.completedAt) {
       return;
     }
     final messenger = ScaffoldMessenger.maybeOf(context);

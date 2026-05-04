@@ -12,8 +12,7 @@ GoRouter _routerFor(final Widget child) => GoRouter(
     GoRoute(path: '/host', builder: (final c, final s) => child),
     GoRoute(
       path: Routes.preferencesConsent,
-      builder: (final c, final s) =>
-          const Scaffold(body: Text('PREFERENCES_CONSENT_PAGE')),
+      builder: (final c, final s) => const Scaffold(body: Text('PREFERENCES_CONSENT_PAGE')),
     ),
   ],
 );

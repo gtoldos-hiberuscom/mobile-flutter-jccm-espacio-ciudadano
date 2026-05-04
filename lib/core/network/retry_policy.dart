@@ -24,11 +24,11 @@ final class RetryInterceptor extends Interceptor {
     final Duration baseDelay = const Duration(milliseconds: 300),
     final Duration maxDelay = const Duration(seconds: 4),
     final Random? random,
-  })  : _dio = dio,
-        _maxRetries = maxRetries,
-        _baseDelay = baseDelay,
-        _maxDelay = maxDelay,
-        _random = random ?? Random();
+  }) : _dio = dio,
+       _maxRetries = maxRetries,
+       _baseDelay = baseDelay,
+       _maxDelay = maxDelay,
+       _random = random ?? Random();
 
   static const String _attemptHeader = 'x-retry-attempt';
   static const Set<String> _idempotentMethods = <String>{

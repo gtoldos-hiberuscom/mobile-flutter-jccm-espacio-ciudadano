@@ -36,12 +36,10 @@ class _StaticRepo implements RecommendationsRepository {
   final List<Recommendation> items;
 
   @override
-  Future<RecommendationsConfigState> loadConfigState() async =>
-      RecommendationsConfigState.configured;
+  Future<RecommendationsConfigState> loadConfigState() async => RecommendationsConfigState.configured;
 
   @override
-  Future<RecommendationsPageResult> loadAll({final String? cursor}) async =>
-      RecommendationsPageResult(items: items, hasMore: false);
+  Future<RecommendationsPageResult> loadAll({final String? cursor}) async => RecommendationsPageResult(items: items, hasMore: false);
 
   @override
   Future<RecommendationsPageResult> loadBucket(
@@ -56,8 +54,7 @@ GoRouter _routerFor(final Widget child) => GoRouter(
     GoRoute(path: '/host', builder: (final c, final s) => child),
     GoRoute(
       path: Routes.preferencesConsent,
-      builder: (final c, final s) =>
-          const Scaffold(body: Text('PREFERENCES_CONSENT_PAGE')),
+      builder: (final c, final s) => const Scaffold(body: Text('PREFERENCES_CONSENT_PAGE')),
     ),
   ],
 );

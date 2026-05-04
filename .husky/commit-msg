@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Hook para validar el mensaje de commit
+
+# Patrón de ejemplo: Conventional Commits (feat|fix|chore|docs|refactor|test|style|perf|build|ci|revert):
+PATTERN='^(feat|fix|chore|docs|refactor|test|style|perf|build|ci|revert)(\([a-zA-Z0-9_-]+\))?: .+$'
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+if ! echo "$commit_msg" | grep -Eq "$PATTERN"; then
+  echo "\033[0;31m[ERROR] Mensaje de commit inválido.\033[0m"
+  echo "El mensaje debe seguir Conventional Commits, por ejemplo:"
+  echo "  feat(login): add login button"
+  echo "  fix(api): handle null response"
+  echo "  chore: update dependencies"
+  exit 1
+fi

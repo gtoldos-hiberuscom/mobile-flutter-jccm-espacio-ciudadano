@@ -31,10 +31,7 @@ final class SignatureHandoffOutcome {
 
   /// Convenience constructor for the in-flight state, before the
   /// deep-link return has been parsed.
-  const SignatureHandoffOutcome.pending({required this.documentId})
-    : status = SignatureHandoffStatus.pending,
-      errorReason = null,
-      completedAt = null;
+  const SignatureHandoffOutcome.pending({required this.documentId}) : status = SignatureHandoffStatus.pending, errorReason = null, completedAt = null;
 
   final SignatureHandoffStatus status;
   final String documentId;

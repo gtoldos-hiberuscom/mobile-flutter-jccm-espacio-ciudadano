@@ -11,8 +11,7 @@
 /// Notes and use `SecureStorage` for sensitive values or
 /// `SharedPreferences` for non-PII metadata explicitly.
 final class TtlCache {
-  TtlCache({final DateTime Function()? clock})
-      : _clock = clock ?? DateTime.now;
+  TtlCache({final DateTime Function()? clock}) : _clock = clock ?? DateTime.now;
 
   final DateTime Function() _clock;
   final Map<String, _Entry> _entries = <String, _Entry>{};

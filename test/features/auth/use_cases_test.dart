@@ -155,8 +155,7 @@ final class _FakeSessionRepository implements AuthSessionRepository {
   AuthTokens? lastSaved;
   bool cleared = false;
   AuthSessionState _state = const UnauthenticatedSession();
-  final StreamController<AuthSessionState> _controller =
-      StreamController<AuthSessionState>.broadcast();
+  final StreamController<AuthSessionState> _controller = StreamController<AuthSessionState>.broadcast();
 
   @override
   Future<AuthSessionState> read() async => _state;

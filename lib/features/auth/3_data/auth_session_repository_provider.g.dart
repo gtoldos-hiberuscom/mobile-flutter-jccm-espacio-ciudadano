@@ -12,14 +12,7 @@ part of 'auth_session_repository_provider.dart';
 @ProviderFor(authSessionRepository)
 const authSessionRepositoryProvider = AuthSessionRepositoryProvider._();
 
-final class AuthSessionRepositoryProvider
-    extends
-        $FunctionalProvider<
-          AuthSessionRepository,
-          AuthSessionRepository,
-          AuthSessionRepository
-        >
-    with $Provider<AuthSessionRepository> {
+final class AuthSessionRepositoryProvider extends $FunctionalProvider<AuthSessionRepository, AuthSessionRepository, AuthSessionRepository> with $Provider<AuthSessionRepository> {
   const AuthSessionRepositoryProvider._()
     : super(
         from: null,
@@ -54,5 +47,4 @@ final class AuthSessionRepositoryProvider
   }
 }
 
-String _$authSessionRepositoryHash() =>
-    r'e63c32be2c2f49d934f9d14610b413898bbbc7b1';
+String _$authSessionRepositoryHash() => r'e63c32be2c2f49d934f9d14610b413898bbbc7b1';

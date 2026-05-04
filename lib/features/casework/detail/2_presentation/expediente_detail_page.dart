@@ -45,16 +45,16 @@ class ExpedienteDetailPage extends ConsumerWidget {
       ),
       body: OfflineBanner(
         child: asyncDetail.when(
-        loading: () => LoadingStateWidget(
-          message: l10n.caseworkExpedienteDetailLoading,
+          loading: () => LoadingStateWidget(
+            message: l10n.caseworkExpedienteDetailLoading,
+          ),
+          error: (final error, final _) => ErrorStateWidget(
+            message: l10n.caseworkExpedienteDetailErrorTitle,
+            detail: l10n.caseworkExpedienteDetailErrorBody,
+            onRetry: () => ref.read(expedienteDetailProvider(expedienteRef).notifier).refresh(),
+          ),
+          data: (final detail) => _LoadedView(detail: detail),
         ),
-        error: (final error, final _) => ErrorStateWidget(
-          message: l10n.caseworkExpedienteDetailErrorTitle,
-          detail: l10n.caseworkExpedienteDetailErrorBody,
-          onRetry: () => ref.read(expedienteDetailProvider(expedienteRef).notifier).refresh(),
-        ),
-        data: (final detail) => _LoadedView(detail: detail),
-      ),
       ),
     );
   }

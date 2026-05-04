@@ -48,9 +48,7 @@ class _AfirmaReturnPageState extends ConsumerState<AfirmaReturnPage> {
       if (!mounted) {
         return;
       }
-      ref
-          .read(signatureHandoffControllerProvider.notifier)
-          .completeFromDeepLink(widget.returnUri);
+      ref.read(signatureHandoffControllerProvider.notifier).completeFromDeepLink(widget.returnUri);
       // Defer navigation so the controller state update has a chance to
       // settle before the inbox page rebuilds and reads it.
       unawaited(

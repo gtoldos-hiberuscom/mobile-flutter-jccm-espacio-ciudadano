@@ -72,8 +72,7 @@ void main() {
           ),
           GoRoute(
             path: '/sitemap',
-            builder: (final c, final s) =>
-                const Scaffold(body: Text('SITEMAP_PAGE')),
+            builder: (final c, final s) => const Scaffold(body: Text('SITEMAP_PAGE')),
           ),
         ],
       );
@@ -83,8 +82,7 @@ void main() {
           overrides: [
             appLoggerProvider.overrideWithValue(logger),
             authRepositoryProvider.overrideWithValue(fakeRepo),
-            authSessionRepositoryProvider
-                .overrideWithValue(_FakeAuthSessionRepository(nif: _nif)),
+            authSessionRepositoryProvider.overrideWithValue(_FakeAuthSessionRepository(nif: _nif)),
             secureStorageProvider.overrideWithValue(_InMemorySecureStorage()),
             goRouterProvider.overrideWith((final ref) => router),
           ],
@@ -118,8 +116,7 @@ void main() {
       // AppButton renders an ElevatedButton internally in most variants;
       // tapping the visible button by label is the most stable selector.
       final ctaByLabel = find.text(
-        AppLocalizations.of(tester.element(find.byType(LandingPage)))
-            .landingCtaButton,
+        AppLocalizations.of(tester.element(find.byType(LandingPage))).landingCtaButton,
       );
       expect(ctaByLabel, findsWidgets);
       await tester.tap(ctaByLabel.first, warnIfMissed: false);
@@ -131,9 +128,7 @@ void main() {
       // The CTA must emit exactly one info log carrying the redacted
       // contract message. Other internal info logs (e.g. notifier
       // diagnostics) are allowed and asserted against PII leakage below.
-      final ctaEntries = logger.entries
-          .where((final e) => e.message == 'Login successful')
-          .toList();
+      final ctaEntries = logger.entries.where((final e) => e.message == 'Login successful').toList();
       expect(ctaEntries, hasLength(1));
       final entry = ctaEntries.single;
       expect(entry.level, 'info');
@@ -144,8 +139,7 @@ void main() {
         expect(
           entry.message,
           isNot(contains(secret)),
-          reason:
-              'PII value "$secret" leaked into log MESSAGE: ${entry.message}',
+          reason: 'PII value "$secret" leaked into log MESSAGE: ${entry.message}',
         );
       }
 
@@ -159,8 +153,7 @@ void main() {
         expect(
           combined,
           isNot(contains(secret)),
-          reason:
-              'PII value "$secret" leaked into log message+context: $combined',
+          reason: 'PII value "$secret" leaked into log message+context: $combined',
         );
       }
 
@@ -275,8 +268,7 @@ class _FakeAuthSessionRepository implements AuthSessionRepository {
   _FakeAuthSessionRepository({required this.nif});
 
   final String nif;
-  final StreamController<AuthSessionState> _controller =
-      StreamController<AuthSessionState>.broadcast();
+  final StreamController<AuthSessionState> _controller = StreamController<AuthSessionState>.broadcast();
 
   @override
   Future<AuthSessionState> read() async => const UnauthenticatedSession();
@@ -307,8 +299,7 @@ Future<void> _runWithCapturedPrint(
   await runZoned<Future<void>>(
     body,
     zoneSpecification: ZoneSpecification(
-      print: (final self, final parent, final zone, final line) =>
-          sink.add(line),
+      print: (final self, final parent, final zone, final line) => sink.add(line),
     ),
   );
 }

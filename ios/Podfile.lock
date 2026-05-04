@@ -5,6 +5,8 @@ PODS:
   - AppAuth/Core (2.0.0)
   - AppAuth/ExternalUserAgent (2.0.0):
     - AppAuth/Core
+  - connectivity_plus (0.0.1):
+    - Flutter
   - file_selector_ios (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -26,6 +28,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - file_selector_ios (from `.symlinks/plugins/file_selector_ios/ios`)
   - Flutter (from `Flutter`)
   - flutter_appauth (from `.symlinks/plugins/flutter_appauth/ios`)
@@ -40,6 +43,8 @@ SPEC REPOS:
     - AppAuth
 
 EXTERNAL SOURCES:
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   file_selector_ios:
     :path: ".symlinks/plugins/file_selector_ios/ios"
   Flutter:
@@ -59,14 +64,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AppAuth: 1c1a8afa7e12f2ec3a294d9882dfa5ab7d3cb063
-  file_selector_ios: 80c12e90ad3f2045ed6819d03742f1a4c5ec3f93
+  connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
+  file_selector_ios: ec57ec07954363dd730b642e765e58f199bb621a
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_appauth: a7e95f120b1933fae942a728b54051c2f5d43f59
-  flutter_native_splash: df59bb2e1421aa0282cb2e95618af4dcb0c56c29
-  flutter_secure_storage_darwin: 557817588b80e60213cbecb573c45c76b788018d
-  path_provider_foundation: 0b743cbb62d8e47eab856f09262bb8c1ddcfe6ba
-  shared_preferences_foundation: 5086985c1d43c5ba4d5e69a4e8083a389e2909e6
-  url_launcher_ios: bb13df5870e8c4234ca12609d04010a21be43dfa
+  flutter_appauth: 53aecd8e5a88b27c0457bf06aa755d3b43625e85
+  flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
+  flutter_secure_storage_darwin: acdb3f316ed05a3e68f856e0353b133eec373a23
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
+  url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
 
 PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
 

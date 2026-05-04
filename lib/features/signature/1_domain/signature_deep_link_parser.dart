@@ -53,9 +53,7 @@ abstract final class SignatureDeepLinkParser {
     return SignatureHandoffOutcome(
       status: status,
       documentId: docId,
-      errorReason: status == SignatureHandoffStatus.error
-          ? (reason != null && reason.isNotEmpty ? reason : null)
-          : null,
+      errorReason: status == SignatureHandoffStatus.error ? (reason != null && reason.isNotEmpty ? reason : null) : null,
       completedAt: DateTime.now(),
     );
   }

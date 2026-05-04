@@ -68,8 +68,7 @@ class SignatureHandoffController extends Notifier<SignatureHandoffOutcome?> {
 }
 
 /// Notifier provider exposing the handoff controller.
-final signatureHandoffControllerProvider =
-    NotifierProvider<SignatureHandoffController, SignatureHandoffOutcome?>(
-      SignatureHandoffController.new,
-      name: 'signatureHandoffControllerProvider',
-    );
+final signatureHandoffControllerProvider = NotifierProvider<SignatureHandoffController, SignatureHandoffOutcome?>(
+  SignatureHandoffController.new,
+  name: 'signatureHandoffControllerProvider',
+);

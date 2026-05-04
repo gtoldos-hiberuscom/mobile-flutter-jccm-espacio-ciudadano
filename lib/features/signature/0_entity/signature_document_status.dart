@@ -13,7 +13,8 @@ enum SignatureDocumentStatus {
   firmado('signatureStatusFirmado'),
   expirado('signatureStatusExpirado'),
   error('signatureStatusError'),
-  unknown('signatureStatusUnknown');
+  unknown('signatureStatusUnknown')
+  ;
 
   const SignatureDocumentStatus(this.labelKey);
 

@@ -7,8 +7,7 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recomme
 /// onboarding / unauthorised variants without touching tests or wiring
 /// a backend. Tests override the source via `ProviderScope.overrides`
 /// rather than mutating this constant.
-const RecommendationsConfigState kRecommendationsMockConfigState =
-    RecommendationsConfigState.configured;
+const RecommendationsConfigState kRecommendationsMockConfigState = RecommendationsConfigState.configured;
 
 /// In-memory mock of [RecommendationsConfigSource].
 ///

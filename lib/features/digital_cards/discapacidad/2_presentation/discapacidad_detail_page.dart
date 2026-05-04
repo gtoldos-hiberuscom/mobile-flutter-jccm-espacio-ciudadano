@@ -52,20 +52,20 @@ class DiscapacidadDetailPage extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.discapacidadDetailTitle)),
       body: OfflineBanner(
         child: asyncCard.when(
-        loading: () => const LoadingStateWidget(),
-        error: (final error, final _) {
-          if (error is DiscapacidadUnavailable) {
-            return _UnavailableBody(l10n: l10n);
-          }
-          return ErrorStateWidget(
-            key: const ValueKey('discapacidadErrorBody'),
-            message: l10n.discapacidadParseErrorMessage,
-            retryLabel: l10n.discapacidadRetry,
-            onRetry: () => ref.read(discapacidadDetailNotifierProvider.notifier).refresh(),
-          );
-        },
-        data: (final card) => _DetailBody(card: card),
-      ),
+          loading: () => const LoadingStateWidget(),
+          error: (final error, final _) {
+            if (error is DiscapacidadUnavailable) {
+              return _UnavailableBody(l10n: l10n);
+            }
+            return ErrorStateWidget(
+              key: const ValueKey('discapacidadErrorBody'),
+              message: l10n.discapacidadParseErrorMessage,
+              retryLabel: l10n.discapacidadRetry,
+              onRetry: () => ref.read(discapacidadDetailNotifierProvider.notifier).refresh(),
+            );
+          },
+          data: (final card) => _DetailBody(card: card),
+        ),
       ),
     );
   }
@@ -258,11 +258,13 @@ class _AvailableBodyState extends ConsumerState<_AvailableBody> {
     final l10n = AppLocalizations.of(context);
     try {
       final BinaryArtifact artifact = await ref.read(discapacidadRepositoryProvider).requestPkpass();
-      final WalletActionResult result = await ref.read(walletActionControllerProvider.notifier).persistAndAct(
-        artifact: artifact,
-        dniHashSeed: _kFileNameDniSeed,
-        requested: _kPkpassCapabilities,
-      );
+      final WalletActionResult result = await ref
+          .read(walletActionControllerProvider.notifier)
+          .persistAndAct(
+            artifact: artifact,
+            dniHashSeed: _kFileNameDniSeed,
+            requested: _kPkpassCapabilities,
+          );
       if (!mounted) {
         return;
       }
@@ -300,9 +302,7 @@ class _HeroHeader extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final materialL10n = MaterialLocalizations.of(context);
 
-    final expiryLabel = card.expiryDate == null
-        ? null
-        : l10n.discapacidadExpiresOn(materialL10n.formatCompactDate(card.expiryDate!));
+    final expiryLabel = card.expiryDate == null ? null : l10n.discapacidadExpiresOn(materialL10n.formatCompactDate(card.expiryDate!));
 
     return Padding(
       padding: const EdgeInsets.symmetric(

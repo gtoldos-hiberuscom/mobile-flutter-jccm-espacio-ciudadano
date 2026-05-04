@@ -116,9 +116,7 @@ class _DetailBody extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final materialL10n = MaterialLocalizations.of(context);
-    final expiryLabel = card.expiryDate == null
-        ? null
-        : l10n.jovenExpiresOn(materialL10n.formatCompactDate(card.expiryDate!));
+    final expiryLabel = card.expiryDate == null ? null : l10n.jovenExpiresOn(materialL10n.formatCompactDate(card.expiryDate!));
 
     return ListView(
       key: const ValueKey('jovenDetailBody'),
@@ -320,11 +318,13 @@ class _FormatActionsSectionState extends ConsumerState<_FormatActionsSection> {
         BinaryArtifactKind.pkpass => await repo.requestPkpass(),
         BinaryArtifactKind.png => await repo.requestQr(), // unreachable in current spec
       };
-      final WalletActionResult result = await ref.read(walletActionControllerProvider.notifier).persistAndAct(
-        artifact: artifact,
-        dniHashSeed: _kFileNameDniSeed,
-        requested: _kAllCapabilities,
-      );
+      final WalletActionResult result = await ref
+          .read(walletActionControllerProvider.notifier)
+          .persistAndAct(
+            artifact: artifact,
+            dniHashSeed: _kFileNameDniSeed,
+            requested: _kAllCapabilities,
+          );
       if (!mounted) {
         return;
       }

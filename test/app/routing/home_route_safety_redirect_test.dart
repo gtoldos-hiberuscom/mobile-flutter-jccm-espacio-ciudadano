@@ -24,13 +24,11 @@ void main() {
     (final tester) async {
       final router = GoRouter(
         initialLocation: '/seed',
-        errorBuilder: (final c, final s) =>
-            const Scaffold(body: Text('NOT_FOUND_MARKER')),
+        errorBuilder: (final c, final s) => const Scaffold(body: Text('NOT_FOUND_MARKER')),
         routes: [
           GoRoute(
             path: '/seed',
-            builder: (final c, final s) =>
-                const Scaffold(body: Text('SEED_MARKER')),
+            builder: (final c, final s) => const Scaffold(body: Text('SEED_MARKER')),
           ),
           GoRoute(
             path: Routes.home,
@@ -38,8 +36,7 @@ void main() {
           ),
           GoRoute(
             path: Routes.sitemap,
-            builder: (final c, final s) =>
-                const Scaffold(body: Text('SITEMAP_MARKER')),
+            builder: (final c, final s) => const Scaffold(body: Text('SITEMAP_MARKER')),
           ),
         ],
       );
@@ -60,8 +57,7 @@ void main() {
       expect(
         router.routerDelegate.currentConfiguration.uri.path,
         Routes.sitemap,
-        reason:
-            'Routes.home must redirect to Routes.sitemap until LoggedHomePage lands.',
+        reason: 'Routes.home must redirect to Routes.sitemap until LoggedHomePage lands.',
       );
       expect(find.text('SITEMAP_MARKER'), findsOneWidget);
       expect(

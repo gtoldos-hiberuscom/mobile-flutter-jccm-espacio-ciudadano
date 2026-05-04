@@ -60,9 +60,7 @@ class CertificateStatusBanner extends ConsumerWidget {
       title: title,
       subtitle: subtitle,
       actionLabel: needsRetry ? l10n.signatureCertificateRecheck : null,
-      onAction: needsRetry
-          ? () => ref.invalidate(certificateValidationProvider)
-          : null,
+      onAction: needsRetry ? () => ref.invalidate(certificateValidationProvider) : null,
     );
   }
 

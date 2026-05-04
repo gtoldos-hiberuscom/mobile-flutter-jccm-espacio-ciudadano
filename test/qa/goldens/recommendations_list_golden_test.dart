@@ -28,12 +28,10 @@ class _GoldenRepo implements RecommendationsRepository {
   const _GoldenRepo();
 
   @override
-  Future<RecommendationsConfigState> loadConfigState() async =>
-      RecommendationsConfigState.configured;
+  Future<RecommendationsConfigState> loadConfigState() async => RecommendationsConfigState.configured;
 
   @override
-  Future<RecommendationsPageResult> loadAll({final String? cursor}) async =>
-      _page;
+  Future<RecommendationsPageResult> loadAll({final String? cursor}) async => _page;
 
   @override
   Future<RecommendationsPageResult> loadBucket(

@@ -44,18 +44,16 @@ final class NotificationDocumentDownloadResult {
 
   /// Document is acknowledged by the backend but not downloadable
   /// right now.
-  factory NotificationDocumentDownloadResult.unavailable({final String? message}) =>
-      NotificationDocumentDownloadResult._(
-        status: NotificationDocumentDownloadStatus.unavailable,
-        message: message,
-      );
+  factory NotificationDocumentDownloadResult.unavailable({final String? message}) => NotificationDocumentDownloadResult._(
+    status: NotificationDocumentDownloadStatus.unavailable,
+    message: message,
+  );
 
   /// Generic failure — typically network / 5xx.
-  factory NotificationDocumentDownloadResult.error({final String? message}) =>
-      NotificationDocumentDownloadResult._(
-        status: NotificationDocumentDownloadStatus.error,
-        message: message,
-      );
+  factory NotificationDocumentDownloadResult.error({final String? message}) => NotificationDocumentDownloadResult._(
+    status: NotificationDocumentDownloadStatus.error,
+    message: message,
+  );
 
   final NotificationDocumentDownloadStatus status;
   final Uint8List? bytes;

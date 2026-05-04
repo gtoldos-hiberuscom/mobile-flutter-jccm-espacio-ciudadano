@@ -43,12 +43,8 @@ class DiscapacidadGradoBadge extends StatelessWidget {
       label = l10n.discapacidadGradoUnknown;
     }
 
-    final Color background = isUnknown
-        ? theme.colorScheme.surfaceContainerHighest
-        : theme.colorScheme.primaryContainer;
-    final Color foreground = isUnknown
-        ? theme.colorScheme.onSurfaceVariant
-        : theme.colorScheme.onPrimaryContainer;
+    final Color background = isUnknown ? theme.colorScheme.surfaceContainerHighest : theme.colorScheme.primaryContainer;
+    final Color foreground = isUnknown ? theme.colorScheme.onSurfaceVariant : theme.colorScheme.onPrimaryContainer;
 
     return Semantics(
       label: '${l10n.discapacidadGradoLabel}: $label',

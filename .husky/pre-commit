@@ -1,0 +1,45 @@
+
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+
+
+echo "Running pre-commit hooks..."
+
+# Formateo automático de Dart
+echo "Running dart format..."
+dart format .
+
+# Correcciones automáticas de Dart
+echo "Running dart fix..."
+dart fix --apply
+if [ $? -eq 0 ]; then
+	if ! git diff --quiet; then
+		echo "dart fix made changes. Please review and add them before committing. Commit aborted."
+		exit 1
+	fi
+fi
+
+# Análisis estático
+echo "Running dart analyze..."
+dart analyze --no-fatal-warnings
+if [ $? -ne 0 ]; then
+	echo "dart analyze failed. Commit aborted."
+	exit 1
+fi
+
+
+# Solo ejecutar en develop, main o release
+if [ "$BRANCH" != "develop" ] && [ "$BRANCH" != "main" ] && [ "$BRANCH" != "release" ]; then
+	echo "Pre-commit checks skipped on branch $BRANCH"
+	exit 0
+fi
+
+# Tests
+# echo "Running dart test..."
+# dart test
+# if [ $? -ne 0 ]; then
+# 	echo "Tests failed. Commit aborted."
+# 	exit 1
+# fi

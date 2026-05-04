@@ -56,19 +56,19 @@ class FamiliaNumerosaDetailPage extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.familiaNumerosaDetailTitle)),
       body: OfflineBanner(
         child: asyncCard.when(
-        loading: () => const LoadingStateWidget(),
-        error: (final error, final _) {
-          if (error is FamiliaNumerosaUnavailable) {
-            return _UnavailableBody(l10n: l10n);
-          }
-          return ErrorStateWidget(
-            message: l10n.familiaNumerosaErrorMessage,
-            retryLabel: l10n.familiaNumerosaRetry,
-            onRetry: () => ref.read(familiaNumerosaDetailNotifierProvider.notifier).refresh(),
-          );
-        },
-        data: (final card) => _DetailBody(card: card),
-      ),
+          loading: () => const LoadingStateWidget(),
+          error: (final error, final _) {
+            if (error is FamiliaNumerosaUnavailable) {
+              return _UnavailableBody(l10n: l10n);
+            }
+            return ErrorStateWidget(
+              message: l10n.familiaNumerosaErrorMessage,
+              retryLabel: l10n.familiaNumerosaRetry,
+              onRetry: () => ref.read(familiaNumerosaDetailNotifierProvider.notifier).refresh(),
+            );
+          },
+          data: (final card) => _DetailBody(card: card),
+        ),
       ),
     );
   }
@@ -119,9 +119,7 @@ class _DetailBody extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final materialL10n = MaterialLocalizations.of(context);
-    final expiryLabel = card.expiryDate == null
-        ? null
-        : l10n.familiaNumerosaExpiresOn(materialL10n.formatCompactDate(card.expiryDate!));
+    final expiryLabel = card.expiryDate == null ? null : l10n.familiaNumerosaExpiresOn(materialL10n.formatCompactDate(card.expiryDate!));
 
     return ListView(
       key: const ValueKey('familiaNumerosaDetailBody'),
@@ -310,11 +308,13 @@ class _FormatActionsSectionState extends ConsumerState<_FormatActionsSection> {
         BinaryArtifactKind.pkpass => await repo.requestPkpass(),
         BinaryArtifactKind.png => await repo.requestQr(), // unreachable in current spec
       };
-      final WalletActionResult result = await ref.read(walletActionControllerProvider.notifier).persistAndAct(
-        artifact: artifact,
-        dniHashSeed: _kFileNameDniSeed,
-        requested: _kAllCapabilities,
-      );
+      final WalletActionResult result = await ref
+          .read(walletActionControllerProvider.notifier)
+          .persistAndAct(
+            artifact: artifact,
+            dniHashSeed: _kFileNameDniSeed,
+            requested: _kAllCapabilities,
+          );
       if (!mounted) {
         return;
       }

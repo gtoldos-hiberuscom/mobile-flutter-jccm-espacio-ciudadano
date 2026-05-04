@@ -17,8 +17,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/3_data/joven
 /// `JovenUnavailable` exception bubbles through `AsyncValue.error` so
 /// the page (and the modal variant) can downgrade to the explicit
 /// unavailable surface.
-final jovenDetailNotifierProvider =
-    AsyncNotifierProvider<JovenDetailNotifier, JovenCard>(
+final jovenDetailNotifierProvider = AsyncNotifierProvider<JovenDetailNotifier, JovenCard>(
   JovenDetailNotifier.new,
 );
 

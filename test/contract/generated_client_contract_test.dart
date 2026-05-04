@@ -41,8 +41,7 @@ void main() {
       expect(parsed!.adjuntar, 'X');
       expect(parsed.isubrc, 0);
       expect(parsed.resultado, 'OK');
-      expect(parsed.publicacionportal?.asunto,
-          'Solicitud de subvención cultural');
+      expect(parsed.publicacionportal?.asunto, 'Solicitud de subvención cultural');
     });
 
     test('tolerates a minimal response (only error indicator)', () {
@@ -86,10 +85,12 @@ void main() {
           ..pregistro = 'REG-2026-9999'
           ..ptipodoc = 'NIF',
       );
-      final json = standardSerializers.serializeWith(
-        ZCSRFCPUBLISELECTBYNUMREG.serializer,
-        req,
-      ) as Map?;
+      final json =
+          standardSerializers.serializeWith(
+                ZCSRFCPUBLISELECTBYNUMREG.serializer,
+                req,
+              )
+              as Map?;
       expect(json, isNotNull);
       expect(json!['pnumdoc'], '12345678Z');
       expect(json['pregistro'], 'REG-2026-9999');
