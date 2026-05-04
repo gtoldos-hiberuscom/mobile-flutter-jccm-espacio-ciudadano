@@ -48,7 +48,7 @@ void main() {
 
       final repo = container.read(authSessionRepositoryProvider);
       final idToken = _makeIdToken(<String, dynamic>{'sub': 's', 'nif': '11111111H'});
-      await repo.save(AuthSession(
+      await repo.save(AuthTokens(
         accessToken: 'a',
         refreshToken: 'r',
         idToken: idToken,
@@ -97,7 +97,7 @@ void main() {
         'family_name': 'Lovelace',
         'email': 'ada@example.com',
       });
-      final result = await repo.save(AuthSession(
+      final result = await repo.save(AuthTokens(
         accessToken: 'access-1',
         refreshToken: 'refresh-1',
         idToken: idToken,
@@ -140,7 +140,7 @@ void main() {
     test('save throws StateError when id_token is missing', () async {
       final repo = AuthSessionRepositoryImpl(_InMemorySecureStorage());
       await expectLater(
-        () => repo.save(const AuthSession(accessToken: 'a', tokenType: 'Bearer', scopes: ['openid'])),
+        () => repo.save(const AuthTokens(accessToken: 'a', tokenType: 'Bearer', scopes: ['openid'])),
         throwsA(isA<StateError>()),
       );
     });

@@ -1,6 +1,6 @@
 /// Represents a successfully authenticated session token set.
-final class AuthSession {
-  const AuthSession({
+final class AuthTokens {
+  const AuthTokens({
     required this.accessToken,
     required this.tokenType,
     required this.scopes,

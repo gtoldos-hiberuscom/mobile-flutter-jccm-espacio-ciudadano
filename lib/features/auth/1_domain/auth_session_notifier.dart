@@ -1,4 +1,4 @@
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session_state.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/auth_session_repository_provider.dart';
@@ -24,9 +24,9 @@ class AuthSessionNotifier extends _$AuthSessionNotifier {
   }
 }
 
-/// Convenience: returns the active [AuthSession] or \`null\`.
+/// Convenience: returns the active [AuthTokens] or \`null\`.
 @Riverpod(keepAlive: true)
-AuthSession? currentAuthSession(final Ref ref) {
+AuthTokens? currentAuthSession(final Ref ref) {
   return ref.watch(authSessionProvider).value?.sessionOrNull;
 }
 

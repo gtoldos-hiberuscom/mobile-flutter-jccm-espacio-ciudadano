@@ -1,4 +1,4 @@
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_auth_remote_datasource.dart';
@@ -13,7 +13,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   final ClaveAuthRemoteDatasource _datasource;
 
   @override
-  Future<AuthSession> login({
+  Future<AuthTokens> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
   }) async {
@@ -22,7 +22,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthSession> refreshToken({
+  Future<AuthTokens> refreshToken({
     required final String refreshToken,
     final List<String> scopes = authDefaultScopes,
   }) async {
@@ -50,8 +50,8 @@ final class AuthRepositoryImpl implements AuthRepository {
     return _mapUser(dto);
   }
 
-  static AuthSession _mapSession(final ClaveTokenResponseDto dto) {
-    return AuthSession(
+  static AuthTokens _mapSession(final ClaveTokenResponseDto dto) {
+    return AuthTokens(
       accessToken: dto.accessToken,
       refreshToken: dto.refreshToken,
       idToken: dto.idToken,

@@ -1,5 +1,5 @@
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 
 /// Default OAuth2 scopes for Cl@ve authentication.
@@ -10,7 +10,7 @@ abstract interface class AuthRepository {
   /// Initiates the Cl@ve authorization-code + token exchange flow.
   ///
   /// Throws [AuthException] on failure.
-  Future<AuthSession> login({
+  Future<AuthTokens> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
   });
@@ -18,7 +18,7 @@ abstract interface class AuthRepository {
   /// Refreshes an existing session using a valid refresh token.
   ///
   /// Throws [AuthException] on failure.
-  Future<AuthSession> refreshToken({
+  Future<AuthTokens> refreshToken({
     required final String refreshToken,
     final List<String> scopes = authDefaultScopes,
   });

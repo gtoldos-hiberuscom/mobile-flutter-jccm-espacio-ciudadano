@@ -1,4 +1,4 @@
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 
 /// Top-level state of the user's authentication session.
@@ -11,8 +11,8 @@ sealed class AuthSessionState {
   /// `true` when there is a valid signed-in user with an active access token.
   bool get isAuthenticated => this is AuthenticatedSession;
 
-  /// Convenience accessor: returns the [AuthSession] when authenticated.
-  AuthSession? get sessionOrNull => switch (this) {
+  /// Convenience accessor: returns the [AuthTokens] when authenticated.
+  AuthTokens? get sessionOrNull => switch (this) {
         AuthenticatedSession(:final session) => session,
         _ => null,
       };
@@ -38,7 +38,7 @@ final class UnauthenticatedSession extends AuthSessionState {
   String toString() => 'UnauthenticatedSession()';
 }
 
-/// Active session: a non-expired [AuthSession] paired with the [AuthUser]
+/// Active session: a non-expired [AuthTokens] paired with the [AuthUser]
 /// derived from the OIDC `id_token`.
 final class AuthenticatedSession extends AuthSessionState {
   const AuthenticatedSession({
@@ -46,11 +46,11 @@ final class AuthenticatedSession extends AuthSessionState {
     required this.user,
   });
 
-  final AuthSession session;
+  final AuthTokens session;
   final AuthUser user;
 
   AuthenticatedSession copyWith({
-    final AuthSession? session,
+    final AuthTokens? session,
     final AuthUser? user,
   }) {
     return AuthenticatedSession(

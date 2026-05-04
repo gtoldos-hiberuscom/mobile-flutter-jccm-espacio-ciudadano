@@ -54,7 +54,7 @@ void main() {
     (final tester) async {
       final logger = _CapturingLogger();
       final fakeRepo = _FakeAuthRepository(
-        const AuthSession(
+        const AuthTokens(
           accessToken: _accessToken,
           refreshToken: _refreshToken,
           idToken: _idToken,
@@ -241,11 +241,11 @@ class _CapturingLogger implements AppLogger {
 class _FakeAuthRepository implements AuthRepository {
   _FakeAuthRepository(this._session);
 
-  final AuthSession _session;
+  final AuthTokens _session;
   int loginCalls = 0;
 
   @override
-  Future<AuthSession> login({
+  Future<AuthTokens> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
   }) async {
@@ -254,7 +254,7 @@ class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthSession> refreshToken({
+  Future<AuthTokens> refreshToken({
     required final String refreshToken,
     final List<String> scopes = authDefaultScopes,
   }) async => _session;
@@ -282,7 +282,7 @@ class _FakeAuthSessionRepository implements AuthSessionRepository {
   Future<AuthSessionState> read() async => const UnauthenticatedSession();
 
   @override
-  Future<AuthenticatedSession> save(final AuthSession session) async {
+  Future<AuthenticatedSession> save(final AuthTokens session) async {
     final authenticated = AuthenticatedSession(
       session: session,
       user: AuthUser(sub: 'fake-sub', nif: nif),

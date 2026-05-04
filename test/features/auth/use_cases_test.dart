@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session_state.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
@@ -95,8 +95,8 @@ void main() {
   });
 }
 
-AuthSession _makeSession(final String accessToken) {
-  return AuthSession(
+AuthTokens _makeSession(final String accessToken) {
+  return AuthTokens(
     accessToken: accessToken,
     idToken: 'fake-id-token',
     tokenType: 'Bearer',
@@ -107,7 +107,7 @@ AuthSession _makeSession(final String accessToken) {
 final class _FakeAuthRepository implements AuthRepository {
   _FakeAuthRepository({this.loginResult, this.loginError, this.logoutError});
 
-  final AuthSession? loginResult;
+  final AuthTokens? loginResult;
   final Object? loginError;
   final Object? logoutError;
 
@@ -117,7 +117,7 @@ final class _FakeAuthRepository implements AuthRepository {
   String? lastLogoutRedirectUri;
 
   @override
-  Future<AuthSession> login({
+  Future<AuthTokens> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
   }) async {
@@ -138,7 +138,7 @@ final class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthSession> refreshToken({
+  Future<AuthTokens> refreshToken({
     required final String refreshToken,
     final List<String> scopes = authDefaultScopes,
   }) async {
@@ -152,7 +152,7 @@ final class _FakeAuthRepository implements AuthRepository {
 }
 
 final class _FakeSessionRepository implements AuthSessionRepository {
-  AuthSession? lastSaved;
+  AuthTokens? lastSaved;
   bool cleared = false;
   AuthSessionState _state = const UnauthenticatedSession();
   final StreamController<AuthSessionState> _controller =
@@ -162,7 +162,7 @@ final class _FakeSessionRepository implements AuthSessionRepository {
   Future<AuthSessionState> read() async => _state;
 
   @override
-  Future<AuthenticatedSession> save(final AuthSession session) async {
+  Future<AuthenticatedSession> save(final AuthTokens session) async {
     lastSaved = session;
     final authenticated = AuthenticatedSession(
       session: session,

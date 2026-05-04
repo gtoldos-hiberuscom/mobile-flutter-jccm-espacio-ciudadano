@@ -77,17 +77,17 @@ abstract class _$AuthSessionNotifier extends $AsyncNotifier<AuthSessionState> {
   }
 }
 
-/// Convenience: returns the active [AuthSession] or \`null\`.
+/// Convenience: returns the active [AuthTokens] or \`null\`.
 
 @ProviderFor(currentAuthSession)
 const currentAuthSessionProvider = CurrentAuthSessionProvider._();
 
-/// Convenience: returns the active [AuthSession] or \`null\`.
+/// Convenience: returns the active [AuthTokens] or \`null\`.
 
 final class CurrentAuthSessionProvider
-    extends $FunctionalProvider<AuthSession?, AuthSession?, AuthSession?>
-    with $Provider<AuthSession?> {
-  /// Convenience: returns the active [AuthSession] or \`null\`.
+    extends $FunctionalProvider<AuthTokens?, AuthTokens?, AuthTokens?>
+    with $Provider<AuthTokens?> {
+  /// Convenience: returns the active [AuthTokens] or \`null\`.
   const CurrentAuthSessionProvider._()
     : super(
         from: null,
@@ -104,19 +104,19 @@ final class CurrentAuthSessionProvider
 
   @$internal
   @override
-  $ProviderElement<AuthSession?> $createElement($ProviderPointer pointer) =>
+  $ProviderElement<AuthTokens?> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  AuthSession? create(Ref ref) {
+  AuthTokens? create(Ref ref) {
     return currentAuthSession(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AuthSession? value) {
+  Override overrideWithValue(AuthTokens? value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<AuthSession?>(value),
+      providerOverride: $SyncValueProvider<AuthTokens?>(value),
     );
   }
 }

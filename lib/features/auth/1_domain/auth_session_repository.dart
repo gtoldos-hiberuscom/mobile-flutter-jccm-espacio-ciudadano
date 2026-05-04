@@ -1,4 +1,4 @@
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session_state.dart';
 
 /// Domain contract responsible for the user's authentication session
@@ -22,7 +22,7 @@ abstract interface class AuthSessionRepository {
   ///
   /// Throws [StateError] when the session cannot be assembled (missing or
   /// undecodable `id_token`).
-  Future<AuthenticatedSession> save(final AuthSession session);
+  Future<AuthenticatedSession> save(final AuthTokens session);
 
   /// Wipes the persisted session and emits [UnauthenticatedSession] through
   /// [watch].
