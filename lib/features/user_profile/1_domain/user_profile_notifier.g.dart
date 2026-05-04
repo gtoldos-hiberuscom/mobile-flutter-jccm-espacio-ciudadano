@@ -11,9 +11,9 @@ part of 'user_profile_notifier.dart';
 /// Manages the currently logged-in user's profile.
 ///
 /// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
-///   [authSessionNotifierProvider]. Returns `null` when there is no session.
-/// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
-///   secure storage and resets session state.
+///   `authSessionProvider`. Returns `null` when there is no session.
+/// - [logout] delegates to [LogoutUseCase], which terminates the Cl@ve
+///   session and clears the persisted local data.
 
 @ProviderFor(UserProfileNotifier)
 const userProfileProvider = UserProfileNotifierProvider._();
@@ -21,17 +21,17 @@ const userProfileProvider = UserProfileNotifierProvider._();
 /// Manages the currently logged-in user's profile.
 ///
 /// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
-///   [authSessionNotifierProvider]. Returns `null` when there is no session.
-/// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
-///   secure storage and resets session state.
+///   `authSessionProvider`. Returns `null` when there is no session.
+/// - [logout] delegates to [LogoutUseCase], which terminates the Cl@ve
+///   session and clears the persisted local data.
 final class UserProfileNotifierProvider
     extends $AsyncNotifierProvider<UserProfileNotifier, UserProfile?> {
   /// Manages the currently logged-in user's profile.
   ///
   /// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
-  ///   [authSessionNotifierProvider]. Returns `null` when there is no session.
-  /// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
-  ///   secure storage and resets session state.
+  ///   `authSessionProvider`. Returns `null` when there is no session.
+  /// - [logout] delegates to [LogoutUseCase], which terminates the Cl@ve
+  ///   session and clears the persisted local data.
   const UserProfileNotifierProvider._()
     : super(
         from: null,
@@ -52,14 +52,14 @@ final class UserProfileNotifierProvider
 }
 
 String _$userProfileNotifierHash() =>
-    r'eae985ce75f2592f114f14c2c8d6651e6a3698c2';
+    r'd4f1447a2bb4aefa544b96b6cc096fdc7762151f';
 
 /// Manages the currently logged-in user's profile.
 ///
 /// - On build: derives a [UserProfile] from the active [AuthUser] exposed by
-///   [authSessionNotifierProvider]. Returns `null` when there is no session.
-/// - [logout] delegates to [AuthSessionNotifier.signOut], which clears all
-///   secure storage and resets session state.
+///   `authSessionProvider`. Returns `null` when there is no session.
+/// - [logout] delegates to [LogoutUseCase], which terminates the Cl@ve
+///   session and clears the persisted local data.
 
 abstract class _$UserProfileNotifier extends $AsyncNotifier<UserProfile?> {
   FutureOr<UserProfile?> build();

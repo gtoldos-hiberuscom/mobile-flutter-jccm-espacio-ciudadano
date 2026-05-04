@@ -83,6 +83,8 @@ void main() {
           overrides: [
             appLoggerProvider.overrideWithValue(logger),
             authRepositoryProvider.overrideWithValue(fakeRepo),
+            authSessionRepositoryProvider
+                .overrideWithValue(_FakeAuthSessionRepository(nif: _nif)),
             secureStorageProvider.overrideWithValue(_InMemorySecureStorage()),
             goRouterProvider.overrideWith((final ref) => router),
           ],
@@ -267,11 +269,35 @@ class _FakeAuthRepository implements AuthRepository {
   Future<AuthUser> fetchUserInfo({required final String accessToken}) async {
     throw UnimplementedError();
   }
+}
+
+class _FakeAuthSessionRepository implements AuthSessionRepository {
+  _FakeAuthSessionRepository({required this.nif});
+
+  final String nif;
+  final StreamController<AuthSessionState> _controller =
+      StreamController<AuthSessionState>.broadcast();
 
   @override
-  AuthUser? decodeIdTokenUser(final String idToken) {
-    return const AuthUser(sub: 'fake-sub', nif: 'fake-nif');
+  Future<AuthSessionState> read() async => const UnauthenticatedSession();
+
+  @override
+  Future<AuthenticatedSession> save(final AuthSession session) async {
+    final authenticated = AuthenticatedSession(
+      session: session,
+      user: AuthUser(sub: 'fake-sub', nif: nif),
+    );
+    _controller.add(authenticated);
+    return authenticated;
   }
+
+  @override
+  Future<void> clear() async {
+    _controller.add(const UnauthenticatedSession());
+  }
+
+  @override
+  Stream<AuthSessionState> watch() => _controller.stream;
 }
 
 Future<void> _runWithCapturedPrint(

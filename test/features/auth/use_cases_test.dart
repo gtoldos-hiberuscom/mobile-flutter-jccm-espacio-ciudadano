@@ -1,97 +1,96 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session_state.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_session_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/logout_use_case.dart';
 
 void main() {
   group('LoginUseCase', () {
-    test('returns AuthSession from repository on success', () async {
+    test('persists Cl@ve session via AuthSessionRepository on success', () async {
       final session = _makeSession('my-token');
-      final repo = _FakeAuthRepository(loginResult: session);
+      final authRepo = _FakeAuthRepository(loginResult: session);
+      final sessionRepo = _FakeSessionRepository();
 
-      final result = await LoginUseCase(repo)();
+      final result = await LoginUseCase(authRepo, sessionRepo)();
 
-      expect(result.accessToken, 'my-token');
+      expect(result, isA<AuthenticatedSession>());
+      expect(result.session.accessToken, 'my-token');
+      expect(sessionRepo.lastSaved?.accessToken, 'my-token');
     });
 
     test('forwards custom loginHint and scopes to repository', () async {
-      final repo = _FakeAuthRepository(loginResult: _makeSession('t'));
+      final authRepo = _FakeAuthRepository(loginResult: _makeSession('t'));
 
-      await LoginUseCase(repo)(
+      await LoginUseCase(authRepo, _FakeSessionRepository())(
         loginHint: '12345678Z',
         scopes: const ['openid', 'profile'],
       );
 
-      expect(repo.lastLoginHint, '12345678Z');
-      expect(repo.lastLoginScopes, const ['openid', 'profile']);
+      expect(authRepo.lastLoginHint, '12345678Z');
+      expect(authRepo.lastLoginScopes, const ['openid', 'profile']);
     });
 
     test('uses authDefaultScopes when scopes are omitted', () async {
-      final repo = _FakeAuthRepository(loginResult: _makeSession('t'));
+      final authRepo = _FakeAuthRepository(loginResult: _makeSession('t'));
 
-      await LoginUseCase(repo)();
+      await LoginUseCase(authRepo, _FakeSessionRepository())();
 
-      expect(repo.lastLoginScopes, authDefaultScopes);
+      expect(authRepo.lastLoginScopes, authDefaultScopes);
     });
 
-    test('propagates AuthException from repository', () {
-      final repo = _FakeAuthRepository(
+    test('propagates AuthException from repository and does not persist', () async {
+      final authRepo = _FakeAuthRepository(
         loginError: const AuthException.cancelled(),
       );
+      final sessionRepo = _FakeSessionRepository();
 
-      expect(
-        () => LoginUseCase(repo)(),
+      await expectLater(
+        () => LoginUseCase(authRepo, sessionRepo)(),
         throwsA(
-          isA<AuthException>().having(
-            (final e) => e.reason,
-            'reason',
-            AuthFailureReason.cancelled,
-          ),
+          isA<AuthException>().having((final e) => e.reason, 'reason', AuthFailureReason.cancelled),
         ),
       );
+      expect(sessionRepo.lastSaved, isNull);
     });
   });
 
   group('LogoutUseCase', () {
-    test('delegates idToken to repository', () async {
-      final repo = _FakeAuthRepository();
+    test('terminates Cl@ve session and clears local state', () async {
+      final authRepo = _FakeAuthRepository();
+      final sessionRepo = _FakeSessionRepository();
 
-      await LogoutUseCase(repo)(idToken: 'id-token');
+      await LogoutUseCase(authRepo, sessionRepo)(idToken: 'id-token');
 
-      expect(repo.lastLogoutIdToken, 'id-token');
+      expect(authRepo.lastLogoutIdToken, 'id-token');
+      expect(sessionRepo.cleared, isTrue);
     });
 
     test('forwards optional postLogoutRedirectUri', () async {
-      final repo = _FakeAuthRepository();
+      final authRepo = _FakeAuthRepository();
 
-      await LogoutUseCase(repo)(
+      await LogoutUseCase(authRepo, _FakeSessionRepository())(
         idToken: 'id-token',
         postLogoutRedirectUri: 'myapp://redirect',
       );
 
-      expect(repo.lastLogoutRedirectUri, 'myapp://redirect');
+      expect(authRepo.lastLogoutRedirectUri, 'myapp://redirect');
     });
 
-    test('propagates AuthException from repository', () {
-      final repo = _FakeAuthRepository(
-        logoutError: const AuthException.remoteFailure(
-          message: 'session end failed',
-        ),
+    test('clears local state even when remote logout fails', () async {
+      final authRepo = _FakeAuthRepository(
+        logoutError: const AuthException.remoteFailure(message: 'session end failed'),
       );
+      final sessionRepo = _FakeSessionRepository();
 
-      expect(
-        () => LogoutUseCase(repo)(idToken: 'id-token'),
-        throwsA(
-          isA<AuthException>().having(
-            (final e) => e.reason,
-            'reason',
-            AuthFailureReason.remoteFailure,
-          ),
-        ),
-      );
+      await LogoutUseCase(authRepo, sessionRepo)(idToken: 'id-token');
+
+      expect(sessionRepo.cleared, isTrue);
     });
   });
 }
@@ -99,17 +98,14 @@ void main() {
 AuthSession _makeSession(final String accessToken) {
   return AuthSession(
     accessToken: accessToken,
+    idToken: 'fake-id-token',
     tokenType: 'Bearer',
     scopes: authDefaultScopes,
   );
 }
 
 final class _FakeAuthRepository implements AuthRepository {
-  _FakeAuthRepository({
-    this.loginResult,
-    this.loginError,
-    this.logoutError,
-  });
+  _FakeAuthRepository({this.loginResult, this.loginError, this.logoutError});
 
   final AuthSession? loginResult;
   final Object? loginError;
@@ -153,9 +149,37 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<AuthUser> fetchUserInfo({required final String accessToken}) async {
     return const AuthUser(sub: 'sub');
   }
+}
+
+final class _FakeSessionRepository implements AuthSessionRepository {
+  AuthSession? lastSaved;
+  bool cleared = false;
+  AuthSessionState _state = const UnauthenticatedSession();
+  final StreamController<AuthSessionState> _controller =
+      StreamController<AuthSessionState>.broadcast();
 
   @override
-  AuthUser? decodeIdTokenUser(final String idToken) {
-    return const AuthUser(sub: 'sub');
+  Future<AuthSessionState> read() async => _state;
+
+  @override
+  Future<AuthenticatedSession> save(final AuthSession session) async {
+    lastSaved = session;
+    final authenticated = AuthenticatedSession(
+      session: session,
+      user: const AuthUser(sub: 'sub'),
+    );
+    _state = authenticated;
+    _controller.add(authenticated);
+    return authenticated;
   }
+
+  @override
+  Future<void> clear() async {
+    cleared = true;
+    _state = const UnauthenticatedSession();
+    _controller.add(_state);
+  }
+
+  @override
+  Stream<AuthSessionState> watch() => _controller.stream;
 }

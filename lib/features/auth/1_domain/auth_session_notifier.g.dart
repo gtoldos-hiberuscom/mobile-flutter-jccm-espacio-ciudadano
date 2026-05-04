@@ -8,48 +8,27 @@ part of 'auth_session_notifier.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Owns the user's authentication session in memory and synchronises it with
-/// `SecureStorage` (encrypted at rest).
+/// Reactive view of the persisted [AuthSessionState].
 ///
-/// - `build()` rehydrates the session from `SecureStorage` on cold start.
-/// - [signIn] runs the Cl@ve login flow, derives the [AuthUser] from the
-///   `id_token`, persists tokens, and emits `AuthenticatedSession`.
-/// - [signOut] revokes at the OIDC end-session endpoint, wipes
-///   `SecureStorage`, and emits `UnauthenticatedSession`.
-///
-/// Feature code that needs the citizen document (DNI / NIE) reads
-/// `currentIdAgenteProvider`; transversal flows that need the access token
-/// (e.g. Dio auth interceptor) can watch `currentAuthSessionProvider`.
+/// Pure exposition: no business logic, no I/O. The notifier subscribes to
+/// `AuthSessionRepository.watch()` and rebuilds whenever a use case
+/// (`LoginUseCase`, `LogoutUseCase`) mutates the persisted session.
 
 @ProviderFor(AuthSessionNotifier)
 const authSessionProvider = AuthSessionNotifierProvider._();
 
-/// Owns the user's authentication session in memory and synchronises it with
-/// `SecureStorage` (encrypted at rest).
+/// Reactive view of the persisted [AuthSessionState].
 ///
-/// - `build()` rehydrates the session from `SecureStorage` on cold start.
-/// - [signIn] runs the Cl@ve login flow, derives the [AuthUser] from the
-///   `id_token`, persists tokens, and emits `AuthenticatedSession`.
-/// - [signOut] revokes at the OIDC end-session endpoint, wipes
-///   `SecureStorage`, and emits `UnauthenticatedSession`.
-///
-/// Feature code that needs the citizen document (DNI / NIE) reads
-/// `currentIdAgenteProvider`; transversal flows that need the access token
-/// (e.g. Dio auth interceptor) can watch `currentAuthSessionProvider`.
+/// Pure exposition: no business logic, no I/O. The notifier subscribes to
+/// `AuthSessionRepository.watch()` and rebuilds whenever a use case
+/// (`LoginUseCase`, `LogoutUseCase`) mutates the persisted session.
 final class AuthSessionNotifierProvider
     extends $AsyncNotifierProvider<AuthSessionNotifier, AuthSessionState> {
-  /// Owns the user's authentication session in memory and synchronises it with
-  /// `SecureStorage` (encrypted at rest).
+  /// Reactive view of the persisted [AuthSessionState].
   ///
-  /// - `build()` rehydrates the session from `SecureStorage` on cold start.
-  /// - [signIn] runs the Cl@ve login flow, derives the [AuthUser] from the
-  ///   `id_token`, persists tokens, and emits `AuthenticatedSession`.
-  /// - [signOut] revokes at the OIDC end-session endpoint, wipes
-  ///   `SecureStorage`, and emits `UnauthenticatedSession`.
-  ///
-  /// Feature code that needs the citizen document (DNI / NIE) reads
-  /// `currentIdAgenteProvider`; transversal flows that need the access token
-  /// (e.g. Dio auth interceptor) can watch `currentAuthSessionProvider`.
+  /// Pure exposition: no business logic, no I/O. The notifier subscribes to
+  /// `AuthSessionRepository.watch()` and rebuilds whenever a use case
+  /// (`LoginUseCase`, `LogoutUseCase`) mutates the persisted session.
   const AuthSessionNotifierProvider._()
     : super(
         from: null,
@@ -70,20 +49,13 @@ final class AuthSessionNotifierProvider
 }
 
 String _$authSessionNotifierHash() =>
-    r'd9d040d66255da1c0d203c58d87aece28be08e97';
+    r'0bf72bf96773ce4aa505595c50ddf7c0941cdee9';
 
-/// Owns the user's authentication session in memory and synchronises it with
-/// `SecureStorage` (encrypted at rest).
+/// Reactive view of the persisted [AuthSessionState].
 ///
-/// - `build()` rehydrates the session from `SecureStorage` on cold start.
-/// - [signIn] runs the Cl@ve login flow, derives the [AuthUser] from the
-///   `id_token`, persists tokens, and emits `AuthenticatedSession`.
-/// - [signOut] revokes at the OIDC end-session endpoint, wipes
-///   `SecureStorage`, and emits `UnauthenticatedSession`.
-///
-/// Feature code that needs the citizen document (DNI / NIE) reads
-/// `currentIdAgenteProvider`; transversal flows that need the access token
-/// (e.g. Dio auth interceptor) can watch `currentAuthSessionProvider`.
+/// Pure exposition: no business logic, no I/O. The notifier subscribes to
+/// `AuthSessionRepository.watch()` and rebuilds whenever a use case
+/// (`LoginUseCase`, `LogoutUseCase`) mutates the persisted session.
 
 abstract class _$AuthSessionNotifier extends $AsyncNotifier<AuthSessionState> {
   FutureOr<AuthSessionState> build();
@@ -105,17 +77,17 @@ abstract class _$AuthSessionNotifier extends $AsyncNotifier<AuthSessionState> {
   }
 }
 
-/// Convenience: returns the active [AuthSession] or `null`.
+/// Convenience: returns the active [AuthSession] or \`null\`.
 
 @ProviderFor(currentAuthSession)
 const currentAuthSessionProvider = CurrentAuthSessionProvider._();
 
-/// Convenience: returns the active [AuthSession] or `null`.
+/// Convenience: returns the active [AuthSession] or \`null\`.
 
 final class CurrentAuthSessionProvider
     extends $FunctionalProvider<AuthSession?, AuthSession?, AuthSession?>
     with $Provider<AuthSession?> {
-  /// Convenience: returns the active [AuthSession] or `null`.
+  /// Convenience: returns the active [AuthSession] or \`null\`.
   const CurrentAuthSessionProvider._()
     : super(
         from: null,
@@ -150,19 +122,19 @@ final class CurrentAuthSessionProvider
 }
 
 String _$currentAuthSessionHash() =>
-    r'2198bbff856d4080ebd9dce788ff875305a0db8f';
+    r'887d42c8ade48e2a39e6e1c3343227e1738befe2';
 
-/// Convenience: returns the active [AuthUser] or `null`.
+/// Convenience: returns the active [AuthUser] or \`null\`.
 
 @ProviderFor(currentAuthUser)
 const currentAuthUserProvider = CurrentAuthUserProvider._();
 
-/// Convenience: returns the active [AuthUser] or `null`.
+/// Convenience: returns the active [AuthUser] or \`null\`.
 
 final class CurrentAuthUserProvider
     extends $FunctionalProvider<AuthUser?, AuthUser?, AuthUser?>
     with $Provider<AuthUser?> {
-  /// Convenience: returns the active [AuthUser] or `null`.
+  /// Convenience: returns the active [AuthUser] or \`null\`.
   const CurrentAuthUserProvider._()
     : super(
         from: null,
@@ -196,28 +168,28 @@ final class CurrentAuthUserProvider
   }
 }
 
-String _$currentAuthUserHash() => r'ca0984be976215be30d6b31011fdf7d61ca0bb9d';
+String _$currentAuthUserHash() => r'453d7295a10af754e024cadc11a2fe5a8f1dae68';
 
-/// Convenience: returns the citizen's `idAgente` (NIF / sub) or `null`.
+/// Convenience: returns the citizen's \`idAgente\` (NIF / sub) or \`null\`.
 ///
-/// This is the canonical entry point for feature code that needs the
-/// document identifier — recommendations, hechos vitales, firma, etc.
+/// Canonical entry point for feature code that needs the document
+/// identifier — recommendations, hechos vitales, firma, etc.
 
 @ProviderFor(currentIdAgente)
 const currentIdAgenteProvider = CurrentIdAgenteProvider._();
 
-/// Convenience: returns the citizen's `idAgente` (NIF / sub) or `null`.
+/// Convenience: returns the citizen's \`idAgente\` (NIF / sub) or \`null\`.
 ///
-/// This is the canonical entry point for feature code that needs the
-/// document identifier — recommendations, hechos vitales, firma, etc.
+/// Canonical entry point for feature code that needs the document
+/// identifier — recommendations, hechos vitales, firma, etc.
 
 final class CurrentIdAgenteProvider
     extends $FunctionalProvider<String?, String?, String?>
     with $Provider<String?> {
-  /// Convenience: returns the citizen's `idAgente` (NIF / sub) or `null`.
+  /// Convenience: returns the citizen's \`idAgente\` (NIF / sub) or \`null\`.
   ///
-  /// This is the canonical entry point for feature code that needs the
-  /// document identifier — recommendations, hechos vitales, firma, etc.
+  /// Canonical entry point for feature code that needs the document
+  /// identifier — recommendations, hechos vitales, firma, etc.
   const CurrentIdAgenteProvider._()
     : super(
         from: null,
@@ -251,4 +223,4 @@ final class CurrentIdAgenteProvider
   }
 }
 
-String _$currentIdAgenteHash() => r'292d73c88db581d8842542129d9ea848ca119150';
+String _$currentIdAgenteHash() => r'9f50868d561172d4985a1fe09b9e1e6e8b0e293c';

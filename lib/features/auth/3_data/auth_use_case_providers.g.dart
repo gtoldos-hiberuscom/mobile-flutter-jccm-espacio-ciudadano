@@ -48,7 +48,7 @@ final class LoginUseCaseProvider
   }
 }
 
-String _$loginUseCaseHash() => r'a705ea49a63447afa4db2d5b3a513e9f3bdae014';
+String _$loginUseCaseHash() => r'116b20d6e3b357020f39f50533d060b72a451d60';
 
 @ProviderFor(logoutUseCase)
 const logoutUseCaseProvider = LogoutUseCaseProvider._();
@@ -89,4 +89,4 @@ final class LogoutUseCaseProvider
   }
 }
 
-String _$logoutUseCaseHash() => r'a52b00ac1ff9010f47f7e4a61ea6a48f7d412b13';
+String _$logoutUseCaseHash() => r'5009f3e629a5d62c73bd16068c2c68f9d02a1c98';
