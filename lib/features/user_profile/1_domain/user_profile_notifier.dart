@@ -1,6 +1,8 @@
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_session_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/1_domain/logout_use_case.dart' show LogoutUseCase;
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/auth_use_case_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/auth.dart' show LogoutUseCase;
 import 'package:jccm_espacio_ciudadano/features/user_profile/0_entity/user_profile.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

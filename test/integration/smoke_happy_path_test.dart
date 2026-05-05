@@ -20,16 +20,16 @@ void main() {
     final tester,
   ) async {
     await tester.pumpWidget(
-      ProviderScope(
+      const ProviderScope(
         child: MaterialApp(
-          localizationsDelegates: const [
+          localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const LandingPage(),
+          home: LandingPage(),
         ),
       ),
     );

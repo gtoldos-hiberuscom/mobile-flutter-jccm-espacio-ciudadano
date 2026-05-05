@@ -1,4 +1,5 @@
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_config_state.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart' show RecommendationsRepository;
 
 /// Domain port (STORY-57) that resolves the citizen's *Mis
 /// Recomendaciones* configuration state.

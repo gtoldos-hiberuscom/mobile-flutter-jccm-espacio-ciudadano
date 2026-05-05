@@ -45,7 +45,7 @@ class _GoldenRepo implements FamiliaNumerosaRepository {
     expiryDate: _expiry,
   );
 
-  static final DateTime _expiry = DateTime.utc(2030, 1, 1);
+  static final DateTime _expiry = DateTime.utc(2030);
 
   @override
   Future<BinaryArtifact> requestQr() async => const BinaryArtifact(
@@ -70,16 +70,16 @@ Future<void> _pump(final WidgetTester tester) async {
           const _GoldenRepo(),
         ),
       ],
-      child: MaterialApp(
-        localizationsDelegates: const [
+      child: const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        home: const FamiliaNumerosaDetailPage(),
+        locale: Locale('es'),
+        home: FamiliaNumerosaDetailPage(),
       ),
     ),
   );

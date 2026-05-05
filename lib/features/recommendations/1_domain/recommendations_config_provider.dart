@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendations_config_state.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_config_source.dart' show RecommendationsConfigSource;
 import 'package:jccm_espacio_ciudadano/features/recommendations/3_data/recommendations_config_source_provider.dart';
 
 /// One-shot probe of [RecommendationsConfigState].

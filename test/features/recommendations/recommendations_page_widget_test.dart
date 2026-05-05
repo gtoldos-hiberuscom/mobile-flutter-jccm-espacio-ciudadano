@@ -13,11 +13,10 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/3_data/recommend
 class _FakeRepo implements RecommendationsRepository {
   _FakeRepo({
     required this.byBucket,
-    this.configState = RecommendationsConfigState.configured,
   });
 
   final Map<RecommendationBucket, List<RecommendationsPageResult>> byBucket;
-  final RecommendationsConfigState configState;
+  final RecommendationsConfigState configState = RecommendationsConfigState.configured;
 
   final Map<RecommendationBucket, int> _calls = {};
 

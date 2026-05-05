@@ -70,16 +70,16 @@ Future<void> _pump(final WidgetTester tester) async {
           const _GoldenRepo(),
         ),
       ],
-      child: MaterialApp(
-        localizationsDelegates: const [
+      child: const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        home: const RecommendationsPage(),
+        locale: Locale('es'),
+        home: RecommendationsPage(),
       ),
     ),
   );

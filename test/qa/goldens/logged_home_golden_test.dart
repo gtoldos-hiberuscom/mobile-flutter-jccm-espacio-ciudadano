@@ -24,9 +24,9 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 Future<void> _pumpHome(final WidgetTester tester) async {
   await tester.pumpWidget(
-    ProviderScope(
+    const ProviderScope(
       child: MaterialApp(
-        localizationsDelegates: const [
+        localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -35,7 +35,7 @@ Future<void> _pumpHome(final WidgetTester tester) async {
         supportedLocales: AppLocalizations.supportedLocales,
         // TODO(STORY-22): replace with the real LoggedHomePage widget
         // once the home dashboard surface lands.
-        home: const Placeholder(),
+        home: Placeholder(),
       ),
     ),
   );

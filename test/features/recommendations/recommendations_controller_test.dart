@@ -121,7 +121,7 @@ void main() {
     test('initial error surfaces as AsyncError', () async {
       final repo = _FakeRecommendationsRepository(
         pages: [
-          RecommendationsPageResult(items: const <Recommendation>[], hasMore: false),
+          const RecommendationsPageResult(items: <Recommendation>[], hasMore: false),
         ],
         failInitial: true,
       );

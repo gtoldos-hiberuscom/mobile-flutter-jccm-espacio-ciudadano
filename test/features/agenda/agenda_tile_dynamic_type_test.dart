@@ -72,7 +72,7 @@ void main() {
   testWidgets('AgendaEventTile does not overflow at 2.0x text scale', (
     final tester,
   ) async {
-    await _pump(tester, scale: 2.0);
+    await _pump(tester, scale: 2);
 
     // Framework would surface RenderFlex overflow as a test exception.
     expect(tester.takeException(), isNull);
@@ -84,7 +84,7 @@ void main() {
   testWidgets('AgendaEventTile renders cleanly at 1.0x text scale', (
     final tester,
   ) async {
-    await _pump(tester, scale: 1.0);
+    await _pump(tester, scale: 1);
     expect(tester.takeException(), isNull);
     expect(find.text(_longTitle), findsOneWidget);
   });

@@ -1,5 +1,7 @@
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session_state.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_tokens.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart' show AuthUser;
+import 'package:jccm_espacio_ciudadano/features/auth/auth.dart' show AuthUser;
 
 /// Domain contract responsible for the user's authentication session
 /// **lifecycle on the device**: persisting tokens, deriving identity claims

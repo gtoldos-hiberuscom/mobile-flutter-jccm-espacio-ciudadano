@@ -48,7 +48,6 @@ void main() {
         Dio(),
         (final d) => RetryInterceptor(
           dio: d,
-          maxRetries: 3,
           baseDelay: const Duration(milliseconds: 1),
           maxDelay: const Duration(milliseconds: 2),
           random: Random(0),
@@ -67,7 +66,6 @@ void main() {
         Dio(),
         (final d) => RetryInterceptor(
           dio: d,
-          maxRetries: 3,
           baseDelay: const Duration(milliseconds: 1),
           maxDelay: const Duration(milliseconds: 2),
           random: Random(0),
@@ -87,7 +85,6 @@ void main() {
         Dio(),
         (final d) => RetryInterceptor(
           dio: d,
-          maxRetries: 3,
           baseDelay: const Duration(milliseconds: 1),
           maxDelay: const Duration(milliseconds: 2),
           random: Random(0),

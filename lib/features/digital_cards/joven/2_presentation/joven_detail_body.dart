@@ -21,6 +21,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/exporters/2_presen
 import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/0_entity/joven_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/1_domain/joven_detail_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/1_domain/joven_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/2_presentation/joven_detail_page.dart' show JovenDetailPage;
 import 'package:jccm_espacio_ciudadano/features/digital_cards/joven/3_data/joven_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
