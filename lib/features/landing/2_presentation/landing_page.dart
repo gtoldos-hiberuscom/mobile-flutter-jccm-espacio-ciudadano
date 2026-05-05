@@ -4,10 +4,9 @@ import 'package:jccm_espacio_ciudadano/app/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
-import 'package:jccm_espacio_ciudadano/core/logging/logger_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/auth.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content.dart';
-import 'package:jccm_espacio_ciudadano/features/landing/1_domain/landing_content_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/providers/landing_content_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/landing_access_step.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/landing_feature_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -23,14 +22,28 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// 5. Footer — accessibility, legal, and help links.
 ///
 /// No business logic lives here — data comes from [landingContentProvider].
+/// Login orchestration is delegated to [LandingNotifier].
 class LandingPage extends ConsumerWidget {
   const LandingPage({super.key});
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final content = ref.watch(landingContentProvider);
+    final landingState = ref.watch(landingProvider);
     final l10n = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
+
+    ref.listen<LandingState>(landingProvider, (final previous, final next) {
+      if (next.loginSuccess) {
+        ref.read(goRouterProvider).go('/sitemap');
+      }
+      if (next.error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.domainGenericLoadError)),
+        );
+        ref.read(landingProvider.notifier).clearError();
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -95,18 +108,7 @@ class LandingPage extends ConsumerWidget {
               AppButton(
                 label: l10n.landingCtaButton,
                 semanticsLabel: l10n.landingCtaButton,
-                onPressed: () async {
-                  final AuthSession session = await ref.read(loginUseCaseProvider)();
-                  ref.read(appLoggerProvider).info(
-                    'Login successful',
-                    context: <String, Object?>{
-                      'sessionType': session.runtimeType.toString(),
-                    },
-                  );
-
-                  //go to sitemap page
-                  ref.read(goRouterProvider).go('/sitemap');
-                },
+                onPressed: landingState.isLoggingIn ? null : () => ref.read(landingProvider.notifier).login(),
               ),
               const SizedBox(height: AppDimensions.space40),
 

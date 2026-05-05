@@ -30,8 +30,7 @@ final Provider<Connectivity> connectivityProvider = Provider<Connectivity>(
   (final ref) => Connectivity(),
 );
 
-final StreamProvider<List<ConnectivityResult>> connectivityRawStreamProvider =
-    StreamProvider<List<ConnectivityResult>>((final ref) async* {
+final StreamProvider<List<ConnectivityResult>> connectivityRawStreamProvider = StreamProvider<List<ConnectivityResult>>((final ref) async* {
   final connectivity = ref.watch(connectivityProvider);
   // Emit the current value first so listeners don't sit in `loading` until
   // the OS posts a change event.
@@ -43,12 +42,11 @@ final StreamProvider<List<ConnectivityResult>> connectivityRawStreamProvider =
 /// We bias toward letting requests through when status is unknown rather
 /// than blocking the UI prematurely (resilience is a defense-in-depth
 /// layer, not a gate).
-final Provider<ConnectivityStatus> connectivityStatusProvider =
-    Provider<ConnectivityStatus>((final ref) {
+final Provider<ConnectivityStatus> connectivityStatusProvider = Provider<ConnectivityStatus>((final ref) {
   final raw = ref.watch(connectivityRawStreamProvider);
   return raw.when(
     data: mapConnectivityResults,
     loading: () => ConnectivityStatus.online,
-    error: (final _, final ___) => ConnectivityStatus.online,
+    error: (final _, final _) => ConnectivityStatus.online,
   );
 });

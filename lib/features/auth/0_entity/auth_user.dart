@@ -1,5 +1,9 @@
-/// Represents the authenticated citizen's identity claims.
-final class AuthUser {
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'auth_user.freezed.dart';
+
+@freezed
+final class AuthUser with _$AuthUser {
   const AuthUser({
     required this.sub,
     this.nif,
@@ -8,35 +12,14 @@ final class AuthUser {
     this.email,
   });
 
-  final String sub;
-  final String? nif;
-  final String? givenName;
-  final String? familyName;
-  final String? email;
-
-  /// Returns the document identifier (`nif`) when available, falling back to `sub`.
-  String get idAgente => nif ?? sub;
-
-  String? get displayName {
-    final names = [
-      givenName?.trim(),
-      familyName?.trim(),
-    ].whereType<String>().where((final value) => value.isNotEmpty);
-
-    final display = names.join(' ');
-    if (display.isEmpty) {
-      return null;
-    }
-    return display;
-  }
-
   @override
-  String toString() {
-    return 'AuthUser('
-        'hasSub: ${sub.isNotEmpty}, '
-        'hasNif: ${nif != null}, '
-        'hasDisplayName: ${displayName != null}, '
-        'hasEmail: ${email != null}'
-        ')';
-  }
+  final String sub;
+  @override
+  final String? nif;
+  @override
+  final String? givenName;
+  @override
+  final String? familyName;
+  @override
+  final String? email;
 }

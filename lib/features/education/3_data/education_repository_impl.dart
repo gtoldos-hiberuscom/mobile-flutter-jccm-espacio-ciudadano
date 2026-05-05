@@ -1,7 +1,5 @@
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/network/result.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_title.dart';
 import 'package:jccm_espacio_ciudadano/features/education/1_domain/education_repository.dart';
@@ -10,43 +8,32 @@ import 'package:jccm_espacio_ciudadano/features/education/3_data/api/educacion_a
 final class EducationRepositoryImpl implements EducationRepository {
   const EducationRepositoryImpl({
     required final EducacionApiWrapper apiWrapper,
-    required final SecureStorage secureStorage,
+    required final String numDocumento,
   }) : _apiWrapper = apiWrapper,
-       _secureStorage = secureStorage;
+       _numDocumento = numDocumento;
 
   final EducacionApiWrapper _apiWrapper;
-  final SecureStorage _secureStorage;
+  final String _numDocumento;
 
   @override
   Future<EducationSnapshot> loadSnapshot() async {
-    final numDocumento = await _secureStorage.read(StorageKeys.idAgente) ?? '';
-  
-    //   // Get the access token from secure storage
-    // final accessToken = await _secureStorage.read(StorageKeys.accessToken) ?? '';
-    
-    // // Fetch the authenticated user to get their document number
-    // final authUser = await _authRepository.fetchUserInfo(accessToken: accessToken);
-    // final numDocumento = authUser.idAgente;
-
-    
-
-
+    final numDocumento = _numDocumento;
 
     final uoFuture = _apiWrapper.getTitulosUniversitarios(
       numDocumento,
       DTEDUTUOREQ((final b) => b..docu = numDocumento),
     );
-    final nuFuture = _apiWrapper.getTitulosNoUniversitarios(
-      numDocumento,
-      DTEDUTNUREQ((final b) => b..docu = numDocumento),
-    );
+    // final nuFuture = _apiWrapper.getTitulosNoUniversitarios(
+    //   numDocumento,
+    //   DTEDUTNUREQ((final b) => b..docu = numDocumento),
+    // );
 
     final uoResult = await uoFuture;
-    final nuResult = await nuFuture;
+    // final nuResult = await nuFuture;
 
     return EducationSnapshot(
       universityTitles: _mapUniversityResult(uoResult),
-      nonUniversityTitles: _mapNonUniversityResult(nuResult),
+      nonUniversityTitles: EducationSection.empty(),
     );
   }
 

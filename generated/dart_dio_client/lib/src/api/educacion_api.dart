@@ -189,18 +189,19 @@ class EducacionApi {
       );
     }
 
-    final _response = await _dio.request<Object>(
-      _path,
-      data: _bodyData,
-      options: _options,
-      cancelToken: cancelToken,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-
+    late final Response<Object> _response;
     DTEDUTUORES? _responseData;
 
     try {
+      _response = await _dio.request<Object>(
+        _path,
+        data: _bodyData,
+        options: _options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+
       final rawResponse = _response.data;
       _responseData = rawResponse == null
           ? null

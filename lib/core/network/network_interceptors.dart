@@ -3,37 +3,36 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 
 // ─── Auth interceptor ────────────────────────────────────────────────────────
 
-/// Reads the stored access token from [SecureStorage] and appends it as a
-/// `Bearer` `Authorization` header on every outgoing request.
+/// Attaches a Bearer [Authorization] header to every outgoing request.
 ///
-/// If no token is stored the request is forwarded unchanged, letting the
-/// server respond with 401 which is then handled by [ErrorInterceptor].
+/// The token is resolved lazily via [tokenGetter] at request time, so the
+/// interceptor never holds a stale reference and no circular dependency is
+/// introduced between [Dio] construction and the auth state providers.
+///
+/// If [tokenGetter] returns null or an empty string the request is forwarded
+/// unchanged, letting the server respond with 401.
 final class AuthInterceptor extends Interceptor {
-  AuthInterceptor(this._storage);
+  AuthInterceptor(this._tokenGetter);
 
-  final SecureStorage _storage;
+  /// Returns the current access token, or null when the user is not logged in.
+  final String? Function() _tokenGetter;
 
   @override
-  Future<void> onRequest(
+  void onRequest(
     final RequestOptions options,
     final RequestInterceptorHandler handler,
-  ) async {
+  ) {
     final hasAuthorizationHeader = options.headers.keys.any(
       (final key) => key.toLowerCase() == HttpHeaders.authorizationHeader,
     );
-    if (hasAuthorizationHeader) {
-      handler.next(options);
-      return;
-    }
-
-    final token = await _storage.read(StorageKeys.accessToken);
-    if (token != null && token.isNotEmpty) {
-      options.headers[HttpHeaders.authorizationHeader] = 'Bearer $token';
+    if (!hasAuthorizationHeader) {
+      final token = _tokenGetter();
+      if (token != null && token.isNotEmpty) {
+        options.headers[HttpHeaders.authorizationHeader] = 'Bearer $token';
+      }
     }
     handler.next(options);
   }

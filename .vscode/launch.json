@@ -1,25 +1,37 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
-            "name": "jccm_espacio_ciudadano",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "jccm_espacio_ciudadano (profile mode)",
+            "name": "Development",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_development.dart"
+        },
+        {
+            "name": "Development (profile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_development.dart",
             "flutterMode": "profile"
         },
         {
-            "name": "jccm_espacio_ciudadano (release mode)",
+            "name": "Preproduction",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_preproduction.dart"
+        },
+        {
+            "name": "Preproduction (profile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_preproduction.dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Production",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_production.dart",
             "flutterMode": "release"
         },
         {

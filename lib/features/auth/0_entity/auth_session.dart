@@ -1,5 +1,9 @@
-/// Represents a successfully authenticated session token set.
-final class AuthSession {
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'auth_session.freezed.dart';
+
+@freezed
+final class AuthSession with _$AuthSession {
   const AuthSession({
     required this.accessToken,
     required this.tokenType,
@@ -10,40 +14,18 @@ final class AuthSession {
     this.refreshTokenExpiresAt,
   });
 
-  final String accessToken;
-  final String? refreshToken;
-  final String? idToken;
-  final String tokenType;
-  final DateTime? accessTokenExpiresAt;
-  final DateTime? refreshTokenExpiresAt;
-  final List<String> scopes;
-
-  bool get hasRefreshToken => refreshToken != null;
-
-  bool get hasIdToken => idToken != null;
-
-  bool isAccessTokenExpired({
-    final DateTime? now,
-    final Duration clockSkew = const Duration(seconds: 30),
-  }) {
-    final expiry = accessTokenExpiresAt;
-    if (expiry == null) {
-      return true;
-    }
-
-    final effectiveNow = now ?? DateTime.now();
-    return !expiry.isAfter(effectiveNow.add(clockSkew));
-  }
-
   @override
-  String toString() {
-    return 'AuthSession('
-        'tokenType: $tokenType, '
-        'accessTokenExpiresAt: $accessTokenExpiresAt, '
-        'refreshTokenExpiresAt: $refreshTokenExpiresAt, '
-        'scopes: $scopes, '
-        'hasRefreshToken: $hasRefreshToken, '
-        'hasIdToken: $hasIdToken'
-        ')';
-  }
+  final String accessToken;
+  @override
+  final String? refreshToken;
+  @override
+  final String? idToken;
+  @override
+  final String tokenType;
+  @override
+  final DateTime? accessTokenExpiresAt;
+  @override
+  final DateTime? refreshTokenExpiresAt;
+  @override
+  final List<String> scopes;
 }

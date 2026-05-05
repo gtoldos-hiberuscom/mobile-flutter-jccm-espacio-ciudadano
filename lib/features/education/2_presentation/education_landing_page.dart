@@ -10,7 +10,7 @@ import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_title.dart';
-import 'package:jccm_espacio_ciudadano/features/education/1_domain/education_landing_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_links_section.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 

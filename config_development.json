@@ -1,5 +1,6 @@
 {
   "APP_FLAVOR": "development",
+  "BASE_URL": "https://fachada-sede-api-uat.cm-pre.jccm.es",
   "TIMEOUT": "20",
   "DEBUG_MODE": "true",
   "SSO_BASE_URL": "https://sso-cerbero-uat.cm-pre.jccm.es/auth",

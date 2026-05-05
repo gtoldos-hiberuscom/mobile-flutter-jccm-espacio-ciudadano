@@ -15,8 +15,8 @@ Future<void> main() async {
   await bootstrap(
     AppConfig(
       environment: BuildEnvironment.production,
-      baseUrl: json['baseUrl'] as String? ?? '',
-      appName: json['appName'] as String? ?? 'Espacio Ciudadano',
+      baseUrl: json['BASE_URL'] as String? ?? 'https://fachada-sede-api.jccm.es',
+      appName: json['APP_NAME'] as String? ?? 'Espacio Ciudadano',
       timeout: int.tryParse(json['TIMEOUT'] as String? ?? '10') ?? 10,
       ssoClientId: json['SSO_CLIENT_ID'] as String? ?? '',
       ssoRedirectUri: json['SSO_REDIRECT_URI'] as String? ?? '',

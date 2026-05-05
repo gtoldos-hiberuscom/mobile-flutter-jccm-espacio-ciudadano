@@ -1,5 +1,6 @@
 {
   "APP_FLAVOR": "production",
+  "BASE_URL": "https://fachada-sede-api.jccm.es",
   "TIMEOUT": "10",
   "DEBUG_MODE": "false",
   "SSO_BASE_URL": "https://cerbero.jccm.es/auth",
