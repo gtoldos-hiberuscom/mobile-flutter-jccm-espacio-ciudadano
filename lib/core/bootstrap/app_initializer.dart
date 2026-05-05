@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:jccm_espacio_ciudadano/app/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 
 /// Handles async initialisation steps that must complete before `runApp`.
 ///

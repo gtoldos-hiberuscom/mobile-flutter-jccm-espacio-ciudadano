@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
+import 'package:jccm_espacio_ciudadano/core/theme/app_colors.dart';
 
 /// A centred blocked-access state with a lock icon, message and optional action.
 ///

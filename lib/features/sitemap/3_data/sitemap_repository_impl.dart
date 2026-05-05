@@ -1,4 +1,4 @@
-import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/0_entity/sitemap_node.dart';

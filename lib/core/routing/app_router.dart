@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/app/observers/analytics_observer.dart';
-import 'package:jccm_espacio_ciudadano/app/observers/app_lifecycle_observer.dart';
-import 'package:jccm_espacio_ciudadano/app/routing/placeholder_screens.dart';
-import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/app/shell/app_scaffold.dart';
+import 'package:jccm_espacio_ciudadano/core/observers/analytics_observer.dart';
+import 'package:jccm_espacio_ciudadano/core/observers/app_lifecycle_observer.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/logger_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';

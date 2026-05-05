@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
-import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/theme/app_colors.dart';
+import 'package:jccm_espacio_ciudadano/core/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content.dart';
 
 /// Numbered step row used in the "Cómo acceder" section.

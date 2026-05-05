@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jccm_espacio_ciudadano/app/bootstrap/app_initializer.dart';
-import 'package:jccm_espacio_ciudadano/app/config/app_config.dart';
-import 'package:jccm_espacio_ciudadano/app/config/app_config_provider.dart';
-import 'package:jccm_espacio_ciudadano/app/shell/app.dart';
+import 'package:jccm_espacio_ciudadano/core/bootstrap/app_initializer.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/shell/app.dart';
 
 /// Entry-point for all environment-specific `main` functions.
 ///

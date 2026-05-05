@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/user_profile/0_entity/user_profile.dart';
 import 'package:jccm_espacio_ciudadano/features/user_profile/2_presentation/widgets/user_avatar_widget.dart';

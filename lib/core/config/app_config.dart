@@ -1,4 +1,4 @@
-import 'package:jccm_espacio_ciudadano/app/config/build_environment.dart';
+import 'package:jccm_espacio_ciudadano/core/config/build_environment.dart';
 
 /// Typed runtime configuration for the application.
 ///

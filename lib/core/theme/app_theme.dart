@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
-import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
-import 'package:jccm_espacio_ciudadano/app/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/theme/app_colors.dart';
+import 'package:jccm_espacio_ciudadano/core/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/theme/app_typography.dart';
 
 /// Central Material 3 theme factory for the application.
 ///

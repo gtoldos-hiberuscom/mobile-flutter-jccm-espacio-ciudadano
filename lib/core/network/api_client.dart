@@ -1,6 +1,6 @@
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
-import 'package:jccm_espacio_ciudadano/app/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/core/feature_flags/resilience_flag.dart';
 import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/emoji_dio_logger.dart';

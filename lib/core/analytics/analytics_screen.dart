@@ -1,4 +1,4 @@
-import 'package:jccm_espacio_ciudadano/app/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 
 /// Allow-listed enum of telemetry screen identifiers.
 ///

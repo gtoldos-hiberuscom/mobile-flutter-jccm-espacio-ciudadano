@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/theme/app_dimensions.dart';
 
 /// Controlled "Próximamente" card for dashboard surfaces whose backend
 /// is not yet exposed (TASK-27 PLACEHOLDER_CONTROLLED decision).

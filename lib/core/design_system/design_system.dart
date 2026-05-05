@@ -7,9 +7,9 @@
 /// ```
 library;
 
-export 'package:jccm_espacio_ciudadano/app/theme/app_colors.dart';
-export 'package:jccm_espacio_ciudadano/app/theme/app_dimensions.dart';
-export 'package:jccm_espacio_ciudadano/app/theme/app_typography.dart';
+export 'package:jccm_espacio_ciudadano/core/theme/app_colors.dart';
+export 'package:jccm_espacio_ciudadano/core/theme/app_dimensions.dart';
+export 'package:jccm_espacio_ciudadano/core/theme/app_typography.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/accessibility/accessibility_helpers.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
