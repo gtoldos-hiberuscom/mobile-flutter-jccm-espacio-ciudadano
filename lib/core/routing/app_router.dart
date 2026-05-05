@@ -7,7 +7,6 @@ import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/shell/app_scaffold.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
-import 'package:jccm_espacio_ciudadano/core/logging/logger_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
@@ -25,7 +24,6 @@ final goRouterProvider = Provider<GoRouter>(
     final lifecycleObserver = AppLifecycleObserver();
     final analyticsObserver = AnalyticsObserver(
       analyticsService: ref.read(analyticsServiceProvider),
-      logger: ref.read(appLoggerProvider),
     );
 
     final router = GoRouter(

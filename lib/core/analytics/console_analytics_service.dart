@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
-import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 
 /// Development-console implementation of [AnalyticsService].
 ///
@@ -21,12 +20,9 @@ final class ConsoleAnalyticsService implements AnalyticsService {
   /// be exercised by tests; it defaults to [kReleaseMode] so production
   /// behaviour is unchanged.
   const ConsoleAnalyticsService({
-    required final AppLogger logger,
     final bool releaseMode = kReleaseMode,
-  }) : _logger = logger,
-       _releaseMode = releaseMode;
+  }) : _releaseMode = releaseMode;
 
-  final AppLogger _logger;
   final bool _releaseMode;
 
   @override
@@ -34,7 +30,8 @@ final class ConsoleAnalyticsService implements AnalyticsService {
     if (_releaseMode) {
       return;
     }
-    _logger.debug('[Analytics] event: ${event.runtimeType} | $event');
+    // ignore: avoid_print
+    print('[Analytics] event: ${event.runtimeType} | $event');
   }
 
   @override
@@ -42,6 +39,7 @@ final class ConsoleAnalyticsService implements AnalyticsService {
     if (_releaseMode) {
       return;
     }
-    _logger.debug('[Analytics] screen: ${screen.slug}');
+    // ignore: avoid_print
+    print('[Analytics] screen: ${screen.slug}');
   }
 }

@@ -2,7 +2,6 @@ import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/core/feature_flags/resilience_flag.dart';
-import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/emoji_dio_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/core/network/retry_policy.dart';
@@ -14,14 +13,13 @@ import 'package:jccm_espacio_ciudadano/core/network/retry_policy.dart';
 /// - Default JSON `Content-Type` and `Accept` headers.
 /// - [AuthInterceptor] — attaches the Bearer access token to every request.
 /// - [ErrorInterceptor] — maps `DioException` to typed `AppError` subtypes.
-/// - [LoggingInterceptor] — enabled only for development environment.
+/// - [EmojiDioLogger] — logs HTTP requests/responses with emoji formatting.
 ///
 /// Use [createCancelToken] to obtain a [CancelToken] that can be passed to
 /// individual requests and cancelled (e.g., on widget/notifier disposal).
 Dio buildDioClient({
   required final AppConfig config,
   required final String? Function() tokenGetter,
-  required final AppLogger logger,
 }) {
   final timeoutDuration = Duration(seconds: config.timeout);
 
@@ -38,9 +36,8 @@ Dio buildDioClient({
     ),
   );
 
-  // Order matters: logging → auth → retry → error
-  dio.interceptors.add(EmojiDioLogger());
-  dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
+  // Order matters: auth → retry → error - logging
+
 
   dio.interceptors.add(AuthInterceptor(tokenGetter));
   // STORY-65 — opt-in retry for idempotent methods only.
@@ -48,7 +45,8 @@ Dio buildDioClient({
     dio.interceptors.add(RetryInterceptor(dio: dio));
   }
   dio.interceptors.add(ErrorInterceptor());
-
+  dio.interceptors.add(EmojiDioLogger());
+  dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
 
   return dio;
 }

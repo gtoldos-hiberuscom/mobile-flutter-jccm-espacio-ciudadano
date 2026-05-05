@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n \"^import.*show\" /Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano/jccm_espacio_ciudadano/lib/core/ui_states/*.dart)",
+      "Bash(grep \"^\\\\-\\\\-$\\\\|^[^-]*:.*\\(\\\\|^[^-]*:.*{\")",
+      "Bash(awk '{print $NF}')"
+    ]
+  }
+}

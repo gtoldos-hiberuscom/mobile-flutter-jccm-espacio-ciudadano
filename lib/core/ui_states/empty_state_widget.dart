@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart' show AppButton;
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart' show AppButton;
 
 /// A centred empty-state placeholder with an icon, message and optional action.

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
-import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 
 // ─── Auth interceptor ────────────────────────────────────────────────────────
 
@@ -91,62 +90,3 @@ final class ErrorInterceptor extends Interceptor {
   }
 }
 
-// ─── Logging interceptor ─────────────────────────────────────────────────────
-
-/// Logs request/response details through the application [AppLogger].
-///
-/// Enabled only when the app runs in the development environment
-/// (see `AppConfig.environment`). URLs and methods are passed via the
-/// structured `context` map so that the logger's PII redaction layer
-/// (see `console_logger.dart`) can scrub any sensitive key fragment.
-final class LoggingInterceptor extends Interceptor {
-  LoggingInterceptor(this._logger);
-
-  final AppLogger _logger;
-
-  @override
-  void onRequest(
-    final RequestOptions options,
-    final RequestInterceptorHandler handler,
-  ) {
-    _logger.info(
-      'HTTP →',
-      context: <String, Object?>{
-        'method': options.method,
-        'url': options.uri.toString(),
-      },
-    );
-    handler.next(options);
-  }
-
-  @override
-  void onResponse(
-    final Response<dynamic> response,
-    final ResponseInterceptorHandler handler,
-  ) {
-    _logger.info(
-      'HTTP ←',
-      context: <String, Object?>{
-        'status': response.statusCode,
-        'url': response.requestOptions.uri.toString(),
-      },
-    );
-    handler.next(response);
-  }
-
-  @override
-  void onError(
-    final DioException err,
-    final ErrorInterceptorHandler handler,
-  ) {
-    _logger.warning(
-      'HTTP ✗',
-      context: <String, Object?>{
-        'type': err.type.name,
-        'url': err.requestOptions.uri.toString(),
-        'message': err.message,
-      },
-    );
-    handler.next(err);
-  }
-}

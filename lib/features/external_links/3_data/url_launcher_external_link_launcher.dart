@@ -1,6 +1,5 @@
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
 import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
-import 'package:jccm_espacio_ciudadano/core/logging/app_logger.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
@@ -32,16 +31,13 @@ final class UrlLauncherExternalLinkLauncher implements ExternalLinkLauncher {
   const UrlLauncherExternalLinkLauncher({
     required final ExternalLinkCatalog catalog,
     required final AnalyticsService analytics,
-    required final AppLogger logger,
     final LaunchUrlFn launchUrlFn = launchUrl,
   }) : _catalog = catalog,
        _analytics = analytics,
-       _logger = logger,
        _launchUrlFn = launchUrlFn;
 
   final ExternalLinkCatalog _catalog;
   final AnalyticsService _analytics;
-  final AppLogger _logger;
   final LaunchUrlFn _launchUrlFn;
 
   @override
@@ -70,11 +66,8 @@ final class UrlLauncherExternalLinkLauncher implements ExternalLinkLauncher {
         );
       }
     } on Object catch (error, stackTrace) {
-      _logger.error(
-        '[external_links] platform launch threw',
-        exception: error,
-        stackTrace: stackTrace,
-      );
+      // ignore: avoid_print
+      print('[external_links] platform launch threw: $error\n$stackTrace');
       return _failure(link, ExternalLinkLaunchFailureReason.unknown);
     }
 
