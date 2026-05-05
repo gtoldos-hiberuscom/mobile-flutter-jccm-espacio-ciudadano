@@ -1,5 +1,3 @@
-import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
-import 'package:jccm_espacio_ciudadano/core/analytics/analytics_service.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
@@ -30,14 +28,11 @@ typedef LaunchUrlFn =
 final class UrlLauncherExternalLinkLauncher implements ExternalLinkLauncher {
   const UrlLauncherExternalLinkLauncher({
     required final ExternalLinkCatalog catalog,
-    required final AnalyticsService analytics,
     final LaunchUrlFn launchUrlFn = launchUrl,
   }) : _catalog = catalog,
-       _analytics = analytics,
        _launchUrlFn = launchUrlFn;
 
   final ExternalLinkCatalog _catalog;
-  final AnalyticsService _analytics;
   final LaunchUrlFn _launchUrlFn;
 
   @override
@@ -71,11 +66,6 @@ final class UrlLauncherExternalLinkLauncher implements ExternalLinkLauncher {
       return _failure(link, ExternalLinkLaunchFailureReason.unknown);
     }
 
-    _analytics
-      ..logEvent(ExternalLinkOpenedEvent(linkId: link.id, success: true))
-      // Backwards-compatible domain-only event also emitted so existing
-      // consumers (canon §26 inventory) keep working.
-      ..logEvent(ExternalLinkEvent(link.url.host));
     return const ExternalLinkLaunchSuccess();
   }
 
@@ -83,11 +73,6 @@ final class UrlLauncherExternalLinkLauncher implements ExternalLinkLauncher {
     final ExternalLink link,
     final ExternalLinkLaunchFailureReason reason,
   ) {
-    _analytics
-      ..logEvent(ExternalLinkOpenedEvent(linkId: link.id, success: false))
-      ..logEvent(
-        ExternalLinkOpenFailedEvent(linkId: link.id, reason: reason.name),
-      );
     return ExternalLinkLaunchFailure(reason);
   }
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/core/observers/analytics_observer.dart';
-import 'package:jccm_espacio_ciudadano/core/observers/app_lifecycle_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/shell/app_scaffold.dart';
-import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
@@ -21,14 +19,9 @@ import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_p
 /// factory, keeping all navigation decisions free of [BuildContext].
 final goRouterProvider = Provider<GoRouter>(
   (final ref) {
-    final lifecycleObserver = AppLifecycleObserver();
-    final analyticsObserver = AnalyticsObserver(
-      analyticsService: ref.read(analyticsServiceProvider),
-    );
-
     final router = GoRouter(
       initialLocation: Routes.landing,
-      observers: [lifecycleObserver, analyticsObserver],
+      observers: [GoRouterObserver()],
       // ── Global redirect ──────────────────────────────────────────────────
       //redirect: (final BuildContext context, final GoRouterState state) => guard.redirect(state),
 

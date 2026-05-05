@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/theme/app_dimensions.dart';
-import 'package:jccm_espacio_ciudadano/core/analytics/analytics_event.dart';
-import 'package:jccm_espacio_ciudadano/core/analytics/analytics_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/domain_section.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/placeholder_controlled_card.dart';
 import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
@@ -28,19 +26,9 @@ class EducationLandingPage extends ConsumerStatefulWidget {
 }
 
 class _EducationLandingPageState extends ConsumerState<EducationLandingPage> {
-  static const String _domainId = 'education';
-  bool _viewedLogged = false;
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_viewedLogged) {
-        return;
-      }
-      _viewedLogged = true;
-      ref.read(analyticsServiceProvider).logEvent(const DomainLandingViewedEvent(domain: _domainId));
-    });
   }
 
   @override

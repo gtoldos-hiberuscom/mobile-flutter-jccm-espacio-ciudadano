@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
-import 'package:jccm_espacio_ciudadano/core/feature_flags/resilience_flag.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Sprint 7 / STORY-65 — opt-in offline banner.
@@ -31,9 +30,6 @@ class OfflineBanner extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
-    if (!kResilienceLayerEnabled) {
-      return child;
-    }
     final status = ref.watch(connectivityStatusProvider);
     final theme = Theme.of(context);
     // Defensive lookup — if the AppLocalizations delegate is missing

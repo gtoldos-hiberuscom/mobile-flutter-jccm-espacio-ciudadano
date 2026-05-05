@@ -1,7 +1,6 @@
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
-import 'package:jccm_espacio_ciudadano/core/feature_flags/resilience_flag.dart';
 import 'package:jccm_espacio_ciudadano/core/network/emoji_dio_logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/core/network/retry_policy.dart';
@@ -41,9 +40,6 @@ Dio buildDioClient({
 
   dio.interceptors.add(AuthInterceptor(tokenGetter));
   // STORY-65 — opt-in retry for idempotent methods only.
-  if (kResilienceLayerEnabled) {
-    dio.interceptors.add(RetryInterceptor(dio: dio));
-  }
   dio.interceptors.add(ErrorInterceptor());
   dio.interceptors.add(EmojiDioLogger());
   dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
