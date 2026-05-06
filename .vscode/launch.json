@@ -5,33 +5,38 @@
             "name": "Development",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_development.dart"
+            "program": "lib/main.dart",
+            "args": ["--dart-define-from-file=config_development.json"]
         },
         {
             "name": "Development (profile)",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_development.dart",
+            "program": "lib/main.dart",
+            "args": ["--dart-define-from-file=config_development.json"],
             "flutterMode": "profile"
         },
         {
             "name": "Preproduction",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_preproduction.dart"
+            "program": "lib/main.dart",
+            "args": ["--dart-define-from-file=config_preproduction.json"]
         },
         {
             "name": "Preproduction (profile)",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_preproduction.dart",
+            "program": "lib/main.dart",
+            "args": ["--dart-define-from-file=config_preproduction.json"],
             "flutterMode": "profile"
         },
         {
             "name": "Production",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_production.dart",
+            "program": "lib/main.dart",
+            "args": ["--dart-define-from-file=config_production.json"],
             "flutterMode": "release"
         },
         {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jccm_espacio_ciudadano/core/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/domain_section.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/placeholder_controlled_card.dart';
-import 'package:jccm_espacio_ciudadano/core/ui_states/empty_state_widget.dart';
-import 'package:jccm_espacio_ciudadano/core/ui_states/error_state_widget.dart';
-import 'package:jccm_espacio_ciudadano/core/ui_states/loading_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_title.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_notifier.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/core/theme/app_colors.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart' show AppColors;
 
 /// Centered [CircularProgressIndicator] with a [Semantics] node for screen
 /// readers.

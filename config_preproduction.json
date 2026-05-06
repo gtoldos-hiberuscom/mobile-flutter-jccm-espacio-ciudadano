@@ -1,5 +1,6 @@
 {
   "APP_FLAVOR": "preproduction",
+  "APP_NAME": "Espacio Ciudadano (Pre)",
   "BASE_URL": "https://fachada-sede-api-pre.cm-pre.jccm.es",
   "TIMEOUT": "20",
   "DEBUG_MODE": "true",

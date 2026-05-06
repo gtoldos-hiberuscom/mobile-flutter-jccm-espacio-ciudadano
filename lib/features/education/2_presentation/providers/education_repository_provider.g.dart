@@ -21,14 +21,7 @@ const educationRepositoryProvider = EducationRepositoryProvider._();
 /// [currentAuthUserProvider] is watched so the repository is recreated
 /// whenever the authenticated user changes (login / logout).
 
-final class EducationRepositoryProvider
-    extends
-        $FunctionalProvider<
-          EducationRepository,
-          EducationRepository,
-          EducationRepository
-        >
-    with $Provider<EducationRepository> {
+final class EducationRepositoryProvider extends $FunctionalProvider<EducationRepository, EducationRepository, EducationRepository> with $Provider<EducationRepository> {
   /// DI composition for [EducationRepository].
   ///
   /// [currentAuthUserProvider] is watched so the repository is recreated
@@ -67,5 +60,4 @@ final class EducationRepositoryProvider
   }
 }
 
-String _$educationRepositoryHash() =>
-    r'd61ca94148576599512a3f50b2d5247f42e90d26';
+String _$educationRepositoryHash() => r'a7dd50d958905f9657f5a4a1d4952ac6084901de';

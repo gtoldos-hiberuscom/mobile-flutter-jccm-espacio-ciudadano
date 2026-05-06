@@ -1,5 +1,5 @@
 import 'package:jccm_espacio_ciudadano/features/auth/auth.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/di/auth_session_notifier.dart' show AuthSessionNotifier;
+import 'package:jccm_espacio_ciudadano/features/auth/di/token_response_notifier.dart' show TokenResponseNotifier;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'landing_notifier.g.dart';
@@ -23,7 +23,7 @@ final class LandingState {
 
 /// Owns the login flow state for the public landing screen.
 ///
-/// Orchestration: UI -> [login] -> [AuthSessionNotifier.login] -> [LandingState].
+/// Orchestration: UI -> [login] -> [TokenResponseNotifier.login] -> [LandingState].
 /// Navigation is triggered by the page via [ref.listen] on [loginSuccess].
 @riverpod
 class LandingNotifier extends _$LandingNotifier {

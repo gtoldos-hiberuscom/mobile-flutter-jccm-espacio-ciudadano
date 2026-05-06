@@ -1,34 +1,34 @@
+import 'package:dio/src/response.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/result.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_title.dart';
 import 'package:jccm_espacio_ciudadano/features/education/1_domain/education_repository.dart';
-import 'package:jccm_espacio_ciudadano/features/education/3_data/api/educacion_api_wrapper.dart';
 
 final class EducationRepositoryImpl implements EducationRepository {
   const EducationRepositoryImpl({
-    required final EducacionApiWrapper apiWrapper,
+    required final EducacionApi apiWrapper,
     required final String numDocumento,
   }) : _apiWrapper = apiWrapper,
        _numDocumento = numDocumento;
 
-  final EducacionApiWrapper _apiWrapper;
+  final EducacionApi _apiWrapper;
   final String _numDocumento;
 
   @override
   Future<EducationSnapshot> loadSnapshot() async {
     final numDocumento = _numDocumento;
-
     final uoFuture = _apiWrapper.getTitulosUniversitarios(
-      numDocumento,
-      DTEDUTUOREQ((final b) => b..docu = numDocumento),
+      numDocumento: numDocumento,
+      dTEDUTUOREQBody: DTEDUTUOREQ(
+        (final b) => b..docu = numDocumento,
+      ),
     );
     // final nuFuture = _apiWrapper.getTitulosNoUniversitarios(
     //   numDocumento,
     //   DTEDUTNUREQ((final b) => b..docu = numDocumento),
     // );
 
-    final uoResult = await uoFuture;
+    final Response<DTEDUTUORES> uoResult = await uoFuture;
     // final nuResult = await nuFuture;
 
     return EducationSnapshot(
@@ -37,26 +37,22 @@ final class EducationRepositoryImpl implements EducationRepository {
     );
   }
 
-  EducationSection<List<EducationTitle>> _mapUniversityResult(
-    final Result<DTEDUTUORES> result,
-  ) {
-    if (result is Failure<DTEDUTUORES>) {
+  EducationSection<List<EducationTitle>> _mapUniversityResult(final Response<DTEDUTUORES> result) {
+    if (result is DTEDUTUORES) {
       return EducationSection.error();
     }
-    final elementos = (result as Success<DTEDUTUORES>).value.elemento;
+    final elementos = (result as DTEDUTUORES).elemento;
     if (elementos == null || elementos.isEmpty) {
       return EducationSection.empty();
     }
     return EducationSection.loaded(_mapElementos(elementos, prefix: 'u'));
   }
 
-  EducationSection<List<EducationTitle>> _mapNonUniversityResult(
-    final Result<DTEDUTNURES> result,
-  ) {
-    if (result is Failure<DTEDUTNURES>) {
+  EducationSection<List<EducationTitle>> _mapNonUniversityResult(final Response<DTEDUTNURES> result) {
+    if (result is DTEDUTNURES) {
       return EducationSection.error();
     }
-    final elementos = (result as Success<DTEDUTNURES>).value.elemento;
+    final elementos = (result as DTEDUTNURES).elemento;
     if (elementos == null || elementos.isEmpty) {
       return EducationSection.empty();
     }

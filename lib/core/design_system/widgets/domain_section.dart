@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/core/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart' show AppDimensions;
 
 /// Reusable section block for the thematic dashboard landings
 /// (STORY-23/24/25/26).

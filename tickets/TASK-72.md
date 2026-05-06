@@ -34,7 +34,7 @@ Además se crean los casos de uso `LoginUseCase` y `LogoutUseCase` en la capa de
 - [ ] La feature `lib/features/auth/` existe con estructura canónica: `0_entity/`, `1_domain/`, `3_data/`.
 - [ ] `0_entity/auth_failure.dart` contiene `AuthFailureReason` (enum) y `AuthException` (renombrado desde `ClaveAuthException`) como tipo de fallo de dominio, con mensajes genéricos sin referencias a proveedor.
 - [ ] `0_entity/auth_session.dart` contiene `AuthSession` como entidad de dominio limpia del resultado de autenticación.
-- [ ] `0_entity/auth_user.dart` contiene `AuthUser` como entidad de dominio limpia de información del usuario.
+- [ ] `0_entity/auth_user.dart` contiene `JwtClaims` como entidad de dominio limpia de información del usuario.
 - [ ] `1_domain/auth_repository.dart` define `abstract interface class AuthRepository` con métodos `login`, `logout`, `refreshToken`, `fetchUserInfo`. La constante `defaultScopes` (=['openid']) vive en este fichero.
 - [ ] `1_domain/login_use_case.dart` contiene `LoginUseCase` que delega a `AuthRepository.login()` y retorna `AuthSession`.
 - [ ] `1_domain/logout_use_case.dart` contiene `LogoutUseCase` que delega a `AuthRepository.logout()` y retorna `void`.
@@ -99,7 +99,7 @@ Además se crean los casos de uso `LoginUseCase` y `LogoutUseCase` en la capa de
 ### Comments
 
 - 2026-04-29T00:43:51+02:00 | by Copilot | Task created. Implementation started on `feat/auth_review`. Task branch: `task/EPIC-2-identity-session/TASK-72-auth-feature-migration/migrate-auth-to-feature`.
-- 2026-04-29T01:10:00+02:00 | by Copilot | Implementation complete on branch `task/EPIC-2-identity-session/TASK-72-auth-feature-migration/migrate-auth-to-feature` (commit `75677fc`). Merged into `ticket/EPIC-2-identity-session/TASK-72-auth-feature-migration` and then into `feat/auth_review`. All acceptance criteria satisfied: `lib/core/auth/` cleared of Dart files; `lib/features/auth/` created with `0_entity/` (AuthSession, AuthUser, AuthFailure/AuthException), `1_domain/` (AuthRepository, LoginUseCase, LogoutUseCase), `3_data/` (DTOs, datasource, AuthRepositoryImpl, authRepositoryProvider); `dart analyze lib/features/auth/` → 0 issues; 18 tests passing in `test/features/auth/` (datasource × 4, repository impl × 7, use cases × 7).
+- 2026-04-29T01:10:00+02:00 | by Copilot | Implementation complete on branch `task/EPIC-2-identity-session/TASK-72-auth-feature-migration/migrate-auth-to-feature` (commit `75677fc`). Merged into `ticket/EPIC-2-identity-session/TASK-72-auth-feature-migration` and then into `feat/auth_review`. All acceptance criteria satisfied: `lib/core/auth/` cleared of Dart files; `lib/features/auth/` created with `0_entity/` (AuthSession, JwtClaims, AuthFailure/AuthException), `1_domain/` (AuthRepository, LoginUseCase, LogoutUseCase), `3_data/` (DTOs, datasource, AuthRepositoryImpl, authRepositoryProvider); `dart analyze lib/features/auth/` → 0 issues; 18 tests passing in `test/features/auth/` (datasource × 4, repository impl × 7, use cases × 7).
 
 ### Change Log
 

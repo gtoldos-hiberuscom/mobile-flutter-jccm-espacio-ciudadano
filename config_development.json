@@ -1,5 +1,6 @@
 {
   "APP_FLAVOR": "development",
+  "APP_NAME": "Espacio Ciudadano (Dev)",
   "BASE_URL": "https://fachada-sede-api-uat.cm-pre.jccm.es",
   "TIMEOUT": "20",
   "DEBUG_MODE": "true",

@@ -1,16 +1,16 @@
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 
 const List<String> authDefaultScopes = ['openid'];
 
 /// Domain contract for authentication operations.
 abstract interface class AuthRepository {
-  Future<AuthSession> login({
+  Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
   });
 
-  Future<AuthSession> refreshToken({
+  Future<TokenResponse> refreshToken({
     required final String refreshToken,
     final List<String> scopes = authDefaultScopes,
   });
@@ -20,7 +20,7 @@ abstract interface class AuthRepository {
     final String? postLogoutRedirectUri,
   });
 
-  Future<AuthUser> fetchUserInfo({
+  Future<JwtClaims> fetchUserInfo({
     required final String accessToken,
   });
 }

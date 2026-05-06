@@ -9,14 +9,26 @@ part of 'auth_use_case_providers.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// DI composition for [LoginUseCase].
+///
+/// Injects the notifiers so the use case can persist the session and user
+/// in memory. Also passes the SecureStorage so the access token is written
+/// there, making it available to [AuthInterceptor] for subsequent requests.
 
 @ProviderFor(loginUseCase)
 const loginUseCaseProvider = LoginUseCaseProvider._();
 
 /// DI composition for [LoginUseCase].
+///
+/// Injects the notifiers so the use case can persist the session and user
+/// in memory. Also passes the SecureStorage so the access token is written
+/// there, making it available to [AuthInterceptor] for subsequent requests.
 
 final class LoginUseCaseProvider extends $FunctionalProvider<LoginUseCase, LoginUseCase, LoginUseCase> with $Provider<LoginUseCase> {
   /// DI composition for [LoginUseCase].
+  ///
+  /// Injects the notifiers so the use case can persist the session and user
+  /// in memory. Also passes the SecureStorage so the access token is written
+  /// there, making it available to [AuthInterceptor] for subsequent requests.
   const LoginUseCaseProvider._()
     : super(
         from: null,
@@ -49,7 +61,7 @@ final class LoginUseCaseProvider extends $FunctionalProvider<LoginUseCase, Login
   }
 }
 
-String _$loginUseCaseHash() => r'a705ea49a63447afa4db2d5b3a513e9f3bdae014';
+String _$loginUseCaseHash() => r'2961de0305e8c31b42bdbf765e777b3513f0b2c0';
 
 /// DI composition for [LogoutUseCase].
 

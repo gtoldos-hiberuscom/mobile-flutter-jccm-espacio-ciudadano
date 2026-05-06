@@ -73,25 +73,22 @@ String _$externalLinkCatalogHash() => r'6e5a0b1c86ef059450ac3fa544c5929d5dc6dcf5
 
 /// Provides the application-wide [ExternalLinkLauncher].
 ///
-/// Composed against the catalog, analytics service and logger. Tests can
-/// override this provider with a fake implementation that does not touch
-/// the real `url_launcher` plugin.
+/// Tests can override this provider with a fake implementation that does
+/// not touch the real `url_launcher` plugin.
 
 @ProviderFor(externalLinkLauncher)
 const externalLinkLauncherProvider = ExternalLinkLauncherProvider._();
 
 /// Provides the application-wide [ExternalLinkLauncher].
 ///
-/// Composed against the catalog, analytics service and logger. Tests can
-/// override this provider with a fake implementation that does not touch
-/// the real `url_launcher` plugin.
+/// Tests can override this provider with a fake implementation that does
+/// not touch the real `url_launcher` plugin.
 
 final class ExternalLinkLauncherProvider extends $FunctionalProvider<ExternalLinkLauncher, ExternalLinkLauncher, ExternalLinkLauncher> with $Provider<ExternalLinkLauncher> {
   /// Provides the application-wide [ExternalLinkLauncher].
   ///
-  /// Composed against the catalog, analytics service and logger. Tests can
-  /// override this provider with a fake implementation that does not touch
-  /// the real `url_launcher` plugin.
+  /// Tests can override this provider with a fake implementation that does
+  /// not touch the real `url_launcher` plugin.
   const ExternalLinkLauncherProvider._()
     : super(
         from: null,
@@ -126,4 +123,4 @@ final class ExternalLinkLauncherProvider extends $FunctionalProvider<ExternalLin
   }
 }
 
-String _$externalLinkLauncherHash() => r'87d2d086e32ffc890a4adaff03279ac74800f7e3';
+String _$externalLinkLauncherHash() => r'add363f02f948bc32da43f49a21fedaa96845711';

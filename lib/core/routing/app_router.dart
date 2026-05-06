@@ -4,9 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/core/shell/app_scaffold.dart';
-import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/consent_page.dart';
-import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
@@ -63,35 +60,6 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.sitemap,
           builder: (final BuildContext context, final GoRouterState state) => const SitemapPage(),
-        ),
-
-        // ── Consent ──────────────────────────────────────────────────────────
-        GoRoute(
-          path: Routes.consent,
-          builder: (final BuildContext context, final GoRouterState state) => const ConsentPage(),
-        ),
-
-        // ── Authenticated shell ──────────────────────────────────────────────
-        ShellRoute(
-          builder:
-              (
-                final BuildContext context,
-                final GoRouterState state,
-                final Widget child,
-              ) => AppScaffold(child: child),
-          routes: [
-            // Sprint 9 / STORY-22 carry-over: Routes.home is referenced by sitemap, consent and the bottom-nav but the home page itself is not implemented (see documentation/qa/STORY-22-home-route-investigation.md). Until a real LoggedHomePage lands, /home redirects to /sitemap to avoid the NotFoundScreen.
-            GoRoute(
-              path: Routes.home,
-              redirect: (final BuildContext context, final GoRouterState state) => Routes.sitemap,
-            ),
-
-            // ── Thematic landings (placeholder until STORY-23/24/25/26) ────
-            GoRoute(
-              path: Routes.education,
-              builder: (final BuildContext context, final GoRouterState state) => const EducationLandingPage(),
-            ),
-          ],
         ),
       ],
     );

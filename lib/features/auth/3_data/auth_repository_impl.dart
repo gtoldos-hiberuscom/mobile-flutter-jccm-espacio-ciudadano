@@ -6,11 +6,8 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_session.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_user.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_token_response_dto.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/3_data/clave_user_info_dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository_impl.g.dart';
@@ -20,7 +17,6 @@ AuthRepository authRepository(final Ref ref) => AuthRepositoryImpl(
   config: ref.watch(appConfigProvider),
   dio: ref.watch(dioProvider),
 );
-typedef Clock = DateTime Function();
 
 final class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
@@ -33,15 +29,13 @@ final class AuthRepositoryImpl implements AuthRepository {
   final Dio _dio;
   final FlutterAppAuth _appAuth = const FlutterAppAuth();
 
-  final Clock _clock = DateTime.now;
-
   @override
-  Future<AuthSession> login({
+  Future<AuthorizationTokenResponse> login({
     final List<String> scopes = const ['openid'],
     final String? loginHint,
   }) async {
     try {
-      final response = await _appAuth.authorizeAndExchangeCode(
+      return await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
           _config.ssoClientId,
           _config.ssoRedirectUri,
@@ -49,16 +43,6 @@ final class AuthRepositoryImpl implements AuthRepository {
           loginHint: loginHint,
           scopes: scopes,
         ),
-      );
-
-      return AuthSession(
-        accessToken: response.accessToken ?? '',
-        refreshToken: response.refreshToken,
-        idToken: response.idToken,
-        tokenType: response.tokenType ?? 'Bearer',
-        accessTokenExpiresAt: response.accessTokenExpirationDateTime,
-        refreshTokenExpiresAt: null, // FlutterAppAuth does not provide this
-        scopes: response.scopes ?? [],
       );
     } on FlutterAppAuthUserCancelledException catch (error, stackTrace) {
       Error.throwWithStackTrace(
@@ -84,14 +68,14 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthSession> refreshToken({
+  Future<TokenResponse> refreshToken({
     required final String refreshToken,
     final List<String> scopes = const ['openid'],
   }) async {
     _requireNotBlank(refreshToken, 'refreshToken');
 
     try {
-      final response = await _appAuth.token(
+      return await _appAuth.token(
         TokenRequest(
           _config.ssoClientId,
           _config.ssoRedirectUri,
@@ -99,16 +83,6 @@ final class AuthRepositoryImpl implements AuthRepository {
           refreshToken: refreshToken,
           scopes: scopes,
         ),
-      );
-
-      return AuthSession(
-        accessToken: response.accessToken ?? '',
-        refreshToken: response.refreshToken,
-        idToken: response.idToken,
-        tokenType: response.tokenType ?? 'Bearer',
-        accessTokenExpiresAt: response.accessTokenExpirationDateTime,
-        refreshTokenExpiresAt: null, // FlutterAppAuth does not provide this
-        scopes: response.scopes ?? [],
       );
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
       Error.throwWithStackTrace(
@@ -165,7 +139,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthUser> fetchUserInfo({
+  Future<JwtClaims> fetchUserInfo({
     required final String accessToken,
   }) async {
     _requireNotBlank(accessToken, 'accessToken');
@@ -187,13 +161,7 @@ final class AuthRepositoryImpl implements AuthRepository {
         );
       }
 
-      return AuthUser(
-        sub: data['sub'] as String? ?? '',
-        nif: data['nif'] as String? ?? '',
-        givenName: data['given_name'] as String?,
-        familyName: data['family_name'] as String?,
-        email: data['email'] as String?,
-      );
+      return JwtClaims.fromMap(data);
     } on DioException catch (error, stackTrace) {
       Error.throwWithStackTrace(
         AuthException.remoteFailure(
@@ -228,39 +196,6 @@ final class AuthRepositoryImpl implements AuthRepository {
     return base.replace(pathSegments: pathSegments).toString();
   }
 
-  void _validateConfig() {
-    final missing = <String>[
-      if (_config.ssoBaseUrl.trim().isEmpty) 'SSO_BASE_URL',
-      if (_config.ssoRealm.trim().isEmpty) 'SSO_REALM',
-      if (_config.ssoClientId.trim().isEmpty) 'SSO_CLIENT_ID',
-      if (_config.ssoRedirectUri.trim().isEmpty) 'SSO_REDIRECT_URI',
-    ];
-    if (missing.isNotEmpty) {
-      throw AuthException.configuration(
-        message: 'Missing Cl@ve configuration: ${missing.join(', ')}.',
-      );
-    }
-
-    final ssoBaseUri = Uri.tryParse(_config.ssoBaseUrl);
-    if (ssoBaseUri == null || !ssoBaseUri.hasScheme || ssoBaseUri.host.isEmpty) {
-      throw const AuthException.configuration(
-        message: 'SSO_BASE_URL must be an absolute URL.',
-      );
-    }
-    if (ssoBaseUri.scheme != 'https') {
-      throw const AuthException.configuration(
-        message: 'SSO_BASE_URL must use HTTPS.',
-      );
-    }
-
-    final redirectUri = Uri.tryParse(_config.ssoRedirectUri);
-    if (redirectUri == null || !redirectUri.hasScheme) {
-      throw const AuthException.configuration(
-        message: 'SSO_REDIRECT_URI must be an absolute URI.',
-      );
-    }
-  }
-
   static void _requireNotBlank(
     final String value,
     final String parameterName,
@@ -287,28 +222,5 @@ final class AuthRepositoryImpl implements AuthRepository {
     }
 
     return 'Cl@ve authentication failed.';
-  }
-
-
-  static AuthSession _mapSession(final ClaveTokenResponseDto dto) {
-    return AuthSession(
-      accessToken: dto.accessToken,
-      refreshToken: dto.refreshToken,
-      idToken: dto.idToken,
-      tokenType: dto.tokenType,
-      accessTokenExpiresAt: dto.accessTokenExpiresAt,
-      refreshTokenExpiresAt: dto.refreshTokenExpiresAt,
-      scopes: dto.scopes,
-    );
-  }
-
-  static AuthUser _mapUser(final ClaveUserInfoDto dto) {
-    return AuthUser(
-      sub: dto.sub,
-      nif: dto.nif,
-      givenName: dto.givenName,
-      familyName: dto.familyName,
-      email: dto.email,
-    );
   }
 }

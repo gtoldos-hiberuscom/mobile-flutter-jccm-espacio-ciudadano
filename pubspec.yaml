@@ -48,9 +48,6 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-    - config_development.json
-    - config_preproduction.json
-    - config_production.json
     - assets/images/
   fonts:
     - family: Roboto

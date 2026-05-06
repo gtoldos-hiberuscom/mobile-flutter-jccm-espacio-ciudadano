@@ -10,7 +10,7 @@ part of 'landing_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 /// Owns the login flow state for the public landing screen.
 ///
-/// Orchestration: UI -> [login] -> [AuthSessionNotifier.login] -> [LandingState].
+/// Orchestration: UI -> [login] -> [TokenResponseNotifier.login] -> [LandingState].
 /// Navigation is triggered by the page via [ref.listen] on [loginSuccess].
 
 @ProviderFor(LandingNotifier)
@@ -18,12 +18,12 @@ const landingProvider = LandingNotifierProvider._();
 
 /// Owns the login flow state for the public landing screen.
 ///
-/// Orchestration: UI -> [login] -> [AuthSessionNotifier.login] -> [LandingState].
+/// Orchestration: UI -> [login] -> [TokenResponseNotifier.login] -> [LandingState].
 /// Navigation is triggered by the page via [ref.listen] on [loginSuccess].
 final class LandingNotifierProvider extends $NotifierProvider<LandingNotifier, LandingState> {
   /// Owns the login flow state for the public landing screen.
   ///
-  /// Orchestration: UI -> [login] -> [AuthSessionNotifier.login] -> [LandingState].
+  /// Orchestration: UI -> [login] -> [TokenResponseNotifier.login] -> [LandingState].
   /// Navigation is triggered by the page via [ref.listen] on [loginSuccess].
   const LandingNotifierProvider._()
     : super(
@@ -56,7 +56,7 @@ String _$landingNotifierHash() => r'643bc298708fbdd2a4e6ec697ed64db3bc4b2c77';
 
 /// Owns the login flow state for the public landing screen.
 ///
-/// Orchestration: UI -> [login] -> [AuthSessionNotifier.login] -> [LandingState].
+/// Orchestration: UI -> [login] -> [TokenResponseNotifier.login] -> [LandingState].
 /// Navigation is triggered by the page via [ref.listen] on [loginSuccess].
 
 abstract class _$LandingNotifier extends $Notifier<LandingState> {

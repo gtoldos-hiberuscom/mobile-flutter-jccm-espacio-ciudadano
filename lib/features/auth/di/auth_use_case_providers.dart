@@ -1,9 +1,10 @@
+import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart' show AuthInterceptor;
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/logout_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/auth_repository_impl.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/di/auth_session_notifier.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/di/auth_user_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/di/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/di/token_response_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_use_case_providers.g.dart';
@@ -16,8 +17,8 @@ part 'auth_use_case_providers.g.dart';
 @riverpod
 LoginUseCase loginUseCase(final Ref ref) => LoginUseCase(
   ref.watch(authRepositoryProvider),
-  ref.watch(authSessionProvider.notifier),
-  ref.watch(authUserProvider.notifier),
+  ref.watch(tokenResponseProvider.notifier),
+  ref.watch(jwtClaimsProvider.notifier),
   ref.watch(secureStorageProvider),
 );
 

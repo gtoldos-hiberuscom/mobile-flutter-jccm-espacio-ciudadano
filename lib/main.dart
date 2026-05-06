@@ -1,13 +1,11 @@
-import 'dart:io';
 import 'package:flutter/widgets.dart';
-import 'package:jccm_espacio_ciudadano/core/bootstrap/bootstrap.dart';
-import 'package:jccm_espacio_ciudadano/core/config/config_loader.dart';
+import 'package:jccm_espacio_ciudadano/core/app/bootstrap.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final flavor = Platform.environment['FLUTTER_FLAVOR'] ?? 'development';
-  final config = await loadConfig(flavor: flavor);
+  const config = AppConfig.fromEnvironment();
 
   await bootstrap(config);
 }
