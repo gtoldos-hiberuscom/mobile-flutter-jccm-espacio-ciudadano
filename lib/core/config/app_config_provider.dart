@@ -1,7 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'app_config_provider.g.dart';
 
 /// Provides the [AppConfig] that was resolved at application startup.
 ///
@@ -18,7 +16,6 @@ part 'app_config_provider.g.dart';
 ///   child: App(config: config),
 /// )
 /// ```
-@Riverpod(keepAlive: true)
-AppConfig appConfig(final Ref ref) => throw UnimplementedError(
+final appConfigProvider = Provider<AppConfig>((ref) => throw UnimplementedError(
   'appConfigProvider must be overridden in ProviderScope at bootstrap.',
-);
+));

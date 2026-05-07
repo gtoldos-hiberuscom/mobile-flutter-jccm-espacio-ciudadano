@@ -1,8 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/auth.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/di/token_response_notifier.dart' show TokenResponseNotifier;
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'landing_notifier.g.dart';
 
 /// UI state for the public landing screen login flow.
 final class LandingState {
@@ -25,8 +23,7 @@ final class LandingState {
 ///
 /// Orchestration: UI -> [login] -> [TokenResponseNotifier.login] -> [LandingState].
 /// Navigation is triggered by the page via [ref.listen] on [loginSuccess].
-@riverpod
-class LandingNotifier extends _$LandingNotifier {
+class LandingNotifier extends Notifier<LandingState> {
   @override
   LandingState build() => const LandingState();
 
@@ -46,3 +43,5 @@ class LandingNotifier extends _$LandingNotifier {
 
   void clearError() => state = const LandingState();
 }
+
+final landingProvider = NotifierProvider<LandingNotifier, LandingState>(LandingNotifier.new);

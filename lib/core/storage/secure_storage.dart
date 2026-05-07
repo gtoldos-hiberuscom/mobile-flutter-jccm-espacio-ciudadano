@@ -1,7 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'secure_storage.g.dart';
 
 /// Abstract contract for encrypted key-value storage.
 ///
@@ -44,7 +42,6 @@ final class FlutterSecureStorageImpl implements SecureStorage {
 /// Riverpod provider that exposes a singleton [SecureStorage] instance.
 ///
 /// Kept alive for the lifetime of the app — tokens must always be reachable.
-@Riverpod(keepAlive: true)
-SecureStorage secureStorage(final Ref ref) {
+final secureStorageProvider = Provider<SecureStorage>((ref) {
   return FlutterSecureStorageImpl(const FlutterSecureStorage());
-}
+});

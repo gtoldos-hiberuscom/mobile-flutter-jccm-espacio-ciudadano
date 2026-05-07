@@ -1,5 +1,7 @@
+import 'package:flutter_appauth_platform_interface/src/token_response.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/di/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/di/token_response_notifier.dart';
@@ -21,8 +23,8 @@ final class LoginUseCase {
     final String? loginHint,
     final List<String> scopes = authDefaultScopes,
   }) async {
-    final session = await _repository.login(loginHint: loginHint, scopes: scopes);
-    final user = await _repository.fetchUserInfo(accessToken: session.accessToken!);
+    final TokenResponse session = await _repository.login(loginHint: loginHint, scopes: scopes);
+    final JwtClaims user = await _repository.fetchUserInfo(accessToken: session.accessToken!);
 
     await Future.wait([
       _secureStorage.write(StorageKeys.accessToken, session.accessToken!),

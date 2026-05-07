@@ -1,18 +1,15 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/user_profile/0_entity/user_profile.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'user_profile_notifier.g.dart';
 
 /// Manages the currently logged-in user's profile.
 ///
 /// - On build: if [sessionStateProvider] has an idAgente, returns a scaffold
 ///   [UserProfile]; otherwise returns `null`.
 /// - [logout] clears stored auth data, invalidates the session, and resets state.
-@Riverpod(keepAlive: true)
-class UserProfileNotifier extends _$UserProfileNotifier {
+class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
   @override
   Future<UserProfile?> build() async {
     return null;
@@ -43,3 +40,7 @@ class UserProfileNotifier extends _$UserProfileNotifier {
     state = const AsyncValue.data(null);
   }
 }
+
+final userProfileProvider = AsyncNotifierProvider<UserProfileNotifier, UserProfile?>(() {
+  return UserProfileNotifier();
+});

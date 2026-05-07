@@ -1,7 +1,5 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-part 'app_storage.g.dart';
 
 /// Abstract contract for non-sensitive key-value storage.
 ///
@@ -58,7 +56,6 @@ final class SharedPreferencesAppStorage implements AppStorage {
 /// Kept alive for the lifetime of the app.
 /// The underlying SharedPreferences instance must be obtained
 /// asynchronously; this provider must be overridden at bootstrap.
-@Riverpod(keepAlive: true)
-AppStorage appStorage(final Ref ref) => throw UnimplementedError(
+final appStorageProvider = Provider<AppStorage>((ref) => throw UnimplementedError(
   'appStorage must be overridden in ProviderScope at bootstrap.',
-);
+));

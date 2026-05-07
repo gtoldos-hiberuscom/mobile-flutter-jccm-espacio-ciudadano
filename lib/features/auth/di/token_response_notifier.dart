@@ -1,12 +1,11 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-part 'token_response_notifier.g.dart';
-
-@Riverpod(keepAlive: true)
-class TokenResponseNotifier extends _$TokenResponseNotifier {
+class TokenResponseNotifier extends Notifier<TokenResponse?> {
   @override
   TokenResponse? build() => null;
 
   void update(final TokenResponse? session) => state = session;
 }
+
+final tokenResponseProvider = NotifierProvider<TokenResponseNotifier, TokenResponse?>(TokenResponseNotifier.new);

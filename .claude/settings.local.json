@@ -4,7 +4,10 @@
       "Bash(grep -n \"^import.*show\" /Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano/jccm_espacio_ciudadano/lib/core/ui_states/*.dart)",
       "Bash(grep \"^\\\\-\\\\-$\\\\|^[^-]*:.*\\(\\\\|^[^-]*:.*{\")",
       "Bash(awk '{print $NF}')",
-      "Bash(dart run *)"
+      "Bash(dart run *)",
+      "Bash(flutter pub *)",
+      "Bash(flutter analyze *)",
+      "Bash(flutter build *)"
     ]
   }
 }

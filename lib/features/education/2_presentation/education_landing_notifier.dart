@@ -1,12 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/education/0_entity/education_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/providers/education_repository_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'education_landing_notifier.g.dart';
 
 /// Owns the Educación landing state (STORY-23). Mock-backed in Sprint 3.
-@riverpod
-class EducationLandingNotifier extends _$EducationLandingNotifier {
+class EducationLandingNotifier extends AsyncNotifier<EducationSnapshot> {
   @override
   Future<EducationSnapshot> build() => ref.watch(educationRepositoryProvider).loadSnapshot();
 
@@ -17,3 +14,7 @@ class EducationLandingNotifier extends _$EducationLandingNotifier {
     );
   }
 }
+
+final educationLandingProvider = AsyncNotifierProvider<EducationLandingNotifier, EducationSnapshot>(() {
+  return EducationLandingNotifier();
+});

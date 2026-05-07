@@ -1,15 +1,12 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'landing_content_provider.g.dart';
 
 /// Provides the static [LandingContent] for the public landing screen.
 ///
 /// Content is hardcoded for this sprint — no network call is required.
 /// `keepAlive` defaults to `false` so the provider is disposed when no longer
 /// watched, which is acceptable for a screen-level provider.
-@riverpod
-LandingContent landingContent(final Ref ref) {
+final landingContentProvider = Provider<LandingContent>((final ref) {
   return const LandingContent(
     appTitle: 'Espacio Ciudadano',
     tagline: 'Tu información pública en un solo lugar',
@@ -69,4 +66,4 @@ LandingContent landingContent(final Ref ref) {
       privacyUrl: 'https://www.jccm.es/proteccion-datos',
     ),
   );
-}
+});

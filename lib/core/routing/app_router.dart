@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
@@ -60,6 +61,10 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.sitemap,
           builder: (final BuildContext context, final GoRouterState state) => const SitemapPage(),
+        ),
+        GoRoute(
+          path: Routes.education,
+          builder: (final BuildContext context, final GoRouterState state) => const EducationLandingPage(),
         ),
       ],
     );
