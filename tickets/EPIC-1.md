@@ -25,7 +25,7 @@ jira_url:
 ---
 # [EPIC-1] Foundations, app shell y arquitectura base
 ## Functional Description
-Construir la base técnica y de composición global de la app bajo el canon Flutter v2 para habilitar todas las funcionalidades posteriores.
+Construir la base técnica y de composición global de la app para habilitar todas las funcionalidades posteriores.
 
 ## Acceptance Criteria
 - [ ] El backlog de foundations queda reflejado en historias hijas reales.

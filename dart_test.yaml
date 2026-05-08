@@ -7,5 +7,7 @@
 # verification opt in.
 
 tags:
+  backend:
+    skip: "Opt-in. Run with: flutter test --tags backend"
   performance:
     skip: "Opt-in. Run with: flutter test --tags performance"
