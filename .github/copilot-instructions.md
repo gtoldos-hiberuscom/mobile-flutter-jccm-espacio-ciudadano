@@ -8,11 +8,10 @@
 - If an implementation request references a ticket, keep code and ticket traceability synchronized through `ticket-manager` or the ticket skills.
 
 ## Architecture source of truth
-- The repository architecture source of truth is `documentation/architecture_canon_flutter_v2_docs/`.
-- Read `architecture_canon_flutter_v2_index.md` first, then the relevant annex for the area being changed.
+- The repository architecture source of truth is `documentation/ARCHITECTURE.md`.
+- Read only the relevant sections of `documentation/ARCHITECTURE.md` for the area being changed.
 - Default project structure:
-  - `lib/app/` for global composition and bootstrap
-  - `lib/core/` for shared infrastructure
+  - `lib/core/` for global composition, bootstrap, shared infrastructure
   - `lib/features/` for business modules
   - `lib/l10n/` for localization assets
 - Default feature structure:
@@ -20,8 +19,8 @@
   - `1_domain/`
   - `2_presentation/`
   - `3_data/`
-- Default technology choices from the canon:
-  - Riverpod with `@riverpod` and `Notifier` / `AsyncNotifier`
+- Default technology choices from the architecture guide:
+  - Riverpod 3 with `@riverpod` and `Notifier` / `AsyncNotifier`
   - GoRouter for routing
   - Dio for networking
   - typed app configuration
@@ -37,7 +36,7 @@
   - `BuildContext` in domain or data
   - business logic in notifier constructors
   - raw backend or transport errors shown to the user
-- Any meaningful exception to the canon requires an ADR or explicit user approval.
+- Any meaningful exception to `documentation/ARCHITECTURE.md` requires an ADR or explicit user approval.
 
 ## Ticket repository conventions for Copilot
 

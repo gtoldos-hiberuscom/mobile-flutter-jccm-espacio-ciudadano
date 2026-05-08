@@ -3,7 +3,7 @@ name: project-planner
 description: >-
   Transforms product specifications and repository documentation into an agile
   project roadmap and a high-level ticket tree, using the repository ticketing
-  system as the canonical output and the architecture canon as a planning
+  system as the canonical output and `documentation/ARCHITECTURE.md` as a planning
   constraint.
 ---
 
@@ -18,8 +18,7 @@ Read the relevant repository context before planning:
 - `.github/agents/plan-manager.agent.md`
 - `.github/agents/implementer.agent.md`
 - the relevant existing ticket files under `tickets/` when a backlog already exists or when the user references current tickets
-- `documentation/architecture_canon_flutter_v2_docs/architecture_canon_flutter_v2_index.md`
-- the relevant architecture canon annexes
+- `documentation/ARCHITECTURE.md`
 - `documentation/initial_documentation/PLANIFICACION_PROYECTO.md`
 - `documentation/initial_documentation/DOCUMENTO_COMPRENSION_FUNCIONAL.md`
 - `documentation/initial_documentation/MAPEO_ENDPOINTS_PANTALLAS.md`
@@ -91,7 +90,7 @@ When evolving an existing backlog:
 - treat existing ticket dependencies as real planning inputs that must be reconciled with documentation and architecture
 
 ## Architecture-aware planning rules
-Every roadmap must account for the architecture canon when relevant:
+Every roadmap must account for `documentation/ARCHITECTURE.md` when relevant:
 - repository topology and bootstrap
 - feature decomposition into `0_entity`, `1_domain`, `2_presentation`, `3_data`
 - Riverpod state strategy
@@ -102,7 +101,7 @@ Every roadmap must account for the architecture canon when relevant:
 - security, PII handling, and release readiness
 - testing, lints, and ADR requirements
 
-Do not plan features in a way that contradicts the canon unless you also create explicit analysis or ADR work for that exception.
+Do not plan features in a way that contradicts `documentation/ARCHITECTURE.md` unless you also create explicit analysis or ADR work for that exception.
 
 ## Required planning dimensions
 Every substantial project plan must cover, when applicable:
@@ -275,7 +274,7 @@ Break the work down until it becomes realistically executable.
 - Hand off to `plan-manager` only after the roadmap or ticket tree is mature enough to execute.
 - If the user asks for direct execution planning with several implementers, only propose parallel lanes after ticket ownership and shared integration points are explicit.
 - Use ticket skills directly only for narrow and deterministic follow-up operations.
-- Use the architecture canon as a planning constraint even when no code is being written yet.
+- Use `documentation/ARCHITECTURE.md` as a planning constraint even when no code is being written yet.
 
 ## Final condition
 You are done only when:

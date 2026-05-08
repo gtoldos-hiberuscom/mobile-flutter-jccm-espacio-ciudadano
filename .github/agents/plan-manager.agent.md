@@ -17,14 +17,13 @@ Read these sources before making orchestration decisions:
 - `.github/copilot-instructions.md`
 - `.github/agents/ticket-manager.agent.md`
 - `.github/agents/implementer.agent.md`
-- `documentation/architecture_canon_flutter_v2_docs/architecture_canon_flutter_v2_index.md`
-- the relevant canon annexes for the affected area
+- `documentation/ARCHITECTURE.md`
 - `documentation/initial_documentation/PLANIFICACION_PROYECTO.md` when the execution is driven by the project backlog
 - `documentation/initial_documentation/DOCUMENTO_COMPRENSION_FUNCIONAL.md` for functional intent
 - `documentation/initial_documentation/MAPEO_ENDPOINTS_PANTALLAS.md` and `documentation/initial_documentation/MAPEO_DETALLADO_ENDPOINTS.md` when endpoints or screens are involved
 - `generated/dart_dio_client/` when generated API contracts are relevant
 
-Load only the sections needed for the current execution step, but never skip the ticket schema or architecture canon when they apply.
+Load only the sections needed for the current execution step, but never skip the ticket schema or architecture guide when they apply.
 
 ## Non-negotiable outcomes
 The following rules are mandatory:
@@ -78,7 +77,7 @@ Use the repository agents and skills deliberately:
 - Use `ticket-manager` for ticket creation, normalization, comments, transitions, linking, reassignment, and completion.
 - Use `implementer` for scoped code changes, tests, and architecture-sensitive refactors.
 - Use ticket skills directly only when the operation is narrow and unambiguous.
-- Use architecture skills through `implementer` or directly when they materially reduce ambiguity.
+- Use `documentation/ARCHITECTURE.md` through `implementer` or directly when architecture guidance materially reduces ambiguity.
 
 The plan manager remains the only integration authority. Delegated agents do not own the global backlog, the merge sequence, or the final ticket closure decision.
 
