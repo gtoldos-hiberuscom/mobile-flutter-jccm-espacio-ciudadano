@@ -1,6 +1,6 @@
 ---
 id: 8
-jira_key:
+jira_key: JCCMEC-30
 type: Epic
 status: To Do
 priority:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-30
 ---
 # [EPIC-8] Hechos vitales, autorizaciones y recomendaciones personalizadas
 ## Functional Description

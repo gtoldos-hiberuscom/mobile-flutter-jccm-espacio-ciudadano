@@ -1,13 +1,13 @@
 ---
 id: 19
-jira_key:
+jira_key: JCCMEC-11
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
-sprint: Sprint 1
+epic_link: JCCMEC-8
+parent: JCCMEC-8
+sprint: Tablero Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,11 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-05-04T12:00:00+02:00
+updated_at: 2026-05-11T16:25:30+02:00
 due_date:
-jira_url:
----
-# [STORY-19] Aceptación inicial de condiciones de uso y protección de datos
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-11 Aceptación inicial de condiciones de uso y protección de datos
 ## Functional Description
 Cubrir el flujo obligatorio de aceptación/rechazo de autorizaciones y consulta de la información ampliada de protección de datos.
 

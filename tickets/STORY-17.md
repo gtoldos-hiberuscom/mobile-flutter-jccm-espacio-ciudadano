@@ -1,13 +1,13 @@
 ---
 id: 17
-jira_key:
+jira_key: JCCMEC-9
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
-sprint: Sprint 1
+epic_link: JCCMEC-8
+parent: JCCMEC-8
+sprint: Tablero Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T12:00:00+02:00
+updated_at: 2026-05-11T16:25:30+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-9
 ---
 # [STORY-17] Landing anónima y flujo informativo previo al acceso
 ## Functional Description

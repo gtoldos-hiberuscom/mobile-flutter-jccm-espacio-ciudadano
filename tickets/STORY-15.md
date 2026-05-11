@@ -1,13 +1,13 @@
 ---
 id: 15
-jira_key:
+jira_key: JCCMEC-7
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
-sprint: Sprint 2
+epic_link: JCCMEC-1
+parent: JCCMEC-1
+sprint: Tablero Sprint 2
 reporter:
 assignee:
 story_points:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-05-04T12:00:00+02:00
+updated_at: 2026-05-11T16:36:00+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-7
 ---
 # [STORY-15] Estados compartidos de UI, paginación, refresh y acciones documentales
 ## Functional Description

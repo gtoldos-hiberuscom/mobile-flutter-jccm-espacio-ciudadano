@@ -1,12 +1,12 @@
 ---
 id: 26
-jira_key:
+jira_key: JCCMEC-20
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-14
+parent: JCCMEC-14
 sprint: Sprint 3
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-05-05T08:00:00+02:00
+updated_at: 2026-05-11T15:57:23+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-20
 ---
 # [STORY-26] Dominio Estado y otros temas de interés con domicilio, inmuebles y vehículos
 ## Functional Description

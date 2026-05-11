@@ -1,13 +1,13 @@
 ---
 id: 14
-jira_key:
+jira_key: JCCMEC-6
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
-sprint: Sprint 1
+epic_link: JCCMEC-1
+parent: JCCMEC-1
+sprint: Tablero Sprint 1
 reporter:
 assignee:
 story_points:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T12:00:00+02:00
+updated_at: 2026-05-11T16:25:30+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-6
 ---
 # [STORY-14] Design system, theming, localización y accesibilidad base
 ## Functional Description

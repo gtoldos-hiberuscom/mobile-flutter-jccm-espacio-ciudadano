@@ -1,12 +1,12 @@
 ---
 id: 58
-jira_key:
+jira_key: JCCMEC-57
 type: Task
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-30
+parent: JCCMEC-30
 sprint: Sprint 6
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-29T10:15:10+00:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-57
 ---
 # [TASK-58] Confirmar reglas de segmentación y contrato semántico de recomendaciones
 ## Functional Description

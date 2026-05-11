@@ -1,6 +1,6 @@
 ---
 id: 3
-jira_key:
+jira_key: JCCMEC-14
 type: Epic
 status: To Do
 priority:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-21T22:41:38+02:00
+updated_at: 2026-05-11T15:57:23+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-14
 ---
 # [EPIC-3] Portada, dashboard y dominios informativos del ciudadano
 ## Functional Description

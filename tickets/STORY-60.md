@@ -1,12 +1,12 @@
 ---
 id: 60
-jira_key:
+jira_key: JCCMEC-59
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-31
+parent: JCCMEC-31
 sprint: Sprint 4
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-24T10:48:01+02:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-59
 ---
 # [STORY-60] Formulario de soporte técnico con adjuntos, consentimiento y captcha
 ## Functional Description

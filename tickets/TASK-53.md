@@ -1,12 +1,12 @@
 ---
 id: 53
-jira_key:
+jira_key: JCCMEC-52
 type: Task
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-29
+parent: JCCMEC-29
 sprint: Sprint 5
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-24T13:04:19+02:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-52
 ---
 # [TASK-53] Validar respuestas binarias o string de carnets y reglas de wallet
 ## Functional Description

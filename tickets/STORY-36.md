@@ -1,12 +1,12 @@
 ---
 id: 36
-jira_key:
+jira_key: JCCMEC-35
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-27
+parent: JCCMEC-27
 sprint: Sprint 5
 reporter:
 assignee: Copilot
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-24T11:34:20+00:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-35
 ---
 # [STORY-36] Detalle de entradas y salidas de registro
 ## Functional Description

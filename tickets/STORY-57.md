@@ -1,12 +1,12 @@
 ---
 id: 57
-jira_key:
+jira_key: JCCMEC-56
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-30
+parent: JCCMEC-30
 sprint: Sprint 6
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-29T10:15:10+00:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-56
 ---
 # [STORY-57] Onboarding y estado vacío de recomendaciones cuando faltan permisos o hechos vitales
 ## Functional Description

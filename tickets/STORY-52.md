@@ -1,12 +1,12 @@
 ---
 id: 52
-jira_key:
+jira_key: JCCMEC-51
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-29
+parent: JCCMEC-29
 sprint: Sprint 5
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-24T11:38:32Z
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-51
 ---
 # [STORY-52] Gestión transversal de QR, PDF, PKPass y wallet móvil
 ## Functional Description

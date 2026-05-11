@@ -1,12 +1,12 @@
 ---
 id: 42
-jira_key:
+jira_key: JCCMEC-42
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-28
+parent: JCCMEC-28
 sprint: Sprint 5
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-24T13:55:20+02:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-42
 ---
 # [STORY-42] Alta de datos de contacto para plataforma de notificación electrónica
 ## Functional Description

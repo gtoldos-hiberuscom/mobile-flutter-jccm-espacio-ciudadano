@@ -1,12 +1,12 @@
 ---
 id: 35
-jira_key:
+jira_key: JCCMEC-34
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-27
+parent: JCCMEC-27
 sprint: Sprint 5
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-23T10:00:00+02:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-34
 ---
 # [STORY-35] Detalle de expediente con metadata y ficheros asociados
 ## Functional Description

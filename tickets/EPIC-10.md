@@ -1,6 +1,6 @@
 ---
 id: 10
-jira_key:
+jira_key: JCCMEC-32
 type: Epic
 status: In Progress
 priority:
@@ -21,9 +21,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T01:35:57+02:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-32
 ---
 # [EPIC-10] Calidad transversal, seguridad, observabilidad y release readiness
 ## Functional Description

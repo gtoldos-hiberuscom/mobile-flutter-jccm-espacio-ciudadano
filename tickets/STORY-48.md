@@ -1,12 +1,12 @@
 ---
 id: 48
-jira_key:
+jira_key: JCCMEC-47
 type: Story
 status: Done
 priority:
 project: Carpeta Ciudadana CLM
-epic_link:
-parent:
+epic_link: JCCMEC-29
+parent: JCCMEC-29
 sprint: Sprint 4
 reporter:
 assignee:
@@ -20,9 +20,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T10:00:00+02:00
+updated_at: 2026-05-11T16:06:40+02:00
 due_date:
-jira_url:
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-47
 ---
 # [STORY-48] Catálogo de carnets digitales con disponibilidad y estados bloqueados
 ## Functional Description
