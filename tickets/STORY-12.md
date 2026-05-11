@@ -1,6 +1,6 @@
 ---
 id: 12
-jira_key:
+jira_key: JCCMEC-2
 type: Story
 status: Done
 priority:
@@ -21,11 +21,9 @@ labels:
 fix_versions: []
 affected_versions: []
 created_at: 2026-04-21T22:41:38+02:00
-updated_at: 2026-04-22T12:00:00+02:00
+updated_at: 2026-05-11T15:45:44+02:00
 due_date:
-jira_url:
----
-# [STORY-12] Red, almacenamiento seguro y estrategia de errores compartida
+jira_url: https://hiberusmobile.atlassian.net/browse/JCCMEC-2 Red, almacenamiento seguro y estrategia de errores compartida
 ## Functional Description
 Definir la infraestructura transversal de red, auth-ready client, storage sensible/no sensible y mapping de errores para todas las features.
 
