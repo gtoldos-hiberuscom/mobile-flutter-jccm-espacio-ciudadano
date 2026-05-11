@@ -55,6 +55,20 @@
 	<string>Main</string>
 	<key>UIStatusBarHidden</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<!-- Cl@ve SSO redirect URI scheme: es.jccm.espaciociudadano://auth/callback -->
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>es.jccm.espaciociudadano</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>es.jccm.espaciociudadano</string>
+			</array>
+		</dict>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

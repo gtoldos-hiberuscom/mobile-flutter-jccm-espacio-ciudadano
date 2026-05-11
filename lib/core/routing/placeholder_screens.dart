@@ -49,6 +49,26 @@ class NotFoundScreen extends StatelessWidget {
   );
 }
 
+// ── SSO / deep-link placeholder screens ───────────────────────────────────────
+
+/// Placeholder registered for the Cl@ve SSO callback deep-link.
+///
+/// The route `/auth/clave/callback` must be declared in GoRouter so that the
+/// OS intent-filter (Android) / URL-scheme (iOS) can hand the redirect back
+/// to the app. `FlutterAppAuth` handles the actual token exchange internally;
+/// this screen is shown only during the brief transition while the framework
+/// completes the flow.
+///
+// TODO(JCCMEC-10): replace with the real login callback handler.
+class ClaveCallbackScreen extends StatelessWidget {
+  const ClaveCallbackScreen({super.key});
+
+  @override
+  Widget build(final BuildContext context) => const Scaffold(
+    body: Center(child: CircularProgressIndicator()),
+  );
+}
+
 // ── Authenticated placeholder screens ─────────────────────────────────────────
 
 /// Placeholder for the thematic landing screens (Educación, Empleo,

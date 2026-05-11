@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
@@ -17,11 +18,13 @@ import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_p
 /// factory, keeping all navigation decisions free of [BuildContext].
 final goRouterProvider = Provider<GoRouter>(
   (final ref) {
+    final guard = SessionGuard(ref);
+
     final router = GoRouter(
       initialLocation: Routes.landing,
       observers: [GoRouterObserver()],
       // ── Global redirect ──────────────────────────────────────────────────
-      //redirect: (final BuildContext context, final GoRouterState state) => guard.redirect(state),
+      redirect: (final BuildContext context, final GoRouterState state) async => guard.redirect(state),
 
       // ── 404 fallback ──────────────────────────────────────────────────────
       errorBuilder: (final BuildContext context, final GoRouterState state) => const NotFoundScreen(),
@@ -31,6 +34,26 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.landing,
           builder: (final BuildContext context, final GoRouterState state) => const LandingPage(),
+        ),
+
+        // ── Login (JCCMEC-10) ─────────────────────────────────────────────
+        GoRoute(
+          path: Routes.login,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const DomainLandingPlaceholder(title: 'Login'),
+        ),
+
+        // ── Cl@ve SSO callback — deep-link entry point ────────────────────
+        GoRoute(
+          path: Routes.claveCallback,
+          builder: (final BuildContext context, final GoRouterState state) => const ClaveCallbackScreen(),
+        ),
+
+        // ── Consent (JCCMEC-11) ───────────────────────────────────────────
+        GoRoute(
+          path: Routes.consent,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const DomainLandingPlaceholder(title: 'Consentimiento'),
         ),
 
         // ── Maintenance ──────────────────────────────────────────────────────
