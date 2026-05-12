@@ -4,8 +4,6 @@ import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/auth_repository_impl.dart';
 
-const List<String> authDefaultScopes = ['openid'];
-
 /// DI composition for [AuthRepository].
 final authRepositoryProvider = Provider<AuthRepository>((final ref) => AuthRepositoryImpl(
   config: ref.watch(appConfigProvider),

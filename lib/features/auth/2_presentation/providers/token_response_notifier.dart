@@ -5,6 +5,7 @@ class TokenResponseNotifier extends Notifier<TokenResponse?> {
   @override
   TokenResponse? build() => null;
 
+  // ignore: use_setters_to_change_properties
   void update(final TokenResponse? session) => state = session;
 }
 

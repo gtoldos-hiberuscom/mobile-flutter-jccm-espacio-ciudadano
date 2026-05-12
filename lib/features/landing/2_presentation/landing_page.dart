@@ -28,7 +28,7 @@ class LandingPage extends ConsumerWidget {
 
     ref.listen<LandingState>(landingProvider, (final previous, final next) {
       if (next.loginSuccess) {
-        ref.read(goRouterProvider).go(Routes.sitemap);
+        ref.read(goRouterProvider).go(Routes.lifeEvents);
       }
       if (next.error != null) {
         ScaffoldMessenger.of(context).showSnackBar(

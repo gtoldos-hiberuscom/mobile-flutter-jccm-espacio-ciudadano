@@ -5,6 +5,7 @@ class JwtClaimsNotifier extends Notifier<JwtClaims?> {
   @override
   JwtClaims? build() => null;
 
+  // ignore: use_setters_to_change_properties
   void update(final JwtClaims? user) => state = user;
 }
 

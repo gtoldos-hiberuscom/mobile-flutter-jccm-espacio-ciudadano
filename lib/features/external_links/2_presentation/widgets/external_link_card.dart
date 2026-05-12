@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart' show ExternalLinkCatalog;
-import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_link_button.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/widgets/external_link_label.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show immutable;
+import 'package:meta/meta.dart';
 
 /// Domain entity representing one selectable life event.
 ///

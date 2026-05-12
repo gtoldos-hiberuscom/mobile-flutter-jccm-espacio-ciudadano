@@ -2,7 +2,10 @@ import 'dart:async' show unawaited;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_repository_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -121,24 +124,22 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
 
   Future<void> _load() async {
     state = const LifeEventsState(status: LifeEventsStatus.loading);
-    try {
-      final events = await ref
-          .read(lifeEventsRepositoryProvider)
-          .loadLifeEvents(idAgente: _idAgente);
-      if (!ref.mounted) {
-        return;
-      }
-      state = events.isEmpty
-          ? const LifeEventsState(status: LifeEventsStatus.empty)
-          : LifeEventsState(status: LifeEventsStatus.loaded, events: events);
-    } on Object catch (e) {
-      if (!ref.mounted) {
-        return;
-      }
-      state = LifeEventsState(
-        status: LifeEventsStatus.loadError,
-        errorMessage: e.toString(),
-      );
+    final result = await ref
+        .read(loadLifeEventsUsecaseProvider)
+        .execute(idAgente: _idAgente);
+    if (!ref.mounted) {
+      return;
+    }
+    switch (result) {
+      case LoadLifeEventsSuccess(:final events):
+        state = events.isEmpty
+            ? const LifeEventsState(status: LifeEventsStatus.empty)
+            : LifeEventsState(status: LifeEventsStatus.loaded, events: events);
+      case LoadLifeEventsFailed(:final message):
+        state = LifeEventsState(
+          status: LifeEventsStatus.loadError,
+          errorMessage: message,
+        );
     }
   }
 
@@ -162,26 +163,24 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
       return;
     }
     state = state.copyWith(status: LifeEventsStatus.saving);
-    try {
-      await ref.read(lifeEventsRepositoryProvider).saveLifeEvents(
-            idAgente: _idAgente,
-            events: state.events,
-          );
-      if (!ref.mounted) {
-        return;
-      }
-      state = state.copyWith(
-        status: LifeEventsStatus.saveSuccess,
-        isDirty: false,
-      );
-    } on Object catch (e) {
-      if (!ref.mounted) {
-        return;
-      }
-      state = state.copyWith(
-        status: LifeEventsStatus.saveError,
-        errorMessage: e.toString(),
-      );
+    final result = await ref.read(saveLifeEventsUsecaseProvider).execute(
+          idAgente: _idAgente,
+          events: state.events,
+        );
+    if (!ref.mounted) {
+      return;
+    }
+    switch (result) {
+      case SaveLifeEventsSuccess():
+        state = state.copyWith(
+          status: LifeEventsStatus.saveSuccess,
+          isDirty: false,
+        );
+      case SaveLifeEventsFailed(:final message):
+        state = state.copyWith(
+          status: LifeEventsStatus.saveError,
+          errorMessage: message,
+        );
     }
   }
 
@@ -197,23 +196,21 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
       showResetConfirm: false,
       status: LifeEventsStatus.resetting,
     );
-    try {
-      await ref
-          .read(lifeEventsRepositoryProvider)
-          .resetPreferences(idAgente: _idAgente);
-      if (!ref.mounted) {
-        return;
-      }
-      state = const LifeEventsState(status: LifeEventsStatus.resetSuccess);
-      await _load();
-    } on Object catch (e) {
-      if (!ref.mounted) {
-        return;
-      }
-      state = state.copyWith(
-        status: LifeEventsStatus.resetError,
-        errorMessage: e.toString(),
-      );
+    final result = await ref
+        .read(resetLifeEventsUsecaseProvider)
+        .execute(idAgente: _idAgente);
+    if (!ref.mounted) {
+      return;
+    }
+    switch (result) {
+      case ResetLifeEventsSuccess():
+        state = const LifeEventsState(status: LifeEventsStatus.resetSuccess);
+        await _load();
+      case ResetLifeEventsFailed(:final message):
+        state = state.copyWith(
+          status: LifeEventsStatus.resetError,
+          errorMessage: message,
+        );
     }
   }
 

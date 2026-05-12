@@ -1,7 +1,3 @@
-import 'package:flutter/cupertino.dart' show IconData;
-import 'package:flutter/material.dart' show IconData;
-import 'package:flutter/widgets.dart' show IconData;
-
 /// Pure domain entity for the public landing screen.
 ///
 /// No Flutter, Riverpod, Dio, or any infrastructure imports — this layer
