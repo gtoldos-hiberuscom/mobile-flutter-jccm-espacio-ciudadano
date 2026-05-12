@@ -1,17 +1,13 @@
-/// Parsed representation of a Cl@ve OIDC id\_token payload.
+/// Parsed representation of the JWT claims returned by Cerbero.
 ///
 /// Pure Dart — no Flutter, Riverpod, Dio, or infrastructure imports.
 final class JwtClaims {
   const JwtClaims({
-    required this.sub,
-    required this.iss,
-    required this.aud,
     required this.exp,
     required this.iat,
-    this.nif,
-    this.givenName,
-    this.familyName,
-    this.email,
+    required this.iss,
+    required this.aud,
+    required this.sub,
     this.authTime,
     this.jti,
     this.typ,
@@ -22,121 +18,37 @@ final class JwtClaims {
     this.scope,
     this.sid,
     this.personIdentifier,
-    this.name,
-    this.firstName,
     this.secondSurname,
+    this.name,
+    this.firstSurname,
     this.preferredUsername,
+    this.idAgente,
+    this.givenName,
+    this.familyName,
   });
 
-  // ── Standard OIDC claims ──────────────────────────────────────────────────
-
-  /// Subject — opaque user identifier assigned by Cl@ve.
-  final String sub;
-
-  /// Issuer URL of the Cl@ve identity provider.
-  final String iss;
-
-  /// Audience list — must contain the app's registered `client_id`.
-  final List<String> aud;
-
-  /// Expiry timestamp (seconds since Unix epoch).
   final int exp;
-
-  /// Issued-at timestamp (seconds since Unix epoch).
   final int iat;
-
-  // ── Cl@ve identity claims ─────────────────────────────────────────────────
-
-  /// National identity number (DNI / NIE) supplied by Cl@ve.
-  ///
-  /// The claim may be named `nif` or `idAgente` depending on the federation
-  /// profile.
-  final String? nif;
-
-  /// Given (first) name from the Cl@ve identity assertion.
-  final String? givenName;
-
-  /// Family (last) name from the Cl@ve identity assertion.
-  final String? familyName;
-
-  /// Email address — optional and not always present in Cl@ve tokens.
-  final String? email;
-
-  // ── Additional OIDC & Cerbero claims ──────────────────────────────────────
-
-  /// Time when the user authenticated (seconds since Unix epoch).
+  final String iss;
+  final List<String> aud;
+  final String sub;
   final int? authTime;
-
-  /// JWT ID — unique identifier for this token.
   final String? jti;
-
-  /// Token type (e.g., "Bearer").
   final String? typ;
-
-  /// Authorized party — typically the client that the token was issued to.
   final String? azp;
-
-  /// Nonce value used to prevent replay attacks.
   final String? nonce;
-
-  /// Session state identifier.
   final String? sessionState;
-
-  /// Realm access information containing roles and other realm-specific data.
-  final Map<String, dynamic>? realmAccess;
-
-  /// OAuth scope(s) granted to this token.
+  final JwtRealmAccess? realmAccess;
   final String? scope;
-
-  /// Session ID.
   final String? sid;
-
-  /// Person identifier (usually DNI/NIE without special characters).
   final String? personIdentifier;
-
-  /// Full name of the user.
-  final String? name;
-
-  /// First name of the user.
-  final String? firstName;
-
-  /// Second surname of the user.
   final String? secondSurname;
-
-  /// Preferred username for login.
+  final String? name;
+  final String? firstSurname;
   final String? preferredUsername;
-
-  // ── Derived helpers ───────────────────────────────────────────────────────
-
-  /// Returns [nif] when present; falls back to [sub] if absent.
-  String get idAgente => nif ?? sub;
-
-  /// Combines [givenName] and [familyName]; returns `null` when both are absent.
-  String? get displayName {
-    final given = givenName?.trim();
-    final family = familyName?.trim();
-    if (given != null && given.isNotEmpty && family != null && family.isNotEmpty) {
-      return '$given $family';
-    }
-    if (given != null && given.isNotEmpty) {
-      return given;
-    }
-    if (family != null && family.isNotEmpty) {
-      return family;
-    }
-    return null;
-  }
-
-  /// Returns `true` if the token's [exp] timestamp has passed.
-  bool get isExpired {
-    final expiryMs = exp * 1000;
-    return DateTime.now().millisecondsSinceEpoch > expiryMs;
-  }
-
-  /// Returns `true` when [aud] contains [clientId].
-  bool validateAudience(final String clientId) => aud.contains(clientId);
-
-  // ── Factory ───────────────────────────────────────────────────────────────
+  final String? idAgente;
+  final String? givenName;
+  final String? familyName;
 
   /// Parses a raw JWT payload map into a [JwtClaims] instance.
   ///
@@ -154,54 +66,79 @@ final class JwtClaims {
     }
 
     return JwtClaims(
-      sub: _str(payload['sub']) ?? '',
-      iss: _str(payload['iss']) ?? '',
-      aud: aud,
       exp: _int(payload['exp']) ?? 0,
       iat: _int(payload['iat']) ?? 0,
-      nif: _str(payload['nif']) ?? _str(payload['idAgente']),
-      givenName: _str(payload['given_name']),
-      familyName: _str(payload['family_name']),
-      email: _str(payload['email']),
+      iss: _str(payload['iss']) ?? '',
+      aud: aud,
+      sub: _str(payload['sub']) ?? '',
       authTime: _int(payload['auth_time']),
       jti: _str(payload['jti']),
       typ: _str(payload['typ']),
       azp: _str(payload['azp']),
       nonce: _str(payload['nonce']),
       sessionState: _str(payload['session_state']),
-      realmAccess: payload['realm_access'] is Map ? payload['realm_access'] as Map<String, dynamic> : null,
+      realmAccess: JwtRealmAccess.tryParse(payload['realm_access']),
       scope: _str(payload['scope']),
       sid: _str(payload['sid']),
       personIdentifier: _str(payload['PersonIdentifier']),
-      name: _str(payload['name']),
-      firstName: _str(payload['first_surname']),
       secondSurname: _str(payload['second_surname']),
+      name: _str(payload['name']),
+      firstSurname: _str(payload['first_surname']),
       preferredUsername: _str(payload['preferred_username']),
+      idAgente: _str(payload['idAgente']),
+      givenName: _str(payload['given_name']),
+      familyName: _str(payload['family_name']),
     );
   }
 
-  static String? _str(final Object? v) {
-    if (v is String && v.isNotEmpty) {
-      return v;
+  static String? _str(final Object? value) {
+    if (value is String && value.isNotEmpty) {
+      return value;
     }
     return null;
   }
 
-  static int? _int(final Object? v) {
-    if (v is int) {
-      return v;
+  static int? _int(final Object? value) {
+    if (value is int) {
+      return value;
     }
-    if (v is double) {
-      return v.toInt();
+    if (value is double) {
+      return value.toInt();
     }
-    if (v is String) {
-      return int.tryParse(v);
+    if (value is String) {
+      return int.tryParse(value);
     }
     return null;
   }
 
   @override
   String toString() =>
-      'JwtClaims(iss: $iss, exp: $exp, isExpired: $isExpired, '
-      'aud: $aud, hasNif: ${nif != null})';
+      'JwtClaims(sub: $sub, iss: $iss, exp: $exp, aud: $aud, '
+      'preferredUsername: $preferredUsername, idAgente: $idAgente)';
+}
+
+final class JwtRealmAccess {
+  const JwtRealmAccess({
+    required this.roles,
+  });
+
+  final List<String> roles;
+
+  static JwtRealmAccess? tryParse(final Object? value) {
+    if (value is! Map<String, dynamic>) {
+      return null;
+    }
+
+    final rawRoles = value['roles'];
+    if (rawRoles is! List) {
+      return null;
+    }
+
+    return JwtRealmAccess(
+      roles: rawRoles.whereType<String>().toList(growable: false),
+    );
+  }
+
+  @override
+  String toString() => 'JwtRealmAccess(roles: $roles)';
 }
