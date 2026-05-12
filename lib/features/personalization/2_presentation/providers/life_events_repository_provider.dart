@@ -12,5 +12,6 @@ final lifeEventsRepositoryProvider = Provider<LifeEventsRepository>((final ref) 
   final dio = ref.watch(dioProvider);
   return LifeEventsRepositoryImpl(
     api: HechosVitalesApi(dio, standardSerializers),
+    dio: dio,
   );
 });
