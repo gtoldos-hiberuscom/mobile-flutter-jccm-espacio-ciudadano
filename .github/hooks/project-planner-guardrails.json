@@ -20,25 +20,12 @@
     "preToolUse": [
       {
         "type": "command",
-        "bash": "python3 .github/hooks/scripts/pre_tool_ticket_policy.py",
-        "cwd": ".",
-        "timeoutSec": 10
-      },
-      {
-        "type": "command",
         "bash": "python3 .github/hooks/scripts/pre_tool_branch_policy.py",
         "cwd": ".",
         "timeoutSec": 10
       }
     ],
-    "postToolUse": [
-      {
-        "type": "command",
-        "bash": "python3 .github/hooks/scripts/post_tool_ticket_validate.py",
-        "cwd": ".",
-        "timeoutSec": 20
-      }
-    ],
+    "postToolUse": [],
     "sessionEnd": [
       {
         "type": "command",

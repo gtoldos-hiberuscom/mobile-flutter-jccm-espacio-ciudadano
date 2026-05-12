@@ -4,8 +4,8 @@
 - Use `project-planner` when the user wants a project roadmap, epics, stories, risks, dependencies, and ticket-tree creation from specifications or repository documentation.
 - Use `plan-manager` when the user wants coordinated backlog or plan execution across tickets, implementation, validation, and progressive branch integration.
 - Use `implementer` for Flutter implementation, scaffolding, refactors, and architecture-sensitive work.
-- Use `ticket-manager` for ticket administration in `tickets/`.
-- If an implementation request references a ticket, keep code and ticket traceability synchronized through `ticket-manager` or the ticket skills.
+- Use `jira-progress-orchestrator` for Jira ticket administration (comments, transitions, syncing) scoped to project `JCCMEC`.
+- If an implementation request references a ticket, keep code and Jira traceability synchronized by having `implementer` delegate Jira operations to `jira-progress-orchestrator`.
 
 ## Architecture source of truth
 - The repository architecture source of truth is `documentation/ARCHITECTURE.md`.

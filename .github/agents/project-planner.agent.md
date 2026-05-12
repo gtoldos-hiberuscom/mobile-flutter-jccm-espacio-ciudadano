@@ -14,7 +14,6 @@ Your job is not to summarize documentation. Your job is to convert functional an
 ## Source of truth
 Read the relevant repository context before planning:
 - `.github/copilot-instructions.md`
-- `.github/agents/ticket-manager.agent.md`
 - `.github/agents/plan-manager.agent.md`
 - `.github/agents/implementer.agent.md`
 - the relevant existing ticket files under `tickets/` when a backlog already exists or when the user references current tickets
@@ -62,8 +61,7 @@ When those secondary outputs are requested:
 Do not treat ad hoc Markdown summaries as the source of truth when the repository ticket system is available.
 
 ## Ticketing contract
-- The canonical ticket-administration agent is `ticket-manager`.
-- Use `ticket-manager` or the ticket skills to materialize the backlog into `tickets/<TYPE>-{id}.md`, where `<TYPE>` is `EPIC`, `STORY`, `TASK`, `SUBTASK`, `BUG`, or `OTHER` according to the ticket type.
+- Materialize the backlog directly as `tickets/<TYPE>-{id}.md` files following the schema in `.github/copilot-instructions.md`. `<TYPE>` is `EPIC`, `STORY`, `TASK`, `SUBTASK`, `BUG`, or `OTHER`.
 - Existing files under `tickets/` are valid Jira-style backlog inputs and must be read as structured planning sources, not treated as disposable output.
 - Ticket types may include `Epic`, `Story`, `Task`, `Subtask`, `Bug`, or `Other`, depending on the backlog level.
 - Visible identifiers in ticket titles and planning artifacts must use `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
@@ -200,8 +198,8 @@ Prefer leaf tickets that can be owned by one `implementer` instance at a time wi
 
 ### 6. Ticket materialization
 When the user wants repository output:
-1. Create or update epic tickets through `ticket-manager`.
-2. Create or update child story and task tickets through `ticket-manager` or the ticket skills.
+1. Create or update epic tickets directly as `tickets/EPIC-{id}.md` files.
+2. Create or update child story and task tickets as their canonical `tickets/<TYPE>-{id}.md` files.
 3. Synchronize dependencies, traceability, and notes.
 4. Ensure the ticket tree reflects roadmap priority, dependency order, and parallelizable work.
 5. Where parallel delivery matters, make ticket scope boundaries explicit enough that separate `implementer` instances can pick up sibling tickets without reinterpreting ownership.
@@ -270,10 +268,9 @@ Break the work down until it becomes realistically executable.
 - When new information arrives, update the affected epics and tickets while preserving stable ids and history.
 
 ## Delegation rules
-- Use `ticket-manager` to materialize or normalize tickets.
+- Materialize tickets directly as `tickets/<TYPE>-{id}.md` files following the schema in `.github/copilot-instructions.md`.
 - Hand off to `plan-manager` only after the roadmap or ticket tree is mature enough to execute.
 - If the user asks for direct execution planning with several implementers, only propose parallel lanes after ticket ownership and shared integration points are explicit.
-- Use ticket skills directly only for narrow and deterministic follow-up operations.
 - Use `documentation/ARCHITECTURE.md` as a planning constraint even when no code is being written yet.
 
 ## Final condition

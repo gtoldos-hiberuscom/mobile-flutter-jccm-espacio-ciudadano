@@ -15,7 +15,6 @@ Delivery is invalid if implementation lands as one final mixed commit, if ticket
 ## Source of truth
 Read these sources before making orchestration decisions:
 - `.github/copilot-instructions.md`
-- `.github/agents/ticket-manager.agent.md`
 - `.github/agents/implementer.agent.md`
 - `documentation/ARCHITECTURE.md`
 - `documentation/initial_documentation/PLANIFICACION_PROYECTO.md` when the execution is driven by the project backlog
@@ -29,7 +28,7 @@ Load only the sections needed for the current execution step, but never skip the
 The following rules are mandatory:
 
 1. Every executable implementation task must map to a specific ticket or to an explicit backlog node that can be traced back to a ticket decision.
-2. Ticket-backed work must use the repository ticket flow under `tickets/`, handled through `ticket-manager` or the ticket skills.
+2. Ticket-backed work must use the repository ticket flow under `tickets/`, with Jira progress coordinated through `jira-progress-orchestrator`.
 3. Every epic must have its own branch created from the base branch.
 4. Every ticket must have its own branch created from its parent epic branch.
 5. Every implementation task must have its own branch created from its parent ticket branch.
@@ -61,7 +60,7 @@ For ticket workflow, use the repository default ticket policy unless the user pr
 - `Cancelled`
 
 ## Ticketing contract
-- The canonical ticket-administration agent is `ticket-manager`.
+- The canonical Jira-synchronization agent is `jira-progress-orchestrator`. Use it for comments, transitions, and any Jira metadata updates scoped to project `JCCMEC`.
 - Ticket files live under `tickets/` and must follow the schema defined in `.github/copilot-instructions.md`.
 - Resolve ticket context from `id`, `jira_key`, or `tickets/<TYPE>-{id}.md`, but always operate on the canonical file named from `type + id`.
 - `id` is the internal numeric identifier; `jira_key` is the external tracker key.
@@ -74,7 +73,7 @@ For ticket workflow, use the repository default ticket policy unless the user pr
 
 ## Delegation contract
 Use the repository agents and skills deliberately:
-- Use `ticket-manager` for ticket creation, normalization, comments, transitions, linking, reassignment, and completion.
+- Use `jira-progress-orchestrator` for Jira comments, transitions, linking, and completion scoped to `JCCMEC`.
 - Use `implementer` for scoped code changes, tests, and architecture-sensitive refactors.
 - Use ticket skills directly only when the operation is narrow and unambiguous.
 - Use `documentation/ARCHITECTURE.md` through `implementer` or directly when architecture guidance materially reduces ambiguity.
@@ -209,7 +208,7 @@ If multiple executable outcomes are still packed into one parent ticket, split t
 ### 3. Resolve or create ticket context
 Before implementation on a ticket-backed item:
 1. Locate the existing ticket file if it already exists.
-2. If the ticket does not exist but the task requires one, delegate ticket creation or normalization to `ticket-manager`.
+2. If the ticket does not exist but the task requires one, create the local `tickets/<TYPE>-{id}.md` file directly following the schema in `.github/copilot-instructions.md`.
 3. Confirm the ticket acceptance criteria and technical notes are compatible with the plan item.
 4. Move the ticket to `In Progress` or append a progress comment when active work begins, if that change is justified.
 
@@ -264,9 +263,9 @@ Validation can include:
 
 After validation:
 - update the relevant plan item from `[F]` to `[V]` only on the task branch or the designated coordinator-controlled plan update branch
-- append ticket progress through `ticket-comment` when needed
-- use `ticket-transition` conservatively
-- use `ticket-complete` only when the acceptance criteria are demonstrably satisfied
+- append ticket progress by delegating to `jira-progress-orchestrator` when needed
+- use `jira-progress-orchestrator` to transition the ticket status conservatively
+- delegate ticket closure to `jira-progress-orchestrator` only when the acceptance criteria are demonstrably satisfied
 
 Never mark a task complete on implementation claim alone.
 
@@ -276,7 +275,7 @@ After a validated task is complete:
 2. Merge the task branch with an explicit merge commit.
 3. Confirm the ticket branch is still clean.
 4. Confirm the task history is reviewable in isolation.
-5. Reconcile ticket notes, changelog, and status as needed through `ticket-manager` or the ticket skills.
+5. Reconcile ticket notes, changelog, and status as needed by updating local `tickets/<TYPE>-{id}.md` directly and delegating Jira progress to `jira-progress-orchestrator`.
 
 Do not implement the next task directly on the ticket branch.
 
@@ -371,7 +370,7 @@ The following are failures of the role:
 - using default merge messages
 - deleting task branches before their integration path is clear
 - using parallel workers on overlapping write sets
-- bypassing ticket-manager or the ticket skills for structural ticket updates
+- bypassing `jira-progress-orchestrator` for Jira ticket progress when the project is `JCCMEC`
 - bypassing hooks or guardrails
 
 ## Progress reporting format

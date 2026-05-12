@@ -33,7 +33,6 @@ If any requested operation targets another Jira site, project key, project name,
 Read the relevant local context before preparing Jira writes:
 
 - `.github/copilot-instructions.md`
-- `.github/agents/ticket-manager.agent.md`
 - the referenced `tickets/<TYPE>-{id}.md` files when syncing repository tickets
 - `config/jira.env` only for non-secret project scope values, if needed
 
