@@ -8,13 +8,109 @@
   "@landingTitle": {
     "description": "Main title displayed in the hero section of the public landing screen."
   },
-  "landingTagline": "Your public information in one place",
+  "landingTagline": "Agile and online management of procedures for the citizens of Castilla-La Mancha",
   "@landingTagline": {
     "description": "Subtitle shown below the title on the landing screen."
   },
-  "landingCtaButton": "Access with Cl@ve",
+  "landingCtaButton": "Access your space",
   "@landingCtaButton": {
     "description": "Primary CTA button text that initiates the Cl@ve authentication flow."
+  },
+  "landingAboutButton": "Learn more about Citizen Space",
+  "@landingAboutButton": {
+    "description": "Secondary button that navigates to the about screen."
+  },
+  "landingHelpLink": "How to access? - Help",
+  "@landingHelpLink": {
+    "description": "Text link that navigates to the access help screen."
+  },
+  "landingHelpPageTitle": "Access help",
+  "@landingHelpPageTitle": {
+    "description": "AppBar title of the access help screen."
+  },
+  "landingHelpTitle": "How to access",
+  "@landingHelpTitle": {
+    "description": "Main title of the access help screen."
+  },
+  "landingHelpBody1": "To access Citizen Space you will need to use Cl@ve, an identification system that allows the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.",
+  "@landingHelpBody1": {
+    "description": "First explanatory paragraph of the access help screen."
+  },
+  "landingHelpBody2": "This identification system is widely used by Spanish public administrations and allows you to use any of the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.",
+  "@landingHelpBody2": {
+    "description": "Second explanatory paragraph of the access help screen."
+  },
+  "landingHelpAccessButton": "Access now",
+  "@landingHelpAccessButton": {
+    "description": "Primary action button on the help screen that initiates authentication."
+  },
+  "landingHelpExternalLink": "External link",
+  "@landingHelpExternalLink": {
+    "description": "External text link on the help screen."
+  },
+  "landingAboutPageTitle": "Learn more about Citizen Space",
+  "@landingAboutPageTitle": {
+    "description": "AppBar title of the about screen."
+  },
+  "landingAboutTitle": "Citizen space",
+  "@landingAboutTitle": {
+    "description": "Main title of the about screen."
+  },
+  "landingAboutBodyPrefix": "is the digital area where relevant information will appear with the aim of",
+  "@landingAboutBodyPrefix": {
+    "description": "Opening text of the descriptive paragraph (precedes the bold fragment)."
+  },
+  "landingAboutBodyBold": "facilitating and improving your relationship with the regional Administration",
+  "@landingAboutBodyBold": {
+    "description": "Bold fragment of the descriptive paragraph."
+  },
+  "landingAboutBodySuffix": "in the procedures and processes in which you are involved or that may be of interest to you.",
+  "@landingAboutBodySuffix": {
+    "description": "Closing text of the descriptive paragraph (after the bold fragment)."
+  },
+  "landingAboutWhatYouFindTitle": "What will you find?",
+  "@landingAboutWhatYouFindTitle": {
+    "description": "Section heading for the list of available content."
+  },
+  "landingAboutWhatYouFindIntro": "You will have access to various information such as:",
+  "@landingAboutWhatYouFindIntro": {
+    "description": "Introduction to the list of available content."
+  },
+  "landingAboutBullet1": "Your personal and contact information.",
+  "@landingAboutBullet1": {
+    "description": "First bullet item in the content list."
+  },
+  "landingAboutBullet2": "Your information from other Public Administrations.",
+  "@landingAboutBullet2": {
+    "description": "Second bullet item in the content list."
+  },
+  "landingAboutBullet3": "Your ongoing cases and their processing status.",
+  "@landingAboutBullet3": {
+    "description": "Third bullet item in the content list."
+  },
+  "landingAboutBullet4": "Your pending notifications.",
+  "@landingAboutBullet4": {
+    "description": "Fourth bullet item in the content list."
+  },
+  "landingAboutBullet5": "Your digital cards.",
+  "@landingAboutBullet5": {
+    "description": "Fifth bullet item in the content list."
+  },
+  "landingAboutBullet6": "Your information from the Regional Government of Castilla-La Mancha.",
+  "@landingAboutBullet6": {
+    "description": "Sixth bullet item in the content list."
+  },
+  "landingAboutBullet7": "Additionally, you can receive proactive service recommendations of interest to you.",
+  "@landingAboutBullet7": {
+    "description": "Seventh bullet item in the content list."
+  },
+  "landingAboutAccessButton": "Access now",
+  "@landingAboutAccessButton": {
+    "description": "Primary action button on the about screen that initiates authentication."
+  },
+  "landingAboutExternalLink": "External link",
+  "@landingAboutExternalLink": {
+    "description": "External text link on the about screen."
   },
   "landingWhatYouFindTitle": "What you'll find",
   "@landingWhatYouFindTitle": {

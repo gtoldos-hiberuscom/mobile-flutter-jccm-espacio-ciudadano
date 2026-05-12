@@ -8,13 +8,109 @@
   "@landingTitle": {
     "description": "Título principal mostrado en la sección hero de la pantalla de inicio pública."
   },
-  "landingTagline": "Tu información pública en un solo lugar",
+  "landingTagline": "Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha",
   "@landingTagline": {
     "description": "Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio."
   },
-  "landingCtaButton": "Acceder con Cl@ve",
+  "landingCtaButton": "Acceder a tu espacio",
   "@landingCtaButton": {
     "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
+  },
+  "landingAboutButton": "Saber más sobre Espacio Ciudadano",
+  "@landingAboutButton": {
+    "description": "Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano."
+  },
+  "landingHelpLink": "¿Cómo acceder? - Ayuda",
+  "@landingHelpLink": {
+    "description": "Enlace de texto que navega a la pantalla de ayuda con el acceso."
+  },
+  "landingHelpPageTitle": "Ayuda con el acceso",
+  "@landingHelpPageTitle": {
+    "description": "Título del AppBar de la pantalla de ayuda con el acceso."
+  },
+  "landingHelpTitle": "Cómo acceder",
+  "@landingHelpTitle": {
+    "description": "Título principal de la pantalla de ayuda con el acceso."
+  },
+  "landingHelpBody1": "Para acceder a Espacio Ciudadano tendrás que usar Cl@ve, un sistema de identificación que permite los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.",
+  "@landingHelpBody1": {
+    "description": "Primer párrafo explicativo de la pantalla de ayuda con el acceso."
+  },
+  "landingHelpBody2": "Este sistema de identificación es ampliamente usado por las Administraciones públicas españolas y te permite utilizar cualquiera de los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.",
+  "@landingHelpBody2": {
+    "description": "Segundo párrafo explicativo de la pantalla de ayuda con el acceso."
+  },
+  "landingHelpAccessButton": "Acceder ahora",
+  "@landingHelpAccessButton": {
+    "description": "Botón de acción principal de la pantalla de ayuda que inicia el flujo de autenticación."
+  },
+  "landingHelpExternalLink": "Enlace externo",
+  "@landingHelpExternalLink": {
+    "description": "Enlace de texto externo en la pantalla de ayuda."
+  },
+  "landingAboutPageTitle": "Saber más sobre el Espacio Ciudadano",
+  "@landingAboutPageTitle": {
+    "description": "Título del AppBar de la pantalla de información sobre el Espacio Ciudadano."
+  },
+  "landingAboutTitle": "Espacio ciudadano",
+  "@landingAboutTitle": {
+    "description": "Título principal de la pantalla de información sobre el Espacio Ciudadano."
+  },
+  "landingAboutBodyPrefix": "es el área digital donde aparecerá información relevante con el objetivo de",
+  "@landingAboutBodyPrefix": {
+    "description": "Texto inicial del párrafo descriptivo (precede al texto en negrita)."
+  },
+  "landingAboutBodyBold": "facilitar y mejorar tu relación con la Administración regional",
+  "@landingAboutBodyBold": {
+    "description": "Fragmento en negrita del párrafo descriptivo."
+  },
+  "landingAboutBodySuffix": "en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.",
+  "@landingAboutBodySuffix": {
+    "description": "Texto final del párrafo descriptivo (tras el fragmento en negrita)."
+  },
+  "landingAboutWhatYouFindTitle": "¿Qué encontrarás?",
+  "@landingAboutWhatYouFindTitle": {
+    "description": "Encabezado de la sección de contenidos de la pantalla about."
+  },
+  "landingAboutWhatYouFindIntro": "Tendrás acceso a diversa información como:",
+  "@landingAboutWhatYouFindIntro": {
+    "description": "Introducción a la lista de contenidos disponibles."
+  },
+  "landingAboutBullet1": "Tu información personal y de contacto.",
+  "@landingAboutBullet1": {
+    "description": "Primer elemento de la lista de contenidos."
+  },
+  "landingAboutBullet2": "Tu información de otras Administraciones Públicas.",
+  "@landingAboutBullet2": {
+    "description": "Segundo elemento de la lista de contenidos."
+  },
+  "landingAboutBullet3": "Tus expedientes en curso y su estado de tramitación.",
+  "@landingAboutBullet3": {
+    "description": "Tercer elemento de la lista de contenidos."
+  },
+  "landingAboutBullet4": "Tus notificaciones pendientes.",
+  "@landingAboutBullet4": {
+    "description": "Cuarto elemento de la lista de contenidos."
+  },
+  "landingAboutBullet5": "Tus carnets digitales.",
+  "@landingAboutBullet5": {
+    "description": "Quinto elemento de la lista de contenidos."
+  },
+  "landingAboutBullet6": "Tu información de la Junta de Comunidades de Castilla-La Mancha.",
+  "@landingAboutBullet6": {
+    "description": "Sexto elemento de la lista de contenidos."
+  },
+  "landingAboutBullet7": "Además, podrás recibir recomendaciones proactivas de servicios de tu interés.",
+  "@landingAboutBullet7": {
+    "description": "Séptimo elemento de la lista de contenidos."
+  },
+  "landingAboutAccessButton": "Acceder ahora",
+  "@landingAboutAccessButton": {
+    "description": "Botón de acción principal de la pantalla about que inicia el flujo de autenticación."
+  },
+  "landingAboutExternalLink": "Enlace externo",
+  "@landingAboutExternalLink": {
+    "description": "Enlace de texto externo en la pantalla about."
   },
   "landingWhatYouFindTitle": "Qué encontrarás",
   "@landingWhatYouFindTitle": {

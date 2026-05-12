@@ -107,13 +107,13 @@ abstract class AppLocalizations {
   /// Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio.
   ///
   /// In es, this message translates to:
-  /// **'Tu información pública en un solo lugar'**
+  /// **'Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha'**
   String get landingTagline;
 
   /// Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve.
   ///
   /// In es, this message translates to:
-  /// **'Acceder con Cl@ve'**
+  /// **'Acceder a tu espacio'**
   String get landingCtaButton;
 
   /// Encabezado de la sección que muestra las categorías de servicios disponibles.
@@ -151,6 +151,150 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Protección de datos'**
   String get landingFooterPrivacy;
+
+  /// Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Espacio Ciudadano'**
+  String get landingAboutButton;
+
+  /// Enlace de texto que navega a la pantalla de ayuda con el acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo acceder? - Ayuda'**
+  String get landingHelpLink;
+
+  /// Título del AppBar de la pantalla de ayuda con el acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda con el acceso'**
+  String get landingHelpPageTitle;
+
+  /// Título principal de la pantalla de ayuda con el acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo acceder'**
+  String get landingHelpTitle;
+
+  /// Primer párrafo explicativo de la pantalla de ayuda con el acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Para acceder a Espacio Ciudadano tendrás que usar Cl@ve...'**
+  String get landingHelpBody1;
+
+  /// Segundo párrafo explicativo de la pantalla de ayuda con el acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Este sistema de identificación es ampliamente usado...'**
+  String get landingHelpBody2;
+
+  /// Botón de acción principal de la pantalla de ayuda que inicia el flujo de autenticación.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder ahora'**
+  String get landingHelpAccessButton;
+
+  /// Enlace de texto externo en la pantalla de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlace externo'**
+  String get landingHelpExternalLink;
+
+  /// Título del AppBar de la pantalla de información sobre el Espacio Ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre el Espacio Ciudadano'**
+  String get landingAboutPageTitle;
+
+  /// Título principal de la pantalla de información sobre el Espacio Ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'Espacio ciudadano'**
+  String get landingAboutTitle;
+
+  /// Texto inicial del párrafo descriptivo (precede al texto en negrita).
+  ///
+  /// In es, this message translates to:
+  /// **'es el área digital donde aparecerá información relevante con el objetivo de'**
+  String get landingAboutBodyPrefix;
+
+  /// Fragmento en negrita del párrafo descriptivo.
+  ///
+  /// In es, this message translates to:
+  /// **'facilitar y mejorar tu relación con la Administración regional'**
+  String get landingAboutBodyBold;
+
+  /// Texto final del párrafo descriptivo (tras el fragmento en negrita).
+  ///
+  /// In es, this message translates to:
+  /// **'en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.'**
+  String get landingAboutBodySuffix;
+
+  /// Encabezado de la sección de contenidos de la pantalla about.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué encontrarás?'**
+  String get landingAboutWhatYouFindTitle;
+
+  /// Introducción a la lista de contenidos disponibles.
+  ///
+  /// In es, this message translates to:
+  /// **'Tendrás acceso a diversa información como:'**
+  String get landingAboutWhatYouFindIntro;
+
+  /// Primer elemento de la lista de contenidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu información personal y de contacto.'**
+  String get landingAboutBullet1;
+
+  /// Segundo elemento de la lista de contenidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu información de otras Administraciones Públicas.'**
+  String get landingAboutBullet2;
+
+  /// Tercer elemento de la lista de contenidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus expedientes en curso y su estado de tramitación.'**
+  String get landingAboutBullet3;
+
+  /// Cuarto elemento de la lista de contenidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus notificaciones pendientes.'**
+  String get landingAboutBullet4;
+
+  /// Quinto elemento de la lista de contenidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus carnets digitales.'**
+  String get landingAboutBullet5;
+
+  /// Sexto elemento de la lista de contenidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu información de la Junta de Comunidades de Castilla-La Mancha.'**
+  String get landingAboutBullet6;
+
+  /// Séptimo elemento de la lista de contenidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Además, podrás recibir recomendaciones proactivas de servicios de tu interés.'**
+  String get landingAboutBullet7;
+
+  /// Botón de acción principal de la pantalla about que inicia el flujo de autenticación.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder ahora'**
+  String get landingAboutAccessButton;
+
+  /// Enlace de texto externo en la pantalla about.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlace externo'**
+  String get landingAboutExternalLink;
 
   /// Título de la pantalla de login que indica que se está accediendo con Cl@ve.
   ///

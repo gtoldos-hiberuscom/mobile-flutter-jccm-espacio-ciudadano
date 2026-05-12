@@ -6,6 +6,8 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/education/2_presentation/education_landing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
@@ -34,6 +36,16 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.landing,
           builder: (final BuildContext context, final GoRouterState state) => const LandingPage(),
+          routes: [
+            GoRoute(
+              path: 'help',
+              builder: (final BuildContext context, final GoRouterState state) => const LandingHelpPage(),
+            ),
+            GoRoute(
+              path: 'about',
+              builder: (final BuildContext context, final GoRouterState state) => const LandingAboutPage(),
+            ),
+          ],
         ),
 
         // ── Login (JCCMEC-10) ─────────────────────────────────────────────

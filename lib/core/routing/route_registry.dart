@@ -14,6 +14,8 @@ abstract final class Routes {
   // ── Public ────────────────────────────────────────────────────────────────
   static const String splash = '/';
   static const String landing = '/landing';
+  static const String landingHelp = '/landing/help';
+  static const String landingAbout = '/landing/about';
   static const String login = '/login';
   static const String loginCallback = '/login/callback';
   static const String maintenance = '/maintenance';

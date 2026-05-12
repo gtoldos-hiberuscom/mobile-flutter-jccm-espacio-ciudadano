@@ -15,10 +15,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingTitle => 'Espacio Ciudadano';
 
   @override
-  String get landingTagline => 'Tu información pública en un solo lugar';
+  String get landingTagline => 'Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha';
 
   @override
-  String get landingCtaButton => 'Acceder con Cl@ve';
+  String get landingCtaButton => 'Acceder a tu espacio';
 
   @override
   String get landingWhatYouFindTitle => 'Qué encontrarás';
@@ -37,6 +37,83 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get landingFooterPrivacy => 'Protección de datos';
+
+  @override
+  String get landingAboutButton => 'Saber más sobre Espacio Ciudadano';
+
+  @override
+  String get landingHelpLink => '¿Cómo acceder? - Ayuda';
+
+  @override
+  String get landingHelpPageTitle => 'Ayuda con el acceso';
+
+  @override
+  String get landingHelpTitle => 'Cómo acceder';
+
+  @override
+  String get landingHelpBody1 =>
+      'Para acceder a Espacio Ciudadano tendrás que usar Cl@ve, un sistema de identificación que permite los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.';
+
+  @override
+  String get landingHelpBody2 =>
+      'Este sistema de identificación es ampliamente usado por las Administraciones públicas españolas y te permite utilizar cualquiera de los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.';
+
+  @override
+  String get landingHelpAccessButton => 'Acceder ahora';
+
+  @override
+  String get landingHelpExternalLink => 'Enlace externo';
+
+  @override
+  String get landingAboutPageTitle => 'Saber más sobre el Espacio Ciudadano';
+
+  @override
+  String get landingAboutTitle => 'Espacio ciudadano';
+
+  @override
+  String get landingAboutBodyPrefix =>
+      'es el área digital donde aparecerá información relevante con el objetivo de';
+
+  @override
+  String get landingAboutBodyBold => 'facilitar y mejorar tu relación con la Administración regional';
+
+  @override
+  String get landingAboutBodySuffix =>
+      'en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.';
+
+  @override
+  String get landingAboutWhatYouFindTitle => '¿Qué encontrarás?';
+
+  @override
+  String get landingAboutWhatYouFindIntro => 'Tendrás acceso a diversa información como:';
+
+  @override
+  String get landingAboutBullet1 => 'Tu información personal y de contacto.';
+
+  @override
+  String get landingAboutBullet2 => 'Tu información de otras Administraciones Públicas.';
+
+  @override
+  String get landingAboutBullet3 => 'Tus expedientes en curso y su estado de tramitación.';
+
+  @override
+  String get landingAboutBullet4 => 'Tus notificaciones pendientes.';
+
+  @override
+  String get landingAboutBullet5 => 'Tus carnets digitales.';
+
+  @override
+  String get landingAboutBullet6 => 'Tu información de la Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
+  String get landingAboutBullet7 =>
+      'Además, podrás recibir recomendaciones proactivas de servicios de tu interés.';
+
+  @override
+  String get landingAboutAccessButton => 'Acceder ahora';
+
+  @override
+  String get landingAboutExternalLink => 'Enlace externo';
 
   @override
   String get loginPageTitle => 'Accediendo con Cl@ve';
