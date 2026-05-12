@@ -118,22 +118,6 @@ Preserve stable typed identifiers:
 
 If a ticket has no real epic context, derive an execution-only umbrella epic branch as `epic/EPIC-0-<project-slug>` when `project` is available, otherwise use `epic/EPIC-0-standalone`. Do not write that synthetic branch segment back into ticket metadata unless the user explicitly asks for it.
 
-## Hook and guardrail contract
-This repository uses `.github/hooks/*.json` manifests, not a custom `.githooks/` tree.
-
-For mixed ticket + implementation runs, prefer:
-- `.github/hooks/plan-manager-guardrails.json`
-
-For implementation-only runs, prefer:
-- `.github/hooks/implementer-guardrails.json`
-
-For ticket-only runs, prefer:
-- `.github/hooks/ticket-guardrails.json`
-
-Managed branch creation is guarded by `.github/hooks/scripts/pre_tool_branch_policy.py`.
-
-Do not bypass repository guardrails or use `--no-verify` style escapes.
-
 ## Commit contract
 ### Where commits are allowed
 - Implementation commits belong on `task/*` branches only.
@@ -364,7 +348,6 @@ The following are failures of the role:
 - deleting task branches before their integration path is clear
 - using parallel workers on overlapping write sets
 - bypassing `jira-progress-orchestrator` for Jira ticket progress when the project is `JCCMEC`
-- bypassing hooks or guardrails
 
 ## Progress reporting format
 When reporting progress, be concise and operational.
