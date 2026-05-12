@@ -91,6 +91,9 @@ abstract final class Routes {
   /// Mis autorizaciones — citizen data-consent screen (STORY-55).
   static const String preferencesConsent = '/preferences/consent';
 
+  /// Mis hechos vitales — life-event selection screen (STORY-54 / JCCMEC-53).
+  static const String lifeEvents = '/preferences/life-events';
+
   // ── Route sets for guard classification ───────────────────────────────────
 
   /// Paths that require an active session.
@@ -113,6 +116,7 @@ abstract final class Routes {
     socialWelfare,
     stateAffairs,
     preferencesConsent,
+    lifeEvents,
   };
 
   /// Returns true when [path] requires authentication.

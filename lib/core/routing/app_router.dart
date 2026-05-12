@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_h
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/0_entity/legal_document.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_document_page.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
 import 'package:jccm_espacio_ciudadano/features/sitemap/2_presentation/sitemap_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -100,6 +101,13 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.education,
           builder: (final BuildContext context, final GoRouterState state) => const EducationLandingPage(),
+        ),
+
+        // ── Personalization — Mis hechos vitales (STORY-54 / JCCMEC-53) ──────
+        GoRoute(
+          path: Routes.lifeEvents,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const LifeEventsPage(),
         ),
       ],
     );

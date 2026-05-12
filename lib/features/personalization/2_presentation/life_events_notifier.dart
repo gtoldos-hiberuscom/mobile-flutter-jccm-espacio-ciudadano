@@ -1,0 +1,220 @@
+import 'dart:async' show unawaited;
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_repository_provider.dart';
+
+// ── State ─────────────────────────────────────────────────────────────────────
+
+/// Possible lifecycle statuses for the life-events screen.
+enum LifeEventsStatus {
+  /// Initial value before any load has started.
+  initial,
+
+  /// A network load is in progress.
+  loading,
+
+  /// Events have been loaded and at least one event exists.
+  loaded,
+
+  /// Events loaded successfully but the list is empty.
+  empty,
+
+  /// A load attempt failed.
+  loadError,
+
+  /// A save operation is in progress.
+  saving,
+
+  /// Last save completed successfully.
+  saveSuccess,
+
+  /// Last save failed.
+  saveError,
+
+  /// A preference-reset operation is in progress.
+  resetting,
+
+  /// Last reset completed successfully (transient — immediately followed by reload).
+  resetSuccess,
+
+  /// Last reset failed.
+  resetError,
+}
+
+/// Immutable UI state for the life-events selection screen.
+final class LifeEventsState {
+  const LifeEventsState({
+    this.status = LifeEventsStatus.initial,
+    this.events = const [],
+    this.isDirty = false,
+    this.errorMessage,
+    this.showResetConfirm = false,
+  });
+
+  /// Current lifecycle status.
+  final LifeEventsStatus status;
+
+  /// Ordered list of life events — empty until first successful load.
+  final List<LifeEvent> events;
+
+  /// `true` when any event selection has changed since the last save/reset.
+  final bool isDirty;
+
+  /// Human-readable error detail. Non-null only on error statuses.
+  final String? errorMessage;
+
+  /// When `true` the reset-confirmation dialog should be displayed.
+  final bool showResetConfirm;
+
+  /// Returns a copy with the given fields replaced.
+  LifeEventsState copyWith({
+    final LifeEventsStatus? status,
+    final List<LifeEvent>? events,
+    final bool? isDirty,
+    final String? errorMessage,
+    final bool? showResetConfirm,
+  }) =>
+      LifeEventsState(
+        status: status ?? this.status,
+        events: events ?? this.events,
+        isDirty: isDirty ?? this.isDirty,
+        errorMessage: errorMessage ?? this.errorMessage,
+        showResetConfirm: showResetConfirm ?? this.showResetConfirm,
+      );
+}
+
+// ── Notifier ──────────────────────────────────────────────────────────────────
+
+/// Owns all business logic for the life-events selection screen.
+///
+/// In Riverpod 3 the family argument is passed to the constructor via the
+/// `NotifierProvider.family` create function; [Notifier.build] has no
+/// parameters. [_idAgente] is stored from the constructor for use in async
+/// operations.
+class LifeEventsNotifier extends Notifier<LifeEventsState> {
+  LifeEventsNotifier(this._idAgente);
+
+  /// The citizen identifier supplied when the family was constructed.
+  final String _idAgente;
+
+  @override
+  LifeEventsState build() {
+    // Kick off the load after the current frame so `build` returns synchronously.
+    unawaited(Future.microtask(_load));
+    return const LifeEventsState(status: LifeEventsStatus.loading);
+  }
+
+  // ── Private ────────────────────────────────────────────────────────────────
+
+  Future<void> _load() async {
+    state = const LifeEventsState(status: LifeEventsStatus.loading);
+    try {
+      final events = await ref
+          .read(lifeEventsRepositoryProvider)
+          .loadLifeEvents(idAgente: _idAgente);
+      if (!ref.mounted) {
+        return;
+      }
+      state = events.isEmpty
+          ? const LifeEventsState(status: LifeEventsStatus.empty)
+          : LifeEventsState(status: LifeEventsStatus.loaded, events: events);
+    } on Object catch (e) {
+      if (!ref.mounted) {
+        return;
+      }
+      state = LifeEventsState(
+        status: LifeEventsStatus.loadError,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
+  // ── Public actions ────────────────────────────────────────────────────────
+
+  /// Flips the selection state of the event with the given [id].
+  void toggle(final int id) {
+    final updated = state.events
+        .map((final e) => e.id == id ? e.copyWith(selected: !e.selected) : e)
+        .toList(growable: false);
+    state = state.copyWith(
+      status: LifeEventsStatus.loaded,
+      events: updated,
+      isDirty: true,
+    );
+  }
+
+  /// Persists the current selection to the backend.
+  Future<void> save() async {
+    if (state.status == LifeEventsStatus.saving) {
+      return;
+    }
+    state = state.copyWith(status: LifeEventsStatus.saving);
+    try {
+      await ref.read(lifeEventsRepositoryProvider).saveLifeEvents(
+            idAgente: _idAgente,
+            events: state.events,
+          );
+      if (!ref.mounted) {
+        return;
+      }
+      state = state.copyWith(
+        status: LifeEventsStatus.saveSuccess,
+        isDirty: false,
+      );
+    } on Object catch (e) {
+      if (!ref.mounted) {
+        return;
+      }
+      state = state.copyWith(
+        status: LifeEventsStatus.saveError,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
+  /// Requests display of the reset-confirmation dialog.
+  void requestReset() => state = state.copyWith(showResetConfirm: true);
+
+  /// Dismisses the reset-confirmation dialog without taking action.
+  void cancelReset() => state = state.copyWith(showResetConfirm: false);
+
+  /// Executes the preference reset and reloads the catalogue.
+  Future<void> confirmReset() async {
+    state = state.copyWith(
+      showResetConfirm: false,
+      status: LifeEventsStatus.resetting,
+    );
+    try {
+      await ref
+          .read(lifeEventsRepositoryProvider)
+          .resetPreferences(idAgente: _idAgente);
+      if (!ref.mounted) {
+        return;
+      }
+      state = const LifeEventsState(status: LifeEventsStatus.resetSuccess);
+      await _load();
+    } on Object catch (e) {
+      if (!ref.mounted) {
+        return;
+      }
+      state = state.copyWith(
+        status: LifeEventsStatus.resetError,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
+  /// Retries a failed load operation.
+  Future<void> retry() => _load();
+}
+
+// ── Provider ──────────────────────────────────────────────────────────────────
+
+/// Family provider keyed by `idAgente`.
+///
+/// Usage: `ref.watch(lifeEventsProvider(idAgente))`.
+final lifeEventsProvider = NotifierProvider.family<
+    LifeEventsNotifier,
+    LifeEventsState,
+    String>(LifeEventsNotifier.new);
