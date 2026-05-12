@@ -25,4 +25,9 @@ abstract final class StorageKeys {
 
   /// The locale code last selected by the user (e.g. `'es'`).
   static const String selectedLocale = 'selected_locale';
+
+  /// Prefix for per-user life-events onboarding-seen flag.
+  /// Full key = lifeEventsOnboardingSeenPrefix + idAgente
+  static const String lifeEventsOnboardingSeenPrefix =
+      'life_events_onboarding_seen_';
 }

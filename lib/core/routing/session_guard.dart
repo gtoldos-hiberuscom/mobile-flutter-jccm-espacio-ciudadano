@@ -5,7 +5,10 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/di/auth_repository_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/di/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/di/token_response_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
 /// Route guard that enforces session validity before any authenticated route
 /// is entered.
@@ -67,12 +70,38 @@ final class SessionGuard {
 
     final bool isExpired = expiresAt == null || expiresAt.isBefore(DateTime.now());
     if (!isExpired) {
-      return null;
+      return _onboardingRedirect(path);
     }
 
     // ── Step 3: attempt silent refresh ───────────────────────────────────────
 
-    return _tryRefresh(storage);
+    final String? refreshResult = await _tryRefresh(storage);
+    if (refreshResult != null) {
+      return refreshResult;
+    }
+    return _onboardingRedirect(path);
+  }
+
+  /// Redirects to the life-events onboarding screen on first login.
+  ///
+  /// Returns [Routes.lifeEvents] if the citizen has not yet seen the screen,
+  /// or `null` to allow navigation to proceed normally.
+  Future<String?> _onboardingRedirect(final String path) async {
+    if (path == Routes.lifeEvents) {
+      return null;
+    }
+    final String idAgente =
+        _ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    if (idAgente.isEmpty) {
+      return null;
+    }
+    final result = await _ref
+        .read(checkLifeEventsOnboardingUsecaseProvider)
+        .execute(idAgente: idAgente);
+    if (result is CheckLifeEventsOnboardingSuccess && !result.hasSeen) {
+      return Routes.lifeEvents;
+    }
+    return null;
   }
 
   /// Attempts a silent token refresh.

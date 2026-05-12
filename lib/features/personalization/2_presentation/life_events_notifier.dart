@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_repository_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
@@ -102,10 +103,21 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
   LifeEventsState build() {
     // Kick off the load after the current frame so `build` returns synchronously.
     unawaited(Future.microtask(_load));
+    // Mark onboarding seen as a silent best-effort side-effect.
+    unawaited(Future.microtask(_markOnboardingSeen));
     return const LifeEventsState(status: LifeEventsStatus.loading);
   }
 
   // ── Private ────────────────────────────────────────────────────────────────
+
+  Future<void> _markOnboardingSeen() async {
+    if (_idAgente.isEmpty) {
+      return;
+    }
+    await ref
+        .read(markLifeEventsOnboardingSeenUsecaseProvider)
+        .execute(idAgente: _idAgente);
+  }
 
   Future<void> _load() async {
     state = const LifeEventsState(status: LifeEventsStatus.loading);
