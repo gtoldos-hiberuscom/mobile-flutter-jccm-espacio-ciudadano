@@ -151,6 +151,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consentPageSemantics => 'Pantalla de aceptación de condiciones de uso';
 
   @override
+  String get consentStep1FullTitle => 'Condiciones de uso y autorizaciones';
+
+  @override
+  String get consentMarkAllButton => 'Marcar todo';
+
+  @override
+  String get consentFinalAcceptButton => 'Aceptar';
+
+  @override
+  String get consentSaveError => 'No se ha podido guardar el consentimiento. Por favor, inténtalo de nuevo.';
+
+  @override
+  String get consentScrollHint => 'Desliza hasta el final para continuar';
+
+  @override
+  String get consentInfoButtonSemantics => 'Ver información legal completa';
+
+  @override
+  String get consentCloseButtonSemantics => 'Cerrar y rechazar condiciones';
+
+  @override
   String get loadingStateDefault => 'Cargando…';
 
   @override

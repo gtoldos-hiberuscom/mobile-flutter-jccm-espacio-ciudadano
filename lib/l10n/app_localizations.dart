@@ -374,6 +374,48 @@ abstract class AppLocalizations {
   /// **'Pantalla de aceptación de condiciones de uso'**
   String get consentPageSemantics;
 
+  /// Título completo del paso 1 del flujo de consentimiento legal (JCCMEC-11).
+  ///
+  /// In es, this message translates to:
+  /// **'Condiciones de uso y autorizaciones'**
+  String get consentStep1FullTitle;
+
+  /// Botón para marcar todas las cláusulas de autorización a la vez (paso 2).
+  ///
+  /// In es, this message translates to:
+  /// **'Marcar todo'**
+  String get consentMarkAllButton;
+
+  /// Botón de confirmación final del consentimiento en el paso 2.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptar'**
+  String get consentFinalAcceptButton;
+
+  /// Mensaje de error cuando el guardado del consentimiento falla.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido guardar el consentimiento. Por favor, inténtalo de nuevo.'**
+  String get consentSaveError;
+
+  /// Indicación para el usuario de que debe desplazarse hasta el final del contenido.
+  ///
+  /// In es, this message translates to:
+  /// **'Desliza hasta el final para continuar'**
+  String get consentScrollHint;
+
+  /// Etiqueta de accesibilidad del botón de información legal en el paso 2.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver información legal completa'**
+  String get consentInfoButtonSemantics;
+
+  /// Etiqueta de accesibilidad del botón de cierre del paso 2 (equivalente a rechazar).
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar y rechazar condiciones'**
+  String get consentCloseButtonSemantics;
+
   /// Texto de accesibilidad predeterminado para los indicadores de carga.
   ///
   /// In es, this message translates to:

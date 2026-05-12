@@ -7,6 +7,8 @@ import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
@@ -70,7 +72,7 @@ final class SessionGuard {
 
     final bool isExpired = expiresAt == null || expiresAt.isBefore(DateTime.now());
     if (!isExpired) {
-      return _onboardingRedirect(path);
+      return _consentRedirect(path);
     }
 
     // ── Step 3: attempt silent refresh ───────────────────────────────────────
@@ -78,6 +80,32 @@ final class SessionGuard {
     final String? refreshResult = await _tryRefresh(storage);
     if (refreshResult != null) {
       return refreshResult;
+    }
+    return _consentRedirect(path);
+  }
+
+  /// Enforces the mandatory legal-consent gate (JCCMEC-11).
+  ///
+  /// Returns [Routes.consent] when the citizen has not yet accepted the
+  /// current consent version. Returns `null` (or delegates to
+  /// [_onboardingRedirect]) when consent is already on record.
+  Future<String?> _consentRedirect(final String path) async {
+    // Allow the consent page itself — prevents infinite redirect loop.
+    if (path == Routes.consent) {
+      return null;
+    }
+
+    final String idAgente = _ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    if (idAgente.isEmpty) {
+      return _onboardingRedirect(path);
+    }
+
+    final result = await _ref
+        .read(checkConsentRequiredUsecaseProvider)
+        .execute(idAgente: idAgente);
+
+    if (result is ConsentRequired) {
+      return Routes.consent;
     }
     return _onboardingRedirect(path);
   }

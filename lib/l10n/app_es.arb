@@ -188,6 +188,34 @@
   "@consentPageSemantics": {
     "description": "Etiqueta de accesibilidad para la pantalla de consentimiento."
   },
+  "consentStep1FullTitle": "Condiciones de uso y autorizaciones",
+  "@consentStep1FullTitle": {
+    "description": "Título completo del paso 1 del flujo de consentimiento legal (JCCMEC-11)."
+  },
+  "consentMarkAllButton": "Marcar todo",
+  "@consentMarkAllButton": {
+    "description": "Botón para marcar todas las cláusulas de autorización a la vez (paso 2)."
+  },
+  "consentFinalAcceptButton": "Aceptar",
+  "@consentFinalAcceptButton": {
+    "description": "Botón de confirmación final del consentimiento en el paso 2."
+  },
+  "consentSaveError": "No se ha podido guardar el consentimiento. Por favor, inténtalo de nuevo.",
+  "@consentSaveError": {
+    "description": "Mensaje de error cuando el guardado del consentimiento falla."
+  },
+  "consentScrollHint": "Desliza hasta el final para continuar",
+  "@consentScrollHint": {
+    "description": "Indicación para el usuario de que debe desplazarse hasta el final del contenido."
+  },
+  "consentInfoButtonSemantics": "Ver información legal completa",
+  "@consentInfoButtonSemantics": {
+    "description": "Etiqueta de accesibilidad del botón de información legal en el paso 2."
+  },
+  "consentCloseButtonSemantics": "Cerrar y rechazar condiciones",
+  "@consentCloseButtonSemantics": {
+    "description": "Etiqueta de accesibilidad del botón de cierre del paso 2 (equivalente a rechazar)."
+  },
   "loadingStateDefault": "Cargando…",
   "@loadingStateDefault": {
     "description": "Texto de accesibilidad predeterminado para los indicadores de carga."

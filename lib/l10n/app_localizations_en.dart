@@ -150,6 +150,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentPageSemantics => 'Terms of use acceptance screen';
 
   @override
+  String get consentStep1FullTitle => 'Terms of use and authorisations';
+
+  @override
+  String get consentMarkAllButton => 'Mark all';
+
+  @override
+  String get consentFinalAcceptButton => 'Accept';
+
+  @override
+  String get consentSaveError => 'Could not save your consent. Please try again.';
+
+  @override
+  String get consentScrollHint => 'Scroll to the end to continue';
+
+  @override
+  String get consentInfoButtonSemantics => 'View full legal information';
+
+  @override
+  String get consentCloseButtonSemantics => 'Close and reject conditions';
+
+  @override
   String get loadingStateDefault => 'Loading…';
 
   @override

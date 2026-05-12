@@ -25,9 +25,14 @@ abstract final class Routes {
   static const String afirmaReturn = '/sign/afirma/return';
 
   // ── Authenticated ───────────────────────────────────────────────────────
+
+  /// Mandatory legal-consent gate shown after first login.
+  static const String consent = '/consent';
+
   static const String lifeEvents = '/preferences/life-events';
 
   static const Set<String> _authenticated = {
+    consent,
     lifeEvents,
   };
 

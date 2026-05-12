@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/pages/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
@@ -43,6 +44,13 @@ final goRouterProvider = Provider<GoRouter>(
               builder: (final BuildContext context, final GoRouterState state) => const LandingAboutPage(),
             ),
           ],
+        ),
+
+        // ── Consent gate (JCCMEC-11) ─────────────────────────────────────────
+        GoRoute(
+          path: Routes.consent,
+          builder: (final BuildContext context, final GoRouterState state) =>
+              const ConsentPage(),
         ),
 
         // ── Login (JCCMEC-10) ─────────────────────────────────────────────

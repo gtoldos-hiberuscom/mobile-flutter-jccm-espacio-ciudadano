@@ -188,6 +188,34 @@
   "@consentPageSemantics": {
     "description": "Accessibility label for the consent screen."
   },
+  "consentStep1FullTitle": "Terms of use and authorisations",
+  "@consentStep1FullTitle": {
+    "description": "Full title of consent flow step 1 (JCCMEC-11)."
+  },
+  "consentMarkAllButton": "Mark all",
+  "@consentMarkAllButton": {
+    "description": "Button to mark all authorisation clauses at once (step 2)."
+  },
+  "consentFinalAcceptButton": "Accept",
+  "@consentFinalAcceptButton": {
+    "description": "Final consent confirmation button in step 2."
+  },
+  "consentSaveError": "Could not save your consent. Please try again.",
+  "@consentSaveError": {
+    "description": "Error message when saving consent fails."
+  },
+  "consentScrollHint": "Scroll to the end to continue",
+  "@consentScrollHint": {
+    "description": "Hint prompting the user to scroll to the end of the legal content."
+  },
+  "consentInfoButtonSemantics": "View full legal information",
+  "@consentInfoButtonSemantics": {
+    "description": "Accessibility label for the legal info button in step 2."
+  },
+  "consentCloseButtonSemantics": "Close and reject conditions",
+  "@consentCloseButtonSemantics": {
+    "description": "Accessibility label for the close button in step 2 (equivalent to reject)."
+  },
   "loadingStateDefault": "Loading…",
   "@loadingStateDefault": {
     "description": "Default accessibility text for loading indicators."
