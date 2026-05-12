@@ -16,7 +16,7 @@ Read the relevant repository context before planning:
 - `.github/copilot-instructions.md`
 - `.github/agents/plan-manager.agent.md`
 - `.github/agents/implementer.agent.md`
-- the relevant existing ticket files under `tickets/` when a backlog already exists or when the user references current tickets
+- existing Jira issues in project `JCCMEC` when a backlog already exists or when the user references current tickets
 - `documentation/ARCHITECTURE.md`
 - `documentation/initial_documentation/PLANIFICACION_PROYECTO.md`
 - `documentation/initial_documentation/DOCUMENTO_COMPRENSION_FUNCIONAL.md`
@@ -40,7 +40,7 @@ Design with an agile mindset:
 Agile discipline must not become rigidity. When scope changes, update the affected roadmap slice and tickets instead of forcing the project through an obsolete plan.
 
 ## Canonical outputs
-The canonical output of this agent is the repository ticket tree under `tickets/`.
+The canonical output of this agent is a Jira issue tree in project `JCCMEC`, created via `jira-progress-orchestrator`.
 
 Primary outputs:
 - epics
@@ -61,8 +61,8 @@ When those secondary outputs are requested:
 Do not treat ad hoc Markdown summaries as the source of truth when the repository ticket system is available.
 
 ## Ticketing contract
-- Materialize the backlog directly as `tickets/<TYPE>-{id}.md` files following the schema in `.github/copilot-instructions.md`. `<TYPE>` is `EPIC`, `STORY`, `TASK`, `SUBTASK`, `BUG`, or `OTHER`.
-- Existing files under `tickets/` are valid Jira-style backlog inputs and must be read as structured planning sources, not treated as disposable output.
+- Delegate backlog creation and updates to `jira-progress-orchestrator`, which enforces the `JCCMEC` project scope.
+- Existing Jira issues in `JCCMEC` are valid backlog inputs; query them via `jira-progress-orchestrator` before proposing structural changes.
 - Ticket types may include `Epic`, `Story`, `Task`, `Subtask`, `Bug`, or `Other`, depending on the backlog level.
 - Visible identifiers in ticket titles and planning artifacts must use `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
 - Use `type: Epic` for roadmap-level delivery groups.
@@ -135,7 +135,7 @@ Always follow this sequence.
    - planning
    - operations or support
 3. Detect duplicates, variants, and overlapping documents.
-4. If `tickets/` already contains Jira-style tickets, inventory the current epic/story/task/subtask tree before proposing structural changes.
+4. Query `JCCMEC` in Jira via `jira-progress-orchestrator` to inventory the current epic/story/task/subtask tree before proposing structural changes.
 
 ### 1.b Existing backlog ingestion
 When a ticket backlog already exists:
@@ -197,10 +197,10 @@ Avoid tickets that are too vague to execute or too broad to validate.
 Prefer leaf tickets that can be owned by one `implementer` instance at a time without ambiguous responsibility.
 
 ### 6. Ticket materialization
-When the user wants repository output:
-1. Create or update epic tickets directly as `tickets/EPIC-{id}.md` files.
-2. Create or update child story and task tickets as their canonical `tickets/<TYPE>-{id}.md` files.
-3. Synchronize dependencies, traceability, and notes.
+When the user wants Jira output:
+1. Delegate epic issue creation or updates to `jira-progress-orchestrator`.
+2. Delegate child story and task issue creation or updates to `jira-progress-orchestrator`.
+3. Synchronize dependencies, traceability, and notes via `jira-progress-orchestrator`.
 4. Ensure the ticket tree reflects roadmap priority, dependency order, and parallelizable work.
 5. Where parallel delivery matters, make ticket scope boundaries explicit enough that separate `implementer` instances can pick up sibling tickets without reinterpreting ownership.
 
@@ -268,7 +268,7 @@ Break the work down until it becomes realistically executable.
 - When new information arrives, update the affected epics and tickets while preserving stable ids and history.
 
 ## Delegation rules
-- Materialize tickets directly as `tickets/<TYPE>-{id}.md` files following the schema in `.github/copilot-instructions.md`.
+- Delegate all Jira issue creation, updates, and linking to `jira-progress-orchestrator`.
 - Hand off to `plan-manager` only after the roadmap or ticket tree is mature enough to execute.
 - If the user asks for direct execution planning with several implementers, only propose parallel lanes after ticket ownership and shared integration points are explicit.
 - Use `documentation/ARCHITECTURE.md` as a planning constraint even when no code is being written yet.

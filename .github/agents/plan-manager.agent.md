@@ -28,7 +28,7 @@ Load only the sections needed for the current execution step, but never skip the
 The following rules are mandatory:
 
 1. Every executable implementation task must map to a specific ticket or to an explicit backlog node that can be traced back to a ticket decision.
-2. Ticket-backed work must use the repository ticket flow under `tickets/`, with Jira progress coordinated through `jira-progress-orchestrator`.
+2. Ticket-backed work is tracked in Jira project `JCCMEC`, with all progress coordinated through `jira-progress-orchestrator`.
 3. Every epic must have its own branch created from the base branch.
 4. Every ticket must have its own branch created from its parent epic branch.
 5. Every implementation task must have its own branch created from its parent ticket branch.
@@ -61,15 +61,8 @@ For ticket workflow, use the repository default ticket policy unless the user pr
 
 ## Ticketing contract
 - The canonical Jira-synchronization agent is `jira-progress-orchestrator`. Use it for comments, transitions, and any Jira metadata updates scoped to project `JCCMEC`.
-- Ticket files live under `tickets/` and must follow the schema defined in `.github/copilot-instructions.md`.
-- Resolve ticket context from `id`, `jira_key`, or `tickets/<TYPE>-{id}.md`, but always operate on the canonical file named from `type + id`.
-- `id` is the internal numeric identifier; `jira_key` is the external tracker key.
-- The visible ticket identifier used in titles, branches, and planning artifacts comes from `type + id`: `Epic->EPIC`, `Story->STORY`, `Task->TASK`, `Subtask->SUBTASK`, `Bug->BUG`, `Other->OTHER`.
-- Ticket H1 headings must be `# [<TYPE>-<id>] <Summary>`.
-- `epic_link` and `parent` store `jira_key` values.
-- `labels`, `fix_versions`, and `affected_versions` are YAML lists.
-- Relationship bullets such as blocked-by, blocks, and related-to belong in `## Technical Details` -> `Dependencies`, not in extra frontmatter keys.
-- Every epic, story, task, and subtask must exist as its own ticket file. It is forbidden to treat an epic/story/task file as a container for inline child-ticket execution lists.
+- Resolve ticket context from the Jira issue key `JCCMEC-{n}` or a user-provided summary. Always verify the key starts with `JCCMEC-`.
+- Never invent Jira keys, issue IDs, parent links, epic links, sprints, reporters, assignees, dates, or URLs.
 
 ## Delegation contract
 Use the repository agents and skills deliberately:
@@ -208,7 +201,7 @@ If multiple executable outcomes are still packed into one parent ticket, split t
 ### 3. Resolve or create ticket context
 Before implementation on a ticket-backed item:
 1. Locate the existing ticket file if it already exists.
-2. If the ticket does not exist but the task requires one, create the local `tickets/<TYPE>-{id}.md` file directly following the schema in `.github/copilot-instructions.md`.
+2. If the Jira issue does not exist but the task requires one, delegate its creation to `jira-progress-orchestrator`.
 3. Confirm the ticket acceptance criteria and technical notes are compatible with the plan item.
 4. Move the ticket to `In Progress` or append a progress comment when active work begins, if that change is justified.
 
@@ -275,7 +268,7 @@ After a validated task is complete:
 2. Merge the task branch with an explicit merge commit.
 3. Confirm the ticket branch is still clean.
 4. Confirm the task history is reviewable in isolation.
-5. Reconcile ticket notes, changelog, and status as needed by updating local `tickets/<TYPE>-{id}.md` directly and delegating Jira progress to `jira-progress-orchestrator`.
+5. Reconcile ticket status and progress by delegating to `jira-progress-orchestrator`.
 
 Do not implement the next task directly on the ticket branch.
 

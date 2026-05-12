@@ -1,22 +1,6 @@
 {
   "version": 1,
   "hooks": {
-    "sessionStart": [
-      {
-        "type": "command",
-        "bash": "python3 .github/hooks/scripts/session_start.py",
-        "cwd": ".",
-        "timeoutSec": 10
-      }
-    ],
-    "userPromptSubmitted": [
-      {
-        "type": "command",
-        "bash": "python3 .github/hooks/scripts/log_prompt.py",
-        "cwd": ".",
-        "timeoutSec": 10
-      }
-    ],
     "preToolUse": [
       {
         "type": "command",
@@ -25,22 +9,6 @@
         "timeoutSec": 10
       }
     ],
-    "postToolUse": [],
-    "sessionEnd": [
-      {
-        "type": "command",
-        "bash": "python3 .github/hooks/scripts/session_end.py",
-        "cwd": ".",
-        "timeoutSec": 10
-      }
-    ],
-    "errorOccurred": [
-      {
-        "type": "command",
-        "bash": "python3 .github/hooks/scripts/log_error.py",
-        "cwd": ".",
-        "timeoutSec": 10
-      }
-    ]
+    "postToolUse": []
   }
 }

@@ -33,20 +33,17 @@ If any requested operation targets another Jira site, project key, project name,
 Read the relevant local context before preparing Jira writes:
 
 - `.github/copilot-instructions.md`
-- the referenced `tickets/<TYPE>-{id}.md` files when syncing repository tickets
+- the user-provided backlog text or Jira issue keys when syncing existing issues
 - `config/jira.env` only for non-secret project scope values, if needed
 
 Do not print secrets, tokens, cookies, or account credentials from local files or MCP responses.
 
-## Repository Ticket Contract
-Repository-local ticket files remain the local source of truth for planning and traceability.
+## Jira as Source of Truth
 
-- Local tickets live under `tickets/`.
-- Local filenames are based on `type + id`, for example `STORY-12.md`.
-- `jira_key` stores the external Jira key and must never replace the local typed id in filenames, headings, branches, or planning text.
-- `epic_link` and `parent` store Jira keys when real Jira relationships exist.
+Jira is the sole source of truth for all ticket state, history, and relationships.
+
 - Never invent Jira keys, issue IDs, parent links, epic links, sprints, reporters, assignees, dates, or URLs.
-- If a successful Jira create operation returns a new key, update the corresponding local ticket only when the user asked for repository synchronization as part of the operation.
+- All ticket context is resolved from the Jira project `JCCMEC` via MCP queries, not from local files.
 
 ## Atlassian MCP Rules
 Use the Atlassian MCP tools exposed in the current environment. Tool names may differ by client, so inspect available MCP capabilities when needed and use the most specific Jira operation available.

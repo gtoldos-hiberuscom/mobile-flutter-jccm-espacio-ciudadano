@@ -5,7 +5,7 @@ import json
 import re
 import shlex
 
-from common import append_audit, parse_tool_args, read_stdin_json, read_ticket_frontmatter, ticket_type_to_visible_prefix
+from architecture_common import append_audit, parse_tool_args, read_stdin_json
 
 SLUG_RE = r"[a-z0-9]+(?:-[a-z0-9]+)*"
 EPIC_SEGMENT_RE = re.compile(rf"^(EPIC)-(\d+)-({SLUG_RE})$")
@@ -58,43 +58,15 @@ def extract_git_branch_target(args: list[str]) -> str | None:
 
 
 def validate_ticket_type_token(segment: str) -> str | None:
-    match = TYPED_SEGMENT_RE.fullmatch(segment)
-    if match is None:
+    if TYPED_SEGMENT_RE.fullmatch(segment) is None:
         return f"Managed branch segment '{segment}' must match <TYPE-id>-<slug> using uppercase TYPE and lowercase slug"
-
-    prefix, ticket_id, _ = match.groups()
-    ticket = read_ticket_frontmatter(ticket_id)
-    if ticket is None:
-        return None
-
-    expected_prefix = ticket_type_to_visible_prefix(ticket.get("type", ""))
-    if expected_prefix is None:
-        return None
-    if prefix != expected_prefix:
-        return (
-            f"Managed branch segment '{segment}' does not match canonical ticket type for id {ticket_id} "
-            f"type '{ticket.get('type', '')}' (expected prefix {expected_prefix})"
-        )
     return None
 
 
 def validate_epic_segment(segment: str) -> str | None:
-    match = EPIC_SEGMENT_RE.fullmatch(segment)
-    if match is None:
+    if EPIC_SEGMENT_RE.fullmatch(segment) is None:
         return "Epic branches must match epic/EPIC-<id>-<epic-slug> with an uppercase EPIC token and lowercase slug"
-
-    _, ticket_id, _ = match.groups()
-    ticket = read_ticket_frontmatter(ticket_id)
-    if ticket is None:
-        return None
-
-    expected_prefix = ticket_type_to_visible_prefix(ticket.get("type", ""))
-    if expected_prefix == "EPIC":
-        return None
-    return (
-        f"Epic branch segment '{segment}' does not match canonical epic ticket type for id {ticket_id} "
-        f"type '{ticket.get('type', '')}' (expected prefix EPIC)"
-    )
+    return None
 
 
 def validate_managed_branch_name(branch_name: str) -> str | None:
@@ -148,14 +120,7 @@ def main() -> int:
     for branch_name in extract_created_branch_names(command):
         error = validate_managed_branch_name(branch_name)
         if error is not None:
-            append_audit(
-                {
-                    "event": "policyDeny",
-                    "toolName": tool_name,
-                    "branchName": branch_name,
-                    "reason": error,
-                }
-            )
+            append_audit({"event": "policyDeny", "toolName": tool_name, "branchName": branch_name, "reason": error})
             return deny(error)
 
     return 0

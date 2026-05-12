@@ -31,15 +31,13 @@ Implement changes that conform to `documentation/ARCHITECTURE.md` and produce a 
 
 ## Jira project scope guard
 
-Before delegating any Jira operation, verify the ticket's `project` field in its `tickets/<TYPE>-{id}.md` frontmatter equals exactly `JCCMEC`.
-
-If the project does not match, stop immediately and report the mismatch. Do not proceed with Jira delegation.
+Before delegating any Jira operation, verify the issue key starts with `JCCMEC-`. If it does not, stop immediately and report the mismatch. Do not proceed with Jira delegation.
 
 ## Default workflow
 
 1. Read the matching sections of `documentation/ARCHITECTURE.md` for the affected architectural area before opening any file.
-2. If the task references a ticket or Jira key, read the corresponding `tickets/<TYPE>-{id}.md` and align the implementation with its `project` field, acceptance criteria, technical details, and traceability notes.
-3. **Confirm `project: JCCMEC`** in the ticket frontmatter before any Jira-related delegation.
+2. If the task references a Jira key (`JCCMEC-*`), look it up via `jira-progress-orchestrator` and align the implementation with its acceptance criteria, technical details, and scope.
+3. **Confirm the issue key starts with `JCCMEC-`** before any Jira-related delegation.
 4. Confirm the scope owned by the current ticket. Do not silently expand into sibling-ticket work.
 5. Implement code respecting all layer boundaries, naming rules, and patterns from `documentation/ARCHITECTURE.md`.
 6. **Commit after each meaningful checkpoint** — do not accumulate all changes into a single final commit. Commit messages must include the visible ticket id (e.g., `[TASK-71]`) so the git tree is human-reviewable ticket by ticket.
@@ -59,7 +57,7 @@ If the project does not match, stop immediately and report the mismatch. Do not 
 
 - Always delegate Jira writes to `jira-progress-orchestrator`. Do not call Atlassian MCP tools directly from this agent.
 - When delegating, provide: `jira_key`, ticket summary, the change performed, and the requested Jira operation (comment / transition / update).
-- Confirm `project: JCCMEC` before every delegation.
+- Confirm the issue key starts with `JCCMEC-` before every delegation.
 - Do not invent Jira keys, issue IDs, parent links, sprint assignments, or user assignments.
 - If no ticket context exists, state that Jira synchronization was not applicable instead of fabricating it.
 
@@ -80,7 +78,7 @@ Before finishing, confirm:
 - The relevant `documentation/ARCHITECTURE.md` sections were consulted.
 - There are no forbidden cross-layer imports, DTO leaks, generated-model leaks, or global anti-pattern folders.
 - Tests or verification steps were run, or explain why they were not.
-- The ticket `project` field was verified as `JCCMEC`, or Jira delegation was not applicable.
+- The ticket `JCCMEC-*` key was verified, or Jira delegation was not applicable.
 - Jira synchronization was delegated to `jira-progress-orchestrator`, or explicitly marked not applicable.
 - At least one reviewable commit references the ticket id, or document the blocker that prevented it.
 - Any deviation from `documentation/ARCHITECTURE.md` is documented as an ADR or explicit user override.
