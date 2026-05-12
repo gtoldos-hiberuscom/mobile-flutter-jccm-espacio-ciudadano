@@ -56,6 +56,8 @@ final class SharedPreferencesAppStorage implements AppStorage {
 /// Kept alive for the lifetime of the app.
 /// The underlying SharedPreferences instance must be obtained
 /// asynchronously; this provider must be overridden at bootstrap.
-final appStorageProvider = Provider<AppStorage>((ref) => throw UnimplementedError(
-  'appStorage must be overridden in ProviderScope at bootstrap.',
-));
+final appStorageProvider = Provider<AppStorage>(
+  (final ref) => throw UnimplementedError(
+    'appStorage must be overridden in ProviderScope at bootstrap.',
+  ),
+);

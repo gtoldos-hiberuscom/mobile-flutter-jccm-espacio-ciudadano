@@ -21,24 +21,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingCtaButton => 'Acceder a tu espacio';
 
   @override
-  String get landingWhatYouFindTitle => 'Qué encontrarás';
-
-  @override
-  String get landingHowToAccessTitle => 'Cómo acceder';
-
-  @override
-  String get landingFooterHelp => 'Ayuda';
-
-  @override
-  String get landingFooterAccessibility => 'Accesibilidad';
-
-  @override
-  String get landingFooterLegal => 'Aviso legal';
-
-  @override
-  String get landingFooterPrivacy => 'Protección de datos';
-
-  @override
   String get landingAboutButton => 'Saber más sobre Espacio Ciudadano';
 
   @override
@@ -51,12 +33,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingHelpTitle => 'Cómo acceder';
 
   @override
-  String get landingHelpBody1 =>
-      'Para acceder a Espacio Ciudadano tendrás que usar Cl@ve, un sistema de identificación que permite los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.';
+  String get landingHelpBody1 => 'Para acceder a Espacio Ciudadano tendrás que usar Cl@ve, un sistema de identificación que permite los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.';
 
   @override
-  String get landingHelpBody2 =>
-      'Este sistema de identificación es ampliamente usado por las Administraciones públicas españolas y te permite utilizar cualquiera de los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.';
+  String get landingHelpBody2 => 'Este sistema de identificación es ampliamente usado por las Administraciones públicas españolas y te permite utilizar cualquiera de los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.';
 
   @override
   String get landingHelpAccessButton => 'Acceder ahora';
@@ -71,15 +51,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingAboutTitle => 'Espacio ciudadano';
 
   @override
-  String get landingAboutBodyPrefix =>
-      'es el área digital donde aparecerá información relevante con el objetivo de';
+  String get landingAboutBodyPrefix => 'es el área digital donde aparecerá información relevante con el objetivo de';
 
   @override
   String get landingAboutBodyBold => 'facilitar y mejorar tu relación con la Administración regional';
 
   @override
-  String get landingAboutBodySuffix =>
-      'en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.';
+  String get landingAboutBodySuffix => 'en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.';
 
   @override
   String get landingAboutWhatYouFindTitle => '¿Qué encontrarás?';
@@ -106,14 +84,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingAboutBullet6 => 'Tu información de la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get landingAboutBullet7 =>
-      'Además, podrás recibir recomendaciones proactivas de servicios de tu interés.';
+  String get landingAboutBullet7 => 'Además, podrás recibir recomendaciones proactivas de servicios de tu interés.';
 
   @override
   String get landingAboutAccessButton => 'Acceder ahora';
 
   @override
   String get landingAboutExternalLink => 'Enlace externo';
+
+  @override
+  String get landingWhatYouFindTitle => 'Qué encontrarás';
+
+  @override
+  String get landingHowToAccessTitle => 'Cómo acceder';
+
+  @override
+  String get landingFooterHelp => 'Ayuda';
+
+  @override
+  String get landingFooterAccessibility => 'Accesibilidad';
+
+  @override
+  String get landingFooterLegal => 'Aviso legal';
+
+  @override
+  String get landingFooterPrivacy => 'Protección de datos';
 
   @override
   String get loginPageTitle => 'Accediendo con Cl@ve';

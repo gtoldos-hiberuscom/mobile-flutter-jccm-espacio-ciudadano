@@ -116,42 +116,6 @@ abstract class AppLocalizations {
   /// **'Acceder a tu espacio'**
   String get landingCtaButton;
 
-  /// Encabezado de la sección que muestra las categorías de servicios disponibles.
-  ///
-  /// In es, this message translates to:
-  /// **'Qué encontrarás'**
-  String get landingWhatYouFindTitle;
-
-  /// Encabezado de la sección de pasos para autenticarse.
-  ///
-  /// In es, this message translates to:
-  /// **'Cómo acceder'**
-  String get landingHowToAccessTitle;
-
-  /// Enlace de pie de página a la sección de ayuda.
-  ///
-  /// In es, this message translates to:
-  /// **'Ayuda'**
-  String get landingFooterHelp;
-
-  /// Enlace de pie de página a la declaración de accesibilidad.
-  ///
-  /// In es, this message translates to:
-  /// **'Accesibilidad'**
-  String get landingFooterAccessibility;
-
-  /// Enlace de pie de página al aviso legal.
-  ///
-  /// In es, this message translates to:
-  /// **'Aviso legal'**
-  String get landingFooterLegal;
-
-  /// Enlace de pie de página a la política de protección de datos.
-  ///
-  /// In es, this message translates to:
-  /// **'Protección de datos'**
-  String get landingFooterPrivacy;
-
   /// Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano.
   ///
   /// In es, this message translates to:
@@ -179,13 +143,13 @@ abstract class AppLocalizations {
   /// Primer párrafo explicativo de la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
-  /// **'Para acceder a Espacio Ciudadano tendrás que usar Cl@ve...'**
+  /// **'Para acceder a Espacio Ciudadano tendrás que usar Cl@ve, un sistema de identificación que permite los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.'**
   String get landingHelpBody1;
 
   /// Segundo párrafo explicativo de la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
-  /// **'Este sistema de identificación es ampliamente usado...'**
+  /// **'Este sistema de identificación es ampliamente usado por las Administraciones públicas españolas y te permite utilizar cualquiera de los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.'**
   String get landingHelpBody2;
 
   /// Botón de acción principal de la pantalla de ayuda que inicia el flujo de autenticación.
@@ -295,6 +259,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Enlace externo'**
   String get landingAboutExternalLink;
+
+  /// Encabezado de la sección que muestra las categorías de servicios disponibles.
+  ///
+  /// In es, this message translates to:
+  /// **'Qué encontrarás'**
+  String get landingWhatYouFindTitle;
+
+  /// Encabezado de la sección de pasos para autenticarse.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo acceder'**
+  String get landingHowToAccessTitle;
+
+  /// Enlace de pie de página a la sección de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda'**
+  String get landingFooterHelp;
+
+  /// Enlace de pie de página a la declaración de accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get landingFooterAccessibility;
+
+  /// Enlace de pie de página al aviso legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get landingFooterLegal;
+
+  /// Enlace de pie de página a la política de protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Protección de datos'**
+  String get landingFooterPrivacy;
 
   /// Título de la pantalla de login que indica que se está accediendo con Cl@ve.
   ///

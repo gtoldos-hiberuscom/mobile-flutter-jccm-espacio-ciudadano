@@ -15,29 +15,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingTitle => 'Citizen Space';
 
   @override
-  String get landingTagline =>
-      'Agile and online management of procedures for the citizens of Castilla-La Mancha';
+  String get landingTagline => 'Agile and online management of procedures for the citizens of Castilla-La Mancha';
 
   @override
   String get landingCtaButton => 'Access your space';
-
-  @override
-  String get landingWhatYouFindTitle => 'What you\'ll find';
-
-  @override
-  String get landingHowToAccessTitle => 'How to access';
-
-  @override
-  String get landingFooterHelp => 'Help';
-
-  @override
-  String get landingFooterAccessibility => 'Accessibility';
-
-  @override
-  String get landingFooterLegal => 'Legal notice';
-
-  @override
-  String get landingFooterPrivacy => 'Data protection';
 
   @override
   String get landingAboutButton => 'Learn more about Citizen Space';
@@ -52,12 +33,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingHelpTitle => 'How to access';
 
   @override
-  String get landingHelpBody1 =>
-      'To access Citizen Space you will need to use Cl@ve, an identification system that allows the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
+  String get landingHelpBody1 => 'To access Citizen Space you will need to use Cl@ve, an identification system that allows the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
 
   @override
-  String get landingHelpBody2 =>
-      'This identification system is widely used by Spanish public administrations and allows you to use any of the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
+  String get landingHelpBody2 => 'This identification system is widely used by Spanish public administrations and allows you to use any of the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
 
   @override
   String get landingHelpAccessButton => 'Access now';
@@ -72,16 +51,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingAboutTitle => 'Citizen space';
 
   @override
-  String get landingAboutBodyPrefix =>
-      'is the digital area where relevant information will appear with the aim of';
+  String get landingAboutBodyPrefix => 'is the digital area where relevant information will appear with the aim of';
 
   @override
-  String get landingAboutBodyBold =>
-      'facilitating and improving your relationship with the regional Administration';
+  String get landingAboutBodyBold => 'facilitating and improving your relationship with the regional Administration';
 
   @override
-  String get landingAboutBodySuffix =>
-      'in the procedures and processes in which you are involved or that may be of interest to you.';
+  String get landingAboutBodySuffix => 'in the procedures and processes in which you are involved or that may be of interest to you.';
 
   @override
   String get landingAboutWhatYouFindTitle => 'What will you find?';
@@ -108,14 +84,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingAboutBullet6 => 'Your information from the Regional Government of Castilla-La Mancha.';
 
   @override
-  String get landingAboutBullet7 =>
-      'Additionally, you can receive proactive service recommendations of interest to you.';
+  String get landingAboutBullet7 => 'Additionally, you can receive proactive service recommendations of interest to you.';
 
   @override
   String get landingAboutAccessButton => 'Access now';
 
   @override
   String get landingAboutExternalLink => 'External link';
+
+  @override
+  String get landingWhatYouFindTitle => 'What you\'ll find';
+
+  @override
+  String get landingHowToAccessTitle => 'How to access';
+
+  @override
+  String get landingFooterHelp => 'Help';
+
+  @override
+  String get landingFooterAccessibility => 'Accessibility';
+
+  @override
+  String get landingFooterLegal => 'Legal notice';
+
+  @override
+  String get landingFooterPrivacy => 'Data protection';
 
   @override
   String get loginPageTitle => 'Signing in with Cl@ve';
