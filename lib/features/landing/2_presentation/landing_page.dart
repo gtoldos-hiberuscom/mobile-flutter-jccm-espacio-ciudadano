@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,11 +19,41 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 ///
 /// All auth orchestration is delegated to [LandingNotifier].
 /// Route navigation uses GoRouter's [context.push] extension.
-class LandingPage extends ConsumerWidget {
+class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  ConsumerState<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends ConsumerState<LandingPage> {
+  bool _didTrySessionUnlock = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didTrySessionUnlock) {
+      return;
+    }
+    _didTrySessionUnlock = true;
+
+    final l10n = AppLocalizations.of(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      unawaited(
+        ref
+            .read(landingProvider.notifier)
+            .tryUnlockStoredSession(
+              localizedReason: l10n.sessionUnlockBiometricReason,
+            ),
+      );
+    });
+  }
+
+  @override
+  Widget build(final BuildContext context) {
     final landingState = ref.watch(landingProvider);
     final l10n = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;

@@ -160,6 +160,10 @@
   "@sessionExpired": {
     "description": "Message shown when the user's session has expired."
   },
+  "sessionUnlockBiometricReason": "Confirm your identity to access your space",
+  "@sessionUnlockBiometricReason": {
+    "description": "System prompt shown when requesting biometric authentication to restore a stored session."
+  },
   "consentPageTitle": "Terms of Use",
   "@consentPageTitle": {
     "description": "Main title of the terms of use acceptance screen."

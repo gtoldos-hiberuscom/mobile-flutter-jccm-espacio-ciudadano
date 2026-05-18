@@ -332,6 +332,12 @@ abstract class AppLocalizations {
   /// **'Tu sesión ha caducado'**
   String get sessionExpired;
 
+  /// Texto mostrado por el sistema al solicitar autenticación biométrica para reanudar una sesión guardada.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma tu identidad para acceder a tu espacio'**
+  String get sessionUnlockBiometricReason;
+
   /// Título principal de la pantalla de aceptación de condiciones de uso.
   ///
   /// In es, this message translates to:

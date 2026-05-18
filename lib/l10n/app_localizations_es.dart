@@ -129,6 +129,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sessionExpired => 'Tu sesión ha caducado';
 
   @override
+  String get sessionUnlockBiometricReason => 'Confirma tu identidad para acceder a tu espacio';
+
+  @override
   String get consentPageTitle => 'Condiciones de uso';
 
   @override
