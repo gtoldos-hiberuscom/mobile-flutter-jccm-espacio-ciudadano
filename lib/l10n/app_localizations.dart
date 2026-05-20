@@ -143,7 +143,7 @@ abstract class AppLocalizations {
   /// Título del AppBar de la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
-  /// **'Ayuda con el acceso'**
+  /// **'Cómo acceder'**
   String get landingHelpPageTitle;
 
   /// Título principal de la pantalla de ayuda con el acceso.
@@ -155,7 +155,7 @@ abstract class AppLocalizations {
   /// Primer párrafo explicativo de la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
-  /// **'Para acceder a Espacio Ciudadano tendrás que usar Cl@ve, un sistema de identificación que permite los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.'**
+  /// **'Para acceder a Espacio Ciudadano debes identificarte con Cl@ve, el sistema de acceso a los servicios públicos. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico (personal o de representante).'**
   String get landingHelpBody1;
 
   /// Segundo párrafo explicativo de la pantalla de ayuda con el acceso.
@@ -167,7 +167,7 @@ abstract class AppLocalizations {
   /// Botón de acción principal de la pantalla de ayuda que inicia el flujo de autenticación.
   ///
   /// In es, this message translates to:
-  /// **'Acceder ahora'**
+  /// **'Acceder a mi Espacio Ciudadano'**
   String get landingHelpAccessButton;
 
   /// Enlace de texto externo en la pantalla de ayuda.
@@ -215,55 +215,49 @@ abstract class AppLocalizations {
   /// Introducción a la lista de contenidos disponibles.
   ///
   /// In es, this message translates to:
-  /// **'Tendrás acceso a diversa información como:'**
+  /// **'Tus datos en relación con la Junta de Comunidades de Castilla-La Mancha:'**
   String get landingAboutWhatYouFindIntro;
 
   /// Primer elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Tu información personal y de contacto.'**
+  /// **'Tu información personal.'**
   String get landingAboutBullet1;
 
   /// Segundo elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Tu información de otras Administraciones Públicas.'**
+  /// **'Tus expedientes y su estado de tramitación.'**
   String get landingAboutBullet2;
 
   /// Tercer elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Tus expedientes en curso y su estado de tramitación.'**
+  /// **'Tus notificaciones.'**
   String get landingAboutBullet3;
 
   /// Cuarto elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Tus notificaciones pendientes.'**
+  /// **'Tus carnets digitales.'**
   String get landingAboutBullet4;
 
   /// Quinto elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Tus carnets digitales.'**
+  /// **'Tus citas o eventos.'**
   String get landingAboutBullet5;
 
   /// Sexto elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Tu información de la Junta de Comunidades de Castilla-La Mancha.'**
+  /// **'Recomendaciones personalizadas basadas en tus intereses.'**
   String get landingAboutBullet6;
-
-  /// Séptimo elemento de la lista de contenidos.
-  ///
-  /// In es, this message translates to:
-  /// **'Además, podrás recibir recomendaciones proactivas de servicios de tu interés.'**
-  String get landingAboutBullet7;
 
   /// Botón de acción principal de la pantalla about que inicia el flujo de autenticación.
   ///
   /// In es, this message translates to:
-  /// **'Acceder ahora'**
+  /// **'Acceder a mi Espacio Ciudadano'**
   String get landingAboutAccessButton;
 
   /// Enlace de texto externo en la pantalla about.

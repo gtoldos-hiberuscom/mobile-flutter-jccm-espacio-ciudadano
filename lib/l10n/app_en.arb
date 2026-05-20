@@ -32,7 +32,7 @@
   "@landingHelpLink": {
     "description": "Text link that navigates to the access help screen."
   },
-  "landingHelpPageTitle": "Access help",
+  "landingHelpPageTitle": "How to access",
   "@landingHelpPageTitle": {
     "description": "AppBar title of the access help screen."
   },
@@ -40,7 +40,7 @@
   "@landingHelpTitle": {
     "description": "Main title of the access help screen."
   },
-  "landingHelpBody1": "To access Citizen Space you will need to use Cl@ve, an identification system that allows the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.",
+  "landingHelpBody1": "To access Citizen Space you must identify yourself with Cl@ve, the access system for public services. You can use Cl@ve Mobile, Cl@ve Permanent, electronic ID or an electronic certificate (personal or representative).",
   "@landingHelpBody1": {
     "description": "First explanatory paragraph of the access help screen."
   },
@@ -48,7 +48,7 @@
   "@landingHelpBody2": {
     "description": "Second explanatory paragraph of the access help screen."
   },
-  "landingHelpAccessButton": "Access now",
+  "landingHelpAccessButton": "Access my Citizen Space",
   "@landingHelpAccessButton": {
     "description": "Primary action button on the help screen that initiates authentication."
   },
@@ -112,7 +112,7 @@
   "@landingAboutBullet7": {
     "description": "Seventh bullet item in the content list."
   },
-  "landingAboutAccessButton": "Access now",
+  "landingAboutAccessButton": "Access my Citizen Space",
   "@landingAboutAccessButton": {
     "description": "Primary action button on the about screen that initiates authentication."
   },

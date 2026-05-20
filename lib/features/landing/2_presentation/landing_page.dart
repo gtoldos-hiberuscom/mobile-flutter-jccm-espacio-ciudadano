@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -86,6 +86,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           // ── Scrollable hero content ─────────────────────────────────────
           Expanded(
             child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
               child: SafeArea(
                 bottom: false,
                 child: Padding(
@@ -111,71 +112,71 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                         children: [
                           const SizedBox(height: AppDimensions.space16),
 
-                      // ── Castilla-La Mancha institutional logo ───────────
-                      Semantics(
-                        label: 'Logotipo de la Junta de Comunidades de Castilla-La Mancha',
-                        image: true,
-                        excludeSemantics: true,
-                        child: SvgPicture.asset(
-                          'assets/images/castilla_logo.svg',
-                          width: 116,
-                          height: 68,
-                        ),
-                      ),
-                      const SizedBox(height: AppDimensions.space24),
-
-                      // ── Espacio Ciudadano logo ──────────────────────────
-                      ExcludeSemantics(
-                        child: SvgPicture.asset(
-                          'assets/images/espacioCiudadano_logo.svg',
-                          width: 256,
-                          height: 64,
-                        ),
-                      ),
-                      const SizedBox(height: AppDimensions.space24),
-
-                      // ── Tagline ─────────────────────────────────────────
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: _TaglineText(),
-                      ),
-                      const SizedBox(height: AppDimensions.space24),
-
-                      // ── Hero composition (splash_logo bg + mask group) ──
-                      ExcludeSemantics(
-                        child: AspectRatio(
-                          aspectRatio: 353.15 / 301.45,
-                          child: LayoutBuilder(
-                            builder: (final context, final constraints) {
-                              final w = constraints.maxWidth;
-                              final h = constraints.maxHeight;
-                              return Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  // Background decorative shape (full size)
-                                  Positioned.fill(
-                                    child: Image.asset(
-                                      'assets/images/splash_logo.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                  // Foreground mask group (windmill + hands)
-                                  Positioned(
-                                    left: w * (75.0 / 353.15),
-                                    right: w * (-5.0 / 353.15),
-                                    bottom: h * (25.0 / 301.45),
-                                    child: Image.asset(
-                                      'assets/images/splash_image.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
+                          // ── Castilla-La Mancha institutional logo ───────────
+                          Semantics(
+                            label: 'Logotipo de la Junta de Comunidades de Castilla-La Mancha',
+                            image: true,
+                            excludeSemantics: true,
+                            child: SvgPicture.asset(
+                              'assets/images/castilla_logo.svg',
+                              width: 116,
+                              height: 68,
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: AppDimensions.space16),
+                          const SizedBox(height: AppDimensions.space24),
+
+                          // ── Espacio Ciudadano logo ──────────────────────────
+                          ExcludeSemantics(
+                            child: SvgPicture.asset(
+                              'assets/images/espacioCiudadano_logo.svg',
+                              width: 256,
+                              height: 64,
+                            ),
+                          ),
+                          const SizedBox(height: AppDimensions.space24),
+
+                          // ── Tagline ─────────────────────────────────────────
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: _TaglineText(),
+                          ),
+                          const SizedBox(height: AppDimensions.space24),
+
+                          // ── Hero composition (splash_logo bg + mask group) ──
+                          ExcludeSemantics(
+                            child: AspectRatio(
+                              aspectRatio: 353.15 / 301.45,
+                              child: LayoutBuilder(
+                                builder: (final context, final constraints) {
+                                  final w = constraints.maxWidth;
+                                  final h = constraints.maxHeight;
+                                  return Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      // Background decorative shape (full size)
+                                      Positioned.fill(
+                                        child: Image.asset(
+                                          'assets/images/splash_logo.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      // Foreground mask group (windmill + hands)
+                                      Positioned(
+                                        left: w * (75.0 / 353.15),
+                                        right: w * (-5.0 / 353.15),
+                                        bottom: h * (25.0 / 301.45),
+                                        child: Image.asset(
+                                          'assets/images/splash_image.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: AppDimensions.space16),
                         ],
                       ), // Column
                     ],

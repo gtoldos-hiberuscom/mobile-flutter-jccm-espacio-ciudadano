@@ -33,19 +33,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingHelpLink => 'How to access?';
 
   @override
-  String get landingHelpPageTitle => 'Access help';
+  String get landingHelpPageTitle => 'How to access';
 
   @override
   String get landingHelpTitle => 'How to access';
 
   @override
-  String get landingHelpBody1 => 'To access Citizen Space you will need to use Cl@ve, an identification system that allows the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
+  String get landingHelpBody1 => 'To access Citizen Space you must identify yourself with Cl@ve, the access system for public services. You can use Cl@ve Mobile, Cl@ve Permanent, electronic ID or an electronic certificate (personal or representative).';
 
   @override
   String get landingHelpBody2 => 'This identification system is widely used by Spanish public administrations and allows you to use any of the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
 
   @override
-  String get landingHelpAccessButton => 'Access now';
+  String get landingHelpAccessButton => 'Access my Citizen Space';
 
   @override
   String get landingHelpExternalLink => 'External link';
@@ -90,10 +90,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingAboutBullet6 => 'Your information from the Regional Government of Castilla-La Mancha.';
 
   @override
-  String get landingAboutBullet7 => 'Additionally, you can receive proactive service recommendations of interest to you.';
-
-  @override
-  String get landingAboutAccessButton => 'Access now';
+  String get landingAboutAccessButton => 'Access my Citizen Space';
 
   @override
   String get landingAboutExternalLink => 'External link';

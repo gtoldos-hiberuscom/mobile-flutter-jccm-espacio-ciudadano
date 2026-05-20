@@ -83,7 +83,7 @@ class _AppButtonState extends State<AppButton> {
   bool _wasLoading = false;
 
   @override
-  void didUpdateWidget(covariant AppButton oldWidget) {
+  void didUpdateWidget(covariant final AppButton oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Rule 3.10 — announce loading start and end (WCAG 4.1.3)
     if (!_wasLoading && widget.isLoading) {

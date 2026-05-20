@@ -32,7 +32,7 @@
   "@landingHelpLink": {
     "description": "Enlace de texto que navega a la pantalla de ayuda con el acceso."
   },
-  "landingHelpPageTitle": "Ayuda con el acceso",
+  "landingHelpPageTitle": "Cómo acceder",
   "@landingHelpPageTitle": {
     "description": "Título del AppBar de la pantalla de ayuda con el acceso."
   },
@@ -40,7 +40,7 @@
   "@landingHelpTitle": {
     "description": "Título principal de la pantalla de ayuda con el acceso."
   },
-  "landingHelpBody1": "Para acceder a Espacio Ciudadano tendrás que usar Cl@ve, un sistema de identificación que permite los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.",
+  "landingHelpBody1": "Para acceder a Espacio Ciudadano debes identificarte con Cl@ve, el sistema de acceso a los servicios públicos. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico (personal o de representante).",
   "@landingHelpBody1": {
     "description": "Primer párrafo explicativo de la pantalla de ayuda con el acceso."
   },
@@ -48,7 +48,7 @@
   "@landingHelpBody2": {
     "description": "Segundo párrafo explicativo de la pantalla de ayuda con el acceso."
   },
-  "landingHelpAccessButton": "Acceder ahora",
+  "landingHelpAccessButton": "Acceder a mi Espacio Ciudadano",
   "@landingHelpAccessButton": {
     "description": "Botón de acción principal de la pantalla de ayuda que inicia el flujo de autenticación."
   },
@@ -80,39 +80,35 @@
   "@landingAboutWhatYouFindTitle": {
     "description": "Encabezado de la sección de contenidos de la pantalla about."
   },
-  "landingAboutWhatYouFindIntro": "Tendrás acceso a diversa información como:",
+  "landingAboutWhatYouFindIntro": "Tus datos en relación con la Junta de Comunidades de Castilla-La Mancha:",
   "@landingAboutWhatYouFindIntro": {
     "description": "Introducción a la lista de contenidos disponibles."
   },
-  "landingAboutBullet1": "Tu información personal y de contacto.",
+  "landingAboutBullet1": "Tu información personal.",
   "@landingAboutBullet1": {
     "description": "Primer elemento de la lista de contenidos."
   },
-  "landingAboutBullet2": "Tu información de otras Administraciones Públicas.",
+  "landingAboutBullet2": "Tus expedientes y su estado de tramitación.",
   "@landingAboutBullet2": {
     "description": "Segundo elemento de la lista de contenidos."
   },
-  "landingAboutBullet3": "Tus expedientes en curso y su estado de tramitación.",
+  "landingAboutBullet3": "Tus notificaciones.",
   "@landingAboutBullet3": {
     "description": "Tercer elemento de la lista de contenidos."
   },
-  "landingAboutBullet4": "Tus notificaciones pendientes.",
+  "landingAboutBullet4": "Tus carnets digitales.",
   "@landingAboutBullet4": {
     "description": "Cuarto elemento de la lista de contenidos."
   },
-  "landingAboutBullet5": "Tus carnets digitales.",
+  "landingAboutBullet5": "Tus citas o eventos.",
   "@landingAboutBullet5": {
     "description": "Quinto elemento de la lista de contenidos."
   },
-  "landingAboutBullet6": "Tu información de la Junta de Comunidades de Castilla-La Mancha.",
+  "landingAboutBullet6": "Recomendaciones personalizadas basadas en tus intereses.",
   "@landingAboutBullet6": {
     "description": "Sexto elemento de la lista de contenidos."
   },
-  "landingAboutBullet7": "Además, podrás recibir recomendaciones proactivas de servicios de tu interés.",
-  "@landingAboutBullet7": {
-    "description": "Séptimo elemento de la lista de contenidos."
-  },
-  "landingAboutAccessButton": "Acceder ahora",
+  "landingAboutAccessButton": "Acceder a mi Espacio Ciudadano",
   "@landingAboutAccessButton": {
     "description": "Botón de acción principal de la pantalla about que inicia el flujo de autenticación."
   },

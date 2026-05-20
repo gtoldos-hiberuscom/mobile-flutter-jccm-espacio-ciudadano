@@ -34,10 +34,19 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   Color get _backgroundColor => switch (type) {
     AppNavBarType.grey => const Color(0xFFE0E5EB),
     AppNavBarType.detail => const Color(0xFFF1F8F9),
+    AppNavBarType.level2 => AppColors.statusNeutralLight,
     _ => AppColors.surface,
   };
 
-  Color get _foregroundColor => AppColors.textPrimary;
+  Color get _foregroundColor => switch (type) {
+    AppNavBarType.level2 => AppColors.primary,
+    _ => AppColors.textPrimary,
+  };
+
+  Color get _iconColor => switch (type) {
+    AppNavBarType.level2 => AppColors.primaryDark,
+    _ => AppColors.textPrimary,
+  };
 
   Widget? get _leadingWidget {
     if (leading != null) {
@@ -48,7 +57,8 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       AppNavBarType.level2 || AppNavBarType.detail => IconButton(
         icon: Icon(
           type == AppNavBarType.detail ? Icons.close_rounded : Icons.arrow_back_rounded,
-          color: _foregroundColor,
+          color: _iconColor,
+          size: type == AppNavBarType.level2 ? AppDimensions.iconLarge : null,
         ),
         onPressed: onBack ?? onClose,
         tooltip: type == AppNavBarType.detail ? 'Cerrar' : 'Volver',
@@ -93,6 +103,16 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       actions: _effectiveActions,
       elevation: 0,
       shadowColor: Colors.transparent,
+      bottom: type == AppNavBarType.level2
+          ? const PreferredSize(
+              preferredSize: Size.fromHeight(1),
+              child: Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.dividerColor,
+              ),
+            )
+          : null,
     );
   }
 }
@@ -126,7 +146,6 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
     return TabBar(
       controller: controller,
       indicatorColor: AppColors.primary,
-      indicatorWeight: 2,
       labelColor: AppColors.primary,
       unselectedLabelColor: AppColors.textSecondary,
       labelStyle: isNivel1 ? AppTypography.bodyBold : AppTypography.bodyBase.copyWith(fontWeight: FontWeight.w600),
@@ -172,7 +191,7 @@ class AppStickyBar extends StatelessWidget {
         AppDimensions.space16,
         AppDimensions.space12 + MediaQuery.of(context).padding.bottom,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.surface,
         boxShadow: AppShadows.high,
       ),
@@ -202,7 +221,6 @@ class AppStickyBar extends StatelessWidget {
           child: AppButton(
             label: primaryLabel,
             onPressed: onPrimary,
-            hierarchy: AppButtonHierarchy.primary,
             isLoading: isPrimaryLoading,
           ),
         ),
@@ -225,7 +243,6 @@ class AppStickyBar extends StatelessWidget {
           child: AppButton(
             label: primaryLabel,
             onPressed: onPrimary,
-            hierarchy: AppButtonHierarchy.primary,
             isLoading: isPrimaryLoading,
           ),
         ),
@@ -242,7 +259,6 @@ class AppStickyBar extends StatelessWidget {
           child: AppButton(
             label: primaryLabel,
             onPressed: onPrimary,
-            hierarchy: AppButtonHierarchy.primary,
             isLoading: isPrimaryLoading,
           ),
         ),

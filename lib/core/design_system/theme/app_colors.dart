@@ -158,12 +158,20 @@ abstract final class AppColors {
   /// Divider base color — 1 dp separator token.
   static const Color dividerColor = Color(0xFFE0E5EB);
 
+  /// Figma token `ColorStatus/Neutral/Light` — neutral light background used
+  /// in level-2 app bars, chips and status surfaces.
+  static const Color statusNeutralLight = Color(0xFFE0E5EB);
+
   // ── Text ──────────────────────────────────────────────────────────────────
   static const Color textPrimary = neutral900;
   static const Color textSecondary = neutral700;
   static const Color textDisabled = neutral500;
   static const Color textOnPrimary = Color(0xFFFFFFFF);
   static const Color textOnSurface = neutral900;
+
+  /// Figma token `Color-Text-Base` / `ColorBrand-Main-Black` — near-black
+  /// used for headings and body text on white/neutral backgrounds.
+  static const Color textBase = Color(0xFF0C0D0D);
 
   // ── Interactive ───────────────────────────────────────────────────────────
   static const Color disabled = neutral500;

@@ -3,6 +3,10 @@
 		"FIGMA-my-mcp-server-4c57070d": {
 			"url": "http://127.0.0.1:3845/mcp",
 			"type": "http"
+		},
+		"my-mcp-server-54b6f8f7": {
+			"url": "http://127.0.0.1:3333/mcp",
+			"type": "http"
 		}
 	},
 	"inputs": []

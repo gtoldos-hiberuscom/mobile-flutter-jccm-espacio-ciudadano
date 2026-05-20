@@ -16,18 +16,16 @@ abstract final class AppTypography {
 
   static const TextStyle h1 = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 32,
-    fontWeight: FontWeight.w700,
-    height: 1.25,
-    letterSpacing: -0.5,
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+    height: 1.5, // 42px — Figma Headings/H1
   );
 
   static const TextStyle h2 = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 28,
-    fontWeight: FontWeight.w700,
-    height: 1.28,
-    letterSpacing: -0.25,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    height: 1.5, // 36px — Figma Headings/H2
   );
 
   static const TextStyle h3 = TextStyle(
@@ -74,12 +72,12 @@ abstract final class AppTypography {
     letterSpacing: 0.1,
   );
 
-  /// Body Large — 18 sp medium, line-height 28/18 ≈ 1.556.
+  /// Body Large — 18 sp medium, line-height 150% (27px) — Figma Body/Large.
   static const TextStyle bodyL = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 18,
     fontWeight: FontWeight.w500,
-    height: 28 / 18,
+    height: 1.5,
   );
 
   /// Body Base — default body text.
