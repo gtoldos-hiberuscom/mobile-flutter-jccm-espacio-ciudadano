@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Hierarchy variants for [AppButton] — mirrors Figma "Button Label" node
 /// (`9:1794`) hierarchy property.
@@ -88,11 +89,17 @@ class _AppButtonState extends State<AppButton> {
     // Rule 3.10 — announce loading start and end (WCAG 4.1.3)
     if (!_wasLoading && widget.isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) SemanticsService.announce('Cargando', TextDirection.ltr);
+        if (mounted) {
+          final l10n = AppLocalizations.of(context);
+          SemanticsService.announce(l10n.a11yLoading, TextDirection.ltr);
+        }
       });
     } else if (_wasLoading && !widget.isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) SemanticsService.announce('Contenido cargado', TextDirection.ltr);
+        if (mounted) {
+          final l10n = AppLocalizations.of(context);
+          SemanticsService.announce(l10n.a11yContentLoaded, TextDirection.ltr);
+        }
       });
     }
     _wasLoading = widget.isLoading;
@@ -126,6 +133,7 @@ class _AppButtonState extends State<AppButton> {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final effectiveHierarchy = _effectiveHierarchy;
     final isDisabled = widget.onPressed == null || effectiveHierarchy == AppButtonHierarchy.disabled;
     final effectiveSemantics = widget.semanticsLabel ?? widget.label;
@@ -134,7 +142,7 @@ class _AppButtonState extends State<AppButton> {
     final Widget content = widget.isLoading
         ? Semantics(
             liveRegion: true,
-            label: 'Cargando',
+            label: l10n.a11yLoading,
             focusable: false,
             child: ExcludeSemantics(
               child: SizedBox(

@@ -3022,5 +3022,25 @@
   "offlineBannerMessage": "Offline. Showing cached data.",
   "@offlineBannerMessage": {
     "description": "STORY-65 — default advisory message displayed by the OfflineBanner when connectivity is reported as offline; adopters keep showing cached data underneath."
+  },
+  "a11yStickybarLabel": "Main actions",
+  "@a11yStickybarLabel": {
+    "description": "Accessibility — semantic label for the sticky bottom action bar."
+  },
+  "a11yLandingH1Label": "Citizen Space of Castilla-La Mancha",
+  "@a11yLandingH1Label": {
+    "description": "Accessibility — semantic H1 label for the landing splash screen."
+  },
+  "a11yCastillaLogoLabel": "Logo of the Regional Government of Castilla-La Mancha",
+  "@a11yCastillaLogoLabel": {
+    "description": "Accessibility — semantic label for the institutional Castilla-La Mancha logo."
+  },
+  "a11yLoading": "Loading",
+  "@a11yLoading": {
+    "description": "Accessibility — announced by screen reader when a loading state starts."
+  },
+  "a11yContentLoaded": "Content loaded",
+  "@a11yContentLoaded": {
+    "description": "Accessibility — announced by screen reader when loading finishes."
   }
 }

@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart' sh
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart' show AppButton;
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Sticky bottom action bar — mirrors the Figma "Stickybar" component.
 ///
@@ -33,9 +34,10 @@ class AppStickybar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Semantics(
       container: true,
-      label: 'Acciones principales',
+      label: l10n.a11yStickybarLabel,
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),

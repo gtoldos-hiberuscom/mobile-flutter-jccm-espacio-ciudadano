@@ -2218,4 +2218,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get offlineBannerMessage => 'Offline. Showing cached data.';
+
+  @override
+  String get a11yStickybarLabel => 'Main actions';
+
+  @override
+  String get a11yLandingH1Label => 'Citizen Space of Castilla-La Mancha';
+
+  @override
+  String get a11yCastillaLogoLabel => 'Logo of the Regional Government of Castilla-La Mancha';
+
+  @override
+  String get a11yLoading => 'Loading';
+
+  @override
+  String get a11yContentLoaded => 'Content loaded';
 }

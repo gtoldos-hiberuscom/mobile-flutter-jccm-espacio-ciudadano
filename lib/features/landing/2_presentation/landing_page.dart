@@ -104,7 +104,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                           header: true,
                           headingLevel: 1,
                           focusable: true,
-                          label: 'Espacio Ciudadano de Castilla-La Mancha',
+                          label: l10n.a11yLandingH1Label,
                           child: const SizedBox(width: 1, height: 1),
                         ),
                       ),
@@ -114,7 +114,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
 
                           // ── Castilla-La Mancha institutional logo ───────────
                           Semantics(
-                            label: 'Logotipo de la Junta de Comunidades de Castilla-La Mancha',
+                            label: l10n.a11yCastillaLogoLabel,
                             image: true,
                             excludeSemantics: true,
                             child: SvgPicture.asset(

@@ -2219,4 +2219,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get offlineBannerMessage => 'Sin conexión. Mostrando datos guardados.';
+
+  @override
+  String get a11yStickybarLabel => 'Acciones principales';
+
+  @override
+  String get a11yLandingH1Label => 'Espacio Ciudadano de Castilla-La Mancha';
+
+  @override
+  String get a11yCastillaLogoLabel => 'Logotipo de la Junta de Comunidades de Castilla-La Mancha';
+
+  @override
+  String get a11yLoading => 'Cargando';
+
+  @override
+  String get a11yContentLoaded => 'Contenido cargado';
 }

@@ -72,21 +72,26 @@ class LandingAboutPage extends ConsumerWidget {
                       const SizedBox(height: AppDimensions.space16),
 
                       // Mixed-weight description paragraph — Figma: Body/Base 16px w400/w700
-                      RichText(
-                        text: TextSpan(
-                          style: AppTypography.bodyBase.copyWith(
-                            color: AppColors.textBase,
-                          ),
-                          children: [
-                            TextSpan(text: '${l10n.landingAboutBodyPrefix} '),
-                            TextSpan(
-                              text: l10n.landingAboutBodyBold,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
+                      Semantics(
+                        label: '${l10n.landingAboutBodyPrefix} ${l10n.landingAboutBodyBold} ${l10n.landingAboutBodySuffix}',
+                        child: ExcludeSemantics(
+                          child: RichText(
+                            text: TextSpan(
+                              style: AppTypography.bodyBase.copyWith(
+                                color: AppColors.textBase,
                               ),
+                              children: [
+                                TextSpan(text: '${l10n.landingAboutBodyPrefix} '),
+                                TextSpan(
+                                  text: l10n.landingAboutBodyBold,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(text: ' ${l10n.landingAboutBodySuffix}'),
+                              ],
                             ),
-                            TextSpan(text: ' ${l10n.landingAboutBodySuffix}'),
-                          ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: AppDimensions.space32),

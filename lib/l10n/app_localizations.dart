@@ -4303,6 +4303,26 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Sin conexión. Mostrando datos guardados.'**
   String get offlineBannerMessage;
+
+  /// In es, this message translates to:
+  /// **'Acciones principales'**
+  String get a11yStickybarLabel;
+
+  /// In es, this message translates to:
+  /// **'Espacio Ciudadano de Castilla-La Mancha'**
+  String get a11yLandingH1Label;
+
+  /// In es, this message translates to:
+  /// **'Logotipo de la Junta de Comunidades de Castilla-La Mancha'**
+  String get a11yCastillaLogoLabel;
+
+  /// In es, this message translates to:
+  /// **'Cargando'**
+  String get a11yLoading;
+
+  /// In es, this message translates to:
+  /// **'Contenido cargado'**
+  String get a11yContentLoaded;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
