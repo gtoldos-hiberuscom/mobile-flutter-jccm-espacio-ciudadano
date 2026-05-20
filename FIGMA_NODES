@@ -1,0 +1,159 @@
+Descripción funcional
+
+Establecer la base visual y de UX compartida para que todas las pantallas usen tokens, textos localizados y contratos mínimos de accesibilidad.
+
+TOKENS
+
+Primitivas de color: https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=243-2584&t=g0R5WFkCvR6NsT0s-11 
+
+Semánticas de color https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=243-3544&t=g0R5WFkCvR6NsT0s-11  
+
+Tipografías:
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=192-4619&t=g0R5WFkCvR6NsT0s-4 
+
+Espaciado 
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=244-6147&t=g0R5WFkCvR6NsT0s-11 
+
+Shape, border radius https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=244-6168&t=g0R5WFkCvR6NsT0s-11
+
+Shadows 
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=165-5898&t=g0R5WFkCvR6NsT0s-11 
+
+Icons
+
+ https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=9-1056&t=g0R5WFkCvR6NsT0s-11 
+
+
+
+COMPONENTES
+
+Button Label
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=9-1794&t=g0R5WFkCvR6NsT0s-11 
+
+Only Button 
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=177-3992&t=g0R5WFkCvR6NsT0s-11 
+
+Tag
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=55-2693&t=g0R5WFkCvR6NsT0s-11
+
+Menu Items
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=14-13681&t=g0R5WFkCvR6NsT0s-11 
+
+Menu Drop Down
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=15-14575&t=g0R5WFkCvR6NsT0s-11 
+
+Tabs
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=10-3407&t=g0R5WFkCvR6NsT0s-11 
+
+Tabs Bottom Bar
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=10-3506&t=g0R5WFkCvR6NsT0s-11
+
+Avatar
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=114-2842&t=g0R5WFkCvR6NsT0s-11
+
+Nav Bar
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=9-2858&t=g0R5WFkCvR6NsT0s-11
+
+Nav Card
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=75-2596&t=g0R5WFkCvR6NsT0s-11 
+
+Tabs 
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=12-9418&t=g0R5WFkCvR6NsT0s-11 
+Floating Navigation
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=12-11893&t=g0R5WFkCvR6NsT0s-11 
+
+Tab
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=234-1125&t=g0R5WFkCvR6NsT0s-11 
+Sticky Bar
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=11-7427&t=g0R5WFkCvR6NsT0s-11
+
+Inputs
+
+InputCase
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=58-5718&t=g0R5WFkCvR6NsT0s-11
+
+Input Case Split
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=93-5025&t=g0R5WFkCvR6NsT0s-11 
+
+Inputs
+
+ https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=60-6366&t=g0R5WFkCvR6NsT0s-11 
+
+Description Text
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=58-6002&t=g0R5WFkCvR6NsT0s-11 
+
+CheckBox
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=106-3249&t=g0R5WFkCvR6NsT0s-11
+
+Progress Bar 
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=98-3784&t=g0R5WFkCvR6NsT0s-11
+
+File Upload
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=102-1691&t=g0R5WFkCvR6NsT0s-11
+
+InputsArea
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=58-6183&t=g0R5WFkCvR6NsT0s-11 
+
+Links
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=8-685&t=g0R5WFkCvR6NsT0s-11
+
+List Bullet
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=51-2007&t=g0R5WFkCvR6NsT0s-11 
+
+List Item
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=51-2012&t=g0R5WFkCvR6NsT0s-11 
+
+Labels
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=53-3355&t=g0R5WFkCvR6NsT0s-11
+
+Cards
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=56-3449&t=g0R5WFkCvR6NsT0s-11 
+Lists
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=61-2773&t=g0R5WFkCvR6NsT0s-11 
+
+ListsBuildingBlocks Select Option
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=60-7248&t=g0R5WFkCvR6NsT0s-11 
+
+AlertToast
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=83-3210&t=g0R5WFkCvR6NsT0s-11 
+
+AlertSnackbar 
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=83-2757&t=g0R5WFkCvR6NsT0s-11
+
+AlertBanner
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=82-3533&t=g0R5WFkCvR6NsT0s-11
+
+AlertDialog
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=83-3263&t=g0R5WFkCvR6NsT0s-11
+
+AlertContextual
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=85-2697&t=g0R5WFkCvR6NsT0s-11 
+
+PopOver
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=113-5701&t=g0R5WFkCvR6NsT0s-11
+
+Divider
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=12-12553&t=g0R5WFkCvR6NsT0s-11
+
+Calendar
+
+https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=313-2762&t=g0R5WFkCvR6NsT0s-11
+

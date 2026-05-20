@@ -1,0 +1,5 @@
+// Data layer for design_system feature.
+// This feature has no remote data sources — all content is sourced from
+// the in-memory design-system token constants.
+// The layer directory is kept to honour the feature contract defined in
+// documentation/ARCHITECTURE.md §3.

@@ -31,6 +31,9 @@ abstract final class Routes {
 
   static const String lifeEvents = '/preferences/life-events';
 
+  /// Design system catalog — developer/designer reference screen.
+  static const String designSystem = '/design-system';
+
   static const Set<String> _authenticated = {
     consent,
     lifeEvents,

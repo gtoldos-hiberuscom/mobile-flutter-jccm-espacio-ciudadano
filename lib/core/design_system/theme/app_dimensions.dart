@@ -17,9 +17,10 @@ abstract final class AppDimensions {
   static const double space64 = 64;
 
   // ── Border radius ─────────────────────────────────────────────────────────
+  static const double radiusXs = 4.0;
   static const double radiusSmall = 4;
   static const double radiusMedium = 8;
-  static const double radiusLarge = 12;
+  static const double radiusLarge = 16.0;
   static const double radiusXLarge = 16;
   static const double radiusRound = 100;
 

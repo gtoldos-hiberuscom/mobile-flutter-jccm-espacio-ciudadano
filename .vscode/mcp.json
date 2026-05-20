@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"FIGMA-my-mcp-server-4c57070d": {
+			"url": "http://127.0.0.1:3845/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}

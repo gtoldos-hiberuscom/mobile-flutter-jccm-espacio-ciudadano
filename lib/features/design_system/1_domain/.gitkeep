@@ -1,0 +1,4 @@
+// Domain layer for design_system feature.
+// This feature has no business logic — it is a pure UI catalog feature.
+// The layer directory is kept to honour the feature contract defined in
+// documentation/ARCHITECTURE.md §3.

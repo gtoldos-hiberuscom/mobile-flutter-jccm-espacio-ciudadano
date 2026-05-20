@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JCCM – Design System Catalog</title>
+  <style>
+    :root {
+      --blue-600: #1A6BCC;
+      --blue-50:  #EBF3FF;
+      --blue-100: #D6E8FF;
+      --gray-50:  #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-400: #94A3B8;
+      --gray-600: #475569;
+      --gray-800: #1E293B;
+      --green-100: #DCFCE7;
+      --green-700: #15803D;
+      --red-100:  #FEE2E2;
+      --red-700:  #B91C1C;
+      --orange-100: #FFEDD5;
+      --orange-700: #C2410C;
+      --purple-100: #F3E8FF;
+      --purple-700: #7E22CE;
+      --cyan-100: #CFFAFE;
+      --cyan-700: #0E7490;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.5;
+      padding: 0 0 64px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0F4C8A 0%, #1A6BCC 60%, #2D8CFF 100%);
+      color: #fff;
+      padding: 48px 40px 36px;
+    }
+    header .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    header svg.figma-icon { flex-shrink: 0; }
+    header h1 { font-size: 28px; font-weight: 700; letter-spacing: -.3px; }
+    header p  { font-size: 15px; opacity: .85; max-width: 700px; margin-top: 6px; }
+    header .meta {
+      margin-top: 20px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    header .meta span {
+      background: rgba(255,255,255,.15);
+      border-radius: 999px;
+      padding: 4px 12px;
+    }
+
+    /* ── Navigation tabs ── */
+    .nav-tabs {
+      background: #fff;
+      border-bottom: 2px solid var(--gray-200);
+      padding: 0 40px;
+      display: flex;
+      gap: 4px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .nav-tabs a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-600);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color .15s, border-color .15s;
+    }
+    .nav-tabs a:hover { color: var(--blue-600); }
+    .nav-tabs a.active { color: var(--blue-600); border-color: var(--blue-600); }
+    .nav-tabs a .badge {
+      background: var(--blue-50);
+      color: var(--blue-600);
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 1px 8px;
+    }
+
+    /* ── Section ── */
+    .section { padding: 40px 40px 0; max-width: 1600px; margin: 0 auto; }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .section-header .subtitle {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 2px;
+    }
+
+    /* ── Table ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    thead th {
+      background: var(--gray-100);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--gray-600);
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background .12s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--blue-50); }
+    td { padding: 12px 16px; vertical-align: top; }
+
+    /* ── Name cell ── */
+    .name-cell {
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--gray-800);
+    }
+
+    /* ── Node ID cell ── */
+    .node-id {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 12px;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      border-radius: 4px;
+      padding: 2px 6px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    /* ── Description cell ── */
+    .desc-cell {
+      color: var(--gray-600);
+      font-size: 13px;
+      max-width: 320px;
+    }
+
+    /* ── Pill badges ── */
+    .pills { display: flex; flex-wrap: wrap; gap: 4px; }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 2px 9px;
+      white-space: nowrap;
+    }
+    .pill-state {
+      background: var(--blue-100);
+      color: var(--blue-600);
+    }
+    .pill-type {
+      background: var(--purple-100);
+      color: var(--purple-700);
+    }
+    .pill-special {
+      background: var(--cyan-100);
+      color: var(--cyan-700);
+    }
+
+    /* ── Figma link button ── */
+    .figma-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--gray-800);
+      text-decoration: none;
+      transition: background .15s, border-color .15s, box-shadow .15s;
+      white-space: nowrap;
+    }
+    .figma-btn:hover {
+      background: var(--blue-50);
+      border-color: var(--blue-600);
+      color: var(--blue-600);
+      box-shadow: 0 2px 6px rgba(26,107,204,.12);
+    }
+    .figma-btn svg { flex-shrink: 0; }
+
+    /* ── Preview cell ── */
+    .preview-cell {
+      min-width: 130px;
+    }
+
+    /* ── Token value cell ── */
+    .token-value {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 12px;
+    }
+
+    /* ── Color swatches ── */
+    .swatch-row { display: flex; gap: 4px; flex-wrap: wrap; }
+    .swatch {
+      width: 16px; height: 16px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,.08);
+      flex-shrink: 0;
+    }
+
+    /* ── Divider between sections ── */
+    .section-spacer { height: 48px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header>
+  <div class="logo-row">
+    <!-- Figma icon -->
+    <svg class="figma-icon" width="28" height="42" viewBox="0 0 38 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/>
+      <path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/>
+      <path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/>
+      <path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/>
+      <path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/>
+    </svg>
+    <div>
+      <h1>JCCM — Design System Catalog</h1>
+    </div>
+  </div>
+  <p>Establecer la base visual y de UX compartida para que todas las pantallas usen tokens, textos localizados y contratos mínimos de accesibilidad.</p>
+  <div class="meta">
+    <span>📁 KSN96EXaRBFcDOpLCy4f5k</span>
+    <span>🎨 7 Tokens</span>
+    <span>🧩 37 Componentes</span>
+  </div>
+</header>
+
+<!-- ═══════════ NAV TABS ═══════════ -->
+<nav class="nav-tabs">
+  <a href="#tokens" class="active" onclick="setActive(this)">
+    🎨 Tokens <span class="badge">7</span>
+  </a>
+  <a href="#components" onclick="setActive(this)">
+    🧩 Componentes <span class="badge">37</span>
+  </a>
+</nav>
+
+<!-- ═══════════ TOKENS ═══════════ -->
+<section class="section" id="tokens">
+  <div class="section-header">
+    <div>
+      <h2>🎨 Tokens de diseño</h2>
+      <p class="subtitle">Variables de color, tipografía, espaciado, forma y efectos que definen el lenguaje visual del sistema.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>ID Nodo</th>
+          <th>Descripción</th>
+          <th>Valores principales</th>
+          <th>Ver en Figma</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- 1. Primitivas de color -->
+        <tr>
+          <td class="name-cell">Primitivas de color</td>
+          <td><span class="node-id">243:2584</span></td>
+          <td class="desc-cell">Paletas de color base sin semántica: escalas de 100–1000 para Blue, Neutral, Green, Yellow, Red y DullBlue. Son la fuente de verdad para los colores semánticos.</td>
+          <td>
+            <div class="swatch-row">
+              <div class="swatch" style="background:#DBEAFE" title="Blue-100"></div>
+              <div class="swatch" style="background:#93C5FD" title="Blue-300"></div>
+              <div class="swatch" style="background:#3B82F6" title="Blue-500"></div>
+              <div class="swatch" style="background:#1D4ED8" title="Blue-700"></div>
+              <div class="swatch" style="background:#1E3A8A" title="Blue-900"></div>
+              <div class="swatch" style="background:#F1F5F9" title="Neutral-100"></div>
+              <div class="swatch" style="background:#94A3B8" title="Neutral-400"></div>
+              <div class="swatch" style="background:#475569" title="Neutral-600"></div>
+              <div class="swatch" style="background:#22C55E" title="Green"></div>
+              <div class="swatch" style="background:#EAB308" title="Yellow"></div>
+              <div class="swatch" style="background:#EF4444" title="Red"></div>
+              <div class="swatch" style="background:#64748B" title="DullBlue"></div>
+            </div>
+            <div class="token-value" style="margin-top:6px;color:var(--gray-600)">Blue · Neutral · Green · Yellow · Red · DullBlue</div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=243-2584" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 2. Semánticas de color -->
+        <tr>
+          <td class="name-cell">Semánticas de color</td>
+          <td><span class="node-id">243:3544</span></td>
+          <td class="desc-cell">Colores con intención: Primary, Text, Status (Error / Warning / Success), Secondary, Background y Border. Cada token semántico referencia una primitiva.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Primary</span>
+              <span class="pill pill-state">Text</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+              <span class="pill" style="background:var(--orange-100);color:var(--orange-700)">Warning</span>
+              <span class="pill" style="background:var(--green-100);color:var(--green-700)">Success</span>
+              <span class="pill pill-special">Secondary</span>
+              <span class="pill pill-type">Background</span>
+              <span class="pill pill-type">Border</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=243-3544" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 3. Tipografías -->
+        <tr>
+          <td class="name-cell">Tipografías</td>
+          <td><span class="node-id">192:4619</span></td>
+          <td class="desc-cell">Estilos de texto del sistema: jerarquía de titulares (H1–H6), cuerpo (LargeText, BodyBold, Body), etiquetas (Caption, Small). Define familia, tamaño, peso y línea base.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">H1</span><span class="pill pill-state">H2</span><span class="pill pill-state">H3</span>
+              <span class="pill pill-state">H4</span><span class="pill pill-state">H5</span><span class="pill pill-state">H6</span>
+              <span class="pill pill-type">LargeText</span><span class="pill pill-type">BodyBold</span>
+              <span class="pill pill-type">Body</span><span class="pill pill-special">Caption</span><span class="pill pill-special">Small</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=192-4619" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 4. Espaciado -->
+        <tr>
+          <td class="name-cell">Espaciado</td>
+          <td><span class="node-id">244:6147</span></td>
+          <td class="desc-cell">Escala de espaciado en múltiplos de 4 px que uniformiza gaps, paddings y márgenes en toda la UI.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Space-4</span><span class="pill pill-state">Space-8</span>
+              <span class="pill pill-state">Space-16</span><span class="pill pill-state">Space-24</span>
+              <span class="pill pill-state">Space-32</span><span class="pill pill-state">Space-40</span>
+              <span class="pill pill-state">Space-48</span><span class="pill pill-state">Space-64</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=244-6147" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 5. Shape / Border radius -->
+        <tr>
+          <td class="name-cell">Shape / Border radius</td>
+          <td><span class="node-id">244:6168</span></td>
+          <td class="desc-cell">Tokens de radio de borde para esquinas de contenedores, botones y tarjetas. Desde esquinas cuadradas hasta redondas completas (999).</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Radius-0</span><span class="pill pill-state">xs</span>
+              <span class="pill pill-state">md</span><span class="pill pill-state">lg</span>
+              <span class="pill pill-state">xl</span><span class="pill pill-state">999</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=244-6168" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 6. Shadows -->
+        <tr>
+          <td class="name-cell">Shadows</td>
+          <td><span class="node-id">165:5898</span></td>
+          <td class="desc-cell">Niveles de elevación para transmitir profundidad y jerarquía visual. Incluye guías de uso por nivel.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Low</span>
+              <span class="pill pill-state">Medium</span>
+              <span class="pill pill-state">High</span>
+              <span class="pill pill-special">OverAll</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=165-5898" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 7. Icons -->
+        <tr>
+          <td class="name-cell">Icons</td>
+          <td><span class="node-id">9:1056</span></td>
+          <td class="desc-cell">Biblioteca de iconos del sistema (44+). Incluye: fingerprint (biométrico), chevrons de navegación, notificaciones, calendario, check, close, search, user y más. Formato SVG a 24×24.</td>
+          <td>
+            <div class="token-value" style="color:var(--gray-600)">fingerprint · chevron-left/right · bell · calendar · search · user · check · close · download · eye · lock · info · warning · … +35 más</div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=9-1056" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- ═══════════ COMPONENTS ═══════════ -->
+<section class="section" id="components">
+  <div class="section-header">
+    <div>
+      <h2>🧩 Componentes</h2>
+      <p class="subtitle">Elementos de UI reutilizables con sus variantes de estado e tipo extraídas del MCP de Figma.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>ID Nodo</th>
+          <th>Descripción</th>
+          <th>Estados</th>
+          <th>Tipos / Variantes</th>
+          <th>Ver en Figma</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- 1. Button Label -->
+        <tr>
+          <td class="name-cell">Button Label</td>
+          <td><span class="node-id">9:1794</span></td>
+          <td class="desc-cell">Botón principal del sistema con icono opcional. Soporta múltiples niveles de jerarquía y dos tamaños.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span><span class="pill pill-state">Focus</span>
+              <span class="pill pill-state">Pressed</span><span class="pill pill-state">Active</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">Disabled</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Primary</span><span class="pill pill-type">Secondary</span>
+              <span class="pill pill-type">Ghost</span><span class="pill pill-type">Tertiary</span>
+              <span class="pill pill-special">Medium</span><span class="pill pill-special">Small</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=9-1794" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 2. Only Button -->
+        <tr>
+          <td class="name-cell">Only Button</td>
+          <td><span class="node-id">177:3992</span></td>
+          <td class="desc-cell">Botón sin etiqueta de texto — solo icono. Versión compacta del sistema de botones.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=177-3992" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 3. Tag -->
+        <tr>
+          <td class="name-cell">Tag</td>
+          <td><span class="node-id">55:2693</span></td>
+          <td class="desc-cell">Etiqueta de estado informativo. Se usa para mostrar el estado de un ítem (Success, Error, Warning, Info activo/inactivo).</td>
+          <td>
+            <div class="pills">
+              <span class="pill" style="background:var(--green-100);color:var(--green-700)">Success</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+              <span class="pill" style="background:var(--orange-100);color:var(--orange-700)">Warning</span>
+              <span class="pill pill-state">InfoActive</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">InfoInactive</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=55-2693" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 4. Menu Items -->
+        <tr>
+          <td class="name-cell">Menu Items</td>
+          <td><span class="node-id">14:13681</span></td>
+          <td class="desc-cell">Ítem de menú lateral con icono y etiqueta. Tiene segmentos Intro (cabecera) e Item (entrada navegable).</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span>
+              <span class="pill pill-state">Selected</span>
+              <span class="pill pill-state">Pressed</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Intro</span>
+              <span class="pill pill-type">Item</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=14-13681" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 5. Menu Drop Down -->
+        <tr>
+          <td class="name-cell">Menu Drop Down</td>
+          <td><span class="node-id">15:14575</span></td>
+          <td class="desc-cell">Menú desplegable para selección de opciones. Contenedor que agrupa ítems de menú en lista expandible.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=15-14575" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 6. Tabs/Tab -->
+        <tr>
+          <td class="name-cell">Tabs / Tab</td>
+          <td><span class="node-id">10:3407</span></td>
+          <td class="desc-cell">Pestaña individual para navegación por secciones. Soporta dos niveles de jerarquía.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span>
+              <span class="pill pill-state">Pressed</span>
+              <span class="pill pill-state">Selected</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Nivel 1</span>
+              <span class="pill pill-type">Nivel 2</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=10-3407" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 7. Tabs Bottom Bar -->
+        <tr>
+          <td class="name-cell">Tabs Bottom Bar</td>
+          <td><span class="node-id">10:3506</span></td>
+          <td class="desc-cell">Barra de pestañas inferior para navegación principal de la app. Contiene múltiples instancias de Tab.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=10-3506" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 8. Avatar -->
+        <tr>
+          <td class="name-cell">Avatar</td>
+          <td><span class="node-id">114:2842</span></td>
+          <td class="desc-cell">Representación visual del usuario. Puede mostrar imagen, iniciales o icono genérico, con indicador de estado opcional.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span>
+              <span class="pill pill-state">Status2</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=114-2842" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 9. Nav Bar -->
+        <tr>
+          <td class="name-cell">Nav Bar</td>
+          <td><span class="node-id">9:2858</span></td>
+          <td class="desc-cell">Barra de navegación superior. Adapta su estructura según el contexto de pantalla (login, inicio, nivel detalle) y si hay sesión activa.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-special">Login: False</span>
+              <span class="pill pill-special">Login: True</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Inicio</span><span class="pill pill-type">Main</span>
+              <span class="pill pill-type">Level 2</span><span class="pill pill-type">Detail</span>
+              <span class="pill pill-type">Grey</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=9-2858" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 10. Nav Card -->
+        <tr>
+          <td class="name-cell">Nav Card</td>
+          <td><span class="node-id">75:2596</span></td>
+          <td class="desc-cell">Tarjeta de navegación con icono y texto descriptivo. Usada en menús y cuadrículas de accesos rápidos.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span><span class="pill pill-state">Focus</span>
+              <span class="pill pill-state">Pressed</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">Disabled</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=75-2596" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 11. Tabs/TabBar -->
+        <tr>
+          <td class="name-cell">Tabs / TabBar</td>
+          <td><span class="node-id">12:9418</span></td>
+          <td class="desc-cell">Barra completa de pestañas horizontales para navegación secundaria dentro de una pantalla.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=12-9418" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 12. Floating Navigation -->
+        <tr>
+          <td class="name-cell">Floating Navigation</td>
+          <td><span class="node-id">12:11893</span></td>
+          <td class="desc-cell">Barra de navegación flotante tipo FAB-row. Se superpone al contenido para accesos rápidos persistentes.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=12-11893" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 13. Tab -->
+        <tr>
+          <td class="name-cell">Tab</td>
+          <td><span class="node-id">234:1125</span></td>
+          <td class="desc-cell">Variante alternativa de pestaña con cuatro estados interactivos claramente diferenciados.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Selected</span><span class="pill pill-state">Active</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">Disabled</span>
+              <span class="pill pill-state">Focus</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=234-1125" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 14. Sticky Bar -->
+        <tr>
+          <td class="name-cell">Sticky Bar</td>
+          <td><span class="node-id">11:7427</span></td>
+          <td class="desc-cell">Barra de acción fija al fondo de pantalla. Contiene CTA primario o acciones contextuales del flujo actual.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Dicotomy</span>
+              <span class="pill pill-type">Vertical</span>
+              <span class="pill pill-type">Flow</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=11-7427" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 15. InputCase -->
+        <tr>
+          <td class="name-cell">InputCase</td>
+          <td><span class="node-id">58:5718</span></td>
+          <td class="desc-cell">Campo de entrada de texto básico. Elemento atómico que se usa como base de todos los controles de formulario.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span><span class="pill pill-state">Focus</span>
+              <span class="pill pill-state">Active</span><span class="pill pill-state">Filled</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+              <span class="pill" style="background:var(--green-100);color:var(--green-700)">Success</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">Disabled</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Enabled: True</span>
+              <span class="pill pill-type">Enabled: False</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=58-5718" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 16. Input Case Split -->
+        <tr>
+          <td class="name-cell">Input Case Split</td>
+          <td><span class="node-id">93:5025</span></td>
+          <td class="desc-cell">Campo de entrada dividido en celdas individuales. Usado para OTP, PIN y códigos de verificación.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span><span class="pill pill-state">Focus</span>
+              <span class="pill pill-state">Active</span><span class="pill pill-state">Filled</span>
+              <span class="pill" style="background:var(--green-100);color:var(--green-700)">Success</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">Disabled</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=93-5025" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 17. Inputs -->
+        <tr>
+          <td class="name-cell">Inputs</td>
+          <td><span class="node-id">60:6366</span></td>
+          <td class="desc-cell">Componente de entrada completo (etiqueta + campo + descripción). Soporta texto libre, selector y selector de fecha.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span><span class="pill pill-state">Focus</span>
+              <span class="pill pill-state">Active</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Basic</span>
+              <span class="pill pill-type">Select</span>
+              <span class="pill pill-type">DatePicker</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=60-6366" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 18. Description Text -->
+        <tr>
+          <td class="name-cell">Description Text</td>
+          <td><span class="node-id">58:6002</span></td>
+          <td class="desc-cell">Texto auxiliar bajo campos de formulario. Proporciona ayuda contextual o mensajes de error inline.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Default</span>
+              <span class="pill pill-type">Error</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=58-6002" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 19. CheckBox -->
+        <tr>
+          <td class="name-cell">CheckBox</td>
+          <td><span class="node-id">106:3249</span></td>
+          <td class="desc-cell">Casilla de selección múltiple. Soporte para estado indeterminado (Mixed), tamaños Medium y Large.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">False</span><span class="pill pill-state">True</span>
+              <span class="pill pill-state">Mixed</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">Disabled</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Medium</span>
+              <span class="pill pill-type">Large</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=106-3249" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 20. Progress Bar -->
+        <tr>
+          <td class="name-cell">Progress Bar</td>
+          <td><span class="node-id">98:3784</span></td>
+          <td class="desc-cell">Barra de progreso lineal para indicar avance en procesos, carga de archivos o pasos de un flujo.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=98-3784" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 21. File Upload -->
+        <tr>
+          <td class="name-cell">File Upload</td>
+          <td><span class="node-id">102:1691</span></td>
+          <td class="desc-cell">Zona de carga de ficheros con soporte para arrastrar y soltar. Muestra el progreso de subida y estado de completado.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span>
+              <span class="pill pill-state">Loading</span>
+              <span class="pill" style="background:var(--green-100);color:var(--green-700)">LoadingComplete</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=102-1691" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 22. InputsArea -->
+        <tr>
+          <td class="name-cell">InputsArea</td>
+          <td><span class="node-id">58:6183</span></td>
+          <td class="desc-cell">Área de texto multilínea. Variante de campo de formulario para entradas de texto largo o comentarios.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=58-6183" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 23. Links/TextBlocks -->
+        <tr>
+          <td class="name-cell">Links / TextBlocks</td>
+          <td><span class="node-id">8:685</span></td>
+          <td class="desc-cell">Bloques de texto con soporte de hipervínculo. Cubre todos los niveles tipográficos del sistema con toggle de enlace activo/inactivo.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">H1</span><span class="pill pill-type">H2</span><span class="pill pill-type">H3</span>
+              <span class="pill pill-type">Body-L</span><span class="pill pill-type">Body-Base</span>
+              <span class="pill pill-type">Body-S</span><span class="pill pill-type">Label</span><span class="pill pill-type">Caption</span>
+              <span class="pill pill-special">Link: True</span><span class="pill pill-special">Link: False</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=8-685" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 24. List Bullet -->
+        <tr>
+          <td class="name-cell">List Bullet</td>
+          <td><span class="node-id">51:2007</span></td>
+          <td class="desc-cell">Viñeta individual de lista. Elemento atómico para construir listas con iconos o puntos decorativos.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=51-2007" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 25. List Item -->
+        <tr>
+          <td class="name-cell">List Item</td>
+          <td><span class="node-id">51:2012</span></td>
+          <td class="desc-cell">Fila de lista con texto principal, secundario e icono. Bloque constructivo para cualquier tipo de lista.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=51-2012" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 26. Labels -->
+        <tr>
+          <td class="name-cell">Labels</td>
+          <td><span class="node-id">53:3355</span></td>
+          <td class="desc-cell">Etiqueta de campo de formulario. Textos breves con dos tamaños para acompañar controles de entrada.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">M</span>
+              <span class="pill pill-type">S</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=53-3355" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 27. Cards -->
+        <tr>
+          <td class="name-cell">Cards</td>
+          <td><span class="node-id">56:3449</span></td>
+          <td class="desc-cell">Contenedor de información con borde, sombra y variantes por contexto. Incluye clase Agenda para eventos y citas.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span>
+              <span class="pill" style="background:var(--orange-100);color:var(--orange-700)">Warning</span>
+              <span class="pill" style="background:var(--gray-100);color:var(--gray-600)">Disabled</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Basic</span>
+              <span class="pill pill-type">Agenda</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=56-3449" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 28. Lists -->
+        <tr>
+          <td class="name-cell">Lists</td>
+          <td><span class="node-id">61:2773</span></td>
+          <td class="desc-cell">Contenedor de lista completo con múltiples patrones: básica, desplegable, checklist y expandible.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Basic</span>
+              <span class="pill pill-type">DropDownList</span>
+              <span class="pill pill-type">Checklist</span>
+              <span class="pill pill-type">Expandible</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=61-2773" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 29. ListsBB Select Option -->
+        <tr>
+          <td class="name-cell">ListsBB Select Option</td>
+          <td><span class="node-id">60:7248</span></td>
+          <td class="desc-cell">Ítem de selección dentro de listas. Building block para opciones simples, checks y nodos expandibles.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-state">Default</span><span class="pill pill-state">Pressed</span>
+              <span class="pill pill-state">Selected</span><span class="pill pill-state">Expanded</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Option</span>
+              <span class="pill pill-type">Check</span>
+              <span class="pill pill-type">Expandible</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=60-7248" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 30. AlertToast -->
+        <tr>
+          <td class="name-cell">AlertToast</td>
+          <td><span class="node-id">83:3210</span></td>
+          <td class="desc-cell">Notificación breve tipo toast que aparece y desaparece automáticamente. Comunica resultados de acciones del usuario.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-special">Neutral</span>
+              <span class="pill" style="background:var(--green-100);color:var(--green-700)">Success</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=83-3210" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 31. AlertSnackbar -->
+        <tr>
+          <td class="name-cell">AlertSnackbar</td>
+          <td><span class="node-id">83:2757</span></td>
+          <td class="desc-cell">Snackbar con acción opcional. Persiste hasta que el usuario la descarta o expira el temporizador.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-special">Neutral</span>
+              <span class="pill" style="background:var(--green-100);color:var(--green-700)">Success</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=83-2757" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 32. AlertBanner -->
+        <tr>
+          <td class="name-cell">AlertBanner</td>
+          <td><span class="node-id">82:3533</span></td>
+          <td class="desc-cell">Banner de alerta de ancho completo. Se usa para avisos de máxima importancia que requieren acción del usuario.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-special">Neutral</span>
+              <span class="pill" style="background:var(--orange-100);color:var(--orange-700)">Warning</span>
+              <span class="pill" style="background:var(--red-100);color:var(--red-700)">Error</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=82-3533" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 33. AlertDialog -->
+        <tr>
+          <td class="name-cell">AlertDialog</td>
+          <td><span class="node-id">83:3263</span></td>
+          <td class="desc-cell">Diálogo modal de confirmación. Interrumpe el flujo del usuario para solicitar una decisión crítica.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-special">Neutral</span>
+            </div>
+          </td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=83-3263" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 34. AlertContextual -->
+        <tr>
+          <td class="name-cell">AlertContextual</td>
+          <td><span class="node-id">85:2697</span></td>
+          <td class="desc-cell">Alerta contextual inline junto a un elemento de la UI. Tamaño adaptable y orientación horizontal/vertical.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Medium</span><span class="pill pill-type">Small</span>
+              <span class="pill pill-special">Horizontal: True</span>
+              <span class="pill pill-special">Horizontal: False</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=85-2697" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 35. PopOver -->
+        <tr>
+          <td class="name-cell">PopOver</td>
+          <td><span class="node-id">113:5701</span></td>
+          <td class="desc-cell">Panel superpuesto de información adicional o acciones contextuales. Variante BottomSheet para móvil y Download para acciones de descarga.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">BottomSheet</span>
+              <span class="pill pill-type">Download</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=113-5701" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 36. Divider -->
+        <tr>
+          <td class="name-cell">Divider</td>
+          <td><span class="node-id">12:12553</span></td>
+          <td class="desc-cell">Separador visual entre secciones de contenido. Tres niveles de intensidad (Soft/Medium/Hard) y modo oscuro.</td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-special">Dark: True</span>
+              <span class="pill pill-special">Dark: False</span>
+            </div>
+          </td>
+          <td>
+            <div class="pills">
+              <span class="pill pill-type">Soft</span>
+              <span class="pill pill-type">Medium</span>
+              <span class="pill pill-type">Hard</span>
+            </div>
+          </td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=12-12553" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+        <!-- 37. Calendar -->
+        <tr>
+          <td class="name-cell">Calendar</td>
+          <td><span class="node-id">313:2762</span></td>
+          <td class="desc-cell">Selector de fecha mensual completo con navegación entre meses. Se integra con el componente DatePicker del input.</td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td><span style="color:var(--gray-400);font-size:12px">—</span></td>
+          <td class="preview-cell">
+            <a class="figma-btn" href="https://www.figma.com/design/KSN96EXaRBFcDOpLCy4f5k/JCCM---DesignSystem?node-id=313-2762" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 38 56" fill="none"><path d="M19 28a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" fill="#1ABCFE"/><path d="M1 46a9 9 0 0 1 9-9h9v9a9 9 0 1 1-18 0Z" fill="#0ACF83"/><path d="M19 1v18h9a9 9 0 1 0 0-18h-9Z" fill="#FF7262"/><path d="M1 10a9 9 0 0 0 9 9h9V1H10A9 9 0 0 0 1 10Z" fill="#F24E1E"/><path d="M1 28a9 9 0 0 0 9 9h9V19H10a9 9 0 0 0-9 9Z" fill="#A259FF"/></svg>
+              Ver en Figma ↗
+            </a>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<script>
+  function setActive(el) {
+    document.querySelectorAll('.nav-tabs a').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Smooth scroll + active tab on section enter
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        document.querySelectorAll('.nav-tabs a').forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
