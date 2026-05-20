@@ -18,13 +18,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingTagline => 'Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha';
 
   @override
-  String get landingCtaButton => 'Acceder a tu espacio';
+  String get landingTaglinePrefix => 'Gestión ágil y online de trámites para la ciudadanía de ';
+
+  @override
+  String get landingTaglineHighlight => 'Castilla-La Mancha';
+
+  @override
+  String get landingCtaButton => 'Acceder a mi Espacio Ciudadano';
 
   @override
   String get landingAboutButton => 'Saber más sobre Espacio Ciudadano';
 
   @override
-  String get landingHelpLink => '¿Cómo acceder? - Ayuda';
+  String get landingHelpLink => 'Cómo acceder';
 
   @override
   String get landingHelpPageTitle => 'Ayuda con el acceso';

@@ -22,7 +22,7 @@ final goRouterProvider = Provider<GoRouter>(
     final guard = SessionGuard(ref);
 
     final router = GoRouter(
-      initialLocation: Routes.designSystem,
+      initialLocation: Routes.landing,
       observers: [GoRouterObserver()],
       // ── Global redirect ──────────────────────────────────────────────────
       redirect: (final BuildContext context, final GoRouterState state) async => guard.redirect(state),
@@ -50,29 +50,25 @@ final goRouterProvider = Provider<GoRouter>(
         // ── Consent gate (JCCMEC-11) ─────────────────────────────────────────
         GoRoute(
           path: Routes.consent,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const ConsentPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const ConsentPage(),
         ),
 
         // ── Login (JCCMEC-10) ─────────────────────────────────────────────
         GoRoute(
           path: Routes.login,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const DomainLandingPlaceholder(title: 'Login'),
+          builder: (final BuildContext context, final GoRouterState state) => const DomainLandingPlaceholder(title: 'Login'),
         ),
 
         // ── Personalization — Mis hechos vitales (STORY-54 / JCCMEC-53) ──────
         GoRoute(
           path: Routes.lifeEvents,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const LifeEventsPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const LifeEventsPage(),
         ),
 
         // ── Design System catalog ─────────────────────────────────────────
         GoRoute(
           path: Routes.designSystem,
-          builder: (final BuildContext context, final GoRouterState state) =>
-              const DesignSystemCatalogPage(),
+          builder: (final BuildContext context, final GoRouterState state) => const DesignSystemCatalogPage(),
         ),
       ],
     );

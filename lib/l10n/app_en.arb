@@ -12,6 +12,14 @@
   "@landingTagline": {
     "description": "Subtitle shown below the title on the landing screen."
   },
+  "landingTaglinePrefix": "Agile and online management of procedures for the citizens of ",
+  "@landingTaglinePrefix": {
+    "description": "First part of the tagline (regular weight) preceding the region name."
+  },
+  "landingTaglineHighlight": "Castilla-La Mancha",
+  "@landingTaglineHighlight": {
+    "description": "Region name highlighted with H2 typography in the tagline."
+  },
   "landingCtaButton": "Access your space",
   "@landingCtaButton": {
     "description": "Primary CTA button text that initiates the Cl@ve authentication flow."
@@ -20,7 +28,7 @@
   "@landingAboutButton": {
     "description": "Secondary button that navigates to the about screen."
   },
-  "landingHelpLink": "How to access? - Help",
+  "landingHelpLink": "How to access?",
   "@landingHelpLink": {
     "description": "Text link that navigates to the access help screen."
   },

@@ -13,7 +13,6 @@ export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
-
 // ── Widgets ───────────────────────────────────────────────────────────────────
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -25,4 +24,5 @@ export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_input_case
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_label.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_tag.dart';

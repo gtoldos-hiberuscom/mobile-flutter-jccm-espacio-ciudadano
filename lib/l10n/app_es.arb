@@ -12,7 +12,15 @@
   "@landingTagline": {
     "description": "Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio."
   },
-  "landingCtaButton": "Acceder a tu espacio",
+  "landingTaglinePrefix": "Gestión ágil y online de trámites para la ciudadanía de ",
+  "@landingTaglinePrefix": {
+    "description": "Primera parte del eslogan (peso regular) que precede al nombre de la región."
+  },
+  "landingTaglineHighlight": "Castilla-La Mancha",
+  "@landingTaglineHighlight": {
+    "description": "Nombre de la región resaltado con tipografía H2 en el eslogan."
+  },
+  "landingCtaButton": "Acceder a mi Espacio Ciudadano",
   "@landingCtaButton": {
     "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
   },
@@ -20,7 +28,7 @@
   "@landingAboutButton": {
     "description": "Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano."
   },
-  "landingHelpLink": "¿Cómo acceder? - Ayuda",
+  "landingHelpLink": "Cómo acceder",
   "@landingHelpLink": {
     "description": "Enlace de texto que navega a la pantalla de ayuda con el acceso."
   },

@@ -58,7 +58,7 @@ class AppButton extends StatelessWidget {
     this.icon,
     this.isLoading = false,
     // Legacy variant param — mapped to hierarchy for backwards compat.
-    @Deprecated('Use hierarchy instead') AppButtonVariant? variant,
+    @Deprecated('Use hierarchy instead') final AppButtonVariant? variant,
   }) : _legacyVariant = variant;
 
   final AppButtonHierarchy hierarchy;
@@ -77,10 +77,10 @@ class AppButton extends StatelessWidget {
   };
 
   TextStyle get _textStyle => switch (size) {
-    AppButtonSize.medium => AppTypography.bodyBold,
+    AppButtonSize.medium => AppTypography.bodyBase,
     AppButtonSize.small => AppTypography.bodyBase.copyWith(
-        fontWeight: FontWeight.w600,
-      ),
+      fontWeight: FontWeight.w600,
+    ),
   };
 
   AppButtonHierarchy get _effectiveHierarchy {
@@ -100,8 +100,7 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final effectiveHierarchy = _effectiveHierarchy;
-    final isDisabled =
-        onPressed == null || effectiveHierarchy == AppButtonHierarchy.disabled;
+    final isDisabled = onPressed == null || effectiveHierarchy == AppButtonHierarchy.disabled;
     final effectiveSemantics = semanticsLabel ?? label;
 
     final Widget content = isLoading
@@ -142,13 +141,11 @@ class AppButton extends StatelessWidget {
     );
   }
 
-  Widget _buildPrimary(Widget content, bool isDisabled) => ElevatedButton(
+  Widget _buildPrimary(final Widget content, final bool isDisabled) => ElevatedButton(
     onPressed: isLoading || isDisabled ? null : onPressed,
     style: ElevatedButton.styleFrom(
-      backgroundColor:
-          isDisabled ? AppColors.disabledContainer : AppColors.primary,
-      foregroundColor:
-          isDisabled ? AppColors.textDisabled : AppColors.textOnPrimary,
+      backgroundColor: isDisabled ? AppColors.disabledContainer : AppColors.primary,
+      foregroundColor: isDisabled ? AppColors.textDisabled : AppColors.textOnPrimary,
       minimumSize: Size(AppDimensions.minTouchTarget, _height),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -162,14 +159,14 @@ class AppButton extends StatelessWidget {
     child: content,
   );
 
-  Widget _buildSecondary(Widget content, bool isDisabled) => OutlinedButton(
+  Widget _buildSecondary(final Widget content, final bool isDisabled) => OutlinedButton(
     onPressed: isLoading || isDisabled ? null : onPressed,
     style: OutlinedButton.styleFrom(
-      foregroundColor: isDisabled ? AppColors.textDisabled : AppColors.primary,
+      foregroundColor: isDisabled ? AppColors.textDisabled : Colors.black,
       minimumSize: Size(AppDimensions.minTouchTarget, _height),
       side: BorderSide(
         color: isDisabled ? AppColors.disabled : AppColors.primary,
-        width: 1.5,
+        width: 2,
       ),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -180,16 +177,12 @@ class AppButton extends StatelessWidget {
     child: content,
   );
 
-  Widget _buildGhost(Widget content, bool isDisabled) => OutlinedButton(
+  Widget _buildGhost(final Widget content, final bool isDisabled) => TextButton(
     onPressed: isLoading || isDisabled ? null : onPressed,
-    style: OutlinedButton.styleFrom(
-      foregroundColor: isDisabled ? AppColors.textDisabled : AppColors.primary,
+    style: TextButton.styleFrom(
+      foregroundColor: isDisabled ? AppColors.textDisabled : Colors.black,
       minimumSize: Size(AppDimensions.minTouchTarget, _height),
       backgroundColor: Colors.transparent,
-      side: BorderSide(
-        color: isDisabled ? AppColors.disabled : AppColors.outline,
-        width: 1,
-      ),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(AppDimensions.radiusXs),
@@ -199,12 +192,11 @@ class AppButton extends StatelessWidget {
     child: content,
   );
 
-  Widget _buildTertiary(Widget content, bool isDisabled) => TextButton(
+  Widget _buildTertiary(final Widget content, final bool isDisabled) => TextButton(
     onPressed: isLoading || isDisabled ? null : onPressed,
     style: TextButton.styleFrom(
       foregroundColor: isDisabled ? AppColors.textDisabled : AppColors.primary,
-      backgroundColor:
-          isDisabled ? null : AppColors.secondaryLight100,
+      backgroundColor: isDisabled ? null : AppColors.secondaryLight100,
       minimumSize: Size(AppDimensions.minTouchTarget, _height),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -216,15 +208,15 @@ class AppButton extends StatelessWidget {
   );
 
   static Color _foregroundColor(
-    AppButtonHierarchy hierarchy,
-    bool isDisabled,
+    final AppButtonHierarchy hierarchy,
+    final bool isDisabled,
   ) {
     if (isDisabled) return AppColors.textDisabled;
     return switch (hierarchy) {
       AppButtonHierarchy.primary => AppColors.textOnPrimary,
-      AppButtonHierarchy.secondary ||
-      AppButtonHierarchy.ghost ||
+      AppButtonHierarchy.secondary => Colors.black,
       AppButtonHierarchy.tertiary => AppColors.primary,
+      AppButtonHierarchy.ghost => Colors.black,
       AppButtonHierarchy.disabled => AppColors.textDisabled,
     };
   }

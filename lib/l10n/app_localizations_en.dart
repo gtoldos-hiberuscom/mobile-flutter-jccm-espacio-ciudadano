@@ -18,13 +18,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingTagline => 'Agile and online management of procedures for the citizens of Castilla-La Mancha';
 
   @override
+  String get landingTaglinePrefix => 'Agile and online management of procedures for the citizens of ';
+
+  @override
+  String get landingTaglineHighlight => 'Castilla-La Mancha';
+
+  @override
   String get landingCtaButton => 'Access your space';
 
   @override
   String get landingAboutButton => 'Learn more about Citizen Space';
 
   @override
-  String get landingHelpLink => 'How to access? - Help';
+  String get landingHelpLink => 'How to access?';
 
   @override
   String get landingHelpPageTitle => 'Access help';

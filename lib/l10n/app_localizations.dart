@@ -110,10 +110,22 @@ abstract class AppLocalizations {
   /// **'Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha'**
   String get landingTagline;
 
+  /// Primera parte del eslogan (peso regular) que precede al nombre de la región.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestión ágil y online de trámites para la ciudadanía de '**
+  String get landingTaglinePrefix;
+
+  /// Nombre de la región resaltado con tipografía H2 en el eslogan.
+  ///
+  /// In es, this message translates to:
+  /// **'Castilla-La Mancha'**
+  String get landingTaglineHighlight;
+
   /// Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve.
   ///
   /// In es, this message translates to:
-  /// **'Acceder a tu espacio'**
+  /// **'Acceder a mi Espacio Ciudadano'**
   String get landingCtaButton;
 
   /// Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano.
@@ -125,7 +137,7 @@ abstract class AppLocalizations {
   /// Enlace de texto que navega a la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
-  /// **'¿Cómo acceder? - Ayuda'**
+  /// **'Cómo acceder'**
   String get landingHelpLink;
 
   /// Título del AppBar de la pantalla de ayuda con el acceso.
