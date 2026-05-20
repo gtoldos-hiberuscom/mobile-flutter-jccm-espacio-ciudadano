@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
@@ -37,6 +38,9 @@ enum AppButtonSize {
 /// - Correct hierarchy colours from Figma tokens.
 /// - Accessible minimum tap area (48 dp for [AppButtonSize.medium]).
 /// - [Semantics] label for screen readers.
+/// - Rule 3.4: content wrapped in [ExcludeSemantics] — label announced as one node.
+/// - Rule 3.10: loading state announces "Cargando" / "Contenido cargado" via
+///   [SemanticsService] and uses [liveRegion] on the spinner.
 ///
 /// Example:
 /// ```dart
@@ -47,7 +51,7 @@ enum AppButtonSize {
 ///   size: AppButtonSize.medium,
 /// )
 /// ```
-class AppButton extends StatelessWidget {
+class AppButton extends StatefulWidget {
   const AppButton({
     required this.label,
     required this.onPressed,
@@ -71,12 +75,35 @@ class AppButton extends StatelessWidget {
   // ignore: deprecated_member_use_from_same_package
   final AppButtonVariant? _legacyVariant;
 
-  double get _height => switch (size) {
+  @override
+  State<AppButton> createState() => _AppButtonState();
+}
+
+class _AppButtonState extends State<AppButton> {
+  bool _wasLoading = false;
+
+  @override
+  void didUpdateWidget(covariant AppButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Rule 3.10 — announce loading start and end (WCAG 4.1.3)
+    if (!_wasLoading && widget.isLoading) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) SemanticsService.announce('Cargando', TextDirection.ltr);
+      });
+    } else if (_wasLoading && !widget.isLoading) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) SemanticsService.announce('Contenido cargado', TextDirection.ltr);
+      });
+    }
+    _wasLoading = widget.isLoading;
+  }
+
+  double get _height => switch (widget.size) {
     AppButtonSize.medium => AppDimensions.minTouchTarget,
     AppButtonSize.small => 36,
   };
 
-  TextStyle get _textStyle => switch (size) {
+  TextStyle get _textStyle => switch (widget.size) {
     AppButtonSize.medium => AppTypography.bodyBase,
     AppButtonSize.small => AppTypography.bodyBase.copyWith(
       fontWeight: FontWeight.w600,
@@ -85,7 +112,7 @@ class AppButton extends StatelessWidget {
 
   AppButtonHierarchy get _effectiveHierarchy {
     // ignore: deprecated_member_use_from_same_package
-    final legacy = _legacyVariant;
+    final legacy = widget._legacyVariant;
     if (legacy != null) {
       // ignore: deprecated_member_use_from_same_package
       return switch (legacy) {
@@ -94,36 +121,44 @@ class AppButton extends StatelessWidget {
         AppButtonVariant.text => AppButtonHierarchy.tertiary,
       };
     }
-    return hierarchy;
+    return widget.hierarchy;
   }
 
   @override
   Widget build(final BuildContext context) {
     final effectiveHierarchy = _effectiveHierarchy;
-    final isDisabled = onPressed == null || effectiveHierarchy == AppButtonHierarchy.disabled;
-    final effectiveSemantics = semanticsLabel ?? label;
+    final isDisabled = widget.onPressed == null || effectiveHierarchy == AppButtonHierarchy.disabled;
+    final effectiveSemantics = widget.semanticsLabel ?? widget.label;
 
-    final Widget content = isLoading
-        ? SizedBox(
-            width: AppDimensions.iconSmall,
-            height: AppDimensions.iconSmall,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                _foregroundColor(effectiveHierarchy, isDisabled),
+    // Rule 3.10 — spinner with liveRegion so SR announces loading state
+    final Widget content = widget.isLoading
+        ? Semantics(
+            liveRegion: true,
+            label: 'Cargando',
+            focusable: false,
+            child: ExcludeSemantics(
+              child: SizedBox(
+                width: AppDimensions.iconSmall,
+                height: AppDimensions.iconSmall,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    _AppButtonUtils.foregroundColor(effectiveHierarchy, isDisabled),
+                  ),
+                ),
               ),
             ),
           )
-        : icon != null
+        : widget.icon != null
         ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              icon!,
+              widget.icon!,
               const SizedBox(width: AppDimensions.space8),
-              Text(label, style: _textStyle),
+              Text(widget.label, style: _textStyle),
             ],
           )
-        : Text(label, style: _textStyle);
+        : Text(widget.label, style: _textStyle);
 
     final button = switch (effectiveHierarchy) {
       AppButtonHierarchy.primary => _buildPrimary(content, isDisabled),
@@ -133,16 +168,17 @@ class AppButton extends StatelessWidget {
       AppButtonHierarchy.disabled => _buildPrimary(content, true),
     };
 
+    // Rule 3.4 — unified Semantics node + ExcludeSemantics on visual content
     return Semantics(
       label: effectiveSemantics,
       button: true,
-      enabled: !isDisabled && !isLoading,
-      child: button,
+      enabled: !isDisabled && !widget.isLoading,
+      child: ExcludeSemantics(child: button),
     );
   }
 
   Widget _buildPrimary(final Widget content, final bool isDisabled) => ElevatedButton(
-    onPressed: isLoading || isDisabled ? null : onPressed,
+    onPressed: widget.isLoading || isDisabled ? null : widget.onPressed,
     style: ElevatedButton.styleFrom(
       backgroundColor: isDisabled ? AppColors.disabledContainer : AppColors.primary,
       foregroundColor: isDisabled ? AppColors.textDisabled : AppColors.textOnPrimary,
@@ -160,7 +196,7 @@ class AppButton extends StatelessWidget {
   );
 
   Widget _buildSecondary(final Widget content, final bool isDisabled) => OutlinedButton(
-    onPressed: isLoading || isDisabled ? null : onPressed,
+    onPressed: widget.isLoading || isDisabled ? null : widget.onPressed,
     style: OutlinedButton.styleFrom(
       foregroundColor: isDisabled ? AppColors.textDisabled : Colors.black,
       minimumSize: Size(AppDimensions.minTouchTarget, _height),
@@ -178,7 +214,7 @@ class AppButton extends StatelessWidget {
   );
 
   Widget _buildGhost(final Widget content, final bool isDisabled) => TextButton(
-    onPressed: isLoading || isDisabled ? null : onPressed,
+    onPressed: widget.isLoading || isDisabled ? null : widget.onPressed,
     style: TextButton.styleFrom(
       foregroundColor: isDisabled ? AppColors.textDisabled : Colors.black,
       minimumSize: Size(AppDimensions.minTouchTarget, _height),
@@ -193,7 +229,7 @@ class AppButton extends StatelessWidget {
   );
 
   Widget _buildTertiary(final Widget content, final bool isDisabled) => TextButton(
-    onPressed: isLoading || isDisabled ? null : onPressed,
+    onPressed: widget.isLoading || isDisabled ? null : widget.onPressed,
     style: TextButton.styleFrom(
       foregroundColor: isDisabled ? AppColors.textDisabled : AppColors.primary,
       backgroundColor: isDisabled ? null : AppColors.secondaryLight100,
@@ -206,8 +242,11 @@ class AppButton extends StatelessWidget {
     ),
     child: content,
   );
+}
 
-  static Color _foregroundColor(
+/// Internal color helper extracted from instance methods (needed after StatefulWidget split).
+abstract final class _AppButtonUtils {
+  static Color foregroundColor(
     final AppButtonHierarchy hierarchy,
     final bool isDisabled,
   ) {

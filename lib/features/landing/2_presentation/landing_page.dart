@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -68,9 +69,12 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         ref.read(goRouterProvider).go(Routes.lifeEvents);
       }
       if (next.error != null) {
+        final errorMsg = l10n.domainGenericLoadError;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.domainGenericLoadError)),
+          SnackBar(content: Text(errorMsg)),
         );
+        // Rule 3.11 — announce feedback messages via SemanticsService (WCAG 4.1.3)
+        SemanticsService.announce(errorMsg, TextDirection.ltr);
         ref.read(landingProvider.notifier).clearError();
       }
     });
@@ -88,16 +92,24 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppDimensions.space16,
                   ),
-                  child: Column(
+                  // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
+                  child: Stack(
                     children: [
-                      const SizedBox(height: AppDimensions.space16),
-
-                      // ── H1 semantic heading (announced first by SR) ─────
-                      Semantics(
-                        header: true,
-                        label: 'Espacio Ciudadano de Castilla-La Mancha',
-                        child: const SizedBox(width: 1, height: 1),
+                      // ── H1 semantic heading — 1×1px node announced first by SR ──
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: Semantics(
+                          header: true,
+                          headingLevel: 1,
+                          focusable: true,
+                          label: 'Espacio Ciudadano de Castilla-La Mancha',
+                          child: const SizedBox(width: 1, height: 1),
+                        ),
                       ),
+                      Column(
+                        children: [
+                          const SizedBox(height: AppDimensions.space16),
 
                       // ── Castilla-La Mancha institutional logo ───────────
                       Semantics(
@@ -164,8 +176,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                         ),
                       ),
                       const SizedBox(height: AppDimensions.space16),
+                        ],
+                      ), // Column
                     ],
-                  ),
+                  ), // Stack
                 ),
               ),
             ),
