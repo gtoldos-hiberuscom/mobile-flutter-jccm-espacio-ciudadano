@@ -306,11 +306,12 @@ class AppNavCard extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: label,
+      label: [label, if (description != null) description].join(', '),
       enabled: !isDisabled,
-      child: InkWell(
-        onTap: isDisabled ? null : onTap,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: isDisabled ? null : onTap,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
         child: Container(
           padding: const EdgeInsets.only(
             left: AppDimensions.space8,
@@ -373,6 +374,7 @@ class AppNavCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

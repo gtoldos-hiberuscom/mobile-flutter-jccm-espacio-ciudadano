@@ -63,7 +63,12 @@ class AppBottomSheet extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return SafeArea(
+    return Semantics(
+      container: true,
+      scopesRoute: true,
+      namesRoute: true,
+      label: title ?? 'Panel inferior',
+      child: SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(
           left: AppDimensions.space4,
@@ -110,6 +115,7 @@ class AppBottomSheet extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 
@@ -144,9 +150,13 @@ class AppBottomSheet extends StatelessWidget {
             ),
           ),
           // Close button
-          GestureDetector(
-            onTap: onClose ?? () => Navigator.of(context).pop(),
-            child: Container(
+          Semantics(
+            label: 'Cerrar',
+            button: true,
+            child: GestureDetector(
+              onTap: onClose ?? () => Navigator.of(context).pop(),
+              child: ExcludeSemantics(
+                child: Container(
               height: AppDimensions.space48,
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDimensions.space8,
@@ -171,6 +181,8 @@ class AppBottomSheet extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          ),
           ),
         ],
       ),

@@ -183,13 +183,27 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    // WCAG 4.1.2 — unified semantic label for complex cards.
+    final semanticSegments = <String>[
+      if (categoryLabel != null) categoryLabel!,
+      title,
+      if (refNumber != null) refNumber!,
+      if (expiryDate != null) expiryDate!,
+      if (date != null) date!,
+      if (time != null) time!,
+      if (description != null) description!,
+    ];
+    final composedLabel = semanticSegments.join(', ');
+
     return Semantics(
+      label: composedLabel,
       button: onTap != null,
       enabled: !_isDisabled,
-      child: InkWell(
-        onTap: _isDisabled ? null : onTap,
-        borderRadius: _borderRadius,
-        child: Container(
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: _isDisabled ? null : onTap,
+          borderRadius: _borderRadius,
+          child: Container(
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: _borderRadius,
@@ -203,6 +217,7 @@ class AppCard extends StatelessWidget {
             children: cardClass == AppCardClass.agenda ? _agendaSlots() : _basicSlots(),
           ),
         ),
+      ),
       ),
     );
   }

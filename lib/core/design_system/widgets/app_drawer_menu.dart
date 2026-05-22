@@ -77,7 +77,12 @@ class AppDrawerMenu extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Drawer(
+    return Semantics(
+      container: true,
+      scopesRoute: true,
+      namesRoute: true,
+      label: 'Menú de navegación',
+      child: Drawer(
       width: MediaQuery.sizeOf(context).width * 0.82,
       shape: const RoundedRectangleBorder(),
       child: Column(
@@ -205,6 +210,7 @@ class AppDrawerMenu extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }
@@ -243,27 +249,33 @@ class _DrawerSecondaryTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return InkWell(
-      onTap: link.onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
-        child: Row(
-          children: [
-            const Icon(
-              Icons.arrow_forward_rounded,
-              color: AppColors.primary,
-              size: AppDimensions.iconSmall,
-            ),
-            const SizedBox(width: AppDimensions.space12),
-            Expanded(
-              child: Text(
-                link.label,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.textPrimary,
+    return Semantics(
+      label: link.label,
+      button: true,
+      child: InkWell(
+        onTap: link.onTap,
+        child: ExcludeSemantics(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.arrow_forward_rounded,
+                  color: AppColors.primary,
+                  size: AppDimensions.iconSmall,
                 ),
-              ),
+                const SizedBox(width: AppDimensions.space12),
+                Expanded(
+                  child: Text(
+                    link.label,
+                    style: AppTypography.bodyRegular.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

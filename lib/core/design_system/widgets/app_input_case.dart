@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
@@ -95,6 +96,22 @@ class _AppInputCaseState extends State<AppInputCase> {
   }
 
   @override
+  void didUpdateWidget(covariant final AppInputCase oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newError = widget.errorText;
+    if (newError != null && newError.isNotEmpty && oldWidget.errorText != newError) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          SemanticsService.announce(
+            'Error, ${widget.label}: $newError',
+            TextDirection.ltr,
+          );
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     if (widget.focusNode == null) _focusNode.dispose();
     super.dispose();
@@ -165,7 +182,18 @@ class _AppInputCaseState extends State<AppInputCase> {
     final (borderColor, fillColor, labelColor) = _stateColors;
     final isDisabled = _effectiveState == AppInputState.disabled;
 
-    return Column(
+    // WCAG 4.1.2 — compose semantic label: field name + current value + error.
+    final semanticSegments = <String>[
+      widget.label,
+      if (widget.errorText != null && widget.errorText!.isNotEmpty) 'Error: ${widget.errorText}',
+    ];
+    final composedLabel = semanticSegments.join(', ');
+
+    return Semantics(
+      label: composedLabel,
+      textField: true,
+      enabled: !isDisabled,
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -228,6 +256,7 @@ class _AppInputCaseState extends State<AppInputCase> {
           ),
         ),
       ],
+    ),
     );
   }
 }

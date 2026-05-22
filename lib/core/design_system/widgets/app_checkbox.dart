@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
@@ -66,10 +67,14 @@ class AppCheckbox extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Semantics(
-          label: label,
+          label: [
+            label,
+            if (isError && errorText != null) 'Error: $errorText',
+          ].join(', '),
           checked: value ?? false,
           enabled: !_isDisabled,
-          child: InkWell(
+          child: ExcludeSemantics(
+            child: InkWell(
             onTap: _isDisabled
                 ? null
                 : () {
@@ -118,6 +123,7 @@ class AppCheckbox extends StatelessWidget {
                 ),
               ],
             ),
+          ),
           ),
         ),
         if (isError && errorText != null) ...[
