@@ -1,150 +1,486 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 
-enum AppCardClass { basic, agenda }
+/// Variant for [AppCard] — mirrors the Figma `propClass` property.
+enum AppCardClass {
+  /// Standard content card with category tag, title, ref block, attachment, and action.
+  basic,
 
-enum AppCardState { defaultState, warning, disabled }
+  /// Calendar/appointment card with date, time, title, and description block.
+  agenda,
+}
 
+/// Status for [AppCard] — mirrors the Figma `status` property.
+enum AppCardState {
+  /// Active, default appearance.
+  defaultState,
+
+  /// Expiry/attention — warning colours on the ref block.
+  warning,
+
+  /// Card is expired/inactive; all content uses muted colours.
+  disabled,
+}
+
+/// A flexible content card — mirrors the Figma **"Cards/Cards"** component
+/// (node `56:3449`) from the DS canvas section `165:6403`.
+///
+/// **Design rule (Figma):** "Una card con sombra implica que será interactiva
+/// y viceversa."  When [isInteractive] is `true` the card uses
+/// [AppShadows.medium] and an `8 dp` radius; non-interactive cards use
+/// [AppShadows.low] and a `4 dp` radius.
+///
+/// ## Variants
+/// - [AppCardClass.basic] — service/document card with optional category label,
+///   status tag, title icon, ref/expiry block, attachment link, action button,
+///   and last-update footer.
+/// - [AppCardClass.agenda] — appointment card with date, time, title,
+///   description block, optional action button, and last-update footer.
+///
+/// ## Example — Basic (interactive, default)
+/// ```dart
+/// AppCard(
+///   title: 'Familia numerosa',
+///   categoryLabel: 'Tag | Categoría',
+///   statusTag: AppTag(status: AppTagStatus.infoActive, label: 'Actualizado'),
+///   titleIcon: Icon(Icons.badge_outlined, size: 32, color: AppColors.primary),
+///   refNumber: '0000000000000000',
+///   expiryDate: '30 Dic 2029',
+///   attachmentLabel: 'Archivos adjuntos al expediente',
+///   lastUpdateText: 'Actualizado el 21 abr 2026 a las 23:00h',
+///   onTap: () {},
+/// )
+/// ```
+///
+/// ## Example — Agenda (non-interactive)
+/// ```dart
+/// AppCard(
+///   cardClass: AppCardClass.agenda,
+///   title: 'Cita en Atención Primaria',
+///   isInteractive: false,
+///   date: '21 dic 2026',
+///   time: '10:30h',
+///   description: 'Texto de la descripción del evento.',
+///   lastUpdateText: 'Actualizado el 21 abr 2026 a las 23:00h',
+/// )
+/// ```
 class AppCard extends StatelessWidget {
   const AppCard({
     required this.title,
     super.key,
     this.cardClass = AppCardClass.basic,
     this.state = AppCardState.defaultState,
-    this.subtitle,
-    this.trailing,
-    this.leading,
-    this.onTap,
+    this.isInteractive = true,
+    // ── Basic slots ──────────────────────────────────────────────────────────
+    this.categoryLabel,
+    this.statusTag,
+    this.titleIcon,
+    this.refNumber,
+    this.expiryDate,
+    this.expiryWarning = false,
+    this.attachmentLabel,
+    this.onAttachmentTap,
+    this.actionButton,
+    this.lastUpdateText,
+    // ── Agenda slots ─────────────────────────────────────────────────────────
     this.date,
-    this.month,
+    this.time,
+    this.description,
+    // ── Interaction ───────────────────────────────────────────────────────────
+    this.onTap,
+    // ── Legacy compat ─────────────────────────────────────────────────────────
+    @Deprecated('Use titleIcon') this.leading,
+    @Deprecated('Use actionButton') this.trailing,
+    @Deprecated('Use date') this.month,
+    @Deprecated('Use description') this.subtitle,
   });
 
   final AppCardClass cardClass;
   final AppCardState state;
+
+  /// When `true` (default) the card has [AppShadows.medium] + `8 dp` radius.
+  /// When `false` the card uses [AppShadows.low] + `4 dp` radius.
+  /// Disabled cards are always non-interactive visually.
+  final bool isInteractive;
+
+  /// Main title — Inter Bold 18/28 (`leadingBold`).
   final String title;
-  final String? subtitle;
-  final Widget? trailing;
-  final Widget? leading;
-  final VoidCallback? onTap;
+
+  // ── Basic ─────────────────────────────────────────────────────────────────
+
+  /// Uppercase caption label at the top-left of the header row.
+  final String? categoryLabel;
+
+  /// Status tag widget — typically `AppTag(status: ..., label: ...)`.
+  final Widget? statusTag;
+
+  /// 32 dp icon displayed to the left of the title.
+  final Widget? titleIcon;
+
+  /// Reference number shown in the description block.
+  final String? refNumber;
+
+  /// Expiry date shown in the description block.
+  final String? expiryDate;
+
+  /// When `true`, displays [expiryDate] in warning colour with a warning icon.
+  final bool expiryWarning;
+
+  /// Attachment row label text.
+  final String? attachmentLabel;
+
+  /// Tap callback for the attachment row.
+  final VoidCallback? onAttachmentTap;
+
+  /// Optional action button widget — typically `AppButton(...)`.
+  final Widget? actionButton;
+
+  /// Last-update footer text, prefixed with an `autorenew` icon.
+  final String? lastUpdateText;
+
+  // ── Agenda ────────────────────────────────────────────────────────────────
+
+  /// Date string — e.g. `'21 dic 2026'`.
   final String? date;
+
+  /// Time string — e.g. `'10:30h'`.
+  final String? time;
+
+  /// Description text shown in the content block.
+  final String? description;
+
+  // ── Interaction ───────────────────────────────────────────────────────────
+
+  final VoidCallback? onTap;
+
+  // ── Legacy compat (unused internally) ────────────────────────────────────
+  // ignore: deprecated_member_use_from_same_package
+  final Widget? leading;
+  // ignore: deprecated_member_use_from_same_package
+  final Widget? trailing;
+  // ignore: deprecated_member_use_from_same_package
   final String? month;
+  // ignore: deprecated_member_use_from_same_package
+  final String? subtitle;
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
+  bool get _isDisabled => state == AppCardState.disabled;
+
+  BorderRadius get _borderRadius => BorderRadius.circular(
+    isInteractive && !_isDisabled ? AppDimensions.radiusMedium : AppDimensions.radiusXs,
+  );
+
+  List<BoxShadow> get _shadow => isInteractive && !_isDisabled ? AppShadows.medium : AppShadows.low;
+
+  Color _textColor([final Color? active]) => _isDisabled ? AppColors.neutralDark : (active ?? AppColors.textPrimary);
+
+  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(final BuildContext context) {
-    final isDisabled = state == AppCardState.disabled;
-    final bgColor = switch (state) {
-      AppCardState.warning => AppColors.warningContainer,
-      AppCardState.disabled => AppColors.disabledContainer,
-      AppCardState.defaultState => AppColors.surface,
-    };
-    final borderColor = switch (state) {
-      AppCardState.warning => AppColors.warning,
-      AppCardState.disabled => AppColors.outline,
-      AppCardState.defaultState => AppColors.outlineVariant,
-    };
-
-    final Widget cardContent = switch (cardClass) {
-      AppCardClass.agenda => _buildAgendaContent(isDisabled),
-      AppCardClass.basic => _buildBasicContent(isDisabled),
-    };
-
     return Semantics(
       button: onTap != null,
-      enabled: !isDisabled,
+      enabled: !_isDisabled,
       child: InkWell(
-        onTap: isDisabled ? null : onTap,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 120),
+        onTap: _isDisabled ? null : onTap,
+        borderRadius: _borderRadius,
+        child: Container(
           decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-            border: Border.all(color: borderColor),
-            boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.low,
+            color: AppColors.surface,
+            borderRadius: _borderRadius,
+            border: Border.all(color: AppColors.backgroundBlueMutedLight),
+            boxShadow: _shadow,
           ),
-          child: cardContent,
+          padding: const EdgeInsets.all(AppDimensions.space16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: cardClass == AppCardClass.agenda ? _agendaSlots() : _basicSlots(),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBasicContent(final bool isDisabled) {
-    return Padding(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+  // ── Basic slots ───────────────────────────────────────────────────────────
+
+  List<Widget> _basicSlots() => [
+    if (categoryLabel != null || statusTag != null) _headerRow(),
+    _titleRow(),
+    if (refNumber != null || expiryDate != null) _refBlock(),
+    if (attachmentLabel != null) _attachmentRow(),
+    if (actionButton != null) SizedBox(width: double.infinity, child: actionButton),
+    if (lastUpdateText != null) _lastUpdateRow(),
+  ];
+
+  Widget _headerRow() {
+    return SizedBox(
+      width: double.infinity,
       child: Row(
         children: [
-          if (leading != null) ...[
-            leading!,
-            const SizedBox(width: AppDimensions.space12),
-          ],
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTypography.bodyBold.copyWith(
-                    color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+          if (categoryLabel != null)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: AppDimensions.space4,
+                  bottom: AppDimensions.space8,
+                ),
+                child: Text(
+                  categoryLabel!,
+                  style: AppTypography.captionUppercase.copyWith(
+                    color: AppColors.neutralDark,
                   ),
                 ),
-                if (subtitle != null) ...[
-                  const SizedBox(height: AppDimensions.space4),
-                  Text(
-                    subtitle!,
-                    style: AppTypography.bodyBase.copyWith(
-                      color: isDisabled ? AppColors.textDisabled : AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ],
+              ),
             ),
-          ),
-          if (trailing != null) ...[
-            const SizedBox(width: AppDimensions.space12),
-            trailing!,
-          ],
+          ?statusTag,
         ],
       ),
     );
   }
 
-  Widget _buildAgendaContent(final bool isDisabled) {
+  Widget _titleRow() {
+    final effectiveTitleIcon = titleIcon;
     return Padding(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+      padding: const EdgeInsets.only(
+        top: AppDimensions.space4,
+        bottom: AppDimensions.space8,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (date != null && month != null)
-            Container(
-              width: 48,
-              padding: const EdgeInsets.all(AppDimensions.space8),
-              decoration: BoxDecoration(
-                color: isDisabled ? AppColors.disabledContainer : AppColors.primaryContainer,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+          if (effectiveTitleIcon != null) ...[
+            SizedBox(width: 32, height: 32, child: effectiveTitleIcon),
+            const SizedBox(width: AppDimensions.space4),
+          ],
+          Expanded(
+            child: Text(
+              title,
+              style: AppTypography.leadingBold.copyWith(color: _textColor()),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _refBlock() {
+    final bgColor = _isDisabled ? AppColors.backgroundBlueMutedLight : AppColors.backgroundBlueLighter;
+
+    final labelColor = _isDisabled ? AppColors.neutralDark : AppColors.textPrimary;
+    final valueColor = _isDisabled ? AppColors.neutralDark : AppColors.textPrimary;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.space8,
+        vertical: AppDimensions.space4,
+      ),
+      color: bgColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (refNumber != null)
+            _refRow(
+              label: 'Nº ref.',
+              value: refNumber!,
+              labelColor: labelColor,
+              valueColor: valueColor,
+            ),
+          if (expiryDate != null)
+            _refRow(
+              label: 'Expir.',
+              value: expiryDate!,
+              labelColor: labelColor,
+              valueColor: expiryWarning ? AppColors.warningDark : valueColor,
+              valueWeight: expiryWarning ? FontWeight.w700 : FontWeight.w400,
+              trailingIcon: expiryWarning
+                  ? const Icon(
+                      Icons.warning_amber_rounded,
+                      size: AppDimensions.iconMedium,
+                      color: AppColors.warningDark,
+                    )
+                  : null,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _refRow({
+    required final String label,
+    required final String value,
+    required final Color labelColor,
+    required final Color valueColor,
+    final FontWeight valueWeight = FontWeight.w400,
+    final Widget? trailingIcon,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+      child: Wrap(
+        spacing: AppDimensions.space8,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 124),
+            child: Text(
+              label.toUpperCase(),
+              style: AppTypography.captionUppercase.copyWith(color: labelColor),
+            ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                value,
+                style: AppTypography.smallRegular.copyWith(
+                  color: valueColor,
+                  fontWeight: valueWeight,
+                ),
               ),
-              child: Column(
-                children: [
-                  Text(
-                    date!,
-                    style: AppTypography.h5.copyWith(
-                      color: isDisabled ? AppColors.textDisabled : AppColors.primary,
-                    ),
-                  ),
-                  Text(
-                    month!.toUpperCase(),
-                    style: AppTypography.small.copyWith(
-                      color: isDisabled ? AppColors.textDisabled : AppColors.primary,
-                    ),
-                  ),
-                ],
+              if (trailingIcon != null) ...[
+                const SizedBox(width: AppDimensions.space4),
+                trailingIcon,
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _attachmentRow() {
+    return InkWell(
+      onTap: _isDisabled ? null : onAttachmentTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+        child: Row(
+          children: [
+            Icon(
+              AppIcons.attachment,
+              size: AppDimensions.iconMedium,
+              color: _textColor(),
+            ),
+            const SizedBox(width: AppDimensions.space8),
+            Expanded(
+              child: Text(
+                attachmentLabel!,
+                style: AppTypography.bodyRegular.copyWith(color: _textColor()),
               ),
             ),
-          const SizedBox(width: AppDimensions.space12),
-          Expanded(child: _buildBasicContent(isDisabled)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _lastUpdateRow() {
+    final color = _isDisabled ? AppColors.neutralDark : AppColors.blueMuted900;
+    return SizedBox(
+      width: double.infinity,
+      child: Row(
+        children: [
+          Icon(AppIcons.autorenew, size: AppDimensions.iconMedium, color: color),
+          const SizedBox(width: AppDimensions.space8),
+          Expanded(
+            child: Text(
+              lastUpdateText!,
+              style: AppTypography.smallRegular.copyWith(color: color),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  // ── Agenda slots ──────────────────────────────────────────────────────────
+
+  List<Widget> _agendaSlots() => [
+    if (date != null || time != null) _agendaHeaderRow(),
+    _agendaTitleRow(),
+    if (description != null) _agendaContentBlock(),
+    if (actionButton != null) SizedBox(width: double.infinity, child: actionButton),
+    if (lastUpdateText != null) _lastUpdateRow(),
+  ];
+
+  Widget _agendaHeaderRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (date != null)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.calendar_today_outlined,
+                  size: AppDimensions.iconMedium,
+                  color: _textColor(),
+                ),
+                const SizedBox(width: AppDimensions.space8),
+                Text(
+                  date!,
+                  style: AppTypography.bodyRegular.copyWith(color: _textColor()),
+                ),
+              ],
+            ),
+          if (time != null)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.schedule_outlined,
+                  size: AppDimensions.iconMedium,
+                  color: _textColor(),
+                ),
+                const SizedBox(width: AppDimensions.space8),
+                Text(
+                  time!,
+                  style: AppTypography.bodyRegular.copyWith(color: _textColor()),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _agendaTitleRow() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: AppDimensions.space4,
+        bottom: AppDimensions.space8,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        child: Text(
+          title,
+          style: AppTypography.leadingBold.copyWith(color: _textColor()),
+        ),
+      ),
+    );
+  }
+
+  Widget _agendaContentBlock() {
+    final bgColor = _isDisabled ? AppColors.backgroundBlueMutedLight : AppColors.backgroundBlueLighter;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.space8,
+        vertical: AppDimensions.space4,
+      ),
+      color: bgColor,
+      child: Text(
+        description!,
+        style: AppTypography.smallRegular.copyWith(color: _textColor()),
       ),
     );
   }
@@ -157,7 +493,7 @@ class AppProgressBar extends StatelessWidget {
     this.color,
     this.backgroundColor,
     this.semanticsLabel,
-    this.height = 8,
+    this.height = 16,
     this.borderRadius,
   });
 
@@ -178,9 +514,9 @@ class AppProgressBar extends StatelessWidget {
         child: LinearProgressIndicator(
           value: value,
           minHeight: height,
-          backgroundColor: backgroundColor ?? AppColors.neutral300,
+          backgroundColor: backgroundColor ?? const Color(0xFFE0E5EB),
           valueColor: AlwaysStoppedAnimation<Color>(
-            color ?? const Color(0xFF156579),
+            color ?? AppColors.secondary,
           ),
         ),
       ),
@@ -236,7 +572,7 @@ class AppAvatar extends StatelessWidget {
     final avatarWidget = DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.primary, width: 1),
+        border: Border.all(color: AppColors.primary),
       ),
       child: CircleAvatar(
         radius: _radius,

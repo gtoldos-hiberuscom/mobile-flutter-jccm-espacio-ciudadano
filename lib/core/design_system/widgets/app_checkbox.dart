@@ -111,13 +111,8 @@ class AppCheckbox extends StatelessWidget {
                 Flexible(
                   child: Text(
                     label,
-                    style: (size == AppCheckboxSize.large
-                            ? AppTypography.bodyL
-                            : AppTypography.bodyBase)
-                        .copyWith(
-                      color: _isDisabled
-                          ? AppColors.textDisabled
-                          : AppColors.textPrimary,
+                    style: (size == AppCheckboxSize.large ? AppTypography.leadingMedium : AppTypography.bodyRegular).copyWith(
+                      color: _isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -129,7 +124,7 @@ class AppCheckbox extends StatelessWidget {
           const SizedBox(height: AppDimensions.space4),
           Text(
             errorText!,
-            style: AppTypography.caption.copyWith(color: AppColors.error),
+            style: AppTypography.captionRegular.copyWith(color: AppColors.error),
           ),
         ],
       ],

@@ -27,7 +27,7 @@ class AppBulletItem extends StatelessWidget {
   /// Optional override for the text style.
   final TextStyle? textStyle;
 
-  static const _teal = Color(0xFF009DA5);
+  static const _teal = AppColors.secondaryLight400;
 
   @override
   Widget build(final BuildContext context) {
@@ -68,7 +68,7 @@ class AppBulletItem extends StatelessWidget {
                 text,
                 style:
                     textStyle ??
-                    AppTypography.bodyBase.copyWith(
+                    AppTypography.bodyRegular.copyWith(
                       color: AppColors.primary,
                       height: 1.4,
                     ),

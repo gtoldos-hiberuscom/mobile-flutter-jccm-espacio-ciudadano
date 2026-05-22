@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_description_text.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_label.dart';
 
 /// Interaction state for [AppInputCase].
@@ -183,12 +185,12 @@ class _AppInputCaseState extends State<AppInputCase> {
           enabled: !isDisabled && !widget.readOnly,
           readOnly: widget.readOnly,
           maxLines: widget.maxLines,
-          style: AppTypography.bodyBase.copyWith(
+          style: AppTypography.bodyRegular.copyWith(
             color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
           ),
           decoration: InputDecoration(
             hintText: widget.hint,
-            hintStyle: AppTypography.bodyBase.copyWith(
+            hintStyle: AppTypography.bodyRegular.copyWith(
               color: AppColors.textDisabled,
             ),
             filled: true,
@@ -225,6 +227,198 @@ class _AppInputCaseState extends State<AppInputCase> {
             helperText: widget.helperText,
           ),
         ),
+      ],
+    );
+  }
+}
+
+// ── AppInputArea ──────────────────────────────────────────────────────────────
+
+/// Collapsible multiline textarea — mirrors the Figma "Inputs/Area" node
+/// (`58:6183`).
+///
+/// Renders a [captionUppercase]-labelled textarea constrained to
+/// [collapsedHeight] (default 140 dp). An expand/collapse toggle in the
+/// top-right corner lets the user switch to an unconstrained height so all
+/// entered text is visible at once.
+///
+/// An optional [description] string is displayed below the field using
+/// [AppDescriptionText].
+///
+/// Example:
+/// ```dart
+/// AppInputArea(
+///   label: 'Observaciones',
+///   hint: 'Escribe aquí...',
+///   controller: _obsController,
+///   description: 'Máximo 500 caracteres.',
+/// )
+/// ```
+class AppInputArea extends StatefulWidget {
+  const AppInputArea({
+    required this.label,
+    super.key,
+    this.hint,
+    this.controller,
+    this.state = AppInputState.defaultState,
+    this.onChanged,
+    this.description,
+    this.descriptionState = AppDescriptionTextState.helper,
+    this.enabled = true,
+    this.focusNode,
+    this.isRequired = false,
+    this.collapsedHeight = 140.0,
+  });
+
+  final String label;
+  final String? hint;
+  final TextEditingController? controller;
+  final AppInputState state;
+  final ValueChanged<String>? onChanged;
+
+  /// Optional helper / error message shown below the field.
+  final String? description;
+  final AppDescriptionTextState descriptionState;
+
+  final bool enabled;
+  final FocusNode? focusNode;
+  final bool isRequired;
+
+  /// Height of the field when collapsed. Defaults to `140.0`.
+  final double collapsedHeight;
+
+  @override
+  State<AppInputArea> createState() => _AppInputAreaState();
+}
+
+class _AppInputAreaState extends State<AppInputArea> {
+  late final FocusNode _focusNode;
+  bool _hasFocus = false;
+  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = widget.focusNode ?? FocusNode();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    setState(() => _hasFocus = _focusNode.hasFocus);
+  }
+
+  @override
+  void dispose() {
+    if (widget.focusNode == null) _focusNode.dispose();
+    super.dispose();
+  }
+
+  AppInputState get _effectiveState {
+    if (!widget.enabled) return AppInputState.disabled;
+    if (widget.state == AppInputState.error) return AppInputState.error;
+    if (widget.state == AppInputState.success) return AppInputState.success;
+    if (_hasFocus) return AppInputState.focus;
+    return widget.state;
+  }
+
+  (Color border, Color fill, Color label) get _stateColors => switch (_effectiveState) {
+    AppInputState.focus => (AppColors.primary, AppColors.surface, AppColors.primary),
+    AppInputState.active || AppInputState.filled => (AppColors.primary, AppColors.surface, AppColors.textSecondary),
+    AppInputState.error => (AppColors.error, AppColors.errorContainer, AppColors.error),
+    AppInputState.success => (AppColors.success, AppColors.successContainer, AppColors.success),
+    AppInputState.disabled => (AppColors.outline, AppColors.disabledContainer, AppColors.textDisabled),
+    AppInputState.defaultState => (AppColors.outlineNeutralBase, AppColors.surface, AppColors.textSecondary),
+  };
+
+  @override
+  Widget build(final BuildContext context) {
+    final (borderColor, fillColor, labelColor) = _stateColors;
+    final isDisabled = _effectiveState == AppInputState.disabled;
+    final borderWidth = _effectiveState == AppInputState.focus ? 2.0 : 1.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AppLabel(
+          text: widget.label,
+          color: labelColor,
+          required: widget.isRequired,
+        ),
+        const SizedBox(height: AppDimensions.space8),
+        // ── Textarea container ───────────────────────────────────────────────
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          height: _isExpanded ? null : widget.collapsedHeight,
+          decoration: BoxDecoration(
+            color: fillColor,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+            border: Border.all(color: borderColor, width: borderWidth),
+            boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.low,
+          ),
+          child: Stack(
+            children: [
+              // ── Text field ─────────────────────────────────────────────────
+              Positioned.fill(
+                child: TextField(
+                  controller: widget.controller,
+                  focusNode: _focusNode,
+                  onChanged: widget.onChanged,
+                  enabled: !isDisabled,
+                  maxLines: _isExpanded ? null : 999,
+                  expands: _isExpanded,
+                  textAlignVertical: TextAlignVertical.top,
+                  keyboardType: TextInputType.multiline,
+                  style: AppTypography.bodyRegular.copyWith(
+                    color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: widget.hint,
+                    hintStyle: AppTypography.bodyRegular.copyWith(
+                      color: AppColors.neutralDark,
+                    ),
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: const EdgeInsets.fromLTRB(
+                      AppDimensions.space8,
+                      AppDimensions.space4,
+                      AppDimensions.space40, // leave room for toggle icon
+                      AppDimensions.space4,
+                    ),
+                  ),
+                ),
+              ),
+              // ── Expand / collapse toggle ────────────────────────────────────
+              Positioned(
+                top: AppDimensions.space4,
+                right: AppDimensions.space4,
+                child: GestureDetector(
+                  onTap: () => setState(() => _isExpanded = !_isExpanded),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimensions.space4),
+                    child: Icon(
+                      _isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                      size: AppDimensions.iconMedium,
+                      color: isDisabled ? AppColors.textDisabled : AppColors.neutralDark,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // ── Description text ────────────────────────────────────────────────
+        if (widget.description != null) ...[
+          const SizedBox(height: AppDimensions.space8),
+          AppDescriptionText(
+            text: widget.description!,
+            state: widget.descriptionState,
+          ),
+        ],
       ],
     );
   }

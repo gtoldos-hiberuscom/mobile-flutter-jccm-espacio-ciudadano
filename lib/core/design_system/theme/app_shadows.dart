@@ -9,59 +9,46 @@ import 'package:flutter/material.dart';
 /// No [BuildContext] dependency — safe to reference in any layer.
 abstract final class AppShadows {
   // ── Low ────────────────────────────────────────────────────────────────────
-  /// Subtle shadow for cards and list items resting on a surface.
+  /// Botones e inputs en reposo.
+  /// Figma: DROP_SHADOW rgba(0,0,0,0.12) offset(0,1) blur 2 spread 0.
   static const List<BoxShadow> low = [
     BoxShadow(
-      color: Color(0x0F000000), // 6 % black
-      blurRadius: 4,
-      offset: Offset(0, 1),
-    ),
-    BoxShadow(
-      color: Color(0x0A000000), // 4 % black
+      color: Color(0x1F000000), // 12 % black — #0000001F
       blurRadius: 2,
-      offset: Offset(0, 0),
+      offset: Offset(0, 1),
     ),
   ];
 
   // ── Medium ─────────────────────────────────────────────────────────────────
-  /// Medium shadow for dropdowns, menus, and floating cards.
+  /// Cards interactivas y menús.
+  /// Figma: DROP_SHADOW rgba(0,0,0,0.16) offset(0,4) blur 6 spread 0.
   static const List<BoxShadow> medium = [
     BoxShadow(
-      color: Color(0x1A000000), // 10 % black
-      blurRadius: 8,
-      offset: Offset(0, 2),
-    ),
-    BoxShadow(
-      color: Color(0x0D000000), // 5 % black
-      blurRadius: 4,
-      offset: Offset(0, 1),
-    ),
-  ];
-
-  // ── High ───────────────────────────────────────────────────────────────────
-  /// Strong shadow for modals, dialogs, and bottom sheets.
-  static const List<BoxShadow> high = [
-    BoxShadow(
-      color: Color(0x29000000), // 16 % black
-      blurRadius: 24,
-      offset: Offset(0, 8),
-    ),
-    BoxShadow(
-      color: Color(0x14000000), // 8 % black
-      blurRadius: 8,
+      color: Color(0x29000000), // 16 % black — #00000029
+      blurRadius: 6,
       offset: Offset(0, 4),
     ),
   ];
 
+  // ── High ───────────────────────────────────────────────────────────────────
+  /// Floating Buttons como FABs, popovers y ventanas de diálogo.
+  /// Figma: DROP_SHADOW rgba(0,0,0,0.20) offset(0,8) blur 16 spread 0.
+  static const List<BoxShadow> high = [
+    BoxShadow(
+      color: Color(0x33000000), // 20 % black — #00000033
+      blurRadius: 16,
+      offset: Offset(0, 8),
+    ),
+  ];
+
   // ── OverAll ────────────────────────────────────────────────────────────────
-  /// Full surround shadow used for popovers and overlays that need depth on
-  /// all sides.
+  /// Modales, Alerts y elementos críticos.
+  /// Figma: DROP_SHADOW rgba(0,0,0,0.25) offset(0,16) blur 32 spread 0.
   static const List<BoxShadow> overAll = [
     BoxShadow(
-      color: Color(0x33000000), // 20 % black
+      color: Color(0x40000000), // 25 % black — #00000040
       blurRadius: 32,
-      offset: Offset(0, 0),
-      spreadRadius: 4,
+      offset: Offset(0, 16),
     ),
   ];
 }

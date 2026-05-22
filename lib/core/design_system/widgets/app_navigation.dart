@@ -148,8 +148,8 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
       indicatorColor: AppColors.primary,
       labelColor: AppColors.primary,
       unselectedLabelColor: AppColors.textSecondary,
-      labelStyle: isNivel1 ? AppTypography.bodyBold : AppTypography.bodyBase.copyWith(fontWeight: FontWeight.w600),
-      unselectedLabelStyle: isNivel1 ? AppTypography.bodyBase : AppTypography.bodyS,
+      labelStyle: isNivel1 ? AppTypography.bodyBold : AppTypography.bodyRegular.copyWith(fontWeight: FontWeight.w600),
+      unselectedLabelStyle: isNivel1 ? AppTypography.bodyRegular : AppTypography.smallRegular,
       tabs: tabs
           .map(
             (final AppTabItem tab) => Tab(
@@ -352,13 +352,13 @@ class AppNavCard extends StatelessWidget {
                   children: [
                     Text(
                       label,
-                      style: AppTypography.bodyL.copyWith(color: titleColor),
+                      style: AppTypography.leadingMedium.copyWith(color: titleColor),
                     ),
                     if (description != null) ...[
                       const SizedBox(height: AppDimensions.space4),
                       Text(
                         description!,
-                        style: AppTypography.bodyS.copyWith(color: descColor),
+                        style: AppTypography.smallRegular.copyWith(color: descColor),
                       ),
                     ],
                   ],
@@ -372,6 +372,90 @@ class AppNavCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── FloatingNavigation ────────────────────────────────────────────────────────
+
+/// A pill-shaped horizontal tab selector that floats above content.
+///
+/// Figma node 165:6170 — "FloatingNavigation" component.
+/// - Container: white bg, `neutral200` border, `radiusLarge` corners, `space8` padding/gap.
+/// - Selected tab: `backgroundLightBlue` bg, `secondary` border, `radiusRound` pill.
+/// - Active tab: white bg, `neutral200` border, `Shadow/Medium`, `radiusRound` pill.
+class AppFloatingNavigation extends StatelessWidget {
+  const AppFloatingNavigation({
+    required this.tabs,
+    required this.selectedIndex,
+    required this.onTabSelected,
+    super.key,
+  });
+
+  final List<String> tabs;
+  final int selectedIndex;
+  final ValueChanged<int> onTabSelected;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppDimensions.space8),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+        border: Border.all(color: AppColors.neutral200),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: AppDimensions.space8,
+        children: List.generate(tabs.length, (final int index) {
+          final bool isSelected = index == selectedIndex;
+          return _FloatingNavTab(
+            label: tabs[index],
+            isSelected: isSelected,
+            onTap: () => onTabSelected(index),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _FloatingNavTab extends StatelessWidget {
+  const _FloatingNavTab({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space16,
+          vertical: AppDimensions.space8,
+        ),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.backgroundLightBlue : AppColors.surface,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+          border: Border.all(
+            color: isSelected ? AppColors.secondary : AppColors.neutral200,
+          ),
+          boxShadow: isSelected ? const <BoxShadow>[] : AppShadows.medium,
+        ),
+        child: Text(
+          label,
+          style: isSelected ? AppTypography.smallBold.copyWith(color: AppColors.secondary) : AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
         ),
       ),
     );

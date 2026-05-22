@@ -44,7 +44,7 @@ class AppDescriptionText extends StatelessWidget {
         Flexible(
           child: Text(
             text,
-            style: AppTypography.caption.copyWith(color: color),
+            style: AppTypography.captionRegular.copyWith(color: color),
           ),
         ),
       ],
