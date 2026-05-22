@@ -22,7 +22,7 @@ final goRouterProvider = Provider<GoRouter>(
     final guard = SessionGuard(ref);
 
     final router = GoRouter(
-      initialLocation: Routes.landing,
+      initialLocation: Routes.designSystem,
       observers: [GoRouterObserver()],
       // ── Global redirect ──────────────────────────────────────────────────
       redirect: (final BuildContext context, final GoRouterState state) async => guard.redirect(state),

@@ -4304,22 +4304,32 @@ abstract class AppLocalizations {
   /// **'Sin conexión. Mostrando datos guardados.'**
   String get offlineBannerMessage;
 
+  /// Accessibility — semantic label for the sticky bottom action bar.
+  ///
   /// In es, this message translates to:
   /// **'Acciones principales'**
   String get a11yStickybarLabel;
 
+  /// Accessibility — semantic H1 label for the landing splash screen.
+  ///
   /// In es, this message translates to:
   /// **'Espacio Ciudadano de Castilla-La Mancha'**
   String get a11yLandingH1Label;
 
+  /// Accessibility — semantic label for the institutional Castilla-La Mancha logo.
+  ///
   /// In es, this message translates to:
   /// **'Logotipo de la Junta de Comunidades de Castilla-La Mancha'**
   String get a11yCastillaLogoLabel;
 
+  /// Accessibility — announced by screen reader when a loading state starts.
+  ///
   /// In es, this message translates to:
   /// **'Cargando'**
   String get a11yLoading;
 
+  /// Accessibility — announced by screen reader when loading finishes.
+  ///
   /// In es, this message translates to:
   /// **'Contenido cargado'**
   String get a11yContentLoaded;

@@ -148,9 +148,7 @@ class LandingAboutPage extends ConsumerWidget {
                 label: l10n.landingAboutAccessButton,
                 icon: const Icon(Icons.check, size: AppDimensions.iconMedium),
                 isLoading: landingState.isLoggingIn,
-                onPressed: landingState.isLoggingIn
-                    ? null
-                    : () => ref.read(landingProvider.notifier).login(),
+                onPressed: landingState.isLoggingIn ? null : () => ref.read(landingProvider.notifier).login(),
               ),
             ],
           ),
