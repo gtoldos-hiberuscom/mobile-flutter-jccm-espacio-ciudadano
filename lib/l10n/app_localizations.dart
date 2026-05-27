@@ -2474,6 +2474,18 @@ abstract class AppLocalizations {
   /// **'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.'**
   String get lifeEventsHeaderDescription;
 
+  /// Personalization — large intro heading on the hechos vitales screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona las temáticas sobre las que te gustaría recibir información'**
+  String get lifeEventsIntroHeading;
+
+  /// Personalization — smaller intro body text on the hechos vitales screen.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona las temáticas sobre las que te gustaría recibir información en el apartado de recomendaciones'**
+  String get lifeEventsIntroBody;
+
   /// Personalization — explicit save button label.
   ///
   /// In es, this message translates to:

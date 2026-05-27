@@ -69,53 +69,53 @@ class AppBottomSheet extends StatelessWidget {
       namesRoute: true,
       label: title ?? 'Panel inferior',
       child: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: AppDimensions.space4,
-          right: AppDimensions.space4,
-          bottom: AppDimensions.space40,
-          top: AppDimensions.space32,
-        ),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: AppColors.backgroundWhite,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-            border: Border.all(color: const Color.fromRGBO(12, 13, 13, 0.5)),
-            boxShadow: AppShadows.overAll,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: AppDimensions.space4,
+            right: AppDimensions.space4,
+            bottom: AppDimensions.space40,
+            top: AppDimensions.space32,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildHeader(context),
-              if (title != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space16,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.backgroundWhite,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+              border: Border.all(color: const Color.fromRGBO(12, 13, 13, 0.5)),
+              boxShadow: AppShadows.overAll,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildHeader(context),
+                if (title != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.space16,
+                    ),
+                    child: _buildTitle(),
                   ),
-                  child: _buildTitle(),
-                ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space16,
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.space16,
+                    ),
+                    child: body,
                   ),
-                  child: body,
                 ),
-              ),
-              if (footer != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space16,
+                if (footer != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.space16,
+                    ),
+                    child: footer,
                   ),
-                  child: footer,
-                ),
-              const SizedBox(height: AppDimensions.space32),
-            ],
+                const SizedBox(height: AppDimensions.space32),
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 
@@ -157,32 +157,32 @@ class AppBottomSheet extends StatelessWidget {
               onTap: onClose ?? () => Navigator.of(context).pop(),
               child: ExcludeSemantics(
                 child: Container(
-              height: AppDimensions.space48,
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space8,
-                vertical: AppDimensions.space4,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Salir',
-                    style: AppTypography.leadingMedium.copyWith(
-                      color: AppColors.textBase,
-                      decoration: TextDecoration.underline,
-                    ),
+                  height: AppDimensions.space48,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.space8,
+                    vertical: AppDimensions.space4,
                   ),
-                  const SizedBox(width: AppDimensions.space8),
-                  const Icon(
-                    Icons.close,
-                    size: 20,
-                    color: AppColors.textBase,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Salir',
+                        style: AppTypography.leadingMedium.copyWith(
+                          color: AppColors.textBase,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      const SizedBox(width: AppDimensions.space8),
+                      const Icon(
+                        Icons.close,
+                        size: 20,
+                        color: AppColors.textBase,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-          ),
           ),
         ],
       ),

@@ -298,25 +298,25 @@ class _AppCalendarState extends State<AppCalendar> {
       child: GestureDetector(
         onTap: () => widget.onDateSelected?.call(date),
         child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-          border: border,
-          boxShadow: selected ? AppShadows.low : null,
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          '${date.day}',
-          style: AppTypography.smallRegular.copyWith(
-            color: textColor,
-            fontWeight: fontWeight,
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+            border: border,
+            boxShadow: selected ? AppShadows.low : null,
           ),
-          textAlign: TextAlign.center,
+          alignment: Alignment.center,
+          child: Text(
+            '${date.day}',
+            style: AppTypography.smallRegular.copyWith(
+              color: textColor,
+              fontWeight: fontWeight,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
-    ),
     );
   }
 }

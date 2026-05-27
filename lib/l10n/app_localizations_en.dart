@@ -1246,6 +1246,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifeEventsHeaderDescription => 'Select the life events that best describe your situation to receive personalized recommendations.';
 
   @override
+  String get lifeEventsIntroHeading => 'Select the topics you would like to receive information about';
+
+  @override
+  String get lifeEventsIntroBody => 'Select the topics you would like to receive information about in the recommendations section';
+
+  @override
   String get lifeEventsSaveAction => 'Save';
 
   @override

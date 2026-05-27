@@ -10,6 +10,7 @@ import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pag
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/login_callback_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -57,6 +58,12 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.login,
           builder: (final BuildContext context, final GoRouterState state) => const DomainLandingPlaceholder(title: 'Login'),
+        ),
+
+        // ── Cl@ve SSO callback deep-link ───────────────────────────────────
+        GoRoute(
+          path: Routes.claveCallback,
+          builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPage(),
         ),
 
         // ── Personalization — Mis hechos vitales (STORY-54 / JCCMEC-53) ──────

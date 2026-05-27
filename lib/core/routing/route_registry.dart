@@ -21,7 +21,9 @@ abstract final class Routes {
   static const String maintenance = '/maintenance';
 
   // ── Deep-link callbacks ───────────────────────────────────────────────────
-  static const String claveCallback = '/auth/clave/callback';
+  // The configured URI is `es.jccm.espaciociudadano://auth/callback`;
+  // Flutter/GoRouter matches its path component, `/callback`.
+  static const String claveCallback = '/callback';
   static const String afirmaReturn = '/sign/afirma/return';
 
   // ── Authenticated ───────────────────────────────────────────────────────

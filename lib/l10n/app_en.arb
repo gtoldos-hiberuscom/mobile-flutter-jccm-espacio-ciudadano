@@ -1671,6 +1671,14 @@
   "@lifeEventsHeaderDescription": {
     "description": "Personalization — descriptive header on the life-events screen."
   },
+  "lifeEventsIntroHeading": "Select the topics you would like to receive information about",
+  "@lifeEventsIntroHeading": {
+    "description": "Personalization — large intro heading on the life-events screen."
+  },
+  "lifeEventsIntroBody": "Select the topics you would like to receive information about in the recommendations section",
+  "@lifeEventsIntroBody": {
+    "description": "Personalization — smaller intro body text on the life-events screen."
+  },
   "lifeEventsSaveAction": "Save",
   "@lifeEventsSaveAction": {
     "description": "Personalization — explicit save button label."

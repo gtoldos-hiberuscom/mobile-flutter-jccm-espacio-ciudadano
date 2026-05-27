@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
@@ -101,7 +100,6 @@ class AppButton extends StatefulWidget {
 class _AppButtonState extends State<AppButton> {
   final _focusNode = FocusNode();
   bool _isFocused = false;
-  bool _wasLoading = false;
 
   @override
   void initState() {
@@ -111,27 +109,6 @@ class _AppButtonState extends State<AppButton> {
 
   void _onFocusChange() {
     if (mounted) setState(() => _isFocused = _focusNode.hasFocus);
-  }
-
-  @override
-  void didUpdateWidget(covariant final AppButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!_wasLoading && widget.isLoading) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          final l10n = AppLocalizations.of(context);
-          SemanticsService.announce(l10n.a11yLoading, TextDirection.ltr);
-        }
-      });
-    } else if (_wasLoading && !widget.isLoading) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          final l10n = AppLocalizations.of(context);
-          SemanticsService.announce(l10n.a11yContentLoaded, TextDirection.ltr);
-        }
-      });
-    }
-    _wasLoading = widget.isLoading;
   }
 
   @override
@@ -179,17 +156,6 @@ class _AppButtonState extends State<AppButton> {
     final isDisabled = widget.onPressed == null || hierarchy == AppButtonHierarchy.disabled;
 
     Widget button = _buildCoreButton(hierarchy, isDisabled, l10n);
-
-    // Shadow/Low — enabled only; Ghost has no shadow per Figma.
-    if (!isDisabled && hierarchy != AppButtonHierarchy.ghost) {
-      button = DecoratedBox(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
-          boxShadow: AppShadows.low,
-        ),
-        child: button,
-      );
-    }
 
     // Focus ring — keyboard focus.
     if (_isFocused && !isDisabled) button = _FocusRingWrapper(child: button);
@@ -250,9 +216,7 @@ class _AppButtonState extends State<AppButton> {
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.all(AppColors.blueMuted100),
           foregroundColor: WidgetStateProperty.all(AppColors.blueMuted500),
-          side: WidgetStateProperty.all(
-            const BorderSide(color: AppColors.blueMuted500),
-          ),
+          side: WidgetStateProperty.all(BorderSide.none),
         ),
         child: content(AppColors.blueMuted500),
       );

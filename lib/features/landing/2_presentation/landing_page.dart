@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -73,8 +72,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMsg)),
         );
-        // Rule 3.11 — announce feedback messages via SemanticsService (WCAG 4.1.3)
-        SemanticsService.announce(errorMsg, TextDirection.ltr);
         ref.read(landingProvider.notifier).clearError();
       }
     });

@@ -194,69 +194,69 @@ class _AppInputCaseState extends State<AppInputCase> {
       textField: true,
       enabled: !isDisabled,
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppLabel(
-          text: widget.label,
-          color: labelColor,
-          required: widget.isRequired,
-        ),
-        const SizedBox(height: AppDimensions.space4),
-        TextField(
-          controller: widget.controller,
-          focusNode: _focusNode,
-          onChanged: widget.onChanged,
-          onSubmitted: widget.onSubmitted,
-          obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType,
-          enabled: !isDisabled && !widget.readOnly,
-          readOnly: widget.readOnly,
-          maxLines: widget.maxLines,
-          style: AppTypography.bodyRegular.copyWith(
-            color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppLabel(
+            text: widget.label,
+            color: labelColor,
+            required: widget.isRequired,
           ),
-          decoration: InputDecoration(
-            hintText: widget.hint,
-            hintStyle: AppTypography.bodyRegular.copyWith(
-              color: AppColors.textDisabled,
+          const SizedBox(height: AppDimensions.space4),
+          TextField(
+            controller: widget.controller,
+            focusNode: _focusNode,
+            onChanged: widget.onChanged,
+            onSubmitted: widget.onSubmitted,
+            obscureText: widget.obscureText,
+            keyboardType: widget.keyboardType,
+            enabled: !isDisabled && !widget.readOnly,
+            readOnly: widget.readOnly,
+            maxLines: widget.maxLines,
+            style: AppTypography.bodyRegular.copyWith(
+              color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
             ),
-            filled: true,
-            fillColor: fillColor,
-            prefixIcon: widget.prefixIcon,
-            suffixIcon: _trailIcon,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-              vertical: AppDimensions.space12,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              borderSide: BorderSide(color: borderColor),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              borderSide: BorderSide(color: borderColor, width: 2),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              borderSide: BorderSide(
-                color: AppColors.outline.withValues(alpha: 0.5),
+            decoration: InputDecoration(
+              hintText: widget.hint,
+              hintStyle: AppTypography.bodyRegular.copyWith(
+                color: AppColors.textDisabled,
               ),
+              filled: true,
+              fillColor: fillColor,
+              prefixIcon: widget.prefixIcon,
+              suffixIcon: _trailIcon,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.space16,
+                vertical: AppDimensions.space12,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                borderSide: BorderSide(color: borderColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                borderSide: BorderSide(color: borderColor, width: 2),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                borderSide: BorderSide(
+                  color: AppColors.outline.withValues(alpha: 0.5),
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                borderSide: const BorderSide(color: AppColors.error),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                borderSide: const BorderSide(color: AppColors.error, width: 2),
+              ),
+              errorText: widget.errorText,
+              helperText: widget.helperText,
             ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              borderSide: const BorderSide(color: AppColors.error),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              borderSide: const BorderSide(color: AppColors.error, width: 2),
-            ),
-            errorText: widget.errorText,
-            helperText: widget.helperText,
           ),
-        ),
-      ],
-    ),
+        ],
+      ),
     );
   }
 }

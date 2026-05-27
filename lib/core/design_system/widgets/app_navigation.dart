@@ -173,6 +173,9 @@ class AppStickyBar extends StatelessWidget {
     this.secondaryLabel,
     this.onSecondary,
     this.isPrimaryLoading = false,
+    this.secondaryHierarchy = AppButtonHierarchy.secondary,
+    this.primaryLeadingIcon,
+    this.secondaryLeadingIcon,
   });
 
   final AppStickyBarType type;
@@ -182,18 +185,37 @@ class AppStickyBar extends StatelessWidget {
   final VoidCallback? onSecondary;
   final bool isPrimaryLoading;
 
+  /// Hierarchy for the secondary/left button in [AppStickyBarType.dicotomy]
+  /// and [AppStickyBarType.flow]. Defaults to [AppButtonHierarchy.secondary].
+  ///
+  /// Use [AppButtonHierarchy.tertiary] to match the Figma Stickybar variant
+  /// where the cancel button has a light-blue (`secondaryLight100`) background.
+  final AppButtonHierarchy secondaryHierarchy;
+
+  /// Optional leading icon for the primary (right/main) button.
+  /// Figma node `41717:12172` — check icon on "Guarda cambios".
+  final IconData? primaryLeadingIcon;
+
+  /// Optional leading icon for the secondary (left/cancel) button.
+  /// Figma node `41717:12172` — cancel icon on "Cancelar".
+  final IconData? secondaryLeadingIcon;
+
   @override
   Widget build(final BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(
         AppDimensions.space16,
-        AppDimensions.space12,
         AppDimensions.space16,
-        AppDimensions.space12 + MediaQuery.of(context).padding.bottom,
+        AppDimensions.space16,
+        AppDimensions.space16 + MediaQuery.of(context).padding.bottom,
       ),
       decoration: const BoxDecoration(
         color: AppColors.surface,
-        boxShadow: AppShadows.high,
+        // Figma node 41779:23195 — Shadow/Low + border neutral-lighter
+        border: Border(
+          top: BorderSide(color: Color(0xFFE5E2E1)), // Color/Border/neutral-lighter
+        ),
+        boxShadow: AppShadows.low,
       ),
       child: switch (type) {
         AppStickyBarType.flow => _buildFlow(),
@@ -211,7 +233,8 @@ class AppStickyBar extends StatelessWidget {
             child: AppButton(
               label: secondaryLabel!,
               onPressed: onSecondary,
-              hierarchy: AppButtonHierarchy.secondary,
+              hierarchy: secondaryHierarchy,
+              leadingIcon: secondaryLeadingIcon,
             ),
           ),
           const SizedBox(width: AppDimensions.space12),
@@ -222,6 +245,7 @@ class AppStickyBar extends StatelessWidget {
             label: primaryLabel,
             onPressed: onPrimary,
             isLoading: isPrimaryLoading,
+            leadingIcon: primaryLeadingIcon,
           ),
         ),
       ],
@@ -235,7 +259,8 @@ class AppStickyBar extends StatelessWidget {
           child: AppButton(
             label: secondaryLabel ?? 'Cancelar',
             onPressed: onSecondary,
-            hierarchy: AppButtonHierarchy.secondary,
+            hierarchy: secondaryHierarchy,
+            leadingIcon: secondaryLeadingIcon,
           ),
         ),
         const SizedBox(width: AppDimensions.space12),
@@ -244,6 +269,7 @@ class AppStickyBar extends StatelessWidget {
             label: primaryLabel,
             onPressed: onPrimary,
             isLoading: isPrimaryLoading,
+            leadingIcon: primaryLeadingIcon,
           ),
         ),
       ],
@@ -312,69 +338,69 @@ class AppNavCard extends StatelessWidget {
         child: InkWell(
           onTap: isDisabled ? null : onTap,
           borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        child: Container(
-          padding: const EdgeInsets.only(
-            left: AppDimensions.space8,
-            right: AppDimensions.space16,
-            top: AppDimensions.space8,
-            bottom: AppDimensions.space8,
-          ),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-            border: Border.all(
-              color: isDisabled ? Colors.black.withValues(alpha: 0.08) : const Color(0xFFA0B2C5),
+          child: Container(
+            padding: const EdgeInsets.only(
+              left: AppDimensions.space8,
+              right: AppDimensions.space16,
+              top: AppDimensions.space8,
+              bottom: AppDimensions.space8,
             ),
-            boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.medium,
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                padding: const EdgeInsets.all(AppDimensions.space4),
-                decoration: BoxDecoration(
-                  color: leadingBg,
-                  borderRadius: BorderRadius.circular(AppDimensions.space4),
-                ),
-                child: Center(
-                  child: Icon(
-                    icon,
-                    size: AppDimensions.iconMedium,
-                    color: iconColor,
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+              border: Border.all(
+                color: isDisabled ? Colors.black.withValues(alpha: 0.08) : const Color(0xFFA0B2C5),
+              ),
+              boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.medium,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 64,
+                  height: 64,
+                  padding: const EdgeInsets.all(AppDimensions.space4),
+                  decoration: BoxDecoration(
+                    color: leadingBg,
+                    borderRadius: BorderRadius.circular(AppDimensions.space4),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      icon,
+                      size: AppDimensions.iconMedium,
+                      color: iconColor,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: AppDimensions.space16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      label,
-                      style: AppTypography.leadingMedium.copyWith(color: titleColor),
-                    ),
-                    if (description != null) ...[
-                      const SizedBox(height: AppDimensions.space4),
+                const SizedBox(width: AppDimensions.space16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                       Text(
-                        description!,
-                        style: AppTypography.smallRegular.copyWith(color: descColor),
+                        label,
+                        style: AppTypography.leadingMedium.copyWith(color: titleColor),
                       ),
+                      if (description != null) ...[
+                        const SizedBox(height: AppDimensions.space4),
+                        Text(
+                          description!,
+                          style: AppTypography.smallRegular.copyWith(color: descColor),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: AppDimensions.space8),
-              Icon(
-                Icons.arrow_forward_rounded,
-                size: AppDimensions.iconLarge,
-                color: iconColor,
-              ),
-            ],
+                const SizedBox(width: AppDimensions.space8),
+                Icon(
+                  Icons.arrow_forward_rounded,
+                  size: AppDimensions.iconLarge,
+                  color: iconColor,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }

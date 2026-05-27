@@ -5,10 +5,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_list.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
@@ -55,12 +56,25 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     final isResetting = lifeState.status == LifeEventsStatus.resetting;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.backgroundWhite,
+      // Figma node 41779:22466 — bg #f1f8f9, border bluemuted-lighter, Shadow/Low
+      appBar: AppNavBar(
+        type: AppNavBarType.detail,
+        title: l10n.lifeEventsTitle,
+        onBack: () => Navigator.of(context).maybePop(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () {},
+            tooltip: 'Información',
+          ),
+        ],
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Hero header with heading ─────────────────────────────────────
-          _HeroHeader(l10n: l10n),
+          // ── Intro heading + description ─────────────────────────────────
+          _IntroSection(l10n: l10n),
 
           // ── Body content ────────────────────────────────────────────────
           Expanded(
@@ -74,12 +88,16 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           ),
 
           // ── Sticky bottom bar ───────────────────────────────────────────
-          _BottomActionBar(
-            l10n: l10n,
-            isSaving: isSaving,
-            isDirty: lifeState.isDirty,
-            onSave: (lifeState.isDirty && !isSaving) ? notifier.save : null,
-            onReset: notifier.requestReset,
+          AppStickyBar(
+            type: AppStickyBarType.dicotomy,
+            secondaryLabel: l10n.lifeEventsResetCancel,
+            onSecondary: notifier.requestReset,
+            secondaryHierarchy: AppButtonHierarchy.tertiary,
+            secondaryLeadingIcon: Icons.highlight_off,
+            primaryLabel: l10n.lifeEventsSaveAction,
+            onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
+            isPrimaryLoading: isSaving,
+            primaryLeadingIcon: Icons.check,
           ),
         ],
       ),
@@ -161,26 +179,39 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     }
 
     return SingleChildScrollView(
+      // Figma node 41779:22467 — content area px:16 py:24 (top handled by IntroSection)
       padding: const EdgeInsets.fromLTRB(
         AppDimensions.space16,
-        AppDimensions.space16,
+        0,
         AppDimensions.space16,
         AppDimensions.space24,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Checklist ─────────────────────────────────────────────────
-          AppList(
-            variant: AppListVariant.checklist,
-            children: lifeState.events
-                .map(
+          // Figma node 41779:13486 — white card, border rgba(12,13,13,0.05),
+          // Shadow/Medium, borderRadius 4, padding 16
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.backgroundWhite,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              border: Border.all(
+                color: const Color(0x0D0C0D0D), // rgba(12,13,13,0.05)
+              ),
+              boxShadow: AppShadows.medium,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ...lifeState.events.map(
                   (final event) => _LifeEventCheckRow(
                     event: event,
                     onToggle: () => notifier.toggle(event.id),
+                    isLast: event == lifeState.events.last,
                   ),
-                )
-                .toList(),
+                ),
+              ],
+            ),
           ),
 
           // Resetting-state loading overlay
@@ -196,121 +227,52 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// HERO HEADER — Dark navy header matching Figma design
+// INTRO SECTION — Heading only, Figma node 41779:22621
+// px-content:16 py-content:24  +  inner TextBlocks px:4 py:8
 // ═══════════════════════════════════════════════════════════════════════════════
 
-class _HeroHeader extends StatelessWidget {
-  const _HeroHeader({required this.l10n});
+class _IntroSection extends StatelessWidget {
+  const _IntroSection({required this.l10n});
 
   final AppLocalizations l10n;
 
   @override
   Widget build(final BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: AppColors.primaryDark,
+    // Figma content area: px:16, pt:24 → TextBlocks adds px:4, py:8
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppDimensions.space16 + AppDimensions.space4, // 20
+        AppDimensions.space24 + AppDimensions.space8, // 32
+        AppDimensions.space16 + AppDimensions.space4, // 20
+        AppDimensions.space8,
       ),
-      child: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: [
-            // Rule 3.1 + 3.2 — H1 heading announced first, 1×1 px node
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Semantics(
-                label: l10n.lifeEventsTitle,
-                header: true,
-                headingLevel: 1,
-                focusable: true,
-                child: const SizedBox(width: 1, height: 1),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space24,
-                AppDimensions.space16,
-                AppDimensions.space24,
-                AppDimensions.space24,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Back button — Rule 3.5: 48 dp min touch target
-                  Semantics(
-                    label: 'Volver',
-                    button: true,
-                    enabled: true,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => Navigator.of(context).maybePop(),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: AppDimensions.minTouchTarget,
-                          minHeight: AppDimensions.minTouchTarget,
-                        ),
-                        child: const ExcludeSemantics(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Icon(
-                              Icons.arrow_back_rounded,
-                              color: AppColors.textOnPrimary,
-                              size: AppDimensions.iconMedium,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppDimensions.space8),
-                  // Title — visual (semantic H1 is the Positioned node above)
-                  ExcludeSemantics(
-                    child: Text(
-                      l10n.lifeEventsTitle,
-                      style: AppTypography.h1.copyWith(
-                        color: AppColors.textOnPrimary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppDimensions.space8),
-                  // Description
-                  ExcludeSemantics(
-                    child: Text(
-                      l10n.lifeEventsHeaderDescription,
-                      style: AppTypography.bodyBase.copyWith(
-                        color: AppColors.textOnPrimary.withValues(alpha: 0.85),
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      child: Text(
+        l10n.lifeEventsIntroHeading,
+        // Figma: H2 SemiBold 24px lineHeight:1.5 color:textBase #0c0d0d
+        style: AppTypography.h2.copyWith(color: AppColors.textBase),
       ),
     );
   }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// LIFE EVENT CHECK ROW — Individual selectable row
+// LIFE EVENT CHECK ROW — Figma node BuildingBlocks/SelectOption
+// padding:8, border-bottom rgba(12,13,13,0.08), label color primary,
+// checkbox trailing; selected: bg successLight, border-bottom success
 // ═══════════════════════════════════════════════════════════════════════════════
 
-/// Single life-event selection row using DS check indicator.
-///
-/// Accessibility: Rule 3.4 — unified Semantics node wrapping all content.
 class _LifeEventCheckRow extends StatelessWidget {
   const _LifeEventCheckRow({
     required this.event,
     required this.onToggle,
+    required this.isLast,
   });
 
   final LifeEvent event;
   final VoidCallback onToggle;
 
-  /// Figma selected-row background — soft green tint.
-  static const Color _selectedBackground = Color(0xFFE8F5E9);
+  /// Last row has no bottom border per Figma.
+  final bool isLast;
 
   @override
   Widget build(final BuildContext context) {
@@ -323,127 +285,49 @@ class _LifeEventCheckRow extends StatelessWidget {
           onTap: onToggle,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
-            color: event.selected ? _selectedBackground : Colors.transparent,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-              vertical: AppDimensions.space12,
+            decoration: BoxDecoration(
+              color: event.selected
+                  ? AppColors
+                        .successLight // #d7f4e3
+                  : Colors.transparent,
+              border: isLast
+                  ? null
+                  : Border(
+                      bottom: BorderSide(
+                        // selected → success green, unselected → rgba(12,13,13,0.08)
+                        color: event.selected
+                            ? AppColors
+                                  .success // #22a85a
+                            : const Color(0x140C0D0D), // rgba(12,13,13,0.08)
+                      ),
+                    ),
             ),
+            padding: const EdgeInsets.all(AppDimensions.space8),
             child: Row(
               children: [
+                // Label — flex:1, color primary #002855, body/regular
                 Expanded(
-                  child: Text(
-                    event.label,
-                    style: AppTypography.bodyBase.copyWith(
-                      color: AppColors.textPrimary,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppDimensions.space4,
+                    ),
+                    child: Text(
+                      event.label,
+                      style: AppTypography.bodyBase.copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(width: AppDimensions.space12),
-                _CheckboxIndicator(isChecked: event.selected),
+                const SizedBox(width: AppDimensions.space8),
+                // Checkbox icon trailing — 24×24
+                Icon(
+                  event.selected ? Icons.check_box : Icons.check_box_outline_blank,
+                  size: AppDimensions.iconMedium,
+                  color: event.selected ? AppColors.success : AppColors.primary,
+                ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Custom checkbox indicator matching Figma spec —
-/// green filled when selected, dark outline when unselected.
-class _CheckboxIndicator extends StatelessWidget {
-  const _CheckboxIndicator({required this.isChecked});
-
-  final bool isChecked;
-
-  @override
-  Widget build(final BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 150),
-      width: AppDimensions.iconMedium,
-      height: AppDimensions.iconMedium,
-      decoration: BoxDecoration(
-        color: isChecked ? AppColors.success : Colors.transparent,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-        border: Border.all(
-          color: isChecked ? AppColors.success : AppColors.neutral800,
-          width: 2,
-        ),
-      ),
-      child: isChecked
-          ? const Icon(
-              Icons.check_rounded,
-              size: 16,
-              color: AppColors.onSuccess,
-            )
-          : null,
-    );
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// BOTTOM ACTION BAR — Sticky save + reset actions
-// ═══════════════════════════════════════════════════════════════════════════════
-
-class _BottomActionBar extends StatelessWidget {
-  const _BottomActionBar({
-    required this.l10n,
-    required this.isSaving,
-    required this.isDirty,
-    required this.onSave,
-    required this.onReset,
-  });
-
-  final AppLocalizations l10n;
-  final bool isSaving;
-  final bool isDirty;
-  final Future<void> Function()? onSave;
-  final VoidCallback onReset;
-
-  @override
-  Widget build(final BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 8,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.space24,
-            vertical: AppDimensions.space16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // ── Save button ──────────────────────────────────────────────
-              AppButton(
-                label: l10n.lifeEventsSaveAction,
-                semanticsLabel: l10n.lifeEventsSaveAction,
-                onPressed: onSave == null ? null : () => unawaited(onSave!()),
-                isLoading: isSaving,
-                isExpanded: true,
-              ),
-              const SizedBox(height: AppDimensions.space12),
-
-              // ── Reset preferences — destructive text button ──────────────
-              AppButton(
-                label: l10n.lifeEventsResetAction,
-                semanticsLabel: l10n.lifeEventsResetAction,
-                onPressed: onReset,
-                hierarchy: AppButtonHierarchy.ghost,
-                intent: AppButtonIntent.destructive,
-                isExpanded: true,
-              ),
-            ],
           ),
         ),
       ),

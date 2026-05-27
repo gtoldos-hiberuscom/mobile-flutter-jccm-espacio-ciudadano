@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 abstract final class AppShadows {
   // ── Low ────────────────────────────────────────────────────────────────────
   /// Botones e inputs en reposo.
-  /// Figma: DROP_SHADOW rgba(0,0,0,0.12) offset(0,1) blur 2 spread 0.
+  /// Figma token Shadow/Low: DROP_SHADOW color:#0000001F offset(0,1) radius:2 spread:0.
   static const List<BoxShadow> low = [
     BoxShadow(
       color: Color(0x1F000000), // 12 % black — #0000001F

@@ -1667,6 +1667,14 @@
   "@lifeEventsHeaderDescription": {
     "description": "Personalization — descriptive header on the hechos vitales screen."
   },
+  "lifeEventsIntroHeading": "Selecciona las temáticas sobre las que te gustaría recibir información",
+  "@lifeEventsIntroHeading": {
+    "description": "Personalization — large intro heading on the hechos vitales screen."
+  },
+  "lifeEventsIntroBody": "Selecciona las temáticas sobre las que te gustaría recibir información en el apartado de recomendaciones",
+  "@lifeEventsIntroBody": {
+    "description": "Personalization — smaller intro body text on the hechos vitales screen."
+  },
   "lifeEventsSaveAction": "Guardar",
   "@lifeEventsSaveAction": {
     "description": "Personalization — explicit save button label."

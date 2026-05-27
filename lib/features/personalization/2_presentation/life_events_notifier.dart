@@ -3,7 +3,6 @@ import 'dart:async' show unawaited;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
@@ -39,7 +38,7 @@ enum LifeEventsStatus {
   /// A preference-reset operation is in progress.
   resetting,
 
-  /// Last reset completed successfully (transient — immediately followed by reload).
+  /// Last reset completed successfully.
   resetSuccess,
 
   /// Last reset failed.
@@ -190,23 +189,34 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
   /// Dismisses the reset-confirmation dialog without taking action.
   void cancelReset() => state = state.copyWith(showResetConfirm: false);
 
-  /// Executes the preference reset and reloads the catalogue.
+  /// Executes the preference reset and restores the catalogue without selections.
   Future<void> confirmReset() async {
+    final clearedEvents = state.events
+        .map((final event) => event.copyWith(selected: false))
+        .toList(growable: false);
     state = state.copyWith(
       showResetConfirm: false,
       status: LifeEventsStatus.resetting,
     );
-    final result = await ref
-        .read(resetLifeEventsUsecaseProvider)
-        .execute(idAgente: _idAgente);
+    // DELETE /preferencias leaves GET /hechos/{idAgente} failing with 500.
+    // Persist the existing catalogue cleared instead: this action removes only
+    // the selected life events described by the confirmation dialog.
+    final result = await ref.read(saveLifeEventsUsecaseProvider).execute(
+          idAgente: _idAgente,
+          events: clearedEvents,
+        );
     if (!ref.mounted) {
       return;
     }
     switch (result) {
-      case ResetLifeEventsSuccess():
-        state = const LifeEventsState(status: LifeEventsStatus.resetSuccess);
-        await _load();
-      case ResetLifeEventsFailed(:final message):
+      case SaveLifeEventsSuccess():
+        state = LifeEventsState(
+          status: clearedEvents.isEmpty
+              ? LifeEventsStatus.empty
+              : LifeEventsStatus.resetSuccess,
+          events: clearedEvents,
+        );
+      case SaveLifeEventsFailed(:final message):
         state = state.copyWith(
           status: LifeEventsStatus.resetError,
           errorMessage: message,

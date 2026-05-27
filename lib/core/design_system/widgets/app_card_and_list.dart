@@ -185,13 +185,13 @@ class AppCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     // WCAG 4.1.2 — unified semantic label for complex cards.
     final semanticSegments = <String>[
-      if (categoryLabel != null) categoryLabel!,
+      ?categoryLabel,
       title,
-      if (refNumber != null) refNumber!,
-      if (expiryDate != null) expiryDate!,
-      if (date != null) date!,
-      if (time != null) time!,
-      if (description != null) description!,
+      ?refNumber,
+      ?expiryDate,
+      ?date,
+      ?time,
+      ?description,
     ];
     final composedLabel = semanticSegments.join(', ');
 
@@ -204,20 +204,20 @@ class AppCard extends StatelessWidget {
           onTap: _isDisabled ? null : onTap,
           borderRadius: _borderRadius,
           child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: _borderRadius,
-            border: Border.all(color: AppColors.backgroundBlueMutedLight),
-            boxShadow: _shadow,
-          ),
-          padding: const EdgeInsets.all(AppDimensions.space16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: cardClass == AppCardClass.agenda ? _agendaSlots() : _basicSlots(),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: _borderRadius,
+              border: Border.all(color: AppColors.backgroundBlueMutedLight),
+              boxShadow: _shadow,
+            ),
+            padding: const EdgeInsets.all(AppDimensions.space16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: cardClass == AppCardClass.agenda ? _agendaSlots() : _basicSlots(),
+            ),
           ),
         ),
-      ),
       ),
     );
   }

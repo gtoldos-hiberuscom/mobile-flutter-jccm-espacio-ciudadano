@@ -75,55 +75,55 @@ class AppCheckbox extends StatelessWidget {
           enabled: !_isDisabled,
           child: ExcludeSemantics(
             child: InkWell(
-            onTap: _isDisabled
-                ? null
-                : () {
-                    if (tristate) {
-                      onChanged?.call(
-                        switch (value) {
-                          false => true,
-                          true => null,
-                          null => false,
-                        },
-                      );
-                    } else {
-                      onChanged?.call(!(value ?? false));
-                    }
-                  },
-            borderRadius: BorderRadius.circular(AppDimensions.space4),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: _iconSize,
-                  height: _iconSize,
-                  child: Checkbox(
-                    value: value,
-                    tristate: tristate,
-                    onChanged: onChanged,
-                    activeColor: activeColor,
-                    checkColor: checkColor,
-                    side: BorderSide(
-                      color: _isDisabled
-                          ? AppColors.disabled
-                          : isError
-                          ? AppColors.error
-                          : AppColors.outline,
+              onTap: _isDisabled
+                  ? null
+                  : () {
+                      if (tristate) {
+                        onChanged?.call(
+                          switch (value) {
+                            false => true,
+                            true => null,
+                            null => false,
+                          },
+                        );
+                      } else {
+                        onChanged?.call(!(value ?? false));
+                      }
+                    },
+              borderRadius: BorderRadius.circular(AppDimensions.space4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: _iconSize,
+                    height: _iconSize,
+                    child: Checkbox(
+                      value: value,
+                      tristate: tristate,
+                      onChanged: onChanged,
+                      activeColor: activeColor,
+                      checkColor: checkColor,
+                      side: BorderSide(
+                        color: _isDisabled
+                            ? AppColors.disabled
+                            : isError
+                            ? AppColors.error
+                            : AppColors.outline,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                Flexible(
-                  child: Text(
-                    label,
-                    style: (size == AppCheckboxSize.large ? AppTypography.leadingMedium : AppTypography.bodyRegular).copyWith(
-                      color: _isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+                  const SizedBox(width: AppDimensions.space8),
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: (size == AppCheckboxSize.large ? AppTypography.leadingMedium : AppTypography.bodyRegular).copyWith(
+                        color: _isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           ),
         ),
         if (isError && errorText != null) ...[

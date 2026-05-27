@@ -83,134 +83,134 @@ class AppDrawerMenu extends StatelessWidget {
       namesRoute: true,
       label: 'Menú de navegación',
       child: Drawer(
-      width: MediaQuery.sizeOf(context).width * 0.82,
-      shape: const RoundedRectangleBorder(),
-      child: Column(
-        children: [
-          // ── Dark header section ──────────────────────────────────────────
-          Expanded(
-            child: ColoredBox(
-              color: AppColors.primaryDark,
-              child: SafeArea(
-                bottom: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Close button
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: AppDimensions.space8,
-                          right: AppDimensions.space8,
-                        ),
-                        child: TextButton.icon(
-                          onPressed: onClose ?? () => Navigator.of(context).pop(),
-                          icon: const Icon(
-                            Icons.close,
-                            color: AppColors.textOnPrimary,
-                            size: AppDimensions.iconMedium,
+        width: MediaQuery.sizeOf(context).width * 0.82,
+        shape: const RoundedRectangleBorder(),
+        child: Column(
+          children: [
+            // ── Dark header section ──────────────────────────────────────────
+            Expanded(
+              child: ColoredBox(
+                color: AppColors.primaryDark,
+                child: SafeArea(
+                  bottom: false,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Close button
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: AppDimensions.space8,
+                            right: AppDimensions.space8,
                           ),
-                          label: Text(
-                            'Cerrar menu',
-                            style: AppTypography.smallRegular.copyWith(
+                          child: TextButton.icon(
+                            onPressed: onClose ?? () => Navigator.of(context).pop(),
+                            icon: const Icon(
+                              Icons.close,
                               color: AppColors.textOnPrimary,
+                              size: AppDimensions.iconMedium,
+                            ),
+                            label: Text(
+                              'Cerrar menu',
+                              style: AppTypography.smallRegular.copyWith(
+                                color: AppColors.textOnPrimary,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    // Greeting
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.space24,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hola, $userName',
-                            style: AppTypography.h2.copyWith(
-                              color: AppColors.textOnPrimary,
+                      // Greeting
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.space24,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hola, $userName',
+                              style: AppTypography.h2.copyWith(
+                                color: AppColors.textOnPrimary,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: AppDimensions.space4),
-                          Text(
-                            'NIF/NIE: $nif',
-                            style: AppTypography.smallRegular.copyWith(
-                              color: AppColors.textOnPrimary.withValues(alpha: 0.8),
+                            const SizedBox(height: AppDimensions.space4),
+                            Text(
+                              'NIF/NIE: $nif',
+                              style: AppTypography.smallRegular.copyWith(
+                                color: AppColors.textOnPrimary.withValues(alpha: 0.8),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: AppDimensions.space24),
-                    // Primary items
-                    ...primaryItems.map(
-                      (final item) => _DrawerPrimaryTile(item: item),
-                    ),
-                    const Spacer(),
-                    // Logout
-                    if (onLogout != null)
-                      _DrawerPrimaryTile(
-                        item: AppDrawerMenuItem(
-                          label: 'Cerrar sesión',
-                          icon: Icons.logout_rounded,
-                          onTap: onLogout,
+                          ],
                         ),
                       ),
-                    const SizedBox(height: AppDimensions.space16),
-                  ],
+                      const SizedBox(height: AppDimensions.space24),
+                      // Primary items
+                      ...primaryItems.map(
+                        (final item) => _DrawerPrimaryTile(item: item),
+                      ),
+                      const Spacer(),
+                      // Logout
+                      if (onLogout != null)
+                        _DrawerPrimaryTile(
+                          item: AppDrawerMenuItem(
+                            label: 'Cerrar sesión',
+                            icon: Icons.logout_rounded,
+                            onTap: onLogout,
+                          ),
+                        ),
+                      const SizedBox(height: AppDimensions.space16),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          // ── Light footer section ─────────────────────────────────────────
-          Container(
-            color: AppColors.neutral000,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space24,
-              vertical: AppDimensions.space16,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...secondaryLinks.map(
-                  (final link) => _DrawerSecondaryTile(link: link),
-                ),
-                if (actionButtonLabel != null) ...[
-                  const SizedBox(height: AppDimensions.space16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: onActionButton,
-                      icon: const Icon(
-                        Icons.open_in_new_rounded,
-                        size: AppDimensions.iconSmall,
-                      ),
-                      label: Text(actionButtonLabel!),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        side: const BorderSide(color: AppColors.primary),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            AppDimensions.radiusRound,
-                          ),
+            // ── Light footer section ─────────────────────────────────────────
+            Container(
+              color: AppColors.neutral000,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.space24,
+                vertical: AppDimensions.space16,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...secondaryLinks.map(
+                    (final link) => _DrawerSecondaryTile(link: link),
+                  ),
+                  if (actionButtonLabel != null) ...[
+                    const SizedBox(height: AppDimensions.space16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: onActionButton,
+                        icon: const Icon(
+                          Icons.open_in_new_rounded,
+                          size: AppDimensions.iconSmall,
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: AppDimensions.space12,
-                          horizontal: AppDimensions.space24,
+                        label: Text(actionButtonLabel!),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.primary),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusRound,
+                            ),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppDimensions.space12,
+                            horizontal: AppDimensions.space24,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 }
