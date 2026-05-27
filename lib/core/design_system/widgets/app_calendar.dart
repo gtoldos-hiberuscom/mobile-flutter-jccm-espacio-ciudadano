@@ -80,14 +80,12 @@ class _AppCalendarState extends State<AppCalendar> {
 
   bool _isSelected(final DateTime date) {
     return widget.selectedDates.any(
-      ( final d) => d.year == date.year && d.month == date.month && d.day == date.day,
+      (final d) => d.year == date.year && d.month == date.month && d.day == date.day,
     );
   }
 
   bool _isToday(final DateTime date) {
-    return date.year == _today.year &&
-        date.month == _today.month &&
-        date.day == _today.day;
+    return date.year == _today.year && date.month == _today.month && date.day == _today.day;
   }
 
   String _monthYearLabel() {
@@ -150,12 +148,19 @@ class _AppCalendarState extends State<AppCalendar> {
   }
 
   Widget _navButton(final IconData icon, final VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        width: AppDimensions.space48,
-        height: AppDimensions.space48,
-        child: Icon(icon, color: AppColors.textWhite, size: 24),
+    final label = icon == Icons.chevron_left ? 'Mes anterior' : 'Mes siguiente';
+    return Semantics(
+      label: label,
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: ExcludeSemantics(
+          child: SizedBox(
+            width: AppDimensions.space48,
+            height: AppDimensions.space48,
+            child: Icon(icon, color: AppColors.textWhite, size: 24),
+          ),
+        ),
       ),
     );
   }
@@ -286,9 +291,13 @@ class _AppCalendarState extends State<AppCalendar> {
       fontWeight = FontWeight.w400;
     }
 
-    return GestureDetector(
-      onTap: () => widget.onDateSelected?.call(date),
-      child: Container(
+    return Semantics(
+      label: '${date.day}${selected ? ", seleccionado" : ""}${today ? ", hoy" : ""}',
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: () => widget.onDateSelected?.call(date),
+        child: Container(
         width: 40,
         height: 40,
         decoration: BoxDecoration(
@@ -307,6 +316,7 @@ class _AppCalendarState extends State<AppCalendar> {
           textAlign: TextAlign.center,
         ),
       ),
+    ),
     );
   }
 }
