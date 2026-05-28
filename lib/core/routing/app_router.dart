@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/pages/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pages/design_system_catalog_page.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
@@ -64,6 +65,12 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.claveCallback,
           builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPage(),
+        ),
+
+        // ── Authenticated Home (STORY-22) — placeholder until full impl ────
+        GoRoute(
+          path: Routes.home,
+          builder: (final BuildContext context, final GoRouterState state) => const HomePage(),
         ),
 
         // ── Personalization — Mis hechos vitales (STORY-54 / JCCMEC-53) ──────

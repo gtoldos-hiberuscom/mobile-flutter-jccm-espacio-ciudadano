@@ -172,9 +172,8 @@ class AppTextBlock extends StatelessWidget {
           // Leading icon
           if (showLeadingIcon)
             leadingIcon ??
-                Icon(
+                AppIcon(
                   AppIcons.chevronRight,
-                  size: AppDimensions.iconMedium,
                   color: resolvedColor,
                 ),
           if (showLeadingIcon) const SizedBox(width: AppDimensions.space8),
@@ -191,9 +190,8 @@ class AppTextBlock extends StatelessWidget {
           if (showTrailingIcon) const SizedBox(width: AppDimensions.space8),
           if (showTrailingIcon)
             trailingIcon ??
-                Icon(
+                AppIcon(
                   AppIcons.callMade,
-                  size: AppDimensions.iconMedium,
                   color: resolvedColor,
                 ),
         ],

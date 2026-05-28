@@ -71,7 +71,7 @@ class AppAlertBanner extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: titleColor, size: AppDimensions.iconMedium),
+                AppIcon(icon, color: titleColor),
                 const SizedBox(width: AppDimensions.space8),
                 Expanded(
                   child: Text(
@@ -88,10 +88,9 @@ class AppAlertBanner extends StatelessWidget {
                     child: InkWell(
                       onTap: onDismiss,
                       borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                      child: Icon(
+                      child: AppIcon(
                         AppIcons.close,
                         color: titleColor,
-                        size: AppDimensions.iconMedium,
                       ),
                     ),
                   ),
@@ -206,10 +205,9 @@ class AppAlertContextual extends StatelessWidget {
     final contentRow = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(
+        const AppIcon(
           AppIcons.info,
           color: AppColors.primaryDark,
-          size: AppDimensions.iconMedium,
         ),
         const SizedBox(width: AppDimensions.space8),
         Expanded(child: textWidget),
@@ -283,7 +281,7 @@ class AppAlertToast extends StatelessWidget {
         duration: duration,
         content: Row(
           children: [
-            Icon(icon, color: Colors.white, size: AppDimensions.iconMedium),
+            AppIcon(icon, color: Colors.white),
             const SizedBox(width: AppDimensions.space8),
             Expanded(
               child: Text(
@@ -318,7 +316,7 @@ class AppAlertToast extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: Colors.white, size: AppDimensions.iconMedium),
+            AppIcon(icon, color: Colors.white),
             const SizedBox(width: AppDimensions.space8),
             Expanded(
               child: Text(
@@ -420,7 +418,7 @@ class AppAlertSnackbar extends StatelessWidget {
         child: Row(
           children: [
             if (icon != null) ...[
-              Icon(icon, color: Colors.white, size: AppDimensions.iconMedium),
+              AppIcon(icon, color: Colors.white),
               const SizedBox(width: AppDimensions.space8),
             ],
             Expanded(
@@ -594,9 +592,8 @@ class AppAlertDialog extends StatelessWidget {
                     color: AppColors.backgroundBlueMutedLight,
                     borderRadius: BorderRadius.circular(64),
                   ),
-                  child: Icon(
+                  child: AppIcon(
                     icon ?? AppIcons.info,
-                    size: AppDimensions.iconMedium,
                     color: AppColors.primary,
                   ),
                 ),

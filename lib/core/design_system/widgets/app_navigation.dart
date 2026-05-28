@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -70,6 +72,16 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   List<Widget>? get _effectiveActions {
     final items = <Widget>[...?actions];
 
+    if (isLoggedIn && type == AppNavBarType.inicio) {
+      items.add(
+        IconButton(
+          icon: const AppIcon(AppIcons.notifications, color: AppColors.textPrimary),
+          onPressed: () {},
+          tooltip: 'Notificaciones',
+        ),
+      );
+    }
+
     if (isLoggedIn) {
       items.add(
         const Padding(
@@ -87,6 +99,19 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     return items.isEmpty ? null : items;
   }
 
+  Widget? get _titleWidget {
+    if (type == AppNavBarType.inicio) {
+      return const AppBrandLogo();
+    }
+    if (title != null) {
+      return Text(
+        title!,
+        style: AppTypography.h3.copyWith(color: _foregroundColor),
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(final BuildContext context) {
     return AppBar(
@@ -94,15 +119,11 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       foregroundColor: _foregroundColor,
       automaticallyImplyLeading: false,
       leading: _leadingWidget,
-      title: title != null
-          ? Text(
-              title!,
-              style: AppTypography.h3.copyWith(color: _foregroundColor),
-            )
-          : null,
+      titleSpacing: type == AppNavBarType.inicio ? AppDimensions.space8 : null,
+      title: _titleWidget,
       actions: _effectiveActions,
-      elevation: 0,
-      shadowColor: Colors.transparent,
+      elevation: type == AppNavBarType.inicio ? 1 : 0,
+      shadowColor: type == AppNavBarType.inicio ? Colors.black.withValues(alpha: 0.12) : Colors.transparent,
       bottom: type == AppNavBarType.level2
           ? const PreferredSize(
               preferredSize: Size.fromHeight(1),
@@ -113,6 +134,49 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null,
+    );
+  }
+}
+
+// ── AppBrandLogo ──────────────────────────────────────────────────────────────
+
+/// The JCCM "Espacio Ciudadano" brand logo used in the `inicio` NavBar.
+///
+/// Figma node 42095:13027 — "Logo" group composed of the castle emblem
+/// and the "Espacio ciudadano" wordmark.
+///
+/// Uses `assets/images/logo.svg`.
+class AppBrandLogo extends StatelessWidget {
+  const AppBrandLogo({super.key, this.height = 40});
+
+  /// Overall height constraint for the logo.
+  final double height;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: height,
+          width: height,
+          child: SvgPicture.asset(
+            'assets/images/logo.svg',
+            height: height,
+            semanticsLabel: 'Escudo de Castilla-La Mancha',
+          ),
+        ),
+        const SizedBox(width: AppDimensions.space4),
+        SizedBox(
+          height: 32,
+          width: 128,
+          child: SvgPicture.asset(
+            'assets/images/espacioCiudadano_logo.svg',
+            height: 32,
+            semanticsLabel: 'Espacio Ciudadano',
+          ),
+        ),
+      ],
     );
   }
 }
@@ -446,6 +510,137 @@ class AppFloatingNavigation extends StatelessWidget {
             onTap: () => onTabSelected(index),
           );
         }),
+      ),
+    );
+  }
+}
+
+// ── AppBottomTabBar ──────────────────────────────────────────────────────────
+
+/// Bottom tab bar item definition.
+class AppBottomTabBarItem {
+  const AppBottomTabBarItem({required this.label, required this.icon});
+
+  final String label;
+
+  /// Icon token — use a constant from [AppIcons].
+  final IconData icon;
+}
+
+/// A dark-themed bottom navigation bar matching Figma "Tabs/ BottomTabBar".
+///
+/// - 5 tabs: Inicio, Gestión, Mi Carpeta, Agenda, Recomendados
+/// - Dark blue background (`AppColors.primary`)
+/// - Active tab has a cyan indicator bar below it
+/// - White icons and labels
+class AppBottomTabBar extends StatelessWidget {
+  const AppBottomTabBar({
+    required this.items,
+    required this.currentIndex,
+    required this.onTap,
+    super.key,
+  });
+
+  final List<AppBottomTabBarItem> items;
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        left: AppDimensions.space4,
+        right: AppDimensions.space4,
+        top: AppDimensions.space4,
+        bottom: MediaQuery.of(context).padding.bottom,
+      ),
+      color: AppColors.primary,
+      child: Row(
+        children: List.generate(items.length, (final int index) {
+          final item = items[index];
+          final isSelected = index == currentIndex;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => onTap(index),
+              behavior: HitTestBehavior.opaque,
+              child: SizedBox(
+                height: AppDimensions.bottomNavHeight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    AppIcon(
+                      item.icon,
+                      color: AppColors.textWhite,
+                    ),
+                    const SizedBox(height: AppDimensions.space8),
+                    Text(
+                      item.label,
+                      style: AppTypography.smallRegular.copyWith(
+                        color: AppColors.textWhite,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppDimensions.space4),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 4,
+                      width: 24,
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.secondaryLight300 : Colors.transparent,
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(AppDimensions.radiusXs),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+// ── AppFab ────────────────────────────────────────────────────────────────────
+
+/// A dark round FAB matching Figma "FAB" (node 41773:16536).
+///
+/// Size: 56×56, dark primary background, white icon, high shadow.
+class AppFab extends StatelessWidget {
+  const AppFab({
+    required this.icon,
+    required this.onPressed,
+    super.key,
+    this.semanticsLabel,
+  });
+
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final String? semanticsLabel;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Semantics(
+      button: true,
+      label: semanticsLabel,
+      child: Material(
+        color: AppColors.primary,
+        shape: const CircleBorder(),
+        elevation: 8,
+        shadowColor: Colors.black.withValues(alpha: 0.2),
+        child: InkWell(
+          onTap: onPressed,
+          customBorder: const CircleBorder(),
+          child: SizedBox(
+            width: 56,
+            height: 56,
+            child: AppIcon(icon, color: AppColors.textWhite, size: 20),
+          ),
+        ),
       ),
     );
   }

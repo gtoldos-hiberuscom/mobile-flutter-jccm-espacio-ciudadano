@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
@@ -12,6 +13,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_in
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_notifier.dart';
@@ -61,7 +63,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
       appBar: AppNavBar(
         type: AppNavBarType.detail,
         title: l10n.lifeEventsTitle,
-        onBack: () => Navigator.of(context).maybePop(),
+        onClose: () => context.go(Routes.home),
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),

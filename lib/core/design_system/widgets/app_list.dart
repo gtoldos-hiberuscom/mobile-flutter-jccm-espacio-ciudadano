@@ -233,9 +233,8 @@ class AppListOptionItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: AppDimensions.space8),
-                  Icon(
+                  AppIcon(
                     AppIcons.callMade,
-                    size: AppDimensions.iconMedium,
                     color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
                   ),
                 ],
@@ -457,9 +456,8 @@ class _AppListExpandableItemState extends State<AppListExpandableItem> with Sing
                         ),
                       ),
                       const SizedBox(width: AppDimensions.space8),
-                      Icon(
+                      AppIcon(
                         _isExpanded ? AppIcons.remove : AppIcons.add,
-                        size: AppDimensions.iconMedium,
                         color: widget.isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
                       ),
                     ],

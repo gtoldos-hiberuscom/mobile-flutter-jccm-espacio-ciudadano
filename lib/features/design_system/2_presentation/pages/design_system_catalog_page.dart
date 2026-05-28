@@ -1149,6 +1149,17 @@ class _NavigationSection extends StatelessWidget {
     return _CatalogSection(
       children: [
         const _SectionTitle('NavBar — tipos'),
+        // Inicio type with login (logo + notifications + avatar)
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppDimensions.space8),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+            child: const AppNavBar(
+              type: AppNavBarType.inicio,
+              isLoggedIn: true,
+            ),
+          ),
+        ),
         ...AppNavBarType.values.map(
           (final t) => Padding(
             padding: const EdgeInsets.only(bottom: AppDimensions.space8),

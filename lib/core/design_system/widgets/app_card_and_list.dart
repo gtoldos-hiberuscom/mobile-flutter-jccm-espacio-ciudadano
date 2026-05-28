@@ -377,9 +377,8 @@ class AppCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
         child: Row(
           children: [
-            Icon(
+            AppIcon(
               AppIcons.attachment,
-              size: AppDimensions.iconMedium,
               color: _textColor(),
             ),
             const SizedBox(width: AppDimensions.space8),
@@ -401,7 +400,7 @@ class AppCard extends StatelessWidget {
       width: double.infinity,
       child: Row(
         children: [
-          Icon(AppIcons.autorenew, size: AppDimensions.iconMedium, color: color),
+          AppIcon(AppIcons.autorenew, color: color),
           const SizedBox(width: AppDimensions.space8),
           Expanded(
             child: Text(

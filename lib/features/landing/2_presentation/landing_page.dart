@@ -42,12 +42,16 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_didTrySessionUnlock) return;
+    if (_didTrySessionUnlock) {
+      return;
+    }
     _didTrySessionUnlock = true;
 
     final l10n = AppLocalizations.of(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       unawaited(
         ref
             .read(landingProvider.notifier)
@@ -65,7 +69,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
 
     ref.listen<LandingState>(landingProvider, (final previous, final next) {
       if (next.loginSuccess) {
-        ref.read(goRouterProvider).go(Routes.lifeEvents);
+        ref.read(goRouterProvider).go(Routes.home);
       }
       if (next.error != null) {
         final errorMsg = l10n.domainGenericLoadError;

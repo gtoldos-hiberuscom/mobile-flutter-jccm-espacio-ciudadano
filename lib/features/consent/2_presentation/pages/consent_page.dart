@@ -75,7 +75,7 @@ class _ConsentPageState extends ConsumerState<ConsentPage> {
         }
         switch (next.status) {
           case ConsentStatus.accepted:
-            context.go(Routes.lifeEvents);
+            context.go(Routes.home);
           case ConsentStatus.rejected:
             context.go(Routes.landing);
           case ConsentStatus.saveError:

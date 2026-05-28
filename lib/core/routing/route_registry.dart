@@ -31,6 +31,9 @@ abstract final class Routes {
   /// Mandatory legal-consent gate shown after first login.
   static const String consent = '/consent';
 
+  /// Authenticated home — main screen with bottom navigation.
+  static const String home = '/home';
+
   static const String lifeEvents = '/preferences/life-events';
 
   /// Design system catalog — developer/designer reference screen.
@@ -38,6 +41,7 @@ abstract final class Routes {
 
   static const Set<String> _authenticated = {
     consent,
+    home,
     lifeEvents,
   };
 

@@ -61,7 +61,7 @@ class AppTag extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final (:bg, :border, :fg, :defaultIcon) = _resolve(status);
-    final effectiveIcon = icon ?? defaultIcon;
+    final IconData effectiveIcon = icon ?? defaultIcon;
 
     return Semantics(
       label: label,
@@ -80,7 +80,7 @@ class AppTag extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(effectiveIcon, size: 16, color: fg),
+            AppIcon(effectiveIcon, size: 16, color: fg),
             const SizedBox(width: AppDimensions.space4),
             Text(
               label.toUpperCase(),

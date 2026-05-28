@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -320,13 +321,13 @@ class _AppButtonState extends State<AppButton> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (hasLeading) ...[
-          widget.icon ?? Icon(widget.leadingIcon, size: _iconSize, color: fg),
+          widget.icon ?? AppIcon(widget.leadingIcon!, size: _iconSize, color: fg),
           const SizedBox(width: AppDimensions.space4), // Figma gap = 4 dp
         ],
         if (widget.isExpanded) Expanded(child: textWidget) else textWidget,
         if (hasTrailing) ...[
           const SizedBox(width: AppDimensions.space4),
-          Icon(widget.trailingIcon, size: _iconSize, color: fg),
+          AppIcon(widget.trailingIcon!, size: _iconSize, color: fg),
         ],
       ],
     );
