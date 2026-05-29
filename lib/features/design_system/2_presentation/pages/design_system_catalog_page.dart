@@ -1150,11 +1150,10 @@ class _NavigationSection extends StatelessWidget {
       children: [
         const _SectionTitle('NavBar — tipos'),
         // Inicio type with login (logo + notifications + avatar)
-        Padding(
-          padding: const EdgeInsets.only(bottom: AppDimensions.space8),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-            child: const AppNavBar(
+        const Padding(
+          padding: EdgeInsets.only(bottom: AppDimensions.space8),
+          child: _NavBarPreview(
+            appBar: AppNavBar(
               type: AppNavBarType.inicio,
               isLoggedIn: true,
             ),
@@ -1163,9 +1162,8 @@ class _NavigationSection extends StatelessWidget {
         ...AppNavBarType.values.map(
           (final t) => Padding(
             padding: const EdgeInsets.only(bottom: AppDimensions.space8),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              child: AppNavBar(
+            child: _NavBarPreview(
+              appBar: AppNavBar(
                 type: t,
                 title: t.name,
                 onBack: () {},
@@ -1239,6 +1237,26 @@ class _NavigationSection extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _NavBarPreview extends StatelessWidget {
+  const _NavBarPreview({required this.appBar});
+
+  final PreferredSizeWidget appBar;
+
+  @override
+  Widget build(final BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+      child: SizedBox(
+        height: appBar.preferredSize.height,
+        child: Scaffold(
+          appBar: appBar,
+          body: const SizedBox.shrink(),
+        ),
+      ),
     );
   }
 }
@@ -1513,8 +1531,27 @@ class _BottomSheetSection extends StatelessWidget {
         ),
         child: const Text('Abrir BottomSheet'),
       ),
+      const SizedBox(height: AppDimensions.space12),
+      ElevatedButton(
+        onPressed: () => AppBottomSheet.show<void>(
+          context: context,
+          body: AppQrDownloadBottomSheetBody(
+            onQrPressed: () => _showBottomSheetAction(context, 'QR'),
+            onPkPassPressed: () => _showBottomSheetAction(context, 'PASSPK'),
+            onPdfPressed: () => _showBottomSheetAction(context, 'PDF'),
+          ),
+        ),
+        child: const Text('Abrir BottomSheet QR'),
+      ),
     ],
   );
+
+  void _showBottomSheetAction(final BuildContext context, final String format) {
+    AppAlertSnackbar.show(
+      context,
+      message: 'Formato seleccionado: $format',
+    );
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

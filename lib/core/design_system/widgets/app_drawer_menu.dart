@@ -5,7 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 
-/// A single item in the drawer menu.
+/// A single item in the drawer menu (primary section with icon).
 class AppDrawerMenuItem {
   const AppDrawerMenuItem({
     required this.label,
@@ -18,7 +18,7 @@ class AppDrawerMenuItem {
   final VoidCallback? onTap;
 }
 
-/// A secondary link item (bottom section of drawer).
+/// A secondary link item (dark section below divider).
 class AppDrawerLinkItem {
   const AppDrawerLinkItem({
     required this.label,
@@ -29,13 +29,17 @@ class AppDrawerLinkItem {
   final VoidCallback? onTap;
 }
 
-/// Side drawer menu matching Figma node `15:14576`.
+/// Side drawer menu matching Figma node `15:16056` — "Menu/DropMenu".
 ///
-/// Split into two sections:
-/// - **Dark header** (`primaryDark` bg): greeting, NIF, primary nav items,
-///   and logout.
-/// - **Light footer** (`neutral000` bg): secondary links and an external
-///   action button.
+/// Layout (top → bottom, all on primary-base `#002855` background):
+/// 1. **Close bar** — secondary-base (`#117d98`) bg with underlined
+///    "Cerrar menú" text + close icon.
+/// 2. **Primary section** — secondary-base bg: greeting, NIF, nav items,
+///    divider (`#156579`), and logout.
+/// 3. **Divider** — neutral-400 (`#939090`) separator on primary bg.
+/// 4. **Secondary links** — primary bg, arrow_forward icon + white text.
+/// 5. **Action button** — white bg, secondary-light-400 border, 4 px radius,
+///    black text + open_in_new icon.
 ///
 /// Use with [Scaffold.endDrawer] or show via [showAppDrawerMenu].
 class AppDrawerMenu extends StatelessWidget {
@@ -60,7 +64,7 @@ class AppDrawerMenu extends StatelessWidget {
   /// Primary navigation items (e.g. "Mi perfil", "Mis carnets digitales").
   final List<AppDrawerMenuItem> primaryItems;
 
-  /// Secondary links shown in the light bottom section.
+  /// Secondary links shown below the divider (e.g. "Ayuda y Contacto").
   final List<AppDrawerLinkItem> secondaryLinks;
 
   /// Called when "Cerrar sesión" is tapped.
@@ -81,134 +85,211 @@ class AppDrawerMenu extends StatelessWidget {
       container: true,
       scopesRoute: true,
       namesRoute: true,
+      explicitChildNodes: true,
       label: 'Menú de navegación',
       child: Drawer(
-        width: MediaQuery.sizeOf(context).width * 0.82,
+        width: MediaQuery.sizeOf(context).width - AppDimensions.space24,
         shape: const RoundedRectangleBorder(),
-        child: Column(
-          children: [
-            // ── Dark header section ──────────────────────────────────────────
-            Expanded(
-              child: ColoredBox(
-                color: AppColors.primaryDark,
-                child: SafeArea(
-                  bottom: false,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Close button
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: AppDimensions.space8,
-                            right: AppDimensions.space8,
-                          ),
-                          child: TextButton.icon(
-                            onPressed: onClose ?? () => Navigator.of(context).pop(),
-                            icon: const Icon(
-                              Icons.close,
-                              color: AppColors.textOnPrimary,
-                              size: AppDimensions.iconMedium,
+        backgroundColor: AppColors.primary,
+        child: SafeArea(
+          child: Column(
+            children: [
+              // ── Close bar (secondary bg) ─────────────────────────────────
+              Container(
+                width: double.infinity,
+                color: AppColors.secondary,
+                padding: const EdgeInsets.all(AppDimensions.space8),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Semantics(
+                    label: 'Cerrar menú',
+                    button: true,
+                    child: ExcludeSemantics(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: onClose ?? () => Navigator.of(context).pop(),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minWidth: AppDimensions.minTouchTarget,
                             ),
-                            label: Text(
-                              'Cerrar menu',
-                              style: AppTypography.smallRegular.copyWith(
-                                color: AppColors.textOnPrimary,
+                            child: Padding(
+                              padding: const EdgeInsets.all(AppDimensions.space8),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Cerrar menú',
+                                    style: AppTypography.leadingMedium.copyWith(
+                                      color: AppColors.neutral000,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AppColors.neutral000,
+                                    ),
+                                  ),
+                                  const SizedBox(width: AppDimensions.space4),
+                                  const Icon(
+                                    Icons.close,
+                                    color: AppColors.neutral000,
+                                    size: AppDimensions.iconMedium,
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      // Greeting
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppDimensions.space24,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Hola, $userName',
-                              style: AppTypography.h2.copyWith(
-                                color: AppColors.textOnPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: AppDimensions.space4),
-                            Text(
-                              'NIF/NIE: $nif',
-                              style: AppTypography.smallRegular.copyWith(
-                                color: AppColors.textOnPrimary.withValues(alpha: 0.8),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: AppDimensions.space24),
-                      // Primary items
-                      ...primaryItems.map(
-                        (final item) => _DrawerPrimaryTile(item: item),
-                      ),
-                      const Spacer(),
-                      // Logout
-                      if (onLogout != null)
-                        _DrawerPrimaryTile(
-                          item: AppDrawerMenuItem(
-                            label: 'Cerrar sesión',
-                            icon: Icons.logout_rounded,
-                            onTap: onLogout,
-                          ),
-                        ),
-                      const SizedBox(height: AppDimensions.space16),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            // ── Light footer section ─────────────────────────────────────────
-            Container(
-              color: AppColors.neutral000,
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space24,
-                vertical: AppDimensions.space16,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...secondaryLinks.map(
-                    (final link) => _DrawerSecondaryTile(link: link),
-                  ),
-                  if (actionButtonLabel != null) ...[
-                    const SizedBox(height: AppDimensions.space16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: onActionButton,
-                        icon: const Icon(
-                          Icons.open_in_new_rounded,
-                          size: AppDimensions.iconSmall,
-                        ),
-                        label: Text(actionButtonLabel!),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.primary,
-                          side: const BorderSide(color: AppColors.primary),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusRound,
-                            ),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: AppDimensions.space12,
-                            horizontal: AppDimensions.space24,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ],
+                  ),
+                ),
               ),
-            ),
-          ],
+
+              // ── Primary section (secondary bg) ───────────────────────────
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header + items block
+                      Container(
+                        width: double.infinity,
+                        color: AppColors.secondary,
+                        padding: const EdgeInsets.all(AppDimensions.space16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Greeting
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: AppDimensions.space8,
+                              ),
+                              child: Text(
+                                'Hola, $userName',
+                                style: AppTypography.h2.copyWith(
+                                  color: AppColors.textWhite,
+                                ),
+                              ),
+                            ),
+                            // NIF
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppDimensions.space4,
+                              ),
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'NIF/NIE:',
+                                      style: AppTypography.smallBold.copyWith(
+                                        color: AppColors.textWhite,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' $nif',
+                                      style: AppTypography.smallRegular.copyWith(
+                                        color: AppColors.textWhite,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: AppDimensions.space8),
+                            // Primary nav items
+                            ...primaryItems.map(
+                              (final item) => _DrawerPrimaryTile(item: item),
+                            ),
+                            // Divider before logout
+                            if (onLogout != null) ...[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.space16,
+                                  vertical: AppDimensions.space8,
+                                ),
+                                child: Container(
+                                  height: 1,
+                                  color: AppColors.secondaryDark,
+                                ),
+                              ),
+                              _DrawerPrimaryTile(
+                                item: AppDrawerMenuItem(
+                                  label: 'Cerrar sesión',
+                                  icon: Icons.logout_rounded,
+                                  onTap: onLogout,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+
+                      // ── Divider (neutral400 on primary bg) ───────────────
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.space16,
+                          vertical: AppDimensions.space8,
+                        ),
+                        child: Container(
+                          height: 1,
+                          color: AppColors.neutral400,
+                        ),
+                      ),
+
+                      // ── Secondary links (primary bg) ─────────────────────
+                      ...secondaryLinks.map(
+                        (final link) => _DrawerSecondaryTile(link: link),
+                      ),
+
+                      // ── Action button ────────────────────────────────────
+                      if (actionButtonLabel != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.space24,
+                            vertical: AppDimensions.space16,
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 47,
+                            child: OutlinedButton.icon(
+                              onPressed: onActionButton,
+                              icon: Text(
+                                actionButtonLabel!,
+                                style: AppTypography.leadingMedium.copyWith(
+                                  color: AppColors.textBlack,
+                                ),
+                              ),
+                              label: const Icon(
+                                Icons.open_in_new_rounded,
+                                color: AppColors.textBlack,
+                                size: 20,
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: AppColors.neutral000,
+                                side: const BorderSide(
+                                  color: AppColors.secondaryLight400,
+                                  width: 2,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    AppDimensions.radiusXs,
+                                  ),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.space16,
+                                  vertical: AppDimensions.space4,
+                                ),
+                                elevation: 1,
+                                shadowColor: Colors.black.withValues(alpha: 0.12),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -222,21 +303,30 @@ class _DrawerPrimaryTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        item.icon,
-        color: AppColors.textOnPrimary,
-        size: AppDimensions.iconMedium,
-      ),
-      title: Text(
-        item.label,
-        style: AppTypography.bodyRegular.copyWith(
-          color: AppColors.textOnPrimary,
-        ),
-      ),
+    return InkWell(
       onTap: item.onTap,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space24,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: AppDimensions.space4,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              item.icon,
+              color: AppColors.textWhite,
+              size: AppDimensions.iconMedium,
+            ),
+            const SizedBox(width: AppDimensions.space16),
+            Expanded(
+              child: Text(
+                item.label,
+                style: AppTypography.leadingMedium.copyWith(
+                  color: AppColors.textWhite,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -256,20 +346,23 @@ class _DrawerSecondaryTile extends StatelessWidget {
         onTap: link.onTap,
         child: ExcludeSemantics(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.space16,
+              vertical: AppDimensions.space8,
+            ),
             child: Row(
               children: [
                 const Icon(
                   Icons.arrow_forward_rounded,
-                  color: AppColors.primary,
-                  size: AppDimensions.iconSmall,
+                  color: AppColors.neutral000,
+                  size: AppDimensions.iconMedium,
                 ),
-                const SizedBox(width: AppDimensions.space12),
+                const SizedBox(width: AppDimensions.space16),
                 Expanded(
                   child: Text(
                     link.label,
-                    style: AppTypography.bodyRegular.copyWith(
-                      color: AppColors.textPrimary,
+                    style: AppTypography.leadingMedium.copyWith(
+                      color: AppColors.neutral000,
                     ),
                   ),
                 ),
@@ -306,7 +399,7 @@ void showAppDrawerMenu({
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'Cerrar menu',
+      barrierLabel: 'Cerrar menú',
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 250),
       pageBuilder: (final context, final animation, final secondaryAnimation) {
