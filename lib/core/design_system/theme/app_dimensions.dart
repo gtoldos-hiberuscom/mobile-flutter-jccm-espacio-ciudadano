@@ -40,6 +40,9 @@ abstract final class AppDimensions {
   /// Standard Material app-bar height.
   static const double appBarHeight = 56;
 
+  /// Inicio app-bar height from Figma: 48 dp content + 8 dp padding.
+  static const double appBarHeightInicio = 64;
+
   /// Bottom navigation bar height (accounts for gesture insets via padding).
   static const double bottomNavHeight = 80;
 

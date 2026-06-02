@@ -31,7 +31,9 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
 
   @override
-  Size get preferredSize => const Size.fromHeight(AppDimensions.appBarHeight);
+  Size get preferredSize => Size.fromHeight(
+    type == AppNavBarType.inicio ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
+  );
 
   Color get _backgroundColor => switch (type) {
     AppNavBarType.grey => const Color(0xFFE0E5EB),
@@ -75,7 +77,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     if (isLoggedIn && type == AppNavBarType.inicio) {
       items.add(
         IconButton(
-          icon: const AppIcon(AppIcons.notifications, color: AppColors.textPrimary),
+          icon: const AppSvgIcon(AppIconAssets.notifications, color: AppColors.textPrimary),
           onPressed: () {},
           tooltip: 'Notificaciones',
         ),
@@ -114,16 +116,22 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(final BuildContext context) {
+    if (type == AppNavBarType.inicio) {
+      return _InicioNavBar(
+        isLoggedIn: isLoggedIn,
+        actions: actions,
+      );
+    }
+
     return AppBar(
       backgroundColor: _backgroundColor,
       foregroundColor: _foregroundColor,
       automaticallyImplyLeading: false,
       leading: _leadingWidget,
-      titleSpacing: type == AppNavBarType.inicio ? AppDimensions.space8 : null,
       title: _titleWidget,
       actions: _effectiveActions,
-      elevation: type == AppNavBarType.inicio ? 1 : 0,
-      shadowColor: type == AppNavBarType.inicio ? Colors.black.withValues(alpha: 0.12) : Colors.transparent,
+      elevation: 0,
+      shadowColor: Colors.transparent,
       bottom: type == AppNavBarType.level2
           ? const PreferredSize(
               preferredSize: Size.fromHeight(1),
@@ -134,6 +142,92 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null,
+    );
+  }
+}
+
+class _InicioNavBar extends StatelessWidget {
+  const _InicioNavBar({
+    required this.isLoggedIn,
+    this.actions,
+  });
+
+  final bool isLoggedIn;
+  final List<Widget>? actions;
+
+  @override
+  Widget build(final BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.backgroundBlueMutedLight),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F000000),
+            offset: Offset(0, 1),
+            blurRadius: 1,
+          ),
+        ],
+      ),
+      child: SizedBox(
+        height: AppDimensions.appBarHeightInicio,
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimensions.space8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(
+                height: 48,
+                child: AppBrandLogo(),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ...?actions,
+                  if (isLoggedIn) ...[
+                    IconButton(
+                      constraints: const BoxConstraints.tightFor(
+                        width: AppDimensions.iconLarge,
+                        height: AppDimensions.iconLarge,
+                      ),
+                      padding: EdgeInsets.zero,
+                      icon: const AppSvgIcon(
+                        AppIconAssets.notifications,
+                        color: AppColors.textPrimary,
+                      ),
+                      onPressed: () {},
+                      tooltip: 'Notificaciones',
+                    ),
+                    const SizedBox(width: AppDimensions.space16),
+                    const Padding(
+                      padding: EdgeInsets.all(AppDimensions.space4),
+                      child: AppAvatar(
+                        initials: 'AM',
+                        size: AppAvatarSize.small,
+                        semanticsLabel: 'Perfil',
+                      ),
+                    ),
+                  ] else
+                    IconButton(
+                      constraints: const BoxConstraints.tightFor(
+                        width: AppDimensions.iconLarge,
+                        height: AppDimensions.iconLarge,
+                      ),
+                      padding: EdgeInsets.zero,
+                      icon: const AppSvgIcon(
+                        AppIconAssets.help,
+                        color: AppColors.textPrimary,
+                      ),
+                      onPressed: () {},
+                      tooltip: 'Ayuda',
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -373,15 +467,17 @@ enum AppStickyBarType { dicotomy, vertical, flow }
 class AppNavCard extends StatelessWidget {
   const AppNavCard({
     required this.label,
-    required this.icon,
     required this.onTap,
     super.key,
+    this.icon,
+    this.iconAsset,
     this.description,
     this.isDisabled = false,
-  });
+  }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
 
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final String? iconAsset;
   final VoidCallback? onTap;
   final String? description;
   final bool isDisabled;
@@ -428,11 +524,16 @@ class AppNavCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppDimensions.space4),
                   ),
                   child: Center(
-                    child: Icon(
-                      icon,
-                      size: AppDimensions.iconMedium,
-                      color: iconColor,
-                    ),
+                    child: iconAsset == null
+                        ? Icon(
+                            icon,
+                            size: AppDimensions.iconMedium,
+                            color: iconColor,
+                          )
+                        : AppSvgIcon(
+                            iconAsset!,
+                            color: iconColor,
+                          ),
                   ),
                 ),
                 const SizedBox(width: AppDimensions.space16),
@@ -456,8 +557,8 @@ class AppNavCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: AppDimensions.space8),
-                Icon(
-                  Icons.arrow_forward_rounded,
+                AppSvgIcon(
+                  AppIconAssets.chevronRight,
                   size: AppDimensions.iconLarge,
                   color: iconColor,
                 ),
@@ -519,12 +620,19 @@ class AppFloatingNavigation extends StatelessWidget {
 
 /// Bottom tab bar item definition.
 class AppBottomTabBarItem {
-  const AppBottomTabBarItem({required this.label, required this.icon});
+  const AppBottomTabBarItem({
+    required this.label,
+    this.icon,
+    this.iconAsset,
+  }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
 
   final String label;
 
   /// Icon token — use a constant from [AppIcons].
-  final IconData icon;
+  final IconData? icon;
+
+  /// SVG icon asset — use a constant from [AppIconAssets].
+  final String? iconAsset;
 }
 
 /// A dark-themed bottom navigation bar matching Figma "Tabs/ BottomTabBar".
@@ -568,10 +676,16 @@ class AppBottomTabBar extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    AppIcon(
-                      item.icon,
-                      color: AppColors.textWhite,
-                    ),
+                    if (item.iconAsset == null)
+                      AppIcon(
+                        item.icon!,
+                        color: AppColors.textWhite,
+                      )
+                    else
+                      AppSvgIcon(
+                        item.iconAsset!,
+                        color: AppColors.textWhite,
+                      ),
                     const SizedBox(height: AppDimensions.space8),
                     Text(
                       item.label,
@@ -612,13 +726,15 @@ class AppBottomTabBar extends StatelessWidget {
 /// Size: 56×56, dark primary background, white icon, high shadow.
 class AppFab extends StatelessWidget {
   const AppFab({
-    required this.icon,
     required this.onPressed,
     super.key,
+    this.icon,
+    this.iconAsset,
     this.semanticsLabel,
-  });
+  }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
 
-  final IconData icon;
+  final IconData? icon;
+  final String? iconAsset;
   final VoidCallback? onPressed;
   final String? semanticsLabel;
 
@@ -638,7 +754,13 @@ class AppFab extends StatelessWidget {
           child: SizedBox(
             width: 56,
             height: 56,
-            child: AppIcon(icon, color: AppColors.textWhite, size: 20),
+            child: iconAsset == null
+                ? AppIcon(icon!, color: AppColors.textWhite, size: 20)
+                : AppSvgIcon(
+                    iconAsset!,
+                    color: AppColors.textWhite,
+                    size: 20,
+                  ),
           ),
         ),
       ),

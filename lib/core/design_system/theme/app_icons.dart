@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 
 /// Icon tokens — maps every Figma DS icon (node `9:1056`) to its
@@ -84,6 +85,23 @@ abstract final class AppIcons {
   static const IconData lock = Icons.lock_outlined;
 }
 
+/// SVG asset tokens for the icon set stored in `assets/icons`.
+abstract final class AppIconAssets {
+  static const String accountBalance = 'assets/icons/account_balance.svg';
+  static const String apps = 'assets/icons/apps.svg';
+  static const String calendarToday = 'assets/icons/calendar_today.svg';
+  static const String check = 'assets/icons/check.svg';
+  static const String chevronRight = 'assets/icons/chevron_right.svg';
+  static const String docs = 'assets/icons/docs.svg';
+  static const String fingerprint = 'assets/icons/fingerprint.svg';
+  static const String help = 'assets/icons/help.svg';
+  static const String license = 'assets/icons/license.svg';
+  static const String notifications = 'assets/icons/notifications.svg';
+  static const String person = 'assets/icons/person.svg';
+  static const String schedule = 'assets/icons/schedule.svg';
+  static const String verified = 'assets/icons/verified.svg';
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // AppIcon widget
 // ─────────────────────────────────────────────────────────────────────────────
@@ -124,6 +142,33 @@ class AppIcon extends StatelessWidget {
       size: size,
       color: color,
       semanticLabel: semanticsLabel,
+    );
+  }
+}
+
+/// Renders one of the design-system SVG icons from `assets/icons`.
+class AppSvgIcon extends StatelessWidget {
+  const AppSvgIcon(
+    this.assetPath, {
+    super.key,
+    this.size = AppDimensions.iconMedium,
+    this.color,
+    this.semanticsLabel,
+  });
+
+  final String assetPath;
+  final double size;
+  final Color? color;
+  final String? semanticsLabel;
+
+  @override
+  Widget build(final BuildContext context) {
+    return SvgPicture.asset(
+      assetPath,
+      width: size,
+      height: size,
+      colorFilter: color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn),
+      semanticsLabel: semanticsLabel,
     );
   }
 }
