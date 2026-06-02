@@ -543,11 +543,13 @@ class AppAlertDialog extends StatelessWidget {
   }) {
     return showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       barrierColor: const Color(0xCC031B35),
       builder: (final ctx) => AppAlertDialog(
         title: title,
         description: description,
         icon: icon,
+        showIconContainer: showIconContainer,
         infoLabel: infoLabel,
         onInfo: onInfo,
         checkboxLabel: checkboxLabel,
@@ -640,6 +642,30 @@ class AppAlertDialog extends StatelessWidget {
   }
 }
 
+/// Biometric quick-access opt-in dialog.
+///
+/// Built from existing design-system pieces: [AppAlertDialog], [AppButton],
+/// [AppIcon], and [AppIcons.fingerprint].
+class AppBiometricAccessDialog {
+  const AppBiometricAccessDialog._();
+
+  static const title = '¿Quieres activar el acceso rápido con huella/reconocimiento facial?';
+  static const description = 'Esto te permitirá entrar en la aplicación sin la necesidad de autenticarte. Cada cierto tiempo se te pedirá autenticación para mantener siempre tus datos a salvo.';
+  static const cancelLabel = 'Cancelar';
+  static const confirmLabel = 'Activar';
+
+  static Future<bool?> show(final BuildContext context) {
+    return AppAlertDialog.show(
+      context,
+      icon: AppIcons.fingerprint,
+      title: title,
+      description: description,
+      confirmLabel: confirmLabel,
+      cancelLabel: cancelLabel,
+    );
+  }
+}
+
 // ─── Dialog internals ─────────────────────────────────────────────────────────
 
 class _DialogCheckboxRow extends StatelessWidget {
@@ -718,19 +744,27 @@ class _DialogActions extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: AppButton(
-                label: cancelLabel,
-                onPressed: onCancel,
-                hierarchy: AppButtonHierarchy.secondary,
-                leadingIcon: AppIcons.cancel,
+              child: SizedBox(
+                height: AppDimensions.minTouchTarget,
+                child: AppButton(
+                  label: cancelLabel,
+                  onPressed: onCancel,
+                  hierarchy: AppButtonHierarchy.tertiary,
+                  leadingIcon: AppIcons.cancel,
+                  isExpanded: true,
+                ),
               ),
             ),
             const SizedBox(width: AppDimensions.space16),
             Expanded(
-              child: AppButton(
-                label: confirmLabel,
-                onPressed: onConfirm,
-                leadingIcon: AppIcons.check,
+              child: SizedBox(
+                height: AppDimensions.minTouchTarget,
+                child: AppButton(
+                  label: confirmLabel,
+                  onPressed: onConfirm,
+                  leadingIcon: AppIcons.check,
+                  isExpanded: true,
+                ),
               ),
             ),
           ],

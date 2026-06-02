@@ -109,13 +109,16 @@ class _AppButtonState extends State<AppButton> {
   }
 
   void _onFocusChange() {
-    if (mounted) setState(() => _isFocused = _focusNode.hasFocus);
+    if (mounted) {
+      setState(() => _isFocused = _focusNode.hasFocus);
+    }
   }
 
   @override
   void dispose() {
-    _focusNode.removeListener(_onFocusChange);
-    _focusNode.dispose();
+    _focusNode
+      ..removeListener(_onFocusChange)
+      ..dispose();
     super.dispose();
   }
 
@@ -159,9 +162,13 @@ class _AppButtonState extends State<AppButton> {
     Widget button = _buildCoreButton(hierarchy, isDisabled, l10n);
 
     // Focus ring — keyboard focus.
-    if (_isFocused && !isDisabled) button = _FocusRingWrapper(child: button);
+    if (_isFocused && !isDisabled) {
+      button = _FocusRingWrapper(child: button);
+    }
 
-    if (widget.isExpanded) button = SizedBox(width: double.infinity, child: button);
+    if (widget.isExpanded) {
+      button = SizedBox(width: double.infinity, child: button);
+    }
 
     return Semantics(
       label: widget.semanticsLabel ?? widget.label,
@@ -312,9 +319,17 @@ class _AppButtonState extends State<AppButton> {
           )
         : _labelStyle(fg);
 
-    final textWidget = Text(widget.label, style: textStyle);
+    final textWidget = Text(
+      widget.label,
+      style: textStyle,
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
 
-    if (!hasLeading && !hasTrailing) return textWidget;
+    if (!hasLeading && !hasTrailing) {
+      return textWidget;
+    }
 
     return Row(
       mainAxisSize: widget.isExpanded ? MainAxisSize.max : MainAxisSize.min,
@@ -324,7 +339,7 @@ class _AppButtonState extends State<AppButton> {
           widget.icon ?? AppIcon(widget.leadingIcon!, size: _iconSize, color: fg),
           const SizedBox(width: AppDimensions.space4), // Figma gap = 4 dp
         ],
-        if (widget.isExpanded) Expanded(child: textWidget) else textWidget,
+        Flexible(child: textWidget),
         if (hasTrailing) ...[
           const SizedBox(width: AppDimensions.space4),
           AppIcon(widget.trailingIcon!, size: _iconSize, color: fg),
@@ -375,13 +390,16 @@ class _AppIconButtonState extends State<AppIconButton> {
   }
 
   void _onFocusChange() {
-    if (mounted) setState(() => _isFocused = _focusNode.hasFocus);
+    if (mounted) {
+      setState(() => _isFocused = _focusNode.hasFocus);
+    }
   }
 
   @override
   void dispose() {
-    _focusNode.removeListener(_onFocusChange);
-    _focusNode.dispose();
+    _focusNode
+      ..removeListener(_onFocusChange)
+      ..dispose();
     super.dispose();
   }
 
@@ -426,8 +444,12 @@ class _AppIconButtonState extends State<AppIconButton> {
         onPressed: effectiveOnPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith((final s) {
-            if (isDisabled) return AppColors.blueMuted100;
-            if (s.contains(WidgetState.pressed)) return AppColors.primaryLight;
+            if (isDisabled) {
+              return AppColors.blueMuted100;
+            }
+            if (s.contains(WidgetState.pressed)) {
+              return AppColors.primaryLight;
+            }
             return colors.background;
           }),
           foregroundColor: WidgetStateProperty.all(colors.foreground),
@@ -479,7 +501,9 @@ class _AppIconButtonState extends State<AppIconButton> {
       );
     }
 
-    if (_isFocused && !isDisabled) button = _FocusRingWrapper(child: button);
+    if (_isFocused && !isDisabled) {
+      button = _FocusRingWrapper(child: button);
+    }
 
     return Semantics(
       label: widget.semanticsLabel,
@@ -508,6 +532,7 @@ class _ButtonColorSet {
   final Color border;
 }
 
+// ignore: avoid_classes_with_only_static_members
 abstract final class _ButtonColors {
   static _ButtonColorSet resolve(
     final AppButtonHierarchy hierarchy,

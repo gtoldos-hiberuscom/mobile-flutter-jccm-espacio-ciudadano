@@ -88,7 +88,7 @@ class AppDrawerMenu extends StatelessWidget {
       explicitChildNodes: true,
       label: 'Menú de navegación',
       child: Drawer(
-        width: MediaQuery.sizeOf(context).width - AppDimensions.space24,
+        width: MediaQuery.sizeOf(context).width - AppDimensions.space64,
         shape: const RoundedRectangleBorder(),
         backgroundColor: AppColors.primary,
         child: SafeArea(

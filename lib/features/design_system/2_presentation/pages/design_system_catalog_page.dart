@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 
 /// Interactive design-system catalog.
@@ -46,6 +47,7 @@ class _DesignSystemCatalogPageState extends State<DesignSystemCatalogPage> with 
     'Bottom Sheet',
     'Calendario',
     'Drawer Menu',
+    'Alerta biométrica',
   ];
 
   @override
@@ -87,6 +89,7 @@ class _DesignSystemCatalogPageState extends State<DesignSystemCatalogPage> with 
           _BottomSheetSection(),
           _CalendarSection(),
           _DrawerMenuSection(),
+          _BiometricAlertSection(),
         ],
       ),
     );
@@ -576,6 +579,81 @@ class _ShadowRow extends StatelessWidget {
 class _IconsSection extends StatelessWidget {
   const _IconsSection();
 
+  static const _assetIcons = <String>[
+    'Empleo.svg',
+    'Status=False.svg',
+    'Status=Mix.svg',
+    'Status=True.svg',
+    'account_balance.svg',
+    'add.svg',
+    'alternate_email.svg',
+    'apps.svg',
+    'arrow_back.svg',
+    'arrow_downward.svg',
+    'arrow_forward.svg',
+    'arrow_upward.svg',
+    'attachment.svg',
+    'autorenew.svg',
+    'backspace.svg',
+    'bienestar_social.svg',
+    'calendar_today.svg',
+    'call.svg',
+    'call_made.svg',
+    'cancel.svg',
+    'check.svg',
+    'check_circle.svg',
+    'chevron_left.svg',
+    'chevron_right.svg',
+    'close.svg',
+    'corporate_fare.svg',
+    'dehaze.svg',
+    'delete.svg',
+    'dependencia.svg',
+    'discapacidad.svg',
+    'docs.svg',
+    'download.svg',
+    'download_done.svg',
+    'draft.svg',
+    'drafts.svg',
+    'edit.svg',
+    'educacion.svg',
+    'estacionamiento.svg',
+    'familianumerosa.svg',
+    'fingerprint.svg',
+    'globe_location_pin.svg',
+    'graph_2.svg',
+    'help.svg',
+    'hourglass.svg',
+    'info.svg',
+    'keyboard_arrow_down.svg',
+    'keyboard_arrow_up.svg',
+    'license.svg',
+    'link_2.svg',
+    'lock.svg',
+    'login.svg',
+    'logout.svg',
+    'mail.svg',
+    'more_horiz.svg',
+    'notifications.svg',
+    'notifications_active.svg',
+    'notifications_off.svg',
+    'open_in_new.svg',
+    'person.svg',
+    'remove.svg',
+    'salud.svg',
+    'schedule.svg',
+    'search.svg',
+    'settings.svg',
+    'share.svg',
+    'termalismo.svg',
+    'upload.svg',
+    'vehiculos.svg',
+    'verified.svg',
+    'visibility.svg',
+    'vivienda.svg',
+    'warning.svg',
+  ];
+
   static const _icons = <(String, IconData)>[
     // Navigation & direction
     ('add', AppIcons.add),
@@ -677,8 +755,66 @@ class _IconsSection extends StatelessWidget {
               .toList(),
         ),
       ),
+      const _SectionTitle('Iconos SVG en assets/icons'),
+      Padding(
+        padding: const EdgeInsets.only(top: AppDimensions.space8),
+        child: Wrap(
+          spacing: AppDimensions.space8,
+          runSpacing: AppDimensions.space8,
+          children: _assetIcons
+              .map(
+                (final name) => _AssetIconPreview(
+                  name: name,
+                  path: 'assets/icons/$name',
+                ),
+              )
+              .toList(),
+        ),
+      ),
     ],
   );
+}
+
+class _AssetIconPreview extends StatelessWidget {
+  const _AssetIconPreview({
+    required this.name,
+    required this.path,
+  });
+
+  final String name;
+  final String path;
+
+  @override
+  Widget build(final BuildContext context) {
+    return SizedBox(
+      width: 104,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: AppDimensions.iconLarge,
+            height: AppDimensions.iconLarge,
+            child: SvgPicture.asset(
+              path,
+              colorFilter: const ColorFilter.mode(
+                AppColors.textPrimary,
+                BlendMode.srcIn,
+              ),
+              semanticsLabel: name,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.space4),
+          Text(
+            name.replaceAll('.svg', ''),
+            style: AppTypography.captionRegular.copyWith(color: AppColors.textSecondary),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1098,21 +1234,27 @@ class _AlertsSectionState extends State<_AlertsSection> {
 
       // ── Dialog ──
       const _SectionTitle('AlertDialog'),
-      ElevatedButton(
-        onPressed: () async {
-          await AppAlertDialog.show(
-            context,
-            title: 'Cerrar sesión',
-            description: 'Vas a cerrar la sesión en este dispositivo. Lorem ipsum dolor sit amet.',
-            infoLabel: 'Más información',
-            checkboxLabel: 'Lorem ipsum',
-            isChecked: _dialogChecked,
-            onCheckboxChanged: (final v) => setState(() => _dialogChecked = v),
-            confirmLabel: 'Aceptar',
-            cancelLabel: 'Cancelar',
-          );
-        },
-        child: const Text('Mostrar diálogo'),
+      Wrap(
+        spacing: AppDimensions.space8,
+        runSpacing: AppDimensions.space8,
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              await AppAlertDialog.show(
+                context,
+                title: 'Cerrar sesión',
+                description: 'Vas a cerrar la sesión en este dispositivo. Lorem ipsum dolor sit amet.',
+                infoLabel: 'Más información',
+                checkboxLabel: 'Lorem ipsum',
+                isChecked: _dialogChecked,
+                onCheckboxChanged: (final v) => setState(() => _dialogChecked = v),
+                confirmLabel: 'Aceptar',
+                cancelLabel: 'Cancelar',
+              );
+            },
+            child: const Text('Mostrar diálogo'),
+          ),
+        ],
       ),
 
       // ── Dividers ──
@@ -1284,7 +1426,7 @@ class _ListsCardsSection extends StatefulWidget {
 
 class _ListsCardsSectionState extends State<_ListsCardsSection> {
   // ignore: unused_field
-  String? _selectedOption = 'opt1';
+  late String? _selectedOption = 'opt1';
   final Set<String> _checkedItems = {'chk2'};
 
   @override
@@ -1616,6 +1758,27 @@ class _DrawerMenuSection extends StatelessWidget {
           onActionButton: () {},
         ),
         child: const Text('Abrir Drawer Menu'),
+      ),
+    ],
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BIOMETRIC ALERT SECTION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+class _BiometricAlertSection extends StatelessWidget {
+  @override
+  Widget build(final BuildContext context) => _CatalogSection(
+    children: [
+      const _SectionTitle('Alerta biométrica'),
+      const Text('Diálogo de activación del acceso rápido con huella o reconocimiento facial.'),
+      const SizedBox(height: AppDimensions.space16),
+      ElevatedButton(
+        onPressed: () async {
+          await AppBiometricAccessDialog.show(context);
+        },
+        child: const Text('Mostrar alerta biométrica'),
       ),
     ],
   );

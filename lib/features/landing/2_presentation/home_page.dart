@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 
@@ -8,7 +10,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 /// - Content area (light blue-lighter background)
 /// - [AppBottomTabBar] (5 tabs: Inicio, Gestión, Mi Carpeta, Agenda, Recomendados)
 /// - [AppFab] (ID card icon, bottom-right)
-/// - Shows an [AppAlertToast] on first load ("Acceso biométrico activado")
+/// - Shows the biometric quick-access dialog on first load.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -18,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentTabIndex = 0;
-  bool _toastShown = false;
+  bool _biometricDialogShown = false;
 
   static const List<AppBottomTabBarItem> _tabs = [
     AppBottomTabBarItem(label: 'Inicio', icon: AppIcons.accountBalance),
@@ -31,18 +33,28 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_toastShown) {
-      _toastShown = true;
+    if (!_biometricDialogShown) {
+      _biometricDialogShown = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          AppAlertToast.show(
-            context,
-            message: 'Acceso biométrico activado',
-            severity: AppAlertSeverity.success,
-          );
+          unawaited(_showBiometricDialog());
         }
       });
     }
+  }
+
+  Future<void> _showBiometricDialog() async {
+    final accepted = await AppBiometricAccessDialog.show(context);
+
+    if (!mounted || accepted != true) {
+      return;
+    }
+
+    AppAlertToast.show(
+      context,
+      message: 'Acceso biométrico activado',
+      severity: AppAlertSeverity.success,
+    );
   }
 
   @override
