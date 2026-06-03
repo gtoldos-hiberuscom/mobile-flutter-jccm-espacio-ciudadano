@@ -1,13 +1,14 @@
 import 'dart:async' show unawaited;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
@@ -31,7 +32,12 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// - Rule 3.11: save/error feedback announced
 /// - Rule 3.14: expandable sections indicate expanded state
 class LifeEventsPage extends ConsumerStatefulWidget {
-  const LifeEventsPage({super.key});
+  const LifeEventsPage({
+    super.key,
+    this.isOnboarding = false,
+  });
+
+  final bool isOnboarding;
 
   @override
   ConsumerState<LifeEventsPage> createState() => _LifeEventsPageState();
@@ -43,12 +49,16 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     final l10n = AppLocalizations.of(context);
     final claims = ref.watch(jwtClaimsProvider);
     final idAgente = claims?.idAgente ?? '';
-    final lifeState = ref.watch(lifeEventsProvider(idAgente));
-    final notifier = ref.read(lifeEventsProvider(idAgente).notifier);
+    final providerArgs = (
+      idAgente: idAgente,
+      clearSelectionsOnLoad: widget.isOnboarding,
+    );
+    final lifeState = ref.watch(lifeEventsProvider(providerArgs));
+    final notifier = ref.read(lifeEventsProvider(providerArgs).notifier);
 
     // ── Side-effect listener (Rule 3.11) ──────────────────────────────────
     ref.listen<LifeEventsState>(
-      lifeEventsProvider(idAgente),
+      lifeEventsProvider(providerArgs),
       (final prev, final next) {
         _handleSideEffects(context, l10n, prev, next, notifier);
       },
@@ -61,9 +71,16 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
       backgroundColor: AppColors.backgroundWhite,
       // Figma node 41779:22466 — bg #f1f8f9, border bluemuted-lighter, Shadow/Low
       appBar: AppNavBar(
-        type: AppNavBarType.detail,
+        type: widget.isOnboarding ? AppNavBarType.detail : AppNavBarType.level2,
         title: l10n.lifeEventsTitle,
-        onClose: () => context.go(Routes.home),
+        showLeading: !widget.isOnboarding,
+        onBack: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(Routes.home);
+          }
+        },
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
@@ -115,12 +132,18 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
   ) {
     // Rule 3.11 — announce feedback to screen readers
     if (next.status == LifeEventsStatus.saveSuccess) {
-      _showFeedback(context, l10n.lifeEventsSavedFeedback);
+      _showFeedback(
+        context,
+        l10n.lifeEventsSavedFeedback,
+        severity: AppAlertSeverity.success,
+      );
+      context.go(Routes.home);
     }
     if (next.status == LifeEventsStatus.saveError) {
       _showFeedback(
         context,
         next.errorMessage ?? l10n.lifeEventsErrorFeedback,
+        severity: AppAlertSeverity.error,
       );
     }
     // Show reset-confirm dialog when the flag flips to true.
@@ -145,12 +168,16 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     }
   }
 
-  void _showFeedback(final BuildContext context, final String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+  void _showFeedback(
+    final BuildContext context,
+    final String message, {
+    required final AppAlertSeverity severity,
+  }) {
+    AppAlertSnackbar.show(
+      context,
+      message: message,
+      severity: severity,
     );
-    // Rule 3.11 — announce for screen readers
-    SemanticsService.announce(message, TextDirection.ltr);
   }
 
   Widget _buildBody(

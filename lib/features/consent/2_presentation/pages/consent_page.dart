@@ -103,8 +103,7 @@ class _ConsentPageState extends ConsumerState<ConsentPage> {
     }
 
     // ── Step 1 ────────────────────────────────────────────────────────────
-    final isStep1 = state.status == ConsentStatus.step1Locked ||
-        state.status == ConsentStatus.step1Unlocked;
+    final isStep1 = state.status == ConsentStatus.step1Locked || state.status == ConsentStatus.step1Unlocked;
 
     if (isStep1) {
       return _Step1Scaffold(
@@ -179,10 +178,8 @@ class _Step1Scaffold extends StatelessWidget {
                 // scrolls (e.g. keyboard/TalkBack) that may not fire the
                 // ScrollController listener.
                 onNotification: (final notification) {
-                  if (notification.metrics.pixels >=
-                      notification.metrics.maxScrollExtent - 64) {
-                    final state = context
-                        .findAncestorStateOfType<_ConsentPageState>();
+                  if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - 64) {
+                    final state = context.findAncestorStateOfType<_ConsentPageState>();
                     if (state != null && state.mounted) {
                       state._onScroll();
                     }
@@ -202,21 +199,18 @@ class _Step1Scaffold extends StatelessWidget {
                     children: [
                       Text(
                         l10n.consentPageSubtitle,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: AppDimensions.space16),
                       Text(
                         l10n.consentPageBody,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: AppColors.textPrimary,
-                              height: 1.6,
-                            ),
+                          color: AppColors.textPrimary,
+                          height: 1.6,
+                        ),
                       ),
                       // Accessibility: visible hint about scroll requirement.
                       if (!isUnlocked) ...[
@@ -321,7 +315,7 @@ class _Step2Scaffold extends StatelessWidget {
             primarySemantics: l10n.consentFinalAcceptButton,
             secondaryLabel: l10n.consentMarkAllButton,
             secondarySemantics: l10n.consentMarkAllButton,
-            isPrimaryEnabled: state.allClausesSelected && !isSaving,
+            isPrimaryEnabled: !isSaving,
             isSecondaryEnabled: !state.allClausesSelected && !isSaving,
             isPrimaryLoading: isSaving,
             onPrimary: () => unawaited(notifier.accept()),
@@ -379,9 +373,9 @@ class _ClauseRow extends StatelessWidget {
                   child: Text(
                     clause.label,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textPrimary,
-                          height: 1.5,
-                        ),
+                      color: AppColors.textPrimary,
+                      height: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -410,9 +404,9 @@ class _ScrollHint extends StatelessWidget {
         Text(
           hint,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textSecondary,
-                fontStyle: FontStyle.italic,
-              ),
+            color: AppColors.textSecondary,
+            fontStyle: FontStyle.italic,
+          ),
         ),
       ],
     );
@@ -508,15 +502,13 @@ class _LegalInfoSheet extends StatelessWidget {
           children: [
             // Drag handle
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: AppDimensions.space12),
+              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
               child: Container(
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
                   color: AppColors.divider,
-                  borderRadius:
-                      BorderRadius.circular(AppDimensions.radiusSmall),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
                 ),
               ),
             ),
@@ -527,8 +519,8 @@ class _LegalInfoSheet extends StatelessWidget {
               child: Text(
                 l10n.consentStep1FullTitle,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             const SizedBox(height: AppDimensions.space8),
@@ -544,9 +536,9 @@ class _LegalInfoSheet extends StatelessWidget {
                 child: Text(
                   l10n.consentPageBody,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textPrimary,
-                        height: 1.6,
-                      ),
+                    color: AppColors.textPrimary,
+                    height: 1.6,
+                  ),
                 ),
               ),
             ),

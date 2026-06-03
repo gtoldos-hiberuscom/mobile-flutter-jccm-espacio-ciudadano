@@ -76,7 +76,9 @@ final goRouterProvider = Provider<GoRouter>(
         // ── Personalization — Mis hechos vitales (STORY-54 / JCCMEC-53) ──────
         GoRoute(
           path: Routes.lifeEvents,
-          builder: (final BuildContext context, final GoRouterState state) => const LifeEventsPage(),
+          builder: (final BuildContext context, final GoRouterState state) => LifeEventsPage(
+            isOnboarding: state.uri.queryParameters['mode'] == 'onboarding',
+          ),
         ),
 
         // ── Design System catalog ─────────────────────────────────────────

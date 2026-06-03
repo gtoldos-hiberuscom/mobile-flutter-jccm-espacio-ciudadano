@@ -20,6 +20,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.onClose,
     this.actions,
     this.leading,
+    this.showLeading = true,
   });
 
   final AppNavBarType type;
@@ -29,6 +30,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onClose;
   final List<Widget>? actions;
   final Widget? leading;
+  final bool showLeading;
 
   @override
   Size get preferredSize => Size.fromHeight(
@@ -53,6 +55,10 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   };
 
   Widget? get _leadingWidget {
+    if (!showLeading) {
+      return null;
+    }
+
     if (leading != null) {
       return leading;
     }
@@ -157,6 +163,8 @@ class _InicioNavBar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final topPadding = MediaQuery.of(context).padding.top;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -170,10 +178,15 @@ class _InicioNavBar extends StatelessWidget {
         ],
       ),
       child: SizedBox(
-        height: AppDimensions.appBarHeightInicio,
+        height: AppDimensions.appBarHeightInicio + topPadding,
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.all(AppDimensions.space8),
+          padding: EdgeInsets.fromLTRB(
+            AppDimensions.space8,
+            topPadding + AppDimensions.space8,
+            AppDimensions.space8,
+            AppDimensions.space8,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

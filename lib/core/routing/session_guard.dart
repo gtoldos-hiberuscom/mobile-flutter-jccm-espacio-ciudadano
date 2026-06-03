@@ -100,9 +100,7 @@ final class SessionGuard {
       return _onboardingRedirect(path);
     }
 
-    final result = await _ref
-        .read(checkConsentRequiredUsecaseProvider)
-        .execute(idAgente: idAgente);
+    final result = await _ref.read(checkConsentRequiredUsecaseProvider).execute(idAgente: idAgente);
 
     if (result is ConsentRequired) {
       return Routes.consent;
@@ -118,16 +116,21 @@ final class SessionGuard {
     if (path == Routes.lifeEvents) {
       return null;
     }
-    final String idAgente =
-        _ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    final String idAgente = _ref.read(jwtClaimsProvider)?.idAgente ?? '';
     if (idAgente.isEmpty) {
       return null;
     }
-    final result = await _ref
-        .read(checkLifeEventsOnboardingUsecaseProvider)
-        .execute(idAgente: idAgente);
-    if (result is CheckLifeEventsOnboardingSuccess && !result.hasSeen) {
-      return Routes.lifeEvents;
+    final result = await _ref.read(checkLifeEventsOnboardingUsecaseProvider).execute(idAgente: idAgente);
+    switch (result.runtimeType) {
+      case CheckLifeEventsOnboardingFailed:
+        return Routes.lifeEventsOnboarding;
+      case CheckLifeEventsOnboardingSuccess:
+        final successResult = result as CheckLifeEventsOnboardingSuccess;
+        if (!successResult.hasSeen) {
+          return Routes.lifeEventsOnboarding;
+        } else {
+          return Routes.home;
+        }
     }
     return null;
   }
@@ -144,16 +147,12 @@ final class SessionGuard {
     }
 
     try {
-      final TokenResponse newSession = await _ref
-          .read(authRepositoryProvider)
-          .refreshToken(refreshToken: storedRefreshToken);
+      final TokenResponse newSession = await _ref.read(authRepositoryProvider).refreshToken(refreshToken: storedRefreshToken);
 
       // Persist the refreshed credentials.
       await Future.wait([
-        if (newSession.accessToken != null)
-          storage.write(StorageKeys.accessToken, newSession.accessToken!),
-        if (newSession.refreshToken != null)
-          storage.write(StorageKeys.refreshToken, newSession.refreshToken!),
+        if (newSession.accessToken != null) storage.write(StorageKeys.accessToken, newSession.accessToken!),
+        if (newSession.refreshToken != null) storage.write(StorageKeys.refreshToken, newSession.refreshToken!),
         if (newSession.accessTokenExpirationDateTime != null)
           storage.write(
             StorageKeys.sessionExpiresAt,

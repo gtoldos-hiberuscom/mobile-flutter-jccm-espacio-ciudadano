@@ -35,6 +35,7 @@ abstract final class Routes {
   static const String home = '/home';
 
   static const String lifeEvents = '/preferences/life-events';
+  static const String lifeEventsOnboarding = '$lifeEvents?mode=onboarding';
 
   /// Design system catalog — developer/designer reference screen.
   static const String designSystem = '/design-system';

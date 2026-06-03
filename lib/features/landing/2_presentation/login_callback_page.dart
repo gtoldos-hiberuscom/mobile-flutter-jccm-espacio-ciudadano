@@ -23,7 +23,7 @@ class _LoginCallbackPageState extends ConsumerState<LoginCallbackPage> {
 
   void _navigateWhenLoginCompletes(final LandingState state) {
     final String? destination = switch (state) {
-      LandingState(loginSuccess: true) => Routes.lifeEvents,
+      LandingState(loginSuccess: true) => Routes.lifeEventsOnboarding,
       LandingState(error: != null) => Routes.landing,
       _ => null,
     };

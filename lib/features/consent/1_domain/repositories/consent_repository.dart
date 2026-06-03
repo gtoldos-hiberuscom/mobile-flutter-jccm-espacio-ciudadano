@@ -6,8 +6,12 @@ abstract interface class ConsentRepository {
   /// accepted the legal consent for the current version.
   Future<bool> hasAcceptedConsent({required final String idAgente});
 
-  /// Persists the fact that the citizen has accepted the legal consent.
-  Future<void> markConsentAccepted({required final String idAgente});
+  /// Persists that the citizen completed the legal consent step and records
+  /// which optional clauses were accepted.
+  Future<void> markConsentAccepted({
+    required final String idAgente,
+    required final List<Clause> clauses,
+  });
 
   /// Returns the ordered list of authorisation clauses the citizen must
   /// accept. Falls back to a hardcoded static list when remote data is
