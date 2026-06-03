@@ -1,0 +1,13 @@
+.git
+.dart_tool
+.gradle
+.idea
+.vscode
+android/.gradle
+build
+ios/Pods
+**/build
+**/.dart_tool
+**/.gradle
+*.iml
+

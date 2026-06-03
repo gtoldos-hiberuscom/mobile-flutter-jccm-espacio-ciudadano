@@ -79,6 +79,7 @@ final class SessionGuard {
 
     final String? refreshResult = await _tryRefresh(storage);
     if (refreshResult != null) {
+      //TODO: esto esta bien??? que salga asi o deberia hacer el consent redirect tambien en este caso????
       return refreshResult;
     }
     return _consentRedirect(path);
@@ -126,10 +127,18 @@ final class SessionGuard {
     final result = await _ref
         .read(checkLifeEventsOnboardingUsecaseProvider)
         .execute(idAgente: idAgente);
-    if (result is CheckLifeEventsOnboardingSuccess && !result.hasSeen) {
-      return Routes.lifeEvents;
-    }
-    return null;
+
+      switch (result.runtimeType) {
+        case CheckLifeEventsOnboardingFailed:
+          return Routes.lifeEvents;
+        case CheckLifeEventsOnboardingSuccess:
+          final successResult = result as CheckLifeEventsOnboardingSuccess;
+          if (!successResult.hasSeen) {
+            return Routes.lifeEvents;
+          }else{
+            return Routes.home;
+          }
+      }
   }
 
   /// Attempts a silent token refresh.
