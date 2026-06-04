@@ -13,7 +13,7 @@ pipeline {
       choices: ['appbundle', 'apk'],
       description: 'Android artifact to build'
     )
-    string(x
+    string(
       name: 'DART_DEFINE_FILE',
       defaultValue: 'config_production.json',
       description: 'Path to the dart-define JSON file'

@@ -5,7 +5,6 @@ import com.cloudbees.plugins.credentials.domains.Domain
 import hudson.plugins.git.BranchSpec
 import hudson.plugins.git.GitSCM
 import hudson.plugins.git.UserRemoteConfig
-import hudson.util.Secret
 import jenkins.model.Jenkins
 import org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition
 import org.jenkinsci.plugins.workflow.job.WorkflowJob
@@ -55,7 +54,7 @@ if (privateKey) {
         credentialId,
         username,
         new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey),
-        passphrase ? Secret.fromString(passphrase) : null,
+        passphrase ?: null,
         "Seeded from Docker environment"
     )
 
