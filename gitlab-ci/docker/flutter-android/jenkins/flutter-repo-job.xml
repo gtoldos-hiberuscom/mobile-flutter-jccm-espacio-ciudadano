@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Clona un repositorio Flutter y ejecuta un comando configurable.</description>
+  <description>Clona un repositorio Flutter y lanza un build parametrizable o un comando custom.</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.model.ParametersDefinitionProperty>
@@ -21,12 +21,45 @@
         <hudson.model.StringParameterDefinition>
           <name>GIT_DEPTH</name>
           <description>Profundidad del clone. Usa 0 para clone completo.</description>
-          <defaultValue></defaultValue>
+          <defaultValue>1</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>BUILD_TARGET</name>
+          <description>Artefacto Android a generar cuando JOB_COMMAND esta vacio.</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>appbundle</string>
+              <string>apk</string>
+              <string>custom</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DART_DEFINE_FILE</name>
+          <description>Ruta al JSON de dart-defines. Si queda vacia no se pasa el flag.</description>
+          <defaultValue>config_production.json</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
+          <name>EXTRA_BUILD_ARGS</name>
+          <description>Argumentos extra para flutter build, por ejemplo --flavor demo.</description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RUN_TESTS</name>
+          <description>Ejecuta flutter test antes del build.</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CLEAN_BEFORE_BUILD</name>
+          <description>Ejecuta flutter clean antes de pub get y del build.</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
           <name>JOB_COMMAND</name>
-          <description>Comando shell a ejecutar dentro del repo clonado.</description>
+          <description>Comando shell custom. Si se rellena, tiene prioridad sobre BUILD_TARGET y el resto de parametros.</description>
           <defaultValue></defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
@@ -53,7 +86,12 @@ set -euo pipefail
 REPO_URL="${REPO_URL:-${JENKINS_JOB_REPO_URL:-}}"
 GIT_BRANCH="${GIT_BRANCH:-${JENKINS_JOB_BRANCH:-main}}"
 GIT_DEPTH="${GIT_DEPTH:-${JENKINS_GIT_DEPTH:-1}}"
-JOB_COMMAND="${JOB_COMMAND:-${JENKINS_JOB_COMMAND:-flutter pub get && flutter test}}"
+BUILD_TARGET="${BUILD_TARGET:-appbundle}"
+DART_DEFINE_FILE="${DART_DEFINE_FILE:-config_production.json}"
+EXTRA_BUILD_ARGS="${EXTRA_BUILD_ARGS:-}"
+RUN_TESTS="${RUN_TESTS:-false}"
+CLEAN_BEFORE_BUILD="${CLEAN_BEFORE_BUILD:-false}"
+JOB_COMMAND="${JOB_COMMAND:-}"
 CLEAN_WORKSPACE="${CLEAN_WORKSPACE:-true}"
 
 if [[ -z "${REPO_URL}" ]]; then
@@ -147,6 +185,11 @@ else
 fi
 
 cd "${repo_dir}"
+
+echo "Repository: ${REPO_URL}"
+echo "Branch: ${GIT_BRANCH}"
+echo "Build target: ${BUILD_TARGET}"
+
 if [[ -f android/gradle.properties ]]; then
   gradle_properties=android/gradle.properties
   upsert_gradle_property() {
@@ -168,10 +211,60 @@ if [[ -f android/gradle.properties ]]; then
 fi
 
 flutter --version
+if [[ -z "${JOB_COMMAND}" ]]; then
+  build_command=""
+  case "${BUILD_TARGET}" in
+    appbundle)
+      build_command="flutter build appbundle --release"
+      ;;
+    apk)
+      build_command="flutter build apk --release"
+      ;;
+    custom)
+      echo "BUILD_TARGET=custom requires JOB_COMMAND."
+      exit 4
+      ;;
+    *)
+      echo "Unsupported BUILD_TARGET: ${BUILD_TARGET}"
+      exit 5
+      ;;
+  esac
+
+  if [[ -n "${DART_DEFINE_FILE}" ]]; then
+    build_command="${build_command} --dart-define-from-file=${DART_DEFINE_FILE}"
+  fi
+  if [[ -n "${EXTRA_BUILD_ARGS}" ]]; then
+    build_command="${build_command} ${EXTRA_BUILD_ARGS}"
+  fi
+
+  if [[ "${CLEAN_BEFORE_BUILD}" == "true" ]]; then
+    JOB_COMMAND="flutter clean && flutter pub get"
+  else
+    JOB_COMMAND="flutter pub get"
+  fi
+
+  if [[ "${RUN_TESTS}" == "true" ]]; then
+    JOB_COMMAND="${JOB_COMMAND} && flutter test"
+  fi
+
+  JOB_COMMAND="${JOB_COMMAND} && ${build_command}"
+fi
+
+echo "Command: ${JOB_COMMAND}"
 bash -lc "${JOB_COMMAND}"
 ]]></command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>repo/build/app/outputs/**/*.aab,repo/build/app/outputs/**/*.apk</artifacts>
+      <allowEmptyArchive>true</allowEmptyArchive>
+      <onlyIfSuccessful>true</onlyIfSuccessful>
+      <fingerprint>true</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+      <followSymlinks>false</followSymlinks>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
   <buildWrappers/>
 </project>

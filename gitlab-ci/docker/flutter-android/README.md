@@ -96,13 +96,37 @@ Abre `http://localhost:8080` y entra con el usuario configurado. El job
 
 - `REPO_URL`: URL git del repositorio; si queda vacio usa `JENKINS_JOB_REPO_URL`.
 - `GIT_BRANCH`: rama a clonar; si queda vacio usa `JENKINS_JOB_BRANCH`.
-- `JOB_COMMAND`: comando a ejecutar dentro del repo; por defecto `flutter pub get && flutter test`.
 - `GIT_DEPTH`: profundidad del clone; usa `0` para clone completo.
+- `BUILD_TARGET`: `appbundle`, `apk` o `custom`.
+- `DART_DEFINE_FILE`: JSON de `--dart-define-from-file`; si queda vacio no se pasa.
+- `EXTRA_BUILD_ARGS`: argumentos extra para `flutter build`.
+- `RUN_TESTS`: ejecuta `flutter test` antes del build.
+- `CLEAN_BEFORE_BUILD`: ejecuta `flutter clean` antes de `pub get`.
+- `JOB_COMMAND`: comando custom; si se rellena, tiene prioridad sobre el resto.
 
 Antes de ejecutar `JOB_COMMAND`, el job ajusta `android/gradle.properties` en el
 clone para CI: baja el heap de Gradle, desactiva el daemon, desactiva el file
 watcher nativo y limita workers. Esto evita caidas habituales en Docker Desktop
 como `Gradle build daemon disappeared unexpectedly` o `Couldn't poll for events`.
+
+Uso recomendado del freestyle job:
+
+- abre `flutter-repo-job`;
+- pulsa `Build with Parameters`;
+- rellena `REPO_URL` y `GIT_BRANCH` si no quieres depender de defaults del contenedor;
+- deja `JOB_COMMAND` vacio para que Jenkins componga un build Android normal;
+- usa `JOB_COMMAND` solo para ejecuciones avanzadas o ad hoc.
+
+Si `JOB_COMMAND` queda vacio, el job genera automaticamente un flujo de este
+tipo:
+
+- `flutter clean` si `CLEAN_BEFORE_BUILD=true`;
+- `flutter pub get`;
+- `flutter test` si `RUN_TESTS=true`;
+- `flutter build appbundle` o `flutter build apk`.
+
+Al terminar, Jenkins archiva automaticamente los `.aab` y `.apk` generados en
+`repo/build/app/outputs/...`.
 
 Para un repo privado por SSH, la forma mas directa es pasar una clave por
 variable:
@@ -152,14 +176,13 @@ Si la clave privada tiene passphrase, añade tambien:
 Para CI suele ser mas simple usar una deploy key dedicada sin passphrase y con
 permiso de solo lectura sobre el repositorio.
 
-Importante: los ficheros de `${JENKINS_REF}` se copian a `${JENKINS_HOME}` solo
-en el primer arranque de un `JENKINS_HOME` vacio. Si reconstruyes la imagen y
-mantienes el volumen `jccm-jenkins-home`, los cambios del job semilla no se
-aplican automaticamente. En ese caso:
+Importante: el bootstrap resincroniza en cada arranque:
 
-- elimina el volumen local y recrea Jenkins, o
-- actualiza el job manualmente en la UI o editando
-  `${JENKINS_HOME}/jobs/flutter-repo-job/config.xml`.
+- `init.groovy.d/*`
+- `jobs/flutter-repo-job/config.xml`
+
+Eso permite actualizar el job freestyle sembrado y los scripts de arranque sin
+tener que borrar el volumen local de Jenkins en cada cambio.
 
 Para comprobar que la clave montada es exactamente la misma que has subido a
 Bitbucket, compara su fingerprint:
@@ -224,11 +247,10 @@ apuntando al `Jenkinsfile` de la rama indicada. Lo normal a partir de ahi es
 usar `Build with Parameters` o `Build Now` sobre ese job, no el freestyle
 `flutter-repo-job`.
 
-Los scripts de `init.groovy.d` se sincronizan en cada arranque del contenedor,
-asi que los cambios de bootstrap del pipeline y de las credenciales SCM ya no
-dependen del primer seed del volumen `jccm-jenkins-home`. Esa limitacion sigue
-aplicando solo al job freestyle `flutter-repo-job`, cuyo `config.xml` se copia
-la primera vez.
+Los scripts de `init.groovy.d` y el `config.xml` de `flutter-repo-job` se
+sincronizan en cada arranque del contenedor, asi que los cambios de bootstrap,
+de credenciales SCM y del job freestyle ya no dependen del primer seed del
+volumen `jccm-jenkins-home`.
 
 ## Uso previsto en GitLab
 
