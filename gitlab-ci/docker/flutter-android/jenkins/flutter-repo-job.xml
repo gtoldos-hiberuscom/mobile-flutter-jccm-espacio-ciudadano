@@ -98,7 +98,7 @@ if [[ -n "${JENKINS_GIT_SSH_PRIVATE_KEY_FILE:-}" ]]; then
     echo "JENKINS_GIT_SSH_PRIVATE_KEY_FILE points to a missing file: ${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}"
     exit 3
   fi
-  chmod 600 "${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}" || true
+  chmod 600 "${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}" 2>/dev/null || true
   key_file="${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}"
 elif [[ -n "${JENKINS_GIT_SSH_PRIVATE_KEY:-}" ]]; then
   temp_key_file="${ssh_dir}/jenkins_job_key"
@@ -147,6 +147,26 @@ else
 fi
 
 cd "${repo_dir}"
+if [[ -f android/gradle.properties ]]; then
+  gradle_properties=android/gradle.properties
+  upsert_gradle_property() {
+    local name="$1"
+    local value="$2"
+    if grep -q "^${name}=" "${gradle_properties}"; then
+      sed -i "s|^${name}=.*|${name}=${value}|" "${gradle_properties}"
+    else
+      printf '%s=%s\n' "${name}" "${value}" >> "${gradle_properties}"
+    fi
+  }
+
+  upsert_gradle_property "org.gradle.jvmargs" "-Xmx2G -XX:MaxMetaspaceSize=1G -XX:ReservedCodeCacheSize=256m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+  upsert_gradle_property "org.gradle.daemon" "false"
+  upsert_gradle_property "org.gradle.vfs.watch" "false"
+  upsert_gradle_property "org.gradle.workers.max" "2"
+  upsert_gradle_property "org.gradle.parallel" "false"
+  upsert_gradle_property "kotlin.daemon.jvmargs" "-Xmx1024m"
+fi
+
 flutter --version
 bash -lc "${JOB_COMMAND}"
 ]]></command>

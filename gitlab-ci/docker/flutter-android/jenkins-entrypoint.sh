@@ -17,7 +17,10 @@ if [[ -d "${JENKINS_REF}" ]]; then
     relative_path="${ref_file#${JENKINS_REF}/}"
     target_file="${JENKINS_HOME}/${relative_path}"
 
-    if [[ ! -e "${target_file}" ]]; then
+    if [[ "${relative_path}" == init.groovy.d/* ]]; then
+      mkdir -p "$(dirname "${target_file}")"
+      cp -af "${ref_file}" "${target_file}"
+    elif [[ ! -e "${target_file}" ]]; then
       mkdir -p "$(dirname "${target_file}")"
       cp -a "${ref_file}" "${target_file}"
     fi

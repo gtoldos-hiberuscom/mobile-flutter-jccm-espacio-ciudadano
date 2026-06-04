@@ -10,6 +10,8 @@ Incluye:
 - Android SDK command-line tools `14742923`.
 - Android platform `android-36`.
 - Android build-tools `36.0.0`.
+- Android platforms `34` y `35`, build-tools `35.0.0`, NDK `28.2.13676358`
+  y CMake `3.22.1`, necesarios por dependencias Android del proyecto.
 - Android emulator package.
 - Ruby, Bundler y Fastlane `2.234.x`.
 - Jenkins LTS con un job inicial `flutter-repo-job`.
@@ -97,6 +99,11 @@ Abre `http://localhost:8080` y entra con el usuario configurado. El job
 - `JOB_COMMAND`: comando a ejecutar dentro del repo; por defecto `flutter pub get && flutter test`.
 - `GIT_DEPTH`: profundidad del clone; usa `0` para clone completo.
 
+Antes de ejecutar `JOB_COMMAND`, el job ajusta `android/gradle.properties` en el
+clone para CI: baja el heap de Gradle, desactiva el daemon, desactiva el file
+watcher nativo y limita workers. Esto evita caidas habituales en Docker Desktop
+como `Gradle build daemon disappeared unexpectedly` o `Couldn't poll for events`.
+
 Para un repo privado por SSH, la forma mas directa es pasar una clave por
 variable:
 
@@ -163,6 +170,65 @@ ssh-keygen -y -P 'tu-passphrase' -f ~/.ssh/jenkins_bitbucket_ci_ed25519 | ssh-ke
 
 El fingerprint debe coincidir con la clave publica registrada en `Repository
 settings -> Access keys` del repositorio correcto.
+
+## Pipeline desde el repo
+
+El repositorio incluye un [Jenkinsfile](/Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano/jccm_espacio_ciudadano/Jenkinsfile:1)
+para usar un Pipeline job o `Pipeline script from SCM` en lugar del job
+freestyle sembrado en Jenkins.
+
+Ese pipeline:
+
+- clona el repo desde SCM;
+- ajusta `android/gradle.properties` para CI dentro del workspace;
+- ejecuta `flutter pub get`;
+- opcionalmente ejecuta `flutter test`;
+- construye `appbundle` o `apk`;
+- publica `.aab` y `.apk` como artifacts de Jenkins.
+
+Es la opcion recomendada si vas a iterar a menudo sobre el proceso de build,
+porque la logica deja de vivir en `JENKINS_HOME` y pasa a estar versionada en
+el propio repositorio.
+
+La imagen instala tambien los plugins minimos para `Pipeline + Git` y, al
+arrancar Jenkins, crea o actualiza un job `flutter-repo-pipeline` y una
+credencial SSH global si encuentra estas variables:
+
+- `JENKINS_JOB_REPO_URL` o `JENKINS_PIPELINE_REPO_URL`
+- `JENKINS_JOB_BRANCH` o `JENKINS_PIPELINE_BRANCH`
+- `JENKINS_GIT_SSH_PRIVATE_KEY_FILE` o `JENKINS_GIT_SSH_PRIVATE_KEY`
+- `JENKINS_GIT_SSH_PASSPHRASE` si la clave esta cifrada
+
+Con eso, el job pipeline queda preparado sin necesidad de configurar la SCM
+credential a mano en la UI.
+
+Arranque recomendado para usar directamente el `Jenkinsfile` del repo por SSH:
+
+```sh
+docker run --rm \
+  -p 8080:8080 \
+  -v jccm-jenkins-home:/var/lib/jenkins \
+  -v "$HOME/.ssh/jenkins_bitbucket_ci_ed25519:/run/secrets/bitbucket_ssh_key:ro" \
+  -e JENKINS_ADMIN_USER=admin \
+  -e JENKINS_ADMIN_PASSWORD=admin \
+  -e JENKINS_PIPELINE_REPO_URL=git@bitbucket.org:hiberus/mobile-flutter-jccm-espacio-ciudadano.git \
+  -e JENKINS_PIPELINE_BRANCH=feature/STORY-54-LifeEvents \
+  -e JENKINS_GIT_SSH_PRIVATE_KEY_FILE=/run/secrets/bitbucket_ssh_key \
+  -e JENKINS_GIT_SSH_PASSPHRASE='tu-passphrase' \
+  -e JENKINS_GIT_KNOWN_HOSTS="$(ssh-keyscan bitbucket.org 2>/dev/null)" \
+  jccm-espacio-ciudadano/flutter-android-ci:3.41.7
+```
+
+Con ese arranque, Jenkins levanta ya con el job `flutter-repo-pipeline`
+apuntando al `Jenkinsfile` de la rama indicada. Lo normal a partir de ahi es
+usar `Build with Parameters` o `Build Now` sobre ese job, no el freestyle
+`flutter-repo-job`.
+
+Los scripts de `init.groovy.d` se sincronizan en cada arranque del contenedor,
+asi que los cambios de bootstrap del pipeline y de las credenciales SCM ya no
+dependen del primer seed del volumen `jccm-jenkins-home`. Esa limitacion sigue
+aplicando solo al job freestyle `flutter-repo-job`, cuyo `config.xml` se copia
+la primera vez.
 
 ## Uso previsto en GitLab
 

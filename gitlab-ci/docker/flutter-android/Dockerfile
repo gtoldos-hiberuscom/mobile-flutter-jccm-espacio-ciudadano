@@ -6,6 +6,8 @@ ARG FLUTTER_VERSION=3.41.7
 ARG ANDROID_COMMANDLINE_TOOLS_VERSION=14742923
 ARG ANDROID_PLATFORM=android-36
 ARG ANDROID_BUILD_TOOLS=36.0.0
+ARG ANDROID_NDK_VERSION=28.2.13676358
+ARG ANDROID_CMAKE_VERSION=3.22.1
 ARG ANDROID_SYSTEM_IMAGE_API=android-36
 ARG ANDROID_SYSTEM_IMAGE_VARIANT=google_apis
 ARG ANDROID_SYSTEM_IMAGE_ARCH=x86_64
@@ -14,6 +16,7 @@ ARG FASTLANE_VERSION=2.234.0
 ARG JENKINS_DEFAULT_REPO_URL=git@github.com:gtoldos-hiberuscom/mobile-flutter-jccm-espacio-ciudadano.git
 ARG JENKINS_DEFAULT_REPO_BRANCH=main
 ARG JENKINS_HTTP_PORT=8080
+ARG JENKINS_PLUGIN_MANAGER_VERSION=2.13.2
 
 LABEL org.opencontainers.image.title="JCCM Espacio Ciudadano Flutter Android CI" \
       org.opencontainers.image.description="Linux CI image for Flutter Android jobs with Jenkins" \
@@ -41,6 +44,12 @@ ENV JENKINS_HOME=/var/lib/jenkins \
     JENKINS_JOB_REPO_URL="${JENKINS_DEFAULT_REPO_URL}" \
     JENKINS_JOB_BRANCH="${JENKINS_DEFAULT_REPO_BRANCH}" \
     JENKINS_JOB_COMMAND="flutter pub get && flutter test" \
+    JENKINS_PIPELINE_JOB_NAME=flutter-repo-pipeline \
+    JENKINS_PIPELINE_REPO_URL="${JENKINS_DEFAULT_REPO_URL}" \
+    JENKINS_PIPELINE_BRANCH="${JENKINS_DEFAULT_REPO_BRANCH}" \
+    JENKINS_PIPELINE_SCRIPT_PATH=Jenkinsfile \
+    JENKINS_PIPELINE_CREDENTIALS_ID=scm-ssh-key \
+    JENKINS_PIPELINE_SSH_USERNAME=git \
     JENKINS_GIT_DEPTH=1
 
 ENV PATH="${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator:${PUB_CACHE}/bin:${PATH}"
@@ -104,8 +113,13 @@ RUN (set +o pipefail; yes | sdkmanager --licenses >/dev/null)
 
 RUN sdkmanager --install \
       "platform-tools" \
+      "platforms;android-34" \
+      "platforms;android-35" \
       "platforms;${ANDROID_PLATFORM}" \
+      "build-tools;35.0.0" \
       "build-tools;${ANDROID_BUILD_TOOLS}" \
+      "ndk;${ANDROID_NDK_VERSION}" \
+      "cmake;${ANDROID_CMAKE_VERSION}" \
       "emulator" \
     && if [[ "${INSTALL_ANDROID_SYSTEM_IMAGE}" == "true" ]]; then sdkmanager --install "system-images;${ANDROID_SYSTEM_IMAGE_API};${ANDROID_SYSTEM_IMAGE_VARIANT};${ANDROID_SYSTEM_IMAGE_ARCH}"; fi
 
@@ -123,7 +137,16 @@ RUN gem install bundler --no-document \
 COPY ci-image-doctor.sh /usr/local/bin/ci-image-doctor
 COPY jenkins-entrypoint.sh /usr/local/bin/jenkins-entrypoint
 COPY jenkins/01-basic-security.groovy "${JENKINS_REF}/init.groovy.d/01-basic-security.groovy"
+COPY jenkins/02-scm-pipeline.groovy "${JENKINS_REF}/init.groovy.d/02-scm-pipeline.groovy"
+COPY jenkins/plugins.txt /tmp/jenkins-plugins.txt
 COPY jenkins/flutter-repo-job.xml "${JENKINS_REF}/jobs/flutter-repo-job/config.xml"
+RUN curl -fsSL -o /tmp/jenkins-plugin-manager.jar \
+      "https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/${JENKINS_PLUGIN_MANAGER_VERSION}/jenkins-plugin-manager-${JENKINS_PLUGIN_MANAGER_VERSION}.jar" \
+    && java -jar /tmp/jenkins-plugin-manager.jar \
+      --war /usr/share/java/jenkins.war \
+      --plugin-download-directory "${JENKINS_REF}/plugins" \
+      --plugin-file /tmp/jenkins-plugins.txt \
+    && rm -f /tmp/jenkins-plugin-manager.jar /tmp/jenkins-plugins.txt
 RUN chmod +x /usr/local/bin/ci-image-doctor /usr/local/bin/jenkins-entrypoint \
     && install -d -o jenkins -g jenkins "${JENKINS_HOME}" "${JENKINS_REF}" /workspace "${PUB_CACHE}" "${GRADLE_USER_HOME}" \
     && chown -R jenkins:jenkins "${JENKINS_HOME}" "${JENKINS_REF}" /workspace "${PUB_CACHE}" "${GRADLE_USER_HOME}" "${FLUTTER_HOME}" "${ANDROID_HOME}"
