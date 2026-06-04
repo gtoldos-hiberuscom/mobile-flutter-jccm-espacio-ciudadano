@@ -379,22 +379,15 @@ class AppAlertSnackbar extends StatelessWidget {
   }) {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: AppColors.primaryDark,
+        backgroundColor: Colors.transparent,
         duration: const Duration(seconds: 5),
-        content: Text(
-          message,
-          style: AppTypography.bodyBold.copyWith(color: Colors.white),
-        ),
-        action: actionLabel != null
-            ? SnackBarAction(
-                label: actionLabel,
-                textColor: Colors.white,
-                onPressed: onAction ?? () {},
-              )
-            : null,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-          side: const BorderSide(color: AppColors.borderBlueMutedBase),
+        elevation: 0,
+        padding: EdgeInsets.zero,
+        content: AppAlertSnackbar(
+          message: message,
+          severity: severity,
+          actionLabel: actionLabel,
+          onAction: onAction,
         ),
         behavior: SnackBarBehavior.floating,
       ),
@@ -431,7 +424,7 @@ class AppAlertSnackbar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: AppDimensions.space4),
                 child: TextButton(
-                  onPressed: onAction,
+                  onPressed: onAction ?? () {},
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(

@@ -179,12 +179,20 @@ class AppTextBlock extends StatelessWidget {
           if (showLeadingIcon) const SizedBox(width: AppDimensions.space8),
 
           // Text
-          Flexible(
-            child: Text(
-              text,
-              style: _textStyle(resolvedColor),
+          if (!showLeadingIcon && !showTrailingIcon)
+            Expanded(
+              child: Text(
+                text,
+                style: _textStyle(resolvedColor),
+              ),
+            )
+          else
+            Flexible(
+              child: Text(
+                text,
+                style: _textStyle(resolvedColor),
+              ),
             ),
-          ),
 
           // Trailing icon
           if (showTrailingIcon) const SizedBox(width: AppDimensions.space8),

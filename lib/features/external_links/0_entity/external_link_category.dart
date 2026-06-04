@@ -34,4 +34,7 @@ enum ExternalLinkCategory {
 
   /// Infancia y familias — childhood and families portal.
   infanciaFamilias,
+
+  /// Agencia Española de Protección de Datos.
+  dataProtection,
 }

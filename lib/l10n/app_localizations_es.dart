@@ -331,6 +331,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get externalLinkInfanciaFamiliasLabel => 'Infancia y familias';
 
   @override
+  String get externalLinkAepdLabel => 'Agencia Española de Protección de Datos';
+
+  @override
   String get helpPageTitle => 'Centro de ayuda';
 
   @override

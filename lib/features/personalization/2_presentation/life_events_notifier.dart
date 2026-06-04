@@ -10,6 +10,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/au
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
@@ -119,18 +120,16 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
   LifeEventsState build() {
     // Kick off the load after the current frame so `build` returns synchronously.
     unawaited(Future.microtask(_load));
-    // Mark onboarding seen as a silent best-effort side-effect.
-    unawaited(Future.microtask(_markOnboardingSeen));
     return const LifeEventsState(status: LifeEventsStatus.loading);
   }
 
   // ── Private ────────────────────────────────────────────────────────────────
 
-  Future<void> _markOnboardingSeen() async {
+  Future<MarkLifeEventsOnboardingSeenResult?> _markOnboardingSeen() async {
     if (!_clearSelectionsOnLoad || _idAgente.isEmpty) {
-      return;
+      return null;
     }
-    await ref.read(markLifeEventsOnboardingSeenUsecaseProvider).execute(idAgente: _idAgente);
+    return ref.read(markLifeEventsOnboardingSeenUsecaseProvider).execute(idAgente: _idAgente);
   }
 
   Future<void> _load() async {
@@ -182,6 +181,17 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
     }
     switch (result) {
       case SaveLifeEventsSuccess():
+        final onboardingResult = await _markOnboardingSeen();
+        if (!ref.mounted) {
+          return;
+        }
+        if (onboardingResult case MarkLifeEventsOnboardingSeenFailed(:final message)) {
+          state = state.copyWith(
+            status: LifeEventsStatus.saveError,
+            errorMessage: message,
+          );
+          return;
+        }
         state = state.copyWith(
           status: LifeEventsStatus.saveSuccess,
           isDirty: false,

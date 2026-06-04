@@ -34,7 +34,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-    type == AppNavBarType.inicio ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
+    type == AppNavBarType.inicio || type == AppNavBarType.detail ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
   );
 
   Color get _backgroundColor => switch (type) {
@@ -129,10 +129,11 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       );
     }
 
-    return AppBar(
+    final appBar = AppBar(
       backgroundColor: _backgroundColor,
       foregroundColor: _foregroundColor,
       automaticallyImplyLeading: false,
+      toolbarHeight: type == AppNavBarType.detail ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
       leading: _leadingWidget,
       title: _titleWidget,
       actions: _effectiveActions,
@@ -148,6 +149,20 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null,
+    );
+
+    if (type != AppNavBarType.detail) {
+      return appBar;
+    }
+
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColors.backgroundBlueMutedLight),
+        ),
+        boxShadow: AppShadows.low,
+      ),
+      child: appBar,
     );
   }
 }
@@ -451,25 +466,27 @@ class AppStickyBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (secondaryLabel != null) ...[
+          SizedBox(
+            width: double.infinity,
+            child: AppButton(
+              label: secondaryLabel!,
+              onPressed: onSecondary,
+              hierarchy: secondaryHierarchy,
+              leadingIcon: secondaryLeadingIcon,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.space16),
+        ],
         SizedBox(
           width: double.infinity,
           child: AppButton(
             label: primaryLabel,
             onPressed: onPrimary,
             isLoading: isPrimaryLoading,
+            leadingIcon: primaryLeadingIcon,
           ),
         ),
-        if (secondaryLabel != null) ...[
-          const SizedBox(height: AppDimensions.space8),
-          SizedBox(
-            width: double.infinity,
-            child: AppButton(
-              label: secondaryLabel!,
-              onPressed: onSecondary,
-              hierarchy: AppButtonHierarchy.tertiary,
-            ),
-          ),
-        ],
       ],
     );
   }

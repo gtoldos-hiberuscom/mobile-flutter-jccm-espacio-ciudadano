@@ -429,6 +429,10 @@
   "@externalLinkInfanciaFamiliasLabel": {
     "description": "Label of the external link to the Childhood and Families portal."
   },
+  "externalLinkAepdLabel": "Spanish Data Protection Agency",
+  "@externalLinkAepdLabel": {
+    "description": "Label of the external link to the Spanish Data Protection Agency."
+  },
   "helpPageTitle": "Help center",
   "@helpPageTitle": {
     "description": "Help page title."

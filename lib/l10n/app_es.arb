@@ -425,6 +425,10 @@
   "@externalLinkInfanciaFamiliasLabel": {
     "description": "Etiqueta del enlace externo al portal de Infancia y Familias."
   },
+  "externalLinkAepdLabel": "Agencia Española de Protección de Datos",
+  "@externalLinkAepdLabel": {
+    "description": "Etiqueta del enlace externo a la Agencia Española de Protección de Datos."
+  },
   "helpPageTitle": "Centro de ayuda",
   "@helpPageTitle": {
     "description": "Título de la pantalla de ayuda."

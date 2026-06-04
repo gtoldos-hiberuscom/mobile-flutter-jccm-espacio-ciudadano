@@ -698,6 +698,12 @@ abstract class AppLocalizations {
   /// **'Infancia y familias'**
   String get externalLinkInfanciaFamiliasLabel;
 
+  /// Etiqueta del enlace externo a la Agencia Española de Protección de Datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Agencia Española de Protección de Datos'**
+  String get externalLinkAepdLabel;
+
   /// Título de la pantalla de ayuda.
   ///
   /// In es, this message translates to:

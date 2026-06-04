@@ -70,6 +70,12 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
       url: Uri.parse('https://infanciayfamilias.castillalamancha.es/'),
       category: ExternalLinkCategory.infanciaFamilias,
     ),
+    ExternalLink(
+      id: 'aepd',
+      displayKey: 'externalLinkAepdLabel',
+      url: Uri.parse('https://www.aepd.es/'),
+      category: ExternalLinkCategory.dataProtection,
+    ),
   ];
 
   @override

@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_a
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/login_callback_page.dart';
+import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/privacy_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -52,7 +53,15 @@ final goRouterProvider = Provider<GoRouter>(
         // ── Consent gate (JCCMEC-11) ─────────────────────────────────────────
         GoRoute(
           path: Routes.consent,
-          builder: (final BuildContext context, final GoRouterState state) => const ConsentPage(),
+          builder: (final BuildContext context, final GoRouterState state) => ConsentPage(
+            isOnboarding: state.uri.queryParameters['mode'] == 'onboarding',
+          ),
+        ),
+
+        // ── Legal ────────────────────────────────────────────────────────────
+        GoRoute(
+          path: Routes.legalPrivacy,
+          builder: (final BuildContext context, final GoRouterState state) => const PrivacyPage(),
         ),
 
         // ── Login (JCCMEC-10) ─────────────────────────────────────────────

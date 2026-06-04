@@ -90,8 +90,8 @@ final class SessionGuard {
   /// current consent version. Returns `null` (or delegates to
   /// [_onboardingRedirect]) when consent is already on record.
   Future<String?> _consentRedirect(final String path) async {
-    // Allow the consent page itself — prevents infinite redirect loop.
-    if (path == Routes.consent) {
+    // Allow legal-gate pages themselves — prevents infinite redirect loops.
+    if (path == Routes.consent || path == Routes.legalPrivacy) {
       return null;
     }
 
@@ -103,7 +103,7 @@ final class SessionGuard {
     final result = await _ref.read(checkConsentRequiredUsecaseProvider).execute(idAgente: idAgente);
 
     if (result is ConsentRequired) {
-      return Routes.consent;
+      return Routes.legalPrivacy;
     }
     return _onboardingRedirect(path);
   }
@@ -111,7 +111,7 @@ final class SessionGuard {
   /// Redirects to the life-events onboarding screen on first login.
   ///
   /// Returns [Routes.lifeEvents] if the citizen has not yet seen the screen,
-  /// or `null` to allow navigation to proceed normally.
+  /// or `null` to allow navigation to proceed normally once completed.
   Future<String?> _onboardingRedirect(final String path) async {
     if (path == Routes.lifeEvents) {
       return null;
@@ -121,18 +121,15 @@ final class SessionGuard {
       return null;
     }
     final result = await _ref.read(checkLifeEventsOnboardingUsecaseProvider).execute(idAgente: idAgente);
-    switch (result.runtimeType) {
-      case CheckLifeEventsOnboardingFailed:
+    switch (result) {
+      case CheckLifeEventsOnboardingFailed():
         return Routes.lifeEventsOnboarding;
-      case CheckLifeEventsOnboardingSuccess:
-        final successResult = result as CheckLifeEventsOnboardingSuccess;
-        if (!successResult.hasSeen) {
+      case CheckLifeEventsOnboardingSuccess(:final hasSeen):
+        if (!hasSeen) {
           return Routes.lifeEventsOnboarding;
-        } else {
-          return Routes.home;
         }
+        return null;
     }
-    return null;
   }
 
   /// Attempts a silent token refresh.

@@ -26,6 +26,12 @@ abstract final class StorageKeys {
   /// The locale code last selected by the user (e.g. `'es'`).
   static const String selectedLocale = 'selected_locale';
 
+  /// Whether biometric quick access has been explicitly enabled by the user.
+  static const String biometricQuickAccessEnabled = 'biometric_quick_access_enabled';
+
+  /// Whether the biometric quick-access prompt has already been shown.
+  static const String biometricQuickAccessPromptSeen = 'biometric_quick_access_prompt_seen';
+
   /// Prefix for per-user life-events onboarding-seen flag.
   /// Full key = lifeEventsOnboardingSeenPrefix + idAgente
   static const String lifeEventsOnboardingSeenPrefix = 'life_events_onboarding_seen_';

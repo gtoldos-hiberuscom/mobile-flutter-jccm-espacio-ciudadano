@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
@@ -15,7 +14,7 @@ enum AppCheckboxSize {
 
 /// Three-state checkbox — mirrors Figma "CheckBox" node (`106:3249`).
 ///
-/// Supports [false], [true], [null] (indeterminate / mixed), disabled and
+/// Supports `false`, `true`, `null` (indeterminate / mixed), disabled and
 /// error states.  Wraps [Checkbox] with WCAG-compliant touch target and
 /// [Semantics].
 ///
@@ -37,6 +36,13 @@ class AppCheckbox extends StatelessWidget {
     this.isError = false,
     this.errorText,
     this.tristate = false,
+    this.labelStyle,
+    this.contentPadding = const EdgeInsets.fromLTRB(
+      AppDimensions.space4,
+      AppDimensions.space4,
+      AppDimensions.space4,
+      AppDimensions.space8,
+    ),
   });
 
   /// `null` triggers the indeterminate (Mixed) state; requires [tristate].
@@ -46,6 +52,8 @@ class AppCheckbox extends StatelessWidget {
   final AppCheckboxSize size;
   final bool isError;
   final String? errorText;
+  final TextStyle? labelStyle;
+  final EdgeInsetsGeometry contentPadding;
 
   /// When `true`, cycles through `false → true → null` on tap.
   final bool tristate;
@@ -59,9 +67,6 @@ class AppCheckbox extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final activeColor = isError ? AppColors.error : AppColors.primary;
-    final checkColor = isError ? AppColors.onError : AppColors.onPrimary;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -91,37 +96,31 @@ class AppCheckbox extends StatelessWidget {
                       }
                     },
               borderRadius: BorderRadius.circular(AppDimensions.space4),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: _iconSize,
-                    height: _iconSize,
-                    child: Checkbox(
-                      value: value,
-                      tristate: tristate,
-                      onChanged: onChanged,
-                      activeColor: activeColor,
-                      checkColor: checkColor,
-                      side: BorderSide(
-                        color: _isDisabled
-                            ? AppColors.disabled
-                            : isError
-                            ? AppColors.error
-                            : AppColors.outline,
+              child: Padding(
+                padding: contentPadding,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      switch (value) {
+                        true => Icons.check_box_outlined,
+                        false => Icons.check_box_outline_blank,
+                        null => Icons.indeterminate_check_box_outlined,
+                      },
+                      size: _iconSize,
+                      color: _iconColor,
+                    ),
+                    const SizedBox(width: AppDimensions.space8),
+                    Flexible(
+                      child: Text(
+                        label,
+                        style: (labelStyle ?? (size == AppCheckboxSize.large ? AppTypography.leadingMedium : AppTypography.bodyRegular)).copyWith(
+                          color: _isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: AppDimensions.space8),
-                  Flexible(
-                    child: Text(
-                      label,
-                      style: (size == AppCheckboxSize.large ? AppTypography.leadingMedium : AppTypography.bodyRegular).copyWith(
-                        color: _isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -135,5 +134,15 @@ class AppCheckbox extends StatelessWidget {
         ],
       ],
     );
+  }
+
+  Color get _iconColor {
+    if (_isDisabled) {
+      return AppColors.disabled;
+    }
+    if (isError) {
+      return AppColors.error;
+    }
+    return value == false ? AppColors.textBase : AppColors.successDark;
   }
 }

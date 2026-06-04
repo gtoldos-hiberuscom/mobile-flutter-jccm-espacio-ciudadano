@@ -19,7 +19,7 @@ enum ConsentStatus {
   /// Step 1 — citizen reached the end of the scroll; CTA is now active.
   step1Unlocked,
 
-  /// Step 2 — authorisation checkboxes; at least one clause is unchecked.
+  /// Step 2 — optional authorisation checkboxes.
   step2,
 
   /// Saving acceptance to storage.
@@ -109,9 +109,9 @@ class ConsentNotifier extends Notifier<ConsentState> {
     }
   }
 
-  /// Advances from step 1 to step 2 (authorisation checkboxes).
+  /// Advances from the data-protection screen to the authorisation checkboxes.
   void proceedToStep2() {
-    if (state.status != ConsentStatus.step1Unlocked) {
+    if (state.status != ConsentStatus.step1Locked && state.status != ConsentStatus.step1Unlocked) {
       return;
     }
     state = state.copyWith(status: ConsentStatus.step2);
