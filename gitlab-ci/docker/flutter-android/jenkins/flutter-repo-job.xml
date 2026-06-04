@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Clona un repositorio Flutter y ejecuta un comando configurable.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>REPO_URL</name>
+          <description>URL git del repositorio. Si se deja vacia usa JENKINS_JOB_REPO_URL.</description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GIT_BRANCH</name>
+          <description>Rama a clonar. Si se deja vacia usa JENKINS_JOB_BRANCH.</description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GIT_DEPTH</name>
+          <description>Profundidad del clone. Usa 0 para clone completo.</description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>JOB_COMMAND</name>
+          <description>Comando shell a ejecutar dentro del repo clonado.</description>
+          <defaultValue></defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>CLEAN_WORKSPACE</name>
+          <description>Elimina el clone anterior antes de ejecutar.</description>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command><![CDATA[#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_URL="${REPO_URL:-${JENKINS_JOB_REPO_URL:-}}"
+GIT_BRANCH="${GIT_BRANCH:-${JENKINS_JOB_BRANCH:-main}}"
+GIT_DEPTH="${GIT_DEPTH:-${JENKINS_GIT_DEPTH:-1}}"
+JOB_COMMAND="${JOB_COMMAND:-${JENKINS_JOB_COMMAND:-flutter pub get && flutter test}}"
+CLEAN_WORKSPACE="${CLEAN_WORKSPACE:-true}"
+
+if [[ -z "${REPO_URL}" ]]; then
+  echo "REPO_URL or JENKINS_JOB_REPO_URL must be set."
+  exit 2
+fi
+
+export HOME="${JENKINS_HOME:-${HOME}}"
+mkdir -p "${HOME}/.ssh"
+
+ssh_dir="${WORKSPACE}/.ssh"
+rm -rf "${ssh_dir}"
+mkdir -p "${ssh_dir}"
+chmod 700 "${ssh_dir}"
+
+askpass_script="${ssh_dir}/ssh-askpass.sh"
+temp_key_file=""
+key_file=""
+cleanup() {
+  if [[ -n "${SSH_AGENT_PID:-}" ]]; then
+    ssh-agent -k >/dev/null
+  fi
+  if [[ -n "${temp_key_file:-}" && -f "${temp_key_file}" ]]; then
+    rm -f "${temp_key_file}"
+  fi
+  if [[ -f "${askpass_script}" ]]; then
+    rm -f "${askpass_script}"
+  fi
+}
+trap cleanup EXIT
+
+ssh_options=(-o "StrictHostKeyChecking=${JENKINS_GIT_STRICT_HOST_KEY_CHECKING:-accept-new}")
+if [[ -n "${JENKINS_GIT_KNOWN_HOSTS:-}" ]]; then
+  known_hosts_file="${ssh_dir}/known_hosts"
+  printf '%s\n' "${JENKINS_GIT_KNOWN_HOSTS}" > "${known_hosts_file}"
+  chmod 600 "${known_hosts_file}"
+  ssh_options+=(-o "UserKnownHostsFile=${known_hosts_file}")
+fi
+
+if [[ -n "${JENKINS_GIT_SSH_PRIVATE_KEY_FILE:-}" ]]; then
+  if [[ ! -f "${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}" ]]; then
+    echo "JENKINS_GIT_SSH_PRIVATE_KEY_FILE points to a missing file: ${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}"
+    exit 3
+  fi
+  chmod 600 "${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}" || true
+  key_file="${JENKINS_GIT_SSH_PRIVATE_KEY_FILE}"
+elif [[ -n "${JENKINS_GIT_SSH_PRIVATE_KEY:-}" ]]; then
+  temp_key_file="${ssh_dir}/jenkins_job_key"
+  printf '%b\n' "${JENKINS_GIT_SSH_PRIVATE_KEY}" > "${temp_key_file}"
+  chmod 600 "${temp_key_file}"
+  key_file="${temp_key_file}"
+fi
+
+if [[ -n "${key_file}" && -n "${JENKINS_GIT_SSH_PASSPHRASE:-}" ]]; then
+  printf '#!/usr/bin/env bash\nprintf %%s %q\n' "${JENKINS_GIT_SSH_PASSPHRASE}" > "${askpass_script}"
+  chmod 700 "${askpass_script}"
+  export SSH_ASKPASS="${askpass_script}"
+  export SSH_ASKPASS_REQUIRE=force
+  export GIT_TERMINAL_PROMPT=0
+  export DISPLAY="${DISPLAY:-jenkins-ssh-askpass}"
+  eval "$(ssh-agent -s)" >/dev/null
+  setsid ssh-add "${key_file}" </dev/null >/dev/null
+  export GIT_SSH_COMMAND="ssh ${ssh_options[*]}"
+elif [[ -n "${key_file}" ]]; then
+  export GIT_SSH_COMMAND="ssh -i ${key_file} -o IdentitiesOnly=yes ${ssh_options[*]}"
+elif [[ -z "${GIT_SSH_COMMAND:-}" ]]; then
+  export GIT_SSH_COMMAND="ssh ${ssh_options[*]}"
+fi
+
+repo_dir="${WORKSPACE}/repo"
+if [[ "${CLEAN_WORKSPACE}" == "true" ]]; then
+  rm -rf "${repo_dir}"
+fi
+
+clone_args=()
+if [[ -n "${GIT_BRANCH}" ]]; then
+  clone_args+=(--branch "${GIT_BRANCH}")
+fi
+if [[ "${GIT_DEPTH}" != "0" ]]; then
+  clone_args+=(--depth "${GIT_DEPTH}")
+fi
+
+if [[ ! -d "${repo_dir}/.git" ]]; then
+  git clone "${clone_args[@]}" "${REPO_URL}" "${repo_dir}"
+else
+  git -C "${repo_dir}" fetch --prune origin "${GIT_BRANCH:-HEAD}"
+  if [[ -n "${GIT_BRANCH}" ]]; then
+    git -C "${repo_dir}" checkout "${GIT_BRANCH}"
+    git -C "${repo_dir}" reset --hard "origin/${GIT_BRANCH}"
+  fi
+fi
+
+cd "${repo_dir}"
+flutter --version
+bash -lc "${JOB_COMMAND}"
+]]></command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
