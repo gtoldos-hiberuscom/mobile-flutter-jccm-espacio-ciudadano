@@ -12,6 +12,14 @@
   "@landingTagline": {
     "description": "Subtitle shown below the title on the landing screen."
   },
+  "landingTaglinePrefix": "Agile and online management of procedures for the citizens of ",
+  "@landingTaglinePrefix": {
+    "description": "First part of the tagline (regular weight) preceding the region name."
+  },
+  "landingTaglineHighlight": "Castilla-La Mancha",
+  "@landingTaglineHighlight": {
+    "description": "Region name highlighted with H2 typography in the tagline."
+  },
   "landingCtaButton": "Access your space",
   "@landingCtaButton": {
     "description": "Primary CTA button text that initiates the Cl@ve authentication flow."
@@ -20,11 +28,11 @@
   "@landingAboutButton": {
     "description": "Secondary button that navigates to the about screen."
   },
-  "landingHelpLink": "How to access? - Help",
+  "landingHelpLink": "How to access?",
   "@landingHelpLink": {
     "description": "Text link that navigates to the access help screen."
   },
-  "landingHelpPageTitle": "Access help",
+  "landingHelpPageTitle": "How to access",
   "@landingHelpPageTitle": {
     "description": "AppBar title of the access help screen."
   },
@@ -32,7 +40,7 @@
   "@landingHelpTitle": {
     "description": "Main title of the access help screen."
   },
-  "landingHelpBody1": "To access Citizen Space you will need to use Cl@ve, an identification system that allows the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.",
+  "landingHelpBody1": "To access Citizen Space you must identify yourself with Cl@ve, the access system for public services. You can use Cl@ve Mobile, Cl@ve Permanent, electronic ID or an electronic certificate (personal or representative).",
   "@landingHelpBody1": {
     "description": "First explanatory paragraph of the access help screen."
   },
@@ -40,7 +48,7 @@
   "@landingHelpBody2": {
     "description": "Second explanatory paragraph of the access help screen."
   },
-  "landingHelpAccessButton": "Access now",
+  "landingHelpAccessButton": "Access my Citizen Space",
   "@landingHelpAccessButton": {
     "description": "Primary action button on the help screen that initiates authentication."
   },
@@ -104,7 +112,7 @@
   "@landingAboutBullet7": {
     "description": "Seventh bullet item in the content list."
   },
-  "landingAboutAccessButton": "Access now",
+  "landingAboutAccessButton": "Access my Citizen Space",
   "@landingAboutAccessButton": {
     "description": "Primary action button on the about screen that initiates authentication."
   },
@@ -1663,6 +1671,14 @@
   "@lifeEventsHeaderDescription": {
     "description": "Personalization — descriptive header on the life-events screen."
   },
+  "lifeEventsIntroHeading": "Select the topics you would like to receive information about",
+  "@lifeEventsIntroHeading": {
+    "description": "Personalization — large intro heading on the life-events screen."
+  },
+  "lifeEventsIntroBody": "Select the topics you would like to receive information about in the recommendations section",
+  "@lifeEventsIntroBody": {
+    "description": "Personalization — smaller intro body text on the life-events screen."
+  },
   "lifeEventsSaveAction": "Save",
   "@lifeEventsSaveAction": {
     "description": "Personalization — explicit save button label."
@@ -3014,5 +3030,25 @@
   "offlineBannerMessage": "Offline. Showing cached data.",
   "@offlineBannerMessage": {
     "description": "STORY-65 — default advisory message displayed by the OfflineBanner when connectivity is reported as offline; adopters keep showing cached data underneath."
+  },
+  "a11yStickybarLabel": "Main actions",
+  "@a11yStickybarLabel": {
+    "description": "Accessibility — semantic label for the sticky bottom action bar."
+  },
+  "a11yLandingH1Label": "Citizen Space of Castilla-La Mancha",
+  "@a11yLandingH1Label": {
+    "description": "Accessibility — semantic H1 label for the landing splash screen."
+  },
+  "a11yCastillaLogoLabel": "Logo of the Regional Government of Castilla-La Mancha",
+  "@a11yCastillaLogoLabel": {
+    "description": "Accessibility — semantic label for the institutional Castilla-La Mancha logo."
+  },
+  "a11yLoading": "Loading",
+  "@a11yLoading": {
+    "description": "Accessibility — announced by screen reader when a loading state starts."
+  },
+  "a11yContentLoaded": "Content loaded",
+  "@a11yContentLoaded": {
+    "description": "Accessibility — announced by screen reader when loading finishes."
   }
 }

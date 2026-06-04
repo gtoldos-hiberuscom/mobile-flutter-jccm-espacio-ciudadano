@@ -21,7 +21,9 @@ abstract final class Routes {
   static const String maintenance = '/maintenance';
 
   // ── Deep-link callbacks ───────────────────────────────────────────────────
-  static const String claveCallback = '/auth/clave/callback';
+  // The configured URI is `es.jccm.espaciociudadano://auth/callback`;
+  // Flutter/GoRouter matches its path component, `/callback`.
+  static const String claveCallback = '/callback';
   static const String afirmaReturn = '/sign/afirma/return';
 
   // ── Authenticated ───────────────────────────────────────────────────────
@@ -29,10 +31,18 @@ abstract final class Routes {
   /// Mandatory legal-consent gate shown after first login.
   static const String consent = '/consent';
 
+  /// Authenticated home — main screen with bottom navigation.
+  static const String home = '/home';
+
   static const String lifeEvents = '/preferences/life-events';
+  static const String lifeEventsOnboarding = '$lifeEvents?mode=onboarding';
+
+  /// Design system catalog — developer/designer reference screen.
+  static const String designSystem = '/design-system';
 
   static const Set<String> _authenticated = {
     consent,
+    home,
     lifeEvents,
   };
 

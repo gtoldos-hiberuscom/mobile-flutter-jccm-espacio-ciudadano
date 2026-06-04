@@ -18,28 +18,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingTagline => 'Agile and online management of procedures for the citizens of Castilla-La Mancha';
 
   @override
+  String get landingTaglinePrefix => 'Agile and online management of procedures for the citizens of ';
+
+  @override
+  String get landingTaglineHighlight => 'Castilla-La Mancha';
+
+  @override
   String get landingCtaButton => 'Access your space';
 
   @override
   String get landingAboutButton => 'Learn more about Citizen Space';
 
   @override
-  String get landingHelpLink => 'How to access? - Help';
+  String get landingHelpLink => 'How to access?';
 
   @override
-  String get landingHelpPageTitle => 'Access help';
+  String get landingHelpPageTitle => 'How to access';
 
   @override
   String get landingHelpTitle => 'How to access';
 
   @override
-  String get landingHelpBody1 => 'To access Citizen Space you will need to use Cl@ve, an identification system that allows the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
+  String get landingHelpBody1 => 'To access Citizen Space you must identify yourself with Cl@ve, the access system for public services. You can use Cl@ve Mobile, Cl@ve Permanent, electronic ID or an electronic certificate (personal or representative).';
 
   @override
   String get landingHelpBody2 => 'This identification system is widely used by Spanish public administrations and allows you to use any of the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.';
 
   @override
-  String get landingHelpAccessButton => 'Access now';
+  String get landingHelpAccessButton => 'Access my Citizen Space';
 
   @override
   String get landingHelpExternalLink => 'External link';
@@ -84,10 +90,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingAboutBullet6 => 'Your information from the Regional Government of Castilla-La Mancha.';
 
   @override
-  String get landingAboutBullet7 => 'Additionally, you can receive proactive service recommendations of interest to you.';
-
-  @override
-  String get landingAboutAccessButton => 'Access now';
+  String get landingAboutAccessButton => 'Access my Citizen Space';
 
   @override
   String get landingAboutExternalLink => 'External link';
@@ -1243,6 +1246,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifeEventsHeaderDescription => 'Select the life events that best describe your situation to receive personalized recommendations.';
 
   @override
+  String get lifeEventsIntroHeading => 'Select the topics you would like to receive information about';
+
+  @override
+  String get lifeEventsIntroBody => 'Select the topics you would like to receive information about in the recommendations section';
+
+  @override
   String get lifeEventsSaveAction => 'Save';
 
   @override
@@ -2215,4 +2224,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get offlineBannerMessage => 'Offline. Showing cached data.';
+
+  @override
+  String get a11yStickybarLabel => 'Main actions';
+
+  @override
+  String get a11yLandingH1Label => 'Citizen Space of Castilla-La Mancha';
+
+  @override
+  String get a11yCastillaLogoLabel => 'Logo of the Regional Government of Castilla-La Mancha';
+
+  @override
+  String get a11yLoading => 'Loading';
+
+  @override
+  String get a11yContentLoaded => 'Content loaded';
 }

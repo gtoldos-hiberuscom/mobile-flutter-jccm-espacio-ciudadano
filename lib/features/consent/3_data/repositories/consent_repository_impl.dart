@@ -22,24 +22,29 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     Clause(
       id: 1,
       label:
-          'Autorizo el acceso y tratamiento de mis datos personales por parte '
-          'de la Junta de Comunidades de Castilla-La Mancha para la prestación '
-          'de los servicios del Espacio Ciudadano.',
+          'Cláusula inicial: autorizo el acceso básico a la información '
+          'necesaria para usar Espacio Ciudadano.',
       isSelected: false,
     ),
     Clause(
       id: 2,
       label:
-          'Autorizo la consulta de mis datos en otros organismos y '
-          'administraciones públicas cuando sea necesario para completar los '
-          'servicios disponibles.',
+          'Cláusula JCCM: autorizo la consulta y tratamiento de información '
+          'gestionada por la Junta de Comunidades de Castilla-La Mancha.',
       isSelected: false,
     ),
     Clause(
       id: 3,
       label:
-          'Consiento el uso de mis hechos vitales para la personalización de '
-          'contenidos y recomendaciones en el Espacio Ciudadano.',
+          'Cláusula AGE: autorizo la consulta de información procedente de '
+          'la Administración General del Estado cuando sea necesaria.',
+      isSelected: false,
+    ),
+    Clause(
+      id: 4,
+      label:
+          'Cláusula recomendaciones: autorizo el uso de mis preferencias y '
+          'hechos vitales para recibir recomendaciones personalizadas.',
       isSelected: false,
     ),
   ];
@@ -49,20 +54,25 @@ final class ConsentRepositoryImpl implements ConsentRepository {
   @override
   Future<bool> hasAcceptedConsent({
     required final String idAgente,
-  }) async =>
-      _storage.read<bool>(_key(idAgente)) ?? false;
+  }) async => _storage.read<bool>(_key(idAgente)) ?? false;
 
   @override
   Future<void> markConsentAccepted({
     required final String idAgente,
-  }) =>
-      _storage.write(_key(idAgente), true);
+    required final List<Clause> clauses,
+  }) async {
+    final acceptedClauseIds = clauses.where((final clause) => clause.isSelected).map((final clause) => clause.id.toString()).toList(growable: false);
+
+    await _storage.write(_acceptedClausesKey(idAgente), acceptedClauseIds);
+    await _storage.write(_key(idAgente), true);
+  }
 
   @override
   Future<List<Clause>> fetchClauses() async => _fallbackClauses;
 
   // ── Private ───────────────────────────────────────────────────────────────
 
-  String _key(final String idAgente) =>
-      '${StorageKeys.consentAcceptedPrefix}$idAgente';
+  String _key(final String idAgente) => '${StorageKeys.consentAcceptedPrefix}$idAgente';
+
+  String _acceptedClausesKey(final String idAgente) => '${StorageKeys.consentAcceptedClausesPrefix}$idAgente';
 }

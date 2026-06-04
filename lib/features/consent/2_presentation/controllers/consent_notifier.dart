@@ -49,19 +49,17 @@ final class ConsentState {
   final List<Clause> clauses;
   final String? errorMessage;
 
-  bool get allClausesSelected =>
-      clauses.isNotEmpty && clauses.every((final c) => c.isSelected);
+  bool get allClausesSelected => clauses.isNotEmpty && clauses.every((final c) => c.isSelected);
 
   ConsentState copyWith({
     final ConsentStatus? status,
     final List<Clause>? clauses,
     final String? errorMessage,
-  }) =>
-      ConsentState(
-        status: status ?? this.status,
-        clauses: clauses ?? this.clauses,
-        errorMessage: errorMessage ?? this.errorMessage,
-      );
+  }) => ConsentState(
+    status: status ?? this.status,
+    clauses: clauses ?? this.clauses,
+    errorMessage: errorMessage ?? this.errorMessage,
+  );
 }
 
 // ── Notifier ──────────────────────────────────────────────────────────────────
@@ -84,8 +82,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
   // ── Private ────────────────────────────────────────────────────────────────
 
   Future<void> _loadClauses() async {
-    final result =
-        await ref.read(loadClausesUsecaseProvider).execute();
+    final result = await ref.read(loadClausesUsecaseProvider).execute();
     if (!ref.mounted) {
       return;
     }
@@ -122,8 +119,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
 
   /// Toggles the selected state of the clause with the given [id].
   void toggleClause(final int id) {
-    if (state.status != ConsentStatus.step2 &&
-        state.status != ConsentStatus.saveError) {
+    if (state.status != ConsentStatus.step2 && state.status != ConsentStatus.saveError) {
       return;
     }
     final updated = state.clauses
@@ -136,26 +132,20 @@ class ConsentNotifier extends Notifier<ConsentState> {
 
   /// Marks all clauses as selected.
   void markAll() {
-    if (state.status != ConsentStatus.step2 &&
-        state.status != ConsentStatus.saveError) {
+    if (state.status != ConsentStatus.step2 && state.status != ConsentStatus.saveError) {
       return;
     }
-    final updated = state.clauses
-        .map((final c) => c.copyWith(isSelected: true))
-        .toList(growable: false);
+    final updated = state.clauses.map((final c) => c.copyWith(isSelected: true)).toList(growable: false);
     state = state.copyWith(status: ConsentStatus.step2, clauses: updated);
   }
 
-  /// Persists consent acceptance and signals the page to navigate forward.
+  /// Persists consent choices and signals the page to navigate forward.
   Future<void> accept() async {
-    if (!state.allClausesSelected ||
-        state.status == ConsentStatus.saving) {
+    if (state.status == ConsentStatus.saving) {
       return;
     }
     state = state.copyWith(status: ConsentStatus.saving);
-    final result = await ref
-        .read(acceptConsentUsecaseProvider)
-        .execute(idAgente: _idAgente);
+    final result = await ref.read(acceptConsentUsecaseProvider).execute(idAgente: _idAgente, clauses: state.clauses);
     if (!ref.mounted) {
       return;
     }
@@ -186,7 +176,4 @@ class ConsentNotifier extends Notifier<ConsentState> {
 /// Family provider keyed by `idAgente`.
 ///
 /// Usage: `ref.watch(consentProvider(idAgente))`.
-final consentProvider = NotifierProvider.family<
-    ConsentNotifier,
-    ConsentState,
-    String>(ConsentNotifier.new);
+final consentProvider = NotifierProvider.family<ConsentNotifier, ConsentState, String>(ConsentNotifier.new);

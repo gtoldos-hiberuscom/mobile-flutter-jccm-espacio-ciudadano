@@ -1,9 +1,15 @@
 import 'dart:async' show unawaited;
 
+import 'package:dio/dio.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
@@ -39,7 +45,7 @@ enum LifeEventsStatus {
   /// A preference-reset operation is in progress.
   resetting,
 
-  /// Last reset completed successfully (transient — immediately followed by reload).
+  /// Last reset completed successfully.
   resetSuccess,
 
   /// Last reset failed.
@@ -78,29 +84,36 @@ final class LifeEventsState {
     final bool? isDirty,
     final String? errorMessage,
     final bool? showResetConfirm,
-  }) =>
-      LifeEventsState(
-        status: status ?? this.status,
-        events: events ?? this.events,
-        isDirty: isDirty ?? this.isDirty,
-        errorMessage: errorMessage ?? this.errorMessage,
-        showResetConfirm: showResetConfirm ?? this.showResetConfirm,
-      );
+  }) => LifeEventsState(
+    status: status ?? this.status,
+    events: events ?? this.events,
+    isDirty: isDirty ?? this.isDirty,
+    errorMessage: errorMessage ?? this.errorMessage,
+    showResetConfirm: showResetConfirm ?? this.showResetConfirm,
+  );
 }
 
 // ── Notifier ──────────────────────────────────────────────────────────────────
+
+typedef LifeEventsProviderArgs = ({
+  String idAgente,
+  bool clearSelectionsOnLoad,
+});
 
 /// Owns all business logic for the life-events selection screen.
 ///
 /// In Riverpod 3 the family argument is passed to the constructor via the
 /// `NotifierProvider.family` create function; [Notifier.build] has no
-/// parameters. [_idAgente] is stored from the constructor for use in async
+/// parameters. The arguments are stored from the constructor for use in async
 /// operations.
 class LifeEventsNotifier extends Notifier<LifeEventsState> {
-  LifeEventsNotifier(this._idAgente);
+  LifeEventsNotifier(this._args);
 
-  /// The citizen identifier supplied when the family was constructed.
-  final String _idAgente;
+  final LifeEventsProviderArgs _args;
+
+  String get _idAgente => _args.idAgente;
+
+  bool get _clearSelectionsOnLoad => _args.clearSelectionsOnLoad;
 
   @override
   LifeEventsState build() {
@@ -114,27 +127,22 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
   // ── Private ────────────────────────────────────────────────────────────────
 
   Future<void> _markOnboardingSeen() async {
-    if (_idAgente.isEmpty) {
+    if (!_clearSelectionsOnLoad || _idAgente.isEmpty) {
       return;
     }
-    await ref
-        .read(markLifeEventsOnboardingSeenUsecaseProvider)
-        .execute(idAgente: _idAgente);
+    await ref.read(markLifeEventsOnboardingSeenUsecaseProvider).execute(idAgente: _idAgente);
   }
 
   Future<void> _load() async {
     state = const LifeEventsState(status: LifeEventsStatus.loading);
-    final result = await ref
-        .read(loadLifeEventsUsecaseProvider)
-        .execute(idAgente: _idAgente);
+    final result = await ref.read(loadLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
     if (!ref.mounted) {
       return;
     }
     switch (result) {
       case LoadLifeEventsSuccess(:final events):
-        state = events.isEmpty
-            ? const LifeEventsState(status: LifeEventsStatus.empty)
-            : LifeEventsState(status: LifeEventsStatus.loaded, events: events);
+        final resolvedEvents = _clearSelectionsOnLoad ? events.map((final event) => event.copyWith(selected: false)).toList(growable: false) : events;
+        state = resolvedEvents.isEmpty ? const LifeEventsState(status: LifeEventsStatus.empty) : LifeEventsState(status: LifeEventsStatus.loaded, events: resolvedEvents);
       case LoadLifeEventsFailed(:final message):
         state = LifeEventsState(
           status: LifeEventsStatus.loadError,
@@ -147,9 +155,7 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
 
   /// Flips the selection state of the event with the given [id].
   void toggle(final int id) {
-    final updated = state.events
-        .map((final e) => e.id == id ? e.copyWith(selected: !e.selected) : e)
-        .toList(growable: false);
+    final updated = state.events.map((final e) => e.id == id ? e.copyWith(selected: !e.selected) : e).toList(growable: false);
     state = state.copyWith(
       status: LifeEventsStatus.loaded,
       events: updated,
@@ -163,10 +169,14 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
       return;
     }
     state = state.copyWith(status: LifeEventsStatus.saving);
-    final result = await ref.read(saveLifeEventsUsecaseProvider).execute(
-          idAgente: _idAgente,
-          events: state.events,
-        );
+    await _refreshSessionIfNeeded();
+    var result = await _saveCurrentEvents();
+    if (result case SaveLifeEventsFailed(:final cause) when _isUnauthorized(cause)) {
+      final refreshed = await _refreshSession(force: true);
+      if (ref.mounted && refreshed) {
+        result = await _saveCurrentEvents();
+      }
+    }
     if (!ref.mounted) {
       return;
     }
@@ -190,23 +200,32 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
   /// Dismisses the reset-confirmation dialog without taking action.
   void cancelReset() => state = state.copyWith(showResetConfirm: false);
 
-  /// Executes the preference reset and reloads the catalogue.
+  /// Executes the preference reset and restores the catalogue without selections.
   Future<void> confirmReset() async {
+    final clearedEvents = state.events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
     state = state.copyWith(
       showResetConfirm: false,
       status: LifeEventsStatus.resetting,
     );
+    // DELETE /preferencias leaves GET /hechos/{idAgente} failing with 500.
+    // Persist the existing catalogue cleared instead: this action removes only
+    // the selected life events described by the confirmation dialog.
     final result = await ref
-        .read(resetLifeEventsUsecaseProvider)
-        .execute(idAgente: _idAgente);
+        .read(saveLifeEventsUsecaseProvider)
+        .execute(
+          idAgente: _idAgente,
+          events: clearedEvents,
+        );
     if (!ref.mounted) {
       return;
     }
     switch (result) {
-      case ResetLifeEventsSuccess():
-        state = const LifeEventsState(status: LifeEventsStatus.resetSuccess);
-        await _load();
-      case ResetLifeEventsFailed(:final message):
+      case SaveLifeEventsSuccess():
+        state = LifeEventsState(
+          status: clearedEvents.isEmpty ? LifeEventsStatus.empty : LifeEventsStatus.resetSuccess,
+          events: clearedEvents,
+        );
+      case SaveLifeEventsFailed(:final message):
         state = state.copyWith(
           status: LifeEventsStatus.resetError,
           errorMessage: message,
@@ -216,14 +235,73 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
 
   /// Retries a failed load operation.
   Future<void> retry() => _load();
+
+  Future<SaveLifeEventsResult> _saveCurrentEvents() {
+    return ref
+        .read(saveLifeEventsUsecaseProvider)
+        .execute(
+          idAgente: _idAgente,
+          events: state.events,
+        );
+  }
+
+  Future<void> _refreshSessionIfNeeded() async {
+    final expiresAt = ref.read(tokenResponseProvider)?.accessTokenExpirationDateTime;
+    if (expiresAt == null || expiresAt.isBefore(DateTime.now().add(const Duration(minutes: 1)))) {
+      await _refreshSession();
+    }
+  }
+
+  Future<bool> _refreshSession({final bool force = false}) async {
+    final storage = ref.read(secureStorageProvider);
+    final refreshToken = await storage.read(StorageKeys.refreshToken);
+    if (refreshToken == null || refreshToken.isEmpty) {
+      return false;
+    }
+
+    final currentExpiry = ref.read(tokenResponseProvider)?.accessTokenExpirationDateTime;
+    if (!force && currentExpiry != null && currentExpiry.isAfter(DateTime.now().add(const Duration(minutes: 1)))) {
+      return true;
+    }
+
+    try {
+      final TokenResponse newSession = await ref.read(authRepositoryProvider).refreshToken(refreshToken: refreshToken);
+      await Future.wait([
+        if (newSession.accessToken != null) storage.write(StorageKeys.accessToken, newSession.accessToken!),
+        if (newSession.refreshToken != null) storage.write(StorageKeys.refreshToken, newSession.refreshToken!),
+        if (newSession.accessTokenExpirationDateTime != null)
+          storage.write(
+            StorageKeys.sessionExpiresAt,
+            newSession.accessTokenExpirationDateTime!.toIso8601String(),
+          ),
+      ]);
+      if (!ref.mounted) {
+        return false;
+      }
+      ref.read(tokenResponseProvider.notifier).update(newSession);
+      return true;
+    } on Object {
+      await Future.wait([
+        storage.delete(StorageKeys.accessToken),
+        storage.delete(StorageKeys.refreshToken),
+        storage.delete(StorageKeys.sessionExpiresAt),
+      ]);
+      if (ref.mounted) {
+        ref.read(tokenResponseProvider.notifier).update(null);
+      }
+      return false;
+    }
+  }
+
+  bool _isUnauthorized(final Object? cause) {
+    return cause is DioException && cause.error is UnauthorizedError;
+  }
 }
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 
-/// Family provider keyed by `idAgente`.
+/// Family provider keyed by `idAgente` and entry mode.
 ///
-/// Usage: `ref.watch(lifeEventsProvider(idAgente))`.
-final lifeEventsProvider = NotifierProvider.family<
-    LifeEventsNotifier,
-    LifeEventsState,
-    String>(LifeEventsNotifier.new);
+/// Usage:
+/// `ref.watch(lifeEventsProvider((idAgente: idAgente, clearSelectionsOnLoad: true)))`.
+final lifeEventsProvider = NotifierProvider.family<LifeEventsNotifier, LifeEventsState, LifeEventsProviderArgs>(LifeEventsNotifier.new);

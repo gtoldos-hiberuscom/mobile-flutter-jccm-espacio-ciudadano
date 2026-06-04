@@ -1,27 +1,43 @@
 import 'dart:async' show unawaited;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_notifier.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-/// Full-page screen for selecting and saving life-event preferences.
+/// "Mis Hechos Vitales" screen — Figma node `41779:22465`.
 ///
-/// Reads [jwtClaimsProvider] internally to obtain the citizen identifier —
-/// no constructor parameter is needed, keeping the router free of auth
-/// dependencies.
+/// Displays selectable life-event checkboxes for personalisation.
+/// Uses DS components exclusively with full WCAG 2.1 AA accessibility.
 ///
-/// All orchestration is delegated to [LifeEventsNotifier]. Snackbars and
-/// dialogs are driven by `ref.listen` side-effect callbacks.
+/// Accessibility contract:
+/// - Rule 3.1: single H1 heading announced first
+/// - Rule 3.4: unified Semantics nodes on interactive rows
+/// - Rule 3.10: loading/saving states announced via SemanticsService
+/// - Rule 3.11: save/error feedback announced
+/// - Rule 3.14: expandable sections indicate expanded state
 class LifeEventsPage extends ConsumerStatefulWidget {
-  const LifeEventsPage({super.key});
+  const LifeEventsPage({
+    super.key,
+    this.isOnboarding = false,
+  });
+
+  final bool isOnboarding;
 
   @override
   ConsumerState<LifeEventsPage> createState() => _LifeEventsPageState();
@@ -33,62 +49,53 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     final l10n = AppLocalizations.of(context);
     final claims = ref.watch(jwtClaimsProvider);
     final idAgente = claims?.idAgente ?? '';
-    final lifeState = ref.watch(lifeEventsProvider(idAgente));
-    final notifier = ref.read(lifeEventsProvider(idAgente).notifier);
+    final providerArgs = (
+      idAgente: idAgente,
+      clearSelectionsOnLoad: widget.isOnboarding,
+    );
+    final lifeState = ref.watch(lifeEventsProvider(providerArgs));
+    final notifier = ref.read(lifeEventsProvider(providerArgs).notifier);
 
-    // ── Side-effect listener ───────────────────────────────────────────────
+    // ── Side-effect listener (Rule 3.11) ──────────────────────────────────
     ref.listen<LifeEventsState>(
-      lifeEventsProvider(idAgente),
+      lifeEventsProvider(providerArgs),
       (final prev, final next) {
-        if (next.status == LifeEventsStatus.saveSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.lifeEventsSavedFeedback)),
-          );
-        }
-        if (next.status == LifeEventsStatus.saveError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.errorMessage ?? l10n.lifeEventsErrorFeedback),
-            ),
-          );
-        }
-        // Show reset-confirm dialog when the flag flips to true.
-        if (next.showResetConfirm && !(prev?.showResetConfirm ?? false)) {
-          unawaited(
-            showDialog<void>(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => _ResetConfirmDialog(
-                l10n: l10n,
-                onCancel: () {
-                  Navigator.of(context).pop();
-                  notifier.cancelReset();
-                },
-                onConfirm: () {
-                  Navigator.of(context).pop();
-                  unawaited(notifier.confirmReset());
-                },
-              ),
-            ),
-          );
-        }
+        _handleSideEffects(context, l10n, prev, next, notifier);
       },
     );
 
-    // ── Layout ────────────────────────────────────────────────────────────
     final isSaving = lifeState.status == LifeEventsStatus.saving;
     final isResetting = lifeState.status == LifeEventsStatus.resetting;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.lifeEventsTitle),
-        leading: BackButton(
-          onPressed: Navigator.of(context).maybePop,
-        ),
+      backgroundColor: AppColors.backgroundWhite,
+      // Figma node 41779:22466 — bg #f1f8f9, border bluemuted-lighter, Shadow/Low
+      appBar: AppNavBar(
+        type: widget.isOnboarding ? AppNavBarType.detail : AppNavBarType.level2,
+        title: l10n.lifeEventsTitle,
+        showLeading: !widget.isOnboarding,
+        onBack: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(Routes.home);
+          }
+        },
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () {},
+            tooltip: 'Información',
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // ── Intro heading + description ─────────────────────────────────
+          _IntroSection(l10n: l10n),
+
+          // ── Body content ────────────────────────────────────────────────
           Expanded(
             child: _buildBody(
               context,
@@ -98,17 +105,78 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
               notifier,
             ),
           ),
-          _BottomActionBar(
-            l10n: l10n,
-            isSaving: isSaving,
-            isDirty: lifeState.isDirty,
-            onSave: (lifeState.isDirty && !isSaving)
-                ? notifier.save
-                : null,
-            onReset: notifier.requestReset,
+
+          // ── Sticky bottom bar ───────────────────────────────────────────
+          AppStickyBar(
+            type: AppStickyBarType.dicotomy,
+            secondaryLabel: l10n.lifeEventsResetCancel,
+            onSecondary: notifier.requestReset,
+            secondaryHierarchy: AppButtonHierarchy.tertiary,
+            secondaryLeadingIcon: Icons.highlight_off,
+            primaryLabel: l10n.lifeEventsSaveAction,
+            onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
+            isPrimaryLoading: isSaving,
+            primaryLeadingIcon: Icons.check,
           ),
         ],
       ),
+    );
+  }
+
+  void _handleSideEffects(
+    final BuildContext context,
+    final AppLocalizations l10n,
+    final LifeEventsState? prev,
+    final LifeEventsState next,
+    final LifeEventsNotifier notifier,
+  ) {
+    // Rule 3.11 — announce feedback to screen readers
+    if (next.status == LifeEventsStatus.saveSuccess) {
+      _showFeedback(
+        context,
+        l10n.lifeEventsSavedFeedback,
+        severity: AppAlertSeverity.success,
+      );
+      context.go(Routes.home);
+    }
+    if (next.status == LifeEventsStatus.saveError) {
+      _showFeedback(
+        context,
+        next.errorMessage ?? l10n.lifeEventsErrorFeedback,
+        severity: AppAlertSeverity.error,
+      );
+    }
+    // Show reset-confirm dialog when the flag flips to true.
+    if (next.showResetConfirm && !(prev?.showResetConfirm ?? false)) {
+      unawaited(
+        showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (final _) => _ResetConfirmDialog(
+            l10n: l10n,
+            onCancel: () {
+              Navigator.of(context).pop();
+              notifier.cancelReset();
+            },
+            onConfirm: () {
+              Navigator.of(context).pop();
+              unawaited(notifier.confirmReset());
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  void _showFeedback(
+    final BuildContext context,
+    final String message, {
+    required final AppAlertSeverity severity,
+  }) {
+    AppAlertSnackbar.show(
+      context,
+      message: message,
+      severity: severity,
     );
   }
 
@@ -121,8 +189,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
   ) {
     final status = lifeState.status;
 
-    if (status == LifeEventsStatus.loading ||
-        status == LifeEventsStatus.initial) {
+    if (status == LifeEventsStatus.loading || status == LifeEventsStatus.initial) {
       return const AppLoadingIndicator();
     }
 
@@ -134,60 +201,45 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     }
 
     if (status == LifeEventsStatus.loadError) {
-      return EmptyStateWidget(
-        icon: Icons.error_outline,
+      return ErrorStateWidget(
         message: l10n.lifeEventsLoadError,
-        action: AppButton(
-          label: 'Reintentar',
-          onPressed: notifier.retry,
-        ),
+        onRetry: notifier.retry,
       );
     }
 
-    // loaded / saving / saveSuccess / saveError / resetting / resetSuccess / resetError
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: AppDimensions.space24),
+      // Figma node 41779:22467 — content area px:16 py:24 (top handled by IntroSection)
+      padding: const EdgeInsets.fromLTRB(
+        AppDimensions.space16,
+        0,
+        AppDimensions.space16,
+        AppDimensions.space24,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Header ─────────────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space24,
-              AppDimensions.space24,
-              AppDimensions.space24,
-              AppDimensions.space8,
+          // Figma node 41779:13486 — white card, border rgba(12,13,13,0.05),
+          // Shadow/Medium, borderRadius 4, padding 16
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.backgroundWhite,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              border: Border.all(
+                color: const Color(0x0D0C0D0D), // rgba(12,13,13,0.05)
+              ),
+              boxShadow: AppShadows.medium,
             ),
-            child: Text(
-              l10n.lifeEventsTitle,
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ...lifeState.events.map(
+                  (final event) => _LifeEventCheckRow(
+                    event: event,
+                    onToggle: () => notifier.toggle(event.id),
+                    isLast: event == lifeState.events.last,
                   ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space24,
-            ),
-            child: Text(
-              l10n.lifeEventsHeaderDescription,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: AppColors.textSecondary),
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space16),
-
-          // ── Events list ────────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-            ),
-            child: _LifeEventsList(
-              events: lifeState.events,
-              onToggle: notifier.toggle,
+                ),
+              ],
             ),
           ),
 
@@ -203,171 +255,108 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
   }
 }
 
-// ── Life events list ───────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// INTRO SECTION — Heading only, Figma node 41779:22621
+// px-content:16 py-content:24  +  inner TextBlocks px:4 py:8
+// ═══════════════════════════════════════════════════════════════════════════════
 
-class _LifeEventsList extends StatelessWidget {
-  const _LifeEventsList({
-    required this.events,
-    required this.onToggle,
-  });
+class _IntroSection extends StatelessWidget {
+  const _IntroSection({required this.l10n});
 
-  final List<LifeEvent> events;
-  final void Function(int id) onToggle;
-
-  static const _selectedBackground = Color(0xFFE8F5E9);
+  final AppLocalizations l10n;
 
   @override
   Widget build(final BuildContext context) {
-    return Card(
-      elevation: AppDimensions.elevationLow,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+    // Figma content area: px:16, pt:24 → TextBlocks adds px:4, py:8
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppDimensions.space16 + AppDimensions.space4, // 20
+        AppDimensions.space24 + AppDimensions.space8, // 32
+        AppDimensions.space16 + AppDimensions.space4, // 20
+        AppDimensions.space8,
       ),
-      clipBehavior: Clip.antiAlias,
-      child: ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: events.length,
-        separatorBuilder: (final _, final unused) => const Divider(
-          height: 1,
-          thickness: 1,
-          color: AppColors.divider,
-        ),
-        itemBuilder: (final context, final index) {
-          final event = events[index];
-          return _LifeEventRow(
-            event: event,
-            selectedBackground: _selectedBackground,
-            onToggle: () => onToggle(event.id),
-          );
-        },
+      child: Text(
+        l10n.lifeEventsIntroHeading,
+        // Figma: H2 SemiBold 24px lineHeight:1.5 color:textBase #0c0d0d
+        style: AppTypography.h2.copyWith(color: AppColors.textBase),
       ),
     );
   }
 }
 
-// ── Single life-event row ──────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// LIFE EVENT CHECK ROW — Figma node BuildingBlocks/SelectOption
+// padding:8, border-bottom rgba(12,13,13,0.08), label color primary,
+// checkbox trailing; selected: bg successLight, border-bottom success
+// ═══════════════════════════════════════════════════════════════════════════════
 
-class _LifeEventRow extends StatelessWidget {
-  const _LifeEventRow({
+class _LifeEventCheckRow extends StatelessWidget {
+  const _LifeEventCheckRow({
     required this.event,
-    required this.selectedBackground,
     required this.onToggle,
+    required this.isLast,
   });
 
   final LifeEvent event;
-  final Color selectedBackground;
   final VoidCallback onToggle;
+
+  /// Last row has no bottom border per Figma.
+  final bool isLast;
 
   @override
   Widget build(final BuildContext context) {
     return Semantics(
       label: event.label,
       checked: event.selected,
-      button: true,
-      child: InkWell(
-        onTap: onToggle,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          color: event.selected ? selectedBackground : Colors.transparent,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.space16,
-            vertical: AppDimensions.space4,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  event.label,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.textPrimary,
+      enabled: true,
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: onToggle,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            decoration: BoxDecoration(
+              color: event.selected
+                  ? AppColors
+                        .successLight // #d7f4e3
+                  : Colors.transparent,
+              border: isLast
+                  ? null
+                  : Border(
+                      bottom: BorderSide(
+                        // selected → success green, unselected → rgba(12,13,13,0.08)
+                        color: event.selected
+                            ? AppColors
+                                  .success // #22a85a
+                            : const Color(0x140C0D0D), // rgba(12,13,13,0.08)
                       ),
-                ),
-              ),
-              Checkbox(
-                value: event.selected,
-                // Full-row tap handles toggling; checkbox is visual-only.
-                onChanged: (_) => onToggle(),
-                activeColor: AppColors.success,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(AppDimensions.radiusSmall),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Sticky bottom action bar ───────────────────────────────────────────────────
-
-class _BottomActionBar extends StatelessWidget {
-  const _BottomActionBar({
-    required this.l10n,
-    required this.isSaving,
-    required this.isDirty,
-    required this.onSave,
-    required this.onReset,
-  });
-
-  final AppLocalizations l10n;
-  final bool isSaving;
-  final bool isDirty;
-  final Future<void> Function()? onSave;
-  final VoidCallback onReset;
-
-  @override
-  Widget build(final BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 8,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.space24,
-            vertical: AppDimensions.space16,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // ── Save button ──────────────────────────────────────────────
-              AppButton(
-                label: l10n.lifeEventsSaveAction,
-                semanticsLabel: l10n.lifeEventsSaveAction,
-                onPressed: onSave == null ? null : () => unawaited(onSave!()),
-                isLoading: isSaving,
-              ),
-              const SizedBox(height: AppDimensions.space12),
-
-              // ── Reset preferences text link ───────────────────────────────
-              Center(
-                child: TextButton(
-                  onPressed: onReset,
-                  child: Text(
-                    l10n.lifeEventsResetAction,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.error,
+                    ),
+            ),
+            padding: const EdgeInsets.all(AppDimensions.space8),
+            child: Row(
+              children: [
+                // Label — flex:1, color primary #002855, body/regular
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppDimensions.space4,
+                    ),
+                    child: Text(
+                      event.label,
+                      style: AppTypography.bodyBase.copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: AppDimensions.space8),
+                // Checkbox icon trailing — 24×24
+                Icon(
+                  event.selected ? Icons.check_box : Icons.check_box_outline_blank,
+                  size: AppDimensions.iconMedium,
+                  color: event.selected ? AppColors.success : AppColors.primary,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -375,7 +364,9 @@ class _BottomActionBar extends StatelessWidget {
   }
 }
 
-// ── Reset confirmation dialog ──────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// RESET CONFIRMATION DIALOG — Rule 3.9: scopesRoute + OrdinalSortKey
+// ═══════════════════════════════════════════════════════════════════════════════
 
 class _ResetConfirmDialog extends StatelessWidget {
   const _ResetConfirmDialog({
@@ -390,23 +381,43 @@ class _ResetConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return AlertDialog(
-      title: Text(l10n.lifeEventsResetConfirmTitle),
-      content: Text(l10n.lifeEventsResetConfirmBody),
-      actions: [
-        TextButton(
-          onPressed: onCancel,
-          child: Text(l10n.lifeEventsResetCancel),
+    // Rule 3.9 — isolate focus within the dialog
+    return Semantics(
+      container: true,
+      scopesRoute: true,
+      namesRoute: true,
+      explicitChildNodes: true,
+      label: l10n.lifeEventsResetConfirmTitle,
+      child: AlertDialog(
+        title: Semantics(
+          header: true,
+          headingLevel: 1,
+          sortKey: const OrdinalSortKey(1),
+          child: Text(l10n.lifeEventsResetConfirmTitle),
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.error,
-            foregroundColor: AppColors.textOnPrimary,
+        content: Semantics(
+          sortKey: const OrdinalSortKey(2),
+          child: Text(l10n.lifeEventsResetConfirmBody),
+        ),
+        actions: [
+          Semantics(
+            sortKey: const OrdinalSortKey(3),
+            child: AppButton(
+              label: l10n.lifeEventsResetCancel,
+              onPressed: onCancel,
+              hierarchy: AppButtonHierarchy.ghost,
+            ),
           ),
-          onPressed: onConfirm,
-          child: Text(l10n.lifeEventsResetConfirm),
-        ),
-      ],
+          Semantics(
+            sortKey: const OrdinalSortKey(4),
+            child: AppButton(
+              label: l10n.lifeEventsResetConfirm,
+              onPressed: onConfirm,
+              intent: AppButtonIntent.destructive,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

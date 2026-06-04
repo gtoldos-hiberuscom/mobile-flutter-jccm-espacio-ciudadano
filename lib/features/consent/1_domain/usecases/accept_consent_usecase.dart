@@ -1,4 +1,5 @@
 // No imports from 2_presentation, 3_data, package:flutter/*, Dio, or Riverpod
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/consent_repository.dart';
 
 sealed class AcceptConsentResult {
@@ -14,16 +15,20 @@ class AcceptConsentFailed extends AcceptConsentResult {
   final String message;
 }
 
-/// Persists the citizen's acceptance of all legal consent clauses.
+/// Persists the citizen's legal-consent choices.
 class AcceptConsentUsecase {
   const AcceptConsentUsecase(this._repository);
   final ConsentRepository _repository;
 
   Future<AcceptConsentResult> execute({
     required final String idAgente,
+    required final List<Clause> clauses,
   }) async {
     try {
-      await _repository.markConsentAccepted(idAgente: idAgente);
+      await _repository.markConsentAccepted(
+        idAgente: idAgente,
+        clauses: clauses,
+      );
       return const AcceptConsentSuccess();
     } catch (e) {
       return AcceptConsentFailed(e.toString());

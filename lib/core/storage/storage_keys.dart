@@ -28,10 +28,13 @@ abstract final class StorageKeys {
 
   /// Prefix for per-user life-events onboarding-seen flag.
   /// Full key = lifeEventsOnboardingSeenPrefix + idAgente
-  static const String lifeEventsOnboardingSeenPrefix =
-      'life_events_onboarding_seen_';
+  static const String lifeEventsOnboardingSeenPrefix = 'life_events_onboarding_seen_';
 
   /// Prefix for per-user legal-consent accepted flag.
   /// Full key = consentAcceptedPrefix + idAgente
   static const String consentAcceptedPrefix = 'consent_accepted_';
+
+  /// Prefix for per-user accepted legal-clause ids.
+  /// Full key = consentAcceptedClausesPrefix + idAgente
+  static const String consentAcceptedClausesPrefix = 'consent_accepted_clauses_';
 }

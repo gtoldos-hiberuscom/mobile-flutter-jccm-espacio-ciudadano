@@ -1,0 +1,19 @@
+{
+	"servers": {
+		"figma": {
+			"command": "npx",
+			"args": [
+				"figma-developer-mcp"
+			],
+			"env": {
+				"FIGMA_ACCESS_TOKEN": "figd_0NB-lELV172zkeTscpw4AxlTpxKrr5CUNkIGsC9C"
+			},
+			"type": "stdio"
+		},
+		"ds_figma": {
+			"url": "http://127.0.0.1:3845/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
