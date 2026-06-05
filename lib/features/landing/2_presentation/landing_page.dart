@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
@@ -73,8 +74,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       }
       if (next.error != null) {
         final errorMsg = l10n.domainGenericLoadError;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMsg)),
+        AppAlertSnackbar.show(
+          context,
+          message: errorMsg,
+          severity: AppAlertSeverity.error,
         );
         ref.read(landingProvider.notifier).clearError();
       }

@@ -146,7 +146,9 @@ class AppList extends StatelessWidget {
   }
 
   List<Widget> _interleaveWithDividers(final List<Widget> items) {
-    if (items.isEmpty) return items;
+    if (items.isEmpty) {
+      return items;
+    }
     final result = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       result.add(items[i]);
@@ -409,7 +411,9 @@ class _AppListExpandableItemState extends State<AppListExpandableItem> with Sing
   }
 
   void _toggle() {
-    if (widget.isDisabled) return;
+    if (widget.isDisabled) {
+      return;
+    }
     setState(() {
       _isExpanded = !_isExpanded;
     });
@@ -439,9 +443,10 @@ class _AppListExpandableItemState extends State<AppListExpandableItem> with Sing
               onTap: _toggle,
               child: Padding(
                 padding: const EdgeInsets.all(AppDimensions.space8),
-                child: SizedBox(
-                  height: 32,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 32),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (widget.leading != null) ...[
                         widget.leading!,
@@ -450,15 +455,19 @@ class _AppListExpandableItemState extends State<AppListExpandableItem> with Sing
                       Expanded(
                         child: Text(
                           widget.title,
+                          softWrap: true,
                           style: AppTypography.bodyBold.copyWith(
                             color: widget.isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
                           ),
                         ),
                       ),
                       const SizedBox(width: AppDimensions.space8),
-                      AppIcon(
-                        _isExpanded ? AppIcons.remove : AppIcons.add,
-                        color: widget.isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+                      Padding(
+                        padding: const EdgeInsets.only(top: AppDimensions.space2),
+                        child: AppIcon(
+                          _isExpanded ? AppIcons.remove : AppIcons.add,
+                          color: widget.isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+                        ),
                       ),
                     ],
                   ),

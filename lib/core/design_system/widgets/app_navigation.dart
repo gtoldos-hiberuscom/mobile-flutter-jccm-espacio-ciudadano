@@ -20,7 +20,9 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.onClose,
     this.actions,
     this.leading,
+    this.titleWidget,
     this.showLeading = true,
+    this.onAvatarTap,
   });
 
   final AppNavBarType type;
@@ -30,16 +32,20 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onClose;
   final List<Widget>? actions;
   final Widget? leading;
+  final Widget? titleWidget;
   final bool showLeading;
+
+  /// Called when the user avatar is tapped (opens the profile drawer).
+  final VoidCallback? onAvatarTap;
 
   @override
   Size get preferredSize => Size.fromHeight(
-    type == AppNavBarType.inicio ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
+    type == AppNavBarType.inicio || type == AppNavBarType.detail ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
   );
 
   Color get _backgroundColor => switch (type) {
-    AppNavBarType.grey => const Color(0xFFE0E5EB),
-    AppNavBarType.detail => const Color(0xFFF1F8F9),
+    AppNavBarType.grey => AppColors.backgroundBlueMutedLight,
+    AppNavBarType.detail => AppColors.backgroundBlueLighter,
     AppNavBarType.level2 => AppColors.statusNeutralLight,
     _ => AppColors.surface,
   };
@@ -92,10 +98,12 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
     if (isLoggedIn) {
       items.add(
-        const Padding(
-          padding: EdgeInsets.only(right: AppDimensions.space16),
-          child: Center(
-            child: AppAvatar(
+        Padding(
+          padding: const EdgeInsets.only(right: AppDimensions.space8),
+          child: IconButton(
+            onPressed: onAvatarTap,
+            tooltip: 'Perfil',
+            icon: const AppAvatar(
               size: AppAvatarSize.small,
               semanticsLabel: 'Perfil',
             ),
@@ -110,6 +118,9 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   Widget? get _titleWidget {
     if (type == AppNavBarType.inicio) {
       return const AppBrandLogo();
+    }
+    if (titleWidget != null) {
+      return titleWidget;
     }
     if (title != null) {
       return Text(
@@ -126,13 +137,15 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       return _InicioNavBar(
         isLoggedIn: isLoggedIn,
         actions: actions,
+        onAvatarTap: onAvatarTap,
       );
     }
 
-    return AppBar(
+    final appBar = AppBar(
       backgroundColor: _backgroundColor,
       foregroundColor: _foregroundColor,
       automaticallyImplyLeading: false,
+      toolbarHeight: type == AppNavBarType.detail ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
       leading: _leadingWidget,
       title: _titleWidget,
       actions: _effectiveActions,
@@ -149,6 +162,20 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
     );
+
+    if (type != AppNavBarType.detail) {
+      return appBar;
+    }
+
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColors.backgroundBlueMutedLight),
+        ),
+        boxShadow: AppShadows.low,
+      ),
+      child: appBar,
+    );
   }
 }
 
@@ -156,10 +183,12 @@ class _InicioNavBar extends StatelessWidget {
   const _InicioNavBar({
     required this.isLoggedIn,
     this.actions,
+    this.onAvatarTap,
   });
 
   final bool isLoggedIn;
   final List<Widget>? actions;
+  final VoidCallback? onAvatarTap;
 
   @override
   Widget build(final BuildContext context) {
@@ -169,13 +198,7 @@ class _InicioNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border.all(color: AppColors.backgroundBlueMutedLight),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1F000000),
-            offset: Offset(0, 1),
-            blurRadius: 1,
-          ),
-        ],
+        boxShadow: AppShadows.low,
       ),
       child: SizedBox(
         height: AppDimensions.appBarHeightInicio + topPadding,
@@ -213,9 +236,15 @@ class _InicioNavBar extends StatelessWidget {
                       tooltip: 'Notificaciones',
                     ),
                     const SizedBox(width: AppDimensions.space16),
-                    const Padding(
-                      padding: EdgeInsets.all(AppDimensions.space4),
-                      child: AppAvatar(
+                    IconButton(
+                      constraints: const BoxConstraints.tightFor(
+                        width: AppDimensions.minTouchTarget,
+                        height: AppDimensions.minTouchTarget,
+                      ),
+                      padding: const EdgeInsets.all(AppDimensions.space8),
+                      onPressed: onAvatarTap,
+                      tooltip: 'Perfil',
+                      icon: const AppAvatar(
                         initials: 'AM',
                         size: AppAvatarSize.small,
                         semanticsLabel: 'Perfil',
@@ -451,25 +480,27 @@ class AppStickyBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (secondaryLabel != null) ...[
+          SizedBox(
+            width: double.infinity,
+            child: AppButton(
+              label: secondaryLabel!,
+              onPressed: onSecondary,
+              hierarchy: secondaryHierarchy,
+              leadingIcon: secondaryLeadingIcon,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.space16),
+        ],
         SizedBox(
           width: double.infinity,
           child: AppButton(
             label: primaryLabel,
             onPressed: onPrimary,
             isLoading: isPrimaryLoading,
+            leadingIcon: primaryLeadingIcon,
           ),
         ),
-        if (secondaryLabel != null) ...[
-          const SizedBox(height: AppDimensions.space8),
-          SizedBox(
-            width: double.infinity,
-            child: AppButton(
-              label: secondaryLabel!,
-              onPressed: onSecondary,
-              hierarchy: AppButtonHierarchy.tertiary,
-            ),
-          ),
-        ],
       ],
     );
   }

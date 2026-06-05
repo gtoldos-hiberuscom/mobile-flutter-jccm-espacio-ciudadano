@@ -13,8 +13,8 @@ abstract interface class ConsentRepository {
     required final List<Clause> clauses,
   });
 
-  /// Returns the ordered list of authorisation clauses the citizen must
-  /// accept. Falls back to a hardcoded static list when remote data is
+  /// Returns the ordered list of optional authorisation clauses presented to
+  /// the citizen. Falls back to a hardcoded static list when remote data is
   /// unavailable.
   Future<List<Clause>> fetchClauses();
 }

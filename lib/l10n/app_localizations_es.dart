@@ -142,7 +142,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get consentPageBody =>
-      'De conformidad con lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), la Junta de Comunidades de Castilla-La Mancha le informa de que los datos personales recabados a través de esta aplicación serán tratados bajo la responsabilidad de la Junta de Comunidades de Castilla-La Mancha, con el fin de prestarle los servicios de administración electrónica incluidos en el Espacio Ciudadano.\n\nDe acuerdo con la Ley 3/2017 de la Junta de Comunidades de Castilla-La Mancha, tiene usted derecho a acceder, rectificar y suprimir sus datos, así como a ejercer los demás derechos reconocidos en la normativa aplicable, mediante escrito dirigido a la Secretaría General de la Junta de Comunidades de Castilla-La Mancha.\n\nPara continuar utilizando la aplicación debe aceptar las presentes condiciones de uso y protección de datos. Si no acepta, la aplicación se cerrará.';
+      'De conformidad con lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), la Junta de Comunidades de Castilla-La Mancha le informa de que los datos personales recabados a través de esta aplicación serán tratados bajo la responsabilidad de la Junta de Comunidades de Castilla-La Mancha, con el fin de prestarle los servicios de administración electrónica incluidos en el Espacio Ciudadano.\n\nDe acuerdo con la Ley 3/2017 de la Junta de Comunidades de Castilla-La Mancha, tiene usted derecho a acceder, rectificar y suprimir sus datos, así como a ejercer los demás derechos reconocidos en la normativa aplicable, mediante escrito dirigido a la Secretaría General de la Junta de Comunidades de Castilla-La Mancha.\n\nPara continuar utilizando la aplicación debe aceptar las presentes condiciones de uso y protección de datos. Si no acepta, se cerrará su sesión y deberá identificarse de nuevo.';
 
   @override
   String get consentPagePrivacyLink => 'Ver política de privacidad completa';
@@ -158,9 +158,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get consentStep1FullTitle => 'Condiciones de uso y autorizaciones';
-
-  @override
-  String get consentMarkAllButton => 'Marcar todo';
 
   @override
   String get consentFinalAcceptButton => 'Aceptar';
@@ -329,6 +326,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get externalLinkInfanciaFamiliasLabel => 'Infancia y familias';
+
+  @override
+  String get externalLinkAepdLabel => 'Agencia Española de Protección de Datos';
 
   @override
   String get helpPageTitle => 'Centro de ayuda';
