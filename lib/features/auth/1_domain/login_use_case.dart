@@ -1,6 +1,4 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 
@@ -25,38 +23,20 @@ final class LoginFailed extends LoginResult {
 // ── Use case ──────────────────────────────────────────────────────────────────
 
 /// Authenticates the citizen via the Cl@ve OIDC flow.
-///
-/// Persists the access token in [SecureStorage] so it is available to the
-/// network auth interceptor for subsequent requests.  The caller is responsible
-/// for updating any in-memory notifiers (e.g. `TokenResponseNotifier`,
-/// `JwtClaimsNotifier`) with the values in [LoginSuccess].
+/// The caller is responsible for registering or persisting the returned
+/// session through the central auth-session controller.
 final class LoginUseCase {
-  const LoginUseCase(this._repository, this._secureStorage);
+  const LoginUseCase(this._repository);
 
   final AuthRepository _repository;
-  final SecureStorage _secureStorage;
 
   Future<LoginResult> call({
     final String? loginHint,
     final List<String> scopes = authDefaultScopes,
   }) async {
     try {
-      final TokenResponse session =
-          await _repository.login(loginHint: loginHint, scopes: scopes);
-      final JwtClaims user =
-          await _repository.fetchUserInfo(accessToken: session.accessToken!);
-
-      await Future.wait([
-        _secureStorage.write(StorageKeys.accessToken, session.accessToken!),
-        if (session.refreshToken != null)
-          _secureStorage.write(
-              StorageKeys.refreshToken, session.refreshToken!),
-        if (session.accessTokenExpirationDateTime != null)
-          _secureStorage.write(
-            StorageKeys.sessionExpiresAt,
-            session.accessTokenExpirationDateTime!.toIso8601String(),
-          ),
-      ]);
+      final TokenResponse session = await _repository.login(loginHint: loginHint, scopes: scopes);
+      final JwtClaims user = await _repository.fetchUserInfo(accessToken: session.accessToken!);
 
       return LoginSuccess(tokenResponse: session, jwtClaims: user);
     } on Object catch (e) {

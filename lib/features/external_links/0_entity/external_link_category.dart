@@ -37,4 +37,7 @@ enum ExternalLinkCategory {
 
   /// Agencia Española de Protección de Datos.
   dataProtection,
+
+  /// Legal and accessibility information referenced from legal screens.
+  legalInformation,
 }

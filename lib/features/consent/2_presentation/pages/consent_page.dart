@@ -15,7 +15,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// until the citizen scrolls to the very bottom of the content.
 ///
 /// **Step 2** — Variable list of optional authorisation checkboxes. "Aceptar"
-/// persists the citizen's chosen combination. "Marcar todo" checks all at once.
+/// persists the citizen's chosen combination.
 /// The `info` icon in the app bar reopens the full legal text without losing
 /// checkbox state.
 ///
@@ -169,9 +169,6 @@ class _Step2Scaffold extends StatelessWidget {
             primaryLabel: l10n.consentFinalAcceptButton,
             primaryLeadingIcon: AppIcons.check,
             onPrimary: !isSaving ? () => unawaited(notifier.accept()) : null,
-            secondaryLabel: l10n.consentMarkAllButton,
-            secondaryLeadingIcon: AppIcons.edit,
-            onSecondary: !state.allClausesSelected && !isSaving ? notifier.markAll : null,
             isPrimaryLoading: isSaving,
           ),
         ],

@@ -1,6 +1,8 @@
 import 'dart:async' show unawaited;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept_consent_usecase.dart';
@@ -49,8 +51,6 @@ final class ConsentState {
   final List<Clause> clauses;
   final String? errorMessage;
 
-  bool get allClausesSelected => clauses.isNotEmpty && clauses.every((final c) => c.isSelected);
-
   ConsentState copyWith({
     final ConsentStatus? status,
     final List<Clause>? clauses,
@@ -66,7 +66,7 @@ final class ConsentState {
 
 /// Owns all business logic for the two-step legal-consent onboarding flow.
 ///
-/// Keyed by [idAgente] so each citizen session gets a fresh notifier state.
+/// Keyed by idAgente so each citizen session gets a fresh notifier state.
 /// This avoids stale terminal states (accepted / rejected) if the user
 /// re-authenticates within the same app session.
 class ConsentNotifier extends Notifier<ConsentState> {
@@ -130,15 +130,6 @@ class ConsentNotifier extends Notifier<ConsentState> {
     state = state.copyWith(status: ConsentStatus.step2, clauses: updated);
   }
 
-  /// Marks all clauses as selected.
-  void markAll() {
-    if (state.status != ConsentStatus.step2 && state.status != ConsentStatus.saveError) {
-      return;
-    }
-    final updated = state.clauses.map((final c) => c.copyWith(isSelected: true)).toList(growable: false);
-    state = state.copyWith(status: ConsentStatus.step2, clauses: updated);
-  }
-
   /// Persists consent choices and signals the page to navigate forward.
   Future<void> accept() async {
     if (state.status == ConsentStatus.saving) {
@@ -151,6 +142,17 @@ class ConsentNotifier extends Notifier<ConsentState> {
     }
     switch (result) {
       case AcceptConsentSuccess():
+        final sessionPersisted = await _persistCurrentSession();
+        if (!ref.mounted) {
+          return;
+        }
+        if (!sessionPersisted) {
+          state = ConsentState(
+            status: ConsentStatus.saveError,
+            clauses: state.clauses,
+          );
+          return;
+        }
         state = state.copyWith(status: ConsentStatus.accepted);
       case AcceptConsentFailed(:final message):
         state = state.copyWith(
@@ -160,10 +162,27 @@ class ConsentNotifier extends Notifier<ConsentState> {
     }
   }
 
-  /// Rejects the consent gate. Clears the in-memory session so the
-  /// SessionGuard will not allow re-entry into authenticated routes.
-  void reject() {
-    ref.read(tokenResponseProvider.notifier).update(null);
+  Future<bool> _persistCurrentSession() async {
+    try {
+      return await ref.read(authSessionControllerProvider).persistCurrentSession();
+    } on Object {
+      return false;
+    }
+  }
+
+  /// Rejects the consent gate. Clears persisted and in-memory session state so
+  /// the SessionGuard will not allow re-entry into authenticated routes. When
+  /// possible it also terminates the federated Cl@ve session so the next access
+  /// asks for credentials again.
+  Future<void> reject() async {
+    try {
+      final idToken = ref.read(tokenResponseProvider)?.idToken ?? '';
+      if (idToken.isNotEmpty) {
+        await ref.read(logoutUseCaseProvider).call(idToken: idToken);
+      }
+    } finally {
+      await ref.read(authSessionControllerProvider).clear();
+    }
     if (!ref.mounted) {
       return;
     }

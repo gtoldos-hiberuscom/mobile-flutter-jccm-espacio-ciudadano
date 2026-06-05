@@ -1,13 +1,9 @@
 import 'dart:async' show unawaited;
 
 import 'package:dio/dio.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
@@ -256,51 +252,11 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
   }
 
   Future<void> _refreshSessionIfNeeded() async {
-    final expiresAt = ref.read(tokenResponseProvider)?.accessTokenExpirationDateTime;
-    if (expiresAt == null || expiresAt.isBefore(DateTime.now().add(const Duration(minutes: 1)))) {
-      await _refreshSession();
-    }
+    await ref.read(authSessionControllerProvider).refreshIfNeeded(threshold: const Duration(minutes: 1));
   }
 
   Future<bool> _refreshSession({final bool force = false}) async {
-    final storage = ref.read(secureStorageProvider);
-    final refreshToken = await storage.read(StorageKeys.refreshToken);
-    if (refreshToken == null || refreshToken.isEmpty) {
-      return false;
-    }
-
-    final currentExpiry = ref.read(tokenResponseProvider)?.accessTokenExpirationDateTime;
-    if (!force && currentExpiry != null && currentExpiry.isAfter(DateTime.now().add(const Duration(minutes: 1)))) {
-      return true;
-    }
-
-    try {
-      final TokenResponse newSession = await ref.read(authRepositoryProvider).refreshToken(refreshToken: refreshToken);
-      await Future.wait([
-        if (newSession.accessToken != null) storage.write(StorageKeys.accessToken, newSession.accessToken!),
-        if (newSession.refreshToken != null) storage.write(StorageKeys.refreshToken, newSession.refreshToken!),
-        if (newSession.accessTokenExpirationDateTime != null)
-          storage.write(
-            StorageKeys.sessionExpiresAt,
-            newSession.accessTokenExpirationDateTime!.toIso8601String(),
-          ),
-      ]);
-      if (!ref.mounted) {
-        return false;
-      }
-      ref.read(tokenResponseProvider.notifier).update(newSession);
-      return true;
-    } on Object {
-      await Future.wait([
-        storage.delete(StorageKeys.accessToken),
-        storage.delete(StorageKeys.refreshToken),
-        storage.delete(StorageKeys.sessionExpiresAt),
-      ]);
-      if (ref.mounted) {
-        ref.read(tokenResponseProvider.notifier).update(null);
-      }
-      return false;
-    }
+    return ref.read(authSessionControllerProvider).refresh(force: force);
   }
 
   bool _isUnauthorized(final Object? cause) {

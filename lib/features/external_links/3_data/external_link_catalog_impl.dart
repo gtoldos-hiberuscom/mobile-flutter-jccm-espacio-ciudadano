@@ -76,6 +76,42 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
       url: Uri.parse('https://www.aepd.es/'),
       category: ExternalLinkCategory.dataProtection,
     ),
+    ExternalLink(
+      id: 'boe_rd_1112_2018',
+      displayKey: 'legalNoticeTitle',
+      url: Uri.parse('https://www.boe.es/buscar/act.php?id=BOE-A-2018-12699'),
+      category: ExternalLinkCategory.legalInformation,
+    ),
+    ExternalLink(
+      id: 'espacio_ciudadano',
+      displayKey: 'legalNoticeTitle',
+      url: Uri.parse('https://espaciociudadano.jccm.es/'),
+      category: ExternalLinkCategory.legalInformation,
+    ),
+    ExternalLink(
+      id: 'accessibility_contact_form',
+      displayKey: 'legalAccessibilityTitle',
+      url: Uri.parse('https://ventanillaelectronica.jccm.es/administracion_electronica/formularios/CONSUL.phtml?SER_ID=IZY&PROC=SIRQ'),
+      category: ExternalLinkCategory.legalInformation,
+    ),
+    ExternalLink(
+      id: 'jccm_offices_oir',
+      displayKey: 'legalAccessibilityTitle',
+      url: Uri.parse('https://www.jccm.es/oficinas-oir'),
+      category: ExternalLinkCategory.legalInformation,
+    ),
+    ExternalLink(
+      id: 'help_guides',
+      displayKey: 'helpPageTitle',
+      url: Uri.parse('https://www.jccm.es/'),
+      category: ExternalLinkCategory.legalInformation,
+    ),
+    ExternalLink(
+      id: 'technical_support',
+      displayKey: 'helpPageTitle',
+      url: Uri.parse('https://espaciociudadano.jccm.es/'),
+      category: ExternalLinkCategory.legalInformation,
+    ),
   ];
 
   @override

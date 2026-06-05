@@ -1,16 +1,15 @@
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 
 /// UI state for the public landing screen login flow.
 final class LandingState {
@@ -63,24 +62,19 @@ class LandingNotifier extends Notifier<LandingState> {
       return;
     }
 
-    final storedRefreshToken = await secureStorage.read(StorageKeys.refreshToken);
-    final storedSessionExpiry = await secureStorage.read(StorageKeys.sessionExpiresAt);
-
-    ref
-        .read(tokenResponseProvider.notifier)
-        .update(
-          TokenResponse(
-            storedAccessToken,
-            storedRefreshToken,
-            storedSessionExpiry != null ? DateTime.tryParse(storedSessionExpiry) : null,
-            null,
-            null,
-            null,
-            null,
-          ),
-        );
-    final jwtClaims = JwtDecoder.decode(storedAccessToken);
-    ref.read(jwtClaimsProvider.notifier).update(jwtClaims.sub.isNotEmpty ? jwtClaims : null);
+    final session = await ref.read(authSessionControllerProvider).hydrateFromStorage();
+    final jwtClaims = ref.read(authSessionControllerProvider).currentClaims;
+    if (session == null || jwtClaims == null) {
+      return;
+    }
+    final consentResult = await ref.read(checkConsentRequiredUsecaseProvider).execute(idAgente: jwtClaims.idAgente ?? '');
+    if (!ref.mounted) {
+      return;
+    }
+    if (consentResult is ConsentRequired) {
+      await ref.read(authSessionControllerProvider).clear();
+      return;
+    }
     ref.invalidate(consentProvider(jwtClaims.idAgente ?? ''));
     state = const LandingState(loginSuccess: true);
   }
@@ -99,10 +93,7 @@ class LandingNotifier extends Notifier<LandingState> {
 
     switch (result) {
       case LoginSuccess(:final tokenResponse, :final jwtClaims):
-        // Persist in-memory session state — this is the caller's responsibility
-        // now that LoginUseCase is decoupled from Riverpod notifiers.
-        ref.read(tokenResponseProvider.notifier).update(tokenResponse);
-        ref.read(jwtClaimsProvider.notifier).update(jwtClaims);
+        ref.read(authSessionControllerProvider).startInMemory(tokenResponse, claims: jwtClaims);
         ref.invalidate(consentProvider(jwtClaims.idAgente ?? ''));
         state = const LandingState(loginSuccess: true);
 

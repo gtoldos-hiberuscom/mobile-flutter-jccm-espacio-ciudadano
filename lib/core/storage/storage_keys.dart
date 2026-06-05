@@ -32,6 +32,9 @@ abstract final class StorageKeys {
   /// Whether the biometric quick-access prompt has already been shown.
   static const String biometricQuickAccessPromptSeen = 'biometric_quick_access_prompt_seen';
 
+  /// Marker written after the app has completed its first boot for this install.
+  static const String installBootstrapped = 'install_bootstrapped';
+
   /// Prefix for per-user life-events onboarding-seen flag.
   /// Full key = lifeEventsOnboardingSeenPrefix + idAgente
   static const String lifeEventsOnboardingSeenPrefix = 'life_events_onboarding_seen_';
