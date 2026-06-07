@@ -6,13 +6,13 @@ import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 
 // ─── Auth interceptor ────────────────────────────────────────────────────────
 
-/// Attaches a Bearer [Authorization] header to every outgoing request.
+/// Attaches a Bearer Authorization header to every outgoing request.
 ///
-/// The token is resolved lazily via [tokenGetter] at request time, so the
+/// The token is resolved lazily via the token getter at request time, so the
 /// interceptor never holds a stale reference and no circular dependency is
-/// introduced between [Dio] construction and the auth state providers.
+/// introduced between Dio construction and the auth state providers.
 ///
-/// If [tokenGetter] returns null or an empty string the request is forwarded
+/// If the token getter returns null or an empty string the request is forwarded
 /// unchanged, letting the server respond with 401.
 final class AuthInterceptor extends Interceptor {
   AuthInterceptor(this._tokenGetter);
@@ -35,6 +35,55 @@ final class AuthInterceptor extends Interceptor {
       }
     }
     handler.next(options);
+  }
+}
+
+final class AuthRefreshInterceptor extends QueuedInterceptor {
+  AuthRefreshInterceptor(
+    this._dio,
+    this._tokenGetter,
+    this._refreshSession,
+  );
+
+  static const _authRetryKey = 'auth_retry';
+
+  final Dio _dio;
+  final String? Function() _tokenGetter;
+  final Future<bool> Function() _refreshSession;
+
+  @override
+  Future<void> onError(
+    final DioException err,
+    final ErrorInterceptorHandler handler,
+  ) async {
+    final response = err.response;
+    if (response?.statusCode != HttpStatus.unauthorized || err.requestOptions.extra[_authRetryKey] == true) {
+      handler.next(err);
+      return;
+    }
+
+    final refreshed = await _refreshSession();
+    final token = _tokenGetter();
+    if (!refreshed || token == null || token.isEmpty) {
+      handler.next(err);
+      return;
+    }
+
+    try {
+      final requestOptions = err.requestOptions;
+      final headers = Map<String, dynamic>.from(requestOptions.headers)..[HttpHeaders.authorizationHeader] = 'Bearer $token';
+      final retryOptions = requestOptions.copyWith(
+        headers: headers,
+        extra: {
+          ...requestOptions.extra,
+          _authRetryKey: true,
+        },
+      );
+      final retryResponse = await _dio.fetch<dynamic>(retryOptions);
+      handler.resolve(retryResponse);
+    } on DioException catch (retryError) {
+      handler.next(retryError);
+    }
   }
 }
 

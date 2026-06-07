@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 Dio buildDioClient({
   required final AppConfig config,
   required final String? Function() tokenGetter,
+  required final Future<bool> Function() refreshSession,
 }) {
   final timeoutDuration = Duration(seconds: config.timeout);
 
@@ -23,6 +24,7 @@ Dio buildDioClient({
   );
 
   dio.interceptors.add(AuthInterceptor(tokenGetter));
+  dio.interceptors.add(AuthRefreshInterceptor(dio, tokenGetter, refreshSession));
   dio.interceptors.add(ErrorInterceptor());
   dio.interceptors.add(EmojiDioLogger());
   dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));

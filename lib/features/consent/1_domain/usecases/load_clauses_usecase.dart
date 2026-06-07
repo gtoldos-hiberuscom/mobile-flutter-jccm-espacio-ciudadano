@@ -16,8 +16,8 @@ class LoadClausesFailed extends LoadClausesResult {
   final String message;
 }
 
-/// Loads the ordered list of legal-authorisation clauses the citizen must
-/// accept during the consent onboarding flow.
+/// Loads the ordered list of optional legal-authorisation clauses presented
+/// during the consent onboarding flow.
 class LoadClausesUsecase {
   const LoadClausesUsecase(this._repository);
   final ConsentRepository _repository;

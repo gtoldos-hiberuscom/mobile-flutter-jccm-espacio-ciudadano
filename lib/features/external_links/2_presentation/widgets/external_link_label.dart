@@ -26,6 +26,8 @@ String resolveExternalLinkLabel(
       return l10n.externalLinkBienestarSocialClmLabel;
     case 'externalLinkInfanciaFamiliasLabel':
       return l10n.externalLinkInfanciaFamiliasLabel;
+    case 'externalLinkAepdLabel':
+      return l10n.externalLinkAepdLabel;
     default:
       return displayKey;
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
@@ -77,11 +78,10 @@ class ExternalLinkButton extends ConsumerWidget {
     }
     if (result is ExternalLinkLaunchFailure) {
       final l10n = AppLocalizations.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.externalLinkOpenFailed),
-          behavior: SnackBarBehavior.floating,
-        ),
+      AppAlertSnackbar.show(
+        context,
+        message: l10n.externalLinkOpenFailed,
+        severity: AppAlertSeverity.error,
       );
     }
   }

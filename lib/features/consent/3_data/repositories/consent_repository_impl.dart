@@ -22,29 +22,26 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     Clause(
       id: 1,
       label:
-          'Cláusula inicial: autorizo el acceso básico a la información '
-          'necesaria para usar Espacio Ciudadano.',
+          'Autorizo la consulta de los hechos administrativos que obren en poder '
+          'de la JCCM en materia de Bienestar social, Empleo, Educación y Salud '
+          'para que se muestren en Espacio ciudadano.',
       isSelected: false,
     ),
     Clause(
       id: 2,
       label:
-          'Cláusula JCCM: autorizo la consulta y tratamiento de información '
-          'gestionada por la Junta de Comunidades de Castilla-La Mancha.',
+          'Autorizo la consulta de los datos que la Otras temas de interés tiene '
+          'sobre mí para que se muestren en Espacio Ciudadano.',
       isSelected: false,
     ),
     Clause(
       id: 3,
       label:
-          'Cláusula AGE: autorizo la consulta de información procedente de '
-          'la Administración General del Estado cuando sea necesaria.',
-      isSelected: false,
-    ),
-    Clause(
-      id: 4,
-      label:
-          'Cláusula recomendaciones: autorizo el uso de mis preferencias y '
-          'hechos vitales para recibir recomendaciones personalizadas.',
+          'Consiento que mis datos sean tratados para recibir recomendaciones '
+          'relativas a trámites mediante la elaboración de un perfil basado '
+          'exclusivamente en los hechos vitales que he marcado. Podrá retirar '
+          'en cualquier momento desmarcando la autorización inicial en el '
+          'apartado de perfil usuario.',
       isSelected: false,
     ),
   ];
