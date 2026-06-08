@@ -3050,5 +3050,17 @@
   "a11yContentLoaded": "Content loaded",
   "@a11yContentLoaded": {
     "description": "Accessibility — announced by screen reader when loading finishes."
+  },
+  "drawerPreferences": "Preferences",
+  "@drawerPreferences": {
+    "description": "Label for the Preferences item in the profile drop menu."
+  },
+  "drawerHelpAndContact": "Help & Contact",
+  "@drawerHelpAndContact": {
+    "description": "Label for the Help and Contact item in the secondary section of the profile menu."
+  },
+  "drawerGoToSedeElectronica": "Go to eGovernment Portal",
+  "@drawerGoToSedeElectronica": {
+    "description": "Action button label in the profile menu linking to Sede Electrónica."
   }
 }

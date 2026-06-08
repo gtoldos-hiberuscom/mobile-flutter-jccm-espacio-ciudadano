@@ -2239,4 +2239,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get a11yContentLoaded => 'Content loaded';
+
+  @override
+  String get drawerPreferences => 'Preferences';
+
+  @override
+  String get drawerHelpAndContact => 'Help & Contact';
+
+  @override
+  String get drawerGoToSedeElectronica => 'Go to eGovernment Portal';
 }

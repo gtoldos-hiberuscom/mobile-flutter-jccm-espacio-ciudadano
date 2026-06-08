@@ -5,7 +5,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/co
 
 /// AppStorage-backed implementation of [ConsentRepository].
 ///
-/// Consent acceptance is persisted per citizen (keyed by [idAgente]) using
+/// Consent acceptance is persisted per citizen (keyed by idAgente) using
 /// SharedPreferences. Clause content is served from a hardcoded static list
 /// that acts as the canonical fallback until a versioned remote catalogue is
 /// introduced in a future ticket.
@@ -62,6 +62,15 @@ final class ConsentRepositoryImpl implements ConsentRepository {
 
     await _storage.write(_acceptedClausesKey(idAgente), acceptedClauseIds);
     await _storage.write(_key(idAgente), true);
+  }
+
+  @override
+  Future<bool> hasAcceptedClause({
+    required final String idAgente,
+    required final int clauseId,
+  }) async {
+    final acceptedClauseIds = _storage.read<List<String>>(_acceptedClausesKey(idAgente)) ?? const [];
+    return acceptedClauseIds.contains(clauseId.toString());
   }
 
   @override

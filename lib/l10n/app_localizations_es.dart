@@ -2240,4 +2240,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get a11yContentLoaded => 'Contenido cargado';
+
+  @override
+  String get drawerPreferences => 'Preferencias';
+
+  @override
+  String get drawerHelpAndContact => 'Ayuda y Contacto';
+
+  @override
+  String get drawerGoToSedeElectronica => 'Ir a Sede Electrónica';
 }

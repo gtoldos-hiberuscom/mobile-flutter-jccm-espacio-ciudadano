@@ -13,9 +13,24 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/au
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+
+final _biometricQuickAccessPromptShownInSessionProvider = NotifierProvider<_BiometricQuickAccessPromptSessionNotifier, bool>(
+  _BiometricQuickAccessPromptSessionNotifier.new,
+);
+
+class _BiometricQuickAccessPromptSessionNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void markShown() => state = true;
+}
 
 /// Authenticated home screen — Figma node 43716:13302 "Inicio".
 ///
@@ -51,17 +66,25 @@ class _HomePageState extends ConsumerState<HomePage> {
       _biometricDialogShown = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          unawaited(_showBiometricDialog());
+          unawaited(_handleInitialPrompts());
         }
       });
     }
   }
 
+  Future<void> _handleInitialPrompts() async {
+    await _showBiometricDialog();
+    if (!mounted) {
+      return;
+    }
+    await _redirectToLifeEventsOnboardingIfNeeded();
+  }
+
   Future<void> _showBiometricDialog() async {
     final appStorage = ref.read(appStorageProvider);
-    final promptSeen = appStorage.read<bool>(StorageKeys.biometricQuickAccessPromptSeen) ?? false;
     final enabled = appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false;
-    if (promptSeen || enabled) {
+    final promptShownInSession = ref.read(_biometricQuickAccessPromptShownInSessionProvider);
+    if (enabled || promptShownInSession) {
       return;
     }
 
@@ -69,10 +92,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (!mounted || !hasBiometrics) {
       return;
     }
+    ref.read(_biometricQuickAccessPromptShownInSessionProvider.notifier).markShown();
 
     final accepted = await AppBiometricAccessDialog.show(context);
-
-    await appStorage.write(StorageKeys.biometricQuickAccessPromptSeen, true);
 
     if (!mounted) {
       return;
@@ -94,6 +116,44 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  Future<void> _redirectToLifeEventsOnboardingIfNeeded() async {
+    final idAgente = ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    if (idAgente.isEmpty) {
+      return;
+    }
+    final hasAcceptedLifeEventsClause = await _hasAcceptedLifeEventsClause(idAgente);
+    if (!mounted || !hasAcceptedLifeEventsClause) {
+      return;
+    }
+
+    final result = await ref.read(checkLifeEventsOnboardingUsecaseProvider).execute(idAgente: idAgente);
+    if (!mounted) {
+      return;
+    }
+
+    switch (result) {
+      case CheckLifeEventsOnboardingFailed():
+        context.go(Routes.lifeEventsOnboarding);
+      case CheckLifeEventsOnboardingSuccess(:final hasSeen):
+        if (!hasSeen) {
+          context.go(Routes.lifeEventsOnboarding);
+        }
+    }
+  }
+
+  Future<bool> _hasAcceptedLifeEventsClause(final String idAgente) async {
+    final result = await ref
+        .read(checkAcceptedConsentClauseUsecaseProvider)
+        .execute(
+          idAgente: idAgente,
+          clauseId: 3,
+        );
+    return switch (result) {
+      AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
+      CheckAcceptedConsentClauseFailed() => false,
+    };
+  }
+
   void _showProfileMenu() {
     final claims = ref.read(jwtClaimsProvider);
     final l10n = AppLocalizations.of(context);
@@ -104,21 +164,23 @@ class _HomePageState extends ConsumerState<HomePage> {
       nif: claims?.personIdentifier ?? claims?.idAgente ?? '-',
       primaryItems: [
         AppDrawerMenuItem(
-          label: l10n.userMenuProfile,
+          label: l10n.drawerPreferences,
           icon: Icons.settings_outlined,
         ),
         AppDrawerMenuItem(
           label: l10n.digitalCardsPageTitle,
-          icon: Icons.person_outline_rounded,
+          icon: Icons.badge_outlined,
         ),
       ],
       secondaryLinks: [
         AppDrawerLinkItem(
-          label: l10n.footerHelp,
+          label: l10n.drawerHelpAndContact,
+          icon: Icons.help_outline_rounded,
           onTap: () => _closeMenuAndGo(Routes.helpContact),
         ),
         AppDrawerLinkItem(
           label: l10n.legalAccessibilityTitle,
+          icon: Icons.accessibility_new_rounded,
           onTap: () => _closeMenuAndGo(Routes.legalAccessibility),
         ),
         AppDrawerLinkItem(
@@ -126,8 +188,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           onTap: () => _closeMenuAndGo(Routes.legalNotice),
         ),
         AppDrawerLinkItem(
-          label: l10n.footerPrivacy,
-          onTap: () => _closeMenuAndGo('${Routes.legalPrivacy}?from=home'),
+          label: l10n.legalPrivacyTitle,
+          onTap: () => _closeMenuAndGo(Routes.legalPrivacy),
         ),
       ],
       onLogout: _logout,

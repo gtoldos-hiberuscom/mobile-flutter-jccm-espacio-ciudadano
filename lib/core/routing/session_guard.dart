@@ -1,8 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
@@ -88,8 +91,15 @@ final class SessionGuard {
     if (path == Routes.lifeEvents) {
       return null;
     }
+    if (_shouldDeferLifeEventsOnboardingForBiometricPrompt(path)) {
+      return null;
+    }
     final String idAgente = _ref.read(jwtClaimsProvider)?.idAgente ?? '';
     if (idAgente.isEmpty) {
+      return null;
+    }
+    final hasAcceptedLifeEventsClause = await _hasAcceptedLifeEventsClause(idAgente);
+    if (!hasAcceptedLifeEventsClause) {
       return null;
     }
     final result = await _ref.read(checkLifeEventsOnboardingUsecaseProvider).execute(idAgente: idAgente);
@@ -102,5 +112,27 @@ final class SessionGuard {
         }
         return null;
     }
+  }
+
+  Future<bool> _hasAcceptedLifeEventsClause(final String idAgente) async {
+    final result = await _ref
+        .read(checkAcceptedConsentClauseUsecaseProvider)
+        .execute(
+          idAgente: idAgente,
+          clauseId: 3,
+        );
+    return switch (result) {
+      AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
+      CheckAcceptedConsentClauseFailed() => false,
+    };
+  }
+
+  bool _shouldDeferLifeEventsOnboardingForBiometricPrompt(final String path) {
+    if (path != Routes.home) {
+      return false;
+    }
+    final appStorage = _ref.read(appStorageProvider);
+    final enabled = appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false;
+    return !enabled;
   }
 }

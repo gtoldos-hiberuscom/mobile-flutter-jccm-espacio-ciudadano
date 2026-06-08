@@ -22,6 +22,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<AuthorizationTokenResponse> login({
     final List<String> scopes = const ['openid'],
     final String? loginHint,
+    final bool forceLogin = false,
   }) async {
     try {
       return await _appAuth.authorizeAndExchangeCode(
@@ -31,6 +32,7 @@ final class AuthRepositoryImpl implements AuthRepository {
           discoveryUrl: _discoveryUrl,
           loginHint: loginHint,
           scopes: scopes,
+          additionalParameters: forceLogin ? const {'prompt': 'login'} : null,
         ),
       );
     } on FlutterAppAuthUserCancelledException catch (error, stackTrace) {

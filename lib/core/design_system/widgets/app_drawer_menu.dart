@@ -22,10 +22,14 @@ class AppDrawerMenuItem {
 class AppDrawerLinkItem {
   const AppDrawerLinkItem({
     required this.label,
+    this.icon,
     this.onTap,
   });
 
   final String label;
+
+  /// Optional leading icon. When `null` the tile falls back to [Icons.arrow_forward_rounded].
+  final IconData? icon;
   final VoidCallback? onTap;
 }
 
@@ -380,12 +384,14 @@ class _DrawerSecondaryTile extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const Icon(
-                  Icons.arrow_forward_rounded,
-                  color: AppColors.neutral000,
-                  size: AppDimensions.iconMedium,
-                ),
-                const SizedBox(width: AppDimensions.space16),
+                if (link.icon != null) ...[
+                  Icon(
+                    link.icon,
+                    color: AppColors.neutral000,
+                    size: AppDimensions.iconMedium,
+                  ),
+                  const SizedBox(width: AppDimensions.space16),
+                ],
                 Expanded(
                   child: Text(
                     link.label,

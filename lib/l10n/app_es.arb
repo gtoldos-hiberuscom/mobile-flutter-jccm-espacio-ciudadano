@@ -3046,5 +3046,17 @@
   "a11yContentLoaded": "Contenido cargado",
   "@a11yContentLoaded": {
     "description": "Accessibility — announced by screen reader when loading finishes."
+  },
+  "drawerPreferences": "Preferencias",
+  "@drawerPreferences": {
+    "description": "Etiqueta del ítem de Preferencias en el menú desplegable del perfil."
+  },
+  "drawerHelpAndContact": "Ayuda y Contacto",
+  "@drawerHelpAndContact": {
+    "description": "Etiqueta del ítem de Ayuda y Contacto en la sección secundaria del menú de perfil."
+  },
+  "drawerGoToSedeElectronica": "Ir a Sede Electrónica",
+  "@drawerGoToSedeElectronica": {
+    "description": "Botón de acción del menú de perfil que enlaza con la Sede Electrónica."
   }
 }

@@ -13,6 +13,12 @@ abstract interface class ConsentRepository {
     required final List<Clause> clauses,
   });
 
+  /// Returns `true` when the citizen accepted the optional clause [clauseId].
+  Future<bool> hasAcceptedClause({
+    required final String idAgente,
+    required final int clauseId,
+  });
+
   /// Returns the ordered list of optional authorisation clauses presented to
   /// the citizen. Falls back to a hardcoded static list when remote data is
   /// unavailable.

@@ -33,9 +33,14 @@ final class LoginUseCase {
   Future<LoginResult> call({
     final String? loginHint,
     final List<String> scopes = authDefaultScopes,
+    final bool forceLogin = false,
   }) async {
     try {
-      final TokenResponse session = await _repository.login(loginHint: loginHint, scopes: scopes);
+      final TokenResponse session = await _repository.login(
+        loginHint: loginHint,
+        scopes: scopes,
+        forceLogin: forceLogin,
+      );
       final JwtClaims user = await _repository.fetchUserInfo(accessToken: session.accessToken!);
 
       return LoginSuccess(tokenResponse: session, jwtClaims: user);

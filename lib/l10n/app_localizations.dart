@@ -4345,6 +4345,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Contenido cargado'**
   String get a11yContentLoaded;
+
+  /// Etiqueta del ítem de Preferencias en el menú desplegable del perfil.
+  ///
+  /// In es, this message translates to:
+  /// **'Preferencias'**
+  String get drawerPreferences;
+
+  /// Etiqueta del ítem de Ayuda y Contacto en la sección secundaria del menú de perfil.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda y Contacto'**
+  String get drawerHelpAndContact;
+
+  /// Botón de acción del menú de perfil que enlaza con la Sede Electrónica.
+  ///
+  /// In es, this message translates to:
+  /// **'Ir a Sede Electrónica'**
+  String get drawerGoToSedeElectronica;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
