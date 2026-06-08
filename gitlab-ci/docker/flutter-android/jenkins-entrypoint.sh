@@ -17,7 +17,7 @@ if [[ -d "${JENKINS_REF}" ]]; then
     relative_path="${ref_file#${JENKINS_REF}/}"
     target_file="${JENKINS_HOME}/${relative_path}"
 
-    if [[ "${relative_path}" == init.groovy.d/* ]]; then
+    if [[ "${relative_path}" == init.groovy.d/* || "${relative_path}" == jobs/flutter-repo-job/config.xml ]]; then
       mkdir -p "$(dirname "${target_file}")"
       cp -af "${ref_file}" "${target_file}"
     elif [[ ! -e "${target_file}" ]]; then
