@@ -39,6 +39,8 @@ abstract final class Routes {
   /// Authenticated home — main screen with bottom navigation.
   static const String home = '/home';
 
+  static const String agenda = '/agenda';
+
   static const String lifeEvents = '/preferences/life-events';
   static const String lifeEventsOnboarding = '$lifeEvents?mode=onboarding';
 
@@ -48,6 +50,7 @@ abstract final class Routes {
   static const Set<String> _authenticated = {
     consent,
     helpContact,
+    agenda,
     home,
     legalAccessibility,
     legalNotice,

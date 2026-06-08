@@ -40,7 +40,11 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-    type == AppNavBarType.inicio || type == AppNavBarType.detail ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
+    switch (type) {
+      AppNavBarType.inicio || AppNavBarType.detail => AppDimensions.appBarHeightInicio,
+      AppNavBarType.main => AppDimensions.appBarHeight + 2,
+      _ => AppDimensions.appBarHeight,
+    },
   );
 
   Color get _backgroundColor => switch (type) {
@@ -86,9 +90,13 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   List<Widget>? get _effectiveActions {
     final items = <Widget>[...?actions];
 
-    if (isLoggedIn && type == AppNavBarType.inicio) {
+    if (isLoggedIn && type != AppNavBarType.inicio) {
       items.add(
         IconButton(
+          constraints: const BoxConstraints.tightFor(
+            width: AppDimensions.minTouchTarget,
+            height: AppDimensions.minTouchTarget,
+          ),
           icon: const AppSvgIcon(AppIconAssets.notifications, color: AppColors.textPrimary),
           onPressed: () {},
           tooltip: 'Notificaciones',
@@ -104,6 +112,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: onAvatarTap,
             tooltip: 'Perfil',
             icon: const AppAvatar(
+              initials: 'AM',
               size: AppAvatarSize.small,
               semanticsLabel: 'Perfil',
             ),
@@ -145,7 +154,12 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: _backgroundColor,
       foregroundColor: _foregroundColor,
       automaticallyImplyLeading: false,
-      toolbarHeight: type == AppNavBarType.detail ? AppDimensions.appBarHeightInicio : AppDimensions.appBarHeight,
+      toolbarHeight: switch (type) {
+        AppNavBarType.detail => AppDimensions.appBarHeightInicio,
+        AppNavBarType.main => AppDimensions.appBarHeight + 2,
+        _ => AppDimensions.appBarHeight,
+      },
+      titleSpacing: showLeading ? null : AppDimensions.space16,
       leading: _leadingWidget,
       title: _titleWidget,
       actions: _effectiveActions,
@@ -162,6 +176,21 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
     );
+
+    if (type == AppNavBarType.level2) {
+      return appBar;
+    }
+
+    if (type == AppNavBarType.main) {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.backgroundBlueMutedLight),
+          boxShadow: AppShadows.low,
+        ),
+        child: appBar,
+      );
+    }
 
     if (type != AppNavBarType.detail) {
       return appBar;
@@ -619,10 +648,10 @@ class AppNavCard extends StatelessWidget {
 
 /// A pill-shaped horizontal tab selector that floats above content.
 ///
-/// Figma node 165:6170 — "FloatingNavigation" component.
-/// - Container: white bg, `neutral200` border, `radiusLarge` corners, `space8` padding/gap.
-/// - Selected tab: `backgroundLightBlue` bg, `secondary` border, `radiusRound` pill.
-/// - Active tab: white bg, `neutral200` border, `Shadow/Medium`, `radiusRound` pill.
+/// Figma node 43716:12912 — "FloatingNavigation" component.
+/// - Container: bluemuted-light bg, bluemuted border, `radiusLarge`, `space8` padding/gap.
+/// - Selected tab: blue-lighter bg, primary border, low shadow, round pill.
+/// - Unselected tab: white bg, bluemuted border, medium shadow, round pill.
 class AppFloatingNavigation extends StatelessWidget {
   const AppFloatingNavigation({
     required this.tabs,
@@ -640,20 +669,23 @@ class AppFloatingNavigation extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.space8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.backgroundBlueMutedLight,
         borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        border: Border.all(color: AppColors.neutral200),
+        border: Border.all(color: AppColors.borderBlueMutedLight),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         spacing: AppDimensions.space8,
         children: List.generate(tabs.length, (final int index) {
           final bool isSelected = index == selectedIndex;
-          return _FloatingNavTab(
+          final tab = _FloatingNavTab(
             label: tabs[index],
             isSelected: isSelected,
             onTap: () => onTabSelected(index),
           );
+          if (isSelected) {
+            return tab;
+          }
+          return Expanded(child: tab);
         }),
       ),
     );
@@ -830,21 +862,28 @@ class _FloatingNavTab extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
+        height: 40,
+        constraints: const BoxConstraints(minWidth: AppDimensions.minTouchTarget),
         padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
+          horizontal: AppDimensions.space8,
           vertical: AppDimensions.space8,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.backgroundLightBlue : AppColors.surface,
+          color: isSelected ? AppColors.backgroundBlueLighter : AppColors.surface,
           borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
           border: Border.all(
-            color: isSelected ? AppColors.secondary : AppColors.neutral200,
+            color: isSelected ? AppColors.primary : AppColors.borderBlueMutedLight,
           ),
-          boxShadow: isSelected ? const <BoxShadow>[] : AppShadows.medium,
+          boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
         ),
-        child: Text(
-          label,
-          style: isSelected ? AppTypography.smallBold.copyWith(color: AppColors.secondary) : AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+        child: Center(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.bodyRegular.copyWith(color: AppColors.textBlack),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );

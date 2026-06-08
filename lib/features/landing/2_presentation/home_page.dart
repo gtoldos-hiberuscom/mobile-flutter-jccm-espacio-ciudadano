@@ -8,18 +8,12 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
-import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 final _biometricQuickAccessPromptShownInSessionProvider = NotifierProvider<_BiometricQuickAccessPromptSessionNotifier, bool>(
   _BiometricQuickAccessPromptSessionNotifier.new,
@@ -154,112 +148,25 @@ class _HomePageState extends ConsumerState<HomePage> {
     };
   }
 
-  void _showProfileMenu() {
-    final claims = ref.read(jwtClaimsProvider);
-    final l10n = AppLocalizations.of(context);
-
-    showAppDrawerMenu(
-      context: context,
-      userName: _userName(claims),
-      nif: claims?.personIdentifier ?? claims?.idAgente ?? '-',
-      primaryItems: [
-        AppDrawerMenuItem(
-          label: l10n.drawerPreferences,
-          icon: Icons.settings_outlined,
-        ),
-        AppDrawerMenuItem(
-          label: l10n.digitalCardsPageTitle,
-          icon: Icons.badge_outlined,
-        ),
-      ],
-      secondaryLinks: [
-        AppDrawerLinkItem(
-          label: l10n.drawerHelpAndContact,
-          icon: Icons.help_outline_rounded,
-          onTap: () => _closeMenuAndGo(Routes.helpContact),
-        ),
-        AppDrawerLinkItem(
-          label: l10n.legalAccessibilityTitle,
-          icon: Icons.accessibility_new_rounded,
-          onTap: () => _closeMenuAndGo(Routes.legalAccessibility),
-        ),
-        AppDrawerLinkItem(
-          label: l10n.legalNoticeTitle,
-          onTap: () => _closeMenuAndGo(Routes.legalNotice),
-        ),
-        AppDrawerLinkItem(
-          label: l10n.legalPrivacyTitle,
-          onTap: () => _closeMenuAndGo(Routes.legalPrivacy),
-        ),
-      ],
-      onLogout: _logout,
-      actionButtonLabel: 'Ir a Sede Electrónica',
-      onActionButton: _openElectronicOffice,
-    );
-  }
-
-  Future<void> _openElectronicOffice() async {
-    final catalog = ref.read(externalLinkCatalogProvider);
-    final link = catalog.findById('sede_dgt');
-    if (link == null) {
-      return;
-    }
-
-    final result = await ref.read(externalLinkLauncherProvider).launch(link);
-    if (!mounted || result is! ExternalLinkLaunchFailure) {
-      return;
-    }
-
-    AppAlertSnackbar.show(
-      context,
-      message: AppLocalizations.of(context).externalLinkOpenFailed,
-      severity: AppAlertSeverity.error,
-    );
-  }
-
-  Future<void> _logout() async {
-    // Close drawer first.
-    if (mounted) {
-      Navigator.of(context, rootNavigator: true).pop();
-    }
-
-    final session = ref.read(tokenResponseProvider);
-    final idToken = session?.idToken ?? '';
-
-    // Best-effort end-session at the Cl@ve IdP.
-    if (idToken.isNotEmpty) {
-      await ref.read(logoutUseCaseProvider).call(idToken: idToken);
-    }
-
-    await ref.read(authSessionControllerProvider).clear();
-
-    if (mounted) {
-      context.go(Routes.landing);
-    }
-  }
-
-  String _userName(final JwtClaims? claims) {
-    return claims?.name ?? claims?.givenName ?? claims?.preferredUsername ?? 'Ciudadano/a';
-  }
-
-  void _closeMenuAndGo(final String route) {
-    Navigator.of(context, rootNavigator: true).pop();
-    context.go(route);
-  }
-
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
       appBar: AppNavBar(
         type: AppNavBarType.inicio,
         isLoggedIn: true,
-        onAvatarTap: _showProfileMenu,
+        onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
       ),
       body: const _HomeDashboard(),
       bottomNavigationBar: AppBottomTabBar(
         items: _tabs,
         currentIndex: _currentTabIndex,
-        onTap: (final int index) => setState(() => _currentTabIndex = index),
+        onTap: (final int index) {
+          if (index == 3) {
+            context.go(Routes.agenda);
+            return;
+          }
+          setState(() => _currentTabIndex = index);
+        },
       ),
       floatingActionButton: AppFab(
         iconAsset: AppIconAssets.license,
