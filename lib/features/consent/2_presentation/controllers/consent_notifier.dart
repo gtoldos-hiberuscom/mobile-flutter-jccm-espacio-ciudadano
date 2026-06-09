@@ -8,6 +8,9 @@ import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept_consent_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/load_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 
 // ── Status ────────────────────────────────────────────────────────────────────
 
@@ -72,6 +75,8 @@ final class ConsentState {
 class ConsentNotifier extends Notifier<ConsentState> {
   ConsentNotifier(this._idAgente);
   final String _idAgente;
+  bool _isPreferencesEditing = false;
+  Set<int> _initialSelectedClauseIds = const {};
 
   @override
   ConsentState build() {
@@ -84,6 +89,9 @@ class ConsentNotifier extends Notifier<ConsentState> {
   Future<void> _loadClauses() async {
     final result = await ref.read(loadClausesUsecaseProvider).execute();
     if (!ref.mounted) {
+      return;
+    }
+    if (_isPreferencesEditing) {
       return;
     }
     switch (result) {
@@ -131,27 +139,44 @@ class ConsentNotifier extends Notifier<ConsentState> {
   }
 
   /// Persists consent choices and signals the page to navigate forward.
-  Future<void> accept() async {
+  Future<void> accept({
+    final bool persistSession = true,
+  }) async {
     if (state.status == ConsentStatus.saving) {
       return;
     }
+    final clausesToPersist = state.clauses;
     state = state.copyWith(status: ConsentStatus.saving);
-    final result = await ref.read(acceptConsentUsecaseProvider).execute(idAgente: _idAgente, clauses: state.clauses);
+    final result = await ref.read(acceptConsentUsecaseProvider).execute(idAgente: _idAgente, clauses: clausesToPersist);
     if (!ref.mounted) {
       return;
     }
     switch (result) {
       case AcceptConsentSuccess():
-        final sessionPersisted = await _persistCurrentSession();
+        final resetError = await _resetLifeEventsIfClauseWasDisabled(clausesToPersist);
         if (!ref.mounted) {
           return;
         }
-        if (!sessionPersisted) {
+        if (resetError != null) {
           state = ConsentState(
             status: ConsentStatus.saveError,
-            clauses: state.clauses,
+            clauses: clausesToPersist,
+            errorMessage: resetError,
           );
           return;
+        }
+        if (persistSession) {
+          final sessionPersisted = await _persistCurrentSession();
+          if (!ref.mounted) {
+            return;
+          }
+          if (!sessionPersisted) {
+            state = ConsentState(
+              status: ConsentStatus.saveError,
+              clauses: clausesToPersist,
+            );
+            return;
+          }
         }
         state = state.copyWith(status: ConsentStatus.accepted);
       case AcceptConsentFailed(:final message):
@@ -167,6 +192,40 @@ class ConsentNotifier extends Notifier<ConsentState> {
       return await ref.read(authSessionControllerProvider).persistCurrentSession();
     } on Object {
       return false;
+    }
+  }
+
+  Future<String?> _resetLifeEventsIfClauseWasDisabled(final List<Clause> clauses) async {
+    if (!_isPreferencesEditing || !_initialSelectedClauseIds.contains(3)) {
+      return null;
+    }
+    final lifeEventsClauseStillSelected = clauses.any((final clause) => clause.id == 3 && clause.isSelected);
+    if (lifeEventsClauseStillSelected) {
+      return null;
+    }
+
+    final loadResult = await ref.read(loadLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
+    if (!ref.mounted) {
+      return null;
+    }
+    switch (loadResult) {
+      case LoadLifeEventsSuccess(:final events):
+        if (events.isEmpty || !events.any((final event) => event.selected)) {
+          return null;
+        }
+        final clearedEvents = events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
+        final saveResult = await ref
+            .read(saveLifeEventsUsecaseProvider)
+            .execute(
+              idAgente: _idAgente,
+              events: clearedEvents,
+            );
+        return switch (saveResult) {
+          SaveLifeEventsSuccess() => null,
+          SaveLifeEventsFailed(:final message) => message,
+        };
+      case LoadLifeEventsFailed(:final message):
+        return message;
     }
   }
 
@@ -187,6 +246,35 @@ class ConsentNotifier extends Notifier<ConsentState> {
       return;
     }
     state = state.copyWith(status: ConsentStatus.rejected);
+  }
+
+  /// Opens the authorisation list as an editable preference surface.
+  ///
+  /// This bypasses the legal-text gate because the citizen has already
+  /// accepted the global consent flow; it only edits optional clauses.
+  Future<void> enterPreferencesEditing() async {
+    if (state.status == ConsentStatus.step2 || state.status == ConsentStatus.saving) {
+      return;
+    }
+    _isPreferencesEditing = true;
+    state = const ConsentState();
+    final result = await ref.read(loadClausesUsecaseProvider).execute(idAgente: _idAgente);
+    if (!ref.mounted) {
+      return;
+    }
+    switch (result) {
+      case LoadClausesSuccess(:final clauses):
+        _initialSelectedClauseIds = clauses.where((final clause) => clause.isSelected).map((final clause) => clause.id).toSet();
+        state = ConsentState(
+          status: ConsentStatus.step2,
+          clauses: clauses,
+        );
+      case LoadClausesFailed(:final message):
+        state = ConsentState(
+          status: ConsentStatus.saveError,
+          errorMessage: message,
+        );
+    }
   }
 }
 

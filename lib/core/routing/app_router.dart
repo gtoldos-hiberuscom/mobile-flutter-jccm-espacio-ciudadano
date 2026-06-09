@@ -18,6 +18,8 @@ import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/accessibili
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_notice_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/privacy_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
+import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/notification_contact_page.dart';
+import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/preferences_page.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendations_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -62,6 +64,8 @@ final goRouterProvider = Provider<GoRouter>(
           path: Routes.consent,
           builder: (final BuildContext context, final GoRouterState state) => ConsentPage(
             isOnboarding: state.uri.queryParameters['mode'] == 'onboarding',
+            isPreferencesEditing: state.uri.queryParameters['mode'] == 'preferences',
+            returnTo: Routes.isKnownRoute(state.uri.queryParameters['returnTo']) ? state.uri.queryParameters['returnTo']! : Routes.home,
           ),
         ),
 
@@ -112,6 +116,16 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.recommendations,
           builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPage(),
+        ),
+
+        GoRoute(
+          path: Routes.preferences,
+          builder: (final BuildContext context, final GoRouterState state) => const PreferencesPage(),
+        ),
+
+        GoRoute(
+          path: Routes.notificationContact,
+          builder: (final BuildContext context, final GoRouterState state) => const NotificationContactPage(),
         ),
 
         // ── Personalization — Mis hechos vitales (STORY-54 / JCCMEC-53) ──────

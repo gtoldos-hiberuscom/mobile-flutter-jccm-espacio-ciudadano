@@ -19,7 +19,7 @@ final class RecommendationsState {
   bool get hasConfiguredLifeEvents => selectedLifeEvents.isNotEmpty;
 }
 
-final recommendationsProvider = FutureProvider<RecommendationsState>((final ref) async {
+final recommendationsProvider = FutureProvider.autoDispose<RecommendationsState>((final ref) async {
   final idAgente = ref.watch(jwtClaimsProvider)?.idAgente;
   if (idAgente == null || idAgente.trim().isEmpty) {
     throw StateError('No se ha encontrado el identificador del usuario.');
@@ -35,7 +35,7 @@ final recommendationsProvider = FutureProvider<RecommendationsState>((final ref)
   final selectedLabels = selected.map((final event) => event.label.trim()).where((final label) => label.isNotEmpty).toList(growable: false);
   final selectedIds = selected.map((final event) => event.id).toList(growable: false);
   final recommendations = await ref
-      .read(recommendationsRepositoryProvider)
+      .watch(recommendationsRepositoryProvider)
       .loadRecommendations(
         idAgente: idAgente.trim(),
         lifeEventIds: selectedIds,

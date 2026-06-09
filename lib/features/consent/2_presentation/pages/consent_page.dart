@@ -25,9 +25,13 @@ class ConsentPage extends ConsumerWidget {
   const ConsentPage({
     super.key,
     this.isOnboarding = false,
+    this.isPreferencesEditing = false,
+    this.returnTo = Routes.home,
   });
 
   final bool isOnboarding;
+  final bool isPreferencesEditing;
+  final String returnTo;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -45,7 +49,7 @@ class ConsentPage extends ConsumerWidget {
         }
         switch (next.status) {
           case ConsentStatus.accepted:
-            context.go(Routes.home);
+            context.go(isPreferencesEditing ? returnTo : Routes.home);
           case ConsentStatus.rejected:
             context.go(Routes.landing);
           case ConsentStatus.saveError:
@@ -66,6 +70,19 @@ class ConsentPage extends ConsumerWidget {
 
     final isBeforeClauses = state.status == ConsentStatus.loading || state.status == ConsentStatus.step1Locked || state.status == ConsentStatus.step1Unlocked;
 
+    final shouldLoadPreferencesClauses = isPreferencesEditing && state.status != ConsentStatus.step2 && state.status != ConsentStatus.saving && state.status != ConsentStatus.saveError;
+
+    if (shouldLoadPreferencesClauses) {
+      WidgetsBinding.instance.addPostFrameCallback((final _) {
+        if (context.mounted) {
+          unawaited(notifier.enterPreferencesEditing());
+        }
+      });
+      return const Scaffold(
+        body: SafeArea(child: AppLoadingIndicator()),
+      );
+    }
+
     if (isBeforeClauses) {
       WidgetsBinding.instance.addPostFrameCallback((final _) {
         if (context.mounted) {
@@ -82,6 +99,8 @@ class ConsentPage extends ConsumerWidget {
       state: state,
       notifier: notifier,
       isOnboarding: isOnboarding,
+      isPreferencesEditing: isPreferencesEditing,
+      returnTo: returnTo,
       onShowLegalInfo: () => context.push(Routes.legalPrivacy),
     );
   }
@@ -95,6 +114,8 @@ class _Step2Scaffold extends StatelessWidget {
     required this.state,
     required this.notifier,
     required this.isOnboarding,
+    required this.isPreferencesEditing,
+    required this.returnTo,
     required this.onShowLegalInfo,
   });
 
@@ -102,6 +123,8 @@ class _Step2Scaffold extends StatelessWidget {
   final ConsentState state;
   final ConsentNotifier notifier;
   final bool isOnboarding;
+  final bool isPreferencesEditing;
+  final String returnTo;
   final VoidCallback onShowLegalInfo;
 
   @override
@@ -123,7 +146,13 @@ class _Step2Scaffold extends StatelessWidget {
                   color: AppColors.textPrimary,
                 ),
                 tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                onPressed: context.pop,
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go(returnTo);
+                  }
+                },
               ),
         actions: [
           IconButton(
@@ -168,7 +197,7 @@ class _Step2Scaffold extends StatelessWidget {
             type: AppStickyBarType.vertical,
             primaryLabel: l10n.consentFinalAcceptButton,
             primaryLeadingIcon: AppIcons.check,
-            onPrimary: !isSaving ? () => unawaited(notifier.accept()) : null,
+            onPrimary: !isSaving ? () => unawaited(notifier.accept(persistSession: !isPreferencesEditing)) : null,
             isPrimaryLoading: isSaving,
           ),
         ],

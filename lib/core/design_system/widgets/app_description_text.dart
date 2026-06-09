@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 
 /// State for [AppDescriptionText] — mirrors Figma "Description Text" node.
 enum AppDescriptionTextState {
@@ -44,7 +43,13 @@ class AppDescriptionText extends StatelessWidget {
         Flexible(
           child: Text(
             text,
-            style: AppTypography.captionRegular.copyWith(color: color),
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              height: 1.5,
+              letterSpacing: 0,
+            ).copyWith(color: color),
           ),
         ),
       ],

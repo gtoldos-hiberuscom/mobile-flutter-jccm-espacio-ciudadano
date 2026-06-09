@@ -22,9 +22,22 @@ class LoadClausesUsecase {
   const LoadClausesUsecase(this._repository);
   final ConsentRepository _repository;
 
-  Future<LoadClausesResult> execute() async {
+  Future<LoadClausesResult> execute({
+    final String? idAgente,
+  }) async {
     try {
-      final clauses = await _repository.fetchClauses();
+      var clauses = await _repository.fetchClauses();
+      if (idAgente != null && idAgente.isNotEmpty) {
+        clauses = await Future.wait(
+          clauses.map((final clause) async {
+            final isAccepted = await _repository.hasAcceptedClause(
+              idAgente: idAgente,
+              clauseId: clause.id,
+            );
+            return clause.copyWith(isSelected: isAccepted);
+          }),
+        );
+      }
       return LoadClausesSuccess(clauses);
     } catch (e) {
       return LoadClausesFailed(e.toString());

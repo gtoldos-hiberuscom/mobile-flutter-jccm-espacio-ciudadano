@@ -136,8 +136,7 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
     }
     switch (result) {
       case LoadLifeEventsSuccess(:final events):
-        final resolvedEvents = _clearSelectionsOnLoad ? events.map((final event) => event.copyWith(selected: false)).toList(growable: false) : events;
-        state = resolvedEvents.isEmpty ? const LifeEventsState(status: LifeEventsStatus.empty) : LifeEventsState(status: LifeEventsStatus.loaded, events: resolvedEvents);
+        state = events.isEmpty ? const LifeEventsState(status: LifeEventsStatus.empty) : LifeEventsState(status: LifeEventsStatus.loaded, events: events);
       case LoadLifeEventsFailed(:final message):
         state = LifeEventsState(
           status: LifeEventsStatus.loadError,

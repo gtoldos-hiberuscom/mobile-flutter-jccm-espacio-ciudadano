@@ -18,6 +18,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// "Mis Hechos Vitales" screen — Figma node `41779:22465`.
@@ -139,6 +140,9 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         l10n.lifeEventsSavedFeedback,
         severity: AppAlertSeverity.success,
       );
+      if (widget.returnTo == Routes.recommendations) {
+        ref.invalidate(recommendationsProvider);
+      }
       context.go(widget.returnTo);
     }
     if (next.status == LifeEventsStatus.saveError) {

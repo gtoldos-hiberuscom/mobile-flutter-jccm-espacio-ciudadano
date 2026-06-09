@@ -42,6 +42,8 @@ abstract final class Routes {
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
 
+  static const String preferences = '/preferences';
+  static const String notificationContact = '/preferences/notification-contact';
   static const String lifeEvents = '/preferences/life-events';
   static const String lifeEventsOnboarding = '$lifeEvents?mode=onboarding';
 
@@ -57,6 +59,8 @@ abstract final class Routes {
     legalAccessibility,
     legalNotice,
     legalPrivacy,
+    preferences,
+    notificationContact,
     lifeEvents,
   };
 

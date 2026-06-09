@@ -70,7 +70,7 @@ void showAuthenticatedProfileMenu({
       AppDrawerMenuItem(
         label: l10n.drawerPreferences,
         icon: Icons.settings_outlined,
-        onTap: () => closeMenuAndGo(Routes.lifeEvents),
+        onTap: () => closeMenuAndGo(Routes.preferences),
       ),
       AppDrawerMenuItem(
         label: l10n.digitalCardsPageTitle,
