@@ -165,6 +165,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             context.go(Routes.agenda);
             return;
           }
+          if (index == 4) {
+            context.go(Routes.recommendations);
+            return;
+          }
           setState(() => _currentTabIndex = index);
         },
       ),
@@ -186,6 +190,7 @@ class _HomeDashboard extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Container(
       width: double.infinity,
+      height: double.infinity,
       color: AppColors.backgroundBlueLighter,
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.space16,

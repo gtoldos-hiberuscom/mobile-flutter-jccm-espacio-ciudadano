@@ -32,7 +32,7 @@ final class AuthRepositoryImpl implements AuthRepository {
           discoveryUrl: _discoveryUrl,
           loginHint: loginHint,
           scopes: scopes,
-          additionalParameters: forceLogin ? const {'prompt': 'login'} : null,
+          promptValues: forceLogin ? const [Prompt.login] : null,
         ),
       );
     } on FlutterAppAuthUserCancelledException catch (error, stackTrace) {

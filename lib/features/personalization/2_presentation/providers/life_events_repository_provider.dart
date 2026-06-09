@@ -1,4 +1,3 @@
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/repositories/life_events_repository.dart';
@@ -11,7 +10,6 @@ import 'package:jccm_espacio_ciudadano/features/personalization/3_data/life_even
 final lifeEventsRepositoryProvider = Provider<LifeEventsRepository>((final ref) {
   final dio = ref.watch(dioProvider);
   return LifeEventsRepositoryImpl(
-    api: HechosVitalesApi(dio, standardSerializers),
     dio: dio,
   );
 });

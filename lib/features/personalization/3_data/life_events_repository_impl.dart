@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/repositories/life_events_repository.dart';
 
-/// Concrete implementation of [LifeEventsRepository] backed by [HechosVitalesApi].
+/// Concrete implementation of [LifeEventsRepository] backed by Hechos Vitales.
 ///
 /// Lives in `3_data/` — all API types are mapped to domain entities before
 /// returning. No generated model, DTO, or Dio type escapes this class.
@@ -15,15 +14,11 @@ import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/reposit
 /// Raw Dio is used here to extract `body.listaHechos` from the actual JSON.
 final class LifeEventsRepositoryImpl implements LifeEventsRepository {
   const LifeEventsRepositoryImpl({
-    required final HechosVitalesApi api,
     required final Dio dio,
-  })  : _api = api,
-        _dio = dio;
+  }) : _dio = dio;
 
-  final HechosVitalesApi _api;
-
-  /// Raw Dio client used only for [loadLifeEvents] — the GET endpoint returns
-  /// a `Respuesta` envelope not reflected in the generated client contract.
+  /// Raw Dio client used because several hechos-vitales endpoints return
+  /// response envelopes not reflected in the generated client contract.
   final Dio _dio;
 
   @override
@@ -59,28 +54,27 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     required final String idAgente,
     required final List<LifeEvent> events,
   }) async {
-    final hechos = events
-        .map(
-          (final e) => Hecho(
-            (final b) => b
-              ..idHecho = e.id
-              ..nombreHecho = e.label
-              ..seleccionado = e.selected,
-          ),
-        )
-        .toList(growable: false);
-
-    await _api.actualizarListaHechos(
-      listaHechosAgente: ListaHechosAgente(
-        (final b) => b
-          ..idAgente = idAgente
-          ..listaHechos.replace(hechos),
-      ),
+    await _dio.patch<Map<String, dynamic>>(
+      '/api/v1/hechos-vitales/hechos',
+      data: <String, dynamic>{
+        'idAgente': idAgente,
+        'listaHechos': events
+            .map(
+              (final event) => <String, dynamic>{
+                'idHecho': event.id,
+                'nombreHecho': event.label,
+                'seleccionado': event.selected,
+              },
+            )
+            .toList(growable: false),
+      },
     );
   }
 
   @override
   Future<void> resetPreferences({required final String idAgente}) async {
-    await _api.eliminarPreferencias(idAgente: idAgente);
+    await _dio.delete<Map<String, dynamic>>(
+      '/api/v1/hechos-vitales/preferencias/$idAgente',
+    );
   }
 }

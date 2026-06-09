@@ -34,6 +34,10 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
     if (index == 3) {
       return;
     }
+    if (index == 4) {
+      context.go(Routes.recommendations);
+      return;
+    }
     setState(() {});
   }
 
@@ -50,20 +54,28 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
       ),
       body: Container(
         width: double.infinity,
+        height: double.infinity,
         color: AppColors.backgroundBlueLighter,
         child: SafeArea(
           top: false,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space16,
-              AppDimensions.space24,
-              AppDimensions.space16,
-              AppDimensions.space24,
-            ),
-            child: agenda.when(
-              data: _buildLoadedContent,
-              loading: _buildLoadingContent,
-              error: (final error, final stackTrace) => _buildErrorContent(),
+          child: LayoutBuilder(
+            builder: (final context, final constraints) => SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(
+                AppDimensions.space16,
+                AppDimensions.space24,
+                AppDimensions.space16,
+                AppDimensions.space24,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight > AppDimensions.space48 ? constraints.maxHeight - AppDimensions.space48 : 0,
+                ),
+                child: agenda.when(
+                  data: _buildLoadedContent,
+                  loading: _buildLoadingContent,
+                  error: (final error, final stackTrace) => _buildErrorContent(),
+                ),
+              ),
             ),
           ),
         ),

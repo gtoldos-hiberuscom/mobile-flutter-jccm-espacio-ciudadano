@@ -40,6 +40,7 @@ abstract final class Routes {
   static const String home = '/home';
 
   static const String agenda = '/agenda';
+  static const String recommendations = '/recommendations';
 
   static const String lifeEvents = '/preferences/life-events';
   static const String lifeEventsOnboarding = '$lifeEvents?mode=onboarding';
@@ -51,6 +52,7 @@ abstract final class Routes {
     consent,
     helpContact,
     agenda,
+    recommendations,
     home,
     legalAccessibility,
     legalNotice,
@@ -60,4 +62,18 @@ abstract final class Routes {
 
   /// Returns true when [path] requires authentication.
   static bool requiresAuth(final String path) => _authenticated.any(path.startsWith);
+
+  static bool isKnownRoute(final String? path) {
+    if (path == null || path.isEmpty) {
+      return false;
+    }
+    return _authenticated.any((final route) => path == route || path.startsWith('$route?')) ||
+        {
+          landing,
+          landingHelp,
+          landingAbout,
+          login,
+          claveCallback,
+        }.contains(path);
+  }
 }

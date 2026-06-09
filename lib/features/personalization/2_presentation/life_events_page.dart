@@ -35,9 +35,11 @@ class LifeEventsPage extends ConsumerStatefulWidget {
   const LifeEventsPage({
     super.key,
     this.isOnboarding = false,
+    this.returnTo = Routes.home,
   });
 
   final bool isOnboarding;
+  final String returnTo;
 
   @override
   ConsumerState<LifeEventsPage> createState() => _LifeEventsPageState();
@@ -78,7 +80,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           if (context.canPop()) {
             context.pop();
           } else {
-            context.go(Routes.home);
+            context.go(widget.returnTo);
           }
         },
         actions: [
@@ -137,7 +139,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         l10n.lifeEventsSavedFeedback,
         severity: AppAlertSeverity.success,
       );
-      context.go(Routes.home);
+      context.go(widget.returnTo);
     }
     if (next.status == LifeEventsStatus.saveError) {
       _showFeedback(
