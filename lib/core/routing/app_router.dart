@@ -20,6 +20,7 @@ import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/privacy_pag
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/notification_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/preferences_page.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendation_life_event_filters_page.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendations_page.dart';
 
 /// Riverpod provider that owns the application [GoRouter].
@@ -116,6 +117,17 @@ final goRouterProvider = Provider<GoRouter>(
         GoRoute(
           path: Routes.recommendations,
           builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPage(),
+        ),
+
+        GoRoute(
+          path: Routes.recommendationLifeEventFilters,
+          builder: (final BuildContext context, final GoRouterState state) {
+            final extra = state.extra;
+            if (extra is RecommendationLifeEventFiltersArgs) {
+              return RecommendationLifeEventFiltersPage(args: extra);
+            }
+            return const RecommendationsPage();
+          },
         ),
 
         GoRoute(

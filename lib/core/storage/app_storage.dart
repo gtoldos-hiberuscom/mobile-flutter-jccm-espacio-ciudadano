@@ -30,7 +30,12 @@ final class SharedPreferencesAppStorage implements AppStorage {
   final SharedPreferences _prefs;
 
   @override
-  T? read<T>(final String key) => _prefs.get(key) as T?;
+  T? read<T>(final String key) {
+    if (T == List<String>) {
+      return _prefs.getStringList(key) as T?;
+    }
+    return _prefs.get(key) as T?;
+  }
 
   @override
   Future<bool> write(final String key, final Object value) => switch (value) {

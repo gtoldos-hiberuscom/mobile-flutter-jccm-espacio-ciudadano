@@ -41,6 +41,7 @@ abstract final class Routes {
 
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
+  static const String recommendationLifeEventFilters = '/recommendations/life-events-filter';
 
   static const String preferences = '/preferences';
   static const String notificationContact = '/preferences/notification-contact';
@@ -55,6 +56,7 @@ abstract final class Routes {
     helpContact,
     agenda,
     recommendations,
+    recommendationLifeEventFilters,
     home,
     legalAccessibility,
     legalNotice,

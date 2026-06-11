@@ -19,13 +19,7 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     final Response<Map<String, dynamic>> response;
     try {
       response = await _dio.get<Map<String, dynamic>>(
-        '/api/v1/hechos-vitales/servicios/segmentacion/$idAgente',
-        options: Options(listFormat: ListFormat.multi),
-        queryParameters: <String, dynamic>{
-          'page': '0',
-          'size': '50',
-          'hechosvitales': lifeEventIds,
-        },
+        '/api/v1/hechos-vitales/servicios/$idAgente',
       );
     } on DioException catch (error) {
       if (_isNoResultsResponse(error.response?.data)) {

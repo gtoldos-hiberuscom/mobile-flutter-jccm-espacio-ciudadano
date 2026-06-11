@@ -9,7 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/3_data/recommend
 
 void main() {
   group('RecommendationsRepositoryImpl', () {
-    test('loads segmented recommendations for selected life events', () async {
+    test('loads recommendations for selected life events', () async {
       final adapter = _RecommendationsAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = RecommendationsRepositoryImpl(dio: dio);
@@ -20,8 +20,8 @@ void main() {
       );
 
       expect(adapter.method, 'GET');
-      expect(adapter.path, '/api/v1/hechos-vitales/servicios/segmentacion/agent-123');
-      expect(adapter.queryParameters['hechosvitales'], [10, 20]);
+      expect(adapter.path, '/api/v1/hechos-vitales/servicios/agent-123');
+      expect(adapter.queryParameters, isEmpty);
       expect(recommendations, hasLength(1));
       expect(recommendations.single.title, 'Ayuda para alquiler joven');
       expect(recommendations.single.lifeEventId, 10);

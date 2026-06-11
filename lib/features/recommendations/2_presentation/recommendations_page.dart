@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendation_life_event_filters_page.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class RecommendationsPage extends ConsumerStatefulWidget {
@@ -17,6 +20,7 @@ class RecommendationsPage extends ConsumerStatefulWidget {
 
 class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
   _RecommendationFilter _selectedFilter = _RecommendationFilter.all;
+  Set<int>? _selectedLifeEventFilterIds;
   bool _showNoRecommendationsBanner = true;
 
   static const List<AppBottomTabBarItem> _tabs = [
@@ -40,8 +44,52 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     }
   }
 
-  void _goToLifeEvents() {
-    context.go(Uri(path: Routes.lifeEvents, queryParameters: {'returnTo': Routes.recommendations}).toString());
+  void _goToPreferences() {
+    unawaited(context.push(Routes.preferences));
+  }
+
+  Future<void> _openLifeEventFilters(final RecommendationsState state) async {
+    final events = state.selectedLifeEventOptions;
+    if (events.isEmpty) {
+      return;
+    }
+
+    final selectedIds = await context.push<Set<int>>(
+      Routes.recommendationLifeEventFilters,
+      extra: RecommendationLifeEventFiltersArgs(
+        events: events,
+        selectedIds: _selectedLifeEventFilterIds ?? const {},
+      ),
+    );
+    if (!mounted || selectedIds == null) {
+      return;
+    }
+    setState(() => _selectedLifeEventFilterIds = selectedIds);
+  }
+
+  List<Recommendation> _filterByLifeEvents({
+    required final List<Recommendation> recommendations,
+    required final List<RecommendationLifeEventOption> events,
+  }) {
+    final selectedIds = _selectedLifeEventFilterIds;
+    if (selectedIds == null || selectedIds.isEmpty) {
+      return recommendations;
+    }
+    final availableIds = events.map((final event) => event.id).toSet();
+    final activeIds = selectedIds.intersection(availableIds);
+    if (activeIds.isEmpty) {
+      return recommendations;
+    }
+    return recommendations.where((final recommendation) => activeIds.contains(recommendation.lifeEventId)).toList(growable: false);
+  }
+
+  int _activeLifeEventFilterCount(final List<RecommendationLifeEventOption> events) {
+    final selectedIds = _selectedLifeEventFilterIds;
+    if (selectedIds == null || selectedIds.isEmpty) {
+      return 0;
+    }
+    final availableIds = events.map((final event) => event.id).toSet();
+    return selectedIds.intersection(availableIds).length;
   }
 
   @override
@@ -93,36 +141,47 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
   }
 
   Widget _buildLoadedContent(final BuildContext context, final RecommendationsState state) {
-    final recommendations = _selectedFilter.apply(state.recommendations);
-    final hasRecommendations = state.recommendations.isNotEmpty;
+    final lifeEventFilteredRecommendations = _filterByLifeEvents(
+      recommendations: state.recommendations,
+      events: state.selectedLifeEventOptions,
+    );
+    final recommendations = _selectedFilter.apply(lifeEventFilteredRecommendations);
+    final showLifeEventsFilterButton = state.hasLifeEventsConsent && state.hasConfiguredLifeEvents;
+    final showNoRecommendationsBanner = state.hasLifeEventsConsent && state.hasConfiguredLifeEvents && recommendations.isEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _FilterNavigation(
           selectedFilter: _selectedFilter,
-          isEnabled: hasRecommendations,
+          recommendations: lifeEventFilteredRecommendations,
           onSelected: (final filter) => setState(() => _selectedFilter = filter),
         ),
         const SizedBox(height: AppDimensions.space24),
-        if (!state.hasConfiguredLifeEvents)
-          _EmptyRecommendationsContent(
-            showBanner: _showNoRecommendationsBanner,
-            onDismissBanner: () => setState(() => _showNoRecommendationsBanner = false),
-            onEditPreferences: _goToLifeEvents,
-          )
-        else ...[
-          if (recommendations.isEmpty)
-            _EmptyRecommendationsContent(
-              showBanner: _showNoRecommendationsBanner,
-              onDismissBanner: () => setState(() => _showNoRecommendationsBanner = false),
-              onEditPreferences: _goToLifeEvents,
-            )
-          else
-            for (final recommendation in recommendations) ...[
-              _RecommendationCard(recommendation: recommendation),
-              const SizedBox(height: AppDimensions.space16),
-            ],
+        if (showLifeEventsFilterButton) ...[
+          AppFilterButton(
+            label: 'Filtrar por hechos vitales',
+            activeFilterCount: _activeLifeEventFilterCount(state.selectedLifeEventOptions),
+            onPressed: () => _openLifeEventFilters(state),
+          ),
+          const SizedBox(height: AppDimensions.space24),
+        ],
+        if (showNoRecommendationsBanner) ...[
+          if (_showNoRecommendationsBanner) ...[
+            _NoRecommendationsBanner(
+              onDismiss: () => setState(() => _showNoRecommendationsBanner = false),
+              onEditPreferences: _goToPreferences,
+            ),
+            const SizedBox(height: AppDimensions.space24),
+          ],
+        ],
+        _PreferencesHint(onEditPreferences: _goToPreferences),
+        if (recommendations.isNotEmpty) ...[
+          const SizedBox(height: AppDimensions.space24),
+          for (final recommendation in recommendations) ...[
+            _RecommendationCard(recommendation: recommendation),
+            const SizedBox(height: AppDimensions.space16),
+          ],
         ],
       ],
     );
@@ -134,7 +193,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       children: [
         _FilterNavigation(
           selectedFilter: _selectedFilter,
-          isEnabled: false,
+          recommendations: const [],
         ),
         const SizedBox(height: AppDimensions.space32),
         const Center(child: AppLoadingIndicator()),
@@ -149,7 +208,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       children: [
         _FilterNavigation(
           selectedFilter: _selectedFilter,
-          isEnabled: true,
+          recommendations: const [],
           onSelected: (final filter) => setState(() => _selectedFilter = filter),
         ),
         const SizedBox(height: AppDimensions.space32),
@@ -171,19 +230,19 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
 class _FilterNavigation extends StatelessWidget {
   const _FilterNavigation({
     required this.selectedFilter,
-    required this.isEnabled,
+    required this.recommendations,
     this.onSelected,
   });
 
   final _RecommendationFilter selectedFilter;
-  final bool isEnabled;
+  final List<Recommendation> recommendations;
   final ValueChanged<_RecommendationFilter>? onSelected;
 
   @override
   Widget build(final BuildContext context) {
     return _RecommendationFloatingNavigation(
       selectedFilter: selectedFilter,
-      isEnabled: isEnabled,
+      recommendations: recommendations,
       onSelected: onSelected,
     );
   }
@@ -192,16 +251,22 @@ class _FilterNavigation extends StatelessWidget {
 class _RecommendationFloatingNavigation extends StatelessWidget {
   const _RecommendationFloatingNavigation({
     required this.selectedFilter,
-    required this.isEnabled,
+    required this.recommendations,
     required this.onSelected,
   });
 
   final _RecommendationFilter selectedFilter;
-  final bool isEnabled;
+  final List<Recommendation> recommendations;
   final ValueChanged<_RecommendationFilter>? onSelected;
 
   @override
   Widget build(final BuildContext context) {
+    final enabledFilters = {
+      _RecommendationFilter.all,
+      for (final filter in _RecommendationFilter.values)
+        if (filter != _RecommendationFilter.all && filter.apply(recommendations).isNotEmpty) filter,
+    };
+
     return Container(
       width: double.infinity,
       height: 58,
@@ -225,7 +290,7 @@ class _RecommendationFloatingNavigation extends StatelessWidget {
             child: _RecommendationFilterTab(
               label: _RecommendationFilter.recent.label(context),
               isSelected: selectedFilter == _RecommendationFilter.recent,
-              isEnabled: isEnabled,
+              isEnabled: enabledFilters.contains(_RecommendationFilter.recent),
               minWidth: 112,
               onTap: () => onSelected?.call(_RecommendationFilter.recent),
             ),
@@ -234,7 +299,7 @@ class _RecommendationFloatingNavigation extends StatelessWidget {
             child: _RecommendationFilterTab(
               label: _RecommendationFilter.news.label(context),
               isSelected: selectedFilter == _RecommendationFilter.news,
-              isEnabled: isEnabled,
+              isEnabled: enabledFilters.contains(_RecommendationFilter.news),
               minWidth: 112,
               onTap: () => onSelected?.call(_RecommendationFilter.news),
             ),
@@ -272,14 +337,27 @@ class _RecommendationFilterTab extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final backgroundColor = isSelected ? AppColors.backgroundBlueLighter : AppColors.background;
-    final borderColor = isSelected ? AppColors.primaryDark : Colors.transparent;
-    final textStyle = isSelected ? AppTypography.bodyBold.copyWith(color: AppColors.textBlack) : AppTypography.bodyRegular.copyWith(color: AppColors.textDisabled);
+    final isInteractive = isSelected || isEnabled;
+    final backgroundColor = isSelected
+        ? AppColors.backgroundBlueLighter
+        : isEnabled
+        ? AppColors.backgroundWhite
+        : AppColors.background;
+    final borderColor = isSelected
+        ? AppColors.primaryDark
+        : isEnabled
+        ? AppColors.borderNeutralLight
+        : Colors.transparent;
+    final textStyle = isSelected
+        ? AppTypography.bodyBold.copyWith(color: AppColors.textBlack)
+        : isEnabled
+        ? AppTypography.bodyRegular.copyWith(color: AppColors.textBlack)
+        : AppTypography.bodyRegular.copyWith(color: AppColors.textDisabled);
 
     return Semantics(
       button: true,
       selected: isSelected,
-      enabled: isSelected || isEnabled,
+      enabled: isInteractive,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -291,7 +369,7 @@ class _RecommendationFilterTab extends StatelessWidget {
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
           child: InkWell(
-            onTap: isSelected || isEnabled ? onTap : null,
+            onTap: isInteractive ? onTap : null,
             borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
             child: Container(
               height: 40,
@@ -309,34 +387,6 @@ class _RecommendationFilterTab extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _EmptyRecommendationsContent extends StatelessWidget {
-  const _EmptyRecommendationsContent({
-    required this.showBanner,
-    required this.onDismissBanner,
-    required this.onEditPreferences,
-  });
-
-  final bool showBanner;
-  final VoidCallback onDismissBanner;
-  final VoidCallback onEditPreferences;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Column(
-      children: [
-        if (showBanner) ...[
-          _NoRecommendationsBanner(
-            onDismiss: onDismissBanner,
-            onEditPreferences: onEditPreferences,
-          ),
-          const SizedBox(height: AppDimensions.space24),
-        ],
-        _PreferencesHint(onEditPreferences: onEditPreferences),
-      ],
     );
   }
 }
