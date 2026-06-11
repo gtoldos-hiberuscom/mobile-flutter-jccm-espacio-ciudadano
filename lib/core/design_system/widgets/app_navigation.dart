@@ -644,6 +644,151 @@ class AppNavCard extends StatelessWidget {
   }
 }
 
+class AppSimpleNavCard extends StatelessWidget {
+  const AppSimpleNavCard({
+    required this.label,
+    required this.description,
+    required this.onTap,
+    super.key,
+  });
+
+  final String label;
+  final String description;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Semantics(
+      button: true,
+      label: '$label, $description',
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(
+              AppDimensions.space24,
+              AppDimensions.space12,
+              AppDimensions.space16,
+              AppDimensions.space12,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+              border: Border.all(color: AppColors.borderBlueMutedLight),
+              boxShadow: AppShadows.medium,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
+                      ),
+                      const SizedBox(height: AppDimensions.space4),
+                      Text(
+                        description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.space8),
+                const AppIcon(
+                  AppIcons.arrowForward,
+                  size: AppDimensions.iconLarge,
+                  color: AppColors.textPrimary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AppQuickAccessCard extends StatelessWidget {
+  const AppQuickAccessCard({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+    super.key,
+  });
+
+  final String label;
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Semantics(
+      button: true,
+      label: label,
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.space8),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+              border: Border.all(color: AppColors.borderBlueMutedLight),
+              boxShadow: AppShadows.medium,
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.backgroundBlueLighter,
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    ),
+                    child: Center(
+                      child: AppIcon(
+                        icon,
+                        size: 40,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppDimensions.space8),
+                SizedBox(
+                  height: 44,
+                  child: Center(
+                    child: Text(
+                      label,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodyRegular.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // ── FloatingNavigation ────────────────────────────────────────────────────────
 
 /// A pill-shaped horizontal tab selector that floats above content.
@@ -658,35 +803,56 @@ class AppFloatingNavigation extends StatelessWidget {
     required this.selectedIndex,
     required this.onTabSelected,
     super.key,
+    this.enabledTabs,
+    this.minTabWidths,
+    this.trailing,
   });
 
   final List<String> tabs;
   final int selectedIndex;
   final ValueChanged<int> onTabSelected;
+  final List<bool>? enabledTabs;
+  final List<double>? minTabWidths;
+  final Widget? trailing;
 
   @override
   Widget build(final BuildContext context) {
+    assert(
+      enabledTabs == null || enabledTabs!.length == tabs.length,
+      'enabledTabs must match tabs length',
+    );
+    assert(
+      minTabWidths == null || minTabWidths!.length == tabs.length,
+      'minTabWidths must match tabs length',
+    );
+
     return Container(
       padding: const EdgeInsets.all(AppDimensions.space8),
       decoration: BoxDecoration(
-        color: AppColors.backgroundBlueMutedLight,
+        color: AppColors.backgroundWhite,
         borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        border: Border.all(color: AppColors.borderBlueMutedLight),
+        border: Border.all(color: AppColors.borderNeutralLight),
       ),
       child: Row(
         spacing: AppDimensions.space8,
-        children: List.generate(tabs.length, (final int index) {
-          final bool isSelected = index == selectedIndex;
-          final tab = _FloatingNavTab(
-            label: tabs[index],
-            isSelected: isSelected,
-            onTap: () => onTabSelected(index),
-          );
-          if (isSelected) {
-            return tab;
-          }
-          return Expanded(child: tab);
-        }),
+        children: [
+          ...List.generate(tabs.length, (final int index) {
+            final bool isSelected = index == selectedIndex;
+            final bool isEnabled = enabledTabs?[index] ?? true;
+            final tab = _FloatingNavTab(
+              label: tabs[index],
+              isSelected: isSelected,
+              isEnabled: isEnabled,
+              minWidth: minTabWidths?[index] ?? AppDimensions.minTouchTarget,
+              onTap: () => onTabSelected(index),
+            );
+            if (isSelected) {
+              return tab;
+            }
+            return Expanded(child: tab);
+          }),
+          ?trailing,
+        ],
       ),
     );
   }
@@ -848,41 +1014,70 @@ class _FloatingNavTab extends StatelessWidget {
   const _FloatingNavTab({
     required this.label,
     required this.isSelected,
+    required this.isEnabled,
+    required this.minWidth,
     required this.onTap,
   });
 
   final String label;
   final bool isSelected;
+  final bool isEnabled;
+  final double minWidth;
   final VoidCallback onTap;
 
   @override
   Widget build(final BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
+    final isInteractive = isSelected || isEnabled;
+    final backgroundColor = isSelected
+        ? AppColors.backgroundBlueLighter
+        : isEnabled
+        ? AppColors.surface
+        : AppColors.background;
+    final borderColor = isSelected
+        ? AppColors.primaryDark
+        : isEnabled
+        ? AppColors.borderNeutralLight
+        : Colors.transparent;
+    final textStyle = isSelected
+        ? AppTypography.bodyBold.copyWith(color: AppColors.textBlack)
+        : isEnabled
+        ? AppTypography.bodyRegular.copyWith(color: AppColors.textBlack)
+        : AppTypography.bodyRegular.copyWith(color: AppColors.textDisabled);
+
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      enabled: isInteractive,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         height: 40,
-        constraints: const BoxConstraints(minWidth: AppDimensions.minTouchTarget),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space8,
-          vertical: AppDimensions.space8,
-        ),
+        constraints: BoxConstraints(minWidth: minWidth),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.backgroundBlueLighter : AppColors.surface,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.borderBlueMutedLight,
-          ),
-          boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
+          border: Border.all(color: borderColor),
+          boxShadow: AppShadows.low,
         ),
-        child: Center(
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTypography.bodyRegular.copyWith(color: AppColors.textBlack),
-            textAlign: TextAlign.center,
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+          child: InkWell(
+            onTap: isInteractive ? onTap : null,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+              child: Center(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: textStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
         ),
       ),

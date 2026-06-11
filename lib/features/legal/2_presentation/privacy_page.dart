@@ -485,30 +485,10 @@ class _HomePrivacyAppBar extends StatelessWidget implements PreferredSizeWidget 
   Widget build(final BuildContext context) => AppNavBar(
     title: isSearching ? null : title,
     titleWidget: isSearching
-        ? TextField(
+        ? AppSearchField(
             controller: searchController,
             focusNode: searchFocusNode,
             autofocus: true,
-            textInputAction: TextInputAction.search,
-            decoration: InputDecoration(
-              hintText: 'Buscar',
-              filled: true,
-              fillColor: AppColors.backgroundWhite,
-              isDense: true,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space12,
-                vertical: AppDimensions.space8,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                borderSide: const BorderSide(color: AppColors.backgroundBlueMutedLight),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                borderSide: const BorderSide(color: AppColors.primary, width: 2),
-              ),
-            ),
-            style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
           )
         : null,
     leading: IconButton(

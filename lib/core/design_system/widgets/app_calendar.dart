@@ -30,7 +30,7 @@ class AppCalendar extends StatefulWidget {
   /// Dates that should appear as selected (light-blue + border).
   final Set<DateTime> selectedDates;
 
-  /// Dates that should display the red event indicator dot.
+  /// Dates that should display the event indicator dot.
   final Set<DateTime> eventDates;
 
   /// Callback when a day is tapped.
@@ -198,9 +198,8 @@ class _AppCalendarState extends State<AppCalendar> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(
-                top: AppDimensions.space4,
                 right: AppDimensions.space4,
-                bottom: AppDimensions.space16,
+                bottom: AppDimensions.space4,
               ),
               child: _monthSelector(),
             ),
@@ -295,13 +294,13 @@ class _AppCalendarState extends State<AppCalendar> {
   // ── Weekday labels ────────────────────────────────────────────────────────
   Widget _buildWeekdayRow() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+      padding: const EdgeInsets.only(bottom: AppDimensions.space4),
       child: Row(
         children: _weekdayLabels
             .map(
               (final label) => Expanded(
                 child: SizedBox(
-                  height: AppDimensions.space40,
+                  height: AppDimensions.space32,
                   child: Center(
                     child: Text(
                       label,
@@ -350,11 +349,11 @@ class _AppCalendarState extends State<AppCalendar> {
           bottom: BorderSide(color: Color.fromRGBO(12, 13, 13, 0.16)),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space24),
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
       child: Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
-            if (i > 0) const SizedBox(height: AppDimensions.space16),
+            if (i > 0) const SizedBox(height: AppDimensions.space8),
             rows[i],
           ],
         ],
@@ -399,8 +398,8 @@ class _AppCalendarState extends State<AppCalendar> {
       child: GestureDetector(
         onTap: () => widget.onDateSelected?.call(date),
         child: Container(
-          width: 40,
-          height: 40,
+          width: 36,
+          height: 36,
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
@@ -427,7 +426,7 @@ class _AppCalendarState extends State<AppCalendar> {
                           width: AppDimensions.space8,
                           height: AppDimensions.space8,
                           decoration: const BoxDecoration(
-                            color: AppColors.error,
+                            color: AppColors.primaryDark,
                             shape: BoxShape.circle,
                           ),
                         )
@@ -446,7 +445,7 @@ class _AppCalendarState extends State<AppCalendar> {
       width: AppDimensions.space8,
       height: AppDimensions.space8,
       decoration: const BoxDecoration(
-        color: AppColors.error,
+        color: AppColors.textWhite,
         shape: BoxShape.circle,
       ),
     );

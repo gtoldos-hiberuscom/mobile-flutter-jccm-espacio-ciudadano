@@ -118,12 +118,15 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final professional = _firstString(raw, const [
       'profesional',
       'nombreProfesional',
+      'nombreCompletoProfesional',
       'nombre_medico',
       'medico',
       'facultativo',
       'doctor',
       'doctorNombre',
+      'nombreDoctor',
       'nomProfesionalRealizador',
+      'profesionalRealizador',
     ]);
     final specialty = _firstString(raw, const [
       'especialidad',
@@ -131,6 +134,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'agenda',
       'prestacion',
       'tipoCita',
+      'descTipoCita',
+      'descripcionTipoCita',
+      'descripcionCita',
+      'nombreCita',
       'tipo',
       'descripcion',
       'motivo',
@@ -148,10 +155,27 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     ]);
     final channel = _firstString(raw, const [
       'canal',
+      'descripcionCanal',
       'modalidad',
+      'descripcionModalidad',
       'tipoConsulta',
+      'tipoAsistencia',
       'nomModoVisita',
       'forma',
+    ]);
+    final detail = _firstString(raw, const [
+      'detalle',
+      'detalleCita',
+      'descripcionConsulta',
+      'descripcionModoVisita',
+      'descModoVisita',
+      'descripcionTipoConsulta',
+      'descTipoConsulta',
+      'nombreTipoConsulta',
+      'nomTipoVisita',
+      'tipoVisita',
+      'subtipoCita',
+      'observaciones',
     ]);
 
     return AgendaAppointment(
@@ -159,7 +183,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       title: professional ?? specialty ?? 'Cita sanitaria',
       description: specialty ?? 'Cita SESCAM',
       channel: channel,
-      detail: center,
+      detail: detail ?? center,
       center: center,
     );
   }

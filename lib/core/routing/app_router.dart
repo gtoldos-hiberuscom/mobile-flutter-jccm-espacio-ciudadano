@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/main_sections_shell.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/placeholder_screens.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
@@ -103,20 +104,28 @@ final goRouterProvider = Provider<GoRouter>(
           builder: (final BuildContext context, final GoRouterState state) => const LoginCallbackPage(),
         ),
 
-        // ── Authenticated Home (STORY-22) — placeholder until full impl ────
-        GoRoute(
-          path: Routes.home,
-          builder: (final BuildContext context, final GoRouterState state) => const HomePage(),
-        ),
+        ShellRoute(
+          builder: (final BuildContext context, final GoRouterState state, final Widget child) => MainSectionsShell(
+            location: state.uri.path,
+            child: child,
+          ),
+          routes: [
+            // ── Authenticated Home (STORY-22) ────────────────────────────────
+            GoRoute(
+              path: Routes.home,
+              builder: (final BuildContext context, final GoRouterState state) => const HomePage(),
+            ),
 
-        GoRoute(
-          path: Routes.agenda,
-          builder: (final BuildContext context, final GoRouterState state) => const AgendaPage(),
-        ),
+            GoRoute(
+              path: Routes.agenda,
+              builder: (final BuildContext context, final GoRouterState state) => const AgendaPage(),
+            ),
 
-        GoRoute(
-          path: Routes.recommendations,
-          builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPage(),
+            GoRoute(
+              path: Routes.recommendations,
+              builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPage(),
+            ),
+          ],
         ),
 
         GoRoute(

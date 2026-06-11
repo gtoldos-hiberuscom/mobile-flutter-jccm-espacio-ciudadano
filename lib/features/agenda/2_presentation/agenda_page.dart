@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
-import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
@@ -17,29 +15,6 @@ class AgendaPage extends ConsumerStatefulWidget {
 
 class _AgendaPageState extends ConsumerState<AgendaPage> {
   _AgendaFilter _selectedFilter = _AgendaFilter.all;
-
-  static const List<AppBottomTabBarItem> _tabs = [
-    AppBottomTabBarItem(label: 'Inicio', iconAsset: AppIconAssets.accountBalance),
-    AppBottomTabBarItem(label: 'Gestión', iconAsset: AppIconAssets.docs),
-    AppBottomTabBarItem(label: 'Mi Carpeta', iconAsset: AppIconAssets.apps),
-    AppBottomTabBarItem(label: 'Agenda', iconAsset: AppIconAssets.calendarToday),
-    AppBottomTabBarItem(label: 'Recomendados', iconAsset: AppIconAssets.license),
-  ];
-
-  void _handleTabTap(final int index) {
-    if (index == 0) {
-      context.go(Routes.home);
-      return;
-    }
-    if (index == 3) {
-      return;
-    }
-    if (index == 4) {
-      context.go(Routes.recommendations);
-      return;
-    }
-    setState(() {});
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -79,11 +54,6 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: AppBottomTabBar(
-        items: _tabs,
-        currentIndex: 3,
-        onTap: _handleTabTap,
       ),
     );
   }
@@ -293,8 +263,8 @@ class _AgendaAppointmentCard extends StatelessWidget {
     final day = date.day.toString();
     final weekday = _weekdayName(date.weekday);
     final time = _formatTime(date);
-    final channel = appointment.channel ?? 'presencial';
     final detail = appointment.detail ?? appointment.center ?? '';
+    final channel = _appointmentChannel(appointment.channel, detail);
 
     return Semantics(
       label: '$day $weekday, $time, $channel, ${appointment.title}, ${appointment.description}, $detail',
@@ -314,83 +284,93 @@ class _AgendaAppointmentCard extends StatelessWidget {
           ),
           borderRadius: BorderRadius.all(Radius.circular(1)),
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 74,
-              padding: const EdgeInsets.only(right: AppDimensions.space12),
-              decoration: const BoxDecoration(
-                border: Border(
-                  right: BorderSide(color: AppColors.backgroundBlueMutedLight),
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    right: BorderSide(color: AppColors.backgroundBlueMutedLight),
+                  ),
                 ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
                       day,
                       style: AppTypography.h1.copyWith(color: AppColors.textPrimary),
                       maxLines: 1,
                       softWrap: false,
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                  Text(
-                    weekday,
-                    style: AppTypography.captionRegular.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        time,
-                        style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                      ),
-                      const SizedBox(width: AppDimensions.space16),
-                      Expanded(
-                        child: Text(
-                          channel.toUpperCase(),
-                          style: AppTypography.captionUppercase.copyWith(
-                            color: AppColors.borderBlueMutedBase,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    appointment.title,
-                    style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
-                  ),
-                  Text(
-                    appointment.description,
-                    style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                  ),
-                  if (detail.isNotEmpty)
                     Text(
-                      detail,
-                      style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
+                      weekday,
+                      style: AppTypography.captionRegular.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      textAlign: TextAlign.center,
                     ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              const SizedBox(width: AppDimensions.space8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          time,
+                          style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                        ),
+                        const SizedBox(width: AppDimensions.space16),
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                channel.toUpperCase(),
+                                style: AppTypography.captionUppercase.copyWith(color: AppColors.borderBlueMutedBase),
+                                maxLines: 1,
+                                softWrap: false,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      appointment.title,
+                      style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      appointment.description,
+                      style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (detail.isNotEmpty)
+                      Text(
+                        detail,
+                        style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -490,6 +470,20 @@ String _formatTime(final DateTime dateTime) {
   final hour = dateTime.hour.toString().padLeft(2, '0');
   final minute = dateTime.minute.toString().padLeft(2, '0');
   return '$hour:${minute}h';
+}
+
+String _appointmentChannel(final String? channel, final String detail) {
+  final trimmedChannel = channel?.trim();
+  if (trimmedChannel != null && trimmedChannel.isNotEmpty) {
+    return trimmedChannel;
+  }
+
+  final normalizedDetail = detail.toLowerCase();
+  if (normalizedDetail.contains('teleconsulta') || normalizedDetail.contains('telef')) {
+    return 'telefónica';
+  }
+
+  return 'presencial';
 }
 
 String _weekdayName(final int weekday) => switch (weekday) {

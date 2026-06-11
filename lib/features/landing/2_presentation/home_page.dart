@@ -42,16 +42,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  int _currentTabIndex = 0;
   bool _biometricDialogShown = false;
-
-  static const List<AppBottomTabBarItem> _tabs = [
-    AppBottomTabBarItem(label: 'Inicio', iconAsset: AppIconAssets.accountBalance),
-    AppBottomTabBarItem(label: 'Gestión', iconAsset: AppIconAssets.docs),
-    AppBottomTabBarItem(label: 'Mi Carpeta', iconAsset: AppIconAssets.apps),
-    AppBottomTabBarItem(label: 'Agenda', iconAsset: AppIconAssets.calendarToday),
-    AppBottomTabBarItem(label: 'Recomendados', iconAsset: AppIconAssets.license),
-  ];
 
   @override
   void didChangeDependencies() {
@@ -148,6 +139,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     };
   }
 
+  void _showComingSoon() {
+    AppAlertSnackbar.show(
+      context,
+      message: 'Función disponible próximamente',
+    );
+  }
+
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
@@ -156,27 +154,10 @@ class _HomePageState extends ConsumerState<HomePage> {
         isLoggedIn: true,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
       ),
-      body: const _HomeDashboard(),
-      bottomNavigationBar: AppBottomTabBar(
-        items: _tabs,
-        currentIndex: _currentTabIndex,
-        onTap: (final int index) {
-          if (index == 3) {
-            context.go(Routes.agenda);
-            return;
-          }
-          if (index == 4) {
-            context.go(Routes.recommendations);
-            return;
-          }
-          setState(() => _currentTabIndex = index);
-        },
-      ),
+      body: _HomeDashboard(onComingSoon: _showComingSoon),
       floatingActionButton: AppFab(
-        iconAsset: AppIconAssets.license,
-        onPressed: () {
-          // TODO(jccm): Navigate to ID card / digital identity.
-        },
+        icon: AppIcons.license,
+        onPressed: _showComingSoon,
         semanticsLabel: 'Identificación digital',
       ),
     );
@@ -184,7 +165,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 }
 
 class _HomeDashboard extends StatelessWidget {
-  const _HomeDashboard();
+  const _HomeDashboard({required this.onComingSoon});
+
+  final VoidCallback onComingSoon;
 
   @override
   Widget build(final BuildContext context) {
@@ -192,37 +175,148 @@ class _HomeDashboard extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       color: AppColors.backgroundBlueLighter,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space16,
-        vertical: AppDimensions.space24,
-      ),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _SectionTitle(text: 'Compo 1', style: AppTypography.h2),
-          SizedBox(height: AppDimensions.space16),
-          _SectionTitle(text: 'Título 3', style: AppTypography.h3),
-          SizedBox(height: AppDimensions.space16),
-          _SectionTitle(text: 'Título 3', style: AppTypography.leadingMedium),
-          SizedBox(height: AppDimensions.space16),
-          _SectionTitle(text: 'Título 3', style: AppTypography.bodyRegular),
-        ],
+      child: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(
+            AppDimensions.space16,
+            AppDimensions.space24,
+            AppDimensions.space16,
+            112,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _SectionTitle(text: 'Mis novedades'),
+              const SizedBox(height: AppDimensions.space8),
+              AppSimpleNavCard(
+                label: 'Notificaciones (4)',
+                description: 'Consulta tus notificaciones pendientes',
+                onTap: onComingSoon,
+              ),
+              const SizedBox(height: AppDimensions.space8),
+              AppSimpleNavCard(
+                label: 'Próximas citas (3)',
+                description: 'Revisa tus citas que tienes agendadas próximamente',
+                onTap: onComingSoon,
+              ),
+              const SizedBox(height: AppDimensions.space24),
+              const _SectionTitle(text: 'Accesos “Mis datos”'),
+              const SizedBox(height: AppDimensions.space8),
+              _QuickAccessGrid(onComingSoon: onComingSoon),
+              const SizedBox(height: AppDimensions.space24),
+              const _SectionTitle(text: 'Trámites recomendados'),
+              const SizedBox(height: AppDimensions.space8),
+              _RecommendedProcedures(onComingSoon: onComingSoon),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.text, required this.style});
+  const _SectionTitle({required this.text});
 
   final String text;
-  final TextStyle style;
 
   @override
   Widget build(final BuildContext context) {
     return Text(
       text,
-      style: style.copyWith(color: AppColors.textBase),
+      style: AppTypography.h3.copyWith(color: AppColors.textBlack),
     );
   }
+}
+
+class _QuickAccessGrid extends StatelessWidget {
+  const _QuickAccessGrid({required this.onComingSoon});
+
+  final VoidCallback onComingSoon;
+
+  static const _items = [
+    _QuickAccessItem(label: 'Salud', icon: AppIcons.favorite),
+    _QuickAccessItem(label: 'Bienestar Social', icon: AppIcons.diversity),
+    _QuickAccessItem(label: 'Empleo', icon: AppIcons.work),
+    _QuickAccessItem(label: 'Educación', icon: AppIcons.school),
+    _QuickAccessItem(label: 'Vivienda', icon: AppIcons.cottage),
+    _QuickAccessItem(label: 'Vehículos', icon: AppIcons.directionsCar),
+  ];
+
+  @override
+  Widget build(final BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: _items.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: AppDimensions.space8,
+        crossAxisSpacing: AppDimensions.space8,
+        childAspectRatio: 0.73,
+      ),
+      itemBuilder: (final context, final index) {
+        final item = _items[index];
+        return AppQuickAccessCard(
+          label: item.label,
+          icon: item.icon,
+          onTap: onComingSoon,
+        );
+      },
+    );
+  }
+}
+
+class _RecommendedProcedures extends StatelessWidget {
+  const _RecommendedProcedures({required this.onComingSoon});
+
+  final VoidCallback onComingSoon;
+
+  @override
+  Widget build(final BuildContext context) {
+    return SizedBox(
+      height: 304,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
+        itemCount: 2,
+        separatorBuilder: (final context, final index) => const SizedBox(width: AppDimensions.space16),
+        itemBuilder: (final context, final index) => SizedBox(
+          width: 288,
+          child: _RecommendedProcedureCard(onTap: onComingSoon),
+        ),
+      ),
+    );
+  }
+}
+
+class _RecommendedProcedureCard extends StatelessWidget {
+  const _RecommendedProcedureCard({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    return AppRecommendationCard(
+      onTap: onTap,
+      title: 'Nombre del trámite recomend. que puede ser muy largo pero con elipsis a la tercera línea...',
+      badge: const AppTag(
+        status: AppTagStatus.success,
+        label: 'Tramitación inmediata',
+      ),
+      detailLabel: 'Hechos vitales asociados',
+      detailText: 'Quiero acoger - Busco trabajo - Quiero vivir en un pueblo - Quiero estudiar',
+    );
+  }
+}
+
+class _QuickAccessItem {
+  const _QuickAccessItem({
+    required this.label,
+    required this.icon,
+  });
+
+  final String label;
+  final IconData icon;
 }

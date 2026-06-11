@@ -72,6 +72,7 @@ abstract final class AppIcons {
   static const IconData fingerprint = Icons.fingerprint;
   static const IconData login = Icons.login;
   static const IconData logout = Icons.logout;
+  static const IconData diversity = Icons.diversity_3_outlined;
 
   // ── Places & organisations ────────────────────────────────────────────────
   static const IconData accountBalance = Icons.account_balance_outlined;
@@ -83,6 +84,11 @@ abstract final class AppIcons {
   static const IconData calendarToday = Icons.calendar_today_outlined;
   static const IconData schedule = Icons.schedule;
   static const IconData lock = Icons.lock_outlined;
+  static const IconData favorite = Icons.favorite_border;
+  static const IconData work = Icons.work_outline;
+  static const IconData school = Icons.school_outlined;
+  static const IconData cottage = Icons.cottage_outlined;
+  static const IconData directionsCar = Icons.directions_car_outlined;
 }
 
 /// SVG asset tokens for the icon set stored in `assets/icons`.

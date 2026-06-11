@@ -20,6 +20,56 @@ enum AppInputState {
   disabled,
 }
 
+class AppSearchField extends StatelessWidget {
+  const AppSearchField({
+    super.key,
+    this.controller,
+    this.focusNode,
+    this.hintText = 'Buscar',
+    this.autofocus = false,
+    this.onChanged,
+    this.onSubmitted,
+  });
+
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final String hintText;
+  final bool autofocus;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+
+  @override
+  Widget build(final BuildContext context) {
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      textInputAction: TextInputAction.search,
+      decoration: InputDecoration(
+        hintText: hintText,
+        filled: true,
+        fillColor: AppColors.backgroundWhite,
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space12,
+          vertical: AppDimensions.space8,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+          borderSide: const BorderSide(color: AppColors.backgroundBlueMutedLight),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+      ),
+      style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
+    );
+  }
+}
+
 /// Atomic text-input field — the foundational form control.
 ///
 /// Manages its own focus decoration transitions to match Figma states.
@@ -102,6 +152,7 @@ class _AppInputCaseState extends State<AppInputCase> {
     if (newError != null && newError.isNotEmpty && oldWidget.errorText != newError) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
+          // ignore: deprecated_member_use, discarded_futures
           SemanticsService.announce(
             'Error, ${widget.label}: $newError',
             TextDirection.ltr,
@@ -113,15 +164,25 @@ class _AppInputCaseState extends State<AppInputCase> {
 
   @override
   void dispose() {
-    if (widget.focusNode == null) _focusNode.dispose();
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    }
     super.dispose();
   }
 
   AppInputState get _effectiveState {
-    if (!widget.enabled) return AppInputState.disabled;
-    if (widget.state == AppInputState.error) return AppInputState.error;
-    if (widget.state == AppInputState.success) return AppInputState.success;
-    if (_hasFocus) return AppInputState.focus;
+    if (!widget.enabled) {
+      return AppInputState.disabled;
+    }
+    if (widget.state == AppInputState.error) {
+      return AppInputState.error;
+    }
+    if (widget.state == AppInputState.success) {
+      return AppInputState.success;
+    }
+    if (_hasFocus) {
+      return AppInputState.focus;
+    }
     return widget.state;
   }
 
@@ -161,7 +222,9 @@ class _AppInputCaseState extends State<AppInputCase> {
   }
 
   Widget? get _trailIcon {
-    if (widget.suffixIcon != null) return widget.suffixIcon;
+    if (widget.suffixIcon != null) {
+      return widget.suffixIcon;
+    }
     return switch (_effectiveState) {
       AppInputState.error => const Icon(
         Icons.error_outline_rounded,
@@ -266,7 +329,7 @@ class _AppInputCaseState extends State<AppInputCase> {
 /// Collapsible multiline textarea — mirrors the Figma "Inputs/Area" node
 /// (`58:6183`).
 ///
-/// Renders a [captionUppercase]-labelled textarea constrained to
+/// Renders a captionUppercase-labelled textarea constrained to
 /// [collapsedHeight] (default 140 dp). An expand/collapse toggle in the
 /// top-right corner lets the user switch to an unconstrained height so all
 /// entered text is visible at once.
@@ -338,15 +401,25 @@ class _AppInputAreaState extends State<AppInputArea> {
 
   @override
   void dispose() {
-    if (widget.focusNode == null) _focusNode.dispose();
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    }
     super.dispose();
   }
 
   AppInputState get _effectiveState {
-    if (!widget.enabled) return AppInputState.disabled;
-    if (widget.state == AppInputState.error) return AppInputState.error;
-    if (widget.state == AppInputState.success) return AppInputState.success;
-    if (_hasFocus) return AppInputState.focus;
+    if (!widget.enabled) {
+      return AppInputState.disabled;
+    }
+    if (widget.state == AppInputState.error) {
+      return AppInputState.error;
+    }
+    if (widget.state == AppInputState.success) {
+      return AppInputState.success;
+    }
+    if (_hasFocus) {
+      return AppInputState.focus;
+    }
     return widget.state;
   }
 

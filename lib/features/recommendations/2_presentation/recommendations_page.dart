@@ -23,27 +23,6 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
   Set<int>? _selectedLifeEventFilterIds;
   bool _showNoRecommendationsBanner = true;
 
-  static const List<AppBottomTabBarItem> _tabs = [
-    AppBottomTabBarItem(label: 'Inicio', iconAsset: AppIconAssets.accountBalance),
-    AppBottomTabBarItem(label: 'Gestión', iconAsset: AppIconAssets.docs),
-    AppBottomTabBarItem(label: 'Mi Carpeta', iconAsset: AppIconAssets.apps),
-    AppBottomTabBarItem(label: 'Agenda', iconAsset: AppIconAssets.calendarToday),
-    AppBottomTabBarItem(label: 'Recomendados', iconAsset: AppIconAssets.license),
-  ];
-
-  void _handleTabTap(final int index) {
-    switch (index) {
-      case 0:
-        context.go(Routes.home);
-      case 3:
-        context.go(Routes.agenda);
-      case 4:
-        return;
-      default:
-        return;
-    }
-  }
-
   void _goToPreferences() {
     unawaited(context.push(Routes.preferences));
   }
@@ -131,11 +110,6 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: AppBottomTabBar(
-        items: _tabs,
-        currentIndex: 4,
-        onTap: _handleTabTap,
       ),
     );
   }
@@ -240,151 +214,27 @@ class _FilterNavigation extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return _RecommendationFloatingNavigation(
-      selectedFilter: selectedFilter,
-      recommendations: recommendations,
-      onSelected: onSelected,
-    );
-  }
-}
-
-class _RecommendationFloatingNavigation extends StatelessWidget {
-  const _RecommendationFloatingNavigation({
-    required this.selectedFilter,
-    required this.recommendations,
-    required this.onSelected,
-  });
-
-  final _RecommendationFilter selectedFilter;
-  final List<Recommendation> recommendations;
-  final ValueChanged<_RecommendationFilter>? onSelected;
-
-  @override
-  Widget build(final BuildContext context) {
     final enabledFilters = {
       _RecommendationFilter.all,
       for (final filter in _RecommendationFilter.values)
         if (filter != _RecommendationFilter.all && filter.apply(recommendations).isNotEmpty) filter,
     };
+    const filters = _RecommendationFilter.values;
 
-    return Container(
-      width: double.infinity,
-      height: 58,
-      padding: const EdgeInsets.all(AppDimensions.space8),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        border: Border.all(color: AppColors.borderNeutralLight),
-      ),
-      child: Row(
-        spacing: AppDimensions.space8,
-        children: [
-          _RecommendationFilterTab(
-            label: _RecommendationFilter.all.label(context),
-            isSelected: selectedFilter == _RecommendationFilter.all,
-            isEnabled: true,
-            minWidth: 74,
-            onTap: () => onSelected?.call(_RecommendationFilter.all),
-          ),
-          Expanded(
-            child: _RecommendationFilterTab(
-              label: _RecommendationFilter.recent.label(context),
-              isSelected: selectedFilter == _RecommendationFilter.recent,
-              isEnabled: enabledFilters.contains(_RecommendationFilter.recent),
-              minWidth: 112,
-              onTap: () => onSelected?.call(_RecommendationFilter.recent),
-            ),
-          ),
-          Expanded(
-            child: _RecommendationFilterTab(
-              label: _RecommendationFilter.news.label(context),
-              isSelected: selectedFilter == _RecommendationFilter.news,
-              isEnabled: enabledFilters.contains(_RecommendationFilter.news),
-              minWidth: 112,
-              onTap: () => onSelected?.call(_RecommendationFilter.news),
-            ),
-          ),
-          SizedBox(
-            width: AppDimensions.minTouchTarget,
-            height: 40,
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
-              onPressed: () {},
-              tooltip: _RecommendationFilter.news.label(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RecommendationFilterTab extends StatelessWidget {
-  const _RecommendationFilterTab({
-    required this.label,
-    required this.isSelected,
-    required this.isEnabled,
-    required this.minWidth,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final bool isEnabled;
-  final double minWidth;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) {
-    final isInteractive = isSelected || isEnabled;
-    final backgroundColor = isSelected
-        ? AppColors.backgroundBlueLighter
-        : isEnabled
-        ? AppColors.backgroundWhite
-        : AppColors.background;
-    final borderColor = isSelected
-        ? AppColors.primaryDark
-        : isEnabled
-        ? AppColors.borderNeutralLight
-        : Colors.transparent;
-    final textStyle = isSelected
-        ? AppTypography.bodyBold.copyWith(color: AppColors.textBlack)
-        : isEnabled
-        ? AppTypography.bodyRegular.copyWith(color: AppColors.textBlack)
-        : AppTypography.bodyRegular.copyWith(color: AppColors.textDisabled);
-
-    return Semantics(
-      button: true,
-      selected: isSelected,
-      enabled: isInteractive,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          border: Border.all(color: borderColor),
-          boxShadow: AppShadows.low,
-        ),
-        child: Material(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          child: InkWell(
-            onTap: isInteractive ? onTap : null,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-            child: Container(
-              height: 40,
-              constraints: BoxConstraints(minWidth: minWidth),
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-              alignment: Alignment.center,
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                style: textStyle,
-              ),
-            ),
-          ),
+    return AppFloatingNavigation(
+      tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
+      selectedIndex: filters.indexOf(selectedFilter),
+      enabledTabs: filters.map(enabledFilters.contains).toList(growable: false),
+      minTabWidths: const [74, 112, 112],
+      onTabSelected: (final index) => onSelected?.call(filters[index]),
+      trailing: SizedBox(
+        width: AppDimensions.minTouchTarget,
+        height: 40,
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          icon: const AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
+          onPressed: () {},
+          tooltip: _RecommendationFilter.news.label(context),
         ),
       ),
     );
@@ -443,71 +293,15 @@ class _RecommendationCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.space16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.secondaryLight400),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        boxShadow: AppShadows.medium,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _RecommendationBadge(badge: recommendation.badge),
-          const SizedBox(height: AppDimensions.space12),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              recommendation.title,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(AppDimensions.space8),
-            color: AppColors.backgroundLightBlue,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.recommendationsLifeEventPrefix.toUpperCase(),
-                  style: AppTypography.captionUppercase.copyWith(color: AppColors.textPrimary),
-                ),
-                const SizedBox(height: AppDimensions.space4),
-                Text(
-                  recommendation.lifeEventName,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                ),
-                if (recommendation.responsibleUnit case final responsibleUnit?) ...[
-                  const SizedBox(height: AppDimensions.space8),
-                  Text(
-                    '${l10n.recommendationsResponsibleUnitPrefix} $responsibleUnit',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                  ),
-                ],
-                if (_deadlineText(context, recommendation) case final deadline?) ...[
-                  const SizedBox(height: AppDimensions.space4),
-                  Text(
-                    '${l10n.recommendationsDeadlinePrefix} $deadline',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
-      ),
+    final responsibleUnit = recommendation.responsibleUnit;
+    final deadline = _deadlineText(context, recommendation);
+    return AppRecommendationCard(
+      title: recommendation.title,
+      badge: _RecommendationBadge(badge: recommendation.badge),
+      detailLabel: l10n.recommendationsLifeEventPrefix,
+      detailText: recommendation.lifeEventName,
+      responsibleUnitText: responsibleUnit == null ? null : '${l10n.recommendationsResponsibleUnitPrefix} $responsibleUnit',
+      deadlineText: deadline == null ? null : '${l10n.recommendationsDeadlinePrefix} $deadline',
     );
   }
 }
@@ -551,86 +345,16 @@ class _NoRecommendationsBanner extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.space16),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundBlueMutedLight,
-        border: Border.all(color: AppColors.borderBlueMutedLight),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        boxShadow: AppShadows.high,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(minHeight: 40),
-                      child: Row(
-                        children: [
-                          const AppIcon(AppIcons.info, color: AppColors.blueMuted900),
-                          const SizedBox(width: AppDimensions.space8),
-                          Expanded(
-                            child: Text(
-                              'Sin recomendaciones disponibles',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.captionUppercase.copyWith(
-                                color: AppColors.blueMuted900,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: AppDimensions.space32,
-                        top: AppDimensions.space4,
-                      ),
-                      child: Text(
-                        'Ajusta tus preferencias para explorar más opciones o espera a nuevas actualizaciones.',
-                        style: AppTypography.bodyRegular.copyWith(color: AppColors.textBlack),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: const AppIcon(AppIcons.close, color: AppColors.primaryDark),
-                  onPressed: onDismiss,
-                  tooltip: 'Cerrar',
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.space4),
-          TextButton.icon(
-            onPressed: onEditPreferences,
-            icon: const AppIcon(AppIcons.settings, color: AppColors.textBlack),
-            label: Text(
-              'Editar preferencias',
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.textBlack),
-            ),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.textBlack,
-              minimumSize: const Size(AppDimensions.minTouchTarget, 40),
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-              ),
-            ),
-          ),
-        ],
+    return AppAlertBanner(
+      title: 'Sin recomendaciones disponibles',
+      message: 'Ajusta tus preferencias para explorar más opciones o espera a nuevas actualizaciones.',
+      onDismiss: onDismiss,
+      action: AppButton(
+        label: 'Editar preferencias',
+        onPressed: onEditPreferences,
+        hierarchy: AppButtonHierarchy.tertiary,
+        size: AppButtonSize.small,
+        leadingIcon: AppIcons.settings,
       ),
     );
   }

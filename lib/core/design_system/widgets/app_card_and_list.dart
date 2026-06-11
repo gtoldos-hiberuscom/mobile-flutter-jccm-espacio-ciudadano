@@ -26,6 +26,154 @@ enum AppCardState {
   disabled,
 }
 
+class AppSurfaceCard extends StatelessWidget {
+  const AppSurfaceCard({
+    required this.child,
+    super.key,
+    this.padding = const EdgeInsets.all(AppDimensions.space16),
+    this.semanticLabel,
+    this.onTap,
+  });
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+  final String? semanticLabel;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    final borderRadius = BorderRadius.circular(AppDimensions.radiusMedium);
+    final card = Material(
+      color: AppColors.surface,
+      borderRadius: borderRadius,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: borderRadius,
+        child: Container(
+          width: double.infinity,
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            border: Border.all(color: AppColors.backgroundBlueMutedLight),
+            boxShadow: AppShadows.low,
+          ),
+          child: child,
+        ),
+      ),
+    );
+
+    return Semantics(
+      label: semanticLabel,
+      button: onTap != null,
+      child: semanticLabel == null ? card : ExcludeSemantics(child: card),
+    );
+  }
+}
+
+class AppRecommendationCard extends StatelessWidget {
+  const AppRecommendationCard({
+    required this.title,
+    required this.badge,
+    required this.detailLabel,
+    required this.detailText,
+    super.key,
+    this.responsibleUnitText,
+    this.deadlineText,
+    this.onTap,
+  });
+
+  final String title;
+  final Widget badge;
+  final String detailLabel;
+  final String detailText;
+  final String? responsibleUnitText;
+  final String? deadlineText;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    final content = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppDimensions.space16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.secondaryLight400),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+        boxShadow: AppShadows.medium,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          badge,
+          const SizedBox(height: AppDimensions.space12),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              title,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
+            ),
+          ),
+          const SizedBox(height: AppDimensions.space16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(AppDimensions.space8),
+            color: AppColors.backgroundLightBlue,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  detailLabel.toUpperCase(),
+                  style: AppTypography.captionUppercase.copyWith(color: AppColors.textPrimary),
+                ),
+                const SizedBox(height: AppDimensions.space4),
+                Text(
+                  detailText,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                ),
+                if (responsibleUnitText != null) ...[
+                  const SizedBox(height: AppDimensions.space8),
+                  Text(
+                    responsibleUnitText!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                  ),
+                ],
+                if (deadlineText != null) ...[
+                  const SizedBox(height: AppDimensions.space4),
+                  Text(
+                    deadlineText!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (onTap == null) {
+      return content;
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+        child: content,
+      ),
+    );
+  }
+}
+
 /// A flexible content card — mirrors the Figma **"Cards/Cards"** component
 /// (node `56:3449`) from the DS canvas section `165:6403`.
 ///
@@ -158,12 +306,16 @@ class AppCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   // ── Legacy compat (unused internally) ────────────────────────────────────
+  @Deprecated('Use titleIcon')
   // ignore: deprecated_member_use_from_same_package
   final Widget? leading;
+  @Deprecated('Use actionButton')
   // ignore: deprecated_member_use_from_same_package
   final Widget? trailing;
+  @Deprecated('Use date')
   // ignore: deprecated_member_use_from_same_package
   final String? month;
+  @Deprecated('Use description')
   // ignore: deprecated_member_use_from_same_package
   final String? subtitle;
 
