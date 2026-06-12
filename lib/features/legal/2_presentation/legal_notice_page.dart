@@ -47,7 +47,13 @@ class _LegalNoticePageState extends ConsumerState<LegalNoticePage> {
             color: AppColors.textPrimary,
           ),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          onPressed: () => context.go(Routes.home),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(Routes.homeFromDrawer);
+            }
+          },
         ),
         actions: [
           IconButton(

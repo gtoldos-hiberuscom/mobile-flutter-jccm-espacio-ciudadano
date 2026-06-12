@@ -33,6 +33,11 @@ final goRouterProvider = Provider<GoRouter>(
   (final ref) {
     final guard = SessionGuard(ref);
 
+    NoTransitionPage<void> noTransitionPage(final GoRouterState state, final Widget child) => NoTransitionPage<void>(
+      key: state.pageKey,
+      child: child,
+    );
+
     final router = GoRouter(
       initialLocation: Routes.landing,
       observers: [GoRouterObserver()],
@@ -73,23 +78,35 @@ final goRouterProvider = Provider<GoRouter>(
 
         GoRoute(
           path: Routes.helpContact,
-          builder: (final BuildContext context, final GoRouterState state) => const HelpContactPage(),
+          pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
+            state,
+            const HelpContactPage(),
+          ),
         ),
 
         // ── Legal ────────────────────────────────────────────────────────────
         GoRoute(
           path: Routes.legalPrivacy,
-          builder: (final BuildContext context, final GoRouterState state) => PrivacyPage(
-            fromHome: state.uri.queryParameters['from'] == 'home',
+          pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
+            state,
+            PrivacyPage(
+              fromHome: state.uri.queryParameters['from'] == 'home',
+            ),
           ),
         ),
         GoRoute(
           path: Routes.legalNotice,
-          builder: (final BuildContext context, final GoRouterState state) => const LegalNoticePage(),
+          pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
+            state,
+            const LegalNoticePage(),
+          ),
         ),
         GoRoute(
           path: Routes.legalAccessibility,
-          builder: (final BuildContext context, final GoRouterState state) => const AccessibilityPage(),
+          pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
+            state,
+            const AccessibilityPage(),
+          ),
         ),
 
         // ── Login (JCCMEC-10) ─────────────────────────────────────────────
@@ -113,7 +130,16 @@ final goRouterProvider = Provider<GoRouter>(
             // ── Authenticated Home (STORY-22) ────────────────────────────────
             GoRoute(
               path: Routes.home,
-              builder: (final BuildContext context, final GoRouterState state) => const HomePage(),
+              pageBuilder: (final BuildContext context, final GoRouterState state) {
+                const page = HomePage();
+                if (state.uri.queryParameters['from'] == 'drawer') {
+                  return noTransitionPage(state, page);
+                }
+                return MaterialPage<void>(
+                  key: state.pageKey,
+                  child: page,
+                );
+              },
             ),
 
             GoRoute(
@@ -141,7 +167,10 @@ final goRouterProvider = Provider<GoRouter>(
 
         GoRoute(
           path: Routes.preferences,
-          builder: (final BuildContext context, final GoRouterState state) => const PreferencesPage(),
+          pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
+            state,
+            const PreferencesPage(),
+          ),
         ),
 
         GoRoute(

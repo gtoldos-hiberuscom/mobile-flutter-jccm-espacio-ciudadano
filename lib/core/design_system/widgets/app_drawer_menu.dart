@@ -411,7 +411,7 @@ class _DrawerSecondaryTile extends StatelessWidget {
   }
 }
 
-/// Shows the [AppDrawerMenu] as a modal from the right edge.
+/// Shows the [AppDrawerMenu] as a modal aligned to the right edge.
 ///
 /// ```dart
 /// showAppDrawerMenu(
@@ -437,7 +437,7 @@ void showAppDrawerMenu({
       barrierDismissible: true,
       barrierLabel: 'Cerrar menú',
       barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 250),
+      transitionDuration: Duration.zero,
       pageBuilder: (final context, final animation, final secondaryAnimation) {
         return Align(
           alignment: Alignment.centerRight,
@@ -451,15 +451,6 @@ void showAppDrawerMenu({
             actionButtonLabel: actionButtonLabel,
             onActionButton: onActionButton,
           ),
-        );
-      },
-      transitionBuilder: (final context, final animation, final secondaryAnimation, final child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(1, 0),
-            end: Offset.zero,
-          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
-          child: child,
         );
       },
     ),

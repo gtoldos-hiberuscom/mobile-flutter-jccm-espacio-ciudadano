@@ -44,7 +44,13 @@ class _HelpContactPageState extends ConsumerState<HelpContactPage> with SingleTi
             color: AppColors.textPrimary,
           ),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          onPressed: () => context.go(Routes.home),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(Routes.homeFromDrawer);
+            }
+          },
         ),
       ),
       body: Column(

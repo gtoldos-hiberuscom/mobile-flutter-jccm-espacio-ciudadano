@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,9 +21,9 @@ void showAuthenticatedProfileMenu({
   final claims = ref.read(jwtClaimsProvider);
   final l10n = AppLocalizations.of(context);
 
-  void closeMenuAndGo(final String route) {
+  void closeMenuAndPush(final String route) {
     Navigator.of(context, rootNavigator: true).pop();
-    context.go(route);
+    unawaited(context.push<void>(route));
   }
 
   Future<void> openElectronicOffice() async {
@@ -70,7 +72,7 @@ void showAuthenticatedProfileMenu({
       AppDrawerMenuItem(
         label: l10n.drawerPreferences,
         icon: Icons.settings_outlined,
-        onTap: () => closeMenuAndGo(Routes.preferences),
+        onTap: () => closeMenuAndPush(Routes.preferences),
       ),
       AppDrawerMenuItem(
         label: l10n.digitalCardsPageTitle,
@@ -81,20 +83,20 @@ void showAuthenticatedProfileMenu({
       AppDrawerLinkItem(
         label: l10n.drawerHelpAndContact,
         icon: Icons.help_outline_rounded,
-        onTap: () => closeMenuAndGo(Routes.helpContact),
+        onTap: () => closeMenuAndPush(Routes.helpContact),
       ),
       AppDrawerLinkItem(
         label: l10n.legalAccessibilityTitle,
         icon: Icons.accessibility_new_rounded,
-        onTap: () => closeMenuAndGo(Routes.legalAccessibility),
+        onTap: () => closeMenuAndPush(Routes.legalAccessibility),
       ),
       AppDrawerLinkItem(
         label: l10n.legalNoticeTitle,
-        onTap: () => closeMenuAndGo(Routes.legalNotice),
+        onTap: () => closeMenuAndPush(Routes.legalNotice),
       ),
       AppDrawerLinkItem(
         label: l10n.legalPrivacyTitle,
-        onTap: () => closeMenuAndGo(Routes.legalPrivacy),
+        onTap: () => closeMenuAndPush('${Routes.legalPrivacy}?from=home'),
       ),
     ],
     onLogout: logout,

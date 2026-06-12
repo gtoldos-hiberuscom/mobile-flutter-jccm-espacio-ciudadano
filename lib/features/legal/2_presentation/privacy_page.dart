@@ -96,7 +96,13 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
               isSearching: _isSearching,
               searchController: _searchController,
               searchFocusNode: _searchFocusNode,
-              onBack: () => context.go(Routes.home),
+              onBack: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go(Routes.homeFromDrawer);
+                }
+              },
               onSearch: _startSearch,
               onCloseSearch: _closeSearch,
             )

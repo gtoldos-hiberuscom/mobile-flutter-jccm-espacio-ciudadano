@@ -19,7 +19,7 @@ enum AppButtonHierarchy {
   disabled,
 }
 
-/// Size variants — Figma: Medium (48 dp) and Small (40 dp).
+/// Size variants — both enforce a minimum 48 dp touch target height.
 enum AppButtonSize {
   medium,
   small,
@@ -60,7 +60,7 @@ class _FocusRingWrapper extends StatelessWidget {
 /// Design-system button — enforces WCAG 2.1 minimum touch target.
 ///
 /// Hierarchies: Primary, Secondary, Ghost, Tertiary.
-/// Sizes: Medium (40 dp, padding 8 dp all sides), Small (40 dp, padding 0 dp vertical / 8 dp horizontal).
+/// Sizes: Medium (48 dp, padding 8 dp all sides), Small (48 dp, padding 0 dp vertical / 8 dp horizontal).
 /// States: Default, Focus (keyboard ring), Pressed (bg change), Disabled, Loading.
 class AppButton extends StatefulWidget {
   const AppButton({
@@ -136,8 +136,8 @@ class _AppButtonState extends State<AppButton> {
     return widget.hierarchy;
   }
 
-  /// Figma: Both Medium and Small = 40 dp height.
-  double get _height => 40;
+  /// Both Medium and Small enforce the minimum 48 dp touch target height.
+  double get _height => AppDimensions.minTouchTarget;
 
   /// Figma: icon 24 dp (medium), 16 dp (small).
   double get _iconSize => widget.size == AppButtonSize.medium ? AppDimensions.iconMedium : AppDimensions.iconSmall;
@@ -354,7 +354,7 @@ class _AppButtonState extends State<AppButton> {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /// Icon-only button — square with no label text.
-/// Medium = 40 dp, Small = 40 dp (same height as label button per Figma spec `213:6334`).
+/// Medium = 48 dp, Small = 48 dp (minimum touch target height).
 class AppIconButton extends StatefulWidget {
   const AppIconButton({
     required this.icon,
@@ -406,7 +406,7 @@ class _AppIconButtonState extends State<AppIconButton> {
   @override
   Widget build(final BuildContext context) {
     final isDisabled = widget.onPressed == null || widget.hierarchy == AppButtonHierarchy.disabled;
-    final double dimension = widget.size == AppButtonSize.medium ? 40.0 : 40.0;
+    const double dimension = AppDimensions.minTouchTarget;
     final double iconSize = widget.size == AppButtonSize.medium ? AppDimensions.iconMedium : AppDimensions.iconSmall;
 
     final colors = _ButtonColors.resolve(widget.hierarchy, widget.intent, isDisabled);
@@ -425,7 +425,7 @@ class _AppIconButtonState extends State<AppIconButton> {
     const shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
     );
-    final minSize = Size(dimension, dimension);
+    const minSize = Size(dimension, dimension);
     final effectiveOnPressed = widget.isLoading || isDisabled ? null : widget.onPressed;
 
     final baseStyle = ButtonStyle(

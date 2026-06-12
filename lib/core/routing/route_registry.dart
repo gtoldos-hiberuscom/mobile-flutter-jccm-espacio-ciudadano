@@ -38,6 +38,7 @@ abstract final class Routes {
 
   /// Authenticated home — main screen with bottom navigation.
   static const String home = '/home';
+  static const String homeFromDrawer = '$home?from=drawer';
 
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';

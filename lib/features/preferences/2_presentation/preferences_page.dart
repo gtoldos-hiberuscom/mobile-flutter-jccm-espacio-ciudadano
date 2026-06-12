@@ -125,7 +125,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           if (context.canPop()) {
             context.pop();
           } else {
-            context.go(Routes.home);
+            context.go(Routes.homeFromDrawer);
           }
         },
         onInfo: () => AppAlertSnackbar.show(
