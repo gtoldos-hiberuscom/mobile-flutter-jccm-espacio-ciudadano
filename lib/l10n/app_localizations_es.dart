@@ -42,9 +42,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingHelpBody1 => 'Para acceder a Espacio Ciudadano debes identificarte con Cl@ve, el sistema de acceso a los servicios públicos. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico (personal o de representante).';
 
   @override
-  String get landingHelpBody2 => 'Este sistema de identificación es ampliamente usado por las Administraciones públicas españolas y te permite utilizar cualquiera de los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.';
-
-  @override
   String get landingHelpAccessButton => 'Acceder a mi Espacio Ciudadano';
 
   @override

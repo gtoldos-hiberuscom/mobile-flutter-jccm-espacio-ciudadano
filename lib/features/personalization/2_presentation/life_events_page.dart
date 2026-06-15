@@ -69,6 +69,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
 
     final isSaving = lifeState.status == LifeEventsStatus.saving;
     final isResetting = lifeState.status == LifeEventsStatus.resetting;
+    final isPreferencesEditing = widget.returnTo == Routes.preferences;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
@@ -112,8 +113,8 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           // ── Sticky bottom bar ───────────────────────────────────────────
           AppStickyBar(
             type: AppStickyBarType.dicotomy,
-            secondaryLabel: l10n.lifeEventsResetCancel,
-            onSecondary: notifier.requestReset,
+            secondaryLabel: isPreferencesEditing ? 'Limpiar' : l10n.lifeEventsResetCancel,
+            onSecondary: isPreferencesEditing ? notifier.clearSelection : notifier.requestReset,
             secondaryHierarchy: AppButtonHierarchy.tertiary,
             secondaryLeadingIcon: Icons.highlight_off,
             primaryLabel: l10n.lifeEventsSaveAction,
@@ -142,6 +143,10 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
       );
       if (widget.returnTo == Routes.recommendations) {
         ref.invalidate(recommendationsProvider);
+      }
+      if (widget.returnTo == Routes.preferences && context.canPop()) {
+        context.pop();
+        return;
       }
       context.go(widget.returnTo);
     }

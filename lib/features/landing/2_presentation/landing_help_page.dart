@@ -80,7 +80,7 @@ class LandingHelpPage extends ConsumerWidget {
                         ),
                       ),
 
-                      // Body paragraph 1 — Figma: Body/Large 18px w500 h150% — padding: 4px top / 16px bottom
+                      // Body paragraph — Figma: Body/Large 18px w500 h150% — padding: 4px top / 16px bottom
                       Padding(
                         padding: const EdgeInsets.only(
                           top: AppDimensions.space4,
@@ -88,20 +88,6 @@ class LandingHelpPage extends ConsumerWidget {
                         ),
                         child: Text(
                           l10n.landingHelpBody1,
-                          style: AppTypography.bodyL.copyWith(
-                            color: AppColors.textBase,
-                          ),
-                        ),
-                      ),
-
-                      // Body paragraph 2 — Figma: Body/Large 18px w500 h150% — padding: 4px top / 8px bottom
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: AppDimensions.space4,
-                          bottom: AppDimensions.space8,
-                        ),
-                        child: Text(
-                          l10n.landingHelpBody2,
                           style: AppTypography.bodyL.copyWith(
                             color: AppColors.textBase,
                           ),

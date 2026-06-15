@@ -3,6 +3,8 @@ import 'dart:async' show unawaited;
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
@@ -176,6 +178,10 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
     }
     switch (result) {
       case SaveLifeEventsSuccess():
+        await _markUpdatedNow();
+        if (!ref.mounted) {
+          return;
+        }
         final onboardingResult = await _markOnboardingSeen();
         if (!ref.mounted) {
           return;
@@ -202,6 +208,17 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
   /// Requests display of the reset-confirmation dialog.
   void requestReset() => state = state.copyWith(showResetConfirm: true);
 
+  /// Clears the current local selection without showing a confirmation dialog.
+  void clearSelection() {
+    final clearedEvents = state.events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
+    state = state.copyWith(
+      status: LifeEventsStatus.loaded,
+      events: clearedEvents,
+      isDirty: true,
+      showResetConfirm: false,
+    );
+  }
+
   /// Dismisses the reset-confirmation dialog without taking action.
   void cancelReset() => state = state.copyWith(showResetConfirm: false);
 
@@ -226,6 +243,10 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
     }
     switch (result) {
       case SaveLifeEventsSuccess():
+        await _markUpdatedNow();
+        if (!ref.mounted) {
+          return;
+        }
         state = LifeEventsState(
           status: clearedEvents.isEmpty ? LifeEventsStatus.empty : LifeEventsStatus.resetSuccess,
           events: clearedEvents,
@@ -256,6 +277,23 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
 
   Future<bool> _refreshSession({final bool force = false}) async {
     return ref.read(authSessionControllerProvider).refresh(force: force);
+  }
+
+  Future<void> _markUpdatedNow() async {
+    if (_idAgente.isEmpty) {
+      return;
+    }
+    try {
+      await ref
+          .read(appStorageProvider)
+          .write(
+            '${StorageKeys.lifeEventsLastUpdatedAtPrefix}$_idAgente',
+            DateTime.now().toIso8601String(),
+          );
+    } on Object {
+      // The backend save has already succeeded; this timestamp is auxiliary UI
+      // metadata and must not make the user repeat the operation.
+    }
   }
 
   bool _isUnauthorized(final Object? cause) {

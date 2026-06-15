@@ -42,6 +42,10 @@ abstract final class StorageKeys {
   /// Full key = lifeEventsOnboardingSeenPrefix + idAgente
   static const String lifeEventsOnboardingSeenPrefix = 'life_events_onboarding_seen_';
 
+  /// Prefix for per-user life-events last successful update timestamp.
+  /// Full key = lifeEventsLastUpdatedAtPrefix + idAgente
+  static const String lifeEventsLastUpdatedAtPrefix = 'life_events_last_updated_at_';
+
   /// Prefix for per-user legal-consent accepted flag.
   /// Full key = consentAcceptedPrefix + idAgente
   static const String consentAcceptedPrefix = 'consent_accepted_';

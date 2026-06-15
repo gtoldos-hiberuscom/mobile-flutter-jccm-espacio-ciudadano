@@ -158,12 +158,6 @@ abstract class AppLocalizations {
   /// **'Para acceder a Espacio Ciudadano debes identificarte con Cl@ve, el sistema de acceso a los servicios públicos. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico (personal o de representante).'**
   String get landingHelpBody1;
 
-  /// Segundo párrafo explicativo de la pantalla de ayuda con el acceso.
-  ///
-  /// In es, this message translates to:
-  /// **'Este sistema de identificación es ampliamente usado por las Administraciones públicas españolas y te permite utilizar cualquiera de los siguientes métodos: Cl@ve móvil, Cl@ve permanente, DNI electrónico o cualquier certificado electrónico reconocido.'**
-  String get landingHelpBody2;
-
   /// Botón de acción principal de la pantalla de ayuda que inicia el flujo de autenticación.
   ///
   /// In es, this message translates to:

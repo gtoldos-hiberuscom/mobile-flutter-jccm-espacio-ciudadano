@@ -88,6 +88,9 @@ final class SessionGuard {
   /// Returns [Routes.lifeEvents] if the citizen has not yet seen the screen,
   /// or `null` to allow navigation to proceed normally once completed.
   Future<String?> _onboardingRedirect(final String path) async {
+    if (path != Routes.home && path != Routes.lifeEvents) {
+      return null;
+    }
     if (path == Routes.lifeEvents) {
       return null;
     }
