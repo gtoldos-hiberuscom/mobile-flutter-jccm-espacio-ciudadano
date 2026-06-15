@@ -39,6 +39,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
     };
     final selectedLifeEvents = lifeEventsEnabled ? await _selectedLifeEvents(ref, args.idAgente) : const <LifeEvent>[];
     final contact = await _loadNotificationContact(ref, args.notificationCitizenId);
+    final lifeEventsUpdatedAt = _readLifeEventsUpdatedAt(appStorage, args.idAgente);
 
     return _PreferencesState(
       lifeEventsStatus: lifeEventsEnabled
@@ -47,6 +48,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
                 : AppPreferenceStatus.pending
           : AppPreferenceStatus.disabled,
       selectedLifeEvents: selectedLifeEvents,
+      lifeEventsUpdatedAt: lifeEventsUpdatedAt,
       notificationContact: contact,
       biometricEnabled: appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false,
     );
@@ -86,12 +88,14 @@ final class _PreferencesState {
   const _PreferencesState({
     required this.lifeEventsStatus,
     required this.selectedLifeEvents,
+    required this.lifeEventsUpdatedAt,
     required this.notificationContact,
     required this.biometricEnabled,
   });
 
   final AppPreferenceStatus lifeEventsStatus;
   final List<LifeEvent> selectedLifeEvents;
+  final DateTime? lifeEventsUpdatedAt;
   final NotificationContact? notificationContact;
   final bool biometricEnabled;
 }
@@ -142,6 +146,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
         data: (final preferences) => _buildPreferencesContent(
           preferences: preferences,
           idAgente: idAgente,
+          preferencesArgs: preferencesArgs,
         ),
       ),
     );
@@ -150,6 +155,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   Widget _buildPreferencesContent({
     required final _PreferencesState preferences,
     required final String idAgente,
+    required final _PreferencesArgs preferencesArgs,
   }) {
     return AppPreferenceList(
       children: [
@@ -174,17 +180,10 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           activeDescription: 'Tienes hechos vitales seleccionados para recibir recomendaciones personalizadas.',
           actionLabel: 'Seleccionar',
           actionIcon: preferences.lifeEventsStatus == AppPreferenceStatus.enabled ? null : AppIcons.edit,
-          onAction: preferences.lifeEventsStatus != AppPreferenceStatus.disabled
-              ? () => context.go(
-                  Uri(
-                    path: Routes.lifeEvents,
-                    queryParameters: {'returnTo': Routes.preferences},
-                  ).toString(),
-                )
-              : null,
+          onAction: preferences.lifeEventsStatus != AppPreferenceStatus.disabled ? () => unawaited(_openLifeEvents(preferencesArgs)) : null,
           filledAction: preferences.lifeEventsStatus != AppPreferenceStatus.disabled,
           summaryItems: preferences.selectedLifeEvents.map((final event) => event.label).toList(growable: false),
-          activeFooterText: 'Actualizado el 21 abr 2026 a las 23:00h',
+          activeFooterText: preferences.lifeEventsUpdatedAt == null ? null : 'Actualizado el ${_formatLifeEventsUpdate(preferences.lifeEventsUpdatedAt!)}',
         ),
         const SizedBox(height: AppDimensions.space16),
         if (preferences.notificationContact?.hasAnyContact ?? false)
@@ -284,8 +283,60 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       severity: AppAlertSeverity.success,
     );
   }
+
+  Future<void> _openLifeEvents(final _PreferencesArgs preferencesArgs) async {
+    await context.push<void>(
+      Uri(
+        path: Routes.lifeEvents,
+        queryParameters: {'returnTo': Routes.preferences},
+      ).toString(),
+    );
+    if (!mounted) {
+      return;
+    }
+    ref.invalidate(_preferencesStateProvider(preferencesArgs));
+  }
 }
 
 String _notificationCitizenId(final JwtClaims? claims) {
   return claims?.idAgente ?? '';
 }
+
+DateTime? _readLifeEventsUpdatedAt(final AppStorage appStorage, final String idAgente) {
+  if (idAgente.isEmpty) {
+    return null;
+  }
+  final storedValue = appStorage.read<String>(
+    '${StorageKeys.lifeEventsLastUpdatedAtPrefix}$idAgente',
+  );
+  if (storedValue == null || storedValue.isEmpty) {
+    return null;
+  }
+  return DateTime.tryParse(storedValue);
+}
+
+String _formatLifeEventsUpdate(final DateTime dateTime) {
+  return '${dateTime.day} ${_shortMonthName(dateTime.month)} ${dateTime.year} a las ${_formatTime(dateTime)}';
+}
+
+String _formatTime(final DateTime dateTime) {
+  final hour = dateTime.hour.toString().padLeft(2, '0');
+  final minute = dateTime.minute.toString().padLeft(2, '0');
+  return '$hour:${minute}h';
+}
+
+String _shortMonthName(final int month) => switch (month) {
+  1 => 'ene',
+  2 => 'feb',
+  3 => 'mar',
+  4 => 'abr',
+  5 => 'may',
+  6 => 'jun',
+  7 => 'jul',
+  8 => 'ago',
+  9 => 'sep',
+  10 => 'oct',
+  11 => 'nov',
+  12 => 'dic',
+  _ => '',
+};

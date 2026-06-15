@@ -181,7 +181,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     return AgendaAppointment(
       dateTime: dateTime,
       title: professional ?? specialty ?? 'Cita sanitaria',
-      description: specialty ?? 'Cita SESCAM',
+      description: specialty ?? 'Cita',
       channel: channel,
       detail: detail ?? center,
       center: center,

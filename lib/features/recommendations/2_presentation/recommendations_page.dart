@@ -43,7 +43,12 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     if (!mounted || selectedIds == null) {
       return;
     }
-    setState(() => _selectedLifeEventFilterIds = selectedIds);
+    setState(() {
+      _selectedLifeEventFilterIds = selectedIds;
+      if (selectedIds.isEmpty) {
+        _selectedFilter = _RecommendationFilter.all;
+      }
+    });
   }
 
   List<Recommendation> _filterByLifeEvents({
@@ -51,8 +56,11 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     required final List<RecommendationLifeEventOption> events,
   }) {
     final selectedIds = _selectedLifeEventFilterIds;
-    if (selectedIds == null || selectedIds.isEmpty) {
+    if (selectedIds == null) {
       return recommendations;
+    }
+    if (selectedIds.isEmpty) {
+      return const [];
     }
     final availableIds = events.map((final event) => event.id).toSet();
     final activeIds = selectedIds.intersection(availableIds);

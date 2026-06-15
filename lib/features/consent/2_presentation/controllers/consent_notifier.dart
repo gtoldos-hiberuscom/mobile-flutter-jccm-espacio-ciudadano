@@ -9,8 +9,10 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/load_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
 // ── Status ────────────────────────────────────────────────────────────────────
 
@@ -165,6 +167,18 @@ class ConsentNotifier extends Notifier<ConsentState> {
           );
           return;
         }
+        final onboardingError = await _markLifeEventsOnboardingSeenIfClauseWasEnabledFromPreferences(clausesToPersist);
+        if (!ref.mounted) {
+          return;
+        }
+        if (onboardingError != null) {
+          state = ConsentState(
+            status: ConsentStatus.saveError,
+            clauses: clausesToPersist,
+            errorMessage: onboardingError,
+          );
+          return;
+        }
         if (persistSession) {
           final sessionPersisted = await _persistCurrentSession();
           if (!ref.mounted) {
@@ -185,6 +199,21 @@ class ConsentNotifier extends Notifier<ConsentState> {
           errorMessage: message,
         );
     }
+  }
+
+  Future<String?> _markLifeEventsOnboardingSeenIfClauseWasEnabledFromPreferences(final List<Clause> clauses) async {
+    if (!_isPreferencesEditing || _initialSelectedClauseIds.contains(3)) {
+      return null;
+    }
+    final lifeEventsClauseSelected = clauses.any((final clause) => clause.id == 3 && clause.isSelected);
+    if (!lifeEventsClauseSelected) {
+      return null;
+    }
+    final result = await ref.read(markLifeEventsOnboardingSeenUsecaseProvider).execute(idAgente: _idAgente);
+    return switch (result) {
+      MarkLifeEventsOnboardingSeenSuccess() => null,
+      MarkLifeEventsOnboardingSeenFailed(:final message) => message,
+    };
   }
 
   Future<bool> _persistCurrentSession() async {

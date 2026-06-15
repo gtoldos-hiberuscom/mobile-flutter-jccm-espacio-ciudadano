@@ -44,10 +44,6 @@
   "@landingHelpBody1": {
     "description": "First explanatory paragraph of the access help screen."
   },
-  "landingHelpBody2": "This identification system is widely used by Spanish public administrations and allows you to use any of the following methods: Cl@ve mobile, Cl@ve permanent, electronic ID or any recognised electronic certificate.",
-  "@landingHelpBody2": {
-    "description": "Second explanatory paragraph of the access help screen."
-  },
   "landingHelpAccessButton": "Access my Citizen Space",
   "@landingHelpAccessButton": {
     "description": "Primary action button on the help screen that initiates authentication."
