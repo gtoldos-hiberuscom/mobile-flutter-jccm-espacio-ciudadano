@@ -376,6 +376,7 @@ class AppAlertSnackbar extends StatelessWidget {
     final AppAlertSeverity severity = AppAlertSeverity.neutral,
     final String? actionLabel,
     final VoidCallback? onAction,
+    final EdgeInsetsGeometry? margin,
   }) {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -390,6 +391,7 @@ class AppAlertSnackbar extends StatelessWidget {
           onAction: onAction,
         ),
         behavior: SnackBarBehavior.floating,
+        margin: margin,
       ),
     );
   }
@@ -627,6 +629,134 @@ class AppAlertDialog extends StatelessWidget {
               cancelLabel: cancelLabel,
               onConfirm: onConfirm,
               onCancel: onCancel,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Destructive confirmation dialog matching the Figma `Alerts/Dialog` danger
+/// variant.
+///
+/// Use this for irreversible or session-impacting actions. The dialog is
+/// blocking and always presents a cancel action plus a destructive primary
+/// action.
+class AppDestructiveConfirmDialog extends StatelessWidget {
+  const AppDestructiveConfirmDialog({
+    required this.title,
+    required this.description,
+    required this.confirmLabel,
+    required this.cancelLabel,
+    required this.onConfirm,
+    required this.onCancel,
+    super.key,
+    this.icon = AppIcons.info,
+  });
+
+  final String title;
+  final String description;
+  final String confirmLabel;
+  final String cancelLabel;
+  final VoidCallback onConfirm;
+  final VoidCallback onCancel;
+  final IconData icon;
+
+  /// Displays this dialog and returns `true` on confirm, `false` on cancel.
+  static Future<bool?> show(
+    final BuildContext context, {
+    required final String title,
+    required final String description,
+    required final String confirmLabel,
+    required final String cancelLabel,
+    final IconData icon = AppIcons.info,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: const Color(0xCC031B35),
+      builder: (final ctx) => AppDestructiveConfirmDialog(
+        title: title,
+        description: description,
+        confirmLabel: confirmLabel,
+        cancelLabel: cancelLabel,
+        icon: icon,
+        onConfirm: () => Navigator.of(ctx).pop(true),
+        onCancel: () => Navigator.of(ctx).pop(false),
+      ),
+    );
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.space16,
+        vertical: AppDimensions.space64,
+      ),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.backgroundWhite,
+          border: Border.all(color: AppColors.borderBlueMutedLight),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          boxShadow: AppShadows.overAll,
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space16,
+          vertical: AppDimensions.space32,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(AppDimensions.space8),
+                decoration: BoxDecoration(
+                  color: AppColors.errorLight,
+                  borderRadius: BorderRadius.circular(64),
+                ),
+                child: AppIcon(
+                  icon,
+                  color: AppColors.errorDark,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppDimensions.space12),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppTypography.h3.copyWith(color: AppColors.primary),
+            ),
+            const SizedBox(height: AppDimensions.space24),
+            Text(
+              description,
+              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+            ),
+            const SizedBox(height: AppDimensions.space16),
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                    label: cancelLabel,
+                    hierarchy: AppButtonHierarchy.tertiary,
+                    isExpanded: true,
+                    onPressed: onCancel,
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.space16),
+                Expanded(
+                  child: AppButton(
+                    label: confirmLabel,
+                    intent: AppButtonIntent.destructive,
+                    isExpanded: true,
+                    onPressed: onConfirm,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

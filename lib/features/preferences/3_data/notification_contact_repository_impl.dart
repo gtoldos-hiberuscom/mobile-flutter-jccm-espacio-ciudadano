@@ -12,10 +12,10 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     final response = await _dio.get<Map<String, dynamic>>(
       '/api/v1/ciudadanos/$citizenId/contacto',
       options: Options(
-        validateStatus: (final status) => status != null && (status < 400 || status == 403 || status == 404),
+        validateStatus: (final status) => status != null && (status < 400 || status == 404),
       ),
     );
-    if (response.statusCode == 403 || response.statusCode == 404) {
+    if (response.statusCode == 404) {
       return null;
     }
     return _mapContact(response.data);

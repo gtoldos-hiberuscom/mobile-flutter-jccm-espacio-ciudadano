@@ -209,7 +209,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
   }
 }
 
-class _FilterNavigation extends StatelessWidget {
+class _FilterNavigation extends StatefulWidget {
   const _FilterNavigation({
     required this.selectedFilter,
     required this.recommendations,
@@ -221,29 +221,85 @@ class _FilterNavigation extends StatelessWidget {
   final ValueChanged<_RecommendationFilter>? onSelected;
 
   @override
+  State<_FilterNavigation> createState() => _FilterNavigationState();
+}
+
+class _FilterNavigationState extends State<_FilterNavigation> {
+  static const _primaryFilters = [
+    _RecommendationFilter.all,
+    _RecommendationFilter.recent,
+    _RecommendationFilter.news,
+  ];
+  static const _immediateFilters = [
+    _RecommendationFilter.news,
+    _RecommendationFilter.immediate,
+  ];
+
+  bool _showImmediate = false;
+
+  @override
+  void didUpdateWidget(covariant final _FilterNavigation oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedFilter == _RecommendationFilter.immediate) {
+      _showImmediate = true;
+    }
+  }
+
+  @override
   Widget build(final BuildContext context) {
     final enabledFilters = {
       _RecommendationFilter.all,
       for (final filter in _RecommendationFilter.values)
-        if (filter != _RecommendationFilter.all && filter.apply(recommendations).isNotEmpty) filter,
+        if (filter != _RecommendationFilter.all && filter.apply(widget.recommendations).isNotEmpty) filter,
     };
-    const filters = _RecommendationFilter.values;
+    final filters = _showImmediate ? _immediateFilters : _primaryFilters;
+    final selectedIndex = filters.contains(widget.selectedFilter) ? filters.indexOf(widget.selectedFilter) : filters.indexOf(_RecommendationFilter.news);
 
     return AppFloatingNavigation(
       tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
-      selectedIndex: filters.indexOf(selectedFilter),
+      selectedIndex: selectedIndex,
       enabledTabs: filters.map(enabledFilters.contains).toList(growable: false),
-      minTabWidths: const [74, 112, 112],
-      onTabSelected: (final index) => onSelected?.call(filters[index]),
-      trailing: SizedBox(
-        width: AppDimensions.minTouchTarget,
-        height: 40,
-        child: IconButton(
-          padding: EdgeInsets.zero,
-          icon: const AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
-          onPressed: () {},
-          tooltip: _RecommendationFilter.news.label(context),
-        ),
+      minTabWidths: _showImmediate ? const [128, 206] : const [76, 150, 150],
+      onTabSelected: (final index) => widget.onSelected?.call(filters[index]),
+      leading: _showImmediate
+          ? _FloatingNavigationArrow(
+              icon: AppIcons.arrowBack,
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              onPressed: () => setState(() => _showImmediate = false),
+            )
+          : null,
+      trailing: !_showImmediate
+          ? _FloatingNavigationArrow(
+              icon: AppIcons.arrowForward,
+              tooltip: _RecommendationFilter.immediate.label(context),
+              onPressed: () => setState(() => _showImmediate = true),
+            )
+          : null,
+    );
+  }
+}
+
+class _FloatingNavigationArrow extends StatelessWidget {
+  const _FloatingNavigationArrow({
+    required this.icon,
+    required this.tooltip,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(final BuildContext context) {
+    return SizedBox(
+      width: AppDimensions.minTouchTarget,
+      height: 40,
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        icon: AppIcon(icon, color: AppColors.textPrimary),
+        onPressed: onPressed,
+        tooltip: tooltip,
       ),
     );
   }
@@ -371,7 +427,8 @@ class _NoRecommendationsBanner extends StatelessWidget {
 enum _RecommendationFilter {
   all,
   recent,
-  news
+  news,
+  immediate
   ;
 
   String label(final BuildContext context) {
@@ -380,6 +437,7 @@ enum _RecommendationFilter {
       _RecommendationFilter.all => l10n.recommendationsTabAll,
       _RecommendationFilter.recent => l10n.recommendationsTabRecent,
       _RecommendationFilter.news => l10n.recommendationsTabNew,
+      _RecommendationFilter.immediate => l10n.recommendationsTabImmediate,
     };
   }
 
@@ -388,6 +446,7 @@ enum _RecommendationFilter {
       _RecommendationFilter.all => recommendations,
       _RecommendationFilter.recent => recommendations.where((final rec) => rec.badge == RecommendationBadge.recent).toList(growable: false),
       _RecommendationFilter.news => recommendations.where((final rec) => rec.badge == RecommendationBadge.news).toList(growable: false),
+      _RecommendationFilter.immediate => recommendations.where((final rec) => rec.badge == RecommendationBadge.immediate).toList(growable: false),
     };
   }
 }

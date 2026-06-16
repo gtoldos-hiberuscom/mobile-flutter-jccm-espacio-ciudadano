@@ -60,7 +60,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
 
   Widget _buildLoadedContent(final AgendaAppointmentsState state) {
     final appointments = _selectedFilter.apply(state.appointments);
-    final eventDates = appointments.map((final appointment) => DateUtils.dateOnly(appointment.dateTime)).toSet();
+    final eventDates = state.appointments.map((final appointment) => DateUtils.dateOnly(appointment.dateTime)).toSet();
     final sections = _buildSections(appointments);
     final initialDate = appointments.isEmpty ? DateTime.now() : appointments.first.dateTime;
 

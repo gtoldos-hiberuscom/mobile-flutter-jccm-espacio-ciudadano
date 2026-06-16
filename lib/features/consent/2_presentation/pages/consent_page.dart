@@ -155,13 +155,18 @@ class _Step2Scaffold extends StatelessWidget {
                 },
               ),
         actions: [
-          IconButton(
-            icon: const AppIcon(
-              AppIcons.info,
-              color: AppColors.textPrimary,
+          Semantics(
+            label: l10n.consentInfoButtonSemantics,
+            button: true,
+            child: ExcludeSemantics(
+              child: IconButton(
+                icon: const AppIcon(
+                  AppIcons.info,
+                  color: AppColors.textPrimary,
+                ),
+                onPressed: onShowLegalInfo,
+              ),
             ),
-            tooltip: l10n.consentInfoButtonSemantics,
-            onPressed: onShowLegalInfo,
           ),
         ],
       ),

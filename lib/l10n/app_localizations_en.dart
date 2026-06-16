@@ -165,6 +165,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentScrollHint => 'Scroll to the end to continue';
 
   @override
+  String get consentLegalInfoSnackBar => 'Read the information about data processing and protection before continuing';
+
+  @override
   String get consentInfoButtonSemantics => 'View full legal information';
 
   @override
@@ -1250,6 +1253,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lifeEventsSaveAction => 'Save';
+
+  @override
+  String get lifeEventsAcceptAction => 'Accept';
+
+  @override
+  String get lifeEventsFillLaterAction => 'Fill in later';
+
+  @override
+  String get lifeEventsClearAllAction => 'Deselect all';
 
   @override
   String get lifeEventsResetAction => 'Reset preferences';

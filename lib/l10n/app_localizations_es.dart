@@ -166,6 +166,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consentScrollHint => 'Desliza hasta el final para continuar';
 
   @override
+  String get consentLegalInfoSnackBar => 'Lee la información sobre el tratamiento y protección de datos antes de continuar';
+
+  @override
   String get consentInfoButtonSemantics => 'Ver información legal completa';
 
   @override
@@ -1253,6 +1256,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lifeEventsSaveAction => 'Guardar';
 
   @override
+  String get lifeEventsAcceptAction => 'Aceptar';
+
+  @override
+  String get lifeEventsFillLaterAction => 'Rellenar luego';
+
+  @override
+  String get lifeEventsClearAllAction => 'Desmarcar todo';
+
+  @override
   String get lifeEventsResetAction => 'Borrar preferencias';
 
   @override
@@ -2161,7 +2173,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsTabNew => 'Novedades';
 
   @override
-  String get recommendationsTabImmediate => 'Tramitación inmediata';
+  String get recommendationsTabImmediate => 'Trámite inmediato';
 
   @override
   String get recommendationsImmediateBadge => 'Tramitación inmediata';

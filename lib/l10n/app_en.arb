@@ -212,6 +212,10 @@
   "@consentScrollHint": {
     "description": "Hint prompting the user to scroll to the end of the legal content."
   },
+  "consentLegalInfoSnackBar": "Read the information about data processing and protection before continuing",
+  "@consentLegalInfoSnackBar": {
+    "description": "SnackBar shown when tapping the info button on the onboarding data-protection screen."
+  },
   "consentInfoButtonSemantics": "View full legal information",
   "@consentInfoButtonSemantics": {
     "description": "Accessibility label for the legal info button in step 2."
@@ -1678,6 +1682,18 @@
   "lifeEventsSaveAction": "Save",
   "@lifeEventsSaveAction": {
     "description": "Personalization — explicit save button label."
+  },
+  "lifeEventsAcceptAction": "Accept",
+  "@lifeEventsAcceptAction": {
+    "description": "Personalization — accept button label for first-login onboarding."
+  },
+  "lifeEventsFillLaterAction": "Fill in later",
+  "@lifeEventsFillLaterAction": {
+    "description": "Personalization — skip action label for first-login onboarding."
+  },
+  "lifeEventsClearAllAction": "Deselect all",
+  "@lifeEventsClearAllAction": {
+    "description": "Personalization — clear all selected life events action label."
   },
   "lifeEventsResetAction": "Reset preferences",
   "@lifeEventsResetAction": {

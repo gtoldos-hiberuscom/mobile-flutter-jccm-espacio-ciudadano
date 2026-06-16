@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'Desliza hasta el final para continuar'**
   String get consentScrollHint;
 
+  /// SnackBar mostrado al pulsar el botón de información en la pantalla de protección de datos del onboarding.
+  ///
+  /// In es, this message translates to:
+  /// **'Lee la información sobre el tratamiento y protección de datos antes de continuar'**
+  String get consentLegalInfoSnackBar;
+
   /// Etiqueta de accesibilidad del botón de información legal en el paso 2.
   ///
   /// In es, this message translates to:
@@ -2486,6 +2492,24 @@ abstract class AppLocalizations {
   /// **'Guardar'**
   String get lifeEventsSaveAction;
 
+  /// Personalization — accept button label for first-login onboarding.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptar'**
+  String get lifeEventsAcceptAction;
+
+  /// Personalization — skip action label for first-login onboarding.
+  ///
+  /// In es, this message translates to:
+  /// **'Rellenar luego'**
+  String get lifeEventsFillLaterAction;
+
+  /// Personalization — clear all selected life events action label.
+  ///
+  /// In es, this message translates to:
+  /// **'Desmarcar todo'**
+  String get lifeEventsClearAllAction;
+
   /// Personalization — reset preferences button label.
   ///
   /// In es, this message translates to:
@@ -4187,7 +4211,7 @@ abstract class AppLocalizations {
   /// Recommendations — tab label for the immediate-processing bucket.
   ///
   /// In es, this message translates to:
-  /// **'Tramitación inmediata'**
+  /// **'Trámite inmediato'**
   String get recommendationsTabImmediate;
 
   /// Recommendations — badge shown on cards flagged as immediate-processing.
