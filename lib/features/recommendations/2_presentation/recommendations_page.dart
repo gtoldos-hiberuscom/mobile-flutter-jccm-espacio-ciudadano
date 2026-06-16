@@ -10,6 +10,7 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recomme
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendation_life_event_filters_page.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RecommendationsPage extends ConsumerStatefulWidget {
   const RecommendationsPage({super.key});
@@ -362,12 +363,31 @@ class _RecommendationCard extends StatelessWidget {
     return AppRecommendationCard(
       title: recommendation.title,
       badge: _RecommendationBadge(badge: recommendation.badge),
-      detailLabel: l10n.recommendationsLifeEventPrefix,
+      detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
       detailText: recommendation.lifeEventName,
       responsibleUnitText: responsibleUnit == null ? null : '${l10n.recommendationsResponsibleUnitPrefix} $responsibleUnit',
       deadlineText: deadline == null ? null : '${l10n.recommendationsDeadlinePrefix} $deadline',
+      onTap: () => unawaited(_openRecommendationDetail(context, recommendation)),
     );
   }
+}
+
+Future<void> _openRecommendationDetail(
+  final BuildContext context,
+  final Recommendation recommendation,
+) async {
+  final l10n = AppLocalizations.of(context);
+  final url = recommendation.detailUrl;
+  if (url == null || !url.hasScheme) {
+    AppAlertSnackbar.show(context, message: l10n.recommendationsDetailUnavailable);
+    return;
+  }
+
+  final accepted = await launchUrl(url, mode: LaunchMode.externalApplication);
+  if (!context.mounted || accepted) {
+    return;
+  }
+  AppAlertSnackbar.show(context, message: l10n.externalLinkOpenFailed);
 }
 
 class _RecommendationBadge extends StatelessWidget {
@@ -383,16 +403,19 @@ class _RecommendationBadge extends StatelessWidget {
         status: AppTagStatus.warning,
         label: l10n.recommendationsTabRecent,
         icon: AppIcons.hourglass,
+        showIcon: false,
       ),
       RecommendationBadge.news => AppTag(
         status: AppTagStatus.infoActive,
         label: l10n.recommendationsTabNew,
         icon: AppIcons.autorenew,
+        showIcon: false,
       ),
       RecommendationBadge.immediate => AppTag(
         status: AppTagStatus.success,
         label: l10n.recommendationsImmediateBadge,
         icon: AppIcons.check,
+        showIcon: false,
       ),
     };
   }

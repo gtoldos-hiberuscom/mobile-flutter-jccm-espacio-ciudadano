@@ -304,6 +304,7 @@ class _RecommendedProcedureCard extends StatelessWidget {
       badge: const AppTag(
         status: AppTagStatus.success,
         label: 'Tramitación inmediata',
+        showIcon: false,
       ),
       detailLabel: 'Hechos vitales asociados',
       detailText: 'Quiero acoger - Busco trabajo - Quiero vivir en un pueblo - Quiero estudiar',

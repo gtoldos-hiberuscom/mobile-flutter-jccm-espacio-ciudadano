@@ -2975,6 +2975,10 @@
   "@recommendationsLifeEventPrefix": {
     "description": "Recommendations — prefix shown before the life event label inside a card chip."
   },
+  "recommendationsAssociatedLifeEventsLabel": "Hechos vitales asociados",
+  "@recommendationsAssociatedLifeEventsLabel": {
+    "description": "Recommendations — label shown above the life events associated with a recommendation card."
+  },
   "recommendationsLoadMore": "Ver más",
   "@recommendationsLoadMore": {
     "description": "Recommendations — load-more button label at the bottom of the list."

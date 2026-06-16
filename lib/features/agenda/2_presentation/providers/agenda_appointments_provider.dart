@@ -25,6 +25,7 @@ final agendaAppointmentsProvider = FutureProvider<AgendaAppointmentsState>((fina
       .read(loadAgendaAppointmentsUsecaseProvider)
       .execute(
         documentNumber: documentNumber.trim(),
+        agentId: claims?.idAgente?.trim(),
       );
 
   return switch (result) {

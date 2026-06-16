@@ -2188,6 +2188,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsLifeEventPrefix => 'Hecho vital:';
 
   @override
+  String get recommendationsAssociatedLifeEventsLabel => 'Hechos vitales asociados';
+
+  @override
   String get recommendationsLoadMore => 'Ver más';
 
   @override

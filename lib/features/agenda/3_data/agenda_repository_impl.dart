@@ -10,14 +10,47 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   final Dio _dio;
 
   @override
-  Future<List<AgendaAppointment>> loadUpcomingAppointments({
+  Future<List<AgendaAppointment>> loadAppointments({
     required final String documentNumber,
+    final String? agentId,
   }) async {
-    final response = await _dio.get<String>(
-      '/api/v1/sescam/citas/$documentNumber',
-      options: Options(responseType: ResponseType.plain),
-    );
+    final trimmedAgentId = agentId?.trim();
+    final responses = await Future.wait([
+      _loadAppointmentsFrom(
+        '/api/v1/sescam/citas/$documentNumber',
+        source: _AgendaAppointmentSource.health,
+      ),
+      if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
+        _loadAppointmentsFrom(
+          '/api/v1/agenda/$trimmedAgentId/eventos/todos',
+          source: _AgendaAppointmentSource.general,
+          ignoreBadRequest: true,
+        ),
+    ]);
 
+    final appointments = responses.expand((final appointments) => appointments).toList(growable: false)..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
+
+    return appointments;
+  }
+
+  Future<List<AgendaAppointment>> _loadAppointmentsFrom(
+    final String path, {
+    required final _AgendaAppointmentSource source,
+    final bool ignoreBadRequest = false,
+  }) async {
+    final Response<String> response;
+    try {
+      response = await _dio.get<String>(
+        path,
+        options: Options(responseType: ResponseType.plain),
+      );
+    } on DioException catch (error) {
+      final statusCode = error.response?.statusCode;
+      if (statusCode == 404 || (ignoreBadRequest && statusCode == 400)) {
+        return const [];
+      }
+      rethrow;
+    }
     final payload = response.data;
     if (payload == null || payload.trim().isEmpty) {
       return const [];
@@ -25,9 +58,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
     final decoded = _decodePayload(payload);
     final objects = _appointmentMaps(decoded);
-    final appointments = objects.map(_tryParseAppointment).nonNulls.toList(growable: false)..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
-
-    return appointments;
+    return objects.map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
   }
 
   Object? _decodePayload(final String payload) {
@@ -109,12 +140,26 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     return maps;
   }
 
-  AgendaAppointment? _tryParseAppointment(final Map<String, dynamic> raw) {
+  AgendaAppointment? _tryParseAppointment(
+    final Map<String, dynamic> raw, {
+    required final _AgendaAppointmentSource source,
+  }) {
     final dateTime = _extractDateTime(raw);
     if (dateTime == null) {
       return null;
     }
 
+    final title = _firstString(raw, const [
+      'titulo',
+      'title',
+      'nombre',
+      'asunto',
+      'resumen',
+      'summary',
+      'evento',
+      'nombreEvento',
+      'descripcionEvento',
+    ]);
     final professional = _firstString(raw, const [
       'profesional',
       'nombreProfesional',
@@ -138,6 +183,13 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'descripcionTipoCita',
       'descripcionCita',
       'nombreCita',
+      'nomTvisita',
+      'nomTVisita',
+      'nomTipoVisita',
+      'nombreTipoVisita',
+      'tipoEvento',
+      'descTipoEvento',
+      'descripcionTipoEvento',
       'tipo',
       'descripcion',
       'motivo',
@@ -178,10 +230,15 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'observaciones',
     ]);
 
+    final description = switch (source) {
+      _AgendaAppointmentSource.health => specialty ?? 'Cita sanitaria',
+      _AgendaAppointmentSource.general => specialty ?? title ?? 'Cita',
+    };
+
     return AgendaAppointment(
       dateTime: dateTime,
-      title: professional ?? specialty ?? 'Cita sanitaria',
-      description: specialty ?? 'Cita',
+      title: source == _AgendaAppointmentSource.health ? professional ?? specialty ?? 'Cita sanitaria' : title ?? specialty ?? 'Cita',
+      description: description,
       channel: channel,
       detail: detail ?? center,
       center: center,
@@ -198,6 +255,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'datetime',
       'inicio',
       'start',
+      'fechaInicio',
+      'fecha_inicio',
+      'startDate',
+      'start_date',
     ]);
     final parsedCombined = _parseDateTime(combined);
     if (parsedCombined != null) {
@@ -210,12 +271,17 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'dia',
       'fechaInicio',
       'fecha_inicio',
+      'fechaEvento',
+      'fecha_evento',
+      'diaEvento',
     ]);
     final time = _firstString(raw, const [
       'hora',
       'time',
       'horaInicio',
       'hora_inicio',
+      'horaEvento',
+      'hora_evento',
     ]);
     return _parseDateAndTime(date: date, time: time);
   }
@@ -273,4 +339,9 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     }
     return null;
   }
+}
+
+enum _AgendaAppointmentSource {
+  health,
+  general,
 }

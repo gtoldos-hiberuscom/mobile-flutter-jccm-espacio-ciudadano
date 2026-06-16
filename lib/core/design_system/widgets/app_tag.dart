@@ -47,6 +47,7 @@ class AppTag extends StatelessWidget {
     required this.label,
     super.key,
     this.icon,
+    this.showIcon = true,
   });
 
   /// The semantic status that drives the colour palette and default icon.
@@ -57,6 +58,9 @@ class AppTag extends StatelessWidget {
 
   /// Optional icon override — defaults to the Figma-specified icon per status.
   final IconData? icon;
+
+  /// Whether the leading status icon is rendered.
+  final bool showIcon;
 
   @override
   Widget build(final BuildContext context) {
@@ -80,8 +84,10 @@ class AppTag extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppIcon(effectiveIcon, size: 16, color: fg),
-            const SizedBox(width: AppDimensions.space4),
+            if (showIcon) ...[
+              AppIcon(effectiveIcon, size: 16, color: fg),
+              const SizedBox(width: AppDimensions.space4),
+            ],
             Text(
               label.toUpperCase(),
               style: AppTypography.captionUppercase.copyWith(color: fg),

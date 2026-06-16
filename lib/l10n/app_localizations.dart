@@ -4238,6 +4238,12 @@ abstract class AppLocalizations {
   /// **'Hecho vital:'**
   String get recommendationsLifeEventPrefix;
 
+  /// Recommendations — label shown above the life events associated with a recommendation card.
+  ///
+  /// In es, this message translates to:
+  /// **'Hechos vitales asociados'**
+  String get recommendationsAssociatedLifeEventsLabel;
+
   /// Recommendations — load-more button label at the bottom of the list.
   ///
   /// In es, this message translates to:

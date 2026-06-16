@@ -2187,6 +2187,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recommendationsLifeEventPrefix => 'Life event:';
 
   @override
+  String get recommendationsAssociatedLifeEventsLabel => 'Associated life events';
+
+  @override
   String get recommendationsLoadMore => 'Load more';
 
   @override
