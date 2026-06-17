@@ -4,7 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.d
 
 /// Size variant for [AppLabel] — mirrors Figma "Labels" node (`53:3355`).
 enum AppLabelSize {
-  /// Medium — caption bold uppercase, 12 sp w700 ls 0.15, primary colour.
+  /// Medium — small bold uppercase, 14 sp w700, primary colour.
   m,
 
   /// Small — bodyS, 14 sp regular, primary colour.
@@ -13,7 +13,7 @@ enum AppLabelSize {
 
 /// Form-field label text.
 ///
-/// - [AppLabelSize.m]: uppercase caption bold (12 sp / w700 / ls 0.15) in
+/// - [AppLabelSize.m]: uppercase small bold (14 sp / w700) in
 ///   primary colour.
 /// - [AppLabelSize.s]: bodyS (14 sp / w400) in primary colour.
 ///
@@ -47,10 +47,10 @@ class AppLabel extends StatelessWidget {
 
     switch (size) {
       case AppLabelSize.m:
-        textStyle = AppTypography.caption.copyWith(
+        textStyle = AppTypography.smallBold.copyWith(
           color: effectiveColor,
           fontWeight: FontWeight.w700,
-          letterSpacing: 0.15,
+          letterSpacing: 0,
         );
         displayText = text.toUpperCase();
       case AppLabelSize.s:
@@ -68,7 +68,7 @@ class AppLabel extends StatelessWidget {
         style: textStyle,
         children: [
           TextSpan(
-            text: ' *',
+            text: '*',
             style: textStyle.copyWith(color: AppColors.error),
           ),
         ],

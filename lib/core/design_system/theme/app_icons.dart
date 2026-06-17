@@ -45,6 +45,7 @@ abstract final class AppIcons {
 
   // ── Communication ─────────────────────────────────────────────────────────
   static const IconData mail = Icons.mail_outlined;
+  static const IconData chat = Icons.chat_bubble_outline;
   static const IconData drafts = Icons.drafts_outlined;
   static const IconData alternateEmail = Icons.alternate_email;
   static const IconData call = Icons.call_outlined;
@@ -94,8 +95,10 @@ abstract final class AppIcons {
 /// SVG asset tokens for the icon set stored in `assets/icons`.
 abstract final class AppIconAssets {
   static const String accountBalance = 'assets/icons/account_balance.svg';
+  static const String ajustes = 'assets/icons/ajustes.svg';
   static const String apps = 'assets/icons/apps.svg';
   static const String calendarToday = 'assets/icons/calendar_today.svg';
+  static const String chat = 'assets/icons/chat.svg';
   static const String check = 'assets/icons/check.svg';
   static const String chevronRight = 'assets/icons/chevron_right.svg';
   static const String docs = 'assets/icons/docs.svg';
@@ -104,6 +107,7 @@ abstract final class AppIconAssets {
   static const String license = 'assets/icons/license.svg';
   static const String notifications = 'assets/icons/notifications.svg';
   static const String person = 'assets/icons/person.svg';
+  static const String question = 'assets/icons/question.svg';
   static const String schedule = 'assets/icons/schedule.svg';
   static const String verified = 'assets/icons/verified.svg';
 }

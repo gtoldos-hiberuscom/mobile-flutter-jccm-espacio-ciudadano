@@ -397,43 +397,48 @@ class _AppCalendarState extends State<AppCalendar> {
       selected: selected,
       child: GestureDetector(
         onTap: () => widget.onDateSelected?.call(date),
-        child: Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            border: border,
-            boxShadow: selected ? AppShadows.low : null,
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${date.day}',
-                style: AppTypography.smallRegular.copyWith(
-                  color: textColor,
-                  fontWeight: fontWeight,
-                ),
-                textAlign: TextAlign.center,
+        child: SizedBox.square(
+          dimension: AppDimensions.minTouchTarget,
+          child: Center(
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                border: border,
+                boxShadow: selected ? AppShadows.low : null,
               ),
-              SizedBox(
-                height: AppDimensions.space8,
-                child: Center(
-                  child: hasEvent
-                      ? Container(
-                          width: AppDimensions.space8,
-                          height: AppDimensions.space8,
-                          decoration: const BoxDecoration(
-                            color: AppColors.primaryDark,
-                            shape: BoxShape.circle,
-                          ),
-                        )
-                      : null,
-                ),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${date.day}',
+                    style: AppTypography.smallRegular.copyWith(
+                      color: textColor,
+                      fontWeight: fontWeight,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: AppDimensions.space8,
+                    child: Center(
+                      child: hasEvent
+                          ? Container(
+                              width: AppDimensions.space8,
+                              height: AppDimensions.space8,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primaryDark,
+                                shape: BoxShape.circle,
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

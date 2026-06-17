@@ -83,14 +83,16 @@ class AppAlertBanner extends StatelessWidget {
                 ),
                 if (onDismiss != null)
                   SizedBox(
-                    width: 40,
-                    height: 40,
+                    width: AppDimensions.minTouchTarget,
+                    height: AppDimensions.minTouchTarget,
                     child: InkWell(
                       onTap: onDismiss,
                       borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                      child: AppIcon(
-                        AppIcons.close,
-                        color: titleColor,
+                      child: Center(
+                        child: AppIcon(
+                          AppIcons.close,
+                          color: titleColor,
+                        ),
                       ),
                     ),
                   ),

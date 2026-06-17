@@ -15,6 +15,7 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_a
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/login_callback_page.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/support_form_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/accessibility_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_notice_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/privacy_page.dart';
@@ -81,6 +82,14 @@ final goRouterProvider = Provider<GoRouter>(
           pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
             state,
             const HelpContactPage(),
+          ),
+        ),
+
+        GoRoute(
+          path: Routes.supportForm,
+          pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
+            state,
+            const SupportFormPage(),
           ),
         ),
 

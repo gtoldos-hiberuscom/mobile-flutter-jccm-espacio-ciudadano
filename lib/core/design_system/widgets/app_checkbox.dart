@@ -96,30 +96,33 @@ class AppCheckbox extends StatelessWidget {
                       }
                     },
               borderRadius: BorderRadius.circular(AppDimensions.space4),
-              child: Padding(
-                padding: contentPadding,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      switch (value) {
-                        true => Icons.check_box_outlined,
-                        false => Icons.check_box_outline_blank,
-                        null => Icons.indeterminate_check_box_outlined,
-                      },
-                      size: _iconSize,
-                      color: _iconColor,
-                    ),
-                    const SizedBox(width: AppDimensions.space8),
-                    Flexible(
-                      child: Text(
-                        label,
-                        style: (labelStyle ?? (size == AppCheckboxSize.large ? AppTypography.leadingMedium : AppTypography.bodyRegular)).copyWith(
-                          color: _isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+                child: Padding(
+                  padding: contentPadding,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        switch (value) {
+                          true => Icons.check_box_outlined,
+                          false => Icons.check_box_outline_blank,
+                          null => Icons.indeterminate_check_box_outlined,
+                        },
+                        size: _iconSize,
+                        color: _iconColor,
+                      ),
+                      const SizedBox(width: AppDimensions.space8),
+                      Flexible(
+                        child: Text(
+                          label,
+                          style: (labelStyle ?? AppTypography.leadingMedium).copyWith(
+                            color: _isDisabled ? AppColors.textDisabled : AppColors.primary,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -143,6 +146,6 @@ class AppCheckbox extends StatelessWidget {
     if (isError) {
       return AppColors.error;
     }
-    return value == false ? AppColors.textBase : AppColors.successDark;
+    return AppColors.successDark;
   }
 }

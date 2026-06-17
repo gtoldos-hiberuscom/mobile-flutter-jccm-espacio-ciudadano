@@ -74,7 +74,7 @@ class _HelpContactPageState extends ConsumerState<HelpContactPage> with SingleTi
                 _ContactTab(
                   onCallPhone: _callPhone,
                   onOpenOffices: () => _openExternalLink('jccm_offices_oir'),
-                  onOpenSupport: () => _openExternalLink('technical_support'),
+                  onOpenSupport: _navigateToSupportForm,
                 ),
               ],
             ),
@@ -97,6 +97,10 @@ class _HelpContactPageState extends ConsumerState<HelpContactPage> with SingleTi
       message: AppLocalizations.of(context).externalLinkOpenFailed,
       severity: AppAlertSeverity.error,
     );
+  }
+
+  Future<void> _navigateToSupportForm() async {
+    await context.push<void>(Routes.supportForm);
   }
 
   Future<void> _openExternalLink(final String id) async {
@@ -127,7 +131,7 @@ class _FaqTab extends StatelessWidget {
   Widget build(final BuildContext context) => ListView(
     padding: const EdgeInsets.all(AppDimensions.space16),
     children: [
-      const _SectionTitle('Preguntas frecuentes'),
+      const AppSectionHeading('Preguntas frecuentes'),
       const SizedBox(height: AppDimensions.space16),
       const AppList(
         padding: EdgeInsets.all(AppDimensions.space8),
@@ -185,14 +189,15 @@ class _FaqTab extends StatelessWidget {
         ],
       ),
       const SizedBox(height: AppDimensions.space24),
-      const _SectionTitle('Guías de ayuda'),
+      const AppSectionHeading('Guías de ayuda'),
       const SizedBox(height: AppDimensions.space16),
-      const _InfoRow(
-        icon: AppIcons.help,
+      const AppIconTextBlock(
+        iconAsset: AppIconAssets.question,
+        iconSize: 36,
         text: 'Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda',
       ),
       const SizedBox(height: AppDimensions.space24),
-      _NavCard(
+      AppContactActionCard(
         title: 'Guías de ayuda',
         subtitle: 'Ir al portal web JCCM',
         onTap: onOpenGuides,
@@ -216,229 +221,53 @@ class _ContactTab extends StatelessWidget {
   Widget build(final BuildContext context) => ListView(
     padding: const EdgeInsets.all(AppDimensions.space16),
     children: [
-      const _SectionTitle('Información de contacto'),
+      const AppSectionHeading('Información de contacto'),
       const SizedBox(height: AppDimensions.space24),
-      const _InfoRow(
-        icon: AppIcons.drafts,
+      const AppIconTextBlock(
+        iconAsset: AppIconAssets.chat,
+        iconSize: 36,
         text: 'Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.',
         boldParts: ['consultas generales e información administrativa', 'teléfonos de atención ciudadana'],
       ),
       const SizedBox(height: AppDimensions.space24),
-      _PhoneCard(
+      AppPhoneActionCard(
         number: '012',
+        subtitle: 'Llamar a Atención a la Ciudadanía',
         onTap: () => onCallPhone('012'),
       ),
       const SizedBox(height: AppDimensions.space16),
-      _PhoneCard(
+      AppPhoneActionCard(
         number: '952 274 552',
+        subtitle: 'Llamar a Atención a la Ciudadanía',
         onTap: () => onCallPhone('952 274 552'),
       ),
       const SizedBox(height: AppDimensions.space24),
-      const _InfoRow(
-        icon: AppIcons.drafts,
+      const AppIconTextBlock(
+        iconAsset: AppIconAssets.chat,
+        iconSize: 36,
         text: 'Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.',
         boldParts: ['conocer más detalles sobre un expediente'],
       ),
       const SizedBox(height: AppDimensions.space24),
-      _NavCard(
+      AppContactActionCard(
         title: 'Listado de Oficina de Información y registro',
         subtitle: 'Ir al portal web JCCM',
         onTap: onOpenOffices,
       ),
       const SizedBox(height: AppDimensions.space24),
-      const _InfoRow(
-        icon: AppIcons.settings,
+      const AppIconTextBlock(
+        iconAsset: AppIconAssets.ajustes,
+        iconSize: 36,
         text: 'Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.',
         boldParts: ['asistencia técnica'],
       ),
       const SizedBox(height: AppDimensions.space24),
-      _NavCard(
-        title: 'Soporte técnico',
-        subtitle: 'Abrir formulario en Espacio web',
-        onTap: onOpenSupport,
+      AppButton(
+        label: 'Formulario de Soporte',
+        trailingIcon: AppIcons.arrowForward,
+        isExpanded: true,
+        onPressed: onOpenSupport,
       ),
     ],
-  );
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.text);
-
-  final String text;
-
-  @override
-  Widget build(final BuildContext context) => Text(
-    text,
-    style: AppTypography.h2.copyWith(color: AppColors.primary),
-  );
-}
-
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.icon,
-    required this.text,
-    this.boldParts = const [],
-  });
-
-  final IconData icon;
-  final String text;
-  final List<String> boldParts;
-
-  @override
-  Widget build(final BuildContext context) {
-    final style = AppTypography.leadingMedium.copyWith(color: AppColors.primary);
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppIcon(icon, color: AppColors.secondary, size: AppDimensions.iconLarge),
-        const SizedBox(width: AppDimensions.space16),
-        Expanded(
-          child: Text.rich(
-            TextSpan(
-              style: style,
-              children: _spansWithBoldParts(text, style, boldParts),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<TextSpan> _spansWithBoldParts(
-    final String value,
-    final TextStyle style,
-    final List<String> boldParts,
-  ) {
-    if (boldParts.isEmpty) {
-      return [TextSpan(text: value)];
-    }
-    final spans = <TextSpan>[];
-    var cursor = 0;
-    while (cursor < value.length) {
-      final next = boldParts
-          .map((final part) => (part: part, index: value.indexOf(part, cursor)))
-          .where((final match) => match.index >= 0)
-          .fold<({String part, int index})?>(
-            null,
-            (final current, final match) => current == null || match.index < current.index ? match : current,
-          );
-      if (next == null) {
-        spans.add(TextSpan(text: value.substring(cursor)));
-        break;
-      }
-      if (cursor < next.index) {
-        spans.add(TextSpan(text: value.substring(cursor, next.index)));
-      }
-      spans.add(
-        TextSpan(
-          text: next.part,
-          style: style.copyWith(fontWeight: FontWeight.w700),
-        ),
-      );
-      cursor = next.index + next.part.length;
-    }
-    return spans;
-  }
-}
-
-class _PhoneCard extends StatelessWidget {
-  const _PhoneCard({
-    required this.number,
-    required this.onTap,
-  });
-
-  final String number;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) => Semantics(
-    button: true,
-    label: 'Llamar al $number',
-    child: InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.backgroundWhite,
-          border: Border.all(color: AppColors.borderBlueMutedLight),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-          boxShadow: AppShadows.low,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimensions.space16),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      number,
-                      style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
-                    ),
-                    const SizedBox(height: AppDimensions.space4),
-                    Text(
-                      'Llamar a Atención a la Ciudadanía',
-                      style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-                    ),
-                  ],
-                ),
-              ),
-              const AppIcon(AppIcons.call, color: AppColors.textBase),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-class _NavCard extends StatelessWidget {
-  const _NavCard({
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) => InkWell(
-    onTap: onTap,
-    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-    child: DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        border: Border.all(color: AppColors.borderBlueMutedLight),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-        boxShadow: AppShadows.low,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space16),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
-                  ),
-                  const SizedBox(height: AppDimensions.space4),
-                  Text(
-                    subtitle,
-                    style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-                  ),
-                ],
-              ),
-            ),
-            const AppIcon(AppIcons.openInNew, color: AppColors.textBase),
-          ],
-        ),
-      ),
-    ),
   );
 }

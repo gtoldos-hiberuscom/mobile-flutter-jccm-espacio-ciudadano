@@ -1054,7 +1054,7 @@ class _FloatingNavTab extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        height: 40,
+        height: AppDimensions.minTouchTarget,
         constraints: BoxConstraints(minWidth: minWidth),
         decoration: BoxDecoration(
           color: backgroundColor,

@@ -17,6 +17,7 @@ abstract final class Routes {
   static const String landingHelp = '/landing/help';
   static const String landingAbout = '/landing/about';
   static const String helpContact = '/help-contact';
+  static const String supportForm = '/support-form';
   static const String legalPrivacy = '/legal/privacy';
   static const String legalNotice = '/legal/notice';
   static const String legalAccessibility = '/legal/accessibility';
@@ -55,6 +56,7 @@ abstract final class Routes {
   static const Set<String> _authenticated = {
     consent,
     helpContact,
+    supportForm,
     agenda,
     recommendations,
     recommendationLifeEventFilters,
