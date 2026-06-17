@@ -4387,6 +4387,258 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ir a Sede Electrónica'**
   String get drawerGoToSedeElectronica;
+
+  /// Título de la sección Mis datos en la barra superior y navegación principal.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos'**
+  String get myDataTitle;
+
+  /// Texto introductorio de la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.'**
+  String get myDataIntro;
+
+  /// Título de la tarjeta de Salud en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Salud'**
+  String get myDataHealthTitle;
+
+  /// Descripción de la tarjeta de Salud en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'SESCAM y servicios de salud'**
+  String get myDataHealthDescription;
+
+  /// Título de la tarjeta de Bienestar Social en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar Social'**
+  String get myDataSocialWelfareTitle;
+
+  /// Descripción de la tarjeta de Bienestar Social en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicios disponibles'**
+  String get myDataSocialWelfareDescription;
+
+  /// Título de la tarjeta de Empleo en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get myDataEmploymentTitle;
+
+  /// Descripción de la tarjeta de Empleo en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Demanda y servicios de empleo'**
+  String get myDataEmploymentDescription;
+
+  /// Título de la tarjeta de Educación en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación'**
+  String get myDataEducationTitle;
+
+  /// Descripción de la tarjeta de Educación en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Titulos formativos'**
+  String get myDataEducationDescription;
+
+  /// Título de la tarjeta de Vivienda en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Vivienda'**
+  String get myDataHousingTitle;
+
+  /// Descripción de la tarjeta de Vivienda en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Titularidad de bienes inmueble'**
+  String get myDataHousingDescription;
+
+  /// Título de la tarjeta de Vehículos en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Vehículos'**
+  String get myDataVehiclesTitle;
+
+  /// Descripción de la tarjeta de Vehículos en la pantalla Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus vehículos registrados'**
+  String get myDataVehiclesDescription;
+
+  /// SnackBar mostrado al pulsar una tarjeta de Mis datos cuyo detalle aún no está implementado.
+  ///
+  /// In es, this message translates to:
+  /// **'{section} disponible próximamente'**
+  String myDataSectionComingSoon(String section);
+
+  /// SnackBar mostrado al pulsar el botón de información en el detalle de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus datos de salud y las citas disponibles.'**
+  String get myDataHealthInfoMessage;
+
+  /// Primera pestaña del detalle de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos de Salud'**
+  String get myDataHealthDataTab;
+
+  /// Segunda pestaña del detalle de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios'**
+  String get myDataHealthServicesTab;
+
+  /// Título de la sección de trámites sugeridos en la pestaña de información y servicios de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites que te pueden interesar'**
+  String get myDataHealthProceduresTitle;
+
+  /// Enlace a reclamaciones y quejas relativas al SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Reclamaciones y quejas relativas al SESCAM'**
+  String get myDataHealthProcedureComplaints;
+
+  /// Enlace a la solicitud de tarjeta para la Atención Sanitaria en el SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud de tarjeta para la Atención Sanitaria en el SESCAM'**
+  String get myDataHealthProcedureHealthCard;
+
+  /// Enlace de libre elección en el ámbito de la Atención Especializada.
+  ///
+  /// In es, this message translates to:
+  /// **'Libre elección en el ámbito de la Atención Especializada'**
+  String get myDataHealthProcedureSpecializedCare;
+
+  /// Título de la sección de enlaces de interés en la pestaña de información y servicios de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlaces de interés'**
+  String get myDataHealthInterestLinksTitle;
+
+  /// Enlace al Servicio de Salud de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio de Salud de Castilla-La Mancha (SESCAM)'**
+  String get myDataHealthLinkSescam;
+
+  /// Enlace a Mi Salud Digital.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi Salud Digital'**
+  String get myDataHealthLinkDigitalHealth;
+
+  /// Enlace a Historia clínica Digital del Sistema Nacional de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Historia clínica Digital (Sistema Nacional de Salud)'**
+  String get myDataHealthLinkClinicalHistory;
+
+  /// Título principal del bloque de citas sanitarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas de Atención Primaria'**
+  String get myDataHealthAppointmentsTitle;
+
+  /// Estado vacío del listado de citas sanitarias.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay citas para mostrar.'**
+  String get myDataHealthAppointmentsEmpty;
+
+  /// Mensaje de error del listado de citas sanitarias.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus citas sanitarias.'**
+  String get myDataHealthAppointmentsError;
+
+  /// Código CIP mostrado bajo el título del detalle de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP: FCCT590551910012'**
+  String get myDataHealthCip;
+
+  /// Pestaña de citas pendientes en Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendientes'**
+  String get myDataHealthPendingTab;
+
+  /// Pestaña de citas pasadas en Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasadas'**
+  String get myDataHealthPastTab;
+
+  /// Año mostrado en la lista de citas de Salud de la maqueta.
+  ///
+  /// In es, this message translates to:
+  /// **'2026'**
+  String get myDataHealthYear;
+
+  /// Mes diciembre mostrado en la lista de citas de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'diciembre'**
+  String get myDataHealthDecember;
+
+  /// Mes octubre mostrado en la lista de citas de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'octubre'**
+  String get myDataHealthOctober;
+
+  /// Número de día de la cita sanitaria de ejemplo.
+  ///
+  /// In es, this message translates to:
+  /// **'12'**
+  String get myDataHealthAppointmentDayNumber;
+
+  /// Día de la semana de la cita sanitaria de ejemplo.
+  ///
+  /// In es, this message translates to:
+  /// **'Jueves'**
+  String get myDataHealthAppointmentWeekday;
+
+  /// Hora de la cita sanitaria de ejemplo.
+  ///
+  /// In es, this message translates to:
+  /// **'17:35h'**
+  String get myDataHealthAppointmentTime;
+
+  /// Tipo de cita sanitaria de ejemplo.
+  ///
+  /// In es, this message translates to:
+  /// **'TELÉFONICA'**
+  String get myDataHealthAppointmentType;
+
+  /// Profesional sanitario de la cita de ejemplo.
+  ///
+  /// In es, this message translates to:
+  /// **'Dr. José Manuel Fernández García'**
+  String get myDataHealthAppointmentProfessional;
+
+  /// Descripción de la cita sanitaria de ejemplo.
+  ///
+  /// In es, this message translates to:
+  /// **'Cita de Atención Primaria'**
+  String get myDataHealthAppointmentDescription;
+
+  /// Modalidad de la cita sanitaria de ejemplo.
+  ///
+  /// In es, this message translates to:
+  /// **'Teleconsulta a demanda'**
+  String get myDataHealthAppointmentModality;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

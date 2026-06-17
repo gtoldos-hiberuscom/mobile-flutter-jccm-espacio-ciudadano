@@ -3078,5 +3078,179 @@
   "drawerGoToSedeElectronica": "Go to eGovernment Portal",
   "@drawerGoToSedeElectronica": {
     "description": "Action button label in the profile menu linking to Sede Electrónica."
+  },
+  "myDataTitle": "My data",
+  "@myDataTitle": {
+    "description": "Title of the My data section in the top bar and main navigation."
+  },
+  "myDataIntro": "Check the information available about you in the Administration and access services and procedures linked to each area.",
+  "@myDataIntro": {
+    "description": "Introductory text on the My data screen."
+  },
+  "myDataHealthTitle": "Health",
+  "@myDataHealthTitle": {
+    "description": "Title of the Health card on the My data screen."
+  },
+  "myDataHealthDescription": "SESCAM and health services",
+  "@myDataHealthDescription": {
+    "description": "Description of the Health card on the My data screen."
+  },
+  "myDataSocialWelfareTitle": "Social Welfare",
+  "@myDataSocialWelfareTitle": {
+    "description": "Title of the Social Welfare card on the My data screen."
+  },
+  "myDataSocialWelfareDescription": "Available services",
+  "@myDataSocialWelfareDescription": {
+    "description": "Description of the Social Welfare card on the My data screen."
+  },
+  "myDataEmploymentTitle": "Employment",
+  "@myDataEmploymentTitle": {
+    "description": "Title of the Employment card on the My data screen."
+  },
+  "myDataEmploymentDescription": "Employment demand and services",
+  "@myDataEmploymentDescription": {
+    "description": "Description of the Employment card on the My data screen."
+  },
+  "myDataEducationTitle": "Education",
+  "@myDataEducationTitle": {
+    "description": "Title of the Education card on the My data screen."
+  },
+  "myDataEducationDescription": "Training qualifications",
+  "@myDataEducationDescription": {
+    "description": "Description of the Education card on the My data screen."
+  },
+  "myDataHousingTitle": "Housing",
+  "@myDataHousingTitle": {
+    "description": "Title of the Housing card on the My data screen."
+  },
+  "myDataHousingDescription": "Property ownership",
+  "@myDataHousingDescription": {
+    "description": "Description of the Housing card on the My data screen."
+  },
+  "myDataVehiclesTitle": "Vehicles",
+  "@myDataVehiclesTitle": {
+    "description": "Title of the Vehicles card on the My data screen."
+  },
+  "myDataVehiclesDescription": "Your registered vehicles",
+  "@myDataVehiclesDescription": {
+    "description": "Description of the Vehicles card on the My data screen."
+  },
+  "myDataSectionComingSoon": "{section} will be available soon",
+  "@myDataSectionComingSoon": {
+    "description": "SnackBar shown when tapping a My data card whose detail is not implemented yet.",
+    "placeholders": {
+      "section": {
+        "type": "String",
+        "example": "Health"
+      }
+    }
+  },
+  "myDataHealthInfoMessage": "Check your health data and available appointments.",
+  "@myDataHealthInfoMessage": {
+    "description": "SnackBar shown when tapping the info button on the Health detail screen."
+  },
+  "myDataHealthDataTab": "My Health data",
+  "@myDataHealthDataTab": {
+    "description": "First tab on the Health detail screen."
+  },
+  "myDataHealthServicesTab": "Information and services",
+  "@myDataHealthServicesTab": {
+    "description": "Second tab on the Health detail screen."
+  },
+  "myDataHealthProceduresTitle": "Procedures you may be interested in",
+  "@myDataHealthProceduresTitle": {
+    "description": "Title of the suggested procedures section on the Health information and services tab."
+  },
+  "myDataHealthProcedureComplaints": "Claims and complaints related to SESCAM",
+  "@myDataHealthProcedureComplaints": {
+    "description": "Link to claims and complaints related to SESCAM."
+  },
+  "myDataHealthProcedureHealthCard": "Request a card for Healthcare in SESCAM",
+  "@myDataHealthProcedureHealthCard": {
+    "description": "Link to request a card for Healthcare in SESCAM."
+  },
+  "myDataHealthProcedureSpecializedCare": "Free choice in Specialized Care",
+  "@myDataHealthProcedureSpecializedCare": {
+    "description": "Link to free choice in Specialized Care."
+  },
+  "myDataHealthInterestLinksTitle": "Links of interest",
+  "@myDataHealthInterestLinksTitle": {
+    "description": "Title of the links of interest section on the Health information and services tab."
+  },
+  "myDataHealthLinkSescam": "Castilla-La Mancha Health Service (SESCAM)",
+  "@myDataHealthLinkSescam": {
+    "description": "Link to the Castilla-La Mancha Health Service."
+  },
+  "myDataHealthLinkDigitalHealth": "My Digital Health",
+  "@myDataHealthLinkDigitalHealth": {
+    "description": "Link to My Digital Health."
+  },
+  "myDataHealthLinkClinicalHistory": "Digital Clinical History (National Health System)",
+  "@myDataHealthLinkClinicalHistory": {
+    "description": "Link to Digital Clinical History of the National Health System."
+  },
+  "myDataHealthAppointmentsTitle": "Primary Care appointments",
+  "@myDataHealthAppointmentsTitle": {
+    "description": "Main title of the health appointments block."
+  },
+  "myDataHealthAppointmentsEmpty": "There are no appointments to show.",
+  "@myDataHealthAppointmentsEmpty": {
+    "description": "Empty state for the health appointments list."
+  },
+  "myDataHealthAppointmentsError": "We couldn't load your health appointments.",
+  "@myDataHealthAppointmentsError": {
+    "description": "Error message for the health appointments list."
+  },
+  "myDataHealthCip": "CIP: FCCT590551910012",
+  "@myDataHealthCip": {
+    "description": "CIP code shown below the Health detail title."
+  },
+  "myDataHealthPendingTab": "Pending",
+  "@myDataHealthPendingTab": {
+    "description": "Pending appointments tab in Health."
+  },
+  "myDataHealthPastTab": "Past",
+  "@myDataHealthPastTab": {
+    "description": "Past appointments tab in Health."
+  },
+  "myDataHealthYear": "2026",
+  "@myDataHealthYear": {
+    "description": "Year shown in the Health appointments list from the mockup."
+  },
+  "myDataHealthDecember": "December",
+  "@myDataHealthDecember": {
+    "description": "December month label shown in the Health appointments list."
+  },
+  "myDataHealthOctober": "October",
+  "@myDataHealthOctober": {
+    "description": "October month label shown in the Health appointments list."
+  },
+  "myDataHealthAppointmentDayNumber": "12",
+  "@myDataHealthAppointmentDayNumber": {
+    "description": "Day number of the sample health appointment."
+  },
+  "myDataHealthAppointmentWeekday": "Thursday",
+  "@myDataHealthAppointmentWeekday": {
+    "description": "Weekday of the sample health appointment."
+  },
+  "myDataHealthAppointmentTime": "17:35h",
+  "@myDataHealthAppointmentTime": {
+    "description": "Time of the sample health appointment."
+  },
+  "myDataHealthAppointmentType": "PHONE",
+  "@myDataHealthAppointmentType": {
+    "description": "Type of the sample health appointment."
+  },
+  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
+  "@myDataHealthAppointmentProfessional": {
+    "description": "Healthcare professional of the sample appointment."
+  },
+  "myDataHealthAppointmentDescription": "Primary Care appointment",
+  "@myDataHealthAppointmentDescription": {
+    "description": "Description of the sample health appointment."
+  },
+  "myDataHealthAppointmentModality": "On-demand teleconsultation",
+  "@myDataHealthAppointmentModality": {
+    "description": "Modality of the sample health appointment."
   }
 }

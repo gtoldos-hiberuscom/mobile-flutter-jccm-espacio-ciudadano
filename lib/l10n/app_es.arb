@@ -3074,5 +3074,179 @@
   "drawerGoToSedeElectronica": "Ir a Sede Electrónica",
   "@drawerGoToSedeElectronica": {
     "description": "Botón de acción del menú de perfil que enlaza con la Sede Electrónica."
+  },
+  "myDataTitle": "Mis datos",
+  "@myDataTitle": {
+    "description": "Título de la sección Mis datos en la barra superior y navegación principal."
+  },
+  "myDataIntro": "Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.",
+  "@myDataIntro": {
+    "description": "Texto introductorio de la pantalla Mis datos."
+  },
+  "myDataHealthTitle": "Salud",
+  "@myDataHealthTitle": {
+    "description": "Título de la tarjeta de Salud en la pantalla Mis datos."
+  },
+  "myDataHealthDescription": "SESCAM y servicios de salud",
+  "@myDataHealthDescription": {
+    "description": "Descripción de la tarjeta de Salud en la pantalla Mis datos."
+  },
+  "myDataSocialWelfareTitle": "Bienestar Social",
+  "@myDataSocialWelfareTitle": {
+    "description": "Título de la tarjeta de Bienestar Social en la pantalla Mis datos."
+  },
+  "myDataSocialWelfareDescription": "Servicios disponibles",
+  "@myDataSocialWelfareDescription": {
+    "description": "Descripción de la tarjeta de Bienestar Social en la pantalla Mis datos."
+  },
+  "myDataEmploymentTitle": "Empleo",
+  "@myDataEmploymentTitle": {
+    "description": "Título de la tarjeta de Empleo en la pantalla Mis datos."
+  },
+  "myDataEmploymentDescription": "Demanda y servicios de empleo",
+  "@myDataEmploymentDescription": {
+    "description": "Descripción de la tarjeta de Empleo en la pantalla Mis datos."
+  },
+  "myDataEducationTitle": "Educación",
+  "@myDataEducationTitle": {
+    "description": "Título de la tarjeta de Educación en la pantalla Mis datos."
+  },
+  "myDataEducationDescription": "Titulos formativos",
+  "@myDataEducationDescription": {
+    "description": "Descripción de la tarjeta de Educación en la pantalla Mis datos."
+  },
+  "myDataHousingTitle": "Vivienda",
+  "@myDataHousingTitle": {
+    "description": "Título de la tarjeta de Vivienda en la pantalla Mis datos."
+  },
+  "myDataHousingDescription": "Titularidad de bienes inmueble",
+  "@myDataHousingDescription": {
+    "description": "Descripción de la tarjeta de Vivienda en la pantalla Mis datos."
+  },
+  "myDataVehiclesTitle": "Vehículos",
+  "@myDataVehiclesTitle": {
+    "description": "Título de la tarjeta de Vehículos en la pantalla Mis datos."
+  },
+  "myDataVehiclesDescription": "Tus vehículos registrados",
+  "@myDataVehiclesDescription": {
+    "description": "Descripción de la tarjeta de Vehículos en la pantalla Mis datos."
+  },
+  "myDataSectionComingSoon": "{section} disponible próximamente",
+  "@myDataSectionComingSoon": {
+    "description": "SnackBar mostrado al pulsar una tarjeta de Mis datos cuyo detalle aún no está implementado.",
+    "placeholders": {
+      "section": {
+        "type": "String",
+        "example": "Salud"
+      }
+    }
+  },
+  "myDataHealthInfoMessage": "Consulta tus datos de salud y las citas disponibles.",
+  "@myDataHealthInfoMessage": {
+    "description": "SnackBar mostrado al pulsar el botón de información en el detalle de Salud."
+  },
+  "myDataHealthDataTab": "Mis datos de Salud",
+  "@myDataHealthDataTab": {
+    "description": "Primera pestaña del detalle de Salud."
+  },
+  "myDataHealthServicesTab": "Información y servicios",
+  "@myDataHealthServicesTab": {
+    "description": "Segunda pestaña del detalle de Salud."
+  },
+  "myDataHealthProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataHealthProceduresTitle": {
+    "description": "Título de la sección de trámites sugeridos en la pestaña de información y servicios de Salud."
+  },
+  "myDataHealthProcedureComplaints": "Reclamaciones y quejas relativas al SESCAM",
+  "@myDataHealthProcedureComplaints": {
+    "description": "Enlace a reclamaciones y quejas relativas al SESCAM."
+  },
+  "myDataHealthProcedureHealthCard": "Solicitud de tarjeta para la Atención Sanitaria en el SESCAM",
+  "@myDataHealthProcedureHealthCard": {
+    "description": "Enlace a la solicitud de tarjeta para la Atención Sanitaria en el SESCAM."
+  },
+  "myDataHealthProcedureSpecializedCare": "Libre elección en el ámbito de la Atención Especializada",
+  "@myDataHealthProcedureSpecializedCare": {
+    "description": "Enlace de libre elección en el ámbito de la Atención Especializada."
+  },
+  "myDataHealthInterestLinksTitle": "Enlaces de interés",
+  "@myDataHealthInterestLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña de información y servicios de Salud."
+  },
+  "myDataHealthLinkSescam": "Servicio de Salud de Castilla-La Mancha (SESCAM)",
+  "@myDataHealthLinkSescam": {
+    "description": "Enlace al Servicio de Salud de Castilla-La Mancha."
+  },
+  "myDataHealthLinkDigitalHealth": "Mi Salud Digital",
+  "@myDataHealthLinkDigitalHealth": {
+    "description": "Enlace a Mi Salud Digital."
+  },
+  "myDataHealthLinkClinicalHistory": "Historia clínica Digital (Sistema Nacional de Salud)",
+  "@myDataHealthLinkClinicalHistory": {
+    "description": "Enlace a Historia clínica Digital del Sistema Nacional de Salud."
+  },
+  "myDataHealthAppointmentsTitle": "Citas de Atención Primaria",
+  "@myDataHealthAppointmentsTitle": {
+    "description": "Título principal del bloque de citas sanitarias."
+  },
+  "myDataHealthAppointmentsEmpty": "No hay citas para mostrar.",
+  "@myDataHealthAppointmentsEmpty": {
+    "description": "Estado vacío del listado de citas sanitarias."
+  },
+  "myDataHealthAppointmentsError": "No hemos podido cargar tus citas sanitarias.",
+  "@myDataHealthAppointmentsError": {
+    "description": "Mensaje de error del listado de citas sanitarias."
+  },
+  "myDataHealthCip": "CIP: FCCT590551910012",
+  "@myDataHealthCip": {
+    "description": "Código CIP mostrado bajo el título del detalle de Salud."
+  },
+  "myDataHealthPendingTab": "Pendientes",
+  "@myDataHealthPendingTab": {
+    "description": "Pestaña de citas pendientes en Salud."
+  },
+  "myDataHealthPastTab": "Pasadas",
+  "@myDataHealthPastTab": {
+    "description": "Pestaña de citas pasadas en Salud."
+  },
+  "myDataHealthYear": "2026",
+  "@myDataHealthYear": {
+    "description": "Año mostrado en la lista de citas de Salud de la maqueta."
+  },
+  "myDataHealthDecember": "diciembre",
+  "@myDataHealthDecember": {
+    "description": "Mes diciembre mostrado en la lista de citas de Salud."
+  },
+  "myDataHealthOctober": "octubre",
+  "@myDataHealthOctober": {
+    "description": "Mes octubre mostrado en la lista de citas de Salud."
+  },
+  "myDataHealthAppointmentDayNumber": "12",
+  "@myDataHealthAppointmentDayNumber": {
+    "description": "Número de día de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentWeekday": "Jueves",
+  "@myDataHealthAppointmentWeekday": {
+    "description": "Día de la semana de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentTime": "17:35h",
+  "@myDataHealthAppointmentTime": {
+    "description": "Hora de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentType": "TELÉFONICA",
+  "@myDataHealthAppointmentType": {
+    "description": "Tipo de cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
+  "@myDataHealthAppointmentProfessional": {
+    "description": "Profesional sanitario de la cita de ejemplo."
+  },
+  "myDataHealthAppointmentDescription": "Cita de Atención Primaria",
+  "@myDataHealthAppointmentDescription": {
+    "description": "Descripción de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentModality": "Teleconsulta a demanda",
+  "@myDataHealthAppointmentModality": {
+    "description": "Modalidad de la cita sanitaria de ejemplo."
   }
 }

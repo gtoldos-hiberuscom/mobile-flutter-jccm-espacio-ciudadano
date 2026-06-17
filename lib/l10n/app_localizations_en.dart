@@ -2260,4 +2260,132 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get drawerGoToSedeElectronica => 'Go to eGovernment Portal';
+
+  @override
+  String get myDataTitle => 'My data';
+
+  @override
+  String get myDataIntro => 'Check the information available about you in the Administration and access services and procedures linked to each area.';
+
+  @override
+  String get myDataHealthTitle => 'Health';
+
+  @override
+  String get myDataHealthDescription => 'SESCAM and health services';
+
+  @override
+  String get myDataSocialWelfareTitle => 'Social Welfare';
+
+  @override
+  String get myDataSocialWelfareDescription => 'Available services';
+
+  @override
+  String get myDataEmploymentTitle => 'Employment';
+
+  @override
+  String get myDataEmploymentDescription => 'Employment demand and services';
+
+  @override
+  String get myDataEducationTitle => 'Education';
+
+  @override
+  String get myDataEducationDescription => 'Training qualifications';
+
+  @override
+  String get myDataHousingTitle => 'Housing';
+
+  @override
+  String get myDataHousingDescription => 'Property ownership';
+
+  @override
+  String get myDataVehiclesTitle => 'Vehicles';
+
+  @override
+  String get myDataVehiclesDescription => 'Your registered vehicles';
+
+  @override
+  String myDataSectionComingSoon(String section) {
+    return '$section will be available soon';
+  }
+
+  @override
+  String get myDataHealthInfoMessage => 'Check your health data and available appointments.';
+
+  @override
+  String get myDataHealthDataTab => 'My Health data';
+
+  @override
+  String get myDataHealthServicesTab => 'Information and services';
+
+  @override
+  String get myDataHealthProceduresTitle => 'Procedures you may be interested in';
+
+  @override
+  String get myDataHealthProcedureComplaints => 'Claims and complaints related to SESCAM';
+
+  @override
+  String get myDataHealthProcedureHealthCard => 'Request a card for Healthcare in SESCAM';
+
+  @override
+  String get myDataHealthProcedureSpecializedCare => 'Free choice in Specialized Care';
+
+  @override
+  String get myDataHealthInterestLinksTitle => 'Links of interest';
+
+  @override
+  String get myDataHealthLinkSescam => 'Castilla-La Mancha Health Service (SESCAM)';
+
+  @override
+  String get myDataHealthLinkDigitalHealth => 'My Digital Health';
+
+  @override
+  String get myDataHealthLinkClinicalHistory => 'Digital Clinical History (National Health System)';
+
+  @override
+  String get myDataHealthAppointmentsTitle => 'Primary Care appointments';
+
+  @override
+  String get myDataHealthAppointmentsEmpty => 'There are no appointments to show.';
+
+  @override
+  String get myDataHealthAppointmentsError => 'We couldn\'t load your health appointments.';
+
+  @override
+  String get myDataHealthCip => 'CIP: FCCT590551910012';
+
+  @override
+  String get myDataHealthPendingTab => 'Pending';
+
+  @override
+  String get myDataHealthPastTab => 'Past';
+
+  @override
+  String get myDataHealthYear => '2026';
+
+  @override
+  String get myDataHealthDecember => 'December';
+
+  @override
+  String get myDataHealthOctober => 'October';
+
+  @override
+  String get myDataHealthAppointmentDayNumber => '12';
+
+  @override
+  String get myDataHealthAppointmentWeekday => 'Thursday';
+
+  @override
+  String get myDataHealthAppointmentTime => '17:35h';
+
+  @override
+  String get myDataHealthAppointmentType => 'PHONE';
+
+  @override
+  String get myDataHealthAppointmentProfessional => 'Dr. José Manuel Fernández García';
+
+  @override
+  String get myDataHealthAppointmentDescription => 'Primary Care appointment';
+
+  @override
+  String get myDataHealthAppointmentModality => 'On-demand teleconsultation';
 }

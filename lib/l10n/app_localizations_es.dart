@@ -2261,4 +2261,132 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get drawerGoToSedeElectronica => 'Ir a Sede Electrónica';
+
+  @override
+  String get myDataTitle => 'Mis datos';
+
+  @override
+  String get myDataIntro => 'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.';
+
+  @override
+  String get myDataHealthTitle => 'Salud';
+
+  @override
+  String get myDataHealthDescription => 'SESCAM y servicios de salud';
+
+  @override
+  String get myDataSocialWelfareTitle => 'Bienestar Social';
+
+  @override
+  String get myDataSocialWelfareDescription => 'Servicios disponibles';
+
+  @override
+  String get myDataEmploymentTitle => 'Empleo';
+
+  @override
+  String get myDataEmploymentDescription => 'Demanda y servicios de empleo';
+
+  @override
+  String get myDataEducationTitle => 'Educación';
+
+  @override
+  String get myDataEducationDescription => 'Titulos formativos';
+
+  @override
+  String get myDataHousingTitle => 'Vivienda';
+
+  @override
+  String get myDataHousingDescription => 'Titularidad de bienes inmueble';
+
+  @override
+  String get myDataVehiclesTitle => 'Vehículos';
+
+  @override
+  String get myDataVehiclesDescription => 'Tus vehículos registrados';
+
+  @override
+  String myDataSectionComingSoon(String section) {
+    return '$section disponible próximamente';
+  }
+
+  @override
+  String get myDataHealthInfoMessage => 'Consulta tus datos de salud y las citas disponibles.';
+
+  @override
+  String get myDataHealthDataTab => 'Mis datos de Salud';
+
+  @override
+  String get myDataHealthServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataHealthProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataHealthProcedureComplaints => 'Reclamaciones y quejas relativas al SESCAM';
+
+  @override
+  String get myDataHealthProcedureHealthCard => 'Solicitud de tarjeta para la Atención Sanitaria en el SESCAM';
+
+  @override
+  String get myDataHealthProcedureSpecializedCare => 'Libre elección en el ámbito de la Atención Especializada';
+
+  @override
+  String get myDataHealthInterestLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataHealthLinkSescam => 'Servicio de Salud de Castilla-La Mancha (SESCAM)';
+
+  @override
+  String get myDataHealthLinkDigitalHealth => 'Mi Salud Digital';
+
+  @override
+  String get myDataHealthLinkClinicalHistory => 'Historia clínica Digital (Sistema Nacional de Salud)';
+
+  @override
+  String get myDataHealthAppointmentsTitle => 'Citas de Atención Primaria';
+
+  @override
+  String get myDataHealthAppointmentsEmpty => 'No hay citas para mostrar.';
+
+  @override
+  String get myDataHealthAppointmentsError => 'No hemos podido cargar tus citas sanitarias.';
+
+  @override
+  String get myDataHealthCip => 'CIP: FCCT590551910012';
+
+  @override
+  String get myDataHealthPendingTab => 'Pendientes';
+
+  @override
+  String get myDataHealthPastTab => 'Pasadas';
+
+  @override
+  String get myDataHealthYear => '2026';
+
+  @override
+  String get myDataHealthDecember => 'diciembre';
+
+  @override
+  String get myDataHealthOctober => 'octubre';
+
+  @override
+  String get myDataHealthAppointmentDayNumber => '12';
+
+  @override
+  String get myDataHealthAppointmentWeekday => 'Jueves';
+
+  @override
+  String get myDataHealthAppointmentTime => '17:35h';
+
+  @override
+  String get myDataHealthAppointmentType => 'TELÉFONICA';
+
+  @override
+  String get myDataHealthAppointmentProfessional => 'Dr. José Manuel Fernández García';
+
+  @override
+  String get myDataHealthAppointmentDescription => 'Cita de Atención Primaria';
+
+  @override
+  String get myDataHealthAppointmentModality => 'Teleconsulta a demanda';
 }

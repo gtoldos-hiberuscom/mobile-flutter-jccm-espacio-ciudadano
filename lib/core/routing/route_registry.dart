@@ -41,6 +41,8 @@ abstract final class Routes {
   static const String home = '/home';
   static const String homeFromDrawer = '$home?from=drawer';
 
+  static const String myData = '/my-data';
+  static const String myDataHealth = '/my-data/health';
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
   static const String recommendationLifeEventFilters = '/recommendations/life-events-filter';
@@ -58,6 +60,7 @@ abstract final class Routes {
     helpContact,
     supportForm,
     agenda,
+    myData,
     recommendations,
     recommendationLifeEventFilters,
     home,
