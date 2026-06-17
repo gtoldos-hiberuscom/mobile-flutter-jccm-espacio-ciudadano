@@ -2317,6 +2317,60 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataVehiclesDescription => 'Tus vehículos registrados';
 
   @override
+  String get myDataVehiclesInfoSheetTitle => 'Sobre Mis datos de Vehículos';
+
+  @override
+  String get myDataVehiclesInfoSheetDescription => 'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.';
+
+  @override
+  String get myDataVehiclesInfoSheetFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)';
+
+  @override
+  String get myDataVehiclesInfoSheetContactButton => 'Contactar';
+
+  @override
+  String get myDataVehiclesDataTab => 'Mis datos de Vehículos';
+
+  @override
+  String get myDataVehiclesServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataVehiclesSectionTitle => 'Mis vehículos';
+
+  @override
+  String get myDataVehiclesLicensePlateLabel => 'Matrícula del vehículo';
+
+  @override
+  String get myDataVehiclesEmpty => 'No constan vehículos registrados a tu nombre.';
+
+  @override
+  String get myDataVehiclesError => 'No hemos podido cargar tus vehículos.';
+
+  @override
+  String get myDataVehiclesServicesEmpty => 'Información y servicios de Vehículos disponible próximamente.';
+
+  @override
+  String get myDataVehiclesLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataVehiclesLinkDgt => 'Sede electrónica DGT';
+
+  @override
+  String get myDataVehiclesLinkAge => 'Carpeta Ciudadana de la AGE';
+
+  @override
+  String get myDataVehiclesProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataVehiclesProcedureMoves3Vehicle => 'Solicitud de ayuda MOVES III para adquisición de vehículos eléctricos';
+
+  @override
+  String get myDataVehiclesProcedureMoves3Infrastructure => 'Solicitud de ayuda MOVES III para implantación de infraestructura de recarga de vehículos eléctricos';
+
+  @override
+  String get myDataVehiclesProcedureCap => 'Homologación de cursos de formación de conductores (cap)';
+
+  @override
   String myDataSectionComingSoon(String section) {
     return '$section disponible próximamente';
   }

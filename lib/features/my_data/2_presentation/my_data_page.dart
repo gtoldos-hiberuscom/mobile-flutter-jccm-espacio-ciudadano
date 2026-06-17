@@ -42,6 +42,7 @@ class MyDataPage extends ConsumerWidget {
       title: _MyDataText.vehiclesTitle,
       description: _MyDataText.vehiclesDescription,
       icon: AppIcons.directionsCar,
+      route: Routes.myDataVehicles,
     ),
   ];
 

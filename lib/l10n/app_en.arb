@@ -3151,6 +3151,78 @@
   "@myDataVehiclesDescription": {
     "description": "Description of the Vehicles card on the My data screen."
   },
+  "myDataVehiclesInfoSheetTitle": "About My Vehicles data",
+  "@myDataVehiclesInfoSheetTitle": {
+    "description": "Title of the My Vehicles data information modal."
+  },
+  "myDataVehiclesInfoSheetDescription": "Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.\n\nQuickly access the most prominent procedures and information related to your vehicle management.",
+  "@myDataVehiclesInfoSheetDescription": {
+    "description": "Main description of the My Vehicles data information modal."
+  },
+  "myDataVehiclesInfoSheetFooter": "If any of your data is incorrect or not up to date, contact the General Directorate of Traffic (DGT)",
+  "@myDataVehiclesInfoSheetFooter": {
+    "description": "Footer text of the My Vehicles data information modal."
+  },
+  "myDataVehiclesInfoSheetContactButton": "Contact",
+  "@myDataVehiclesInfoSheetContactButton": {
+    "description": "Contact button label in the My Vehicles data information modal."
+  },
+  "myDataVehiclesDataTab": "My Vehicles data",
+  "@myDataVehiclesDataTab": {
+    "description": "First tab on the Vehicles detail screen."
+  },
+  "myDataVehiclesServicesTab": "Information and services",
+  "@myDataVehiclesServicesTab": {
+    "description": "Second tab on the Vehicles detail screen."
+  },
+  "myDataVehiclesSectionTitle": "My vehicles",
+  "@myDataVehiclesSectionTitle": {
+    "description": "Title of the vehicles list section."
+  },
+  "myDataVehiclesLicensePlateLabel": "Vehicle registration number",
+  "@myDataVehiclesLicensePlateLabel": {
+    "description": "Descriptive label for the vehicle license plate."
+  },
+  "myDataVehiclesEmpty": "There are no vehicles registered in your name.",
+  "@myDataVehiclesEmpty": {
+    "description": "Message shown when there are no vehicles."
+  },
+  "myDataVehiclesError": "We could not load your vehicles.",
+  "@myDataVehiclesError": {
+    "description": "Error message when loading vehicles."
+  },
+  "myDataVehiclesServicesEmpty": "Vehicles information and services will be available soon.",
+  "@myDataVehiclesServicesEmpty": {
+    "description": "Temporary empty state for the Vehicles Information and services tab."
+  },
+  "myDataVehiclesLinksTitle": "Links of interest",
+  "@myDataVehiclesLinksTitle": {
+    "description": "Title of the links section in the Vehicles Information and services tab."
+  },
+  "myDataVehiclesLinkDgt": "DGT electronic office",
+  "@myDataVehiclesLinkDgt": {
+    "description": "Link to the electronic office of the Directorate General of Traffic."
+  },
+  "myDataVehiclesLinkAge": "AGE Citizen Folder",
+  "@myDataVehiclesLinkAge": {
+    "description": "Link to the Citizen Folder of the General State Administration."
+  },
+  "myDataVehiclesProceduresTitle": "Procedures that may interest you",
+  "@myDataVehiclesProceduresTitle": {
+    "description": "Title of the procedures section related to vehicles."
+  },
+  "myDataVehiclesProcedureMoves3Vehicle": "MOVES III aid application for electric vehicle acquisition",
+  "@myDataVehiclesProcedureMoves3Vehicle": {
+    "description": "Procedure to apply for MOVES III aid to purchase electric vehicles."
+  },
+  "myDataVehiclesProcedureMoves3Infrastructure": "MOVES III aid application for electric vehicle charging infrastructure implementation",
+  "@myDataVehiclesProcedureMoves3Infrastructure": {
+    "description": "Procedure to apply for MOVES III aid for charging infrastructure."
+  },
+  "myDataVehiclesProcedureCap": "Homologation of driver training courses (CAP)",
+  "@myDataVehiclesProcedureCap": {
+    "description": "Procedure to homologate CAP driver training courses."
+  },
   "myDataSectionComingSoon": "{section} will be available soon",
   "@myDataSectionComingSoon": {
     "description": "SnackBar shown when tapping a My data card whose detail is not implemented yet.",

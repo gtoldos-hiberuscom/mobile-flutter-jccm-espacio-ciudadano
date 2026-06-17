@@ -3147,6 +3147,78 @@
   "@myDataVehiclesDescription": {
     "description": "Descripción de la tarjeta de Vehículos en la pantalla Mis datos."
   },
+  "myDataVehiclesInfoSheetTitle": "Sobre Mis datos de Vehículos",
+  "@myDataVehiclesInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesInfoSheetDescription": "Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.",
+  "@myDataVehiclesInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesInfoSheetFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)",
+  "@myDataVehiclesInfoSheetFooter": {
+    "description": "Texto del pie de página del modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesInfoSheetContactButton": "Contactar",
+  "@myDataVehiclesInfoSheetContactButton": {
+    "description": "Etiqueta del botón de contacto en el modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesDataTab": "Mis datos de Vehículos",
+  "@myDataVehiclesDataTab": {
+    "description": "Primera pestaña del detalle de Vehículos."
+  },
+  "myDataVehiclesServicesTab": "Información y servicios",
+  "@myDataVehiclesServicesTab": {
+    "description": "Segunda pestaña del detalle de Vehículos."
+  },
+  "myDataVehiclesSectionTitle": "Mis vehículos",
+  "@myDataVehiclesSectionTitle": {
+    "description": "Título de la sección de listado de vehículos."
+  },
+  "myDataVehiclesLicensePlateLabel": "Matrícula del vehículo",
+  "@myDataVehiclesLicensePlateLabel": {
+    "description": "Etiqueta descriptiva de la matrícula del vehículo."
+  },
+  "myDataVehiclesEmpty": "No constan vehículos registrados a tu nombre.",
+  "@myDataVehiclesEmpty": {
+    "description": "Mensaje mostrado cuando no hay vehículos."
+  },
+  "myDataVehiclesError": "No hemos podido cargar tus vehículos.",
+  "@myDataVehiclesError": {
+    "description": "Mensaje de error al cargar vehículos."
+  },
+  "myDataVehiclesServicesEmpty": "Información y servicios de Vehículos disponible próximamente.",
+  "@myDataVehiclesServicesEmpty": {
+    "description": "Estado vacío temporal de la pestaña Información y servicios de Vehículos."
+  },
+  "myDataVehiclesLinksTitle": "Enlaces de interés",
+  "@myDataVehiclesLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña Información y servicios de Vehículos."
+  },
+  "myDataVehiclesLinkDgt": "Sede electrónica DGT",
+  "@myDataVehiclesLinkDgt": {
+    "description": "Enlace a la Sede electrónica de la Dirección General de Tráfico."
+  },
+  "myDataVehiclesLinkAge": "Carpeta Ciudadana de la AGE",
+  "@myDataVehiclesLinkAge": {
+    "description": "Enlace a la Carpeta Ciudadana de la Administración General del Estado."
+  },
+  "myDataVehiclesProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataVehiclesProceduresTitle": {
+    "description": "Título de la sección de trámites relacionados con vehículos."
+  },
+  "myDataVehiclesProcedureMoves3Vehicle": "Solicitud de ayuda MOVES III para adquisición de vehículos eléctricos",
+  "@myDataVehiclesProcedureMoves3Vehicle": {
+    "description": "Trámite para solicitar ayuda MOVES III para comprar vehículos eléctricos."
+  },
+  "myDataVehiclesProcedureMoves3Infrastructure": "Solicitud de ayuda MOVES III para implantación de infraestructura de recarga de vehículos eléctricos",
+  "@myDataVehiclesProcedureMoves3Infrastructure": {
+    "description": "Trámite para solicitar ayuda MOVES III para infraestructura de recarga."
+  },
+  "myDataVehiclesProcedureCap": "Homologación de cursos de formación de conductores (cap)",
+  "@myDataVehiclesProcedureCap": {
+    "description": "Trámite para homologar cursos de formación de conductores CAP."
+  },
   "myDataSectionComingSoon": "{section} disponible próximamente",
   "@myDataSectionComingSoon": {
     "description": "SnackBar mostrado al pulsar una tarjeta de Mis datos cuyo detalle aún no está implementado.",

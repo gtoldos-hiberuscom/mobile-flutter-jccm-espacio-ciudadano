@@ -90,7 +90,7 @@ class AppBottomSheet extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.backgroundWhite,
               borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-              border: Border.all(color: const Color.fromRGBO(12, 13, 13, 0.5)),
+              border: Border.all(color: AppColors.neutral300),
               boxShadow: AppShadows.overAll,
             ),
             child: Column(
@@ -149,7 +149,7 @@ class AppBottomSheet extends StatelessWidget {
                   width: 80,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFD9D9D9),
+                    color: AppColors.neutral200,
                     borderRadius: BorderRadius.circular(
                       AppDimensions.space64,
                     ),
@@ -179,6 +179,7 @@ class AppBottomSheet extends StatelessWidget {
                         style: AppTypography.leadingMedium.copyWith(
                           color: AppColors.textBase,
                           decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       const SizedBox(width: AppDimensions.space8),

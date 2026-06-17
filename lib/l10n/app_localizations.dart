@@ -4496,6 +4496,114 @@ abstract class AppLocalizations {
   /// **'Tus vehículos registrados'**
   String get myDataVehiclesDescription;
 
+  /// Título del modal informativo de Mis datos de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mis datos de Vehículos'**
+  String get myDataVehiclesInfoSheetTitle;
+
+  /// Descripción principal del modal informativo de Mis datos de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.'**
+  String get myDataVehiclesInfoSheetDescription;
+
+  /// Texto del pie de página del modal informativo de Mis datos de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)'**
+  String get myDataVehiclesInfoSheetFooter;
+
+  /// Etiqueta del botón de contacto en el modal informativo de Mis datos de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Contactar'**
+  String get myDataVehiclesInfoSheetContactButton;
+
+  /// Primera pestaña del detalle de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos de Vehículos'**
+  String get myDataVehiclesDataTab;
+
+  /// Segunda pestaña del detalle de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios'**
+  String get myDataVehiclesServicesTab;
+
+  /// Título de la sección de listado de vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis vehículos'**
+  String get myDataVehiclesSectionTitle;
+
+  /// Etiqueta descriptiva de la matrícula del vehículo.
+  ///
+  /// In es, this message translates to:
+  /// **'Matrícula del vehículo'**
+  String get myDataVehiclesLicensePlateLabel;
+
+  /// Mensaje mostrado cuando no hay vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan vehículos registrados a tu nombre.'**
+  String get myDataVehiclesEmpty;
+
+  /// Mensaje de error al cargar vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus vehículos.'**
+  String get myDataVehiclesError;
+
+  /// Estado vacío temporal de la pestaña Información y servicios de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios de Vehículos disponible próximamente.'**
+  String get myDataVehiclesServicesEmpty;
+
+  /// Título de la sección de enlaces de interés en la pestaña Información y servicios de Vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlaces de interés'**
+  String get myDataVehiclesLinksTitle;
+
+  /// Enlace a la Sede electrónica de la Dirección General de Tráfico.
+  ///
+  /// In es, this message translates to:
+  /// **'Sede electrónica DGT'**
+  String get myDataVehiclesLinkDgt;
+
+  /// Enlace a la Carpeta Ciudadana de la Administración General del Estado.
+  ///
+  /// In es, this message translates to:
+  /// **'Carpeta Ciudadana de la AGE'**
+  String get myDataVehiclesLinkAge;
+
+  /// Título de la sección de trámites relacionados con vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites que te pueden interesar'**
+  String get myDataVehiclesProceduresTitle;
+
+  /// Trámite para solicitar ayuda MOVES III para comprar vehículos eléctricos.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud de ayuda MOVES III para adquisición de vehículos eléctricos'**
+  String get myDataVehiclesProcedureMoves3Vehicle;
+
+  /// Trámite para solicitar ayuda MOVES III para infraestructura de recarga.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud de ayuda MOVES III para implantación de infraestructura de recarga de vehículos eléctricos'**
+  String get myDataVehiclesProcedureMoves3Infrastructure;
+
+  /// Trámite para homologar cursos de formación de conductores CAP.
+  ///
+  /// In es, this message translates to:
+  /// **'Homologación de cursos de formación de conductores (cap)'**
+  String get myDataVehiclesProcedureCap;
+
   /// SnackBar mostrado al pulsar una tarjeta de Mis datos cuyo detalle aún no está implementado.
   ///
   /// In es, this message translates to:

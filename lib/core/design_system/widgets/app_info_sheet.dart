@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_bottom_sheet.dart';
 
@@ -63,6 +64,7 @@ class AppInfoSheet {
     await AppBottomSheet.show<void>(
       context: context,
       title: title,
+      horizontalMargin: AppDimensions.space4,
       body: _AppInfoSheetBody(
         bodyText: bodyText,
         footerText: footerText,
@@ -97,54 +99,53 @@ class _AppInfoSheetBody extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Main body text
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-          child: Text(
-            bodyText,
-            style: AppTypography.bodyRegular.copyWith(
-              color: AppColors.textPrimary,
-            ),
-          ),
-        ),
-
-        // Divider (only if there's footer or action)
-        if (hasFooter || hasAction) ...[
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
-            child: Divider(
-              color: AppColors.divider,
-              thickness: 1,
-            ),
-          ),
-        ],
-
-        // Footer text
-        if (footerText != null) ...[
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
             child: Text(
-              footerText!,
+              bodyText,
               style: AppTypography.bodyRegular.copyWith(
                 color: AppColors.textPrimary,
               ),
             ),
           ),
-        ],
 
-        // Action button
-        if (hasAction) ...[
-          const SizedBox(height: AppDimensions.space8),
-          _AppInfoSheetActionButton(
-            label: actionLabel!,
-            onPressed: onActionPressed!,
-            icon: actionIcon,
-          ),
+          if (hasFooter || hasAction) ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
+              child: Divider(
+                color: AppColors.neutral100,
+                thickness: 1,
+                height: 1,
+              ),
+            ),
+          ],
+
+          if (footerText != null) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+              child: Text(
+                footerText!,
+                style: AppTypography.bodyRegular.copyWith(
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+          ],
+
+          if (hasAction) ...[
+            const SizedBox(height: AppDimensions.space8),
+            _AppInfoSheetActionButton(
+              label: actionLabel!,
+              onPressed: onActionPressed!,
+              icon: actionIcon,
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }
@@ -164,34 +165,35 @@ class _AppInfoSheetActionButton extends StatelessWidget {
   Widget build(final BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.primary),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.space16,
-            vertical: AppDimensions.space12,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w600,
-              ),
+      height: AppDimensions.space48,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(boxShadow: AppShadows.low),
+        child: OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            backgroundColor: AppColors.backgroundWhite,
+            foregroundColor: AppColors.textBlack,
+            side: const BorderSide(color: AppColors.primary, width: 2),
+            padding: const EdgeInsets.all(AppDimensions.space8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
             ),
-            if (icon != null) ...[
-              const SizedBox(width: AppDimensions.space8),
-              Icon(icon, size: 20, color: AppColors.primary),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: AppTypography.bodyRegular.copyWith(
+                  color: AppColors.textBlack,
+                ),
+              ),
+              if (icon != null) ...[
+                const SizedBox(width: AppDimensions.space8),
+                Icon(icon, size: AppDimensions.iconMedium, color: AppColors.textBlack),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

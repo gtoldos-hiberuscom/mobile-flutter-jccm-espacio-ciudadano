@@ -24,6 +24,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_h
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_non_university_titles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_university_titles_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_vehicles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/notification_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/preferences_page.dart';
@@ -184,6 +185,11 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.myDataEducationNonUniversityTitles,
               builder: (final BuildContext context, final GoRouterState state) => const MyDataNonUniversityTitlesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataVehicles,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataVehiclesPage(),
             ),
 
             GoRoute(

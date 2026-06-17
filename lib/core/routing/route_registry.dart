@@ -46,6 +46,7 @@ abstract final class Routes {
   static const String myDataEducation = '/my-data/education';
   static const String myDataEducationUniversityTitles = '/my-data/education/university-titles';
   static const String myDataEducationNonUniversityTitles = '/my-data/education/non-university-titles';
+  static const String myDataVehicles = '/my-data/vehicles';
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
   static const String recommendationLifeEventFilters = '/recommendations/life-events-filter';
@@ -67,6 +68,7 @@ abstract final class Routes {
     myDataEducation,
     myDataEducationUniversityTitles,
     myDataEducationNonUniversityTitles,
+    myDataVehicles,
     recommendations,
     recommendationLifeEventFilters,
     home,

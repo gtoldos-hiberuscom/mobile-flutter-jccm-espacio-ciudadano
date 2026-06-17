@@ -2316,6 +2316,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataVehiclesDescription => 'Your registered vehicles';
 
   @override
+  String get myDataVehiclesInfoSheetTitle => 'About My Vehicles data';
+
+  @override
+  String get myDataVehiclesInfoSheetDescription => 'Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.\n\nQuickly access the most prominent procedures and information related to your vehicle management.';
+
+  @override
+  String get myDataVehiclesInfoSheetFooter => 'If any of your data is incorrect or not up to date, contact the General Directorate of Traffic (DGT)';
+
+  @override
+  String get myDataVehiclesInfoSheetContactButton => 'Contact';
+
+  @override
+  String get myDataVehiclesDataTab => 'My Vehicles data';
+
+  @override
+  String get myDataVehiclesServicesTab => 'Information and services';
+
+  @override
+  String get myDataVehiclesSectionTitle => 'My vehicles';
+
+  @override
+  String get myDataVehiclesLicensePlateLabel => 'Vehicle registration number';
+
+  @override
+  String get myDataVehiclesEmpty => 'There are no vehicles registered in your name.';
+
+  @override
+  String get myDataVehiclesError => 'We could not load your vehicles.';
+
+  @override
+  String get myDataVehiclesServicesEmpty => 'Vehicles information and services will be available soon.';
+
+  @override
+  String get myDataVehiclesLinksTitle => 'Links of interest';
+
+  @override
+  String get myDataVehiclesLinkDgt => 'DGT electronic office';
+
+  @override
+  String get myDataVehiclesLinkAge => 'AGE Citizen Folder';
+
+  @override
+  String get myDataVehiclesProceduresTitle => 'Procedures that may interest you';
+
+  @override
+  String get myDataVehiclesProcedureMoves3Vehicle => 'MOVES III aid application for electric vehicle acquisition';
+
+  @override
+  String get myDataVehiclesProcedureMoves3Infrastructure => 'MOVES III aid application for electric vehicle charging infrastructure implementation';
+
+  @override
+  String get myDataVehiclesProcedureCap => 'Homologation of driver training courses (CAP)';
+
+  @override
   String myDataSectionComingSoon(String section) {
     return '$section will be available soon';
   }
