@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/support_request.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/usecases/submit_support_request_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/providers/support_form_providers.dart';
@@ -75,6 +77,8 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 descriptionError: _descriptionError,
                 consentAccepted: _consentAccepted,
                 consentError: _consentError,
+                captchaAccepted: _captchaAccepted,
+                captchaError: _captchaError,
                 attachment: _attachment,
                 attachmentBytes: _attachmentBytes,
                 onChanged: _refreshValidation,
@@ -82,6 +86,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 onCaptchaTap: () => setState(() => _captchaAccepted = true),
                 onPickAttachment: _pickAttachment,
                 onRemoveAttachment: _removeAttachment,
+                onOpenPrivacyInfo: _openPrivacyInfo,
               ),
       ),
       bottomNavigationBar: _sent
@@ -133,6 +138,24 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       _attachment = file;
       _attachmentBytes = bytes;
     });
+  }
+
+  Future<void> _openPrivacyInfo() async {
+    final link = ref.read(externalLinkCatalogProvider).findById('support_form_privacy_info');
+    if (link == null) {
+      return;
+    }
+
+    final result = await ref.read(externalLinkLauncherProvider).launch(link);
+    if (!mounted || result is! ExternalLinkLaunchFailure) {
+      return;
+    }
+
+    AppAlertSnackbar.show(
+      context,
+      message: AppLocalizations.of(context).externalLinkOpenFailed,
+      severity: AppAlertSeverity.error,
+    );
   }
 
   void _removeAttachment() {
@@ -320,6 +343,8 @@ class _FormView extends StatelessWidget {
     required this.descriptionError,
     required this.consentAccepted,
     required this.consentError,
+    required this.captchaAccepted,
+    required this.captchaError,
     required this.attachment,
     required this.attachmentBytes,
     required this.onChanged,
@@ -327,6 +352,7 @@ class _FormView extends StatelessWidget {
     required this.onCaptchaTap,
     required this.onPickAttachment,
     required this.onRemoveAttachment,
+    required this.onOpenPrivacyInfo,
   });
 
   final TextEditingController nameController;
@@ -341,6 +367,8 @@ class _FormView extends StatelessWidget {
   final String? descriptionError;
   final bool consentAccepted;
   final String? consentError;
+  final bool captchaAccepted;
+  final String? captchaError;
   final XFile? attachment;
   final int? attachmentBytes;
   final VoidCallback onChanged;
@@ -348,6 +376,7 @@ class _FormView extends StatelessWidget {
   final VoidCallback onCaptchaTap;
   final VoidCallback onPickAttachment;
   final VoidCallback onRemoveAttachment;
+  final VoidCallback onOpenPrivacyInfo;
 
   @override
   Widget build(final BuildContext context) {
@@ -444,11 +473,16 @@ class _FormView extends StatelessWidget {
         const SizedBox(height: AppDimensions.space24),
         GestureDetector(
           onTap: onCaptchaTap,
-          child: const AppCaptchaPlaceholder(label: 'Captcha*'),
+          child: AppCaptchaPlaceholder(
+            label: 'Captcha*',
+            isVerified: captchaAccepted,
+            errorText: captchaError,
+          ),
         ),
         const SizedBox(height: AppDimensions.space24),
-        const AppPrivacyInfoText(
+        AppPrivacyInfoText(
           text: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en https://rat.castillalamancha.es/info/2309',
+          onTap: onOpenPrivacyInfo,
         ),
       ],
     );

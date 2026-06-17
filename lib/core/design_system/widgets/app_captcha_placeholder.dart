@@ -1,26 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_description_text.dart';
 
 class AppCaptchaPlaceholder extends StatelessWidget {
   const AppCaptchaPlaceholder({
     required this.label,
     super.key,
+    this.errorText,
+    this.isVerified = false,
+    this.verifiedLabel = 'Captcha verificado',
   });
 
   final String label;
+  final String? errorText;
+  final bool isVerified;
+  final String verifiedLabel;
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      color: AppColors.borderBlueMutedBase,
-      child: Text(
-        label,
-        style: AppTypography.leadingMedium.copyWith(color: AppColors.textWhite),
-      ),
+    final isError = errorText != null && errorText!.isNotEmpty;
+    final borderColor = switch ((isError, isVerified)) {
+      (true, _) => AppColors.error,
+      (_, true) => AppColors.borderSuccess,
+      _ => AppColors.borderBlueMutedBase,
+    };
+    final borderWidth = isError || isVerified ? 2.0 : 1.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Semantics(
+          label: switch ((isError, isVerified)) {
+            (true, _) => '$label. Error: $errorText',
+            (_, true) => verifiedLabel,
+            _ => label,
+          },
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: isVerified ? AppColors.backgroundSuccess : AppColors.borderBlueMutedBase,
+              border: Border.all(
+                color: borderColor,
+                width: borderWidth,
+              ),
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              height: 104,
+              child: Center(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 180),
+                  child: isVerified
+                      ? Row(
+                          key: const ValueKey('verified'),
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              AppIcons.checkCircle,
+                              color: AppColors.successDark,
+                              size: AppDimensions.iconLarge,
+                            ),
+                            const SizedBox(width: AppDimensions.space8),
+                            Text(
+                              verifiedLabel,
+                              style: AppTypography.leadingMedium.copyWith(color: AppColors.successDark),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          label,
+                          key: const ValueKey('pending'),
+                          style: AppTypography.leadingMedium.copyWith(color: AppColors.textWhite),
+                        ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (isError) ...[
+          const SizedBox(height: AppDimensions.space8),
+          AppDescriptionText(
+            text: errorText!,
+            state: AppDescriptionTextState.error,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -28,20 +94,25 @@ class AppCaptchaPlaceholder extends StatelessWidget {
 class AppPrivacyInfoText extends StatelessWidget {
   const AppPrivacyInfoText({
     required this.text,
+    this.onTap,
     super.key,
   });
 
   final String text;
+  final VoidCallback? onTap;
 
   @override
   Widget build(final BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 8),
-      child: Text(
-        text,
-        style: AppTypography.leadingMedium.copyWith(
-          color: AppColors.primary,
-          height: 1.5,
+      child: InkWell(
+        onTap: onTap,
+        child: Text(
+          text,
+          style: AppTypography.leadingMedium.copyWith(
+            color: AppColors.primary,
+            height: 1.5,
+          ),
         ),
       ),
     );

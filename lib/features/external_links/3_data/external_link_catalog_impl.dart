@@ -112,6 +112,12 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
       url: Uri.parse('https://espaciociudadano.jccm.es/'),
       category: ExternalLinkCategory.legalInformation,
     ),
+    ExternalLink(
+      id: 'support_form_privacy_info',
+      displayKey: 'legalNoticeTitle',
+      url: Uri.parse('https://rat.castillalamancha.es/info/2309'),
+      category: ExternalLinkCategory.dataProtection,
+    ),
   ];
 
   @override

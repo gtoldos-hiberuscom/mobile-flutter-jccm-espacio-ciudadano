@@ -9,7 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/landing/3_data/support_repositor
 
 void main() {
   group('SupportRepositoryImpl', () {
-    test('submits the support form to consulta API', () async {
+    test('submits the support form to support API', () async {
       final adapter = _RecordingAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = SupportRepositoryImpl(dio: dio);
@@ -30,23 +30,16 @@ void main() {
 
       expect(adapter.request?.method, 'POST');
       expect(adapter.request?.path, SupportRepositoryImpl.endpoint);
-      expect(adapter.request?.jsonBody, <String, dynamic>{
-        'idatos': <String, dynamic>{
-          'subfam': 'SOPORTE_TECNICO',
-        },
-        'returns': <String, dynamic>{},
-        'tfaq': <String, dynamic>{
-          'item': <Map<String, String>>[
-            <String, String>{'numseq': '001', 'textlinea': 'nombre', 'textarea': 'María Pérez'},
-            <String, String>{'numseq': '002', 'textlinea': 'email', 'textarea': 'maria@example.es'},
-            <String, String>{'numseq': '003', 'textlinea': 'asunto', 'textarea': 'No puedo acceder'},
-            <String, String>{'numseq': '004', 'textlinea': 'mensaje', 'textarea': 'La app no carga mis expedientes.'},
-            <String, String>{'numseq': '005', 'textlinea': 'proteccion_datos', 'textarea': 'S'},
-            <String, String>{'numseq': '006', 'textlinea': 'adjunto_nombre', 'textarea': 'captura.png'},
-            <String, String>{'numseq': '007', 'textlinea': 'adjunto_base64', 'textarea': 'AQID'},
-          ],
-        },
+      expect(adapter.request?.contentType, startsWith('multipart/form-data'));
+      expect(jsonDecode(adapter.request!.fields['datos']!) as Map<String, dynamic>, <String, dynamic>{
+        'asunto': 'No puedo acceder',
+        'descripcion': 'La app no carga mis expedientes.',
+        'email': 'maria@example.es',
+        'nombreApellidos': 'María Pérez',
       });
+      expect(adapter.request?.files.single.key, 'adjunto');
+      expect(adapter.request?.files.single.filename, 'captura.png');
+      expect(adapter.request?.files.single.length, 3);
     });
   });
 }
@@ -55,12 +48,28 @@ final class _CapturedRequest {
   const _CapturedRequest({
     required this.method,
     required this.path,
-    required this.jsonBody,
+    required this.contentType,
+    required this.fields,
+    required this.files,
   });
 
   final String method;
   final String path;
-  final Map<String, dynamic>? jsonBody;
+  final String? contentType;
+  final Map<String, String> fields;
+  final List<_CapturedFile> files;
+}
+
+final class _CapturedFile {
+  const _CapturedFile({
+    required this.key,
+    required this.filename,
+    required this.length,
+  });
+
+  final String key;
+  final String? filename;
+  final int length;
 }
 
 final class _RecordingAdapter implements HttpClientAdapter {
@@ -76,10 +85,21 @@ final class _RecordingAdapter implements HttpClientAdapter {
     await for (final chunk in requestStream ?? const Stream<Uint8List>.empty()) {
       chunk.forEach(bodyBytes.add);
     }
+    final data = options.data;
+    final formData = data is FormData ? data : null;
     request = _CapturedRequest(
       method: options.method,
       path: options.path,
-      jsonBody: bodyBytes.isEmpty ? null : jsonDecode(utf8.decode(bodyBytes)) as Map<String, dynamic>,
+      contentType: options.contentType,
+      fields: Map<String, String>.fromEntries(formData?.fields ?? const []),
+      files: [
+        for (final file in formData?.files ?? const <MapEntry<String, MultipartFile>>[])
+          _CapturedFile(
+            key: file.key,
+            filename: file.value.filename,
+            length: file.value.length,
+          ),
+      ],
     );
 
     return ResponseBody.fromString(
