@@ -21,6 +21,7 @@ class AppBottomSheet extends StatelessWidget {
     this.title,
     this.footer,
     this.onClose,
+    this.horizontalMargin = AppDimensions.space16,
   });
 
   /// Bold title displayed below the drag handle.
@@ -35,6 +36,9 @@ class AppBottomSheet extends StatelessWidget {
   /// Called when the close button is tapped. If null, pops the route.
   final VoidCallback? onClose;
 
+  /// Horizontal spacing between the sheet and the viewport edge.
+  final double horizontalMargin;
+
   /// Shows the bottom sheet as a modal with the JCCM scrim colour.
   static Future<T?> show<T>({
     required final BuildContext context,
@@ -44,6 +48,7 @@ class AppBottomSheet extends StatelessWidget {
     final VoidCallback? onClose,
     final bool isDismissible = true,
     final bool enableDrag = true,
+    final double horizontalMargin = AppDimensions.space16,
   }) {
     return showModalBottomSheet<T>(
       context: context,
@@ -57,6 +62,7 @@ class AppBottomSheet extends StatelessWidget {
         body: body,
         footer: footer,
         onClose: onClose,
+        horizontalMargin: horizontalMargin,
       ),
     );
   }
@@ -71,12 +77,14 @@ class AppBottomSheet extends StatelessWidget {
       label: title ?? 'Panel inferior',
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: AppDimensions.space16,
-            right: AppDimensions.space16,
-            bottom: AppDimensions.space40,
-            top: AppDimensions.space32,
-          ),
+          padding:
+              const EdgeInsets.only(
+                bottom: AppDimensions.space40,
+                top: AppDimensions.space32,
+              ).copyWith(
+                left: horizontalMargin,
+                right: horizontalMargin,
+              ),
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(

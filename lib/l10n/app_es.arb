@@ -964,6 +964,22 @@
   "@educationUniversityTitlesError": {
     "description": "Educación — error títulos universitarios."
   },
+  "educationUniversityTitlesInfoTitle": "Sobre tus títulos universitarios",
+  "@educationUniversityTitlesInfoTitle": {
+    "description": "Educación — título del modal de ayuda de títulos universitarios."
+  },
+  "educationUniversityTitlesInfoBody": "Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.",
+  "@educationUniversityTitlesInfoBody": {
+    "description": "Educación — cuerpo principal del modal de ayuda de títulos universitarios."
+  },
+  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.",
+  "@educationUniversityTitlesInfoFooter": {
+    "description": "Educación — texto de pie del modal de ayuda de títulos universitarios."
+  },
+  "educationUniversityTitlesInfoContactButton": "Contactar",
+  "@educationUniversityTitlesInfoContactButton": {
+    "description": "Educación — botón de contacto en el modal de ayuda de títulos universitarios."
+  },
   "educationNonUniversityTitlesTitle": "Títulos no universitarios",
   "@educationNonUniversityTitlesTitle": {
     "description": "Educación — sección títulos no universitarios."
@@ -3144,6 +3160,74 @@
   "myDataHealthInfoMessage": "Consulta tus datos de salud y las citas disponibles.",
   "@myDataHealthInfoMessage": {
     "description": "SnackBar mostrado al pulsar el botón de información en el detalle de Salud."
+  },
+  "myDataEducationInfoSheetTitle": "Sobre Mis datos de Educación",
+  "@myDataEducationInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Educación."
+  },
+  "myDataEducationInfoSheetDescription": "Consulta tu información y accede a servicios relacionados de educación en Castilla-La Mancha.",
+  "@myDataEducationInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Educación."
+  },
+  "myDataEducationDataTab": "Mis datos de Educación",
+  "@myDataEducationDataTab": {
+    "description": "Primera pestaña del detalle de Educación."
+  },
+  "myDataEducationServicesTab": "Información y servicios",
+  "@myDataEducationServicesTab": {
+    "description": "Segunda pestaña del detalle de Educación."
+  },
+  "myDataEducationUniversityTitles": "Títulos universitarios",
+  "@myDataEducationUniversityTitles": {
+    "description": "Tarjeta de acceso a títulos universitarios en Mis datos de Educación."
+  },
+  "myDataEducationNonUniversityTitles": "Títulos no universitarios",
+  "@myDataEducationNonUniversityTitles": {
+    "description": "Tarjeta de acceso a títulos no universitarios en Mis datos de Educación."
+  },
+  "myDataEducationTitlesDescription": "Universidades públicas y privadas",
+  "@myDataEducationTitlesDescription": {
+    "description": "Descripción de las tarjetas de títulos educativos."
+  },
+  "myDataEducationServicesEmpty": "Información y servicios de Educación disponible próximamente.",
+  "@myDataEducationServicesEmpty": {
+    "description": "Estado vacío temporal de la pestaña Información y servicios de Educación."
+  },
+  "myDataEducationProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataEducationProceduresTitle": {
+    "description": "Título de la sección de trámites sugeridos en la pestaña de información y servicios de Educación."
+  },
+  "myDataEducationProcedureEquivalence": "Solicitud equivalencia de estudios con los títulos oficiales",
+  "@myDataEducationProcedureEquivalence": {
+    "description": "Enlace a la solicitud de equivalencia de estudios con títulos oficiales."
+  },
+  "myDataEducationProcedureScholarships": "Becas y ayudas a alumnos de niveles postobligatorios",
+  "@myDataEducationProcedureScholarships": {
+    "description": "Enlace a becas y ayudas para alumnos de niveles postobligatorios."
+  },
+  "myDataEducationProcedureSecondaryDegree": "Pruebas libres para la obtención del título de graduado en educación secundaria obligatoria para > 18 años",
+  "@myDataEducationProcedureSecondaryDegree": {
+    "description": "Enlace a pruebas libres para obtener el título de graduado en ESO para mayores de 18 años."
+  },
+  "myDataEducationInterestLinksTitle": "Enlaces de interés",
+  "@myDataEducationInterestLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña de información y servicios de Educación."
+  },
+  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
+  "@myDataEducationInterestLinkPlaceholder": {
+    "description": "Placeholder de enlace de interés de Educación según el diseño de Figma."
+  },
+  "myDataHealthInfoSheetTitle": "Sobre Mis datos de Salud",
+  "@myDataHealthInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Salud."
+  },
+  "myDataHealthInfoSheetDescription": "Consulta la información de tus citas de Atención Primaria del Servicio de Salud de Castilla-La Mancha (SESCAM).",
+  "@myDataHealthInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Salud."
+  },
+  "myDataHealthInfoSheetContactHint": "Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.",
+  "@myDataHealthInfoSheetContactHint": {
+    "description": "Texto de ayuda previo al CTA de contacto del modal informativo de Salud."
   },
   "myDataHealthDataTab": "Mis datos de Salud",
   "@myDataHealthDataTab": {

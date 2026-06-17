@@ -28,10 +28,7 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
       appBar: AppHeaderBar(
         title: l10n.myDataHealthTitle,
         onBack: () => context.go(Routes.myData),
-        onInfo: () => AppAlertSnackbar.show(
-          context,
-          message: l10n.myDataHealthInfoMessage,
-        ),
+        onInfo: () => _showHealthInfoSheet(context),
       ),
       body: Container(
         width: double.infinity,
@@ -41,10 +38,10 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
           top: false,
           child: Column(
             children: [
-              _HealthTabBar(
-                l10n: l10n,
-                selectedTab: _selectedTab,
-                onSelected: (final tab) => setState(() => _selectedTab = tab),
+              AppTopTabBar(
+                tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
+                selectedIndex: _selectedTab.index,
+                onTabSelected: (final index) => setState(() => _selectedTab = _HealthTab.values[index]),
               ),
               Expanded(
                 child: switch (_selectedTab) {
@@ -61,115 +58,19 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
       ),
     );
   }
+
+  Future<void> _showHealthInfoSheet(final BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    await AppInfoSheet.show(
+      context: context,
+      title: l10n.myDataHealthInfoSheetTitle,
+      bodyText: l10n.myDataHealthInfoSheetDescription,
+      footerText: l10n.myDataHealthInfoSheetContactHint,
+    );
+  }
 }
 
 enum _HealthTab { data, services }
-
-class _HealthTabBar extends StatelessWidget {
-  const _HealthTabBar({
-    required this.l10n,
-    required this.selectedTab,
-    required this.onSelected,
-  });
-
-  final AppLocalizations l10n;
-  final _HealthTab selectedTab;
-  final ValueChanged<_HealthTab> onSelected;
-
-  @override
-  Widget build(final BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: AppColors.statusNeutralLight,
-        border: Border(
-          bottom: BorderSide(color: AppColors.borderBlueMutedLight),
-        ),
-      ),
-      child: SizedBox(
-        height: 40,
-        child: Row(
-          children: [
-            Expanded(
-              child: _HealthTopTab(
-                label: l10n.myDataHealthDataTab,
-                isSelected: selectedTab == _HealthTab.data,
-                onTap: () => onSelected(_HealthTab.data),
-              ),
-            ),
-            const VerticalDivider(
-              width: 1,
-              thickness: 1,
-              color: AppColors.borderBlueMutedLight,
-            ),
-            Expanded(
-              child: _HealthTopTab(
-                label: l10n.myDataHealthServicesTab,
-                isSelected: selectedTab == _HealthTab.services,
-                onTap: () => onSelected(_HealthTab.services),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _HealthTopTab extends StatelessWidget {
-  const _HealthTopTab({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Semantics(
-      button: true,
-      selected: isSelected,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: AppTypography.smallRegular.copyWith(
-                      color: AppColors.textBase,
-                    ),
-                  ),
-                ),
-              ),
-              if (isSelected)
-                Container(
-                  width: AppDimensions.iconMedium,
-                  height: AppDimensions.space4,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(AppDimensions.radiusXs),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _HealthAppointmentsTab extends ConsumerWidget {
   const _HealthAppointmentsTab({
@@ -204,9 +105,12 @@ class _HealthAppointmentsTab extends ConsumerWidget {
           const SizedBox(height: AppDimensions.space24),
           _CipText(cip: healthState.asData?.value.cip),
           const SizedBox(height: AppDimensions.space16),
-          _AppointmentFilterSelector(
-            selectedFilter: selectedAppointmentFilter,
-            onSelected: onAppointmentFilterSelected,
+          AppSegmentedControl(
+            segments: [l10n.myDataHealthPendingTab, l10n.myDataHealthPastTab],
+            selectedIndex: selectedAppointmentFilter == HealthAppointmentFilter.pending ? 0 : 1,
+            onSelected: (final index) => onAppointmentFilterSelected(
+              index == 0 ? HealthAppointmentFilter.pending : HealthAppointmentFilter.past,
+            ),
           ),
           const SizedBox(height: AppDimensions.space20),
           healthState.when(
@@ -409,100 +313,6 @@ class _CipText extends StatelessWidget {
         color: AppColors.primary,
         fontWeight: FontWeight.w400,
         letterSpacing: 0,
-      ),
-    );
-  }
-}
-
-class _AppointmentFilterSelector extends StatelessWidget {
-  const _AppointmentFilterSelector({
-    required this.selectedFilter,
-    required this.onSelected,
-  });
-
-  final HealthAppointmentFilter selectedFilter;
-  final ValueChanged<HealthAppointmentFilter> onSelected;
-
-  @override
-  Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.space8),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        border: Border.all(color: AppColors.borderNeutralLight),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _AppointmentFilterButton(
-              label: l10n.myDataHealthPendingTab,
-              isSelected: selectedFilter == HealthAppointmentFilter.pending,
-              onTap: () => onSelected(HealthAppointmentFilter.pending),
-            ),
-          ),
-          const SizedBox(width: AppDimensions.space8),
-          Expanded(
-            child: _AppointmentFilterButton(
-              label: l10n.myDataHealthPastTab,
-              isSelected: selectedFilter == HealthAppointmentFilter.past,
-              onTap: () => onSelected(HealthAppointmentFilter.past),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AppointmentFilterButton extends StatelessWidget {
-  const _AppointmentFilterButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Semantics(
-      button: true,
-      selected: isSelected,
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          child: Container(
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundWhite,
-              border: Border.all(
-                color: isSelected ? AppColors.borderDarkPrimary : AppColors.neutral500,
-              ),
-              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-              boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.textBlack,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

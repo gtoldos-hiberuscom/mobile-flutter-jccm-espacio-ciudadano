@@ -19,8 +19,11 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/support_f
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/accessibility_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_notice_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/privacy_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_education_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_health_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_non_university_titles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_university_titles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/notification_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/preferences_page.dart';
@@ -166,6 +169,21 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.myDataHealth,
               builder: (final BuildContext context, final GoRouterState state) => const MyDataHealthPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEducation,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataEducationPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEducationUniversityTitles,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataUniversityTitlesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEducationNonUniversityTitles,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataNonUniversityTitlesPage(),
             ),
 
             GoRoute(

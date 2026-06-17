@@ -968,6 +968,22 @@
   "@educationUniversityTitlesError": {
     "description": "Education — university titles error."
   },
+  "educationUniversityTitlesInfoTitle": "About your university degrees",
+  "@educationUniversityTitlesInfoTitle": {
+    "description": "Education — help modal title for university titles."
+  },
+  "educationUniversityTitlesInfoBody": "Check the data of degrees listed in the National Register of Official University Graduates of the Ministry of Science, Innovation and Universities.\nIf your degree is prior to 1996, your data may not be automatically displayed.",
+  "@educationUniversityTitlesInfoBody": {
+    "description": "Education — help modal main body for university titles."
+  },
+  "educationUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Ministry of Science, Innovation and Universities.",
+  "@educationUniversityTitlesInfoFooter": {
+    "description": "Education — help modal footer text for university titles."
+  },
+  "educationUniversityTitlesInfoContactButton": "Contact",
+  "@educationUniversityTitlesInfoContactButton": {
+    "description": "Education — contact button in help modal for university titles."
+  },
   "educationNonUniversityTitlesTitle": "Non-university titles",
   "@educationNonUniversityTitlesTitle": {
     "description": "Education — non-university titles section."
@@ -3148,6 +3164,74 @@
   "myDataHealthInfoMessage": "Check your health data and available appointments.",
   "@myDataHealthInfoMessage": {
     "description": "SnackBar shown when tapping the info button on the Health detail screen."
+  },
+  "myDataEducationInfoSheetTitle": "About My Education data",
+  "@myDataEducationInfoSheetTitle": {
+    "description": "Title of the My Education data information modal."
+  },
+  "myDataEducationInfoSheetDescription": "Check your information and access related education services in Castilla-La Mancha.",
+  "@myDataEducationInfoSheetDescription": {
+    "description": "Main description of the My Education data information modal."
+  },
+  "myDataEducationDataTab": "My Education data",
+  "@myDataEducationDataTab": {
+    "description": "First tab on the Education detail screen."
+  },
+  "myDataEducationServicesTab": "Information and services",
+  "@myDataEducationServicesTab": {
+    "description": "Second tab on the Education detail screen."
+  },
+  "myDataEducationUniversityTitles": "University degrees",
+  "@myDataEducationUniversityTitles": {
+    "description": "Access card for university degrees in My Education data."
+  },
+  "myDataEducationNonUniversityTitles": "Non-university qualifications",
+  "@myDataEducationNonUniversityTitles": {
+    "description": "Access card for non-university qualifications in My Education data."
+  },
+  "myDataEducationTitlesDescription": "Public and private universities",
+  "@myDataEducationTitlesDescription": {
+    "description": "Description of education qualification cards."
+  },
+  "myDataEducationServicesEmpty": "Education information and services will be available soon.",
+  "@myDataEducationServicesEmpty": {
+    "description": "Temporary empty state for the Education Information and services tab."
+  },
+  "myDataEducationProceduresTitle": "Procedures you may be interested in",
+  "@myDataEducationProceduresTitle": {
+    "description": "Title of the suggested procedures section on the Education information and services tab."
+  },
+  "myDataEducationProcedureEquivalence": "Request study equivalence with official qualifications",
+  "@myDataEducationProcedureEquivalence": {
+    "description": "Link to request study equivalence with official qualifications."
+  },
+  "myDataEducationProcedureScholarships": "Scholarships and grants for post-compulsory students",
+  "@myDataEducationProcedureScholarships": {
+    "description": "Link to scholarships and grants for post-compulsory students."
+  },
+  "myDataEducationProcedureSecondaryDegree": "Open tests to obtain the compulsory secondary education graduate qualification for > 18 years old",
+  "@myDataEducationProcedureSecondaryDegree": {
+    "description": "Link to open tests to obtain the ESO graduate qualification for people over 18."
+  },
+  "myDataEducationInterestLinksTitle": "Links of interest",
+  "@myDataEducationInterestLinksTitle": {
+    "description": "Title of the links of interest section on the Education information and services tab."
+  },
+  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
+  "@myDataEducationInterestLinkPlaceholder": {
+    "description": "Education link placeholder from the Figma design."
+  },
+  "myDataHealthInfoSheetTitle": "About My Health data",
+  "@myDataHealthInfoSheetTitle": {
+    "description": "Title of the My Health data information modal."
+  },
+  "myDataHealthInfoSheetDescription": "Check the information about your Primary Care appointments from the Castilla-La Mancha Health Service (SESCAM).",
+  "@myDataHealthInfoSheetDescription": {
+    "description": "Main description of the My Health data information modal."
+  },
+  "myDataHealthInfoSheetContactHint": "If any data is incorrect or out of date, contact your Health Centre.",
+  "@myDataHealthInfoSheetContactHint": {
+    "description": "Helper text before the contact CTA in the Health information modal."
   },
   "myDataHealthDataTab": "My Health data",
   "@myDataHealthDataTab": {

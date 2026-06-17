@@ -722,6 +722,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationUniversityTitlesError => 'We could not load your university titles.';
 
   @override
+  String get educationUniversityTitlesInfoTitle => 'About your university degrees';
+
+  @override
+  String get educationUniversityTitlesInfoBody => 'Check the data of degrees listed in the National Register of Official University Graduates of the Ministry of Science, Innovation and Universities.\nIf your degree is prior to 1996, your data may not be automatically displayed.';
+
+  @override
+  String get educationUniversityTitlesInfoFooter => 'If any of your data is incorrect or not updated, contact the Ministry of Science, Innovation and Universities.';
+
+  @override
+  String get educationUniversityTitlesInfoContactButton => 'Contact';
+
+  @override
   String get educationNonUniversityTitlesTitle => 'Non-university titles';
 
   @override
@@ -2310,6 +2322,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myDataHealthInfoMessage => 'Check your health data and available appointments.';
+
+  @override
+  String get myDataEducationInfoSheetTitle => 'About My Education data';
+
+  @override
+  String get myDataEducationInfoSheetDescription => 'Check your information and access related education services in Castilla-La Mancha.';
+
+  @override
+  String get myDataEducationDataTab => 'My Education data';
+
+  @override
+  String get myDataEducationServicesTab => 'Information and services';
+
+  @override
+  String get myDataEducationUniversityTitles => 'University degrees';
+
+  @override
+  String get myDataEducationNonUniversityTitles => 'Non-university qualifications';
+
+  @override
+  String get myDataEducationTitlesDescription => 'Public and private universities';
+
+  @override
+  String get myDataEducationServicesEmpty => 'Education information and services will be available soon.';
+
+  @override
+  String get myDataEducationProceduresTitle => 'Procedures you may be interested in';
+
+  @override
+  String get myDataEducationProcedureEquivalence => 'Request study equivalence with official qualifications';
+
+  @override
+  String get myDataEducationProcedureScholarships => 'Scholarships and grants for post-compulsory students';
+
+  @override
+  String get myDataEducationProcedureSecondaryDegree => 'Open tests to obtain the compulsory secondary education graduate qualification for > 18 years old';
+
+  @override
+  String get myDataEducationInterestLinksTitle => 'Links of interest';
+
+  @override
+  String get myDataEducationInterestLinkPlaceholder => 'Lorem ipsum dolor sit amet';
+
+  @override
+  String get myDataHealthInfoSheetTitle => 'About My Health data';
+
+  @override
+  String get myDataHealthInfoSheetDescription => 'Check the information about your Primary Care appointments from the Castilla-La Mancha Health Service (SESCAM).';
+
+  @override
+  String get myDataHealthInfoSheetContactHint => 'If any data is incorrect or out of date, contact your Health Centre.';
 
   @override
   String get myDataHealthDataTab => 'My Health data';

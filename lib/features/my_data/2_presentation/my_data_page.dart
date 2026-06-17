@@ -31,6 +31,7 @@ class MyDataPage extends ConsumerWidget {
       title: _MyDataText.educationTitle,
       description: _MyDataText.educationDescription,
       icon: AppIcons.school,
+      route: Routes.myDataEducation,
     ),
     _MyDataSectionDefinition(
       title: _MyDataText.housingTitle,

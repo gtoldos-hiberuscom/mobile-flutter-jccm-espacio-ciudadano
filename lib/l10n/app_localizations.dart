@@ -1454,6 +1454,30 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar tus títulos universitarios.'**
   String get educationUniversityTitlesError;
 
+  /// Educación — título del modal de ayuda de títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre tus títulos universitarios'**
+  String get educationUniversityTitlesInfoTitle;
+
+  /// Educación — cuerpo principal del modal de ayuda de títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.'**
+  String get educationUniversityTitlesInfoBody;
+
+  /// Educación — texto de pie del modal de ayuda de títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.'**
+  String get educationUniversityTitlesInfoFooter;
+
+  /// Educación — botón de contacto en el modal de ayuda de títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Contactar'**
+  String get educationUniversityTitlesInfoContactButton;
+
   /// Educación — sección títulos no universitarios.
   ///
   /// In es, this message translates to:
@@ -4483,6 +4507,108 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Consulta tus datos de salud y las citas disponibles.'**
   String get myDataHealthInfoMessage;
+
+  /// Título del modal informativo de Mis datos de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mis datos de Educación'**
+  String get myDataEducationInfoSheetTitle;
+
+  /// Descripción principal del modal informativo de Mis datos de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tu información y accede a servicios relacionados de educación en Castilla-La Mancha.'**
+  String get myDataEducationInfoSheetDescription;
+
+  /// Primera pestaña del detalle de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos de Educación'**
+  String get myDataEducationDataTab;
+
+  /// Segunda pestaña del detalle de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios'**
+  String get myDataEducationServicesTab;
+
+  /// Tarjeta de acceso a títulos universitarios en Mis datos de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Títulos universitarios'**
+  String get myDataEducationUniversityTitles;
+
+  /// Tarjeta de acceso a títulos no universitarios en Mis datos de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Títulos no universitarios'**
+  String get myDataEducationNonUniversityTitles;
+
+  /// Descripción de las tarjetas de títulos educativos.
+  ///
+  /// In es, this message translates to:
+  /// **'Universidades públicas y privadas'**
+  String get myDataEducationTitlesDescription;
+
+  /// Estado vacío temporal de la pestaña Información y servicios de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios de Educación disponible próximamente.'**
+  String get myDataEducationServicesEmpty;
+
+  /// Título de la sección de trámites sugeridos en la pestaña de información y servicios de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites que te pueden interesar'**
+  String get myDataEducationProceduresTitle;
+
+  /// Enlace a la solicitud de equivalencia de estudios con títulos oficiales.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud equivalencia de estudios con los títulos oficiales'**
+  String get myDataEducationProcedureEquivalence;
+
+  /// Enlace a becas y ayudas para alumnos de niveles postobligatorios.
+  ///
+  /// In es, this message translates to:
+  /// **'Becas y ayudas a alumnos de niveles postobligatorios'**
+  String get myDataEducationProcedureScholarships;
+
+  /// Enlace a pruebas libres para obtener el título de graduado en ESO para mayores de 18 años.
+  ///
+  /// In es, this message translates to:
+  /// **'Pruebas libres para la obtención del título de graduado en educación secundaria obligatoria para > 18 años'**
+  String get myDataEducationProcedureSecondaryDegree;
+
+  /// Título de la sección de enlaces de interés en la pestaña de información y servicios de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlaces de interés'**
+  String get myDataEducationInterestLinksTitle;
+
+  /// Placeholder de enlace de interés de Educación según el diseño de Figma.
+  ///
+  /// In es, this message translates to:
+  /// **'Lorem ipsum dolor sit amet'**
+  String get myDataEducationInterestLinkPlaceholder;
+
+  /// Título del modal informativo de Mis datos de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mis datos de Salud'**
+  String get myDataHealthInfoSheetTitle;
+
+  /// Descripción principal del modal informativo de Mis datos de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la información de tus citas de Atención Primaria del Servicio de Salud de Castilla-La Mancha (SESCAM).'**
+  String get myDataHealthInfoSheetDescription;
+
+  /// Texto de ayuda previo al CTA de contacto del modal informativo de Salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.'**
+  String get myDataHealthInfoSheetContactHint;
 
   /// Primera pestaña del detalle de Salud.
   ///
