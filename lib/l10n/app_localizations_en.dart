@@ -805,7 +805,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialWelfareHeaderDescription => 'Check your familia numerosa title and reach the official Castilla-La Mancha social welfare services.';
 
   @override
+  String get socialWelfareScreenTitle => 'Social welfare';
+
+  @override
+  String get socialWelfareDataTab => 'Social welfare data';
+
+  @override
+  String get socialWelfareServicesTab => 'Information and services';
+
+  @override
+  String get socialWelfareInterestLinksTitle => 'Links of interest';
+
+  @override
+  String get socialWelfareSuggestedProceduresTitle => 'Procedures that may interest you';
+
+  @override
+  String get socialWelfareDisabilityRecognitionProcedure => 'Recognition of disability degree';
+
+  @override
+  String get socialWelfareEarlyCareProcedure => 'Access to early care service';
+
+  @override
+  String get socialWelfareTemporaryResidentialStayProcedure => 'Place for temporary stays in residential centres for older people';
+
+  @override
+  String get socialWelfareInfoSheetTitle => 'About Social welfare data';
+
+  @override
+  String get socialWelfareInfoSheetDescription => 'Check the information for your Social Welfare files and access the services available from the Government of Castilla-La Mancha.';
+
+  @override
   String get socialWelfareFamilyTitle => 'Large family';
+
+  @override
+  String get socialWelfareFamilyNavDescription => 'Title details and beneficiaries';
+
+  @override
+  String get socialWelfareDisabilityTitle => 'Disability';
+
+  @override
+  String get socialWelfareDisabilityNavDescription => 'Disability title details';
+
+  @override
+  String get socialWelfareDisabilityInfoSheetTitle => 'About My disability title';
+
+  @override
+  String get socialWelfareDisabilityInfoSheetDescription => 'Check the details of your disability title.';
+
+  @override
+  String get socialWelfareDisabilityTitleSection => 'My disability title';
+
+  @override
+  String get socialWelfareDisabilityEffectiveDateLabel => 'Effective date';
+
+  @override
+  String get socialWelfareDisabilityPermanentValidityLabel => 'Permanent validity';
+
+  @override
+  String get socialWelfareDisabilityFileNumberLabel => 'File number';
+
+  @override
+  String get socialWelfareDisabilityBirthDateLabel => 'Birth date';
+
+  @override
+  String get socialWelfareDisabilityMobilityLabel => 'Reduced mobility applies';
+
+  @override
+  String get socialWelfareDisabilityThirdPersonLabel => 'Third-person assistance recognized';
+
+  @override
+  String get socialWelfareDisabilityRoyalDecreeLabel => 'Royal decree used to grant the degree';
 
   @override
   String get socialWelfareFamilySource => 'Source: Junta de Comunidades de Castilla-La Mancha';
@@ -852,10 +921,73 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialWelfareTermalismoTitle => 'Thermal-spa programs';
 
   @override
+  String get socialWelfareTermalismoNavTitle => 'Thermal spas';
+
+  @override
+  String get socialWelfareTermalismoNavDescription => 'Assigned spa resort';
+
+  @override
+  String get socialWelfareTermalismoInfoSheetTitle => 'About Thermal spas';
+
+  @override
+  String get socialWelfareTermalismoInfoSheetDescription => 'Check the details of the latest spa resort definitively assigned to you in the Castilla-La Mancha Thermal Spa Programme.';
+
+  @override
+  String get socialWelfareTermalismoAwardTitle => 'Latest assigned spa resort';
+
+  @override
+  String get socialWelfareTermalismoSpaNameLabel => 'Spa resort name';
+
+  @override
+  String get socialWelfareTermalismoStartDateLabel => 'Start date';
+
+  @override
+  String get socialWelfareTermalismoEndDateLabel => 'End date';
+
+  @override
+  String get socialWelfareTermalismoUnavailableMessage => 'We could not find thermal-spa information associated with your data. Please try again later.';
+
+  @override
+  String get socialWelfareTermalismoErrorMessage => 'Your thermal-spa information could not be loaded.';
+
+  @override
   String get socialWelfareTermalismoDescription => 'The Castilla-La Mancha thermal-spa program is managed through the official Social Welfare portal.';
 
   @override
   String get socialWelfareParkingTitle => 'Parking card';
+
+  @override
+  String get socialWelfareParkingNavTitle => 'Parking card';
+
+  @override
+  String get socialWelfareParkingNavDescription => 'Your parking card details';
+
+  @override
+  String get socialWelfareParkingInfoSheetTitle => 'About My parking card';
+
+  @override
+  String get socialWelfareParkingInfoSheetDescription => 'Check the details of your current parking card for people with disabilities and reduced mobility in Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareParkingCardTitle => 'My parking card';
+
+  @override
+  String get socialWelfareParkingCodeLabel => 'Card code';
+
+  @override
+  String get socialWelfareParkingModalityLabel => 'Modality';
+
+  @override
+  String get socialWelfareParkingValidFromLabel => 'Valid from';
+
+  @override
+  String get socialWelfareParkingValidUntilLabel => 'Valid until';
+
+  @override
+  String get socialWelfareParkingUnavailableMessage => 'We could not find parking card information associated with your data. Please try again later.';
+
+  @override
+  String get socialWelfareParkingErrorMessage => 'Your parking card could not be loaded.';
 
   @override
   String get socialWelfareParkingDescription => 'Requesting and managing the disability parking card is handled in the corresponding e-office.';
@@ -864,7 +996,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialWelfareDependenciaTitle => 'Dependency support';
 
   @override
+  String get socialWelfareDependenciaNavDescription => 'Current situation and benefits';
+
+  @override
+  String get socialWelfareDependenciaInfoSheetTitle => 'About Dependency care';
+
+  @override
+  String get socialWelfareDependenciaInfoSheetDescription => 'Check the details of your current situation and dependency care benefits.';
+
+  @override
+  String get socialWelfareDependenciaCurrentStatusTitle => 'My current situation';
+
+  @override
+  String get socialWelfareDependenciaRequestDateLabel => 'Request date';
+
+  @override
+  String get socialWelfareDependenciaResolutionDateLabel => 'Resolution date';
+
+  @override
+  String get socialWelfareDependenciaRecognizedDegreeLabel => 'Recognized degree';
+
+  @override
+  String get socialWelfareDependenciaBaremoLabel => 'Scale';
+
+  @override
+  String get socialWelfareDependenciaBenefitsTitle => 'Benefits';
+
+  @override
+  String get socialWelfareDependenciaBenefitResolutionDateLabel => 'Resolution date';
+
+  @override
+  String get socialWelfareDependenciaBenefitEffectiveDateLabel => 'Effective date';
+
+  @override
+  String get socialWelfareDependenciaBenefitAmountLabel => 'Amount (€)';
+
+  @override
+  String get socialWelfareDependenciaUnavailableMessage => 'We could not find dependency care information associated with your data. Please try again later.';
+
+  @override
+  String get socialWelfareDependenciaErrorMessage => 'Your dependency care information could not be loaded.';
+
+  @override
   String get socialWelfareDependenciaDescription => 'Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.';
+
+  @override
+  String get socialWelfareServicesEmpty => 'Social welfare information and services will be available soon.';
 
   @override
   String get supportFormTitle => 'Technical support';
@@ -2037,7 +2214,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationDetailPlaceholderPending => 'Detail screen will be enabled in STORY-44.';
 
   @override
-  String get familiaNumerosaDetailTitle => 'Large family card';
+  String get familiaNumerosaDetailTitle => 'Large family';
+
+  @override
+  String get familiaNumerosaInfoSheetTitle => 'About Large family';
+
+  @override
+  String get familiaNumerosaInfoSheetDescription => 'Check the details of your large family title.';
+
+  @override
+  String get familiaNumerosaTitleSection => 'My large family title';
+
+  @override
+  String get familiaNumerosaRegionLabel => 'Autonomous community';
+
+  @override
+  String get familiaNumerosaTitleNumberLabel => 'Title number';
+
+  @override
+  String get familiaNumerosaCategoryLabel => 'Category';
+
+  @override
+  String get familiaNumerosaValidLabel => 'Valid';
+
+  @override
+  String get familiaNumerosaIssueDateLabel => 'Issue date';
+
+  @override
+  String get familiaNumerosaExpiryDateLabel => 'Expiry date';
+
+  @override
+  String get familiaNumerosaChildrenCountLabel => 'Number of children in the title';
+
+  @override
+  String get familiaNumerosaBeneficiariesTitle => 'Beneficiaries';
+
+  @override
+  String familiaNumerosaBeneficiaryTitle(int index) {
+    return 'Beneficiary $index';
+  }
+
+  @override
+  String get familiaNumerosaDocumentNumberLabel => 'Document number';
+
+  @override
+  String get familiaNumerosaBirthDateLabel => 'Birth date';
+
+  @override
+  String get familiaNumerosaFullNameLabel => 'Full name';
+
+  @override
+  String get familiaNumerosaHolderLabel => 'Holder';
+
+  @override
+  String get familiaNumerosaYes => 'Yes';
+
+  @override
+  String get familiaNumerosaNo => 'No';
+
+  @override
+  String get familiaNumerosaNoDataMessage => 'We could not find large family information associated with your data in the JCCM lookup service.\n\nIf this situation is not correct or not up to date, contact the Social Welfare Department of Castilla-La Mancha.';
+
+  @override
+  String get familiaNumerosaContactHint => 'If any of your data is incorrect or not up to date, contact the Social Welfare Department of Castilla-La Mancha.';
+
+  @override
+  String get familiaNumerosaOfficeContactsButton => 'Office and contact list';
 
   @override
   String familiaNumerosaCardNumberLabel(String number) {

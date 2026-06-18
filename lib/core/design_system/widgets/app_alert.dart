@@ -230,7 +230,10 @@ class AppAlertContextual extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Align(alignment: Alignment.centerLeft, child: contentRow),
-              ?action,
+              if (action != null) ...[
+                const SizedBox(height: AppDimensions.space16),
+                action!,
+              ],
             ],
           );
 

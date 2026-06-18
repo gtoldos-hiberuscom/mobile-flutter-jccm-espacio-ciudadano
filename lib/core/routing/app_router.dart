@@ -23,6 +23,12 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_e
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_health_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_non_university_titles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_dependency_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_disability_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_family_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_parking_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_thermal_spa_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_university_titles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_vehicles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
@@ -170,6 +176,36 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.myDataHealth,
               builder: (final BuildContext context, final GoRouterState state) => const MyDataHealthPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfare,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfarePage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareFamily,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareFamilyPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareDisability,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareDisabilityPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareThermalSpa,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareThermalSpaPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareDependency,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareDependencyPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareParking,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareParkingPage(),
             ),
 
             GoRoute(

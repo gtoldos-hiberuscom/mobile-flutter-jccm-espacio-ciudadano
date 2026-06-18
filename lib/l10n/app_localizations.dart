@@ -1616,11 +1616,149 @@ abstract class AppLocalizations {
   /// **'Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.'**
   String get socialWelfareHeaderDescription;
 
+  /// Mis datos de Bienestar — título de la pantalla.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienestar social'**
+  String get socialWelfareScreenTitle;
+
+  /// Mis datos de Bienestar — pestaña de datos personales.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos de Bienestar'**
+  String get socialWelfareDataTab;
+
+  /// Mis datos de Bienestar — pestaña de información y servicios.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios'**
+  String get socialWelfareServicesTab;
+
+  /// Mis datos de Bienestar — título de la sección de enlaces de interés.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlaces de interés'**
+  String get socialWelfareInterestLinksTitle;
+
+  /// Mis datos de Bienestar — título de la sección de trámites sugeridos.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites que te pueden interesar'**
+  String get socialWelfareSuggestedProceduresTitle;
+
+  /// Mis datos de Bienestar — enlace al trámite de reconocimiento de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Reconocimiento del grado de discapacidad'**
+  String get socialWelfareDisabilityRecognitionProcedure;
+
+  /// Mis datos de Bienestar — enlace al trámite de atención temprana.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso al servicio de atención temprana'**
+  String get socialWelfareEarlyCareProcedure;
+
+  /// Mis datos de Bienestar — enlace al trámite de estancias temporales en centros residenciales.
+  ///
+  /// In es, this message translates to:
+  /// **'Plaza para el servicio de estancias temporales en centros residenciales para personas mayores'**
+  String get socialWelfareTemporaryResidentialStayProcedure;
+
+  /// Mis datos de Bienestar — título del modal informativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mis datos de Bienestar social'**
+  String get socialWelfareInfoSheetTitle;
+
+  /// Mis datos de Bienestar — descripción del modal informativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.'**
+  String get socialWelfareInfoSheetDescription;
+
   /// Bienestar — sección familia numerosa.
   ///
   /// In es, this message translates to:
   /// **'Familia numerosa'**
   String get socialWelfareFamilyTitle;
+
+  /// Mis datos de Bienestar — descripción de la tarjeta de familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalles del título y personas beneficiarias'**
+  String get socialWelfareFamilyNavDescription;
+
+  /// Mis datos de Bienestar — título de la tarjeta de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Discapacidad'**
+  String get socialWelfareDisabilityTitle;
+
+  /// Mis datos de Bienestar — descripción de la tarjeta de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalles del título de discapacidad'**
+  String get socialWelfareDisabilityNavDescription;
+
+  /// Mis datos de Bienestar — título del panel informativo de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mi título de discapacidad'**
+  String get socialWelfareDisabilityInfoSheetTitle;
+
+  /// Mis datos de Bienestar — descripción del panel informativo de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos de tu título de discapacidad.'**
+  String get socialWelfareDisabilityInfoSheetDescription;
+
+  /// Mis datos de Bienestar — sección del título de discapacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi título de discapacidad'**
+  String get socialWelfareDisabilityTitleSection;
+
+  /// Mis datos de Bienestar — etiqueta de fecha de efectos.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de efectos'**
+  String get socialWelfareDisabilityEffectiveDateLabel;
+
+  /// Mis datos de Bienestar — etiqueta de validez definitiva.
+  ///
+  /// In es, this message translates to:
+  /// **'Validez definitiva'**
+  String get socialWelfareDisabilityPermanentValidityLabel;
+
+  /// Mis datos de Bienestar — etiqueta de número de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get socialWelfareDisabilityFileNumberLabel;
+
+  /// Mis datos de Bienestar — etiqueta de fecha de nacimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de nacimiento'**
+  String get socialWelfareDisabilityBirthDateLabel;
+
+  /// Mis datos de Bienestar — etiqueta de movilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Procede movilidad'**
+  String get socialWelfareDisabilityMobilityLabel;
+
+  /// Mis datos de Bienestar — etiqueta de tercera persona.
+  ///
+  /// In es, this message translates to:
+  /// **'Reconocido concurso de tercera persona'**
+  String get socialWelfareDisabilityThirdPersonLabel;
+
+  /// Mis datos de Bienestar — etiqueta del real decreto.
+  ///
+  /// In es, this message translates to:
+  /// **'Real decreto en base a la que se concede el grado'**
+  String get socialWelfareDisabilityRoyalDecreeLabel;
 
   /// Bienestar — atribución CCAA.
   ///
@@ -1706,6 +1844,66 @@ abstract class AppLocalizations {
   /// **'Termalismo / Balnearios'**
   String get socialWelfareTermalismoTitle;
 
+  /// Mis datos de Bienestar — título de la tarjeta de termalismo.
+  ///
+  /// In es, this message translates to:
+  /// **'Termalismo'**
+  String get socialWelfareTermalismoNavTitle;
+
+  /// Mis datos de Bienestar — descripción de la tarjeta de termalismo.
+  ///
+  /// In es, this message translates to:
+  /// **'Balneario adjudicado'**
+  String get socialWelfareTermalismoNavDescription;
+
+  /// Mis datos de Bienestar — título del panel informativo de termalismo.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Termalismo'**
+  String get socialWelfareTermalismoInfoSheetTitle;
+
+  /// Mis datos de Bienestar — descripción del panel informativo de termalismo.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos del último balneario que te han adjudicado de forma definitiva en el Programa Termalismo de Castilla-La Mancha.'**
+  String get socialWelfareTermalismoInfoSheetDescription;
+
+  /// Mis datos de Bienestar — sección del último balneario adjudicado.
+  ///
+  /// In es, this message translates to:
+  /// **'Último balneario adjudicado'**
+  String get socialWelfareTermalismoAwardTitle;
+
+  /// Mis datos de Bienestar — etiqueta del nombre del balneario.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre del balneario'**
+  String get socialWelfareTermalismoSpaNameLabel;
+
+  /// Mis datos de Bienestar — etiqueta de fecha desde.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha desde'**
+  String get socialWelfareTermalismoStartDateLabel;
+
+  /// Mis datos de Bienestar — etiqueta de fecha hasta.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha hasta'**
+  String get socialWelfareTermalismoEndDateLabel;
+
+  /// Mis datos de Bienestar — estado vacío de termalismo.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de termalismo asociada a tus datos. Vuelve a intentarlo más tarde.'**
+  String get socialWelfareTermalismoUnavailableMessage;
+
+  /// Mis datos de Bienestar — error de carga de termalismo.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu información de termalismo.'**
+  String get socialWelfareTermalismoErrorMessage;
+
   /// Bienestar — copy termalismo.
   ///
   /// In es, this message translates to:
@@ -1717,6 +1915,72 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Tarjeta de estacionamiento'**
   String get socialWelfareParkingTitle;
+
+  /// Mis datos de Bienestar — título de la tarjeta de estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Tarjeta estacionamiento'**
+  String get socialWelfareParkingNavTitle;
+
+  /// Mis datos de Bienestar — descripción de la tarjeta de estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalles de tu tarjeta de estacionamiento'**
+  String get socialWelfareParkingNavDescription;
+
+  /// Mis datos de Bienestar — título del panel informativo de tarjeta de estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mi tarjeta de estacionamiento'**
+  String get socialWelfareParkingInfoSheetTitle;
+
+  /// Mis datos de Bienestar — descripción del panel informativo de tarjeta de estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos de tu tarjeta de estacionamiento en vigor para personas con discapacidad y movilidad reducida de Castilla-La Mancha.'**
+  String get socialWelfareParkingInfoSheetDescription;
+
+  /// Mis datos de Bienestar — título de detalle de tarjeta de estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi tarjeta de estacionamiento'**
+  String get socialWelfareParkingCardTitle;
+
+  /// Mis datos de Bienestar — etiqueta del código de tarjeta.
+  ///
+  /// In es, this message translates to:
+  /// **'Código de la tarjeta'**
+  String get socialWelfareParkingCodeLabel;
+
+  /// Mis datos de Bienestar — etiqueta de modalidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Modalidad'**
+  String get socialWelfareParkingModalityLabel;
+
+  /// Mis datos de Bienestar — etiqueta de fecha de vigencia desde.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de vigencia desde'**
+  String get socialWelfareParkingValidFromLabel;
+
+  /// Mis datos de Bienestar — etiqueta de fecha de vigencia hasta.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de vigencia hasta'**
+  String get socialWelfareParkingValidUntilLabel;
+
+  /// Mis datos de Bienestar — estado vacío de tarjeta de estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos. Vuelve a intentarlo más tarde.'**
+  String get socialWelfareParkingUnavailableMessage;
+
+  /// Mis datos de Bienestar — error de carga de tarjeta de estacionamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu tarjeta de estacionamiento.'**
+  String get socialWelfareParkingErrorMessage;
 
   /// Bienestar — copy tarjeta estacionamiento.
   ///
@@ -1730,11 +1994,101 @@ abstract class AppLocalizations {
   /// **'Atención a la dependencia'**
   String get socialWelfareDependenciaTitle;
 
+  /// Mis datos de Bienestar — descripción de la tarjeta de dependencia.
+  ///
+  /// In es, this message translates to:
+  /// **'Situación actual y prestaciones'**
+  String get socialWelfareDependenciaNavDescription;
+
+  /// Mis datos de Bienestar — título del panel informativo de dependencia.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Atención a la dependencia'**
+  String get socialWelfareDependenciaInfoSheetTitle;
+
+  /// Mis datos de Bienestar — descripción del panel informativo de dependencia.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos sobre tu situación actual de las prestaciones en ayuda a la dependencia.'**
+  String get socialWelfareDependenciaInfoSheetDescription;
+
+  /// Mis datos de Bienestar — título de situación actual.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi situación actual'**
+  String get socialWelfareDependenciaCurrentStatusTitle;
+
+  /// Mis datos de Bienestar — etiqueta de fecha de solicitud.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de solicitud'**
+  String get socialWelfareDependenciaRequestDateLabel;
+
+  /// Mis datos de Bienestar — etiqueta de fecha de resolución.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de resolución'**
+  String get socialWelfareDependenciaResolutionDateLabel;
+
+  /// Mis datos de Bienestar — etiqueta de grado reconocido.
+  ///
+  /// In es, this message translates to:
+  /// **'Grado reconocido'**
+  String get socialWelfareDependenciaRecognizedDegreeLabel;
+
+  /// Mis datos de Bienestar — etiqueta de baremo.
+  ///
+  /// In es, this message translates to:
+  /// **'Baremo'**
+  String get socialWelfareDependenciaBaremoLabel;
+
+  /// Mis datos de Bienestar — título de prestaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Prestaciones'**
+  String get socialWelfareDependenciaBenefitsTitle;
+
+  /// Mis datos de Bienestar — etiqueta de fecha resolución de prestación.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha resolución'**
+  String get socialWelfareDependenciaBenefitResolutionDateLabel;
+
+  /// Mis datos de Bienestar — etiqueta de fecha efecto de prestación.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha efecto'**
+  String get socialWelfareDependenciaBenefitEffectiveDateLabel;
+
+  /// Mis datos de Bienestar — etiqueta de importe de prestación.
+  ///
+  /// In es, this message translates to:
+  /// **'Importe (€)'**
+  String get socialWelfareDependenciaBenefitAmountLabel;
+
+  /// Mis datos de Bienestar — estado vacío de dependencia.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de atención a la dependencia asociada a tus datos. Vuelve a intentarlo más tarde.'**
+  String get socialWelfareDependenciaUnavailableMessage;
+
+  /// Mis datos de Bienestar — error de carga de dependencia.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido cargar tu información de atención a la dependencia.'**
+  String get socialWelfareDependenciaErrorMessage;
+
   /// Bienestar — copy dependencia.
   ///
   /// In es, this message translates to:
   /// **'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.'**
   String get socialWelfareDependenciaDescription;
+
+  /// Mis datos de Bienestar — estado vacío temporal de la pestaña Información y servicios.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios de Bienestar disponible próximamente.'**
+  String get socialWelfareServicesEmpty;
 
   /// Título de la pantalla de formulario de soporte.
   ///
@@ -3965,8 +4319,134 @@ abstract class AppLocalizations {
   /// Familia numerosa detail page — AppBar title.
   ///
   /// In es, this message translates to:
-  /// **'Carnet de familia numerosa'**
+  /// **'Familia numerosa'**
   String get familiaNumerosaDetailTitle;
+
+  /// Familia numerosa detail — título del panel informativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Familia numerosa'**
+  String get familiaNumerosaInfoSheetTitle;
+
+  /// Familia numerosa detail — descripción del panel informativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos de tu título de familia numerosa.'**
+  String get familiaNumerosaInfoSheetDescription;
+
+  /// Familia numerosa detail — sección de datos del título.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi título de familia numerosa'**
+  String get familiaNumerosaTitleSection;
+
+  /// Familia numerosa detail — etiqueta de comunidad autónoma.
+  ///
+  /// In es, this message translates to:
+  /// **'Comunidad autónoma'**
+  String get familiaNumerosaRegionLabel;
+
+  /// Familia numerosa detail — etiqueta de número de título.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de título'**
+  String get familiaNumerosaTitleNumberLabel;
+
+  /// Familia numerosa detail — etiqueta de categoría.
+  ///
+  /// In es, this message translates to:
+  /// **'Categoría'**
+  String get familiaNumerosaCategoryLabel;
+
+  /// Familia numerosa detail — etiqueta de vigencia.
+  ///
+  /// In es, this message translates to:
+  /// **'Vigente'**
+  String get familiaNumerosaValidLabel;
+
+  /// Familia numerosa detail — etiqueta de fecha de expedición.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de expedición'**
+  String get familiaNumerosaIssueDateLabel;
+
+  /// Familia numerosa detail — etiqueta de fecha de caducidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de caducidad'**
+  String get familiaNumerosaExpiryDateLabel;
+
+  /// Familia numerosa detail — etiqueta de número de hijos/as.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de hijos/as del título'**
+  String get familiaNumerosaChildrenCountLabel;
+
+  /// Familia numerosa detail — sección de beneficiarios/as.
+  ///
+  /// In es, this message translates to:
+  /// **'Beneficiarios/as'**
+  String get familiaNumerosaBeneficiariesTitle;
+
+  /// Familia numerosa detail — título numerado de beneficiario/a.
+  ///
+  /// In es, this message translates to:
+  /// **'Beneficiario/a {index}'**
+  String familiaNumerosaBeneficiaryTitle(int index);
+
+  /// Familia numerosa detail — etiqueta de documento de beneficiario/a.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de documento'**
+  String get familiaNumerosaDocumentNumberLabel;
+
+  /// Familia numerosa detail — etiqueta de fecha de nacimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de nacimiento'**
+  String get familiaNumerosaBirthDateLabel;
+
+  /// Familia numerosa detail — etiqueta de nombre completo.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre y apellidos'**
+  String get familiaNumerosaFullNameLabel;
+
+  /// Familia numerosa detail — etiqueta de titular.
+  ///
+  /// In es, this message translates to:
+  /// **'Titular'**
+  String get familiaNumerosaHolderLabel;
+
+  /// Familia numerosa detail — valor afirmativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Sí'**
+  String get familiaNumerosaYes;
+
+  /// Familia numerosa detail — valor negativo.
+  ///
+  /// In es, this message translates to:
+  /// **'No'**
+  String get familiaNumerosaNo;
+
+  /// Familia numerosa detail — helper mostrado cuando no hay datos.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get familiaNumerosaNoDataMessage;
+
+  /// Familia numerosa detail — helper bajo los datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get familiaNumerosaContactHint;
+
+  /// Familia numerosa detail — botón externo hacia oficinas y contactos.
+  ///
+  /// In es, this message translates to:
+  /// **'Listado de oficinas y contactos'**
+  String get familiaNumerosaOfficeContactsButton;
 
   /// Familia numerosa detail page — printed carnet number row.
   ///

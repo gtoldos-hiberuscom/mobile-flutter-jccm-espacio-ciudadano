@@ -21,6 +21,7 @@ class MyDataPage extends ConsumerWidget {
       title: _MyDataText.socialWelfareTitle,
       description: _MyDataText.socialWelfareDescription,
       icon: AppIcons.diversity,
+      route: Routes.myDataSocialWelfare,
     ),
     _MyDataSectionDefinition(
       title: _MyDataText.employmentTitle,
@@ -82,8 +83,10 @@ class MyDataPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppDimensions.space20),
                 for (final section in sections) ...[
-                  _MyDataCard(
-                    section: section,
+                  AppIconNavigationCard(
+                    title: section.title,
+                    description: section.description,
+                    icon: section.icon,
                     onTap: () {
                       final route = section.route;
                       if (route == null) {
@@ -160,110 +163,6 @@ enum _MyDataText {
       _MyDataText.vehiclesTitle => l10n.myDataVehiclesTitle,
       _MyDataText.vehiclesDescription => l10n.myDataVehiclesDescription,
     };
-  }
-}
-
-class _MyDataCard extends StatelessWidget {
-  const _MyDataCard({
-    required this.section,
-    required this.onTap,
-  });
-
-  final _MyDataSection section;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Semantics(
-      button: true,
-      label: '${section.title}. ${section.description}',
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: Border.all(color: AppColors.borderBlueMutedLight),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-          boxShadow: AppShadows.medium,
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space8,
-                AppDimensions.space8,
-                AppDimensions.space16,
-                AppDimensions.space8,
-              ),
-              child: Row(
-                children: [
-                  _MyDataIcon(icon: section.icon),
-                  const SizedBox(width: AppDimensions.space16),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            section.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTypography.leadingMedium.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.space4),
-                          Text(
-                            section.description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTypography.smallRegular.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppDimensions.space8),
-                  const AppIcon(
-                    AppIcons.arrowForward,
-                    color: AppColors.textPrimary,
-                    size: AppDimensions.iconLarge,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MyDataIcon extends StatelessWidget {
-  const _MyDataIcon({required this.icon});
-
-  final IconData icon;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Container(
-      width: AppDimensions.space64,
-      constraints: const BoxConstraints(minHeight: 64),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundBlueLighter,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-      ),
-      alignment: Alignment.center,
-      child: AppIcon(
-        icon,
-        color: AppColors.textPrimary,
-      ),
-    );
   }
 }
 

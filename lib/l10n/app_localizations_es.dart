@@ -806,7 +806,76 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareHeaderDescription => 'Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.';
 
   @override
+  String get socialWelfareScreenTitle => 'Bienestar social';
+
+  @override
+  String get socialWelfareDataTab => 'Mis datos de Bienestar';
+
+  @override
+  String get socialWelfareServicesTab => 'Información y servicios';
+
+  @override
+  String get socialWelfareInterestLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get socialWelfareSuggestedProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get socialWelfareDisabilityRecognitionProcedure => 'Reconocimiento del grado de discapacidad';
+
+  @override
+  String get socialWelfareEarlyCareProcedure => 'Acceso al servicio de atención temprana';
+
+  @override
+  String get socialWelfareTemporaryResidentialStayProcedure => 'Plaza para el servicio de estancias temporales en centros residenciales para personas mayores';
+
+  @override
+  String get socialWelfareInfoSheetTitle => 'Sobre Mis datos de Bienestar social';
+
+  @override
+  String get socialWelfareInfoSheetDescription => 'Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
   String get socialWelfareFamilyTitle => 'Familia numerosa';
+
+  @override
+  String get socialWelfareFamilyNavDescription => 'Detalles del título y personas beneficiarias';
+
+  @override
+  String get socialWelfareDisabilityTitle => 'Discapacidad';
+
+  @override
+  String get socialWelfareDisabilityNavDescription => 'Detalles del título de discapacidad';
+
+  @override
+  String get socialWelfareDisabilityInfoSheetTitle => 'Sobre Mi título de discapacidad';
+
+  @override
+  String get socialWelfareDisabilityInfoSheetDescription => 'Consulta los datos de tu título de discapacidad.';
+
+  @override
+  String get socialWelfareDisabilityTitleSection => 'Mi título de discapacidad';
+
+  @override
+  String get socialWelfareDisabilityEffectiveDateLabel => 'Fecha de efectos';
+
+  @override
+  String get socialWelfareDisabilityPermanentValidityLabel => 'Validez definitiva';
+
+  @override
+  String get socialWelfareDisabilityFileNumberLabel => 'Número de expediente';
+
+  @override
+  String get socialWelfareDisabilityBirthDateLabel => 'Fecha de nacimiento';
+
+  @override
+  String get socialWelfareDisabilityMobilityLabel => 'Procede movilidad';
+
+  @override
+  String get socialWelfareDisabilityThirdPersonLabel => 'Reconocido concurso de tercera persona';
+
+  @override
+  String get socialWelfareDisabilityRoyalDecreeLabel => 'Real decreto en base a la que se concede el grado';
 
   @override
   String get socialWelfareFamilySource => 'Fuente: Junta de Comunidades de Castilla-La Mancha';
@@ -853,10 +922,73 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareTermalismoTitle => 'Termalismo / Balnearios';
 
   @override
+  String get socialWelfareTermalismoNavTitle => 'Termalismo';
+
+  @override
+  String get socialWelfareTermalismoNavDescription => 'Balneario adjudicado';
+
+  @override
+  String get socialWelfareTermalismoInfoSheetTitle => 'Sobre Termalismo';
+
+  @override
+  String get socialWelfareTermalismoInfoSheetDescription => 'Consulta los datos del último balneario que te han adjudicado de forma definitiva en el Programa Termalismo de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareTermalismoAwardTitle => 'Último balneario adjudicado';
+
+  @override
+  String get socialWelfareTermalismoSpaNameLabel => 'Nombre del balneario';
+
+  @override
+  String get socialWelfareTermalismoStartDateLabel => 'Fecha desde';
+
+  @override
+  String get socialWelfareTermalismoEndDateLabel => 'Fecha hasta';
+
+  @override
+  String get socialWelfareTermalismoUnavailableMessage => 'No hemos encontrado información de termalismo asociada a tus datos. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get socialWelfareTermalismoErrorMessage => 'No se ha podido cargar tu información de termalismo.';
+
+  @override
   String get socialWelfareTermalismoDescription => 'El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.';
 
   @override
   String get socialWelfareParkingTitle => 'Tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingNavTitle => 'Tarjeta estacionamiento';
+
+  @override
+  String get socialWelfareParkingNavDescription => 'Detalles de tu tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingInfoSheetTitle => 'Sobre Mi tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingInfoSheetDescription => 'Consulta los datos de tu tarjeta de estacionamiento en vigor para personas con discapacidad y movilidad reducida de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareParkingCardTitle => 'Mi tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingCodeLabel => 'Código de la tarjeta';
+
+  @override
+  String get socialWelfareParkingModalityLabel => 'Modalidad';
+
+  @override
+  String get socialWelfareParkingValidFromLabel => 'Fecha de vigencia desde';
+
+  @override
+  String get socialWelfareParkingValidUntilLabel => 'Fecha de vigencia hasta';
+
+  @override
+  String get socialWelfareParkingUnavailableMessage => 'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get socialWelfareParkingErrorMessage => 'No se ha podido cargar tu tarjeta de estacionamiento.';
 
   @override
   String get socialWelfareParkingDescription => 'La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.';
@@ -865,7 +997,52 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareDependenciaTitle => 'Atención a la dependencia';
 
   @override
+  String get socialWelfareDependenciaNavDescription => 'Situación actual y prestaciones';
+
+  @override
+  String get socialWelfareDependenciaInfoSheetTitle => 'Sobre Atención a la dependencia';
+
+  @override
+  String get socialWelfareDependenciaInfoSheetDescription => 'Consulta los datos sobre tu situación actual de las prestaciones en ayuda a la dependencia.';
+
+  @override
+  String get socialWelfareDependenciaCurrentStatusTitle => 'Mi situación actual';
+
+  @override
+  String get socialWelfareDependenciaRequestDateLabel => 'Fecha de solicitud';
+
+  @override
+  String get socialWelfareDependenciaResolutionDateLabel => 'Fecha de resolución';
+
+  @override
+  String get socialWelfareDependenciaRecognizedDegreeLabel => 'Grado reconocido';
+
+  @override
+  String get socialWelfareDependenciaBaremoLabel => 'Baremo';
+
+  @override
+  String get socialWelfareDependenciaBenefitsTitle => 'Prestaciones';
+
+  @override
+  String get socialWelfareDependenciaBenefitResolutionDateLabel => 'Fecha resolución';
+
+  @override
+  String get socialWelfareDependenciaBenefitEffectiveDateLabel => 'Fecha efecto';
+
+  @override
+  String get socialWelfareDependenciaBenefitAmountLabel => 'Importe (€)';
+
+  @override
+  String get socialWelfareDependenciaUnavailableMessage => 'No hemos encontrado información de atención a la dependencia asociada a tus datos. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get socialWelfareDependenciaErrorMessage => 'No se ha podido cargar tu información de atención a la dependencia.';
+
+  @override
   String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareServicesEmpty => 'Información y servicios de Bienestar disponible próximamente.';
 
   @override
   String get supportFormTitle => 'Soporte técnico';
@@ -2038,7 +2215,72 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationDetailPlaceholderPending => 'Detalle pendiente de habilitar en STORY-44.';
 
   @override
-  String get familiaNumerosaDetailTitle => 'Carnet de familia numerosa';
+  String get familiaNumerosaDetailTitle => 'Familia numerosa';
+
+  @override
+  String get familiaNumerosaInfoSheetTitle => 'Sobre Familia numerosa';
+
+  @override
+  String get familiaNumerosaInfoSheetDescription => 'Consulta los datos de tu título de familia numerosa.';
+
+  @override
+  String get familiaNumerosaTitleSection => 'Mi título de familia numerosa';
+
+  @override
+  String get familiaNumerosaRegionLabel => 'Comunidad autónoma';
+
+  @override
+  String get familiaNumerosaTitleNumberLabel => 'Número de título';
+
+  @override
+  String get familiaNumerosaCategoryLabel => 'Categoría';
+
+  @override
+  String get familiaNumerosaValidLabel => 'Vigente';
+
+  @override
+  String get familiaNumerosaIssueDateLabel => 'Fecha de expedición';
+
+  @override
+  String get familiaNumerosaExpiryDateLabel => 'Fecha de caducidad';
+
+  @override
+  String get familiaNumerosaChildrenCountLabel => 'Número de hijos/as del título';
+
+  @override
+  String get familiaNumerosaBeneficiariesTitle => 'Beneficiarios/as';
+
+  @override
+  String familiaNumerosaBeneficiaryTitle(int index) {
+    return 'Beneficiario/a $index';
+  }
+
+  @override
+  String get familiaNumerosaDocumentNumberLabel => 'Número de documento';
+
+  @override
+  String get familiaNumerosaBirthDateLabel => 'Fecha de nacimiento';
+
+  @override
+  String get familiaNumerosaFullNameLabel => 'Nombre y apellidos';
+
+  @override
+  String get familiaNumerosaHolderLabel => 'Titular';
+
+  @override
+  String get familiaNumerosaYes => 'Sí';
+
+  @override
+  String get familiaNumerosaNo => 'No';
+
+  @override
+  String get familiaNumerosaNoDataMessage => 'No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get familiaNumerosaContactHint => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get familiaNumerosaOfficeContactsButton => 'Listado de oficinas y contactos';
 
   @override
   String familiaNumerosaCardNumberLabel(String number) {

@@ -43,6 +43,12 @@ abstract final class Routes {
 
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
+  static const String myDataSocialWelfare = '/my-data/social-welfare';
+  static const String myDataSocialWelfareFamily = '/my-data/social-welfare/family';
+  static const String myDataSocialWelfareDisability = '/my-data/social-welfare/disability';
+  static const String myDataSocialWelfareThermalSpa = '/my-data/social-welfare/thermal-spa';
+  static const String myDataSocialWelfareDependency = '/my-data/social-welfare/dependency';
+  static const String myDataSocialWelfareParking = '/my-data/social-welfare/parking';
   static const String myDataEducation = '/my-data/education';
   static const String myDataEducationUniversityTitles = '/my-data/education/university-titles';
   static const String myDataEducationNonUniversityTitles = '/my-data/education/non-university-titles';
@@ -68,6 +74,12 @@ abstract final class Routes {
     myDataEducation,
     myDataEducationUniversityTitles,
     myDataEducationNonUniversityTitles,
+    myDataSocialWelfare,
+    myDataSocialWelfareFamily,
+    myDataSocialWelfareDisability,
+    myDataSocialWelfareThermalSpa,
+    myDataSocialWelfareDependency,
+    myDataSocialWelfareParking,
     myDataVehicles,
     recommendations,
     recommendationLifeEventFilters,

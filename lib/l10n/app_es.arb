@@ -1077,9 +1077,101 @@
   "@socialWelfareHeaderDescription": {
     "description": "Bienestar — descripción de cabecera."
   },
+  "socialWelfareScreenTitle": "Bienestar social",
+  "@socialWelfareScreenTitle": {
+    "description": "Mis datos de Bienestar — título de la pantalla."
+  },
+  "socialWelfareDataTab": "Mis datos de Bienestar",
+  "@socialWelfareDataTab": {
+    "description": "Mis datos de Bienestar — pestaña de datos personales."
+  },
+  "socialWelfareServicesTab": "Información y servicios",
+  "@socialWelfareServicesTab": {
+    "description": "Mis datos de Bienestar — pestaña de información y servicios."
+  },
+  "socialWelfareInterestLinksTitle": "Enlaces de interés",
+  "@socialWelfareInterestLinksTitle": {
+    "description": "Mis datos de Bienestar — título de la sección de enlaces de interés."
+  },
+  "socialWelfareSuggestedProceduresTitle": "Trámites que te pueden interesar",
+  "@socialWelfareSuggestedProceduresTitle": {
+    "description": "Mis datos de Bienestar — título de la sección de trámites sugeridos."
+  },
+  "socialWelfareDisabilityRecognitionProcedure": "Reconocimiento del grado de discapacidad",
+  "@socialWelfareDisabilityRecognitionProcedure": {
+    "description": "Mis datos de Bienestar — enlace al trámite de reconocimiento de discapacidad."
+  },
+  "socialWelfareEarlyCareProcedure": "Acceso al servicio de atención temprana",
+  "@socialWelfareEarlyCareProcedure": {
+    "description": "Mis datos de Bienestar — enlace al trámite de atención temprana."
+  },
+  "socialWelfareTemporaryResidentialStayProcedure": "Plaza para el servicio de estancias temporales en centros residenciales para personas mayores",
+  "@socialWelfareTemporaryResidentialStayProcedure": {
+    "description": "Mis datos de Bienestar — enlace al trámite de estancias temporales en centros residenciales."
+  },
+  "socialWelfareInfoSheetTitle": "Sobre Mis datos de Bienestar social",
+  "@socialWelfareInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del modal informativo."
+  },
+  "socialWelfareInfoSheetDescription": "Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.",
+  "@socialWelfareInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del modal informativo."
+  },
   "socialWelfareFamilyTitle": "Familia numerosa",
   "@socialWelfareFamilyTitle": {
     "description": "Bienestar — sección familia numerosa."
+  },
+  "socialWelfareFamilyNavDescription": "Detalles del título y personas beneficiarias",
+  "@socialWelfareFamilyNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de familia numerosa."
+  },
+  "socialWelfareDisabilityTitle": "Discapacidad",
+  "@socialWelfareDisabilityTitle": {
+    "description": "Mis datos de Bienestar — título de la tarjeta de discapacidad."
+  },
+  "socialWelfareDisabilityNavDescription": "Detalles del título de discapacidad",
+  "@socialWelfareDisabilityNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de discapacidad."
+  },
+  "socialWelfareDisabilityInfoSheetTitle": "Sobre Mi título de discapacidad",
+  "@socialWelfareDisabilityInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de discapacidad."
+  },
+  "socialWelfareDisabilityInfoSheetDescription": "Consulta los datos de tu título de discapacidad.",
+  "@socialWelfareDisabilityInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de discapacidad."
+  },
+  "socialWelfareDisabilityTitleSection": "Mi título de discapacidad",
+  "@socialWelfareDisabilityTitleSection": {
+    "description": "Mis datos de Bienestar — sección del título de discapacidad."
+  },
+  "socialWelfareDisabilityEffectiveDateLabel": "Fecha de efectos",
+  "@socialWelfareDisabilityEffectiveDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de efectos."
+  },
+  "socialWelfareDisabilityPermanentValidityLabel": "Validez definitiva",
+  "@socialWelfareDisabilityPermanentValidityLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de validez definitiva."
+  },
+  "socialWelfareDisabilityFileNumberLabel": "Número de expediente",
+  "@socialWelfareDisabilityFileNumberLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de número de expediente."
+  },
+  "socialWelfareDisabilityBirthDateLabel": "Fecha de nacimiento",
+  "@socialWelfareDisabilityBirthDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de nacimiento."
+  },
+  "socialWelfareDisabilityMobilityLabel": "Procede movilidad",
+  "@socialWelfareDisabilityMobilityLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de movilidad."
+  },
+  "socialWelfareDisabilityThirdPersonLabel": "Reconocido concurso de tercera persona",
+  "@socialWelfareDisabilityThirdPersonLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de tercera persona."
+  },
+  "socialWelfareDisabilityRoyalDecreeLabel": "Real decreto en base a la que se concede el grado",
+  "@socialWelfareDisabilityRoyalDecreeLabel": {
+    "description": "Mis datos de Bienestar — etiqueta del real decreto."
   },
   "socialWelfareFamilySource": "Fuente: Junta de Comunidades de Castilla-La Mancha",
   "@socialWelfareFamilySource": {
@@ -1145,6 +1237,46 @@
   "@socialWelfareTermalismoTitle": {
     "description": "Bienestar — sección termalismo (external link)."
   },
+  "socialWelfareTermalismoNavTitle": "Termalismo",
+  "@socialWelfareTermalismoNavTitle": {
+    "description": "Mis datos de Bienestar — título de la tarjeta de termalismo."
+  },
+  "socialWelfareTermalismoNavDescription": "Balneario adjudicado",
+  "@socialWelfareTermalismoNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de termalismo."
+  },
+  "socialWelfareTermalismoInfoSheetTitle": "Sobre Termalismo",
+  "@socialWelfareTermalismoInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de termalismo."
+  },
+  "socialWelfareTermalismoInfoSheetDescription": "Consulta los datos del último balneario que te han adjudicado de forma definitiva en el Programa Termalismo de Castilla-La Mancha.",
+  "@socialWelfareTermalismoInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de termalismo."
+  },
+  "socialWelfareTermalismoAwardTitle": "Último balneario adjudicado",
+  "@socialWelfareTermalismoAwardTitle": {
+    "description": "Mis datos de Bienestar — sección del último balneario adjudicado."
+  },
+  "socialWelfareTermalismoSpaNameLabel": "Nombre del balneario",
+  "@socialWelfareTermalismoSpaNameLabel": {
+    "description": "Mis datos de Bienestar — etiqueta del nombre del balneario."
+  },
+  "socialWelfareTermalismoStartDateLabel": "Fecha desde",
+  "@socialWelfareTermalismoStartDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha desde."
+  },
+  "socialWelfareTermalismoEndDateLabel": "Fecha hasta",
+  "@socialWelfareTermalismoEndDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha hasta."
+  },
+  "socialWelfareTermalismoUnavailableMessage": "No hemos encontrado información de termalismo asociada a tus datos. Vuelve a intentarlo más tarde.",
+  "@socialWelfareTermalismoUnavailableMessage": {
+    "description": "Mis datos de Bienestar — estado vacío de termalismo."
+  },
+  "socialWelfareTermalismoErrorMessage": "No se ha podido cargar tu información de termalismo.",
+  "@socialWelfareTermalismoErrorMessage": {
+    "description": "Mis datos de Bienestar — error de carga de termalismo."
+  },
   "socialWelfareTermalismoDescription": "El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.",
   "@socialWelfareTermalismoDescription": {
     "description": "Bienestar — copy termalismo."
@@ -1152,6 +1284,50 @@
   "socialWelfareParkingTitle": "Tarjeta de estacionamiento",
   "@socialWelfareParkingTitle": {
     "description": "Bienestar — sección tarjeta de estacionamiento (external link)."
+  },
+  "socialWelfareParkingNavTitle": "Tarjeta estacionamiento",
+  "@socialWelfareParkingNavTitle": {
+    "description": "Mis datos de Bienestar — título de la tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingNavDescription": "Detalles de tu tarjeta de estacionamiento",
+  "@socialWelfareParkingNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingInfoSheetTitle": "Sobre Mi tarjeta de estacionamiento",
+  "@socialWelfareParkingInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingInfoSheetDescription": "Consulta los datos de tu tarjeta de estacionamiento en vigor para personas con discapacidad y movilidad reducida de Castilla-La Mancha.",
+  "@socialWelfareParkingInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingCardTitle": "Mi tarjeta de estacionamiento",
+  "@socialWelfareParkingCardTitle": {
+    "description": "Mis datos de Bienestar — título de detalle de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingCodeLabel": "Código de la tarjeta",
+  "@socialWelfareParkingCodeLabel": {
+    "description": "Mis datos de Bienestar — etiqueta del código de tarjeta."
+  },
+  "socialWelfareParkingModalityLabel": "Modalidad",
+  "@socialWelfareParkingModalityLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de modalidad."
+  },
+  "socialWelfareParkingValidFromLabel": "Fecha de vigencia desde",
+  "@socialWelfareParkingValidFromLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de vigencia desde."
+  },
+  "socialWelfareParkingValidUntilLabel": "Fecha de vigencia hasta",
+  "@socialWelfareParkingValidUntilLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de vigencia hasta."
+  },
+  "socialWelfareParkingUnavailableMessage": "No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos. Vuelve a intentarlo más tarde.",
+  "@socialWelfareParkingUnavailableMessage": {
+    "description": "Mis datos de Bienestar — estado vacío de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingErrorMessage": "No se ha podido cargar tu tarjeta de estacionamiento.",
+  "@socialWelfareParkingErrorMessage": {
+    "description": "Mis datos de Bienestar — error de carga de tarjeta de estacionamiento."
   },
   "socialWelfareParkingDescription": "La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.",
   "@socialWelfareParkingDescription": {
@@ -1161,9 +1337,69 @@
   "@socialWelfareDependenciaTitle": {
     "description": "Bienestar — sección atención a la dependencia (external link)."
   },
+  "socialWelfareDependenciaNavDescription": "Situación actual y prestaciones",
+  "@socialWelfareDependenciaNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de dependencia."
+  },
+  "socialWelfareDependenciaInfoSheetTitle": "Sobre Atención a la dependencia",
+  "@socialWelfareDependenciaInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de dependencia."
+  },
+  "socialWelfareDependenciaInfoSheetDescription": "Consulta los datos sobre tu situación actual de las prestaciones en ayuda a la dependencia.",
+  "@socialWelfareDependenciaInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de dependencia."
+  },
+  "socialWelfareDependenciaCurrentStatusTitle": "Mi situación actual",
+  "@socialWelfareDependenciaCurrentStatusTitle": {
+    "description": "Mis datos de Bienestar — título de situación actual."
+  },
+  "socialWelfareDependenciaRequestDateLabel": "Fecha de solicitud",
+  "@socialWelfareDependenciaRequestDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de solicitud."
+  },
+  "socialWelfareDependenciaResolutionDateLabel": "Fecha de resolución",
+  "@socialWelfareDependenciaResolutionDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de resolución."
+  },
+  "socialWelfareDependenciaRecognizedDegreeLabel": "Grado reconocido",
+  "@socialWelfareDependenciaRecognizedDegreeLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de grado reconocido."
+  },
+  "socialWelfareDependenciaBaremoLabel": "Baremo",
+  "@socialWelfareDependenciaBaremoLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de baremo."
+  },
+  "socialWelfareDependenciaBenefitsTitle": "Prestaciones",
+  "@socialWelfareDependenciaBenefitsTitle": {
+    "description": "Mis datos de Bienestar — título de prestaciones."
+  },
+  "socialWelfareDependenciaBenefitResolutionDateLabel": "Fecha resolución",
+  "@socialWelfareDependenciaBenefitResolutionDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha resolución de prestación."
+  },
+  "socialWelfareDependenciaBenefitEffectiveDateLabel": "Fecha efecto",
+  "@socialWelfareDependenciaBenefitEffectiveDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha efecto de prestación."
+  },
+  "socialWelfareDependenciaBenefitAmountLabel": "Importe (€)",
+  "@socialWelfareDependenciaBenefitAmountLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de importe de prestación."
+  },
+  "socialWelfareDependenciaUnavailableMessage": "No hemos encontrado información de atención a la dependencia asociada a tus datos. Vuelve a intentarlo más tarde.",
+  "@socialWelfareDependenciaUnavailableMessage": {
+    "description": "Mis datos de Bienestar — estado vacío de dependencia."
+  },
+  "socialWelfareDependenciaErrorMessage": "No se ha podido cargar tu información de atención a la dependencia.",
+  "@socialWelfareDependenciaErrorMessage": {
+    "description": "Mis datos de Bienestar — error de carga de dependencia."
+  },
   "socialWelfareDependenciaDescription": "La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.",
   "@socialWelfareDependenciaDescription": {
     "description": "Bienestar — copy dependencia."
+  },
+  "socialWelfareServicesEmpty": "Información y servicios de Bienestar disponible próximamente.",
+  "@socialWelfareServicesEmpty": {
+    "description": "Mis datos de Bienestar — estado vacío temporal de la pestaña Información y servicios."
   },
   "supportFormTitle": "Soporte técnico",
   "@supportFormTitle": {
@@ -2755,9 +2991,99 @@
   "@notificationDetailPlaceholderPending": {
     "description": "Notifications — mensaje provisional para el detalle real."
   },
-  "familiaNumerosaDetailTitle": "Carnet de familia numerosa",
+  "familiaNumerosaDetailTitle": "Familia numerosa",
   "@familiaNumerosaDetailTitle": {
     "description": "Familia numerosa detail page — AppBar title."
+  },
+  "familiaNumerosaInfoSheetTitle": "Sobre Familia numerosa",
+  "@familiaNumerosaInfoSheetTitle": {
+    "description": "Familia numerosa detail — título del panel informativo."
+  },
+  "familiaNumerosaInfoSheetDescription": "Consulta los datos de tu título de familia numerosa.",
+  "@familiaNumerosaInfoSheetDescription": {
+    "description": "Familia numerosa detail — descripción del panel informativo."
+  },
+  "familiaNumerosaTitleSection": "Mi título de familia numerosa",
+  "@familiaNumerosaTitleSection": {
+    "description": "Familia numerosa detail — sección de datos del título."
+  },
+  "familiaNumerosaRegionLabel": "Comunidad autónoma",
+  "@familiaNumerosaRegionLabel": {
+    "description": "Familia numerosa detail — etiqueta de comunidad autónoma."
+  },
+  "familiaNumerosaTitleNumberLabel": "Número de título",
+  "@familiaNumerosaTitleNumberLabel": {
+    "description": "Familia numerosa detail — etiqueta de número de título."
+  },
+  "familiaNumerosaCategoryLabel": "Categoría",
+  "@familiaNumerosaCategoryLabel": {
+    "description": "Familia numerosa detail — etiqueta de categoría."
+  },
+  "familiaNumerosaValidLabel": "Vigente",
+  "@familiaNumerosaValidLabel": {
+    "description": "Familia numerosa detail — etiqueta de vigencia."
+  },
+  "familiaNumerosaIssueDateLabel": "Fecha de expedición",
+  "@familiaNumerosaIssueDateLabel": {
+    "description": "Familia numerosa detail — etiqueta de fecha de expedición."
+  },
+  "familiaNumerosaExpiryDateLabel": "Fecha de caducidad",
+  "@familiaNumerosaExpiryDateLabel": {
+    "description": "Familia numerosa detail — etiqueta de fecha de caducidad."
+  },
+  "familiaNumerosaChildrenCountLabel": "Número de hijos/as del título",
+  "@familiaNumerosaChildrenCountLabel": {
+    "description": "Familia numerosa detail — etiqueta de número de hijos/as."
+  },
+  "familiaNumerosaBeneficiariesTitle": "Beneficiarios/as",
+  "@familiaNumerosaBeneficiariesTitle": {
+    "description": "Familia numerosa detail — sección de beneficiarios/as."
+  },
+  "familiaNumerosaBeneficiaryTitle": "Beneficiario/a {index}",
+  "@familiaNumerosaBeneficiaryTitle": {
+    "description": "Familia numerosa detail — título numerado de beneficiario/a.",
+    "placeholders": {
+      "index": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
+  "familiaNumerosaDocumentNumberLabel": "Número de documento",
+  "@familiaNumerosaDocumentNumberLabel": {
+    "description": "Familia numerosa detail — etiqueta de documento de beneficiario/a."
+  },
+  "familiaNumerosaBirthDateLabel": "Fecha de nacimiento",
+  "@familiaNumerosaBirthDateLabel": {
+    "description": "Familia numerosa detail — etiqueta de fecha de nacimiento."
+  },
+  "familiaNumerosaFullNameLabel": "Nombre y apellidos",
+  "@familiaNumerosaFullNameLabel": {
+    "description": "Familia numerosa detail — etiqueta de nombre completo."
+  },
+  "familiaNumerosaHolderLabel": "Titular",
+  "@familiaNumerosaHolderLabel": {
+    "description": "Familia numerosa detail — etiqueta de titular."
+  },
+  "familiaNumerosaYes": "Sí",
+  "@familiaNumerosaYes": {
+    "description": "Familia numerosa detail — valor afirmativo."
+  },
+  "familiaNumerosaNo": "No",
+  "@familiaNumerosaNo": {
+    "description": "Familia numerosa detail — valor negativo."
+  },
+  "familiaNumerosaNoDataMessage": "No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "@familiaNumerosaNoDataMessage": {
+    "description": "Familia numerosa detail — helper mostrado cuando no hay datos."
+  },
+  "familiaNumerosaContactHint": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "@familiaNumerosaContactHint": {
+    "description": "Familia numerosa detail — helper bajo los datos."
+  },
+  "familiaNumerosaOfficeContactsButton": "Listado de oficinas y contactos",
+  "@familiaNumerosaOfficeContactsButton": {
+    "description": "Familia numerosa detail — botón externo hacia oficinas y contactos."
   },
   "familiaNumerosaCardNumberLabel": "Número de carnet: {number}",
   "@familiaNumerosaCardNumberLabel": {

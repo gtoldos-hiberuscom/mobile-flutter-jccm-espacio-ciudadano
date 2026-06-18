@@ -1081,9 +1081,101 @@
   "@socialWelfareHeaderDescription": {
     "description": "Social welfare — header description."
   },
+  "socialWelfareScreenTitle": "Social welfare",
+  "@socialWelfareScreenTitle": {
+    "description": "Social welfare data — screen title."
+  },
+  "socialWelfareDataTab": "Social welfare data",
+  "@socialWelfareDataTab": {
+    "description": "Social welfare data — personal data tab."
+  },
+  "socialWelfareServicesTab": "Information and services",
+  "@socialWelfareServicesTab": {
+    "description": "Social welfare data — information and services tab."
+  },
+  "socialWelfareInterestLinksTitle": "Links of interest",
+  "@socialWelfareInterestLinksTitle": {
+    "description": "Social welfare data — links of interest section title."
+  },
+  "socialWelfareSuggestedProceduresTitle": "Procedures that may interest you",
+  "@socialWelfareSuggestedProceduresTitle": {
+    "description": "Social welfare data — suggested procedures section title."
+  },
+  "socialWelfareDisabilityRecognitionProcedure": "Recognition of disability degree",
+  "@socialWelfareDisabilityRecognitionProcedure": {
+    "description": "Social welfare data — disability recognition procedure link."
+  },
+  "socialWelfareEarlyCareProcedure": "Access to early care service",
+  "@socialWelfareEarlyCareProcedure": {
+    "description": "Social welfare data — early care procedure link."
+  },
+  "socialWelfareTemporaryResidentialStayProcedure": "Place for temporary stays in residential centres for older people",
+  "@socialWelfareTemporaryResidentialStayProcedure": {
+    "description": "Social welfare data — temporary residential stay procedure link."
+  },
+  "socialWelfareInfoSheetTitle": "About Social welfare data",
+  "@socialWelfareInfoSheetTitle": {
+    "description": "Social welfare data — info sheet title."
+  },
+  "socialWelfareInfoSheetDescription": "Check the information for your Social Welfare files and access the services available from the Government of Castilla-La Mancha.",
+  "@socialWelfareInfoSheetDescription": {
+    "description": "Social welfare data — info sheet description."
+  },
   "socialWelfareFamilyTitle": "Large family",
   "@socialWelfareFamilyTitle": {
     "description": "Social welfare — large family section."
+  },
+  "socialWelfareFamilyNavDescription": "Title details and beneficiaries",
+  "@socialWelfareFamilyNavDescription": {
+    "description": "Social welfare data — large family card description."
+  },
+  "socialWelfareDisabilityTitle": "Disability",
+  "@socialWelfareDisabilityTitle": {
+    "description": "Social welfare data — disability card title."
+  },
+  "socialWelfareDisabilityNavDescription": "Disability title details",
+  "@socialWelfareDisabilityNavDescription": {
+    "description": "Social welfare data — disability card description."
+  },
+  "socialWelfareDisabilityInfoSheetTitle": "About My disability title",
+  "@socialWelfareDisabilityInfoSheetTitle": {
+    "description": "Social welfare data — disability info sheet title."
+  },
+  "socialWelfareDisabilityInfoSheetDescription": "Check the details of your disability title.",
+  "@socialWelfareDisabilityInfoSheetDescription": {
+    "description": "Social welfare data — disability info sheet description."
+  },
+  "socialWelfareDisabilityTitleSection": "My disability title",
+  "@socialWelfareDisabilityTitleSection": {
+    "description": "Social welfare data — disability title section."
+  },
+  "socialWelfareDisabilityEffectiveDateLabel": "Effective date",
+  "@socialWelfareDisabilityEffectiveDateLabel": {
+    "description": "Social welfare data — effective date label."
+  },
+  "socialWelfareDisabilityPermanentValidityLabel": "Permanent validity",
+  "@socialWelfareDisabilityPermanentValidityLabel": {
+    "description": "Social welfare data — permanent validity label."
+  },
+  "socialWelfareDisabilityFileNumberLabel": "File number",
+  "@socialWelfareDisabilityFileNumberLabel": {
+    "description": "Social welfare data — file number label."
+  },
+  "socialWelfareDisabilityBirthDateLabel": "Birth date",
+  "@socialWelfareDisabilityBirthDateLabel": {
+    "description": "Social welfare data — birth date label."
+  },
+  "socialWelfareDisabilityMobilityLabel": "Reduced mobility applies",
+  "@socialWelfareDisabilityMobilityLabel": {
+    "description": "Social welfare data — reduced mobility label."
+  },
+  "socialWelfareDisabilityThirdPersonLabel": "Third-person assistance recognized",
+  "@socialWelfareDisabilityThirdPersonLabel": {
+    "description": "Social welfare data — third-person assistance label."
+  },
+  "socialWelfareDisabilityRoyalDecreeLabel": "Royal decree used to grant the degree",
+  "@socialWelfareDisabilityRoyalDecreeLabel": {
+    "description": "Social welfare data — royal decree label."
   },
   "socialWelfareFamilySource": "Source: Junta de Comunidades de Castilla-La Mancha",
   "@socialWelfareFamilySource": {
@@ -1149,6 +1241,46 @@
   "@socialWelfareTermalismoTitle": {
     "description": "Social welfare — thermal-spa section (external link)."
   },
+  "socialWelfareTermalismoNavTitle": "Thermal spas",
+  "@socialWelfareTermalismoNavTitle": {
+    "description": "Social welfare data — thermal-spa card title."
+  },
+  "socialWelfareTermalismoNavDescription": "Assigned spa resort",
+  "@socialWelfareTermalismoNavDescription": {
+    "description": "Social welfare data — thermal-spa card description."
+  },
+  "socialWelfareTermalismoInfoSheetTitle": "About Thermal spas",
+  "@socialWelfareTermalismoInfoSheetTitle": {
+    "description": "Social welfare data — thermal-spa info sheet title."
+  },
+  "socialWelfareTermalismoInfoSheetDescription": "Check the details of the latest spa resort definitively assigned to you in the Castilla-La Mancha Thermal Spa Programme.",
+  "@socialWelfareTermalismoInfoSheetDescription": {
+    "description": "Social welfare data — thermal-spa info sheet description."
+  },
+  "socialWelfareTermalismoAwardTitle": "Latest assigned spa resort",
+  "@socialWelfareTermalismoAwardTitle": {
+    "description": "Social welfare data — latest assigned spa resort section."
+  },
+  "socialWelfareTermalismoSpaNameLabel": "Spa resort name",
+  "@socialWelfareTermalismoSpaNameLabel": {
+    "description": "Social welfare data — spa resort name label."
+  },
+  "socialWelfareTermalismoStartDateLabel": "Start date",
+  "@socialWelfareTermalismoStartDateLabel": {
+    "description": "Social welfare data — start date label."
+  },
+  "socialWelfareTermalismoEndDateLabel": "End date",
+  "@socialWelfareTermalismoEndDateLabel": {
+    "description": "Social welfare data — end date label."
+  },
+  "socialWelfareTermalismoUnavailableMessage": "We could not find thermal-spa information associated with your data. Please try again later.",
+  "@socialWelfareTermalismoUnavailableMessage": {
+    "description": "Social welfare data — thermal-spa empty state."
+  },
+  "socialWelfareTermalismoErrorMessage": "Your thermal-spa information could not be loaded.",
+  "@socialWelfareTermalismoErrorMessage": {
+    "description": "Social welfare data — thermal-spa loading error."
+  },
   "socialWelfareTermalismoDescription": "The Castilla-La Mancha thermal-spa program is managed through the official Social Welfare portal.",
   "@socialWelfareTermalismoDescription": {
     "description": "Social welfare — thermal-spa copy."
@@ -1156,6 +1288,50 @@
   "socialWelfareParkingTitle": "Parking card",
   "@socialWelfareParkingTitle": {
     "description": "Social welfare — parking card section (external link)."
+  },
+  "socialWelfareParkingNavTitle": "Parking card",
+  "@socialWelfareParkingNavTitle": {
+    "description": "Social welfare data — parking card title."
+  },
+  "socialWelfareParkingNavDescription": "Your parking card details",
+  "@socialWelfareParkingNavDescription": {
+    "description": "Social welfare data — parking card description."
+  },
+  "socialWelfareParkingInfoSheetTitle": "About My parking card",
+  "@socialWelfareParkingInfoSheetTitle": {
+    "description": "Social welfare data — parking card info sheet title."
+  },
+  "socialWelfareParkingInfoSheetDescription": "Check the details of your current parking card for people with disabilities and reduced mobility in Castilla-La Mancha.",
+  "@socialWelfareParkingInfoSheetDescription": {
+    "description": "Social welfare data — parking card info sheet description."
+  },
+  "socialWelfareParkingCardTitle": "My parking card",
+  "@socialWelfareParkingCardTitle": {
+    "description": "Social welfare data — parking card detail title."
+  },
+  "socialWelfareParkingCodeLabel": "Card code",
+  "@socialWelfareParkingCodeLabel": {
+    "description": "Social welfare data — parking card code label."
+  },
+  "socialWelfareParkingModalityLabel": "Modality",
+  "@socialWelfareParkingModalityLabel": {
+    "description": "Social welfare data — modality label."
+  },
+  "socialWelfareParkingValidFromLabel": "Valid from",
+  "@socialWelfareParkingValidFromLabel": {
+    "description": "Social welfare data — valid from label."
+  },
+  "socialWelfareParkingValidUntilLabel": "Valid until",
+  "@socialWelfareParkingValidUntilLabel": {
+    "description": "Social welfare data — valid until label."
+  },
+  "socialWelfareParkingUnavailableMessage": "We could not find parking card information associated with your data. Please try again later.",
+  "@socialWelfareParkingUnavailableMessage": {
+    "description": "Social welfare data — parking card empty state."
+  },
+  "socialWelfareParkingErrorMessage": "Your parking card could not be loaded.",
+  "@socialWelfareParkingErrorMessage": {
+    "description": "Social welfare data — parking card loading error."
   },
   "socialWelfareParkingDescription": "Requesting and managing the disability parking card is handled in the corresponding e-office.",
   "@socialWelfareParkingDescription": {
@@ -1165,9 +1341,69 @@
   "@socialWelfareDependenciaTitle": {
     "description": "Social welfare — dependency support section (external link)."
   },
+  "socialWelfareDependenciaNavDescription": "Current situation and benefits",
+  "@socialWelfareDependenciaNavDescription": {
+    "description": "Social welfare data — dependency support card description."
+  },
+  "socialWelfareDependenciaInfoSheetTitle": "About Dependency care",
+  "@socialWelfareDependenciaInfoSheetTitle": {
+    "description": "Social welfare data — dependency care info sheet title."
+  },
+  "socialWelfareDependenciaInfoSheetDescription": "Check the details of your current situation and dependency care benefits.",
+  "@socialWelfareDependenciaInfoSheetDescription": {
+    "description": "Social welfare data — dependency care info sheet description."
+  },
+  "socialWelfareDependenciaCurrentStatusTitle": "My current situation",
+  "@socialWelfareDependenciaCurrentStatusTitle": {
+    "description": "Social welfare data — current situation title."
+  },
+  "socialWelfareDependenciaRequestDateLabel": "Request date",
+  "@socialWelfareDependenciaRequestDateLabel": {
+    "description": "Social welfare data — request date label."
+  },
+  "socialWelfareDependenciaResolutionDateLabel": "Resolution date",
+  "@socialWelfareDependenciaResolutionDateLabel": {
+    "description": "Social welfare data — resolution date label."
+  },
+  "socialWelfareDependenciaRecognizedDegreeLabel": "Recognized degree",
+  "@socialWelfareDependenciaRecognizedDegreeLabel": {
+    "description": "Social welfare data — recognized degree label."
+  },
+  "socialWelfareDependenciaBaremoLabel": "Scale",
+  "@socialWelfareDependenciaBaremoLabel": {
+    "description": "Social welfare data — scale label."
+  },
+  "socialWelfareDependenciaBenefitsTitle": "Benefits",
+  "@socialWelfareDependenciaBenefitsTitle": {
+    "description": "Social welfare data — benefits title."
+  },
+  "socialWelfareDependenciaBenefitResolutionDateLabel": "Resolution date",
+  "@socialWelfareDependenciaBenefitResolutionDateLabel": {
+    "description": "Social welfare data — benefit resolution date label."
+  },
+  "socialWelfareDependenciaBenefitEffectiveDateLabel": "Effective date",
+  "@socialWelfareDependenciaBenefitEffectiveDateLabel": {
+    "description": "Social welfare data — benefit effective date label."
+  },
+  "socialWelfareDependenciaBenefitAmountLabel": "Amount (€)",
+  "@socialWelfareDependenciaBenefitAmountLabel": {
+    "description": "Social welfare data — benefit amount label."
+  },
+  "socialWelfareDependenciaUnavailableMessage": "We could not find dependency care information associated with your data. Please try again later.",
+  "@socialWelfareDependenciaUnavailableMessage": {
+    "description": "Social welfare data — dependency care empty state."
+  },
+  "socialWelfareDependenciaErrorMessage": "Your dependency care information could not be loaded.",
+  "@socialWelfareDependenciaErrorMessage": {
+    "description": "Social welfare data — dependency care loading error."
+  },
   "socialWelfareDependenciaDescription": "Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.",
   "@socialWelfareDependenciaDescription": {
     "description": "Social welfare — dependency copy."
+  },
+  "socialWelfareServicesEmpty": "Social welfare information and services will be available soon.",
+  "@socialWelfareServicesEmpty": {
+    "description": "Social welfare data — temporary empty state for the Information and services tab."
   },
   "supportFormTitle": "Technical support",
   "@supportFormTitle": {
@@ -2759,9 +2995,99 @@
   "@notificationDetailPlaceholderPending": {
     "description": "Notifications — placeholder pending message."
   },
-  "familiaNumerosaDetailTitle": "Large family card",
+  "familiaNumerosaDetailTitle": "Large family",
   "@familiaNumerosaDetailTitle": {
     "description": "Familia numerosa detail page — AppBar title."
+  },
+  "familiaNumerosaInfoSheetTitle": "About Large family",
+  "@familiaNumerosaInfoSheetTitle": {
+    "description": "Familia numerosa detail — info sheet title."
+  },
+  "familiaNumerosaInfoSheetDescription": "Check the details of your large family title.",
+  "@familiaNumerosaInfoSheetDescription": {
+    "description": "Familia numerosa detail — info sheet description."
+  },
+  "familiaNumerosaTitleSection": "My large family title",
+  "@familiaNumerosaTitleSection": {
+    "description": "Familia numerosa detail — title data section."
+  },
+  "familiaNumerosaRegionLabel": "Autonomous community",
+  "@familiaNumerosaRegionLabel": {
+    "description": "Familia numerosa detail — autonomous community label."
+  },
+  "familiaNumerosaTitleNumberLabel": "Title number",
+  "@familiaNumerosaTitleNumberLabel": {
+    "description": "Familia numerosa detail — title number label."
+  },
+  "familiaNumerosaCategoryLabel": "Category",
+  "@familiaNumerosaCategoryLabel": {
+    "description": "Familia numerosa detail — category label."
+  },
+  "familiaNumerosaValidLabel": "Valid",
+  "@familiaNumerosaValidLabel": {
+    "description": "Familia numerosa detail — validity label."
+  },
+  "familiaNumerosaIssueDateLabel": "Issue date",
+  "@familiaNumerosaIssueDateLabel": {
+    "description": "Familia numerosa detail — issue date label."
+  },
+  "familiaNumerosaExpiryDateLabel": "Expiry date",
+  "@familiaNumerosaExpiryDateLabel": {
+    "description": "Familia numerosa detail — expiry date label."
+  },
+  "familiaNumerosaChildrenCountLabel": "Number of children in the title",
+  "@familiaNumerosaChildrenCountLabel": {
+    "description": "Familia numerosa detail — children count label."
+  },
+  "familiaNumerosaBeneficiariesTitle": "Beneficiaries",
+  "@familiaNumerosaBeneficiariesTitle": {
+    "description": "Familia numerosa detail — beneficiaries section."
+  },
+  "familiaNumerosaBeneficiaryTitle": "Beneficiary {index}",
+  "@familiaNumerosaBeneficiaryTitle": {
+    "description": "Familia numerosa detail — numbered beneficiary title.",
+    "placeholders": {
+      "index": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
+  "familiaNumerosaDocumentNumberLabel": "Document number",
+  "@familiaNumerosaDocumentNumberLabel": {
+    "description": "Familia numerosa detail — beneficiary document label."
+  },
+  "familiaNumerosaBirthDateLabel": "Birth date",
+  "@familiaNumerosaBirthDateLabel": {
+    "description": "Familia numerosa detail — birth date label."
+  },
+  "familiaNumerosaFullNameLabel": "Full name",
+  "@familiaNumerosaFullNameLabel": {
+    "description": "Familia numerosa detail — full name label."
+  },
+  "familiaNumerosaHolderLabel": "Holder",
+  "@familiaNumerosaHolderLabel": {
+    "description": "Familia numerosa detail — holder label."
+  },
+  "familiaNumerosaYes": "Yes",
+  "@familiaNumerosaYes": {
+    "description": "Familia numerosa detail — affirmative value."
+  },
+  "familiaNumerosaNo": "No",
+  "@familiaNumerosaNo": {
+    "description": "Familia numerosa detail — negative value."
+  },
+  "familiaNumerosaNoDataMessage": "We could not find large family information associated with your data in the JCCM lookup service.\n\nIf this situation is not correct or not up to date, contact the Social Welfare Department of Castilla-La Mancha.",
+  "@familiaNumerosaNoDataMessage": {
+    "description": "Familia numerosa detail — helper shown when no data exists."
+  },
+  "familiaNumerosaContactHint": "If any of your data is incorrect or not up to date, contact the Social Welfare Department of Castilla-La Mancha.",
+  "@familiaNumerosaContactHint": {
+    "description": "Familia numerosa detail — helper below data."
+  },
+  "familiaNumerosaOfficeContactsButton": "Office and contact list",
+  "@familiaNumerosaOfficeContactsButton": {
+    "description": "Familia numerosa detail — external office and contact button."
   },
   "familiaNumerosaCardNumberLabel": "Card number: {number}",
   "@familiaNumerosaCardNumberLabel": {
