@@ -43,6 +43,7 @@ abstract final class Routes {
 
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
+  static const String myDataEmployment = '/my-data/employment';
   static const String myDataSocialWelfare = '/my-data/social-welfare';
   static const String myDataSocialWelfareFamily = '/my-data/social-welfare/family';
   static const String myDataSocialWelfareDisability = '/my-data/social-welfare/disability';
@@ -52,6 +53,10 @@ abstract final class Routes {
   static const String myDataEducation = '/my-data/education';
   static const String myDataEducationUniversityTitles = '/my-data/education/university-titles';
   static const String myDataEducationNonUniversityTitles = '/my-data/education/non-university-titles';
+  static const String myDataHousing = '/my-data/housing';
+  static const String myDataHousingRealEstate = '/my-data/housing/real-estate';
+  static const String myDataHousingRealEstateDetail = '/my-data/housing/real-estate/:reference';
+  static const String myDataHousingAddress = '/my-data/housing/address';
   static const String myDataVehicles = '/my-data/vehicles';
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
@@ -71,9 +76,13 @@ abstract final class Routes {
     supportForm,
     agenda,
     myData,
+    myDataEmployment,
     myDataEducation,
     myDataEducationUniversityTitles,
     myDataEducationNonUniversityTitles,
+    myDataHousing,
+    myDataHousingRealEstate,
+    myDataHousingAddress,
     myDataSocialWelfare,
     myDataSocialWelfareFamily,
     myDataSocialWelfareDisability,

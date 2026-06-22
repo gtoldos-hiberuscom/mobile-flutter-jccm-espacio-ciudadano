@@ -3453,6 +3453,74 @@
   "@myDataEmploymentDescription": {
     "description": "Description of the Employment card on the My data screen."
   },
+  "myDataEmploymentInfoSheetTitle": "About My Employment data",
+  "@myDataEmploymentInfoSheetTitle": {
+    "description": "Title of the My Employment data information modal."
+  },
+  "myDataEmploymentInfoSheetDescription": "Check your job-seeker registration information and access employment services and procedures in Castilla-La Mancha.",
+  "@myDataEmploymentInfoSheetDescription": {
+    "description": "Main description of the My Employment data information modal."
+  },
+  "myDataEmploymentDataTab": "My Employment data",
+  "@myDataEmploymentDataTab": {
+    "description": "First tab on the Employment detail screen."
+  },
+  "myDataEmploymentServicesTab": "Information and services",
+  "@myDataEmploymentServicesTab": {
+    "description": "Second tab on the Employment detail screen."
+  },
+  "myDataEmploymentDemandTitle": "Your employment demand",
+  "@myDataEmploymentDemandTitle": {
+    "description": "Employment demand card title."
+  },
+  "myDataEmploymentRegistrationDateLabel": "Uninterrupted registration date",
+  "@myDataEmploymentRegistrationDateLabel": {
+    "description": "Uninterrupted registration date label."
+  },
+  "myDataEmploymentDemandEmpty": "No employment demand data is registered.",
+  "@myDataEmploymentDemandEmpty": {
+    "description": "Message shown when there is no employment demand data."
+  },
+  "myDataEmploymentDemandError": "We could not load your employment demand.",
+  "@myDataEmploymentDemandError": {
+    "description": "Error message when loading employment demand."
+  },
+  "myDataEmploymentOffersTitle": "Offer registrations",
+  "@myDataEmploymentOffersTitle": {
+    "description": "Offer registrations card title."
+  },
+  "myDataEmploymentOffersDescription": "Job offers you have registered for",
+  "@myDataEmploymentOffersDescription": {
+    "description": "Offer registrations card description."
+  },
+  "myDataEmploymentProceduresTitle": "Procedures that may interest you",
+  "@myDataEmploymentProceduresTitle": {
+    "description": "Employment procedures section title."
+  },
+  "myDataEmploymentProcedureProfessionalCertificate": "Professional certificate issuance",
+  "@myDataEmploymentProcedureProfessionalCertificate": {
+    "description": "Professional certificate issuance procedure."
+  },
+  "myDataEmploymentProcedureJobSeekerRegistration": "Registration as a job seeker at employment and entrepreneurship offices",
+  "@myDataEmploymentProcedureJobSeekerRegistration": {
+    "description": "Job seeker registration procedure."
+  },
+  "myDataEmploymentProcedureVirtualOfficeCredentials": "Request access credentials for the Employment and Economy virtual office for individuals, legal entities and self-employed workers.",
+  "@myDataEmploymentProcedureVirtualOfficeCredentials": {
+    "description": "Employment virtual office credentials procedure."
+  },
+  "myDataEmploymentInterestLinksTitle": "Links of interest",
+  "@myDataEmploymentInterestLinksTitle": {
+    "description": "Employment links section title."
+  },
+  "myDataEmploymentLinkEmploymentClm": "Employment CLM",
+  "@myDataEmploymentLinkEmploymentClm": {
+    "description": "Employment CLM portal link."
+  },
+  "myDataEmploymentLinkPublicEmploymentClm": "Public Employment CLM",
+  "@myDataEmploymentLinkPublicEmploymentClm": {
+    "description": "Public Employment CLM portal link."
+  },
   "myDataEducationTitle": "Education",
   "@myDataEducationTitle": {
     "description": "Title of the Education card on the My data screen."
@@ -3468,6 +3536,227 @@
   "myDataHousingDescription": "Property ownership",
   "@myDataHousingDescription": {
     "description": "Description of the Housing card on the My data screen."
+  },
+  "myDataHousingInfoSheetTitle": "About My Housing data",
+  "@myDataHousingInfoSheetTitle": {
+    "description": "Title of the My Housing data information modal."
+  },
+  "myDataHousingInfoSheetDescription": "Check the information about your real estate, your home and your current address details.",
+  "@myDataHousingInfoSheetDescription": {
+    "description": "Main description of the My Housing data information modal."
+  },
+  "myDataHousingDataTab": "My Housing data",
+  "@myDataHousingDataTab": {
+    "description": "First tab on the Housing detail screen."
+  },
+  "myDataHousingServicesTab": "Information and services",
+  "@myDataHousingServicesTab": {
+    "description": "Second tab on the Housing detail screen."
+  },
+  "myDataHousingRealEstateTitle": "Real estate",
+  "@myDataHousingRealEstateTitle": {
+    "description": "Title of the real estate card on the Housing detail screen."
+  },
+  "myDataHousingRealEstateDescription": "Cadastral data for my properties",
+  "@myDataHousingRealEstateDescription": {
+    "description": "Description of the real estate card on the Housing detail screen."
+  },
+  "myDataHousingRealEstateInfoSheetTitle": "About your real-estate assets",
+  "@myDataHousingRealEstateInfoSheetTitle": {
+    "description": "Title of the real estate detail information modal."
+  },
+  "myDataHousingRealEstateInfoSheetDescription": "Check the cadastral data for your properties registered with the Directorate General for Cadastre.",
+  "@myDataHousingRealEstateInfoSheetDescription": {
+    "description": "Main description of the real estate detail information modal."
+  },
+  "myDataHousingRealEstateInfoSheetFooter": "If any of your data is incorrect, go to or contact the Cadastre electronic office.",
+  "@myDataHousingRealEstateInfoSheetFooter": {
+    "description": "Footer of the real estate detail information modal."
+  },
+  "myDataHousingRealEstateFilterAll": "All",
+  "@myDataHousingRealEstateFilterAll": {
+    "description": "All real estate properties filter label."
+  },
+  "myDataHousingRealEstateFilterUrban": "Urban",
+  "@myDataHousingRealEstateFilterUrban": {
+    "description": "Urban real estate properties filter label."
+  },
+  "myDataHousingRealEstateFilterRustic": "Rustic",
+  "@myDataHousingRealEstateFilterRustic": {
+    "description": "Rustic real estate properties filter label."
+  },
+  "myDataHousingRealEstateReferenceTitle": "Cadastral reference {value}",
+  "@myDataHousingRealEstateReferenceTitle": {
+    "description": "Real estate card title with cadastral reference.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHousingRealEstateDetailClose": "Close",
+  "@myDataHousingRealEstateDetailClose": {
+    "description": "Tooltip for the close button on the real estate detail."
+  },
+  "myDataHousingRealEstateDetailHomeDataTitle": "Housing data",
+  "@myDataHousingRealEstateDetailHomeDataTitle": {
+    "description": "Title of the housing data section."
+  },
+  "myDataHousingRealEstateReferenceLabel": "Cadastral reference",
+  "@myDataHousingRealEstateReferenceLabel": {
+    "description": "Cadastral reference field label."
+  },
+  "myDataHousingRealEstateAddressLabel": "Address",
+  "@myDataHousingRealEstateAddressLabel": {
+    "description": "Real estate address label."
+  },
+  "myDataHousingRealEstateUseLabel": "Use",
+  "@myDataHousingRealEstateUseLabel": {
+    "description": "Real estate use label."
+  },
+  "myDataHousingRealEstateCadastralValueLabel": "Cadastral value",
+  "@myDataHousingRealEstateCadastralValueLabel": {
+    "description": "Real estate cadastral value label."
+  },
+  "myDataHousingRealEstateLandValueLabel": "Land value",
+  "@myDataHousingRealEstateLandValueLabel": {
+    "description": "Real estate land value label."
+  },
+  "myDataHousingRealEstateConstructionValueLabel": "Construction value",
+  "@myDataHousingRealEstateConstructionValueLabel": {
+    "description": "Real estate construction value label."
+  },
+  "myDataHousingRealEstateStatusLabel": "Status",
+  "@myDataHousingRealEstateStatusLabel": {
+    "description": "Real estate status label."
+  },
+  "myDataHousingRealEstateShowCartography": "Show cartography",
+  "@myDataHousingRealEstateShowCartography": {
+    "description": "Button text to open the real estate cartography."
+  },
+  "myDataHousingRealEstateHoldersTitle": "Holders",
+  "@myDataHousingRealEstateHoldersTitle": {
+    "description": "Title of the real estate holders section."
+  },
+  "myDataHousingRealEstateHoldersEmpty": "No holders are registered for this real-estate asset.",
+  "@myDataHousingRealEstateHoldersEmpty": {
+    "description": "Message shown when there are no holders for the real estate asset."
+  },
+  "myDataHousingRealEstateDetailEmpty": "We could not find the selected real-estate asset.",
+  "@myDataHousingRealEstateDetailEmpty": {
+    "description": "Message shown when the selected real estate detail cannot be found."
+  },
+  "myDataHousingRealEstateEmpty": "No real-estate assets are registered under your name.",
+  "@myDataHousingRealEstateEmpty": {
+    "description": "Empty state for real estate properties."
+  },
+  "myDataHousingRealEstateFilteredEmpty": "There are no real-estate assets for this filter.",
+  "@myDataHousingRealEstateFilteredEmpty": {
+    "description": "Empty state for filtered real estate properties."
+  },
+  "myDataHousingRealEstateError": "We could not load Catastro data.",
+  "@myDataHousingRealEstateError": {
+    "description": "Error state for real estate properties."
+  },
+  "myDataHousingAddressTitle": "Address in Castilla-La Mancha",
+  "@myDataHousingAddressTitle": {
+    "description": "Title of the address card on the Housing detail screen."
+  },
+  "myDataHousingAddressDescription": "Data in the municipal register database",
+  "@myDataHousingAddressDescription": {
+    "description": "Description of the address card on the Housing detail screen."
+  },
+  "myDataHousingAddressInfoSheetTitle": "About your address",
+  "@myDataHousingAddressInfoSheetTitle": {
+    "description": "Title of the address detail information modal."
+  },
+  "myDataHousingAddressInfoSheetDescription": "Check your data in the municipal register database of the National Statistics Institute (INE) within Castilla-La Mancha, which collects information from all municipal registers in Castilla-La Mancha. This information is updated every month with data sent by town councils, so it may not match your current situation if you recently changed your registration.",
+  "@myDataHousingAddressInfoSheetDescription": {
+    "description": "Main description of the address detail information modal."
+  },
+  "myDataHousingAddressInfoSheetFooter": "If any of your data is incorrect, go to or contact your town council.",
+  "@myDataHousingAddressInfoSheetFooter": {
+    "description": "Footer of the address detail information modal."
+  },
+  "myDataHousingAddressDataTitle": "Address data",
+  "@myDataHousingAddressDataTitle": {
+    "description": "Title of the address data section."
+  },
+  "myDataHousingAddressRegistrationDataTitle": "Registration-related data",
+  "@myDataHousingAddressRegistrationDataTitle": {
+    "description": "Title of the municipal registration data section."
+  },
+  "myDataHousingAddressLabel": "Address",
+  "@myDataHousingAddressLabel": {
+    "description": "Address field label."
+  },
+  "myDataHousingAddressPostalCodeLabel": "Postal code",
+  "@myDataHousingAddressPostalCodeLabel": {
+    "description": "Postal code field label."
+  },
+  "myDataHousingAddressMunicipalityLabel": "Municipality",
+  "@myDataHousingAddressMunicipalityLabel": {
+    "description": "Municipality field label."
+  },
+  "myDataHousingAddressProvinceLabel": "Province",
+  "@myDataHousingAddressProvinceLabel": {
+    "description": "Province field label."
+  },
+  "myDataHousingAddressCollectiveEntityLabel": "Collective entity",
+  "@myDataHousingAddressCollectiveEntityLabel": {
+    "description": "Collective entity field label."
+  },
+  "myDataHousingAddressSingleEntityLabel": "Single entity",
+  "@myDataHousingAddressSingleEntityLabel": {
+    "description": "Single entity field label."
+  },
+  "myDataHousingAddressPopulationUnitLabel": "Population unit",
+  "@myDataHousingAddressPopulationUnitLabel": {
+    "description": "Population unit field label."
+  },
+  "myDataHousingAddressVariationTypeLabel": "Variation type",
+  "@myDataHousingAddressVariationTypeLabel": {
+    "description": "Registration variation type label."
+  },
+  "myDataHousingAddressVariationDateLabel": "Variation date",
+  "@myDataHousingAddressVariationDateLabel": {
+    "description": "Registration variation date label."
+  },
+  "myDataHousingAddressEmpty": "No address data is registered in Castilla-La Mancha.",
+  "@myDataHousingAddressEmpty": {
+    "description": "Message shown when no address is registered."
+  },
+  "myDataHousingAddressError": "We could not load your address data.",
+  "@myDataHousingAddressError": {
+    "description": "Error message when loading address data."
+  },
+  "myDataHousingLinksTitle": "Links of interest",
+  "@myDataHousingLinksTitle": {
+    "description": "Title of the links section in the Housing Information and services tab."
+  },
+  "myDataHousingLinkClmHousing": "Castilla-La Mancha Housing",
+  "@myDataHousingLinkClmHousing": {
+    "description": "Link to Castilla-La Mancha Housing."
+  },
+  "myDataHousingLinkCadastre": "Cadastre office",
+  "@myDataHousingLinkCadastre": {
+    "description": "Link to the Cadastre office."
+  },
+  "myDataHousingProceduresTitle": "Procedures that may interest you",
+  "@myDataHousingProceduresTitle": {
+    "description": "Title of the procedures section related to housing."
+  },
+  "myDataHousingProcedureYoungRentVoucher": "Young rent voucher aid in Castilla-La Mancha",
+  "@myDataHousingProcedureYoungRentVoucher": {
+    "description": "Young rent voucher aid procedure in Castilla-La Mancha."
+  },
+  "myDataHousingProcedureProtectedHousingRegister": "Registration in the CLM protected public housing applicant register",
+  "@myDataHousingProcedureProtectedHousingRegister": {
+    "description": "Procedure to register in the CLM protected public housing applicant register."
+  },
+  "myDataHousingProcedureSocialEmergencyAid": "Social emergency aid",
+  "@myDataHousingProcedureSocialEmergencyAid": {
+    "description": "Social emergency aid procedure."
   },
   "myDataVehiclesTitle": "Vehicles",
   "@myDataVehiclesTitle": {

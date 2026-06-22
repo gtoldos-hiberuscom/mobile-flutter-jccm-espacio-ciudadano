@@ -27,6 +27,7 @@ class MyDataPage extends ConsumerWidget {
       title: _MyDataText.employmentTitle,
       description: _MyDataText.employmentDescription,
       icon: AppIcons.work,
+      route: Routes.myDataEmployment,
     ),
     _MyDataSectionDefinition(
       title: _MyDataText.educationTitle,
@@ -38,6 +39,7 @@ class MyDataPage extends ConsumerWidget {
       title: _MyDataText.housingTitle,
       description: _MyDataText.housingDescription,
       icon: AppIcons.cottage,
+      route: Routes.myDataHousing,
     ),
     _MyDataSectionDefinition(
       title: _MyDataText.vehiclesTitle,

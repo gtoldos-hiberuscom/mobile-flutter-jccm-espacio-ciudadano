@@ -23,40 +23,22 @@ class _MyDataSocialWelfarePageState extends State<MyDataSocialWelfarePage> {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Scaffold(
-      appBar: AppHeaderBar(
-        title: l10n.socialWelfareScreenTitle,
-        onBack: () => context.go(Routes.myData),
-        onInfo: () => _showInfoSheet(context),
+    return AppTabbedDetailScaffold(
+      title: l10n.socialWelfareScreenTitle,
+      onBack: () => context.go(Routes.myData),
+      onInfo: () => _showInfoSheet(context),
+      tabs: [
+        l10n.socialWelfareDataTab,
+        l10n.socialWelfareServicesTab,
+      ],
+      selectedIndex: _selectedTab.index,
+      onTabSelected: (final index) => setState(
+        () => _selectedTab = _SocialWelfareTab.values[index],
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: AppColors.backgroundBlueLighter,
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              AppTopTabBar(
-                tabs: [
-                  l10n.socialWelfareDataTab,
-                  l10n.socialWelfareServicesTab,
-                ],
-                selectedIndex: _selectedTab.index,
-                onTabSelected: (final index) => setState(
-                  () => _selectedTab = _SocialWelfareTab.values[index],
-                ),
-              ),
-              Expanded(
-                child: switch (_selectedTab) {
-                  _SocialWelfareTab.data => const _SocialWelfareDataTab(),
-                  _SocialWelfareTab.services => const _SocialWelfareServicesTab(),
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+      tabViews: const [
+        _SocialWelfareDataTab(),
+        _SocialWelfareServicesTab(),
+      ],
     );
   }
 

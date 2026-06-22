@@ -2540,6 +2540,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentDescription => 'Employment demand and services';
 
   @override
+  String get myDataEmploymentInfoSheetTitle => 'About My Employment data';
+
+  @override
+  String get myDataEmploymentInfoSheetDescription => 'Check your job-seeker registration information and access employment services and procedures in Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentDataTab => 'My Employment data';
+
+  @override
+  String get myDataEmploymentServicesTab => 'Information and services';
+
+  @override
+  String get myDataEmploymentDemandTitle => 'Your employment demand';
+
+  @override
+  String get myDataEmploymentRegistrationDateLabel => 'Uninterrupted registration date';
+
+  @override
+  String get myDataEmploymentDemandEmpty => 'No employment demand data is registered.';
+
+  @override
+  String get myDataEmploymentDemandError => 'We could not load your employment demand.';
+
+  @override
+  String get myDataEmploymentOffersTitle => 'Offer registrations';
+
+  @override
+  String get myDataEmploymentOffersDescription => 'Job offers you have registered for';
+
+  @override
+  String get myDataEmploymentProceduresTitle => 'Procedures that may interest you';
+
+  @override
+  String get myDataEmploymentProcedureProfessionalCertificate => 'Professional certificate issuance';
+
+  @override
+  String get myDataEmploymentProcedureJobSeekerRegistration => 'Registration as a job seeker at employment and entrepreneurship offices';
+
+  @override
+  String get myDataEmploymentProcedureVirtualOfficeCredentials => 'Request access credentials for the Employment and Economy virtual office for individuals, legal entities and self-employed workers.';
+
+  @override
+  String get myDataEmploymentInterestLinksTitle => 'Links of interest';
+
+  @override
+  String get myDataEmploymentLinkEmploymentClm => 'Employment CLM';
+
+  @override
+  String get myDataEmploymentLinkPublicEmploymentClm => 'Public Employment CLM';
+
+  @override
   String get myDataEducationTitle => 'Education';
 
   @override
@@ -2550,6 +2601,170 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myDataHousingDescription => 'Property ownership';
+
+  @override
+  String get myDataHousingInfoSheetTitle => 'About My Housing data';
+
+  @override
+  String get myDataHousingInfoSheetDescription => 'Check the information about your real estate, your home and your current address details.';
+
+  @override
+  String get myDataHousingDataTab => 'My Housing data';
+
+  @override
+  String get myDataHousingServicesTab => 'Information and services';
+
+  @override
+  String get myDataHousingRealEstateTitle => 'Real estate';
+
+  @override
+  String get myDataHousingRealEstateDescription => 'Cadastral data for my properties';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetTitle => 'About your real-estate assets';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetDescription => 'Check the cadastral data for your properties registered with the Directorate General for Cadastre.';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetFooter => 'If any of your data is incorrect, go to or contact the Cadastre electronic office.';
+
+  @override
+  String get myDataHousingRealEstateFilterAll => 'All';
+
+  @override
+  String get myDataHousingRealEstateFilterUrban => 'Urban';
+
+  @override
+  String get myDataHousingRealEstateFilterRustic => 'Rustic';
+
+  @override
+  String myDataHousingRealEstateReferenceTitle(String value) {
+    return 'Cadastral reference $value';
+  }
+
+  @override
+  String get myDataHousingRealEstateDetailClose => 'Close';
+
+  @override
+  String get myDataHousingRealEstateDetailHomeDataTitle => 'Housing data';
+
+  @override
+  String get myDataHousingRealEstateReferenceLabel => 'Cadastral reference';
+
+  @override
+  String get myDataHousingRealEstateAddressLabel => 'Address';
+
+  @override
+  String get myDataHousingRealEstateUseLabel => 'Use';
+
+  @override
+  String get myDataHousingRealEstateCadastralValueLabel => 'Cadastral value';
+
+  @override
+  String get myDataHousingRealEstateLandValueLabel => 'Land value';
+
+  @override
+  String get myDataHousingRealEstateConstructionValueLabel => 'Construction value';
+
+  @override
+  String get myDataHousingRealEstateStatusLabel => 'Status';
+
+  @override
+  String get myDataHousingRealEstateShowCartography => 'Show cartography';
+
+  @override
+  String get myDataHousingRealEstateHoldersTitle => 'Holders';
+
+  @override
+  String get myDataHousingRealEstateHoldersEmpty => 'No holders are registered for this real-estate asset.';
+
+  @override
+  String get myDataHousingRealEstateDetailEmpty => 'We could not find the selected real-estate asset.';
+
+  @override
+  String get myDataHousingRealEstateEmpty => 'No real-estate assets are registered under your name.';
+
+  @override
+  String get myDataHousingRealEstateFilteredEmpty => 'There are no real-estate assets for this filter.';
+
+  @override
+  String get myDataHousingRealEstateError => 'We could not load Catastro data.';
+
+  @override
+  String get myDataHousingAddressTitle => 'Address in Castilla-La Mancha';
+
+  @override
+  String get myDataHousingAddressDescription => 'Data in the municipal register database';
+
+  @override
+  String get myDataHousingAddressInfoSheetTitle => 'About your address';
+
+  @override
+  String get myDataHousingAddressInfoSheetDescription => 'Check your data in the municipal register database of the National Statistics Institute (INE) within Castilla-La Mancha, which collects information from all municipal registers in Castilla-La Mancha. This information is updated every month with data sent by town councils, so it may not match your current situation if you recently changed your registration.';
+
+  @override
+  String get myDataHousingAddressInfoSheetFooter => 'If any of your data is incorrect, go to or contact your town council.';
+
+  @override
+  String get myDataHousingAddressDataTitle => 'Address data';
+
+  @override
+  String get myDataHousingAddressRegistrationDataTitle => 'Registration-related data';
+
+  @override
+  String get myDataHousingAddressLabel => 'Address';
+
+  @override
+  String get myDataHousingAddressPostalCodeLabel => 'Postal code';
+
+  @override
+  String get myDataHousingAddressMunicipalityLabel => 'Municipality';
+
+  @override
+  String get myDataHousingAddressProvinceLabel => 'Province';
+
+  @override
+  String get myDataHousingAddressCollectiveEntityLabel => 'Collective entity';
+
+  @override
+  String get myDataHousingAddressSingleEntityLabel => 'Single entity';
+
+  @override
+  String get myDataHousingAddressPopulationUnitLabel => 'Population unit';
+
+  @override
+  String get myDataHousingAddressVariationTypeLabel => 'Variation type';
+
+  @override
+  String get myDataHousingAddressVariationDateLabel => 'Variation date';
+
+  @override
+  String get myDataHousingAddressEmpty => 'No address data is registered in Castilla-La Mancha.';
+
+  @override
+  String get myDataHousingAddressError => 'We could not load your address data.';
+
+  @override
+  String get myDataHousingLinksTitle => 'Links of interest';
+
+  @override
+  String get myDataHousingLinkClmHousing => 'Castilla-La Mancha Housing';
+
+  @override
+  String get myDataHousingLinkCadastre => 'Cadastre office';
+
+  @override
+  String get myDataHousingProceduresTitle => 'Procedures that may interest you';
+
+  @override
+  String get myDataHousingProcedureYoungRentVoucher => 'Young rent voucher aid in Castilla-La Mancha';
+
+  @override
+  String get myDataHousingProcedureProtectedHousingRegister => 'Registration in the CLM protected public housing applicant register';
+
+  @override
+  String get myDataHousingProcedureSocialEmergencyAid => 'Social emergency aid';
 
   @override
   String get myDataVehiclesTitle => 'Vehicles';

@@ -8,11 +8,13 @@ class AppInfoCard extends StatelessWidget {
     super.key,
     this.leadingBorderColor = AppColors.borderBlueMutedLight,
     this.borderColor = AppColors.borderBlueMutedLight,
+    this.leadingBorderWidth = AppDimensions.space8,
   });
 
   final Widget child;
   final Color leadingBorderColor;
   final Color borderColor;
+  final double leadingBorderWidth;
 
   @override
   Widget build(final BuildContext context) {
@@ -23,7 +25,7 @@ class AppInfoCard extends StatelessWidget {
           top: BorderSide(color: borderColor),
           right: BorderSide(color: borderColor),
           bottom: BorderSide(color: borderColor),
-          left: BorderSide(color: leadingBorderColor, width: AppDimensions.space8),
+          left: BorderSide(color: leadingBorderColor, width: leadingBorderWidth),
         ),
         borderRadius: BorderRadius.circular(1),
       ),

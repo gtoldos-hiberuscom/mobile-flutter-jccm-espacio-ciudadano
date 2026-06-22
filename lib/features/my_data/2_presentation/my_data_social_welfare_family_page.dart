@@ -17,23 +17,15 @@ class MyDataSocialWelfareFamilyPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final familyAsync = ref.watch(largeFamilyTitleProvider);
 
-    return Scaffold(
-      appBar: AppHeaderBar(
-        title: l10n.familiaNumerosaDetailTitle,
-        backgroundColor: AppColors.backgroundBlueLighter,
-        onBack: () => context.go(Routes.myDataSocialWelfare),
-        onInfo: () => _showFamilyInfoSheet(context, ref),
-      ),
-      body: ColoredBox(
-        color: AppColors.backgroundWhite,
-        child: SafeArea(
-          top: false,
-          child: familyAsync.when(
-            data: (final title) => title == null ? _NoLargeFamilyData(ref: ref) : _LargeFamilyContent(title: title, ref: ref),
-            loading: () => const Center(child: AppLoadingIndicator()),
-            error: (final error, final stackTrace) => _LargeFamilyError(ref: ref),
-          ),
-        ),
+    return AppDetailScaffold(
+      title: l10n.familiaNumerosaDetailTitle,
+      onBack: () => context.go(Routes.myDataSocialWelfare),
+      onInfo: () => _showFamilyInfoSheet(context, ref),
+      appBarBackgroundColor: AppColors.backgroundBlueLighter,
+      body: familyAsync.when(
+        data: (final title) => title == null ? _NoLargeFamilyData(ref: ref) : _LargeFamilyContent(title: title, ref: ref),
+        loading: () => const Center(child: AppLoadingIndicator()),
+        error: (final error, final stackTrace) => _LargeFamilyError(ref: ref),
       ),
     );
   }

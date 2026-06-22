@@ -27,7 +27,9 @@ export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_l
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_checkbox.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_confirmation_state.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_contact_content.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_data_summary_card.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_description_text.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_detail_scaffold.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_divider.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_drawer_menu.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_external_link_section.dart';
@@ -50,6 +52,7 @@ export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_phone_inpu
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_preference_cards.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_segmented_control.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_tabbed_detail_scaffold.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_tag.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_text_block.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_top_tab_bar.dart';

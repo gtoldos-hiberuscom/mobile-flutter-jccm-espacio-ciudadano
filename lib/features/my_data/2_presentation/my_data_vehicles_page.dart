@@ -23,35 +23,17 @@ class _MyDataVehiclesPageState extends State<MyDataVehiclesPage> {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Scaffold(
-      appBar: AppHeaderBar(
-        title: l10n.myDataVehiclesTitle,
-        onBack: () => context.go(Routes.myData),
-        onInfo: () => _showVehiclesInfoSheet(context),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: AppColors.backgroundBlueLighter,
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              AppTopTabBar(
-                tabs: [l10n.myDataVehiclesDataTab, l10n.myDataVehiclesServicesTab],
-                selectedIndex: _selectedTab.index,
-                onTabSelected: (final index) => setState(() => _selectedTab = _VehiclesTab.values[index]),
-              ),
-              Expanded(
-                child: switch (_selectedTab) {
-                  _VehiclesTab.data => const _VehiclesDataTab(),
-                  _VehiclesTab.services => const _VehiclesServicesTab(),
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+    return AppTabbedDetailScaffold(
+      title: l10n.myDataVehiclesTitle,
+      onBack: () => context.go(Routes.myData),
+      onInfo: () => _showVehiclesInfoSheet(context),
+      tabs: [l10n.myDataVehiclesDataTab, l10n.myDataVehiclesServicesTab],
+      selectedIndex: _selectedTab.index,
+      onTabSelected: (final index) => setState(() => _selectedTab = _VehiclesTab.values[index]),
+      tabViews: const [
+        _VehiclesDataTab(),
+        _VehiclesServicesTab(),
+      ],
     );
   }
 
@@ -200,19 +182,8 @@ class _VehicleCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.space8),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(
-          left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
-          top: BorderSide(color: AppColors.borderBlueMutedLight),
-          right: BorderSide(color: AppColors.borderBlueMutedLight),
-          bottom: BorderSide(color: AppColors.borderBlueMutedLight),
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(1)),
-      ),
+    return AppInfoCard(
+      leadingBorderWidth: AppDimensions.space4,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.space16,
@@ -260,109 +231,38 @@ class _VehiclesServicesTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Enlaces de interés
-          _VehiclesSectionTitle(title: l10n.myDataVehiclesLinksTitle),
-          const SizedBox(height: AppDimensions.space16),
-          _VehiclesLinkItem(
-            label: l10n.myDataVehiclesLinkDgt,
-            url: 'https://sede.dgt.gob.es/',
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          _VehiclesLinkItem(
-            label: l10n.myDataVehiclesLinkAge,
-            url: 'https://carpetaciudadana.gob.es/',
+          AppExternalLinkSection(
+            title: l10n.myDataVehiclesLinksTitle,
+            links: [
+              AppExternalLinkItem(
+                label: l10n.myDataVehiclesLinkDgt,
+                onTap: () => _launchUrl(context, 'https://sede.dgt.gob.es/'),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataVehiclesLinkAge,
+                onTap: () => _launchUrl(context, 'https://carpetaciudadana.gob.es/'),
+              ),
+            ],
           ),
           const SizedBox(height: AppDimensions.space24),
-
-          // Trámites que te pueden interesar
-          _VehiclesSectionTitle(title: l10n.myDataVehiclesProceduresTitle),
-          const SizedBox(height: AppDimensions.space16),
-          _VehiclesLinkItem(
-            label: l10n.myDataVehiclesProcedureMoves3Vehicle,
-            url: 'https://www.castillalamancha.es/',
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          _VehiclesLinkItem(
-            label: l10n.myDataVehiclesProcedureMoves3Infrastructure,
-            url: 'https://www.castillalamancha.es/',
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          _VehiclesLinkItem(
-            label: l10n.myDataVehiclesProcedureCap,
-            url: 'https://www.castillalamancha.es/',
+          AppExternalLinkSection(
+            title: l10n.myDataVehiclesProceduresTitle,
+            links: [
+              AppExternalLinkItem(
+                label: l10n.myDataVehiclesProcedureMoves3Vehicle,
+                onTap: () => _launchUrl(context, 'https://www.castillalamancha.es/'),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataVehiclesProcedureMoves3Infrastructure,
+                onTap: () => _launchUrl(context, 'https://www.castillalamancha.es/'),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataVehiclesProcedureCap,
+                onTap: () => _launchUrl(context, 'https://www.castillalamancha.es/'),
+              ),
+            ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Section title widget (H2 typography).
-class _VehiclesSectionTitle extends StatelessWidget {
-  const _VehiclesSectionTitle({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-      child: Text(
-        title,
-        style: AppTypography.h2.copyWith(
-          color: AppColors.primary,
-        ),
-      ),
-    );
-  }
-}
-
-/// Link item with double-bullet indicator and external link icon.
-class _VehiclesLinkItem extends StatelessWidget {
-  const _VehiclesLinkItem({
-    required this.label,
-    required this.url,
-  });
-
-  final String label;
-  final String url;
-
-  @override
-  Widget build(final BuildContext context) {
-    return InkWell(
-      onTap: () => _launchUrl(context, url),
-      child: Padding(
-        padding: const EdgeInsets.only(left: AppDimensions.space16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: AppDimensions.space8),
-              child: _VehiclesDoubleBullet(),
-            ),
-            const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                child: Text(
-                  label,
-                  style: AppTypography.bodyLink.copyWith(
-                    color: AppColors.primary,
-                    decorationColor: AppColors.primary,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: AppDimensions.space8),
-            const Padding(
-              padding: EdgeInsets.only(top: AppDimensions.space4),
-              child: AppIcon(
-                AppIcons.openInNew,
-                color: AppColors.textBase,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -380,40 +280,5 @@ class _VehiclesLinkItem extends StatelessWidget {
         message: 'No se pudo abrir el enlace: $urlString',
       );
     }
-  }
-}
-
-/// Double-bullet indicator (primary + secondary colors).
-class _VehiclesDoubleBullet extends StatelessWidget {
-  const _VehiclesDoubleBullet();
-
-  @override
-  Widget build(final BuildContext context) {
-    return const Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _VehiclesBulletDot(color: AppColors.primary),
-        SizedBox(width: AppDimensions.space4),
-        _VehiclesBulletDot(color: AppColors.secondaryLight400),
-      ],
-    );
-  }
-}
-
-/// Single bullet dot.
-class _VehiclesBulletDot extends StatelessWidget {
-  const _VehiclesBulletDot({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(final BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
-      child: const SizedBox.square(dimension: AppDimensions.space8),
-    );
   }
 }

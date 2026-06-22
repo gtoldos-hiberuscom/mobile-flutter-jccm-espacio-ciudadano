@@ -4940,6 +4940,108 @@ abstract class AppLocalizations {
   /// **'Demanda y servicios de empleo'**
   String get myDataEmploymentDescription;
 
+  /// Título del modal informativo de Mis datos de Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mis datos de Empleo'**
+  String get myDataEmploymentInfoSheetTitle;
+
+  /// Descripción principal del modal informativo de Mis datos de Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.'**
+  String get myDataEmploymentInfoSheetDescription;
+
+  /// Primera pestaña del detalle de Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos de Empleo'**
+  String get myDataEmploymentDataTab;
+
+  /// Segunda pestaña del detalle de Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios'**
+  String get myDataEmploymentServicesTab;
+
+  /// Título de la tarjeta de demanda de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu demanda de empleo'**
+  String get myDataEmploymentDemandTitle;
+
+  /// Etiqueta de la fecha de inscripción sin interrupciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de inscripción sin interrupciones'**
+  String get myDataEmploymentRegistrationDateLabel;
+
+  /// Mensaje mostrado cuando no hay datos de demanda de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan datos de demanda de empleo.'**
+  String get myDataEmploymentDemandEmpty;
+
+  /// Mensaje de error al cargar la demanda de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tu demanda de empleo.'**
+  String get myDataEmploymentDemandError;
+
+  /// Título de la tarjeta de inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'Inscripciones en ofertas'**
+  String get myDataEmploymentOffersTitle;
+
+  /// Descripción de la tarjeta de inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'Ofertas de empleo en las que te has inscrito'**
+  String get myDataEmploymentOffersDescription;
+
+  /// Título de la sección de trámites de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites que te pueden interesar'**
+  String get myDataEmploymentProceduresTitle;
+
+  /// Trámite de expedición de certificado de profesionalidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Expedición certificado de profesionalidad'**
+  String get myDataEmploymentProcedureProfessionalCertificate;
+
+  /// Trámite de inscripción como demandante de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Inscripción como demandante de personas trabajadoras en oficinas de empleo y emprendedores'**
+  String get myDataEmploymentProcedureJobSeekerRegistration;
+
+  /// Trámite de solicitud de credenciales de la oficina virtual de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Solicitud de credenciales de acceso a la oficina virtual de la consejería de empleo y economía para personas físicas, jurídicas y autónomos.'**
+  String get myDataEmploymentProcedureVirtualOfficeCredentials;
+
+  /// Título de la sección de enlaces de interés de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlaces de interés'**
+  String get myDataEmploymentInterestLinksTitle;
+
+  /// Enlace al portal Empleo CLM.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo CLM'**
+  String get myDataEmploymentLinkEmploymentClm;
+
+  /// Enlace al portal Empleo Público CLM.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo Público CLM'**
+  String get myDataEmploymentLinkPublicEmploymentClm;
+
   /// Título de la tarjeta de Educación en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
@@ -4963,6 +5065,330 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Titularidad de bienes inmueble'**
   String get myDataHousingDescription;
+
+  /// Título del modal informativo de Mis datos de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mis datos de Vivienda'**
+  String get myDataHousingInfoSheetTitle;
+
+  /// Descripción principal del modal informativo de Mis datos de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la información de tus bienes inmuebles, tu vivienda y los datos de tu domicilio actual.'**
+  String get myDataHousingInfoSheetDescription;
+
+  /// Primera pestaña del detalle de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos de Vivienda'**
+  String get myDataHousingDataTab;
+
+  /// Segunda pestaña del detalle de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Información y servicios'**
+  String get myDataHousingServicesTab;
+
+  /// Título de la tarjeta de bienes inmuebles en el detalle de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienes inmuebles'**
+  String get myDataHousingRealEstateTitle;
+
+  /// Descripción de la tarjeta de bienes inmuebles en el detalle de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos catastrales de mis inmuebles'**
+  String get myDataHousingRealEstateDescription;
+
+  /// Título del modal informativo de bienes inmuebles.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre tus bienes inmueble'**
+  String get myDataHousingRealEstateInfoSheetTitle;
+
+  /// Descripción principal del modal informativo de bienes inmuebles.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.'**
+  String get myDataHousingRealEstateInfoSheetDescription;
+
+  /// Pie del modal informativo de bienes inmuebles.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro'**
+  String get myDataHousingRealEstateInfoSheetFooter;
+
+  /// Etiqueta del filtro de todos los bienes inmuebles.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo'**
+  String get myDataHousingRealEstateFilterAll;
+
+  /// Etiqueta del filtro de bienes inmuebles urbanos.
+  ///
+  /// In es, this message translates to:
+  /// **'Urbano'**
+  String get myDataHousingRealEstateFilterUrban;
+
+  /// Etiqueta del filtro de bienes inmuebles rústicos.
+  ///
+  /// In es, this message translates to:
+  /// **'Rústico'**
+  String get myDataHousingRealEstateFilterRustic;
+
+  /// Título de la tarjeta de bien inmueble con referencia catastral.
+  ///
+  /// In es, this message translates to:
+  /// **'Referencia catastral {value}'**
+  String myDataHousingRealEstateReferenceTitle(String value);
+
+  /// Tooltip del botón de cerrar el detalle de bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get myDataHousingRealEstateDetailClose;
+
+  /// Título de la sección de datos de la vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de la vivienda'**
+  String get myDataHousingRealEstateDetailHomeDataTitle;
+
+  /// Etiqueta del campo referencia catastral.
+  ///
+  /// In es, this message translates to:
+  /// **'Referencia catastral'**
+  String get myDataHousingRealEstateReferenceLabel;
+
+  /// Etiqueta de dirección del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Dirección'**
+  String get myDataHousingRealEstateAddressLabel;
+
+  /// Etiqueta de uso del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Uso'**
+  String get myDataHousingRealEstateUseLabel;
+
+  /// Etiqueta de valor catastral del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Valor catastral'**
+  String get myDataHousingRealEstateCadastralValueLabel;
+
+  /// Etiqueta de valor del suelo del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Valor del suelo'**
+  String get myDataHousingRealEstateLandValueLabel;
+
+  /// Etiqueta de valor de construcción del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Valor de construcción'**
+  String get myDataHousingRealEstateConstructionValueLabel;
+
+  /// Etiqueta de estado del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado'**
+  String get myDataHousingRealEstateStatusLabel;
+
+  /// Texto del botón para abrir la cartografía del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar cartografía'**
+  String get myDataHousingRealEstateShowCartography;
+
+  /// Título de la sección de titulares del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'Titulares'**
+  String get myDataHousingRealEstateHoldersTitle;
+
+  /// Mensaje mostrado cuando no hay titulares del bien inmueble.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan titulares para este bien inmueble.'**
+  String get myDataHousingRealEstateHoldersEmpty;
+
+  /// Mensaje mostrado cuando no se encuentra el detalle del inmueble seleccionado.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado el bien inmueble seleccionado.'**
+  String get myDataHousingRealEstateDetailEmpty;
+
+  /// Estado vacío de bienes inmuebles.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan bienes inmuebles a tu nombre.'**
+  String get myDataHousingRealEstateEmpty;
+
+  /// Estado vacío de bienes inmuebles filtrados.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay bienes inmuebles para este filtro.'**
+  String get myDataHousingRealEstateFilteredEmpty;
+
+  /// Estado de error de bienes inmuebles.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los datos de Catastro.'**
+  String get myDataHousingRealEstateError;
+
+  /// Título de la tarjeta de domicilio en el detalle de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Domicilio en Castilla-La Mancha'**
+  String get myDataHousingAddressTitle;
+
+  /// Descripción de la tarjeta de domicilio en el detalle de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos en la base padronal'**
+  String get myDataHousingAddressDescription;
+
+  /// Título del modal informativo del detalle de domicilio.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre tu domicilio'**
+  String get myDataHousingAddressInfoSheetTitle;
+
+  /// Descripción principal del modal informativo del detalle de domicilio.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.'**
+  String get myDataHousingAddressInfoSheetDescription;
+
+  /// Pie del modal informativo del detalle de domicilio.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.'**
+  String get myDataHousingAddressInfoSheetFooter;
+
+  /// Título de la sección de datos del domicilio.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del domicilio'**
+  String get myDataHousingAddressDataTitle;
+
+  /// Título de la sección de datos de inscripción padronal.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos relativos a la inscripción'**
+  String get myDataHousingAddressRegistrationDataTitle;
+
+  /// Etiqueta del campo domicilio.
+  ///
+  /// In es, this message translates to:
+  /// **'Domicilio'**
+  String get myDataHousingAddressLabel;
+
+  /// Etiqueta del campo código postal.
+  ///
+  /// In es, this message translates to:
+  /// **'Código postal'**
+  String get myDataHousingAddressPostalCodeLabel;
+
+  /// Etiqueta del campo municipio.
+  ///
+  /// In es, this message translates to:
+  /// **'Municipio'**
+  String get myDataHousingAddressMunicipalityLabel;
+
+  /// Etiqueta del campo provincia.
+  ///
+  /// In es, this message translates to:
+  /// **'Provincia'**
+  String get myDataHousingAddressProvinceLabel;
+
+  /// Etiqueta del campo entidad colectivo.
+  ///
+  /// In es, this message translates to:
+  /// **'Entidad colectivo'**
+  String get myDataHousingAddressCollectiveEntityLabel;
+
+  /// Etiqueta del campo entidad singular.
+  ///
+  /// In es, this message translates to:
+  /// **'Entidad singular'**
+  String get myDataHousingAddressSingleEntityLabel;
+
+  /// Etiqueta del campo núcleo o diseminado.
+  ///
+  /// In es, this message translates to:
+  /// **'Núcleo / Diseminado'**
+  String get myDataHousingAddressPopulationUnitLabel;
+
+  /// Etiqueta del tipo de variación padronal.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de variación'**
+  String get myDataHousingAddressVariationTypeLabel;
+
+  /// Etiqueta de la fecha de variación padronal.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de variación'**
+  String get myDataHousingAddressVariationDateLabel;
+
+  /// Mensaje mostrado cuando no hay domicilio registrado.
+  ///
+  /// In es, this message translates to:
+  /// **'No constan datos de domicilio en Castilla-La Mancha.'**
+  String get myDataHousingAddressEmpty;
+
+  /// Mensaje de error al cargar domicilio.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus datos de domicilio.'**
+  String get myDataHousingAddressError;
+
+  /// Título de la sección de enlaces de interés en la pestaña Información y servicios de Vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlaces de interés'**
+  String get myDataHousingLinksTitle;
+
+  /// Enlace al portal de Vivienda Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Vivienda Castilla-La Mancha'**
+  String get myDataHousingLinkClmHousing;
+
+  /// Enlace a la Sede del Catastro.
+  ///
+  /// In es, this message translates to:
+  /// **'Sede del catastro'**
+  String get myDataHousingLinkCadastre;
+
+  /// Título de la sección de trámites relacionados con vivienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites que te pueden interesar'**
+  String get myDataHousingProceduresTitle;
+
+  /// Trámite de ayudas al bono alquiler joven en Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayudas al bono alquiler joven en Castilla-La Mancha'**
+  String get myDataHousingProcedureYoungRentVoucher;
+
+  /// Trámite de inscripción en el registro de demandantes de vivienda con protección pública de CLM.
+  ///
+  /// In es, this message translates to:
+  /// **'Inscripción en el registro de demandantes de vivienda con protección pública de CLM'**
+  String get myDataHousingProcedureProtectedHousingRegister;
+
+  /// Trámite de ayudas de emergencia social.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayudas de emergencia social'**
+  String get myDataHousingProcedureSocialEmergencyAid;
 
   /// Título de la tarjeta de Vehículos en la pantalla Mis datos.
   ///

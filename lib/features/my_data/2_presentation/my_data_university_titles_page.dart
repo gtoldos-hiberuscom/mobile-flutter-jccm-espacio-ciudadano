@@ -17,24 +17,14 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final titlesAsync = ref.watch(universityTitlesProvider);
 
-    return Scaffold(
-      appBar: AppHeaderBar(
-        title: l10n.educationUniversityTitlesTitle,
-        onBack: () => context.go(Routes.myDataEducation),
-        onInfo: () => _showInfoSheet(context, l10n),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: AppColors.surface,
-        child: SafeArea(
-          top: false,
-          child: titlesAsync.when(
-            data: (final titles) => _buildTitlesList(context, l10n, titles),
-            loading: () => const Center(child: AppLoadingIndicator()),
-            error: (final error, final stack) => _buildErrorState(context, l10n, ref),
-          ),
-        ),
+    return AppDetailScaffold(
+      title: l10n.educationUniversityTitlesTitle,
+      onBack: () => context.go(Routes.myDataEducation),
+      onInfo: () => _showInfoSheet(context, l10n),
+      body: titlesAsync.when(
+        data: (final titles) => _buildTitlesList(context, l10n, titles),
+        loading: () => const Center(child: AppLoadingIndicator()),
+        error: (final error, final stack) => _buildErrorState(context, l10n, ref),
       ),
     );
   }
@@ -159,19 +149,8 @@ class _UniversityTitleCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.space8),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(
-          left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
-          top: BorderSide(color: AppColors.borderBlueMutedLight),
-          right: BorderSide(color: AppColors.borderBlueMutedLight),
-          bottom: BorderSide(color: AppColors.borderBlueMutedLight),
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(1)),
-      ),
+    return AppInfoCard(
+      leadingBorderWidth: AppDimensions.space4,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
         child: Column(

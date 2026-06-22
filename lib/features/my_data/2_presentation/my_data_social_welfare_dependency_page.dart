@@ -17,34 +17,23 @@ class MyDataSocialWelfareDependencyPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final statusAsync = ref.watch(dependencyCareStatusProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
-      appBar: AppHeaderBar(
-        title: l10n.socialWelfareDependenciaTitle,
-        backgroundColor: AppColors.backgroundBlueLighter,
-        onBack: () => context.go(Routes.myDataSocialWelfare),
-        onInfo: () => AppInfoSheet.show(
-          context: context,
-          title: l10n.socialWelfareDependenciaInfoSheetTitle,
-          bodyText: l10n.socialWelfareDependenciaInfoSheetDescription,
-          footerText: l10n.familiaNumerosaContactHint,
-          actionLabel: l10n.familiaNumerosaOfficeContactsButton,
-          onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
-          actionIcon: AppIcons.openInNew,
-        ),
+    return AppDetailScaffold(
+      title: l10n.socialWelfareDependenciaTitle,
+      onBack: () => context.go(Routes.myDataSocialWelfare),
+      onInfo: () => AppInfoSheet.show(
+        context: context,
+        title: l10n.socialWelfareDependenciaInfoSheetTitle,
+        bodyText: l10n.socialWelfareDependenciaInfoSheetDescription,
+        footerText: l10n.familiaNumerosaContactHint,
+        actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+        onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
+        actionIcon: AppIcons.openInNew,
       ),
-      body: SizedBox.expand(
-        child: ColoredBox(
-          color: AppColors.backgroundWhite,
-          child: SafeArea(
-            top: false,
-            child: statusAsync.when(
-              data: (final status) => status == null ? _DependencyEmpty(ref: ref) : _DependencyContent(status: status),
-              loading: () => const Center(child: AppLoadingIndicator()),
-              error: (final error, final stackTrace) => _DependencyError(ref: ref),
-            ),
-          ),
-        ),
+      appBarBackgroundColor: AppColors.backgroundBlueLighter,
+      body: statusAsync.when(
+        data: (final status) => status == null ? _DependencyEmpty(ref: ref) : _DependencyContent(status: status),
+        loading: () => const Center(child: AppLoadingIndicator()),
+        error: (final error, final stackTrace) => _DependencyError(ref: ref),
       ),
     );
   }

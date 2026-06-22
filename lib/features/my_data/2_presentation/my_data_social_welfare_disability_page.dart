@@ -17,31 +17,23 @@ class MyDataSocialWelfareDisabilityPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final disabilityAsync = ref.watch(disabilityTitleProvider);
 
-    return Scaffold(
-      appBar: AppHeaderBar(
-        title: l10n.socialWelfareDisabilityTitle,
-        backgroundColor: AppColors.backgroundBlueLighter,
-        onBack: () => context.go(Routes.myDataSocialWelfare),
-        onInfo: () => AppInfoSheet.show(
-          context: context,
-          title: l10n.socialWelfareDisabilityInfoSheetTitle,
-          bodyText: l10n.socialWelfareDisabilityInfoSheetDescription,
-          footerText: l10n.familiaNumerosaContactHint,
-          actionLabel: l10n.familiaNumerosaOfficeContactsButton,
-          onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
-          actionIcon: AppIcons.openInNew,
-        ),
+    return AppDetailScaffold(
+      title: l10n.socialWelfareDisabilityTitle,
+      onBack: () => context.go(Routes.myDataSocialWelfare),
+      onInfo: () => AppInfoSheet.show(
+        context: context,
+        title: l10n.socialWelfareDisabilityInfoSheetTitle,
+        bodyText: l10n.socialWelfareDisabilityInfoSheetDescription,
+        footerText: l10n.familiaNumerosaContactHint,
+        actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+        onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
+        actionIcon: AppIcons.openInNew,
       ),
-      body: ColoredBox(
-        color: AppColors.backgroundWhite,
-        child: SafeArea(
-          top: false,
-          child: disabilityAsync.when(
-            data: (final title) => title == null ? _DisabilityEmpty(ref: ref) : _DisabilityContent(title: title),
-            loading: () => const Center(child: AppLoadingIndicator()),
-            error: (final error, final stackTrace) => _DisabilityError(ref: ref),
-          ),
-        ),
+      appBarBackgroundColor: AppColors.backgroundBlueLighter,
+      body: disabilityAsync.when(
+        data: (final title) => title == null ? _DisabilityEmpty(ref: ref) : _DisabilityContent(title: title),
+        loading: () => const Center(child: AppLoadingIndicator()),
+        error: (final error, final stackTrace) => _DisabilityError(ref: ref),
       ),
     );
   }

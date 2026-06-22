@@ -3449,6 +3449,74 @@
   "@myDataEmploymentDescription": {
     "description": "Descripción de la tarjeta de Empleo en la pantalla Mis datos."
   },
+  "myDataEmploymentInfoSheetTitle": "Sobre Mis datos de Empleo",
+  "@myDataEmploymentInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Empleo."
+  },
+  "myDataEmploymentInfoSheetDescription": "Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.",
+  "@myDataEmploymentInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Empleo."
+  },
+  "myDataEmploymentDataTab": "Mis datos de Empleo",
+  "@myDataEmploymentDataTab": {
+    "description": "Primera pestaña del detalle de Empleo."
+  },
+  "myDataEmploymentServicesTab": "Información y servicios",
+  "@myDataEmploymentServicesTab": {
+    "description": "Segunda pestaña del detalle de Empleo."
+  },
+  "myDataEmploymentDemandTitle": "Tu demanda de empleo",
+  "@myDataEmploymentDemandTitle": {
+    "description": "Título de la tarjeta de demanda de empleo."
+  },
+  "myDataEmploymentRegistrationDateLabel": "Fecha de inscripción sin interrupciones",
+  "@myDataEmploymentRegistrationDateLabel": {
+    "description": "Etiqueta de la fecha de inscripción sin interrupciones."
+  },
+  "myDataEmploymentDemandEmpty": "No constan datos de demanda de empleo.",
+  "@myDataEmploymentDemandEmpty": {
+    "description": "Mensaje mostrado cuando no hay datos de demanda de empleo."
+  },
+  "myDataEmploymentDemandError": "No hemos podido cargar tu demanda de empleo.",
+  "@myDataEmploymentDemandError": {
+    "description": "Mensaje de error al cargar la demanda de empleo."
+  },
+  "myDataEmploymentOffersTitle": "Inscripciones en ofertas",
+  "@myDataEmploymentOffersTitle": {
+    "description": "Título de la tarjeta de inscripciones en ofertas."
+  },
+  "myDataEmploymentOffersDescription": "Ofertas de empleo en las que te has inscrito",
+  "@myDataEmploymentOffersDescription": {
+    "description": "Descripción de la tarjeta de inscripciones en ofertas."
+  },
+  "myDataEmploymentProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataEmploymentProceduresTitle": {
+    "description": "Título de la sección de trámites de empleo."
+  },
+  "myDataEmploymentProcedureProfessionalCertificate": "Expedición certificado de profesionalidad",
+  "@myDataEmploymentProcedureProfessionalCertificate": {
+    "description": "Trámite de expedición de certificado de profesionalidad."
+  },
+  "myDataEmploymentProcedureJobSeekerRegistration": "Inscripción como demandante de personas trabajadoras en oficinas de empleo y emprendedores",
+  "@myDataEmploymentProcedureJobSeekerRegistration": {
+    "description": "Trámite de inscripción como demandante de empleo."
+  },
+  "myDataEmploymentProcedureVirtualOfficeCredentials": "Solicitud de credenciales de acceso a la oficina virtual de la consejería de empleo y economía para personas físicas, jurídicas y autónomos.",
+  "@myDataEmploymentProcedureVirtualOfficeCredentials": {
+    "description": "Trámite de solicitud de credenciales de la oficina virtual de empleo."
+  },
+  "myDataEmploymentInterestLinksTitle": "Enlaces de interés",
+  "@myDataEmploymentInterestLinksTitle": {
+    "description": "Título de la sección de enlaces de interés de empleo."
+  },
+  "myDataEmploymentLinkEmploymentClm": "Empleo CLM",
+  "@myDataEmploymentLinkEmploymentClm": {
+    "description": "Enlace al portal Empleo CLM."
+  },
+  "myDataEmploymentLinkPublicEmploymentClm": "Empleo Público CLM",
+  "@myDataEmploymentLinkPublicEmploymentClm": {
+    "description": "Enlace al portal Empleo Público CLM."
+  },
   "myDataEducationTitle": "Educación",
   "@myDataEducationTitle": {
     "description": "Título de la tarjeta de Educación en la pantalla Mis datos."
@@ -3464,6 +3532,227 @@
   "myDataHousingDescription": "Titularidad de bienes inmueble",
   "@myDataHousingDescription": {
     "description": "Descripción de la tarjeta de Vivienda en la pantalla Mis datos."
+  },
+  "myDataHousingInfoSheetTitle": "Sobre Mis datos de Vivienda",
+  "@myDataHousingInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Vivienda."
+  },
+  "myDataHousingInfoSheetDescription": "Consulta la información de tus bienes inmuebles, tu vivienda y los datos de tu domicilio actual.",
+  "@myDataHousingInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Vivienda."
+  },
+  "myDataHousingDataTab": "Mis datos de Vivienda",
+  "@myDataHousingDataTab": {
+    "description": "Primera pestaña del detalle de Vivienda."
+  },
+  "myDataHousingServicesTab": "Información y servicios",
+  "@myDataHousingServicesTab": {
+    "description": "Segunda pestaña del detalle de Vivienda."
+  },
+  "myDataHousingRealEstateTitle": "Bienes inmuebles",
+  "@myDataHousingRealEstateTitle": {
+    "description": "Título de la tarjeta de bienes inmuebles en el detalle de Vivienda."
+  },
+  "myDataHousingRealEstateDescription": "Datos catastrales de mis inmuebles",
+  "@myDataHousingRealEstateDescription": {
+    "description": "Descripción de la tarjeta de bienes inmuebles en el detalle de Vivienda."
+  },
+  "myDataHousingRealEstateInfoSheetTitle": "Sobre tus bienes inmueble",
+  "@myDataHousingRealEstateInfoSheetTitle": {
+    "description": "Título del modal informativo de bienes inmuebles."
+  },
+  "myDataHousingRealEstateInfoSheetDescription": "Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.",
+  "@myDataHousingRealEstateInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de bienes inmuebles."
+  },
+  "myDataHousingRealEstateInfoSheetFooter": "Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro",
+  "@myDataHousingRealEstateInfoSheetFooter": {
+    "description": "Pie del modal informativo de bienes inmuebles."
+  },
+  "myDataHousingRealEstateFilterAll": "Todo",
+  "@myDataHousingRealEstateFilterAll": {
+    "description": "Etiqueta del filtro de todos los bienes inmuebles."
+  },
+  "myDataHousingRealEstateFilterUrban": "Urbano",
+  "@myDataHousingRealEstateFilterUrban": {
+    "description": "Etiqueta del filtro de bienes inmuebles urbanos."
+  },
+  "myDataHousingRealEstateFilterRustic": "Rústico",
+  "@myDataHousingRealEstateFilterRustic": {
+    "description": "Etiqueta del filtro de bienes inmuebles rústicos."
+  },
+  "myDataHousingRealEstateReferenceTitle": "Referencia catastral {value}",
+  "@myDataHousingRealEstateReferenceTitle": {
+    "description": "Título de la tarjeta de bien inmueble con referencia catastral.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHousingRealEstateDetailClose": "Cerrar",
+  "@myDataHousingRealEstateDetailClose": {
+    "description": "Tooltip del botón de cerrar el detalle de bien inmueble."
+  },
+  "myDataHousingRealEstateDetailHomeDataTitle": "Datos de la vivienda",
+  "@myDataHousingRealEstateDetailHomeDataTitle": {
+    "description": "Título de la sección de datos de la vivienda."
+  },
+  "myDataHousingRealEstateReferenceLabel": "Referencia catastral",
+  "@myDataHousingRealEstateReferenceLabel": {
+    "description": "Etiqueta del campo referencia catastral."
+  },
+  "myDataHousingRealEstateAddressLabel": "Dirección",
+  "@myDataHousingRealEstateAddressLabel": {
+    "description": "Etiqueta de dirección del bien inmueble."
+  },
+  "myDataHousingRealEstateUseLabel": "Uso",
+  "@myDataHousingRealEstateUseLabel": {
+    "description": "Etiqueta de uso del bien inmueble."
+  },
+  "myDataHousingRealEstateCadastralValueLabel": "Valor catastral",
+  "@myDataHousingRealEstateCadastralValueLabel": {
+    "description": "Etiqueta de valor catastral del bien inmueble."
+  },
+  "myDataHousingRealEstateLandValueLabel": "Valor del suelo",
+  "@myDataHousingRealEstateLandValueLabel": {
+    "description": "Etiqueta de valor del suelo del bien inmueble."
+  },
+  "myDataHousingRealEstateConstructionValueLabel": "Valor de construcción",
+  "@myDataHousingRealEstateConstructionValueLabel": {
+    "description": "Etiqueta de valor de construcción del bien inmueble."
+  },
+  "myDataHousingRealEstateStatusLabel": "Estado",
+  "@myDataHousingRealEstateStatusLabel": {
+    "description": "Etiqueta de estado del bien inmueble."
+  },
+  "myDataHousingRealEstateShowCartography": "Mostrar cartografía",
+  "@myDataHousingRealEstateShowCartography": {
+    "description": "Texto del botón para abrir la cartografía del bien inmueble."
+  },
+  "myDataHousingRealEstateHoldersTitle": "Titulares",
+  "@myDataHousingRealEstateHoldersTitle": {
+    "description": "Título de la sección de titulares del bien inmueble."
+  },
+  "myDataHousingRealEstateHoldersEmpty": "No constan titulares para este bien inmueble.",
+  "@myDataHousingRealEstateHoldersEmpty": {
+    "description": "Mensaje mostrado cuando no hay titulares del bien inmueble."
+  },
+  "myDataHousingRealEstateDetailEmpty": "No hemos encontrado el bien inmueble seleccionado.",
+  "@myDataHousingRealEstateDetailEmpty": {
+    "description": "Mensaje mostrado cuando no se encuentra el detalle del inmueble seleccionado."
+  },
+  "myDataHousingRealEstateEmpty": "No constan bienes inmuebles a tu nombre.",
+  "@myDataHousingRealEstateEmpty": {
+    "description": "Estado vacío de bienes inmuebles."
+  },
+  "myDataHousingRealEstateFilteredEmpty": "No hay bienes inmuebles para este filtro.",
+  "@myDataHousingRealEstateFilteredEmpty": {
+    "description": "Estado vacío de bienes inmuebles filtrados."
+  },
+  "myDataHousingRealEstateError": "No hemos podido cargar los datos de Catastro.",
+  "@myDataHousingRealEstateError": {
+    "description": "Estado de error de bienes inmuebles."
+  },
+  "myDataHousingAddressTitle": "Domicilio en Castilla-La Mancha",
+  "@myDataHousingAddressTitle": {
+    "description": "Título de la tarjeta de domicilio en el detalle de Vivienda."
+  },
+  "myDataHousingAddressDescription": "Datos en la base padronal",
+  "@myDataHousingAddressDescription": {
+    "description": "Descripción de la tarjeta de domicilio en el detalle de Vivienda."
+  },
+  "myDataHousingAddressInfoSheetTitle": "Sobre tu domicilio",
+  "@myDataHousingAddressInfoSheetTitle": {
+    "description": "Título del modal informativo del detalle de domicilio."
+  },
+  "myDataHousingAddressInfoSheetDescription": "Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.",
+  "@myDataHousingAddressInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo del detalle de domicilio."
+  },
+  "myDataHousingAddressInfoSheetFooter": "Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.",
+  "@myDataHousingAddressInfoSheetFooter": {
+    "description": "Pie del modal informativo del detalle de domicilio."
+  },
+  "myDataHousingAddressDataTitle": "Datos del domicilio",
+  "@myDataHousingAddressDataTitle": {
+    "description": "Título de la sección de datos del domicilio."
+  },
+  "myDataHousingAddressRegistrationDataTitle": "Datos relativos a la inscripción",
+  "@myDataHousingAddressRegistrationDataTitle": {
+    "description": "Título de la sección de datos de inscripción padronal."
+  },
+  "myDataHousingAddressLabel": "Domicilio",
+  "@myDataHousingAddressLabel": {
+    "description": "Etiqueta del campo domicilio."
+  },
+  "myDataHousingAddressPostalCodeLabel": "Código postal",
+  "@myDataHousingAddressPostalCodeLabel": {
+    "description": "Etiqueta del campo código postal."
+  },
+  "myDataHousingAddressMunicipalityLabel": "Municipio",
+  "@myDataHousingAddressMunicipalityLabel": {
+    "description": "Etiqueta del campo municipio."
+  },
+  "myDataHousingAddressProvinceLabel": "Provincia",
+  "@myDataHousingAddressProvinceLabel": {
+    "description": "Etiqueta del campo provincia."
+  },
+  "myDataHousingAddressCollectiveEntityLabel": "Entidad colectivo",
+  "@myDataHousingAddressCollectiveEntityLabel": {
+    "description": "Etiqueta del campo entidad colectivo."
+  },
+  "myDataHousingAddressSingleEntityLabel": "Entidad singular",
+  "@myDataHousingAddressSingleEntityLabel": {
+    "description": "Etiqueta del campo entidad singular."
+  },
+  "myDataHousingAddressPopulationUnitLabel": "Núcleo / Diseminado",
+  "@myDataHousingAddressPopulationUnitLabel": {
+    "description": "Etiqueta del campo núcleo o diseminado."
+  },
+  "myDataHousingAddressVariationTypeLabel": "Tipo de variación",
+  "@myDataHousingAddressVariationTypeLabel": {
+    "description": "Etiqueta del tipo de variación padronal."
+  },
+  "myDataHousingAddressVariationDateLabel": "Fecha de variación",
+  "@myDataHousingAddressVariationDateLabel": {
+    "description": "Etiqueta de la fecha de variación padronal."
+  },
+  "myDataHousingAddressEmpty": "No constan datos de domicilio en Castilla-La Mancha.",
+  "@myDataHousingAddressEmpty": {
+    "description": "Mensaje mostrado cuando no hay domicilio registrado."
+  },
+  "myDataHousingAddressError": "No hemos podido cargar tus datos de domicilio.",
+  "@myDataHousingAddressError": {
+    "description": "Mensaje de error al cargar domicilio."
+  },
+  "myDataHousingLinksTitle": "Enlaces de interés",
+  "@myDataHousingLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña Información y servicios de Vivienda."
+  },
+  "myDataHousingLinkClmHousing": "Vivienda Castilla-La Mancha",
+  "@myDataHousingLinkClmHousing": {
+    "description": "Enlace al portal de Vivienda Castilla-La Mancha."
+  },
+  "myDataHousingLinkCadastre": "Sede del catastro",
+  "@myDataHousingLinkCadastre": {
+    "description": "Enlace a la Sede del Catastro."
+  },
+  "myDataHousingProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataHousingProceduresTitle": {
+    "description": "Título de la sección de trámites relacionados con vivienda."
+  },
+  "myDataHousingProcedureYoungRentVoucher": "Ayudas al bono alquiler joven en Castilla-La Mancha",
+  "@myDataHousingProcedureYoungRentVoucher": {
+    "description": "Trámite de ayudas al bono alquiler joven en Castilla-La Mancha."
+  },
+  "myDataHousingProcedureProtectedHousingRegister": "Inscripción en el registro de demandantes de vivienda con protección pública de CLM",
+  "@myDataHousingProcedureProtectedHousingRegister": {
+    "description": "Trámite de inscripción en el registro de demandantes de vivienda con protección pública de CLM."
+  },
+  "myDataHousingProcedureSocialEmergencyAid": "Ayudas de emergencia social",
+  "@myDataHousingProcedureSocialEmergencyAid": {
+    "description": "Trámite de ayudas de emergencia social."
   },
   "myDataVehiclesTitle": "Vehículos",
   "@myDataVehiclesTitle": {

@@ -24,38 +24,20 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Scaffold(
-      appBar: AppHeaderBar(
-        title: l10n.myDataHealthTitle,
-        onBack: () => context.go(Routes.myData),
-        onInfo: () => _showHealthInfoSheet(context),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: AppColors.backgroundBlueLighter,
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              AppTopTabBar(
-                tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
-                selectedIndex: _selectedTab.index,
-                onTabSelected: (final index) => setState(() => _selectedTab = _HealthTab.values[index]),
-              ),
-              Expanded(
-                child: switch (_selectedTab) {
-                  _HealthTab.data => _HealthAppointmentsTab(
-                    selectedAppointmentFilter: _selectedAppointmentFilter,
-                    onAppointmentFilterSelected: (final filter) => setState(() => _selectedAppointmentFilter = filter),
-                  ),
-                  _HealthTab.services => const _HealthServicesTab(),
-                },
-              ),
-            ],
-          ),
+    return AppTabbedDetailScaffold(
+      title: l10n.myDataHealthTitle,
+      onBack: () => context.go(Routes.myData),
+      onInfo: () => _showHealthInfoSheet(context),
+      tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
+      selectedIndex: _selectedTab.index,
+      onTabSelected: (final index) => setState(() => _selectedTab = _HealthTab.values[index]),
+      tabViews: [
+        _HealthAppointmentsTab(
+          selectedAppointmentFilter: _selectedAppointmentFilter,
+          onAppointmentFilterSelected: (final filter) => setState(() => _selectedAppointmentFilter = filter),
         ),
-      ),
+        const _HealthServicesTab(),
+      ],
     );
   }
 
@@ -149,150 +131,50 @@ class _HealthServicesTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _HealthServicesSection(
+          AppExternalLinkSection(
             title: l10n.myDataHealthProceduresTitle,
-            items: [
-              l10n.myDataHealthProcedureComplaints,
-              l10n.myDataHealthProcedureHealthCard,
-              l10n.myDataHealthProcedureSpecializedCare,
+            links: [
+              AppExternalLinkItem(
+                label: l10n.myDataHealthProcedureComplaints,
+                onTap: () => _showComingSoon(context, l10n.myDataHealthProcedureComplaints),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataHealthProcedureHealthCard,
+                onTap: () => _showComingSoon(context, l10n.myDataHealthProcedureHealthCard),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataHealthProcedureSpecializedCare,
+                onTap: () => _showComingSoon(context, l10n.myDataHealthProcedureSpecializedCare),
+              ),
             ],
           ),
           const SizedBox(height: AppDimensions.space24),
-          _HealthServicesSection(
+          AppExternalLinkSection(
             title: l10n.myDataHealthInterestLinksTitle,
-            items: [
-              l10n.myDataHealthLinkSescam,
-              l10n.myDataHealthLinkDigitalHealth,
-              l10n.myDataHealthLinkClinicalHistory,
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HealthServicesSection extends StatelessWidget {
-  const _HealthServicesSection({
-    required this.title,
-    required this.items,
-  });
-
-  final String title;
-  final List<String> items;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-          child: Text(
-            title,
-            style: AppTypography.h2.copyWith(
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-        const SizedBox(height: AppDimensions.space8),
-        for (final item in items) ...[
-          _HealthServicesLink(label: item),
-          const SizedBox(height: AppDimensions.space16),
-        ],
-      ],
-    );
-  }
-}
-
-class _HealthServicesLink extends StatelessWidget {
-  const _HealthServicesLink({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    return Semantics(
-      button: true,
-      link: true,
-      label: label,
-      child: InkWell(
-        onTap: () => AppAlertSnackbar.show(
-          context,
-          message: l10n.myDataSectionComingSoon(label),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: AppDimensions.space16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: AppDimensions.space8),
-                child: _HealthDoubleBullet(),
+            links: [
+              AppExternalLinkItem(
+                label: l10n.myDataHealthLinkSescam,
+                onTap: () => _showComingSoon(context, l10n.myDataHealthLinkSescam),
               ),
-              const SizedBox(width: AppDimensions.space8),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: AppDimensions.space4),
-                  child: Text(
-                    label,
-                    style: AppTypography.bodyLink.copyWith(
-                      color: AppColors.primary,
-                      decorationColor: AppColors.primary,
-                    ),
-                  ),
-                ),
+              AppExternalLinkItem(
+                label: l10n.myDataHealthLinkDigitalHealth,
+                onTap: () => _showComingSoon(context, l10n.myDataHealthLinkDigitalHealth),
               ),
-              const SizedBox(width: AppDimensions.space8),
-              const Padding(
-                padding: EdgeInsets.only(top: AppDimensions.space4),
-                child: AppIcon(
-                  AppIcons.openInNew,
-                  color: AppColors.textBase,
-                ),
+              AppExternalLinkItem(
+                label: l10n.myDataHealthLinkClinicalHistory,
+                onTap: () => _showComingSoon(context, l10n.myDataHealthLinkClinicalHistory),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HealthDoubleBullet extends StatelessWidget {
-  const _HealthDoubleBullet();
-
-  @override
-  Widget build(final BuildContext context) {
-    return const SizedBox(
-      height: AppDimensions.space16,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _HealthBulletDot(color: AppColors.primary),
-          SizedBox(width: AppDimensions.space4),
-          _HealthBulletDot(color: AppColors.secondaryLight400),
         ],
       ),
     );
   }
-}
 
-class _HealthBulletDot extends StatelessWidget {
-  const _HealthBulletDot({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(final BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
-      child: const SizedBox.square(dimension: AppDimensions.space8),
+  void _showComingSoon(final BuildContext context, final String label) {
+    AppAlertSnackbar.show(
+      context,
+      message: AppLocalizations.of(context).myDataSectionComingSoon(label),
     );
   }
 }

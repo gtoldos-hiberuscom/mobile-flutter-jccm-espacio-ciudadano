@@ -2541,6 +2541,57 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentDescription => 'Demanda y servicios de empleo';
 
   @override
+  String get myDataEmploymentInfoSheetTitle => 'Sobre Mis datos de Empleo';
+
+  @override
+  String get myDataEmploymentInfoSheetDescription => 'Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentDataTab => 'Mis datos de Empleo';
+
+  @override
+  String get myDataEmploymentServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataEmploymentDemandTitle => 'Tu demanda de empleo';
+
+  @override
+  String get myDataEmploymentRegistrationDateLabel => 'Fecha de inscripción sin interrupciones';
+
+  @override
+  String get myDataEmploymentDemandEmpty => 'No constan datos de demanda de empleo.';
+
+  @override
+  String get myDataEmploymentDemandError => 'No hemos podido cargar tu demanda de empleo.';
+
+  @override
+  String get myDataEmploymentOffersTitle => 'Inscripciones en ofertas';
+
+  @override
+  String get myDataEmploymentOffersDescription => 'Ofertas de empleo en las que te has inscrito';
+
+  @override
+  String get myDataEmploymentProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataEmploymentProcedureProfessionalCertificate => 'Expedición certificado de profesionalidad';
+
+  @override
+  String get myDataEmploymentProcedureJobSeekerRegistration => 'Inscripción como demandante de personas trabajadoras en oficinas de empleo y emprendedores';
+
+  @override
+  String get myDataEmploymentProcedureVirtualOfficeCredentials => 'Solicitud de credenciales de acceso a la oficina virtual de la consejería de empleo y economía para personas físicas, jurídicas y autónomos.';
+
+  @override
+  String get myDataEmploymentInterestLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataEmploymentLinkEmploymentClm => 'Empleo CLM';
+
+  @override
+  String get myDataEmploymentLinkPublicEmploymentClm => 'Empleo Público CLM';
+
+  @override
   String get myDataEducationTitle => 'Educación';
 
   @override
@@ -2551,6 +2602,170 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myDataHousingDescription => 'Titularidad de bienes inmueble';
+
+  @override
+  String get myDataHousingInfoSheetTitle => 'Sobre Mis datos de Vivienda';
+
+  @override
+  String get myDataHousingInfoSheetDescription => 'Consulta la información de tus bienes inmuebles, tu vivienda y los datos de tu domicilio actual.';
+
+  @override
+  String get myDataHousingDataTab => 'Mis datos de Vivienda';
+
+  @override
+  String get myDataHousingServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataHousingRealEstateTitle => 'Bienes inmuebles';
+
+  @override
+  String get myDataHousingRealEstateDescription => 'Datos catastrales de mis inmuebles';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetTitle => 'Sobre tus bienes inmueble';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetDescription => 'Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetFooter => 'Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro';
+
+  @override
+  String get myDataHousingRealEstateFilterAll => 'Todo';
+
+  @override
+  String get myDataHousingRealEstateFilterUrban => 'Urbano';
+
+  @override
+  String get myDataHousingRealEstateFilterRustic => 'Rústico';
+
+  @override
+  String myDataHousingRealEstateReferenceTitle(String value) {
+    return 'Referencia catastral $value';
+  }
+
+  @override
+  String get myDataHousingRealEstateDetailClose => 'Cerrar';
+
+  @override
+  String get myDataHousingRealEstateDetailHomeDataTitle => 'Datos de la vivienda';
+
+  @override
+  String get myDataHousingRealEstateReferenceLabel => 'Referencia catastral';
+
+  @override
+  String get myDataHousingRealEstateAddressLabel => 'Dirección';
+
+  @override
+  String get myDataHousingRealEstateUseLabel => 'Uso';
+
+  @override
+  String get myDataHousingRealEstateCadastralValueLabel => 'Valor catastral';
+
+  @override
+  String get myDataHousingRealEstateLandValueLabel => 'Valor del suelo';
+
+  @override
+  String get myDataHousingRealEstateConstructionValueLabel => 'Valor de construcción';
+
+  @override
+  String get myDataHousingRealEstateStatusLabel => 'Estado';
+
+  @override
+  String get myDataHousingRealEstateShowCartography => 'Mostrar cartografía';
+
+  @override
+  String get myDataHousingRealEstateHoldersTitle => 'Titulares';
+
+  @override
+  String get myDataHousingRealEstateHoldersEmpty => 'No constan titulares para este bien inmueble.';
+
+  @override
+  String get myDataHousingRealEstateDetailEmpty => 'No hemos encontrado el bien inmueble seleccionado.';
+
+  @override
+  String get myDataHousingRealEstateEmpty => 'No constan bienes inmuebles a tu nombre.';
+
+  @override
+  String get myDataHousingRealEstateFilteredEmpty => 'No hay bienes inmuebles para este filtro.';
+
+  @override
+  String get myDataHousingRealEstateError => 'No hemos podido cargar los datos de Catastro.';
+
+  @override
+  String get myDataHousingAddressTitle => 'Domicilio en Castilla-La Mancha';
+
+  @override
+  String get myDataHousingAddressDescription => 'Datos en la base padronal';
+
+  @override
+  String get myDataHousingAddressInfoSheetTitle => 'Sobre tu domicilio';
+
+  @override
+  String get myDataHousingAddressInfoSheetDescription => 'Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.';
+
+  @override
+  String get myDataHousingAddressInfoSheetFooter => 'Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.';
+
+  @override
+  String get myDataHousingAddressDataTitle => 'Datos del domicilio';
+
+  @override
+  String get myDataHousingAddressRegistrationDataTitle => 'Datos relativos a la inscripción';
+
+  @override
+  String get myDataHousingAddressLabel => 'Domicilio';
+
+  @override
+  String get myDataHousingAddressPostalCodeLabel => 'Código postal';
+
+  @override
+  String get myDataHousingAddressMunicipalityLabel => 'Municipio';
+
+  @override
+  String get myDataHousingAddressProvinceLabel => 'Provincia';
+
+  @override
+  String get myDataHousingAddressCollectiveEntityLabel => 'Entidad colectivo';
+
+  @override
+  String get myDataHousingAddressSingleEntityLabel => 'Entidad singular';
+
+  @override
+  String get myDataHousingAddressPopulationUnitLabel => 'Núcleo / Diseminado';
+
+  @override
+  String get myDataHousingAddressVariationTypeLabel => 'Tipo de variación';
+
+  @override
+  String get myDataHousingAddressVariationDateLabel => 'Fecha de variación';
+
+  @override
+  String get myDataHousingAddressEmpty => 'No constan datos de domicilio en Castilla-La Mancha.';
+
+  @override
+  String get myDataHousingAddressError => 'No hemos podido cargar tus datos de domicilio.';
+
+  @override
+  String get myDataHousingLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataHousingLinkClmHousing => 'Vivienda Castilla-La Mancha';
+
+  @override
+  String get myDataHousingLinkCadastre => 'Sede del catastro';
+
+  @override
+  String get myDataHousingProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataHousingProcedureYoungRentVoucher => 'Ayudas al bono alquiler joven en Castilla-La Mancha';
+
+  @override
+  String get myDataHousingProcedureProtectedHousingRegister => 'Inscripción en el registro de demandantes de vivienda con protección pública de CLM';
+
+  @override
+  String get myDataHousingProcedureSocialEmergencyAid => 'Ayudas de emergencia social';
 
   @override
   String get myDataVehiclesTitle => 'Vehículos';

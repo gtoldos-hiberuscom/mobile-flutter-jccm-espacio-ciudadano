@@ -17,34 +17,23 @@ class MyDataSocialWelfareParkingPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final cardAsync = ref.watch(parkingCardProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
-      appBar: AppHeaderBar(
-        title: l10n.socialWelfareParkingTitle,
-        backgroundColor: AppColors.backgroundBlueLighter,
-        onBack: () => context.go(Routes.myDataSocialWelfare),
-        onInfo: () => AppInfoSheet.show(
-          context: context,
-          title: l10n.socialWelfareParkingInfoSheetTitle,
-          bodyText: l10n.socialWelfareParkingInfoSheetDescription,
-          footerText: l10n.familiaNumerosaContactHint,
-          actionLabel: l10n.familiaNumerosaOfficeContactsButton,
-          onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
-          actionIcon: AppIcons.openInNew,
-        ),
+    return AppDetailScaffold(
+      title: l10n.socialWelfareParkingTitle,
+      onBack: () => context.go(Routes.myDataSocialWelfare),
+      onInfo: () => AppInfoSheet.show(
+        context: context,
+        title: l10n.socialWelfareParkingInfoSheetTitle,
+        bodyText: l10n.socialWelfareParkingInfoSheetDescription,
+        footerText: l10n.familiaNumerosaContactHint,
+        actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+        onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
+        actionIcon: AppIcons.openInNew,
       ),
-      body: SizedBox.expand(
-        child: ColoredBox(
-          color: AppColors.backgroundWhite,
-          child: SafeArea(
-            top: false,
-            child: cardAsync.when(
-              data: (final card) => card == null ? _ParkingEmpty(ref: ref) : _ParkingContent(card: card),
-              loading: () => const Center(child: AppLoadingIndicator()),
-              error: (final error, final stackTrace) => _ParkingError(ref: ref),
-            ),
-          ),
-        ),
+      appBarBackgroundColor: AppColors.backgroundBlueLighter,
+      body: cardAsync.when(
+        data: (final card) => card == null ? _ParkingEmpty(ref: ref) : _ParkingContent(card: card),
+        loading: () => const Center(child: AppLoadingIndicator()),
+        error: (final error, final stackTrace) => _ParkingError(ref: ref),
       ),
     );
   }

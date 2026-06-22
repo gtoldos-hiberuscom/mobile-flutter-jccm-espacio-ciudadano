@@ -17,31 +17,23 @@ class MyDataSocialWelfareThermalSpaPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final awardAsync = ref.watch(thermalSpaAwardProvider);
 
-    return Scaffold(
-      appBar: AppHeaderBar(
-        title: l10n.socialWelfareTermalismoNavTitle,
-        backgroundColor: AppColors.backgroundBlueLighter,
-        onBack: () => context.go(Routes.myDataSocialWelfare),
-        onInfo: () => AppInfoSheet.show(
-          context: context,
-          title: l10n.socialWelfareTermalismoInfoSheetTitle,
-          bodyText: l10n.socialWelfareTermalismoInfoSheetDescription,
-          footerText: l10n.familiaNumerosaContactHint,
-          actionLabel: l10n.familiaNumerosaOfficeContactsButton,
-          onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
-          actionIcon: AppIcons.openInNew,
-        ),
+    return AppDetailScaffold(
+      title: l10n.socialWelfareTermalismoNavTitle,
+      onBack: () => context.go(Routes.myDataSocialWelfare),
+      onInfo: () => AppInfoSheet.show(
+        context: context,
+        title: l10n.socialWelfareTermalismoInfoSheetTitle,
+        bodyText: l10n.socialWelfareTermalismoInfoSheetDescription,
+        footerText: l10n.familiaNumerosaContactHint,
+        actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+        onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
+        actionIcon: AppIcons.openInNew,
       ),
-      body: ColoredBox(
-        color: AppColors.backgroundWhite,
-        child: SafeArea(
-          top: false,
-          child: awardAsync.when(
-            data: (final award) => award == null ? _ThermalSpaEmpty(ref: ref) : _ThermalSpaContent(award: award),
-            loading: () => const Center(child: AppLoadingIndicator()),
-            error: (final error, final stackTrace) => _ThermalSpaError(ref: ref),
-          ),
-        ),
+      appBarBackgroundColor: AppColors.backgroundBlueLighter,
+      body: awardAsync.when(
+        data: (final award) => award == null ? _ThermalSpaEmpty(ref: ref) : _ThermalSpaContent(award: award),
+        loading: () => const Center(child: AppLoadingIndicator()),
+        error: (final error, final stackTrace) => _ThermalSpaError(ref: ref),
       ),
     );
   }
