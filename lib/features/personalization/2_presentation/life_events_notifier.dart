@@ -49,6 +49,9 @@ enum LifeEventsStatus {
 
   /// Last reset failed.
   resetError,
+
+  /// Life-events onboarding was intentionally skipped.
+  onboardingSkipped,
 }
 
 /// Immutable UI state for the life-events selection screen.
@@ -138,7 +141,8 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
     }
     switch (result) {
       case LoadLifeEventsSuccess(:final events):
-        state = events.isEmpty ? const LifeEventsState(status: LifeEventsStatus.empty) : LifeEventsState(status: LifeEventsStatus.loaded, events: events);
+        final loadedEvents = _clearSelectionsOnLoad ? events.map((final event) => event.copyWith(selected: false)).toList(growable: false) : events;
+        state = loadedEvents.isEmpty ? const LifeEventsState(status: LifeEventsStatus.empty) : LifeEventsState(status: LifeEventsStatus.loaded, events: loadedEvents);
       case LoadLifeEventsFailed(:final message):
         state = LifeEventsState(
           status: LifeEventsStatus.loadError,
@@ -205,16 +209,36 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
     }
   }
 
+  /// Marks the first-login onboarding as seen without saving selections.
+  Future<void> skipOnboarding() async {
+    if (!_clearSelectionsOnLoad) {
+      return;
+    }
+    final onboardingResult = await _markOnboardingSeen();
+    if (!ref.mounted) {
+      return;
+    }
+    if (onboardingResult case MarkLifeEventsOnboardingSeenFailed(:final message)) {
+      state = state.copyWith(
+        status: LifeEventsStatus.saveError,
+        errorMessage: message,
+      );
+      return;
+    }
+    state = state.copyWith(status: LifeEventsStatus.onboardingSkipped);
+  }
+
   /// Requests display of the reset-confirmation dialog.
   void requestReset() => state = state.copyWith(showResetConfirm: true);
 
   /// Clears the current local selection without showing a confirmation dialog.
   void clearSelection() {
     final clearedEvents = state.events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
+    final hasSelectedEvents = state.events.any((final event) => event.selected);
     state = state.copyWith(
       status: LifeEventsStatus.loaded,
       events: clearedEvents,
-      isDirty: true,
+      isDirty: state.isDirty || hasSelectedEvents,
       showResetConfirm: false,
     );
   }

@@ -25,10 +25,12 @@ final class LoadAgendaAppointmentsUsecase {
 
   Future<LoadAgendaAppointmentsResult> execute({
     required final String documentNumber,
+    final String? agentId,
   }) async {
     try {
-      final appointments = await _repository.loadUpcomingAppointments(
+      final appointments = await _repository.loadAppointments(
         documentNumber: documentNumber,
+        agentId: agentId,
       );
       return LoadAgendaAppointmentsSuccess(appointments: appointments);
     } on Object catch (error) {

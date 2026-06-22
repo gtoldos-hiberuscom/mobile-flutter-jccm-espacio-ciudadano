@@ -97,7 +97,7 @@ class AppRecommendationCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppDimensions.space16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        border: Border.all(color: AppColors.secondaryLight400),
+        border: Border.all(color: AppColors.borderBlueMutedLight),
         borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
         boxShadow: AppShadows.medium,
       ),
@@ -105,34 +105,51 @@ class AppRecommendationCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           badge,
-          const SizedBox(height: AppDimensions.space12),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              title,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
+          const SizedBox(height: AppDimensions.space8),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: AppDimensions.space4,
+              bottom: AppDimensions.space8,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.space8),
+                const AppIcon(
+                  AppIcons.openInNew,
+                  color: AppColors.textBase,
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: AppDimensions.space16),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(AppDimensions.space8),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.space8,
+              vertical: AppDimensions.space4,
+            ),
             color: AppColors.backgroundLightBlue,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: AppDimensions.space4),
                 Text(
                   detailLabel.toUpperCase(),
-                  style: AppTypography.captionUppercase.copyWith(color: AppColors.textPrimary),
+                  style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
                 ),
-                const SizedBox(height: AppDimensions.space4),
+                const SizedBox(height: AppDimensions.space8),
                 Text(
                   detailText,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                  style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
                 ),
                 if (responsibleUnitText != null) ...[
                   const SizedBox(height: AppDimensions.space8),
@@ -140,7 +157,7 @@ class AppRecommendationCard extends StatelessWidget {
                     responsibleUnitText!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                    style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
                   ),
                 ],
                 if (deadlineText != null) ...[
@@ -149,9 +166,10 @@ class AppRecommendationCard extends StatelessWidget {
                     deadlineText!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+                    style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
                   ),
                 ],
+                const SizedBox(height: AppDimensions.space4),
               ],
             ),
           ),

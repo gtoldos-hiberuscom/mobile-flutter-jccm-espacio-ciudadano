@@ -148,10 +148,10 @@ class EmojiDioLogger extends Interceptor {
   void onRequest(final RequestOptions options, final RequestInterceptorHandler handler) {
     logger.d('$dioNote 📑 Request: ${options.method} ${options.uri}');
     if (options.headers.isNotEmpty) {
-      logger.d('$dioNote 📑 Headers: ${options.headers}');
+      logger.d('$dioNote 📑 Headers: ${_redact(options.headers)}');
     }
     if (options.data != null) {
-      logger.d('$dioNote 📑 Body: ${options.data}');
+      logger.d('$dioNote 📑 Body: ${_redact(options.data)}');
     }
     handler.next(options);
   }
@@ -160,7 +160,7 @@ class EmojiDioLogger extends Interceptor {
   void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
     logger
       ..d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}')
-      ..d('$dioNote 📦 Response Data: ${response.data}');
+      ..d('$dioNote 📦 Response Data: ${_redact(response.data)}');
     handler.next(response);
   }
 
@@ -168,8 +168,34 @@ class EmojiDioLogger extends Interceptor {
   void onError(final DioException err, final ErrorInterceptorHandler handler) {
     logger.e('$dioNote 💥 Error: ${err.type} ${err.message}');
     if (err.response != null) {
-      logger.e('$dioNote 💥 Error Response: ${err.response?.data}');
+      logger.e('$dioNote 💥 Error Response: ${_redact(err.response?.data)}');
     }
     handler.next(err);
   }
+
+  Object? _redact(final Object? value) {
+    if (value is Map) {
+      return value.map((final key, final nestedValue) {
+        final keyText = key.toString().toLowerCase();
+        if (_sensitiveKeyFragments.any(keyText.contains)) {
+          return MapEntry(key, '***');
+        }
+        return MapEntry(key, _redact(nestedValue));
+      });
+    }
+    if (value is Iterable) {
+      return value.map(_redact).toList(growable: false);
+    }
+    return value;
+  }
+
+  static const _sensitiveKeyFragments = [
+    'authorization',
+    'token',
+    'dni',
+    'nif',
+    'email',
+    'telefono',
+    'phone',
+  ];
 }

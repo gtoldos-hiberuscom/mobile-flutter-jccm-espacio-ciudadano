@@ -166,6 +166,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consentScrollHint => 'Desliza hasta el final para continuar';
 
   @override
+  String get consentLegalInfoSnackBar => 'Lee la información sobre el tratamiento y protección de datos antes de continuar';
+
+  @override
   String get consentInfoButtonSemantics => 'Ver información legal completa';
 
   @override
@@ -720,6 +723,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get educationUniversityTitlesError => 'No hemos podido cargar tus títulos universitarios.';
 
   @override
+  String get educationUniversityTitlesInfoTitle => 'Sobre tus títulos universitarios';
+
+  @override
+  String get educationUniversityTitlesInfoBody => 'Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.';
+
+  @override
+  String get educationUniversityTitlesInfoFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.';
+
+  @override
+  String get educationUniversityTitlesInfoContactButton => 'Contactar';
+
+  @override
   String get educationNonUniversityTitlesTitle => 'Títulos no universitarios';
 
   @override
@@ -791,7 +806,76 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareHeaderDescription => 'Consulta tu título de familia numerosa y accede a los servicios de bienestar social de Castilla-La Mancha.';
 
   @override
+  String get socialWelfareScreenTitle => 'Bienestar social';
+
+  @override
+  String get socialWelfareDataTab => 'Mis datos de Bienestar';
+
+  @override
+  String get socialWelfareServicesTab => 'Información y servicios';
+
+  @override
+  String get socialWelfareInterestLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get socialWelfareSuggestedProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get socialWelfareDisabilityRecognitionProcedure => 'Reconocimiento del grado de discapacidad';
+
+  @override
+  String get socialWelfareEarlyCareProcedure => 'Acceso al servicio de atención temprana';
+
+  @override
+  String get socialWelfareTemporaryResidentialStayProcedure => 'Plaza para el servicio de estancias temporales en centros residenciales para personas mayores';
+
+  @override
+  String get socialWelfareInfoSheetTitle => 'Sobre Mis datos de Bienestar social';
+
+  @override
+  String get socialWelfareInfoSheetDescription => 'Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
   String get socialWelfareFamilyTitle => 'Familia numerosa';
+
+  @override
+  String get socialWelfareFamilyNavDescription => 'Detalles del título y personas beneficiarias';
+
+  @override
+  String get socialWelfareDisabilityTitle => 'Discapacidad';
+
+  @override
+  String get socialWelfareDisabilityNavDescription => 'Detalles del título de discapacidad';
+
+  @override
+  String get socialWelfareDisabilityInfoSheetTitle => 'Sobre Mi título de discapacidad';
+
+  @override
+  String get socialWelfareDisabilityInfoSheetDescription => 'Consulta los datos de tu título de discapacidad.';
+
+  @override
+  String get socialWelfareDisabilityTitleSection => 'Mi título de discapacidad';
+
+  @override
+  String get socialWelfareDisabilityEffectiveDateLabel => 'Fecha de efectos';
+
+  @override
+  String get socialWelfareDisabilityPermanentValidityLabel => 'Validez definitiva';
+
+  @override
+  String get socialWelfareDisabilityFileNumberLabel => 'Número de expediente';
+
+  @override
+  String get socialWelfareDisabilityBirthDateLabel => 'Fecha de nacimiento';
+
+  @override
+  String get socialWelfareDisabilityMobilityLabel => 'Procede movilidad';
+
+  @override
+  String get socialWelfareDisabilityThirdPersonLabel => 'Reconocido concurso de tercera persona';
+
+  @override
+  String get socialWelfareDisabilityRoyalDecreeLabel => 'Real decreto en base a la que se concede el grado';
 
   @override
   String get socialWelfareFamilySource => 'Fuente: Junta de Comunidades de Castilla-La Mancha';
@@ -838,10 +922,73 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareTermalismoTitle => 'Termalismo / Balnearios';
 
   @override
+  String get socialWelfareTermalismoNavTitle => 'Termalismo';
+
+  @override
+  String get socialWelfareTermalismoNavDescription => 'Balneario adjudicado';
+
+  @override
+  String get socialWelfareTermalismoInfoSheetTitle => 'Sobre Termalismo';
+
+  @override
+  String get socialWelfareTermalismoInfoSheetDescription => 'Consulta los datos del último balneario que te han adjudicado de forma definitiva en el Programa Termalismo de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareTermalismoAwardTitle => 'Último balneario adjudicado';
+
+  @override
+  String get socialWelfareTermalismoSpaNameLabel => 'Nombre del balneario';
+
+  @override
+  String get socialWelfareTermalismoStartDateLabel => 'Fecha desde';
+
+  @override
+  String get socialWelfareTermalismoEndDateLabel => 'Fecha hasta';
+
+  @override
+  String get socialWelfareTermalismoUnavailableMessage => 'No hemos encontrado información de termalismo asociada a tus datos. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get socialWelfareTermalismoErrorMessage => 'No se ha podido cargar tu información de termalismo.';
+
+  @override
   String get socialWelfareTermalismoDescription => 'El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.';
 
   @override
   String get socialWelfareParkingTitle => 'Tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingNavTitle => 'Tarjeta estacionamiento';
+
+  @override
+  String get socialWelfareParkingNavDescription => 'Detalles de tu tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingInfoSheetTitle => 'Sobre Mi tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingInfoSheetDescription => 'Consulta los datos de tu tarjeta de estacionamiento en vigor para personas con discapacidad y movilidad reducida de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareParkingCardTitle => 'Mi tarjeta de estacionamiento';
+
+  @override
+  String get socialWelfareParkingCodeLabel => 'Código de la tarjeta';
+
+  @override
+  String get socialWelfareParkingModalityLabel => 'Modalidad';
+
+  @override
+  String get socialWelfareParkingValidFromLabel => 'Fecha de vigencia desde';
+
+  @override
+  String get socialWelfareParkingValidUntilLabel => 'Fecha de vigencia hasta';
+
+  @override
+  String get socialWelfareParkingUnavailableMessage => 'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get socialWelfareParkingErrorMessage => 'No se ha podido cargar tu tarjeta de estacionamiento.';
 
   @override
   String get socialWelfareParkingDescription => 'La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.';
@@ -850,7 +997,52 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareDependenciaTitle => 'Atención a la dependencia';
 
   @override
+  String get socialWelfareDependenciaNavDescription => 'Situación actual y prestaciones';
+
+  @override
+  String get socialWelfareDependenciaInfoSheetTitle => 'Sobre Atención a la dependencia';
+
+  @override
+  String get socialWelfareDependenciaInfoSheetDescription => 'Consulta los datos sobre tu situación actual de las prestaciones en ayuda a la dependencia.';
+
+  @override
+  String get socialWelfareDependenciaCurrentStatusTitle => 'Mi situación actual';
+
+  @override
+  String get socialWelfareDependenciaRequestDateLabel => 'Fecha de solicitud';
+
+  @override
+  String get socialWelfareDependenciaResolutionDateLabel => 'Fecha de resolución';
+
+  @override
+  String get socialWelfareDependenciaRecognizedDegreeLabel => 'Grado reconocido';
+
+  @override
+  String get socialWelfareDependenciaBaremoLabel => 'Baremo';
+
+  @override
+  String get socialWelfareDependenciaBenefitsTitle => 'Prestaciones';
+
+  @override
+  String get socialWelfareDependenciaBenefitResolutionDateLabel => 'Fecha resolución';
+
+  @override
+  String get socialWelfareDependenciaBenefitEffectiveDateLabel => 'Fecha efecto';
+
+  @override
+  String get socialWelfareDependenciaBenefitAmountLabel => 'Importe (€)';
+
+  @override
+  String get socialWelfareDependenciaUnavailableMessage => 'No hemos encontrado información de atención a la dependencia asociada a tus datos. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get socialWelfareDependenciaErrorMessage => 'No se ha podido cargar tu información de atención a la dependencia.';
+
+  @override
   String get socialWelfareDependenciaDescription => 'La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareServicesEmpty => 'Información y servicios de Bienestar disponible próximamente.';
 
   @override
   String get supportFormTitle => 'Soporte técnico';
@@ -1251,6 +1443,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get lifeEventsSaveAction => 'Guardar';
+
+  @override
+  String get lifeEventsAcceptAction => 'Aceptar';
+
+  @override
+  String get lifeEventsFillLaterAction => 'Rellenar luego';
+
+  @override
+  String get lifeEventsClearAllAction => 'Desmarcar todo';
 
   @override
   String get lifeEventsResetAction => 'Borrar preferencias';
@@ -2014,7 +2215,72 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationDetailPlaceholderPending => 'Detalle pendiente de habilitar en STORY-44.';
 
   @override
-  String get familiaNumerosaDetailTitle => 'Carnet de familia numerosa';
+  String get familiaNumerosaDetailTitle => 'Familia numerosa';
+
+  @override
+  String get familiaNumerosaInfoSheetTitle => 'Sobre Familia numerosa';
+
+  @override
+  String get familiaNumerosaInfoSheetDescription => 'Consulta los datos de tu título de familia numerosa.';
+
+  @override
+  String get familiaNumerosaTitleSection => 'Mi título de familia numerosa';
+
+  @override
+  String get familiaNumerosaRegionLabel => 'Comunidad autónoma';
+
+  @override
+  String get familiaNumerosaTitleNumberLabel => 'Número de título';
+
+  @override
+  String get familiaNumerosaCategoryLabel => 'Categoría';
+
+  @override
+  String get familiaNumerosaValidLabel => 'Vigente';
+
+  @override
+  String get familiaNumerosaIssueDateLabel => 'Fecha de expedición';
+
+  @override
+  String get familiaNumerosaExpiryDateLabel => 'Fecha de caducidad';
+
+  @override
+  String get familiaNumerosaChildrenCountLabel => 'Número de hijos/as del título';
+
+  @override
+  String get familiaNumerosaBeneficiariesTitle => 'Beneficiarios/as';
+
+  @override
+  String familiaNumerosaBeneficiaryTitle(int index) {
+    return 'Beneficiario/a $index';
+  }
+
+  @override
+  String get familiaNumerosaDocumentNumberLabel => 'Número de documento';
+
+  @override
+  String get familiaNumerosaBirthDateLabel => 'Fecha de nacimiento';
+
+  @override
+  String get familiaNumerosaFullNameLabel => 'Nombre y apellidos';
+
+  @override
+  String get familiaNumerosaHolderLabel => 'Titular';
+
+  @override
+  String get familiaNumerosaYes => 'Sí';
+
+  @override
+  String get familiaNumerosaNo => 'No';
+
+  @override
+  String get familiaNumerosaNoDataMessage => 'No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get familiaNumerosaContactHint => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get familiaNumerosaOfficeContactsButton => 'Listado de oficinas y contactos';
 
   @override
   String familiaNumerosaCardNumberLabel(String number) {
@@ -2161,7 +2427,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsTabNew => 'Novedades';
 
   @override
-  String get recommendationsTabImmediate => 'Tramitación inmediata';
+  String get recommendationsTabImmediate => 'Trámite inmediato';
 
   @override
   String get recommendationsImmediateBadge => 'Tramitación inmediata';
@@ -2174,6 +2440,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get recommendationsLifeEventPrefix => 'Hecho vital:';
+
+  @override
+  String get recommendationsAssociatedLifeEventsLabel => 'Hechos vitales asociados';
 
   @override
   String get recommendationsLoadMore => 'Ver más';
@@ -2246,4 +2515,452 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get drawerGoToSedeElectronica => 'Ir a Sede Electrónica';
+
+  @override
+  String get myDataTitle => 'Mis datos';
+
+  @override
+  String get myDataIntro => 'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.';
+
+  @override
+  String get myDataHealthTitle => 'Salud';
+
+  @override
+  String get myDataHealthDescription => 'SESCAM y servicios de salud';
+
+  @override
+  String get myDataSocialWelfareTitle => 'Bienestar Social';
+
+  @override
+  String get myDataSocialWelfareDescription => 'Servicios disponibles';
+
+  @override
+  String get myDataEmploymentTitle => 'Empleo';
+
+  @override
+  String get myDataEmploymentDescription => 'Demanda y servicios de empleo';
+
+  @override
+  String get myDataEmploymentInfoSheetTitle => 'Sobre Mis datos de Empleo';
+
+  @override
+  String get myDataEmploymentInfoSheetDescription => 'Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentDataTab => 'Mis datos de Empleo';
+
+  @override
+  String get myDataEmploymentServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataEmploymentDemandTitle => 'Tu demanda de empleo';
+
+  @override
+  String get myDataEmploymentRegistrationDateLabel => 'Fecha de inscripción sin interrupciones';
+
+  @override
+  String get myDataEmploymentDemandEmpty => 'No constan datos de demanda de empleo.';
+
+  @override
+  String get myDataEmploymentDemandError => 'No hemos podido cargar tu demanda de empleo.';
+
+  @override
+  String get myDataEmploymentOffersTitle => 'Inscripciones en ofertas';
+
+  @override
+  String get myDataEmploymentOffersDescription => 'Ofertas de empleo en las que te has inscrito';
+
+  @override
+  String get myDataEmploymentProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataEmploymentProcedureProfessionalCertificate => 'Expedición certificado de profesionalidad';
+
+  @override
+  String get myDataEmploymentProcedureJobSeekerRegistration => 'Inscripción como demandante de personas trabajadoras en oficinas de empleo y emprendedores';
+
+  @override
+  String get myDataEmploymentProcedureVirtualOfficeCredentials => 'Solicitud de credenciales de acceso a la oficina virtual de la consejería de empleo y economía para personas físicas, jurídicas y autónomos.';
+
+  @override
+  String get myDataEmploymentInterestLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataEmploymentLinkEmploymentClm => 'Empleo CLM';
+
+  @override
+  String get myDataEmploymentLinkPublicEmploymentClm => 'Empleo Público CLM';
+
+  @override
+  String get myDataEducationTitle => 'Educación';
+
+  @override
+  String get myDataEducationDescription => 'Titulos formativos';
+
+  @override
+  String get myDataHousingTitle => 'Vivienda';
+
+  @override
+  String get myDataHousingDescription => 'Titularidad de bienes inmueble';
+
+  @override
+  String get myDataHousingInfoSheetTitle => 'Sobre Mis datos de Vivienda';
+
+  @override
+  String get myDataHousingInfoSheetDescription => 'Consulta la información de tus bienes inmuebles, tu vivienda y los datos de tu domicilio actual.';
+
+  @override
+  String get myDataHousingDataTab => 'Mis datos de Vivienda';
+
+  @override
+  String get myDataHousingServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataHousingRealEstateTitle => 'Bienes inmuebles';
+
+  @override
+  String get myDataHousingRealEstateDescription => 'Datos catastrales de mis inmuebles';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetTitle => 'Sobre tus bienes inmueble';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetDescription => 'Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.';
+
+  @override
+  String get myDataHousingRealEstateInfoSheetFooter => 'Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro';
+
+  @override
+  String get myDataHousingRealEstateFilterAll => 'Todo';
+
+  @override
+  String get myDataHousingRealEstateFilterUrban => 'Urbano';
+
+  @override
+  String get myDataHousingRealEstateFilterRustic => 'Rústico';
+
+  @override
+  String myDataHousingRealEstateReferenceTitle(String value) {
+    return 'Referencia catastral $value';
+  }
+
+  @override
+  String get myDataHousingRealEstateDetailClose => 'Cerrar';
+
+  @override
+  String get myDataHousingRealEstateDetailHomeDataTitle => 'Datos de la vivienda';
+
+  @override
+  String get myDataHousingRealEstateReferenceLabel => 'Referencia catastral';
+
+  @override
+  String get myDataHousingRealEstateAddressLabel => 'Dirección';
+
+  @override
+  String get myDataHousingRealEstateUseLabel => 'Uso';
+
+  @override
+  String get myDataHousingRealEstateCadastralValueLabel => 'Valor catastral';
+
+  @override
+  String get myDataHousingRealEstateLandValueLabel => 'Valor del suelo';
+
+  @override
+  String get myDataHousingRealEstateConstructionValueLabel => 'Valor de construcción';
+
+  @override
+  String get myDataHousingRealEstateStatusLabel => 'Estado';
+
+  @override
+  String get myDataHousingRealEstateShowCartography => 'Mostrar cartografía';
+
+  @override
+  String get myDataHousingRealEstateHoldersTitle => 'Titulares';
+
+  @override
+  String get myDataHousingRealEstateHoldersEmpty => 'No constan titulares para este bien inmueble.';
+
+  @override
+  String get myDataHousingRealEstateDetailEmpty => 'No hemos encontrado el bien inmueble seleccionado.';
+
+  @override
+  String get myDataHousingRealEstateEmpty => 'No constan bienes inmuebles a tu nombre.';
+
+  @override
+  String get myDataHousingRealEstateFilteredEmpty => 'No hay bienes inmuebles para este filtro.';
+
+  @override
+  String get myDataHousingRealEstateError => 'No hemos podido cargar los datos de Catastro.';
+
+  @override
+  String get myDataHousingAddressTitle => 'Domicilio en Castilla-La Mancha';
+
+  @override
+  String get myDataHousingAddressDescription => 'Datos en la base padronal';
+
+  @override
+  String get myDataHousingAddressInfoSheetTitle => 'Sobre tu domicilio';
+
+  @override
+  String get myDataHousingAddressInfoSheetDescription => 'Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.';
+
+  @override
+  String get myDataHousingAddressInfoSheetFooter => 'Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.';
+
+  @override
+  String get myDataHousingAddressDataTitle => 'Datos del domicilio';
+
+  @override
+  String get myDataHousingAddressRegistrationDataTitle => 'Datos relativos a la inscripción';
+
+  @override
+  String get myDataHousingAddressLabel => 'Domicilio';
+
+  @override
+  String get myDataHousingAddressPostalCodeLabel => 'Código postal';
+
+  @override
+  String get myDataHousingAddressMunicipalityLabel => 'Municipio';
+
+  @override
+  String get myDataHousingAddressProvinceLabel => 'Provincia';
+
+  @override
+  String get myDataHousingAddressCollectiveEntityLabel => 'Entidad colectivo';
+
+  @override
+  String get myDataHousingAddressSingleEntityLabel => 'Entidad singular';
+
+  @override
+  String get myDataHousingAddressPopulationUnitLabel => 'Núcleo / Diseminado';
+
+  @override
+  String get myDataHousingAddressVariationTypeLabel => 'Tipo de variación';
+
+  @override
+  String get myDataHousingAddressVariationDateLabel => 'Fecha de variación';
+
+  @override
+  String get myDataHousingAddressEmpty => 'No constan datos de domicilio en Castilla-La Mancha.';
+
+  @override
+  String get myDataHousingAddressError => 'No hemos podido cargar tus datos de domicilio.';
+
+  @override
+  String get myDataHousingLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataHousingLinkClmHousing => 'Vivienda Castilla-La Mancha';
+
+  @override
+  String get myDataHousingLinkCadastre => 'Sede del catastro';
+
+  @override
+  String get myDataHousingProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataHousingProcedureYoungRentVoucher => 'Ayudas al bono alquiler joven en Castilla-La Mancha';
+
+  @override
+  String get myDataHousingProcedureProtectedHousingRegister => 'Inscripción en el registro de demandantes de vivienda con protección pública de CLM';
+
+  @override
+  String get myDataHousingProcedureSocialEmergencyAid => 'Ayudas de emergencia social';
+
+  @override
+  String get myDataVehiclesTitle => 'Vehículos';
+
+  @override
+  String get myDataVehiclesDescription => 'Tus vehículos registrados';
+
+  @override
+  String get myDataVehiclesInfoSheetTitle => 'Sobre Mis datos de Vehículos';
+
+  @override
+  String get myDataVehiclesInfoSheetDescription => 'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.';
+
+  @override
+  String get myDataVehiclesInfoSheetFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)';
+
+  @override
+  String get myDataVehiclesInfoSheetContactButton => 'Contactar';
+
+  @override
+  String get myDataVehiclesDataTab => 'Mis datos de Vehículos';
+
+  @override
+  String get myDataVehiclesServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataVehiclesSectionTitle => 'Mis vehículos';
+
+  @override
+  String get myDataVehiclesLicensePlateLabel => 'Matrícula del vehículo';
+
+  @override
+  String get myDataVehiclesEmpty => 'No constan vehículos registrados a tu nombre.';
+
+  @override
+  String get myDataVehiclesError => 'No hemos podido cargar tus vehículos.';
+
+  @override
+  String get myDataVehiclesServicesEmpty => 'Información y servicios de Vehículos disponible próximamente.';
+
+  @override
+  String get myDataVehiclesLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataVehiclesLinkDgt => 'Sede electrónica DGT';
+
+  @override
+  String get myDataVehiclesLinkAge => 'Carpeta Ciudadana de la AGE';
+
+  @override
+  String get myDataVehiclesProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataVehiclesProcedureMoves3Vehicle => 'Solicitud de ayuda MOVES III para adquisición de vehículos eléctricos';
+
+  @override
+  String get myDataVehiclesProcedureMoves3Infrastructure => 'Solicitud de ayuda MOVES III para implantación de infraestructura de recarga de vehículos eléctricos';
+
+  @override
+  String get myDataVehiclesProcedureCap => 'Homologación de cursos de formación de conductores (cap)';
+
+  @override
+  String myDataSectionComingSoon(String section) {
+    return '$section disponible próximamente';
+  }
+
+  @override
+  String get myDataHealthInfoMessage => 'Consulta tus datos de salud y las citas disponibles.';
+
+  @override
+  String get myDataEducationInfoSheetTitle => 'Sobre Mis datos de Educación';
+
+  @override
+  String get myDataEducationInfoSheetDescription => 'Consulta tu información y accede a servicios relacionados de educación en Castilla-La Mancha.';
+
+  @override
+  String get myDataEducationDataTab => 'Mis datos de Educación';
+
+  @override
+  String get myDataEducationServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataEducationUniversityTitles => 'Títulos universitarios';
+
+  @override
+  String get myDataEducationNonUniversityTitles => 'Títulos no universitarios';
+
+  @override
+  String get myDataEducationTitlesDescription => 'Universidades públicas y privadas';
+
+  @override
+  String get myDataEducationServicesEmpty => 'Información y servicios de Educación disponible próximamente.';
+
+  @override
+  String get myDataEducationProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataEducationProcedureEquivalence => 'Solicitud equivalencia de estudios con los títulos oficiales';
+
+  @override
+  String get myDataEducationProcedureScholarships => 'Becas y ayudas a alumnos de niveles postobligatorios';
+
+  @override
+  String get myDataEducationProcedureSecondaryDegree => 'Pruebas libres para la obtención del título de graduado en educación secundaria obligatoria para > 18 años';
+
+  @override
+  String get myDataEducationInterestLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataEducationInterestLinkPlaceholder => 'Lorem ipsum dolor sit amet';
+
+  @override
+  String get myDataHealthInfoSheetTitle => 'Sobre Mis datos de Salud';
+
+  @override
+  String get myDataHealthInfoSheetDescription => 'Consulta la información de tus citas de Atención Primaria del Servicio de Salud de Castilla-La Mancha (SESCAM).';
+
+  @override
+  String get myDataHealthInfoSheetContactHint => 'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.';
+
+  @override
+  String get myDataHealthDataTab => 'Mis datos de Salud';
+
+  @override
+  String get myDataHealthServicesTab => 'Información y servicios';
+
+  @override
+  String get myDataHealthProceduresTitle => 'Trámites que te pueden interesar';
+
+  @override
+  String get myDataHealthProcedureComplaints => 'Reclamaciones y quejas relativas al SESCAM';
+
+  @override
+  String get myDataHealthProcedureHealthCard => 'Solicitud de tarjeta para la Atención Sanitaria en el SESCAM';
+
+  @override
+  String get myDataHealthProcedureSpecializedCare => 'Libre elección en el ámbito de la Atención Especializada';
+
+  @override
+  String get myDataHealthInterestLinksTitle => 'Enlaces de interés';
+
+  @override
+  String get myDataHealthLinkSescam => 'Servicio de Salud de Castilla-La Mancha (SESCAM)';
+
+  @override
+  String get myDataHealthLinkDigitalHealth => 'Mi Salud Digital';
+
+  @override
+  String get myDataHealthLinkClinicalHistory => 'Historia clínica Digital (Sistema Nacional de Salud)';
+
+  @override
+  String get myDataHealthAppointmentsTitle => 'Citas de Atención Primaria';
+
+  @override
+  String get myDataHealthAppointmentsEmpty => 'No hay citas para mostrar.';
+
+  @override
+  String get myDataHealthAppointmentsError => 'No hemos podido cargar tus citas sanitarias.';
+
+  @override
+  String get myDataHealthCip => 'CIP: FCCT590551910012';
+
+  @override
+  String get myDataHealthPendingTab => 'Pendientes';
+
+  @override
+  String get myDataHealthPastTab => 'Pasadas';
+
+  @override
+  String get myDataHealthYear => '2026';
+
+  @override
+  String get myDataHealthDecember => 'diciembre';
+
+  @override
+  String get myDataHealthOctober => 'octubre';
+
+  @override
+  String get myDataHealthAppointmentDayNumber => '12';
+
+  @override
+  String get myDataHealthAppointmentWeekday => 'Jueves';
+
+  @override
+  String get myDataHealthAppointmentTime => '17:35h';
+
+  @override
+  String get myDataHealthAppointmentType => 'TELÉFONICA';
+
+  @override
+  String get myDataHealthAppointmentProfessional => 'Dr. José Manuel Fernández García';
+
+  @override
+  String get myDataHealthAppointmentDescription => 'Cita de Atención Primaria';
+
+  @override
+  String get myDataHealthAppointmentModality => 'Teleconsulta a demanda';
 }

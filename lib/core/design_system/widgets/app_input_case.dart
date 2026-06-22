@@ -196,7 +196,7 @@ class _AppInputCaseState extends State<AppInputCase> {
       AppInputState.active || AppInputState.filled => (
         AppColors.primary,
         AppColors.surface,
-        AppColors.textSecondary,
+        AppColors.primary,
       ),
       AppInputState.error => (
         AppColors.error,
@@ -214,9 +214,9 @@ class _AppInputCaseState extends State<AppInputCase> {
         AppColors.textDisabled,
       ),
       AppInputState.defaultState => (
-        AppColors.outline,
+        AppColors.borderBlueMutedBase,
         AppColors.surface,
-        AppColors.textSecondary,
+        AppColors.primary,
       ),
     };
   }
@@ -266,56 +266,62 @@ class _AppInputCaseState extends State<AppInputCase> {
             required: widget.isRequired,
           ),
           const SizedBox(height: AppDimensions.space4),
-          TextField(
-            controller: widget.controller,
-            focusNode: _focusNode,
-            onChanged: widget.onChanged,
-            onSubmitted: widget.onSubmitted,
-            obscureText: widget.obscureText,
-            keyboardType: widget.keyboardType,
-            enabled: !isDisabled && !widget.readOnly,
-            readOnly: widget.readOnly,
-            maxLines: widget.maxLines,
-            style: AppTypography.bodyRegular.copyWith(
-              color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+          DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.low,
             ),
-            decoration: InputDecoration(
-              hintText: widget.hint,
-              hintStyle: AppTypography.bodyRegular.copyWith(
-                color: AppColors.textDisabled,
+            child: TextField(
+              controller: widget.controller,
+              focusNode: _focusNode,
+              onChanged: widget.onChanged,
+              onSubmitted: widget.onSubmitted,
+              obscureText: widget.obscureText,
+              keyboardType: widget.keyboardType,
+              enabled: !isDisabled && !widget.readOnly,
+              readOnly: widget.readOnly,
+              maxLines: widget.maxLines,
+              style: AppTypography.leadingMedium.copyWith(
+                color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
               ),
-              filled: true,
-              fillColor: fillColor,
-              prefixIcon: widget.prefixIcon,
-              suffixIcon: _trailIcon,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space12,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-                borderSide: BorderSide(color: borderColor),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-                borderSide: BorderSide(color: borderColor, width: 2),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-                borderSide: BorderSide(
-                  color: AppColors.outline.withValues(alpha: 0.5),
+              decoration: InputDecoration(
+                hintText: widget.hint,
+                hintStyle: AppTypography.leadingMedium.copyWith(
+                  color: AppColors.borderBlueMutedBase,
                 ),
+                filled: true,
+                fillColor: fillColor,
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: _trailIcon,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space8,
+                  vertical: AppDimensions.space12,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  borderSide: BorderSide(color: borderColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  borderSide: BorderSide(color: borderColor, width: 2),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  borderSide: BorderSide(
+                    color: AppColors.outline.withValues(alpha: 0.5),
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  borderSide: const BorderSide(color: AppColors.error),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  borderSide: const BorderSide(color: AppColors.error, width: 2),
+                ),
+                errorText: widget.errorText,
+                helperText: widget.helperText,
               ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-                borderSide: const BorderSide(color: AppColors.error),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-                borderSide: const BorderSide(color: AppColors.error, width: 2),
-              ),
-              errorText: widget.errorText,
-              helperText: widget.helperText,
             ),
           ),
         ],
@@ -500,12 +506,14 @@ class _AppInputAreaState extends State<AppInputArea> {
                 right: AppDimensions.space4,
                 child: GestureDetector(
                   onTap: () => setState(() => _isExpanded = !_isExpanded),
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppDimensions.space4),
-                    child: Icon(
-                      _isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
-                      size: AppDimensions.iconMedium,
-                      color: isDisabled ? AppColors.textDisabled : AppColors.neutralDark,
+                  child: SizedBox.square(
+                    dimension: AppDimensions.minTouchTarget,
+                    child: Center(
+                      child: Icon(
+                        _isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                        size: AppDimensions.iconMedium,
+                        color: isDisabled ? AppColors.textDisabled : AppColors.neutralDark,
+                      ),
                     ),
                   ),
                 ),

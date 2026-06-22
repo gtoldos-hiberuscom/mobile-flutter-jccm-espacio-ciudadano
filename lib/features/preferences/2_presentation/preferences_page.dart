@@ -10,11 +10,13 @@ import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dar
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/usecases/load_notification_contact_usecase.dart';
@@ -109,6 +111,7 @@ class PreferencesPage extends ConsumerStatefulWidget {
 
 class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   bool _updatingBiometrics = false;
+  bool _deletingAccount = false;
 
   @override
   Widget build(final BuildContext context) {
@@ -217,6 +220,15 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(idAgente, preferences.biometricEnabled)),
           showInactiveIcon: true,
         ),
+        const SizedBox(height: AppDimensions.space24),
+        AppButton(
+          label: 'Eliminar cuenta',
+          leadingIcon: AppIcons.close,
+          intent: AppButtonIntent.destructive,
+          isExpanded: true,
+          isLoading: _deletingAccount,
+          onPressed: _deletingAccount ? null : () => unawaited(_confirmAndDeleteAccount(idAgente)),
+        ),
       ],
     );
   }
@@ -295,6 +307,96 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       return;
     }
     ref.invalidate(_preferencesStateProvider(preferencesArgs));
+  }
+
+  Future<void> _confirmAndDeleteAccount(final String idAgente) async {
+    final confirmed = await AppDestructiveConfirmDialog.show(
+      context,
+      title: 'Eliminación de cuenta y revocación de permisos',
+      description:
+          '¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\n'
+          'Al hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.',
+      cancelLabel: 'Cancelar',
+      confirmLabel: 'Eliminar',
+    );
+    if (confirmed != true || !mounted) {
+      return;
+    }
+    if (idAgente.isEmpty) {
+      AppAlertSnackbar.show(
+        context,
+        message: 'No se ha encontrado el identificador del usuario.',
+        severity: AppAlertSeverity.error,
+      );
+      return;
+    }
+
+    setState(() => _deletingAccount = true);
+    final resetError = await _resetAccountPreferences(idAgente);
+    if (!mounted) {
+      return;
+    }
+    if (resetError != null) {
+      setState(() => _deletingAccount = false);
+      AppAlertSnackbar.show(
+        context,
+        message: resetError,
+        severity: AppAlertSeverity.error,
+      );
+      return;
+    }
+
+    await ref.read(appStorageProvider).write(StorageKeys.forceClaveLoginOnNextLogin, true);
+    await ref.read(authSessionControllerProvider).clear();
+    if (!mounted) {
+      return;
+    }
+    context.go(Routes.landing);
+  }
+
+  Future<String?> _resetAccountPreferences(final String idAgente) async {
+    final lifeEventsError = await _resetLifeEvents(idAgente);
+    if (lifeEventsError != null) {
+      return lifeEventsError;
+    }
+
+    final appStorage = ref.read(appStorageProvider);
+    final writes = await Future.wait([
+      appStorage.remove('${StorageKeys.consentAcceptedPrefix}$idAgente'),
+      appStorage.remove('${StorageKeys.consentAcceptedClausesPrefix}$idAgente'),
+      appStorage.remove('${StorageKeys.lifeEventsOnboardingSeenPrefix}$idAgente'),
+      appStorage.remove('${StorageKeys.lifeEventsLastUpdatedAtPrefix}$idAgente'),
+    ]);
+    if (writes.any((final success) => !success)) {
+      return 'No hemos podido borrar tus autorizaciones. Inténtalo de nuevo.';
+    }
+    return null;
+  }
+
+  Future<String?> _resetLifeEvents(final String idAgente) async {
+    final loadResult = await ref.read(loadLifeEventsUsecaseProvider).execute(idAgente: idAgente);
+    if (!mounted) {
+      return null;
+    }
+    switch (loadResult) {
+      case LoadLifeEventsSuccess(:final events):
+        if (events.isEmpty || !events.any((final event) => event.selected)) {
+          return null;
+        }
+        final clearedEvents = events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
+        final saveResult = await ref
+            .read(saveLifeEventsUsecaseProvider)
+            .execute(
+              idAgente: idAgente,
+              events: clearedEvents,
+            );
+        return switch (saveResult) {
+          SaveLifeEventsSuccess() => null,
+          SaveLifeEventsFailed(:final message) => message,
+        };
+      case LoadLifeEventsFailed(:final message):
+        return message;
+    }
   }
 }
 

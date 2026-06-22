@@ -805,6 +805,7 @@ class AppFloatingNavigation extends StatelessWidget {
     super.key,
     this.enabledTabs,
     this.minTabWidths,
+    this.leading,
     this.trailing,
   });
 
@@ -813,6 +814,7 @@ class AppFloatingNavigation extends StatelessWidget {
   final ValueChanged<int> onTabSelected;
   final List<bool>? enabledTabs;
   final List<double>? minTabWidths;
+  final Widget? leading;
   final Widget? trailing;
 
   @override
@@ -836,6 +838,7 @@ class AppFloatingNavigation extends StatelessWidget {
       child: Row(
         spacing: AppDimensions.space8,
         children: [
+          ?leading,
           ...List.generate(tabs.length, (final int index) {
             final bool isSelected = index == selectedIndex;
             final bool isEnabled = enabledTabs?[index] ?? true;
@@ -1051,7 +1054,7 @@ class _FloatingNavTab extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        height: 40,
+        height: AppDimensions.minTouchTarget,
         constraints: BoxConstraints(minWidth: minWidth),
         decoration: BoxDecoration(
           color: backgroundColor,

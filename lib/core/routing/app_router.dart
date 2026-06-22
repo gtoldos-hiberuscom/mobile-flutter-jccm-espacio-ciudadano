@@ -15,9 +15,27 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_a
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_help_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/login_callback_page.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/support_form_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/accessibility_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_notice_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/privacy_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_education_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_employment_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_health_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_address_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_real_estate_detail_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_real_estate_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_non_university_titles_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_dependency_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_disability_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_family_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_parking_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_thermal_spa_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_university_titles_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_vehicles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/notification_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/preferences_page.dart';
@@ -84,6 +102,14 @@ final goRouterProvider = Provider<GoRouter>(
           ),
         ),
 
+        GoRoute(
+          path: Routes.supportForm,
+          pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
+            state,
+            const SupportFormPage(),
+          ),
+        ),
+
         // ── Legal ────────────────────────────────────────────────────────────
         GoRoute(
           path: Routes.legalPrivacy,
@@ -145,6 +171,93 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.agenda,
               builder: (final BuildContext context, final GoRouterState state) => const AgendaPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myData,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataHealth,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataHealthPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEmployment,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataEmploymentPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfare,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfarePage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareFamily,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareFamilyPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareDisability,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareDisabilityPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareThermalSpa,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareThermalSpaPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareDependency,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareDependencyPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataSocialWelfareParking,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfareParkingPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEducation,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataEducationPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEducationUniversityTitles,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataUniversityTitlesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEducationNonUniversityTitles,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataNonUniversityTitlesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataHousing,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataHousingPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataHousingRealEstate,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataHousingRealEstatePage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataHousingRealEstateDetail,
+              builder: (final BuildContext context, final GoRouterState state) => MyDataHousingRealEstateDetailPage(
+                reference: state.pathParameters['reference'] ?? '',
+              ),
+            ),
+
+            GoRoute(
+              path: Routes.myDataHousingAddress,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataHousingAddressPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataVehicles,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataVehiclesPage(),
             ),
 
             GoRoute(

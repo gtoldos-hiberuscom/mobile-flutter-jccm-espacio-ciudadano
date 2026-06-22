@@ -105,7 +105,7 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         continue;
       }
 
-      final startDate = _date(rawProcedure['fechaPresentacionIni'] ?? rawProcedure['fechaInicio']);
+      final startDate = _date(rawProcedure['fechaPresentacionIni'] ?? rawProcedure['fechaPresentacion'] ?? rawProcedure['fechaInicio']);
       final endDate = _date(rawProcedure['fechaPresentacionFin'] ?? rawProcedure['fechaFin']);
 
       yield Recommendation(
@@ -114,7 +114,9 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         lifeEventId: lifeEventId,
         lifeEventName: lifeEventName,
         badge: _badge(startDate: startDate, endDate: endDate),
-        responsibleUnit: _stringOrNull(rawProcedure['nombreUnidadResponsable'] ?? rawProcedure['unidadResponsable']),
+        responsibleUnit: _stringOrNull(
+          rawProcedure['nombreUnidadOrganicaResponsable'] ?? rawProcedure['nombreUnidadResponsable'] ?? rawProcedure['unidadResponsable'],
+        ),
         submissionStartDate: startDate,
         submissionEndDate: endDate,
         detailUrl: _uri(rawProcedure['url'] ?? rawProcedure['urlDetalle'] ?? rawProcedure['enlace']),

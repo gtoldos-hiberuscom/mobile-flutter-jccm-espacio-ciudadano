@@ -77,7 +77,23 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
       appBar: AppNavBar(
         type: widget.isOnboarding ? AppNavBarType.detail : AppNavBarType.level2,
         title: l10n.lifeEventsTitle,
-        showLeading: !widget.isOnboarding,
+        leading: widget.isOnboarding
+            ? IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  color: AppColors.textPrimary,
+                  size: AppDimensions.iconLarge,
+                ),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go(widget.returnTo);
+                  }
+                },
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              )
+            : null,
         onBack: () {
           if (context.canPop()) {
             context.pop();
@@ -111,17 +127,27 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           ),
 
           // ── Sticky bottom bar ───────────────────────────────────────────
-          AppStickyBar(
-            type: AppStickyBarType.dicotomy,
-            secondaryLabel: isPreferencesEditing ? 'Limpiar' : l10n.lifeEventsResetCancel,
-            onSecondary: isPreferencesEditing ? notifier.clearSelection : notifier.requestReset,
-            secondaryHierarchy: AppButtonHierarchy.tertiary,
-            secondaryLeadingIcon: Icons.highlight_off,
-            primaryLabel: l10n.lifeEventsSaveAction,
-            onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
-            isPrimaryLoading: isSaving,
-            primaryLeadingIcon: Icons.check,
-          ),
+          if (widget.isOnboarding)
+            _OnboardingStickyBar(
+              l10n: l10n,
+              canSave: !isSaving,
+              isSaving: isSaving,
+              onFillLater: () => unawaited(notifier.skipOnboarding()),
+              onClearAll: notifier.clearSelection,
+              onSave: () => unawaited(notifier.save()),
+            )
+          else
+            AppStickyBar(
+              type: AppStickyBarType.dicotomy,
+              secondaryLabel: isPreferencesEditing ? 'Limpiar' : l10n.lifeEventsResetCancel,
+              onSecondary: isPreferencesEditing ? notifier.clearSelection : notifier.requestReset,
+              secondaryHierarchy: AppButtonHierarchy.tertiary,
+              secondaryLeadingIcon: Icons.highlight_off,
+              primaryLabel: l10n.lifeEventsSaveAction,
+              onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
+              isPrimaryLoading: isSaving,
+              primaryLeadingIcon: Icons.check,
+            ),
         ],
       ),
     );
@@ -148,6 +174,9 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         context.pop();
         return;
       }
+      context.go(widget.returnTo);
+    }
+    if (next.status == LifeEventsStatus.onboardingSkipped) {
       context.go(widget.returnTo);
     }
     if (next.status == LifeEventsStatus.saveError) {
@@ -260,6 +289,68 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
               padding: EdgeInsets.only(top: AppDimensions.space24),
               child: AppLoadingIndicator(),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OnboardingStickyBar extends StatelessWidget {
+  const _OnboardingStickyBar({
+    required this.l10n,
+    required this.canSave,
+    required this.isSaving,
+    required this.onFillLater,
+    required this.onClearAll,
+    required this.onSave,
+  });
+
+  final AppLocalizations l10n;
+  final bool canSave;
+  final bool isSaving;
+  final VoidCallback onFillLater;
+  final VoidCallback? onClearAll;
+  final VoidCallback onSave;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(
+        AppDimensions.space16,
+        AppDimensions.space16,
+        AppDimensions.space16,
+        AppDimensions.space16 + MediaQuery.of(context).padding.bottom,
+      ),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(
+          top: BorderSide(color: Color(0xFFE5E2E1)),
+        ),
+        boxShadow: AppShadows.low,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppButton(
+            label: l10n.lifeEventsFillLaterAction,
+            onPressed: onFillLater,
+            hierarchy: AppButtonHierarchy.tertiary,
+          ),
+          const SizedBox(height: AppDimensions.space16),
+          AppButton(
+            label: l10n.lifeEventsClearAllAction,
+            onPressed: onClearAll,
+            hierarchy: AppButtonHierarchy.secondary,
+            leadingIcon: Icons.sync,
+          ),
+          const SizedBox(height: AppDimensions.space16),
+          AppButton(
+            label: l10n.lifeEventsAcceptAction,
+            onPressed: canSave ? onSave : null,
+            isLoading: isSaving,
+            leadingIcon: Icons.check,
+          ),
         ],
       ),
     );

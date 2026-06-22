@@ -55,7 +55,7 @@ class AppInfoLabel extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          label,
+          label.toUpperCase(),
           style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
         ),
       ),

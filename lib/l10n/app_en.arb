@@ -212,6 +212,10 @@
   "@consentScrollHint": {
     "description": "Hint prompting the user to scroll to the end of the legal content."
   },
+  "consentLegalInfoSnackBar": "Read the information about data processing and protection before continuing",
+  "@consentLegalInfoSnackBar": {
+    "description": "SnackBar shown when tapping the info button on the onboarding data-protection screen."
+  },
   "consentInfoButtonSemantics": "View full legal information",
   "@consentInfoButtonSemantics": {
     "description": "Accessibility label for the legal info button in step 2."
@@ -964,6 +968,22 @@
   "@educationUniversityTitlesError": {
     "description": "Education — university titles error."
   },
+  "educationUniversityTitlesInfoTitle": "About your university degrees",
+  "@educationUniversityTitlesInfoTitle": {
+    "description": "Education — help modal title for university titles."
+  },
+  "educationUniversityTitlesInfoBody": "Check the data of degrees listed in the National Register of Official University Graduates of the Ministry of Science, Innovation and Universities.\nIf your degree is prior to 1996, your data may not be automatically displayed.",
+  "@educationUniversityTitlesInfoBody": {
+    "description": "Education — help modal main body for university titles."
+  },
+  "educationUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Ministry of Science, Innovation and Universities.",
+  "@educationUniversityTitlesInfoFooter": {
+    "description": "Education — help modal footer text for university titles."
+  },
+  "educationUniversityTitlesInfoContactButton": "Contact",
+  "@educationUniversityTitlesInfoContactButton": {
+    "description": "Education — contact button in help modal for university titles."
+  },
   "educationNonUniversityTitlesTitle": "Non-university titles",
   "@educationNonUniversityTitlesTitle": {
     "description": "Education — non-university titles section."
@@ -1061,9 +1081,101 @@
   "@socialWelfareHeaderDescription": {
     "description": "Social welfare — header description."
   },
+  "socialWelfareScreenTitle": "Social welfare",
+  "@socialWelfareScreenTitle": {
+    "description": "Social welfare data — screen title."
+  },
+  "socialWelfareDataTab": "Social welfare data",
+  "@socialWelfareDataTab": {
+    "description": "Social welfare data — personal data tab."
+  },
+  "socialWelfareServicesTab": "Information and services",
+  "@socialWelfareServicesTab": {
+    "description": "Social welfare data — information and services tab."
+  },
+  "socialWelfareInterestLinksTitle": "Links of interest",
+  "@socialWelfareInterestLinksTitle": {
+    "description": "Social welfare data — links of interest section title."
+  },
+  "socialWelfareSuggestedProceduresTitle": "Procedures that may interest you",
+  "@socialWelfareSuggestedProceduresTitle": {
+    "description": "Social welfare data — suggested procedures section title."
+  },
+  "socialWelfareDisabilityRecognitionProcedure": "Recognition of disability degree",
+  "@socialWelfareDisabilityRecognitionProcedure": {
+    "description": "Social welfare data — disability recognition procedure link."
+  },
+  "socialWelfareEarlyCareProcedure": "Access to early care service",
+  "@socialWelfareEarlyCareProcedure": {
+    "description": "Social welfare data — early care procedure link."
+  },
+  "socialWelfareTemporaryResidentialStayProcedure": "Place for temporary stays in residential centres for older people",
+  "@socialWelfareTemporaryResidentialStayProcedure": {
+    "description": "Social welfare data — temporary residential stay procedure link."
+  },
+  "socialWelfareInfoSheetTitle": "About Social welfare data",
+  "@socialWelfareInfoSheetTitle": {
+    "description": "Social welfare data — info sheet title."
+  },
+  "socialWelfareInfoSheetDescription": "Check the information for your Social Welfare files and access the services available from the Government of Castilla-La Mancha.",
+  "@socialWelfareInfoSheetDescription": {
+    "description": "Social welfare data — info sheet description."
+  },
   "socialWelfareFamilyTitle": "Large family",
   "@socialWelfareFamilyTitle": {
     "description": "Social welfare — large family section."
+  },
+  "socialWelfareFamilyNavDescription": "Title details and beneficiaries",
+  "@socialWelfareFamilyNavDescription": {
+    "description": "Social welfare data — large family card description."
+  },
+  "socialWelfareDisabilityTitle": "Disability",
+  "@socialWelfareDisabilityTitle": {
+    "description": "Social welfare data — disability card title."
+  },
+  "socialWelfareDisabilityNavDescription": "Disability title details",
+  "@socialWelfareDisabilityNavDescription": {
+    "description": "Social welfare data — disability card description."
+  },
+  "socialWelfareDisabilityInfoSheetTitle": "About My disability title",
+  "@socialWelfareDisabilityInfoSheetTitle": {
+    "description": "Social welfare data — disability info sheet title."
+  },
+  "socialWelfareDisabilityInfoSheetDescription": "Check the details of your disability title.",
+  "@socialWelfareDisabilityInfoSheetDescription": {
+    "description": "Social welfare data — disability info sheet description."
+  },
+  "socialWelfareDisabilityTitleSection": "My disability title",
+  "@socialWelfareDisabilityTitleSection": {
+    "description": "Social welfare data — disability title section."
+  },
+  "socialWelfareDisabilityEffectiveDateLabel": "Effective date",
+  "@socialWelfareDisabilityEffectiveDateLabel": {
+    "description": "Social welfare data — effective date label."
+  },
+  "socialWelfareDisabilityPermanentValidityLabel": "Permanent validity",
+  "@socialWelfareDisabilityPermanentValidityLabel": {
+    "description": "Social welfare data — permanent validity label."
+  },
+  "socialWelfareDisabilityFileNumberLabel": "File number",
+  "@socialWelfareDisabilityFileNumberLabel": {
+    "description": "Social welfare data — file number label."
+  },
+  "socialWelfareDisabilityBirthDateLabel": "Birth date",
+  "@socialWelfareDisabilityBirthDateLabel": {
+    "description": "Social welfare data — birth date label."
+  },
+  "socialWelfareDisabilityMobilityLabel": "Reduced mobility applies",
+  "@socialWelfareDisabilityMobilityLabel": {
+    "description": "Social welfare data — reduced mobility label."
+  },
+  "socialWelfareDisabilityThirdPersonLabel": "Third-person assistance recognized",
+  "@socialWelfareDisabilityThirdPersonLabel": {
+    "description": "Social welfare data — third-person assistance label."
+  },
+  "socialWelfareDisabilityRoyalDecreeLabel": "Royal decree used to grant the degree",
+  "@socialWelfareDisabilityRoyalDecreeLabel": {
+    "description": "Social welfare data — royal decree label."
   },
   "socialWelfareFamilySource": "Source: Junta de Comunidades de Castilla-La Mancha",
   "@socialWelfareFamilySource": {
@@ -1129,6 +1241,46 @@
   "@socialWelfareTermalismoTitle": {
     "description": "Social welfare — thermal-spa section (external link)."
   },
+  "socialWelfareTermalismoNavTitle": "Thermal spas",
+  "@socialWelfareTermalismoNavTitle": {
+    "description": "Social welfare data — thermal-spa card title."
+  },
+  "socialWelfareTermalismoNavDescription": "Assigned spa resort",
+  "@socialWelfareTermalismoNavDescription": {
+    "description": "Social welfare data — thermal-spa card description."
+  },
+  "socialWelfareTermalismoInfoSheetTitle": "About Thermal spas",
+  "@socialWelfareTermalismoInfoSheetTitle": {
+    "description": "Social welfare data — thermal-spa info sheet title."
+  },
+  "socialWelfareTermalismoInfoSheetDescription": "Check the details of the latest spa resort definitively assigned to you in the Castilla-La Mancha Thermal Spa Programme.",
+  "@socialWelfareTermalismoInfoSheetDescription": {
+    "description": "Social welfare data — thermal-spa info sheet description."
+  },
+  "socialWelfareTermalismoAwardTitle": "Latest assigned spa resort",
+  "@socialWelfareTermalismoAwardTitle": {
+    "description": "Social welfare data — latest assigned spa resort section."
+  },
+  "socialWelfareTermalismoSpaNameLabel": "Spa resort name",
+  "@socialWelfareTermalismoSpaNameLabel": {
+    "description": "Social welfare data — spa resort name label."
+  },
+  "socialWelfareTermalismoStartDateLabel": "Start date",
+  "@socialWelfareTermalismoStartDateLabel": {
+    "description": "Social welfare data — start date label."
+  },
+  "socialWelfareTermalismoEndDateLabel": "End date",
+  "@socialWelfareTermalismoEndDateLabel": {
+    "description": "Social welfare data — end date label."
+  },
+  "socialWelfareTermalismoUnavailableMessage": "We could not find thermal-spa information associated with your data. Please try again later.",
+  "@socialWelfareTermalismoUnavailableMessage": {
+    "description": "Social welfare data — thermal-spa empty state."
+  },
+  "socialWelfareTermalismoErrorMessage": "Your thermal-spa information could not be loaded.",
+  "@socialWelfareTermalismoErrorMessage": {
+    "description": "Social welfare data — thermal-spa loading error."
+  },
   "socialWelfareTermalismoDescription": "The Castilla-La Mancha thermal-spa program is managed through the official Social Welfare portal.",
   "@socialWelfareTermalismoDescription": {
     "description": "Social welfare — thermal-spa copy."
@@ -1136,6 +1288,50 @@
   "socialWelfareParkingTitle": "Parking card",
   "@socialWelfareParkingTitle": {
     "description": "Social welfare — parking card section (external link)."
+  },
+  "socialWelfareParkingNavTitle": "Parking card",
+  "@socialWelfareParkingNavTitle": {
+    "description": "Social welfare data — parking card title."
+  },
+  "socialWelfareParkingNavDescription": "Your parking card details",
+  "@socialWelfareParkingNavDescription": {
+    "description": "Social welfare data — parking card description."
+  },
+  "socialWelfareParkingInfoSheetTitle": "About My parking card",
+  "@socialWelfareParkingInfoSheetTitle": {
+    "description": "Social welfare data — parking card info sheet title."
+  },
+  "socialWelfareParkingInfoSheetDescription": "Check the details of your current parking card for people with disabilities and reduced mobility in Castilla-La Mancha.",
+  "@socialWelfareParkingInfoSheetDescription": {
+    "description": "Social welfare data — parking card info sheet description."
+  },
+  "socialWelfareParkingCardTitle": "My parking card",
+  "@socialWelfareParkingCardTitle": {
+    "description": "Social welfare data — parking card detail title."
+  },
+  "socialWelfareParkingCodeLabel": "Card code",
+  "@socialWelfareParkingCodeLabel": {
+    "description": "Social welfare data — parking card code label."
+  },
+  "socialWelfareParkingModalityLabel": "Modality",
+  "@socialWelfareParkingModalityLabel": {
+    "description": "Social welfare data — modality label."
+  },
+  "socialWelfareParkingValidFromLabel": "Valid from",
+  "@socialWelfareParkingValidFromLabel": {
+    "description": "Social welfare data — valid from label."
+  },
+  "socialWelfareParkingValidUntilLabel": "Valid until",
+  "@socialWelfareParkingValidUntilLabel": {
+    "description": "Social welfare data — valid until label."
+  },
+  "socialWelfareParkingUnavailableMessage": "We could not find parking card information associated with your data. Please try again later.",
+  "@socialWelfareParkingUnavailableMessage": {
+    "description": "Social welfare data — parking card empty state."
+  },
+  "socialWelfareParkingErrorMessage": "Your parking card could not be loaded.",
+  "@socialWelfareParkingErrorMessage": {
+    "description": "Social welfare data — parking card loading error."
   },
   "socialWelfareParkingDescription": "Requesting and managing the disability parking card is handled in the corresponding e-office.",
   "@socialWelfareParkingDescription": {
@@ -1145,9 +1341,69 @@
   "@socialWelfareDependenciaTitle": {
     "description": "Social welfare — dependency support section (external link)."
   },
+  "socialWelfareDependenciaNavDescription": "Current situation and benefits",
+  "@socialWelfareDependenciaNavDescription": {
+    "description": "Social welfare data — dependency support card description."
+  },
+  "socialWelfareDependenciaInfoSheetTitle": "About Dependency care",
+  "@socialWelfareDependenciaInfoSheetTitle": {
+    "description": "Social welfare data — dependency care info sheet title."
+  },
+  "socialWelfareDependenciaInfoSheetDescription": "Check the details of your current situation and dependency care benefits.",
+  "@socialWelfareDependenciaInfoSheetDescription": {
+    "description": "Social welfare data — dependency care info sheet description."
+  },
+  "socialWelfareDependenciaCurrentStatusTitle": "My current situation",
+  "@socialWelfareDependenciaCurrentStatusTitle": {
+    "description": "Social welfare data — current situation title."
+  },
+  "socialWelfareDependenciaRequestDateLabel": "Request date",
+  "@socialWelfareDependenciaRequestDateLabel": {
+    "description": "Social welfare data — request date label."
+  },
+  "socialWelfareDependenciaResolutionDateLabel": "Resolution date",
+  "@socialWelfareDependenciaResolutionDateLabel": {
+    "description": "Social welfare data — resolution date label."
+  },
+  "socialWelfareDependenciaRecognizedDegreeLabel": "Recognized degree",
+  "@socialWelfareDependenciaRecognizedDegreeLabel": {
+    "description": "Social welfare data — recognized degree label."
+  },
+  "socialWelfareDependenciaBaremoLabel": "Scale",
+  "@socialWelfareDependenciaBaremoLabel": {
+    "description": "Social welfare data — scale label."
+  },
+  "socialWelfareDependenciaBenefitsTitle": "Benefits",
+  "@socialWelfareDependenciaBenefitsTitle": {
+    "description": "Social welfare data — benefits title."
+  },
+  "socialWelfareDependenciaBenefitResolutionDateLabel": "Resolution date",
+  "@socialWelfareDependenciaBenefitResolutionDateLabel": {
+    "description": "Social welfare data — benefit resolution date label."
+  },
+  "socialWelfareDependenciaBenefitEffectiveDateLabel": "Effective date",
+  "@socialWelfareDependenciaBenefitEffectiveDateLabel": {
+    "description": "Social welfare data — benefit effective date label."
+  },
+  "socialWelfareDependenciaBenefitAmountLabel": "Amount (€)",
+  "@socialWelfareDependenciaBenefitAmountLabel": {
+    "description": "Social welfare data — benefit amount label."
+  },
+  "socialWelfareDependenciaUnavailableMessage": "We could not find dependency care information associated with your data. Please try again later.",
+  "@socialWelfareDependenciaUnavailableMessage": {
+    "description": "Social welfare data — dependency care empty state."
+  },
+  "socialWelfareDependenciaErrorMessage": "Your dependency care information could not be loaded.",
+  "@socialWelfareDependenciaErrorMessage": {
+    "description": "Social welfare data — dependency care loading error."
+  },
   "socialWelfareDependenciaDescription": "Information and procedures for the Dependency Act are managed on the official Castilla-La Mancha Social Welfare portal.",
   "@socialWelfareDependenciaDescription": {
     "description": "Social welfare — dependency copy."
+  },
+  "socialWelfareServicesEmpty": "Social welfare information and services will be available soon.",
+  "@socialWelfareServicesEmpty": {
+    "description": "Social welfare data — temporary empty state for the Information and services tab."
   },
   "supportFormTitle": "Technical support",
   "@supportFormTitle": {
@@ -1678,6 +1934,18 @@
   "lifeEventsSaveAction": "Save",
   "@lifeEventsSaveAction": {
     "description": "Personalization — explicit save button label."
+  },
+  "lifeEventsAcceptAction": "Accept",
+  "@lifeEventsAcceptAction": {
+    "description": "Personalization — accept button label for first-login onboarding."
+  },
+  "lifeEventsFillLaterAction": "Fill in later",
+  "@lifeEventsFillLaterAction": {
+    "description": "Personalization — skip action label for first-login onboarding."
+  },
+  "lifeEventsClearAllAction": "Deselect all",
+  "@lifeEventsClearAllAction": {
+    "description": "Personalization — clear all selected life events action label."
   },
   "lifeEventsResetAction": "Reset preferences",
   "@lifeEventsResetAction": {
@@ -2727,9 +2995,99 @@
   "@notificationDetailPlaceholderPending": {
     "description": "Notifications — placeholder pending message."
   },
-  "familiaNumerosaDetailTitle": "Large family card",
+  "familiaNumerosaDetailTitle": "Large family",
   "@familiaNumerosaDetailTitle": {
     "description": "Familia numerosa detail page — AppBar title."
+  },
+  "familiaNumerosaInfoSheetTitle": "About Large family",
+  "@familiaNumerosaInfoSheetTitle": {
+    "description": "Familia numerosa detail — info sheet title."
+  },
+  "familiaNumerosaInfoSheetDescription": "Check the details of your large family title.",
+  "@familiaNumerosaInfoSheetDescription": {
+    "description": "Familia numerosa detail — info sheet description."
+  },
+  "familiaNumerosaTitleSection": "My large family title",
+  "@familiaNumerosaTitleSection": {
+    "description": "Familia numerosa detail — title data section."
+  },
+  "familiaNumerosaRegionLabel": "Autonomous community",
+  "@familiaNumerosaRegionLabel": {
+    "description": "Familia numerosa detail — autonomous community label."
+  },
+  "familiaNumerosaTitleNumberLabel": "Title number",
+  "@familiaNumerosaTitleNumberLabel": {
+    "description": "Familia numerosa detail — title number label."
+  },
+  "familiaNumerosaCategoryLabel": "Category",
+  "@familiaNumerosaCategoryLabel": {
+    "description": "Familia numerosa detail — category label."
+  },
+  "familiaNumerosaValidLabel": "Valid",
+  "@familiaNumerosaValidLabel": {
+    "description": "Familia numerosa detail — validity label."
+  },
+  "familiaNumerosaIssueDateLabel": "Issue date",
+  "@familiaNumerosaIssueDateLabel": {
+    "description": "Familia numerosa detail — issue date label."
+  },
+  "familiaNumerosaExpiryDateLabel": "Expiry date",
+  "@familiaNumerosaExpiryDateLabel": {
+    "description": "Familia numerosa detail — expiry date label."
+  },
+  "familiaNumerosaChildrenCountLabel": "Number of children in the title",
+  "@familiaNumerosaChildrenCountLabel": {
+    "description": "Familia numerosa detail — children count label."
+  },
+  "familiaNumerosaBeneficiariesTitle": "Beneficiaries",
+  "@familiaNumerosaBeneficiariesTitle": {
+    "description": "Familia numerosa detail — beneficiaries section."
+  },
+  "familiaNumerosaBeneficiaryTitle": "Beneficiary {index}",
+  "@familiaNumerosaBeneficiaryTitle": {
+    "description": "Familia numerosa detail — numbered beneficiary title.",
+    "placeholders": {
+      "index": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
+  "familiaNumerosaDocumentNumberLabel": "Document number",
+  "@familiaNumerosaDocumentNumberLabel": {
+    "description": "Familia numerosa detail — beneficiary document label."
+  },
+  "familiaNumerosaBirthDateLabel": "Birth date",
+  "@familiaNumerosaBirthDateLabel": {
+    "description": "Familia numerosa detail — birth date label."
+  },
+  "familiaNumerosaFullNameLabel": "Full name",
+  "@familiaNumerosaFullNameLabel": {
+    "description": "Familia numerosa detail — full name label."
+  },
+  "familiaNumerosaHolderLabel": "Holder",
+  "@familiaNumerosaHolderLabel": {
+    "description": "Familia numerosa detail — holder label."
+  },
+  "familiaNumerosaYes": "Yes",
+  "@familiaNumerosaYes": {
+    "description": "Familia numerosa detail — affirmative value."
+  },
+  "familiaNumerosaNo": "No",
+  "@familiaNumerosaNo": {
+    "description": "Familia numerosa detail — negative value."
+  },
+  "familiaNumerosaNoDataMessage": "We could not find large family information associated with your data in the JCCM lookup service.\n\nIf this situation is not correct or not up to date, contact the Social Welfare Department of Castilla-La Mancha.",
+  "@familiaNumerosaNoDataMessage": {
+    "description": "Familia numerosa detail — helper shown when no data exists."
+  },
+  "familiaNumerosaContactHint": "If any of your data is incorrect or not up to date, contact the Social Welfare Department of Castilla-La Mancha.",
+  "@familiaNumerosaContactHint": {
+    "description": "Familia numerosa detail — helper below data."
+  },
+  "familiaNumerosaOfficeContactsButton": "Office and contact list",
+  "@familiaNumerosaOfficeContactsButton": {
+    "description": "Familia numerosa detail — external office and contact button."
   },
   "familiaNumerosaCardNumberLabel": "Card number: {number}",
   "@familiaNumerosaCardNumberLabel": {
@@ -2963,6 +3321,10 @@
   "@recommendationsLifeEventPrefix": {
     "description": "Recommendations — prefix shown before the life event label inside a card chip."
   },
+  "recommendationsAssociatedLifeEventsLabel": "Associated life events",
+  "@recommendationsAssociatedLifeEventsLabel": {
+    "description": "Recommendations — label shown above the life events associated with a recommendation card."
+  },
   "recommendationsLoadMore": "Load more",
   "@recommendationsLoadMore": {
     "description": "Recommendations — load-more button label at the bottom of the list."
@@ -3058,5 +3420,608 @@
   "drawerGoToSedeElectronica": "Go to eGovernment Portal",
   "@drawerGoToSedeElectronica": {
     "description": "Action button label in the profile menu linking to Sede Electrónica."
+  },
+  "myDataTitle": "My data",
+  "@myDataTitle": {
+    "description": "Title of the My data section in the top bar and main navigation."
+  },
+  "myDataIntro": "Check the information available about you in the Administration and access services and procedures linked to each area.",
+  "@myDataIntro": {
+    "description": "Introductory text on the My data screen."
+  },
+  "myDataHealthTitle": "Health",
+  "@myDataHealthTitle": {
+    "description": "Title of the Health card on the My data screen."
+  },
+  "myDataHealthDescription": "SESCAM and health services",
+  "@myDataHealthDescription": {
+    "description": "Description of the Health card on the My data screen."
+  },
+  "myDataSocialWelfareTitle": "Social Welfare",
+  "@myDataSocialWelfareTitle": {
+    "description": "Title of the Social Welfare card on the My data screen."
+  },
+  "myDataSocialWelfareDescription": "Available services",
+  "@myDataSocialWelfareDescription": {
+    "description": "Description of the Social Welfare card on the My data screen."
+  },
+  "myDataEmploymentTitle": "Employment",
+  "@myDataEmploymentTitle": {
+    "description": "Title of the Employment card on the My data screen."
+  },
+  "myDataEmploymentDescription": "Employment demand and services",
+  "@myDataEmploymentDescription": {
+    "description": "Description of the Employment card on the My data screen."
+  },
+  "myDataEmploymentInfoSheetTitle": "About My Employment data",
+  "@myDataEmploymentInfoSheetTitle": {
+    "description": "Title of the My Employment data information modal."
+  },
+  "myDataEmploymentInfoSheetDescription": "Check your job-seeker registration information and access employment services and procedures in Castilla-La Mancha.",
+  "@myDataEmploymentInfoSheetDescription": {
+    "description": "Main description of the My Employment data information modal."
+  },
+  "myDataEmploymentDataTab": "My Employment data",
+  "@myDataEmploymentDataTab": {
+    "description": "First tab on the Employment detail screen."
+  },
+  "myDataEmploymentServicesTab": "Information and services",
+  "@myDataEmploymentServicesTab": {
+    "description": "Second tab on the Employment detail screen."
+  },
+  "myDataEmploymentDemandTitle": "Your employment demand",
+  "@myDataEmploymentDemandTitle": {
+    "description": "Employment demand card title."
+  },
+  "myDataEmploymentRegistrationDateLabel": "Uninterrupted registration date",
+  "@myDataEmploymentRegistrationDateLabel": {
+    "description": "Uninterrupted registration date label."
+  },
+  "myDataEmploymentDemandEmpty": "No employment demand data is registered.",
+  "@myDataEmploymentDemandEmpty": {
+    "description": "Message shown when there is no employment demand data."
+  },
+  "myDataEmploymentDemandError": "We could not load your employment demand.",
+  "@myDataEmploymentDemandError": {
+    "description": "Error message when loading employment demand."
+  },
+  "myDataEmploymentOffersTitle": "Offer registrations",
+  "@myDataEmploymentOffersTitle": {
+    "description": "Offer registrations card title."
+  },
+  "myDataEmploymentOffersDescription": "Job offers you have registered for",
+  "@myDataEmploymentOffersDescription": {
+    "description": "Offer registrations card description."
+  },
+  "myDataEmploymentProceduresTitle": "Procedures that may interest you",
+  "@myDataEmploymentProceduresTitle": {
+    "description": "Employment procedures section title."
+  },
+  "myDataEmploymentProcedureProfessionalCertificate": "Professional certificate issuance",
+  "@myDataEmploymentProcedureProfessionalCertificate": {
+    "description": "Professional certificate issuance procedure."
+  },
+  "myDataEmploymentProcedureJobSeekerRegistration": "Registration as a job seeker at employment and entrepreneurship offices",
+  "@myDataEmploymentProcedureJobSeekerRegistration": {
+    "description": "Job seeker registration procedure."
+  },
+  "myDataEmploymentProcedureVirtualOfficeCredentials": "Request access credentials for the Employment and Economy virtual office for individuals, legal entities and self-employed workers.",
+  "@myDataEmploymentProcedureVirtualOfficeCredentials": {
+    "description": "Employment virtual office credentials procedure."
+  },
+  "myDataEmploymentInterestLinksTitle": "Links of interest",
+  "@myDataEmploymentInterestLinksTitle": {
+    "description": "Employment links section title."
+  },
+  "myDataEmploymentLinkEmploymentClm": "Employment CLM",
+  "@myDataEmploymentLinkEmploymentClm": {
+    "description": "Employment CLM portal link."
+  },
+  "myDataEmploymentLinkPublicEmploymentClm": "Public Employment CLM",
+  "@myDataEmploymentLinkPublicEmploymentClm": {
+    "description": "Public Employment CLM portal link."
+  },
+  "myDataEducationTitle": "Education",
+  "@myDataEducationTitle": {
+    "description": "Title of the Education card on the My data screen."
+  },
+  "myDataEducationDescription": "Training qualifications",
+  "@myDataEducationDescription": {
+    "description": "Description of the Education card on the My data screen."
+  },
+  "myDataHousingTitle": "Housing",
+  "@myDataHousingTitle": {
+    "description": "Title of the Housing card on the My data screen."
+  },
+  "myDataHousingDescription": "Property ownership",
+  "@myDataHousingDescription": {
+    "description": "Description of the Housing card on the My data screen."
+  },
+  "myDataHousingInfoSheetTitle": "About My Housing data",
+  "@myDataHousingInfoSheetTitle": {
+    "description": "Title of the My Housing data information modal."
+  },
+  "myDataHousingInfoSheetDescription": "Check the information about your real estate, your home and your current address details.",
+  "@myDataHousingInfoSheetDescription": {
+    "description": "Main description of the My Housing data information modal."
+  },
+  "myDataHousingDataTab": "My Housing data",
+  "@myDataHousingDataTab": {
+    "description": "First tab on the Housing detail screen."
+  },
+  "myDataHousingServicesTab": "Information and services",
+  "@myDataHousingServicesTab": {
+    "description": "Second tab on the Housing detail screen."
+  },
+  "myDataHousingRealEstateTitle": "Real estate",
+  "@myDataHousingRealEstateTitle": {
+    "description": "Title of the real estate card on the Housing detail screen."
+  },
+  "myDataHousingRealEstateDescription": "Cadastral data for my properties",
+  "@myDataHousingRealEstateDescription": {
+    "description": "Description of the real estate card on the Housing detail screen."
+  },
+  "myDataHousingRealEstateInfoSheetTitle": "About your real-estate assets",
+  "@myDataHousingRealEstateInfoSheetTitle": {
+    "description": "Title of the real estate detail information modal."
+  },
+  "myDataHousingRealEstateInfoSheetDescription": "Check the cadastral data for your properties registered with the Directorate General for Cadastre.",
+  "@myDataHousingRealEstateInfoSheetDescription": {
+    "description": "Main description of the real estate detail information modal."
+  },
+  "myDataHousingRealEstateInfoSheetFooter": "If any of your data is incorrect, go to or contact the Cadastre electronic office.",
+  "@myDataHousingRealEstateInfoSheetFooter": {
+    "description": "Footer of the real estate detail information modal."
+  },
+  "myDataHousingRealEstateFilterAll": "All",
+  "@myDataHousingRealEstateFilterAll": {
+    "description": "All real estate properties filter label."
+  },
+  "myDataHousingRealEstateFilterUrban": "Urban",
+  "@myDataHousingRealEstateFilterUrban": {
+    "description": "Urban real estate properties filter label."
+  },
+  "myDataHousingRealEstateFilterRustic": "Rustic",
+  "@myDataHousingRealEstateFilterRustic": {
+    "description": "Rustic real estate properties filter label."
+  },
+  "myDataHousingRealEstateReferenceTitle": "Cadastral reference {value}",
+  "@myDataHousingRealEstateReferenceTitle": {
+    "description": "Real estate card title with cadastral reference.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHousingRealEstateDetailClose": "Close",
+  "@myDataHousingRealEstateDetailClose": {
+    "description": "Tooltip for the close button on the real estate detail."
+  },
+  "myDataHousingRealEstateDetailHomeDataTitle": "Housing data",
+  "@myDataHousingRealEstateDetailHomeDataTitle": {
+    "description": "Title of the housing data section."
+  },
+  "myDataHousingRealEstateReferenceLabel": "Cadastral reference",
+  "@myDataHousingRealEstateReferenceLabel": {
+    "description": "Cadastral reference field label."
+  },
+  "myDataHousingRealEstateAddressLabel": "Address",
+  "@myDataHousingRealEstateAddressLabel": {
+    "description": "Real estate address label."
+  },
+  "myDataHousingRealEstateUseLabel": "Use",
+  "@myDataHousingRealEstateUseLabel": {
+    "description": "Real estate use label."
+  },
+  "myDataHousingRealEstateCadastralValueLabel": "Cadastral value",
+  "@myDataHousingRealEstateCadastralValueLabel": {
+    "description": "Real estate cadastral value label."
+  },
+  "myDataHousingRealEstateLandValueLabel": "Land value",
+  "@myDataHousingRealEstateLandValueLabel": {
+    "description": "Real estate land value label."
+  },
+  "myDataHousingRealEstateConstructionValueLabel": "Construction value",
+  "@myDataHousingRealEstateConstructionValueLabel": {
+    "description": "Real estate construction value label."
+  },
+  "myDataHousingRealEstateStatusLabel": "Status",
+  "@myDataHousingRealEstateStatusLabel": {
+    "description": "Real estate status label."
+  },
+  "myDataHousingRealEstateShowCartography": "Show cartography",
+  "@myDataHousingRealEstateShowCartography": {
+    "description": "Button text to open the real estate cartography."
+  },
+  "myDataHousingRealEstateHoldersTitle": "Holders",
+  "@myDataHousingRealEstateHoldersTitle": {
+    "description": "Title of the real estate holders section."
+  },
+  "myDataHousingRealEstateHoldersEmpty": "No holders are registered for this real-estate asset.",
+  "@myDataHousingRealEstateHoldersEmpty": {
+    "description": "Message shown when there are no holders for the real estate asset."
+  },
+  "myDataHousingRealEstateDetailEmpty": "We could not find the selected real-estate asset.",
+  "@myDataHousingRealEstateDetailEmpty": {
+    "description": "Message shown when the selected real estate detail cannot be found."
+  },
+  "myDataHousingRealEstateEmpty": "No real-estate assets are registered under your name.",
+  "@myDataHousingRealEstateEmpty": {
+    "description": "Empty state for real estate properties."
+  },
+  "myDataHousingRealEstateFilteredEmpty": "There are no real-estate assets for this filter.",
+  "@myDataHousingRealEstateFilteredEmpty": {
+    "description": "Empty state for filtered real estate properties."
+  },
+  "myDataHousingRealEstateError": "We could not load Catastro data.",
+  "@myDataHousingRealEstateError": {
+    "description": "Error state for real estate properties."
+  },
+  "myDataHousingAddressTitle": "Address in Castilla-La Mancha",
+  "@myDataHousingAddressTitle": {
+    "description": "Title of the address card on the Housing detail screen."
+  },
+  "myDataHousingAddressDescription": "Data in the municipal register database",
+  "@myDataHousingAddressDescription": {
+    "description": "Description of the address card on the Housing detail screen."
+  },
+  "myDataHousingAddressInfoSheetTitle": "About your address",
+  "@myDataHousingAddressInfoSheetTitle": {
+    "description": "Title of the address detail information modal."
+  },
+  "myDataHousingAddressInfoSheetDescription": "Check your data in the municipal register database of the National Statistics Institute (INE) within Castilla-La Mancha, which collects information from all municipal registers in Castilla-La Mancha. This information is updated every month with data sent by town councils, so it may not match your current situation if you recently changed your registration.",
+  "@myDataHousingAddressInfoSheetDescription": {
+    "description": "Main description of the address detail information modal."
+  },
+  "myDataHousingAddressInfoSheetFooter": "If any of your data is incorrect, go to or contact your town council.",
+  "@myDataHousingAddressInfoSheetFooter": {
+    "description": "Footer of the address detail information modal."
+  },
+  "myDataHousingAddressDataTitle": "Address data",
+  "@myDataHousingAddressDataTitle": {
+    "description": "Title of the address data section."
+  },
+  "myDataHousingAddressRegistrationDataTitle": "Registration-related data",
+  "@myDataHousingAddressRegistrationDataTitle": {
+    "description": "Title of the municipal registration data section."
+  },
+  "myDataHousingAddressLabel": "Address",
+  "@myDataHousingAddressLabel": {
+    "description": "Address field label."
+  },
+  "myDataHousingAddressPostalCodeLabel": "Postal code",
+  "@myDataHousingAddressPostalCodeLabel": {
+    "description": "Postal code field label."
+  },
+  "myDataHousingAddressMunicipalityLabel": "Municipality",
+  "@myDataHousingAddressMunicipalityLabel": {
+    "description": "Municipality field label."
+  },
+  "myDataHousingAddressProvinceLabel": "Province",
+  "@myDataHousingAddressProvinceLabel": {
+    "description": "Province field label."
+  },
+  "myDataHousingAddressCollectiveEntityLabel": "Collective entity",
+  "@myDataHousingAddressCollectiveEntityLabel": {
+    "description": "Collective entity field label."
+  },
+  "myDataHousingAddressSingleEntityLabel": "Single entity",
+  "@myDataHousingAddressSingleEntityLabel": {
+    "description": "Single entity field label."
+  },
+  "myDataHousingAddressPopulationUnitLabel": "Population unit",
+  "@myDataHousingAddressPopulationUnitLabel": {
+    "description": "Population unit field label."
+  },
+  "myDataHousingAddressVariationTypeLabel": "Variation type",
+  "@myDataHousingAddressVariationTypeLabel": {
+    "description": "Registration variation type label."
+  },
+  "myDataHousingAddressVariationDateLabel": "Variation date",
+  "@myDataHousingAddressVariationDateLabel": {
+    "description": "Registration variation date label."
+  },
+  "myDataHousingAddressEmpty": "No address data is registered in Castilla-La Mancha.",
+  "@myDataHousingAddressEmpty": {
+    "description": "Message shown when no address is registered."
+  },
+  "myDataHousingAddressError": "We could not load your address data.",
+  "@myDataHousingAddressError": {
+    "description": "Error message when loading address data."
+  },
+  "myDataHousingLinksTitle": "Links of interest",
+  "@myDataHousingLinksTitle": {
+    "description": "Title of the links section in the Housing Information and services tab."
+  },
+  "myDataHousingLinkClmHousing": "Castilla-La Mancha Housing",
+  "@myDataHousingLinkClmHousing": {
+    "description": "Link to Castilla-La Mancha Housing."
+  },
+  "myDataHousingLinkCadastre": "Cadastre office",
+  "@myDataHousingLinkCadastre": {
+    "description": "Link to the Cadastre office."
+  },
+  "myDataHousingProceduresTitle": "Procedures that may interest you",
+  "@myDataHousingProceduresTitle": {
+    "description": "Title of the procedures section related to housing."
+  },
+  "myDataHousingProcedureYoungRentVoucher": "Young rent voucher aid in Castilla-La Mancha",
+  "@myDataHousingProcedureYoungRentVoucher": {
+    "description": "Young rent voucher aid procedure in Castilla-La Mancha."
+  },
+  "myDataHousingProcedureProtectedHousingRegister": "Registration in the CLM protected public housing applicant register",
+  "@myDataHousingProcedureProtectedHousingRegister": {
+    "description": "Procedure to register in the CLM protected public housing applicant register."
+  },
+  "myDataHousingProcedureSocialEmergencyAid": "Social emergency aid",
+  "@myDataHousingProcedureSocialEmergencyAid": {
+    "description": "Social emergency aid procedure."
+  },
+  "myDataVehiclesTitle": "Vehicles",
+  "@myDataVehiclesTitle": {
+    "description": "Title of the Vehicles card on the My data screen."
+  },
+  "myDataVehiclesDescription": "Your registered vehicles",
+  "@myDataVehiclesDescription": {
+    "description": "Description of the Vehicles card on the My data screen."
+  },
+  "myDataVehiclesInfoSheetTitle": "About My Vehicles data",
+  "@myDataVehiclesInfoSheetTitle": {
+    "description": "Title of the My Vehicles data information modal."
+  },
+  "myDataVehiclesInfoSheetDescription": "Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.\n\nQuickly access the most prominent procedures and information related to your vehicle management.",
+  "@myDataVehiclesInfoSheetDescription": {
+    "description": "Main description of the My Vehicles data information modal."
+  },
+  "myDataVehiclesInfoSheetFooter": "If any of your data is incorrect or not up to date, contact the General Directorate of Traffic (DGT)",
+  "@myDataVehiclesInfoSheetFooter": {
+    "description": "Footer text of the My Vehicles data information modal."
+  },
+  "myDataVehiclesInfoSheetContactButton": "Contact",
+  "@myDataVehiclesInfoSheetContactButton": {
+    "description": "Contact button label in the My Vehicles data information modal."
+  },
+  "myDataVehiclesDataTab": "My Vehicles data",
+  "@myDataVehiclesDataTab": {
+    "description": "First tab on the Vehicles detail screen."
+  },
+  "myDataVehiclesServicesTab": "Information and services",
+  "@myDataVehiclesServicesTab": {
+    "description": "Second tab on the Vehicles detail screen."
+  },
+  "myDataVehiclesSectionTitle": "My vehicles",
+  "@myDataVehiclesSectionTitle": {
+    "description": "Title of the vehicles list section."
+  },
+  "myDataVehiclesLicensePlateLabel": "Vehicle registration number",
+  "@myDataVehiclesLicensePlateLabel": {
+    "description": "Descriptive label for the vehicle license plate."
+  },
+  "myDataVehiclesEmpty": "There are no vehicles registered in your name.",
+  "@myDataVehiclesEmpty": {
+    "description": "Message shown when there are no vehicles."
+  },
+  "myDataVehiclesError": "We could not load your vehicles.",
+  "@myDataVehiclesError": {
+    "description": "Error message when loading vehicles."
+  },
+  "myDataVehiclesServicesEmpty": "Vehicles information and services will be available soon.",
+  "@myDataVehiclesServicesEmpty": {
+    "description": "Temporary empty state for the Vehicles Information and services tab."
+  },
+  "myDataVehiclesLinksTitle": "Links of interest",
+  "@myDataVehiclesLinksTitle": {
+    "description": "Title of the links section in the Vehicles Information and services tab."
+  },
+  "myDataVehiclesLinkDgt": "DGT electronic office",
+  "@myDataVehiclesLinkDgt": {
+    "description": "Link to the electronic office of the Directorate General of Traffic."
+  },
+  "myDataVehiclesLinkAge": "AGE Citizen Folder",
+  "@myDataVehiclesLinkAge": {
+    "description": "Link to the Citizen Folder of the General State Administration."
+  },
+  "myDataVehiclesProceduresTitle": "Procedures that may interest you",
+  "@myDataVehiclesProceduresTitle": {
+    "description": "Title of the procedures section related to vehicles."
+  },
+  "myDataVehiclesProcedureMoves3Vehicle": "MOVES III aid application for electric vehicle acquisition",
+  "@myDataVehiclesProcedureMoves3Vehicle": {
+    "description": "Procedure to apply for MOVES III aid to purchase electric vehicles."
+  },
+  "myDataVehiclesProcedureMoves3Infrastructure": "MOVES III aid application for electric vehicle charging infrastructure implementation",
+  "@myDataVehiclesProcedureMoves3Infrastructure": {
+    "description": "Procedure to apply for MOVES III aid for charging infrastructure."
+  },
+  "myDataVehiclesProcedureCap": "Homologation of driver training courses (CAP)",
+  "@myDataVehiclesProcedureCap": {
+    "description": "Procedure to homologate CAP driver training courses."
+  },
+  "myDataSectionComingSoon": "{section} will be available soon",
+  "@myDataSectionComingSoon": {
+    "description": "SnackBar shown when tapping a My data card whose detail is not implemented yet.",
+    "placeholders": {
+      "section": {
+        "type": "String",
+        "example": "Health"
+      }
+    }
+  },
+  "myDataHealthInfoMessage": "Check your health data and available appointments.",
+  "@myDataHealthInfoMessage": {
+    "description": "SnackBar shown when tapping the info button on the Health detail screen."
+  },
+  "myDataEducationInfoSheetTitle": "About My Education data",
+  "@myDataEducationInfoSheetTitle": {
+    "description": "Title of the My Education data information modal."
+  },
+  "myDataEducationInfoSheetDescription": "Check your information and access related education services in Castilla-La Mancha.",
+  "@myDataEducationInfoSheetDescription": {
+    "description": "Main description of the My Education data information modal."
+  },
+  "myDataEducationDataTab": "My Education data",
+  "@myDataEducationDataTab": {
+    "description": "First tab on the Education detail screen."
+  },
+  "myDataEducationServicesTab": "Information and services",
+  "@myDataEducationServicesTab": {
+    "description": "Second tab on the Education detail screen."
+  },
+  "myDataEducationUniversityTitles": "University degrees",
+  "@myDataEducationUniversityTitles": {
+    "description": "Access card for university degrees in My Education data."
+  },
+  "myDataEducationNonUniversityTitles": "Non-university qualifications",
+  "@myDataEducationNonUniversityTitles": {
+    "description": "Access card for non-university qualifications in My Education data."
+  },
+  "myDataEducationTitlesDescription": "Public and private universities",
+  "@myDataEducationTitlesDescription": {
+    "description": "Description of education qualification cards."
+  },
+  "myDataEducationServicesEmpty": "Education information and services will be available soon.",
+  "@myDataEducationServicesEmpty": {
+    "description": "Temporary empty state for the Education Information and services tab."
+  },
+  "myDataEducationProceduresTitle": "Procedures you may be interested in",
+  "@myDataEducationProceduresTitle": {
+    "description": "Title of the suggested procedures section on the Education information and services tab."
+  },
+  "myDataEducationProcedureEquivalence": "Request study equivalence with official qualifications",
+  "@myDataEducationProcedureEquivalence": {
+    "description": "Link to request study equivalence with official qualifications."
+  },
+  "myDataEducationProcedureScholarships": "Scholarships and grants for post-compulsory students",
+  "@myDataEducationProcedureScholarships": {
+    "description": "Link to scholarships and grants for post-compulsory students."
+  },
+  "myDataEducationProcedureSecondaryDegree": "Open tests to obtain the compulsory secondary education graduate qualification for > 18 years old",
+  "@myDataEducationProcedureSecondaryDegree": {
+    "description": "Link to open tests to obtain the ESO graduate qualification for people over 18."
+  },
+  "myDataEducationInterestLinksTitle": "Links of interest",
+  "@myDataEducationInterestLinksTitle": {
+    "description": "Title of the links of interest section on the Education information and services tab."
+  },
+  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
+  "@myDataEducationInterestLinkPlaceholder": {
+    "description": "Education link placeholder from the Figma design."
+  },
+  "myDataHealthInfoSheetTitle": "About My Health data",
+  "@myDataHealthInfoSheetTitle": {
+    "description": "Title of the My Health data information modal."
+  },
+  "myDataHealthInfoSheetDescription": "Check the information about your Primary Care appointments from the Castilla-La Mancha Health Service (SESCAM).",
+  "@myDataHealthInfoSheetDescription": {
+    "description": "Main description of the My Health data information modal."
+  },
+  "myDataHealthInfoSheetContactHint": "If any data is incorrect or out of date, contact your Health Centre.",
+  "@myDataHealthInfoSheetContactHint": {
+    "description": "Helper text before the contact CTA in the Health information modal."
+  },
+  "myDataHealthDataTab": "My Health data",
+  "@myDataHealthDataTab": {
+    "description": "First tab on the Health detail screen."
+  },
+  "myDataHealthServicesTab": "Information and services",
+  "@myDataHealthServicesTab": {
+    "description": "Second tab on the Health detail screen."
+  },
+  "myDataHealthProceduresTitle": "Procedures you may be interested in",
+  "@myDataHealthProceduresTitle": {
+    "description": "Title of the suggested procedures section on the Health information and services tab."
+  },
+  "myDataHealthProcedureComplaints": "Claims and complaints related to SESCAM",
+  "@myDataHealthProcedureComplaints": {
+    "description": "Link to claims and complaints related to SESCAM."
+  },
+  "myDataHealthProcedureHealthCard": "Request a card for Healthcare in SESCAM",
+  "@myDataHealthProcedureHealthCard": {
+    "description": "Link to request a card for Healthcare in SESCAM."
+  },
+  "myDataHealthProcedureSpecializedCare": "Free choice in Specialized Care",
+  "@myDataHealthProcedureSpecializedCare": {
+    "description": "Link to free choice in Specialized Care."
+  },
+  "myDataHealthInterestLinksTitle": "Links of interest",
+  "@myDataHealthInterestLinksTitle": {
+    "description": "Title of the links of interest section on the Health information and services tab."
+  },
+  "myDataHealthLinkSescam": "Castilla-La Mancha Health Service (SESCAM)",
+  "@myDataHealthLinkSescam": {
+    "description": "Link to the Castilla-La Mancha Health Service."
+  },
+  "myDataHealthLinkDigitalHealth": "My Digital Health",
+  "@myDataHealthLinkDigitalHealth": {
+    "description": "Link to My Digital Health."
+  },
+  "myDataHealthLinkClinicalHistory": "Digital Clinical History (National Health System)",
+  "@myDataHealthLinkClinicalHistory": {
+    "description": "Link to Digital Clinical History of the National Health System."
+  },
+  "myDataHealthAppointmentsTitle": "Primary Care appointments",
+  "@myDataHealthAppointmentsTitle": {
+    "description": "Main title of the health appointments block."
+  },
+  "myDataHealthAppointmentsEmpty": "There are no appointments to show.",
+  "@myDataHealthAppointmentsEmpty": {
+    "description": "Empty state for the health appointments list."
+  },
+  "myDataHealthAppointmentsError": "We couldn't load your health appointments.",
+  "@myDataHealthAppointmentsError": {
+    "description": "Error message for the health appointments list."
+  },
+  "myDataHealthCip": "CIP: FCCT590551910012",
+  "@myDataHealthCip": {
+    "description": "CIP code shown below the Health detail title."
+  },
+  "myDataHealthPendingTab": "Pending",
+  "@myDataHealthPendingTab": {
+    "description": "Pending appointments tab in Health."
+  },
+  "myDataHealthPastTab": "Past",
+  "@myDataHealthPastTab": {
+    "description": "Past appointments tab in Health."
+  },
+  "myDataHealthYear": "2026",
+  "@myDataHealthYear": {
+    "description": "Year shown in the Health appointments list from the mockup."
+  },
+  "myDataHealthDecember": "December",
+  "@myDataHealthDecember": {
+    "description": "December month label shown in the Health appointments list."
+  },
+  "myDataHealthOctober": "October",
+  "@myDataHealthOctober": {
+    "description": "October month label shown in the Health appointments list."
+  },
+  "myDataHealthAppointmentDayNumber": "12",
+  "@myDataHealthAppointmentDayNumber": {
+    "description": "Day number of the sample health appointment."
+  },
+  "myDataHealthAppointmentWeekday": "Thursday",
+  "@myDataHealthAppointmentWeekday": {
+    "description": "Weekday of the sample health appointment."
+  },
+  "myDataHealthAppointmentTime": "17:35h",
+  "@myDataHealthAppointmentTime": {
+    "description": "Time of the sample health appointment."
+  },
+  "myDataHealthAppointmentType": "PHONE",
+  "@myDataHealthAppointmentType": {
+    "description": "Type of the sample health appointment."
+  },
+  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
+  "@myDataHealthAppointmentProfessional": {
+    "description": "Healthcare professional of the sample appointment."
+  },
+  "myDataHealthAppointmentDescription": "Primary Care appointment",
+  "@myDataHealthAppointmentDescription": {
+    "description": "Description of the sample health appointment."
+  },
+  "myDataHealthAppointmentModality": "On-demand teleconsultation",
+  "@myDataHealthAppointmentModality": {
+    "description": "Modality of the sample health appointment."
   }
 }

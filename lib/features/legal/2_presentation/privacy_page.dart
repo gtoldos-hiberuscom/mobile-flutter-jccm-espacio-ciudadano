@@ -111,17 +111,29 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
               title: l10n.legalPrivacyTitle,
               showLeading: false,
               actions: [
-                IconButton(
-                  icon: const AppIcon(
-                    AppIcons.info,
-                    color: AppColors.textPrimary,
+                Semantics(
+                  label: l10n.legalPrivacyTitle,
+                  button: true,
+                  child: ExcludeSemantics(
+                    child: IconButton(
+                      icon: const AppIcon(
+                        AppIcons.info,
+                        color: AppColors.textPrimary,
+                      ),
+                      onPressed: () {
+                        AppAlertSnackbar.show(
+                          context,
+                          message: l10n.consentLegalInfoSnackBar,
+                          margin: EdgeInsets.fromLTRB(
+                            AppDimensions.space16,
+                            0,
+                            AppDimensions.space16,
+                            MediaQuery.of(context).padding.bottom + AppDimensions.space48 + AppDimensions.space16,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  tooltip: l10n.legalPrivacyTitle,
-                  onPressed: () {
-                    if (_scrollController.hasClients) {
-                      _scrollController.jumpTo(0);
-                    }
-                  },
                 ),
               ],
             ),

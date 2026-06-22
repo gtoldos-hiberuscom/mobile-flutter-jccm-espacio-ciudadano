@@ -17,6 +17,7 @@ abstract final class Routes {
   static const String landingHelp = '/landing/help';
   static const String landingAbout = '/landing/about';
   static const String helpContact = '/help-contact';
+  static const String supportForm = '/support-form';
   static const String legalPrivacy = '/legal/privacy';
   static const String legalNotice = '/legal/notice';
   static const String legalAccessibility = '/legal/accessibility';
@@ -40,6 +41,23 @@ abstract final class Routes {
   static const String home = '/home';
   static const String homeFromDrawer = '$home?from=drawer';
 
+  static const String myData = '/my-data';
+  static const String myDataHealth = '/my-data/health';
+  static const String myDataEmployment = '/my-data/employment';
+  static const String myDataSocialWelfare = '/my-data/social-welfare';
+  static const String myDataSocialWelfareFamily = '/my-data/social-welfare/family';
+  static const String myDataSocialWelfareDisability = '/my-data/social-welfare/disability';
+  static const String myDataSocialWelfareThermalSpa = '/my-data/social-welfare/thermal-spa';
+  static const String myDataSocialWelfareDependency = '/my-data/social-welfare/dependency';
+  static const String myDataSocialWelfareParking = '/my-data/social-welfare/parking';
+  static const String myDataEducation = '/my-data/education';
+  static const String myDataEducationUniversityTitles = '/my-data/education/university-titles';
+  static const String myDataEducationNonUniversityTitles = '/my-data/education/non-university-titles';
+  static const String myDataHousing = '/my-data/housing';
+  static const String myDataHousingRealEstate = '/my-data/housing/real-estate';
+  static const String myDataHousingRealEstateDetail = '/my-data/housing/real-estate/:reference';
+  static const String myDataHousingAddress = '/my-data/housing/address';
+  static const String myDataVehicles = '/my-data/vehicles';
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
   static const String recommendationLifeEventFilters = '/recommendations/life-events-filter';
@@ -55,7 +73,23 @@ abstract final class Routes {
   static const Set<String> _authenticated = {
     consent,
     helpContact,
+    supportForm,
     agenda,
+    myData,
+    myDataEmployment,
+    myDataEducation,
+    myDataEducationUniversityTitles,
+    myDataEducationNonUniversityTitles,
+    myDataHousing,
+    myDataHousingRealEstate,
+    myDataHousingAddress,
+    myDataSocialWelfare,
+    myDataSocialWelfareFamily,
+    myDataSocialWelfareDisability,
+    myDataSocialWelfareThermalSpa,
+    myDataSocialWelfareDependency,
+    myDataSocialWelfareParking,
+    myDataVehicles,
     recommendations,
     recommendationLifeEventFilters,
     home,

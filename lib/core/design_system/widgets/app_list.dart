@@ -216,10 +216,10 @@ class AppListOptionItem extends StatelessWidget {
       child: ExcludeSemantics(
         child: InkWell(
           onTap: isDisabled ? null : onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(AppDimensions.space8),
-            child: SizedBox(
-              height: 32,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimensions.space8),
               child: Row(
                 children: [
                   if (leading != null) ...[
@@ -291,8 +291,8 @@ class AppListCheckItem extends StatelessWidget {
 
     Widget row = Padding(
       padding: const EdgeInsets.all(AppDimensions.space8),
-      child: SizedBox(
-        height: 32,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
         child: Row(
           children: [
             if (leading != null) ...[
@@ -444,7 +444,7 @@ class _AppListExpandableItemState extends State<AppListExpandableItem> with Sing
               child: Padding(
                 padding: const EdgeInsets.all(AppDimensions.space8),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 32),
+                  constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -179,5 +179,5 @@ String _notificationCitizenId(final JwtClaims? claims) {
 }
 
 String _notificationDni(final JwtClaims? claims) {
-  return claims?.personIdentifier ?? claims?.preferredUsername ?? '';
+  return claims?.personIdentifier ?? claims?.idAgente ?? claims?.preferredUsername ?? '';
 }

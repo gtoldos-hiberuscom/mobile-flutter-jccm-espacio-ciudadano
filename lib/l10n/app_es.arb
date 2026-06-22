@@ -208,6 +208,10 @@
   "@consentScrollHint": {
     "description": "Indicación para el usuario de que debe desplazarse hasta el final del contenido."
   },
+  "consentLegalInfoSnackBar": "Lee la información sobre el tratamiento y protección de datos antes de continuar",
+  "@consentLegalInfoSnackBar": {
+    "description": "SnackBar mostrado al pulsar el botón de información en la pantalla de protección de datos del onboarding."
+  },
   "consentInfoButtonSemantics": "Ver información legal completa",
   "@consentInfoButtonSemantics": {
     "description": "Etiqueta de accesibilidad del botón de información legal en el paso 2."
@@ -960,6 +964,22 @@
   "@educationUniversityTitlesError": {
     "description": "Educación — error títulos universitarios."
   },
+  "educationUniversityTitlesInfoTitle": "Sobre tus títulos universitarios",
+  "@educationUniversityTitlesInfoTitle": {
+    "description": "Educación — título del modal de ayuda de títulos universitarios."
+  },
+  "educationUniversityTitlesInfoBody": "Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.",
+  "@educationUniversityTitlesInfoBody": {
+    "description": "Educación — cuerpo principal del modal de ayuda de títulos universitarios."
+  },
+  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.",
+  "@educationUniversityTitlesInfoFooter": {
+    "description": "Educación — texto de pie del modal de ayuda de títulos universitarios."
+  },
+  "educationUniversityTitlesInfoContactButton": "Contactar",
+  "@educationUniversityTitlesInfoContactButton": {
+    "description": "Educación — botón de contacto en el modal de ayuda de títulos universitarios."
+  },
   "educationNonUniversityTitlesTitle": "Títulos no universitarios",
   "@educationNonUniversityTitlesTitle": {
     "description": "Educación — sección títulos no universitarios."
@@ -1057,9 +1077,101 @@
   "@socialWelfareHeaderDescription": {
     "description": "Bienestar — descripción de cabecera."
   },
+  "socialWelfareScreenTitle": "Bienestar social",
+  "@socialWelfareScreenTitle": {
+    "description": "Mis datos de Bienestar — título de la pantalla."
+  },
+  "socialWelfareDataTab": "Mis datos de Bienestar",
+  "@socialWelfareDataTab": {
+    "description": "Mis datos de Bienestar — pestaña de datos personales."
+  },
+  "socialWelfareServicesTab": "Información y servicios",
+  "@socialWelfareServicesTab": {
+    "description": "Mis datos de Bienestar — pestaña de información y servicios."
+  },
+  "socialWelfareInterestLinksTitle": "Enlaces de interés",
+  "@socialWelfareInterestLinksTitle": {
+    "description": "Mis datos de Bienestar — título de la sección de enlaces de interés."
+  },
+  "socialWelfareSuggestedProceduresTitle": "Trámites que te pueden interesar",
+  "@socialWelfareSuggestedProceduresTitle": {
+    "description": "Mis datos de Bienestar — título de la sección de trámites sugeridos."
+  },
+  "socialWelfareDisabilityRecognitionProcedure": "Reconocimiento del grado de discapacidad",
+  "@socialWelfareDisabilityRecognitionProcedure": {
+    "description": "Mis datos de Bienestar — enlace al trámite de reconocimiento de discapacidad."
+  },
+  "socialWelfareEarlyCareProcedure": "Acceso al servicio de atención temprana",
+  "@socialWelfareEarlyCareProcedure": {
+    "description": "Mis datos de Bienestar — enlace al trámite de atención temprana."
+  },
+  "socialWelfareTemporaryResidentialStayProcedure": "Plaza para el servicio de estancias temporales en centros residenciales para personas mayores",
+  "@socialWelfareTemporaryResidentialStayProcedure": {
+    "description": "Mis datos de Bienestar — enlace al trámite de estancias temporales en centros residenciales."
+  },
+  "socialWelfareInfoSheetTitle": "Sobre Mis datos de Bienestar social",
+  "@socialWelfareInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del modal informativo."
+  },
+  "socialWelfareInfoSheetDescription": "Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.",
+  "@socialWelfareInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del modal informativo."
+  },
   "socialWelfareFamilyTitle": "Familia numerosa",
   "@socialWelfareFamilyTitle": {
     "description": "Bienestar — sección familia numerosa."
+  },
+  "socialWelfareFamilyNavDescription": "Detalles del título y personas beneficiarias",
+  "@socialWelfareFamilyNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de familia numerosa."
+  },
+  "socialWelfareDisabilityTitle": "Discapacidad",
+  "@socialWelfareDisabilityTitle": {
+    "description": "Mis datos de Bienestar — título de la tarjeta de discapacidad."
+  },
+  "socialWelfareDisabilityNavDescription": "Detalles del título de discapacidad",
+  "@socialWelfareDisabilityNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de discapacidad."
+  },
+  "socialWelfareDisabilityInfoSheetTitle": "Sobre Mi título de discapacidad",
+  "@socialWelfareDisabilityInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de discapacidad."
+  },
+  "socialWelfareDisabilityInfoSheetDescription": "Consulta los datos de tu título de discapacidad.",
+  "@socialWelfareDisabilityInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de discapacidad."
+  },
+  "socialWelfareDisabilityTitleSection": "Mi título de discapacidad",
+  "@socialWelfareDisabilityTitleSection": {
+    "description": "Mis datos de Bienestar — sección del título de discapacidad."
+  },
+  "socialWelfareDisabilityEffectiveDateLabel": "Fecha de efectos",
+  "@socialWelfareDisabilityEffectiveDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de efectos."
+  },
+  "socialWelfareDisabilityPermanentValidityLabel": "Validez definitiva",
+  "@socialWelfareDisabilityPermanentValidityLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de validez definitiva."
+  },
+  "socialWelfareDisabilityFileNumberLabel": "Número de expediente",
+  "@socialWelfareDisabilityFileNumberLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de número de expediente."
+  },
+  "socialWelfareDisabilityBirthDateLabel": "Fecha de nacimiento",
+  "@socialWelfareDisabilityBirthDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de nacimiento."
+  },
+  "socialWelfareDisabilityMobilityLabel": "Procede movilidad",
+  "@socialWelfareDisabilityMobilityLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de movilidad."
+  },
+  "socialWelfareDisabilityThirdPersonLabel": "Reconocido concurso de tercera persona",
+  "@socialWelfareDisabilityThirdPersonLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de tercera persona."
+  },
+  "socialWelfareDisabilityRoyalDecreeLabel": "Real decreto en base a la que se concede el grado",
+  "@socialWelfareDisabilityRoyalDecreeLabel": {
+    "description": "Mis datos de Bienestar — etiqueta del real decreto."
   },
   "socialWelfareFamilySource": "Fuente: Junta de Comunidades de Castilla-La Mancha",
   "@socialWelfareFamilySource": {
@@ -1125,6 +1237,46 @@
   "@socialWelfareTermalismoTitle": {
     "description": "Bienestar — sección termalismo (external link)."
   },
+  "socialWelfareTermalismoNavTitle": "Termalismo",
+  "@socialWelfareTermalismoNavTitle": {
+    "description": "Mis datos de Bienestar — título de la tarjeta de termalismo."
+  },
+  "socialWelfareTermalismoNavDescription": "Balneario adjudicado",
+  "@socialWelfareTermalismoNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de termalismo."
+  },
+  "socialWelfareTermalismoInfoSheetTitle": "Sobre Termalismo",
+  "@socialWelfareTermalismoInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de termalismo."
+  },
+  "socialWelfareTermalismoInfoSheetDescription": "Consulta los datos del último balneario que te han adjudicado de forma definitiva en el Programa Termalismo de Castilla-La Mancha.",
+  "@socialWelfareTermalismoInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de termalismo."
+  },
+  "socialWelfareTermalismoAwardTitle": "Último balneario adjudicado",
+  "@socialWelfareTermalismoAwardTitle": {
+    "description": "Mis datos de Bienestar — sección del último balneario adjudicado."
+  },
+  "socialWelfareTermalismoSpaNameLabel": "Nombre del balneario",
+  "@socialWelfareTermalismoSpaNameLabel": {
+    "description": "Mis datos de Bienestar — etiqueta del nombre del balneario."
+  },
+  "socialWelfareTermalismoStartDateLabel": "Fecha desde",
+  "@socialWelfareTermalismoStartDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha desde."
+  },
+  "socialWelfareTermalismoEndDateLabel": "Fecha hasta",
+  "@socialWelfareTermalismoEndDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha hasta."
+  },
+  "socialWelfareTermalismoUnavailableMessage": "No hemos encontrado información de termalismo asociada a tus datos. Vuelve a intentarlo más tarde.",
+  "@socialWelfareTermalismoUnavailableMessage": {
+    "description": "Mis datos de Bienestar — estado vacío de termalismo."
+  },
+  "socialWelfareTermalismoErrorMessage": "No se ha podido cargar tu información de termalismo.",
+  "@socialWelfareTermalismoErrorMessage": {
+    "description": "Mis datos de Bienestar — error de carga de termalismo."
+  },
   "socialWelfareTermalismoDescription": "El programa de termalismo y balnearios de Castilla-La Mancha se gestiona a través del portal oficial de Bienestar Social.",
   "@socialWelfareTermalismoDescription": {
     "description": "Bienestar — copy termalismo."
@@ -1132,6 +1284,50 @@
   "socialWelfareParkingTitle": "Tarjeta de estacionamiento",
   "@socialWelfareParkingTitle": {
     "description": "Bienestar — sección tarjeta de estacionamiento (external link)."
+  },
+  "socialWelfareParkingNavTitle": "Tarjeta estacionamiento",
+  "@socialWelfareParkingNavTitle": {
+    "description": "Mis datos de Bienestar — título de la tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingNavDescription": "Detalles de tu tarjeta de estacionamiento",
+  "@socialWelfareParkingNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingInfoSheetTitle": "Sobre Mi tarjeta de estacionamiento",
+  "@socialWelfareParkingInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingInfoSheetDescription": "Consulta los datos de tu tarjeta de estacionamiento en vigor para personas con discapacidad y movilidad reducida de Castilla-La Mancha.",
+  "@socialWelfareParkingInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingCardTitle": "Mi tarjeta de estacionamiento",
+  "@socialWelfareParkingCardTitle": {
+    "description": "Mis datos de Bienestar — título de detalle de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingCodeLabel": "Código de la tarjeta",
+  "@socialWelfareParkingCodeLabel": {
+    "description": "Mis datos de Bienestar — etiqueta del código de tarjeta."
+  },
+  "socialWelfareParkingModalityLabel": "Modalidad",
+  "@socialWelfareParkingModalityLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de modalidad."
+  },
+  "socialWelfareParkingValidFromLabel": "Fecha de vigencia desde",
+  "@socialWelfareParkingValidFromLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de vigencia desde."
+  },
+  "socialWelfareParkingValidUntilLabel": "Fecha de vigencia hasta",
+  "@socialWelfareParkingValidUntilLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de vigencia hasta."
+  },
+  "socialWelfareParkingUnavailableMessage": "No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos. Vuelve a intentarlo más tarde.",
+  "@socialWelfareParkingUnavailableMessage": {
+    "description": "Mis datos de Bienestar — estado vacío de tarjeta de estacionamiento."
+  },
+  "socialWelfareParkingErrorMessage": "No se ha podido cargar tu tarjeta de estacionamiento.",
+  "@socialWelfareParkingErrorMessage": {
+    "description": "Mis datos de Bienestar — error de carga de tarjeta de estacionamiento."
   },
   "socialWelfareParkingDescription": "La solicitud y gestión de la tarjeta de estacionamiento para personas con discapacidad se realiza en la sede electrónica correspondiente.",
   "@socialWelfareParkingDescription": {
@@ -1141,9 +1337,69 @@
   "@socialWelfareDependenciaTitle": {
     "description": "Bienestar — sección atención a la dependencia (external link)."
   },
+  "socialWelfareDependenciaNavDescription": "Situación actual y prestaciones",
+  "@socialWelfareDependenciaNavDescription": {
+    "description": "Mis datos de Bienestar — descripción de la tarjeta de dependencia."
+  },
+  "socialWelfareDependenciaInfoSheetTitle": "Sobre Atención a la dependencia",
+  "@socialWelfareDependenciaInfoSheetTitle": {
+    "description": "Mis datos de Bienestar — título del panel informativo de dependencia."
+  },
+  "socialWelfareDependenciaInfoSheetDescription": "Consulta los datos sobre tu situación actual de las prestaciones en ayuda a la dependencia.",
+  "@socialWelfareDependenciaInfoSheetDescription": {
+    "description": "Mis datos de Bienestar — descripción del panel informativo de dependencia."
+  },
+  "socialWelfareDependenciaCurrentStatusTitle": "Mi situación actual",
+  "@socialWelfareDependenciaCurrentStatusTitle": {
+    "description": "Mis datos de Bienestar — título de situación actual."
+  },
+  "socialWelfareDependenciaRequestDateLabel": "Fecha de solicitud",
+  "@socialWelfareDependenciaRequestDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de solicitud."
+  },
+  "socialWelfareDependenciaResolutionDateLabel": "Fecha de resolución",
+  "@socialWelfareDependenciaResolutionDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha de resolución."
+  },
+  "socialWelfareDependenciaRecognizedDegreeLabel": "Grado reconocido",
+  "@socialWelfareDependenciaRecognizedDegreeLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de grado reconocido."
+  },
+  "socialWelfareDependenciaBaremoLabel": "Baremo",
+  "@socialWelfareDependenciaBaremoLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de baremo."
+  },
+  "socialWelfareDependenciaBenefitsTitle": "Prestaciones",
+  "@socialWelfareDependenciaBenefitsTitle": {
+    "description": "Mis datos de Bienestar — título de prestaciones."
+  },
+  "socialWelfareDependenciaBenefitResolutionDateLabel": "Fecha resolución",
+  "@socialWelfareDependenciaBenefitResolutionDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha resolución de prestación."
+  },
+  "socialWelfareDependenciaBenefitEffectiveDateLabel": "Fecha efecto",
+  "@socialWelfareDependenciaBenefitEffectiveDateLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de fecha efecto de prestación."
+  },
+  "socialWelfareDependenciaBenefitAmountLabel": "Importe (€)",
+  "@socialWelfareDependenciaBenefitAmountLabel": {
+    "description": "Mis datos de Bienestar — etiqueta de importe de prestación."
+  },
+  "socialWelfareDependenciaUnavailableMessage": "No hemos encontrado información de atención a la dependencia asociada a tus datos. Vuelve a intentarlo más tarde.",
+  "@socialWelfareDependenciaUnavailableMessage": {
+    "description": "Mis datos de Bienestar — estado vacío de dependencia."
+  },
+  "socialWelfareDependenciaErrorMessage": "No se ha podido cargar tu información de atención a la dependencia.",
+  "@socialWelfareDependenciaErrorMessage": {
+    "description": "Mis datos de Bienestar — error de carga de dependencia."
+  },
   "socialWelfareDependenciaDescription": "La información y los trámites de la Ley de Dependencia se gestionan en el portal oficial de Bienestar Social de Castilla-La Mancha.",
   "@socialWelfareDependenciaDescription": {
     "description": "Bienestar — copy dependencia."
+  },
+  "socialWelfareServicesEmpty": "Información y servicios de Bienestar disponible próximamente.",
+  "@socialWelfareServicesEmpty": {
+    "description": "Mis datos de Bienestar — estado vacío temporal de la pestaña Información y servicios."
   },
   "supportFormTitle": "Soporte técnico",
   "@supportFormTitle": {
@@ -1674,6 +1930,18 @@
   "lifeEventsSaveAction": "Guardar",
   "@lifeEventsSaveAction": {
     "description": "Personalization — explicit save button label."
+  },
+  "lifeEventsAcceptAction": "Aceptar",
+  "@lifeEventsAcceptAction": {
+    "description": "Personalization — accept button label for first-login onboarding."
+  },
+  "lifeEventsFillLaterAction": "Rellenar luego",
+  "@lifeEventsFillLaterAction": {
+    "description": "Personalization — skip action label for first-login onboarding."
+  },
+  "lifeEventsClearAllAction": "Desmarcar todo",
+  "@lifeEventsClearAllAction": {
+    "description": "Personalization — clear all selected life events action label."
   },
   "lifeEventsResetAction": "Borrar preferencias",
   "@lifeEventsResetAction": {
@@ -2723,9 +2991,99 @@
   "@notificationDetailPlaceholderPending": {
     "description": "Notifications — mensaje provisional para el detalle real."
   },
-  "familiaNumerosaDetailTitle": "Carnet de familia numerosa",
+  "familiaNumerosaDetailTitle": "Familia numerosa",
   "@familiaNumerosaDetailTitle": {
     "description": "Familia numerosa detail page — AppBar title."
+  },
+  "familiaNumerosaInfoSheetTitle": "Sobre Familia numerosa",
+  "@familiaNumerosaInfoSheetTitle": {
+    "description": "Familia numerosa detail — título del panel informativo."
+  },
+  "familiaNumerosaInfoSheetDescription": "Consulta los datos de tu título de familia numerosa.",
+  "@familiaNumerosaInfoSheetDescription": {
+    "description": "Familia numerosa detail — descripción del panel informativo."
+  },
+  "familiaNumerosaTitleSection": "Mi título de familia numerosa",
+  "@familiaNumerosaTitleSection": {
+    "description": "Familia numerosa detail — sección de datos del título."
+  },
+  "familiaNumerosaRegionLabel": "Comunidad autónoma",
+  "@familiaNumerosaRegionLabel": {
+    "description": "Familia numerosa detail — etiqueta de comunidad autónoma."
+  },
+  "familiaNumerosaTitleNumberLabel": "Número de título",
+  "@familiaNumerosaTitleNumberLabel": {
+    "description": "Familia numerosa detail — etiqueta de número de título."
+  },
+  "familiaNumerosaCategoryLabel": "Categoría",
+  "@familiaNumerosaCategoryLabel": {
+    "description": "Familia numerosa detail — etiqueta de categoría."
+  },
+  "familiaNumerosaValidLabel": "Vigente",
+  "@familiaNumerosaValidLabel": {
+    "description": "Familia numerosa detail — etiqueta de vigencia."
+  },
+  "familiaNumerosaIssueDateLabel": "Fecha de expedición",
+  "@familiaNumerosaIssueDateLabel": {
+    "description": "Familia numerosa detail — etiqueta de fecha de expedición."
+  },
+  "familiaNumerosaExpiryDateLabel": "Fecha de caducidad",
+  "@familiaNumerosaExpiryDateLabel": {
+    "description": "Familia numerosa detail — etiqueta de fecha de caducidad."
+  },
+  "familiaNumerosaChildrenCountLabel": "Número de hijos/as del título",
+  "@familiaNumerosaChildrenCountLabel": {
+    "description": "Familia numerosa detail — etiqueta de número de hijos/as."
+  },
+  "familiaNumerosaBeneficiariesTitle": "Beneficiarios/as",
+  "@familiaNumerosaBeneficiariesTitle": {
+    "description": "Familia numerosa detail — sección de beneficiarios/as."
+  },
+  "familiaNumerosaBeneficiaryTitle": "Beneficiario/a {index}",
+  "@familiaNumerosaBeneficiaryTitle": {
+    "description": "Familia numerosa detail — título numerado de beneficiario/a.",
+    "placeholders": {
+      "index": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
+  "familiaNumerosaDocumentNumberLabel": "Número de documento",
+  "@familiaNumerosaDocumentNumberLabel": {
+    "description": "Familia numerosa detail — etiqueta de documento de beneficiario/a."
+  },
+  "familiaNumerosaBirthDateLabel": "Fecha de nacimiento",
+  "@familiaNumerosaBirthDateLabel": {
+    "description": "Familia numerosa detail — etiqueta de fecha de nacimiento."
+  },
+  "familiaNumerosaFullNameLabel": "Nombre y apellidos",
+  "@familiaNumerosaFullNameLabel": {
+    "description": "Familia numerosa detail — etiqueta de nombre completo."
+  },
+  "familiaNumerosaHolderLabel": "Titular",
+  "@familiaNumerosaHolderLabel": {
+    "description": "Familia numerosa detail — etiqueta de titular."
+  },
+  "familiaNumerosaYes": "Sí",
+  "@familiaNumerosaYes": {
+    "description": "Familia numerosa detail — valor afirmativo."
+  },
+  "familiaNumerosaNo": "No",
+  "@familiaNumerosaNo": {
+    "description": "Familia numerosa detail — valor negativo."
+  },
+  "familiaNumerosaNoDataMessage": "No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "@familiaNumerosaNoDataMessage": {
+    "description": "Familia numerosa detail — helper mostrado cuando no hay datos."
+  },
+  "familiaNumerosaContactHint": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "@familiaNumerosaContactHint": {
+    "description": "Familia numerosa detail — helper bajo los datos."
+  },
+  "familiaNumerosaOfficeContactsButton": "Listado de oficinas y contactos",
+  "@familiaNumerosaOfficeContactsButton": {
+    "description": "Familia numerosa detail — botón externo hacia oficinas y contactos."
   },
   "familiaNumerosaCardNumberLabel": "Número de carnet: {number}",
   "@familiaNumerosaCardNumberLabel": {
@@ -2939,7 +3297,7 @@
   "@recommendationsTabNew": {
     "description": "Recommendations — tab label for the newly assigned bucket."
   },
-  "recommendationsTabImmediate": "Tramitación inmediata",
+  "recommendationsTabImmediate": "Trámite inmediato",
   "@recommendationsTabImmediate": {
     "description": "Recommendations — tab label for the immediate-processing bucket."
   },
@@ -2958,6 +3316,10 @@
   "recommendationsLifeEventPrefix": "Hecho vital:",
   "@recommendationsLifeEventPrefix": {
     "description": "Recommendations — prefix shown before the life event label inside a card chip."
+  },
+  "recommendationsAssociatedLifeEventsLabel": "Hechos vitales asociados",
+  "@recommendationsAssociatedLifeEventsLabel": {
+    "description": "Recommendations — label shown above the life events associated with a recommendation card."
   },
   "recommendationsLoadMore": "Ver más",
   "@recommendationsLoadMore": {
@@ -3054,5 +3416,608 @@
   "drawerGoToSedeElectronica": "Ir a Sede Electrónica",
   "@drawerGoToSedeElectronica": {
     "description": "Botón de acción del menú de perfil que enlaza con la Sede Electrónica."
+  },
+  "myDataTitle": "Mis datos",
+  "@myDataTitle": {
+    "description": "Título de la sección Mis datos en la barra superior y navegación principal."
+  },
+  "myDataIntro": "Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.",
+  "@myDataIntro": {
+    "description": "Texto introductorio de la pantalla Mis datos."
+  },
+  "myDataHealthTitle": "Salud",
+  "@myDataHealthTitle": {
+    "description": "Título de la tarjeta de Salud en la pantalla Mis datos."
+  },
+  "myDataHealthDescription": "SESCAM y servicios de salud",
+  "@myDataHealthDescription": {
+    "description": "Descripción de la tarjeta de Salud en la pantalla Mis datos."
+  },
+  "myDataSocialWelfareTitle": "Bienestar Social",
+  "@myDataSocialWelfareTitle": {
+    "description": "Título de la tarjeta de Bienestar Social en la pantalla Mis datos."
+  },
+  "myDataSocialWelfareDescription": "Servicios disponibles",
+  "@myDataSocialWelfareDescription": {
+    "description": "Descripción de la tarjeta de Bienestar Social en la pantalla Mis datos."
+  },
+  "myDataEmploymentTitle": "Empleo",
+  "@myDataEmploymentTitle": {
+    "description": "Título de la tarjeta de Empleo en la pantalla Mis datos."
+  },
+  "myDataEmploymentDescription": "Demanda y servicios de empleo",
+  "@myDataEmploymentDescription": {
+    "description": "Descripción de la tarjeta de Empleo en la pantalla Mis datos."
+  },
+  "myDataEmploymentInfoSheetTitle": "Sobre Mis datos de Empleo",
+  "@myDataEmploymentInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Empleo."
+  },
+  "myDataEmploymentInfoSheetDescription": "Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.",
+  "@myDataEmploymentInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Empleo."
+  },
+  "myDataEmploymentDataTab": "Mis datos de Empleo",
+  "@myDataEmploymentDataTab": {
+    "description": "Primera pestaña del detalle de Empleo."
+  },
+  "myDataEmploymentServicesTab": "Información y servicios",
+  "@myDataEmploymentServicesTab": {
+    "description": "Segunda pestaña del detalle de Empleo."
+  },
+  "myDataEmploymentDemandTitle": "Tu demanda de empleo",
+  "@myDataEmploymentDemandTitle": {
+    "description": "Título de la tarjeta de demanda de empleo."
+  },
+  "myDataEmploymentRegistrationDateLabel": "Fecha de inscripción sin interrupciones",
+  "@myDataEmploymentRegistrationDateLabel": {
+    "description": "Etiqueta de la fecha de inscripción sin interrupciones."
+  },
+  "myDataEmploymentDemandEmpty": "No constan datos de demanda de empleo.",
+  "@myDataEmploymentDemandEmpty": {
+    "description": "Mensaje mostrado cuando no hay datos de demanda de empleo."
+  },
+  "myDataEmploymentDemandError": "No hemos podido cargar tu demanda de empleo.",
+  "@myDataEmploymentDemandError": {
+    "description": "Mensaje de error al cargar la demanda de empleo."
+  },
+  "myDataEmploymentOffersTitle": "Inscripciones en ofertas",
+  "@myDataEmploymentOffersTitle": {
+    "description": "Título de la tarjeta de inscripciones en ofertas."
+  },
+  "myDataEmploymentOffersDescription": "Ofertas de empleo en las que te has inscrito",
+  "@myDataEmploymentOffersDescription": {
+    "description": "Descripción de la tarjeta de inscripciones en ofertas."
+  },
+  "myDataEmploymentProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataEmploymentProceduresTitle": {
+    "description": "Título de la sección de trámites de empleo."
+  },
+  "myDataEmploymentProcedureProfessionalCertificate": "Expedición certificado de profesionalidad",
+  "@myDataEmploymentProcedureProfessionalCertificate": {
+    "description": "Trámite de expedición de certificado de profesionalidad."
+  },
+  "myDataEmploymentProcedureJobSeekerRegistration": "Inscripción como demandante de personas trabajadoras en oficinas de empleo y emprendedores",
+  "@myDataEmploymentProcedureJobSeekerRegistration": {
+    "description": "Trámite de inscripción como demandante de empleo."
+  },
+  "myDataEmploymentProcedureVirtualOfficeCredentials": "Solicitud de credenciales de acceso a la oficina virtual de la consejería de empleo y economía para personas físicas, jurídicas y autónomos.",
+  "@myDataEmploymentProcedureVirtualOfficeCredentials": {
+    "description": "Trámite de solicitud de credenciales de la oficina virtual de empleo."
+  },
+  "myDataEmploymentInterestLinksTitle": "Enlaces de interés",
+  "@myDataEmploymentInterestLinksTitle": {
+    "description": "Título de la sección de enlaces de interés de empleo."
+  },
+  "myDataEmploymentLinkEmploymentClm": "Empleo CLM",
+  "@myDataEmploymentLinkEmploymentClm": {
+    "description": "Enlace al portal Empleo CLM."
+  },
+  "myDataEmploymentLinkPublicEmploymentClm": "Empleo Público CLM",
+  "@myDataEmploymentLinkPublicEmploymentClm": {
+    "description": "Enlace al portal Empleo Público CLM."
+  },
+  "myDataEducationTitle": "Educación",
+  "@myDataEducationTitle": {
+    "description": "Título de la tarjeta de Educación en la pantalla Mis datos."
+  },
+  "myDataEducationDescription": "Titulos formativos",
+  "@myDataEducationDescription": {
+    "description": "Descripción de la tarjeta de Educación en la pantalla Mis datos."
+  },
+  "myDataHousingTitle": "Vivienda",
+  "@myDataHousingTitle": {
+    "description": "Título de la tarjeta de Vivienda en la pantalla Mis datos."
+  },
+  "myDataHousingDescription": "Titularidad de bienes inmueble",
+  "@myDataHousingDescription": {
+    "description": "Descripción de la tarjeta de Vivienda en la pantalla Mis datos."
+  },
+  "myDataHousingInfoSheetTitle": "Sobre Mis datos de Vivienda",
+  "@myDataHousingInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Vivienda."
+  },
+  "myDataHousingInfoSheetDescription": "Consulta la información de tus bienes inmuebles, tu vivienda y los datos de tu domicilio actual.",
+  "@myDataHousingInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Vivienda."
+  },
+  "myDataHousingDataTab": "Mis datos de Vivienda",
+  "@myDataHousingDataTab": {
+    "description": "Primera pestaña del detalle de Vivienda."
+  },
+  "myDataHousingServicesTab": "Información y servicios",
+  "@myDataHousingServicesTab": {
+    "description": "Segunda pestaña del detalle de Vivienda."
+  },
+  "myDataHousingRealEstateTitle": "Bienes inmuebles",
+  "@myDataHousingRealEstateTitle": {
+    "description": "Título de la tarjeta de bienes inmuebles en el detalle de Vivienda."
+  },
+  "myDataHousingRealEstateDescription": "Datos catastrales de mis inmuebles",
+  "@myDataHousingRealEstateDescription": {
+    "description": "Descripción de la tarjeta de bienes inmuebles en el detalle de Vivienda."
+  },
+  "myDataHousingRealEstateInfoSheetTitle": "Sobre tus bienes inmueble",
+  "@myDataHousingRealEstateInfoSheetTitle": {
+    "description": "Título del modal informativo de bienes inmuebles."
+  },
+  "myDataHousingRealEstateInfoSheetDescription": "Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.",
+  "@myDataHousingRealEstateInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de bienes inmuebles."
+  },
+  "myDataHousingRealEstateInfoSheetFooter": "Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro",
+  "@myDataHousingRealEstateInfoSheetFooter": {
+    "description": "Pie del modal informativo de bienes inmuebles."
+  },
+  "myDataHousingRealEstateFilterAll": "Todo",
+  "@myDataHousingRealEstateFilterAll": {
+    "description": "Etiqueta del filtro de todos los bienes inmuebles."
+  },
+  "myDataHousingRealEstateFilterUrban": "Urbano",
+  "@myDataHousingRealEstateFilterUrban": {
+    "description": "Etiqueta del filtro de bienes inmuebles urbanos."
+  },
+  "myDataHousingRealEstateFilterRustic": "Rústico",
+  "@myDataHousingRealEstateFilterRustic": {
+    "description": "Etiqueta del filtro de bienes inmuebles rústicos."
+  },
+  "myDataHousingRealEstateReferenceTitle": "Referencia catastral {value}",
+  "@myDataHousingRealEstateReferenceTitle": {
+    "description": "Título de la tarjeta de bien inmueble con referencia catastral.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHousingRealEstateDetailClose": "Cerrar",
+  "@myDataHousingRealEstateDetailClose": {
+    "description": "Tooltip del botón de cerrar el detalle de bien inmueble."
+  },
+  "myDataHousingRealEstateDetailHomeDataTitle": "Datos de la vivienda",
+  "@myDataHousingRealEstateDetailHomeDataTitle": {
+    "description": "Título de la sección de datos de la vivienda."
+  },
+  "myDataHousingRealEstateReferenceLabel": "Referencia catastral",
+  "@myDataHousingRealEstateReferenceLabel": {
+    "description": "Etiqueta del campo referencia catastral."
+  },
+  "myDataHousingRealEstateAddressLabel": "Dirección",
+  "@myDataHousingRealEstateAddressLabel": {
+    "description": "Etiqueta de dirección del bien inmueble."
+  },
+  "myDataHousingRealEstateUseLabel": "Uso",
+  "@myDataHousingRealEstateUseLabel": {
+    "description": "Etiqueta de uso del bien inmueble."
+  },
+  "myDataHousingRealEstateCadastralValueLabel": "Valor catastral",
+  "@myDataHousingRealEstateCadastralValueLabel": {
+    "description": "Etiqueta de valor catastral del bien inmueble."
+  },
+  "myDataHousingRealEstateLandValueLabel": "Valor del suelo",
+  "@myDataHousingRealEstateLandValueLabel": {
+    "description": "Etiqueta de valor del suelo del bien inmueble."
+  },
+  "myDataHousingRealEstateConstructionValueLabel": "Valor de construcción",
+  "@myDataHousingRealEstateConstructionValueLabel": {
+    "description": "Etiqueta de valor de construcción del bien inmueble."
+  },
+  "myDataHousingRealEstateStatusLabel": "Estado",
+  "@myDataHousingRealEstateStatusLabel": {
+    "description": "Etiqueta de estado del bien inmueble."
+  },
+  "myDataHousingRealEstateShowCartography": "Mostrar cartografía",
+  "@myDataHousingRealEstateShowCartography": {
+    "description": "Texto del botón para abrir la cartografía del bien inmueble."
+  },
+  "myDataHousingRealEstateHoldersTitle": "Titulares",
+  "@myDataHousingRealEstateHoldersTitle": {
+    "description": "Título de la sección de titulares del bien inmueble."
+  },
+  "myDataHousingRealEstateHoldersEmpty": "No constan titulares para este bien inmueble.",
+  "@myDataHousingRealEstateHoldersEmpty": {
+    "description": "Mensaje mostrado cuando no hay titulares del bien inmueble."
+  },
+  "myDataHousingRealEstateDetailEmpty": "No hemos encontrado el bien inmueble seleccionado.",
+  "@myDataHousingRealEstateDetailEmpty": {
+    "description": "Mensaje mostrado cuando no se encuentra el detalle del inmueble seleccionado."
+  },
+  "myDataHousingRealEstateEmpty": "No constan bienes inmuebles a tu nombre.",
+  "@myDataHousingRealEstateEmpty": {
+    "description": "Estado vacío de bienes inmuebles."
+  },
+  "myDataHousingRealEstateFilteredEmpty": "No hay bienes inmuebles para este filtro.",
+  "@myDataHousingRealEstateFilteredEmpty": {
+    "description": "Estado vacío de bienes inmuebles filtrados."
+  },
+  "myDataHousingRealEstateError": "No hemos podido cargar los datos de Catastro.",
+  "@myDataHousingRealEstateError": {
+    "description": "Estado de error de bienes inmuebles."
+  },
+  "myDataHousingAddressTitle": "Domicilio en Castilla-La Mancha",
+  "@myDataHousingAddressTitle": {
+    "description": "Título de la tarjeta de domicilio en el detalle de Vivienda."
+  },
+  "myDataHousingAddressDescription": "Datos en la base padronal",
+  "@myDataHousingAddressDescription": {
+    "description": "Descripción de la tarjeta de domicilio en el detalle de Vivienda."
+  },
+  "myDataHousingAddressInfoSheetTitle": "Sobre tu domicilio",
+  "@myDataHousingAddressInfoSheetTitle": {
+    "description": "Título del modal informativo del detalle de domicilio."
+  },
+  "myDataHousingAddressInfoSheetDescription": "Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.",
+  "@myDataHousingAddressInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo del detalle de domicilio."
+  },
+  "myDataHousingAddressInfoSheetFooter": "Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.",
+  "@myDataHousingAddressInfoSheetFooter": {
+    "description": "Pie del modal informativo del detalle de domicilio."
+  },
+  "myDataHousingAddressDataTitle": "Datos del domicilio",
+  "@myDataHousingAddressDataTitle": {
+    "description": "Título de la sección de datos del domicilio."
+  },
+  "myDataHousingAddressRegistrationDataTitle": "Datos relativos a la inscripción",
+  "@myDataHousingAddressRegistrationDataTitle": {
+    "description": "Título de la sección de datos de inscripción padronal."
+  },
+  "myDataHousingAddressLabel": "Domicilio",
+  "@myDataHousingAddressLabel": {
+    "description": "Etiqueta del campo domicilio."
+  },
+  "myDataHousingAddressPostalCodeLabel": "Código postal",
+  "@myDataHousingAddressPostalCodeLabel": {
+    "description": "Etiqueta del campo código postal."
+  },
+  "myDataHousingAddressMunicipalityLabel": "Municipio",
+  "@myDataHousingAddressMunicipalityLabel": {
+    "description": "Etiqueta del campo municipio."
+  },
+  "myDataHousingAddressProvinceLabel": "Provincia",
+  "@myDataHousingAddressProvinceLabel": {
+    "description": "Etiqueta del campo provincia."
+  },
+  "myDataHousingAddressCollectiveEntityLabel": "Entidad colectivo",
+  "@myDataHousingAddressCollectiveEntityLabel": {
+    "description": "Etiqueta del campo entidad colectivo."
+  },
+  "myDataHousingAddressSingleEntityLabel": "Entidad singular",
+  "@myDataHousingAddressSingleEntityLabel": {
+    "description": "Etiqueta del campo entidad singular."
+  },
+  "myDataHousingAddressPopulationUnitLabel": "Núcleo / Diseminado",
+  "@myDataHousingAddressPopulationUnitLabel": {
+    "description": "Etiqueta del campo núcleo o diseminado."
+  },
+  "myDataHousingAddressVariationTypeLabel": "Tipo de variación",
+  "@myDataHousingAddressVariationTypeLabel": {
+    "description": "Etiqueta del tipo de variación padronal."
+  },
+  "myDataHousingAddressVariationDateLabel": "Fecha de variación",
+  "@myDataHousingAddressVariationDateLabel": {
+    "description": "Etiqueta de la fecha de variación padronal."
+  },
+  "myDataHousingAddressEmpty": "No constan datos de domicilio en Castilla-La Mancha.",
+  "@myDataHousingAddressEmpty": {
+    "description": "Mensaje mostrado cuando no hay domicilio registrado."
+  },
+  "myDataHousingAddressError": "No hemos podido cargar tus datos de domicilio.",
+  "@myDataHousingAddressError": {
+    "description": "Mensaje de error al cargar domicilio."
+  },
+  "myDataHousingLinksTitle": "Enlaces de interés",
+  "@myDataHousingLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña Información y servicios de Vivienda."
+  },
+  "myDataHousingLinkClmHousing": "Vivienda Castilla-La Mancha",
+  "@myDataHousingLinkClmHousing": {
+    "description": "Enlace al portal de Vivienda Castilla-La Mancha."
+  },
+  "myDataHousingLinkCadastre": "Sede del catastro",
+  "@myDataHousingLinkCadastre": {
+    "description": "Enlace a la Sede del Catastro."
+  },
+  "myDataHousingProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataHousingProceduresTitle": {
+    "description": "Título de la sección de trámites relacionados con vivienda."
+  },
+  "myDataHousingProcedureYoungRentVoucher": "Ayudas al bono alquiler joven en Castilla-La Mancha",
+  "@myDataHousingProcedureYoungRentVoucher": {
+    "description": "Trámite de ayudas al bono alquiler joven en Castilla-La Mancha."
+  },
+  "myDataHousingProcedureProtectedHousingRegister": "Inscripción en el registro de demandantes de vivienda con protección pública de CLM",
+  "@myDataHousingProcedureProtectedHousingRegister": {
+    "description": "Trámite de inscripción en el registro de demandantes de vivienda con protección pública de CLM."
+  },
+  "myDataHousingProcedureSocialEmergencyAid": "Ayudas de emergencia social",
+  "@myDataHousingProcedureSocialEmergencyAid": {
+    "description": "Trámite de ayudas de emergencia social."
+  },
+  "myDataVehiclesTitle": "Vehículos",
+  "@myDataVehiclesTitle": {
+    "description": "Título de la tarjeta de Vehículos en la pantalla Mis datos."
+  },
+  "myDataVehiclesDescription": "Tus vehículos registrados",
+  "@myDataVehiclesDescription": {
+    "description": "Descripción de la tarjeta de Vehículos en la pantalla Mis datos."
+  },
+  "myDataVehiclesInfoSheetTitle": "Sobre Mis datos de Vehículos",
+  "@myDataVehiclesInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesInfoSheetDescription": "Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.",
+  "@myDataVehiclesInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesInfoSheetFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)",
+  "@myDataVehiclesInfoSheetFooter": {
+    "description": "Texto del pie de página del modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesInfoSheetContactButton": "Contactar",
+  "@myDataVehiclesInfoSheetContactButton": {
+    "description": "Etiqueta del botón de contacto en el modal informativo de Mis datos de Vehículos."
+  },
+  "myDataVehiclesDataTab": "Mis datos de Vehículos",
+  "@myDataVehiclesDataTab": {
+    "description": "Primera pestaña del detalle de Vehículos."
+  },
+  "myDataVehiclesServicesTab": "Información y servicios",
+  "@myDataVehiclesServicesTab": {
+    "description": "Segunda pestaña del detalle de Vehículos."
+  },
+  "myDataVehiclesSectionTitle": "Mis vehículos",
+  "@myDataVehiclesSectionTitle": {
+    "description": "Título de la sección de listado de vehículos."
+  },
+  "myDataVehiclesLicensePlateLabel": "Matrícula del vehículo",
+  "@myDataVehiclesLicensePlateLabel": {
+    "description": "Etiqueta descriptiva de la matrícula del vehículo."
+  },
+  "myDataVehiclesEmpty": "No constan vehículos registrados a tu nombre.",
+  "@myDataVehiclesEmpty": {
+    "description": "Mensaje mostrado cuando no hay vehículos."
+  },
+  "myDataVehiclesError": "No hemos podido cargar tus vehículos.",
+  "@myDataVehiclesError": {
+    "description": "Mensaje de error al cargar vehículos."
+  },
+  "myDataVehiclesServicesEmpty": "Información y servicios de Vehículos disponible próximamente.",
+  "@myDataVehiclesServicesEmpty": {
+    "description": "Estado vacío temporal de la pestaña Información y servicios de Vehículos."
+  },
+  "myDataVehiclesLinksTitle": "Enlaces de interés",
+  "@myDataVehiclesLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña Información y servicios de Vehículos."
+  },
+  "myDataVehiclesLinkDgt": "Sede electrónica DGT",
+  "@myDataVehiclesLinkDgt": {
+    "description": "Enlace a la Sede electrónica de la Dirección General de Tráfico."
+  },
+  "myDataVehiclesLinkAge": "Carpeta Ciudadana de la AGE",
+  "@myDataVehiclesLinkAge": {
+    "description": "Enlace a la Carpeta Ciudadana de la Administración General del Estado."
+  },
+  "myDataVehiclesProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataVehiclesProceduresTitle": {
+    "description": "Título de la sección de trámites relacionados con vehículos."
+  },
+  "myDataVehiclesProcedureMoves3Vehicle": "Solicitud de ayuda MOVES III para adquisición de vehículos eléctricos",
+  "@myDataVehiclesProcedureMoves3Vehicle": {
+    "description": "Trámite para solicitar ayuda MOVES III para comprar vehículos eléctricos."
+  },
+  "myDataVehiclesProcedureMoves3Infrastructure": "Solicitud de ayuda MOVES III para implantación de infraestructura de recarga de vehículos eléctricos",
+  "@myDataVehiclesProcedureMoves3Infrastructure": {
+    "description": "Trámite para solicitar ayuda MOVES III para infraestructura de recarga."
+  },
+  "myDataVehiclesProcedureCap": "Homologación de cursos de formación de conductores (cap)",
+  "@myDataVehiclesProcedureCap": {
+    "description": "Trámite para homologar cursos de formación de conductores CAP."
+  },
+  "myDataSectionComingSoon": "{section} disponible próximamente",
+  "@myDataSectionComingSoon": {
+    "description": "SnackBar mostrado al pulsar una tarjeta de Mis datos cuyo detalle aún no está implementado.",
+    "placeholders": {
+      "section": {
+        "type": "String",
+        "example": "Salud"
+      }
+    }
+  },
+  "myDataHealthInfoMessage": "Consulta tus datos de salud y las citas disponibles.",
+  "@myDataHealthInfoMessage": {
+    "description": "SnackBar mostrado al pulsar el botón de información en el detalle de Salud."
+  },
+  "myDataEducationInfoSheetTitle": "Sobre Mis datos de Educación",
+  "@myDataEducationInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Educación."
+  },
+  "myDataEducationInfoSheetDescription": "Consulta tu información y accede a servicios relacionados de educación en Castilla-La Mancha.",
+  "@myDataEducationInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Educación."
+  },
+  "myDataEducationDataTab": "Mis datos de Educación",
+  "@myDataEducationDataTab": {
+    "description": "Primera pestaña del detalle de Educación."
+  },
+  "myDataEducationServicesTab": "Información y servicios",
+  "@myDataEducationServicesTab": {
+    "description": "Segunda pestaña del detalle de Educación."
+  },
+  "myDataEducationUniversityTitles": "Títulos universitarios",
+  "@myDataEducationUniversityTitles": {
+    "description": "Tarjeta de acceso a títulos universitarios en Mis datos de Educación."
+  },
+  "myDataEducationNonUniversityTitles": "Títulos no universitarios",
+  "@myDataEducationNonUniversityTitles": {
+    "description": "Tarjeta de acceso a títulos no universitarios en Mis datos de Educación."
+  },
+  "myDataEducationTitlesDescription": "Universidades públicas y privadas",
+  "@myDataEducationTitlesDescription": {
+    "description": "Descripción de las tarjetas de títulos educativos."
+  },
+  "myDataEducationServicesEmpty": "Información y servicios de Educación disponible próximamente.",
+  "@myDataEducationServicesEmpty": {
+    "description": "Estado vacío temporal de la pestaña Información y servicios de Educación."
+  },
+  "myDataEducationProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataEducationProceduresTitle": {
+    "description": "Título de la sección de trámites sugeridos en la pestaña de información y servicios de Educación."
+  },
+  "myDataEducationProcedureEquivalence": "Solicitud equivalencia de estudios con los títulos oficiales",
+  "@myDataEducationProcedureEquivalence": {
+    "description": "Enlace a la solicitud de equivalencia de estudios con títulos oficiales."
+  },
+  "myDataEducationProcedureScholarships": "Becas y ayudas a alumnos de niveles postobligatorios",
+  "@myDataEducationProcedureScholarships": {
+    "description": "Enlace a becas y ayudas para alumnos de niveles postobligatorios."
+  },
+  "myDataEducationProcedureSecondaryDegree": "Pruebas libres para la obtención del título de graduado en educación secundaria obligatoria para > 18 años",
+  "@myDataEducationProcedureSecondaryDegree": {
+    "description": "Enlace a pruebas libres para obtener el título de graduado en ESO para mayores de 18 años."
+  },
+  "myDataEducationInterestLinksTitle": "Enlaces de interés",
+  "@myDataEducationInterestLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña de información y servicios de Educación."
+  },
+  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
+  "@myDataEducationInterestLinkPlaceholder": {
+    "description": "Placeholder de enlace de interés de Educación según el diseño de Figma."
+  },
+  "myDataHealthInfoSheetTitle": "Sobre Mis datos de Salud",
+  "@myDataHealthInfoSheetTitle": {
+    "description": "Título del modal informativo de Mis datos de Salud."
+  },
+  "myDataHealthInfoSheetDescription": "Consulta la información de tus citas de Atención Primaria del Servicio de Salud de Castilla-La Mancha (SESCAM).",
+  "@myDataHealthInfoSheetDescription": {
+    "description": "Descripción principal del modal informativo de Mis datos de Salud."
+  },
+  "myDataHealthInfoSheetContactHint": "Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.",
+  "@myDataHealthInfoSheetContactHint": {
+    "description": "Texto de ayuda previo al CTA de contacto del modal informativo de Salud."
+  },
+  "myDataHealthDataTab": "Mis datos de Salud",
+  "@myDataHealthDataTab": {
+    "description": "Primera pestaña del detalle de Salud."
+  },
+  "myDataHealthServicesTab": "Información y servicios",
+  "@myDataHealthServicesTab": {
+    "description": "Segunda pestaña del detalle de Salud."
+  },
+  "myDataHealthProceduresTitle": "Trámites que te pueden interesar",
+  "@myDataHealthProceduresTitle": {
+    "description": "Título de la sección de trámites sugeridos en la pestaña de información y servicios de Salud."
+  },
+  "myDataHealthProcedureComplaints": "Reclamaciones y quejas relativas al SESCAM",
+  "@myDataHealthProcedureComplaints": {
+    "description": "Enlace a reclamaciones y quejas relativas al SESCAM."
+  },
+  "myDataHealthProcedureHealthCard": "Solicitud de tarjeta para la Atención Sanitaria en el SESCAM",
+  "@myDataHealthProcedureHealthCard": {
+    "description": "Enlace a la solicitud de tarjeta para la Atención Sanitaria en el SESCAM."
+  },
+  "myDataHealthProcedureSpecializedCare": "Libre elección en el ámbito de la Atención Especializada",
+  "@myDataHealthProcedureSpecializedCare": {
+    "description": "Enlace de libre elección en el ámbito de la Atención Especializada."
+  },
+  "myDataHealthInterestLinksTitle": "Enlaces de interés",
+  "@myDataHealthInterestLinksTitle": {
+    "description": "Título de la sección de enlaces de interés en la pestaña de información y servicios de Salud."
+  },
+  "myDataHealthLinkSescam": "Servicio de Salud de Castilla-La Mancha (SESCAM)",
+  "@myDataHealthLinkSescam": {
+    "description": "Enlace al Servicio de Salud de Castilla-La Mancha."
+  },
+  "myDataHealthLinkDigitalHealth": "Mi Salud Digital",
+  "@myDataHealthLinkDigitalHealth": {
+    "description": "Enlace a Mi Salud Digital."
+  },
+  "myDataHealthLinkClinicalHistory": "Historia clínica Digital (Sistema Nacional de Salud)",
+  "@myDataHealthLinkClinicalHistory": {
+    "description": "Enlace a Historia clínica Digital del Sistema Nacional de Salud."
+  },
+  "myDataHealthAppointmentsTitle": "Citas de Atención Primaria",
+  "@myDataHealthAppointmentsTitle": {
+    "description": "Título principal del bloque de citas sanitarias."
+  },
+  "myDataHealthAppointmentsEmpty": "No hay citas para mostrar.",
+  "@myDataHealthAppointmentsEmpty": {
+    "description": "Estado vacío del listado de citas sanitarias."
+  },
+  "myDataHealthAppointmentsError": "No hemos podido cargar tus citas sanitarias.",
+  "@myDataHealthAppointmentsError": {
+    "description": "Mensaje de error del listado de citas sanitarias."
+  },
+  "myDataHealthCip": "CIP: FCCT590551910012",
+  "@myDataHealthCip": {
+    "description": "Código CIP mostrado bajo el título del detalle de Salud."
+  },
+  "myDataHealthPendingTab": "Pendientes",
+  "@myDataHealthPendingTab": {
+    "description": "Pestaña de citas pendientes en Salud."
+  },
+  "myDataHealthPastTab": "Pasadas",
+  "@myDataHealthPastTab": {
+    "description": "Pestaña de citas pasadas en Salud."
+  },
+  "myDataHealthYear": "2026",
+  "@myDataHealthYear": {
+    "description": "Año mostrado en la lista de citas de Salud de la maqueta."
+  },
+  "myDataHealthDecember": "diciembre",
+  "@myDataHealthDecember": {
+    "description": "Mes diciembre mostrado en la lista de citas de Salud."
+  },
+  "myDataHealthOctober": "octubre",
+  "@myDataHealthOctober": {
+    "description": "Mes octubre mostrado en la lista de citas de Salud."
+  },
+  "myDataHealthAppointmentDayNumber": "12",
+  "@myDataHealthAppointmentDayNumber": {
+    "description": "Número de día de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentWeekday": "Jueves",
+  "@myDataHealthAppointmentWeekday": {
+    "description": "Día de la semana de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentTime": "17:35h",
+  "@myDataHealthAppointmentTime": {
+    "description": "Hora de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentType": "TELÉFONICA",
+  "@myDataHealthAppointmentType": {
+    "description": "Tipo de cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
+  "@myDataHealthAppointmentProfessional": {
+    "description": "Profesional sanitario de la cita de ejemplo."
+  },
+  "myDataHealthAppointmentDescription": "Cita de Atención Primaria",
+  "@myDataHealthAppointmentDescription": {
+    "description": "Descripción de la cita sanitaria de ejemplo."
+  },
+  "myDataHealthAppointmentModality": "Teleconsulta a demanda",
+  "@myDataHealthAppointmentModality": {
+    "description": "Modalidad de la cita sanitaria de ejemplo."
   }
 }
