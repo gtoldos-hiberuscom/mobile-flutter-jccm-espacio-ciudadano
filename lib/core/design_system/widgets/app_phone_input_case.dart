@@ -17,6 +17,10 @@ class AppPhoneInputCase extends StatelessWidget {
     this.hint = '600 000 000',
     this.errorText,
     this.onChanged,
+    this.helperText,
+    this.onSelectorTap,
+    this.inputFormatters,
+    this.keyboardType,
   });
 
   final String label;
@@ -25,6 +29,10 @@ class AppPhoneInputCase extends StatelessWidget {
   final String hint;
   final String? errorText;
   final ValueChanged<String>? onChanged;
+  final String? helperText;
+  final VoidCallback? onSelectorTap;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(final BuildContext context) {
@@ -32,6 +40,21 @@ class AppPhoneInputCase extends StatelessWidget {
     final color = isError ? AppColors.error : AppColors.primary;
     final borderColor = isError ? AppColors.error : AppColors.borderBlueMutedBase;
     final fillColor = isError ? AppColors.errorContainer : AppColors.backgroundWhite;
+
+    final selectorContent = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+      child: Row(
+        children: [
+          const AppIcon(AppIcons.globeLocationPin, color: AppColors.textPrimary),
+          const SizedBox(width: AppDimensions.space4),
+          Text(
+            countryLabel,
+            style: AppTypography.bodyRegular.copyWith(color: AppColors.borderBlueMutedBase),
+          ),
+          const AppIcon(AppIcons.keyboardArrowDown, color: AppColors.textPrimary),
+        ],
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,20 +74,13 @@ class AppPhoneInputCase extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-                child: Row(
-                  children: [
-                    const AppIcon(AppIcons.globeLocationPin, color: AppColors.textPrimary),
-                    const SizedBox(width: AppDimensions.space4),
-                    Text(
-                      countryLabel,
-                      style: AppTypography.bodyRegular.copyWith(color: AppColors.borderBlueMutedBase),
-                    ),
-                    const AppIcon(AppIcons.keyboardArrowDown, color: AppColors.textPrimary),
-                  ],
-                ),
-              ),
+              if (onSelectorTap != null)
+                GestureDetector(
+                  onTap: onSelectorTap,
+                  child: selectorContent,
+                )
+              else
+                selectorContent,
               Container(
                 width: 1,
                 height: 30,
@@ -73,11 +89,12 @@ class AppPhoneInputCase extends StatelessWidget {
               Expanded(
                 child: TextField(
                   controller: controller,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(9),
-                  ],
+                  keyboardType: keyboardType ?? TextInputType.phone,
+                  inputFormatters: inputFormatters ??
+                      [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(9),
+                      ],
                   onChanged: onChanged,
                   style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
                   decoration: InputDecoration(
@@ -109,6 +126,9 @@ class AppPhoneInputCase extends StatelessWidget {
             text: errorText!,
             state: AppDescriptionTextState.error,
           ),
+        ] else if (helperText != null) ...[
+          const SizedBox(height: AppDimensions.space8),
+          AppDescriptionText(text: helperText!),
         ],
       ],
     );

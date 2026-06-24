@@ -25,6 +25,7 @@ class GestionPage extends ConsumerWidget {
       title: _GestionText.aportacionTitle,
       description: _GestionText.aportacionDescription,
       hasDividerAbove: true,
+      route: Routes.gestionAportacion,
     ),
     _GestionSectionDefinition(
       title: _GestionText.notificacionesTitle,

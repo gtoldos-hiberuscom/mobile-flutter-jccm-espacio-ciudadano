@@ -5959,6 +5959,138 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Detalle salida de registro'**
   String get gestionRegistrosDetalleSalidaTitle;
+
+  /// Label del campo de tipo de identificación y número en la pantalla de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de identificación y número'**
+  String get gestionAportacionTipoIdLabel;
+
+  /// Placeholder del campo de número de identificación en la pantalla de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'000000000A'**
+  String get gestionAportacionTipoIdHint;
+
+  /// Texto de ayuda del campo de tipo de identificación.
+  ///
+  /// In es, this message translates to:
+  /// **'El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos'**
+  String get gestionAportacionTipoIdHelper;
+
+  /// Texto introductorio de la pantalla de aportación de documentos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta el expediente sobre el que quieres aportar documentación'**
+  String get gestionAportacionIntroText;
+
+  /// Etiqueta de sección para identificar a la persona interesada.
+  ///
+  /// In es, this message translates to:
+  /// **'IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE'**
+  String get gestionAportacionPersonaLabel;
+
+  /// Etiqueta de sección para indicar el expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN'**
+  String get gestionAportacionExpedienteLabel;
+
+  /// Nota informativa de los campos del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'*Rellenar solo uno de los dos campos'**
+  String get gestionAportacionExpedienteNote;
+
+  /// Label del campo número de registro del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'NÚMERO DE REGISTRO DEL EXPEDIENTE'**
+  String get gestionAportacionNumRegistroLabel;
+
+  /// Placeholder del campo número de registro del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'000 0 00000 0 00'**
+  String get gestionAportacionNumRegistroHint;
+
+  /// Texto de ayuda del campo número de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Este número se obtiene en el momento de la presentación del expediente'**
+  String get gestionAportacionNumRegistroHelper;
+
+  /// Label del campo código identificador del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE'**
+  String get gestionAportacionCodIdentificadorLabel;
+
+  /// Placeholder del campo código identificador del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo: 600 000 000'**
+  String get gestionAportacionCodIdentificadorHint;
+
+  /// Texto de ayuda del campo código identificador.
+  ///
+  /// In es, this message translates to:
+  /// **'Este número se encuentra en la documentación del expediente'**
+  String get gestionAportacionCodIdentificadorHelper;
+
+  /// Título del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación de documentos de terceros'**
+  String get gestionAportacionInfoTitle;
+
+  /// Cuerpo del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.'**
+  String get gestionAportacionInfoBody;
+
+  /// Título del bottom sheet para seleccionar tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar tipo de documento'**
+  String get gestionAportacionSeleccionarTipo;
+
+  /// Opción DNI en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'DNI'**
+  String get gestionAportacionDni;
+
+  /// Opción NIE en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'NIE'**
+  String get gestionAportacionNie;
+
+  /// Opción CIF en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'CIF'**
+  String get gestionAportacionCif;
+
+  /// Opción Pasaporte en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasaporte'**
+  String get gestionAportacionPasaporte;
+
+  /// Opción CEE en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'CEE'**
+  String get gestionAportacionCee;
+
+  /// Texto del botón principal del formulario de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Encontrar expediente'**
+  String get gestionAportacionFindButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -129,66 +129,55 @@ class AppBottomSheet extends StatelessWidget {
   }
 
   Widget _buildHeader(final BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: AppDimensions.space4,
-        right: AppDimensions.space8,
-      ),
-      child: Row(
+    return SizedBox(
+      height: AppDimensions.space48,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          // Drag handle area (centered in remaining space)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space4,
-                vertical: AppDimensions.space8,
-              ),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  width: 80,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: AppColors.neutral200,
-                    borderRadius: BorderRadius.circular(
-                      AppDimensions.space64,
-                    ),
-                  ),
-                ),
+          // Drag handle — truly centered over the full header width
+          Center(
+            child: Container(
+              width: 80,
+              height: 8,
+              decoration: BoxDecoration(
+                color: AppColors.neutral200,
+                borderRadius: BorderRadius.circular(AppDimensions.space64),
               ),
             ),
           ),
-          // Close button
-          Semantics(
-            label: 'Cerrar',
-            button: true,
-            child: GestureDetector(
-              onTap: onClose ?? () => Navigator.of(context).pop(),
-              child: ExcludeSemantics(
-                child: Container(
-                  height: AppDimensions.space48,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space8,
-                    vertical: AppDimensions.space4,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Salir',
-                        style: AppTypography.leadingMedium.copyWith(
-                          color: AppColors.textBase,
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.w400,
+          // Close button pinned to the right
+          Align(
+            alignment: Alignment.centerRight,
+            child: Semantics(
+              label: 'Cerrar',
+              button: true,
+              child: GestureDetector(
+                onTap: onClose ?? () => Navigator.of(context).pop(),
+                child: ExcludeSemantics(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.space8,
+                      vertical: AppDimensions.space4,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Salir',
+                          style: AppTypography.leadingMedium.copyWith(
+                            color: AppColors.textBase,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: AppDimensions.space8),
-                      const Icon(
-                        Icons.close,
-                        size: 20,
-                        color: AppColors.textBase,
-                      ),
-                    ],
+                        const SizedBox(width: AppDimensions.space8),
+                        const Icon(
+                          Icons.close,
+                          size: 20,
+                          color: AppColors.textBase,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

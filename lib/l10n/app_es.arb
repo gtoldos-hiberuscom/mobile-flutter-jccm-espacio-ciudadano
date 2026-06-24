@@ -4142,5 +4142,93 @@
   "gestionRegistrosDetalleSalidaTitle": "Detalle salida de registro",
   "@gestionRegistrosDetalleSalidaTitle": {
     "description": "Título de la pantalla de detalle de salida de registro."
+  },
+  "gestionAportacionTipoIdLabel": "Tipo de identificación y número",
+  "@gestionAportacionTipoIdLabel": {
+    "description": "Label del campo de tipo de identificación y número en la pantalla de aportación."
+  },
+  "gestionAportacionTipoIdHint": "000000000A",
+  "@gestionAportacionTipoIdHint": {
+    "description": "Placeholder del campo de número de identificación en la pantalla de aportación."
+  },
+  "gestionAportacionTipoIdHelper": "El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos",
+  "@gestionAportacionTipoIdHelper": {
+    "description": "Texto de ayuda del campo de tipo de identificación."
+  },
+  "gestionAportacionIntroText": "Consulta el expediente sobre el que quieres aportar documentación",
+  "@gestionAportacionIntroText": {
+    "description": "Texto introductorio de la pantalla de aportación de documentos."
+  },
+  "gestionAportacionPersonaLabel": "IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE",
+  "@gestionAportacionPersonaLabel": {
+    "description": "Etiqueta de sección para identificar a la persona interesada."
+  },
+  "gestionAportacionExpedienteLabel": "INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN",
+  "@gestionAportacionExpedienteLabel": {
+    "description": "Etiqueta de sección para indicar el expediente."
+  },
+  "gestionAportacionExpedienteNote": "*Rellenar solo uno de los dos campos",
+  "@gestionAportacionExpedienteNote": {
+    "description": "Nota informativa de los campos del expediente."
+  },
+  "gestionAportacionNumRegistroLabel": "NÚMERO DE REGISTRO DEL EXPEDIENTE",
+  "@gestionAportacionNumRegistroLabel": {
+    "description": "Label del campo número de registro del expediente."
+  },
+  "gestionAportacionNumRegistroHint": "000 0 00000 0 00",
+  "@gestionAportacionNumRegistroHint": {
+    "description": "Placeholder del campo número de registro del expediente."
+  },
+  "gestionAportacionNumRegistroHelper": "Este número se obtiene en el momento de la presentación del expediente",
+  "@gestionAportacionNumRegistroHelper": {
+    "description": "Texto de ayuda del campo número de registro."
+  },
+  "gestionAportacionCodIdentificadorLabel": "CÓDIGO IDENTIFICADOR DEL EXPEDIENTE",
+  "@gestionAportacionCodIdentificadorLabel": {
+    "description": "Label del campo código identificador del expediente."
+  },
+  "gestionAportacionCodIdentificadorHint": "Ejemplo: 600 000 000",
+  "@gestionAportacionCodIdentificadorHint": {
+    "description": "Placeholder del campo código identificador del expediente."
+  },
+  "gestionAportacionCodIdentificadorHelper": "Este número se encuentra en la documentación del expediente",
+  "@gestionAportacionCodIdentificadorHelper": {
+    "description": "Texto de ayuda del campo código identificador."
+  },
+  "gestionAportacionInfoTitle": "Aportación de documentos de terceros",
+  "@gestionAportacionInfoTitle": {
+    "description": "Título del bottom sheet informativo de aportación."
+  },
+  "gestionAportacionInfoBody": "A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.",
+  "@gestionAportacionInfoBody": {
+    "description": "Cuerpo del bottom sheet informativo de aportación."
+  },
+  "gestionAportacionSeleccionarTipo": "Seleccionar tipo de documento",
+  "@gestionAportacionSeleccionarTipo": {
+    "description": "Título del bottom sheet para seleccionar tipo de documento."
+  },
+  "gestionAportacionDni": "DNI",
+  "@gestionAportacionDni": {
+    "description": "Opción DNI en el selector de tipo de documento."
+  },
+  "gestionAportacionNie": "NIE",
+  "@gestionAportacionNie": {
+    "description": "Opción NIE en el selector de tipo de documento."
+  },
+  "gestionAportacionCif": "CIF",
+  "@gestionAportacionCif": {
+    "description": "Opción CIF en el selector de tipo de documento."
+  },
+  "gestionAportacionPasaporte": "Pasaporte",
+  "@gestionAportacionPasaporte": {
+    "description": "Opción Pasaporte en el selector de tipo de documento."
+  },
+  "gestionAportacionCee": "CEE",
+  "@gestionAportacionCee": {
+    "description": "Opción CEE en el selector de tipo de documento."
+  },
+  "gestionAportacionFindButton": "Encontrar expediente",
+  "@gestionAportacionFindButton": {
+    "description": "Texto del botón principal del formulario de aportación."
   }
 }

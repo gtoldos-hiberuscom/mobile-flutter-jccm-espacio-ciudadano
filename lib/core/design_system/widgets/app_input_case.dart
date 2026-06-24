@@ -319,11 +319,16 @@ class _AppInputCaseState extends State<AppInputCase> {
                   borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
                   borderSide: const BorderSide(color: AppColors.error, width: 2),
                 ),
-                errorText: widget.errorText,
-                helperText: widget.helperText,
               ),
             ),
           ),
+          if (widget.errorText != null && widget.errorText!.isNotEmpty) ...[
+            const SizedBox(height: AppDimensions.space4),
+            AppDescriptionText(text: widget.errorText!, state: AppDescriptionTextState.error),
+          ] else if (widget.helperText != null) ...[
+            const SizedBox(height: AppDimensions.space4),
+            AppDescriptionText(text: widget.helperText!),
+          ],
         ],
       ),
     );

@@ -3053,4 +3053,70 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gestionRegistrosDetalleSalidaTitle => 'Detalle salida de registro';
+
+  @override
+  String get gestionAportacionTipoIdLabel => 'Tipo de identificación y número';
+
+  @override
+  String get gestionAportacionTipoIdHint => '000000000A';
+
+  @override
+  String get gestionAportacionTipoIdHelper => 'El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos';
+
+  @override
+  String get gestionAportacionIntroText => 'Consulta el expediente sobre el que quieres aportar documentación';
+
+  @override
+  String get gestionAportacionPersonaLabel => 'IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE';
+
+  @override
+  String get gestionAportacionExpedienteLabel => 'INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN';
+
+  @override
+  String get gestionAportacionExpedienteNote => '*Rellenar solo uno de los dos campos';
+
+  @override
+  String get gestionAportacionNumRegistroLabel => 'NÚMERO DE REGISTRO DEL EXPEDIENTE';
+
+  @override
+  String get gestionAportacionNumRegistroHint => '000 0 00000 0 00';
+
+  @override
+  String get gestionAportacionNumRegistroHelper => 'Este número se obtiene en el momento de la presentación del expediente';
+
+  @override
+  String get gestionAportacionCodIdentificadorLabel => 'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE';
+
+  @override
+  String get gestionAportacionCodIdentificadorHint => 'Ejemplo: 600 000 000';
+
+  @override
+  String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';
+
+  @override
+  String get gestionAportacionInfoTitle => 'Aportación de documentos de terceros';
+
+  @override
+  String get gestionAportacionInfoBody => 'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.';
+
+  @override
+  String get gestionAportacionSeleccionarTipo => 'Seleccionar tipo de documento';
+
+  @override
+  String get gestionAportacionDni => 'DNI';
+
+  @override
+  String get gestionAportacionNie => 'NIE';
+
+  @override
+  String get gestionAportacionCif => 'CIF';
+
+  @override
+  String get gestionAportacionPasaporte => 'Pasaporte';
+
+  @override
+  String get gestionAportacionCee => 'CEE';
+
+  @override
+  String get gestionAportacionFindButton => 'Encontrar expediente';
 }

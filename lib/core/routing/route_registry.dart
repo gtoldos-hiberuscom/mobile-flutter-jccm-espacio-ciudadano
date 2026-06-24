@@ -42,6 +42,7 @@ abstract final class Routes {
   static const String homeFromDrawer = '$home?from=drawer';
 
   static const String gestion = '/gestion';
+  static const String gestionAportacion = '/gestion/aportacion';
   static const String gestionExpedientes = '/gestion/expedientes';
   static const String gestionRegistros = '/gestion/registros';
   static const String gestionRegistrosDetail = '/gestion/registros/detail';
@@ -80,6 +81,7 @@ abstract final class Routes {
     supportForm,
     agenda,
     gestion,
+    gestionAportacion,
     gestionExpedientes,
     gestionRegistros,
     gestionRegistrosDetail,
