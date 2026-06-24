@@ -11,7 +11,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Housing detail page — Figma nodes 43973:2061 and 43973:2085.
 class MyDataHousingPage extends StatefulWidget {
-  const MyDataHousingPage({super.key});
+  const MyDataHousingPage({
+    super.key,
+    this.backRoute = Routes.myData,
+  });
+
+  final String backRoute;
 
   @override
   State<MyDataHousingPage> createState() => _MyDataHousingPageState();
@@ -26,7 +31,7 @@ class _MyDataHousingPageState extends State<MyDataHousingPage> {
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataHousingTitle,
-      onBack: () => context.go(Routes.myData),
+      onBack: () => context.go(widget.backRoute),
       onInfo: () => _showHousingInfoSheet(context),
       tabs: [l10n.myDataHousingDataTab, l10n.myDataHousingServicesTab],
       selectedIndex: _selectedTab.index,

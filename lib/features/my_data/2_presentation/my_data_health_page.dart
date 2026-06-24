@@ -12,7 +12,12 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Health data detail — Figma node 43973:1861.
 class MyDataHealthPage extends ConsumerStatefulWidget {
-  const MyDataHealthPage({super.key});
+  const MyDataHealthPage({
+    super.key,
+    this.backRoute = Routes.myData,
+  });
+
+  final String backRoute;
 
   @override
   ConsumerState<MyDataHealthPage> createState() => _MyDataHealthPageState();
@@ -28,7 +33,7 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataHealthTitle,
-      onBack: () => context.go(Routes.myData),
+      onBack: () => context.go(widget.backRoute),
       onInfo: () => _showHealthInfoSheet(context),
       tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
       selectedIndex: _selectedTab.index,

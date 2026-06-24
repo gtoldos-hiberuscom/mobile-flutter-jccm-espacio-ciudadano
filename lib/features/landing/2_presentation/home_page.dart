@@ -236,12 +236,36 @@ class _QuickAccessGrid extends StatelessWidget {
   final VoidCallback onComingSoon;
 
   static const _items = [
-    _QuickAccessItem(label: 'Salud', icon: AppIcons.favorite),
-    _QuickAccessItem(label: 'Bienestar Social', icon: AppIcons.diversity),
-    _QuickAccessItem(label: 'Empleo', icon: AppIcons.work),
-    _QuickAccessItem(label: 'Educación', icon: AppIcons.school),
-    _QuickAccessItem(label: 'Vivienda', icon: AppIcons.cottage),
-    _QuickAccessItem(label: 'Vehículos', icon: AppIcons.directionsCar),
+    _QuickAccessItem(
+      label: 'Salud',
+      icon: AppIcons.favorite,
+      route: Routes.myDataHealth,
+    ),
+    _QuickAccessItem(
+      label: 'Bienestar Social',
+      icon: AppIcons.diversity,
+      route: Routes.myDataSocialWelfare,
+    ),
+    _QuickAccessItem(
+      label: 'Empleo',
+      icon: AppIcons.work,
+      route: Routes.myDataEmployment,
+    ),
+    _QuickAccessItem(
+      label: 'Educación',
+      icon: AppIcons.school,
+      route: Routes.myDataEducation,
+    ),
+    _QuickAccessItem(
+      label: 'Vivienda',
+      icon: AppIcons.cottage,
+      route: Routes.myDataHousing,
+    ),
+    _QuickAccessItem(
+      label: 'Vehículos',
+      icon: AppIcons.directionsCar,
+      route: Routes.myDataVehicles,
+    ),
   ];
 
   @override
@@ -261,7 +285,19 @@ class _QuickAccessGrid extends StatelessWidget {
         return AppQuickAccessCard(
           label: item.label,
           icon: item.icon,
-          onTap: onComingSoon,
+          onTap: () {
+            final route = item.route;
+            if (route == null) {
+              onComingSoon();
+              return;
+            }
+            context.go(
+              Uri(
+                path: route,
+                queryParameters: const {'from': 'home'},
+              ).toString(),
+            );
+          },
         );
       },
     );
@@ -316,8 +352,10 @@ class _QuickAccessItem {
   const _QuickAccessItem({
     required this.label,
     required this.icon,
+    this.route,
   });
 
   final String label;
   final IconData icon;
+  final String? route;
 }

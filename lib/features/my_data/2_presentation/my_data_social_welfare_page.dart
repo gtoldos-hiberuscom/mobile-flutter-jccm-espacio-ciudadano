@@ -13,7 +13,12 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Social welfare data page — Figma node 43973:1893.
 class MyDataSocialWelfarePage extends StatefulWidget {
-  const MyDataSocialWelfarePage({super.key});
+  const MyDataSocialWelfarePage({
+    super.key,
+    this.backRoute = Routes.myData,
+  });
+
+  final String backRoute;
 
   @override
   State<MyDataSocialWelfarePage> createState() => _MyDataSocialWelfarePageState();
@@ -28,7 +33,7 @@ class _MyDataSocialWelfarePageState extends State<MyDataSocialWelfarePage> {
 
     return AppTabbedDetailScaffold(
       title: l10n.socialWelfareScreenTitle,
-      onBack: () => context.go(Routes.myData),
+      onBack: () => context.go(widget.backRoute),
       onInfo: () => _showInfoSheet(context),
       tabs: [
         l10n.socialWelfareDataTab,

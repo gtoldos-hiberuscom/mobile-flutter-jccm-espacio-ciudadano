@@ -12,7 +12,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Vehicles list page — Figma node 43973:2068.
 class MyDataVehiclesPage extends StatefulWidget {
-  const MyDataVehiclesPage({super.key});
+  const MyDataVehiclesPage({
+    super.key,
+    this.backRoute = Routes.myData,
+  });
+
+  final String backRoute;
 
   @override
   State<MyDataVehiclesPage> createState() => _MyDataVehiclesPageState();
@@ -27,7 +32,7 @@ class _MyDataVehiclesPageState extends State<MyDataVehiclesPage> {
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataVehiclesTitle,
-      onBack: () => context.go(Routes.myData),
+      onBack: () => context.go(widget.backRoute),
       onInfo: () => _showVehiclesInfoSheet(context),
       tabs: [l10n.myDataVehiclesDataTab, l10n.myDataVehiclesServicesTab],
       selectedIndex: _selectedTab.index,

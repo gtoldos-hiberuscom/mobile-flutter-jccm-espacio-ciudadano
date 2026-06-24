@@ -9,7 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Employment detail page — Figma nodes 43973:1993 and 43973:2077.
 class MyDataEmploymentPage extends StatefulWidget {
-  const MyDataEmploymentPage({super.key});
+  const MyDataEmploymentPage({
+    super.key,
+    this.backRoute = Routes.myData,
+  });
+
+  final String backRoute;
 
   @override
   State<MyDataEmploymentPage> createState() => _MyDataEmploymentPageState();
@@ -24,7 +29,7 @@ class _MyDataEmploymentPageState extends State<MyDataEmploymentPage> {
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataEmploymentTitle,
-      onBack: () => context.go(Routes.myData),
+      onBack: () => context.go(widget.backRoute),
       onInfo: () => _showEmploymentInfoSheet(context),
       tabs: [l10n.myDataEmploymentDataTab, l10n.myDataEmploymentServicesTab],
       selectedIndex: _selectedTab.index,

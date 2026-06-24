@@ -10,7 +10,12 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Education data detail — Figma node 43973:1875.
 class MyDataEducationPage extends StatefulWidget {
-  const MyDataEducationPage({super.key});
+  const MyDataEducationPage({
+    super.key,
+    this.backRoute = Routes.myData,
+  });
+
+  final String backRoute;
 
   @override
   State<MyDataEducationPage> createState() => _MyDataEducationPageState();
@@ -25,7 +30,7 @@ class _MyDataEducationPageState extends State<MyDataEducationPage> {
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataEducationTitle,
-      onBack: () => context.go(Routes.myData),
+      onBack: () => context.go(widget.backRoute),
       onInfo: () => _showEducationInfoSheet(context),
       tabs: [l10n.myDataEducationDataTab, l10n.myDataEducationServicesTab],
       selectedIndex: _selectedTab.index,

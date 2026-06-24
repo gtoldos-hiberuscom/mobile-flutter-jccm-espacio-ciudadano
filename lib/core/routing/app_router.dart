@@ -181,12 +181,16 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.myDataHealth,
-              builder: (final BuildContext context, final GoRouterState state) => const MyDataHealthPage(),
+              builder: (final BuildContext context, final GoRouterState state) => MyDataHealthPage(
+                backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
+              ),
             ),
 
             GoRoute(
               path: Routes.myDataEmployment,
-              builder: (final BuildContext context, final GoRouterState state) => const MyDataEmploymentPage(),
+              builder: (final BuildContext context, final GoRouterState state) => MyDataEmploymentPage(
+                backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
+              ),
             ),
 
             GoRoute(
@@ -196,7 +200,9 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.myDataSocialWelfare,
-              builder: (final BuildContext context, final GoRouterState state) => const MyDataSocialWelfarePage(),
+              builder: (final BuildContext context, final GoRouterState state) => MyDataSocialWelfarePage(
+                backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
+              ),
             ),
 
             GoRoute(
@@ -226,7 +232,9 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.myDataEducation,
-              builder: (final BuildContext context, final GoRouterState state) => const MyDataEducationPage(),
+              builder: (final BuildContext context, final GoRouterState state) => MyDataEducationPage(
+                backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
+              ),
             ),
 
             GoRoute(
@@ -241,7 +249,9 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.myDataHousing,
-              builder: (final BuildContext context, final GoRouterState state) => const MyDataHousingPage(),
+              builder: (final BuildContext context, final GoRouterState state) => MyDataHousingPage(
+                backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
+              ),
             ),
 
             GoRoute(
@@ -263,7 +273,9 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.myDataVehicles,
-              builder: (final BuildContext context, final GoRouterState state) => const MyDataVehiclesPage(),
+              builder: (final BuildContext context, final GoRouterState state) => MyDataVehiclesPage(
+                backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
+              ),
             ),
 
             GoRoute(
