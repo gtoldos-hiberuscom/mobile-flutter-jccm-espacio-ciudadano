@@ -3010,4 +3010,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionExpedientesEmpty => 'No tienes expedientes activos';
+
+  @override
+  String get gestionRegistrosPageTitle => 'Mis registros';
+
+  @override
+  String get gestionRegistrosEntradasTab => 'Entradas de registro';
+
+  @override
+  String get gestionRegistrosSalidasTab => 'Salidas de registro';
+
+  @override
+  String get gestionRegistrosNumRegistroLabel => 'Nº REGISTRO';
+
+  @override
+  String get gestionRegistrosFechaLabel => 'FECHA';
+
+  @override
+  String get gestionRegistrosConsejeriaOrigenLabel => 'CONSERJERÍA DE ORIGEN';
+
+  @override
+  String get gestionRegistrosConsejeriaDestinoLabel => 'CONSERJERÍA DE DESTINO';
+
+  @override
+  String get gestionRegistrosDatosRegistroTitle => 'Datos del Registro';
+
+  @override
+  String get gestionRegistrosEntradasLoadError => 'No hemos podido cargar tus entradas de registro';
+
+  @override
+  String get gestionRegistrosSalidasLoadError => 'No hemos podido cargar tus salidas de registro';
+
+  @override
+  String get gestionRegistrosEntradasEmpty => 'No tienes entradas de registro';
+
+  @override
+  String get gestionRegistrosSalidasEmpty => 'No tienes salidas de registro';
+
+  @override
+  String get gestionRegistrosDetalleEntradaTitle => 'Detalle de entrada de registro';
+
+  @override
+  String get gestionRegistrosDetalleSalidaTitle => 'Detalle salida de registro';
 }

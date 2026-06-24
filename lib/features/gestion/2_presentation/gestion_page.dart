@@ -19,6 +19,7 @@ class GestionPage extends ConsumerWidget {
     _GestionSectionDefinition(
       title: _GestionText.registrosTitle,
       description: _GestionText.registrosDescription,
+      route: Routes.gestionRegistros,
     ),
     _GestionSectionDefinition(
       title: _GestionText.aportacionTitle,

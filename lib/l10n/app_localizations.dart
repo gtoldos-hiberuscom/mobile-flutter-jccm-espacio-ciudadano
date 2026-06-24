@@ -5875,6 +5875,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No tienes expedientes activos'**
   String get gestionExpedientesEmpty;
+
+  /// Título de la pantalla de mis registros.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis registros'**
+  String get gestionRegistrosPageTitle;
+
+  /// Etiqueta del tab de entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Entradas de registro'**
+  String get gestionRegistrosEntradasTab;
+
+  /// Etiqueta del tab de salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Salidas de registro'**
+  String get gestionRegistrosSalidasTab;
+
+  /// Etiqueta del campo número de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Nº REGISTRO'**
+  String get gestionRegistrosNumRegistroLabel;
+
+  /// Etiqueta del campo fecha de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA'**
+  String get gestionRegistrosFechaLabel;
+
+  /// Etiqueta del campo consejería de origen (salidas).
+  ///
+  /// In es, this message translates to:
+  /// **'CONSERJERÍA DE ORIGEN'**
+  String get gestionRegistrosConsejeriaOrigenLabel;
+
+  /// Etiqueta del campo consejería de destino (entradas).
+  ///
+  /// In es, this message translates to:
+  /// **'CONSERJERÍA DE DESTINO'**
+  String get gestionRegistrosConsejeriaDestinoLabel;
+
+  /// Título de la sección de datos del registro en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del Registro'**
+  String get gestionRegistrosDatosRegistroTitle;
+
+  /// Error al cargar la lista de entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus entradas de registro'**
+  String get gestionRegistrosEntradasLoadError;
+
+  /// Error al cargar la lista de salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus salidas de registro'**
+  String get gestionRegistrosSalidasLoadError;
+
+  /// Mensaje de lista vacía para entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes entradas de registro'**
+  String get gestionRegistrosEntradasEmpty;
+
+  /// Mensaje de lista vacía para salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes salidas de registro'**
+  String get gestionRegistrosSalidasEmpty;
+
+  /// Título de la pantalla de detalle de entrada de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de entrada de registro'**
+  String get gestionRegistrosDetalleEntradaTitle;
+
+  /// Título de la pantalla de detalle de salida de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle salida de registro'**
+  String get gestionRegistrosDetalleSalidaTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

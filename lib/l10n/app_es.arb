@@ -4085,5 +4085,62 @@
   "gestionExpedientesEmpty": "No tienes expedientes activos",
   "@gestionExpedientesEmpty": {
     "description": "Mensaje de lista vacía en la pantalla de expedientes."
+  },
+
+  "gestionRegistrosPageTitle": "Mis registros",
+  "@gestionRegistrosPageTitle": {
+    "description": "Título de la pantalla de mis registros."
+  },
+  "gestionRegistrosEntradasTab": "Entradas de registro",
+  "@gestionRegistrosEntradasTab": {
+    "description": "Etiqueta del tab de entradas de registro."
+  },
+  "gestionRegistrosSalidasTab": "Salidas de registro",
+  "@gestionRegistrosSalidasTab": {
+    "description": "Etiqueta del tab de salidas de registro."
+  },
+  "gestionRegistrosNumRegistroLabel": "Nº REGISTRO",
+  "@gestionRegistrosNumRegistroLabel": {
+    "description": "Etiqueta del campo número de registro."
+  },
+  "gestionRegistrosFechaLabel": "FECHA",
+  "@gestionRegistrosFechaLabel": {
+    "description": "Etiqueta del campo fecha de registro."
+  },
+  "gestionRegistrosConsejeriaOrigenLabel": "CONSERJERÍA DE ORIGEN",
+  "@gestionRegistrosConsejeriaOrigenLabel": {
+    "description": "Etiqueta del campo consejería de origen (salidas)."
+  },
+  "gestionRegistrosConsejeriaDestinoLabel": "CONSERJERÍA DE DESTINO",
+  "@gestionRegistrosConsejeriaDestinoLabel": {
+    "description": "Etiqueta del campo consejería de destino (entradas)."
+  },
+  "gestionRegistrosDatosRegistroTitle": "Datos del Registro",
+  "@gestionRegistrosDatosRegistroTitle": {
+    "description": "Título de la sección de datos del registro en el detalle."
+  },
+  "gestionRegistrosEntradasLoadError": "No hemos podido cargar tus entradas de registro",
+  "@gestionRegistrosEntradasLoadError": {
+    "description": "Error al cargar la lista de entradas de registro."
+  },
+  "gestionRegistrosSalidasLoadError": "No hemos podido cargar tus salidas de registro",
+  "@gestionRegistrosSalidasLoadError": {
+    "description": "Error al cargar la lista de salidas de registro."
+  },
+  "gestionRegistrosEntradasEmpty": "No tienes entradas de registro",
+  "@gestionRegistrosEntradasEmpty": {
+    "description": "Mensaje de lista vacía para entradas de registro."
+  },
+  "gestionRegistrosSalidasEmpty": "No tienes salidas de registro",
+  "@gestionRegistrosSalidasEmpty": {
+    "description": "Mensaje de lista vacía para salidas de registro."
+  },
+  "gestionRegistrosDetalleEntradaTitle": "Detalle de entrada de registro",
+  "@gestionRegistrosDetalleEntradaTitle": {
+    "description": "Título de la pantalla de detalle de entrada de registro."
+  },
+  "gestionRegistrosDetalleSalidaTitle": "Detalle salida de registro",
+  "@gestionRegistrosDetalleSalidaTitle": {
+    "description": "Título de la pantalla de detalle de salida de registro."
   }
 }
