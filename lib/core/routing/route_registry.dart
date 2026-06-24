@@ -44,6 +44,7 @@ abstract final class Routes {
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
   static const String myDataEmployment = '/my-data/employment';
+  static const String myDataEmploymentOffers = '/my-data/employment/offers';
   static const String myDataSocialWelfare = '/my-data/social-welfare';
   static const String myDataSocialWelfareFamily = '/my-data/social-welfare/family';
   static const String myDataSocialWelfareDisability = '/my-data/social-welfare/disability';
@@ -77,6 +78,7 @@ abstract final class Routes {
     agenda,
     myData,
     myDataEmployment,
+    myDataEmploymentOffers,
     myDataEducation,
     myDataEducationUniversityTitles,
     myDataEducationNonUniversityTitles,

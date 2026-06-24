@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_vehicles_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -75,12 +77,42 @@ class _VehiclesDataTab extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final vehiclesAsync = ref.watch(vehiclesProvider);
+    final authorizationAsync = ref.watch(ageDataAuthorizationProvider);
 
-    return vehiclesAsync.when(
-      data: (final vehicles) => _buildVehiclesList(context, l10n, vehicles),
+    return authorizationAsync.when(
+      data: (final hasAgeAuthorization) {
+        if (!hasAgeAuthorization) {
+          return _buildAuthorizationRequired(context, l10n);
+        }
+
+        final vehiclesAsync = ref.watch(vehiclesProvider);
+        return vehiclesAsync.when(
+          data: (final vehicles) => _buildVehiclesList(context, l10n, vehicles),
+          loading: () => const Center(child: AppLoadingIndicator()),
+          error: (final error, final stack) => _buildErrorState(context, l10n, ref),
+        );
+      },
       loading: () => const Center(child: AppLoadingIndicator()),
-      error: (final error, final stack) => _buildErrorState(context, l10n, ref),
+      error: (final error, final stack) => _buildAuthorizationRequired(context, l10n),
+    );
+  }
+
+  Widget _buildAuthorizationRequired(
+    final BuildContext context,
+    final AppLocalizations l10n,
+  ) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(
+        AppDimensions.space16,
+        AppDimensions.space16,
+        AppDimensions.space16,
+        AppDimensions.space64,
+      ),
+      child: MyDataAuthorizationContextualHelper(
+        message: l10n.myDataAgeAuthorizationRequiredMessage,
+        semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+        onOpenSettings: () => _openSettings(context),
+      ),
     );
   }
 
@@ -169,6 +201,18 @@ class _VehiclesDataTab extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _openSettings(final BuildContext context) {
+    context.go(
+      Uri(
+        path: Routes.consent,
+        queryParameters: {
+          'mode': 'preferences',
+          'returnTo': Routes.myDataVehicles,
+        },
+      ).toString(),
     );
   }
 }

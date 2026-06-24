@@ -1121,6 +1121,18 @@
   "@socialWelfareInfoSheetDescription": {
     "description": "Social welfare data — info sheet description."
   },
+  "myDataJccmAuthorizationRequiredMessage": "You must authorise the consultation of administrative facts held by the JCCM from your preferences.",
+  "@myDataJccmAuthorizationRequiredMessage": {
+    "description": "Message shown when JCCM data consultation is not authorised."
+  },
+  "myDataJccmAuthorizationRequiredCta": "Go to Terms of use and authorizations",
+  "@myDataJccmAuthorizationRequiredCta": {
+    "description": "Accessible text for the button that opens terms of use and authorizations."
+  },
+  "myDataAgeAuthorizationRequiredMessage": "You must authorise the consultation of data held about you by the General State Administration from your preferences.",
+  "@myDataAgeAuthorizationRequiredMessage": {
+    "description": "Message shown when AGE data consultation is not authorised."
+  },
   "socialWelfareFamilyTitle": "Large family",
   "@socialWelfareFamilyTitle": {
     "description": "Social welfare — large family section."
@@ -3457,9 +3469,17 @@
   "@myDataEmploymentInfoSheetTitle": {
     "description": "Title of the My Employment data information modal."
   },
-  "myDataEmploymentInfoSheetDescription": "Check your job-seeker registration information and access employment services and procedures in Castilla-La Mancha.",
+  "myDataEmploymentInfoSheetDescription": "Check your current situation as a job seeker and your latest offer registrations.",
   "@myDataEmploymentInfoSheetDescription": {
     "description": "Main description of the My Employment data information modal."
+  },
+  "myDataEmploymentInfoSheetFooter": "If any of your data is incorrect or not up to date, contact the Castilla-La Mancha Regional Ministry of Social Welfare.",
+  "@myDataEmploymentInfoSheetFooter": {
+    "description": "Contact text in the My Employment data information modal."
+  },
+  "myDataEmploymentInfoSheetOfficeContactsButton": "List of offices and contacts",
+  "@myDataEmploymentInfoSheetOfficeContactsButton": {
+    "description": "External button to offices and contacts in the My Employment data information modal."
   },
   "myDataEmploymentDataTab": "My Employment data",
   "@myDataEmploymentDataTab": {
@@ -3485,6 +3505,38 @@
   "@myDataEmploymentDemandError": {
     "description": "Error message when loading employment demand."
   },
+  "myDataEmploymentServiceUnavailableTitle": "Service unavailable",
+  "@myDataEmploymentServiceUnavailableTitle": {
+    "description": "Banner title shown when the employment demand service is unavailable."
+  },
+  "myDataEmploymentServiceUnavailableMessage": "The Employment demand service is currently unavailable. You can reload the information or try again later.",
+  "@myDataEmploymentServiceUnavailableMessage": {
+    "description": "Banner message shown when the employment demand service is unavailable."
+  },
+  "myDataEmploymentServiceUnavailableReload": "Reload page",
+  "@myDataEmploymentServiceUnavailableReload": {
+    "description": "Button label to reload employment demand when the service is unavailable."
+  },
+  "myDataEmploymentOffersServiceUnavailableMessage": "The offer registrations service is currently unavailable. You can reload the information or try again later.",
+  "@myDataEmploymentOffersServiceUnavailableMessage": {
+    "description": "Contextual helper message shown when the offer registrations service is unavailable."
+  },
+  "myDataEmploymentAuthorizationDialogTitle": "You have not authorised data lookup in your profile",
+  "@myDataEmploymentAuthorizationDialogTitle": {
+    "description": "Dialog title shown when authorizations are missing to view offer registrations."
+  },
+  "myDataEmploymentAuthorizationDialogBody": "To view your offer registrations, you must first authorize data lookup in “Terms of use and authorizations” in your profile.",
+  "@myDataEmploymentAuthorizationDialogBody": {
+    "description": "Dialog body shown when authorizations are missing to view offer registrations."
+  },
+  "myDataEmploymentAuthorizationDialogAuthorizationsCta": "Go to Terms of use and authorizations",
+  "@myDataEmploymentAuthorizationDialogAuthorizationsCta": {
+    "description": "Dialog CTA to go to the terms of use and authorizations screen."
+  },
+  "myDataEmploymentAuthorizationDialogBack": "Back",
+  "@myDataEmploymentAuthorizationDialogBack": {
+    "description": "Button to close the offer registrations authorization dialog."
+  },
   "myDataEmploymentOffersTitle": "Offer registrations",
   "@myDataEmploymentOffersTitle": {
     "description": "Offer registrations card title."
@@ -3492,6 +3544,38 @@
   "myDataEmploymentOffersDescription": "Job offers you have registered for",
   "@myDataEmploymentOffersDescription": {
     "description": "Offer registrations card description."
+  },
+  "myDataEmploymentOffersPageTitle": "Employment offer registration",
+  "@myDataEmploymentOffersPageTitle": {
+    "description": "Title of the employment offer registrations screen."
+  },
+  "myDataEmploymentOffersInfoSheetDescription": "Check the job offers you have registered for and the status of your application.",
+  "@myDataEmploymentOffersInfoSheetDescription": {
+    "description": "Information sheet description for the offer registrations screen."
+  },
+  "myDataEmploymentOffersEmptyMessage": "You have not registered for any offer yet. If you think this is incorrect or not up to date, contact the Lirem ipsum service.",
+  "@myDataEmploymentOffersEmptyMessage": {
+    "description": "Message shown when there are no offer registrations."
+  },
+  "myDataEmploymentOffersLoadError": "We could not load your offer registrations.",
+  "@myDataEmploymentOffersLoadError": {
+    "description": "Error message when loading offer registrations."
+  },
+  "myDataEmploymentOfferPublicationDateLabel": "Publication date",
+  "@myDataEmploymentOfferPublicationDateLabel": {
+    "description": "Offer publication date label."
+  },
+  "myDataEmploymentOfferRegistrationDateLabel": "Registration date",
+  "@myDataEmploymentOfferRegistrationDateLabel": {
+    "description": "Offer registration date label."
+  },
+  "myDataEmploymentOfferSelectionEndDateLabel": "Selection process end date",
+  "@myDataEmploymentOfferSelectionEndDateLabel": {
+    "description": "Offer selection process end date label."
+  },
+  "myDataEmploymentOfferApplicationStatusLabel": "Application status",
+  "@myDataEmploymentOfferApplicationStatusLabel": {
+    "description": "Offer application status label."
   },
   "myDataEmploymentProceduresTitle": "Procedures that may interest you",
   "@myDataEmploymentProceduresTitle": {

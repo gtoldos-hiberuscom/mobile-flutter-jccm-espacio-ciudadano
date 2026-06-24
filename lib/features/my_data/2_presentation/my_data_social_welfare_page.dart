@@ -6,6 +6,9 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Social welfare data page — Figma node 43973:1893.
@@ -88,6 +91,39 @@ class _SocialWelfareDataTab extends StatelessWidget {
       ),
     ];
 
+    return Consumer(
+      builder: (final context, final ref, final child) {
+        final authorizationAsync = ref.watch(jccmDataAuthorizationProvider);
+
+        return authorizationAsync.when(
+          data: (final hasJccmAuthorization) => _SocialWelfareDataList(
+            items: items,
+            hasJccmAuthorization: hasJccmAuthorization,
+          ),
+          loading: () => const Center(child: AppLoadingIndicator()),
+          error: (final error, final stackTrace) => _SocialWelfareDataList(
+            items: items,
+            hasJccmAuthorization: false,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SocialWelfareDataList extends StatelessWidget {
+  const _SocialWelfareDataList({
+    required this.items,
+    required this.hasJccmAuthorization,
+  });
+
+  final List<_SocialWelfareNavItem> items;
+  final bool hasJccmAuthorization;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(
         AppDimensions.space16,
@@ -95,23 +131,51 @@ class _SocialWelfareDataTab extends StatelessWidget {
         AppDimensions.space16,
         AppDimensions.space24,
       ),
-      itemBuilder: (final context, final index) => AppNavigationCard(
-        title: items[index].title,
-        description: items[index].description,
-        onTap: () {
-          final route = items[index].route;
-          if (route != null) {
-            context.go(route);
-            return;
-          }
-          AppAlertSnackbar.show(
-            context,
-            message: l10n.myDataSectionComingSoon(items[index].title),
+      itemBuilder: (final context, final index) {
+        // Show contextual helper at the top when authorization is missing
+        if (!hasJccmAuthorization && index == 0) {
+          return MyDataAuthorizationContextualHelper(
+            onOpenSettings: () => context.go(
+              Uri(
+                path: Routes.consent,
+                queryParameters: {
+                  'mode': 'preferences',
+                  'returnTo': Routes.myDataSocialWelfare,
+                },
+              ).toString(),
+            ),
           );
-        },
-      ),
+        }
+
+        // Adjust index to account for the contextual helper
+        final itemIndex = hasJccmAuthorization ? index : index - 1;
+
+        final item = items[itemIndex];
+        if (!hasJccmAuthorization) {
+          return MyDataDisabledNavigationCard(
+            title: item.title,
+            description: item.description,
+          );
+        }
+
+        return AppNavigationCard(
+          title: item.title,
+          description: item.description,
+          onTap: () {
+            final route = item.route;
+            if (route != null) {
+              context.go(route);
+              return;
+            }
+            AppAlertSnackbar.show(
+              context,
+              message: l10n.myDataSectionComingSoon(item.title),
+            );
+          },
+        );
+      },
       separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-      itemCount: items.length,
+      itemCount: hasJccmAuthorization ? items.length : items.length + 1,
     );
   }
 }

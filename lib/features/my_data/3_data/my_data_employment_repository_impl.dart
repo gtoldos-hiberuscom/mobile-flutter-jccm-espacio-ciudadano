@@ -179,7 +179,7 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
       return 'Activa';
     }
     if (upper == 'N' || upper == 'NO' || upper == 'FALSE' || upper == '0') {
-      return 'No activa';
+      return 'No Inscrito';
     }
     return normalized;
   }

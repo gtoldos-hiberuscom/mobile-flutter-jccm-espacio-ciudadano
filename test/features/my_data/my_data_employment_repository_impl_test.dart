@@ -35,6 +35,16 @@ void main() {
 
       expect(demand, isNull);
     });
+
+    test('maps inactive employment demand to not registered status', () async {
+      final adapter = _EmploymentAdapter(inscrito: 'N');
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      final demand = await repository.loadDemand(documentNumber: '12345678A');
+
+      expect(demand?.status, 'No Inscrito');
+    });
   });
 }
 
@@ -51,9 +61,10 @@ final class _CapturedRequest {
 }
 
 final class _EmploymentAdapter implements HttpClientAdapter {
-  _EmploymentAdapter({this.returnNotFound = false});
+  _EmploymentAdapter({this.returnNotFound = false, this.inscrito = 'S'});
 
   final bool returnNotFound;
+  final String inscrito;
   _CapturedRequest? request;
 
   @override
@@ -78,7 +89,7 @@ final class _EmploymentAdapter implements HttpClientAdapter {
 
     return ResponseBody.fromString(
       jsonEncode({
-        'inscrito': 'S',
+        'inscrito': inscrito,
         'ultimainscrip': '20000701',
         'mensaje': 'Tramitada',
       }),

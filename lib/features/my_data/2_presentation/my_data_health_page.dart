@@ -5,7 +5,9 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Health data detail — Figma node 43973:1861.
@@ -66,7 +68,7 @@ class _HealthAppointmentsTab extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final healthState = ref.watch(myDataHealthProvider(selectedAppointmentFilter));
+    final authorizationAsync = ref.watch(jccmDataAuthorizationProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -85,31 +87,67 @@ class _HealthAppointmentsTab extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: AppDimensions.space24),
-          _CipText(cip: healthState.asData?.value.cip),
-          const SizedBox(height: AppDimensions.space16),
-          AppSegmentedControl(
-            segments: [l10n.myDataHealthPendingTab, l10n.myDataHealthPastTab],
-            selectedIndex: selectedAppointmentFilter == HealthAppointmentFilter.pending ? 0 : 1,
-            onSelected: (final index) => onAppointmentFilterSelected(
-              index == 0 ? HealthAppointmentFilter.pending : HealthAppointmentFilter.past,
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space20),
-          healthState.when(
-            data: (final state) => _AppointmentsContent(
-              appointments: state.appointments,
-              l10n: l10n,
-            ),
+          authorizationAsync.when(
+            data: (final hasJccmAuthorization) {
+              if (!hasJccmAuthorization) {
+                return MyDataAuthorizationContextualHelper(
+                  onOpenSettings: () => _openSettings(context),
+                );
+              }
+
+              final healthState = ref.watch(myDataHealthProvider(selectedAppointmentFilter));
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _CipText(cip: healthState.asData?.value.cip),
+                  const SizedBox(height: AppDimensions.space16),
+                  AppSegmentedControl(
+                    segments: [l10n.myDataHealthPendingTab, l10n.myDataHealthPastTab],
+                    selectedIndex: selectedAppointmentFilter == HealthAppointmentFilter.pending ? 0 : 1,
+                    onSelected: (final index) => onAppointmentFilterSelected(
+                      index == 0 ? HealthAppointmentFilter.pending : HealthAppointmentFilter.past,
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space20),
+                  healthState.when(
+                    data: (final state) => _AppointmentsContent(
+                      appointments: state.appointments,
+                      l10n: l10n,
+                    ),
+                    loading: () => const Padding(
+                      padding: EdgeInsets.only(top: AppDimensions.space24),
+                      child: Center(child: AppLoadingIndicator()),
+                    ),
+                    error: (final error, final stackTrace) => _HealthErrorState(
+                      onRetry: () => ref.invalidate(myDataHealthProvider(selectedAppointmentFilter)),
+                    ),
+                  ),
+                ],
+              );
+            },
             loading: () => const Padding(
               padding: EdgeInsets.only(top: AppDimensions.space24),
               child: Center(child: AppLoadingIndicator()),
             ),
-            error: (final error, final stackTrace) => _HealthErrorState(
-              onRetry: () => ref.invalidate(myDataHealthProvider(selectedAppointmentFilter)),
+            error: (final error, final stackTrace) => MyDataAuthorizationContextualHelper(
+              onOpenSettings: () => _openSettings(context),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void _openSettings(final BuildContext context) {
+    context.go(
+      Uri(
+        path: Routes.consent,
+        queryParameters: {
+          'mode': 'preferences',
+          'returnTo': Routes.myDataHealth,
+        },
+      ).toString(),
     );
   }
 }

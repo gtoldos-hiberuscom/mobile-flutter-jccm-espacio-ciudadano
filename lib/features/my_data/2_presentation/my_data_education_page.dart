@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Education data detail — Figma node 43973:1875.
@@ -45,8 +49,29 @@ class _MyDataEducationPageState extends State<MyDataEducationPage> {
 
 enum _EducationTab { data, services }
 
-class _EducationDataTab extends StatelessWidget {
+class _EducationDataTab extends ConsumerWidget {
   const _EducationDataTab();
+
+  @override
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final authorizationAsync = ref.watch(ageDataAuthorizationProvider);
+
+    return authorizationAsync.when(
+      data: (final hasAgeAuthorization) => _EducationDataContent(
+        hasAgeAuthorization: hasAgeAuthorization,
+      ),
+      loading: () => const Center(child: AppLoadingIndicator()),
+      error: (final error, final stackTrace) => const _EducationDataContent(
+        hasAgeAuthorization: false,
+      ),
+    );
+  }
+}
+
+class _EducationDataContent extends StatelessWidget {
+  const _EducationDataContent({required this.hasAgeAuthorization});
+
+  final bool hasAgeAuthorization;
 
   @override
   Widget build(final BuildContext context) {
@@ -61,19 +86,51 @@ class _EducationDataTab extends StatelessWidget {
       ),
       child: Column(
         children: [
-          AppNavigationCard(
-            title: l10n.myDataEducationUniversityTitles,
-            description: l10n.myDataEducationTitlesDescription,
-            onTap: () => context.go(Routes.myDataEducationUniversityTitles),
-          ),
+          if (!hasAgeAuthorization) ...[
+            MyDataAuthorizationContextualHelper(
+              message: l10n.myDataAgeAuthorizationRequiredMessage,
+              semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+              onOpenSettings: () => _openSettings(context),
+            ),
+            const SizedBox(height: AppDimensions.space16),
+          ],
+          if (hasAgeAuthorization)
+            AppNavigationCard(
+              title: l10n.myDataEducationUniversityTitles,
+              description: l10n.myDataEducationTitlesDescription,
+              onTap: () => context.go(Routes.myDataEducationUniversityTitles),
+            )
+          else
+            MyDataDisabledNavigationCard(
+              title: l10n.myDataEducationUniversityTitles,
+              description: l10n.myDataEducationTitlesDescription,
+            ),
           const SizedBox(height: AppDimensions.space16),
-          AppNavigationCard(
-            title: l10n.myDataEducationNonUniversityTitles,
-            description: l10n.myDataEducationTitlesDescription,
-            onTap: () => context.go(Routes.myDataEducationNonUniversityTitles),
-          ),
+          if (hasAgeAuthorization)
+            AppNavigationCard(
+              title: l10n.myDataEducationNonUniversityTitles,
+              description: l10n.myDataEducationTitlesDescription,
+              onTap: () => context.go(Routes.myDataEducationNonUniversityTitles),
+            )
+          else
+            MyDataDisabledNavigationCard(
+              title: l10n.myDataEducationNonUniversityTitles,
+              description: l10n.myDataEducationTitlesDescription,
+            ),
         ],
       ),
+    );
+  }
+
+  void _openSettings(final BuildContext context) {
+    context.go(
+      Uri(
+        path: Routes.consent,
+        queryParameters: {
+          'mode': 'preferences',
+          'returnTo': Routes.myDataEducation,
+        },
+      ).toString(),
     );
   }
 }

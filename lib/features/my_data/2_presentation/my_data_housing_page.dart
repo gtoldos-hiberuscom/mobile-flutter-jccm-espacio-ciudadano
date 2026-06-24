@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,8 +51,29 @@ class _MyDataHousingPageState extends State<MyDataHousingPage> {
 
 enum _HousingTab { data, services }
 
-class _HousingDataTab extends StatelessWidget {
+class _HousingDataTab extends ConsumerWidget {
   const _HousingDataTab();
+
+  @override
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final authorizationAsync = ref.watch(ageDataAuthorizationProvider);
+
+    return authorizationAsync.when(
+      data: (final hasAgeAuthorization) => _HousingDataContent(
+        hasAgeAuthorization: hasAgeAuthorization,
+      ),
+      loading: () => const Center(child: AppLoadingIndicator()),
+      error: (final error, final stackTrace) => const _HousingDataContent(
+        hasAgeAuthorization: false,
+      ),
+    );
+  }
+}
+
+class _HousingDataContent extends StatelessWidget {
+  const _HousingDataContent({required this.hasAgeAuthorization});
+
+  final bool hasAgeAuthorization;
 
   @override
   Widget build(final BuildContext context) {
@@ -63,19 +88,51 @@ class _HousingDataTab extends StatelessWidget {
       ),
       child: Column(
         children: [
-          AppNavigationCard(
-            title: l10n.myDataHousingRealEstateTitle,
-            description: l10n.myDataHousingRealEstateDescription,
-            onTap: () => context.go(Routes.myDataHousingRealEstate),
-          ),
+          if (!hasAgeAuthorization) ...[
+            MyDataAuthorizationContextualHelper(
+              message: l10n.myDataAgeAuthorizationRequiredMessage,
+              semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+              onOpenSettings: () => _openSettings(context),
+            ),
+            const SizedBox(height: AppDimensions.space16),
+          ],
+          if (hasAgeAuthorization)
+            AppNavigationCard(
+              title: l10n.myDataHousingRealEstateTitle,
+              description: l10n.myDataHousingRealEstateDescription,
+              onTap: () => context.go(Routes.myDataHousingRealEstate),
+            )
+          else
+            MyDataDisabledNavigationCard(
+              title: l10n.myDataHousingRealEstateTitle,
+              description: l10n.myDataHousingRealEstateDescription,
+            ),
           const SizedBox(height: AppDimensions.space16),
-          AppNavigationCard(
-            title: l10n.myDataHousingAddressTitle,
-            description: l10n.myDataHousingAddressDescription,
-            onTap: () => context.go(Routes.myDataHousingAddress),
-          ),
+          if (hasAgeAuthorization)
+            AppNavigationCard(
+              title: l10n.myDataHousingAddressTitle,
+              description: l10n.myDataHousingAddressDescription,
+              onTap: () => context.go(Routes.myDataHousingAddress),
+            )
+          else
+            MyDataDisabledNavigationCard(
+              title: l10n.myDataHousingAddressTitle,
+              description: l10n.myDataHousingAddressDescription,
+            ),
         ],
       ),
+    );
+  }
+
+  void _openSettings(final BuildContext context) {
+    context.go(
+      Uri(
+        path: Routes.consent,
+        queryParameters: {
+          'mode': 'preferences',
+          'returnTo': Routes.myDataHousing,
+        },
+      ).toString(),
     );
   }
 }

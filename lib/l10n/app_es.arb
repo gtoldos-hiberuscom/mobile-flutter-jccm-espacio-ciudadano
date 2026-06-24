@@ -1117,6 +1117,18 @@
   "@socialWelfareInfoSheetDescription": {
     "description": "Mis datos de Bienestar — descripción del modal informativo."
   },
+  "myDataJccmAuthorizationRequiredMessage": "Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.",
+  "@myDataJccmAuthorizationRequiredMessage": {
+    "description": "Mensaje mostrado cuando la consulta de datos JCCM no está autorizada."
+  },
+  "myDataJccmAuthorizationRequiredCta": "Ir a Condiciones de uso y autorizaciones",
+  "@myDataJccmAuthorizationRequiredCta": {
+    "description": "Texto accesible del botón para abrir condiciones de uso y autorizaciones."
+  },
+  "myDataAgeAuthorizationRequiredMessage": "Debes autorizar la consulta de los datos que la Administración General del Estado tiene sobre ti desde tus preferencias.",
+  "@myDataAgeAuthorizationRequiredMessage": {
+    "description": "Mensaje mostrado cuando la consulta de datos AGE no está autorizada."
+  },
   "socialWelfareFamilyTitle": "Familia numerosa",
   "@socialWelfareFamilyTitle": {
     "description": "Bienestar — sección familia numerosa."
@@ -3453,9 +3465,17 @@
   "@myDataEmploymentInfoSheetTitle": {
     "description": "Título del modal informativo de Mis datos de Empleo."
   },
-  "myDataEmploymentInfoSheetDescription": "Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.",
+  "myDataEmploymentInfoSheetDescription": "Consulta tu situación actual como demandante de empleo y tus últimas inscripciones en ofertas.",
   "@myDataEmploymentInfoSheetDescription": {
     "description": "Descripción principal del modal informativo de Mis datos de Empleo."
+  },
+  "myDataEmploymentInfoSheetFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "@myDataEmploymentInfoSheetFooter": {
+    "description": "Texto de contacto del modal informativo de Mis datos de Empleo."
+  },
+  "myDataEmploymentInfoSheetOfficeContactsButton": "Listado de oficinas y contactos",
+  "@myDataEmploymentInfoSheetOfficeContactsButton": {
+    "description": "Botón externo hacia oficinas y contactos en el modal informativo de Mis datos de Empleo."
   },
   "myDataEmploymentDataTab": "Mis datos de Empleo",
   "@myDataEmploymentDataTab": {
@@ -3481,6 +3501,38 @@
   "@myDataEmploymentDemandError": {
     "description": "Mensaje de error al cargar la demanda de empleo."
   },
+  "myDataEmploymentServiceUnavailableTitle": "Servicio no disponible",
+  "@myDataEmploymentServiceUnavailableTitle": {
+    "description": "Título del banner mostrado cuando el servicio de demanda de empleo no está disponible."
+  },
+  "myDataEmploymentServiceUnavailableMessage": "El servicio de Demanda de empleo actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "@myDataEmploymentServiceUnavailableMessage": {
+    "description": "Mensaje del banner mostrado cuando el servicio de demanda de empleo no está disponible."
+  },
+  "myDataEmploymentServiceUnavailableReload": "Recargar página",
+  "@myDataEmploymentServiceUnavailableReload": {
+    "description": "Etiqueta del botón para recargar la demanda de empleo cuando el servicio no está disponible."
+  },
+  "myDataEmploymentOffersServiceUnavailableMessage": "El servicio de inscripciones en ofertas actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "@myDataEmploymentOffersServiceUnavailableMessage": {
+    "description": "Mensaje del helper contextual mostrado cuando el servicio de inscripciones en ofertas no está disponible."
+  },
+  "myDataEmploymentAuthorizationDialogTitle": "No has autorizado la consulta de datos en tu perfil",
+  "@myDataEmploymentAuthorizationDialogTitle": {
+    "description": "Título del diálogo mostrado cuando faltan autorizaciones para ver inscripciones en ofertas."
+  },
+  "myDataEmploymentAuthorizationDialogBody": "Para visualizar tus inscripciones en ofertas, debes autorizar primero la consulta de los datos en “Condiciones de uso y autorizaciones” en tu perfil.",
+  "@myDataEmploymentAuthorizationDialogBody": {
+    "description": "Cuerpo del diálogo mostrado cuando faltan autorizaciones para ver inscripciones en ofertas."
+  },
+  "myDataEmploymentAuthorizationDialogAuthorizationsCta": "Ir a Condiciones de uso y autorizaciones",
+  "@myDataEmploymentAuthorizationDialogAuthorizationsCta": {
+    "description": "CTA del diálogo para ir a la pantalla de condiciones de uso y autorizaciones."
+  },
+  "myDataEmploymentAuthorizationDialogBack": "Volver",
+  "@myDataEmploymentAuthorizationDialogBack": {
+    "description": "Botón para cerrar el diálogo de autorización de inscripciones en ofertas."
+  },
   "myDataEmploymentOffersTitle": "Inscripciones en ofertas",
   "@myDataEmploymentOffersTitle": {
     "description": "Título de la tarjeta de inscripciones en ofertas."
@@ -3488,6 +3540,38 @@
   "myDataEmploymentOffersDescription": "Ofertas de empleo en las que te has inscrito",
   "@myDataEmploymentOffersDescription": {
     "description": "Descripción de la tarjeta de inscripciones en ofertas."
+  },
+  "myDataEmploymentOffersPageTitle": "Inscripción en ofertas de empleo",
+  "@myDataEmploymentOffersPageTitle": {
+    "description": "Título de la pantalla de inscripciones en ofertas de empleo."
+  },
+  "myDataEmploymentOffersInfoSheetDescription": "Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.",
+  "@myDataEmploymentOffersInfoSheetDescription": {
+    "description": "Descripción del modal informativo de la pantalla de inscripciones en ofertas."
+  },
+  "myDataEmploymentOffersEmptyMessage": "Aún no te has inscrito a ninguna oferta. Si consideras que no es correcto o no está actualizado, contacta con el servicio de Lirem ipsum",
+  "@myDataEmploymentOffersEmptyMessage": {
+    "description": "Mensaje mostrado cuando no hay inscripciones en ofertas."
+  },
+  "myDataEmploymentOffersLoadError": "No hemos podido cargar tus inscripciones en ofertas.",
+  "@myDataEmploymentOffersLoadError": {
+    "description": "Mensaje de error al cargar inscripciones en ofertas."
+  },
+  "myDataEmploymentOfferPublicationDateLabel": "Fecha publicación",
+  "@myDataEmploymentOfferPublicationDateLabel": {
+    "description": "Etiqueta de fecha de publicación de una oferta."
+  },
+  "myDataEmploymentOfferRegistrationDateLabel": "Fecha inscripción",
+  "@myDataEmploymentOfferRegistrationDateLabel": {
+    "description": "Etiqueta de fecha de inscripción a una oferta."
+  },
+  "myDataEmploymentOfferSelectionEndDateLabel": "Fecha de finalización del proceso de selección",
+  "@myDataEmploymentOfferSelectionEndDateLabel": {
+    "description": "Etiqueta de fecha de finalización del proceso de selección de una oferta."
+  },
+  "myDataEmploymentOfferApplicationStatusLabel": "Estado candidatura",
+  "@myDataEmploymentOfferApplicationStatusLabel": {
+    "description": "Etiqueta del estado de candidatura de una oferta."
   },
   "myDataEmploymentProceduresTitle": "Trámites que te pueden interesar",
   "@myDataEmploymentProceduresTitle": {

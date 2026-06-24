@@ -836,6 +836,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareInfoSheetDescription => 'Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
+  String get myDataJccmAuthorizationRequiredMessage => 'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.';
+
+  @override
+  String get myDataJccmAuthorizationRequiredCta => 'Ir a Condiciones de uso y autorizaciones';
+
+  @override
+  String get myDataAgeAuthorizationRequiredMessage => 'Debes autorizar la consulta de los datos que la Administración General del Estado tiene sobre ti desde tus preferencias.';
+
+  @override
   String get socialWelfareFamilyTitle => 'Familia numerosa';
 
   @override
@@ -2544,7 +2553,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentInfoSheetTitle => 'Sobre Mis datos de Empleo';
 
   @override
-  String get myDataEmploymentInfoSheetDescription => 'Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.';
+  String get myDataEmploymentInfoSheetDescription => 'Consulta tu situación actual como demandante de empleo y tus últimas inscripciones en ofertas.';
+
+  @override
+  String get myDataEmploymentInfoSheetFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentInfoSheetOfficeContactsButton => 'Listado de oficinas y contactos';
 
   @override
   String get myDataEmploymentDataTab => 'Mis datos de Empleo';
@@ -2565,10 +2580,58 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentDemandError => 'No hemos podido cargar tu demanda de empleo.';
 
   @override
+  String get myDataEmploymentServiceUnavailableTitle => 'Servicio no disponible';
+
+  @override
+  String get myDataEmploymentServiceUnavailableMessage => 'El servicio de Demanda de empleo actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get myDataEmploymentServiceUnavailableReload => 'Recargar página';
+
+  @override
+  String get myDataEmploymentOffersServiceUnavailableMessage => 'El servicio de inscripciones en ofertas actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogTitle => 'No has autorizado la consulta de datos en tu perfil';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogBody => 'Para visualizar tus inscripciones en ofertas, debes autorizar primero la consulta de los datos en “Condiciones de uso y autorizaciones” en tu perfil.';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogAuthorizationsCta => 'Ir a Condiciones de uso y autorizaciones';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogBack => 'Volver';
+
+  @override
   String get myDataEmploymentOffersTitle => 'Inscripciones en ofertas';
 
   @override
   String get myDataEmploymentOffersDescription => 'Ofertas de empleo en las que te has inscrito';
+
+  @override
+  String get myDataEmploymentOffersPageTitle => 'Inscripción en ofertas de empleo';
+
+  @override
+  String get myDataEmploymentOffersInfoSheetDescription => 'Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.';
+
+  @override
+  String get myDataEmploymentOffersEmptyMessage => 'Aún no te has inscrito a ninguna oferta. Si consideras que no es correcto o no está actualizado, contacta con el servicio de Lirem ipsum';
+
+  @override
+  String get myDataEmploymentOffersLoadError => 'No hemos podido cargar tus inscripciones en ofertas.';
+
+  @override
+  String get myDataEmploymentOfferPublicationDateLabel => 'Fecha publicación';
+
+  @override
+  String get myDataEmploymentOfferRegistrationDateLabel => 'Fecha inscripción';
+
+  @override
+  String get myDataEmploymentOfferSelectionEndDateLabel => 'Fecha de finalización del proceso de selección';
+
+  @override
+  String get myDataEmploymentOfferApplicationStatusLabel => 'Estado candidatura';
 
   @override
   String get myDataEmploymentProceduresTitle => 'Trámites que te pueden interesar';

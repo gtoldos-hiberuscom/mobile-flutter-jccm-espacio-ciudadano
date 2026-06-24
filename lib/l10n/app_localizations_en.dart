@@ -835,6 +835,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialWelfareInfoSheetDescription => 'Check the information for your Social Welfare files and access the services available from the Government of Castilla-La Mancha.';
 
   @override
+  String get myDataJccmAuthorizationRequiredMessage => 'You must authorise the consultation of administrative facts held by the JCCM from your preferences.';
+
+  @override
+  String get myDataJccmAuthorizationRequiredCta => 'Go to Terms of use and authorizations';
+
+  @override
+  String get myDataAgeAuthorizationRequiredMessage => 'You must authorise the consultation of data held about you by the General State Administration from your preferences.';
+
+  @override
   String get socialWelfareFamilyTitle => 'Large family';
 
   @override
@@ -2543,7 +2552,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentInfoSheetTitle => 'About My Employment data';
 
   @override
-  String get myDataEmploymentInfoSheetDescription => 'Check your job-seeker registration information and access employment services and procedures in Castilla-La Mancha.';
+  String get myDataEmploymentInfoSheetDescription => 'Check your current situation as a job seeker and your latest offer registrations.';
+
+  @override
+  String get myDataEmploymentInfoSheetFooter => 'If any of your data is incorrect or not up to date, contact the Castilla-La Mancha Regional Ministry of Social Welfare.';
+
+  @override
+  String get myDataEmploymentInfoSheetOfficeContactsButton => 'List of offices and contacts';
 
   @override
   String get myDataEmploymentDataTab => 'My Employment data';
@@ -2564,10 +2579,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentDemandError => 'We could not load your employment demand.';
 
   @override
+  String get myDataEmploymentServiceUnavailableTitle => 'Service unavailable';
+
+  @override
+  String get myDataEmploymentServiceUnavailableMessage => 'The Employment demand service is currently unavailable. You can reload the information or try again later.';
+
+  @override
+  String get myDataEmploymentServiceUnavailableReload => 'Reload page';
+
+  @override
+  String get myDataEmploymentOffersServiceUnavailableMessage => 'The offer registrations service is currently unavailable. You can reload the information or try again later.';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogTitle => 'You have not authorised data lookup in your profile';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogBody => 'To view your offer registrations, you must first authorize data lookup in “Terms of use and authorizations” in your profile.';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogAuthorizationsCta => 'Go to Terms of use and authorizations';
+
+  @override
+  String get myDataEmploymentAuthorizationDialogBack => 'Back';
+
+  @override
   String get myDataEmploymentOffersTitle => 'Offer registrations';
 
   @override
   String get myDataEmploymentOffersDescription => 'Job offers you have registered for';
+
+  @override
+  String get myDataEmploymentOffersPageTitle => 'Employment offer registration';
+
+  @override
+  String get myDataEmploymentOffersInfoSheetDescription => 'Check the job offers you have registered for and the status of your application.';
+
+  @override
+  String get myDataEmploymentOffersEmptyMessage => 'You have not registered for any offer yet. If you think this is incorrect or not up to date, contact the Lirem ipsum service.';
+
+  @override
+  String get myDataEmploymentOffersLoadError => 'We could not load your offer registrations.';
+
+  @override
+  String get myDataEmploymentOfferPublicationDateLabel => 'Publication date';
+
+  @override
+  String get myDataEmploymentOfferRegistrationDateLabel => 'Registration date';
+
+  @override
+  String get myDataEmploymentOfferSelectionEndDateLabel => 'Selection process end date';
+
+  @override
+  String get myDataEmploymentOfferApplicationStatusLabel => 'Application status';
 
   @override
   String get myDataEmploymentProceduresTitle => 'Procedures that may interest you';

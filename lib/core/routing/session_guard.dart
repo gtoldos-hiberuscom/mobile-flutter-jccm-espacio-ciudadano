@@ -80,7 +80,48 @@ final class SessionGuard {
     if (path == Routes.consent || path == Routes.legalPrivacy) {
       return null;
     }
+    final optionalConsentRedirect = await _optionalConsentRedirect(path);
+    if (optionalConsentRedirect != null) {
+      return optionalConsentRedirect;
+    }
     return _onboardingRedirect(path);
+  }
+
+  Future<String?> _optionalConsentRedirect(final String path) async {
+    final String idAgente = _ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    if (idAgente.isEmpty) {
+      return null;
+    }
+
+    final requiredClauseId = _requiredOptionalClauseId(path);
+    if (requiredClauseId == null) {
+      return null;
+    }
+
+    final hasAcceptedClause = await _hasAcceptedClause(idAgente, requiredClauseId);
+    if (hasAcceptedClause) {
+      return null;
+    }
+
+    return Uri(
+      path: Routes.consent,
+      queryParameters: {
+        'mode': 'preferences',
+        'returnTo': path,
+      },
+    ).toString();
+  }
+
+  int? _requiredOptionalClauseId(final String path) {
+    if (path == Routes.myDataEmploymentOffers || path.startsWith(Routes.myDataSocialWelfareFamily) || path.startsWith(Routes.myDataSocialWelfareDisability) || path.startsWith(Routes.myDataSocialWelfareThermalSpa) || path.startsWith(Routes.myDataSocialWelfareDependency) || path.startsWith(Routes.myDataSocialWelfareParking)) {
+      return 1;
+    }
+
+    if (path.startsWith(Routes.myDataEducationUniversityTitles) || path.startsWith(Routes.myDataEducationNonUniversityTitles) || path.startsWith(Routes.myDataHousingRealEstate) || path.startsWith(Routes.myDataHousingAddress)) {
+      return 2;
+    }
+
+    return null;
   }
 
   /// Redirects to the life-events onboarding screen on first login.
@@ -118,11 +159,15 @@ final class SessionGuard {
   }
 
   Future<bool> _hasAcceptedLifeEventsClause(final String idAgente) async {
+    return _hasAcceptedClause(idAgente, 3);
+  }
+
+  Future<bool> _hasAcceptedClause(final String idAgente, final int clauseId) async {
     final result = await _ref
         .read(checkAcceptedConsentClauseUsecaseProvider)
         .execute(
           idAgente: idAgente,
-          clauseId: 3,
+          clauseId: clauseId,
         );
     return switch (result) {
       AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,

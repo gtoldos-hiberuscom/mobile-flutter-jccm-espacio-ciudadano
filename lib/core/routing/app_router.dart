@@ -20,6 +20,7 @@ import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/accessibili
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/legal_notice_page.dart';
 import 'package:jccm_espacio_ciudadano/features/legal/2_presentation/privacy_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_education_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_employment_offers_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_employment_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_health_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_address_page.dart';
@@ -186,6 +187,11 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.myDataEmployment,
               builder: (final BuildContext context, final GoRouterState state) => const MyDataEmploymentPage(),
+            ),
+
+            GoRoute(
+              path: Routes.myDataEmploymentOffers,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataEmploymentOffersPage(),
             ),
 
             GoRoute(

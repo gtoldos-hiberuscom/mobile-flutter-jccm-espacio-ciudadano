@@ -1676,6 +1676,24 @@ abstract class AppLocalizations {
   /// **'Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.'**
   String get socialWelfareInfoSheetDescription;
 
+  /// Mensaje mostrado cuando la consulta de datos JCCM no está autorizada.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.'**
+  String get myDataJccmAuthorizationRequiredMessage;
+
+  /// Texto accesible del botón para abrir condiciones de uso y autorizaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Ir a Condiciones de uso y autorizaciones'**
+  String get myDataJccmAuthorizationRequiredCta;
+
+  /// Mensaje mostrado cuando la consulta de datos AGE no está autorizada.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes autorizar la consulta de los datos que la Administración General del Estado tiene sobre ti desde tus preferencias.'**
+  String get myDataAgeAuthorizationRequiredMessage;
+
   /// Bienestar — sección familia numerosa.
   ///
   /// In es, this message translates to:
@@ -4949,8 +4967,20 @@ abstract class AppLocalizations {
   /// Descripción principal del modal informativo de Mis datos de Empleo.
   ///
   /// In es, this message translates to:
-  /// **'Consulta la información de tu demanda de empleo y accede a servicios y trámites relacionados con empleo en Castilla-La Mancha.'**
+  /// **'Consulta tu situación actual como demandante de empleo y tus últimas inscripciones en ofertas.'**
   String get myDataEmploymentInfoSheetDescription;
+
+  /// Texto de contacto del modal informativo de Mis datos de Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get myDataEmploymentInfoSheetFooter;
+
+  /// Botón externo hacia oficinas y contactos en el modal informativo de Mis datos de Empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Listado de oficinas y contactos'**
+  String get myDataEmploymentInfoSheetOfficeContactsButton;
 
   /// Primera pestaña del detalle de Empleo.
   ///
@@ -4988,6 +5018,54 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar tu demanda de empleo.'**
   String get myDataEmploymentDemandError;
 
+  /// Título del banner mostrado cuando el servicio de demanda de empleo no está disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio no disponible'**
+  String get myDataEmploymentServiceUnavailableTitle;
+
+  /// Mensaje del banner mostrado cuando el servicio de demanda de empleo no está disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de Demanda de empleo actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get myDataEmploymentServiceUnavailableMessage;
+
+  /// Etiqueta del botón para recargar la demanda de empleo cuando el servicio no está disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Recargar página'**
+  String get myDataEmploymentServiceUnavailableReload;
+
+  /// Mensaje del helper contextual mostrado cuando el servicio de inscripciones en ofertas no está disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de inscripciones en ofertas actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get myDataEmploymentOffersServiceUnavailableMessage;
+
+  /// Título del diálogo mostrado cuando faltan autorizaciones para ver inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'No has autorizado la consulta de datos en tu perfil'**
+  String get myDataEmploymentAuthorizationDialogTitle;
+
+  /// Cuerpo del diálogo mostrado cuando faltan autorizaciones para ver inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'Para visualizar tus inscripciones en ofertas, debes autorizar primero la consulta de los datos en “Condiciones de uso y autorizaciones” en tu perfil.'**
+  String get myDataEmploymentAuthorizationDialogBody;
+
+  /// CTA del diálogo para ir a la pantalla de condiciones de uso y autorizaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Ir a Condiciones de uso y autorizaciones'**
+  String get myDataEmploymentAuthorizationDialogAuthorizationsCta;
+
+  /// Botón para cerrar el diálogo de autorización de inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get myDataEmploymentAuthorizationDialogBack;
+
   /// Título de la tarjeta de inscripciones en ofertas.
   ///
   /// In es, this message translates to:
@@ -4999,6 +5077,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ofertas de empleo en las que te has inscrito'**
   String get myDataEmploymentOffersDescription;
+
+  /// Título de la pantalla de inscripciones en ofertas de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Inscripción en ofertas de empleo'**
+  String get myDataEmploymentOffersPageTitle;
+
+  /// Descripción del modal informativo de la pantalla de inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.'**
+  String get myDataEmploymentOffersInfoSheetDescription;
+
+  /// Mensaje mostrado cuando no hay inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no te has inscrito a ninguna oferta. Si consideras que no es correcto o no está actualizado, contacta con el servicio de Lirem ipsum'**
+  String get myDataEmploymentOffersEmptyMessage;
+
+  /// Mensaje de error al cargar inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus inscripciones en ofertas.'**
+  String get myDataEmploymentOffersLoadError;
+
+  /// Etiqueta de fecha de publicación de una oferta.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha publicación'**
+  String get myDataEmploymentOfferPublicationDateLabel;
+
+  /// Etiqueta de fecha de inscripción a una oferta.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha inscripción'**
+  String get myDataEmploymentOfferRegistrationDateLabel;
+
+  /// Etiqueta de fecha de finalización del proceso de selección de una oferta.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de finalización del proceso de selección'**
+  String get myDataEmploymentOfferSelectionEndDateLabel;
+
+  /// Etiqueta del estado de candidatura de una oferta.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado candidatura'**
+  String get myDataEmploymentOfferApplicationStatusLabel;
 
   /// Título de la sección de trámites de empleo.
   ///
