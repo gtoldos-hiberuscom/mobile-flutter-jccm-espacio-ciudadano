@@ -41,6 +41,7 @@ abstract final class Routes {
   static const String home = '/home';
   static const String homeFromDrawer = '$home?from=drawer';
 
+  static const String gestion = '/gestion';
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
   static const String myDataEmployment = '/my-data/employment';
@@ -75,6 +76,7 @@ abstract final class Routes {
     helpContact,
     supportForm,
     agenda,
+    gestion,
     myData,
     myDataEmployment,
     myDataEducation,

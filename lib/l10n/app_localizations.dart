@@ -5779,6 +5779,66 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Teleconsulta a demanda'**
   String get myDataHealthAppointmentModality;
+
+  /// Título de la pantalla principal de Gestión.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestión'**
+  String get gestionTitle;
+
+  /// Título de la tarjeta de navegación a Mis expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get gestionExpedientesTitle;
+
+  /// Descripción de la tarjeta de navegación a Mis expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta y gestiona tus expedientes administrativos'**
+  String get gestionExpedientesDescription;
+
+  /// Título de la tarjeta de navegación a Mis registros.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis registros'**
+  String get gestionRegistrosTitle;
+
+  /// Descripción de la tarjeta de navegación a Mis registros.
+  ///
+  /// In es, this message translates to:
+  /// **'Accede a tus entradas y salidas de registro'**
+  String get gestionRegistrosDescription;
+
+  /// Título de la tarjeta de navegación para aportar documentos a expedientes de terceros.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentos a un expediente de terceros'**
+  String get gestionAportacionTitle;
+
+  /// Descripción de la tarjeta de navegación para aportar documentos a expedientes de terceros.
+  ///
+  /// In es, this message translates to:
+  /// **'Adjunta documentación a expedientes de otras personas'**
+  String get gestionAportacionDescription;
+
+  /// Título de la tarjeta de navegación a Mis notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis notificaciones'**
+  String get gestionNotificacionesTitle;
+
+  /// Descripción de la tarjeta de navegación a Mis notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona tus notificaciones electrónicas'**
+  String get gestionNotificacionesDescription;
+
+  /// Mensaje cuando una sección de Gestión aún no está implementada.
+  ///
+  /// In es, this message translates to:
+  /// **'Función disponible próximamente'**
+  String get gestionSectionComingSoon;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

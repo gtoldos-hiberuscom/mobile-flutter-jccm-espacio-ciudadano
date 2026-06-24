@@ -2963,4 +2963,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myDataHealthAppointmentModality => 'Teleconsulta a demanda';
+
+  @override
+  String get gestionTitle => 'Gestión';
+
+  @override
+  String get gestionExpedientesTitle => 'Mis expedientes';
+
+  @override
+  String get gestionExpedientesDescription => 'Consulta y gestiona tus expedientes administrativos';
+
+  @override
+  String get gestionRegistrosTitle => 'Mis registros';
+
+  @override
+  String get gestionRegistrosDescription => 'Accede a tus entradas y salidas de registro';
+
+  @override
+  String get gestionAportacionTitle => 'Aportar documentos a un expediente de terceros';
+
+  @override
+  String get gestionAportacionDescription => 'Adjunta documentación a expedientes de otras personas';
+
+  @override
+  String get gestionNotificacionesTitle => 'Mis notificaciones';
+
+  @override
+  String get gestionNotificacionesDescription => 'Gestiona tus notificaciones electrónicas';
+
+  @override
+  String get gestionSectionComingSoon => 'Función disponible próximamente';
 }

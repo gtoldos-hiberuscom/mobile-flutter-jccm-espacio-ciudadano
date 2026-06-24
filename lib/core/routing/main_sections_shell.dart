@@ -22,6 +22,9 @@ class MainSectionsShell extends StatelessWidget {
   ];
 
   int get _currentIndex {
+    if (location.startsWith(Routes.gestion)) {
+      return 1;
+    }
     if (location.startsWith(Routes.myData)) {
       return 2;
     }
@@ -50,17 +53,14 @@ class MainSectionsShell extends StatelessWidget {
     switch (index) {
       case 0:
         context.go(Routes.home);
+      case 1:
+        context.go(Routes.gestion);
       case 2:
         context.go(Routes.myData);
       case 3:
         context.go(Routes.agenda);
       case 4:
         context.go(Routes.recommendations);
-      default:
-        AppAlertSnackbar.show(
-          context,
-          message: 'Función disponible próximamente',
-        );
     }
   }
 }

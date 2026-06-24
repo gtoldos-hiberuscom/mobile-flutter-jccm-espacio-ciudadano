@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/pages/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pages/design_system_catalog_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/help_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
@@ -166,6 +167,11 @@ final goRouterProvider = Provider<GoRouter>(
                   child: page,
                 );
               },
+            ),
+
+            GoRoute(
+              path: Routes.gestion,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionPage(),
             ),
 
             GoRoute(

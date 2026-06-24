@@ -4019,5 +4019,46 @@
   "myDataHealthAppointmentModality": "Teleconsulta a demanda",
   "@myDataHealthAppointmentModality": {
     "description": "Modalidad de la cita sanitaria de ejemplo."
+  },
+
+  "gestionTitle": "Gestión",
+  "@gestionTitle": {
+    "description": "Título de la pantalla principal de Gestión."
+  },
+  "gestionExpedientesTitle": "Mis expedientes",
+  "@gestionExpedientesTitle": {
+    "description": "Título de la tarjeta de navegación a Mis expedientes."
+  },
+  "gestionExpedientesDescription": "Consulta y gestiona tus expedientes administrativos",
+  "@gestionExpedientesDescription": {
+    "description": "Descripción de la tarjeta de navegación a Mis expedientes."
+  },
+  "gestionRegistrosTitle": "Mis registros",
+  "@gestionRegistrosTitle": {
+    "description": "Título de la tarjeta de navegación a Mis registros."
+  },
+  "gestionRegistrosDescription": "Accede a tus entradas y salidas de registro",
+  "@gestionRegistrosDescription": {
+    "description": "Descripción de la tarjeta de navegación a Mis registros."
+  },
+  "gestionAportacionTitle": "Aportar documentos a un expediente de terceros",
+  "@gestionAportacionTitle": {
+    "description": "Título de la tarjeta de navegación para aportar documentos a expedientes de terceros."
+  },
+  "gestionAportacionDescription": "Adjunta documentación a expedientes de otras personas",
+  "@gestionAportacionDescription": {
+    "description": "Descripción de la tarjeta de navegación para aportar documentos a expedientes de terceros."
+  },
+  "gestionNotificacionesTitle": "Mis notificaciones",
+  "@gestionNotificacionesTitle": {
+    "description": "Título de la tarjeta de navegación a Mis notificaciones."
+  },
+  "gestionNotificacionesDescription": "Gestiona tus notificaciones electrónicas",
+  "@gestionNotificacionesDescription": {
+    "description": "Descripción de la tarjeta de navegación a Mis notificaciones."
+  },
+  "gestionSectionComingSoon": "Función disponible próximamente",
+  "@gestionSectionComingSoon": {
+    "description": "Mensaje cuando una sección de Gestión aún no está implementada."
   }
 }
