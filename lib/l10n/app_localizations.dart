@@ -6205,6 +6205,78 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Datos de contacto guardados'**
   String get gestionNotificacionesAltaSuccessMessage;
+
+  /// Título de la pantalla de listado de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis notificaciones'**
+  String get gestionNotificacionesPageTitle;
+
+  /// Pestaña 'Todo' en el filtro de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo'**
+  String get gestionNotificacionesTabTodo;
+
+  /// Pestaña 'Pendientes' en el filtro de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendientes'**
+  String get gestionNotificacionesTabPendientes;
+
+  /// Pestaña 'Aceptadas' en el filtro de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptadas'**
+  String get gestionNotificacionesTabAceptadas;
+
+  /// Etiqueta del campo procedimiento en la card de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Procedimiento'**
+  String get gestionNotificacionesProcedimientoLabel;
+
+  /// Etiqueta del campo fecha de caducidad en la card de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha expiración'**
+  String get gestionNotificacionesFechaCaducidadLabel;
+
+  /// Etiqueta del tag de estado pendiente en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get gestionNotificacionesTagPendiente;
+
+  /// Etiqueta del tag de estado aceptada en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptada'**
+  String get gestionNotificacionesTagAceptada;
+
+  /// Etiqueta del tag de estado rechazada en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazada'**
+  String get gestionNotificacionesTagRechazada;
+
+  /// Etiqueta del tag de estado expirada en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Expirada'**
+  String get gestionNotificacionesTagExpirada;
+
+  /// Mensaje de lista vacía en la pantalla de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes notificaciones en este momento'**
+  String get gestionNotificacionesEmpty;
+
+  /// Mensaje de error al cargar la lista de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'No se han podido cargar las notificaciones'**
+  String get gestionNotificacionesLoadError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

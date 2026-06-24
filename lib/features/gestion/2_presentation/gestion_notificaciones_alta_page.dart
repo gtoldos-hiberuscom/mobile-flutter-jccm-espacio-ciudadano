@@ -234,7 +234,6 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-String _citizenId(final JwtClaims? claims) => claims?.idAgente ?? '';
+String _citizenId(final JwtClaims? claims) => claims?.normalizedPersonIdentifier ?? '';
 
-String _dni(final JwtClaims? claims) =>
-    claims?.personIdentifier ?? claims?.idAgente ?? claims?.preferredUsername ?? '';
+String _dni(final JwtClaims? claims) => claims?.normalizedPersonIdentifier ?? '';

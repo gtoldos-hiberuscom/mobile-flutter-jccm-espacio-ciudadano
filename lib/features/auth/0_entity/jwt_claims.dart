@@ -50,6 +50,12 @@ final class JwtClaims {
   final String? givenName;
   final String? familyName;
 
+  /// Document identifier expected by `/api/v1/ciudadanos/{id}` endpoints.
+  String? get normalizedPersonIdentifier {
+    final value = personIdentifier?.trim();
+    return value == null || value.isEmpty ? null : value.toUpperCase();
+  }
+
   /// Parses a raw JWT payload map into a [JwtClaims] instance.
   ///
   /// Null-safe and non-throwing: absent or malformed fields become their

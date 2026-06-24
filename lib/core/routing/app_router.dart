@@ -13,6 +13,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportacion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expedientes_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_alta_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registro_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registros_page.dart';
@@ -183,6 +184,11 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.gestionAportacion,
               builder: (final BuildContext context, final GoRouterState state) => const GestionAportacionPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionNotificaciones,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionNotificacionesPage(),
             ),
 
             GoRoute(

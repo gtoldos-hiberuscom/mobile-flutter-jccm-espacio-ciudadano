@@ -175,9 +175,9 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
 }
 
 String _notificationCitizenId(final JwtClaims? claims) {
-  return claims?.idAgente ?? '';
+  return claims?.normalizedPersonIdentifier ?? '';
 }
 
 String _notificationDni(final JwtClaims? claims) {
-  return claims?.personIdentifier ?? claims?.idAgente ?? claims?.preferredUsername ?? '';
+  return claims?.normalizedPersonIdentifier ?? '';
 }

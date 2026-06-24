@@ -4306,5 +4306,53 @@
   "gestionNotificacionesAltaSuccessMessage": "Datos de contacto guardados",
   "@gestionNotificacionesAltaSuccessMessage": {
     "description": "Mensaje de éxito tras guardar los datos de contacto."
+  },
+  "gestionNotificacionesPageTitle": "Mis notificaciones",
+  "@gestionNotificacionesPageTitle": {
+    "description": "Título de la pantalla de listado de notificaciones."
+  },
+  "gestionNotificacionesTabTodo": "Todo",
+  "@gestionNotificacionesTabTodo": {
+    "description": "Pestaña 'Todo' en el filtro de notificaciones."
+  },
+  "gestionNotificacionesTabPendientes": "Pendientes",
+  "@gestionNotificacionesTabPendientes": {
+    "description": "Pestaña 'Pendientes' en el filtro de notificaciones."
+  },
+  "gestionNotificacionesTabAceptadas": "Aceptadas",
+  "@gestionNotificacionesTabAceptadas": {
+    "description": "Pestaña 'Aceptadas' en el filtro de notificaciones."
+  },
+  "gestionNotificacionesProcedimientoLabel": "Procedimiento",
+  "@gestionNotificacionesProcedimientoLabel": {
+    "description": "Etiqueta del campo procedimiento en la card de notificación."
+  },
+  "gestionNotificacionesFechaCaducidadLabel": "Fecha expiración",
+  "@gestionNotificacionesFechaCaducidadLabel": {
+    "description": "Etiqueta del campo fecha de caducidad en la card de notificación."
+  },
+  "gestionNotificacionesTagPendiente": "Pendiente",
+  "@gestionNotificacionesTagPendiente": {
+    "description": "Etiqueta del tag de estado pendiente en notificaciones."
+  },
+  "gestionNotificacionesTagAceptada": "Aceptada",
+  "@gestionNotificacionesTagAceptada": {
+    "description": "Etiqueta del tag de estado aceptada en notificaciones."
+  },
+  "gestionNotificacionesTagRechazada": "Rechazada",
+  "@gestionNotificacionesTagRechazada": {
+    "description": "Etiqueta del tag de estado rechazada en notificaciones."
+  },
+  "gestionNotificacionesTagExpirada": "Expirada",
+  "@gestionNotificacionesTagExpirada": {
+    "description": "Etiqueta del tag de estado expirada en notificaciones."
+  },
+  "gestionNotificacionesEmpty": "No tienes notificaciones en este momento",
+  "@gestionNotificacionesEmpty": {
+    "description": "Mensaje de lista vacía en la pantalla de notificaciones."
+  },
+  "gestionNotificacionesLoadError": "No se han podido cargar las notificaciones",
+  "@gestionNotificacionesLoadError": {
+    "description": "Mensaje de error al cargar la lista de notificaciones."
   }
 }

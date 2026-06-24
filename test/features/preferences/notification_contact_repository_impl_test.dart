@@ -18,7 +18,7 @@ void main() {
 
       await expectLater(
         repository.saveContact(
-          citizenId: 'agent-123',
+          citizenId: '12345678Z',
           dni: '12345678Z',
           contact: const NotificationContact(phone: '640559754'),
         ),
@@ -27,7 +27,7 @@ void main() {
 
       expect(adapter.requests, hasLength(1));
       expect(adapter.requests.single.method, 'GET');
-      expect(adapter.requests.single.path, '/api/v1/ciudadanos/agent-123/contacto');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/12345678Z/contacto');
     });
 
     test('creates contact when loading existing contact returns not found', () async {
@@ -47,7 +47,7 @@ void main() {
       final repository = NotificationContactRepositoryImpl(dio: dio);
 
       final result = await repository.saveContact(
-        citizenId: 'agent-123',
+        citizenId: '12345678Z',
         dni: '12345678Z',
         contact: const NotificationContact(phone: '640559754'),
       );

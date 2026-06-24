@@ -3175,4 +3175,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionNotificacionesAltaSuccessMessage => 'Datos de contacto guardados';
+
+  @override
+  String get gestionNotificacionesPageTitle => 'Mis notificaciones';
+
+  @override
+  String get gestionNotificacionesTabTodo => 'Todo';
+
+  @override
+  String get gestionNotificacionesTabPendientes => 'Pendientes';
+
+  @override
+  String get gestionNotificacionesTabAceptadas => 'Aceptadas';
+
+  @override
+  String get gestionNotificacionesProcedimientoLabel => 'Procedimiento';
+
+  @override
+  String get gestionNotificacionesFechaCaducidadLabel => 'Fecha expiración';
+
+  @override
+  String get gestionNotificacionesTagPendiente => 'Pendiente';
+
+  @override
+  String get gestionNotificacionesTagAceptada => 'Aceptada';
+
+  @override
+  String get gestionNotificacionesTagRechazada => 'Rechazada';
+
+  @override
+  String get gestionNotificacionesTagExpirada => 'Expirada';
+
+  @override
+  String get gestionNotificacionesEmpty => 'No tienes notificaciones en este momento';
+
+  @override
+  String get gestionNotificacionesLoadError => 'No se han podido cargar las notificaciones';
 }
