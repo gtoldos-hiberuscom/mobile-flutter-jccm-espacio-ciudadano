@@ -63,6 +63,102 @@ void main() {
         },
       );
     });
+
+    test('updates contact including idTercero when backend already has a record', () async {
+      final adapter = _SequenceAdapter([
+        const _AdapterResponse(
+          statusCode: 200,
+          body: <String, dynamic>{
+            'body': {
+              'idTercero': 5,
+              'telefono': 640559754,
+              'email': 'old@example.com',
+            },
+          },
+        ),
+        const _AdapterResponse(
+          statusCode: 200,
+          body: <String, dynamic>{
+            'body': {
+              'idTercero': 5,
+              'telefono': 666777888,
+              'email': 'new@example.com',
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = NotificationContactRepositoryImpl(dio: dio);
+
+      final result = await repository.saveContact(
+        citizenId: '12345678Z',
+        dni: '12345678Z',
+        contact: const NotificationContact(
+          phone: '666777888',
+          email: 'new@example.com',
+        ),
+      );
+
+      expect(result.idTercero, 5);
+      expect(result.phone, '666777888');
+      expect(result.email, 'new@example.com');
+      expect(adapter.requests.map((final request) => request.method), ['GET', 'PUT']);
+      expect(
+        adapter.requests.last.jsonBody,
+        <String, dynamic>{
+          'dni': '12345678Z',
+          'email': 'new@example.com',
+          'idTercero': 5,
+          'telefono': 666777888,
+        },
+      );
+    });
+
+    test('updates contact when record exists with only idTercero and no visible contact data', () async {
+      final adapter = _SequenceAdapter([
+        const _AdapterResponse(
+          statusCode: 200,
+          body: <String, dynamic>{
+            'body': {
+              'idTercero': 5,
+              'telefono': null,
+              'email': null,
+            },
+          },
+        ),
+        const _AdapterResponse(
+          statusCode: 200,
+          body: <String, dynamic>{
+            'body': {
+              'idTercero': 5,
+              'telefono': 640559754,
+              'email': null,
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = NotificationContactRepositoryImpl(dio: dio);
+
+      final result = await repository.saveContact(
+        citizenId: '12345678Z',
+        dni: '12345678Z',
+        contact: const NotificationContact(phone: '640559754'),
+      );
+
+      expect(result.idTercero, 5);
+      expect(result.phone, '640559754');
+      expect(adapter.requests.map((final request) => request.method), ['GET', 'PUT']);
+      expect(
+        adapter.requests.last.jsonBody,
+        <String, dynamic>{
+          'dni': '12345678Z',
+          'email': null,
+          'idTercero': 5,
+          'telefono': 640559754,
+        },
+      );
+    });
   });
 }
 
