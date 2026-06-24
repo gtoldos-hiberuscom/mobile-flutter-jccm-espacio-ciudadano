@@ -6,6 +6,9 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 
 /// Interactive navigation card with title, short description and arrow.
+///
+/// Set [isDisabled] to true to render the card in the disabled visual state
+/// (grey background, no shadow, muted text) without interaction.
 class AppNavigationCard extends StatelessWidget {
   const AppNavigationCard({
     required this.title,
@@ -13,32 +16,35 @@ class AppNavigationCard extends StatelessWidget {
     required this.onTap,
     super.key,
     this.semanticLabel,
+    this.isDisabled = false,
   });
 
   final String title;
   final String description;
   final VoidCallback onTap;
   final String? semanticLabel;
+  final bool isDisabled;
 
   @override
   Widget build(final BuildContext context) {
     final borderRadius = BorderRadius.circular(AppDimensions.radiusMedium);
+    final textColor = isDisabled ? AppColors.textDisabled : AppColors.primary;
 
     return Semantics(
-      button: true,
+      button: !isDisabled,
       label: semanticLabel ?? '$title. $description',
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: AppColors.backgroundWhite,
-            border: Border.all(color: AppColors.borderBlueMutedLight),
+            color: isDisabled ? AppColors.background : AppColors.backgroundWhite,
+            border: Border.all(color: isDisabled ? AppColors.borderNeutralLight : AppColors.borderBlueMutedLight),
             borderRadius: borderRadius,
-            boxShadow: AppShadows.medium,
+            boxShadow: isDisabled ? [] : AppShadows.medium,
           ),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: onTap,
+              onTap: isDisabled ? null : onTap,
               borderRadius: borderRadius,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 80),
@@ -62,27 +68,23 @@ class AppNavigationCard extends StatelessWidget {
                                 title,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: AppTypography.leadingMedium.copyWith(
-                                  color: AppColors.primary,
-                                ),
+                                style: AppTypography.leadingMedium.copyWith(color: textColor),
                               ),
                               const SizedBox(height: AppDimensions.space4),
                               Text(
                                 description,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: AppTypography.smallRegular.copyWith(
-                                  color: AppColors.primary,
-                                ),
+                                style: AppTypography.smallRegular.copyWith(color: textColor),
                               ),
                             ],
                           ),
                         ),
                       ),
                       const SizedBox(width: AppDimensions.space8),
-                      const AppIcon(
+                      AppIcon(
                         AppIcons.arrowForward,
-                        color: AppColors.textPrimary,
+                        color: isDisabled ? AppColors.disabled : AppColors.textPrimary,
                         size: AppDimensions.iconLarge,
                       ),
                     ],

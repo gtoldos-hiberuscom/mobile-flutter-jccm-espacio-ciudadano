@@ -6091,6 +6091,120 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Encontrar expediente'**
   String get gestionAportacionFindButton;
+
+  /// Texto del helper contextual bajo la card desactivada de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.'**
+  String get gestionNotificacionesContextualMessage;
+
+  /// Etiqueta del botón ghost del helper contextual de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar'**
+  String get gestionNotificacionesContextualAction;
+
+  /// Título del NavBar de la pantalla de activación de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar notificaciones'**
+  String get gestionNotificacionesAltaTitle;
+
+  /// Texto introductorio de la pantalla de activación de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.'**
+  String get gestionNotificacionesAltaIntro;
+
+  /// Nota de campo obligatorio en la pantalla de activación de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'*Obligatorio rellenar al menos uno de los medios de contacto'**
+  String get gestionNotificacionesAltaRequiredNote;
+
+  /// Etiqueta del campo de teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Teléfono móvil'**
+  String get gestionNotificacionesAltaPhoneLabel;
+
+  /// Placeholder del campo de teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'600 000 000'**
+  String get gestionNotificacionesAltaPhoneHint;
+
+  /// Texto de ayuda bajo el campo de teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Para recibir las notificaciones en mensaje SMS'**
+  String get gestionNotificacionesAltaPhoneHelper;
+
+  /// Etiqueta del campo de email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get gestionNotificacionesAltaEmailLabel;
+
+  /// Placeholder del campo de email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo: mperez@correo.es'**
+  String get gestionNotificacionesAltaEmailHint;
+
+  /// Texto de ayuda bajo el campo de email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Para recibir las notificaciones en tu correo electrónico'**
+  String get gestionNotificacionesAltaEmailHelper;
+
+  /// Etiqueta del botón principal sticky de la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Dar de alta notificaciones'**
+  String get gestionNotificacionesAltaSaveButton;
+
+  /// Título del bottom sheet informativo de la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto'**
+  String get gestionNotificacionesAltaInfoTitle;
+
+  /// Cuerpo del bottom sheet informativo de la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.'**
+  String get gestionNotificacionesAltaInfoBody;
+
+  /// Error de validación cuando no se rellena ningún campo de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes indicar al menos un teléfono móvil o un correo electrónico.'**
+  String get gestionNotificacionesAltaErrorAtLeastOne;
+
+  /// Error de validación del teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un teléfono móvil válido.'**
+  String get gestionNotificacionesAltaErrorPhone;
+
+  /// Error de validación del email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un correo electrónico válido.'**
+  String get gestionNotificacionesAltaErrorEmail;
+
+  /// Error cuando no se puede obtener el ID del ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido identificar al ciudadano.'**
+  String get gestionNotificacionesAltaErrorNoCitizenId;
+
+  /// Mensaje de éxito tras guardar los datos de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto guardados'**
+  String get gestionNotificacionesAltaSuccessMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

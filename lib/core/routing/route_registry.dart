@@ -44,6 +44,7 @@ abstract final class Routes {
   static const String gestion = '/gestion';
   static const String gestionAportacion = '/gestion/aportacion';
   static const String gestionExpedientes = '/gestion/expedientes';
+  static const String gestionNotificacionesAlta = '/gestion/notificaciones/alta';
   static const String gestionRegistros = '/gestion/registros';
   static const String gestionRegistrosDetail = '/gestion/registros/detail';
   static const String myData = '/my-data';
@@ -83,6 +84,7 @@ abstract final class Routes {
     gestion,
     gestionAportacion,
     gestionExpedientes,
+    gestionNotificacionesAlta,
     gestionRegistros,
     gestionRegistrosDetail,
     myData,

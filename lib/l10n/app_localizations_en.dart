@@ -3118,4 +3118,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionAportacionFindButton => 'Encontrar expediente';
+
+  @override
+  String get gestionNotificacionesContextualMessage => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
+  String get gestionNotificacionesContextualAction => 'Activar';
+
+  @override
+  String get gestionNotificacionesAltaTitle => 'Activar notificaciones';
+
+  @override
+  String get gestionNotificacionesAltaIntro => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
+  String get gestionNotificacionesAltaRequiredNote => '*Obligatorio rellenar al menos uno de los medios de contacto';
+
+  @override
+  String get gestionNotificacionesAltaPhoneLabel => 'Teléfono móvil';
+
+  @override
+  String get gestionNotificacionesAltaPhoneHint => '600 000 000';
+
+  @override
+  String get gestionNotificacionesAltaPhoneHelper => 'Para recibir las notificaciones en mensaje SMS';
+
+  @override
+  String get gestionNotificacionesAltaEmailLabel => 'Correo electrónico';
+
+  @override
+  String get gestionNotificacionesAltaEmailHint => 'Ejemplo: mperez@correo.es';
+
+  @override
+  String get gestionNotificacionesAltaEmailHelper => 'Para recibir las notificaciones en tu correo electrónico';
+
+  @override
+  String get gestionNotificacionesAltaSaveButton => 'Dar de alta notificaciones';
+
+  @override
+  String get gestionNotificacionesAltaInfoTitle => 'Datos de contacto';
+
+  @override
+  String get gestionNotificacionesAltaInfoBody => 'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.';
+
+  @override
+  String get gestionNotificacionesAltaErrorAtLeastOne => 'Debes indicar al menos un teléfono móvil o un correo electrónico.';
+
+  @override
+  String get gestionNotificacionesAltaErrorPhone => 'Introduce un teléfono móvil válido.';
+
+  @override
+  String get gestionNotificacionesAltaErrorEmail => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get gestionNotificacionesAltaErrorNoCitizenId => 'No hemos podido identificar al ciudadano.';
+
+  @override
+  String get gestionNotificacionesAltaSuccessMessage => 'Datos de contacto guardados';
 }
