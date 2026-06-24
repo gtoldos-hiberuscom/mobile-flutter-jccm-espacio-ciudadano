@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -12,6 +14,7 @@ class GestionPage extends ConsumerWidget {
     _GestionSectionDefinition(
       title: _GestionText.expedientesTitle,
       description: _GestionText.expedientesDescription,
+      route: Routes.gestionExpedientes,
     ),
     _GestionSectionDefinition(
       title: _GestionText.registrosTitle,
@@ -64,10 +67,16 @@ class GestionPage extends ConsumerWidget {
                   AppNavigationCard(
                     title: section.title,
                     description: section.description,
-                    onTap: () => AppAlertSnackbar.show(
-                      context,
-                      message: l10n.gestionSectionComingSoon,
-                    ),
+                    onTap: () {
+                      if (section.route != null) {
+                        context.go(section.route!);
+                      } else {
+                        AppAlertSnackbar.show(
+                          context,
+                          message: l10n.gestionSectionComingSoon,
+                        );
+                      }
+                    },
                   ),
                   if (!section.hasDividerAbove) const SizedBox(height: AppDimensions.space16),
                 ],
@@ -85,17 +94,20 @@ class _GestionSectionDefinition {
     required this.title,
     required this.description,
     this.hasDividerAbove = false,
+    this.route,
   });
 
   final _GestionText title;
   final _GestionText description;
   final bool hasDividerAbove;
+  final String? route;
 
   _GestionSection resolve(final AppLocalizations l10n) {
     return _GestionSection(
       title: title.resolve(l10n),
       description: description.resolve(l10n),
       hasDividerAbove: hasDividerAbove,
+      route: route,
     );
   }
 }
@@ -129,9 +141,11 @@ class _GestionSection {
     required this.title,
     required this.description,
     required this.hasDividerAbove,
+    this.route,
   });
 
   final String title;
   final String description;
   final bool hasDividerAbove;
+  final String? route;
 }

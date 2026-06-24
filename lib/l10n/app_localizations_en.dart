@@ -2992,4 +2992,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionSectionComingSoon => 'Función disponible próximamente';
+
+  @override
+  String get gestionExpedientesPageTitle => 'Mis expedientes';
+
+  @override
+  String get gestionExpedientesNumExpedienteLabel => 'Nº EXPEDIENTE.';
+
+  @override
+  String get gestionExpedientesFechaInicioLabel => 'FECHA DE INICIO';
+
+  @override
+  String get gestionExpedientesEstadoLabel => 'ESTADO';
+
+  @override
+  String get gestionExpedientesLoadError => 'No hemos podido cargar tus expedientes';
+
+  @override
+  String get gestionExpedientesEmpty => 'No tienes expedientes activos';
 }

@@ -1,1 +1,1 @@
-// Barrel — exports added as data layer is populated.
+export 'repositories/gestion_expediente_repository_impl.dart';

@@ -4060,5 +4060,30 @@
   "gestionSectionComingSoon": "Función disponible próximamente",
   "@gestionSectionComingSoon": {
     "description": "Mensaje cuando una sección de Gestión aún no está implementada."
+  },
+
+  "gestionExpedientesPageTitle": "Mis expedientes",
+  "@gestionExpedientesPageTitle": {
+    "description": "Título de la pantalla de listado de expedientes."
+  },
+  "gestionExpedientesNumExpedienteLabel": "Nº EXPEDIENTE.",
+  "@gestionExpedientesNumExpedienteLabel": {
+    "description": "Etiqueta del número de expediente en la tarjeta."
+  },
+  "gestionExpedientesFechaInicioLabel": "FECHA DE INICIO",
+  "@gestionExpedientesFechaInicioLabel": {
+    "description": "Etiqueta de la fecha de inicio en la tarjeta de expediente."
+  },
+  "gestionExpedientesEstadoLabel": "ESTADO",
+  "@gestionExpedientesEstadoLabel": {
+    "description": "Etiqueta del estado en la tarjeta de expediente."
+  },
+  "gestionExpedientesLoadError": "No hemos podido cargar tus expedientes",
+  "@gestionExpedientesLoadError": {
+    "description": "Error al cargar la lista de expedientes."
+  },
+  "gestionExpedientesEmpty": "No tienes expedientes activos",
+  "@gestionExpedientesEmpty": {
+    "description": "Mensaje de lista vacía en la pantalla de expedientes."
   }
 }

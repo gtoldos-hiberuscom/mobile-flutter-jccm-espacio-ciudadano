@@ -1,1 +1,1 @@
-// Barrel — exports added as domain layer is populated.
+export 'repositories/gestion_expediente_repository.dart';

@@ -5839,6 +5839,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Función disponible próximamente'**
   String get gestionSectionComingSoon;
+
+  /// Título de la pantalla de listado de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get gestionExpedientesPageTitle;
+
+  /// Etiqueta del número de expediente en la tarjeta.
+  ///
+  /// In es, this message translates to:
+  /// **'Nº EXPEDIENTE.'**
+  String get gestionExpedientesNumExpedienteLabel;
+
+  /// Etiqueta de la fecha de inicio en la tarjeta de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA DE INICIO'**
+  String get gestionExpedientesFechaInicioLabel;
+
+  /// Etiqueta del estado en la tarjeta de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'ESTADO'**
+  String get gestionExpedientesEstadoLabel;
+
+  /// Error al cargar la lista de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus expedientes'**
+  String get gestionExpedientesLoadError;
+
+  /// Mensaje de lista vacía en la pantalla de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes expedientes activos'**
+  String get gestionExpedientesEmpty;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
