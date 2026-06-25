@@ -1,30 +1,119 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_expediente_repository.dart';
 
 final class GestionExpedienteRepositoryImpl implements GestionExpedienteRepository {
-  const GestionExpedienteRepositoryImpl({required final Dio dio}) : _dio = dio;
+  GestionExpedienteRepositoryImpl({required final Dio dio}) : _api = PublicacionApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final PublicacionApi _api;
 
   @override
   Future<List<Expediente>> loadExpedientes({required final String documentNumber}) async {
-    final response = await _dio.post<Object?>(
-      '/api/v1/publicacion/misexpedientes',
-      data: {'pnumdoc': documentNumber},
-      options: Options(
-        responseType: ResponseType.plain,
-        validateStatus: (final status) => status != null && status < 500,
-      ),
-    );
-
-    if (response.statusCode == 404) {
-      return const [];
+    final expedientes = await _loadMisExpedientes(documentNumber: documentNumber);
+    if (expedientes.isNotEmpty) {
+      return expedientes;
     }
+    return _loadExpedientesByNif(documentNumber: documentNumber);
+  }
 
-    final payload = _decode(response.data);
+  Future<List<Expediente>> _loadMisExpedientes({
+    required final String documentNumber,
+  }) async {
+    try {
+      final response = await _api.siMisExpedientesOperation(
+        zcsrfcmisexpedientesBody: ZCSRFCMISEXPEDIENTES((final builder) => builder.pnumdoc = documentNumber),
+        extra: {
+          generatedApiDecodeStringResponseExtraKey: true,
+          generatedApiNormalizeSingletonCollectionsExtraKey: const ['expedientes.item'],
+        },
+        validateStatus: (final status) => status != null && status < 500,
+      );
+
+      if (response.statusCode == 404) {
+        return const [];
+      }
+
+      final items = response.data?.expedientes?.item;
+      if (items != null) {
+        return items.map(_toExpedienteDto).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
+      }
+
+      return _rawExpedientes(response.extra[generatedApiRawResponseDataExtraKey]);
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return const [];
+      }
+      final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
+      final parsed = _rawExpedientes(rawData);
+      if (parsed.isNotEmpty) {
+        return parsed;
+      }
+      rethrow;
+    }
+  }
+
+  Future<List<Expediente>> _loadExpedientesByNif({
+    required final String documentNumber,
+  }) async {
+    try {
+      final response = await _api.myPubliSelecByNifTipoProcOperation1(
+        dTSELECTBYNIFV2REQ: DTSELECTBYNIFV2REQ((final builder) => builder.numerodocumento = documentNumber),
+        extra: {
+          generatedApiDecodeStringResponseExtraKey: true,
+          generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
+        },
+        validateStatus: (final status) => status != null && status < 500,
+      );
+
+      if (response.statusCode == 404) {
+        return const [];
+      }
+
+      final items = response.data?.publicacionportal?.item;
+      if (items != null) {
+        return items.map(_toExpedienteByNifDto).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
+      }
+
+      return _rawExpedientesByNif(response.extra[generatedApiRawResponseDataExtraKey]);
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return const [];
+      }
+      final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
+      final parsed = _rawExpedientesByNif(rawData);
+      if (parsed.isNotEmpty) {
+        return parsed;
+      }
+      rethrow;
+    }
+  }
+
+  Expediente _toExpedienteDto(final ZCSAUXSTEXPEDIENTES data) {
+    return Expediente(
+      numexp: _emptyToNull(data.numexp) ?? '',
+      titulo: _emptyToNull(data.titulo) ?? _emptyToNull(data.descrip) ?? _emptyToNull(data.desproc) ?? '',
+      consejeria: _emptyToNull(data.desconsej) ?? _emptyToNull(data.consej) ?? '',
+      fechaInicio: _emptyToNull(data.fechareg),
+      estado: _emptyToNull(data.estado) ?? _emptyToNull(data.estadosede),
+    );
+  }
+
+  Expediente _toExpedienteByNifDto(final ZCSSTPUBPORTAL data) {
+    return Expediente(
+      numexp: _emptyToNull(data.numexp) ?? '',
+      titulo: _emptyToNull(data.titulo) ?? _emptyToNull(data.descrip) ?? _emptyToNull(data.desproc) ?? _emptyToNull(data.asunto) ?? _emptyToNull(data.desasunto) ?? '',
+      consejeria: _emptyToNull(data.desconsej) ?? _emptyToNull(data.consej) ?? '',
+      fechaInicio: _emptyToNull(data.fechareg) ?? _emptyToNull(data.fechaini),
+      estado: _emptyToNull(data.estado),
+    );
+  }
+
+  List<Expediente> _rawExpedientes(final Object? data) {
+    final payload = _decode(data);
     final root = _asMap(payload);
     if (root == null) {
       return const [];
@@ -39,16 +128,45 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       _ => const <dynamic>[],
     };
 
-    return items.map(_asMap).whereType<Map<String, Object?>>().map(_toExpediente).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
+    return items.map(_asMap).whereType<Map<String, Object?>>().map(_toExpedienteMap).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
   }
 
-  Expediente _toExpediente(final Map<String, Object?> data) {
+  List<Expediente> _rawExpedientesByNif(final Object? data) {
+    final payload = _decode(data);
+    final root = _asMap(payload);
+    if (root == null) {
+      return const [];
+    }
+
+    final portalNode = _asMap(root['publicacionportal']);
+    final itemsNode = portalNode?['item'];
+
+    final items = switch (itemsNode) {
+      final List<dynamic> list => list,
+      final Map<dynamic, dynamic> single => [single],
+      _ => const <dynamic>[],
+    };
+
+    return items.map(_asMap).whereType<Map<String, Object?>>().map(_toExpedienteByNifMap).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
+  }
+
+  Expediente _toExpedienteMap(final Map<String, Object?> data) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
       titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
       fechaInicio: _string(data, 'fechareg'),
       estado: _string(data, 'estado') ?? _string(data, 'estadosede'),
+    );
+  }
+
+  Expediente _toExpedienteByNifMap(final Map<String, Object?> data) {
+    return Expediente(
+      numexp: _string(data, 'numexp') ?? '',
+      titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
+      fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
+      estado: _string(data, 'estado'),
     );
   }
 
@@ -91,5 +209,10 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       return trimmed.isEmpty ? null : trimmed;
     }
     return null;
+  }
+
+  String? _emptyToNull(final String? value) {
+    final text = value?.trim();
+    return text == null || text.isEmpty ? null : text;
   }
 }
