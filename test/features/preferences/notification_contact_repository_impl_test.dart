@@ -9,6 +9,29 @@ import 'package:jccm_espacio_ciudadano/features/preferences/3_data/notification_
 
 void main() {
   group('NotificationContactRepositoryImpl', () {
+    test('loads contact when API returns the direct DTO shape from the generated client', () async {
+      final adapter = _SequenceAdapter([
+        const _AdapterResponse(
+          statusCode: 200,
+          body: <String, dynamic>{
+            'idTercero': 5,
+            'telefono': 640559754,
+            'email': 'test@example.com',
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = NotificationContactRepositoryImpl(dio: dio);
+
+      final result = await repository.loadContact(citizenId: '12345678Z');
+
+      expect(result?.idTercero, 5);
+      expect(result?.phone, '640559754');
+      expect(result?.email, 'test@example.com');
+      expect(adapter.requests.single.method, 'GET');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/12345678Z/contacto');
+    });
+
     test('does not create contact when loading existing contact is forbidden', () async {
       final adapter = _SequenceAdapter([
         const _AdapterResponse(statusCode: 403, body: <String, dynamic>{}),

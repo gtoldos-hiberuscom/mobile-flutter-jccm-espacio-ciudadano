@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/repositories/notification_contact_repository.dart';
 
 final class NotificationContactRepositoryImpl implements NotificationContactRepository {
-  const NotificationContactRepositoryImpl({required final Dio dio}) : _dio = dio;
+  NotificationContactRepositoryImpl({required final Dio dio}) : _api = CiudadanosApi(_withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final CiudadanosApi _api;
+
+  static const _rawResponseExtraKey = 'generated_api.raw_response_data';
+  static const _requestDataExtraKey = 'generated_api.request_data';
 
   @override
   Future<NotificationContact?> loadContact({required final String citizenId}) async {
@@ -14,16 +18,25 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
   }
 
   Future<NotificationContact?> _loadStoredContact({required final String citizenId}) async {
-    final response = await _dio.get<Map<String, dynamic>>(
-      '/api/v1/ciudadanos/$citizenId/contacto',
-      options: Options(
+    try {
+      final response = await _api.obtenerCiudadano(
+        id: citizenId,
         validateStatus: (final status) => status != null && (status < 400 || status == 404),
-      ),
-    );
-    if (response.statusCode == 404) {
-      return null;
+      );
+      if (response.statusCode == 404) {
+        return null;
+      }
+      return _storedContactFromResponse(response);
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+      final storedContact = _storedContactFromRaw(error.response?.data);
+      if (storedContact != null) {
+        return storedContact;
+      }
+      rethrow;
     }
-    return _storedContact(response.data);
   }
 
   @override
@@ -55,11 +68,23 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     required final Map<String, dynamic> data,
     required final NotificationContact fallback,
   }) async {
-    final response = await _dio.post<Map<String, dynamic>>(
-      '/api/v1/ciudadanos/$citizenId/contacto',
-      data: data,
-    );
-    return _mapContact(response.data) ?? fallback;
+    final request = _requestDto(data);
+    try {
+      final response = await _api.registrarCiudadano(
+        id: citizenId,
+        terceroN2Dto: request,
+        extra: {
+          _requestDataExtraKey: data,
+        },
+      );
+      return _storedContactFromResponse(response) ?? fallback;
+    } on DioException catch (error) {
+      final storedContact = _storedContactFromRaw(error.response?.data);
+      if (storedContact != null) {
+        return storedContact;
+      }
+      rethrow;
+    }
   }
 
   Future<NotificationContact> _updateContact({
@@ -67,11 +92,23 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     required final Map<String, dynamic> data,
     required final NotificationContact fallback,
   }) async {
-    final response = await _dio.put<Map<String, dynamic>>(
-      '/api/v1/ciudadanos/$citizenId/contacto',
-      data: data,
-    );
-    return _mapContact(response.data) ?? fallback;
+    final request = _requestDto(data);
+    try {
+      final response = await _api.modificarCiudadano(
+        id: citizenId,
+        terceroN2Dto: request,
+        extra: {
+          _requestDataExtraKey: data,
+        },
+      );
+      return _storedContactFromResponse(response) ?? fallback;
+    } on DioException catch (error) {
+      final storedContact = _storedContactFromRaw(error.response?.data);
+      if (storedContact != null) {
+        return storedContact;
+      }
+      rethrow;
+    }
   }
 
   Map<String, dynamic> _toJson(
@@ -91,9 +128,45 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     return data;
   }
 
-  NotificationContact? _mapContact(final Map<String, dynamic>? data) {
-    final contact = _storedContact(data);
-    return _visibleContact(contact);
+  TerceroN2Dto _requestDto(final Map<String, dynamic> data) {
+    return TerceroN2Dto((final builder) {
+      builder
+        ..dni = data['dni'] as String?
+        ..email = data['email'] as String?
+        ..idTercero = data['idTercero'] as int?
+        ..telefono = data['telefono'] as int?;
+    });
+  }
+
+  NotificationContact? _storedContactFromResponse(final Response<TerceroN2Dto> response) {
+    final contact = _storedContactFromDto(response.data);
+    if (contact != null) {
+      return contact;
+    }
+    return _storedContactFromRaw(response.extra[_rawResponseExtraKey]);
+  }
+
+  NotificationContact? _storedContactFromDto(final TerceroN2Dto? data) {
+    if (data == null) {
+      return null;
+    }
+    final phone = data.telefono?.toString();
+    if (data.idTercero == null && phone == null && data.email == null) {
+      return null;
+    }
+    return NotificationContact(
+      idTercero: data.idTercero,
+      phone: phone,
+      email: _emptyToNull(data.email),
+    );
+  }
+
+  NotificationContact? _storedContactFromRaw(final Object? data) {
+    final payload = _payload(data);
+    if (payload == null) {
+      return null;
+    }
+    return _storedContact(payload);
   }
 
   NotificationContact? _storedContact(final Map<String, dynamic>? data) {
@@ -117,15 +190,22 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     return contact;
   }
 
-  Map<String, dynamic>? _payload(final Map<String, dynamic>? data) {
+  Map<String, dynamic>? _payload(final Object? data) {
     if (data == null) {
       return null;
     }
+    if (data is! Map) {
+      return null;
+    }
+    final map = data is Map<String, dynamic> ? data : <String, dynamic>{for (final entry in data.entries) '${entry.key}': entry.value};
     final body = data['body'];
     if (body is Map<String, dynamic>) {
       return body;
     }
-    return data;
+    if (body is Map) {
+      return <String, dynamic>{for (final entry in body.entries) '${entry.key}': entry.value};
+    }
+    return map;
   }
 
   String? _string(final Object? value) {
@@ -149,5 +229,44 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
   String? _emptyToNull(final String? value) {
     final text = value?.trim();
     return text == null || text.isEmpty ? null : text;
+  }
+}
+
+Dio _withGeneratedApiCompat(final Dio dio) {
+  if (dio.interceptors.any((final interceptor) => interceptor is _GeneratedApiCompatInterceptor)) {
+    return dio;
+  }
+  dio.interceptors.insert(0, const _GeneratedApiCompatInterceptor());
+  return dio;
+}
+
+final class _GeneratedApiCompatInterceptor extends Interceptor {
+  const _GeneratedApiCompatInterceptor();
+
+  @override
+  void onRequest(final RequestOptions options, final RequestInterceptorHandler handler) {
+    final requestData = options.extra[NotificationContactRepositoryImpl._requestDataExtraKey];
+    if (requestData is Map<String, dynamic>) {
+      options.data = requestData;
+    }
+    handler.next(options);
+  }
+
+  @override
+  void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
+    response.extra.putIfAbsent(
+      NotificationContactRepositoryImpl._rawResponseExtraKey,
+      () => response.data,
+    );
+    handler.next(response);
+  }
+
+  @override
+  void onError(final DioException err, final ErrorInterceptorHandler handler) {
+    err.response?.extra.putIfAbsent(
+      NotificationContactRepositoryImpl._rawResponseExtraKey,
+      () => err.response?.data,
+    );
+    handler.next(err);
   }
 }
