@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **getDatosFamiliaNumerosa**
-> DTMINHAFPCCCAFNRES getDatosFamiliaNumerosa(numDocumento, dTMINHAFPCCCAFNREQBody, authorization)
+> DTMINHAFPCCCAFNRES getDatosFamiliaNumerosa(numDocumento, DTMINHAFPCCCAFNREQ, authorization)
 
 Servicio para obtener los datos de familia numerosa
 
@@ -23,11 +23,11 @@ import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCcaaApi();
 final String numDocumento = numDocumento_example; // String | 
-final DTMINHAFPCCCAFNREQ dTMINHAFPCCCAFNREQBody = ; // DTMINHAFPCCCAFNREQ | 
+final DTMINHAFPCCCAFNREQ DTMINHAFPCCCAFNREQ = ; // DTMINHAFPCCCAFNREQ | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.getDatosFamiliaNumerosa(numDocumento, dTMINHAFPCCCAFNREQBody, authorization);
+    final response = api.getDatosFamiliaNumerosa(numDocumento, DTMINHAFPCCCAFNREQ, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling CcaaApi->getDatosFamiliaNumerosa: $e\n');
@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **numDocumento** | **String**|  | 
- **dTMINHAFPCCCAFNREQBody** | [**DTMINHAFPCCCAFNREQ**](DTMINHAFPCCCAFNREQ.md)|  | 
+ **DTMINHAFPCCCAFNREQ** | [**DTMINHAFPCCCAFNREQ**](DTMINHAFPCCCAFNREQ.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type

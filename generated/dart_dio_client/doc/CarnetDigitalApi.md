@@ -10,9 +10,10 @@ All URIs are relative to *https://fachada-sede-api-pre.cm-pre.jccm.es*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**obtenerCarnetJoven**](CarnetDigitalApi.md#obtenercarnetjoven) | **GET** /api/v1/carnet-digital/joven/{dni} | Obtener carnet joven
-[**obtenerDatosFamiliaNumerosa**](CarnetDigitalApi.md#obtenerdatosfamilianumerosa) | **POST** /api/v1/intermediacion/discapacidad/datos | Obtener datos del carné de familia numerosa
-[**obtenerDatosFamiliaNumerosa1**](CarnetDigitalApi.md#obtenerdatosfamilianumerosa1) | **GET** /api/v1/carnet-digital/grado-discapacidad/{dni} | Obtener datos del carné de familia numerosa
-[**obtenerDatosFamiliaNumerosa2**](CarnetDigitalApi.md#obtenerdatosfamilianumerosa2) | **GET** /api/v1/carnet-digital/familia-numerosa/{dni} | Obtener datos del carné de familia numerosa
+[**obtenerDatosDiscapacidadIntermediacion**](CarnetDigitalApi.md#obtenerdatosdiscapacidadintermediacion) | **POST** /api/v1/intermediacion/discapacidad/datos | Obtener datos del carné de discapacidad
+[**obtenerDatosFamiliaNumerosa**](CarnetDigitalApi.md#obtenerdatosfamilianumerosa) | **GET** /api/v1/carnet-digital/grado-discapacidad/{dni} | Obtener datos del carné de familia numerosa
+[**obtenerDatosFamiliaNumerosa1**](CarnetDigitalApi.md#obtenerdatosfamilianumerosa1) | **GET** /api/v1/carnet-digital/familia-numerosa/{dni} | Obtener datos del carné de familia numerosa
+[**obtenerDatosFamiliaNumerosaIntermediacion**](CarnetDigitalApi.md#obtenerdatosfamilianumerosaintermediacion) | **POST** /api/v1/intermediacion/familia-numerosa/datos | Obtener datos del carné de familia numerosa
 [**obtenerPdf**](CarnetDigitalApi.md#obtenerpdf) | **POST** /api/v1/carnet-digital/pdf/{dni} | Obtener Pdf de un carné
 [**obtenerPkPass**](CarnetDigitalApi.md#obtenerpkpass) | **POST** /api/v1/carnet-digital/pkpass/{dni} | Obtener PkPass de un carné
 [**obtenerPkPassFamiliaNumerosa**](CarnetDigitalApi.md#obtenerpkpassfamilianumerosa) | **GET** /api/v1/carnet-digital/familia-numerosa-pkpass/{dni} | Obtener PkPass del carné de familia numerosa
@@ -63,24 +64,24 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **obtenerDatosFamiliaNumerosa**
-> String obtenerDatosFamiliaNumerosa(requestFachadaDiscapacidadInterm, authorization)
+# **obtenerDatosDiscapacidadIntermediacion**
+> RespuestaFachadaInterm obtenerDatosDiscapacidadIntermediacion(baseRequestIntermediacion, authorization)
 
-Obtener datos del carné de familia numerosa
+Obtener datos del carné de discapacidad
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCarnetDigitalApi();
-final RequestFachadaDiscapacidadInterm requestFachadaDiscapacidadInterm = ; // RequestFachadaDiscapacidadInterm | 
+final BaseRequestIntermediacion baseRequestIntermediacion = ; // BaseRequestIntermediacion | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.obtenerDatosFamiliaNumerosa(requestFachadaDiscapacidadInterm, authorization);
+    final response = api.obtenerDatosDiscapacidadIntermediacion(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
-    print('Exception when calling CarnetDigitalApi->obtenerDatosFamiliaNumerosa: $e\n');
+    print('Exception when calling CarnetDigitalApi->obtenerDatosDiscapacidadIntermediacion: $e\n');
 }
 ```
 
@@ -88,12 +89,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **requestFachadaDiscapacidadInterm** | [**RequestFachadaDiscapacidadInterm**](RequestFachadaDiscapacidadInterm.md)|  | 
+ **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type
 
-**String**
+[**RespuestaFachadaInterm**](RespuestaFachadaInterm.md)
 
 ### Authorization
 
@@ -106,10 +107,55 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **obtenerDatosFamiliaNumerosa1**
-> String obtenerDatosFamiliaNumerosa1(dni, authorization)
+# **obtenerDatosFamiliaNumerosa**
+> String obtenerDatosFamiliaNumerosa(dni, authorization)
 
 Obtener datos del carné de familia numerosa
+
+### Example
+```dart
+import 'package:espacio_ciudadano_api/api.dart';
+
+final api = EspacioCiudadanoApi().getCarnetDigitalApi();
+final String dni = dni_example; // String | 
+final String authorization = authorization_example; // String | 
+
+try {
+    final response = api.obtenerDatosFamiliaNumerosa(dni, authorization);
+    print(response);
+} on DioException catch (e) {
+    print('Exception when calling CarnetDigitalApi->obtenerDatosFamiliaNumerosa: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **dni** | **String**|  | 
+ **authorization** | **String**|  | [optional] 
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **obtenerDatosFamiliaNumerosa1**
+> DatosFamiliaNumerosa obtenerDatosFamiliaNumerosa1(dni, authorization)
+
+Obtener datos del carné de familia numerosa
+
+(Método GET) Obtiene los datos de familia numerosa por DNI.
 
 ### Example
 ```dart
@@ -136,7 +182,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**String**
+[**DatosFamiliaNumerosa**](DatosFamiliaNumerosa.md)
 
 ### Authorization
 
@@ -149,26 +195,24 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **obtenerDatosFamiliaNumerosa2**
-> DatosFamiliaNumerosa obtenerDatosFamiliaNumerosa2(dni, authorization)
+# **obtenerDatosFamiliaNumerosaIntermediacion**
+> RespuestaFachadaInterm obtenerDatosFamiliaNumerosaIntermediacion(baseRequestIntermediacion, authorization)
 
 Obtener datos del carné de familia numerosa
-
-(Método GET) Obtiene los datos de familia numerosa por DNI.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCarnetDigitalApi();
-final String dni = dni_example; // String | 
+final BaseRequestIntermediacion baseRequestIntermediacion = ; // BaseRequestIntermediacion | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.obtenerDatosFamiliaNumerosa2(dni, authorization);
+    final response = api.obtenerDatosFamiliaNumerosaIntermediacion(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
-    print('Exception when calling CarnetDigitalApi->obtenerDatosFamiliaNumerosa2: $e\n');
+    print('Exception when calling CarnetDigitalApi->obtenerDatosFamiliaNumerosaIntermediacion: $e\n');
 }
 ```
 
@@ -176,12 +220,12 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dni** | **String**|  | 
+ **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type
 
-[**DatosFamiliaNumerosa**](DatosFamiliaNumerosa.md)
+[**RespuestaFachadaInterm**](RespuestaFachadaInterm.md)
 
 ### Authorization
 
@@ -189,7 +233,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

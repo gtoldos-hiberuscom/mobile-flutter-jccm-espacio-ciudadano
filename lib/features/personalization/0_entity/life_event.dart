@@ -23,17 +23,10 @@ final class LifeEvent {
   final bool selected;
 
   /// Returns a copy of this entity with [selected] overridden.
-  LifeEvent copyWith({final bool? selected}) =>
-      LifeEvent(id: id, label: label, selected: selected ?? this.selected);
+  LifeEvent copyWith({final bool? selected}) => LifeEvent(id: id, label: label, selected: selected ?? this.selected);
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is LifeEvent &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          label == other.label &&
-          selected == other.selected;
+  bool operator ==(final Object other) => identical(this, other) || other is LifeEvent && runtimeType == other.runtimeType && id == other.id && label == other.label && selected == other.selected;
 
   @override
   int get hashCode => Object.hash(id, label, selected);

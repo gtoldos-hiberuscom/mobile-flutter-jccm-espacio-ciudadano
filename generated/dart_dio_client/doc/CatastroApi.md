@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **getDatosCatastrales**
-> Respuesta getDatosCatastrales(numDocumento, dTCTROCDATREQBody, authorization)
+> Respuesta getDatosCatastrales(numDocumento, DTCTROCDATREQ, authorization)
 
 Servicio para obtener los datos catastrales
 
@@ -23,11 +23,11 @@ import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCatastroApi();
 final String numDocumento = numDocumento_example; // String | 
-final DTCTROCDATREQ dTCTROCDATREQBody = ; // DTCTROCDATREQ | 
+final DTCTROCDATREQ DTCTROCDATREQ = ; // DTCTROCDATREQ | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.getDatosCatastrales(numDocumento, dTCTROCDATREQBody, authorization);
+    final response = api.getDatosCatastrales(numDocumento, DTCTROCDATREQ, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling CatastroApi->getDatosCatastrales: $e\n');
@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **numDocumento** | **String**|  | 
- **dTCTROCDATREQBody** | [**DTCTROCDATREQ**](DTCTROCDATREQ.md)|  | 
+ **DTCTROCDATREQ** | [**DTCTROCDATREQ**](DTCTROCDATREQ.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type

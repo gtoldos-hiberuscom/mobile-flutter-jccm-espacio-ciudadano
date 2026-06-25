@@ -21,7 +21,7 @@ class ServicioApi {
   ///
   ///
   /// Parameters:
-  /// * [dTQUERYBody]
+  /// * [DTQUERY]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -32,7 +32,7 @@ class ServicioApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRFCPUBLISELECTBYNIFResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> miDetalleOperation({
-    required DTQUERY dTQUERYBody,
+    required DTQUERY dtqueryBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -58,7 +58,7 @@ class ServicioApi {
 
     try {
       const _type = FullType(DTQUERY);
-      _bodyData = _serializers.serialize(dTQUERYBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(dtqueryBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

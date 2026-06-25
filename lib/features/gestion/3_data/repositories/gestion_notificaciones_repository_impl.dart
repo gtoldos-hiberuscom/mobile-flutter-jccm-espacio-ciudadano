@@ -31,10 +31,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       return const [];
     }
 
-    return data
-        .whereType<Map<String, Object?>>()
-        .map(_toNotificacion)
-        .toList(growable: false);
+    return data.whereType<Map<String, Object?>>().map(_toNotificacion).toList(growable: false);
   }
 
   Notificacion _toNotificacion(final Map<String, Object?> data) {

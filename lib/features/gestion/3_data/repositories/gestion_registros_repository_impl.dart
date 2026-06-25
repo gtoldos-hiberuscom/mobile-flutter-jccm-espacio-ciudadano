@@ -48,23 +48,13 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
       _ => const <dynamic>[],
     };
 
-    return items
-        .map(_asMap)
-        .whereType<Map<String, Object?>>()
-        .map(_toRegistro)
-        .where((final r) => r.numregistro.isNotEmpty)
-        .toList(growable: false);
+    return items.map(_asMap).whereType<Map<String, Object?>>().map(_toRegistro).where((final r) => r.numregistro.isNotEmpty).toList(growable: false);
   }
 
   Registro _toRegistro(final Map<String, Object?> data) {
     return Registro(
       numregistro: _string(data, 'registro') ?? '',
-      titulo:
-          _string(data, 'asunto') ??
-          _string(data, 'titulo') ??
-          _string(data, 'desasunto') ??
-          _string(data, 'descrip') ??
-          '',
+      titulo: _string(data, 'asunto') ?? _string(data, 'titulo') ?? _string(data, 'desasunto') ?? _string(data, 'descrip') ?? '',
       fecha: _string(data, 'fechareg'),
       consejeria: _string(data, 'desconsej'),
     );

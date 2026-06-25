@@ -74,27 +74,29 @@ class _EntradasTab extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    return ref.watch(entradasProvider).when(
-      loading: () => const LoadingStateWidget(),
-      error: (final error, final _) => ErrorStateWidget(
-        message: l10n.gestionRegistrosEntradasLoadError,
-        onRetry: () => ref.invalidate(entradasProvider),
-      ),
-      data: (final registros) => registros.isEmpty
-          ? EmptyStateWidget(message: l10n.gestionRegistrosEntradasEmpty)
-          : ListView.separated(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space24,
-              ),
-              itemCount: registros.length,
-              separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-              itemBuilder: (final context, final index) => _RegistroCard(
-                registro: registros[index],
-                isEntrada: true,
-              ),
-            ),
-    );
+    return ref
+        .watch(entradasProvider)
+        .when(
+          loading: () => const LoadingStateWidget(),
+          error: (final error, final _) => ErrorStateWidget(
+            message: l10n.gestionRegistrosEntradasLoadError,
+            onRetry: () => ref.invalidate(entradasProvider),
+          ),
+          data: (final registros) => registros.isEmpty
+              ? EmptyStateWidget(message: l10n.gestionRegistrosEntradasEmpty)
+              : ListView.separated(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.space16,
+                    vertical: AppDimensions.space24,
+                  ),
+                  itemCount: registros.length,
+                  separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
+                  itemBuilder: (final context, final index) => _RegistroCard(
+                    registro: registros[index],
+                    isEntrada: true,
+                  ),
+                ),
+        );
   }
 }
 
@@ -104,27 +106,29 @@ class _SalidasTab extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    return ref.watch(salidasProvider).when(
-      loading: () => const LoadingStateWidget(),
-      error: (final error, final _) => ErrorStateWidget(
-        message: l10n.gestionRegistrosSalidasLoadError,
-        onRetry: () => ref.invalidate(salidasProvider),
-      ),
-      data: (final registros) => registros.isEmpty
-          ? EmptyStateWidget(message: l10n.gestionRegistrosSalidasEmpty)
-          : ListView.separated(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space24,
-              ),
-              itemCount: registros.length,
-              separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-              itemBuilder: (final context, final index) => _RegistroCard(
-                registro: registros[index],
-                isEntrada: false,
-              ),
-            ),
-    );
+    return ref
+        .watch(salidasProvider)
+        .when(
+          loading: () => const LoadingStateWidget(),
+          error: (final error, final _) => ErrorStateWidget(
+            message: l10n.gestionRegistrosSalidasLoadError,
+            onRetry: () => ref.invalidate(salidasProvider),
+          ),
+          data: (final registros) => registros.isEmpty
+              ? EmptyStateWidget(message: l10n.gestionRegistrosSalidasEmpty)
+              : ListView.separated(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.space16,
+                    vertical: AppDimensions.space24,
+                  ),
+                  itemCount: registros.length,
+                  separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
+                  itemBuilder: (final context, final index) => _RegistroCard(
+                    registro: registros[index],
+                    isEntrada: false,
+                  ),
+                ),
+        );
   }
 }
 

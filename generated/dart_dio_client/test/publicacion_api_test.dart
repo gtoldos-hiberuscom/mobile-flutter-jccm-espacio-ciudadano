@@ -8,28 +8,28 @@ void main() {
   group(PublicacionApi, () {
     // Consultar el detalle de un tramite en cesar
     //
-    //Future<ZCSRFCPUBLISELECTBYNIFResponse> miDetalleOperation(DTQUERY dTQUERYBody) async
+    //Future<ZCSRFCPUBLISELECTBYNIFResponse> miDetalleOperation(DTQUERY DTQUERY) async
     test('test miDetalleOperation', () async {
       // TODO
     });
 
     // Servicio que permite consultar el documento de certificado de deuda en cesar
     //
-    //Future<ZCSRFCDOCSFIRMADOSPFEXPTEResponse> miDocsfirmados(ZCSRFCDOCSFIRMADOSPFEXPTE zCSRFCDOCSFIRMADOSPFEXPTEBody) async
+    //Future<ZCSRFCDOCSFIRMADOSPFEXPTEResponse> miDocsfirmados(ZCSRFCDOCSFIRMADOSPFEXPTE ZCSRFCDOCSFIRMADOSPFEXPTE) async
     test('test miDocsfirmados', () async {
       // TODO
     });
 
     // Consulta un expediente especificado por número de registro
     //
-    //Future<ZCSRFCPUBLISELECTBYNUMREGResponse> myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG zCSRFCPUBLISELECTBYNUMREGBody) async
+    //Future<ZCSRFCPUBLISELECTBYNUMREGResponse> myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG ZCSRFCPUBLISELECTBYNUMREG) async
     test('test myPubliNumRegOperation', () async {
       // TODO
     });
 
     // Consultar la lista de expedientes vinculados a un NIF o número de identificación
     //
-    //Future<ZCSRFCPUBLISELECTBYNIFResponse> myPubliSelecByNifOperation(DTSELECTBYNIFREQ dTSELECTBYNIFREQBody) async
+    //Future<ZCSRFCPUBLISELECTBYNIFResponse> myPubliSelecByNifOperation(DTSELECTBYNIFREQ DTSELECTBYNIFREQ) async
     test('test myPubliSelecByNifOperation', () async {
       // TODO
     });
@@ -57,14 +57,14 @@ void main() {
 
     // Consultar el expediente especificado por número de expediente
     //
-    //Future<ZCSRFCPUBLISELECTBYNUMEXPResponse> myPubliSelecByNumExpOperation(ZCSRFCPUBLISELECTBYNUMEXP zCSRFCPUBLISELECTBYNUMEXPBody) async
+    //Future<ZCSRFCPUBLISELECTBYNUMEXPResponse> myPubliSelecByNumExpOperation(ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP) async
     test('test myPubliSelecByNumExpOperation', () async {
       // TODO
     });
 
     // Consultar listado de expedientes asociados a un número de documento
     //
-    //Future<ZCSRFCMISEXPEDIENTESResponse> siMisExpedientesOperation(ZCSRFCMISEXPEDIENTES zCSRFCMISEXPEDIENTESBody) async
+    //Future<ZCSRFCMISEXPEDIENTESResponse> siMisExpedientesOperation(ZCSRFCMISEXPEDIENTES ZCSRFCMISEXPEDIENTES) async
     test('test siMisExpedientesOperation', () async {
       // TODO
     });

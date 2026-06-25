@@ -13,17 +13,17 @@ void main() {
       // TODO
     });
 
-    // Obtener datos del carné de familia numerosa
+    // Obtener datos del carné de discapacidad
     //
-    //Future<String> obtenerDatosFamiliaNumerosa(RequestFachadaDiscapacidadInterm requestFachadaDiscapacidadInterm, { String authorization }) async
-    test('test obtenerDatosFamiliaNumerosa', () async {
+    //Future<RespuestaFachadaInterm> obtenerDatosDiscapacidadIntermediacion(BaseRequestIntermediacion baseRequestIntermediacion, { String authorization }) async
+    test('test obtenerDatosDiscapacidadIntermediacion', () async {
       // TODO
     });
 
     // Obtener datos del carné de familia numerosa
     //
-    //Future<String> obtenerDatosFamiliaNumerosa1(String dni, { String authorization }) async
-    test('test obtenerDatosFamiliaNumerosa1', () async {
+    //Future<String> obtenerDatosFamiliaNumerosa(String dni, { String authorization }) async
+    test('test obtenerDatosFamiliaNumerosa', () async {
       // TODO
     });
 
@@ -31,8 +31,15 @@ void main() {
     //
     // (Método GET) Obtiene los datos de familia numerosa por DNI.
     //
-    //Future<DatosFamiliaNumerosa> obtenerDatosFamiliaNumerosa2(String dni, { String authorization }) async
-    test('test obtenerDatosFamiliaNumerosa2', () async {
+    //Future<DatosFamiliaNumerosa> obtenerDatosFamiliaNumerosa1(String dni, { String authorization }) async
+    test('test obtenerDatosFamiliaNumerosa1', () async {
+      // TODO
+    });
+
+    // Obtener datos del carné de familia numerosa
+    //
+    //Future<RespuestaFachadaInterm> obtenerDatosFamiliaNumerosaIntermediacion(BaseRequestIntermediacion baseRequestIntermediacion, { String authorization }) async
+    test('test obtenerDatosFamiliaNumerosaIntermediacion', () async {
       // TODO
     });
 

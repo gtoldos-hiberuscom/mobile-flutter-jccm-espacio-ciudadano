@@ -8,14 +8,14 @@ void main() {
   group(EducacionApi, () {
     // Servicio para obtener los títulos no universitarios
     //
-    //Future<DTEDUTNURES> getTitulosNoUniversitarios(String numDocumento, DTEDUTNUREQ dTEDUTNUREQBody, { String authorization }) async
+    //Future<DTEDUTNURES> getTitulosNoUniversitarios(String numDocumento, DTEDUTNUREQ DTEDUTNUREQ, { String authorization }) async
     test('test getTitulosNoUniversitarios', () async {
       // TODO
     });
 
     // Servicio para obtener los títulos universitarios
     //
-    //Future<DTEDUTUORES> getTitulosUniversitarios(String numDocumento, DTEDUTUOREQ dTEDUTUOREQBody, { String authorization }) async
+    //Future<DTEDUTUORES> getTitulosUniversitarios(String numDocumento, DTEDUTUOREQ DTEDUTUOREQ, { String authorization }) async
     test('test getTitulosUniversitarios', () async {
       // TODO
     });

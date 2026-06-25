@@ -23,7 +23,7 @@ class DgtApi {
   ///
   /// Parameters:
   /// * [numDocumento]
-  /// * [dTDGTLISTADOVEHICULOSREQBody]
+  /// * [DTDGTLISTADOVEHICULOSREQ]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -36,7 +36,7 @@ class DgtApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<DTDGTLISTADOVEHICULOSRES>> getListaVehiculos({
     required String numDocumento,
-    required DTDGTLISTADOVEHICULOSREQ dTDGTLISTADOVEHICULOSREQBody,
+    required DTDGTLISTADOVEHICULOSREQ dtdgtlistadovehiculosreqBody,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -67,7 +67,7 @@ class DgtApi {
 
     try {
       const _type = FullType(DTDGTLISTADOVEHICULOSREQ);
-      _bodyData = _serializers.serialize(dTDGTLISTADOVEHICULOSREQBody,
+      _bodyData = _serializers.serialize(dtdgtlistadovehiculosreqBody,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(

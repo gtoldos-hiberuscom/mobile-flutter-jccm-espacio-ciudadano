@@ -8,14 +8,14 @@ void main() {
   group(AfirmaApi, () {
     // Consultar el listado de los tipos de documentos en cesar
     //
-    //Future<ZCSVECResponse> miListarDocumentosReq(ZCSLISTARTIPOSDOC zCSLISTARTIPOSDOCBody) async
+    //Future<ZCSVECResponse> miListarDocumentosReq(ZCSLISTARTIPOSDOC ZCSLISTARTIPOSDOC) async
     test('test miListarDocumentosReq', () async {
       // TODO
     });
 
     // Consultar el servicio para la validación de la firma en cesar
     //
-    //Future<ZCSVECResponse> miVecReq(ZCSVEC zCSVECBody) async
+    //Future<ZCSVECResponse> miVecReq(ZCSVEC ZCSVEC) async
     test('test miVecReq', () async {
       // TODO
     });

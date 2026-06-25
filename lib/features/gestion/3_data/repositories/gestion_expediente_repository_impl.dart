@@ -39,12 +39,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       _ => const <dynamic>[],
     };
 
-    return items
-        .map(_asMap)
-        .whereType<Map<String, Object?>>()
-        .map(_toExpediente)
-        .where((final e) => e.numexp.isNotEmpty)
-        .toList(growable: false);
+    return items.map(_asMap).whereType<Map<String, Object?>>().map(_toExpediente).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
   }
 
   Expediente _toExpediente(final Map<String, Object?> data) {

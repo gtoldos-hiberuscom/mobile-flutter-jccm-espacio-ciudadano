@@ -19,6 +19,7 @@ import 'package:espacio_ciudadano_api/src/model/adjuntos.dart';
 import 'package:espacio_ciudadano_api/src/model/api_error.dart';
 import 'package:espacio_ciudadano_api/src/model/bapiret2.dart';
 import 'package:espacio_ciudadano_api/src/model/beneficiarios.dart';
+import 'package:espacio_ciudadano_api/src/model/base_request_intermediacion.dart';
 import 'package:espacio_ciudadano_api/src/model/confirmarprocedimiento.dart';
 import 'package:espacio_ciudadano_api/src/model/carnet_joven.dart';
 import 'package:espacio_ciudadano_api/src/model/carnet_qr.dart';
@@ -46,42 +47,51 @@ import 'package:espacio_ciudadano_api/src/model/dtselectbynifreq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtselectbynifv2_req.dart';
 import 'package:espacio_ciudadano_api/src/model/dtsepesvdidefareq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtsepesvdidefares.dart';
-import 'package:espacio_ciudadano_api/src/model/datos_beneficiarios_familia_numerosa.dart';
-import 'package:espacio_ciudadano_api/src/model/datos_beneficiarios_familia_numerosa_list.dart';
-import 'package:espacio_ciudadano_api/src/model/datos_especificos_familia_numerosa.dart';
 import 'package:espacio_ciudadano_api/src/model/datos_familia_numerosa.dart';
 import 'package:espacio_ciudadano_api/src/model/datos_representante.dart';
-import 'package:espacio_ciudadano_api/src/model/datos_titulo_familia_numerosa.dart';
-import 'package:espacio_ciudadano_api/src/model/datos_titulo_familia_numerosa_list.dart';
+import 'package:espacio_ciudadano_api/src/model/documento_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/documento_registro.dart';
+import 'package:espacio_ciudadano_api/src/model/documentos_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/elemento.dart';
 import 'package:espacio_ciudadano_api/src/model/etlistdocs.dart';
 import 'package:espacio_ciudadano_api/src/model/etreturn.dart';
 import 'package:espacio_ciudadano_api/src/model/expedientes.dart';
+import 'package:espacio_ciudadano_api/src/model/email_aviso_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/expediente_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/hecho.dart';
+import 'package:espacio_ciudadano_api/src/model/historico_estado_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/info_error.dart';
+import 'package:espacio_ciudadano_api/src/model/informacion_adicional_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/interesado_notifica_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/listavehiculos.dart';
+import 'package:espacio_ciudadano_api/src/model/link.dart';
 import 'package:espacio_ciudadano_api/src/model/lista_hechos.dart';
 import 'package:espacio_ciudadano_api/src/model/lista_hechos_agente.dart';
 import 'package:espacio_ciudadano_api/src/model/lista_tramites_por_hechos.dart';
+import 'package:espacio_ciudadano_api/src/model/medios_aviso_adicionales_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/notificacion_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/notificacion_indexa_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/pdatos.dart';
 import 'package:espacio_ciudadano_api/src/model/pregistro.dart';
 import 'package:espacio_ciudadano_api/src/model/publicacionportal.dart';
 import 'package:espacio_ciudadano_api/src/model/pkpass_familia_numerosa.dart';
+import 'package:espacio_ciudadano_api/src/model/procedimiento_administrativo_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/procedimiento_administrativo_indexa_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/registro.dart';
 import 'package:espacio_ciudadano_api/src/model/resultadoprocedimiento.dart';
 import 'package:espacio_ciudadano_api/src/model/returns.dart';
 import 'package:espacio_ciudadano_api/src/model/registrar_fichero_request.dart';
-import 'package:espacio_ciudadano_api/src/model/request_fachada_discapacidad_interm.dart';
-import 'package:espacio_ciudadano_api/src/model/request_fachada_familia_numerosa_interm.dart';
-import 'package:espacio_ciudadano_api/src/model/response_familia_numerosa_intermediacion.dart';
 import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta_fachada_familia_numerosa_interm.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta_respuesta_fachada_familia_numerosa_interm.dart';
+import 'package:espacio_ciudadano_api/src/model/respuesta_fachada_interm.dart';
 import 'package:espacio_ciudadano_api/src/model/tfaq.dart';
 import 'package:espacio_ciudadano_api/src/model/ttextosrespuesta.dart';
+import 'package:espacio_ciudadano_api/src/model/telefono_aviso_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/tercero_n2_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/tramite.dart';
 import 'package:espacio_ciudadano_api/src/model/tramites_por_hecho.dart';
+import 'package:espacio_ciudadano_api/src/model/transicion_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/unidad_organica_dto.dart';
+import 'package:espacio_ciudadano_api/src/model/unidad_organica_indexa_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/vehiculo.dart';
 import 'package:espacio_ciudadano_api/src/model/xml_registro.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsauxstexpedientes.dart';
@@ -119,6 +129,7 @@ part 'serializers.g.dart';
   ApiError,
   BAPIRET2,
   BENEFICIARIOS,
+  BaseRequestIntermediacion,
   CONFIRMARPROCEDIMIENTO,
   CarnetJoven,
   CarnetQr,
@@ -146,42 +157,51 @@ part 'serializers.g.dart';
   DTSELECTBYNIFV2REQ,
   DTSEPESVDIDEFAREQ,
   DTSEPESVDIDEFARES,
-  DatosBeneficiariosFamiliaNumerosa,
-  DatosBeneficiariosFamiliaNumerosaList,
-  DatosEspecificosFamiliaNumerosa,
   DatosFamiliaNumerosa,
   DatosRepresentante,
-  DatosTituloFamiliaNumerosa,
-  DatosTituloFamiliaNumerosaList,
+  DocumentoDto,
   DocumentoRegistro,
+  DocumentosDto,
   ELEMENTO,
   ETLISTDOCS,
   ETRETURN,
   EXPEDIENTES,
+  EmailAvisoDto,
+  ExpedienteDto,
   Hecho,
+  HistoricoEstadoDto,
   InfoError,
+  InformacionAdicionalDto,
+  InteresadoNotificaDto,
   LISTAVEHICULOS,
+  Link,
   ListaHechos,
   ListaHechosAgente,
   ListaTramitesPorHechos,
+  MediosAvisoAdicionalesDto,
+  NotificacionDto,
+  NotificacionIndexaDto,
   PDATOS,
   PREGISTRO,
   PUBLICACIONPORTAL,
   PkpassFamiliaNumerosa,
+  ProcedimientoAdministrativoDto,
+  ProcedimientoAdministrativoIndexaDto,
   REGISTRO,
   RESULTADOPROCEDIMIENTO,
   RETURNS,
   RegistrarFicheroRequest,
-  RequestFachadaDiscapacidadInterm,
-  RequestFachadaFamiliaNumerosaInterm,
-  ResponseFamiliaNumerosaIntermediacion,
   Respuesta,
-  RespuestaFachadaFamiliaNumerosaInterm,
-  RespuestaRespuestaFachadaFamiliaNumerosaInterm,
+  RespuestaFachadaInterm,
   TFAQ,
   TTEXTOSRESPUESTA,
+  TelefonoAvisoDto,
+  TerceroN2Dto,
   Tramite,
   TramitesPorHecho,
+  TransicionDto,
+  UnidadOrganicaDto,
+  UnidadOrganicaIndexaDto,
   VEHICULO,
   XMLRegistro,
   ZCSAUXSTEXPEDIENTES,
@@ -213,8 +233,16 @@ part 'serializers.g.dart';
 ])
 Serializers serializers = (_$serializers.toBuilder()
       ..addBuilderFactory(
+        const FullType(BuiltList, [FullType(NotificacionIndexaDto)]),
+        () => ListBuilder<NotificacionIndexaDto>(),
+      )
+      ..addBuilderFactory(
         const FullType(BuiltList, [FullType(int)]),
         () => ListBuilder<int>(),
+      )
+      ..addBuilderFactory(
+        const FullType(BuiltMap, [FullType(String), FullType(BuiltMap)]),
+        () => MapBuilder<String, BuiltMap<String, Link>>(),
       )
       ..add(const OneOfSerializer())
       ..add(const AnyOfSerializer())

@@ -13,6 +13,7 @@ part 'dtedutnures.g.dart';
 /// DTEDUTNURES
 ///
 /// Properties:
+/// * [codestado]
 /// * [docu]
 /// * [elemento]
 /// * [fecnac]
@@ -24,6 +25,9 @@ part 'dtedutnures.g.dart';
 /// * [resul]
 @BuiltValue()
 abstract class DTEDUTNURES implements Built<DTEDUTNURES, DTEDUTNURESBuilder> {
+  @BuiltValueField(wireName: r'codestado')
+  String? get codestado;
+
   @BuiltValueField(wireName: r'docu')
   String? get docu;
 
@@ -74,6 +78,13 @@ class _$DTEDUTNURESSerializer implements PrimitiveSerializer<DTEDUTNURES> {
     DTEDUTNURES object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
+    if (object.codestado != null) {
+      yield r'codestado';
+      yield serializers.serialize(
+        object.codestado,
+        specifiedType: const FullType(String),
+      );
+    }
     if (object.docu != null) {
       yield r'docu';
       yield serializers.serialize(
@@ -162,6 +173,13 @@ class _$DTEDUTNURESSerializer implements PrimitiveSerializer<DTEDUTNURES> {
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
+        case r'codestado':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.codestado = valueDes;
+          break;
         case r'docu':
           final valueDes = serializers.deserialize(
             value,

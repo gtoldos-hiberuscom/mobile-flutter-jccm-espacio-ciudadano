@@ -23,7 +23,7 @@ class CcaaApi {
   ///
   /// Parameters:
   /// * [numDocumento]
-  /// * [dTMINHAFPCCCAFNREQBody]
+  /// * [DTMINHAFPCCCAFNREQ]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -36,7 +36,7 @@ class CcaaApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<DTMINHAFPCCCAFNRES>> getDatosFamiliaNumerosa({
     required String numDocumento,
-    required DTMINHAFPCCCAFNREQ dTMINHAFPCCCAFNREQBody,
+    required DTMINHAFPCCCAFNREQ dtminhafpcccafnreqBody,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -68,7 +68,7 @@ class CcaaApi {
     try {
       const _type = FullType(DTMINHAFPCCCAFNREQ);
       _bodyData =
-          _serializers.serialize(dTMINHAFPCCCAFNREQBody, specifiedType: _type);
+          _serializers.serialize(dtminhafpcccafnreqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

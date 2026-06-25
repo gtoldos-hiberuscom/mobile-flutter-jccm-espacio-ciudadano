@@ -21,7 +21,7 @@ class ConsultaApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSRFCCONSULTAFAQBody]
+  /// * [ZCSRFCCONSULTAFAQ]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -32,7 +32,7 @@ class ConsultaApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRFCCONSULTAFAQResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCCONSULTAFAQResponse>> miConsultafaqOperation({
-    required ZCSRFCCONSULTAFAQ zCSRFCCONSULTAFAQBody,
+    required ZCSRFCCONSULTAFAQ zcsrfcconsultafaqBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -59,7 +59,7 @@ class ConsultaApi {
     try {
       const _type = FullType(ZCSRFCCONSULTAFAQ);
       _bodyData =
-          _serializers.serialize(zCSRFCCONSULTAFAQBody, specifiedType: _type);
+          _serializers.serialize(zcsrfcconsultafaqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

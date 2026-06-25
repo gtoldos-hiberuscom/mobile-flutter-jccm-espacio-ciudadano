@@ -147,8 +147,7 @@ enum _MyDataText {
   housingTitle,
   housingDescription,
   vehiclesTitle,
-  vehiclesDescription
-  ;
+  vehiclesDescription;
 
   String resolve(final AppLocalizations l10n) {
     return switch (this) {

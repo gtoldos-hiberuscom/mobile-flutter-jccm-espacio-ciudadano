@@ -15,14 +15,7 @@ final class Registro {
   final String? consejeria;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is Registro &&
-          runtimeType == other.runtimeType &&
-          numregistro == other.numregistro &&
-          titulo == other.titulo &&
-          fecha == other.fecha &&
-          consejeria == other.consejeria;
+  bool operator ==(final Object other) => identical(this, other) || other is Registro && runtimeType == other.runtimeType && numregistro == other.numregistro && titulo == other.titulo && fecha == other.fecha && consejeria == other.consejeria;
 
   @override
   int get hashCode => Object.hash(numregistro, titulo, fecha, consejeria);

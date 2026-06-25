@@ -17,15 +17,7 @@ final class Expediente {
   final String? estado;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is Expediente &&
-          runtimeType == other.runtimeType &&
-          numexp == other.numexp &&
-          titulo == other.titulo &&
-          consejeria == other.consejeria &&
-          fechaInicio == other.fechaInicio &&
-          estado == other.estado;
+  bool operator ==(final Object other) => identical(this, other) || other is Expediente && runtimeType == other.runtimeType && numexp == other.numexp && titulo == other.titulo && consejeria == other.consejeria && fechaInicio == other.fechaInicio && estado == other.estado;
 
   @override
   int get hashCode => Object.hash(numexp, titulo, consejeria, fechaInicio, estado);

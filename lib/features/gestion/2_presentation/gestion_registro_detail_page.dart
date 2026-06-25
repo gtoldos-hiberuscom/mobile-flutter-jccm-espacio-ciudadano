@@ -75,9 +75,7 @@ class GestionRegistroDetailPage extends StatelessWidget {
                 value: registro.fecha ?? '-',
               ),
               _DetailField(
-                label: isEntrada
-                    ? l10n.gestionRegistrosConsejeriaDestinoLabel
-                    : l10n.gestionRegistrosConsejeriaOrigenLabel,
+                label: isEntrada ? l10n.gestionRegistrosConsejeriaDestinoLabel : l10n.gestionRegistrosConsejeriaOrigenLabel,
                 value: registro.consejeria ?? '-',
               ),
             ],

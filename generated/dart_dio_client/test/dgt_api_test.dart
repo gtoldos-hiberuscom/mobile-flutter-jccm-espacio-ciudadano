@@ -8,7 +8,7 @@ void main() {
   group(DgtApi, () {
     // Servicio para consultar el listado de vehiculos
     //
-    //Future<DTDGTLISTADOVEHICULOSRES> getListaVehiculos(String numDocumento, DTDGTLISTADOVEHICULOSREQ dTDGTLISTADOVEHICULOSREQBody, { String authorization }) async
+    //Future<DTDGTLISTADOVEHICULOSRES> getListaVehiculos(String numDocumento, DTDGTLISTADOVEHICULOSREQ DTDGTLISTADOVEHICULOSREQ, { String authorization }) async
     test('test getListaVehiculos', () async {
       // TODO
     });

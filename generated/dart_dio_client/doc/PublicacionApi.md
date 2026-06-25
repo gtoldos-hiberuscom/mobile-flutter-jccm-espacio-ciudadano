@@ -21,7 +21,7 @@ Method | HTTP request | Description
 
 
 # **miDetalleOperation**
-> ZCSRFCPUBLISELECTBYNIFResponse miDetalleOperation(dTQUERYBody)
+> ZCSRFCPUBLISELECTBYNIFResponse miDetalleOperation(DTQUERY)
 
 Consultar el detalle de un tramite en cesar
 
@@ -30,10 +30,10 @@ Consultar el detalle de un tramite en cesar
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final DTQUERY dTQUERYBody = ; // DTQUERY | 
+final DTQUERY DTQUERY = ; // DTQUERY | 
 
 try {
-    final response = api.miDetalleOperation(dTQUERYBody);
+    final response = api.miDetalleOperation(DTQUERY);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->miDetalleOperation: $e\n');
@@ -44,7 +44,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dTQUERYBody** | [**DTQUERY**](DTQUERY.md)|  | 
+ **DTQUERY** | [**DTQUERY**](DTQUERY.md)|  | 
 
 ### Return type
 
@@ -62,7 +62,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **miDocsfirmados**
-> ZCSRFCDOCSFIRMADOSPFEXPTEResponse miDocsfirmados(zCSRFCDOCSFIRMADOSPFEXPTEBody)
+> ZCSRFCDOCSFIRMADOSPFEXPTEResponse miDocsfirmados(ZCSRFCDOCSFIRMADOSPFEXPTE)
 
 Servicio que permite consultar el documento de certificado de deuda en cesar
 
@@ -71,10 +71,10 @@ Servicio que permite consultar el documento de certificado de deuda en cesar
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCDOCSFIRMADOSPFEXPTE zCSRFCDOCSFIRMADOSPFEXPTEBody = ; // ZCSRFCDOCSFIRMADOSPFEXPTE | 
+final ZCSRFCDOCSFIRMADOSPFEXPTE ZCSRFCDOCSFIRMADOSPFEXPTE = ; // ZCSRFCDOCSFIRMADOSPFEXPTE | 
 
 try {
-    final response = api.miDocsfirmados(zCSRFCDOCSFIRMADOSPFEXPTEBody);
+    final response = api.miDocsfirmados(ZCSRFCDOCSFIRMADOSPFEXPTE);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->miDocsfirmados: $e\n');
@@ -85,7 +85,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSRFCDOCSFIRMADOSPFEXPTEBody** | [**ZCSRFCDOCSFIRMADOSPFEXPTE**](ZCSRFCDOCSFIRMADOSPFEXPTE.md)|  | 
+ **ZCSRFCDOCSFIRMADOSPFEXPTE** | [**ZCSRFCDOCSFIRMADOSPFEXPTE**](ZCSRFCDOCSFIRMADOSPFEXPTE.md)|  | 
 
 ### Return type
 
@@ -103,7 +103,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliNumRegOperation**
-> ZCSRFCPUBLISELECTBYNUMREGResponse myPubliNumRegOperation(zCSRFCPUBLISELECTBYNUMREGBody)
+> ZCSRFCPUBLISELECTBYNUMREGResponse myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG)
 
 Consulta un expediente especificado por número de registro
 
@@ -112,10 +112,10 @@ Consulta un expediente especificado por número de registro
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCPUBLISELECTBYNUMREG zCSRFCPUBLISELECTBYNUMREGBody = ; // ZCSRFCPUBLISELECTBYNUMREG | 
+final ZCSRFCPUBLISELECTBYNUMREG ZCSRFCPUBLISELECTBYNUMREG = ; // ZCSRFCPUBLISELECTBYNUMREG | 
 
 try {
-    final response = api.myPubliNumRegOperation(zCSRFCPUBLISELECTBYNUMREGBody);
+    final response = api.myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliNumRegOperation: $e\n');
@@ -126,7 +126,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSRFCPUBLISELECTBYNUMREGBody** | [**ZCSRFCPUBLISELECTBYNUMREG**](ZCSRFCPUBLISELECTBYNUMREG.md)|  | 
+ **ZCSRFCPUBLISELECTBYNUMREG** | [**ZCSRFCPUBLISELECTBYNUMREG**](ZCSRFCPUBLISELECTBYNUMREG.md)|  | 
 
 ### Return type
 
@@ -144,7 +144,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNifOperation**
-> ZCSRFCPUBLISELECTBYNIFResponse myPubliSelecByNifOperation(dTSELECTBYNIFREQBody)
+> ZCSRFCPUBLISELECTBYNIFResponse myPubliSelecByNifOperation(DTSELECTBYNIFREQ)
 
 Consultar la lista de expedientes vinculados a un NIF o número de identificación
 
@@ -153,10 +153,10 @@ Consultar la lista de expedientes vinculados a un NIF o número de identificaci�
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final DTSELECTBYNIFREQ dTSELECTBYNIFREQBody = ; // DTSELECTBYNIFREQ | 
+final DTSELECTBYNIFREQ DTSELECTBYNIFREQ = ; // DTSELECTBYNIFREQ | 
 
 try {
-    final response = api.myPubliSelecByNifOperation(dTSELECTBYNIFREQBody);
+    final response = api.myPubliSelecByNifOperation(DTSELECTBYNIFREQ);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliSelecByNifOperation: $e\n');
@@ -167,7 +167,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dTSELECTBYNIFREQBody** | [**DTSELECTBYNIFREQ**](DTSELECTBYNIFREQ.md)|  | 
+ **DTSELECTBYNIFREQ** | [**DTSELECTBYNIFREQ**](DTSELECTBYNIFREQ.md)|  | 
 
 ### Return type
 
@@ -308,7 +308,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNumExpOperation**
-> ZCSRFCPUBLISELECTBYNUMEXPResponse myPubliSelecByNumExpOperation(zCSRFCPUBLISELECTBYNUMEXPBody)
+> ZCSRFCPUBLISELECTBYNUMEXPResponse myPubliSelecByNumExpOperation(ZCSRFCPUBLISELECTBYNUMEXP)
 
 Consultar el expediente especificado por número de expediente
 
@@ -317,10 +317,10 @@ Consultar el expediente especificado por número de expediente
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCPUBLISELECTBYNUMEXP zCSRFCPUBLISELECTBYNUMEXPBody = ; // ZCSRFCPUBLISELECTBYNUMEXP | 
+final ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP = ; // ZCSRFCPUBLISELECTBYNUMEXP | 
 
 try {
-    final response = api.myPubliSelecByNumExpOperation(zCSRFCPUBLISELECTBYNUMEXPBody);
+    final response = api.myPubliSelecByNumExpOperation(ZCSRFCPUBLISELECTBYNUMEXP);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliSelecByNumExpOperation: $e\n');
@@ -331,7 +331,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSRFCPUBLISELECTBYNUMEXPBody** | [**ZCSRFCPUBLISELECTBYNUMEXP**](ZCSRFCPUBLISELECTBYNUMEXP.md)|  | 
+ **ZCSRFCPUBLISELECTBYNUMEXP** | [**ZCSRFCPUBLISELECTBYNUMEXP**](ZCSRFCPUBLISELECTBYNUMEXP.md)|  | 
 
 ### Return type
 
@@ -349,7 +349,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **siMisExpedientesOperation**
-> ZCSRFCMISEXPEDIENTESResponse siMisExpedientesOperation(zCSRFCMISEXPEDIENTESBody)
+> ZCSRFCMISEXPEDIENTESResponse siMisExpedientesOperation(ZCSRFCMISEXPEDIENTES)
 
 Consultar listado de expedientes asociados a un número de documento
 
@@ -358,10 +358,10 @@ Consultar listado de expedientes asociados a un número de documento
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCMISEXPEDIENTES zCSRFCMISEXPEDIENTESBody = ; // ZCSRFCMISEXPEDIENTES | 
+final ZCSRFCMISEXPEDIENTES ZCSRFCMISEXPEDIENTES = ; // ZCSRFCMISEXPEDIENTES | 
 
 try {
-    final response = api.siMisExpedientesOperation(zCSRFCMISEXPEDIENTESBody);
+    final response = api.siMisExpedientesOperation(ZCSRFCMISEXPEDIENTES);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->siMisExpedientesOperation: $e\n');
@@ -372,7 +372,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSRFCMISEXPEDIENTESBody** | [**ZCSRFCMISEXPEDIENTES**](ZCSRFCMISEXPEDIENTES.md)|  | 
+ **ZCSRFCMISEXPEDIENTES** | [**ZCSRFCMISEXPEDIENTES**](ZCSRFCMISEXPEDIENTES.md)|  | 
 
 ### Return type
 

@@ -7,6 +7,11 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(DTEDUTNURES, () {
+    // String codestado
+    test('to test the property `codestado`', () async {
+      // TODO
+    });
+
     // String docu
     test('to test the property `docu`', () async {
       // TODO

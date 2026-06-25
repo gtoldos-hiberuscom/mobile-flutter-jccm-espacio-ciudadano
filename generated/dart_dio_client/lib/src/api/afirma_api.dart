@@ -22,7 +22,7 @@ class AfirmaApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSLISTARTIPOSDOCBody]
+  /// * [ZCSLISTARTIPOSDOC]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -33,7 +33,7 @@ class AfirmaApi {
   /// Returns a [Future] containing a [Response] with a [ZCSVECResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSVECResponse>> miListarDocumentosReq({
-    required ZCSLISTARTIPOSDOC zCSLISTARTIPOSDOCBody,
+    required ZCSLISTARTIPOSDOC zcslistartiposdocBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -60,7 +60,7 @@ class AfirmaApi {
     try {
       const _type = FullType(ZCSLISTARTIPOSDOC);
       _bodyData =
-          _serializers.serialize(zCSLISTARTIPOSDOCBody, specifiedType: _type);
+          _serializers.serialize(zcslistartiposdocBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -118,7 +118,7 @@ class AfirmaApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSVECBody]
+  /// * [ZCSVEC]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -129,7 +129,7 @@ class AfirmaApi {
   /// Returns a [Future] containing a [Response] with a [ZCSVECResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSVECResponse>> miVecReq({
-    required ZCSVEC zCSVECBody,
+    required ZCSVEC zcsvecBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -155,7 +155,7 @@ class AfirmaApi {
 
     try {
       const _type = FullType(ZCSVEC);
-      _bodyData = _serializers.serialize(zCSVECBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(zcsvecBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

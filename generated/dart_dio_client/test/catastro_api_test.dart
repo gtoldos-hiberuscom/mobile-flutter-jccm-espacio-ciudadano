@@ -8,7 +8,7 @@ void main() {
   group(CatastroApi, () {
     // Servicio para obtener los datos catastrales
     //
-    //Future<Respuesta> getDatosCatastrales(String numDocumento, DTCTROCDATREQ dTCTROCDATREQBody, { String authorization }) async
+    //Future<Respuesta> getDatosCatastrales(String numDocumento, DTCTROCDATREQ DTCTROCDATREQ, { String authorization }) async
     test('test getDatosCatastrales', () async {
       // TODO
     });

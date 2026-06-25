@@ -21,7 +21,6 @@ class AppConfig {
 
   final Map<String, Object?> _json;
 
-
   /// The active environment name for this run (e.g. 'development', 'preproduction', 'production').
   String get environment => _getConfigValue('APP_FLAVOR', (final v) => v as String);
 

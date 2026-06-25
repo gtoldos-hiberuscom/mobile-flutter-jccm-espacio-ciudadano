@@ -21,17 +21,7 @@ final class Notificacion {
   final String? sistemaOrigen;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is Notificacion &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          concepto == other.concepto &&
-          procedimientoDenominacion == other.procedimientoDenominacion &&
-          fechaCaducidad == other.fechaCaducidad &&
-          procedimientoIdFicha == other.procedimientoIdFicha &&
-          unidadOrganicaNombre == other.unidadOrganicaNombre &&
-          sistemaOrigen == other.sistemaOrigen;
+  bool operator ==(final Object other) => identical(this, other) || other is Notificacion && runtimeType == other.runtimeType && id == other.id && concepto == other.concepto && procedimientoDenominacion == other.procedimientoDenominacion && fechaCaducidad == other.fechaCaducidad && procedimientoIdFicha == other.procedimientoIdFicha && unidadOrganicaNombre == other.unidadOrganicaNombre && sistemaOrigen == other.sistemaOrigen;
 
   @override
   int get hashCode => Object.hash(

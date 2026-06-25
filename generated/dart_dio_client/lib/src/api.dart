@@ -5,14 +5,25 @@
 import 'package:dio/dio.dart';
 import 'package:built_value/serializer.dart';
 import 'package:espacio_ciudadano_api/src/serializers.dart';
+import 'package:espacio_ciudadano_api/src/auth/api_key_auth.dart';
+import 'package:espacio_ciudadano_api/src/auth/basic_auth.dart';
+import 'package:espacio_ciudadano_api/src/auth/bearer_auth.dart';
+import 'package:espacio_ciudadano_api/src/auth/oauth.dart';
+import 'package:espacio_ciudadano_api/src/api/actuator_api.dart';
 import 'package:espacio_ciudadano_api/src/api/afirma_api.dart';
+import 'package:espacio_ciudadano_api/src/api/agenda_api.dart';
+import 'package:espacio_ciudadano_api/src/api/atencion_dependencia_api.dart';
 import 'package:espacio_ciudadano_api/src/api/carnet_digital_api.dart';
 import 'package:espacio_ciudadano_api/src/api/catastro_api.dart';
 import 'package:espacio_ciudadano_api/src/api/ccaa_api.dart';
+import 'package:espacio_ciudadano_api/src/api/ciudadano_api.dart';
+import 'package:espacio_ciudadano_api/src/api/ciudadanos_api.dart';
 import 'package:espacio_ciudadano_api/src/api/consulta_api.dart';
+import 'package:espacio_ciudadano_api/src/api/consulta_titulos_no_universitarios_api.dart';
 import 'package:espacio_ciudadano_api/src/api/dgt_api.dart';
 import 'package:espacio_ciudadano_api/src/api/documentacion_api.dart';
 import 'package:espacio_ciudadano_api/src/api/educacion_api.dart';
+import 'package:espacio_ciudadano_api/src/api/empleo_ofertas_inscritas_api.dart';
 import 'package:espacio_ciudadano_api/src/api/hechos_vitales_api.dart';
 import 'package:espacio_ciudadano_api/src/api/ine_api.dart';
 import 'package:espacio_ciudadano_api/src/api/intermediacion_api.dart';
@@ -21,6 +32,9 @@ import 'package:espacio_ciudadano_api/src/api/publicacion_api.dart';
 import 'package:espacio_ciudadano_api/src/api/sepe_api.dart';
 import 'package:espacio_ciudadano_api/src/api/servicio_api.dart';
 import 'package:espacio_ciudadano_api/src/api/sescam_api.dart';
+import 'package:espacio_ciudadano_api/src/api/soporte_api.dart';
+import 'package:espacio_ciudadano_api/src/api/tarjeta_estacionamiento_api.dart';
+import 'package:espacio_ciudadano_api/src/api/termalismo_api.dart';
 
 class EspacioCiudadanoApi {
   static const String basePath = r'https://fachada-sede-api-pre.cm-pre.jccm.es';
@@ -32,18 +46,83 @@ class EspacioCiudadanoApi {
     Dio? dio,
     Serializers? serializers,
     String? basePathOverride,
+    List<Interceptor>? interceptors,
   })  : this.serializers = serializers ?? standardSerializers,
         this.dio = dio ??
             Dio(BaseOptions(
               baseUrl: basePathOverride ?? basePath,
               connectTimeout: const Duration(milliseconds: 5000),
               receiveTimeout: const Duration(milliseconds: 3000),
-            )) {}
+            )) {
+    if (interceptors == null) {
+      this.dio.interceptors.addAll([
+        OAuthInterceptor(),
+        BasicAuthInterceptor(),
+        BearerAuthInterceptor(),
+        ApiKeyAuthInterceptor(),
+      ]);
+    } else {
+      this.dio.interceptors.addAll(interceptors);
+    }
+  }
+
+  void setOAuthToken(String name, String token) {
+    if (this.dio.interceptors.any((i) => i is OAuthInterceptor)) {
+      (this.dio.interceptors.firstWhere((i) => i is OAuthInterceptor)
+              as OAuthInterceptor)
+          .tokens[name] = token;
+    }
+  }
+
+  void setBearerAuth(String name, String token) {
+    if (this.dio.interceptors.any((i) => i is BearerAuthInterceptor)) {
+      (this.dio.interceptors.firstWhere((i) => i is BearerAuthInterceptor)
+              as BearerAuthInterceptor)
+          .tokens[name] = token;
+    }
+  }
+
+  void setBasicAuth(String name, String username, String password) {
+    if (this.dio.interceptors.any((i) => i is BasicAuthInterceptor)) {
+      (this.dio.interceptors.firstWhere((i) => i is BasicAuthInterceptor)
+              as BasicAuthInterceptor)
+          .authInfo[name] = BasicAuthInfo(username, password);
+    }
+  }
+
+  void setApiKey(String name, String apiKey) {
+    if (this.dio.interceptors.any((i) => i is ApiKeyAuthInterceptor)) {
+      (this
+                  .dio
+                  .interceptors
+                  .firstWhere((element) => element is ApiKeyAuthInterceptor)
+              as ApiKeyAuthInterceptor)
+          .apiKeys[name] = apiKey;
+    }
+  }
+
+  /// Get ActuatorApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  ActuatorApi getActuatorApi() {
+    return ActuatorApi(dio, serializers);
+  }
 
   /// Get AfirmaApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
   AfirmaApi getAfirmaApi() {
     return AfirmaApi(dio, serializers);
+  }
+
+  /// Get AgendaApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  AgendaApi getAgendaApi() {
+    return AgendaApi(dio, serializers);
+  }
+
+  /// Get AtencionDependenciaApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  AtencionDependenciaApi getAtencionDependenciaApi() {
+    return AtencionDependenciaApi(dio, serializers);
   }
 
   /// Get CarnetDigitalApi instance, base route and serializer can be overridden by a given but be careful,
@@ -64,10 +143,28 @@ class EspacioCiudadanoApi {
     return CcaaApi(dio, serializers);
   }
 
+  /// Get CiudadanoApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  CiudadanoApi getCiudadanoApi() {
+    return CiudadanoApi(dio, serializers);
+  }
+
+  /// Get CiudadanosApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  CiudadanosApi getCiudadanosApi() {
+    return CiudadanosApi(dio, serializers);
+  }
+
   /// Get ConsultaApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
   ConsultaApi getConsultaApi() {
     return ConsultaApi(dio, serializers);
+  }
+
+  /// Get ConsultaTitulosNoUniversitariosApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  ConsultaTitulosNoUniversitariosApi getConsultaTitulosNoUniversitariosApi() {
+    return ConsultaTitulosNoUniversitariosApi(dio, serializers);
   }
 
   /// Get DgtApi instance, base route and serializer can be overridden by a given but be careful,
@@ -86,6 +183,12 @@ class EspacioCiudadanoApi {
   /// by doing that all interceptors will not be executed
   EducacionApi getEducacionApi() {
     return EducacionApi(dio, serializers);
+  }
+
+  /// Get EmpleoOfertasInscritasApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  EmpleoOfertasInscritasApi getEmpleoOfertasInscritasApi() {
+    return EmpleoOfertasInscritasApi(dio, serializers);
   }
 
   /// Get HechosVitalesApi instance, base route and serializer can be overridden by a given but be careful,
@@ -134,5 +237,23 @@ class EspacioCiudadanoApi {
   /// by doing that all interceptors will not be executed
   SescamApi getSescamApi() {
     return SescamApi(dio, serializers);
+  }
+
+  /// Get SoporteApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  SoporteApi getSoporteApi() {
+    return SoporteApi(dio, serializers);
+  }
+
+  /// Get TarjetaEstacionamientoApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  TarjetaEstacionamientoApi getTarjetaEstacionamientoApi() {
+    return TarjetaEstacionamientoApi(dio, serializers);
+  }
+
+  /// Get TermalismoApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  TermalismoApi getTermalismoApi() {
+    return TermalismoApi(dio, serializers);
   }
 }

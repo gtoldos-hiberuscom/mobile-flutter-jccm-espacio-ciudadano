@@ -8,6 +8,7 @@ import 'package:espacio_ciudadano_api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**codestado** | **String** |  | [optional] 
 **idepeticion** | **String** |  | [optional] 
 **listavehiculos** | [**LISTAVEHICULOS**](LISTAVEHICULOS.md) |  | [optional] 
 **mensaje** | **String** |  | [optional] 

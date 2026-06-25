@@ -90,7 +90,8 @@ class AppPhoneInputCase extends StatelessWidget {
                 child: TextField(
                   controller: controller,
                   keyboardType: keyboardType ?? TextInputType.phone,
-                  inputFormatters: inputFormatters ??
+                  inputFormatters:
+                      inputFormatters ??
                       [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(9),
