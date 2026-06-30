@@ -13,65 +13,19 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<List<Expediente>> loadExpedientes({required final String documentNumber}) async {
-    final expedientes = await _loadMisExpedientes(documentNumber: documentNumber);
-    if (expedientes.isNotEmpty) {
-      return expedientes;
-    }
-    return _loadExpedientesByNif(documentNumber: documentNumber);
-  }
-
-  Future<List<Expediente>> _loadMisExpedientes({
-    required final String documentNumber,
-  }) async {
     try {
-      final response = await _api.siMisExpedientesOperation(
-        zcsrfcmisexpedientesBody: ZCSRFCMISEXPEDIENTES((final builder) => builder.pnumdoc = documentNumber),
+      final response = await _api.myPubliSelecByNifOperation(
+        dtselectbynifreqBody: DTSELECTBYNIFREQ(
+          (final builder) => builder
+            ..numerodocumento = documentNumber
+            ..tipodoc = 'NIF',
+        ),
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
-          generatedApiNormalizeSingletonCollectionsExtraKey: const ['expedientes.item'],
-        },
-        validateStatus: (final status) => status != null && status < 500,
-      );
-
-      if (response.statusCode == 404) {
-        return const [];
-      }
-
-      final items = response.data?.expedientes?.item;
-      if (items != null) {
-        return items.map(_toExpedienteDto).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
-      }
-
-      return _rawExpedientes(response.extra[generatedApiRawResponseDataExtraKey]);
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return const [];
-      }
-      final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
-      final parsed = _rawExpedientes(rawData);
-      if (parsed.isNotEmpty) {
-        return parsed;
-      }
-      rethrow;
-    }
-  }
-
-  Future<List<Expediente>> _loadExpedientesByNif({
-    required final String documentNumber,
-  }) async {
-    try {
-      final response = await _api.myPubliSelecByNifTipoProcOperation1(
-        dTSELECTBYNIFV2REQ: DTSELECTBYNIFV2REQ((final builder) => builder.numerodocumento = documentNumber),
-        extra: {
-          generatedApiDecodeStringResponseExtraKey: true,
+          generatedApiUnwrapBodyExtraKey: true,
           generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
         },
-        validateStatus: (final status) => status != null && status < 500,
       );
-
-      if (response.statusCode == 404) {
-        return const [];
-      }
 
       final items = response.data?.publicacionportal?.item;
       if (items != null) {
@@ -92,16 +46,6 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     }
   }
 
-  Expediente _toExpedienteDto(final ZCSAUXSTEXPEDIENTES data) {
-    return Expediente(
-      numexp: _emptyToNull(data.numexp) ?? '',
-      titulo: _emptyToNull(data.titulo) ?? _emptyToNull(data.descrip) ?? _emptyToNull(data.desproc) ?? '',
-      consejeria: _emptyToNull(data.desconsej) ?? _emptyToNull(data.consej) ?? '',
-      fechaInicio: _emptyToNull(data.fechareg),
-      estado: _emptyToNull(data.estado) ?? _emptyToNull(data.estadosede),
-    );
-  }
-
   Expediente _toExpedienteByNifDto(final ZCSSTPUBPORTAL data) {
     return Expediente(
       numexp: _emptyToNull(data.numexp) ?? '',
@@ -112,28 +56,10 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     );
   }
 
-  List<Expediente> _rawExpedientes(final Object? data) {
-    final payload = _decode(data);
-    final root = _asMap(payload);
-    if (root == null) {
-      return const [];
-    }
-
-    final expedientesNode = root['expedientes'];
-    final itemsNode = _asMap(expedientesNode)?['item'];
-
-    final items = switch (itemsNode) {
-      final List<dynamic> list => list,
-      final Map<dynamic, dynamic> single => [single],
-      _ => const <dynamic>[],
-    };
-
-    return items.map(_asMap).whereType<Map<String, Object?>>().map(_toExpedienteMap).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
-  }
-
   List<Expediente> _rawExpedientesByNif(final Object? data) {
     final payload = _decode(data);
-    final root = _asMap(payload);
+    final payloadMap = _asMap(payload);
+    final root = _asMap(payloadMap?['body']) ?? payloadMap;
     if (root == null) {
       return const [];
     }
@@ -148,16 +74,6 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     };
 
     return items.map(_asMap).whereType<Map<String, Object?>>().map(_toExpedienteByNifMap).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
-  }
-
-  Expediente _toExpedienteMap(final Map<String, Object?> data) {
-    return Expediente(
-      numexp: _string(data, 'numexp') ?? '',
-      titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? '',
-      consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
-      fechaInicio: _string(data, 'fechareg'),
-      estado: _string(data, 'estado') ?? _string(data, 'estadosede'),
-    );
   }
 
   Expediente _toExpedienteByNifMap(final Map<String, Object?> data) {

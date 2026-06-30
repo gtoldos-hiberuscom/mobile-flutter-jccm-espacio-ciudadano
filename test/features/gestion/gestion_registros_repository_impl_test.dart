@@ -28,16 +28,18 @@ void main() {
       expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifentrada');
       expect(
         adapter.requests.single.jsonBody,
-        <String, dynamic>{'numerodocumento': '99999999R'},
+        <String, dynamic>{
+          'numerodocumento': '99999999R',
+          'tipodocumento': 'NIF',
+        },
       );
     });
 
-    test('loads salidas through the generated endpoint', () async {
+    test('loads salidas through the generated endpoint when response is wrapped inside body', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
-          contentType: Headers.textPlainContentType,
-          body: '{"publicacionportal":{"item":{"registro":"SAL-1","desasunto":"Salida registrada","fechareg":"2026-06-22","desconsej":"Consejería C"}}}',
+          body: '{"body":{"publicacionportal":{"item":{"registro":"SAL-1","desasunto":"Salida registrada","fechareg":"2026-06-22","desconsej":"Consejería C"}}}}',
         ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
@@ -54,7 +56,10 @@ void main() {
       expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifsalida');
       expect(
         adapter.requests.single.jsonBody,
-        <String, dynamic>{'numerodocumento': '99999999R'},
+        <String, dynamic>{
+          'numerodocumento': '99999999R',
+          'tipodocumento': 'NIF',
+        },
       );
     });
   });

@@ -28,6 +28,7 @@ Future<void> bootstrap(final AppConfig config) async {
 
   runApp(
     ProviderScope(
+      retry: (final retryCount, final error) => null,
       overrides: [
         appConfigProvider.overrideWithValue(config),
         appStorageProvider.overrideWithValue(appStorage),

@@ -14,14 +14,14 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   @override
   Future<List<Registro>> loadEntradas({required final String documentNumber}) async {
     return _loadRegistros(
-      request: DTSELECTBYNIFV2REQ((final builder) => builder.numerodocumento = documentNumber),
-      fetch: (final request, final validateStatus) => _api.myPubliSelecByNifTipoProcOperation2(
+      request: _request(documentNumber),
+      fetch: (final request) => _api.myPubliSelecByNifTipoProcOperation2(
         dTSELECTBYNIFV2REQ: request,
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
+          generatedApiUnwrapBodyExtraKey: true,
           generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
         },
-        validateStatus: validateStatus,
       ),
     );
   }
@@ -29,31 +29,32 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   @override
   Future<List<Registro>> loadSalidas({required final String documentNumber}) async {
     return _loadRegistros(
-      request: DTSELECTBYNIFV2REQ((final builder) => builder.numerodocumento = documentNumber),
-      fetch: (final request, final validateStatus) => _api.myPubliSelecByNifTipoProcOperation(
+      request: _request(documentNumber),
+      fetch: (final request) => _api.myPubliSelecByNifTipoProcOperation(
         dTSELECTBYNIFV2REQ: request,
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
+          generatedApiUnwrapBodyExtraKey: true,
           generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
         },
-        validateStatus: validateStatus,
       ),
+    );
+  }
+
+  DTSELECTBYNIFV2REQ _request(final String documentNumber) {
+    return DTSELECTBYNIFV2REQ(
+      (final builder) => builder
+        ..numerodocumento = documentNumber
+        ..tipodocumento = 'NIF',
     );
   }
 
   Future<List<Registro>> _loadRegistros({
     required final DTSELECTBYNIFV2REQ request,
-    required final Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> Function(DTSELECTBYNIFV2REQ request, ValidateStatus validateStatus) fetch,
+    required final Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> Function(DTSELECTBYNIFV2REQ request) fetch,
   }) async {
     try {
-      final response = await fetch(
-        request,
-        (final status) => status != null && status < 500,
-      );
-
-      if (response.statusCode == 404) {
-        return const [];
-      }
+      final response = await fetch(request);
 
       final items = response.data?.publicacionportal?.item;
       if (items != null) {
@@ -85,7 +86,8 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
 
   List<Registro> _rawRegistros(final Object? data) {
     final payload = _decode(data);
-    final root = _asMap(payload);
+    final payloadMap = _asMap(payload);
+    final root = _asMap(payloadMap?['body']) ?? payloadMap;
     if (root == null) {
       return const [];
     }
