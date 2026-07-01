@@ -1,0 +1,49 @@
+digraph arquitectura_general {
+  graph [
+    rankdir=TB,
+    bgcolor="white",
+    pad="0.25",
+    nodesep="0.35",
+    ranksep="0.55",
+    fontname="Arial",
+    label="Arquitectura general - Espacio Ciudadano CLM",
+    labelloc="t",
+    fontsize=20
+  ];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=11, margin="0.16,0.10", color="#44546A"];
+  edge [fontname="Arial", fontsize=9, color="#5B6573", arrowsize=0.8];
+
+  subgraph cluster_app {
+    label="Aplicación Flutter";
+    color="#A7B6C8";
+    style="rounded";
+
+    ui [label="2_presentation\nPages, widgets, estado y Riverpod", fillcolor="#D9EAF7"];
+    domain [label="1_domain\nCasos de uso y contratos de repositorio", fillcolor="#E2F0D9"];
+    entities [label="0_entity\nEntidades y modelos de dominio", fillcolor="#FFF2CC"];
+    data [label="3_data\nRepositorios concretos, mapeo y adaptadores", fillcolor="#FCE4D6"];
+    core [label="core\nRouter, red, configuración, storage, seguridad,\ndesign system, accesibilidad y conectividad", fillcolor="#E4DFEC"];
+
+    ui -> domain [label="invoca"];
+    domain -> entities [label="usa"];
+    data -> domain [label="implementa contratos"];
+    data -> entities [label="mapea"];
+    ui -> core [label="servicios transversales", style=dashed];
+    data -> core [label="Dio / storage / config", style=dashed];
+  }
+
+  riverpod [label="Riverpod 3\nComposición e inyección de dependencias", fillcolor="#DDEBF7"];
+  router [label="GoRouter\nRutas y SessionGuard", fillcolor="#DDEBF7"];
+  api [label="Fachada Sede REST\nCliente OpenAPI + Dio", fillcolor="#E2F0D9"];
+  sso [label="Cl@ve / OIDC\nAuthorization Code + PKCE", fillcolor="#E2F0D9"];
+  secure [label="Almacenamiento local\nSecure Storage + SharedPreferences", fillcolor="#FFF2CC"];
+  platform [label="Android / iOS\nBiometría, deep links y navegador externo", fillcolor="#FCE4D6"];
+
+  riverpod -> ui [label="provee estado"];
+  riverpod -> data [label="inyecta implementaciones"];
+  router -> ui [label="navega y protege"];
+  data -> api [label="HTTPS / JSON"];
+  data -> sso [label="autenticación"];
+  core -> secure [label="persistencia"];
+  core -> platform [label="plugins nativos"];
+}
