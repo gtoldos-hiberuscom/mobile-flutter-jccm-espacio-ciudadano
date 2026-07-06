@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **miDetalleOperation**
-> ZCSRFCPUBLISELECTBYNIFResponse miDetalleOperation(dTQUERYBody)
+> ZCSRFCPUBLISELECTBYNIFResponse miDetalleOperation(DTQUERY)
 
 Consultar el detalle de un tramite en cesar
 
@@ -22,10 +22,10 @@ Consultar el detalle de un tramite en cesar
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getServicioApi();
-final DTQUERY dTQUERYBody = ; // DTQUERY | 
+final DTQUERY DTQUERY = ; // DTQUERY | 
 
 try {
-    final response = api.miDetalleOperation(dTQUERYBody);
+    final response = api.miDetalleOperation(DTQUERY);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ServicioApi->miDetalleOperation: $e\n');
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dTQUERYBody** | [**DTQUERY**](DTQUERY.md)|  | 
+ **DTQUERY** | [**DTQUERY**](DTQUERY.md)|  | 
 
 ### Return type
 

@@ -8,14 +8,14 @@ void main() {
   group(ProcedimientoApi, () {
     // Servicio que permite generar el hash de un documento codificado en base64 sin firma
     //
-    //Future<RESULTADOPROCEDIMIENTO> hashAdjuntoaOperation(ADJUNTO aDJUNTOBody) async
+    //Future<RESULTADOPROCEDIMIENTO> hashAdjuntoaOperation(ADJUNTO ADJUNTO) async
     test('test hashAdjuntoaOperation', () async {
       // TODO
     });
 
     // Servicio para realizar la escritura de un procedimiento en cesar
     //
-    //Future<RESULTADOPROCEDIMIENTO> miConfirmarProcOperation(CONFIRMARPROCEDIMIENTO cONFIRMARPROCEDIMIENTOBody) async
+    //Future<RESULTADOPROCEDIMIENTO> miConfirmarProcOperation(CONFIRMARPROCEDIMIENTO CONFIRMARPROCEDIMIENTO) async
     test('test miConfirmarProcOperation', () async {
       // TODO
     });
@@ -29,21 +29,21 @@ void main() {
 
     // Consultar la respuesta de un expediente en cesar
     //
-    //Future<ZCSRMOBTRESPUESTAEXPResponse> miObtenerRespuestaOperation(ZCSRMOBTRESPUESTAEXP zCSRMOBTRESPUESTAEXPBody) async
+    //Future<ZCSRMOBTRESPUESTAEXPResponse> miObtenerRespuestaOperation(ZCSRMOBTRESPUESTAEXP ZCSRMOBTRESPUESTAEXP) async
     test('test miObtenerRespuestaOperation', () async {
       // TODO
     });
 
     // Servicio que permite subir al buzon de tramitacion un documento codificado en base64 firmado
     //
-    //Future<RESULTADOPROCEDIMIENTO> miSubirAdjuntoOperation(ADJUNTO aDJUNTOBody) async
+    //Future<RESULTADOPROCEDIMIENTO> miSubirAdjuntoOperation(ADJUNTO ADJUNTO) async
     test('test miSubirAdjuntoOperation', () async {
       // TODO
     });
 
     // Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma
     //
-    //Future<RESULTADOPROCEDIMIENTO> miSubirAdjuntoSinFirmaOperation(ADJUNTO aDJUNTOBody) async
+    //Future<RESULTADOPROCEDIMIENTO> miSubirAdjuntoSinFirmaOperation(ADJUNTO ADJUNTO) async
     test('test miSubirAdjuntoSinFirmaOperation', () async {
       // TODO
     });

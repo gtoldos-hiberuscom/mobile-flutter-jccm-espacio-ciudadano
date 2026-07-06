@@ -23,7 +23,7 @@ class IneApi {
   ///
   /// Parameters:
   /// * [numDocumento]
-  /// * [dTINECDRFREQBody]
+  /// * [DTINECDRFREQ]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -36,7 +36,7 @@ class IneApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<DTINECDRFRES>> getDatosResidencia({
     required String numDocumento,
-    required DTINECDRFREQ dTINECDRFREQBody,
+    required DTINECDRFREQ dtinecdrfreqBody,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -68,7 +68,7 @@ class IneApi {
     try {
       const _type = FullType(DTINECDRFREQ);
       _bodyData =
-          _serializers.serialize(dTINECDRFREQBody, specifiedType: _type);
+          _serializers.serialize(dtinecdrfreqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

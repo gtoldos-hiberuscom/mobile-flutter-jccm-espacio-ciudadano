@@ -12,6 +12,7 @@ part 'dtdgtlistadovehiculosres.g.dart';
 /// DTDGTLISTADOVEHICULOSRES
 ///
 /// Properties:
+/// * [codestado]
 /// * [idepeticion]
 /// * [listavehiculos]
 /// * [mensaje]
@@ -20,6 +21,9 @@ part 'dtdgtlistadovehiculosres.g.dart';
 abstract class DTDGTLISTADOVEHICULOSRES
     implements
         Built<DTDGTLISTADOVEHICULOSRES, DTDGTLISTADOVEHICULOSRESBuilder> {
+  @BuiltValueField(wireName: r'codestado')
+  String? get codestado;
+
   @BuiltValueField(wireName: r'idepeticion')
   String? get idepeticion;
 
@@ -62,6 +66,13 @@ class _$DTDGTLISTADOVEHICULOSRESSerializer
     DTDGTLISTADOVEHICULOSRES object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
+    if (object.codestado != null) {
+      yield r'codestado';
+      yield serializers.serialize(
+        object.codestado,
+        specifiedType: const FullType(String),
+      );
+    }
     if (object.idepeticion != null) {
       yield r'idepeticion';
       yield serializers.serialize(
@@ -115,6 +126,13 @@ class _$DTDGTLISTADOVEHICULOSRESSerializer
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
+        case r'codestado':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.codestado = valueDes;
+          break;
         case r'idepeticion':
           final valueDes = serializers.deserialize(
             value,

@@ -16,6 +16,8 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 ///   child: App(config: config),
 /// )
 /// ```
-final appConfigProvider = Provider<AppConfig>((ref) => throw UnimplementedError(
-  'appConfigProvider must be overridden in ProviderScope at bootstrap.',
-));
+final appConfigProvider = Provider<AppConfig>(
+  (ref) => throw UnimplementedError(
+    'appConfigProvider must be overridden in ProviderScope at bootstrap.',
+  ),
+);

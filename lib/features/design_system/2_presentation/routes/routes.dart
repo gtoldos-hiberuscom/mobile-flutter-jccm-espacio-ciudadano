@@ -12,8 +12,7 @@ final designSystemRoutesProvider = Provider<List<RouteBase>>((final ref) {
     GoRoute(
       path: '/design-system',
       name: 'design-system-catalog',
-      builder: (final context, final state) =>
-          const DesignSystemCatalogPage(),
+      builder: (final context, final state) => const DesignSystemCatalogPage(),
     ),
   ];
 });

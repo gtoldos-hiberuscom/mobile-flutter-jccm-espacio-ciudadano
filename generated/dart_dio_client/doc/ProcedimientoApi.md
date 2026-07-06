@@ -18,7 +18,7 @@ Method | HTTP request | Description
 
 
 # **hashAdjuntoaOperation**
-> RESULTADOPROCEDIMIENTO hashAdjuntoaOperation(aDJUNTOBody)
+> RESULTADOPROCEDIMIENTO hashAdjuntoaOperation(ADJUNTO)
 
 Servicio que permite generar el hash de un documento codificado en base64 sin firma
 
@@ -27,10 +27,10 @@ Servicio que permite generar el hash de un documento codificado en base64 sin fi
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getProcedimientoApi();
-final ADJUNTO aDJUNTOBody = ; // ADJUNTO | 
+final ADJUNTO ADJUNTO = ; // ADJUNTO | 
 
 try {
-    final response = api.hashAdjuntoaOperation(aDJUNTOBody);
+    final response = api.hashAdjuntoaOperation(ADJUNTO);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ProcedimientoApi->hashAdjuntoaOperation: $e\n');
@@ -41,7 +41,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **aDJUNTOBody** | [**ADJUNTO**](ADJUNTO.md)|  | 
+ **ADJUNTO** | [**ADJUNTO**](ADJUNTO.md)|  | 
 
 ### Return type
 
@@ -59,7 +59,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **miConfirmarProcOperation**
-> RESULTADOPROCEDIMIENTO miConfirmarProcOperation(cONFIRMARPROCEDIMIENTOBody)
+> RESULTADOPROCEDIMIENTO miConfirmarProcOperation(CONFIRMARPROCEDIMIENTO)
 
 Servicio para realizar la escritura de un procedimiento en cesar
 
@@ -68,10 +68,10 @@ Servicio para realizar la escritura de un procedimiento en cesar
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getProcedimientoApi();
-final CONFIRMARPROCEDIMIENTO cONFIRMARPROCEDIMIENTOBody = ; // CONFIRMARPROCEDIMIENTO | 
+final CONFIRMARPROCEDIMIENTO CONFIRMARPROCEDIMIENTO = ; // CONFIRMARPROCEDIMIENTO | 
 
 try {
-    final response = api.miConfirmarProcOperation(cONFIRMARPROCEDIMIENTOBody);
+    final response = api.miConfirmarProcOperation(CONFIRMARPROCEDIMIENTO);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ProcedimientoApi->miConfirmarProcOperation: $e\n');
@@ -82,7 +82,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cONFIRMARPROCEDIMIENTOBody** | [**CONFIRMARPROCEDIMIENTO**](CONFIRMARPROCEDIMIENTO.md)|  | 
+ **CONFIRMARPROCEDIMIENTO** | [**CONFIRMARPROCEDIMIENTO**](CONFIRMARPROCEDIMIENTO.md)|  | 
 
 ### Return type
 
@@ -141,7 +141,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **miObtenerRespuestaOperation**
-> ZCSRMOBTRESPUESTAEXPResponse miObtenerRespuestaOperation(zCSRMOBTRESPUESTAEXPBody)
+> ZCSRMOBTRESPUESTAEXPResponse miObtenerRespuestaOperation(ZCSRMOBTRESPUESTAEXP)
 
 Consultar la respuesta de un expediente en cesar
 
@@ -150,10 +150,10 @@ Consultar la respuesta de un expediente en cesar
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getProcedimientoApi();
-final ZCSRMOBTRESPUESTAEXP zCSRMOBTRESPUESTAEXPBody = ; // ZCSRMOBTRESPUESTAEXP | 
+final ZCSRMOBTRESPUESTAEXP ZCSRMOBTRESPUESTAEXP = ; // ZCSRMOBTRESPUESTAEXP | 
 
 try {
-    final response = api.miObtenerRespuestaOperation(zCSRMOBTRESPUESTAEXPBody);
+    final response = api.miObtenerRespuestaOperation(ZCSRMOBTRESPUESTAEXP);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ProcedimientoApi->miObtenerRespuestaOperation: $e\n');
@@ -164,7 +164,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSRMOBTRESPUESTAEXPBody** | [**ZCSRMOBTRESPUESTAEXP**](ZCSRMOBTRESPUESTAEXP.md)|  | 
+ **ZCSRMOBTRESPUESTAEXP** | [**ZCSRMOBTRESPUESTAEXP**](ZCSRMOBTRESPUESTAEXP.md)|  | 
 
 ### Return type
 
@@ -182,7 +182,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **miSubirAdjuntoOperation**
-> RESULTADOPROCEDIMIENTO miSubirAdjuntoOperation(aDJUNTOBody)
+> RESULTADOPROCEDIMIENTO miSubirAdjuntoOperation(ADJUNTO)
 
 Servicio que permite subir al buzon de tramitacion un documento codificado en base64 firmado
 
@@ -191,10 +191,10 @@ Servicio que permite subir al buzon de tramitacion un documento codificado en ba
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getProcedimientoApi();
-final ADJUNTO aDJUNTOBody = ; // ADJUNTO | 
+final ADJUNTO ADJUNTO = ; // ADJUNTO | 
 
 try {
-    final response = api.miSubirAdjuntoOperation(aDJUNTOBody);
+    final response = api.miSubirAdjuntoOperation(ADJUNTO);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ProcedimientoApi->miSubirAdjuntoOperation: $e\n');
@@ -205,7 +205,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **aDJUNTOBody** | [**ADJUNTO**](ADJUNTO.md)|  | 
+ **ADJUNTO** | [**ADJUNTO**](ADJUNTO.md)|  | 
 
 ### Return type
 
@@ -223,7 +223,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **miSubirAdjuntoSinFirmaOperation**
-> RESULTADOPROCEDIMIENTO miSubirAdjuntoSinFirmaOperation(aDJUNTOBody)
+> RESULTADOPROCEDIMIENTO miSubirAdjuntoSinFirmaOperation(ADJUNTO)
 
 Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma
 
@@ -232,10 +232,10 @@ Servicio que permite subir al buzon de tramitacion un documento codificado en ba
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getProcedimientoApi();
-final ADJUNTO aDJUNTOBody = ; // ADJUNTO | 
+final ADJUNTO ADJUNTO = ; // ADJUNTO | 
 
 try {
-    final response = api.miSubirAdjuntoSinFirmaOperation(aDJUNTOBody);
+    final response = api.miSubirAdjuntoSinFirmaOperation(ADJUNTO);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ProcedimientoApi->miSubirAdjuntoSinFirmaOperation: $e\n');
@@ -246,7 +246,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **aDJUNTOBody** | [**ADJUNTO**](ADJUNTO.md)|  | 
+ **ADJUNTO** | [**ADJUNTO**](ADJUNTO.md)|  | 
 
 ### Return type
 

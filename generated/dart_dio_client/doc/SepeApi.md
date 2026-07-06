@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **getDemandanteEmpleoFechaActual**
-> DTSEPESVDIDEFARES getDemandanteEmpleoFechaActual(numDocumento, dTSEPESVDIDEFAREQBody, authorization)
+> DTSEPESVDIDEFARES getDemandanteEmpleoFechaActual(numDocumento, DTSEPESVDIDEFAREQ, authorization)
 
 Servicio para obtener los datos de demandante de empleo a Fecha Actual
 
@@ -23,11 +23,11 @@ import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getSepeApi();
 final String numDocumento = numDocumento_example; // String | 
-final DTSEPESVDIDEFAREQ dTSEPESVDIDEFAREQBody = ; // DTSEPESVDIDEFAREQ | 
+final DTSEPESVDIDEFAREQ DTSEPESVDIDEFAREQ = ; // DTSEPESVDIDEFAREQ | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.getDemandanteEmpleoFechaActual(numDocumento, dTSEPESVDIDEFAREQBody, authorization);
+    final response = api.getDemandanteEmpleoFechaActual(numDocumento, DTSEPESVDIDEFAREQ, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling SepeApi->getDemandanteEmpleoFechaActual: $e\n');
@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **numDocumento** | **String**|  | 
- **dTSEPESVDIDEFAREQBody** | [**DTSEPESVDIDEFAREQ**](DTSEPESVDIDEFAREQ.md)|  | 
+ **DTSEPESVDIDEFAREQ** | [**DTSEPESVDIDEFAREQ**](DTSEPESVDIDEFAREQ.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type

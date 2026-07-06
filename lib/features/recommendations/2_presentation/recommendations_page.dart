@@ -451,8 +451,7 @@ enum _RecommendationFilter {
   all,
   recent,
   news,
-  immediate
-  ;
+  immediate;
 
   String label(final BuildContext context) {
     final l10n = AppLocalizations.of(context);

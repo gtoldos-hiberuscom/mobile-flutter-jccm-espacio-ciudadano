@@ -6,13 +6,11 @@ sealed class MarkLifeEventsOnboardingSeenResult {
   const MarkLifeEventsOnboardingSeenResult();
 }
 
-class MarkLifeEventsOnboardingSeenSuccess
-    extends MarkLifeEventsOnboardingSeenResult {
+class MarkLifeEventsOnboardingSeenSuccess extends MarkLifeEventsOnboardingSeenResult {
   const MarkLifeEventsOnboardingSeenSuccess();
 }
 
-class MarkLifeEventsOnboardingSeenFailed
-    extends MarkLifeEventsOnboardingSeenResult {
+class MarkLifeEventsOnboardingSeenFailed extends MarkLifeEventsOnboardingSeenResult {
   const MarkLifeEventsOnboardingSeenFailed(this.message);
   final String message;
 }

@@ -25,7 +25,7 @@ class ProcedimientoApi {
   ///
   ///
   /// Parameters:
-  /// * [aDJUNTOBody]
+  /// * [ADJUNTO]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -36,7 +36,7 @@ class ProcedimientoApi {
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<RESULTADOPROCEDIMIENTO>> hashAdjuntoaOperation({
-    required ADJUNTO aDJUNTOBody,
+    required ADJUNTO adjuntoBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -62,7 +62,7 @@ class ProcedimientoApi {
 
     try {
       const _type = FullType(ADJUNTO);
-      _bodyData = _serializers.serialize(aDJUNTOBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(adjuntoBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -120,7 +120,7 @@ class ProcedimientoApi {
   ///
   ///
   /// Parameters:
-  /// * [cONFIRMARPROCEDIMIENTOBody]
+  /// * [CONFIRMARPROCEDIMIENTO]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -131,7 +131,7 @@ class ProcedimientoApi {
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<RESULTADOPROCEDIMIENTO>> miConfirmarProcOperation({
-    required CONFIRMARPROCEDIMIENTO cONFIRMARPROCEDIMIENTOBody,
+    required CONFIRMARPROCEDIMIENTO confirmarprocedimientoBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -157,7 +157,7 @@ class ProcedimientoApi {
 
     try {
       const _type = FullType(CONFIRMARPROCEDIMIENTO);
-      _bodyData = _serializers.serialize(cONFIRMARPROCEDIMIENTOBody,
+      _bodyData = _serializers.serialize(confirmarprocedimientoBody,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
@@ -311,7 +311,7 @@ class ProcedimientoApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSRMOBTRESPUESTAEXPBody]
+  /// * [ZCSRMOBTRESPUESTAEXP]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -322,7 +322,7 @@ class ProcedimientoApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRMOBTRESPUESTAEXPResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRMOBTRESPUESTAEXPResponse>> miObtenerRespuestaOperation({
-    required ZCSRMOBTRESPUESTAEXP zCSRMOBTRESPUESTAEXPBody,
+    required ZCSRMOBTRESPUESTAEXP zcsrmobtrespuestaexpBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -348,7 +348,7 @@ class ProcedimientoApi {
 
     try {
       const _type = FullType(ZCSRMOBTRESPUESTAEXP);
-      _bodyData = _serializers.serialize(zCSRMOBTRESPUESTAEXPBody,
+      _bodyData = _serializers.serialize(zcsrmobtrespuestaexpBody,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
@@ -407,7 +407,7 @@ class ProcedimientoApi {
   ///
   ///
   /// Parameters:
-  /// * [aDJUNTOBody]
+  /// * [ADJUNTO]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -418,7 +418,7 @@ class ProcedimientoApi {
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<RESULTADOPROCEDIMIENTO>> miSubirAdjuntoOperation({
-    required ADJUNTO aDJUNTOBody,
+    required ADJUNTO adjuntoBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -444,7 +444,7 @@ class ProcedimientoApi {
 
     try {
       const _type = FullType(ADJUNTO);
-      _bodyData = _serializers.serialize(aDJUNTOBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(adjuntoBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -502,7 +502,7 @@ class ProcedimientoApi {
   ///
   ///
   /// Parameters:
-  /// * [aDJUNTOBody]
+  /// * [ADJUNTO]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -513,7 +513,7 @@ class ProcedimientoApi {
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<RESULTADOPROCEDIMIENTO>> miSubirAdjuntoSinFirmaOperation({
-    required ADJUNTO aDJUNTOBody,
+    required ADJUNTO adjuntoBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -539,7 +539,7 @@ class ProcedimientoApi {
 
     try {
       const _type = FullType(ADJUNTO);
-      _bodyData = _serializers.serialize(aDJUNTOBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(adjuntoBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

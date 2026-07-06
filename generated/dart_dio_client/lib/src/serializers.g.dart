@@ -12,6 +12,7 @@ Serializers _$serializers = (Serializers().toBuilder()
       ..add(ApiError.serializer)
       ..add(BAPIRET2.serializer)
       ..add(BENEFICIARIOS.serializer)
+      ..add(BaseRequestIntermediacion.serializer)
       ..add(CONFIRMARPROCEDIMIENTO.serializer)
       ..add(CarnetJoven.serializer)
       ..add(CarnetQr.serializer)
@@ -39,42 +40,51 @@ Serializers _$serializers = (Serializers().toBuilder()
       ..add(DTSELECTBYNIFV2REQ.serializer)
       ..add(DTSEPESVDIDEFAREQ.serializer)
       ..add(DTSEPESVDIDEFARES.serializer)
-      ..add(DatosBeneficiariosFamiliaNumerosa.serializer)
-      ..add(DatosBeneficiariosFamiliaNumerosaList.serializer)
-      ..add(DatosEspecificosFamiliaNumerosa.serializer)
       ..add(DatosFamiliaNumerosa.serializer)
       ..add(DatosRepresentante.serializer)
-      ..add(DatosTituloFamiliaNumerosa.serializer)
-      ..add(DatosTituloFamiliaNumerosaList.serializer)
+      ..add(DocumentoDto.serializer)
       ..add(DocumentoRegistro.serializer)
+      ..add(DocumentosDto.serializer)
       ..add(ELEMENTO.serializer)
       ..add(ETLISTDOCS.serializer)
       ..add(ETRETURN.serializer)
       ..add(EXPEDIENTES.serializer)
+      ..add(EmailAvisoDto.serializer)
+      ..add(ExpedienteDto.serializer)
       ..add(Hecho.serializer)
+      ..add(HistoricoEstadoDto.serializer)
       ..add(InfoError.serializer)
+      ..add(InformacionAdicionalDto.serializer)
+      ..add(InteresadoNotificaDto.serializer)
       ..add(LISTAVEHICULOS.serializer)
+      ..add(Link.serializer)
       ..add(ListaHechos.serializer)
       ..add(ListaHechosAgente.serializer)
       ..add(ListaTramitesPorHechos.serializer)
+      ..add(MediosAvisoAdicionalesDto.serializer)
+      ..add(NotificacionDto.serializer)
+      ..add(NotificacionIndexaDto.serializer)
       ..add(PDATOS.serializer)
       ..add(PREGISTRO.serializer)
       ..add(PUBLICACIONPORTAL.serializer)
       ..add(PkpassFamiliaNumerosa.serializer)
+      ..add(ProcedimientoAdministrativoDto.serializer)
+      ..add(ProcedimientoAdministrativoIndexaDto.serializer)
       ..add(REGISTRO.serializer)
       ..add(RESULTADOPROCEDIMIENTO.serializer)
       ..add(RETURNS.serializer)
       ..add(RegistrarFicheroRequest.serializer)
-      ..add(RequestFachadaDiscapacidadInterm.serializer)
-      ..add(RequestFachadaFamiliaNumerosaInterm.serializer)
-      ..add(ResponseFamiliaNumerosaIntermediacion.serializer)
       ..add(Respuesta.serializer)
-      ..add(RespuestaFachadaFamiliaNumerosaInterm.serializer)
-      ..add(RespuestaRespuestaFachadaFamiliaNumerosaInterm.serializer)
+      ..add(RespuestaFachadaInterm.serializer)
       ..add(TFAQ.serializer)
       ..add(TTEXTOSRESPUESTA.serializer)
+      ..add(TelefonoAvisoDto.serializer)
+      ..add(TerceroN2Dto.serializer)
       ..add(Tramite.serializer)
       ..add(TramitesPorHecho.serializer)
+      ..add(TransicionDto.serializer)
+      ..add(UnidadOrganicaDto.serializer)
+      ..add(UnidadOrganicaIndexaDto.serializer)
       ..add(VEHICULO.serializer)
       ..add(XMLRegistro.serializer)
       ..add(ZCSAUXSTEXPEDIENTES.serializer)
@@ -119,28 +129,48 @@ Serializers _$serializers = (Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(Clausulas)]),
           () => ListBuilder<Clausulas>())
       ..addBuilderFactory(
-          const FullType(BuiltList,
-              const [const FullType(DatosBeneficiariosFamiliaNumerosaList)]),
-          () => ListBuilder<DatosBeneficiariosFamiliaNumerosaList>())
-      ..addBuilderFactory(
-          const FullType(BuiltList,
-              const [const FullType(DatosTituloFamiliaNumerosaList)]),
-          () => ListBuilder<DatosTituloFamiliaNumerosaList>())
-      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(DocumentoRegistro)]),
           () => ListBuilder<DocumentoRegistro>())
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(DocumentosDto)]),
+          () => ListBuilder<DocumentosDto>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(HistoricoEstadoDto)]),
+          () => ListBuilder<HistoricoEstadoDto>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(InteresadoNotificaDto)]),
+          () => ListBuilder<InteresadoNotificaDto>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ELEMENTO)]),
           () => ListBuilder<ELEMENTO>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ELEMENTO)]),
           () => ListBuilder<ELEMENTO>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(EmailAvisoDto)]),
+          () => ListBuilder<EmailAvisoDto>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(TelefonoAvisoDto)]),
+          () => ListBuilder<TelefonoAvisoDto>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Hecho)]),
           () => ListBuilder<Hecho>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Hecho)]),
           () => ListBuilder<Hecho>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(InformacionAdicionalDto)]),
+          () => ListBuilder<InformacionAdicionalDto>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(InformacionAdicionalDto)]),
+          () => ListBuilder<InformacionAdicionalDto>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(InformacionAdicionalDto)]),
+          () => ListBuilder<InformacionAdicionalDto>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => ListBuilder<String>())

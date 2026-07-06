@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 
 # **getTitulosNoUniversitarios**
-> DTEDUTNURES getTitulosNoUniversitarios(numDocumento, dTEDUTNUREQBody, authorization)
+> DTEDUTNURES getTitulosNoUniversitarios(numDocumento, DTEDUTNUREQ, authorization)
 
 Servicio para obtener los títulos no universitarios
 
@@ -24,11 +24,11 @@ import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getEducacionApi();
 final String numDocumento = numDocumento_example; // String | 
-final DTEDUTNUREQ dTEDUTNUREQBody = ; // DTEDUTNUREQ | 
+final DTEDUTNUREQ DTEDUTNUREQ = ; // DTEDUTNUREQ | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.getTitulosNoUniversitarios(numDocumento, dTEDUTNUREQBody, authorization);
+    final response = api.getTitulosNoUniversitarios(numDocumento, DTEDUTNUREQ, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling EducacionApi->getTitulosNoUniversitarios: $e\n');
@@ -40,7 +40,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **numDocumento** | **String**|  | 
- **dTEDUTNUREQBody** | [**DTEDUTNUREQ**](DTEDUTNUREQ.md)|  | 
+ **DTEDUTNUREQ** | [**DTEDUTNUREQ**](DTEDUTNUREQ.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type
@@ -59,7 +59,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getTitulosUniversitarios**
-> DTEDUTUORES getTitulosUniversitarios(numDocumento, dTEDUTUOREQBody, authorization)
+> DTEDUTUORES getTitulosUniversitarios(numDocumento, DTEDUTUOREQ, authorization)
 
 Servicio para obtener los títulos universitarios
 
@@ -69,11 +69,11 @@ import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getEducacionApi();
 final String numDocumento = numDocumento_example; // String | 
-final DTEDUTUOREQ dTEDUTUOREQBody = ; // DTEDUTUOREQ | 
+final DTEDUTUOREQ DTEDUTUOREQ = ; // DTEDUTUOREQ | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.getTitulosUniversitarios(numDocumento, dTEDUTUOREQBody, authorization);
+    final response = api.getTitulosUniversitarios(numDocumento, DTEDUTUOREQ, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling EducacionApi->getTitulosUniversitarios: $e\n');
@@ -85,7 +85,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **numDocumento** | **String**|  | 
- **dTEDUTUOREQBody** | [**DTEDUTUOREQ**](DTEDUTUOREQ.md)|  | 
+ **DTEDUTUOREQ** | [**DTEDUTUOREQ**](DTEDUTUOREQ.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type

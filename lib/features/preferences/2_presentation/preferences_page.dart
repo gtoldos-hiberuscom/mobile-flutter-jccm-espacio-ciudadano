@@ -401,7 +401,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
 }
 
 String _notificationCitizenId(final JwtClaims? claims) {
-  return claims?.idAgente ?? '';
+  return claims?.normalizedPersonIdentifier ?? '';
 }
 
 DateTime? _readLifeEventsUpdatedAt(final AppStorage appStorage, final String idAgente) {

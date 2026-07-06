@@ -56,6 +56,7 @@ class AppSurfaceCard extends StatelessWidget {
             borderRadius: borderRadius,
             border: Border.all(color: AppColors.backgroundBlueMutedLight),
             boxShadow: AppShadows.low,
+            color: AppColors.surface,
           ),
           child: child,
         ),

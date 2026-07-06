@@ -8,6 +8,8 @@ part of 'dtedutnures.dart';
 
 class _$DTEDUTNURES extends DTEDUTNURES {
   @override
+  final String? codestado;
+  @override
   final String? docu;
   @override
   final BuiltList<ELEMENTO>? elemento;
@@ -30,7 +32,8 @@ class _$DTEDUTNURES extends DTEDUTNURES {
       (DTEDUTNURESBuilder()..update(updates))._build();
 
   _$DTEDUTNURES._(
-      {this.docu,
+      {this.codestado,
+      this.docu,
       this.elemento,
       this.fecnac,
       this.idpeticion,
@@ -51,6 +54,7 @@ class _$DTEDUTNURES extends DTEDUTNURES {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is DTEDUTNURES &&
+        codestado == other.codestado &&
         docu == other.docu &&
         elemento == other.elemento &&
         fecnac == other.fecnac &&
@@ -65,6 +69,7 @@ class _$DTEDUTNURES extends DTEDUTNURES {
   @override
   int get hashCode {
     var _$hash = 0;
+    _$hash = $jc(_$hash, codestado.hashCode);
     _$hash = $jc(_$hash, docu.hashCode);
     _$hash = $jc(_$hash, elemento.hashCode);
     _$hash = $jc(_$hash, fecnac.hashCode);
@@ -81,6 +86,7 @@ class _$DTEDUTNURES extends DTEDUTNURES {
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'DTEDUTNURES')
+          ..add('codestado', codestado)
           ..add('docu', docu)
           ..add('elemento', elemento)
           ..add('fecnac', fecnac)
@@ -96,6 +102,10 @@ class _$DTEDUTNURES extends DTEDUTNURES {
 
 class DTEDUTNURESBuilder implements Builder<DTEDUTNURES, DTEDUTNURESBuilder> {
   _$DTEDUTNURES? _$v;
+
+  String? _codestado;
+  String? get codestado => _$this._codestado;
+  set codestado(String? codestado) => _$this._codestado = codestado;
 
   String? _docu;
   String? get docu => _$this._docu;
@@ -141,6 +151,7 @@ class DTEDUTNURESBuilder implements Builder<DTEDUTNURES, DTEDUTNURESBuilder> {
   DTEDUTNURESBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
+      _codestado = $v.codestado;
       _docu = $v.docu;
       _elemento = $v.elemento?.toBuilder();
       _fecnac = $v.fecnac;
@@ -173,6 +184,7 @@ class DTEDUTNURESBuilder implements Builder<DTEDUTNURES, DTEDUTNURESBuilder> {
     try {
       _$result = _$v ??
           _$DTEDUTNURES._(
+            codestado: codestado,
             docu: docu,
             elemento: _elemento?.build(),
             fecnac: fecnac,

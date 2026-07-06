@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **getDatosResidencia**
-> DTINECDRFRES getDatosResidencia(numDocumento, dTINECDRFREQBody, authorization)
+> DTINECDRFRES getDatosResidencia(numDocumento, DTINECDRFREQ, authorization)
 
 Servicio para obtener los datos de residencia
 
@@ -23,11 +23,11 @@ import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIneApi();
 final String numDocumento = numDocumento_example; // String | 
-final DTINECDRFREQ dTINECDRFREQBody = ; // DTINECDRFREQ | 
+final DTINECDRFREQ DTINECDRFREQ = ; // DTINECDRFREQ | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.getDatosResidencia(numDocumento, dTINECDRFREQBody, authorization);
+    final response = api.getDatosResidencia(numDocumento, DTINECDRFREQ, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling IneApi->getDatosResidencia: $e\n');
@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **numDocumento** | **String**|  | 
- **dTINECDRFREQBody** | [**DTINECDRFREQ**](DTINECDRFREQ.md)|  | 
+ **DTINECDRFREQ** | [**DTINECDRFREQ**](DTINECDRFREQ.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type

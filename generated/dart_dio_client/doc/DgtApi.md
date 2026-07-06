@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **getListaVehiculos**
-> DTDGTLISTADOVEHICULOSRES getListaVehiculos(numDocumento, dTDGTLISTADOVEHICULOSREQBody, authorization)
+> DTDGTLISTADOVEHICULOSRES getListaVehiculos(numDocumento, DTDGTLISTADOVEHICULOSREQ, authorization)
 
 Servicio para consultar el listado de vehiculos
 
@@ -23,11 +23,11 @@ import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getDgtApi();
 final String numDocumento = numDocumento_example; // String | 
-final DTDGTLISTADOVEHICULOSREQ dTDGTLISTADOVEHICULOSREQBody = ; // DTDGTLISTADOVEHICULOSREQ | 
+final DTDGTLISTADOVEHICULOSREQ DTDGTLISTADOVEHICULOSREQ = ; // DTDGTLISTADOVEHICULOSREQ | 
 final String authorization = authorization_example; // String | 
 
 try {
-    final response = api.getListaVehiculos(numDocumento, dTDGTLISTADOVEHICULOSREQBody, authorization);
+    final response = api.getListaVehiculos(numDocumento, DTDGTLISTADOVEHICULOSREQ, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling DgtApi->getListaVehiculos: $e\n');
@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **numDocumento** | **String**|  | 
- **dTDGTLISTADOVEHICULOSREQBody** | [**DTDGTLISTADOVEHICULOSREQ**](DTDGTLISTADOVEHICULOSREQ.md)|  | 
+ **DTDGTLISTADOVEHICULOSREQ** | [**DTDGTLISTADOVEHICULOSREQ**](DTDGTLISTADOVEHICULOSREQ.md)|  | 
  **authorization** | **String**|  | [optional] 
 
 ### Return type

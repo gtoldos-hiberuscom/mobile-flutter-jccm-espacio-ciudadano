@@ -8,7 +8,7 @@ void main() {
   group(ServicioApi, () {
     // Consultar el detalle de un tramite en cesar
     //
-    //Future<ZCSRFCPUBLISELECTBYNIFResponse> miDetalleOperation(DTQUERY dTQUERYBody) async
+    //Future<ZCSRFCPUBLISELECTBYNIFResponse> miDetalleOperation(DTQUERY DTQUERY) async
     test('test miDetalleOperation', () async {
       // TODO
     });

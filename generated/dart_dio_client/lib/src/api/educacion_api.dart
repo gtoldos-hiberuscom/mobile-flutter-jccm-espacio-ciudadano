@@ -25,7 +25,7 @@ class EducacionApi {
   ///
   /// Parameters:
   /// * [numDocumento]
-  /// * [dTEDUTNUREQBody]
+  /// * [DTEDUTNUREQ]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -38,7 +38,7 @@ class EducacionApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<DTEDUTNURES>> getTitulosNoUniversitarios({
     required String numDocumento,
-    required DTEDUTNUREQ dTEDUTNUREQBody,
+    required DTEDUTNUREQ dtedutnureqBody,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -71,7 +71,7 @@ class EducacionApi {
 
     try {
       const _type = FullType(DTEDUTNUREQ);
-      _bodyData = _serializers.serialize(dTEDUTNUREQBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(dtedutnureqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -130,7 +130,7 @@ class EducacionApi {
   ///
   /// Parameters:
   /// * [numDocumento]
-  /// * [dTEDUTUOREQBody]
+  /// * [DTEDUTUOREQ]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -143,7 +143,7 @@ class EducacionApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<DTEDUTUORES>> getTitulosUniversitarios({
     required String numDocumento,
-    required DTEDUTUOREQ dTEDUTUOREQBody,
+    required DTEDUTUOREQ dtedutuoreqBody,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -176,7 +176,7 @@ class EducacionApi {
 
     try {
       const _type = FullType(DTEDUTUOREQ);
-      _bodyData = _serializers.serialize(dTEDUTUOREQBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(dtedutuoreqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -189,19 +189,18 @@ class EducacionApi {
       );
     }
 
-    late final Response<Object> _response;
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
     DTEDUTUORES? _responseData;
 
     try {
-      _response = await _dio.request<Object>(
-        _path,
-        data: _bodyData,
-        options: _options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-
       final rawResponse = _response.data;
       _responseData = rawResponse == null
           ? null

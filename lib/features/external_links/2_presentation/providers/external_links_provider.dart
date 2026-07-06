@@ -17,6 +17,8 @@ final externalLinkCatalogProvider = Provider<ExternalLinkCatalog>((final ref) =>
 ///
 /// Tests can override this provider with a fake implementation that does
 /// not touch the real `url_launcher` plugin.
-final externalLinkLauncherProvider = Provider<ExternalLinkLauncher>((final ref) => UrlLauncherExternalLinkLauncher(
-  catalog: ref.watch(externalLinkCatalogProvider),
-));
+final externalLinkLauncherProvider = Provider<ExternalLinkLauncher>(
+  (final ref) => UrlLauncherExternalLinkLauncher(
+    catalog: ref.watch(externalLinkCatalogProvider),
+  ),
+);

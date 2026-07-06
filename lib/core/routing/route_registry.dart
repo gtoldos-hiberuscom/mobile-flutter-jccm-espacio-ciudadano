@@ -41,6 +41,13 @@ abstract final class Routes {
   static const String home = '/home';
   static const String homeFromDrawer = '$home?from=drawer';
 
+  static const String gestion = '/gestion';
+  static const String gestionAportacion = '/gestion/aportacion';
+  static const String gestionExpedientes = '/gestion/expedientes';
+  static const String gestionNotificaciones = '/gestion/notificaciones';
+  static const String gestionNotificacionesAlta = '/gestion/notificaciones/alta';
+  static const String gestionRegistros = '/gestion/registros';
+  static const String gestionRegistrosDetail = '/gestion/registros/detail';
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
   static const String myDataEmployment = '/my-data/employment';
@@ -77,6 +84,13 @@ abstract final class Routes {
     helpContact,
     supportForm,
     agenda,
+    gestion,
+    gestionAportacion,
+    gestionExpedientes,
+    gestionNotificaciones,
+    gestionNotificacionesAlta,
+    gestionRegistros,
+    gestionRegistrosDetail,
     myData,
     myDataEmployment,
     myDataEmploymentOffers,

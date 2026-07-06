@@ -8,7 +8,7 @@ void main() {
   group(CcaaApi, () {
     // Servicio para obtener los datos de familia numerosa
     //
-    //Future<DTMINHAFPCCCAFNRES> getDatosFamiliaNumerosa(String numDocumento, DTMINHAFPCCCAFNREQ dTMINHAFPCCCAFNREQBody, { String authorization }) async
+    //Future<DTMINHAFPCCCAFNRES> getDatosFamiliaNumerosa(String numDocumento, DTMINHAFPCCCAFNREQ DTMINHAFPCCCAFNREQ, { String authorization }) async
     test('test getDatosFamiliaNumerosa', () async {
       // TODO
     });

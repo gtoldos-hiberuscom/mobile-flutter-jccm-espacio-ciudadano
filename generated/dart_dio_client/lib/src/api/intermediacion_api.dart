@@ -7,9 +7,8 @@ import 'dart:async';
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
 
-import 'package:espacio_ciudadano_api/src/model/request_fachada_discapacidad_interm.dart';
-import 'package:espacio_ciudadano_api/src/model/request_fachada_familia_numerosa_interm.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta_respuesta_fachada_familia_numerosa_interm.dart';
+import 'package:espacio_ciudadano_api/src/model/base_request_intermediacion.dart';
+import 'package:espacio_ciudadano_api/src/model/respuesta_fachada_interm.dart';
 
 class IntermediacionApi {
   final Dio _dio;
@@ -18,11 +17,11 @@ class IntermediacionApi {
 
   const IntermediacionApi(this._dio, this._serializers);
 
-  /// Obtener datos del carné de familia numerosa
-  ///
+  /// Obtener datos de atención a la dependencia
+  /// Consulta la situación actual de las prestaciones en ayuda a la dependencia.
   ///
   /// Parameters:
-  /// * [requestFachadaDiscapacidadInterm]
+  /// * [baseRequestIntermediacion]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -31,10 +30,111 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [String] as data
+  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<String>> obtenerDatosFamiliaNumerosa({
-    required RequestFachadaDiscapacidadInterm requestFachadaDiscapacidadInterm,
+  Future<Response<RespuestaFachadaInterm>>
+      obtenerDatosAtencionDependenciaIntermediacion({
+    required BaseRequestIntermediacion baseRequestIntermediacion,
+    String? authorization,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/intermediacion/atencion-dependencia/datos';
+    final _options = Options(
+      method: r'POST',
+      headers: <String, dynamic>{
+        if (authorization != null) r'Authorization': authorization,
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      contentType: 'application/json',
+      validateStatus: validateStatus,
+    );
+
+    dynamic _bodyData;
+
+    try {
+      const _type = FullType(BaseRequestIntermediacion);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _options.compose(
+          _dio.options,
+          _path,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    RespuestaFachadaInterm? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RespuestaFachadaInterm),
+            ) as RespuestaFachadaInterm;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<RespuestaFachadaInterm>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
+  /// Obtener datos del carné de discapacidad
+  ///
+  ///
+  /// Parameters:
+  /// * [baseRequestIntermediacion]
+  /// * [authorization]
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<RespuestaFachadaInterm>>
+      obtenerDatosDiscapacidadIntermediacion({
+    required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -61,8 +161,8 @@ class IntermediacionApi {
     dynamic _bodyData;
 
     try {
-      const _type = FullType(RequestFachadaDiscapacidadInterm);
-      _bodyData = _serializers.serialize(requestFachadaDiscapacidadInterm,
+      const _type = FullType(BaseRequestIntermediacion);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
@@ -85,11 +185,16 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    String? _responseData;
+    RespuestaFachadaInterm? _responseData;
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : rawResponse as String;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RespuestaFachadaInterm),
+            ) as RespuestaFachadaInterm;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -100,7 +205,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<String>(
+    return Response<RespuestaFachadaInterm>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -112,11 +217,11 @@ class IntermediacionApi {
     );
   }
 
-  /// obtenerDatosFamiliaNumerosaIntermediacion
+  /// Obtener datos del carné de familia numerosa
   ///
   ///
   /// Parameters:
-  /// * [requestFachadaFamiliaNumerosaInterm]
+  /// * [baseRequestIntermediacion]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -125,12 +230,11 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaRespuestaFachadaFamiliaNumerosaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaRespuestaFachadaFamiliaNumerosaInterm>>
+  Future<Response<RespuestaFachadaInterm>>
       obtenerDatosFamiliaNumerosaIntermediacion({
-    required RequestFachadaFamiliaNumerosaInterm
-        requestFachadaFamiliaNumerosaInterm,
+    required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -157,8 +261,8 @@ class IntermediacionApi {
     dynamic _bodyData;
 
     try {
-      const _type = FullType(RequestFachadaFamiliaNumerosaInterm);
-      _bodyData = _serializers.serialize(requestFachadaFamiliaNumerosaInterm,
+      const _type = FullType(BaseRequestIntermediacion);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
@@ -181,7 +285,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaRespuestaFachadaFamiliaNumerosaInterm? _responseData;
+    RespuestaFachadaInterm? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -189,9 +293,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(
-                  RespuestaRespuestaFachadaFamiliaNumerosaInterm),
-            ) as RespuestaRespuestaFachadaFamiliaNumerosaInterm;
+              specifiedType: const FullType(RespuestaFachadaInterm),
+            ) as RespuestaFachadaInterm;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -202,7 +305,406 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaRespuestaFachadaFamiliaNumerosaInterm>(
+    return Response<RespuestaFachadaInterm>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
+  /// Obtener datos de la tarjeta de estacionamiento
+  /// Consulta la información de la tarjeta de estacionamiento en vigor de personas con discapacidad y movilidad reducida de Castilla La Mancha.
+  ///
+  /// Parameters:
+  /// * [baseRequestIntermediacion]
+  /// * [authorization]
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<RespuestaFachadaInterm>>
+      obtenerDatosTarjetaEstacionamientoIntermediacion({
+    required BaseRequestIntermediacion baseRequestIntermediacion,
+    String? authorization,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/intermediacion/tarjeta-estacionamiento/datos';
+    final _options = Options(
+      method: r'POST',
+      headers: <String, dynamic>{
+        if (authorization != null) r'Authorization': authorization,
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      contentType: 'application/json',
+      validateStatus: validateStatus,
+    );
+
+    dynamic _bodyData;
+
+    try {
+      const _type = FullType(BaseRequestIntermediacion);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _options.compose(
+          _dio.options,
+          _path,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    RespuestaFachadaInterm? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RespuestaFachadaInterm),
+            ) as RespuestaFachadaInterm;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<RespuestaFachadaInterm>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
+  /// Obtener datos de termalismo
+  /// Consulta el último balneario adjudicado del programa de termalismo.
+  ///
+  /// Parameters:
+  /// * [baseRequestIntermediacion]
+  /// * [authorization]
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<RespuestaFachadaInterm>>
+      obtenerDatosTermalismoIntermediacion({
+    required BaseRequestIntermediacion baseRequestIntermediacion,
+    String? authorization,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/intermediacion/termalismo/datos';
+    final _options = Options(
+      method: r'POST',
+      headers: <String, dynamic>{
+        if (authorization != null) r'Authorization': authorization,
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      contentType: 'application/json',
+      validateStatus: validateStatus,
+    );
+
+    dynamic _bodyData;
+
+    try {
+      const _type = FullType(BaseRequestIntermediacion);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _options.compose(
+          _dio.options,
+          _path,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    RespuestaFachadaInterm? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RespuestaFachadaInterm),
+            ) as RespuestaFachadaInterm;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<RespuestaFachadaInterm>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
+  /// Consulta las ofertas de empleo inscritas por un ciudadano en la Consejería de Empleo.
+  /// Consulta las ofertas de empleo inscritas por un ciudadano en la Consejería de Empleo.
+  ///
+  /// Parameters:
+  /// * [baseRequestIntermediacion]
+  /// * [authorization]
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<RespuestaFachadaInterm>> obtenerOfertasEmpleoInscritas({
+    required BaseRequestIntermediacion baseRequestIntermediacion,
+    String? authorization,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/intermediacion/empleo/ofertas-inscritas';
+    final _options = Options(
+      method: r'POST',
+      headers: <String, dynamic>{
+        if (authorization != null) r'Authorization': authorization,
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      contentType: 'application/json',
+      validateStatus: validateStatus,
+    );
+
+    dynamic _bodyData;
+
+    try {
+      const _type = FullType(BaseRequestIntermediacion);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _options.compose(
+          _dio.options,
+          _path,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    RespuestaFachadaInterm? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RespuestaFachadaInterm),
+            ) as RespuestaFachadaInterm;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<RespuestaFachadaInterm>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
+  /// Obtener títulos no universitarios
+  /// Consulta los títulos no universitarios de un ciudadano.
+  ///
+  /// Parameters:
+  /// * [baseRequestIntermediacion]
+  /// * [authorization]
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<RespuestaFachadaInterm>>
+      obtenerTitulosNoUniversitariosIntermediacion({
+    required BaseRequestIntermediacion baseRequestIntermediacion,
+    String? authorization,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/intermediacion/titulos-no-universitarios/datos';
+    final _options = Options(
+      method: r'POST',
+      headers: <String, dynamic>{
+        if (authorization != null) r'Authorization': authorization,
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      contentType: 'application/json',
+      validateStatus: validateStatus,
+    );
+
+    dynamic _bodyData;
+
+    try {
+      const _type = FullType(BaseRequestIntermediacion);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion,
+          specifiedType: _type);
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _options.compose(
+          _dio.options,
+          _path,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    RespuestaFachadaInterm? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(RespuestaFachadaInterm),
+            ) as RespuestaFachadaInterm;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<RespuestaFachadaInterm>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

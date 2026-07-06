@@ -23,7 +23,7 @@ class SepeApi {
   ///
   /// Parameters:
   /// * [numDocumento]
-  /// * [dTSEPESVDIDEFAREQBody]
+  /// * [DTSEPESVDIDEFAREQ]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -36,7 +36,7 @@ class SepeApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<DTSEPESVDIDEFARES>> getDemandanteEmpleoFechaActual({
     required String numDocumento,
-    required DTSEPESVDIDEFAREQ dTSEPESVDIDEFAREQBody,
+    required DTSEPESVDIDEFAREQ dtsepesvdidefareqBody,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -70,7 +70,7 @@ class SepeApi {
     try {
       const _type = FullType(DTSEPESVDIDEFAREQ);
       _bodyData =
-          _serializers.serialize(dTSEPESVDIDEFAREQBody, specifiedType: _type);
+          _serializers.serialize(dtsepesvdidefareqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

@@ -3026,4 +3026,253 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myDataHealthAppointmentModality => 'Teleconsulta a demanda';
+
+  @override
+  String get gestionTitle => 'Gestión';
+
+  @override
+  String get gestionExpedientesTitle => 'Mis expedientes';
+
+  @override
+  String get gestionExpedientesDescription => 'Consulta y gestiona tus expedientes administrativos';
+
+  @override
+  String get gestionRegistrosTitle => 'Mis registros';
+
+  @override
+  String get gestionRegistrosDescription => 'Accede a tus entradas y salidas de registro';
+
+  @override
+  String get gestionAportacionTitle => 'Aportar documentos a un expediente de terceros';
+
+  @override
+  String get gestionAportacionDescription => 'Adjunta documentación a expedientes de otras personas';
+
+  @override
+  String get gestionNotificacionesTitle => 'Mis notificaciones';
+
+  @override
+  String get gestionNotificacionesDescription => 'Gestiona tus notificaciones electrónicas';
+
+  @override
+  String get gestionSectionComingSoon => 'Función disponible próximamente';
+
+  @override
+  String get gestionExpedientesPageTitle => 'Mis expedientes';
+
+  @override
+  String get gestionExpedientesNumExpedienteLabel => 'Nº EXPEDIENTE.';
+
+  @override
+  String get gestionExpedientesFechaInicioLabel => 'FECHA DE INICIO';
+
+  @override
+  String get gestionExpedientesEstadoLabel => 'ESTADO';
+
+  @override
+  String get gestionExpedientesLoadError => 'No hemos podido cargar tus expedientes';
+
+  @override
+  String get gestionExpedientesEmpty => 'No tienes expedientes activos';
+
+  @override
+  String get gestionRegistrosPageTitle => 'Mis registros';
+
+  @override
+  String get gestionRegistrosEntradasTab => 'Entradas de registro';
+
+  @override
+  String get gestionRegistrosSalidasTab => 'Salidas de registro';
+
+  @override
+  String get gestionRegistrosNumRegistroLabel => 'Nº REGISTRO';
+
+  @override
+  String get gestionRegistrosFechaLabel => 'FECHA';
+
+  @override
+  String get gestionRegistrosConsejeriaOrigenLabel => 'CONSERJERÍA DE ORIGEN';
+
+  @override
+  String get gestionRegistrosConsejeriaDestinoLabel => 'CONSERJERÍA DE DESTINO';
+
+  @override
+  String get gestionRegistrosDatosRegistroTitle => 'Datos del Registro';
+
+  @override
+  String get gestionRegistrosEntradasLoadError => 'No hemos podido cargar tus entradas de registro';
+
+  @override
+  String get gestionRegistrosSalidasLoadError => 'No hemos podido cargar tus salidas de registro';
+
+  @override
+  String get gestionRegistrosEntradasEmpty => 'No tienes entradas de registro';
+
+  @override
+  String get gestionRegistrosSalidasEmpty => 'No tienes salidas de registro';
+
+  @override
+  String get gestionRegistrosDetalleEntradaTitle => 'Detalle de entrada de registro';
+
+  @override
+  String get gestionRegistrosDetalleSalidaTitle => 'Detalle salida de registro';
+
+  @override
+  String get gestionAportacionTipoIdLabel => 'Tipo de identificación y número';
+
+  @override
+  String get gestionAportacionTipoIdHint => '000000000A';
+
+  @override
+  String get gestionAportacionTipoIdHelper => 'El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos';
+
+  @override
+  String get gestionAportacionIntroText => 'Consulta el expediente sobre el que quieres aportar documentación';
+
+  @override
+  String get gestionAportacionPersonaLabel => 'IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE';
+
+  @override
+  String get gestionAportacionExpedienteLabel => 'INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN';
+
+  @override
+  String get gestionAportacionExpedienteNote => '*Rellenar solo uno de los dos campos';
+
+  @override
+  String get gestionAportacionNumRegistroLabel => 'NÚMERO DE REGISTRO DEL EXPEDIENTE';
+
+  @override
+  String get gestionAportacionNumRegistroHint => '000 0 00000 0 00';
+
+  @override
+  String get gestionAportacionNumRegistroHelper => 'Este número se obtiene en el momento de la presentación del expediente';
+
+  @override
+  String get gestionAportacionCodIdentificadorLabel => 'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE';
+
+  @override
+  String get gestionAportacionCodIdentificadorHint => 'Ejemplo: 600 000 000';
+
+  @override
+  String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';
+
+  @override
+  String get gestionAportacionInfoTitle => 'Aportación de documentos de terceros';
+
+  @override
+  String get gestionAportacionInfoBody => 'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.';
+
+  @override
+  String get gestionAportacionSeleccionarTipo => 'Seleccionar tipo de documento';
+
+  @override
+  String get gestionAportacionDni => 'DNI';
+
+  @override
+  String get gestionAportacionNie => 'NIE';
+
+  @override
+  String get gestionAportacionCif => 'CIF';
+
+  @override
+  String get gestionAportacionPasaporte => 'Pasaporte';
+
+  @override
+  String get gestionAportacionCee => 'CEE';
+
+  @override
+  String get gestionAportacionFindButton => 'Encontrar expediente';
+
+  @override
+  String get gestionNotificacionesContextualMessage => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
+  String get gestionNotificacionesContextualAction => 'Activar';
+
+  @override
+  String get gestionNotificacionesAltaTitle => 'Activar notificaciones';
+
+  @override
+  String get gestionNotificacionesAltaIntro => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
+  String get gestionNotificacionesAltaRequiredNote => '*Obligatorio rellenar al menos uno de los medios de contacto';
+
+  @override
+  String get gestionNotificacionesAltaPhoneLabel => 'Teléfono móvil';
+
+  @override
+  String get gestionNotificacionesAltaPhoneHint => '600 000 000';
+
+  @override
+  String get gestionNotificacionesAltaPhoneHelper => 'Para recibir las notificaciones en mensaje SMS';
+
+  @override
+  String get gestionNotificacionesAltaEmailLabel => 'Correo electrónico';
+
+  @override
+  String get gestionNotificacionesAltaEmailHint => 'Ejemplo: mperez@correo.es';
+
+  @override
+  String get gestionNotificacionesAltaEmailHelper => 'Para recibir las notificaciones en tu correo electrónico';
+
+  @override
+  String get gestionNotificacionesAltaSaveButton => 'Dar de alta notificaciones';
+
+  @override
+  String get gestionNotificacionesAltaInfoTitle => 'Datos de contacto';
+
+  @override
+  String get gestionNotificacionesAltaInfoBody => 'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.';
+
+  @override
+  String get gestionNotificacionesAltaErrorAtLeastOne => 'Debes indicar al menos un teléfono móvil o un correo electrónico.';
+
+  @override
+  String get gestionNotificacionesAltaErrorPhone => 'Introduce un teléfono móvil válido.';
+
+  @override
+  String get gestionNotificacionesAltaErrorEmail => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get gestionNotificacionesAltaErrorNoCitizenId => 'No hemos podido identificar al ciudadano.';
+
+  @override
+  String get gestionNotificacionesAltaSuccessMessage => 'Datos de contacto guardados';
+
+  @override
+  String get gestionNotificacionesPageTitle => 'Mis notificaciones';
+
+  @override
+  String get gestionNotificacionesTabTodo => 'Todo';
+
+  @override
+  String get gestionNotificacionesTabPendientes => 'Pendientes';
+
+  @override
+  String get gestionNotificacionesTabAceptadas => 'Aceptadas';
+
+  @override
+  String get gestionNotificacionesProcedimientoLabel => 'Procedimiento';
+
+  @override
+  String get gestionNotificacionesFechaCaducidadLabel => 'Fecha expiración';
+
+  @override
+  String get gestionNotificacionesTagPendiente => 'Pendiente';
+
+  @override
+  String get gestionNotificacionesTagAceptada => 'Aceptada';
+
+  @override
+  String get gestionNotificacionesTagRechazada => 'Rechazada';
+
+  @override
+  String get gestionNotificacionesTagExpirada => 'Expirada';
+
+  @override
+  String get gestionNotificacionesEmpty => 'No tienes notificaciones en este momento';
+
+  @override
+  String get gestionNotificacionesLoadError => 'No se han podido cargar las notificaciones';
 }

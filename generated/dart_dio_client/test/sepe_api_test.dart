@@ -8,7 +8,7 @@ void main() {
   group(SepeApi, () {
     // Servicio para obtener los datos de demandante de empleo a Fecha Actual
     //
-    //Future<DTSEPESVDIDEFARES> getDemandanteEmpleoFechaActual(String numDocumento, DTSEPESVDIDEFAREQ dTSEPESVDIDEFAREQBody, { String authorization }) async
+    //Future<DTSEPESVDIDEFARES> getDemandanteEmpleoFechaActual(String numDocumento, DTSEPESVDIDEFAREQ DTSEPESVDIDEFAREQ, { String authorization }) async
     test('test getDemandanteEmpleoFechaActual', () async {
       // TODO
     });

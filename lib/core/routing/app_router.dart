@@ -10,6 +10,14 @@ import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_pag
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/pages/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pages/design_system_catalog_page.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportacion_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expedientes_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_alta_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registro_detail_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registros_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/help_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
@@ -167,6 +175,44 @@ final goRouterProvider = Provider<GoRouter>(
                   key: state.pageKey,
                   child: page,
                 );
+              },
+            ),
+
+            GoRoute(
+              path: Routes.gestion,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionAportacion,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionAportacionPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionNotificaciones,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionNotificacionesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionNotificacionesAlta,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionNotificacionesAltaPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionExpedientes,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionExpedientesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionRegistros,
+              builder: (final BuildContext context, final GoRouterState state) => const GestionRegistrosPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionRegistrosDetail,
+              builder: (final BuildContext context, final GoRouterState state) {
+                final args = state.extra! as (Registro, bool);
+                return GestionRegistroDetailPage(registro: args.$1, isEntrada: args.$2);
               },
             ),
 

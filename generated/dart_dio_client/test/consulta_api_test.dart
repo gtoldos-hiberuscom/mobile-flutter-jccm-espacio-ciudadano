@@ -8,7 +8,7 @@ void main() {
   group(ConsultaApi, () {
     // Consultar el servicio para obtener el texto de la consulta o reclamacion y la respuesta
     //
-    //Future<ZCSRFCCONSULTAFAQResponse> miConsultafaqOperation(ZCSRFCCONSULTAFAQ zCSRFCCONSULTAFAQBody) async
+    //Future<ZCSRFCCONSULTAFAQResponse> miConsultafaqOperation(ZCSRFCCONSULTAFAQ ZCSRFCCONSULTAFAQ) async
     test('test miConsultafaqOperation', () async {
       // TODO
     });

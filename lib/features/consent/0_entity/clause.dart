@@ -24,19 +24,14 @@ final class Clause {
   final String version;
 
   Clause copyWith({final bool? isSelected}) => Clause(
-        id: id,
-        label: label,
-        isSelected: isSelected ?? this.isSelected,
-        version: version,
-      );
+    id: id,
+    label: label,
+    isSelected: isSelected ?? this.isSelected,
+    version: version,
+  );
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is Clause &&
-          id == other.id &&
-          isSelected == other.isSelected &&
-          version == other.version;
+  bool operator ==(final Object other) => identical(this, other) || other is Clause && id == other.id && isSelected == other.isSelected && version == other.version;
 
   @override
   int get hashCode => Object.hash(id, isSelected, version);

@@ -31,7 +31,7 @@ class PublicacionApi {
   ///
   ///
   /// Parameters:
-  /// * [dTQUERYBody]
+  /// * [DTQUERY]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -42,7 +42,7 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRFCPUBLISELECTBYNIFResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> miDetalleOperation({
-    required DTQUERY dTQUERYBody,
+    required DTQUERY dtqueryBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -68,7 +68,7 @@ class PublicacionApi {
 
     try {
       const _type = FullType(DTQUERY);
-      _bodyData = _serializers.serialize(dTQUERYBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(dtqueryBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -126,7 +126,7 @@ class PublicacionApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSRFCDOCSFIRMADOSPFEXPTEBody]
+  /// * [ZCSRFCDOCSFIRMADOSPFEXPTE]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -137,7 +137,7 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRFCDOCSFIRMADOSPFEXPTEResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCDOCSFIRMADOSPFEXPTEResponse>> miDocsfirmados({
-    required ZCSRFCDOCSFIRMADOSPFEXPTE zCSRFCDOCSFIRMADOSPFEXPTEBody,
+    required ZCSRFCDOCSFIRMADOSPFEXPTE zcsrfcdocsfirmadospfexpteBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -163,7 +163,7 @@ class PublicacionApi {
 
     try {
       const _type = FullType(ZCSRFCDOCSFIRMADOSPFEXPTE);
-      _bodyData = _serializers.serialize(zCSRFCDOCSFIRMADOSPFEXPTEBody,
+      _bodyData = _serializers.serialize(zcsrfcdocsfirmadospfexpteBody,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
@@ -222,7 +222,7 @@ class PublicacionApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSRFCPUBLISELECTBYNUMREGBody]
+  /// * [ZCSRFCPUBLISELECTBYNUMREG]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -233,7 +233,7 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRFCPUBLISELECTBYNUMREGResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCPUBLISELECTBYNUMREGResponse>> myPubliNumRegOperation({
-    required ZCSRFCPUBLISELECTBYNUMREG zCSRFCPUBLISELECTBYNUMREGBody,
+    required ZCSRFCPUBLISELECTBYNUMREG zcsrfcpubliselectbynumregBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -259,7 +259,7 @@ class PublicacionApi {
 
     try {
       const _type = FullType(ZCSRFCPUBLISELECTBYNUMREG);
-      _bodyData = _serializers.serialize(zCSRFCPUBLISELECTBYNUMREGBody,
+      _bodyData = _serializers.serialize(zcsrfcpubliselectbynumregBody,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
@@ -318,7 +318,7 @@ class PublicacionApi {
   ///
   ///
   /// Parameters:
-  /// * [dTSELECTBYNIFREQBody]
+  /// * [DTSELECTBYNIFREQ]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -329,7 +329,7 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRFCPUBLISELECTBYNIFResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> myPubliSelecByNifOperation({
-    required DTSELECTBYNIFREQ dTSELECTBYNIFREQBody,
+    required DTSELECTBYNIFREQ dtselectbynifreqBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -356,7 +356,7 @@ class PublicacionApi {
     try {
       const _type = FullType(DTSELECTBYNIFREQ);
       _bodyData =
-          _serializers.serialize(dTSELECTBYNIFREQBody, specifiedType: _type);
+          _serializers.serialize(dtselectbynifreqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -705,7 +705,7 @@ class PublicacionApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSRFCPUBLISELECTBYNUMEXPBody]
+  /// * [ZCSRFCPUBLISELECTBYNUMEXP]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -717,7 +717,7 @@ class PublicacionApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCPUBLISELECTBYNUMEXPResponse>>
       myPubliSelecByNumExpOperation({
-    required ZCSRFCPUBLISELECTBYNUMEXP zCSRFCPUBLISELECTBYNUMEXPBody,
+    required ZCSRFCPUBLISELECTBYNUMEXP zcsrfcpubliselectbynumexpBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -743,7 +743,7 @@ class PublicacionApi {
 
     try {
       const _type = FullType(ZCSRFCPUBLISELECTBYNUMEXP);
-      _bodyData = _serializers.serialize(zCSRFCPUBLISELECTBYNUMEXPBody,
+      _bodyData = _serializers.serialize(zcsrfcpubliselectbynumexpBody,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
@@ -802,7 +802,7 @@ class PublicacionApi {
   ///
   ///
   /// Parameters:
-  /// * [zCSRFCMISEXPEDIENTESBody]
+  /// * [ZCSRFCMISEXPEDIENTES]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -813,7 +813,7 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [ZCSRFCMISEXPEDIENTESResponse] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<ZCSRFCMISEXPEDIENTESResponse>> siMisExpedientesOperation({
-    required ZCSRFCMISEXPEDIENTES zCSRFCMISEXPEDIENTESBody,
+    required ZCSRFCMISEXPEDIENTES zcsrfcmisexpedientesBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -839,7 +839,7 @@ class PublicacionApi {
 
     try {
       const _type = FullType(ZCSRFCMISEXPEDIENTES);
-      _bodyData = _serializers.serialize(zCSRFCMISEXPEDIENTESBody,
+      _bodyData = _serializers.serialize(zcsrfcmisexpedientesBody,
           specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(

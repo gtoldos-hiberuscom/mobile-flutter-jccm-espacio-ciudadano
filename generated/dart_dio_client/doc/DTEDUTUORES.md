@@ -8,6 +8,7 @@ import 'package:espacio_ciudadano_api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**codestado** | **String** |  | [optional] 
 **docu** | **String** |  | [optional] 
 **elemento** | [**BuiltList&lt;ELEMENTO&gt;**](ELEMENTO.md) |  | [optional] 
 **fecnac** | **String** |  | [optional] 

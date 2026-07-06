@@ -6,8 +6,7 @@ sealed class CheckLifeEventsOnboardingResult {
   const CheckLifeEventsOnboardingResult();
 }
 
-class CheckLifeEventsOnboardingSuccess
-    extends CheckLifeEventsOnboardingResult {
+class CheckLifeEventsOnboardingSuccess extends CheckLifeEventsOnboardingResult {
   const CheckLifeEventsOnboardingSuccess(this.hasSeen);
   final bool hasSeen;
 }

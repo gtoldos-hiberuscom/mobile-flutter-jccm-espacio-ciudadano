@@ -5905,6 +5905,504 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Teleconsulta a demanda'**
   String get myDataHealthAppointmentModality;
+
+  /// Título de la pantalla principal de Gestión.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestión'**
+  String get gestionTitle;
+
+  /// Título de la tarjeta de navegación a Mis expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get gestionExpedientesTitle;
+
+  /// Descripción de la tarjeta de navegación a Mis expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta y gestiona tus expedientes administrativos'**
+  String get gestionExpedientesDescription;
+
+  /// Título de la tarjeta de navegación a Mis registros.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis registros'**
+  String get gestionRegistrosTitle;
+
+  /// Descripción de la tarjeta de navegación a Mis registros.
+  ///
+  /// In es, this message translates to:
+  /// **'Accede a tus entradas y salidas de registro'**
+  String get gestionRegistrosDescription;
+
+  /// Título de la tarjeta de navegación para aportar documentos a expedientes de terceros.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentos a un expediente de terceros'**
+  String get gestionAportacionTitle;
+
+  /// Descripción de la tarjeta de navegación para aportar documentos a expedientes de terceros.
+  ///
+  /// In es, this message translates to:
+  /// **'Adjunta documentación a expedientes de otras personas'**
+  String get gestionAportacionDescription;
+
+  /// Título de la tarjeta de navegación a Mis notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis notificaciones'**
+  String get gestionNotificacionesTitle;
+
+  /// Descripción de la tarjeta de navegación a Mis notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona tus notificaciones electrónicas'**
+  String get gestionNotificacionesDescription;
+
+  /// Mensaje cuando una sección de Gestión aún no está implementada.
+  ///
+  /// In es, this message translates to:
+  /// **'Función disponible próximamente'**
+  String get gestionSectionComingSoon;
+
+  /// Título de la pantalla de listado de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis expedientes'**
+  String get gestionExpedientesPageTitle;
+
+  /// Etiqueta del número de expediente en la tarjeta.
+  ///
+  /// In es, this message translates to:
+  /// **'Nº EXPEDIENTE.'**
+  String get gestionExpedientesNumExpedienteLabel;
+
+  /// Etiqueta de la fecha de inicio en la tarjeta de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA DE INICIO'**
+  String get gestionExpedientesFechaInicioLabel;
+
+  /// Etiqueta del estado en la tarjeta de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'ESTADO'**
+  String get gestionExpedientesEstadoLabel;
+
+  /// Error al cargar la lista de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus expedientes'**
+  String get gestionExpedientesLoadError;
+
+  /// Mensaje de lista vacía en la pantalla de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes expedientes activos'**
+  String get gestionExpedientesEmpty;
+
+  /// Título de la pantalla de mis registros.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis registros'**
+  String get gestionRegistrosPageTitle;
+
+  /// Etiqueta del tab de entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Entradas de registro'**
+  String get gestionRegistrosEntradasTab;
+
+  /// Etiqueta del tab de salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Salidas de registro'**
+  String get gestionRegistrosSalidasTab;
+
+  /// Etiqueta del campo número de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Nº REGISTRO'**
+  String get gestionRegistrosNumRegistroLabel;
+
+  /// Etiqueta del campo fecha de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA'**
+  String get gestionRegistrosFechaLabel;
+
+  /// Etiqueta del campo consejería de origen (salidas).
+  ///
+  /// In es, this message translates to:
+  /// **'CONSERJERÍA DE ORIGEN'**
+  String get gestionRegistrosConsejeriaOrigenLabel;
+
+  /// Etiqueta del campo consejería de destino (entradas).
+  ///
+  /// In es, this message translates to:
+  /// **'CONSERJERÍA DE DESTINO'**
+  String get gestionRegistrosConsejeriaDestinoLabel;
+
+  /// Título de la sección de datos del registro en el detalle.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del Registro'**
+  String get gestionRegistrosDatosRegistroTitle;
+
+  /// Error al cargar la lista de entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus entradas de registro'**
+  String get gestionRegistrosEntradasLoadError;
+
+  /// Error al cargar la lista de salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus salidas de registro'**
+  String get gestionRegistrosSalidasLoadError;
+
+  /// Mensaje de lista vacía para entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes entradas de registro'**
+  String get gestionRegistrosEntradasEmpty;
+
+  /// Mensaje de lista vacía para salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes salidas de registro'**
+  String get gestionRegistrosSalidasEmpty;
+
+  /// Título de la pantalla de detalle de entrada de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de entrada de registro'**
+  String get gestionRegistrosDetalleEntradaTitle;
+
+  /// Título de la pantalla de detalle de salida de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle salida de registro'**
+  String get gestionRegistrosDetalleSalidaTitle;
+
+  /// Label del campo de tipo de identificación y número en la pantalla de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de identificación y número'**
+  String get gestionAportacionTipoIdLabel;
+
+  /// Placeholder del campo de número de identificación en la pantalla de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'000000000A'**
+  String get gestionAportacionTipoIdHint;
+
+  /// Texto de ayuda del campo de tipo de identificación.
+  ///
+  /// In es, this message translates to:
+  /// **'El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos'**
+  String get gestionAportacionTipoIdHelper;
+
+  /// Texto introductorio de la pantalla de aportación de documentos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta el expediente sobre el que quieres aportar documentación'**
+  String get gestionAportacionIntroText;
+
+  /// Etiqueta de sección para identificar a la persona interesada.
+  ///
+  /// In es, this message translates to:
+  /// **'IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE'**
+  String get gestionAportacionPersonaLabel;
+
+  /// Etiqueta de sección para indicar el expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN'**
+  String get gestionAportacionExpedienteLabel;
+
+  /// Nota informativa de los campos del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'*Rellenar solo uno de los dos campos'**
+  String get gestionAportacionExpedienteNote;
+
+  /// Label del campo número de registro del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'NÚMERO DE REGISTRO DEL EXPEDIENTE'**
+  String get gestionAportacionNumRegistroLabel;
+
+  /// Placeholder del campo número de registro del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'000 0 00000 0 00'**
+  String get gestionAportacionNumRegistroHint;
+
+  /// Texto de ayuda del campo número de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Este número se obtiene en el momento de la presentación del expediente'**
+  String get gestionAportacionNumRegistroHelper;
+
+  /// Label del campo código identificador del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE'**
+  String get gestionAportacionCodIdentificadorLabel;
+
+  /// Placeholder del campo código identificador del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo: 600 000 000'**
+  String get gestionAportacionCodIdentificadorHint;
+
+  /// Texto de ayuda del campo código identificador.
+  ///
+  /// In es, this message translates to:
+  /// **'Este número se encuentra en la documentación del expediente'**
+  String get gestionAportacionCodIdentificadorHelper;
+
+  /// Título del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportación de documentos de terceros'**
+  String get gestionAportacionInfoTitle;
+
+  /// Cuerpo del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.'**
+  String get gestionAportacionInfoBody;
+
+  /// Título del bottom sheet para seleccionar tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar tipo de documento'**
+  String get gestionAportacionSeleccionarTipo;
+
+  /// Opción DNI en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'DNI'**
+  String get gestionAportacionDni;
+
+  /// Opción NIE en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'NIE'**
+  String get gestionAportacionNie;
+
+  /// Opción CIF en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'CIF'**
+  String get gestionAportacionCif;
+
+  /// Opción Pasaporte en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasaporte'**
+  String get gestionAportacionPasaporte;
+
+  /// Opción CEE en el selector de tipo de documento.
+  ///
+  /// In es, this message translates to:
+  /// **'CEE'**
+  String get gestionAportacionCee;
+
+  /// Texto del botón principal del formulario de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Encontrar expediente'**
+  String get gestionAportacionFindButton;
+
+  /// Texto del helper contextual bajo la card desactivada de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.'**
+  String get gestionNotificacionesContextualMessage;
+
+  /// Etiqueta del botón ghost del helper contextual de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar'**
+  String get gestionNotificacionesContextualAction;
+
+  /// Título del NavBar de la pantalla de activación de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar notificaciones'**
+  String get gestionNotificacionesAltaTitle;
+
+  /// Texto introductorio de la pantalla de activación de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.'**
+  String get gestionNotificacionesAltaIntro;
+
+  /// Nota de campo obligatorio en la pantalla de activación de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'*Obligatorio rellenar al menos uno de los medios de contacto'**
+  String get gestionNotificacionesAltaRequiredNote;
+
+  /// Etiqueta del campo de teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Teléfono móvil'**
+  String get gestionNotificacionesAltaPhoneLabel;
+
+  /// Placeholder del campo de teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'600 000 000'**
+  String get gestionNotificacionesAltaPhoneHint;
+
+  /// Texto de ayuda bajo el campo de teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Para recibir las notificaciones en mensaje SMS'**
+  String get gestionNotificacionesAltaPhoneHelper;
+
+  /// Etiqueta del campo de email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get gestionNotificacionesAltaEmailLabel;
+
+  /// Placeholder del campo de email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo: mperez@correo.es'**
+  String get gestionNotificacionesAltaEmailHint;
+
+  /// Texto de ayuda bajo el campo de email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Para recibir las notificaciones en tu correo electrónico'**
+  String get gestionNotificacionesAltaEmailHelper;
+
+  /// Etiqueta del botón principal sticky de la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Dar de alta notificaciones'**
+  String get gestionNotificacionesAltaSaveButton;
+
+  /// Título del bottom sheet informativo de la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto'**
+  String get gestionNotificacionesAltaInfoTitle;
+
+  /// Cuerpo del bottom sheet informativo de la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.'**
+  String get gestionNotificacionesAltaInfoBody;
+
+  /// Error de validación cuando no se rellena ningún campo de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes indicar al menos un teléfono móvil o un correo electrónico.'**
+  String get gestionNotificacionesAltaErrorAtLeastOne;
+
+  /// Error de validación del teléfono en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un teléfono móvil válido.'**
+  String get gestionNotificacionesAltaErrorPhone;
+
+  /// Error de validación del email en la pantalla de activación.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce un correo electrónico válido.'**
+  String get gestionNotificacionesAltaErrorEmail;
+
+  /// Error cuando no se puede obtener el ID del ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido identificar al ciudadano.'**
+  String get gestionNotificacionesAltaErrorNoCitizenId;
+
+  /// Mensaje de éxito tras guardar los datos de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto guardados'**
+  String get gestionNotificacionesAltaSuccessMessage;
+
+  /// Título de la pantalla de listado de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis notificaciones'**
+  String get gestionNotificacionesPageTitle;
+
+  /// Pestaña 'Todo' en el filtro de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo'**
+  String get gestionNotificacionesTabTodo;
+
+  /// Pestaña 'Pendientes' en el filtro de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendientes'**
+  String get gestionNotificacionesTabPendientes;
+
+  /// Pestaña 'Aceptadas' en el filtro de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptadas'**
+  String get gestionNotificacionesTabAceptadas;
+
+  /// Etiqueta del campo procedimiento en la card de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Procedimiento'**
+  String get gestionNotificacionesProcedimientoLabel;
+
+  /// Etiqueta del campo fecha de caducidad en la card de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha expiración'**
+  String get gestionNotificacionesFechaCaducidadLabel;
+
+  /// Etiqueta del tag de estado pendiente en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get gestionNotificacionesTagPendiente;
+
+  /// Etiqueta del tag de estado aceptada en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptada'**
+  String get gestionNotificacionesTagAceptada;
+
+  /// Etiqueta del tag de estado rechazada en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazada'**
+  String get gestionNotificacionesTagRechazada;
+
+  /// Etiqueta del tag de estado expirada en notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Expirada'**
+  String get gestionNotificacionesTagExpirada;
+
+  /// Mensaje de lista vacía en la pantalla de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes notificaciones en este momento'**
+  String get gestionNotificacionesEmpty;
+
+  /// Mensaje de error al cargar la lista de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'No se han podido cargar las notificaciones'**
+  String get gestionNotificacionesLoadError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

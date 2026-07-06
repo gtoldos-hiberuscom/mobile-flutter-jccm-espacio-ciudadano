@@ -8,6 +8,8 @@ part of 'dtdgtlistadovehiculosres.dart';
 
 class _$DTDGTLISTADOVEHICULOSRES extends DTDGTLISTADOVEHICULOSRES {
   @override
+  final String? codestado;
+  @override
   final String? idepeticion;
   @override
   final LISTAVEHICULOS? listavehiculos;
@@ -21,7 +23,11 @@ class _$DTDGTLISTADOVEHICULOSRES extends DTDGTLISTADOVEHICULOSRES {
       (DTDGTLISTADOVEHICULOSRESBuilder()..update(updates))._build();
 
   _$DTDGTLISTADOVEHICULOSRES._(
-      {this.idepeticion, this.listavehiculos, this.mensaje, this.resul})
+      {this.codestado,
+      this.idepeticion,
+      this.listavehiculos,
+      this.mensaje,
+      this.resul})
       : super._();
   @override
   DTDGTLISTADOVEHICULOSRES rebuild(
@@ -36,6 +42,7 @@ class _$DTDGTLISTADOVEHICULOSRES extends DTDGTLISTADOVEHICULOSRES {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is DTDGTLISTADOVEHICULOSRES &&
+        codestado == other.codestado &&
         idepeticion == other.idepeticion &&
         listavehiculos == other.listavehiculos &&
         mensaje == other.mensaje &&
@@ -45,6 +52,7 @@ class _$DTDGTLISTADOVEHICULOSRES extends DTDGTLISTADOVEHICULOSRES {
   @override
   int get hashCode {
     var _$hash = 0;
+    _$hash = $jc(_$hash, codestado.hashCode);
     _$hash = $jc(_$hash, idepeticion.hashCode);
     _$hash = $jc(_$hash, listavehiculos.hashCode);
     _$hash = $jc(_$hash, mensaje.hashCode);
@@ -56,6 +64,7 @@ class _$DTDGTLISTADOVEHICULOSRES extends DTDGTLISTADOVEHICULOSRES {
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'DTDGTLISTADOVEHICULOSRES')
+          ..add('codestado', codestado)
           ..add('idepeticion', idepeticion)
           ..add('listavehiculos', listavehiculos)
           ..add('mensaje', mensaje)
@@ -68,6 +77,10 @@ class DTDGTLISTADOVEHICULOSRESBuilder
     implements
         Builder<DTDGTLISTADOVEHICULOSRES, DTDGTLISTADOVEHICULOSRESBuilder> {
   _$DTDGTLISTADOVEHICULOSRES? _$v;
+
+  String? _codestado;
+  String? get codestado => _$this._codestado;
+  set codestado(String? codestado) => _$this._codestado = codestado;
 
   String? _idepeticion;
   String? get idepeticion => _$this._idepeticion;
@@ -94,6 +107,7 @@ class DTDGTLISTADOVEHICULOSRESBuilder
   DTDGTLISTADOVEHICULOSRESBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
+      _codestado = $v.codestado;
       _idepeticion = $v.idepeticion;
       _listavehiculos = $v.listavehiculos?.toBuilder();
       _mensaje = $v.mensaje;
@@ -121,6 +135,7 @@ class DTDGTLISTADOVEHICULOSRESBuilder
     try {
       _$result = _$v ??
           _$DTDGTLISTADOVEHICULOSRES._(
+            codestado: codestado,
             idepeticion: idepeticion,
             listavehiculos: _listavehiculos?.build(),
             mensaje: mensaje,

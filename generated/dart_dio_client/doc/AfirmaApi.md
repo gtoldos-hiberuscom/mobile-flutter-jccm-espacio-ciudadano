@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 
 # **miListarDocumentosReq**
-> ZCSVECResponse miListarDocumentosReq(zCSLISTARTIPOSDOCBody)
+> ZCSVECResponse miListarDocumentosReq(ZCSLISTARTIPOSDOC)
 
 Consultar el listado de los tipos de documentos en cesar
 
@@ -23,10 +23,10 @@ Consultar el listado de los tipos de documentos en cesar
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getAfirmaApi();
-final ZCSLISTARTIPOSDOC zCSLISTARTIPOSDOCBody = ; // ZCSLISTARTIPOSDOC | 
+final ZCSLISTARTIPOSDOC ZCSLISTARTIPOSDOC = ; // ZCSLISTARTIPOSDOC | 
 
 try {
-    final response = api.miListarDocumentosReq(zCSLISTARTIPOSDOCBody);
+    final response = api.miListarDocumentosReq(ZCSLISTARTIPOSDOC);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling AfirmaApi->miListarDocumentosReq: $e\n');
@@ -37,7 +37,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSLISTARTIPOSDOCBody** | [**ZCSLISTARTIPOSDOC**](ZCSLISTARTIPOSDOC.md)|  | 
+ **ZCSLISTARTIPOSDOC** | [**ZCSLISTARTIPOSDOC**](ZCSLISTARTIPOSDOC.md)|  | 
 
 ### Return type
 
@@ -55,7 +55,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **miVecReq**
-> ZCSVECResponse miVecReq(zCSVECBody)
+> ZCSVECResponse miVecReq(ZCSVEC)
 
 Consultar el servicio para la validación de la firma en cesar
 
@@ -64,10 +64,10 @@ Consultar el servicio para la validación de la firma en cesar
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getAfirmaApi();
-final ZCSVEC zCSVECBody = ; // ZCSVEC | 
+final ZCSVEC ZCSVEC = ; // ZCSVEC | 
 
 try {
-    final response = api.miVecReq(zCSVECBody);
+    final response = api.miVecReq(ZCSVEC);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling AfirmaApi->miVecReq: $e\n');
@@ -78,7 +78,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSVECBody** | [**ZCSVEC**](ZCSVEC.md)|  | 
+ **ZCSVEC** | [**ZCSVEC**](ZCSVEC.md)|  | 
 
 ### Return type
 

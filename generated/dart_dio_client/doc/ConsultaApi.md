@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **miConsultafaqOperation**
-> ZCSRFCCONSULTAFAQResponse miConsultafaqOperation(zCSRFCCONSULTAFAQBody)
+> ZCSRFCCONSULTAFAQResponse miConsultafaqOperation(ZCSRFCCONSULTAFAQ)
 
 Consultar el servicio para obtener el texto de la consulta o reclamacion y la respuesta
 
@@ -22,10 +22,10 @@ Consultar el servicio para obtener el texto de la consulta o reclamacion y la re
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getConsultaApi();
-final ZCSRFCCONSULTAFAQ zCSRFCCONSULTAFAQBody = ; // ZCSRFCCONSULTAFAQ | 
+final ZCSRFCCONSULTAFAQ ZCSRFCCONSULTAFAQ = ; // ZCSRFCCONSULTAFAQ | 
 
 try {
-    final response = api.miConsultafaqOperation(zCSRFCCONSULTAFAQBody);
+    final response = api.miConsultafaqOperation(ZCSRFCCONSULTAFAQ);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ConsultaApi->miConsultafaqOperation: $e\n');
@@ -36,7 +36,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **zCSRFCCONSULTAFAQBody** | [**ZCSRFCCONSULTAFAQ**](ZCSRFCCONSULTAFAQ.md)|  | 
+ **ZCSRFCCONSULTAFAQ** | [**ZCSRFCCONSULTAFAQ**](ZCSRFCCONSULTAFAQ.md)|  | 
 
 ### Return type
 

@@ -8,7 +8,7 @@ void main() {
   group(IneApi, () {
     // Servicio para obtener los datos de residencia
     //
-    //Future<DTINECDRFRES> getDatosResidencia(String numDocumento, DTINECDRFREQ dTINECDRFREQBody, { String authorization }) async
+    //Future<DTINECDRFRES> getDatosResidencia(String numDocumento, DTINECDRFREQ DTINECDRFREQ, { String authorization }) async
     test('test getDatosResidencia', () async {
       // TODO
     });

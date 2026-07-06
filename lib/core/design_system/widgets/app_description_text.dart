@@ -43,6 +43,8 @@ class AppDescriptionText extends StatelessWidget {
         Flexible(
           child: Text(
             text,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontFamily: 'Inter',
               fontSize: 12,

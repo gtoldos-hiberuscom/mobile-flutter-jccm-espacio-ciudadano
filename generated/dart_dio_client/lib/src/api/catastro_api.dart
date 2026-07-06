@@ -23,7 +23,7 @@ class CatastroApi {
   ///
   /// Parameters:
   /// * [numDocumento]
-  /// * [dTCTROCDATREQBody]
+  /// * [DTCTROCDATREQ]
   /// * [authorization]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -36,7 +36,7 @@ class CatastroApi {
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> getDatosCatastrales({
     required String numDocumento,
-    required DTCTROCDATREQ dTCTROCDATREQBody,
+    required DTCTROCDATREQ dtctrocdatreqBody,
     String? authorization,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -70,7 +70,7 @@ class CatastroApi {
     try {
       const _type = FullType(DTCTROCDATREQ);
       _bodyData =
-          _serializers.serialize(dTCTROCDATREQBody, specifiedType: _type);
+          _serializers.serialize(dtctrocdatreqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

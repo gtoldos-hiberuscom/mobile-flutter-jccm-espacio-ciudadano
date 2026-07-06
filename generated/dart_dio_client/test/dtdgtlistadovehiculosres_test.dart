@@ -7,6 +7,11 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(DTDGTLISTADOVEHICULOSRES, () {
+    // String codestado
+    test('to test the property `codestado`', () async {
+      // TODO
+    });
+
     // String idepeticion
     test('to test the property `idepeticion`', () async {
       // TODO
