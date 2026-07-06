@@ -16,7 +16,12 @@ const _kEstadoAceptada = 'aceptada';
 
 /// Pantalla de listado de notificaciones — Figma node 41972:6649.
 class GestionNotificacionesPage extends ConsumerStatefulWidget {
-  const GestionNotificacionesPage({super.key});
+  const GestionNotificacionesPage({
+    super.key,
+    this.backRoute = Routes.gestion,
+  });
+
+  final String backRoute;
 
   @override
   ConsumerState<GestionNotificacionesPage> createState() => _GestionNotificacionesPageState();
@@ -44,7 +49,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
       appBar: AppNavBar(
         type: AppNavBarType.level2,
         title: l10n.gestionNotificacionesPageTitle,
-        onBack: () => context.go(Routes.gestion),
+        onBack: () => context.go(widget.backRoute),
         actions: [
           IconButton(
             icon: const Icon(AppIcons.settings),

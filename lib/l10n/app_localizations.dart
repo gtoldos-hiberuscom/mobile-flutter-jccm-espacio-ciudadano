@@ -125,19 +125,19 @@ abstract class AppLocalizations {
   /// Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve.
   ///
   /// In es, this message translates to:
-  /// **'Acceder a mi Espacio Ciudadano'**
+  /// **'Acceder a mi Espacio ciudadano'**
   String get landingCtaButton;
 
   /// Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano.
   ///
   /// In es, this message translates to:
-  /// **'Saber más sobre Espacio Ciudadano'**
+  /// **'Información y ayuda sobre el espacio'**
   String get landingAboutButton;
 
   /// Enlace de texto que navega a la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
-  /// **'Cómo acceder'**
+  /// **'Ayuda y contacto'**
   String get landingHelpLink;
 
   /// Título del AppBar de la pantalla de ayuda con el acceso.

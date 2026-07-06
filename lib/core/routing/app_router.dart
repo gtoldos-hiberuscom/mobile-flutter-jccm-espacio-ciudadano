@@ -190,7 +190,9 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.gestionNotificaciones,
-              builder: (final BuildContext context, final GoRouterState state) => const GestionNotificacionesPage(),
+              builder: (final BuildContext context, final GoRouterState state) => GestionNotificacionesPage(
+                backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.gestion,
+              ),
             ),
 
             GoRoute(

@@ -128,82 +128,90 @@ class _FaqTab extends StatelessWidget {
   final VoidCallback onOpenGuides;
 
   @override
-  Widget build(final BuildContext context) => ListView(
-    padding: const EdgeInsets.all(AppDimensions.space16),
-    children: [
-      const AppSectionHeading('Preguntas frecuentes'),
-      const SizedBox(height: AppDimensions.space16),
-      const AppList(
-        padding: EdgeInsets.all(AppDimensions.space8),
-        variant: AppListVariant.expandable,
-        children: [
-          AppListExpandableItem(
-            title: '¿Qué dispositivos puedo utilizar para acceder a Espacio Ciudadano?',
-            initiallyExpanded: true,
-            children: [
-              Text('Lorem ipsum'),
-            ],
-          ),
-          AppListExpandableItem(
-            title: '¿Qué necesito para acceder?',
-            children: [
-              Text('Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado.'),
-            ],
-          ),
-          AppListExpandableItem(
-            title: '¿Qué datos personales se almacenan en Espacio Ciudadano?',
-            children: [
-              Text('Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.'),
-            ],
-          ),
-          AppListExpandableItem(
-            title: 'Los datos mostrados contienen algún error, ¿puedo corregirlo?',
-            children: [
-              Text('Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.'),
-            ],
-          ),
-          AppListExpandableItem(
-            title: '¿Qué eventos se muestran en Mi Agenda?',
-            children: [
-              Text('Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.'),
-            ],
-          ),
-          AppListExpandableItem(
-            title: 'Lorem ipsum',
-            children: [
-              Text('Lorem ipsum'),
-            ],
-          ),
-          AppListExpandableItem(
-            title: 'Lorem ipsum',
-            children: [
-              Text('Lorem ipsum'),
-            ],
-          ),
-          AppListExpandableItem(
-            title: 'Lorem ipsum',
-            children: [
-              Text('Lorem ipsum'),
-            ],
-          ),
-        ],
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        AppDimensions.space16,
+        AppDimensions.space16,
+        AppDimensions.space16,
+        AppDimensions.space48,
       ),
-      const SizedBox(height: AppDimensions.space24),
-      const AppSectionHeading('Guías de ayuda'),
-      const SizedBox(height: AppDimensions.space16),
-      const AppIconTextBlock(
-        iconAsset: AppIconAssets.question,
-        iconSize: 36,
-        text: 'Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda',
-      ),
-      const SizedBox(height: AppDimensions.space24),
-      AppContactActionCard(
-        title: 'Guías de ayuda',
-        subtitle: 'Ir al portal web JCCM',
-        onTap: onOpenGuides,
-      ),
-    ],
-  );
+      children: [
+        const AppSectionHeading('Preguntas frecuentes'),
+        const SizedBox(height: AppDimensions.space16),
+        AppList(
+          padding: const EdgeInsets.all(AppDimensions.space8),
+          variant: AppListVariant.expandable,
+          children: [
+            AppListExpandableItem(
+              title: '¿Cómo puedo acceder a Espacio Ciudadano?',
+              initiallyExpanded: true,
+              children: [
+                Text(l10n.landingHelpBody1),
+              ],
+            ),
+            const AppListExpandableItem(
+              title: '¿Qué necesito para acceder?',
+              children: [
+                Text('Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado.'),
+              ],
+            ),
+            const AppListExpandableItem(
+              title: '¿Qué datos personales se almacenan en Espacio Ciudadano?',
+              children: [
+                Text('Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.'),
+              ],
+            ),
+            const AppListExpandableItem(
+              title: 'Los datos mostrados contienen algún error, ¿puedo corregirlo?',
+              children: [
+                Text('Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.'),
+              ],
+            ),
+            const AppListExpandableItem(
+              title: '¿Qué eventos se muestran en Mi Agenda?',
+              children: [
+                Text('Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.'),
+              ],
+            ),
+            const AppListExpandableItem(
+              title: 'Lorem ipsum',
+              children: [
+                Text('Lorem ipsum'),
+              ],
+            ),
+            const AppListExpandableItem(
+              title: 'Lorem ipsum',
+              children: [
+                Text('Lorem ipsum'),
+              ],
+            ),
+            const AppListExpandableItem(
+              title: 'Lorem ipsum',
+              children: [
+                Text('Lorem ipsum'),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: AppDimensions.space24),
+        const AppSectionHeading('Guías de ayuda'),
+        const SizedBox(height: AppDimensions.space16),
+        const AppIconTextBlock(
+          iconAsset: AppIconAssets.question,
+          iconSize: 36,
+          text: 'Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda',
+        ),
+        const SizedBox(height: AppDimensions.space24),
+        AppContactActionCard(
+          title: 'Guías de ayuda',
+          subtitle: 'Ir al portal web JCCM',
+          onTap: onOpenGuides,
+        ),
+      ],
+    );
+  }
 }
 
 class _ContactTab extends StatelessWidget {
@@ -219,7 +227,12 @@ class _ContactTab extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListView(
-    padding: const EdgeInsets.all(AppDimensions.space16),
+    padding: const EdgeInsets.fromLTRB(
+      AppDimensions.space16,
+      AppDimensions.space16,
+      AppDimensions.space16,
+      AppDimensions.space48,
+    ),
     children: [
       const AppSectionHeading('Información de contacto'),
       const SizedBox(height: AppDimensions.space24),

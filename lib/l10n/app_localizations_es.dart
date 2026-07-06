@@ -24,13 +24,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingTaglineHighlight => 'Castilla-La Mancha';
 
   @override
-  String get landingCtaButton => 'Acceder a mi Espacio Ciudadano';
+  String get landingCtaButton => 'Acceder a mi Espacio ciudadano';
 
   @override
-  String get landingAboutButton => 'Saber más sobre Espacio Ciudadano';
+  String get landingAboutButton => 'Información y ayuda sobre el espacio';
 
   @override
-  String get landingHelpLink => 'Cómo acceder';
+  String get landingHelpLink => 'Ayuda y contacto';
 
   @override
   String get landingHelpPageTitle => 'Cómo acceder';

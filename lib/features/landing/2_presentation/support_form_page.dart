@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/support_request.dart';
@@ -48,6 +49,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isAuthenticated = ref.watch(jwtClaimsProvider) != null;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
@@ -81,6 +83,8 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 captchaError: _captchaError,
                 attachment: _attachment,
                 attachmentBytes: _attachmentBytes,
+                showNameField: !isAuthenticated,
+                showCaptcha: !isAuthenticated,
                 onChanged: _refreshValidation,
                 onConsentChanged: (final value) => setState(() => _consentAccepted = value),
                 onCaptchaTap: () => setState(() => _captchaAccepted = true),
@@ -228,8 +232,9 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
   Future<SupportRequest> _buildSupportRequest() async {
     final attachment = _attachment;
+    final isAuthenticated = ref.read(jwtClaimsProvider) != null;
     return SupportRequest(
-      name: _nameController.text.trim(),
+      name: isAuthenticated ? '' : _nameController.text.trim(),
       email: _emailController.text.trim(),
       subject: _subjectController.text.trim(),
       message: _descriptionController.text.trim(),
@@ -262,8 +267,10 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
   bool get _isValid => _nameError == null && _emailError == null && _emailConfirmError == null && _subjectError == null && _descriptionError == null && _consentError == null && _captchaError == null;
 
+  bool get _requiresPublicVerification => ref.read(jwtClaimsProvider) == null;
+
   String? get _nameError {
-    if (!_submitted) {
+    if (!_submitted || !_requiresPublicVerification) {
       return null;
     }
     return _nameController.text.trim().isEmpty ? AppLocalizations.of(context).supportErrorNameRequired : null;
@@ -322,7 +329,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   }
 
   String? get _captchaError {
-    if (!_submitted || _captchaAccepted) {
+    if (!_submitted || !_requiresPublicVerification || _captchaAccepted) {
       return null;
     }
     return AppLocalizations.of(context).supportErrorCaptchaRequired;
@@ -347,6 +354,8 @@ class _FormView extends StatelessWidget {
     required this.captchaError,
     required this.attachment,
     required this.attachmentBytes,
+    required this.showNameField,
+    required this.showCaptcha,
     required this.onChanged,
     required this.onConsentChanged,
     required this.onCaptchaTap,
@@ -371,6 +380,8 @@ class _FormView extends StatelessWidget {
   final String? captchaError;
   final XFile? attachment;
   final int? attachmentBytes;
+  final bool showNameField;
+  final bool showCaptcha;
   final VoidCallback onChanged;
   final ValueChanged<bool> onConsentChanged;
   final VoidCallback onCaptchaTap;
@@ -393,16 +404,18 @@ class _FormView extends StatelessWidget {
           style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
         ),
         const SizedBox(height: AppDimensions.space24),
-        AppInputCase(
-          label: 'Nombre y apellidos',
-          hint: 'Ejemplo:  María Pérez',
-          controller: nameController,
-          isRequired: true,
-          state: _inputState(nameError),
-          errorText: nameError,
-          onChanged: (_) => onChanged(),
-        ),
-        const SizedBox(height: AppDimensions.space24),
+        if (showNameField) ...[
+          AppInputCase(
+            label: 'Nombre y apellidos',
+            hint: 'Ejemplo:  María Pérez',
+            controller: nameController,
+            isRequired: true,
+            state: _inputState(nameError),
+            errorText: nameError,
+            onChanged: (_) => onChanged(),
+          ),
+          const SizedBox(height: AppDimensions.space24),
+        ],
         AppInputCase(
           label: 'Correo electrónico',
           hint: 'Ejemplo:  maríapérez@correo.es',
@@ -470,15 +483,17 @@ class _FormView extends StatelessWidget {
           errorText: consentError,
           onChanged: (final value) => onConsentChanged(value ?? false),
         ),
-        const SizedBox(height: AppDimensions.space24),
-        GestureDetector(
-          onTap: onCaptchaTap,
-          child: AppCaptchaPlaceholder(
-            label: 'Captcha*',
-            isVerified: captchaAccepted,
-            errorText: captchaError,
+        if (showCaptcha) ...[
+          const SizedBox(height: AppDimensions.space24),
+          GestureDetector(
+            onTap: onCaptchaTap,
+            child: AppCaptchaPlaceholder(
+              label: 'Captcha*',
+              isVerified: captchaAccepted,
+              errorText: captchaError,
+            ),
           ),
-        ),
+        ],
         const SizedBox(height: AppDimensions.space24),
         AppPrivacyInfoText(
           text: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en https://rat.castillalamancha.es/info/2309',

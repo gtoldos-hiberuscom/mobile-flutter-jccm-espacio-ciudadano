@@ -8,10 +8,12 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
@@ -157,6 +159,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         type: AppNavBarType.inicio,
         isLoggedIn: true,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
+        onNotificationsTap: _goToNotifications,
       ),
       body: _HomeDashboard(onComingSoon: _showComingSoon),
       floatingActionButton: AppFab(
@@ -164,6 +167,15 @@ class _HomePageState extends ConsumerState<HomePage> {
         onPressed: _showComingSoon,
         semanticsLabel: 'Identificación digital',
       ),
+    );
+  }
+
+  void _goToNotifications() {
+    context.go(
+      Uri(
+        path: Routes.gestionNotificaciones,
+        queryParameters: const {'from': 'home'},
+      ).toString(),
     );
   }
 }
@@ -191,19 +203,7 @@ class _HomeDashboard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _SectionTitle(text: 'Mis novedades'),
-              const SizedBox(height: AppDimensions.space8),
-              AppSimpleNavCard(
-                label: 'Notificaciones (4)',
-                description: 'Consulta tus notificaciones pendientes',
-                onTap: onComingSoon,
-              ),
-              const SizedBox(height: AppDimensions.space8),
-              AppSimpleNavCard(
-                label: 'Próximas citas (3)',
-                description: 'Revisa tus citas que tienes agendadas próximamente',
-                onTap: onComingSoon,
-              ),
+              const _HomeNewsSection(),
               const SizedBox(height: AppDimensions.space24),
               const _SectionTitle(text: 'Accesos “Mis datos”'),
               const SizedBox(height: AppDimensions.space8),
@@ -229,6 +229,59 @@ class _SectionTitle extends StatelessWidget {
       text,
       style: AppTypography.h3.copyWith(color: AppColors.textBlack),
     );
+  }
+}
+
+class _HomeNewsSection extends ConsumerWidget {
+  const _HomeNewsSection();
+
+  static const _pendingNotificationStatus = 'pendiente';
+
+  @override
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final notifications = ref.watch(gestionNotificacionesProvider(_pendingNotificationStatus));
+    final agenda = ref.watch(agendaAppointmentsProvider);
+    final notificationsCount = notifications.maybeWhen(
+      data: (final values) => values.length,
+      orElse: () => null,
+    );
+    final upcomingAppointmentsCount = agenda.maybeWhen(
+      data: (final state) {
+        final now = DateTime.now();
+        return state.appointments.where((final appointment) => !appointment.dateTime.isBefore(now)).length;
+      },
+      orElse: () => null,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _SectionTitle(text: 'Mis novedades'),
+        const SizedBox(height: AppDimensions.space8),
+        AppSimpleNavCard(
+          label: _labelWithCount('Notificaciones', notificationsCount),
+          description: 'Consulta tus notificaciones pendientes',
+          onTap: () => context.go(
+            Uri(
+              path: Routes.gestionNotificaciones,
+              queryParameters: const {'from': 'home'},
+            ).toString(),
+          ),
+        ),
+        if (upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0) ...[
+          const SizedBox(height: AppDimensions.space8),
+          AppSimpleNavCard(
+            label: _labelWithCount('Próximas citas', upcomingAppointmentsCount),
+            description: 'Revisa tus citas que tienes agendadas próximamente',
+            onTap: () => context.go(Routes.agenda),
+          ),
+        ],
+      ],
+    );
+  }
+
+  String _labelWithCount(final String label, final int? count) {
+    return count == null ? label : '$label ($count)';
   }
 }
 

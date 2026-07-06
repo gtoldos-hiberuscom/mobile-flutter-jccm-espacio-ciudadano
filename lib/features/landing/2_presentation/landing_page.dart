@@ -193,15 +193,15 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           // ── Stickybar ───────────────────────────────────────────────────
           AppStickybar(
             children: [
-              // Ghost — "Cómo acceder"
+              // Ghost — "Ayuda y contacto"
               AppButton(
                 label: l10n.landingHelpLink,
                 hierarchy: AppButtonHierarchy.ghost,
                 icon: const Icon(Icons.help_outline, size: AppDimensions.iconMedium),
-                onPressed: () => context.push(Routes.landingHelp),
+                onPressed: () => context.push(Routes.helpContact),
               ),
 
-              // Secondary — "Saber más sobre Espacio Ciudadano"
+              // Secondary — "Información y ayuda sobre el espacio"
               AppButton(
                 label: l10n.landingAboutButton,
                 hierarchy: AppButtonHierarchy.secondary,
@@ -209,7 +209,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                 onPressed: () => context.push(Routes.landingAbout),
               ),
 
-              // Primary — "Acceder a mi Espacio Ciudadano"
+              // Primary — "Acceder a mi Espacio ciudadano"
               AppButton(
                 label: l10n.landingCtaButton,
                 icon: const Icon(Icons.check, size: AppDimensions.iconMedium),

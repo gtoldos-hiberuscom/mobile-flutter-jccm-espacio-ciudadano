@@ -81,8 +81,6 @@ abstract final class Routes {
 
   static const Set<String> _authenticated = {
     consent,
-    helpContact,
-    supportForm,
     agenda,
     gestion,
     gestionAportacion,

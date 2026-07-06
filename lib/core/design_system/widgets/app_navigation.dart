@@ -23,6 +23,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleWidget,
     this.showLeading = true,
     this.onAvatarTap,
+    this.onNotificationsTap,
   });
 
   final AppNavBarType type;
@@ -37,6 +38,9 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Called when the user avatar is tapped (opens the profile drawer).
   final VoidCallback? onAvatarTap;
+
+  /// Called when the notifications icon is tapped.
+  final VoidCallback? onNotificationsTap;
 
   @override
   Size get preferredSize => Size.fromHeight(
@@ -98,7 +102,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
             height: AppDimensions.minTouchTarget,
           ),
           icon: const AppSvgIcon(AppIconAssets.notifications, color: AppColors.textPrimary),
-          onPressed: () {},
+          onPressed: onNotificationsTap,
           tooltip: 'Notificaciones',
         ),
       );
@@ -147,6 +151,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
         isLoggedIn: isLoggedIn,
         actions: actions,
         onAvatarTap: onAvatarTap,
+        onNotificationsTap: onNotificationsTap,
       );
     }
 
@@ -213,11 +218,13 @@ class _InicioNavBar extends StatelessWidget {
     required this.isLoggedIn,
     this.actions,
     this.onAvatarTap,
+    this.onNotificationsTap,
   });
 
   final bool isLoggedIn;
   final List<Widget>? actions;
   final VoidCallback? onAvatarTap;
+  final VoidCallback? onNotificationsTap;
 
   @override
   Widget build(final BuildContext context) {
@@ -261,7 +268,7 @@ class _InicioNavBar extends StatelessWidget {
                         AppIconAssets.notifications,
                         color: AppColors.textPrimary,
                       ),
-                      onPressed: () {},
+                      onPressed: onNotificationsTap,
                       tooltip: 'Notificaciones',
                     ),
                     const SizedBox(width: AppDimensions.space16),

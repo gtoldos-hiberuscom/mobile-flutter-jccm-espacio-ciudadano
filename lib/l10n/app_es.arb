@@ -20,15 +20,15 @@
   "@landingTaglineHighlight": {
     "description": "Nombre de la región resaltado con tipografía H2 en el eslogan."
   },
-  "landingCtaButton": "Acceder a mi Espacio Ciudadano",
+  "landingCtaButton": "Acceder a mi Espacio ciudadano",
   "@landingCtaButton": {
     "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
   },
-  "landingAboutButton": "Saber más sobre Espacio Ciudadano",
+  "landingAboutButton": "Información y ayuda sobre el espacio",
   "@landingAboutButton": {
     "description": "Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano."
   },
-  "landingHelpLink": "Cómo acceder",
+  "landingHelpLink": "Ayuda y contacto",
   "@landingHelpLink": {
     "description": "Enlace de texto que navega a la pantalla de ayuda con el acceso."
   },
