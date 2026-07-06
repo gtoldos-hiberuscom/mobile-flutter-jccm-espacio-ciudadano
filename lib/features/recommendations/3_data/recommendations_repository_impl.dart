@@ -83,11 +83,11 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
       return false;
     }
     final responseCode = data['codigo-respuesta']?.toString();
-    if (responseCode == '404.01') {
+    if (responseCode == '404.01' || responseCode == '412.00') {
       return true;
     }
     final message = data['mensaje-respuesta']?.toString().toLowerCase() ?? '';
-    return message.contains('no se obtuvieron resultados');
+    return message.contains('no se obtuvieron resultados') || message.contains('no se pudo dar de alta el soporte');
   }
 
   Iterable<Recommendation> _mapGroup(final Map<String, dynamic> group) sync* {

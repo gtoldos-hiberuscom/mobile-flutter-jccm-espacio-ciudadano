@@ -2,6 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/repositories/life_events_repository.dart';
 
+const lifeEventsSupportUnavailableMessage = 'No se han podido guardar tus hechos vitales. Inténtalo de nuevo más tarde.';
+
+final class LifeEventsSupportUnavailableException implements Exception {
+  const LifeEventsSupportUnavailableException();
+
+  @override
+  String toString() => lifeEventsSupportUnavailableMessage;
+}
+
 /// Concrete implementation of [LifeEventsRepository] backed by Hechos Vitales.
 ///
 /// Lives in `3_data/` — all API types are mapped to domain entities before
@@ -54,21 +63,28 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     required final String idAgente,
     required final List<LifeEvent> events,
   }) async {
-    await _dio.patch<Map<String, dynamic>>(
-      '/api/v1/hechos-vitales/hechos',
-      data: <String, dynamic>{
-        'idAgente': idAgente,
-        'listaHechos': events
-            .map(
-              (final event) => <String, dynamic>{
-                'idHecho': event.id,
-                'nombreHecho': event.label,
-                'seleccionado': event.selected,
-              },
-            )
-            .toList(growable: false),
-      },
-    );
+    try {
+      await _dio.patch<Map<String, dynamic>>(
+        '/api/v1/hechos-vitales/hechos',
+        data: <String, dynamic>{
+          'idAgente': idAgente,
+          'listaHechos': events
+              .map(
+                (final event) => <String, dynamic>{
+                  'idHecho': event.id,
+                  'nombreHecho': event.label,
+                  'seleccionado': event.selected,
+                },
+              )
+              .toList(growable: false),
+        },
+      );
+    } on DioException catch (error) {
+      if (_isSupportUnavailableResponse(error.response?.data)) {
+        throw const LifeEventsSupportUnavailableException();
+      }
+      rethrow;
+    }
   }
 
   @override
@@ -76,5 +92,17 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     await _dio.delete<Map<String, dynamic>>(
       '/api/v1/hechos-vitales/preferencias/$idAgente',
     );
+  }
+
+  bool _isSupportUnavailableResponse(final Object? data) {
+    if (data is! Map<String, dynamic>) {
+      return false;
+    }
+    final responseCode = data['codigo-respuesta']?.toString();
+    if (responseCode == '412.00') {
+      return true;
+    }
+    final message = data['mensaje-respuesta']?.toString().toLowerCase() ?? '';
+    return message.contains('no se pudo dar de alta el soporte');
   }
 }

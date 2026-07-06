@@ -14,6 +14,10 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final _biometricQuickAccessPromptShownInSessionProvider = NotifierProvider<_BiometricQuickAccessPromptSessionNotifier, bool>(
   _BiometricQuickAccessPromptSessionNotifier.new,
@@ -205,9 +209,7 @@ class _HomeDashboard extends StatelessWidget {
               const SizedBox(height: AppDimensions.space8),
               _QuickAccessGrid(onComingSoon: onComingSoon),
               const SizedBox(height: AppDimensions.space24),
-              const _SectionTitle(text: 'Trámites recomendados'),
-              const SizedBox(height: AppDimensions.space8),
-              _RecommendedProcedures(onComingSoon: onComingSoon),
+              const _HomeRecommendationsSection(),
             ],
           ),
         ),
@@ -304,48 +306,136 @@ class _QuickAccessGrid extends StatelessWidget {
   }
 }
 
-class _RecommendedProcedures extends StatelessWidget {
-  const _RecommendedProcedures({required this.onComingSoon});
-
-  final VoidCallback onComingSoon;
+class _HomeRecommendationsSection extends ConsumerWidget {
+  const _HomeRecommendationsSection();
 
   @override
-  Widget build(final BuildContext context) {
-    return SizedBox(
-      height: 304,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        clipBehavior: Clip.none,
-        itemCount: 2,
-        separatorBuilder: (final context, final index) => const SizedBox(width: AppDimensions.space16),
-        itemBuilder: (final context, final index) => SizedBox(
-          width: 288,
-          child: _RecommendedProcedureCard(onTap: onComingSoon),
-        ),
-      ),
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final state = ref.watch(recommendationsProvider);
+    return state.maybeWhen(
+      data: (final data) {
+        if (!data.hasLifeEventsConsent || data.recommendations.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        final recommendations = data.recommendations.take(5).toList(growable: false);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const _SectionTitle(text: 'Trámites recomendados'),
+            const SizedBox(height: AppDimensions.space8),
+            SizedBox(
+              height: 304,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                clipBehavior: Clip.none,
+                itemCount: recommendations.length,
+                separatorBuilder: (final context, final index) => const SizedBox(width: AppDimensions.space16),
+                itemBuilder: (final context, final index) => SizedBox(
+                  width: 288,
+                  child: _RecommendedProcedureCard(recommendation: recommendations[index]),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }
 
 class _RecommendedProcedureCard extends StatelessWidget {
-  const _RecommendedProcedureCard({required this.onTap});
+  const _RecommendedProcedureCard({required this.recommendation});
 
-  final VoidCallback onTap;
+  final Recommendation recommendation;
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final responsibleUnit = recommendation.responsibleUnit;
+    final deadline = _deadlineText(recommendation);
+    final lifeEventName = recommendation.lifeEventName.trim();
     return AppRecommendationCard(
-      onTap: onTap,
-      title: 'Nombre del trámite recomend. que puede ser muy largo pero con elipsis a la tercera línea...',
-      badge: const AppTag(
-        status: AppTagStatus.success,
-        label: 'Tramitación inmediata',
-        showIcon: false,
-      ),
-      detailLabel: 'Hechos vitales asociados',
-      detailText: 'Quiero acoger - Busco trabajo - Quiero vivir en un pueblo - Quiero estudiar',
+      onTap: () => unawaited(_openRecommendationDetail(context, recommendation)),
+      title: recommendation.title,
+      badge: _RecommendationBadge(badge: recommendation.badge),
+      detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
+      detailText: lifeEventName.isEmpty ? l10n.homeBlockLastUpdatedUnknown : lifeEventName,
+      responsibleUnitText: responsibleUnit == null ? null : '${l10n.recommendationsResponsibleUnitPrefix} $responsibleUnit',
+      deadlineText: deadline == null ? null : '${l10n.recommendationsDeadlinePrefix} $deadline',
     );
   }
+}
+
+class _RecommendationBadge extends StatelessWidget {
+  const _RecommendationBadge({required this.badge});
+
+  final RecommendationBadge badge;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return switch (badge) {
+      RecommendationBadge.recent => AppTag(
+        status: AppTagStatus.warning,
+        label: l10n.recommendationsTabRecent,
+        icon: AppIcons.hourglass,
+        showIcon: false,
+      ),
+      RecommendationBadge.news => AppTag(
+        status: AppTagStatus.infoActive,
+        label: l10n.recommendationsTabNew,
+        icon: AppIcons.autorenew,
+        showIcon: false,
+      ),
+      RecommendationBadge.immediate => AppTag(
+        status: AppTagStatus.success,
+        label: l10n.recommendationsImmediateBadge,
+        icon: AppIcons.check,
+        showIcon: false,
+      ),
+    };
+  }
+}
+
+Future<void> _openRecommendationDetail(
+  final BuildContext context,
+  final Recommendation recommendation,
+) async {
+  final l10n = AppLocalizations.of(context);
+  final url = recommendation.detailUrl;
+  if (url == null || !url.hasScheme) {
+    AppAlertSnackbar.show(context, message: l10n.recommendationsDetailUnavailable);
+    return;
+  }
+
+  final accepted = await launchUrl(url, mode: LaunchMode.externalApplication);
+  if (!context.mounted || accepted) {
+    return;
+  }
+  AppAlertSnackbar.show(context, message: l10n.externalLinkOpenFailed);
+}
+
+String? _deadlineText(final Recommendation recommendation) {
+  final start = recommendation.submissionStartDate;
+  final end = recommendation.submissionEndDate;
+  if (start == null && end == null) {
+    return null;
+  }
+  if (start != null && end != null) {
+    return '${_formatShortDate(start)} - ${_formatShortDate(end)}';
+  }
+  if (start != null) {
+    return 'desde ${_formatShortDate(start)}';
+  }
+  return 'hasta ${_formatShortDate(end!)}';
+}
+
+String _formatShortDate(final DateTime date) {
+  final day = date.day.toString().padLeft(2, '0');
+  final month = date.month.toString().padLeft(2, '0');
+  return '$day/$month/${date.year}';
 }
 
 class _QuickAccessItem {

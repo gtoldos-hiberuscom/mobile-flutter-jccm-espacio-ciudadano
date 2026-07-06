@@ -166,11 +166,25 @@ class EmojiDioLogger extends Interceptor {
 
   @override
   void onError(final DioException err, final ErrorInterceptorHandler handler) {
+    if (_isHandledBusinessResponse(err.response?.data)) {
+      handler.next(err);
+      return;
+    }
+
     logger.e('$dioNote 💥 Error: ${err.type} ${err.message}');
     if (err.response != null) {
       logger.e('$dioNote 💥 Error Response: ${_redact(err.response?.data)}');
     }
     handler.next(err);
+  }
+
+  bool _isHandledBusinessResponse(final Object? data) {
+    if (data is! Map) {
+      return false;
+    }
+    final responseCode = data['codigo-respuesta']?.toString();
+    final message = data['mensaje-respuesta']?.toString().toLowerCase() ?? '';
+    return responseCode == '412.00' && message.contains('no se pudo dar de alta el soporte');
   }
 
   Object? _redact(final Object? value) {

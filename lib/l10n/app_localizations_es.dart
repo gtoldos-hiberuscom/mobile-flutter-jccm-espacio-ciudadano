@@ -2556,7 +2556,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentInfoSheetDescription => 'Consulta tu situación actual como demandante de empleo y tus últimas inscripciones en ofertas.';
 
   @override
-  String get myDataEmploymentInfoSheetFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get myDataEmploymentInfoSheetFooter => 'Si tus datos como demandante de empleo no son correctos, contacta con Servicio Público de Empleo Estatal (SEPE).';
 
   @override
   String get myDataEmploymentInfoSheetOfficeContactsButton => 'Listado de oficinas y contactos';
@@ -2685,7 +2685,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingRealEstateDescription => 'Datos catastrales de mis inmuebles';
 
   @override
-  String get myDataHousingRealEstateInfoSheetTitle => 'Sobre tus bienes inmueble';
+  String get myDataHousingRealEstateInfoSheetTitle => 'Sobre Bienes Inmuebles';
 
   @override
   String get myDataHousingRealEstateInfoSheetDescription => 'Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.';
@@ -2822,7 +2822,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingProceduresTitle => 'Trámites que te pueden interesar';
 
   @override
-  String get myDataHousingProcedureYoungRentVoucher => 'Ayudas al bono alquiler joven en Castilla-La Mancha';
+  String get myDataHousingProcedureRentalHousingAid => 'Ayudas al alquiler de viviendas';
 
   @override
   String get myDataHousingProcedureProtectedHousingRegister => 'Inscripción en el registro de demandantes de vivienda con protección pública de CLM';
@@ -2840,7 +2840,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataVehiclesInfoSheetTitle => 'Sobre Mis datos de Vehículos';
 
   @override
-  String get myDataVehiclesInfoSheetDescription => 'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.';
+  String get myDataVehiclesInfoSheetDescription => 'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.';
 
   @override
   String get myDataVehiclesInfoSheetFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)';

@@ -3469,7 +3469,7 @@
   "@myDataEmploymentInfoSheetDescription": {
     "description": "Descripción principal del modal informativo de Mis datos de Empleo."
   },
-  "myDataEmploymentInfoSheetFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "myDataEmploymentInfoSheetFooter": "Si tus datos como demandante de empleo no son correctos, contacta con Servicio Público de Empleo Estatal (SEPE).",
   "@myDataEmploymentInfoSheetFooter": {
     "description": "Texto de contacto del modal informativo de Mis datos de Empleo."
   },
@@ -3641,7 +3641,7 @@
   "@myDataHousingRealEstateDescription": {
     "description": "Descripción de la tarjeta de bienes inmuebles en el detalle de Vivienda."
   },
-  "myDataHousingRealEstateInfoSheetTitle": "Sobre tus bienes inmueble",
+  "myDataHousingRealEstateInfoSheetTitle": "Sobre Bienes Inmuebles",
   "@myDataHousingRealEstateInfoSheetTitle": {
     "description": "Título del modal informativo de bienes inmuebles."
   },
@@ -3826,9 +3826,9 @@
   "@myDataHousingProceduresTitle": {
     "description": "Título de la sección de trámites relacionados con vivienda."
   },
-  "myDataHousingProcedureYoungRentVoucher": "Ayudas al bono alquiler joven en Castilla-La Mancha",
-  "@myDataHousingProcedureYoungRentVoucher": {
-    "description": "Trámite de ayudas al bono alquiler joven en Castilla-La Mancha."
+  "myDataHousingProcedureRentalHousingAid": "Ayudas al alquiler de viviendas",
+  "@myDataHousingProcedureRentalHousingAid": {
+    "description": "Trámite de ayudas al alquiler de viviendas."
   },
   "myDataHousingProcedureProtectedHousingRegister": "Inscripción en el registro de demandantes de vivienda con protección pública de CLM",
   "@myDataHousingProcedureProtectedHousingRegister": {
@@ -3850,7 +3850,7 @@
   "@myDataVehiclesInfoSheetTitle": {
     "description": "Título del modal informativo de Mis datos de Vehículos."
   },
-  "myDataVehiclesInfoSheetDescription": "Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.",
+  "myDataVehiclesInfoSheetDescription": "Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.",
   "@myDataVehiclesInfoSheetDescription": {
     "description": "Descripción principal del modal informativo de Mis datos de Vehículos."
   },

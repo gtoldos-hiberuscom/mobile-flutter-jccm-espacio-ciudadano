@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 
 /// A modal bottom-sheet following the JCCM design system (Figma node 113:5701).
 ///
@@ -225,11 +228,15 @@ class AppBottomSheet extends StatelessWidget {
 class AppQrDownloadBottomSheetBody extends StatelessWidget {
   const AppQrDownloadBottomSheetBody({
     super.key,
+    this.qrImageBytes,
+    this.isQrLoading = false,
     this.onQrPressed,
     this.onPkPassPressed,
     this.onPdfPressed,
   });
 
+  final Uint8List? qrImageBytes;
+  final bool isQrLoading;
   final VoidCallback? onQrPressed;
   final VoidCallback? onPkPassPressed;
   final VoidCallback? onPdfPressed;
@@ -240,15 +247,18 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const _QrPreview(),
-          const SizedBox(height: AppDimensions.space24),
+          _QrPreview(
+            imageBytes: qrImageBytes,
+            isLoading: isQrLoading,
+          ),
+          const SizedBox(height: AppDimensions.space16),
           const Divider(height: 1, color: AppColors.neutral100),
-          const SizedBox(height: AppDimensions.space32),
+          const SizedBox(height: AppDimensions.space16),
           Text(
             'Formato de descarga',
             style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
           ),
-          const SizedBox(height: AppDimensions.space24),
+          const SizedBox(height: AppDimensions.space16),
           _DownloadFormatButton(
             label: 'QR',
             onPressed: onQrPressed,
@@ -271,7 +281,13 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
 }
 
 class _QrPreview extends StatelessWidget {
-  const _QrPreview();
+  const _QrPreview({
+    this.imageBytes,
+    this.isLoading = false,
+  });
+
+  final Uint8List? imageBytes;
+  final bool isLoading;
 
   @override
   Widget build(final BuildContext context) {
@@ -287,9 +303,17 @@ class _QrPreview extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
               border: Border.all(color: AppColors.neutral100),
             ),
-            child: const Padding(
-              padding: EdgeInsets.all(AppDimensions.space16),
-              child: CustomPaint(painter: _QrPreviewPainter()),
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimensions.space12),
+              child: isLoading
+                  ? const AppLoadingIndicator(strokeWidth: 3)
+                  : imageBytes == null
+                  ? const CustomPaint(painter: _QrPreviewPainter())
+                  : Image.memory(
+                      imageBytes!,
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.none,
+                    ),
             ),
           ),
         ),
@@ -320,7 +344,7 @@ class _DownloadFormatButton extends StatelessWidget {
       label: 'Descargar $label',
       child: ExcludeSemantics(
         child: SizedBox(
-          height: AppDimensions.space64,
+          height: AppDimensions.minTouchTarget,
           child: OutlinedButton(
             onPressed: onPressed,
             style: OutlinedButton.styleFrom(

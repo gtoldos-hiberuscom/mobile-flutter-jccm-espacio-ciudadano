@@ -2821,7 +2821,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHousingProceduresTitle => 'Procedures that may interest you';
 
   @override
-  String get myDataHousingProcedureYoungRentVoucher => 'Young rent voucher aid in Castilla-La Mancha';
+  String get myDataHousingProcedureRentalHousingAid => 'Housing rental aid';
 
   @override
   String get myDataHousingProcedureProtectedHousingRegister => 'Registration in the CLM protected public housing applicant register';
@@ -2839,7 +2839,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataVehiclesInfoSheetTitle => 'About My Vehicles data';
 
   @override
-  String get myDataVehiclesInfoSheetDescription => 'Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.\n\nQuickly access the most prominent procedures and information related to your vehicle management.';
+  String get myDataVehiclesInfoSheetDescription => 'Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.';
 
   @override
   String get myDataVehiclesInfoSheetFooter => 'If any of your data is incorrect or not up to date, contact the General Directorate of Traffic (DGT)';

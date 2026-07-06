@@ -4973,7 +4973,7 @@ abstract class AppLocalizations {
   /// Texto de contacto del modal informativo de Mis datos de Empleo.
   ///
   /// In es, this message translates to:
-  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'Si tus datos como demandante de empleo no son correctos, contacta con Servicio Público de Empleo Estatal (SEPE).'**
   String get myDataEmploymentInfoSheetFooter;
 
   /// Botón externo hacia oficinas y contactos en el modal informativo de Mis datos de Empleo.
@@ -5231,7 +5231,7 @@ abstract class AppLocalizations {
   /// Título del modal informativo de bienes inmuebles.
   ///
   /// In es, this message translates to:
-  /// **'Sobre tus bienes inmueble'**
+  /// **'Sobre Bienes Inmuebles'**
   String get myDataHousingRealEstateInfoSheetTitle;
 
   /// Descripción principal del modal informativo de bienes inmuebles.
@@ -5498,11 +5498,11 @@ abstract class AppLocalizations {
   /// **'Trámites que te pueden interesar'**
   String get myDataHousingProceduresTitle;
 
-  /// Trámite de ayudas al bono alquiler joven en Castilla-La Mancha.
+  /// Trámite de ayudas al alquiler de viviendas.
   ///
   /// In es, this message translates to:
-  /// **'Ayudas al bono alquiler joven en Castilla-La Mancha'**
-  String get myDataHousingProcedureYoungRentVoucher;
+  /// **'Ayudas al alquiler de viviendas'**
+  String get myDataHousingProcedureRentalHousingAid;
 
   /// Trámite de inscripción en el registro de demandantes de vivienda con protección pública de CLM.
   ///
@@ -5537,7 +5537,7 @@ abstract class AppLocalizations {
   /// Descripción principal del modal informativo de Mis datos de Vehículos.
   ///
   /// In es, this message translates to:
-  /// **'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.\n\nAccede rápidamente a los trámites más destacados y a información relacionada con tus gestiones relacionadas con vehículos.'**
+  /// **'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.'**
   String get myDataVehiclesInfoSheetDescription;
 
   /// Texto del pie de página del modal informativo de Mis datos de Vehículos.

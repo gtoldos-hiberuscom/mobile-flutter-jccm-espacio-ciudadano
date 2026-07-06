@@ -31,7 +31,20 @@ void main() {
     });
 
     test('returns empty list when backend reports no matching results', () async {
-      final adapter = _RecommendationsAdapter(statusCode: 404);
+      final adapter = _RecommendationsAdapter(responseKind: _RecommendationsResponseKind.noResults);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = RecommendationsRepositoryImpl(dio: dio);
+
+      final recommendations = await repository.loadRecommendations(
+        idAgente: 'agent-123',
+        lifeEventIds: const [10],
+      );
+
+      expect(recommendations, isEmpty);
+    });
+
+    test('returns empty list when backend cannot register recommendations support', () async {
+      final adapter = _RecommendationsAdapter(responseKind: _RecommendationsResponseKind.supportUnavailable);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = RecommendationsRepositoryImpl(dio: dio);
 
@@ -45,10 +58,16 @@ void main() {
   });
 }
 
-final class _RecommendationsAdapter implements HttpClientAdapter {
-  _RecommendationsAdapter({this.statusCode = 200});
+enum _RecommendationsResponseKind {
+  recommendations,
+  noResults,
+  supportUnavailable,
+}
 
-  final int statusCode;
+final class _RecommendationsAdapter implements HttpClientAdapter {
+  _RecommendationsAdapter({this.responseKind = _RecommendationsResponseKind.recommendations});
+
+  final _RecommendationsResponseKind responseKind;
   String? method;
   String? path;
   Map<String, dynamic> queryParameters = const {};
@@ -64,8 +83,8 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
     queryParameters = options.queryParameters;
 
     return ResponseBody.fromString(
-      jsonEncode(statusCode == 404 ? _noResultsPayload() : _recommendationsPayload()),
-      statusCode,
+      jsonEncode(_payload()),
+      _statusCode,
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],
       },
@@ -74,6 +93,22 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
 
   @override
   void close({final bool force = false}) {}
+
+  int get _statusCode {
+    return switch (responseKind) {
+      _RecommendationsResponseKind.recommendations => 200,
+      _RecommendationsResponseKind.noResults => 404,
+      _RecommendationsResponseKind.supportUnavailable => 403,
+    };
+  }
+
+  Map<String, dynamic> _payload() {
+    return switch (responseKind) {
+      _RecommendationsResponseKind.recommendations => _recommendationsPayload(),
+      _RecommendationsResponseKind.noResults => _noResultsPayload(),
+      _RecommendationsResponseKind.supportUnavailable => _supportUnavailablePayload(),
+    };
+  }
 
   Map<String, dynamic> _recommendationsPayload() => <String, dynamic>{
     'body': <String, dynamic>{
@@ -99,5 +134,11 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
     'body': null,
     'mensaje-respuesta': 'No se obtuvieron resultados para los criterios indicados',
     'codigo-respuesta': '404.01',
+  };
+
+  Map<String, dynamic> _supportUnavailablePayload() => <String, dynamic>{
+    'body': null,
+    'mensaje-respuesta': 'No se pudo dar de alta el soporte. Cuando autorizas a que Espacio Ciudadano muestre los datos que las Administraciones Publicas tienen sobre ti, te mostramos esta informacion para tu consulta.',
+    'codigo-respuesta': '412.00',
   };
 }

@@ -3830,9 +3830,9 @@
   "@myDataHousingProceduresTitle": {
     "description": "Title of the procedures section related to housing."
   },
-  "myDataHousingProcedureYoungRentVoucher": "Young rent voucher aid in Castilla-La Mancha",
-  "@myDataHousingProcedureYoungRentVoucher": {
-    "description": "Young rent voucher aid procedure in Castilla-La Mancha."
+  "myDataHousingProcedureRentalHousingAid": "Housing rental aid",
+  "@myDataHousingProcedureRentalHousingAid": {
+    "description": "Housing rental aid procedure."
   },
   "myDataHousingProcedureProtectedHousingRegister": "Registration in the CLM protected public housing applicant register",
   "@myDataHousingProcedureProtectedHousingRegister": {
@@ -3854,7 +3854,7 @@
   "@myDataVehiclesInfoSheetTitle": {
     "description": "Title of the My Vehicles data information modal."
   },
-  "myDataVehiclesInfoSheetDescription": "Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.\n\nQuickly access the most prominent procedures and information related to your vehicle management.",
+  "myDataVehiclesInfoSheetDescription": "Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.",
   "@myDataVehiclesInfoSheetDescription": {
     "description": "Main description of the My Vehicles data information modal."
   },

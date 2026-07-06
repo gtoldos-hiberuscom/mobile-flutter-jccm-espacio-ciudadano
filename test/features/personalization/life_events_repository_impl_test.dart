@@ -50,10 +50,41 @@ void main() {
         },
       );
     });
+
+    test('saveLifeEvents maps support unavailable response to domain exception', () async {
+      final adapter = _CapturingAdapter(responseKind: _LifeEventsResponseKind.supportUnavailable);
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: 'https://example.test',
+          headers: const {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+        ),
+      )..httpClientAdapter = adapter;
+      final repository = LifeEventsRepositoryImpl(dio: dio);
+
+      expect(
+        () => repository.saveLifeEvents(
+          idAgente: 'agent-123',
+          events: const [
+            LifeEvent(id: 1, label: 'Familia', selected: true),
+          ],
+        ),
+        throwsA(isA<LifeEventsSupportUnavailableException>()),
+      );
+    });
   });
 }
 
+enum _LifeEventsResponseKind {
+  success,
+  supportUnavailable,
+}
+
 final class _CapturingAdapter implements HttpClientAdapter {
+  _CapturingAdapter({this.responseKind = _LifeEventsResponseKind.success});
+
+  final _LifeEventsResponseKind responseKind;
   String? method;
   String? path;
   Map<String, dynamic>? jsonBody;
@@ -74,12 +105,8 @@ final class _CapturingAdapter implements HttpClientAdapter {
     jsonBody = jsonDecode(utf8.decode(bodyBytes)) as Map<String, dynamic>;
 
     return ResponseBody.fromString(
-      jsonEncode(<String, dynamic>{
-        'codigo-respuesta': '200',
-        'mensaje-respuesta': 'ok',
-        'body': <String, dynamic>{},
-      }),
-      200,
+      jsonEncode(_payload()),
+      _statusCode,
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],
       },
@@ -88,4 +115,34 @@ final class _CapturingAdapter implements HttpClientAdapter {
 
   @override
   void close({final bool force = false}) {}
+
+  int get _statusCode {
+    return switch (responseKind) {
+      _LifeEventsResponseKind.success => 200,
+      _LifeEventsResponseKind.supportUnavailable => 403,
+    };
+  }
+
+  Map<String, dynamic> _payload() {
+    return switch (responseKind) {
+      _LifeEventsResponseKind.success => <String, dynamic>{
+        'codigo-respuesta': '200',
+        'mensaje-respuesta': 'ok',
+        'body': <String, dynamic>{},
+      },
+      _LifeEventsResponseKind.supportUnavailable => <String, dynamic>{
+        'body': null,
+        'mensaje-respuesta': 'No se pudo dar de alta el soporte.',
+        'codigo-respuesta': '412.00',
+        'info-error': <String, dynamic>{
+          'errores': [
+            {
+              'codigo-error': 3034,
+              'mensaje-error': 'Cuando autorizas a que Espacio Ciudadano muestre los datos que las Administraciones Públicas tienen sobre ti te mostramos esta información para tu consulta.',
+            },
+          ],
+        },
+      },
+    };
+  }
 }

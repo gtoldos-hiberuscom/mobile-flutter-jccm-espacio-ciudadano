@@ -177,16 +177,16 @@ class _HousingServicesTab extends StatelessWidget {
             title: l10n.myDataHousingProceduresTitle,
             links: [
               AppExternalLinkItem(
-                label: l10n.myDataHousingProcedureYoungRentVoucher,
-                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/'),
-              ),
-              AppExternalLinkItem(
                 label: l10n.myDataHousingProcedureProtectedHousingRegister,
                 onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/'),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHousingProcedureSocialEmergencyAid,
                 onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/'),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataHousingProcedureRentalHousingAid,
+                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/tramites/1021878'),
               ),
             ],
           ),

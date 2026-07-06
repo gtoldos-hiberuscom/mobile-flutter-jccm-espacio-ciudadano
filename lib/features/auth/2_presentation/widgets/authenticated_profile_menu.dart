@@ -71,6 +71,7 @@ void showAuthenticatedProfileMenu({
       AppDrawerMenuItem(
         label: l10n.digitalCardsPageTitle,
         icon: Icons.badge_outlined,
+        onTap: () => closeMenuAndPush(Routes.digitalCards),
       ),
     ],
     secondaryLinks: [

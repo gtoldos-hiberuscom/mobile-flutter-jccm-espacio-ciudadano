@@ -59,6 +59,7 @@ abstract final class Routes {
   static const String myDataHousingRealEstateDetail = '/my-data/housing/real-estate/:reference';
   static const String myDataHousingAddress = '/my-data/housing/address';
   static const String myDataVehicles = '/my-data/vehicles';
+  static const String digitalCards = '/digital-cards';
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
   static const String recommendationLifeEventFilters = '/recommendations/life-events-filter';
@@ -92,6 +93,7 @@ abstract final class Routes {
     myDataSocialWelfareDependency,
     myDataSocialWelfareParking,
     myDataVehicles,
+    digitalCards,
     recommendations,
     recommendationLifeEventFilters,
     home,

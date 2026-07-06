@@ -30,6 +30,7 @@ export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_contact_co
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_data_summary_card.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_description_text.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_detail_scaffold.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_digital_card.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_divider.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_drawer_menu.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_external_link_section.dart';
