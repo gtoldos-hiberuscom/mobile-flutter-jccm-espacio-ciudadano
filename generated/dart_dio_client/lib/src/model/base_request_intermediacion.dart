@@ -16,9 +16,7 @@ part 'base_request_intermediacion.g.dart';
 /// * [nombreFuncionario] - Nombre del funcionario
 /// * [tipodoc] - Tipo de documento del usuario
 @BuiltValue()
-abstract class BaseRequestIntermediacion
-    implements
-        Built<BaseRequestIntermediacion, BaseRequestIntermediacionBuilder> {
+abstract class BaseRequestIntermediacion implements Built<BaseRequestIntermediacion, BaseRequestIntermediacionBuilder> {
   /// Documento del funcionario
   @BuiltValueField(wireName: r'doc_funcionario')
   String? get docFuncionario;
@@ -37,25 +35,18 @@ abstract class BaseRequestIntermediacion
 
   BaseRequestIntermediacion._();
 
-  factory BaseRequestIntermediacion(
-          [void updates(BaseRequestIntermediacionBuilder b)]) =
-      _$BaseRequestIntermediacion;
+  factory BaseRequestIntermediacion([void updates(BaseRequestIntermediacionBuilder b)]) = _$BaseRequestIntermediacion;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(BaseRequestIntermediacionBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<BaseRequestIntermediacion> get serializer =>
-      _$BaseRequestIntermediacionSerializer();
+  static Serializer<BaseRequestIntermediacion> get serializer => _$BaseRequestIntermediacionSerializer();
 }
 
-class _$BaseRequestIntermediacionSerializer
-    implements PrimitiveSerializer<BaseRequestIntermediacion> {
+class _$BaseRequestIntermediacionSerializer implements PrimitiveSerializer<BaseRequestIntermediacion> {
   @override
-  final Iterable<Type> types = const [
-    BaseRequestIntermediacion,
-    _$BaseRequestIntermediacion
-  ];
+  final Iterable<Type> types = const [BaseRequestIntermediacion, _$BaseRequestIntermediacion];
 
   @override
   final String wireName = r'BaseRequestIntermediacion';
@@ -101,9 +92,7 @@ class _$BaseRequestIntermediacionSerializer
     BaseRequestIntermediacion object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -174,3 +163,4 @@ class _$BaseRequestIntermediacionSerializer
     return result.build();
   }
 }
+

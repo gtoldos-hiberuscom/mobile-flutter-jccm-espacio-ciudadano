@@ -6,11 +6,11 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class SoporteApi {
+
   final Dio _dio;
 
   final Serializers _serializers;
@@ -32,7 +32,7 @@ class SoporteApi {
   ///
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<Respuesta>> crearTareaSoporte({
+  Future<Response<Respuesta>> crearTareaSoporte({ 
     required String datos,
     MultipartFile? adjunto,
     CancelToken? cancelToken,
@@ -61,12 +61,12 @@ class SoporteApi {
     try {
       _bodyData = FormData.fromMap(<String, dynamic>{
         if (adjunto != null) r'adjunto': adjunto,
-        r'datos':
-            encodeFormParameter(_serializers, datos, const FullType(String)),
+        r'datos': encodeFormParameter(_serializers, datos, const FullType(String)),
       });
-    } catch (error, stackTrace) {
+
+    } catch(error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
+         requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -89,12 +89,11 @@ class SoporteApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null
-          ? null
-          : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(Respuesta),
-            ) as Respuesta;
+      _responseData = rawResponse == null ? null : _serializers.deserialize(
+        rawResponse,
+        specifiedType: const FullType(Respuesta),
+      ) as Respuesta;
+
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -116,4 +115,5 @@ class SoporteApi {
       extra: _response.extra,
     );
   }
+
 }

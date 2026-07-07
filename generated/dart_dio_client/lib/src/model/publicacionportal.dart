@@ -13,28 +13,24 @@ part 'publicacionportal.g.dart';
 /// PUBLICACIONPORTAL
 ///
 /// Properties:
-/// * [item]
+/// * [item] 
 @BuiltValue()
-abstract class PUBLICACIONPORTAL
-    implements Built<PUBLICACIONPORTAL, PUBLICACIONPORTALBuilder> {
+abstract class PUBLICACIONPORTAL implements Built<PUBLICACIONPORTAL, PUBLICACIONPORTALBuilder> {
   @BuiltValueField(wireName: r'item')
   BuiltList<ZCSSTPUBPORTAL>? get item;
 
   PUBLICACIONPORTAL._();
 
-  factory PUBLICACIONPORTAL([void updates(PUBLICACIONPORTALBuilder b)]) =
-      _$PUBLICACIONPORTAL;
+  factory PUBLICACIONPORTAL([void updates(PUBLICACIONPORTALBuilder b)]) = _$PUBLICACIONPORTAL;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(PUBLICACIONPORTALBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<PUBLICACIONPORTAL> get serializer =>
-      _$PUBLICACIONPORTALSerializer();
+  static Serializer<PUBLICACIONPORTAL> get serializer => _$PUBLICACIONPORTALSerializer();
 }
 
-class _$PUBLICACIONPORTALSerializer
-    implements PrimitiveSerializer<PUBLICACIONPORTAL> {
+class _$PUBLICACIONPORTALSerializer implements PrimitiveSerializer<PUBLICACIONPORTAL> {
   @override
   final Iterable<Type> types = const [PUBLICACIONPORTAL, _$PUBLICACIONPORTAL];
 
@@ -61,9 +57,7 @@ class _$PUBLICACIONPORTALSerializer
     PUBLICACIONPORTAL object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -81,8 +75,7 @@ class _$PUBLICACIONPORTALSerializer
         case r'item':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType:
-                const FullType(BuiltList, [FullType(ZCSSTPUBPORTAL)]),
+            specifiedType: const FullType(BuiltList, [FullType(ZCSSTPUBPORTAL)]),
           ) as BuiltList<ZCSSTPUBPORTAL>;
           result.item.replace(valueDes);
           break;
@@ -114,3 +107,4 @@ class _$PUBLICACIONPORTALSerializer
     return result.build();
   }
 }
+

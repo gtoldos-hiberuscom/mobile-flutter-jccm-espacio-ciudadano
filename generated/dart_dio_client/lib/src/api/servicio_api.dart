@@ -11,6 +11,7 @@ import 'package:espacio_ciudadano_api/src/model/dtquery.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynif_response.dart';
 
 class ServicioApi {
+
   final Dio _dio;
 
   final Serializers _serializers;
@@ -18,10 +19,10 @@ class ServicioApi {
   const ServicioApi(this._dio, this._serializers);
 
   /// Consultar el detalle de un tramite en cesar
-  ///
+  /// 
   ///
   /// Parameters:
-  /// * [DTQUERY]
+  /// * [DTQUERY] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -31,7 +32,7 @@ class ServicioApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ZCSRFCPUBLISELECTBYNIFResponse] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> miDetalleOperation({
+  Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> miDetalleOperation({ 
     required DTQUERY dtqueryBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -59,9 +60,10 @@ class ServicioApi {
     try {
       const _type = FullType(DTQUERY);
       _bodyData = _serializers.serialize(dtqueryBody, specifiedType: _type);
-    } catch (error, stackTrace) {
+
+    } catch(error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
+         requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -84,12 +86,11 @@ class ServicioApi {
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null
-          ? null
-          : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(ZCSRFCPUBLISELECTBYNIFResponse),
-            ) as ZCSRFCPUBLISELECTBYNIFResponse;
+      _responseData = rawResponse == null ? null : _serializers.deserialize(
+        rawResponse,
+        specifiedType: const FullType(ZCSRFCPUBLISELECTBYNIFResponse),
+      ) as ZCSRFCPUBLISELECTBYNIFResponse;
+
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -111,4 +112,5 @@ class ServicioApi {
       extra: _response.extra,
     );
   }
+
 }

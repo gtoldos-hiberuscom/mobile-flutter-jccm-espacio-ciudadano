@@ -6,12 +6,8 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/dtedutnureq.dart';
-import 'package:espacio_ciudadano_api/src/model/dtedutnures.dart';
-import 'package:espacio_ciudadano_api/src/model/dtedutuoreq.dart';
-import 'package:espacio_ciudadano_api/src/model/dtedutuores.dart';
 
 class EducacionApi {
   final Dio _dio;
@@ -20,13 +16,13 @@ class EducacionApi {
 
   const EducacionApi(this._dio, this._serializers);
 
-  /// Servicio para obtener los títulos no universitarios
-  ///
+  /// Obtener titulos no universitarios
+  /// Consulta los titulos no universitarios del ciudadano en el servicio de Educacion.
   ///
   /// Parameters:
-  /// * [numDocumento]
-  /// * [DTEDUTNUREQ]
-  /// * [authorization]
+  /// * [numDocumento] - Documento identificativo del ciudadano a consultar.
+  /// * [DTEDUTNUREQ] - Datos de entrada para la consulta de titulos no universitarios.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -34,9 +30,9 @@ class EducacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [DTEDUTNURES] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTEDUTNURES>> getTitulosNoUniversitarios({
+  Future<Response<Respuesta>> getTitulosNoUniversitarios({
     required String numDocumento,
     required DTEDUTNUREQ dtedutnureqBody,
     String? authorization,
@@ -47,12 +43,9 @@ class EducacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/educacion/titulos-no-universitarios/{numDocumento}'
-        .replaceAll(
-            '{' r'numDocumento' '}',
-            encodeQueryParameter(
-                    _serializers, numDocumento, const FullType(String))
-                .toString());
+    final _path = r'/api/v1/educacion/titulos-no-universitarios/{numDocumento}'.replaceAll(
+        '{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -93,7 +86,7 @@ class EducacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    DTEDUTNURES? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -101,8 +94,8 @@ class EducacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(DTEDUTNURES),
-            ) as DTEDUTNURES;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -113,7 +106,7 @@ class EducacionApi {
       );
     }
 
-    return Response<DTEDUTNURES>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -125,13 +118,13 @@ class EducacionApi {
     );
   }
 
-  /// Servicio para obtener los títulos universitarios
-  ///
+  /// Obtener titulos universitarios
+  /// Consulta los titulos universitarios del ciudadano en el servicio de Educacion.
   ///
   /// Parameters:
-  /// * [numDocumento]
-  /// * [DTEDUTUOREQ]
-  /// * [authorization]
+  /// * [numDocumento] - Documento identificativo del ciudadano a consultar.
+  /// * [DTEDUTUOREQ] - Datos de entrada para la consulta de titulos universitarios.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -139,9 +132,9 @@ class EducacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [DTEDUTUORES] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTEDUTUORES>> getTitulosUniversitarios({
+  Future<Response<Respuesta>> getTitulosUniversitarios({
     required String numDocumento,
     required DTEDUTUOREQ dtedutuoreqBody,
     String? authorization,
@@ -152,12 +145,9 @@ class EducacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/educacion/titulos-universitarios/{numDocumento}'
-        .replaceAll(
-            '{' r'numDocumento' '}',
-            encodeQueryParameter(
-                    _serializers, numDocumento, const FullType(String))
-                .toString());
+    final _path = r'/api/v1/educacion/titulos-universitarios/{numDocumento}'.replaceAll(
+        '{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -198,7 +188,7 @@ class EducacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    DTEDUTUORES? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -206,8 +196,8 @@ class EducacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(DTEDUTUORES),
-            ) as DTEDUTUORES;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -218,7 +208,7 @@ class EducacionApi {
       );
     }
 
-    return Response<DTEDUTUORES>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

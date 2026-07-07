@@ -10,14 +10,12 @@ All URIs are relative to *https://fachada-sede-api-pre.cm-pre.jccm.es*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**miDetalleOperation**](PublicacionApi.md#midetalleoperation) | **POST** /api/v1/servicio/midetalle | Consultar el detalle de un tramite en cesar
-[**miDocsfirmados**](PublicacionApi.md#midocsfirmados) | **POST** /api/v1/publicacion/midocfirmados | Servicio que permite consultar el documento de certificado de deuda en cesar
-[**myPubliNumRegOperation**](PublicacionApi.md#mypublinumregoperation) | **POST** /api/v1/publicacion/selectbynumreg | Consulta un expediente especificado por número de registro
-[**myPubliSelecByNifOperation**](PublicacionApi.md#mypubliselecbynifoperation) | **POST** /api/v1/publicacion/selectbynif | Consultar la lista de expedientes vinculados a un NIF o número de identificación
-[**myPubliSelecByNifTipoProcOperation**](PublicacionApi.md#mypubliselecbyniftipoprocoperation) | **POST** /api/v1/publicacion/selectbynifsalida | Consultar la lista de salidas vinculados a un NIF o número de identificación
-[**myPubliSelecByNifTipoProcOperation1**](PublicacionApi.md#mypubliselecbyniftipoprocoperation1) | **POST** /api/v1/publicacion/selectbynifexp | Consultar la lista de expedientes vinculados a un NIF o número de identificación
-[**myPubliSelecByNifTipoProcOperation2**](PublicacionApi.md#mypubliselecbyniftipoprocoperation2) | **POST** /api/v1/publicacion/selectbynifentrada | Consultar la lista de entradas vinculados a un NIF o número de identificación
-[**myPubliSelecByNumExpOperation**](PublicacionApi.md#mypubliselecbynumexpoperation) | **POST** /api/v1/publicacion/selectbynumexp | Consultar el expediente especificado por número de expediente
-[**siMisExpedientesOperation**](PublicacionApi.md#simisexpedientesoperation) | **POST** /api/v1/publicacion/misexpedientes | Consultar listado de expedientes asociados a un número de documento
+[**myPubliNumRegOperation**](PublicacionApi.md#mypublinumregoperation) | **POST** /api/v1/publicacion/selectbynumreg | Consultar un expediente de publicación por número de registro
+[**myPubliSelecByNifOperation**](PublicacionApi.md#mypubliselecbynifoperation) | **POST** /api/v1/publicacion/selectbynif | Consultar expedientes y publicaciones asociados a un documento de identidad
+[**myPubliSelecByNifTipoProcEntradaOperation**](PublicacionApi.md#mypubliselecbyniftipoprocentradaoperation) | **POST** /api/v1/publicacion/selectbynifentrada | Consultar registros de entrada por documento del ciudadano
+[**myPubliSelecByNifTipoProcExpOperation**](PublicacionApi.md#mypubliselecbyniftipoprocexpoperation) | **POST** /api/v1/publicacion/selectbynifexp | Consultar expedientes por documento del ciudadano
+[**myPubliSelecByNifTipoProcSalidaOperation**](PublicacionApi.md#mypubliselecbyniftipoprocsalidaoperation) | **POST** /api/v1/publicacion/selectbynifsalida | Consultar registros de salida por documento del ciudadano
+[**myPubliSelecByNumExpOperation**](PublicacionApi.md#mypubliselecbynumexpoperation) | **POST** /api/v1/publicacion/selectbynumexp | Consultar un expediente de publicación por número de expediente
 
 
 # **miDetalleOperation**
@@ -61,58 +59,19 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **miDocsfirmados**
-> ZCSRFCDOCSFIRMADOSPFEXPTEResponse miDocsfirmados(ZCSRFCDOCSFIRMADOSPFEXPTE)
-
-Servicio que permite consultar el documento de certificado de deuda en cesar
-
-### Example
-```dart
-import 'package:espacio_ciudadano_api/api.dart';
-
-final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCDOCSFIRMADOSPFEXPTE ZCSRFCDOCSFIRMADOSPFEXPTE = ; // ZCSRFCDOCSFIRMADOSPFEXPTE | 
-
-try {
-    final response = api.miDocsfirmados(ZCSRFCDOCSFIRMADOSPFEXPTE);
-    print(response);
-} on DioException catch (e) {
-    print('Exception when calling PublicacionApi->miDocsfirmados: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **ZCSRFCDOCSFIRMADOSPFEXPTE** | [**ZCSRFCDOCSFIRMADOSPFEXPTE**](ZCSRFCDOCSFIRMADOSPFEXPTE.md)|  | 
-
-### Return type
-
-[**ZCSRFCDOCSFIRMADOSPFEXPTEResponse**](ZCSRFCDOCSFIRMADOSPFEXPTEResponse.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **myPubliNumRegOperation**
-> ZCSRFCPUBLISELECTBYNUMREGResponse myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG)
+> Respuesta myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG)
 
-Consulta un expediente especificado por número de registro
+Consultar un expediente de publicación por número de registro
+
+Consulta el detalle de un expediente de publicación a partir del número de registro, el tipo de documento y el número de documento del ciudadano. La respuesta devuelve la estructura completa del expediente, incluyendo datos identificativos, órgano gestor, estado de tramitación y relación de documentos asociados.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCPUBLISELECTBYNUMREG ZCSRFCPUBLISELECTBYNUMREG = ; // ZCSRFCPUBLISELECTBYNUMREG | 
+final ZCSRFCPUBLISELECTBYNUMREG ZCSRFCPUBLISELECTBYNUMREG = {"pnumdoc":"99999999R","pregistro":"1103488/2024","ptipodoc":"NIF"}; // ZCSRFCPUBLISELECTBYNUMREG | Cuerpo de la petición con el número de documento, número de registro y tipo de documento del ciudadano para localizar el expediente.
 
 try {
     final response = api.myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG);
@@ -126,11 +85,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ZCSRFCPUBLISELECTBYNUMREG** | [**ZCSRFCPUBLISELECTBYNUMREG**](ZCSRFCPUBLISELECTBYNUMREG.md)|  | 
+ **ZCSRFCPUBLISELECTBYNUMREG** | [**ZCSRFCPUBLISELECTBYNUMREG**](ZCSRFCPUBLISELECTBYNUMREG.md)| Cuerpo de la petición con el número de documento, número de registro y tipo de documento del ciudadano para localizar el expediente. | 
 
 ### Return type
 
-[**ZCSRFCPUBLISELECTBYNUMREGResponse**](ZCSRFCPUBLISELECTBYNUMREGResponse.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 
@@ -144,16 +103,18 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNifOperation**
-> ZCSRFCPUBLISELECTBYNIFResponse myPubliSelecByNifOperation(DTSELECTBYNIFREQ)
+> Respuesta myPubliSelecByNifOperation(DTSELECTBYNIFREQ)
 
-Consultar la lista de expedientes vinculados a un NIF o número de identificación
+Consultar expedientes y publicaciones asociados a un documento de identidad
+
+Consulta los expedientes de publicación asociados a un ciudadano mediante su tipo y número de documento. La respuesta devuelve la estructura completa con el resultado de la consulta, incluyendo los expedientes localizados, datos del interesado, estado de tramitación, órgano responsable y documentos asociados.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final DTSELECTBYNIFREQ DTSELECTBYNIFREQ = ; // DTSELECTBYNIFREQ | 
+final DTSELECTBYNIFREQ DTSELECTBYNIFREQ = {"tipodocumento":"NIF","numerodocumento":"99999999R"}; // DTSELECTBYNIFREQ | Cuerpo de la petición con el tipo y número de documento del ciudadano cuyos expedientes se desean consultar.
 
 try {
     final response = api.myPubliSelecByNifOperation(DTSELECTBYNIFREQ);
@@ -167,11 +128,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **DTSELECTBYNIFREQ** | [**DTSELECTBYNIFREQ**](DTSELECTBYNIFREQ.md)|  | 
+ **DTSELECTBYNIFREQ** | [**DTSELECTBYNIFREQ**](DTSELECTBYNIFREQ.md)| Cuerpo de la petición con el tipo y número de documento del ciudadano cuyos expedientes se desean consultar. | 
 
 ### Return type
 
-[**ZCSRFCPUBLISELECTBYNIFResponse**](ZCSRFCPUBLISELECTBYNIFResponse.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 
@@ -184,23 +145,25 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **myPubliSelecByNifTipoProcOperation**
-> ZCSRFCPUBLISELECTBYNIFResponse myPubliSelecByNifTipoProcOperation(dTSELECTBYNIFV2REQ)
+# **myPubliSelecByNifTipoProcEntradaOperation**
+> Respuesta myPubliSelecByNifTipoProcEntradaOperation(DTSELECTBYNIFV2REQ)
 
-Consultar la lista de salidas vinculados a un NIF o número de identificación
+Consultar registros de entrada por documento del ciudadano
+
+Consulta la lista de registros de entrada asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento ENTRADA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final DTSELECTBYNIFV2REQ dTSELECTBYNIFV2REQ = ; // DTSELECTBYNIFV2REQ | 
+final DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ = {"tipodocumento":"NIF","numerodocumento":"99999999R"}; // DTSELECTBYNIFV2REQ | Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como ENTRADA.
 
 try {
-    final response = api.myPubliSelecByNifTipoProcOperation(dTSELECTBYNIFV2REQ);
+    final response = api.myPubliSelecByNifTipoProcEntradaOperation(DTSELECTBYNIFV2REQ);
     print(response);
 } on DioException catch (e) {
-    print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcOperation: $e\n');
+    print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcEntradaOperation: $e\n');
 }
 ```
 
@@ -208,11 +171,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)|  | 
+ **DTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)| Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como ENTRADA. | 
 
 ### Return type
 
-[**ZCSRFCPUBLISELECTBYNIFResponse**](ZCSRFCPUBLISELECTBYNIFResponse.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 
@@ -225,23 +188,25 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **myPubliSelecByNifTipoProcOperation1**
-> ZCSRFCPUBLISELECTBYNIFResponse myPubliSelecByNifTipoProcOperation1(dTSELECTBYNIFV2REQ)
+# **myPubliSelecByNifTipoProcExpOperation**
+> Respuesta myPubliSelecByNifTipoProcExpOperation(DTSELECTBYNIFV2REQ)
 
-Consultar la lista de expedientes vinculados a un NIF o número de identificación
+Consultar expedientes por documento del ciudadano
+
+Consulta la lista de expedientes asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento EXP y devuelve los expedientes localizados con información de tramitación, órgano responsable y documentos asociados.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final DTSELECTBYNIFV2REQ dTSELECTBYNIFV2REQ = ; // DTSELECTBYNIFV2REQ | 
+final DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ = {"tipodocumento":"NIF","numerodocumento":"99999999R"}; // DTSELECTBYNIFV2REQ | Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como EXP.
 
 try {
-    final response = api.myPubliSelecByNifTipoProcOperation1(dTSELECTBYNIFV2REQ);
+    final response = api.myPubliSelecByNifTipoProcExpOperation(DTSELECTBYNIFV2REQ);
     print(response);
 } on DioException catch (e) {
-    print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcOperation1: $e\n');
+    print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcExpOperation: $e\n');
 }
 ```
 
@@ -249,11 +214,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)|  | 
+ **DTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)| Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como EXP. | 
 
 ### Return type
 
-[**ZCSRFCPUBLISELECTBYNIFResponse**](ZCSRFCPUBLISELECTBYNIFResponse.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 
@@ -266,23 +231,25 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **myPubliSelecByNifTipoProcOperation2**
-> ZCSRFCPUBLISELECTBYNIFResponse myPubliSelecByNifTipoProcOperation2(dTSELECTBYNIFV2REQ)
+# **myPubliSelecByNifTipoProcSalidaOperation**
+> Respuesta myPubliSelecByNifTipoProcSalidaOperation(DTSELECTBYNIFV2REQ)
 
-Consultar la lista de entradas vinculados a un NIF o número de identificación
+Consultar registros de salida por documento del ciudadano
+
+Consulta la lista de registros de salida asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento SALIDA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final DTSELECTBYNIFV2REQ dTSELECTBYNIFV2REQ = ; // DTSELECTBYNIFV2REQ | 
+final DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ = {"tipodocumento":"NIF","numerodocumento":"99999999R"}; // DTSELECTBYNIFV2REQ | Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como SALIDA.
 
 try {
-    final response = api.myPubliSelecByNifTipoProcOperation2(dTSELECTBYNIFV2REQ);
+    final response = api.myPubliSelecByNifTipoProcSalidaOperation(DTSELECTBYNIFV2REQ);
     print(response);
 } on DioException catch (e) {
-    print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcOperation2: $e\n');
+    print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcSalidaOperation: $e\n');
 }
 ```
 
@@ -290,11 +257,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)|  | 
+ **DTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)| Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como SALIDA. | 
 
 ### Return type
 
-[**ZCSRFCPUBLISELECTBYNIFResponse**](ZCSRFCPUBLISELECTBYNIFResponse.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 
@@ -308,16 +275,18 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNumExpOperation**
-> ZCSRFCPUBLISELECTBYNUMEXPResponse myPubliSelecByNumExpOperation(ZCSRFCPUBLISELECTBYNUMEXP)
+> Respuesta myPubliSelecByNumExpOperation(ZCSRFCPUBLISELECTBYNUMEXP)
 
-Consultar el expediente especificado por número de expediente
+Consultar un expediente de publicación por número de expediente
+
+Consulta el detalle de un expediente de publicación a partir del número de expediente, el tipo de documento y el número de documento del ciudadano. La respuesta devuelve la estructura completa del expediente con datos identificativos, estado, órgano gestor y documentos asociados.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP = ; // ZCSRFCPUBLISELECTBYNUMEXP | 
+final ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP = {"pnumdoc":"03874761C","pnumexp":"S020/2024/0001-PR","ptipodoc":"NIF"}; // ZCSRFCPUBLISELECTBYNUMEXP | Cuerpo de la petición con número de documento, número de expediente y tipo de documento del ciudadano para localizar el expediente.
 
 try {
     final response = api.myPubliSelecByNumExpOperation(ZCSRFCPUBLISELECTBYNUMEXP);
@@ -331,52 +300,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ZCSRFCPUBLISELECTBYNUMEXP** | [**ZCSRFCPUBLISELECTBYNUMEXP**](ZCSRFCPUBLISELECTBYNUMEXP.md)|  | 
+ **ZCSRFCPUBLISELECTBYNUMEXP** | [**ZCSRFCPUBLISELECTBYNUMEXP**](ZCSRFCPUBLISELECTBYNUMEXP.md)| Cuerpo de la petición con número de documento, número de expediente y tipo de documento del ciudadano para localizar el expediente. | 
 
 ### Return type
 
-[**ZCSRFCPUBLISELECTBYNUMEXPResponse**](ZCSRFCPUBLISELECTBYNUMEXPResponse.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **siMisExpedientesOperation**
-> ZCSRFCMISEXPEDIENTESResponse siMisExpedientesOperation(ZCSRFCMISEXPEDIENTES)
-
-Consultar listado de expedientes asociados a un número de documento
-
-### Example
-```dart
-import 'package:espacio_ciudadano_api/api.dart';
-
-final api = EspacioCiudadanoApi().getPublicacionApi();
-final ZCSRFCMISEXPEDIENTES ZCSRFCMISEXPEDIENTES = ; // ZCSRFCMISEXPEDIENTES | 
-
-try {
-    final response = api.siMisExpedientesOperation(ZCSRFCMISEXPEDIENTES);
-    print(response);
-} on DioException catch (e) {
-    print('Exception when calling PublicacionApi->siMisExpedientesOperation: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **ZCSRFCMISEXPEDIENTES** | [**ZCSRFCMISEXPEDIENTES**](ZCSRFCMISEXPEDIENTES.md)|  | 
-
-### Return type
-
-[**ZCSRFCMISEXPEDIENTESResponse**](ZCSRFCMISEXPEDIENTESResponse.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 

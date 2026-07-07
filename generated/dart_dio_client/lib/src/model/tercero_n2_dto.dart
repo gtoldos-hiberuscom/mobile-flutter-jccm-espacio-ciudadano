@@ -8,25 +8,28 @@ import 'package:built_value/serializer.dart';
 
 part 'tercero_n2_dto.g.dart';
 
-/// TerceroN2Dto
+/// Datos de contacto de un tercero registrado en el sistema Notifica para recibir notificaciones electrónicas
 ///
 /// Properties:
-/// * [dni]
-/// * [email]
-/// * [idTercero]
-/// * [telefono]
+/// * [dni] - Documento de identificación del ciudadano (NIF/NIE/CIF)
+/// * [email] - Dirección de correo electrónico para recibir notificaciones
+/// * [idTercero] - Identificador interno del tercero en Notifica
+/// * [telefono] - Número de teléfono móvil sin prefijo internacional
 @BuiltValue()
-abstract class TerceroN2Dto
-    implements Built<TerceroN2Dto, TerceroN2DtoBuilder> {
+abstract class TerceroN2Dto implements Built<TerceroN2Dto, TerceroN2DtoBuilder> {
+  /// Documento de identificación del ciudadano (NIF/NIE/CIF)
   @BuiltValueField(wireName: r'dni')
-  String? get dni;
+  String get dni;
 
+  /// Dirección de correo electrónico para recibir notificaciones
   @BuiltValueField(wireName: r'email')
-  String? get email;
+  String get email;
 
+  /// Identificador interno del tercero en Notifica
   @BuiltValueField(wireName: r'idTercero')
   int? get idTercero;
 
+  /// Número de teléfono móvil sin prefijo internacional
   @BuiltValueField(wireName: r'telefono')
   int? get telefono;
 
@@ -53,20 +56,16 @@ class _$TerceroN2DtoSerializer implements PrimitiveSerializer<TerceroN2Dto> {
     TerceroN2Dto object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    if (object.dni != null) {
-      yield r'dni';
-      yield serializers.serialize(
-        object.dni,
-        specifiedType: const FullType(String),
-      );
-    }
-    if (object.email != null) {
-      yield r'email';
-      yield serializers.serialize(
-        object.email,
-        specifiedType: const FullType(String),
-      );
-    }
+    yield r'dni';
+    yield serializers.serialize(
+      object.dni,
+      specifiedType: const FullType(String),
+    );
+    yield r'email';
+    yield serializers.serialize(
+      object.email,
+      specifiedType: const FullType(String),
+    );
     if (object.idTercero != null) {
       yield r'idTercero';
       yield serializers.serialize(
@@ -89,9 +88,7 @@ class _$TerceroN2DtoSerializer implements PrimitiveSerializer<TerceroN2Dto> {
     TerceroN2Dto object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -162,3 +159,4 @@ class _$TerceroN2DtoSerializer implements PrimitiveSerializer<TerceroN2Dto> {
     return result.build();
   }
 }
+

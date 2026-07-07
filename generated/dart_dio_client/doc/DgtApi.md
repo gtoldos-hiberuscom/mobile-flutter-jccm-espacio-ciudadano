@@ -9,22 +9,24 @@ All URIs are relative to *https://fachada-sede-api-pre.cm-pre.jccm.es*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getListaVehiculos**](DgtApi.md#getlistavehiculos) | **POST** /api/v1/dgt/lista-vehiculos/{numDocumento} | Servicio para consultar el listado de vehiculos
+[**getListaVehiculos**](DgtApi.md#getlistavehiculos) | **POST** /api/v1/dgt/lista-vehiculos/{numDocumento} | Consultar listado de vehiculos de un ciudadano
 
 
 # **getListaVehiculos**
-> DTDGTLISTADOVEHICULOSRES getListaVehiculos(numDocumento, DTDGTLISTADOVEHICULOSREQ, authorization)
+> Respuesta getListaVehiculos(numDocumento, DTDGTLISTADOVEHICULOSREQ, authorization)
 
-Servicio para consultar el listado de vehiculos
+Consultar listado de vehiculos de un ciudadano
+
+Consulta en el servicio DGT el listado de vehiculos asociados a un ciudadano identificado por NIF y devuelve el resultado completo de la tramitacion.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getDgtApi();
-final String numDocumento = numDocumento_example; // String | 
-final DTDGTLISTADOVEHICULOSREQ DTDGTLISTADOVEHICULOSREQ = ; // DTDGTLISTADOVEHICULOSREQ | 
-final String authorization = authorization_example; // String | 
+final String numDocumento = 12345678Z; // String | Documento identificativo del ciudadano.
+final DTDGTLISTADOVEHICULOSREQ DTDGTLISTADOVEHICULOSREQ = {"tipodoc":"NIF","docu":"92920000T"}; // DTDGTLISTADOVEHICULOSREQ | Datos de entrada para la consulta DGT. El campo DOCU se resuelve internamente a partir del token de seguridad del ciudadano.
+final String authorization = authorization_example; // String | Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
     final response = api.getListaVehiculos(numDocumento, DTDGTLISTADOVEHICULOSREQ, authorization);
@@ -38,13 +40,13 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **numDocumento** | **String**|  | 
- **DTDGTLISTADOVEHICULOSREQ** | [**DTDGTLISTADOVEHICULOSREQ**](DTDGTLISTADOVEHICULOSREQ.md)|  | 
- **authorization** | **String**|  | [optional] 
+ **numDocumento** | **String**| Documento identificativo del ciudadano. | 
+ **DTDGTLISTADOVEHICULOSREQ** | [**DTDGTLISTADOVEHICULOSREQ**](DTDGTLISTADOVEHICULOSREQ.md)| Datos de entrada para la consulta DGT. El campo DOCU se resuelve internamente a partir del token de seguridad del ciudadano. | 
+ **authorization** | **String**| Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 
 ### Return type
 
-[**DTDGTLISTADOVEHICULOSRES**](DTDGTLISTADOVEHICULOSRES.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 

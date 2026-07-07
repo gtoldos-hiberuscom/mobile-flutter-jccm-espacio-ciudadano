@@ -8,9 +8,9 @@ part of 'tercero_n2_dto.dart';
 
 class _$TerceroN2Dto extends TerceroN2Dto {
   @override
-  final String? dni;
+  final String dni;
   @override
-  final String? email;
+  final String email;
   @override
   final int? idTercero;
   @override
@@ -19,7 +19,8 @@ class _$TerceroN2Dto extends TerceroN2Dto {
   factory _$TerceroN2Dto([void Function(TerceroN2DtoBuilder)? updates]) =>
       (TerceroN2DtoBuilder()..update(updates))._build();
 
-  _$TerceroN2Dto._({this.dni, this.email, this.idTercero, this.telefono})
+  _$TerceroN2Dto._(
+      {required this.dni, required this.email, this.idTercero, this.telefono})
       : super._();
   @override
   TerceroN2Dto rebuild(void Function(TerceroN2DtoBuilder) updates) =>
@@ -112,8 +113,10 @@ class TerceroN2DtoBuilder
   _$TerceroN2Dto _build() {
     final _$result = _$v ??
         _$TerceroN2Dto._(
-          dni: dni,
-          email: email,
+          dni: BuiltValueNullFieldError.checkNotNull(
+              dni, r'TerceroN2Dto', 'dni'),
+          email: BuiltValueNullFieldError.checkNotNull(
+              email, r'TerceroN2Dto', 'email'),
           idTercero: idTercero,
           telefono: telefono,
         );

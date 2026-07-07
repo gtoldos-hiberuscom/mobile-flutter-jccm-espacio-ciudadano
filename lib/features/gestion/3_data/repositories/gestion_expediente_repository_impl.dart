@@ -27,11 +27,6 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
         },
       );
 
-      final items = response.data?.publicacionportal?.item;
-      if (items != null) {
-        return items.map(_toExpedienteByNifDto).where((final e) => e.numexp.isNotEmpty).toList(growable: false);
-      }
-
       return _rawExpedientesByNif(response.extra[generatedApiRawResponseDataExtraKey]);
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
@@ -44,16 +39,6 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       }
       rethrow;
     }
-  }
-
-  Expediente _toExpedienteByNifDto(final ZCSSTPUBPORTAL data) {
-    return Expediente(
-      numexp: _emptyToNull(data.numexp) ?? '',
-      titulo: _emptyToNull(data.titulo) ?? _emptyToNull(data.descrip) ?? _emptyToNull(data.desproc) ?? _emptyToNull(data.asunto) ?? _emptyToNull(data.desasunto) ?? '',
-      consejeria: _emptyToNull(data.desconsej) ?? _emptyToNull(data.consej) ?? '',
-      fechaInicio: _emptyToNull(data.fechareg) ?? _emptyToNull(data.fechaini),
-      estado: _emptyToNull(data.estado),
-    );
   }
 
   List<Expediente> _rawExpedientesByNif(final Object? data) {
@@ -125,10 +110,5 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       return trimmed.isEmpty ? null : trimmed;
     }
     return null;
-  }
-
-  String? _emptyToNull(final String? value) {
-    final text = value?.trim();
-    return text == null || text.isEmpty ? null : text;
   }
 }

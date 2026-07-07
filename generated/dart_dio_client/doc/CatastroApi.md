@@ -9,22 +9,24 @@ All URIs are relative to *https://fachada-sede-api-pre.cm-pre.jccm.es*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getDatosCatastrales**](CatastroApi.md#getdatoscatastrales) | **POST** /api/v1/catastro/datos-catastrales/{numDocumento} | Servicio para obtener los datos catastrales
+[**getDatosCatastrales**](CatastroApi.md#getdatoscatastrales) | **POST** /api/v1/catastro/datos-catastrales/{numDocumento} | Obtener datos catastrales
 
 
 # **getDatosCatastrales**
 > Respuesta getDatosCatastrales(numDocumento, DTCTROCDATREQ, authorization)
 
-Servicio para obtener los datos catastrales
+Obtener datos catastrales
+
+Consulta los datos catastrales del ciudadano en el servicio de Catastro.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCatastroApi();
-final String numDocumento = numDocumento_example; // String | 
-final DTCTROCDATREQ DTCTROCDATREQ = ; // DTCTROCDATREQ | 
-final String authorization = authorization_example; // String | 
+final String numDocumento = 99999999R; // String | Documento identificativo del ciudadano a consultar.
+final DTCTROCDATREQ DTCTROCDATREQ = {"tipdoc":"NIF","docu":"99999999R"}; // DTCTROCDATREQ | Datos de entrada para la consulta catastral.
+final String authorization = authorization_example; // String | Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
     final response = api.getDatosCatastrales(numDocumento, DTCTROCDATREQ, authorization);
@@ -38,9 +40,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **numDocumento** | **String**|  | 
- **DTCTROCDATREQ** | [**DTCTROCDATREQ**](DTCTROCDATREQ.md)|  | 
- **authorization** | **String**|  | [optional] 
+ **numDocumento** | **String**| Documento identificativo del ciudadano a consultar. | 
+ **DTCTROCDATREQ** | [**DTCTROCDATREQ**](DTCTROCDATREQ.md)| Datos de entrada para la consulta catastral. | 
+ **authorization** | **String**| Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 
 ### Return type
 

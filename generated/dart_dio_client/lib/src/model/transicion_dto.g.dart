@@ -6,16 +6,77 @@ part of 'transicion_dto.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+const TransicionDtoAccionEnum _$transicionDtoAccionEnum_COMPARECER =
+    const TransicionDtoAccionEnum._('COMPARECER');
+const TransicionDtoAccionEnum _$transicionDtoAccionEnum_ACEPTAR =
+    const TransicionDtoAccionEnum._('ACEPTAR');
+const TransicionDtoAccionEnum _$transicionDtoAccionEnum_RECHAZAR =
+    const TransicionDtoAccionEnum._('RECHAZAR');
+
+TransicionDtoAccionEnum _$transicionDtoAccionEnumValueOf(String name) {
+  switch (name) {
+    case 'COMPARECER':
+      return _$transicionDtoAccionEnum_COMPARECER;
+    case 'ACEPTAR':
+      return _$transicionDtoAccionEnum_ACEPTAR;
+    case 'RECHAZAR':
+      return _$transicionDtoAccionEnum_RECHAZAR;
+    default:
+      throw ArgumentError(name);
+  }
+}
+
+final BuiltSet<TransicionDtoAccionEnum> _$transicionDtoAccionEnumValues =
+    BuiltSet<TransicionDtoAccionEnum>(const <TransicionDtoAccionEnum>[
+  _$transicionDtoAccionEnum_COMPARECER,
+  _$transicionDtoAccionEnum_ACEPTAR,
+  _$transicionDtoAccionEnum_RECHAZAR,
+]);
+
+Serializer<TransicionDtoAccionEnum> _$transicionDtoAccionEnumSerializer =
+    _$TransicionDtoAccionEnumSerializer();
+
+class _$TransicionDtoAccionEnumSerializer
+    implements PrimitiveSerializer<TransicionDtoAccionEnum> {
+  static const Map<String, Object> _toWire = const <String, Object>{
+    'COMPARECER': 'COMPARECER',
+    'ACEPTAR': 'ACEPTAR',
+    'RECHAZAR': 'RECHAZAR',
+  };
+  static const Map<Object, String> _fromWire = const <Object, String>{
+    'COMPARECER': 'COMPARECER',
+    'ACEPTAR': 'ACEPTAR',
+    'RECHAZAR': 'RECHAZAR',
+  };
+
+  @override
+  final Iterable<Type> types = const <Type>[TransicionDtoAccionEnum];
+  @override
+  final String wireName = 'TransicionDtoAccionEnum';
+
+  @override
+  Object serialize(Serializers serializers, TransicionDtoAccionEnum object,
+          {FullType specifiedType = FullType.unspecified}) =>
+      _toWire[object.name] ?? object.name;
+
+  @override
+  TransicionDtoAccionEnum deserialize(
+          Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      TransicionDtoAccionEnum.valueOf(
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
+}
+
 class _$TransicionDto extends TransicionDto {
   @override
-  final String? accion;
+  final TransicionDtoAccionEnum accion;
   @override
   final String? justificacion;
 
   factory _$TransicionDto([void Function(TransicionDtoBuilder)? updates]) =>
       (TransicionDtoBuilder()..update(updates))._build();
 
-  _$TransicionDto._({this.accion, this.justificacion}) : super._();
+  _$TransicionDto._({required this.accion, this.justificacion}) : super._();
   @override
   TransicionDto rebuild(void Function(TransicionDtoBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -53,9 +114,9 @@ class TransicionDtoBuilder
     implements Builder<TransicionDto, TransicionDtoBuilder> {
   _$TransicionDto? _$v;
 
-  String? _accion;
-  String? get accion => _$this._accion;
-  set accion(String? accion) => _$this._accion = accion;
+  TransicionDtoAccionEnum? _accion;
+  TransicionDtoAccionEnum? get accion => _$this._accion;
+  set accion(TransicionDtoAccionEnum? accion) => _$this._accion = accion;
 
   String? _justificacion;
   String? get justificacion => _$this._justificacion;
@@ -92,7 +153,8 @@ class TransicionDtoBuilder
   _$TransicionDto _build() {
     final _$result = _$v ??
         _$TransicionDto._(
-          accion: accion,
+          accion: BuiltValueNullFieldError.checkNotNull(
+              accion, r'TransicionDto', 'accion'),
           justificacion: justificacion,
         );
     replace(_$result);

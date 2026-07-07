@@ -24,16 +24,18 @@ Method | HTTP request | Description
 
 Descargar documento de una notificación
 
+Descarga un documento adjunto específico de una notificación electrónica identificado por su orden. Los documentos pueden ser resoluciones, anexos o cualquier contenido notificado al ciudadano.
+
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final int notificacionId = 789; // int | 
-final int orden = 56; // int | 
-final String authorization = authorization_example; // String | 
-final String sisOrigen = sisOrigen_example; // String | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final int notificacionId = 123456; // int | Identificador único de la notificación
+final int orden = 1; // int | Número de orden del documento dentro de la notificación
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String sisOrigen = sisOrigen_example; // String | Código del sistema origen que realiza la petición
 
 try {
     final response = api.descargarDocumento(id, notificacionId, orden, authorization, sisOrigen);
@@ -47,11 +49,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **notificacionId** | **int**|  | 
- **orden** | **int**|  | 
- **authorization** | **String**|  | [optional] 
- **sisOrigen** | **String**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **notificacionId** | **int**| Identificador único de la notificación | 
+ **orden** | **int**| Número de orden del documento dentro de la notificación | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **sisOrigen** | **String**| Código del sistema origen que realiza la petición | [optional] 
 
 ### Return type
 
@@ -73,15 +75,17 @@ No authorization required
 
 Descargar justificante de una notificación
 
+Descarga el documento PDF que acredita el puesta a disposición, acceso o rechazo de una notificación electrónica. El justificante tiene valor probatorio conforme a la normativa de notificaciones electrónicas.
+
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final int notificacionId = 789; // int | 
-final String authorization = authorization_example; // String | 
-final String sisOrigen = sisOrigen_example; // String | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final int notificacionId = 123456; // int | Identificador único de la notificación
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String sisOrigen = sisOrigen_example; // String | Código del sistema origen que realiza la petición
 
 try {
     final response = api.descargarJustificante(id, notificacionId, authorization, sisOrigen);
@@ -95,10 +99,10 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **notificacionId** | **int**|  | 
- **authorization** | **String**|  | [optional] 
- **sisOrigen** | **String**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **notificacionId** | **int**| Identificador único de la notificación | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **sisOrigen** | **String**| Código del sistema origen que realiza la petición | [optional] 
 
 ### Return type
 
@@ -120,15 +124,17 @@ No authorization required
 
 Modificar el contacto de un ciudadano en Notifica
 
+Actualiza los datos de contacto (email, teléfono) de un tercero previamente registrado en Notifica. El ciudadano debe existir en el sistema. Requiere que el NIF del token coincida con el NIF a modificar.
+
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final TerceroN2Dto terceroN2Dto = ; // TerceroN2Dto | 
-final String authorization = authorization_example; // String | 
-final String sisOrigen = sisOrigen_example; // String | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final TerceroN2Dto terceroN2Dto = ; // TerceroN2Dto | Datos de contacto actualizados del ciudadano
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String sisOrigen = sisOrigen_example; // String | Código del sistema origen que realiza la petición
 
 try {
     final response = api.modificarCiudadano(id, terceroN2Dto, authorization, sisOrigen);
@@ -142,10 +148,10 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **terceroN2Dto** | [**TerceroN2Dto**](TerceroN2Dto.md)|  | 
- **authorization** | **String**|  | [optional] 
- **sisOrigen** | **String**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **terceroN2Dto** | [**TerceroN2Dto**](TerceroN2Dto.md)| Datos de contacto actualizados del ciudadano | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **sisOrigen** | **String**| Código del sistema origen que realiza la petición | [optional] 
 
 ### Return type
 
@@ -167,14 +173,16 @@ No authorization required
 
 Obtener contacto de un ciudadano registrado en Notifica
 
+Consulta los datos de contacto (email, teléfono) de un tercero previamente registrado en el sistema Notifica. Devuelve 404 si el ciudadano no está registrado.
+
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final String authorization = authorization_example; // String | 
-final String sisOrigen = sisOrigen_example; // String | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String sisOrigen = sisOrigen_example; // String | Código del sistema origen que realiza la petición
 
 try {
     final response = api.obtenerCiudadano(id, authorization, sisOrigen);
@@ -188,9 +196,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **authorization** | **String**|  | [optional] 
- **sisOrigen** | **String**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **sisOrigen** | **String**| Código del sistema origen que realiza la petición | [optional] 
 
 ### Return type
 
@@ -208,19 +216,21 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **obtenerNotificacion**
-> NotificacionDto obtenerNotificacion(id, notificacionId, authorization, sisOrigen)
+> Respuesta obtenerNotificacion(id, notificacionId, authorization, sisOrigen)
 
 Obtener una notificación concreta de un ciudadano
+
+Recupera el detalle completo de una notificación electrónica específica, incluyendo documentos adjuntos, histórico de estados e interesados. Aplica control de acceso para verificar que el ciudadano autenticado es interesado en la notificación.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final int notificacionId = 789; // int | 
-final String authorization = authorization_example; // String | 
-final String sisOrigen = sisOrigen_example; // String | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final int notificacionId = 123456; // int | Identificador único de la notificación
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String sisOrigen = sisOrigen_example; // String | Código del sistema origen que realiza la petición
 
 try {
     final response = api.obtenerNotificacion(id, notificacionId, authorization, sisOrigen);
@@ -234,14 +244,14 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **notificacionId** | **int**|  | 
- **authorization** | **String**|  | [optional] 
- **sisOrigen** | **String**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **notificacionId** | **int**| Identificador único de la notificación | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **sisOrigen** | **String**| Código del sistema origen que realiza la petición | [optional] 
 
 ### Return type
 
-[**NotificacionDto**](NotificacionDto.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 
@@ -259,16 +269,18 @@ No authorization required
 
 Obtener notificaciones de un ciudadano
 
+Recupera el listado de notificaciones electrónicas asociadas a un ciudadano identificado por su NIF/NIE. Permite filtrar por estado y paginar los resultados. Requiere autenticación mediante token JWT y validación de la cláusula de consentimiento.
+
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final String authorization = authorization_example; // String | 
-final String estado = estado_example; // String | Estado de la notificación
-final int page = 56; // int | 
-final int size = 56; // int | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String estado = estado_example; // String | Estado de las notificaciones a filtrar
+final int page = 0; // int | Número de página para paginación (base 0)
+final int size = 10; // int | Tamaño de página para paginación
 
 try {
     final response = api.obtenerNotificacionesCiudadano(id, authorization, estado, page, size);
@@ -282,11 +294,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **authorization** | **String**|  | [optional] 
- **estado** | **String**| Estado de la notificación | [optional] 
- **page** | **int**|  | [optional] 
- **size** | **int**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **estado** | **String**| Estado de las notificaciones a filtrar | [optional] 
+ **page** | **int**| Número de página para paginación (base 0) | [optional] 
+ **size** | **int**| Tamaño de página para paginación | [optional] 
 
 ### Return type
 
@@ -308,15 +320,17 @@ No authorization required
 
 Registrar el contacto de un ciudadano en Notifica
 
+Crea un nuevo registro de contacto (tercero) en el sistema Notifica para recibir notificaciones electrónicas. El NIF del ciudadano debe coincidir con el del token de autenticación. Requiere aceptación previa de la cláusula de consentimiento.
+
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final TerceroN2Dto terceroN2Dto = ; // TerceroN2Dto | 
-final String authorization = authorization_example; // String | 
-final String sisOrigen = sisOrigen_example; // String | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final TerceroN2Dto terceroN2Dto = ; // TerceroN2Dto | Datos de contacto del ciudadano a registrar en Notifica
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String sisOrigen = sisOrigen_example; // String | Código del sistema origen que realiza la petición
 
 try {
     final response = api.registrarCiudadano(id, terceroN2Dto, authorization, sisOrigen);
@@ -330,10 +344,10 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **terceroN2Dto** | [**TerceroN2Dto**](TerceroN2Dto.md)|  | 
- **authorization** | **String**|  | [optional] 
- **sisOrigen** | **String**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **terceroN2Dto** | [**TerceroN2Dto**](TerceroN2Dto.md)| Datos de contacto del ciudadano a registrar en Notifica | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **sisOrigen** | **String**| Código del sistema origen que realiza la petición | [optional] 
 
 ### Return type
 
@@ -351,20 +365,22 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **transicionNotificacion**
-> NotificacionDto transicionNotificacion(id, notificacionId, transicionDto, authorization, sisOrigen)
+> Respuesta transicionNotificacion(id, notificacionId, transicionDto, authorization, sisOrigen)
 
 Realizar una transición sobre una notificación
+
+Ejecuta una transición de estado sobre una notificación (por ejemplo: comparecer, aceptar, rechazar). La transición modifica el estado de la notificación según las reglas de negocio del sistema Notifica. Puede requerir justificación según el tipo de transición.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getCiudadanosApi();
-final String id = id_example; // String | 
-final int notificacionId = 789; // int | 
-final TransicionDto transicionDto = ; // TransicionDto | 
-final String authorization = authorization_example; // String | 
-final String sisOrigen = sisOrigen_example; // String | 
+final String id = 12345678Z; // String | Documento de identificación del ciudadano (NIF/NIE)
+final int notificacionId = 123456; // int | Identificador único de la notificación
+final TransicionDto transicionDto = ; // TransicionDto | Datos de la transición a realizar, incluyendo la acción y opcionalmente una justificación
+final String authorization = authorization_example; // String | Token JWT de autenticación del ciudadano obtenido tras el login
+final String sisOrigen = sisOrigen_example; // String | Código del sistema origen que realiza la petición
 
 try {
     final response = api.transicionNotificacion(id, notificacionId, transicionDto, authorization, sisOrigen);
@@ -378,15 +394,15 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **notificacionId** | **int**|  | 
- **transicionDto** | [**TransicionDto**](TransicionDto.md)|  | 
- **authorization** | **String**|  | [optional] 
- **sisOrigen** | **String**|  | [optional] 
+ **id** | **String**| Documento de identificación del ciudadano (NIF/NIE) | 
+ **notificacionId** | **int**| Identificador único de la notificación | 
+ **transicionDto** | [**TransicionDto**](TransicionDto.md)| Datos de la transición a realizar, incluyendo la acción y opcionalmente una justificación | 
+ **authorization** | **String**| Token JWT de autenticación del ciudadano obtenido tras el login | [optional] 
+ **sisOrigen** | **String**| Código del sistema origen que realiza la petición | [optional] 
 
 ### Return type
 
-[**NotificacionDto**](NotificacionDto.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 

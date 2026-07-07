@@ -11,18 +11,17 @@ part 'datossolicitante.g.dart';
 /// DATOSSOLICITANTE
 ///
 /// Properties:
-/// * [apellido1]
-/// * [apellido2]
-/// * [codigopostal]
-/// * [domicilio]
-/// * [entidad]
-/// * [nombre]
-/// * [numero]
-/// * [poblacion]
-/// * [provincia]
+/// * [apellido1] 
+/// * [apellido2] 
+/// * [codigopostal] 
+/// * [domicilio] 
+/// * [entidad] 
+/// * [nombre] 
+/// * [numero] 
+/// * [poblacion] 
+/// * [provincia] 
 @BuiltValue()
-abstract class DATOSSOLICITANTE
-    implements Built<DATOSSOLICITANTE, DATOSSOLICITANTEBuilder> {
+abstract class DATOSSOLICITANTE implements Built<DATOSSOLICITANTE, DATOSSOLICITANTEBuilder> {
   @BuiltValueField(wireName: r'apellido1')
   String get apellido1;
 
@@ -52,19 +51,16 @@ abstract class DATOSSOLICITANTE
 
   DATOSSOLICITANTE._();
 
-  factory DATOSSOLICITANTE([void updates(DATOSSOLICITANTEBuilder b)]) =
-      _$DATOSSOLICITANTE;
+  factory DATOSSOLICITANTE([void updates(DATOSSOLICITANTEBuilder b)]) = _$DATOSSOLICITANTE;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DATOSSOLICITANTEBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DATOSSOLICITANTE> get serializer =>
-      _$DATOSSOLICITANTESerializer();
+  static Serializer<DATOSSOLICITANTE> get serializer => _$DATOSSOLICITANTESerializer();
 }
 
-class _$DATOSSOLICITANTESerializer
-    implements PrimitiveSerializer<DATOSSOLICITANTE> {
+class _$DATOSSOLICITANTESerializer implements PrimitiveSerializer<DATOSSOLICITANTE> {
   @override
   final Iterable<Type> types = const [DATOSSOLICITANTE, _$DATOSSOLICITANTE];
 
@@ -129,9 +125,7 @@ class _$DATOSSOLICITANTESerializer
     DATOSSOLICITANTE object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -237,3 +231,4 @@ class _$DATOSSOLICITANTESerializer
     return result.build();
   }
 }
+

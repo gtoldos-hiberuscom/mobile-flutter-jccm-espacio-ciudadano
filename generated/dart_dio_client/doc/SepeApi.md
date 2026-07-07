@@ -9,22 +9,24 @@ All URIs are relative to *https://fachada-sede-api-pre.cm-pre.jccm.es*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getDemandanteEmpleoFechaActual**](SepeApi.md#getdemandanteempleofechaactual) | **POST** /api/v1/sepe/demandante-empleo-fecha-actual/{numDocumento} | Servicio para obtener los datos de demandante de empleo a Fecha Actual
+[**getDemandanteEmpleoFechaActual**](SepeApi.md#getdemandanteempleofechaactual) | **POST** /api/v1/sepe/demandante-empleo-fecha-actual/{numDocumento} | Consultar situacion de demandante de empleo a fecha actual
 
 
 # **getDemandanteEmpleoFechaActual**
-> DTSEPESVDIDEFARES getDemandanteEmpleoFechaActual(numDocumento, DTSEPESVDIDEFAREQ, authorization)
+> Respuesta getDemandanteEmpleoFechaActual(numDocumento, DTSEPESVDIDEFAREQ, authorization)
 
-Servicio para obtener los datos de demandante de empleo a Fecha Actual
+Consultar situacion de demandante de empleo a fecha actual
+
+Consulta en el servicio SEPE si el ciudadano figura como demandante de empleo en la fecha actual y devuelve el resultado de la tramitacion.
 
 ### Example
 ```dart
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getSepeApi();
-final String numDocumento = numDocumento_example; // String | 
-final DTSEPESVDIDEFAREQ DTSEPESVDIDEFAREQ = ; // DTSEPESVDIDEFAREQ | 
-final String authorization = authorization_example; // String | 
+final String numDocumento = 12345678Z; // String | Documento identificativo del ciudadano.
+final DTSEPESVDIDEFAREQ DTSEPESVDIDEFAREQ = {"tipodoc":"DNI","docu":"92920000T","nombretitular":"JUAN","apellido1TITULAR":"Perez","apellido2TITULAR":"Sanchez"}; // DTSEPESVDIDEFAREQ | Datos de entrada para la consulta SEPE. El campo DOCU se resuelve internamente a partir del token de seguridad del ciudadano.
+final String authorization = authorization_example; // String | Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
     final response = api.getDemandanteEmpleoFechaActual(numDocumento, DTSEPESVDIDEFAREQ, authorization);
@@ -38,13 +40,13 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **numDocumento** | **String**|  | 
- **DTSEPESVDIDEFAREQ** | [**DTSEPESVDIDEFAREQ**](DTSEPESVDIDEFAREQ.md)|  | 
- **authorization** | **String**|  | [optional] 
+ **numDocumento** | **String**| Documento identificativo del ciudadano. | 
+ **DTSEPESVDIDEFAREQ** | [**DTSEPESVDIDEFAREQ**](DTSEPESVDIDEFAREQ.md)| Datos de entrada para la consulta SEPE. El campo DOCU se resuelve internamente a partir del token de seguridad del ciudadano. | 
+ **authorization** | **String**| Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 
 ### Return type
 
-[**DTSEPESVDIDEFARES**](DTSEPESVDIDEFARES.md)
+[**Respuesta**](Respuesta.md)
 
 ### Authorization
 

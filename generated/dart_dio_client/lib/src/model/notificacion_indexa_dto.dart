@@ -10,30 +10,33 @@ import 'package:built_value/serializer.dart';
 
 part 'notificacion_indexa_dto.g.dart';
 
-/// NotificacionIndexaDto
+/// Resumen de una notificación electrónica indexada para listados
 ///
 /// Properties:
-/// * [concepto]
-/// * [fechaCaducidad]
-/// * [idNotificacion]
-/// * [procedimientoAdministrativo]
-/// * [sistemaOrigen]
-/// * [unidadOrganica]
+/// * [concepto] - Concepto o asunto de la notificación
+/// * [fechaCaducidad] - Fecha límite para acceder a la notificación antes de que expire
+/// * [idNotificacion] - Identificador único de la notificación
+/// * [procedimientoAdministrativo] 
+/// * [sistemaOrigen] - Código del sistema origen que generó la notificación
+/// * [unidadOrganica] 
 @BuiltValue()
-abstract class NotificacionIndexaDto
-    implements Built<NotificacionIndexaDto, NotificacionIndexaDtoBuilder> {
+abstract class NotificacionIndexaDto implements Built<NotificacionIndexaDto, NotificacionIndexaDtoBuilder> {
+  /// Concepto o asunto de la notificación
   @BuiltValueField(wireName: r'concepto')
   String? get concepto;
 
+  /// Fecha límite para acceder a la notificación antes de que expire
   @BuiltValueField(wireName: r'fechaCaducidad')
   DateTime? get fechaCaducidad;
 
+  /// Identificador único de la notificación
   @BuiltValueField(wireName: r'idNotificacion')
   int? get idNotificacion;
 
   @BuiltValueField(wireName: r'procedimientoAdministrativo')
   ProcedimientoAdministrativoIndexaDto? get procedimientoAdministrativo;
 
+  /// Código del sistema origen que generó la notificación
   @BuiltValueField(wireName: r'sistemaOrigen')
   String? get sistemaOrigen;
 
@@ -42,24 +45,18 @@ abstract class NotificacionIndexaDto
 
   NotificacionIndexaDto._();
 
-  factory NotificacionIndexaDto(
-      [void updates(NotificacionIndexaDtoBuilder b)]) = _$NotificacionIndexaDto;
+  factory NotificacionIndexaDto([void updates(NotificacionIndexaDtoBuilder b)]) = _$NotificacionIndexaDto;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(NotificacionIndexaDtoBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<NotificacionIndexaDto> get serializer =>
-      _$NotificacionIndexaDtoSerializer();
+  static Serializer<NotificacionIndexaDto> get serializer => _$NotificacionIndexaDtoSerializer();
 }
 
-class _$NotificacionIndexaDtoSerializer
-    implements PrimitiveSerializer<NotificacionIndexaDto> {
+class _$NotificacionIndexaDtoSerializer implements PrimitiveSerializer<NotificacionIndexaDto> {
   @override
-  final Iterable<Type> types = const [
-    NotificacionIndexaDto,
-    _$NotificacionIndexaDto
-  ];
+  final Iterable<Type> types = const [NotificacionIndexaDto, _$NotificacionIndexaDto];
 
   @override
   final String wireName = r'NotificacionIndexaDto';
@@ -119,9 +116,7 @@ class _$NotificacionIndexaDtoSerializer
     NotificacionIndexaDto object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -206,3 +201,4 @@ class _$NotificacionIndexaDtoSerializer
     return result.build();
   }
 }
+

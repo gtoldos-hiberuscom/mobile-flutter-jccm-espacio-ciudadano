@@ -11,11 +11,10 @@ part 'dtselectbynifreq.g.dart';
 /// DTSELECTBYNIFREQ
 ///
 /// Properties:
-/// * [numerodocumento]
-/// * [tipodoc]
+/// * [numerodocumento] 
+/// * [tipodoc] 
 @BuiltValue()
-abstract class DTSELECTBYNIFREQ
-    implements Built<DTSELECTBYNIFREQ, DTSELECTBYNIFREQBuilder> {
+abstract class DTSELECTBYNIFREQ implements Built<DTSELECTBYNIFREQ, DTSELECTBYNIFREQBuilder> {
   @BuiltValueField(wireName: r'numerodocumento')
   String? get numerodocumento;
 
@@ -24,19 +23,16 @@ abstract class DTSELECTBYNIFREQ
 
   DTSELECTBYNIFREQ._();
 
-  factory DTSELECTBYNIFREQ([void updates(DTSELECTBYNIFREQBuilder b)]) =
-      _$DTSELECTBYNIFREQ;
+  factory DTSELECTBYNIFREQ([void updates(DTSELECTBYNIFREQBuilder b)]) = _$DTSELECTBYNIFREQ;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTSELECTBYNIFREQBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTSELECTBYNIFREQ> get serializer =>
-      _$DTSELECTBYNIFREQSerializer();
+  static Serializer<DTSELECTBYNIFREQ> get serializer => _$DTSELECTBYNIFREQSerializer();
 }
 
-class _$DTSELECTBYNIFREQSerializer
-    implements PrimitiveSerializer<DTSELECTBYNIFREQ> {
+class _$DTSELECTBYNIFREQSerializer implements PrimitiveSerializer<DTSELECTBYNIFREQ> {
   @override
   final Iterable<Type> types = const [DTSELECTBYNIFREQ, _$DTSELECTBYNIFREQ];
 
@@ -70,9 +66,7 @@ class _$DTSELECTBYNIFREQSerializer
     DTSELECTBYNIFREQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -129,3 +123,4 @@ class _$DTSELECTBYNIFREQSerializer
     return result.build();
   }
 }
+

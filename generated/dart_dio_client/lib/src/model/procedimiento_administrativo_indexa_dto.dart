@@ -8,16 +8,13 @@ import 'package:built_value/serializer.dart';
 
 part 'procedimiento_administrativo_indexa_dto.g.dart';
 
-/// ProcedimientoAdministrativoIndexaDto
+/// Datos del procedimiento administrativo al que pertenece la notificación
 ///
 /// Properties:
-/// * [denominacion]
-/// * [idFicha]
+/// * [denominacion] 
+/// * [idFicha] 
 @BuiltValue()
-abstract class ProcedimientoAdministrativoIndexaDto
-    implements
-        Built<ProcedimientoAdministrativoIndexaDto,
-            ProcedimientoAdministrativoIndexaDtoBuilder> {
+abstract class ProcedimientoAdministrativoIndexaDto implements Built<ProcedimientoAdministrativoIndexaDto, ProcedimientoAdministrativoIndexaDtoBuilder> {
   @BuiltValueField(wireName: r'denominacion')
   String? get denominacion;
 
@@ -26,25 +23,18 @@ abstract class ProcedimientoAdministrativoIndexaDto
 
   ProcedimientoAdministrativoIndexaDto._();
 
-  factory ProcedimientoAdministrativoIndexaDto(
-          [void updates(ProcedimientoAdministrativoIndexaDtoBuilder b)]) =
-      _$ProcedimientoAdministrativoIndexaDto;
+  factory ProcedimientoAdministrativoIndexaDto([void updates(ProcedimientoAdministrativoIndexaDtoBuilder b)]) = _$ProcedimientoAdministrativoIndexaDto;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ProcedimientoAdministrativoIndexaDtoBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ProcedimientoAdministrativoIndexaDto> get serializer =>
-      _$ProcedimientoAdministrativoIndexaDtoSerializer();
+  static Serializer<ProcedimientoAdministrativoIndexaDto> get serializer => _$ProcedimientoAdministrativoIndexaDtoSerializer();
 }
 
-class _$ProcedimientoAdministrativoIndexaDtoSerializer
-    implements PrimitiveSerializer<ProcedimientoAdministrativoIndexaDto> {
+class _$ProcedimientoAdministrativoIndexaDtoSerializer implements PrimitiveSerializer<ProcedimientoAdministrativoIndexaDto> {
   @override
-  final Iterable<Type> types = const [
-    ProcedimientoAdministrativoIndexaDto,
-    _$ProcedimientoAdministrativoIndexaDto
-  ];
+  final Iterable<Type> types = const [ProcedimientoAdministrativoIndexaDto, _$ProcedimientoAdministrativoIndexaDto];
 
   @override
   final String wireName = r'ProcedimientoAdministrativoIndexaDto';
@@ -76,9 +66,7 @@ class _$ProcedimientoAdministrativoIndexaDtoSerializer
     ProcedimientoAdministrativoIndexaDto object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -135,3 +123,4 @@ class _$ProcedimientoAdministrativoIndexaDtoSerializer
     return result.build();
   }
 }
+

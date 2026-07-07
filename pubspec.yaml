@@ -7,6 +7,7 @@ environment:
   sdk: ^3.10.1
 
 dependencies:
+  built_collection: ^5.1.1
   connectivity_plus: ^6.1.0
   crypto: ^3.0.6
   curl_logger_dio_interceptor: ^1.0.1

@@ -6,14 +6,8 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/base_request_intermediacion.dart';
-import 'package:espacio_ciudadano_api/src/model/carnet_joven.dart';
-import 'package:espacio_ciudadano_api/src/model/carnet_qr.dart';
-import 'package:espacio_ciudadano_api/src/model/datos_familia_numerosa.dart';
-import 'package:espacio_ciudadano_api/src/model/pkpass_familia_numerosa.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta_fachada_interm.dart';
 
 class CarnetDigitalApi {
   final Dio _dio;
@@ -22,12 +16,12 @@ class CarnetDigitalApi {
 
   const CarnetDigitalApi(this._dio, this._serializers);
 
-  /// Obtener carnet joven
-  ///
+  /// Obtener carné joven digital
+  /// Recupera los datos del carné joven digital asociados al ciudadano autenticado.
   ///
   /// Parameters:
-  /// * [dni]
-  /// * [authorization]
+  /// * [dni] - Documento identificativo del ciudadano titular del carné joven.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -35,9 +29,9 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [CarnetJoven] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<CarnetJoven>> obtenerCarnetJoven({
+  Future<Response<Respuesta>> obtenerCarnetJoven({
     required String dni,
     String? authorization,
     CancelToken? cancelToken,
@@ -48,9 +42,7 @@ class CarnetDigitalApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final _path = r'/api/v1/carnet-digital/joven/{dni}'.replaceAll(
-        '{' r'dni' '}',
-        encodeQueryParameter(_serializers, dni, const FullType(String))
-            .toString());
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -72,7 +64,7 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    CarnetJoven? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -80,8 +72,8 @@ class CarnetDigitalApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(CarnetJoven),
-            ) as CarnetJoven;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -92,7 +84,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<CarnetJoven>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -105,11 +97,11 @@ class CarnetDigitalApi {
   }
 
   /// Obtener datos del carné de discapacidad
-  ///
+  /// Recupera los datos del carné digital de discapacidad asociados al ciudadano autenticado.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [dni] - Documento identificativo del ciudadano titular del carné de discapacidad.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -117,10 +109,89 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerDatosDiscapacidadIntermediacion({
+  Future<Response<Respuesta>> obtenerDatosDiscapacidad({
+    required String dni,
+    String? authorization,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/carnet-digital/grado-discapacidad/{dni}'.replaceAll(
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
+    final _options = Options(
+      method: r'GET',
+      headers: <String, dynamic>{
+        if (authorization != null) r'Authorization': authorization,
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      validateStatus: validateStatus,
+    );
+
+    final _response = await _dio.request<Object>(
+      _path,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    Respuesta? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<Respuesta>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
+  /// Obtener datos de discapacidad por intermediación
+  /// Consulta el servicio de intermediación para recuperar los datos del certificado de discapacidad del ciudadano.
+  ///
+  /// Parameters:
+  /// * [baseRequestIntermediacion] - Cuerpo de petición para consultar datos de discapacidad por intermediación.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<Respuesta>> obtenerDatosDiscapacidadIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -149,8 +220,7 @@ class CarnetDigitalApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -172,7 +242,7 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -180,8 +250,8 @@ class CarnetDigitalApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -192,7 +262,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -205,11 +275,11 @@ class CarnetDigitalApi {
   }
 
   /// Obtener datos del carné de familia numerosa
-  ///
+  /// Recupera los datos del carné digital de familia numerosa asociados al ciudadano autenticado.
   ///
   /// Parameters:
-  /// * [dni]
-  /// * [authorization]
+  /// * [dni] - Documento identificativo del ciudadano titular del carné de familia numerosa.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -217,86 +287,9 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [String] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<String>> obtenerDatosFamiliaNumerosa({
-    required String dni,
-    String? authorization,
-    CancelToken? cancelToken,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? extra,
-    ValidateStatus? validateStatus,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) async {
-    final _path = r'/api/v1/carnet-digital/grado-discapacidad/{dni}'.replaceAll(
-        '{' r'dni' '}',
-        encodeQueryParameter(_serializers, dni, const FullType(String))
-            .toString());
-    final _options = Options(
-      method: r'GET',
-      headers: <String, dynamic>{
-        if (authorization != null) r'Authorization': authorization,
-        ...?headers,
-      },
-      extra: <String, dynamic>{
-        'secure': <Map<String, String>>[],
-        ...?extra,
-      },
-      validateStatus: validateStatus,
-    );
-
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
-      cancelToken: cancelToken,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-
-    String? _responseData;
-
-    try {
-      final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : rawResponse as String;
-    } catch (error, stackTrace) {
-      throw DioException(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioExceptionType.unknown,
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }
-
-    return Response<String>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
-    );
-  }
-
-  /// Obtener datos del carné de familia numerosa
-  /// (Método GET) Obtiene los datos de familia numerosa por DNI.
-  ///
-  /// Parameters:
-  /// * [dni]
-  /// * [authorization]
-  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
-  /// * [headers] - Can be used to add additional headers to the request
-  /// * [extras] - Can be used to add flags to the request
-  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
-  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
-  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
-  ///
-  /// Returns a [Future] containing a [Response] with a [DatosFamiliaNumerosa] as data
-  /// Throws [DioException] if API call or serialization fails
-  Future<Response<DatosFamiliaNumerosa>> obtenerDatosFamiliaNumerosa1({
+  Future<Response<Respuesta>> obtenerDatosFamiliaNumerosa({
     required String dni,
     String? authorization,
     CancelToken? cancelToken,
@@ -307,9 +300,7 @@ class CarnetDigitalApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final _path = r'/api/v1/carnet-digital/familia-numerosa/{dni}'.replaceAll(
-        '{' r'dni' '}',
-        encodeQueryParameter(_serializers, dni, const FullType(String))
-            .toString());
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -331,7 +322,7 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    DatosFamiliaNumerosa? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -339,8 +330,8 @@ class CarnetDigitalApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(DatosFamiliaNumerosa),
-            ) as DatosFamiliaNumerosa;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -351,7 +342,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<DatosFamiliaNumerosa>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -363,12 +354,12 @@ class CarnetDigitalApi {
     );
   }
 
-  /// Obtener datos del carné de familia numerosa
-  ///
+  /// Obtener datos de familia numerosa por intermediación
+  /// Consulta el servicio de intermediación para recuperar los datos del título de familia numerosa del ciudadano. Devuelve información detallada del título incluyendo categoría, vigencia, fecha de caducidad, número de hijos y datos de todos los beneficiarios (titular e hijos) con sus documentos de identidad y fecha de nacimiento.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -376,10 +367,9 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerDatosFamiliaNumerosaIntermediacion({
+  Future<Response<Respuesta>> obtenerDatosFamiliaNumerosaIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -408,8 +398,7 @@ class CarnetDigitalApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -431,7 +420,7 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -439,8 +428,8 @@ class CarnetDigitalApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -451,7 +440,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -463,12 +452,12 @@ class CarnetDigitalApi {
     );
   }
 
-  /// Obtener Pdf de un carné
-  ///
+  /// Obtener PDF del carné joven digital
+  /// Genera el documento PDF del carné joven digital del ciudadano autenticado.
   ///
   /// Parameters:
-  /// * [dni]
-  /// * [authorization]
+  /// * [dni] - Documento identificativo del ciudadano titular del carné joven.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -476,9 +465,9 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [String] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<String>> obtenerPdf({
+  Future<Response<Respuesta>> obtenerPdf({
     required String dni,
     String? authorization,
     CancelToken? cancelToken,
@@ -489,9 +478,7 @@ class CarnetDigitalApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final _path = r'/api/v1/carnet-digital/pdf/{dni}'.replaceAll(
-        '{' r'dni' '}',
-        encodeQueryParameter(_serializers, dni, const FullType(String))
-            .toString());
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -513,11 +500,16 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    String? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : rawResponse as String;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -528,7 +520,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<String>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -540,12 +532,12 @@ class CarnetDigitalApi {
     );
   }
 
-  /// Obtener PkPass de un carné
-  ///
+  /// Obtener PKPass del carné joven digital
+  /// Genera el fichero PKPass del carné joven digital del ciudadano autenticado para su uso en wallet compatible.
   ///
   /// Parameters:
-  /// * [dni]
-  /// * [authorization]
+  /// * [dni] - Documento identificativo del ciudadano titular del carné joven.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -553,9 +545,9 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [String] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<String>> obtenerPkPass({
+  Future<Response<Respuesta>> obtenerPkPass({
     required String dni,
     String? authorization,
     CancelToken? cancelToken,
@@ -566,9 +558,7 @@ class CarnetDigitalApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final _path = r'/api/v1/carnet-digital/pkpass/{dni}'.replaceAll(
-        '{' r'dni' '}',
-        encodeQueryParameter(_serializers, dni, const FullType(String))
-            .toString());
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -590,85 +580,7 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    String? _responseData;
-
-    try {
-      final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : rawResponse as String;
-    } catch (error, stackTrace) {
-      throw DioException(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioExceptionType.unknown,
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }
-
-    return Response<String>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
-    );
-  }
-
-  /// Obtener PkPass del carné de familia numerosa
-  /// (Método GET) Obtiene el PKPASS de familia numerosa por DNI.
-  ///
-  /// Parameters:
-  /// * [dni]
-  /// * [authorization]
-  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
-  /// * [headers] - Can be used to add additional headers to the request
-  /// * [extras] - Can be used to add flags to the request
-  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
-  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
-  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
-  ///
-  /// Returns a [Future] containing a [Response] with a [PkpassFamiliaNumerosa] as data
-  /// Throws [DioException] if API call or serialization fails
-  Future<Response<PkpassFamiliaNumerosa>> obtenerPkPassFamiliaNumerosa({
-    required String dni,
-    String? authorization,
-    CancelToken? cancelToken,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? extra,
-    ValidateStatus? validateStatus,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) async {
-    final _path = r'/api/v1/carnet-digital/familia-numerosa-pkpass/{dni}'
-        .replaceAll(
-            '{' r'dni' '}',
-            encodeQueryParameter(_serializers, dni, const FullType(String))
-                .toString());
-    final _options = Options(
-      method: r'GET',
-      headers: <String, dynamic>{
-        if (authorization != null) r'Authorization': authorization,
-        ...?headers,
-      },
-      extra: <String, dynamic>{
-        'secure': <Map<String, String>>[],
-        ...?extra,
-      },
-      validateStatus: validateStatus,
-    );
-
-    final _response = await _dio.request<Object>(
-      _path,
-      options: _options,
-      cancelToken: cancelToken,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-
-    PkpassFamiliaNumerosa? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -676,8 +588,8 @@ class CarnetDigitalApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(PkpassFamiliaNumerosa),
-            ) as PkpassFamiliaNumerosa;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -688,7 +600,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<PkpassFamiliaNumerosa>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -700,12 +612,12 @@ class CarnetDigitalApi {
     );
   }
 
-  /// Obtener PkPass del carné de familia numerosa
-  ///
+  /// Obtener PKPass del carné de discapacidad
+  /// Genera el fichero PKPass del carné digital de discapacidad del ciudadano autenticado.
   ///
   /// Parameters:
-  /// * [dni]
-  /// * [authorization]
+  /// * [dni] - Documento identificativo del ciudadano titular del carné de discapacidad.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -713,9 +625,9 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [String] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<String>> obtenerPkPassFamiliaNumerosa1({
+  Future<Response<Respuesta>> obtenerPkPassDiscapacidad({
     required String dni,
     String? authorization,
     CancelToken? cancelToken,
@@ -725,11 +637,8 @@ class CarnetDigitalApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/carnet-digital/discapacidad-pkpass/{dni}'
-        .replaceAll(
-            '{' r'dni' '}',
-            encodeQueryParameter(_serializers, dni, const FullType(String))
-                .toString());
+    final _path = r'/api/v1/carnet-digital/discapacidad-pkpass/{dni}'.replaceAll(
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -751,11 +660,16 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    String? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : rawResponse as String;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -766,7 +680,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<String>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -778,12 +692,12 @@ class CarnetDigitalApi {
     );
   }
 
-  /// Obtener Qr de un carné
-  ///
+  /// Obtener PKPass del carné de familia numerosa
+  /// Genera el fichero PKPass del carné digital de familia numerosa del ciudadano autenticado.
   ///
   /// Parameters:
-  /// * [dni]
-  /// * [authorization]
+  /// * [dni] - Documento identificativo del ciudadano titular del carné de familia numerosa.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -791,9 +705,89 @@ class CarnetDigitalApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [CarnetQr] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<CarnetQr>> obtenerQr({
+  Future<Response<Respuesta>> obtenerPkPassFamiliaNumerosa({
+    required String dni,
+    String? authorization,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/carnet-digital/familia-numerosa-pkpass/{dni}'.replaceAll(
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
+    final _options = Options(
+      method: r'GET',
+      headers: <String, dynamic>{
+        if (authorization != null) r'Authorization': authorization,
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      validateStatus: validateStatus,
+    );
+
+    final _response = await _dio.request<Object>(
+      _path,
+      options: _options,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    Respuesta? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<Respuesta>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
+  /// Obtener QR del carné joven digital
+  /// Genera el código QR asociado al carné joven digital del ciudadano autenticado.
+  ///
+  /// Parameters:
+  /// * [dni] - Documento identificativo del ciudadano titular del carné joven.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<Respuesta>> obtenerQr({
     required String dni,
     String? authorization,
     CancelToken? cancelToken,
@@ -804,9 +798,7 @@ class CarnetDigitalApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final _path = r'/api/v1/carnet-digital/qr/{dni}'.replaceAll(
-        '{' r'dni' '}',
-        encodeQueryParameter(_serializers, dni, const FullType(String))
-            .toString());
+        '{' r'dni' '}', encodeQueryParameter(_serializers, dni, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -828,7 +820,7 @@ class CarnetDigitalApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    CarnetQr? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -836,8 +828,8 @@ class CarnetDigitalApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(CarnetQr),
-            ) as CarnetQr;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -848,7 +840,7 @@ class CarnetDigitalApi {
       );
     }
 
-    return Response<CarnetQr>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

@@ -11,13 +11,12 @@ part 'zcstbdocumento.g.dart';
 /// ZCSTBDOCUMENTO
 ///
 /// Properties:
-/// * [ejeexp]
-/// * [iddoc]
-/// * [numexp]
-/// * [tipoproc]
+/// * [ejeexp] 
+/// * [iddoc] 
+/// * [numexp] 
+/// * [tipoproc] 
 @BuiltValue()
-abstract class ZCSTBDOCUMENTO
-    implements Built<ZCSTBDOCUMENTO, ZCSTBDOCUMENTOBuilder> {
+abstract class ZCSTBDOCUMENTO implements Built<ZCSTBDOCUMENTO, ZCSTBDOCUMENTOBuilder> {
   @BuiltValueField(wireName: r'ejeexp')
   String? get ejeexp;
 
@@ -32,19 +31,16 @@ abstract class ZCSTBDOCUMENTO
 
   ZCSTBDOCUMENTO._();
 
-  factory ZCSTBDOCUMENTO([void updates(ZCSTBDOCUMENTOBuilder b)]) =
-      _$ZCSTBDOCUMENTO;
+  factory ZCSTBDOCUMENTO([void updates(ZCSTBDOCUMENTOBuilder b)]) = _$ZCSTBDOCUMENTO;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSTBDOCUMENTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSTBDOCUMENTO> get serializer =>
-      _$ZCSTBDOCUMENTOSerializer();
+  static Serializer<ZCSTBDOCUMENTO> get serializer => _$ZCSTBDOCUMENTOSerializer();
 }
 
-class _$ZCSTBDOCUMENTOSerializer
-    implements PrimitiveSerializer<ZCSTBDOCUMENTO> {
+class _$ZCSTBDOCUMENTOSerializer implements PrimitiveSerializer<ZCSTBDOCUMENTO> {
   @override
   final Iterable<Type> types = const [ZCSTBDOCUMENTO, _$ZCSTBDOCUMENTO];
 
@@ -92,9 +88,7 @@ class _$ZCSTBDOCUMENTOSerializer
     ZCSTBDOCUMENTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -165,3 +159,4 @@ class _$ZCSTBDOCUMENTOSerializer
     return result.build();
   }
 }
+

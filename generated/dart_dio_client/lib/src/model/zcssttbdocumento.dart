@@ -13,28 +13,24 @@ part 'zcssttbdocumento.g.dart';
 /// ZCSSTTBDOCUMENTO
 ///
 /// Properties:
-/// * [item]
+/// * [item] 
 @BuiltValue()
-abstract class ZCSSTTBDOCUMENTO
-    implements Built<ZCSSTTBDOCUMENTO, ZCSSTTBDOCUMENTOBuilder> {
+abstract class ZCSSTTBDOCUMENTO implements Built<ZCSSTTBDOCUMENTO, ZCSSTTBDOCUMENTOBuilder> {
   @BuiltValueField(wireName: r'item')
   BuiltList<ZCSTBDOCUMENTO>? get item;
 
   ZCSSTTBDOCUMENTO._();
 
-  factory ZCSSTTBDOCUMENTO([void updates(ZCSSTTBDOCUMENTOBuilder b)]) =
-      _$ZCSSTTBDOCUMENTO;
+  factory ZCSSTTBDOCUMENTO([void updates(ZCSSTTBDOCUMENTOBuilder b)]) = _$ZCSSTTBDOCUMENTO;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ZCSSTTBDOCUMENTOBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ZCSSTTBDOCUMENTO> get serializer =>
-      _$ZCSSTTBDOCUMENTOSerializer();
+  static Serializer<ZCSSTTBDOCUMENTO> get serializer => _$ZCSSTTBDOCUMENTOSerializer();
 }
 
-class _$ZCSSTTBDOCUMENTOSerializer
-    implements PrimitiveSerializer<ZCSSTTBDOCUMENTO> {
+class _$ZCSSTTBDOCUMENTOSerializer implements PrimitiveSerializer<ZCSSTTBDOCUMENTO> {
   @override
   final Iterable<Type> types = const [ZCSSTTBDOCUMENTO, _$ZCSSTTBDOCUMENTO];
 
@@ -61,9 +57,7 @@ class _$ZCSSTTBDOCUMENTOSerializer
     ZCSSTTBDOCUMENTO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -81,8 +75,7 @@ class _$ZCSSTTBDOCUMENTOSerializer
         case r'item':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType:
-                const FullType(BuiltList, [FullType(ZCSTBDOCUMENTO)]),
+            specifiedType: const FullType(BuiltList, [FullType(ZCSTBDOCUMENTO)]),
           ) as BuiltList<ZCSTBDOCUMENTO>;
           result.item.replace(valueDes);
           break;
@@ -114,3 +107,4 @@ class _$ZCSSTTBDOCUMENTOSerializer
     return result.build();
   }
 }
+

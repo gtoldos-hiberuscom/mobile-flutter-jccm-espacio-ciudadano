@@ -11,9 +11,9 @@ part 'clausulas.g.dart';
 /// Clausulas
 ///
 /// Properties:
-/// * [idClausula]
-/// * [seleccionado]
-/// * [version]
+/// * [idClausula] 
+/// * [seleccionado] 
+/// * [version] 
 @BuiltValue()
 abstract class Clausulas implements Built<Clausulas, ClausulasBuilder> {
   @BuiltValueField(wireName: r'idClausula')
@@ -77,9 +77,7 @@ class _$ClausulasSerializer implements PrimitiveSerializer<Clausulas> {
     Clausulas object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -143,3 +141,4 @@ class _$ClausulasSerializer implements PrimitiveSerializer<Clausulas> {
     return result.build();
   }
 }
+

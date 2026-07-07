@@ -7,16 +7,19 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(NotificacionIndexaDto, () {
+    // Concepto o asunto de la notificación
     // String concepto
     test('to test the property `concepto`', () async {
       // TODO
     });
 
+    // Fecha límite para acceder a la notificación antes de que expire
     // DateTime fechaCaducidad
     test('to test the property `fechaCaducidad`', () async {
       // TODO
     });
 
+    // Identificador único de la notificación
     // int idNotificacion
     test('to test the property `idNotificacion`', () async {
       // TODO
@@ -27,6 +30,7 @@ void main() {
       // TODO
     });
 
+    // Código del sistema origen que generó la notificación
     // String sistemaOrigen
     test('to test the property `sistemaOrigen`', () async {
       // TODO
@@ -36,5 +40,6 @@ void main() {
     test('to test the property `unidadOrganica`', () async {
       // TODO
     });
+
   });
 }

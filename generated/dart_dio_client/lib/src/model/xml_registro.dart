@@ -11,7 +11,7 @@ part 'xml_registro.g.dart';
 /// XMLRegistro
 ///
 /// Properties:
-/// * [xmlClave]
+/// * [xmlClave] 
 @BuiltValue()
 abstract class XMLRegistro implements Built<XMLRegistro, XMLRegistroBuilder> {
   @BuiltValueField(wireName: r'xmlClave')
@@ -55,9 +55,7 @@ class _$XMLRegistroSerializer implements PrimitiveSerializer<XMLRegistro> {
     XMLRegistro object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -107,3 +105,4 @@ class _$XMLRegistroSerializer implements PrimitiveSerializer<XMLRegistro> {
     return result.build();
   }
 }
+

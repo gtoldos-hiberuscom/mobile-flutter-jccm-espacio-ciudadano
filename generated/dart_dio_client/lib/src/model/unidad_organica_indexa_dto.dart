@@ -8,37 +8,29 @@ import 'package:built_value/serializer.dart';
 
 part 'unidad_organica_indexa_dto.g.dart';
 
-/// UnidadOrganicaIndexaDto
+/// Datos de la unidad administrativa que emite la notificación
 ///
 /// Properties:
-/// * [nombre]
+/// * [nombre] 
 @BuiltValue()
-abstract class UnidadOrganicaIndexaDto
-    implements Built<UnidadOrganicaIndexaDto, UnidadOrganicaIndexaDtoBuilder> {
+abstract class UnidadOrganicaIndexaDto implements Built<UnidadOrganicaIndexaDto, UnidadOrganicaIndexaDtoBuilder> {
   @BuiltValueField(wireName: r'nombre')
   String? get nombre;
 
   UnidadOrganicaIndexaDto._();
 
-  factory UnidadOrganicaIndexaDto(
-          [void updates(UnidadOrganicaIndexaDtoBuilder b)]) =
-      _$UnidadOrganicaIndexaDto;
+  factory UnidadOrganicaIndexaDto([void updates(UnidadOrganicaIndexaDtoBuilder b)]) = _$UnidadOrganicaIndexaDto;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(UnidadOrganicaIndexaDtoBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<UnidadOrganicaIndexaDto> get serializer =>
-      _$UnidadOrganicaIndexaDtoSerializer();
+  static Serializer<UnidadOrganicaIndexaDto> get serializer => _$UnidadOrganicaIndexaDtoSerializer();
 }
 
-class _$UnidadOrganicaIndexaDtoSerializer
-    implements PrimitiveSerializer<UnidadOrganicaIndexaDto> {
+class _$UnidadOrganicaIndexaDtoSerializer implements PrimitiveSerializer<UnidadOrganicaIndexaDto> {
   @override
-  final Iterable<Type> types = const [
-    UnidadOrganicaIndexaDto,
-    _$UnidadOrganicaIndexaDto
-  ];
+  final Iterable<Type> types = const [UnidadOrganicaIndexaDto, _$UnidadOrganicaIndexaDto];
 
   @override
   final String wireName = r'UnidadOrganicaIndexaDto';
@@ -63,9 +55,7 @@ class _$UnidadOrganicaIndexaDtoSerializer
     UnidadOrganicaIndexaDto object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -115,3 +105,4 @@ class _$UnidadOrganicaIndexaDtoSerializer
     return result.build();
   }
 }
+

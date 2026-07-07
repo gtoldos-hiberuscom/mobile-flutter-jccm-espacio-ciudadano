@@ -61,5 +61,6 @@ void main() {
     test('to test the property `xmlRegistro`', () async {
       // TODO
     });
+
   });
 }

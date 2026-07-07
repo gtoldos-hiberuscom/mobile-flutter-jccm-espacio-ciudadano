@@ -11,14 +11,13 @@ part 'datos_representante.g.dart';
 /// DatosRepresentante
 ///
 /// Properties:
-/// * [apellido1]
-/// * [apellido2]
-/// * [nifcif]
-/// * [nombre]
-/// * [tipodoc]
+/// * [apellido1] 
+/// * [apellido2] 
+/// * [nifcif] 
+/// * [nombre] 
+/// * [tipodoc] 
 @BuiltValue()
-abstract class DatosRepresentante
-    implements Built<DatosRepresentante, DatosRepresentanteBuilder> {
+abstract class DatosRepresentante implements Built<DatosRepresentante, DatosRepresentanteBuilder> {
   @BuiltValueField(wireName: r'apellido1')
   String? get apellido1;
 
@@ -36,19 +35,16 @@ abstract class DatosRepresentante
 
   DatosRepresentante._();
 
-  factory DatosRepresentante([void updates(DatosRepresentanteBuilder b)]) =
-      _$DatosRepresentante;
+  factory DatosRepresentante([void updates(DatosRepresentanteBuilder b)]) = _$DatosRepresentante;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DatosRepresentanteBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DatosRepresentante> get serializer =>
-      _$DatosRepresentanteSerializer();
+  static Serializer<DatosRepresentante> get serializer => _$DatosRepresentanteSerializer();
 }
 
-class _$DatosRepresentanteSerializer
-    implements PrimitiveSerializer<DatosRepresentante> {
+class _$DatosRepresentanteSerializer implements PrimitiveSerializer<DatosRepresentante> {
   @override
   final Iterable<Type> types = const [DatosRepresentante, _$DatosRepresentante];
 
@@ -103,9 +99,7 @@ class _$DatosRepresentanteSerializer
     DatosRepresentante object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -183,3 +177,4 @@ class _$DatosRepresentanteSerializer
     return result.build();
   }
 }
+

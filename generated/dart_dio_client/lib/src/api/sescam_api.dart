@@ -6,9 +6,8 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class SescamApi {
   final Dio _dio;
@@ -42,10 +41,8 @@ class SescamApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/sescam/citas/{numDocumento}'.replaceAll(
-        '{' r'numDocumento' '}',
-        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
-            .toString());
+    final _path = r'/api/v1/sescam/citas/{numDocumento}'.replaceAll('{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -126,10 +123,8 @@ class SescamApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/sescam/citas-pasadas/{numDocumento}'.replaceAll(
-        '{' r'numDocumento' '}',
-        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
-            .toString());
+    final _path = r'/api/v1/sescam/citas-pasadas/{numDocumento}'.replaceAll('{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -145,8 +140,7 @@ class SescamApi {
 
     final _queryParameters = <String, dynamic>{
       if (pagina != null)
-        r'pagina':
-            encodeQueryParameter(_serializers, pagina, const FullType(int)),
+        r'pagina': encodeQueryParameter(_serializers, pagina, const FullType(int)),
     };
 
     final _response = await _dio.request<Object>(
@@ -215,10 +209,8 @@ class SescamApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/sescam/cip/{numDocumento}'.replaceAll(
-        '{' r'numDocumento' '}',
-        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
-            .toString());
+    final _path = r'/api/v1/sescam/cip/{numDocumento}'.replaceAll('{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{

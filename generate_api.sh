@@ -59,6 +59,10 @@ cleanup_generated_api_imports() {
     if ! rg -q '\bRespuesta\b' "$file"; then
       perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/respuesta\\.dart';\\n@@m" "$file"
     fi
+
+    if ! rg -q '\bRespuestaRESULTADOPROCEDIMIENTO\b' "$file"; then
+      perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/respuesta_resultadoprocedimiento\\.dart';\\n@@m" "$file"
+    fi
   done
 }
 

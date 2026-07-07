@@ -11,7 +11,7 @@ part 'dtquery.g.dart';
 /// DTQUERY
 ///
 /// Properties:
-/// * [query]
+/// * [query] 
 @BuiltValue()
 abstract class DTQUERY implements Built<DTQUERY, DTQUERYBuilder> {
   @BuiltValueField(wireName: r'query')
@@ -53,9 +53,7 @@ class _$DTQUERYSerializer implements PrimitiveSerializer<DTQUERY> {
     DTQUERY object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -105,3 +103,4 @@ class _$DTQUERYSerializer implements PrimitiveSerializer<DTQUERY> {
     return result.build();
   }
 }
+

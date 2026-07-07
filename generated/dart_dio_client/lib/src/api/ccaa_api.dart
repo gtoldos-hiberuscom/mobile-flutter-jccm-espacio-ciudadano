@@ -6,25 +6,24 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/dtminhafpcccafnreq.dart';
-import 'package:espacio_ciudadano_api/src/model/dtminhafpcccafnres.dart';
 
 class CcaaApi {
+
   final Dio _dio;
 
   final Serializers _serializers;
 
   const CcaaApi(this._dio, this._serializers);
 
-  /// Servicio para obtener los datos de familia numerosa
-  ///
+  /// Obtener datos de familia numerosa
+  /// Consulta los datos de familia numerosa del ciudadano en el servicio CCAA.
   ///
   /// Parameters:
-  /// * [numDocumento]
-  /// * [DTMINHAFPCCCAFNREQ]
-  /// * [authorization]
+  /// * [numDocumento] - Documento identificativo del ciudadano a consultar.
+  /// * [DTMINHAFPCCCAFNREQ] - Datos de entrada para la consulta de familia numerosa.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -32,9 +31,9 @@ class CcaaApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [DTMINHAFPCCCAFNRES] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTMINHAFPCCCAFNRES>> getDatosFamiliaNumerosa({
+  Future<Response<Respuesta>> getDatosFamiliaNumerosa({ 
     required String numDocumento,
     required DTMINHAFPCCCAFNREQ dtminhafpcccafnreqBody,
     String? authorization,
@@ -45,10 +44,7 @@ class CcaaApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/ccaa/familia-numerosa/{numDocumento}'.replaceAll(
-        '{' r'numDocumento' '}',
-        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
-            .toString());
+    final _path = r'/api/v1/ccaa/familia-numerosa/{numDocumento}'.replaceAll('{' r'numDocumento' '}', encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -67,11 +63,11 @@ class CcaaApi {
 
     try {
       const _type = FullType(DTMINHAFPCCCAFNREQ);
-      _bodyData =
-          _serializers.serialize(dtminhafpcccafnreqBody, specifiedType: _type);
-    } catch (error, stackTrace) {
+      _bodyData = _serializers.serialize(dtminhafpcccafnreqBody, specifiedType: _type);
+
+    } catch(error, stackTrace) {
       throw DioException(
-        requestOptions: _options.compose(
+         requestOptions: _options.compose(
           _dio.options,
           _path,
         ),
@@ -90,16 +86,15 @@ class CcaaApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    DTMINHAFPCCCAFNRES? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
-      _responseData = rawResponse == null
-          ? null
-          : _serializers.deserialize(
-              rawResponse,
-              specifiedType: const FullType(DTMINHAFPCCCAFNRES),
-            ) as DTMINHAFPCCCAFNRES;
+      _responseData = rawResponse == null ? null : _serializers.deserialize(
+        rawResponse,
+        specifiedType: const FullType(Respuesta),
+      ) as Respuesta;
+
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -110,7 +105,7 @@ class CcaaApi {
       );
     }
 
-    return Response<DTMINHAFPCCCAFNRES>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -121,4 +116,5 @@ class CcaaApi {
       extra: _response.extra,
     );
   }
+
 }

@@ -11,19 +11,18 @@ part 'dtsepesvdidefareq.g.dart';
 /// DTSEPESVDIDEFAREQ
 ///
 /// Properties:
-/// * [apellido1TITULAR]
-/// * [apellido2TITULAR]
-/// * [docu]
-/// * [documentofuncionario]
-/// * [idaut]
-/// * [nombrefuncionario]
-/// * [nombretitular]
-/// * [proc]
-/// * [tipo]
-/// * [tipodoc]
+/// * [apellido1TITULAR] 
+/// * [apellido2TITULAR] 
+/// * [docu] 
+/// * [documentofuncionario] 
+/// * [idaut] 
+/// * [nombrefuncionario] 
+/// * [nombretitular] 
+/// * [proc] 
+/// * [tipo] 
+/// * [tipodoc] 
 @BuiltValue()
-abstract class DTSEPESVDIDEFAREQ
-    implements Built<DTSEPESVDIDEFAREQ, DTSEPESVDIDEFAREQBuilder> {
+abstract class DTSEPESVDIDEFAREQ implements Built<DTSEPESVDIDEFAREQ, DTSEPESVDIDEFAREQBuilder> {
   @BuiltValueField(wireName: r'apellido1TITULAR')
   String? get apellido1TITULAR;
 
@@ -56,19 +55,16 @@ abstract class DTSEPESVDIDEFAREQ
 
   DTSEPESVDIDEFAREQ._();
 
-  factory DTSEPESVDIDEFAREQ([void updates(DTSEPESVDIDEFAREQBuilder b)]) =
-      _$DTSEPESVDIDEFAREQ;
+  factory DTSEPESVDIDEFAREQ([void updates(DTSEPESVDIDEFAREQBuilder b)]) = _$DTSEPESVDIDEFAREQ;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTSEPESVDIDEFAREQBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTSEPESVDIDEFAREQ> get serializer =>
-      _$DTSEPESVDIDEFAREQSerializer();
+  static Serializer<DTSEPESVDIDEFAREQ> get serializer => _$DTSEPESVDIDEFAREQSerializer();
 }
 
-class _$DTSEPESVDIDEFAREQSerializer
-    implements PrimitiveSerializer<DTSEPESVDIDEFAREQ> {
+class _$DTSEPESVDIDEFAREQSerializer implements PrimitiveSerializer<DTSEPESVDIDEFAREQ> {
   @override
   final Iterable<Type> types = const [DTSEPESVDIDEFAREQ, _$DTSEPESVDIDEFAREQ];
 
@@ -158,9 +154,7 @@ class _$DTSEPESVDIDEFAREQSerializer
     DTSEPESVDIDEFAREQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -273,3 +267,4 @@ class _$DTSEPESVDIDEFAREQSerializer
     return result.build();
   }
 }
+

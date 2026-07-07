@@ -11,13 +11,13 @@ part 'dtedutnureq.g.dart';
 /// DTEDUTNUREQ
 ///
 /// Properties:
-/// * [docu]
-/// * [documentofuncionario]
-/// * [idaut]
-/// * [nombrefuncionario]
-/// * [proc]
-/// * [tipo]
-/// * [tipodoc]
+/// * [docu] 
+/// * [documentofuncionario] 
+/// * [idaut] 
+/// * [nombrefuncionario] 
+/// * [proc] 
+/// * [tipo] 
+/// * [tipodoc] 
 @BuiltValue()
 abstract class DTEDUTNUREQ implements Built<DTEDUTNUREQ, DTEDUTNUREQBuilder> {
   @BuiltValueField(wireName: r'docu')
@@ -121,9 +121,7 @@ class _$DTEDUTNUREQSerializer implements PrimitiveSerializer<DTEDUTNUREQ> {
     DTEDUTNUREQ object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -215,3 +213,4 @@ class _$DTEDUTNUREQSerializer implements PrimitiveSerializer<DTEDUTNUREQ> {
     return result.build();
   }
 }
+

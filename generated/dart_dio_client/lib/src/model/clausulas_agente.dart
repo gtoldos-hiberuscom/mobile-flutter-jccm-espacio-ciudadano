@@ -13,11 +13,10 @@ part 'clausulas_agente.g.dart';
 /// ClausulasAgente
 ///
 /// Properties:
-/// * [clausulas]
-/// * [idAgente]
+/// * [clausulas] 
+/// * [idAgente] 
 @BuiltValue()
-abstract class ClausulasAgente
-    implements Built<ClausulasAgente, ClausulasAgenteBuilder> {
+abstract class ClausulasAgente implements Built<ClausulasAgente, ClausulasAgenteBuilder> {
   @BuiltValueField(wireName: r'clausulas')
   BuiltList<Clausulas>? get clausulas;
 
@@ -26,19 +25,16 @@ abstract class ClausulasAgente
 
   ClausulasAgente._();
 
-  factory ClausulasAgente([void updates(ClausulasAgenteBuilder b)]) =
-      _$ClausulasAgente;
+  factory ClausulasAgente([void updates(ClausulasAgenteBuilder b)]) = _$ClausulasAgente;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(ClausulasAgenteBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<ClausulasAgente> get serializer =>
-      _$ClausulasAgenteSerializer();
+  static Serializer<ClausulasAgente> get serializer => _$ClausulasAgenteSerializer();
 }
 
-class _$ClausulasAgenteSerializer
-    implements PrimitiveSerializer<ClausulasAgente> {
+class _$ClausulasAgenteSerializer implements PrimitiveSerializer<ClausulasAgente> {
   @override
   final Iterable<Type> types = const [ClausulasAgente, _$ClausulasAgente];
 
@@ -72,9 +68,7 @@ class _$ClausulasAgenteSerializer
     ClausulasAgente object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -131,3 +125,4 @@ class _$ClausulasAgenteSerializer
     return result.build();
   }
 }
+

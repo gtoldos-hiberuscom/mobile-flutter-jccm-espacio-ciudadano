@@ -6,10 +6,8 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/dtsepesvdidefareq.dart';
-import 'package:espacio_ciudadano_api/src/model/dtsepesvdidefares.dart';
 
 class SepeApi {
   final Dio _dio;
@@ -18,13 +16,13 @@ class SepeApi {
 
   const SepeApi(this._dio, this._serializers);
 
-  /// Servicio para obtener los datos de demandante de empleo a Fecha Actual
-  ///
+  /// Consultar situacion de demandante de empleo a fecha actual
+  /// Consulta en el servicio SEPE si el ciudadano figura como demandante de empleo en la fecha actual y devuelve el resultado de la tramitacion.
   ///
   /// Parameters:
-  /// * [numDocumento]
-  /// * [DTSEPESVDIDEFAREQ]
-  /// * [authorization]
+  /// * [numDocumento] - Documento identificativo del ciudadano.
+  /// * [DTSEPESVDIDEFAREQ] - Datos de entrada para la consulta SEPE. El campo DOCU se resuelve internamente a partir del token de seguridad del ciudadano.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -32,9 +30,9 @@ class SepeApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [DTSEPESVDIDEFARES] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTSEPESVDIDEFARES>> getDemandanteEmpleoFechaActual({
+  Future<Response<Respuesta>> getDemandanteEmpleoFechaActual({
     required String numDocumento,
     required DTSEPESVDIDEFAREQ dtsepesvdidefareqBody,
     String? authorization,
@@ -45,12 +43,9 @@ class SepeApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/sepe/demandante-empleo-fecha-actual/{numDocumento}'
-        .replaceAll(
-            '{' r'numDocumento' '}',
-            encodeQueryParameter(
-                    _serializers, numDocumento, const FullType(String))
-                .toString());
+    final _path = r'/api/v1/sepe/demandante-empleo-fecha-actual/{numDocumento}'.replaceAll(
+        '{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -69,8 +64,7 @@ class SepeApi {
 
     try {
       const _type = FullType(DTSEPESVDIDEFAREQ);
-      _bodyData =
-          _serializers.serialize(dtsepesvdidefareqBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(dtsepesvdidefareqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -92,7 +86,7 @@ class SepeApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    DTSEPESVDIDEFARES? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -100,8 +94,8 @@ class SepeApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(DTSEPESVDIDEFARES),
-            ) as DTSEPESVDIDEFARES;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -112,7 +106,7 @@ class SepeApi {
       );
     }
 
-    return Response<DTSEPESVDIDEFARES>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

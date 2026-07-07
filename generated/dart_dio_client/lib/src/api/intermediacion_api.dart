@@ -6,9 +6,7 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
-import 'package:espacio_ciudadano_api/src/model/base_request_intermediacion.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta_fachada_interm.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 
 class IntermediacionApi {
   final Dio _dio;
@@ -17,12 +15,12 @@ class IntermediacionApi {
 
   const IntermediacionApi(this._dio, this._serializers);
 
-  /// Obtener datos de atención a la dependencia
-  /// Consulta la situación actual de las prestaciones en ayuda a la dependencia.
+  /// Obtener datos de atencion a la dependencia
+  /// Consulta la situacion actual del expediente y prestaciones de dependencia del ciudadano. La respuesta se muestra con la estructura completa Respuesta y el detalle interno de datos especificos.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de peticion para consultar datos de atencion a la dependencia por intermediacion.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -30,10 +28,9 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerDatosAtencionDependenciaIntermediacion({
+  Future<Response<Respuesta>> obtenerDatosAtencionDependenciaIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -62,8 +59,7 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -85,7 +81,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -93,8 +89,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -105,7 +101,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -117,12 +113,12 @@ class IntermediacionApi {
     );
   }
 
-  /// Obtener datos del carné de discapacidad
-  ///
+  /// Obtener datos de discapacidad por intermediación
+  /// Consulta el servicio de intermediación para recuperar los datos del certificado de discapacidad del ciudadano.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de petición para consultar datos de discapacidad por intermediación.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -130,10 +126,9 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerDatosDiscapacidadIntermediacion({
+  Future<Response<Respuesta>> obtenerDatosDiscapacidadIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -162,8 +157,7 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -185,7 +179,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -193,8 +187,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -205,7 +199,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -217,12 +211,12 @@ class IntermediacionApi {
     );
   }
 
-  /// Obtener datos del carné de familia numerosa
-  ///
+  /// Obtener datos de familia numerosa por intermediación
+  /// Consulta el servicio de intermediación para recuperar los datos del título de familia numerosa del ciudadano. Devuelve información detallada del título incluyendo categoría, vigencia, fecha de caducidad, número de hijos y datos de todos los beneficiarios (titular e hijos) con sus documentos de identidad y fecha de nacimiento.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -230,10 +224,9 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerDatosFamiliaNumerosaIntermediacion({
+  Future<Response<Respuesta>> obtenerDatosFamiliaNumerosaIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -262,8 +255,7 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -285,7 +277,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -293,8 +285,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -305,7 +297,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -317,12 +309,12 @@ class IntermediacionApi {
     );
   }
 
-  /// Obtener datos de la tarjeta de estacionamiento
-  /// Consulta la información de la tarjeta de estacionamiento en vigor de personas con discapacidad y movilidad reducida de Castilla La Mancha.
+  /// Obtener datos de la tarjeta de estacionamiento para personas con discapacidad
+  /// Consulta la información de la tarjeta de estacionamiento en vigor de personas con discapacidad y movilidad reducida de Castilla-La Mancha. La respuesta incluye el identificador de la tarjeta, modalidad (Persona con Discapacidad o Movilidad Reducida), fechas de vigencia de inicio y fin, y demás datos asociados a la tarjeta.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de petición para consultar datos de tarjeta de estacionamiento por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -330,10 +322,9 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerDatosTarjetaEstacionamientoIntermediacion({
+  Future<Response<Respuesta>> obtenerDatosTarjetaEstacionamientoIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -362,8 +353,7 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -385,7 +375,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -393,8 +383,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -405,7 +395,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -417,12 +407,12 @@ class IntermediacionApi {
     );
   }
 
-  /// Obtener datos de termalismo
-  /// Consulta el último balneario adjudicado del programa de termalismo.
+  /// Obtener datos del último balneario adjudicado del programa de termalismo
+  /// Consulta el último balneario adjudicado en el programa de termalismo de Castilla-La Mancha para el ciudadano especificado. La respuesta incluye información detallada del balneario incluyendo su nombre, localidad, fechas de estancia programadas y otros datos de la adjudicación.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de petición para consultar datos de termalismo por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -430,10 +420,9 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerDatosTermalismoIntermediacion({
+  Future<Response<Respuesta>> obtenerDatosTermalismoIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -462,8 +451,7 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -485,7 +473,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -493,8 +481,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -505,7 +493,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -517,12 +505,12 @@ class IntermediacionApi {
     );
   }
 
-  /// Consulta las ofertas de empleo inscritas por un ciudadano en la Consejería de Empleo.
-  /// Consulta las ofertas de empleo inscritas por un ciudadano en la Consejería de Empleo.
+  /// Obtener ofertas de empleo inscritas
+  /// Consulta las ofertas de empleo en las que el ciudadano figura inscrito. La respuesta se muestra con la estructura completa Respuesta y el listado de ofertas en datosespecificos.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de peticion para consultar ofertas de empleo inscritas por intermediacion.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -530,9 +518,9 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>> obtenerOfertasEmpleoInscritas({
+  Future<Response<Respuesta>> obtenerOfertasEmpleoInscritas({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -561,8 +549,7 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -584,7 +571,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -592,8 +579,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -604,7 +591,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,
@@ -616,12 +603,12 @@ class IntermediacionApi {
     );
   }
 
-  /// Obtener títulos no universitarios
-  /// Consulta los títulos no universitarios de un ciudadano.
+  /// Obtener títulos no universitarios del ciudadano
+  /// Consulta los títulos no universitarios (Ciclos Formativos de Grado Superior y Grado Medio) registrados para el ciudadano. La respuesta incluye información detallada de cada título obtenido como denominación, tipo de ciclo (CFGS/CFGM), centro educativo, localidad y fechas de obtención y expedición del título.
   ///
   /// Parameters:
-  /// * [baseRequestIntermediacion]
-  /// * [authorization]
+  /// * [baseRequestIntermediacion] - Cuerpo de petición para consultar títulos no universitarios por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
+  /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -629,10 +616,9 @@ class IntermediacionApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaFachadaInterm] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaFachadaInterm>>
-      obtenerTitulosNoUniversitariosIntermediacion({
+  Future<Response<Respuesta>> obtenerTitulosNoUniversitariosIntermediacion({
     required BaseRequestIntermediacion baseRequestIntermediacion,
     String? authorization,
     CancelToken? cancelToken,
@@ -661,8 +647,7 @@ class IntermediacionApi {
 
     try {
       const _type = FullType(BaseRequestIntermediacion);
-      _bodyData = _serializers.serialize(baseRequestIntermediacion,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(baseRequestIntermediacion, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -684,7 +669,7 @@ class IntermediacionApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    RespuestaFachadaInterm? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -692,8 +677,8 @@ class IntermediacionApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(RespuestaFachadaInterm),
-            ) as RespuestaFachadaInterm;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -704,7 +689,7 @@ class IntermediacionApi {
       );
     }
 
-    return Response<RespuestaFachadaInterm>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

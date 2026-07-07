@@ -11,8 +11,8 @@ part 'datospago.g.dart';
 /// DATOSPAGO
 ///
 /// Properties:
-/// * [imprec]
-/// * [refdocrecur]
+/// * [imprec] 
+/// * [refdocrecur] 
 @BuiltValue()
 abstract class DATOSPAGO implements Built<DATOSPAGO, DATOSPAGOBuilder> {
   @BuiltValueField(wireName: r'imprec')
@@ -62,9 +62,7 @@ class _$DATOSPAGOSerializer implements PrimitiveSerializer<DATOSPAGO> {
     DATOSPAGO object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -121,3 +119,4 @@ class _$DATOSPAGOSerializer implements PrimitiveSerializer<DATOSPAGO> {
     return result.build();
   }
 }
+

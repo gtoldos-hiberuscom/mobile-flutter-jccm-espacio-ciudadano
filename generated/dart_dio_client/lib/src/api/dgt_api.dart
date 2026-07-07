@@ -6,10 +6,8 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/dtdgtlistadovehiculosreq.dart';
-import 'package:espacio_ciudadano_api/src/model/dtdgtlistadovehiculosres.dart';
 
 class DgtApi {
   final Dio _dio;
@@ -18,13 +16,13 @@ class DgtApi {
 
   const DgtApi(this._dio, this._serializers);
 
-  /// Servicio para consultar el listado de vehiculos
-  ///
+  /// Consultar listado de vehiculos de un ciudadano
+  /// Consulta en el servicio DGT el listado de vehiculos asociados a un ciudadano identificado por NIF y devuelve el resultado completo de la tramitacion.
   ///
   /// Parameters:
-  /// * [numDocumento]
-  /// * [DTDGTLISTADOVEHICULOSREQ]
-  /// * [authorization]
+  /// * [numDocumento] - Documento identificativo del ciudadano.
+  /// * [DTDGTLISTADOVEHICULOSREQ] - Datos de entrada para la consulta DGT. El campo DOCU se resuelve internamente a partir del token de seguridad del ciudadano.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -32,9 +30,9 @@ class DgtApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [DTDGTLISTADOVEHICULOSRES] as data
+  /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<DTDGTLISTADOVEHICULOSRES>> getListaVehiculos({
+  Future<Response<Respuesta>> getListaVehiculos({
     required String numDocumento,
     required DTDGTLISTADOVEHICULOSREQ dtdgtlistadovehiculosreqBody,
     String? authorization,
@@ -45,10 +43,8 @@ class DgtApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/dgt/lista-vehiculos/{numDocumento}'.replaceAll(
-        '{' r'numDocumento' '}',
-        encodeQueryParameter(_serializers, numDocumento, const FullType(String))
-            .toString());
+    final _path = r'/api/v1/dgt/lista-vehiculos/{numDocumento}'.replaceAll('{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -67,8 +63,7 @@ class DgtApi {
 
     try {
       const _type = FullType(DTDGTLISTADOVEHICULOSREQ);
-      _bodyData = _serializers.serialize(dtdgtlistadovehiculosreqBody,
-          specifiedType: _type);
+      _bodyData = _serializers.serialize(dtdgtlistadovehiculosreqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(
@@ -90,7 +85,7 @@ class DgtApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    DTDGTLISTADOVEHICULOSRES? _responseData;
+    Respuesta? _responseData;
 
     try {
       final rawResponse = _response.data;
@@ -98,8 +93,8 @@ class DgtApi {
           ? null
           : _serializers.deserialize(
               rawResponse,
-              specifiedType: const FullType(DTDGTLISTADOVEHICULOSRES),
-            ) as DTDGTLISTADOVEHICULOSRES;
+              specifiedType: const FullType(Respuesta),
+            ) as Respuesta;
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _response.requestOptions,
@@ -110,7 +105,7 @@ class DgtApi {
       );
     }
 
-    return Response<DTDGTLISTADOVEHICULOSRES>(
+    return Response<Respuesta>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

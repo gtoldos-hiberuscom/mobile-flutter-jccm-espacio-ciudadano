@@ -6,10 +6,8 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api_util.dart';
-import 'package:espacio_ciudadano_api/src/model/dtctrocdatreq.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class CatastroApi {
   final Dio _dio;
@@ -18,13 +16,13 @@ class CatastroApi {
 
   const CatastroApi(this._dio, this._serializers);
 
-  /// Servicio para obtener los datos catastrales
-  ///
+  /// Obtener datos catastrales
+  /// Consulta los datos catastrales del ciudadano en el servicio de Catastro.
   ///
   /// Parameters:
-  /// * [numDocumento]
-  /// * [DTCTROCDATREQ]
-  /// * [authorization]
+  /// * [numDocumento] - Documento identificativo del ciudadano a consultar.
+  /// * [DTCTROCDATREQ] - Datos de entrada para la consulta catastral.
+  /// * [authorization] - Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -45,12 +43,9 @@ class CatastroApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/catastro/datos-catastrales/{numDocumento}'
-        .replaceAll(
-            '{' r'numDocumento' '}',
-            encodeQueryParameter(
-                    _serializers, numDocumento, const FullType(String))
-                .toString());
+    final _path = r'/api/v1/catastro/datos-catastrales/{numDocumento}'.replaceAll(
+        '{' r'numDocumento' '}',
+        encodeQueryParameter(_serializers, numDocumento, const FullType(String)).toString());
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -69,8 +64,7 @@ class CatastroApi {
 
     try {
       const _type = FullType(DTCTROCDATREQ);
-      _bodyData =
-          _serializers.serialize(dtctrocdatreqBody, specifiedType: _type);
+      _bodyData = _serializers.serialize(dtctrocdatreqBody, specifiedType: _type);
     } catch (error, stackTrace) {
       throw DioException(
         requestOptions: _options.compose(

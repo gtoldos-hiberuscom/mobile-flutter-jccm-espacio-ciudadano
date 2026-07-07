@@ -15,8 +15,8 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   Future<List<Registro>> loadEntradas({required final String documentNumber}) async {
     return _loadRegistros(
       request: _request(documentNumber),
-      fetch: (final request) => _api.myPubliSelecByNifTipoProcOperation2(
-        dTSELECTBYNIFV2REQ: request,
+      fetch: (final request) => _api.myPubliSelecByNifTipoProcEntradaOperation(
+        dtselectbynifv2reqBody: request,
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
           generatedApiUnwrapBodyExtraKey: true,
@@ -30,8 +30,8 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   Future<List<Registro>> loadSalidas({required final String documentNumber}) async {
     return _loadRegistros(
       request: _request(documentNumber),
-      fetch: (final request) => _api.myPubliSelecByNifTipoProcOperation(
-        dTSELECTBYNIFV2REQ: request,
+      fetch: (final request) => _api.myPubliSelecByNifTipoProcSalidaOperation(
+        dtselectbynifv2reqBody: request,
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
           generatedApiUnwrapBodyExtraKey: true,
@@ -51,16 +51,10 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
 
   Future<List<Registro>> _loadRegistros({
     required final DTSELECTBYNIFV2REQ request,
-    required final Future<Response<ZCSRFCPUBLISELECTBYNIFResponse>> Function(DTSELECTBYNIFV2REQ request) fetch,
+    required final Future<Response<Respuesta>> Function(DTSELECTBYNIFV2REQ request) fetch,
   }) async {
     try {
       final response = await fetch(request);
-
-      final items = response.data?.publicacionportal?.item;
-      if (items != null) {
-        return items.map(_toRegistroDto).where((final r) => r.numregistro.isNotEmpty).toList(growable: false);
-      }
-
       return _rawRegistros(response.extra[generatedApiRawResponseDataExtraKey]);
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
@@ -73,15 +67,6 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
       }
       rethrow;
     }
-  }
-
-  Registro _toRegistroDto(final ZCSSTPUBPORTAL data) {
-    return Registro(
-      numregistro: _emptyToNull(data.registro) ?? '',
-      titulo: _emptyToNull(data.asunto) ?? _emptyToNull(data.titulo) ?? _emptyToNull(data.desasunto) ?? _emptyToNull(data.descrip) ?? '',
-      fecha: _emptyToNull(data.fechareg),
-      consejeria: _emptyToNull(data.desconsej),
-    );
   }
 
   List<Registro> _rawRegistros(final Object? data) {
@@ -152,10 +137,5 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
       return trimmed.isEmpty ? null : trimmed;
     }
     return null;
-  }
-
-  String? _emptyToNull(final String? value) {
-    final text = value?.trim();
-    return text == null || text.isEmpty ? null : text;
   }
 }

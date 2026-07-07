@@ -9,13 +9,54 @@ All URIs are relative to *https://fachada-sede-api-pre.cm-pre.jccm.es*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**getIniProc**](ProcedimientoApi.md#getiniproc) | **POST** /api/v1/procedimiento/inicproc | Iniciar procedimiento administrativo
 [**hashAdjuntoaOperation**](ProcedimientoApi.md#hashadjuntoaoperation) | **POST** /api/v1/procedimiento/obtenerhashdeadjunto | Servicio que permite generar el hash de un documento codificado en base64 sin firma
-[**miConfirmarProcOperation**](ProcedimientoApi.md#miconfirmarprocoperation) | **POST** /api/v1/procedimiento/miconfirmarproc | Servicio para realizar la escritura de un procedimiento en cesar
-[**miIniProcOperation**](ProcedimientoApi.md#miiniprocoperation) | **POST** /api/v1/procedimiento/inicproc | Servicio para realizar la validacion de un procedimiento en cesar
-[**miObtenerRespuestaOperation**](ProcedimientoApi.md#miobtenerrespuestaoperation) | **POST** /api/v1/procedimiento/miobtenerres | Consultar la respuesta de un expediente en cesar
 [**miSubirAdjuntoOperation**](ProcedimientoApi.md#misubiradjuntooperation) | **POST** /api/v1/procedimiento/subiradjunto | Servicio que permite subir al buzon de tramitacion un documento codificado en base64 firmado
 [**miSubirAdjuntoSinFirmaOperation**](ProcedimientoApi.md#misubiradjuntosinfirmaoperation) | **POST** /api/v1/procedimiento/subiradjuntosinfirma | Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma
 
+
+# **getIniProc**
+> Respuesta getIniProc(dTProcedimiento)
+
+Iniciar procedimiento administrativo
+
+Inicia un nuevo procedimiento administrativo en el sistema CESAR. Valida los datos del procedimiento y crea el registro correspondiente.
+
+### Example
+```dart
+import 'package:espacio_ciudadano_api/api.dart';
+
+final api = EspacioCiudadanoApi().getProcedimientoApi();
+final DTProcedimiento dTProcedimiento = {"idunico":"03874761C_171447919011019","tipoprocedimiento":"020","unidadorganica":"012848","consejeria":"001952","provincia":"","noexpediente":"EXP-2024-00789","registro":{"noregistro":null,"fecha":null},"identificacion":{"category":"NIF","nifcif":"99999999R"},"asunto":"","asudescripcion":"","source":"TRAM","datossolicitante":{"apellido1":"García","apellido2":"López","nombre":"Juan","codigopostal":"45000","domicilio":"Calle Mayor","entidad":"","numero":"1","poblacion":"Toledo","provincia":"Toledo"},"datospago":{},"adjuntos":{}}; // DTProcedimiento | Datos del procedimiento a iniciar. Incluye identificación del ciudadano, datos del solicitante y referencias administrativas.
+
+try {
+    final response = api.getIniProc(dTProcedimiento);
+    print(response);
+} on DioException catch (e) {
+    print('Exception when calling ProcedimientoApi->getIniProc: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **dTProcedimiento** | [**DTProcedimiento**](DTProcedimiento.md)| Datos del procedimiento a iniciar. Incluye identificación del ciudadano, datos del solicitante y referencias administrativas. | 
+
+### Return type
+
+[**Respuesta**](Respuesta.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **hashAdjuntoaOperation**
 > RESULTADOPROCEDIMIENTO hashAdjuntoaOperation(ADJUNTO)
@@ -46,129 +87,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**RESULTADOPROCEDIMIENTO**](RESULTADOPROCEDIMIENTO.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **miConfirmarProcOperation**
-> RESULTADOPROCEDIMIENTO miConfirmarProcOperation(CONFIRMARPROCEDIMIENTO)
-
-Servicio para realizar la escritura de un procedimiento en cesar
-
-### Example
-```dart
-import 'package:espacio_ciudadano_api/api.dart';
-
-final api = EspacioCiudadanoApi().getProcedimientoApi();
-final CONFIRMARPROCEDIMIENTO CONFIRMARPROCEDIMIENTO = ; // CONFIRMARPROCEDIMIENTO | 
-
-try {
-    final response = api.miConfirmarProcOperation(CONFIRMARPROCEDIMIENTO);
-    print(response);
-} on DioException catch (e) {
-    print('Exception when calling ProcedimientoApi->miConfirmarProcOperation: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **CONFIRMARPROCEDIMIENTO** | [**CONFIRMARPROCEDIMIENTO**](CONFIRMARPROCEDIMIENTO.md)|  | 
-
-### Return type
-
-[**RESULTADOPROCEDIMIENTO**](RESULTADOPROCEDIMIENTO.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **miIniProcOperation**
-> RESULTADOPROCEDIMIENTO miIniProcOperation(dTProcedimiento)
-
-Servicio para realizar la validacion de un procedimiento en cesar
-
-### Example
-```dart
-import 'package:espacio_ciudadano_api/api.dart';
-
-final api = EspacioCiudadanoApi().getProcedimientoApi();
-final DTProcedimiento dTProcedimiento = ; // DTProcedimiento | 
-
-try {
-    final response = api.miIniProcOperation(dTProcedimiento);
-    print(response);
-} on DioException catch (e) {
-    print('Exception when calling ProcedimientoApi->miIniProcOperation: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **dTProcedimiento** | [**DTProcedimiento**](DTProcedimiento.md)|  | 
-
-### Return type
-
-[**RESULTADOPROCEDIMIENTO**](RESULTADOPROCEDIMIENTO.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **miObtenerRespuestaOperation**
-> ZCSRMOBTRESPUESTAEXPResponse miObtenerRespuestaOperation(ZCSRMOBTRESPUESTAEXP)
-
-Consultar la respuesta de un expediente en cesar
-
-### Example
-```dart
-import 'package:espacio_ciudadano_api/api.dart';
-
-final api = EspacioCiudadanoApi().getProcedimientoApi();
-final ZCSRMOBTRESPUESTAEXP ZCSRMOBTRESPUESTAEXP = ; // ZCSRMOBTRESPUESTAEXP | 
-
-try {
-    final response = api.miObtenerRespuestaOperation(ZCSRMOBTRESPUESTAEXP);
-    print(response);
-} on DioException catch (e) {
-    print('Exception when calling ProcedimientoApi->miObtenerRespuestaOperation: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **ZCSRMOBTRESPUESTAEXP** | [**ZCSRMOBTRESPUESTAEXP**](ZCSRMOBTRESPUESTAEXP.md)|  | 
-
-### Return type
-
-[**ZCSRMOBTRESPUESTAEXPResponse**](ZCSRMOBTRESPUESTAEXPResponse.md)
 
 ### Authorization
 

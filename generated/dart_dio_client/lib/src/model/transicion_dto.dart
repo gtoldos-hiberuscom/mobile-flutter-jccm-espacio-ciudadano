@@ -3,36 +3,37 @@
 //
 
 // ignore_for_file: unused_element
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
 part 'transicion_dto.g.dart';
 
-/// TransicionDto
+/// Datos para realizar una transición de estado sobre una notificación electrónica
 ///
 /// Properties:
-/// * [accion]
-/// * [justificacion]
+/// * [accion] - Código de la acción a realizar sobre la notificación
+/// * [justificacion] - Texto justificativo de la transición, requerido en algunas acciones como el rechazo
 @BuiltValue()
-abstract class TransicionDto
-    implements Built<TransicionDto, TransicionDtoBuilder> {
+abstract class TransicionDto implements Built<TransicionDto, TransicionDtoBuilder> {
+  /// Código de la acción a realizar sobre la notificación
   @BuiltValueField(wireName: r'accion')
-  String? get accion;
+  TransicionDtoAccionEnum get accion;
+  // enum accionEnum {  COMPARECER,  ACEPTAR,  RECHAZAR,  };
 
+  /// Texto justificativo de la transición, requerido en algunas acciones como el rechazo
   @BuiltValueField(wireName: r'justificacion')
   String? get justificacion;
 
   TransicionDto._();
 
-  factory TransicionDto([void updates(TransicionDtoBuilder b)]) =
-      _$TransicionDto;
+  factory TransicionDto([void updates(TransicionDtoBuilder b)]) = _$TransicionDto;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(TransicionDtoBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<TransicionDto> get serializer =>
-      _$TransicionDtoSerializer();
+  static Serializer<TransicionDto> get serializer => _$TransicionDtoSerializer();
 }
 
 class _$TransicionDtoSerializer implements PrimitiveSerializer<TransicionDto> {
@@ -47,13 +48,11 @@ class _$TransicionDtoSerializer implements PrimitiveSerializer<TransicionDto> {
     TransicionDto object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    if (object.accion != null) {
-      yield r'accion';
-      yield serializers.serialize(
-        object.accion,
-        specifiedType: const FullType(String),
-      );
-    }
+    yield r'accion';
+    yield serializers.serialize(
+      object.accion,
+      specifiedType: const FullType(TransicionDtoAccionEnum),
+    );
     if (object.justificacion != null) {
       yield r'justificacion';
       yield serializers.serialize(
@@ -69,9 +68,7 @@ class _$TransicionDtoSerializer implements PrimitiveSerializer<TransicionDto> {
     TransicionDto object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -89,8 +86,8 @@ class _$TransicionDtoSerializer implements PrimitiveSerializer<TransicionDto> {
         case r'accion':
           final valueDes = serializers.deserialize(
             value,
-            specifiedType: const FullType(String),
-          ) as String;
+            specifiedType: const FullType(TransicionDtoAccionEnum),
+          ) as TransicionDtoAccionEnum;
           result.accion = valueDes;
           break;
         case r'justificacion':
@@ -128,3 +125,24 @@ class _$TransicionDtoSerializer implements PrimitiveSerializer<TransicionDto> {
     return result.build();
   }
 }
+
+class TransicionDtoAccionEnum extends EnumClass {
+
+  /// Código de la acción a realizar sobre la notificación
+  @BuiltValueEnumConst(wireName: r'COMPARECER')
+  static const TransicionDtoAccionEnum COMPARECER = _$transicionDtoAccionEnum_COMPARECER;
+  /// Código de la acción a realizar sobre la notificación
+  @BuiltValueEnumConst(wireName: r'ACEPTAR')
+  static const TransicionDtoAccionEnum ACEPTAR = _$transicionDtoAccionEnum_ACEPTAR;
+  /// Código de la acción a realizar sobre la notificación
+  @BuiltValueEnumConst(wireName: r'RECHAZAR')
+  static const TransicionDtoAccionEnum RECHAZAR = _$transicionDtoAccionEnum_RECHAZAR;
+
+  static Serializer<TransicionDtoAccionEnum> get serializer => _$transicionDtoAccionEnumSerializer;
+
+  const TransicionDtoAccionEnum._(String name): super(name);
+
+  static BuiltSet<TransicionDtoAccionEnum> get values => _$transicionDtoAccionEnumValues;
+  static TransicionDtoAccionEnum valueOf(String name) => _$transicionDtoAccionEnumValueOf(name);
+}
+

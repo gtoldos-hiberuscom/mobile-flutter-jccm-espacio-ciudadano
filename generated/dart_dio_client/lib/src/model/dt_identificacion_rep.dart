@@ -11,11 +11,10 @@ part 'dt_identificacion_rep.g.dart';
 /// DTIdentificacionRep
 ///
 /// Properties:
-/// * [categoryrep]
-/// * [nifcifrep]
+/// * [categoryrep] 
+/// * [nifcifrep] 
 @BuiltValue()
-abstract class DTIdentificacionRep
-    implements Built<DTIdentificacionRep, DTIdentificacionRepBuilder> {
+abstract class DTIdentificacionRep implements Built<DTIdentificacionRep, DTIdentificacionRepBuilder> {
   @BuiltValueField(wireName: r'categoryrep')
   String get categoryrep;
 
@@ -24,24 +23,18 @@ abstract class DTIdentificacionRep
 
   DTIdentificacionRep._();
 
-  factory DTIdentificacionRep([void updates(DTIdentificacionRepBuilder b)]) =
-      _$DTIdentificacionRep;
+  factory DTIdentificacionRep([void updates(DTIdentificacionRepBuilder b)]) = _$DTIdentificacionRep;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(DTIdentificacionRepBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<DTIdentificacionRep> get serializer =>
-      _$DTIdentificacionRepSerializer();
+  static Serializer<DTIdentificacionRep> get serializer => _$DTIdentificacionRepSerializer();
 }
 
-class _$DTIdentificacionRepSerializer
-    implements PrimitiveSerializer<DTIdentificacionRep> {
+class _$DTIdentificacionRepSerializer implements PrimitiveSerializer<DTIdentificacionRep> {
   @override
-  final Iterable<Type> types = const [
-    DTIdentificacionRep,
-    _$DTIdentificacionRep
-  ];
+  final Iterable<Type> types = const [DTIdentificacionRep, _$DTIdentificacionRep];
 
   @override
   final String wireName = r'DTIdentificacionRep';
@@ -69,9 +62,7 @@ class _$DTIdentificacionRepSerializer
     DTIdentificacionRep object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object,
-            specifiedType: specifiedType)
-        .toList();
+    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
   }
 
   void _deserializeProperties(
@@ -128,3 +119,4 @@ class _$DTIdentificacionRepSerializer
     return result.build();
   }
 }
+
