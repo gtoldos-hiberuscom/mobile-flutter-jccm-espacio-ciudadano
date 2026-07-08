@@ -4202,6 +4202,42 @@
   "@gestionExpedientesDetalleLoadError": {
     "description": "Error al cargar el detalle de un expediente."
   },
+  "gestionAportarDocumentacionTitle": "Aportar documentación",
+  "@gestionAportarDocumentacionTitle": {
+    "description": "Título de la pantalla de aportar documentación."
+  },
+  "gestionAportarDocumentacionHelperText": "Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.",
+  "@gestionAportarDocumentacionHelperText": {
+    "description": "Aviso persistente con las condiciones de subida de ficheros."
+  },
+  "gestionAportarDocumentacionCancelarButton": "Cancelar",
+  "@gestionAportarDocumentacionCancelarButton": {
+    "description": "Botón para cancelar la aportación de documentación."
+  },
+  "gestionAportarDocumentacionSeleccionarButton": "Seleccionar documentos",
+  "@gestionAportarDocumentacionSeleccionarButton": {
+    "description": "Botón para abrir el selector de ficheros."
+  },
+  "gestionAportarDocumentacionRegistrarButton": "Registrar documentos aportados",
+  "@gestionAportarDocumentacionRegistrarButton": {
+    "description": "Botón para registrar los documentos aportados."
+  },
+  "gestionAportarDocumentacionMaxFilesError": "No puedes aportar más de 5 ficheros.",
+  "@gestionAportarDocumentacionMaxFilesError": {
+    "description": "Error al superar el número máximo de ficheros permitidos."
+  },
+  "gestionAportarDocumentacionMaxSizeError": "Cada fichero debe pesar como máximo 20MB.",
+  "@gestionAportarDocumentacionMaxSizeError": {
+    "description": "Error al superar el tamaño máximo permitido por fichero."
+  },
+  "gestionAportarDocumentacionInvalidTypeError": "Formato de fichero no permitido.",
+  "@gestionAportarDocumentacionInvalidTypeError": {
+    "description": "Error al seleccionar un fichero con un formato no admitido."
+  },
+  "gestionAportarDocumentacionDuplicateError": "Ese fichero ya se ha añadido.",
+  "@gestionAportarDocumentacionDuplicateError": {
+    "description": "Error al seleccionar un fichero ya añadido previamente."
+  },
 
   "gestionRegistrosPageTitle": "Mis registros",
   "@gestionRegistrosPageTitle": {

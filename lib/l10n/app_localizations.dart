@@ -6050,6 +6050,60 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar el detalle del expediente'**
   String get gestionExpedientesDetalleLoadError;
 
+  /// Título de la pantalla de aportar documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get gestionAportarDocumentacionTitle;
+
+  /// Aviso persistente con las condiciones de subida de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.'**
+  String get gestionAportarDocumentacionHelperText;
+
+  /// Botón para cancelar la aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get gestionAportarDocumentacionCancelarButton;
+
+  /// Botón para abrir el selector de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar documentos'**
+  String get gestionAportarDocumentacionSeleccionarButton;
+
+  /// Botón para registrar los documentos aportados.
+  ///
+  /// In es, this message translates to:
+  /// **'Registrar documentos aportados'**
+  String get gestionAportarDocumentacionRegistrarButton;
+
+  /// Error al superar el número máximo de ficheros permitidos.
+  ///
+  /// In es, this message translates to:
+  /// **'No puedes aportar más de 5 ficheros.'**
+  String get gestionAportarDocumentacionMaxFilesError;
+
+  /// Error al superar el tamaño máximo permitido por fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada fichero debe pesar como máximo 20MB.'**
+  String get gestionAportarDocumentacionMaxSizeError;
+
+  /// Error al seleccionar un fichero con un formato no admitido.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato de fichero no permitido.'**
+  String get gestionAportarDocumentacionInvalidTypeError;
+
+  /// Error al seleccionar un fichero ya añadido previamente.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese fichero ya se ha añadido.'**
+  String get gestionAportarDocumentacionDuplicateError;
+
   /// Título de la pantalla de mis registros.
   ///
   /// In es, this message translates to:

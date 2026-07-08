@@ -3100,6 +3100,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionExpedientesDetalleLoadError => 'No hemos podido cargar el detalle del expediente';
 
   @override
+  String get gestionAportarDocumentacionTitle => 'Aportar documentación';
+
+  @override
+  String get gestionAportarDocumentacionHelperText => 'Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.';
+
+  @override
+  String get gestionAportarDocumentacionCancelarButton => 'Cancelar';
+
+  @override
+  String get gestionAportarDocumentacionSeleccionarButton => 'Seleccionar documentos';
+
+  @override
+  String get gestionAportarDocumentacionRegistrarButton => 'Registrar documentos aportados';
+
+  @override
+  String get gestionAportarDocumentacionMaxFilesError => 'No puedes aportar más de 5 ficheros.';
+
+  @override
+  String get gestionAportarDocumentacionMaxSizeError => 'Cada fichero debe pesar como máximo 20MB.';
+
+  @override
+  String get gestionAportarDocumentacionInvalidTypeError => 'Formato de fichero no permitido.';
+
+  @override
+  String get gestionAportarDocumentacionDuplicateError => 'Ese fichero ya se ha añadido.';
+
+  @override
   String get gestionRegistrosPageTitle => 'Mis registros';
 
   @override

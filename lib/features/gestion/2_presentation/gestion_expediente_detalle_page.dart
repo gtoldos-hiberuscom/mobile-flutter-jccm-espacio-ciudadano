@@ -122,10 +122,7 @@ class _ExpedienteDetalleBody extends StatelessWidget {
               label: l10n.gestionExpedientesAportarDocumentacionButton,
               isExpanded: true,
               leadingIcon: AppIcons.upload,
-              onPressed: () => AppAlertSnackbar.show(
-                context,
-                message: l10n.gestionSectionComingSoon,
-              ),
+              onPressed: () => context.go('${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}/aportar-documentacion'),
             ),
           ],
         ),
