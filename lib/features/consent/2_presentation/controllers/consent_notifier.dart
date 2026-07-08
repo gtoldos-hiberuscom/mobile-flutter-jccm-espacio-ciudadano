@@ -1,6 +1,8 @@
 import 'dart:async' show unawaited;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
@@ -9,10 +11,8 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/load_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
 // ── Status ────────────────────────────────────────────────────────────────────
 
@@ -89,7 +89,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
   // ── Private ────────────────────────────────────────────────────────────────
 
   Future<void> _loadClauses() async {
-    final result = await ref.read(loadClausesUsecaseProvider).execute();
+    final result = await ref.read(loadClausesUsecaseProvider).execute(idAgente: _idAgente);
     if (!ref.mounted) {
       return;
     }
@@ -129,6 +129,9 @@ class ConsentNotifier extends Notifier<ConsentState> {
 
   /// Toggles the selected state of the clause with the given [id].
   void toggleClause(final int id) {
+    if (id == 0) {
+      return;
+    }
     if (state.status != ConsentStatus.step2 && state.status != ConsentStatus.saveError) {
       return;
     }
@@ -147,7 +150,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
     if (state.status == ConsentStatus.saving) {
       return;
     }
-    final clausesToPersist = state.clauses;
+    final clausesToPersist = _clausesForPersistence(state.clauses);
     state = state.copyWith(status: ConsentStatus.saving);
     final result = await ref.read(acceptConsentUsecaseProvider).execute(idAgente: _idAgente, clauses: clausesToPersist);
     if (!ref.mounted) {
@@ -167,7 +170,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
           );
           return;
         }
-        final onboardingError = await _markLifeEventsOnboardingSeenIfClauseWasEnabledFromPreferences(clausesToPersist);
+        final onboardingError = await _resetLifeEventsOnboardingIfClauseWasEnabledFromPreferences(clausesToPersist);
         if (!ref.mounted) {
           return;
         }
@@ -201,7 +204,15 @@ class ConsentNotifier extends Notifier<ConsentState> {
     }
   }
 
-  Future<String?> _markLifeEventsOnboardingSeenIfClauseWasEnabledFromPreferences(final List<Clause> clauses) async {
+  List<Clause> _clausesForPersistence(final List<Clause> clauses) {
+    return clauses
+        .map(
+          (final clause) => clause.id == 0 ? clause.copyWith(isSelected: true) : clause,
+        )
+        .toList(growable: false);
+  }
+
+  Future<String?> _resetLifeEventsOnboardingIfClauseWasEnabledFromPreferences(final List<Clause> clauses) async {
     if (!_isPreferencesEditing || _initialSelectedClauseIds.contains(3)) {
       return null;
     }
@@ -209,11 +220,8 @@ class ConsentNotifier extends Notifier<ConsentState> {
     if (!lifeEventsClauseSelected) {
       return null;
     }
-    final result = await ref.read(markLifeEventsOnboardingSeenUsecaseProvider).execute(idAgente: _idAgente);
-    return switch (result) {
-      MarkLifeEventsOnboardingSeenSuccess() => null,
-      MarkLifeEventsOnboardingSeenFailed(:final message) => message,
-    };
+    final removed = await ref.read(appStorageProvider).remove('${StorageKeys.lifeEventsOnboardingSeenPrefix}$_idAgente');
+    return removed ? null : 'No hemos podido reiniciar el asistente de hechos vitales. Inténtalo de nuevo.';
   }
 
   Future<bool> _persistCurrentSession() async {

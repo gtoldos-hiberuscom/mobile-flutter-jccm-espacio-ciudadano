@@ -13,6 +13,12 @@ abstract interface class ConsentRepository {
     required final List<Clause> clauses,
   });
 
+  /// Resets every persisted clause to rejected for [idAgente].
+  ///
+  /// This must not create a new remote preference if the citizen does not have
+  /// one yet; account deletion should leave the profile as a fresh user.
+  Future<void> resetConsentClauses({required final String idAgente});
+
   /// Returns `true` when the citizen accepted the optional clause [clauseId].
   Future<bool> hasAcceptedClause({
     required final String idAgente,
@@ -22,5 +28,5 @@ abstract interface class ConsentRepository {
   /// Returns the ordered list of optional authorisation clauses presented to
   /// the citizen. Falls back to a hardcoded static list when remote data is
   /// unavailable.
-  Future<List<Clause>> fetchClauses();
+  Future<List<Clause>> fetchClauses({final String? idAgente});
 }

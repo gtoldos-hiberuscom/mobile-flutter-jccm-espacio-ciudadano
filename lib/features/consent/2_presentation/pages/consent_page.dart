@@ -188,7 +188,7 @@ class _Step2Scaffold extends StatelessWidget {
                   color: AppColors.textBase,
                 ),
                 const SizedBox(height: AppDimensions.space8),
-                for (final clause in state.clauses)
+                for (final clause in state.clauses.where((final clause) => clause.id != 0))
                   AppCheckbox(
                     label: clause.label,
                     value: clause.isSelected,
