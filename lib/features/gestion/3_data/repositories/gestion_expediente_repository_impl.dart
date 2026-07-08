@@ -93,6 +93,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       // "0000-00-00" es el sentinel SAP de fecha nula; se trata como ausente.
       fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
       estado: _string(data, 'descrip') ?? _string(data, 'estado'),
+      tipoproc: _string(data, 'tipoproc'),
     );
   }
 

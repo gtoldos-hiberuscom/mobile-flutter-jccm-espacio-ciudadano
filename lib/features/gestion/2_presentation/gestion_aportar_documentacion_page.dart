@@ -3,21 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_aportar_documentacion_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_documento_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
+/// UTIs de iOS para las extensiones permitidas — `file_selector_ios` ignora
+/// `extensions` por completo y exige `uniformTypeIdentifiers` explícitos,
+/// o lanza un `ArgumentError` antes de abrir el picker nativo.
+const List<String> _iosUniformTypeIdentifiersAportacion = [
+  'com.adobe.pdf',
+  'com.microsoft.word.doc',
+  'org.openxmlformats.wordprocessingml.document', // .docx
+  'com.microsoft.excel.xls',
+  'org.openxmlformats.spreadsheetml.sheet', // .xlsx
+  'public.zip-archive',
+];
+
 /// Aportar documentación — Figma node 44242:24884.
-class GestionAportarDocumentacionPage extends ConsumerWidget {
+///
+/// **Integración de backend no verificada**: `procedimiento/subiradjuntosinfirma`
+/// exige un `idunico` que ningún endpoint de lectura devuelve para un
+/// expediente ya existente; aquí se autogenera como `{NIF}_{timestamp}` por
+/// inferencia de los ejemplos del swagger, sin confirmación del backend.
+class GestionAportarDocumentacionPage extends ConsumerStatefulWidget {
   const GestionAportarDocumentacionPage({required this.numexp, super.key});
 
   final String numexp;
 
-  String get _decodedNumexp => Uri.decodeComponent(numexp);
+  @override
+  ConsumerState<GestionAportarDocumentacionPage> createState() => _GestionAportarDocumentacionPageState();
+}
+
+class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportarDocumentacionPage> {
+  bool _isRegistering = false;
+
+  String get _decodedNumexp => Uri.decodeComponent(widget.numexp);
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final archivos = ref.watch(gestionAportarDocumentacionProvider);
     final expedienteRoute = '${Routes.gestionExpedientes}/${Uri.encodeComponent(_decodedNumexp)}';
@@ -69,16 +98,14 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
                 hierarchy: AppButtonHierarchy.secondary,
                 isExpanded: true,
                 leadingIcon: AppIcons.upload,
-                onPressed: () => _pickFiles(context, ref),
+                onPressed: () => _pickFiles(archivos),
               ),
               AppButton(
                 label: l10n.gestionAportarDocumentacionRegistrarButton,
                 isExpanded: true,
                 leadingIcon: AppIcons.check,
-                onPressed: () => AppAlertSnackbar.show(
-                  context,
-                  message: l10n.gestionSectionComingSoon,
-                ),
+                isLoading: _isRegistering,
+                onPressed: _isRegistering ? null : () => _registrar(archivos, expedienteRoute),
               ),
             ],
           ),
@@ -87,14 +114,18 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     );
   }
 
-  Future<void> _pickFiles(final BuildContext context, final WidgetRef ref) async {
+  Future<void> _pickFiles(final List<AportacionArchivo> archivosActuales) async {
     final l10n = AppLocalizations.of(context);
     final selected = await openFiles(
       acceptedTypeGroups: const [
-        XTypeGroup(label: 'documentos', extensions: extensionesPermitidasAportacion),
+        XTypeGroup(
+          label: 'documentos',
+          extensions: extensionesPermitidasAportacion,
+          uniformTypeIdentifiers: _iosUniformTypeIdentifiersAportacion,
+        ),
       ],
     );
-    if (selected.isEmpty || !context.mounted) {
+    if (selected.isEmpty || !mounted) {
       return;
     }
 
@@ -107,7 +138,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         ),
       ),
     );
-    if (!context.mounted) {
+    if (!mounted) {
       return;
     }
 
@@ -123,6 +154,72 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       AppAlertSnackbar.show(context, message: message, severity: AppAlertSeverity.error);
     }
   }
+
+  Future<void> _registrar(final List<AportacionArchivo> archivos, final String expedienteRoute) async {
+    final l10n = AppLocalizations.of(context);
+    if (archivos.isEmpty) {
+      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionNoFilesError, severity: AppAlertSeverity.error);
+      return;
+    }
+
+    final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
+    if (documentNumber == null) {
+      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
+      return;
+    }
+
+    setState(() => _isRegistering = true);
+    try {
+      final expediente = await ref.read(expedienteDetailProvider(_decodedNumexp).future);
+      final tipoProcedimiento = expediente.tipoproc ?? '';
+      final idUnico = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
+      final repository = ref.read(gestionDocumentoRepositoryProvider);
+
+      for (final archivo in archivos) {
+        final bytes = await XFile(archivo.path).readAsBytes();
+        await repository.subirDocumentoSinFirma(
+          documentNumber: documentNumber,
+          idUnico: idUnico,
+          tipoProcedimiento: tipoProcedimiento,
+          nombreFichero: archivo.nombre,
+          bytes: bytes,
+        );
+      }
+
+      if (!mounted) {
+        return;
+      }
+      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroSuccess, severity: AppAlertSeverity.success);
+      context.go(expedienteRoute);
+    } on Object catch (error, stackTrace) {
+      logger.e('Error al registrar documentación aportada', error: error, stackTrace: stackTrace);
+      if (mounted) {
+        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isRegistering = false);
+      }
+    }
+  }
+}
+
+/// Duplicado deliberadamente pequeño del helper de
+/// `gestion_expedientes_provider.dart` — no amerita una abstracción
+/// compartida para 10 líneas usadas en dos sitios.
+String? _documentNumber(final JwtClaims? claims) {
+  final candidates = [
+    claims?.personIdentifier,
+    claims?.preferredUsername,
+    claims?.sub,
+  ];
+  for (final candidate in candidates) {
+    final normalized = candidate?.trim();
+    if (normalized != null && normalized.isNotEmpty) {
+      return normalized;
+    }
+  }
+  return null;
 }
 
 class _AportacionArchivoCard extends StatelessWidget {

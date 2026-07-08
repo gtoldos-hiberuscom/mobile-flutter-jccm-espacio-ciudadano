@@ -105,6 +105,7 @@ void main() {
     "publicacionportal": {
       "numexp": "S020/2024/0001-PR",
       "titulo": "",
+      "tipoproc": "020",
       "desproc": "SOLICITUD DE AYUDAS PARA EL FOMENTO DE LA ACUICULTURA",
       "desconsej": "CONSEJERÍA DE DESARROLLO SOSTENIBLE",
       "desuniorg": "",
@@ -135,6 +136,7 @@ void main() {
       expect(result.fechaInicio, '2024-10-22');
       expect(result.fechaFin, isNull);
       expect(result.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
+      expect(result.tipoproc, '020');
       expect(adapter.requests.single.method, 'POST');
       expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynumexp');
       expect(

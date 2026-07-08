@@ -3127,6 +3127,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportarDocumentacionDuplicateError => 'Ese fichero ya se ha añadido.';
 
   @override
+  String get gestionAportarDocumentacionNoFilesError => 'Selecciona al menos un fichero antes de registrar.';
+
+  @override
+  String get gestionAportarDocumentacionRegistroSuccess => 'Documentación registrada correctamente.';
+
+  @override
+  String get gestionAportarDocumentacionRegistroError => 'No hemos podido registrar la documentación. Inténtalo de nuevo.';
+
+  @override
   String get gestionRegistrosPageTitle => 'Mis registros';
 
   @override

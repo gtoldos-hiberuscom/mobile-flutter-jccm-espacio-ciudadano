@@ -6104,6 +6104,24 @@ abstract class AppLocalizations {
   /// **'Ese fichero ya se ha añadido.'**
   String get gestionAportarDocumentacionDuplicateError;
 
+  /// Error al intentar registrar sin haber seleccionado ningún fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona al menos un fichero antes de registrar.'**
+  String get gestionAportarDocumentacionNoFilesError;
+
+  /// Mensaje de éxito al registrar los documentos aportados.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentación registrada correctamente.'**
+  String get gestionAportarDocumentacionRegistroSuccess;
+
+  /// Mensaje de error al fallar el registro de los documentos aportados.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido registrar la documentación. Inténtalo de nuevo.'**
+  String get gestionAportarDocumentacionRegistroError;
+
   /// Título de la pantalla de mis registros.
   ///
   /// In es, this message translates to:

@@ -4238,6 +4238,18 @@
   "@gestionAportarDocumentacionDuplicateError": {
     "description": "Error al seleccionar un fichero ya añadido previamente."
   },
+  "gestionAportarDocumentacionNoFilesError": "Selecciona al menos un fichero antes de registrar.",
+  "@gestionAportarDocumentacionNoFilesError": {
+    "description": "Error al intentar registrar sin haber seleccionado ningún fichero."
+  },
+  "gestionAportarDocumentacionRegistroSuccess": "Documentación registrada correctamente.",
+  "@gestionAportarDocumentacionRegistroSuccess": {
+    "description": "Mensaje de éxito al registrar los documentos aportados."
+  },
+  "gestionAportarDocumentacionRegistroError": "No hemos podido registrar la documentación. Inténtalo de nuevo.",
+  "@gestionAportarDocumentacionRegistroError": {
+    "description": "Mensaje de error al fallar el registro de los documentos aportados."
+  },
 
   "gestionRegistrosPageTitle": "Mis registros",
   "@gestionRegistrosPageTitle": {
