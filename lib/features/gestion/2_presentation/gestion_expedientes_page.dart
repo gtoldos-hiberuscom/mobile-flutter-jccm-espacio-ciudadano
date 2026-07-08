@@ -83,6 +83,9 @@ class _GestionExpedienteCard extends StatelessWidget {
       expiryDateLabel: l10n.gestionExpedientesFechaInicioLabel,
       extraLabel: expediente.estado != null ? l10n.gestionExpedientesEstadoLabel : null,
       extraText: expediente.estado,
+      onTap: () => context.go(
+        '${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}',
+      ),
     );
   }
 }

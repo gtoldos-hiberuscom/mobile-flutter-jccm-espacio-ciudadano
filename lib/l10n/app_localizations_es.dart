@@ -3076,6 +3076,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionExpedientesEmpty => 'No tienes expedientes activos';
 
   @override
+  String get gestionExpedientesDetalleTitle => 'Detalle de expediente';
+
+  @override
+  String get gestionExpedientesDatosExpedienteTitle => 'Datos del Expediente';
+
+  @override
+  String get gestionExpedientesEstadoTramitacionTitle => 'Estado de tramitación';
+
+  @override
+  String get gestionExpedientesConsejeriaLabel => 'CONSEJERÍA';
+
+  @override
+  String get gestionExpedientesOficinaTramitadoraLabel => 'OFICINA TRAMITADORA';
+
+  @override
+  String get gestionExpedientesFechaCierreLabel => 'FECHA DE CIERRE';
+
+  @override
+  String get gestionExpedientesAportarDocumentacionButton => 'Aportar documentación';
+
+  @override
+  String get gestionExpedientesDetalleLoadError => 'No hemos podido cargar el detalle del expediente';
+
+  @override
   String get gestionRegistrosPageTitle => 'Mis registros';
 
   @override

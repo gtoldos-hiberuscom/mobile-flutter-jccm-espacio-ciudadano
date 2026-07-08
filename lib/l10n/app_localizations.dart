@@ -6002,6 +6002,54 @@ abstract class AppLocalizations {
   /// **'No tienes expedientes activos'**
   String get gestionExpedientesEmpty;
 
+  /// Título de la barra de navegación en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de expediente'**
+  String get gestionExpedientesDetalleTitle;
+
+  /// Encabezado de la primera sección en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del Expediente'**
+  String get gestionExpedientesDatosExpedienteTitle;
+
+  /// Encabezado de la segunda sección en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado de tramitación'**
+  String get gestionExpedientesEstadoTramitacionTitle;
+
+  /// Etiqueta de la consejería en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'CONSEJERÍA'**
+  String get gestionExpedientesConsejeriaLabel;
+
+  /// Etiqueta de la oficina tramitadora en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'OFICINA TRAMITADORA'**
+  String get gestionExpedientesOficinaTramitadoraLabel;
+
+  /// Etiqueta de la fecha de cierre en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA DE CIERRE'**
+  String get gestionExpedientesFechaCierreLabel;
+
+  /// Etiqueta del botón fijo inferior en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get gestionExpedientesAportarDocumentacionButton;
+
+  /// Error al cargar el detalle de un expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar el detalle del expediente'**
+  String get gestionExpedientesDetalleLoadError;
+
   /// Título de la pantalla de mis registros.
   ///
   /// In es, this message translates to:

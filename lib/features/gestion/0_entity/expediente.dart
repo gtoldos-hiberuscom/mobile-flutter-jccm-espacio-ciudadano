@@ -8,6 +8,8 @@ final class Expediente {
     required this.consejeria,
     this.fechaInicio,
     this.estado,
+    this.oficinaTramitadora,
+    this.fechaFin,
   });
 
   final String numexp;
@@ -15,12 +17,14 @@ final class Expediente {
   final String consejeria;
   final String? fechaInicio;
   final String? estado;
+  final String? oficinaTramitadora;
+  final String? fechaFin;
 
   @override
-  bool operator ==(final Object other) => identical(this, other) || other is Expediente && runtimeType == other.runtimeType && numexp == other.numexp && titulo == other.titulo && consejeria == other.consejeria && fechaInicio == other.fechaInicio && estado == other.estado;
+  bool operator ==(final Object other) => identical(this, other) || other is Expediente && runtimeType == other.runtimeType && numexp == other.numexp && titulo == other.titulo && consejeria == other.consejeria && fechaInicio == other.fechaInicio && estado == other.estado && oficinaTramitadora == other.oficinaTramitadora && fechaFin == other.fechaFin;
 
   @override
-  int get hashCode => Object.hash(numexp, titulo, consejeria, fechaInicio, estado);
+  int get hashCode => Object.hash(numexp, titulo, consejeria, fechaInicio, estado, oficinaTramitadora, fechaFin);
 
   Expediente copyWith({
     final String? numexp,
@@ -28,6 +32,8 @@ final class Expediente {
     final String? consejeria,
     final String? fechaInicio,
     final String? estado,
+    final String? oficinaTramitadora,
+    final String? fechaFin,
   }) {
     return Expediente(
       numexp: numexp ?? this.numexp,
@@ -35,6 +41,8 @@ final class Expediente {
       consejeria: consejeria ?? this.consejeria,
       fechaInicio: fechaInicio ?? this.fechaInicio,
       estado: estado ?? this.estado,
+      oficinaTramitadora: oficinaTramitadora ?? this.oficinaTramitadora,
+      fechaFin: fechaFin ?? this.fechaFin,
     );
   }
 }

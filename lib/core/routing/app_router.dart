@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pag
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportacion_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expediente_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expedientes_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_alta_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_page.dart';
@@ -203,6 +204,13 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.gestionExpedientes,
               builder: (final BuildContext context, final GoRouterState state) => const GestionExpedientesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionExpedienteDetalle,
+              builder: (final BuildContext context, final GoRouterState state) => GestionExpedienteDetallePage(
+                numexp: state.pathParameters['numexp'] ?? '',
+              ),
             ),
 
             GoRoute(

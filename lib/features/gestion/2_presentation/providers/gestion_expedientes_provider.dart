@@ -20,6 +20,16 @@ final expedientesProvider = FutureProvider.autoDispose<List<Expediente>>((final 
   return repository.loadExpedientes(documentNumber: documentNumber);
 });
 
+final expedienteDetailProvider = FutureProvider.autoDispose.family<Expediente, String>((final ref, final numexp) async {
+  final documentNumber = _documentNumber(ref.watch(jwtClaimsProvider));
+  if (documentNumber == null) {
+    throw StateError('No se ha encontrado el número de documento.');
+  }
+
+  final repository = ref.watch(gestionExpedienteRepositoryProvider);
+  return repository.loadExpedienteDetail(documentNumber: documentNumber, numexp: numexp);
+});
+
 String? _documentNumber(final JwtClaims? claims) {
   final candidates = [
     claims?.personIdentifier,

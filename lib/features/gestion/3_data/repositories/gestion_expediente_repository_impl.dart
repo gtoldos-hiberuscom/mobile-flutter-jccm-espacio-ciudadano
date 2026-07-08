@@ -41,6 +41,63 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     }
   }
 
+  @override
+  Future<Expediente> loadExpedienteDetail({
+    required final String documentNumber,
+    required final String numexp,
+  }) async {
+    final response = await _api.myPubliSelecByNumExpOperation(
+      zcsrfcpubliselectbynumexpBody: ZCSRFCPUBLISELECTBYNUMEXP(
+        (final builder) => builder
+          ..pnumdoc = documentNumber
+          ..pnumexp = numexp
+          ..ptipodoc = 'NIF',
+      ),
+      extra: {
+        generatedApiDecodeStringResponseExtraKey: true,
+        generatedApiUnwrapBodyExtraKey: true,
+        // A diferencia de selectbynif, aquí `publicacionportal` es un objeto
+        // plano (no `.item`), según el ejemplo del swagger
+        // (fachada-sede-api-swagger.yaml:6299) — no se normalizan colecciones
+        // singleton.
+      },
+    );
+
+    final expediente = _rawExpedienteDetail(response.extra[generatedApiRawResponseDataExtraKey]);
+    if (expediente == null) {
+      throw StateError('Respuesta de expediente sin datos.');
+    }
+    return expediente;
+  }
+
+  Expediente? _rawExpedienteDetail(final Object? data) {
+    final payload = _decode(data);
+    final payloadMap = _asMap(payload);
+    final root = _asMap(payloadMap?['body']) ?? payloadMap;
+    final portal = _asMap(root?['publicacionportal']);
+    return portal == null ? null : _toExpedienteDetailMap(portal);
+  }
+
+  // Los nombres de campo del backend (estilo SAP) no se corresponden
+  // literalmente con las etiquetas de Figma; se documenta la inferencia
+  // porque no es obvia a partir de la clave sola.
+  Expediente _toExpedienteDetailMap(final Map<String, Object?> data) {
+    return Expediente(
+      numexp: _string(data, 'numexp') ?? '',
+      titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
+      // "Oficina tramitadora": mejor candidato disponible es `desuniorg`
+      // (descripción de la unidad orgánica, campo paralelo a `desconsej`).
+      oficinaTramitadora: _string(data, 'desuniorg'),
+      fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
+      // "0000-00-00" es el sentinel SAP de fecha nula; se trata como ausente.
+      fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
+      estado: _string(data, 'descrip') ?? _string(data, 'estado'),
+    );
+  }
+
+  String? _nonSentinelDate(final String? value) => (value == null || value == '0000-00-00') ? null : value;
+
   List<Expediente> _rawExpedientesByNif(final Object? data) {
     final payload = _decode(data);
     final payloadMap = _asMap(payload);

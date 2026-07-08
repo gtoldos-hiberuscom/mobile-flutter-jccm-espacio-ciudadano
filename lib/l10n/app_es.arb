@@ -4170,6 +4170,38 @@
   "@gestionExpedientesEmpty": {
     "description": "Mensaje de lista vacía en la pantalla de expedientes."
   },
+  "gestionExpedientesDetalleTitle": "Detalle de expediente",
+  "@gestionExpedientesDetalleTitle": {
+    "description": "Título de la barra de navegación en la pantalla de detalle de expediente."
+  },
+  "gestionExpedientesDatosExpedienteTitle": "Datos del Expediente",
+  "@gestionExpedientesDatosExpedienteTitle": {
+    "description": "Encabezado de la primera sección en la pantalla de detalle de expediente."
+  },
+  "gestionExpedientesEstadoTramitacionTitle": "Estado de tramitación",
+  "@gestionExpedientesEstadoTramitacionTitle": {
+    "description": "Encabezado de la segunda sección en la pantalla de detalle de expediente."
+  },
+  "gestionExpedientesConsejeriaLabel": "CONSEJERÍA",
+  "@gestionExpedientesConsejeriaLabel": {
+    "description": "Etiqueta de la consejería en la pantalla de detalle de expediente."
+  },
+  "gestionExpedientesOficinaTramitadoraLabel": "OFICINA TRAMITADORA",
+  "@gestionExpedientesOficinaTramitadoraLabel": {
+    "description": "Etiqueta de la oficina tramitadora en la pantalla de detalle de expediente."
+  },
+  "gestionExpedientesFechaCierreLabel": "FECHA DE CIERRE",
+  "@gestionExpedientesFechaCierreLabel": {
+    "description": "Etiqueta de la fecha de cierre en la pantalla de detalle de expediente."
+  },
+  "gestionExpedientesAportarDocumentacionButton": "Aportar documentación",
+  "@gestionExpedientesAportarDocumentacionButton": {
+    "description": "Etiqueta del botón fijo inferior en la pantalla de detalle de expediente."
+  },
+  "gestionExpedientesDetalleLoadError": "No hemos podido cargar el detalle del expediente",
+  "@gestionExpedientesDetalleLoadError": {
+    "description": "Error al cargar el detalle de un expediente."
+  },
 
   "gestionRegistrosPageTitle": "Mis registros",
   "@gestionRegistrosPageTitle": {

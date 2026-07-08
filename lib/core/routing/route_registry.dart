@@ -44,6 +44,7 @@ abstract final class Routes {
   static const String gestion = '/gestion';
   static const String gestionAportacion = '/gestion/aportacion';
   static const String gestionExpedientes = '/gestion/expedientes';
+  static const String gestionExpedienteDetalle = '/gestion/expedientes/:numexp';
   static const String gestionNotificaciones = '/gestion/notificaciones';
   static const String gestionNotificacionesAlta = '/gestion/notificaciones/alta';
   static const String gestionRegistros = '/gestion/registros';
