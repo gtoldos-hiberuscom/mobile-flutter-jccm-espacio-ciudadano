@@ -73,121 +73,16 @@ class _GestionExpedienteCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return AppSurfaceCard(
-      padding: EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space16,
-              AppDimensions.space12,
-              AppDimensions.space16,
-              AppDimensions.space8,
-            ),
-            child: Text(
-              expediente.consejeria.toUpperCase(),
-              style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space16,
-              0,
-              AppDimensions.space16,
-              AppDimensions.space12,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    expediente.titulo,
-                    style: AppTypography.leadingMedium.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                const Icon(AppIcons.arrowForward, size: 20, color: AppColors.primary),
-              ],
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            color: AppColors.backgroundLightBlue,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-              vertical: AppDimensions.space12,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _RefRow(label: l10n.gestionExpedientesNumExpedienteLabel, value: expediente.numexp),
-                const SizedBox(height: AppDimensions.space8),
-                _RefRow(
-                  label: l10n.gestionExpedientesFechaInicioLabel,
-                  value: expediente.fechaInicio ?? '-',
-                ),
-              ],
-            ),
-          ),
-          if (expediente.estado != null) ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space16,
-                AppDimensions.space12,
-                AppDimensions.space16,
-                AppDimensions.space4,
-              ),
-              child: Text(
-                l10n.gestionExpedientesEstadoLabel,
-                style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space16,
-                0,
-                AppDimensions.space16,
-                AppDimensions.space12,
-              ),
-              child: Text(
-                expediente.estado!,
-                style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _RefRow extends StatelessWidget {
-  const _RefRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
-        ),
-        const SizedBox(width: AppDimensions.space8),
-        Expanded(
-          child: Text(
-            value,
-            style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-          ),
-        ),
-      ],
+    return AppCard(
+      title: expediente.titulo,
+      categoryLabel: expediente.consejeria.toUpperCase(),
+      showArrow: true,
+      refNumber: expediente.numexp,
+      refNumberLabel: l10n.gestionExpedientesNumExpedienteLabel,
+      expiryDate: expediente.fechaInicio ?? '-',
+      expiryDateLabel: l10n.gestionExpedientesFechaInicioLabel,
+      extraLabel: expediente.estado != null ? l10n.gestionExpedientesEstadoLabel : null,
+      extraText: expediente.estado,
     );
   }
 }

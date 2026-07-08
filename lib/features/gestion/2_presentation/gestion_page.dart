@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_divider.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
@@ -15,17 +16,14 @@ class GestionPage extends ConsumerWidget {
   static const List<_GestionSectionDefinition> _sections = [
     _GestionSectionDefinition(
       title: _GestionText.expedientesTitle,
-      description: _GestionText.expedientesDescription,
       route: Routes.gestionExpedientes,
     ),
     _GestionSectionDefinition(
       title: _GestionText.registrosTitle,
-      description: _GestionText.registrosDescription,
       route: Routes.gestionRegistros,
     ),
     _GestionSectionDefinition(
       title: _GestionText.aportacionTitle,
-      description: _GestionText.aportacionDescription,
       hasDividerAbove: true,
       route: Routes.gestionAportacion,
     ),
@@ -65,8 +63,9 @@ class GestionPage extends ConsumerWidget {
                 for (final section in sections) ...[
                   if (section.hasDividerAbove) ...[
                     const SizedBox(height: AppDimensions.space8),
-                    const AppDivider(),
+                    const AppDivider(strength: AppDividerStrength.medium),
                     const SizedBox(height: AppDimensions.space8),
+                    
                   ],
                   AppNavigationCard(
                     title: section.title,
@@ -80,7 +79,6 @@ class GestionPage extends ConsumerWidget {
                 const SizedBox(height: AppDimensions.space8),
                 AppNavigationCard(
                   title: l10n.gestionNotificacionesTitle,
-                  description: l10n.gestionNotificacionesDescription,
                   isDisabled: !hasContact,
                   onTap: () {
                     if (hasContact) {
@@ -125,20 +123,20 @@ class _NotificacionesContextualHelper extends StatelessWidget {
 class _GestionSectionDefinition {
   const _GestionSectionDefinition({
     required this.title,
-    required this.description,
     required this.route,
+    this.description,
     this.hasDividerAbove = false,
   });
 
   final _GestionText title;
-  final _GestionText description;
+  final _GestionText? description;
   final bool hasDividerAbove;
   final String route;
 
   _GestionSection resolve(final AppLocalizations l10n) {
     return _GestionSection(
       title: title.resolve(l10n),
-      description: description.resolve(l10n),
+      description: description?.resolve(l10n),
       hasDividerAbove: hasDividerAbove,
       route: route,
     );
@@ -172,13 +170,13 @@ enum _GestionText {
 class _GestionSection {
   const _GestionSection({
     required this.title,
-    required this.description,
     required this.hasDividerAbove,
     required this.route,
+    this.description,
   });
 
   final String title;
-  final String description;
+  final String? description;
   final bool hasDividerAbove;
   final String route;
 }

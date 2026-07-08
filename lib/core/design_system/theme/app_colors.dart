@@ -114,6 +114,9 @@ abstract final class AppColors {
   /// Figma: Color(new)/Text — Link on dark  {Blue/300}
   static const Color textLinkOnDark = blue300;
 
+  /// Figma: Color(new)/Text — Bluemuted-dark  {#383E45}
+  static const Color textBlueMutedDark = Color(0xFF383E45);
+
   // Kept for backward-compat with existing widgets
   static const Color textSecondary = neutral700;
   static const Color textDisabled = neutral500;
@@ -228,7 +231,7 @@ abstract final class AppColors {
   static const Color outlineNeutralBase = blueMuted500;
   static const Color neutralGray = neutral100;
   static const Color neutralDark = blueMuted700;
-  static const Color dividerColor = blueMuted100;
+  static const Color dividerColor = neutral200;
   static const Color statusNeutralLight = blueMuted100;
 
   // ── Interactive ───────────────────────────────────────────────────────────

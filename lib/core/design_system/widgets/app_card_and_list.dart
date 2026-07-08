@@ -253,6 +253,11 @@ class AppCard extends StatelessWidget {
     this.onAttachmentTap,
     this.actionButton,
     this.lastUpdateText,
+    this.showArrow = false,
+    this.refNumberLabel = 'Nº ref.',
+    this.expiryDateLabel = 'Expir.',
+    this.extraLabel,
+    this.extraText,
     // ── Agenda slots ─────────────────────────────────────────────────────────
     this.date,
     this.time,
@@ -308,6 +313,23 @@ class AppCard extends StatelessWidget {
 
   /// Last-update footer text, prefixed with an `autorenew` icon.
   final String? lastUpdateText;
+
+  /// When `true`, shows a trailing `arrow_forward` icon next to the title
+  /// (navigation affordance) — independent from [titleIcon].
+  final bool showArrow;
+
+  /// Overrides the "Nº ref." label in the ref block's first row.
+  final String refNumberLabel;
+
+  /// Overrides the "Expir." label in the ref block's second row.
+  final String expiryDateLabel;
+
+  /// Uppercase caption label for the optional info block rendered below the
+  /// ref block (e.g. "Estado").
+  final String? extraLabel;
+
+  /// Value text for the optional info block rendered below the ref block.
+  final String? extraText;
 
   // ── Agenda ────────────────────────────────────────────────────────────────
 
@@ -378,7 +400,7 @@ class AppCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: _borderRadius,
-              border: Border.all(color: AppColors.backgroundBlueMutedLight),
+              border: Border.all(color: AppColors.borderBlueMutedLight),
               boxShadow: _shadow,
             ),
             padding: const EdgeInsets.all(AppDimensions.space16),
@@ -399,6 +421,7 @@ class AppCard extends StatelessWidget {
     if (categoryLabel != null || statusTag != null) _headerRow(),
     _titleRow(),
     if (refNumber != null || expiryDate != null) _refBlock(),
+    if (extraLabel != null && extraText != null) _extraInfoBlock(),
     if (attachmentLabel != null) _attachmentRow(),
     if (actionButton != null) SizedBox(width: double.infinity, child: actionButton),
     if (lastUpdateText != null) _lastUpdateRow(),
@@ -419,7 +442,7 @@ class AppCard extends StatelessWidget {
                 child: Text(
                   categoryLabel!,
                   style: AppTypography.captionUppercase.copyWith(
-                    color: AppColors.neutralDark,
+                    color: _isDisabled ? AppColors.neutralDark : AppColors.textBlueMutedDark,
                   ),
                 ),
               ),
@@ -432,6 +455,7 @@ class AppCard extends StatelessWidget {
 
   Widget _titleRow() {
     final effectiveTitleIcon = titleIcon;
+    final titleColor = _isDisabled ? AppColors.neutralDark : AppColors.primary;
     return Padding(
       padding: const EdgeInsets.only(
         top: AppDimensions.space4,
@@ -447,9 +471,16 @@ class AppCard extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: AppTypography.leadingBold.copyWith(color: _textColor()),
+              style: AppTypography.leadingBold.copyWith(color: titleColor),
             ),
           ),
+          if (showArrow) ...[
+            const SizedBox(width: AppDimensions.space8),
+            AppIcon(
+              AppIcons.arrowForward,
+              color: _isDisabled ? AppColors.neutralDark : AppColors.primaryDark,
+            ),
+          ],
         ],
       ),
     );
@@ -458,8 +489,8 @@ class AppCard extends StatelessWidget {
   Widget _refBlock() {
     final bgColor = _isDisabled ? AppColors.backgroundBlueMutedLight : AppColors.backgroundBlueLighter;
 
-    final labelColor = _isDisabled ? AppColors.neutralDark : AppColors.textPrimary;
-    final valueColor = _isDisabled ? AppColors.neutralDark : AppColors.textPrimary;
+    final labelColor = _isDisabled ? AppColors.neutralDark : AppColors.primary;
+    final valueColor = _isDisabled ? AppColors.neutralDark : AppColors.primary;
 
     return Container(
       width: double.infinity,
@@ -474,14 +505,14 @@ class AppCard extends StatelessWidget {
         children: [
           if (refNumber != null)
             _refRow(
-              label: 'Nº ref.',
+              label: refNumberLabel,
               value: refNumber!,
               labelColor: labelColor,
               valueColor: valueColor,
             ),
           if (expiryDate != null)
             _refRow(
-              label: 'Expir.',
+              label: expiryDateLabel,
               value: expiryDate!,
               labelColor: labelColor,
               valueColor: expiryWarning ? AppColors.warningDark : valueColor,
@@ -535,6 +566,33 @@ class AppCard extends StatelessWidget {
                 trailingIcon,
               ],
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _extraInfoBlock() {
+    final color = _isDisabled ? AppColors.neutralDark : AppColors.primary;
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: AppDimensions.space8, bottom: AppDimensions.space4),
+            child: Text(
+              extraLabel!,
+              style: AppTypography.captionUppercase.copyWith(color: color),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppDimensions.space4),
+            child: Text(
+              extraText!,
+              style: AppTypography.smallRegular.copyWith(color: color),
+            ),
           ),
         ],
       ),
