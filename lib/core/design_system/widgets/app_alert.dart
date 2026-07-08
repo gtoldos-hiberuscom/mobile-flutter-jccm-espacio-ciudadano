@@ -770,6 +770,133 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
   }
 }
 
+/// Success confirmation dialog matching the Figma `Alerts/Dialog` success
+/// variant (node `44242:24055`).
+///
+/// Unlike [AppAlertDialog], its two actions are stacked full-width instead
+/// of side by side, and the secondary action has no leading icon — the same
+/// reason [AppDestructiveConfirmDialog] is its own class rather than an
+/// [AppAlertDialog] variant.
+class AppSuccessDialog extends StatelessWidget {
+  const AppSuccessDialog({
+    required this.title,
+    required this.description,
+    required this.secondaryLabel,
+    required this.primaryLabel,
+    required this.onSecondary,
+    required this.onPrimary,
+    super.key,
+  });
+
+  final String title;
+  final String description;
+  final String secondaryLabel;
+  final String primaryLabel;
+  final VoidCallback onSecondary;
+  final VoidCallback onPrimary;
+
+  /// Displays this dialog. Dismissal is only via [onSecondary]/[onPrimary],
+  /// each of which pops this dialog (using its own route context, not the
+  /// caller's) before invoking the provided callback — same pattern as
+  /// [AppAlertDialog.show]/[AppDestructiveConfirmDialog.show].
+  static Future<void> show(
+    final BuildContext context, {
+    required final String title,
+    required final String description,
+    required final String secondaryLabel,
+    required final String primaryLabel,
+    required final VoidCallback onSecondary,
+    required final VoidCallback onPrimary,
+  }) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: const Color(0xCC031B35),
+      builder: (final ctx) => AppSuccessDialog(
+        title: title,
+        description: description,
+        secondaryLabel: secondaryLabel,
+        primaryLabel: primaryLabel,
+        onSecondary: () {
+          Navigator.of(ctx).pop();
+          onSecondary();
+        },
+        onPrimary: () {
+          Navigator.of(ctx).pop();
+          onPrimary();
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.space16,
+        vertical: AppDimensions.space64,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.borderBlueMutedLight),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          boxShadow: AppShadows.overAll,
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space16,
+          vertical: AppDimensions.space32,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(AppDimensions.space8),
+                decoration: BoxDecoration(
+                  color: AppColors.successLight,
+                  borderRadius: BorderRadius.circular(64),
+                ),
+                child: const AppIcon(
+                  AppIcons.checkCircle,
+                  color: AppColors.successDark,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppDimensions.space12),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppTypography.h3.copyWith(color: AppColors.primary),
+            ),
+            const SizedBox(height: AppDimensions.space16),
+            Text(
+              description,
+              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+            ),
+            const SizedBox(height: AppDimensions.space16),
+            AppButton(
+              label: secondaryLabel,
+              hierarchy: AppButtonHierarchy.tertiary,
+              isExpanded: true,
+              onPressed: onSecondary,
+            ),
+            const SizedBox(height: AppDimensions.space16),
+            AppButton(
+              label: primaryLabel,
+              leadingIcon: AppIcons.check,
+              isExpanded: true,
+              onPressed: onPrimary,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Biometric quick-access opt-in dialog.
 ///
 /// Built from existing design-system pieces: [AppAlertDialog], [AppButton],

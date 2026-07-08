@@ -3135,6 +3135,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportarDocumentacionRegistroError => 'No hemos podido registrar la documentación. Inténtalo de nuevo.';
 
   @override
+  String get gestionAportarDocumentacionUploadErrorParcial => 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
+
+  @override
+  String get gestionAportarDocumentacionExitoTitulo => 'Los documentos han sido enviados correctamente';
+
+  @override
+  String get gestionAportarDocumentacionExitoDescripcion => 'La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante';
+
+  @override
+  String get gestionAportarDocumentacionCerrarSinDescargarButton => 'Cerrar sin descargar';
+
+  @override
+  String get gestionAportarDocumentacionDescargarJustificanteButton => 'Descargar justificante';
+
+  @override
   String get gestionRegistrosPageTitle => 'Mis registros';
 
   @override

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,37 +26,37 @@ const List<String> _iosUniformTypeIdentifiersAportacion = [
   'public.zip-archive',
 ];
 
-/// Aportar documentación — Figma node 44242:24884.
+/// Aportar documentación — Figma node 44242:24884, subida en paralelo con
+/// progreso (44198:64251) y diálogo de éxito (44242:24055).
 ///
 /// **Integración de backend no verificada**: `procedimiento/subiradjuntosinfirma`
 /// exige un `idunico` que ningún endpoint de lectura devuelve para un
 /// expediente ya existente; aquí se autogenera como `{NIF}_{timestamp}` por
 /// inferencia de los ejemplos del swagger, sin confirmación del backend.
-class GestionAportarDocumentacionPage extends ConsumerStatefulWidget {
+class GestionAportarDocumentacionPage extends ConsumerWidget {
   const GestionAportarDocumentacionPage({required this.numexp, super.key});
 
   final String numexp;
 
-  @override
-  ConsumerState<GestionAportarDocumentacionPage> createState() => _GestionAportarDocumentacionPageState();
-}
-
-class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportarDocumentacionPage> {
-  bool _isRegistering = false;
-
-  String get _decodedNumexp => Uri.decodeComponent(widget.numexp);
+  String get _decodedNumexp => Uri.decodeComponent(numexp);
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final archivos = ref.watch(gestionAportarDocumentacionProvider);
     final expedienteRoute = '${Routes.gestionExpedientes}/${Uri.encodeComponent(_decodedNumexp)}';
+    final estaSubiendo = archivos.any((final a) => a.estado == AportacionArchivoEstado.enviando);
+
+    void volverAlExpediente() {
+      ref.read(gestionAportarDocumentacionProvider.notifier).cancelarTodas();
+      context.go(expedienteRoute);
+    }
 
     return Scaffold(
       appBar: AppNavBar(
         type: AppNavBarType.detail,
         title: l10n.gestionAportarDocumentacionTitle,
-        onBack: () => context.go(expedienteRoute),
+        onBack: volverAlExpediente,
       ),
       body: Column(
         children: [
@@ -78,6 +79,8 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                       child: _AportacionArchivoCard(
                         archivo: archivo,
                         onDelete: () => ref.read(gestionAportarDocumentacionProvider.notifier).removeArchivo(archivo.path),
+                        onCancel: () => ref.read(gestionAportarDocumentacionProvider.notifier).cancelarSubida(archivo.path),
+                        onRetry: () => _registrar(context, ref, archivos, expedienteRoute),
                       ),
                     ),
                 ],
@@ -91,21 +94,21 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                 hierarchy: AppButtonHierarchy.tertiary,
                 isExpanded: true,
                 leadingIcon: AppIcons.cancel,
-                onPressed: () => context.go(expedienteRoute),
+                onPressed: volverAlExpediente,
               ),
               AppButton(
                 label: l10n.gestionAportarDocumentacionSeleccionarButton,
                 hierarchy: AppButtonHierarchy.secondary,
                 isExpanded: true,
                 leadingIcon: AppIcons.upload,
-                onPressed: () => _pickFiles(archivos),
+                onPressed: () => _pickFiles(context, ref, archivos),
               ),
               AppButton(
                 label: l10n.gestionAportarDocumentacionRegistrarButton,
                 isExpanded: true,
                 leadingIcon: AppIcons.check,
-                isLoading: _isRegistering,
-                onPressed: _isRegistering ? null : () => _registrar(archivos, expedienteRoute),
+                isLoading: estaSubiendo,
+                onPressed: estaSubiendo ? null : () => _registrar(context, ref, archivos, expedienteRoute),
               ),
             ],
           ),
@@ -114,7 +117,7 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     );
   }
 
-  Future<void> _pickFiles(final List<AportacionArchivo> archivosActuales) async {
+  Future<void> _pickFiles(final BuildContext context, final WidgetRef ref, final List<AportacionArchivo> archivosActuales) async {
     final l10n = AppLocalizations.of(context);
     final selected = await openFiles(
       acceptedTypeGroups: const [
@@ -125,7 +128,7 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
         ),
       ],
     );
-    if (selected.isEmpty || !mounted) {
+    if (selected.isEmpty || !context.mounted) {
       return;
     }
 
@@ -138,7 +141,7 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
         ),
       ),
     );
-    if (!mounted) {
+    if (!context.mounted) {
       return;
     }
 
@@ -155,9 +158,18 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     }
   }
 
-  Future<void> _registrar(final List<AportacionArchivo> archivos, final String expedienteRoute) async {
+  /// Sube en paralelo todos los ficheros que no estén ya `completado`
+  /// (`noEnviado` o `error` — así "Reintentar" en una tarjeta y "Registrar"
+  /// comparten el mismo flujo, sin reenviar los ya completados).
+  Future<void> _registrar(
+    final BuildContext context,
+    final WidgetRef ref,
+    final List<AportacionArchivo> archivos,
+    final String expedienteRoute,
+  ) async {
     final l10n = AppLocalizations.of(context);
-    if (archivos.isEmpty) {
+    final pendientes = archivos.where((final a) => a.estado != AportacionArchivoEstado.completado).toList(growable: false);
+    if (pendientes.isEmpty) {
       AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionNoFilesError, severity: AppAlertSeverity.error);
       return;
     }
@@ -168,38 +180,87 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
       return;
     }
 
-    setState(() => _isRegistering = true);
+    final String tipoProcedimiento;
     try {
       final expediente = await ref.read(expedienteDetailProvider(_decodedNumexp).future);
-      final tipoProcedimiento = expediente.tipoproc ?? '';
-      final idUnico = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
-      final repository = ref.read(gestionDocumentoRepositoryProvider);
+      tipoProcedimiento = expediente.tipoproc ?? '';
+    } on Object catch (error, stackTrace) {
+      logger.e('Error al obtener el expediente para aportar documentación', error: error, stackTrace: stackTrace);
+      if (context.mounted) {
+        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
+      }
+      return;
+    }
 
-      for (final archivo in archivos) {
-        final bytes = await XFile(archivo.path).readAsBytes();
-        await repository.subirDocumentoSinFirma(
+    final idUnico = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
+
+    await Future.wait(
+      pendientes.map(
+        (final archivo) => _subirArchivo(
+          ref: ref,
+          archivo: archivo,
           documentNumber: documentNumber,
           idUnico: idUnico,
           tipoProcedimiento: tipoProcedimiento,
-          nombreFichero: archivo.nombre,
-          bytes: bytes,
-        );
-      }
+        ),
+      ),
+    );
 
-      if (!mounted) {
+    if (!context.mounted) {
+      return;
+    }
+
+    final actuales = ref.read(gestionAportarDocumentacionProvider);
+    if (actuales.any((final a) => a.estado == AportacionArchivoEstado.error)) {
+      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionUploadErrorParcial, severity: AppAlertSeverity.error);
+      return;
+    }
+
+    await AppSuccessDialog.show(
+      context,
+      title: l10n.gestionAportarDocumentacionExitoTitulo,
+      description: l10n.gestionAportarDocumentacionExitoDescripcion,
+      secondaryLabel: l10n.gestionAportarDocumentacionCerrarSinDescargarButton,
+      primaryLabel: l10n.gestionAportarDocumentacionDescargarJustificanteButton,
+      onSecondary: () => context.go(expedienteRoute),
+      onPrimary: () => AppAlertSnackbar.show(context, message: l10n.gestionSectionComingSoon),
+    );
+  }
+
+  Future<void> _subirArchivo({
+    required final WidgetRef ref,
+    required final AportacionArchivo archivo,
+    required final String documentNumber,
+    required final String idUnico,
+    required final String tipoProcedimiento,
+  }) async {
+    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
+    final repository = ref.read(gestionDocumentoRepositoryProvider);
+    final token = notifier.beginUpload(archivo.path);
+
+    try {
+      final bytes = await XFile(archivo.path).readAsBytes();
+      await repository.subirDocumentoSinFirma(
+        documentNumber: documentNumber,
+        idUnico: idUnico,
+        tipoProcedimiento: tipoProcedimiento,
+        nombreFichero: archivo.nombre,
+        bytes: bytes,
+        cancelToken: token,
+        onProgress: (final progreso) => notifier.updateProgreso(archivo.path, progreso),
+      );
+      notifier.marcarCompletado(archivo.path);
+    } on DioException catch (error, stackTrace) {
+      if (error.type == DioExceptionType.cancel) {
+        // Cancelación manual del usuario — `cancelarSubida` ya revirtió el
+        // estado a `noEnviado`; no se trata como error.
         return;
       }
-      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroSuccess, severity: AppAlertSeverity.success);
-      context.go(expedienteRoute);
+      logger.e('Error al subir ${archivo.nombre}', error: error, stackTrace: stackTrace);
+      notifier.marcarError(archivo.path);
     } on Object catch (error, stackTrace) {
-      logger.e('Error al registrar documentación aportada', error: error, stackTrace: stackTrace);
-      if (mounted) {
-        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isRegistering = false);
-      }
+      logger.e('Error al subir ${archivo.nombre}', error: error, stackTrace: stackTrace);
+      notifier.marcarError(archivo.path);
     }
   }
 }
@@ -223,13 +284,27 @@ String? _documentNumber(final JwtClaims? claims) {
 }
 
 class _AportacionArchivoCard extends StatelessWidget {
-  const _AportacionArchivoCard({required this.archivo, required this.onDelete});
+  const _AportacionArchivoCard({
+    required this.archivo,
+    required this.onDelete,
+    required this.onCancel,
+    required this.onRetry,
+  });
 
   final AportacionArchivo archivo;
   final VoidCallback onDelete;
+  final VoidCallback onCancel;
+  final VoidCallback onRetry;
 
   @override
   Widget build(final BuildContext context) {
+    final status = switch (archivo.estado) {
+      AportacionArchivoEstado.noEnviado => AppFileUploadStatus.uploaded,
+      AportacionArchivoEstado.enviando => AppFileUploadStatus.uploading,
+      AportacionArchivoEstado.completado => AppFileUploadStatus.complete,
+      AportacionArchivoEstado.error => AppFileUploadStatus.error,
+    };
+
     return Container(
       padding: const EdgeInsets.all(AppDimensions.space16),
       decoration: const BoxDecoration(
@@ -244,8 +319,11 @@ class _AportacionArchivoCard extends StatelessWidget {
       child: AppFileUpload(
         fileName: archivo.nombre,
         fileInfo: _formatFileInfo(archivo.tamanioBytes),
-        status: AppFileUploadStatus.uploaded,
+        status: status,
+        progress: archivo.progreso,
         onDelete: onDelete,
+        onCancel: onCancel,
+        onRetry: onRetry,
       ),
     );
   }

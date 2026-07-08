@@ -6122,6 +6122,36 @@ abstract class AppLocalizations {
   /// **'No hemos podido registrar la documentación. Inténtalo de nuevo.'**
   String get gestionAportarDocumentacionRegistroError;
 
+  /// Mensaje cuando alguno de los ficheros subidos en paralelo falla.
+  ///
+  /// In es, this message translates to:
+  /// **'Algunos ficheros no se han podido enviar. Puedes reintentarlo.'**
+  String get gestionAportarDocumentacionUploadErrorParcial;
+
+  /// Título del diálogo de éxito al completar la aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Los documentos han sido enviados correctamente'**
+  String get gestionAportarDocumentacionExitoTitulo;
+
+  /// Descripción del diálogo de éxito al completar la aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante'**
+  String get gestionAportarDocumentacionExitoDescripcion;
+
+  /// Botón secundario del diálogo de éxito de aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sin descargar'**
+  String get gestionAportarDocumentacionCerrarSinDescargarButton;
+
+  /// Botón primario del diálogo de éxito de aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar justificante'**
+  String get gestionAportarDocumentacionDescargarJustificanteButton;
+
   /// Título de la pantalla de mis registros.
   ///
   /// In es, this message translates to:

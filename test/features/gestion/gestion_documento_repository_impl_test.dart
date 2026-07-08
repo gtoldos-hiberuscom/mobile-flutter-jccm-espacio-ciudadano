@@ -77,5 +77,26 @@ void main() {
         throwsA(isA<DioException>()),
       );
     });
+
+    test('rethrows a DioExceptionType.cancel when the CancelToken is already cancelled', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 200, body: '{}'),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionDocumentoRepositoryImpl(dio: dio);
+      final cancelToken = CancelToken()..cancel();
+
+      await expectLater(
+        repository.subirDocumentoSinFirma(
+          documentNumber: '03874761C',
+          idUnico: '03874761C_1700000000000',
+          tipoProcedimiento: '020',
+          nombreFichero: 'documento.pdf',
+          bytes: Uint8List.fromList('x'.codeUnits),
+          cancelToken: cancelToken,
+        ),
+        throwsA(isA<DioException>().having((final e) => e.type, 'type', DioExceptionType.cancel)),
+      );
+    });
   });
 }

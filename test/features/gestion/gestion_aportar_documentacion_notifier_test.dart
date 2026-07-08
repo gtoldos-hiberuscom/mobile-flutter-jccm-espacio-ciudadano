@@ -81,5 +81,86 @@ void main() {
       expect(remaining, hasLength(1));
       expect(remaining.single.nombre, 'b.pdf');
     });
+
+    test('beginUpload marks the file as enviando with progreso 0', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
+
+      final token = notifier.beginUpload('/tmp/a.pdf');
+
+      final result = container.read(gestionAportarDocumentacionProvider).single;
+      expect(result.estado, AportacionArchivoEstado.enviando);
+      expect(result.progreso, 0);
+      expect(token.isCancelled, isFalse);
+    });
+
+    test('updateProgreso only affects the matching file', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf'), archivo('b.pdf')]);
+      notifier
+        ..beginUpload('/tmp/a.pdf')
+        ..beginUpload('/tmp/b.pdf')
+        ..updateProgreso('/tmp/a.pdf', 0.5);
+
+      final result = container.read(gestionAportarDocumentacionProvider);
+      expect(result.firstWhere((final a) => a.nombre == 'a.pdf').progreso, 0.5);
+      expect(result.firstWhere((final a) => a.nombre == 'b.pdf').progreso, 0);
+    });
+
+    test('marcarCompletado sets estado completado and clears progreso', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
+      notifier
+        ..beginUpload('/tmp/a.pdf')
+        ..updateProgreso('/tmp/a.pdf', 0.7)
+        ..marcarCompletado('/tmp/a.pdf');
+
+      final result = container.read(gestionAportarDocumentacionProvider).single;
+      expect(result.estado, AportacionArchivoEstado.completado);
+      expect(result.progreso, isNull);
+    });
+
+    test('marcarError sets estado error and clears progreso', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
+      notifier
+        ..beginUpload('/tmp/a.pdf')
+        ..marcarError('/tmp/a.pdf');
+
+      final result = container.read(gestionAportarDocumentacionProvider).single;
+      expect(result.estado, AportacionArchivoEstado.error);
+      expect(result.progreso, isNull);
+    });
+
+    test('cancelarSubida cancels the token and reverts to noEnviado', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
+      final token = notifier.beginUpload('/tmp/a.pdf');
+
+      notifier.cancelarSubida('/tmp/a.pdf');
+
+      expect(token.isCancelled, isTrue);
+      final result = container.read(gestionAportarDocumentacionProvider).single;
+      expect(result.estado, AportacionArchivoEstado.noEnviado);
+      expect(result.progreso, isNull);
+    });
+
+    test('cancelarTodas cancels every active token', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf'), archivo('b.pdf')]);
+      final tokenA = notifier.beginUpload('/tmp/a.pdf');
+      final tokenB = notifier.beginUpload('/tmp/b.pdf');
+
+      notifier.cancelarTodas();
+
+      expect(tokenA.isCancelled, isTrue);
+      expect(tokenB.isCancelled, isTrue);
+    });
   });
 }

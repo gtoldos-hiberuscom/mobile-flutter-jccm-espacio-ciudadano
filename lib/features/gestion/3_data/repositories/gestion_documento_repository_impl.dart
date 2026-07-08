@@ -18,6 +18,8 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final String tipoProcedimiento,
     required final String nombreFichero,
     required final Uint8List bytes,
+    final CancelToken? cancelToken,
+    final void Function(double progreso)? onProgress,
   }) async {
     final adjunto = ADJUNTO(
       (final builder) => builder
@@ -29,7 +31,15 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     );
 
     try {
-      await _api.miSubirAdjuntoSinFirmaOperation(adjuntoBody: adjunto);
+      await _api.miSubirAdjuntoSinFirmaOperation(
+        adjuntoBody: adjunto,
+        cancelToken: cancelToken,
+        onSendProgress: (final sent, final total) {
+          if (total > 0) {
+            onProgress?.call(sent / total);
+          }
+        },
+      );
     } on DioException catch (error) {
       // Confirmado contra backend real (UAT): este endpoint responde 200 con
       // el sobre genérico `Respuesta` ({body, timestamp, mensaje-respuesta,

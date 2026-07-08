@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 
@@ -38,8 +39,13 @@ final class AddArchivosRejectedDuplicate extends AddArchivosResult {
 }
 
 class GestionAportarDocumentacionNotifier extends Notifier<List<AportacionArchivo>> {
+  final Map<String, CancelToken> _cancelTokens = {};
+
   @override
-  List<AportacionArchivo> build() => const [];
+  List<AportacionArchivo> build() {
+    ref.onDispose(cancelarTodas);
+    return const [];
+  }
 
   AddArchivosResult addArchivos(final List<AportacionArchivo> nuevos) {
     final existingPaths = state.map((final a) => a.path).toSet();
@@ -68,7 +74,56 @@ class GestionAportarDocumentacionNotifier extends Notifier<List<AportacionArchiv
   }
 
   void removeArchivo(final String path) {
+    _cancelTokens.remove(path)?.cancel();
     state = state.where((final a) => a.path != path).toList(growable: false);
+  }
+
+  /// Crea y registra un [CancelToken] para la subida de [path], marcando ese
+  /// fichero como `enviando` con progreso `0`. Devuelve el token para que el
+  /// llamador lo pase a la llamada de red.
+  CancelToken beginUpload(final String path) {
+    final token = CancelToken();
+    _cancelTokens[path] = token;
+    _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.enviando, progreso: 0));
+    return token;
+  }
+
+  void updateProgreso(final String path, final double progreso) {
+    _updateArchivo(path, (final a) => a.copyWith(progreso: progreso));
+  }
+
+  void marcarCompletado(final String path) {
+    _cancelTokens.remove(path);
+    _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.completado, clearProgreso: true));
+  }
+
+  void marcarError(final String path) {
+    _cancelTokens.remove(path);
+    _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.error, clearProgreso: true));
+  }
+
+  /// Cancela la subida en curso de [path] (si la hay) y lo revierte a
+  /// `noEnviado`.
+  void cancelarSubida(final String path) {
+    _cancelTokens.remove(path)?.cancel();
+    _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.noEnviado, clearProgreso: true));
+  }
+
+  /// Cancela todas las subidas en curso — usado al pulsar "Cancelar" y al
+  /// liberarse el provider (`ref.onDispose`) para no dejar peticiones
+  /// colgadas si se abandona la pantalla en mitad de una subida.
+  void cancelarTodas() {
+    for (final token in _cancelTokens.values) {
+      token.cancel();
+    }
+    _cancelTokens.clear();
+  }
+
+  void _updateArchivo(final String path, final AportacionArchivo Function(AportacionArchivo) update) {
+    state = [
+      for (final archivo in state)
+        if (archivo.path == path) update(archivo) else archivo,
+    ];
   }
 
   bool _hasAllowedExtension(final String nombre) {

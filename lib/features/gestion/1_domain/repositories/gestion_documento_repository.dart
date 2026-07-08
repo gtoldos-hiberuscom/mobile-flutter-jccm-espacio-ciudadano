@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
+
 abstract interface class GestionDocumentoRepository {
   /// Sube un fichero sin firma electrónica al buzón de tramitación.
   ///
@@ -12,5 +14,7 @@ abstract interface class GestionDocumentoRepository {
     required final String tipoProcedimiento,
     required final String nombreFichero,
     required final Uint8List bytes,
+    final CancelToken? cancelToken,
+    final void Function(double progreso)? onProgress,
   });
 }
