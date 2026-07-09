@@ -223,6 +223,10 @@ abstract final class AppColors {
   /// Figma: Color(new)/Border — Bluemuted-light  {#A0B2C5}
   static const Color borderBlueMutedLight = Color(0xFFA0B2C5);
 
+  /// Figma: Color(new)/Border — Bluemuted-lighter  {#F6F7F9}
+  /// Used under the detail NavBar.
+  static const Color borderBlueMutedLighter = Color(0xFFF6F7F9);
+
   // Kept for backward-compat
   static const Color outline = neutral400;
   static const Color outlineVariant = neutral300;

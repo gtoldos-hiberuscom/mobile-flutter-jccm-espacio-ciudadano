@@ -21,6 +21,7 @@ class GestionRegistroDetailPage extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundWhite,
       appBar: AppNavBar(
         type: AppNavBarType.detail,
         title: isEntrada ? l10n.gestionRegistrosDetalleEntradaTitle : l10n.gestionRegistrosDetalleSalidaTitle,
