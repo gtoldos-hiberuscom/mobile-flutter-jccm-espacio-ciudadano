@@ -61,6 +61,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     }
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundWhite,
       appBar: AppNavBar(
         type: AppNavBarType.detail,
         title: l10n.gestionAportarDocumentacionTitle,

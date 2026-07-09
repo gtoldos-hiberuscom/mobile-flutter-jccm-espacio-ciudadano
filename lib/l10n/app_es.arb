@@ -4391,13 +4391,25 @@
   "@gestionAportacionCodIdentificadorHelper": {
     "description": "Texto de ayuda del campo código identificador."
   },
-  "gestionAportacionInfoTitle": "Aportación de documentos de terceros",
-  "@gestionAportacionInfoTitle": {
-    "description": "Título del bottom sheet informativo de aportación."
+  "gestionAportacionInfoHeading": "Aportar documentos a un expediente",
+  "@gestionAportacionInfoHeading": {
+    "description": "Encabezado del bottom sheet informativo de aportación."
   },
-  "gestionAportacionInfoBody": "A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.",
+  "gestionAportacionInfoBody": "Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:",
   "@gestionAportacionInfoBody": {
     "description": "Cuerpo del bottom sheet informativo de aportación."
+  },
+  "gestionAportacionInfoBullet1": "La persona interesada",
+  "@gestionAportacionInfoBullet1": {
+    "description": "Primera viñeta del bottom sheet informativo de aportación."
+  },
+  "gestionAportacionInfoBullet2": "Su representante legal",
+  "@gestionAportacionInfoBullet2": {
+    "description": "Segunda viñeta del bottom sheet informativo de aportación."
+  },
+  "gestionAportacionInfoBullet3": "Una persona autorizada",
+  "@gestionAportacionInfoBullet3": {
+    "description": "Tercera viñeta del bottom sheet informativo de aportación."
   },
   "gestionAportacionSeleccionarTipo": "Seleccionar tipo de documento",
   "@gestionAportacionSeleccionarTipo": {

@@ -6332,17 +6332,35 @@ abstract class AppLocalizations {
   /// **'Este número se encuentra en la documentación del expediente'**
   String get gestionAportacionCodIdentificadorHelper;
 
-  /// Título del bottom sheet informativo de aportación.
+  /// Encabezado del bottom sheet informativo de aportación.
   ///
   /// In es, this message translates to:
-  /// **'Aportación de documentos de terceros'**
-  String get gestionAportacionInfoTitle;
+  /// **'Aportar documentos a un expediente'**
+  String get gestionAportacionInfoHeading;
 
   /// Cuerpo del bottom sheet informativo de aportación.
   ///
   /// In es, this message translates to:
-  /// **'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.'**
+  /// **'Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:'**
   String get gestionAportacionInfoBody;
+
+  /// Primera viñeta del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'La persona interesada'**
+  String get gestionAportacionInfoBullet1;
+
+  /// Segunda viñeta del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Su representante legal'**
+  String get gestionAportacionInfoBullet2;
+
+  /// Tercera viñeta del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Una persona autorizada'**
+  String get gestionAportacionInfoBullet3;
 
   /// Título del bottom sheet para seleccionar tipo de documento.
   ///

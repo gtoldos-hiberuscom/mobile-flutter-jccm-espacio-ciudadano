@@ -3241,10 +3241,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';
 
   @override
-  String get gestionAportacionInfoTitle => 'Aportación de documentos de terceros';
+  String get gestionAportacionInfoHeading => 'Aportar documentos a un expediente';
 
   @override
-  String get gestionAportacionInfoBody => 'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.';
+  String get gestionAportacionInfoBody => 'Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:';
+
+  @override
+  String get gestionAportacionInfoBullet1 => 'La persona interesada';
+
+  @override
+  String get gestionAportacionInfoBullet2 => 'Su representante legal';
+
+  @override
+  String get gestionAportacionInfoBullet3 => 'Una persona autorizada';
 
   @override
   String get gestionAportacionSeleccionarTipo => 'Seleccionar tipo de documento';

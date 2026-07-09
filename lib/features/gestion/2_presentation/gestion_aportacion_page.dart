@@ -31,10 +31,24 @@ class _GestionAportacionPageState extends State<GestionAportacionPage> {
     // ignore: discarded_futures
     AppBottomSheet.show<void>(
       context: context,
-      title: l10n.gestionAportacionInfoTitle,
-      body: Text(
-        l10n.gestionAportacionInfoBody,
-        style: AppTypography.bodyRegular.copyWith(color: AppColors.textBase),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            l10n.gestionAportacionInfoHeading,
+            style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+          ),
+          const SizedBox(height: AppDimensions.space8),
+          Text(
+            l10n.gestionAportacionInfoBody,
+            style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+          ),
+          const SizedBox(height: AppDimensions.space8),
+          AppBulletItem(text: l10n.gestionAportacionInfoBullet1),
+          AppBulletItem(text: l10n.gestionAportacionInfoBullet2),
+          AppBulletItem(text: l10n.gestionAportacionInfoBullet3),
+        ],
       ),
     );
   }
