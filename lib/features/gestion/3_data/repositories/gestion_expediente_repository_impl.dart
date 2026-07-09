@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente_aportacion_datos.dart';
@@ -14,6 +15,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<List<Expediente>> loadExpedientes({required final String documentNumber}) async {
+    logger.d('[selectbynif] req numerodocumento=$documentNumber tipodoc=NIF');
     try {
       final response = await _api.myPubliSelecByNifOperation(
         dtselectbynifreqBody: DTSELECTBYNIFREQ(
@@ -28,16 +30,24 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
         },
       );
 
-      return _rawExpedientesByNif(response.extra[generatedApiRawResponseDataExtraKey]);
+      final raw = response.extra[generatedApiRawResponseDataExtraKey];
+      _logEnvelope('selectbynif', raw);
+      final expedientes = _rawExpedientesByNif(raw);
+      logger.d('[selectbynif] ok ${expedientes.length} expediente(s)');
+      return expedientes;
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
+        logger.w('[selectbynif] 404 → lista vacía');
         return const [];
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
+      _logEnvelope('selectbynif(error)', rawData);
       final parsed = _rawExpedientesByNif(rawData);
       if (parsed.isNotEmpty) {
+        logger.w('[selectbynif] error HTTP pero cuerpo con ${parsed.length} expediente(s) → se usa el cuerpo');
         return parsed;
       }
+      logger.e('[selectbynif] error sin cuerpo aprovechable', error: error);
       rethrow;
     }
   }
@@ -46,13 +56,16 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   Future<Expediente> loadExpedienteDetail({
     required final String documentNumber,
     required final String numexp,
+    final String tipodoc = 'NIF',
   }) async {
+    logger.d('[selectbynumexp] req pnumdoc=$documentNumber pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
     final response = await _api.myPubliSelecByNumExpOperation(
       zcsrfcpubliselectbynumexpBody: ZCSRFCPUBLISELECTBYNUMEXP(
         (final builder) => builder
           ..pnumdoc = documentNumber
           ..pnumexp = numexp
           ..ptipodoc = 'NIF',
+          // ..ptipodoc = tipodoc,
       ),
       extra: {
         generatedApiDecodeStringResponseExtraKey: true,
@@ -64,11 +77,83 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       },
     );
 
-    final expediente = _rawExpedienteDetail(response.extra[generatedApiRawResponseDataExtraKey]);
+    final raw = response.extra[generatedApiRawResponseDataExtraKey];
+    _logEnvelope('selectbynumexp', raw);
+    final expediente = _rawExpedienteDetail(raw);
     if (expediente == null) {
+      logger.w('[selectbynumexp] sin datos para pnumexp=$numexp (200 pero publicacionportal vacío/nulo)');
       throw StateError('Respuesta de expediente sin datos.');
     }
+    logger.d('[selectbynumexp] ok numexp=${expediente.numexp}');
     return expediente;
+  }
+
+  @override
+  Future<Expediente> loadExpedienteByRegistro({
+    required final String documentNumber,
+    required final String numRegistro,
+    final String tipodoc = 'NIF',
+  }) async {
+    logger.d('[selectbynumreg] req pnumdoc=$documentNumber pregistro=$numRegistro ptipodoc=$tipodoc');
+    final response = await _api.myPubliNumRegOperation(
+      zcsrfcpubliselectbynumregBody: ZCSRFCPUBLISELECTBYNUMREG(
+        (final builder) => builder
+          ..pnumdoc = documentNumber
+          ..pregistro = numRegistro
+          ..ptipodoc = tipodoc,
+      ),
+      extra: {
+        generatedApiDecodeStringResponseExtraKey: true,
+        generatedApiUnwrapBodyExtraKey: true,
+        // A diferencia de selectbynumexp, aquí `publicacionportal.item` es
+        // una lista (fachada-sede-api-swagger.yaml, ejemplo de
+        // selectbynumreg) aunque solo pueda haber un expediente por número
+        // de registro — se normaliza para tratarla igual que selectbynif.
+        generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
+      },
+    );
+
+    final raw = response.extra[generatedApiRawResponseDataExtraKey];
+    _logEnvelope('selectbynumreg', raw);
+    final expediente = _rawExpedienteByRegistro(raw);
+    if (expediente == null) {
+      logger.w('[selectbynumreg] sin datos para pregistro=$numRegistro (200 pero publicacionportal.item vacío/nulo)');
+      throw StateError('Respuesta de expediente sin datos.');
+    }
+    logger.d('[selectbynumreg] ok numexp=${expediente.numexp}');
+    return expediente;
+  }
+
+  /// Registra los campos de diagnóstico del sobre de respuesta del backend.
+  /// Este backend puede responder `200 OK` con `isubrc: 1` +
+  /// `resultado: "No hay publicaciones..."` y un `publicacionportal` con todos
+  /// los campos a `null` cuando no encuentra nada — no un 404. Esta traza
+  /// hace visible ese caso durante la depuración.
+  void _logEnvelope(final String op, final Object? raw) {
+    final payload = _asMap(_decode(raw));
+    final body = _asMap(payload?['body']) ?? payload;
+    logger.d(
+      '[$op] envelope codigo-respuesta=${payload?['codigo-respuesta']} '
+      'mensaje=${payload?['mensaje-respuesta']} isubrc=${body?['isubrc']} '
+      'resultado=${body?['resultado']}',
+    );
+  }
+
+  Expediente? _rawExpedienteByRegistro(final Object? data) {
+    final payload = _decode(data);
+    final payloadMap = _asMap(payload);
+    final root = _asMap(payloadMap?['body']) ?? payloadMap;
+    final portalNode = _asMap(root?['publicacionportal']);
+    final itemsNode = portalNode?['item'];
+
+    final items = switch (itemsNode) {
+      final List<dynamic> list => list,
+      final Map<dynamic, dynamic> single => [single],
+      _ => const <dynamic>[],
+    };
+
+    final first = items.map(_asMap).whereType<Map<String, Object?>>().firstOrNull;
+    return first == null ? null : _toExpedienteDetailMap(first);
   }
 
   Expediente? _rawExpedienteDetail(final Object? data) {
@@ -76,7 +161,16 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     final payloadMap = _asMap(payload);
     final root = _asMap(payloadMap?['body']) ?? payloadMap;
     final portal = _asMap(root?['publicacionportal']);
-    return portal == null ? null : _toExpedienteDetailMap(portal);
+    if (portal == null) {
+      return null;
+    }
+    final expediente = _toExpedienteDetailMap(portal);
+    // El backend devuelve 200 con `publicacionportal` presente pero con todos
+    // los campos a `null` (isubrc:1, "No hay publicaciones...") cuando no
+    // encuentra el expediente. Sin este guard se mapearía un `Expediente` con
+    // `numexp` vacío en vez de tratarse como "no encontrado" — mismo criterio
+    // que `_rawExpedientesByNif`, que filtra los `numexp` vacíos.
+    return expediente.numexp.isEmpty ? null : expediente;
   }
 
   // Los nombres de campo del backend (estilo SAP) no se corresponden

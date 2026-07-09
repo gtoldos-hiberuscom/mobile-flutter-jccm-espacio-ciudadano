@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/representante.dart';
 
 abstract interface class GestionDocumentoRepository {
   /// Sube un fichero sin firma electrónica al buzón de tramitación.
@@ -26,15 +27,29 @@ abstract interface class GestionDocumentoRepository {
   /// del enviado (el backend puede ajustarlo) — hay que usar el confirmado,
   /// no el generado localmente, en las llamadas siguientes.
   ///
+  /// [representante], si no es nulo, identifica a quien presenta realmente la
+  /// documentación (el usuario autenticado) al aportar a un expediente de
+  /// terceros: su documento va en `identificacionrep`, mientras que
+  /// [documentNumber] es siempre el titular del expediente. Si es nulo se
+  /// aporta como interesado y `identificacionrep` toma el propio
+  /// [documentNumber] (comportamiento existente).
+  ///
   /// **No verificado contra backend real.**
   Future<InicioProcedimientoResultado> iniciarProcedimiento({
     required final String idUnico,
     required final String documentNumber,
     required final Expediente expediente,
+    final Representante? representante,
   });
 
   /// Cierra la transacción abierta por [iniciarProcedimiento] una vez
   /// subidos todos los ficheros, y devuelve el justificante en PDF.
+  ///
+  /// [representante], si no es nulo, marca la aportación como "por
+  /// contraste" (`esPorContraste: true`) con los datos de quien presenta
+  /// realmente la documentación — uso al aportar a un expediente de
+  /// terceros. Si es nulo, se aporta como interesado (comportamiento
+  /// existente, sin cambios).
   ///
   /// **No verificado contra backend real.**
   Future<Uint8List> registrarFicheros({
@@ -42,5 +57,6 @@ abstract interface class GestionDocumentoRepository {
     required final Expediente expediente,
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
+    final Representante? representante,
   });
 }

@@ -7,19 +7,26 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/load
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Detalle de expediente — Figma node 44242:24873.
+///
+/// [tercero], si no es nulo, indica que se llegó desde la búsqueda de un
+/// expediente ajeno (`GestionAportacionPage`): el detalle se consulta con el
+/// documento del titular localizado, no con el del usuario autenticado.
 class GestionExpedienteDetallePage extends ConsumerWidget {
-  const GestionExpedienteDetallePage({required this.numexp, super.key});
+  const GestionExpedienteDetallePage({required this.numexp, this.tercero, super.key});
 
   final String numexp;
+  final TerceroIdentificacion? tercero;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final decodedNumexp = Uri.decodeComponent(numexp);
-    final detailAsync = ref.watch(expedienteDetailProvider(decodedNumexp));
+    final key = (numexp: decodedNumexp, tercero: tercero);
+    final detailAsync = ref.watch(expedienteDetailProvider(key));
 
     return AppDetailScaffold(
       title: l10n.gestionExpedientesDetalleTitle,
@@ -28,18 +35,19 @@ class GestionExpedienteDetallePage extends ConsumerWidget {
         loading: () => const LoadingStateWidget(),
         error: (final error, final _) => ErrorStateWidget(
           message: l10n.gestionExpedientesDetalleLoadError,
-          onRetry: () => ref.invalidate(expedienteDetailProvider(decodedNumexp)),
+          onRetry: () => ref.invalidate(expedienteDetailProvider(key)),
         ),
-        data: (final expediente) => _ExpedienteDetalleBody(expediente: expediente),
+        data: (final expediente) => _ExpedienteDetalleBody(expediente: expediente, tercero: tercero),
       ),
     );
   }
 }
 
 class _ExpedienteDetalleBody extends StatelessWidget {
-  const _ExpedienteDetalleBody({required this.expediente});
+  const _ExpedienteDetalleBody({required this.expediente, this.tercero});
 
   final Expediente expediente;
+  final TerceroIdentificacion? tercero;
 
   @override
   Widget build(final BuildContext context) {
@@ -122,7 +130,7 @@ class _ExpedienteDetalleBody extends StatelessWidget {
               label: l10n.gestionExpedientesAportarDocumentacionButton,
               isExpanded: true,
               leadingIcon: AppIcons.upload,
-              onPressed: () => context.go('${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}/aportar-documentacion'),
+              onPressed: () => context.go('${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}/aportar-documentacion', extra: tercero),
             ),
           ],
         ),

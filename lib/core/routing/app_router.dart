@@ -20,6 +20,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_n
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registro_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registros_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/help_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
@@ -209,16 +210,24 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.gestionExpedienteDetalle,
-              builder: (final BuildContext context, final GoRouterState state) => GestionExpedienteDetallePage(
-                numexp: state.pathParameters['numexp'] ?? '',
-              ),
+              builder: (final BuildContext context, final GoRouterState state) {
+                final extra = state.extra;
+                return GestionExpedienteDetallePage(
+                  numexp: state.pathParameters['numexp'] ?? '',
+                  tercero: extra is TerceroIdentificacion ? extra : null,
+                );
+              },
             ),
 
             GoRoute(
               path: Routes.gestionExpedienteAportarDocumentacion,
-              builder: (final BuildContext context, final GoRouterState state) => GestionAportarDocumentacionPage(
-                numexp: state.pathParameters['numexp'] ?? '',
-              ),
+              builder: (final BuildContext context, final GoRouterState state) {
+                final extra = state.extra;
+                return GestionAportarDocumentacionPage(
+                  numexp: state.pathParameters['numexp'] ?? '',
+                  tercero: extra is TerceroIdentificacion ? extra : null,
+                );
+              },
             ),
 
             GoRoute(

@@ -3277,6 +3277,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionFindButton => 'Encontrar expediente';
 
   @override
+  String get gestionAportacionDocNumberRequiredError => 'Introduce el número de documento de la persona interesada.';
+
+  @override
+  String get gestionAportacionCamposExpedienteError => 'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).';
+
+  @override
   String get gestionNotificacionesContextualMessage => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
 
   @override

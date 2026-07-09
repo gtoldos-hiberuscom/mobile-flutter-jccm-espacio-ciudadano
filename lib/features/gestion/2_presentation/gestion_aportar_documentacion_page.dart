@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
@@ -15,9 +16,11 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jw
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/representante.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_aportar_documentacion_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_documento_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// UTIs de iOS para las extensiones permitidas — `file_selector_ios` ignora
@@ -42,9 +45,14 @@ const List<String> _iosUniformTypeIdentifiersAportacion = [
 /// se ha podido probar contra un backend real. `idunico` se autogenera como
 /// `{NIF}_{timestamp}` y se sustituye por el que confirme `inicproc`.
 class GestionAportarDocumentacionPage extends ConsumerWidget {
-  const GestionAportarDocumentacionPage({required this.numexp, super.key});
+  const GestionAportarDocumentacionPage({required this.numexp, this.tercero, super.key});
 
   final String numexp;
+
+  /// No nulo cuando se llega desde la búsqueda de un expediente ajeno — el
+  /// documento del titular sustituye al del usuario autenticado para
+  /// consultar el detalle e iniciar/registrar la aportación.
+  final TerceroIdentificacion? tercero;
 
   String get _decodedNumexp => Uri.decodeComponent(numexp);
 
@@ -57,7 +65,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
 
     void volverAlExpediente() {
       ref.read(gestionAportarDocumentacionProvider.notifier).cancelarTodas();
-      context.go(expedienteRoute);
+      context.go(expedienteRoute, extra: tercero);
     }
 
     return Scaffold(
@@ -188,19 +196,33 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       return;
     }
 
-    final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
+    final claims = ref.read(jwtClaimsProvider);
+    final documentNumber = tercero?.documentNumber ?? _documentNumber(claims);
     if (documentNumber == null) {
       AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
       return;
     }
+    // No nulo solo al aportar a un expediente de terceros: identifica ante
+    // el backend a quien presenta realmente la documentación (el usuario
+    // autenticado), distinto del titular del expediente que va en
+    // `documentNumber`.
+    final representante = tercero == null
+        ? null
+        : Representante(
+            nombre: claims?.givenName ?? '',
+            apellido1: claims?.firstSurname ?? '',
+            apellido2: claims?.secondSurname ?? '',
+            nifcif: _documentNumber(claims) ?? '',
+            tipodoc: 'NIF',
+          );
 
     final Expediente expediente;
     try {
-      expediente = await ref.read(expedienteDetailProvider(_decodedNumexp).future);
+      expediente = await ref.read(expedienteDetailProvider((numexp: _decodedNumexp, tercero: tercero)).future);
     } on Object catch (error, stackTrace) {
       logger.e('Error al obtener el expediente para aportar documentación', error: error, stackTrace: stackTrace);
       if (context.mounted) {
-        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
+        AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionRegistroError, error), severity: AppAlertSeverity.error);
       }
       return;
     }
@@ -209,11 +231,11 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     final InicioProcedimientoResultado inicio;
     try {
       final idUnicoLocal = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
-      inicio = await repository.iniciarProcedimiento(idUnico: idUnicoLocal, documentNumber: documentNumber, expediente: expediente);
+      inicio = await repository.iniciarProcedimiento(idUnico: idUnicoLocal, documentNumber: documentNumber, expediente: expediente, representante: representante);
     } on Object catch (error, stackTrace) {
       logger.e('Error al iniciar el procedimiento de aportación', error: error, stackTrace: stackTrace);
       if (context.mounted) {
-        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
+        AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionRegistroError, error), severity: AppAlertSeverity.error);
       }
       return;
     }
@@ -248,12 +270,13 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         expediente: expediente,
         inicio: inicio,
         documentos: [for (final a in actuales) (nombre: a.nombre, hash: a.hash!, tamanioBytes: a.tamanioBytes)],
+        representante: representante,
       );
     } on Object catch (error, stackTrace) {
       logger.e('Error al finalizar el registro de la aportación', error: error, stackTrace: stackTrace);
       notifier.marcarErrorTodos();
       if (context.mounted) {
-        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionFinalizacionError, severity: AppAlertSeverity.error);
+        AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionFinalizacionError, error), severity: AppAlertSeverity.error);
       }
       return;
     }
@@ -282,7 +305,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         return;
       }
       if (!descargar) {
-        context.go(expedienteRoute);
+        context.go(expedienteRoute, extra: tercero);
         return;
       }
       final guardado = await _descargarJustificante(context, justificante, expediente.numexp);
@@ -290,7 +313,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         return;
       }
       if (guardado) {
-        context.go(expedienteRoute);
+        context.go(expedienteRoute, extra: tercero);
         return;
       }
     }
@@ -459,4 +482,17 @@ class _AportacionArchivoCard extends StatelessWidget {
     final mb = kb / 1024;
     return '${mb.toStringAsFixed(mb >= 100 ? 0 : 1)} MB';
   }
+}
+
+/// Devuelve un mensaje orientado al usuario final, segmentando por tipo de
+/// error. SOLO se exponen mensajes curados y seguros (p.ej. sesión caducada);
+/// NUNCA el detalle interno del error —`StateError` de la aplicación, el
+/// `mensaje`/cuerpo técnico del backend (BAC) o las excepciones de transporte
+/// de Dio—, que revelaría información interna del sistema. Ese detalle sigue
+/// registrándose en los logs (`logger.e`) para depuración, no en la UI.
+String _mensajeUsuarioError(final AppLocalizations l10n, final String base, final Object error) {
+  if (error is DioException && error.error is UnauthorizedError) {
+    return l10n.sessionExpired;
+  }
+  return base;
 }

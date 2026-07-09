@@ -30,15 +30,6 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
         type: AppNavBarType.level2,
         title: l10n.gestionRegistrosPageTitle,
         onBack: () => context.go(Routes.gestion),
-        actions: [
-          IconButton(
-            icon: const Icon(AppIcons.search),
-            onPressed: () => AppAlertSnackbar.show(
-              context,
-              message: l10n.gestionSectionComingSoon,
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [

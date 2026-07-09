@@ -4439,6 +4439,14 @@
   "@gestionAportacionFindButton": {
     "description": "Texto del botón principal del formulario de aportación."
   },
+  "gestionAportacionDocNumberRequiredError": "Introduce el número de documento de la persona interesada.",
+  "@gestionAportacionDocNumberRequiredError": {
+    "description": "Error de validación cuando el número de documento está vacío."
+  },
+  "gestionAportacionCamposExpedienteError": "Rellena el número de registro o el código identificador del expediente (solo uno de los dos).",
+  "@gestionAportacionCamposExpedienteError": {
+    "description": "Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente."
+  },
   "gestionNotificacionesContextualMessage": "Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.",
   "@gestionNotificacionesContextualMessage": {
     "description": "Texto del helper contextual bajo la card desactivada de notificaciones."

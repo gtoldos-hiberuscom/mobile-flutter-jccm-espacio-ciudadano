@@ -3,9 +3,11 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/representante.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_documento_repository.dart';
 
 final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository {
@@ -86,6 +88,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final String idUnico,
     required final String documentNumber,
     required final Expediente expediente,
+    final Representante? representante,
   }) async {
     // Bypass deliberado del cliente generado para este campo: el modelo
     // generado declara `datosprocedimiento` como JsonObject no-nulo (no
@@ -100,8 +103,10 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       idUnico: idUnico,
       documentNumber: documentNumber,
       expediente: expediente,
+      representante: representante,
     );
 
+    logger.d('[inicproc] req idunico=$idUnico noexpediente=${expediente.numexp} tipoproc=${expediente.tipoproc ?? ''} category=NIF titular=$documentNumber repNif=${representante?.nifcif ?? documentNumber}');
     Map<String, Object?>? responseBody;
     try {
       final response = await _dio.post<Object?>(
@@ -109,10 +114,13 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         data: body,
         options: Options(contentType: Headers.jsonContentType),
       );
+      _logEnvelope('inicproc', response.statusCode, response.data);
       responseBody = _asMap(_decode(response.data));
     } on DioException catch (error) {
       final statusCode = error.response?.statusCode;
+      _logEnvelope('inicproc(error)', statusCode, error.response?.data);
       if (statusCode == null || statusCode < 200 || statusCode >= 300) {
+        logger.e('[inicproc] fallo HTTP $statusCode', error: error);
         rethrow;
       }
       responseBody = _asMap(_decode(error.response?.data));
@@ -148,6 +156,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final String idUnico,
     required final String documentNumber,
     required final Expediente expediente,
+    required final Representante? representante,
   }) {
     final datos = expediente.datosAportacion;
     return <String, Object?>{
@@ -164,8 +173,15 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         'fecha': datos?.fechareg ?? '',
         'noregistro': datos?.registro ?? '',
       },
+      // `category` describe el tipo de documento del titular; el backend solo
+      // acepta NIF (rechaza `DNI` con "numero de DNI incorrecto") y el propio
+      // expediente devuelve `tipodoc: NIF` — se fija a NIF, igual que en
+      // `selectbynumexp`.
       'identificacion': {'category': 'NIF', 'nifcif': documentNumber},
-      'identificacionrep': {'categoryrep': 'NIF', 'nifcifrep': documentNumber},
+      // `identificacionrep` es el representante (quien presenta): el usuario
+      // autenticado al aportar como tercero, o el propio titular cuando se
+      // aporta como interesado (`representante == null`).
+      'identificacionrep': {'categoryrep': 'NIF', 'nifcifrep': representante?.nifcif ?? documentNumber},
       'datossolicitante': {
         'nombre': datos?.nombre ?? '',
         'apellido1': datos?.apellido1 ?? '',
@@ -188,6 +204,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final Expediente expediente,
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
+    final Representante? representante,
   }) async {
     // Mismo bypass que en iniciarProcedimiento: `DTProcedimiento.datosprocedimiento`
     // exige un `JsonObject` no nulo en el cliente generado, pero enviar `{}`
@@ -200,8 +217,10 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       expediente: expediente,
       inicio: inicio,
       documentos: documentos,
+      representante: representante,
     );
 
+    logger.d('[registrarfichero] req idunico=${inicio.idunico} noexpediente=${expediente.numexp} esPorContraste=${representante != null} documentos=${documentos.length}');
     Uint8List? bytes;
     try {
       final response = await _dio.post<Uint8List>(
@@ -210,12 +229,19 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         options: Options(contentType: Headers.jsonContentType, responseType: ResponseType.bytes),
       );
       bytes = response.data;
+      logger.d('[registrarfichero] ok (200 directo) ${bytes?.length ?? 0} bytes');
     } on DioException catch (error) {
       final statusCode = error.response?.statusCode;
       if (statusCode == null || statusCode < 200 || statusCode >= 300) {
+        // El justificante vuelve como bytes; en un error el cuerpo suele ser
+        // el sobre JSON del 500 crudo (sin `info-error`) — se decodifica a
+        // texto para hacerlo visible en la traza.
+        _logBytesBody('registrarfichero(error)', statusCode, error.response?.data);
+        logger.e('[registrarfichero] fallo HTTP $statusCode', error: error);
         rethrow;
       }
       bytes = error.response?.data as Uint8List?;
+      logger.d('[registrarfichero] ok (2xx vía DioException) ${bytes?.length ?? 0} bytes');
     }
 
     if (bytes == null) {
@@ -242,6 +268,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final Expediente expediente,
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
+    required final Representante? representante,
   }) {
     final datos = expediente.datosAportacion;
     return <String, Object?>{
@@ -263,7 +290,14 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
           // `identificacionrep: {}` vacíos para este endpoint — sin
           // confirmar todavía si registrarfichero exige lo mismo que
           // inicproc o, como documenta el manual, los espera vacíos.
+          // `identificacionrep` permanece vacío incluso en el ejemplo
+          // oficial "por contraste" del swagger (los datos de quien
+          // representa van en `datosRepresentante`, no aquí).
           'registro': <String, Object?>{},
+          // El backend solo acepta NIF (rechaza `DNI`); ver misma nota en
+          // `_buildIniciarProcedimientoBody`. Aquí el representante NO va en
+          // `identificacionrep` (se deja vacío, según el ejemplo oficial) sino
+          // en `datosRepresentante` + `esPorContraste`, más abajo.
           'identificacion': {'category': 'NIF', 'nifcif': documentNumber},
           'identificacionrep': <String, Object?>{},
           'asunto': datos?.asunto ?? '',
@@ -342,16 +376,17 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       // contra UAT real.
       'consejeriaTramitadora': expediente.consejeria,
       'xmlRegistro': {'xmlClave': ''},
-      // Aportación como interesado, no como tercero por contraste.
-      'esPorContraste': false,
-      // Sin representante — se envía la estructura vacía para blindar
-      // posibles cadenas de getters incondicionales en el backend.
+      // `true` + `datosRepresentante` poblado cuando se aporta a un
+      // expediente de terceros ("por contraste"), replicando el ejemplo
+      // oficial del swagger para este caso; `false` + estructura vacía para
+      // la aportación como interesado (comportamiento previo, sin cambios).
+      'esPorContraste': representante != null,
       'datosRepresentante': {
-        'nombre': '',
-        'apellido1': '',
-        'apellido2': '',
-        'nifcif': '',
-        'tipodoc': '',
+        'nombre': representante?.nombre ?? '',
+        'apellido1': representante?.apellido1 ?? '',
+        'apellido2': representante?.apellido2 ?? '',
+        'nifcif': representante?.nifcif ?? '',
+        'tipodoc': representante?.tipodoc ?? '',
       },
     };
   }
@@ -371,6 +406,41 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       return 'PDF';
     }
     return nombreFichero.substring(punto + 1).toUpperCase();
+  }
+
+  /// Traza los campos de diagnóstico del sobre genérico `Respuesta`
+  /// ({body, mensaje-respuesta, codigo-respuesta, info-error}). Este backend
+  /// puede responder con `estado != OK` o lanzar 500 crudos sin `info-error`,
+  /// así que se registran tanto los campos del sobre como `body.estado`/
+  /// `body.mensaje`.
+  void _logEnvelope(final String op, final int? statusCode, final Object? raw) {
+    final payload = _asMap(_decode(raw));
+    final body = _asMap(payload?['body']);
+    logger.d(
+      '[$op] http=$statusCode codigo-respuesta=${payload?['codigo-respuesta']} '
+      'mensaje-respuesta=${payload?['mensaje-respuesta']} info-error=${payload?['info-error']} '
+      'estado=${_string(body, 'estado')} mensaje=${_string(body, 'mensaje')}',
+    );
+  }
+
+  /// `registrarfichero` responde con bytes crudos (el justificante). En un
+  /// error el cuerpo suele ser el sobre JSON del 500; se decodifica a texto
+  /// (recortado) para verlo en la traza sin volcar un binario.
+  void _logBytesBody(final String op, final int? statusCode, final Object? data) {
+    String preview;
+    if (data is Uint8List) {
+      try {
+        preview = utf8.decode(data, allowMalformed: true);
+      } on Object {
+        preview = '<${data.length} bytes binarios>';
+      }
+    } else {
+      preview = data?.toString() ?? 'null';
+    }
+    if (preview.length > 600) {
+      preview = '${preview.substring(0, 600)}…';
+    }
+    logger.d('[$op] http=$statusCode body=$preview');
   }
 
   Object? _decode(final Object? raw) {

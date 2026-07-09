@@ -6404,6 +6404,18 @@ abstract class AppLocalizations {
   /// **'Encontrar expediente'**
   String get gestionAportacionFindButton;
 
+  /// Error de validación cuando el número de documento está vacío.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce el número de documento de la persona interesada.'**
+  String get gestionAportacionDocNumberRequiredError;
+
+  /// Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).'**
+  String get gestionAportacionCamposExpedienteError;
+
   /// Texto del helper contextual bajo la card desactivada de notificaciones.
   ///
   /// In es, this message translates to:
