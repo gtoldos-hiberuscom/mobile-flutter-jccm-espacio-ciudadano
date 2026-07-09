@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/dependency_care_status.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/disability_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/large_family_title.dart';
@@ -9,115 +11,145 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/thermal_spa_awa
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_social_welfare_repository.dart';
 
 final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepository {
-  const MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _dio = dio;
+  MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _ccaaApi = CcaaApi(withGeneratedApiCompat(dio), standardSerializers), _intermediacionApi = IntermediacionApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final CcaaApi _ccaaApi;
+  final IntermediacionApi _intermediacionApi;
 
   @override
   Future<LargeFamilyTitle?> loadLargeFamilyTitle({
     required final String documentNumber,
   }) async {
-    final response = await _postOptional(
-      '/api/v1/ccaa/familia-numerosa/${Uri.encodeComponent(documentNumber)}',
-      data: {
-        'tipdoc': _documentType(documentNumber),
-        'docu': documentNumber,
-      },
+    final data = {
+      'tipdoc': _documentType(documentNumber),
+      'docu': documentNumber,
+    };
+    final response = await _rawResponse(
+      () => _ccaaApi.getDatosFamiliaNumerosa(
+        numDocumento: documentNumber,
+        dtminhafpcccafnreqBody: DTMINHAFPCCCAFNREQ(
+          (final builder) => builder
+            ..tipdoc = _documentType(documentNumber)
+            ..docu = documentNumber,
+        ),
+        extra: _generatedExtra(data),
+        validateStatus: (final status) => status != null && status < 500,
+      ),
     );
     if (response == null) {
       return null;
     }
 
-    return _parseLargeFamilyTitle(_decodePayload(response.data));
+    return _parseLargeFamilyTitle(_decodePayload(response));
   }
 
   @override
   Future<DisabilityTitle?> loadDisabilityTitle({
     required final String documentNumber,
   }) async {
-    final response = await _postOptional(
-      '/api/v1/intermediacion/discapacidad/datos',
-      data: {
-        'docu': documentNumber,
-        'tipodoc': _documentType(documentNumber),
-      },
+    final response = await _rawResponse(
+      () => _intermediacionApi.obtenerDatosDiscapacidadIntermediacion(
+        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
+        extra: _generatedExtra(_intermediacionData(documentNumber)),
+        validateStatus: (final status) => status != null && status < 500,
+      ),
     );
     if (response == null) {
       return null;
     }
 
-    return _parseDisabilityTitle(_decodePayload(response.data));
+    return _parseDisabilityTitle(_decodePayload(response));
   }
 
   @override
   Future<ThermalSpaAward?> loadThermalSpaAward({
     required final String documentNumber,
   }) async {
-    final response = await _postOptional(
-      '/api/v1/intermediacion/termalismo/datos',
-      data: {
-        'docu': documentNumber,
-        'tipodoc': _documentType(documentNumber),
-      },
+    final response = await _rawResponse(
+      () => _intermediacionApi.obtenerDatosTermalismoIntermediacion(
+        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
+        extra: _generatedExtra(_intermediacionData(documentNumber)),
+        validateStatus: (final status) => status != null && status < 500,
+      ),
     );
     if (response == null) {
       return null;
     }
 
-    return _parseThermalSpaAward(_decodePayload(response.data));
+    return _parseThermalSpaAward(_decodePayload(response));
   }
 
   @override
   Future<DependencyCareStatus?> loadDependencyCareStatus({
     required final String documentNumber,
   }) async {
-    final response = await _postOptional(
-      '/api/v1/intermediacion/atencion-dependencia/datos',
-      data: {
-        'docu': documentNumber,
-        'tipodoc': _documentType(documentNumber),
-      },
+    final response = await _rawResponse(
+      () => _intermediacionApi.obtenerDatosAtencionDependenciaIntermediacion(
+        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
+        extra: _generatedExtra(_intermediacionData(documentNumber)),
+        validateStatus: (final status) => status != null && status < 500,
+      ),
     );
     if (response == null) {
       return null;
     }
 
-    return _parseDependencyCareStatus(_decodePayload(response.data));
+    return _parseDependencyCareStatus(_decodePayload(response));
   }
 
   @override
   Future<ParkingCard?> loadParkingCard({
     required final String documentNumber,
   }) async {
-    final response = await _postOptional(
-      '/api/v1/intermediacion/tarjeta-estacionamiento/datos',
-      data: {
-        'docu': documentNumber,
-        'tipodoc': _documentType(documentNumber),
-      },
+    final response = await _rawResponse(
+      () => _intermediacionApi.obtenerDatosTarjetaEstacionamientoIntermediacion(
+        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
+        extra: _generatedExtra(_intermediacionData(documentNumber)),
+        validateStatus: (final status) => status != null && status < 500,
+      ),
     );
     if (response == null) {
       return null;
     }
 
-    return _parseParkingCard(_decodePayload(response.data));
+    return _parseParkingCard(_decodePayload(response));
   }
 
-  Future<Response<Object?>?> _postOptional(
-    final String path, {
-    required final Map<String, Object?> data,
-  }) async {
-    final response = await _dio.post<Object?>(
-      path,
-      data: data,
-      options: Options(
-        validateStatus: (final status) => status != null && status < 500,
-      ),
+  BaseRequestIntermediacion _intermediacionRequest(final String documentNumber) {
+    return BaseRequestIntermediacion(
+      (final builder) => builder
+        ..docu = documentNumber
+        ..tipodoc = _documentType(documentNumber),
     );
-    if (response.statusCode == 404) {
-      return null;
+  }
+
+  Map<String, Object?> _intermediacionData(final String documentNumber) => {
+    'docu': documentNumber,
+    'tipodoc': _documentType(documentNumber),
+  };
+
+  Map<String, dynamic> _generatedExtra(final Map<String, Object?> data) => {
+    generatedApiRequestDataExtraKey: data,
+    generatedApiDecodeStringResponseExtraKey: true,
+  };
+
+  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+    try {
+      final response = await fetch();
+      if (response.statusCode == 404) {
+        return null;
+      }
+      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData != null) {
+        return rawData;
+      }
+      rethrow;
     }
-    return response;
   }
 
   LargeFamilyTitle? _parseLargeFamilyTitle(final Object? payload) {

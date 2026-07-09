@@ -1,31 +1,26 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
 
 final class MyDataHealthRepositoryImpl implements MyDataHealthRepository {
-  const MyDataHealthRepositoryImpl({required final Dio dio}) : _dio = dio;
+  MyDataHealthRepositoryImpl({required final Dio dio}) : _api = SescamApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final SescamApi _api;
 
   @override
   Future<String?> loadCip({required final String documentNumber}) async {
-    final Response<String> response;
-    try {
-      response = await _dio.get<String>(
-        '/api/v1/sescam/cip/${Uri.encodeComponent(documentNumber)}',
-        options: Options(responseType: ResponseType.plain),
-      );
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      rethrow;
-    }
-
-    final payload = response.data;
-    if (payload == null || payload.trim().isEmpty) {
+    final payload = await _rawResponse(
+      () => _api.getCipFromNif(
+        numDocumento: documentNumber,
+        extra: _generatedExtra,
+        validateStatus: (final status) => status != null && status < 500,
+      ),
+    );
+    if (payload == null) {
       return null;
     }
 
@@ -38,31 +33,53 @@ final class MyDataHealthRepositoryImpl implements MyDataHealthRepository {
     required final String documentNumber,
     required final HealthAppointmentFilter filter,
   }) async {
-    final path = switch (filter) {
-      HealthAppointmentFilter.pending => '/api/v1/sescam/citas/${Uri.encodeComponent(documentNumber)}',
-      HealthAppointmentFilter.past => '/api/v1/sescam/citas-pasadas/${Uri.encodeComponent(documentNumber)}',
+    final payload = switch (filter) {
+      HealthAppointmentFilter.pending => await _rawResponse(
+        () => _api.citasFuturas(
+          numDocumento: documentNumber,
+          extra: _generatedExtra,
+          validateStatus: (final status) => status != null && status < 500,
+        ),
+      ),
+      HealthAppointmentFilter.past => await _rawResponse(
+        () => _api.citasPasadas(
+          numDocumento: documentNumber,
+          extra: _generatedExtra,
+          validateStatus: (final status) => status != null && status < 500,
+        ),
+      ),
     };
-    final Response<String> response;
-    try {
-      response = await _dio.get<String>(
-        path,
-        options: Options(responseType: ResponseType.plain),
-      );
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return const [];
-      }
-      rethrow;
-    }
 
-    final payload = response.data;
-    if (payload == null || payload.trim().isEmpty) {
+    if (payload == null) {
       return const [];
     }
 
     return _appointmentMaps(_decodePayload(payload)).map(_tryParseAppointment).nonNulls.toList(growable: false)..sort(
       (final a, final b) => filter == HealthAppointmentFilter.past ? b.dateTime.compareTo(a.dateTime) : a.dateTime.compareTo(b.dateTime),
     );
+  }
+
+  Map<String, dynamic> get _generatedExtra => const {
+    generatedApiDecodeStringResponseExtraKey: true,
+  };
+
+  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+    try {
+      final response = await fetch();
+      if (response.statusCode == 404) {
+        return null;
+      }
+      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData != null) {
+        return rawData;
+      }
+      rethrow;
+    }
   }
 
   Object? _decodePayload(final Object? payload) {

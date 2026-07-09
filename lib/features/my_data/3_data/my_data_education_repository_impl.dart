@@ -1,38 +1,23 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/non_university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_education_repository.dart';
 
 final class MyDataEducationRepositoryImpl implements MyDataEducationRepository {
-  const MyDataEducationRepositoryImpl({required final Dio dio}) : _dio = dio;
+  MyDataEducationRepositoryImpl({required final Dio dio}) : _api = EducacionApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final EducacionApi _api;
 
   @override
   Future<List<UniversityTitle>> loadUniversityTitles({
     required final String documentNumber,
   }) async {
-    final Response<String> response;
-    try {
-      response = await _dio.post<String>(
-        '/api/v1/educacion/titulos-universitarios/${Uri.encodeComponent(documentNumber)}',
-        data: {
-          'docu': documentNumber,
-          'tipodoc': 'NIF',
-        },
-        options: Options(responseType: ResponseType.plain),
-      );
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return const [];
-      }
-      rethrow;
-    }
-
-    final payload = response.data;
-    if (payload == null || payload.trim().isEmpty) {
+    final payload = await _loadRawUniversityTitles(documentNumber);
+    if (payload == null) {
       return const [];
     }
 
@@ -59,25 +44,8 @@ final class MyDataEducationRepositoryImpl implements MyDataEducationRepository {
   Future<List<NonUniversityTitle>> loadNonUniversityTitles({
     required final String documentNumber,
   }) async {
-    final Response<String> response;
-    try {
-      response = await _dio.post<String>(
-        '/api/v1/educacion/titulos-no-universitarios/${Uri.encodeComponent(documentNumber)}',
-        data: {
-          'docu': documentNumber,
-          'tipodoc': 'NIF',
-        },
-        options: Options(responseType: ResponseType.plain),
-      );
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return const [];
-      }
-      rethrow;
-    }
-
-    final payload = response.data;
-    if (payload == null || payload.trim().isEmpty) {
+    final payload = await _loadRawNonUniversityTitles(documentNumber);
+    if (payload == null) {
       return const [];
     }
 
@@ -98,6 +66,67 @@ final class MyDataEducationRepositoryImpl implements MyDataEducationRepository {
     }
 
     return titles;
+  }
+
+  Future<Object?> _loadRawUniversityTitles(final String documentNumber) {
+    final data = _requestData(documentNumber);
+    return _rawResponse(
+      () => _api.getTitulosUniversitarios(
+        numDocumento: documentNumber,
+        dtedutuoreqBody: DTEDUTUOREQ(
+          (final builder) => builder
+            ..docu = documentNumber
+            ..tipodoc = 'NIF',
+        ),
+        extra: _generatedExtra(data),
+        validateStatus: (final status) => status != null && status < 500,
+      ),
+    );
+  }
+
+  Future<Object?> _loadRawNonUniversityTitles(final String documentNumber) {
+    final data = _requestData(documentNumber);
+    return _rawResponse(
+      () => _api.getTitulosNoUniversitarios(
+        numDocumento: documentNumber,
+        dtedutnureqBody: DTEDUTNUREQ(
+          (final builder) => builder
+            ..docu = documentNumber
+            ..tipodoc = 'NIF',
+        ),
+        extra: _generatedExtra(data),
+        validateStatus: (final status) => status != null && status < 500,
+      ),
+    );
+  }
+
+  Map<String, Object?> _requestData(final String documentNumber) => {
+    'docu': documentNumber,
+    'tipodoc': 'NIF',
+  };
+
+  Map<String, dynamic> _generatedExtra(final Map<String, Object?> data) => {
+    generatedApiRequestDataExtraKey: data,
+    generatedApiDecodeStringResponseExtraKey: true,
+  };
+
+  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+    try {
+      final response = await fetch();
+      if (response.statusCode == 404) {
+        return null;
+      }
+      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData != null) {
+        return rawData;
+      }
+      rethrow;
+    }
   }
 
   UniversityTitle? _extractUniversityTitle(final Map<String, Object?> raw) {
@@ -247,11 +276,22 @@ final class MyDataEducationRepositoryImpl implements MyDataEducationRepository {
     return null;
   }
 
-  dynamic _decodePayload(final String payload) {
-    try {
-      return jsonDecode(payload);
-    } on Exception {
-      return null;
+  Object? _decodePayload(final Object? payload) {
+    Object? current = payload;
+    for (var i = 0; i < 3; i++) {
+      if (current is! String) {
+        return current;
+      }
+      final trimmed = current.trim();
+      if (trimmed.isEmpty) {
+        return null;
+      }
+      try {
+        current = jsonDecode(trimmed);
+      } on FormatException {
+        return trimmed;
+      }
     }
+    return current;
   }
 }

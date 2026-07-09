@@ -1,39 +1,46 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_housing_repository.dart';
 
 final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
-  const MyDataHousingRepositoryImpl({required final Dio dio}) : _dio = dio;
+  MyDataHousingRepositoryImpl({required final Dio dio}) : _ineApi = IneApi(withGeneratedApiCompat(dio), standardSerializers), _catastroApi = CatastroApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final IneApi _ineApi;
+  final CatastroApi _catastroApi;
 
   @override
   Future<HousingAddress?> loadAddress({
     required final String documentNumber,
   }) async {
-    final response = await _dio.post<Object?>(
-      '/api/v1/ine/datos-residencia/${Uri.encodeComponent(documentNumber)}',
-      data: {
-        'docu': documentNumber,
-        'tipodoc': _documentType(documentNumber),
-      },
-      options: Options(
-        responseType: ResponseType.plain,
+    final requestData = {
+      'docu': documentNumber,
+      'tipodoc': _documentType(documentNumber),
+    };
+    final payload = await _rawResponse(
+      () => _ineApi.getDatosResidencia(
+        numDocumento: documentNumber,
+        dtinecdrfreqBody: DTINECDRFREQ(
+          (final builder) => builder
+            ..docu = documentNumber
+            ..tipodoc = _documentType(documentNumber),
+        ),
+        extra: _generatedExtra(requestData),
         validateStatus: (final status) => status != null && status < 500,
       ),
     );
-
-    if (response.statusCode == 404) {
+    if (payload == null) {
       return null;
     }
 
-    final payload = _decodePayload(response.data);
-    final root = _asStringMap(payload);
+    final decoded = _decodePayload(payload);
+    final root = _asStringMap(decoded);
     final body = _asStringMap(root?['body']);
-    final data = body ?? root ?? _collectMaps(payload).firstOrNull;
+    final data = body ?? root ?? _collectMaps(decoded).firstOrNull;
     if (data == null) {
       return null;
     }
@@ -57,28 +64,57 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
   Future<List<RealEstateProperty>> loadRealEstateProperties({
     required final String documentNumber,
   }) async {
-    final response = await _dio.post<Object?>(
-      '/api/v1/catastro/datos-catastrales/${Uri.encodeComponent(documentNumber)}',
-      data: {
-        'docu': documentNumber,
-        'tipdoc': _documentType(documentNumber),
-      },
-      options: Options(
-        responseType: ResponseType.plain,
+    final requestData = {
+      'docu': documentNumber,
+      'tipdoc': _documentType(documentNumber),
+    };
+    final payload = await _rawResponse(
+      () => _catastroApi.getDatosCatastrales(
+        numDocumento: documentNumber,
+        dtctrocdatreqBody: DTCTROCDATREQ(
+          (final builder) => builder
+            ..docu = documentNumber
+            ..tipdoc = _documentType(documentNumber),
+        ),
+        extra: _generatedExtra(requestData),
         validateStatus: (final status) => status != null && status < 500,
       ),
     );
 
-    if (response.statusCode == 404) {
+    if (payload == null) {
       return const [];
     }
 
-    final payload = _decodePayload(response.data);
-    final root = _asStringMap(payload);
+    final decoded = _decodePayload(payload);
+    final root = _asStringMap(decoded);
     final body = root == null ? null : _decodePayload(root['body']);
-    final candidates = _propertyCandidateMaps(body ?? root ?? payload);
+    final candidates = _propertyCandidateMaps(body ?? root ?? decoded);
 
     return candidates.map(_parseRealEstateProperty).where((final property) => property.hasData).toList(growable: false);
+  }
+
+  Map<String, dynamic> _generatedExtra(final Map<String, Object?> data) => {
+    generatedApiRequestDataExtraKey: data,
+    generatedApiDecodeStringResponseExtraKey: true,
+  };
+
+  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+    try {
+      final response = await fetch();
+      if (response.statusCode == 404) {
+        return null;
+      }
+      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData != null) {
+        return rawData;
+      }
+      rethrow;
+    }
   }
 
   String? _composeAddress(final Map<String, Object?> data) {

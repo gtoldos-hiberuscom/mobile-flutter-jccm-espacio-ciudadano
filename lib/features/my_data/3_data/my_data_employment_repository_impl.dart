@@ -1,38 +1,48 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/employment_demand.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_employment_repository.dart';
 
 final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository {
-  const MyDataEmploymentRepositoryImpl({required final Dio dio}) : _dio = dio;
+  MyDataEmploymentRepositoryImpl({required final Dio dio}) : _api = SepeApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final SepeApi _api;
 
   @override
   Future<EmploymentDemand?> loadDemand({
     required final String documentNumber,
   }) async {
-    final response = await _dio.post<Object?>(
-      '/api/v1/sepe/demandante-empleo-fecha-actual/${Uri.encodeComponent(documentNumber)}',
-      data: {
-        'docu': documentNumber,
-        'tipodoc': _documentType(documentNumber),
-      },
-      options: Options(
-        responseType: ResponseType.plain,
+    final requestData = {
+      'docu': documentNumber,
+      'tipodoc': _documentType(documentNumber),
+    };
+    final payload = await _rawResponse(
+      () => _api.getDemandanteEmpleoFechaActual(
+        numDocumento: documentNumber,
+        dtsepesvdidefareqBody: DTSEPESVDIDEFAREQ(
+          (final builder) => builder
+            ..docu = documentNumber
+            ..tipodoc = _documentType(documentNumber),
+        ),
+        extra: {
+          generatedApiRequestDataExtraKey: requestData,
+          generatedApiDecodeStringResponseExtraKey: true,
+        },
         validateStatus: (final status) => status != null && status < 500,
       ),
     );
 
-    if (response.statusCode == 404) {
+    if (payload == null) {
       return null;
     }
 
-    final payload = _decodePayload(response.data);
-    final root = _asStringMap(payload);
+    final decoded = _decodePayload(payload);
+    final root = _asStringMap(decoded);
     final body = root == null ? null : _asStringMap(_decodePayload(root['body']));
-    final data = body ?? root ?? _collectMaps(payload).firstOrNull;
+    final data = body ?? root ?? _collectMaps(decoded).firstOrNull;
     if (data == null) {
       return null;
     }
@@ -48,6 +58,25 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
     );
 
     return demand.hasData ? demand : null;
+  }
+
+  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+    try {
+      final response = await fetch();
+      if (response.statusCode == 404) {
+        return null;
+      }
+      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData != null) {
+        return rawData;
+      }
+      rethrow;
+    }
   }
 
   Object? _decodePayload(final Object? payload) {

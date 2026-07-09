@@ -1,4 +1,7 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/repositories/life_events_repository.dart';
 
@@ -22,24 +25,25 @@ final class LifeEventsSupportUnavailableException implements Exception {
 /// directly. The generated client therefore deserialises to an empty object.
 /// Raw Dio is used here to extract `body.listaHechos` from the actual JSON.
 final class LifeEventsRepositoryImpl implements LifeEventsRepository {
-  const LifeEventsRepositoryImpl({
+  LifeEventsRepositoryImpl({
     required final Dio dio,
-  }) : _dio = dio;
+  }) : _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  /// Raw Dio client used because several hechos-vitales endpoints return
-  /// response envelopes not reflected in the generated client contract.
-  final Dio _dio;
+  final HechosVitalesApi _api;
 
   @override
   Future<List<LifeEvent>> loadLifeEvents({required final String idAgente}) async {
     // Actual response shape:
     //   { body: { idAgente, listaHechos: [{ idHecho, nombreHecho, seleccionado }] },
     //     timestamp, mensaje-respuesta, codigo-respuesta, info-error }
-    final response = await _dio.get<Map<String, dynamic>>(
-      '/api/v1/hechos-vitales/hechos/$idAgente',
+    final payload = await _rawResponse(
+      () => _api.obtenerListaHechosByIdAgente(
+        idAgente: idAgente,
+        extra: _generatedExtra,
+      ),
     );
 
-    final body = response.data?['body'] as Map<String, dynamic>?;
+    final body = _asStringMap(_asStringMap(payload)?['body']);
     final rawList = body?['listaHechos'] as List<dynamic>?;
     if (rawList == null) {
       return const [];
@@ -64,19 +68,26 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     required final List<LifeEvent> events,
   }) async {
     try {
-      await _dio.patch<Map<String, dynamic>>(
-        '/api/v1/hechos-vitales/hechos',
-        data: <String, dynamic>{
-          'idAgente': idAgente,
-          'listaHechos': events
-              .map(
-                (final event) => <String, dynamic>{
-                  'idHecho': event.id,
-                  'nombreHecho': event.label,
-                  'seleccionado': event.selected,
-                },
-              )
-              .toList(growable: false),
+      await _api.actualizarListaHechos(
+        listaHechosAgente: ListaHechosAgente(
+          (final builder) => builder
+            ..idAgente = idAgente
+            ..listaHechos.replace(
+              events
+                  .map(
+                    (final event) => Hecho(
+                      (final hecho) => hecho
+                        ..idHecho = event.id
+                        ..nombreHecho = event.label
+                        ..seleccionado = event.selected,
+                    ),
+                  )
+                  .toBuiltList(),
+            ),
+        ),
+        extra: {
+          generatedApiRequestDataExtraKey: _requestBody(idAgente, events),
+          generatedApiDecodeStringResponseExtraKey: true,
         },
       );
     } on DioException catch (error) {
@@ -89,9 +100,55 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
 
   @override
   Future<void> resetPreferences({required final String idAgente}) async {
-    await _dio.delete<Map<String, dynamic>>(
-      '/api/v1/hechos-vitales/preferencias/$idAgente',
+    await _api.eliminarPreferencias(
+      idAgente: idAgente,
+      extra: _generatedExtra,
     );
+  }
+
+  Map<String, dynamic> get _generatedExtra => const {
+    generatedApiDecodeStringResponseExtraKey: true,
+  };
+
+  Map<String, dynamic> _requestBody(final String idAgente, final List<LifeEvent> events) {
+    return <String, dynamic>{
+      'idAgente': idAgente,
+      'listaHechos': events
+          .map(
+            (final event) => <String, dynamic>{
+              'idHecho': event.id,
+              'nombreHecho': event.label,
+              'seleccionado': event.selected,
+            },
+          )
+          .toList(growable: false),
+    };
+  }
+
+  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+    try {
+      final response = await fetch();
+      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData != null) {
+        return rawData;
+      }
+      rethrow;
+    }
+  }
+
+  Map<String, dynamic>? _asStringMap(final Object? value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return {
+        for (final entry in value.entries)
+          if (entry.key != null) entry.key.toString(): entry.value,
+      };
+    }
+    return null;
   }
 
   bool _isSupportUnavailableResponse(final Object? data) {

@@ -1,37 +1,22 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_vehicles_repository.dart';
 
 final class MyDataVehiclesRepositoryImpl implements MyDataVehiclesRepository {
-  const MyDataVehiclesRepositoryImpl({required final Dio dio}) : _dio = dio;
+  MyDataVehiclesRepositoryImpl({required final Dio dio}) : _api = DgtApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final DgtApi _api;
 
   @override
   Future<List<Vehicle>> loadVehicles({
     required final String documentNumber,
   }) async {
-    final Response<String> response;
-    try {
-      response = await _dio.post<String>(
-        '/api/v1/dgt/lista-vehiculos/${Uri.encodeComponent(documentNumber)}',
-        data: {
-          'docu': documentNumber,
-          'tipodoc': 'NIF',
-        },
-        options: Options(responseType: ResponseType.plain),
-      );
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return const [];
-      }
-      rethrow;
-    }
-
-    final payload = response.data;
-    if (payload == null || payload.trim().isEmpty) {
+    final payload = await _loadRawVehicles(documentNumber);
+    if (payload == null) {
       return const [];
     }
 
@@ -63,6 +48,41 @@ final class MyDataVehiclesRepositoryImpl implements MyDataVehiclesRepository {
     }
 
     return vehicles;
+  }
+
+  Future<Object?> _loadRawVehicles(final String documentNumber) async {
+    final data = {
+      'docu': documentNumber,
+      'tipodoc': 'NIF',
+    };
+    try {
+      final response = await _api.getListaVehiculos(
+        numDocumento: documentNumber,
+        dtdgtlistadovehiculosreqBody: DTDGTLISTADOVEHICULOSREQ(
+          (final builder) => builder
+            ..docu = documentNumber
+            ..tipodoc = 'NIF',
+        ),
+        extra: {
+          generatedApiRequestDataExtraKey: data,
+          generatedApiDecodeStringResponseExtraKey: true,
+        },
+        validateStatus: (final status) => status != null && status < 500,
+      );
+      if (response.statusCode == 404) {
+        return null;
+      }
+      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData != null) {
+        return rawData;
+      }
+      rethrow;
+    }
   }
 
   Vehicle? _extractVehicle(final Map<String, Object?> raw) {
@@ -110,11 +130,22 @@ final class MyDataVehiclesRepositoryImpl implements MyDataVehiclesRepository {
     return null;
   }
 
-  dynamic _decodePayload(final String payload) {
-    try {
-      return jsonDecode(payload);
-    } on Exception {
-      return null;
+  Object? _decodePayload(final Object? payload) {
+    Object? current = payload;
+    for (var i = 0; i < 3; i++) {
+      if (current is! String) {
+        return current;
+      }
+      final trimmed = current.trim();
+      if (trimmed.isEmpty) {
+        return null;
+      }
+      try {
+        current = jsonDecode(trimmed);
+      } on FormatException {
+        return trimmed;
+      }
     }
+    return current;
   }
 }

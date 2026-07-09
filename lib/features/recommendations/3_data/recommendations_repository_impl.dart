@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 
 final class RecommendationsRepositoryImpl implements RecommendationsRepository {
-  const RecommendationsRepositoryImpl({required final Dio dio}) : _dio = dio;
+  RecommendationsRepositoryImpl({required final Dio dio}) : _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final HechosVitalesApi _api;
 
   @override
   Future<List<Recommendation>> loadRecommendations({
@@ -16,26 +18,37 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
       return const [];
     }
 
-    final Response<Map<String, dynamic>> response;
+    final Object? payload;
     try {
-      response = await _dio.get<Map<String, dynamic>>(
-        '/api/v1/hechos-vitales/servicios/$idAgente',
+      final response = await _api.getServicios(
+        idAgente: idAgente,
+        extra: const {
+          generatedApiDecodeStringResponseExtraKey: true,
+        },
       );
+      payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
     } on DioException catch (error) {
-      if (_isNoResultsResponse(error.response?.data)) {
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (_isNoResultsResponse(rawData)) {
         return const [];
+      }
+      if (rawData != null) {
+        final groups = _extractGroups(rawData);
+        return [
+          for (final group in groups) ..._mapGroup(group),
+        ];
       }
       rethrow;
     }
 
-    final groups = _extractGroups(response.data);
+    final groups = _extractGroups(payload);
     return [
       for (final group in groups) ..._mapGroup(group),
     ];
   }
 
-  List<Map<String, dynamic>> _extractGroups(final Map<String, dynamic>? data) {
-    final root = data ?? const <String, dynamic>{};
+  List<Map<String, dynamic>> _extractGroups(final Object? data) {
+    final root = _asStringMap(data) ?? const <String, dynamic>{};
     final body = root['body'];
     final payload = body is Map<String, dynamic> || body is List ? body : root;
 
@@ -79,15 +92,29 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
   }
 
   bool _isNoResultsResponse(final Object? data) {
-    if (data is! Map<String, dynamic>) {
+    final map = _asStringMap(data);
+    if (map == null) {
       return false;
     }
-    final responseCode = data['codigo-respuesta']?.toString();
+    final responseCode = map['codigo-respuesta']?.toString();
     if (responseCode == '404.01' || responseCode == '412.00') {
       return true;
     }
-    final message = data['mensaje-respuesta']?.toString().toLowerCase() ?? '';
+    final message = map['mensaje-respuesta']?.toString().toLowerCase() ?? '';
     return message.contains('no se obtuvieron resultados') || message.contains('no se pudo dar de alta el soporte');
+  }
+
+  Map<String, dynamic>? _asStringMap(final Object? value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return {
+        for (final entry in value.entries)
+          if (entry.key != null) entry.key.toString(): entry.value,
+      };
+    }
+    return null;
   }
 
   Iterable<Recommendation> _mapGroup(final Map<String, dynamic> group) sync* {

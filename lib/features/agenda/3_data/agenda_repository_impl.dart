@@ -1,13 +1,16 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/repositories/agenda_repository.dart';
 
 final class AgendaRepositoryImpl implements AgendaRepository {
-  const AgendaRepositoryImpl({required final Dio dio}) : _dio = dio;
+  AgendaRepositoryImpl({required final Dio dio}) : _sescamApi = SescamApi(withGeneratedApiCompat(dio), standardSerializers), _agendaApi = AgendaApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final Dio _dio;
+  final SescamApi _sescamApi;
+  final AgendaApi _agendaApi;
 
   @override
   Future<List<AgendaAppointment>> loadAppointments({
@@ -17,12 +20,21 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final trimmedAgentId = agentId?.trim();
     final responses = await Future.wait([
       _loadAppointmentsFrom(
-        '/api/v1/sescam/citas/$documentNumber',
+        () => _sescamApi.citasFuturas(
+          numDocumento: documentNumber,
+          extra: _generatedExtra,
+          validateStatus: (final status) => status != null && status < 500,
+        ),
         source: _AgendaAppointmentSource.health,
       ),
       if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
         _loadAppointmentsFrom(
-          '/api/v1/agenda/$trimmedAgentId/eventos/todos',
+          () => _agendaApi.obtenerEventosAgenda(
+            idAgente: trimmedAgentId,
+            periodo: 'todos',
+            extra: _generatedExtra,
+            validateStatus: (final status) => status != null && status < 500,
+          ),
           source: _AgendaAppointmentSource.general,
           ignoreBadRequest: true,
         ),
@@ -34,25 +46,29 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   }
 
   Future<List<AgendaAppointment>> _loadAppointmentsFrom(
-    final String path, {
+    final Future<Response<Respuesta>> Function() fetch, {
     required final _AgendaAppointmentSource source,
     final bool ignoreBadRequest = false,
   }) async {
-    final Response<String> response;
+    final Object? payload;
     try {
-      response = await _dio.get<String>(
-        path,
-        options: Options(responseType: ResponseType.plain),
-      );
+      final response = await fetch();
+      if (response.statusCode == 404 || (ignoreBadRequest && response.statusCode == 400)) {
+        return const [];
+      }
+      payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
     } on DioException catch (error) {
       final statusCode = error.response?.statusCode;
       if (statusCode == 404 || (ignoreBadRequest && statusCode == 400)) {
         return const [];
       }
-      rethrow;
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (rawData == null) {
+        rethrow;
+      }
+      return _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
     }
-    final payload = response.data;
-    if (payload == null || payload.trim().isEmpty) {
+    if (payload == null) {
       return const [];
     }
 
@@ -61,7 +77,11 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     return objects.map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
   }
 
-  Object? _decodePayload(final String payload) {
+  Map<String, dynamic> get _generatedExtra => const {
+    generatedApiDecodeStringResponseExtraKey: true,
+  };
+
+  Object? _decodePayload(final Object? payload) {
     Object? current = payload;
     for (var i = 0; i < 3; i++) {
       if (current is! String) {
