@@ -4274,6 +4274,10 @@
   "@gestionAportarDocumentacionJustificanteDescargado": {
     "description": "Toast mostrado tras guardar el justificante con el selector nativo de destino."
   },
+  "gestionAportarDocumentacionJustificanteError": "No se pudo guardar el justificante. Inténtalo de nuevo.",
+  "@gestionAportarDocumentacionJustificanteError": {
+    "description": "Snackbar de error cuando falla el guardado del justificante en el destino elegido; el diálogo de éxito se reabre para reintentar."
+  },
   "gestionAportarDocumentacionFinalizacionError": "Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.",
   "@gestionAportarDocumentacionFinalizacionError": {
     "description": "Mensaje de error cuando registrarFicheros falla tras haber subido todos los ficheros."

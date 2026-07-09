@@ -6158,6 +6158,12 @@ abstract class AppLocalizations {
   /// **'Justificante de aportación descargado'**
   String get gestionAportarDocumentacionJustificanteDescargado;
 
+  /// Snackbar de error cuando falla el guardado del justificante en el destino elegido; el diálogo de éxito se reabre para reintentar.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo guardar el justificante. Inténtalo de nuevo.'**
+  String get gestionAportarDocumentacionJustificanteError;
+
   /// Mensaje de error cuando registrarFicheros falla tras haber subido todos los ficheros.
   ///
   /// In es, this message translates to:

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -260,15 +261,38 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       return;
     }
 
-    await AppSuccessDialog.show(
-      context,
-      title: l10n.gestionAportarDocumentacionExitoTitulo,
-      description: l10n.gestionAportarDocumentacionExitoDescripcion,
-      secondaryLabel: l10n.gestionAportarDocumentacionCerrarSinDescargarButton,
-      primaryLabel: l10n.gestionAportarDocumentacionDescargarJustificanteButton,
-      onSecondary: () => context.go(expedienteRoute),
-      onPrimary: () => _descargarJustificante(context, justificante, expediente.numexp),
-    );
+    // Bucle deliberado: los callbacks del diálogo solo registran la elección
+    // (AppSuccessDialog se auto-cierra antes de invocarlos) y la acción se
+    // ejecuta cuando `show` resuelve. Si el usuario cancela el selector de
+    // guardado (o falla la escritura) se reabre el diálogo, porque el
+    // justificante solo existe en memoria y no se puede recuperar después.
+    while (context.mounted) {
+      var descargar = false;
+      await AppSuccessDialog.show(
+        context,
+        title: l10n.gestionAportarDocumentacionExitoTitulo,
+        description: l10n.gestionAportarDocumentacionExitoDescripcion,
+        secondaryLabel: l10n.gestionAportarDocumentacionCerrarSinDescargarButton,
+        primaryLabel: l10n.gestionAportarDocumentacionDescargarJustificanteButton,
+        onSecondary: () {},
+        onPrimary: () => descargar = true,
+      );
+      if (!context.mounted) {
+        return;
+      }
+      if (!descargar) {
+        context.go(expedienteRoute);
+        return;
+      }
+      final guardado = await _descargarJustificante(context, justificante, expediente.numexp);
+      if (!context.mounted) {
+        return;
+      }
+      if (guardado) {
+        context.go(expedienteRoute);
+        return;
+      }
+    }
   }
 
   Future<void> _subirArchivo({
@@ -308,25 +332,56 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     }
   }
 
-  /// Guarda el justificante ya obtenido (por `registrarFicheros`) usando el
+  /// Guarda el justificante ya obtenido (por `registrarFicheros`) mediante el
   /// selector nativo de destino — no hace ninguna llamada de red nueva.
-  Future<void> _descargarJustificante(
+  ///
+  /// Se usa `FilePicker.saveFile` (y no `getSaveLocation` de `file_selector`)
+  /// porque este último no está implementado en Android/iOS: en móvil lanza
+  /// `UnimplementedError` sin mostrar selector alguno. `FilePicker.saveFile`
+  /// abre el selector SAF en Android y el export picker de Archivos en iOS,
+  /// y en ambos casos escribe los bytes por sí mismo.
+  ///
+  /// Devuelve `true` si el fichero quedó guardado; `false` si el usuario
+  /// canceló el selector o falló la escritura (el llamador reabre el diálogo).
+  Future<bool> _descargarJustificante(
     final BuildContext context,
     final Uint8List bytes,
     final String numexp,
   ) async {
     final l10n = AppLocalizations.of(context);
-    final location = await getSaveLocation(suggestedName: 'justificante_$numexp.pdf');
-    if (location == null || !context.mounted) {
-      // El usuario canceló el selector nativo.
-      return;
+    try {
+      final ruta = await FilePicker.saveFile(
+        dialogTitle: l10n.gestionAportarDocumentacionDescargarJustificanteButton,
+        fileName: _nombreFicheroJustificante(numexp),
+        type: FileType.custom,
+        allowedExtensions: const ['pdf'],
+        bytes: bytes,
+      );
+      if (ruta == null) {
+        // El usuario canceló el selector nativo.
+        return false;
+      }
+      // En Android/iOS el plugin ya escribió los bytes; en escritorio (solo
+      // entorno de desarrollo) devuelve la ruta sin escribir el fichero.
+      if (!Platform.isAndroid && !Platform.isIOS) {
+        await File(ruta).writeAsBytes(bytes);
+      }
+      if (context.mounted) {
+        AppAlertToast.show(context, message: l10n.gestionAportarDocumentacionJustificanteDescargado, severity: AppAlertSeverity.success);
+      }
+      return true;
+    } on Object catch (error, stackTrace) {
+      logger.e('Error al guardar el justificante', error: error, stackTrace: stackTrace);
+      if (context.mounted) {
+        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionJustificanteError, severity: AppAlertSeverity.error);
+      }
+      return false;
     }
-    await File(location.path).writeAsBytes(bytes);
-    if (!context.mounted) {
-      return;
-    }
-    AppAlertToast.show(context, message: l10n.gestionAportarDocumentacionJustificanteDescargado, severity: AppAlertSeverity.success);
   }
+
+  /// `numexp` contiene `/` (ej. `WMEQ/2026/000002`), inválido en un nombre de
+  /// fichero — se sustituye todo carácter fuera de `[A-Za-z0-9._-]`.
+  String _nombreFicheroJustificante(final String numexp) => 'justificante_${numexp.replaceAll(RegExp('[^A-Za-z0-9._-]'), '_')}.pdf';
 }
 
 /// Duplicado deliberadamente pequeño del helper de

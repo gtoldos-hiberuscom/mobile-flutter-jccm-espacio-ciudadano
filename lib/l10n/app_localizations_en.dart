@@ -3153,6 +3153,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportarDocumentacionJustificanteDescargado => 'Justificante de aportación descargado';
 
   @override
+  String get gestionAportarDocumentacionJustificanteError => 'No se pudo guardar el justificante. Inténtalo de nuevo.';
+
+  @override
   String get gestionAportarDocumentacionFinalizacionError => 'Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.';
 
   @override
