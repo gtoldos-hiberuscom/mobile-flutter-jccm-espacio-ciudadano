@@ -4270,6 +4270,14 @@
   "@gestionAportarDocumentacionDescargarJustificanteButton": {
     "description": "Botón primario del diálogo de éxito de aportación de documentación."
   },
+  "gestionAportarDocumentacionJustificanteDescargado": "Justificante de aportación descargado",
+  "@gestionAportarDocumentacionJustificanteDescargado": {
+    "description": "Toast mostrado tras guardar el justificante con el selector nativo de destino."
+  },
+  "gestionAportarDocumentacionFinalizacionError": "Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.",
+  "@gestionAportarDocumentacionFinalizacionError": {
+    "description": "Mensaje de error cuando registrarFicheros falla tras haber subido todos los ficheros."
+  },
 
   "gestionRegistrosPageTitle": "Mis registros",
   "@gestionRegistrosPageTitle": {

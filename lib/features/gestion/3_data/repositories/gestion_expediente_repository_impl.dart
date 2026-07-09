@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente_aportacion_datos.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_expediente_repository.dart';
 
 final class GestionExpedienteRepositoryImpl implements GestionExpedienteRepository {
@@ -94,6 +95,27 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
       estado: _string(data, 'descrip') ?? _string(data, 'estado'),
       tipoproc: _string(data, 'tipoproc'),
+      // Campos en bruto necesarios para `inicproc`/`registrarfichero` al
+      // aportar documentación — ver ExpedienteAportacionDatos.
+      datosAportacion: ExpedienteAportacionDatos(
+        uniorg: _string(data, 'uniorg'),
+        consej: _string(data, 'consej'),
+        bland: _string(data, 'bland'),
+        asunto: _string(data, 'asunto'),
+        desasunto: _string(data, 'desasunto'),
+        source: _string(data, 'source'),
+        nombre: _string(data, 'nombre'),
+        apellido1: _string(data, 'apellido1'),
+        apellido2: _string(data, 'apellido2'),
+        numdoc: _string(data, 'numdoc'),
+        codpos: _string(data, 'codpos'),
+        calle: _string(data, 'calle'),
+        ncalle: _string(data, 'ncalle'),
+        tlfno: _string(data, 'tlfno'),
+        bezei: _string(data, 'bezei'),
+        registro: _string(data, 'registro'),
+        fechareg: _string(data, 'fechareg'),
+      ),
     );
   }
 

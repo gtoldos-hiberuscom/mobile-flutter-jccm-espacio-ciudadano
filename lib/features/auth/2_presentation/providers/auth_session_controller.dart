@@ -1,5 +1,6 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
@@ -94,7 +95,12 @@ final class AuthSessionController {
         _updateMemory(mergedSession);
       }
       return true;
-    } on Object {
+    } on Object catch (error, stackTrace) {
+      // Sin este log no hay forma de distinguir, a posteriori, un refresh
+      // token ausente/expirado (invalid_grant real de Keycloak) de un fallo
+      // de red o de configuración — todos acababan indistinguibles como
+      // "Session expired" en el interceptor.
+      logger.e('Failed to refresh session', error: error, stackTrace: stackTrace);
       await clear();
       return false;
     }

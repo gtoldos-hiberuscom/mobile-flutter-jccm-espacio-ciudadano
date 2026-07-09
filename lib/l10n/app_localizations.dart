@@ -6152,6 +6152,18 @@ abstract class AppLocalizations {
   /// **'Descargar justificante'**
   String get gestionAportarDocumentacionDescargarJustificanteButton;
 
+  /// Toast mostrado tras guardar el justificante con el selector nativo de destino.
+  ///
+  /// In es, this message translates to:
+  /// **'Justificante de aportación descargado'**
+  String get gestionAportarDocumentacionJustificanteDescargado;
+
+  /// Mensaje de error cuando registrarFicheros falla tras haber subido todos los ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.'**
+  String get gestionAportarDocumentacionFinalizacionError;
+
   /// Título de la pantalla de mis registros.
   ///
   /// In es, this message translates to:

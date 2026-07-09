@@ -4,15 +4,18 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_documento_repository.dart';
 
 final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository {
-  GestionDocumentoRepositoryImpl({required final Dio dio}) : _api = ProcedimientoApi(withGeneratedApiCompat(dio), standardSerializers);
+  GestionDocumentoRepositoryImpl({required final Dio dio}) : _dio = dio, _procedimientoApi = ProcedimientoApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final ProcedimientoApi _api;
+  final Dio _dio;
+  final ProcedimientoApi _procedimientoApi;
 
   @override
-  Future<void> subirDocumentoSinFirma({
+  Future<String> subirDocumentoSinFirma({
     required final String documentNumber,
     required final String idUnico,
     required final String tipoProcedimiento,
@@ -27,11 +30,25 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         ..nifcif = documentNumber
         ..nombre = nombreFichero
         ..tipoprocedimiento = tipoProcedimiento
-        ..data = base64Encode(bytes),
+        ..data = base64Encode(bytes)
+        // Metadatos del documento que api-rest-doc.html marca como
+        // `required` (`categoria`, `idprop`, `tipodoc`) y que el ejemplo
+        // oficial envía siempre. La subida devuelve 200 + hash también sin
+        // ellos (solo almacena en el buzón), pero es `registrarfichero`
+        // quien procesa después los adjuntos almacenados para incorporarlos
+        // al expediente — un adjunto guardado sin estos metadatos es
+        // candidato al 500 sin detalle que sufre ese paso final. Valores
+        // literales del ejemplo oficial; semántica de `categoria`/`tdoc`/
+        // `origen` no documentada. Sin confirmar contra UAT real.
+        ..categoria = '501'
+        ..tdoc = 'C'
+        ..origen = '0'
+        ..idprop = documentNumber
+        ..tipodoc = _extensionMayusculas(nombreFichero),
     );
 
     try {
-      await _api.miSubirAdjuntoSinFirmaOperation(
+      await _procedimientoApi.miSubirAdjuntoSinFirmaOperation(
         adjuntoBody: adjunto,
         cancelToken: cancelToken,
         onSendProgress: (final sent, final total) {
@@ -40,6 +57,10 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
           }
         },
       );
+      // No observado contra backend real (ver rama catch): el tipo
+      // declarado (`RESULTADOPROCEDIMIENTO`) no tiene ningún campo de hash,
+      // así que esta rama no puede producir uno.
+      throw StateError('Respuesta inesperada de subiradjuntosinfirma: no se pudo obtener el hash del documento.');
     } on DioException catch (error) {
       // Confirmado contra backend real (UAT): este endpoint responde 200 con
       // el sobre genérico `Respuesta` ({body, timestamp, mensaje-respuesta,
@@ -47,11 +68,349 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       // documenta el swagger. El cliente generado deserializa en tipado
       // estricto y lanza DioException aunque la petición HTTP haya sido
       // correcta — si el status es 2xx se considera éxito pese al fallo de
-      // deserialización.
+      // deserialización, y `body` es el hash del documento.
       final statusCode = error.response?.statusCode;
       if (statusCode == null || statusCode < 200 || statusCode >= 300) {
         rethrow;
       }
+      final hash = _string(_asMap(_decode(error.response?.data)), 'body');
+      if (hash == null) {
+        throw StateError('No se pudo extraer el hash del documento de la respuesta.');
+      }
+      return hash;
     }
+  }
+
+  @override
+  Future<InicioProcedimientoResultado> iniciarProcedimiento({
+    required final String idUnico,
+    required final String documentNumber,
+    required final Expediente expediente,
+  }) async {
+    // Bypass deliberado del cliente generado para este campo: el modelo
+    // generado declara `datosprocedimiento` como JsonObject no-nulo (no
+    // puede representar un `null` real — su factory lanza ArgumentError
+    // para cualquier valor que no sea num/String/bool/List/Map), pero
+    // enviar `{}` en su lugar devolvió un 500 real del backend en pruebas
+    // contra UAT, igual que enviar cadenas vacías en `registro`/
+    // `identificacionrep` (ya corregido más abajo). Se construye el body a
+    // mano para poder enviar `datosprocedimiento: null` literal — sin
+    // confirmar todavía si esto resuelve el 500.
+    final body = _buildIniciarProcedimientoBody(
+      idUnico: idUnico,
+      documentNumber: documentNumber,
+      expediente: expediente,
+    );
+
+    Map<String, Object?>? responseBody;
+    try {
+      final response = await _dio.post<Object?>(
+        '/api/v1/procedimiento/inicproc',
+        data: body,
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      responseBody = _asMap(_decode(response.data));
+    } on DioException catch (error) {
+      final statusCode = error.response?.statusCode;
+      if (statusCode == null || statusCode < 200 || statusCode >= 300) {
+        rethrow;
+      }
+      responseBody = _asMap(_decode(error.response?.data));
+    }
+
+    final envelopeBody = _asMap(responseBody?['body']);
+    if (envelopeBody == null) {
+      throw StateError('Respuesta vacía o ilegible al iniciar el procedimiento.');
+    }
+    final estado = _string(envelopeBody, 'estado');
+    if (estado == null || estado != 'OK') {
+      throw StateError('El procedimiento no se pudo iniciar: ${_string(envelopeBody, 'mensaje') ?? 'sin mensaje'}.');
+    }
+    final pregistro = _asMap(_asMap(envelopeBody['datosregistro'])?['pregistro']);
+    if (pregistro == null) {
+      throw StateError('Respuesta de inicio de procedimiento sin datosregistro.pregistro.');
+    }
+
+    return InicioProcedimientoResultado(
+      idunico: _string(envelopeBody, 'idunico') ?? idUnico,
+      estado: estado,
+      asuid: _string(pregistro, 'asuid') ?? '',
+      descrip: _string(pregistro, 'descrip') ?? '',
+      uniorg: _string(pregistro, 'uniorg') ?? '',
+      numdoc: _string(pregistro, 'numdoc') ?? documentNumber,
+      nombre: _string(pregistro, 'nombre') ?? '',
+      apellido1: _string(pregistro, 'apellido1') ?? '',
+      apellido2: _string(pregistro, 'apellido2') ?? '',
+    );
+  }
+
+  Map<String, Object?> _buildIniciarProcedimientoBody({
+    required final String idUnico,
+    required final String documentNumber,
+    required final Expediente expediente,
+  }) {
+    final datos = expediente.datosAportacion;
+    return <String, Object?>{
+      'idunico': idUnico,
+      'tipoprocedimiento': expediente.tipoproc ?? '',
+      'unidadorganica': datos?.uniorg ?? '',
+      'consejeria': datos?.consej ?? '',
+      'provincia': datos?.bland ?? '',
+      'noexpediente': expediente.numexp,
+      'asunto': datos?.asunto ?? '',
+      'asudescripcion': datos?.desasunto,
+      'source': datos?.source,
+      'registro': {
+        'fecha': datos?.fechareg ?? '',
+        'noregistro': datos?.registro ?? '',
+      },
+      'identificacion': {'category': 'NIF', 'nifcif': documentNumber},
+      'identificacionrep': {'categoryrep': 'NIF', 'nifcifrep': documentNumber},
+      'datossolicitante': {
+        'nombre': datos?.nombre ?? '',
+        'apellido1': datos?.apellido1 ?? '',
+        'apellido2': datos?.apellido2 ?? '',
+        'entidad': '',
+        'numero': datos?.tlfno ?? '',
+        'poblacion': datos?.bezei ?? '',
+        'provincia': datos?.bland ?? '',
+        'codigopostal': datos?.codpos ?? '',
+        'domicilio': '${datos?.calle ?? ''} ${datos?.ncalle ?? ''}'.trim(),
+      },
+      'datosprocedimiento': null,
+      'adjuntos': {'adjunto': <String>[]},
+    };
+  }
+
+  @override
+  Future<Uint8List> registrarFicheros({
+    required final String documentNumber,
+    required final Expediente expediente,
+    required final InicioProcedimientoResultado inicio,
+    required final List<({String nombre, String hash, int tamanioBytes})> documentos,
+  }) async {
+    // Mismo bypass que en iniciarProcedimiento: `DTProcedimiento.datosprocedimiento`
+    // exige un `JsonObject` no nulo en el cliente generado, pero enviar `{}`
+    // reprodujo el mismo 500 real del backend que sufrió inicproc antes del
+    // bypass — confirmado contra UAT real. `documentacion/registrarfichero`
+    // además devuelve el justificante como bytes crudos (no un sobre JSON),
+    // de ahí `ResponseType.bytes` en vez del parseo `_decode`/`_asMap`.
+    final body = _buildRegistrarFicherosBody(
+      documentNumber: documentNumber,
+      expediente: expediente,
+      inicio: inicio,
+      documentos: documentos,
+    );
+
+    Uint8List? bytes;
+    try {
+      final response = await _dio.post<Uint8List>(
+        '/api/v1/documentacion/registrarfichero',
+        data: body,
+        options: Options(contentType: Headers.jsonContentType, responseType: ResponseType.bytes),
+      );
+      bytes = response.data;
+    } on DioException catch (error) {
+      final statusCode = error.response?.statusCode;
+      if (statusCode == null || statusCode < 200 || statusCode >= 300) {
+        rethrow;
+      }
+      bytes = error.response?.data as Uint8List?;
+    }
+
+    if (bytes == null) {
+      throw StateError('Respuesta vacía al registrar los ficheros.');
+    }
+    return bytes;
+  }
+
+  // Body alineado con los ejemplos oficiales completos de las 3 fuentes
+  // (manual de integración, swagger≡v3/api-docs en caliente y
+  // api-rest-doc.html
+  // #_registrar_todos_los_ficheros_adjuntos_a_una_transacción_iniciada_en_pi).
+  // Historial contra UAT real: 5 iteraciones fallaron con el mismo 500
+  // crudo sin `info-error` (excepción no controlada del backend) variando
+  // el contenido de `confirmarProcedimiento` (datosprocedimiento null/{}
+  // registro/identificacionrep vacíos o rellenos, datospago/firma/fileSize)
+  // y añadiendo los hermanos `oficinaTramitadora`/`procedimiento`/fechas/
+  // `estadoTramitacion`. La 6ª iteración añade las claves raíz que ningún
+  // intento envió (`consejeriaTramitadora`, `xmlRegistro`,
+  // `esPorContraste`, `datosRepresentante`) y, en paralelo, los metadatos
+  // del ADJUNTO en subirDocumentoSinFirma — ver comentarios in situ.
+  Map<String, Object?> _buildRegistrarFicherosBody({
+    required final String documentNumber,
+    required final Expediente expediente,
+    required final InicioProcedimientoResultado inicio,
+    required final List<({String nombre, String hash, int tamanioBytes})> documentos,
+  }) {
+    final datos = expediente.datosAportacion;
+    return <String, Object?>{
+      'confirmarProcedimiento': {
+        'procedimiento': {
+          // El `idunico` confirmado por el servidor en iniciarProcedimiento,
+          // no el generado localmente — puede diferir (el backend añade
+          // sufijo).
+          'idunico': inicio.idunico,
+          'tipoprocedimiento': expediente.tipoproc ?? '',
+          'unidadorganica': datos?.uniorg ?? '',
+          'consejeria': datos?.consej ?? '',
+          'provincia': datos?.bland ?? '',
+          'noexpediente': expediente.numexp,
+          // A diferencia de iniciarProcedimiento (donde enviar `registro`
+          // vacío devolvió un 500 confirmado contra UAT real), aquí se sigue
+          // el ejemplo literal "Datos Entrada Registrar Fichero" del manual
+          // de integración, que muestra `registro: {}` e
+          // `identificacionrep: {}` vacíos para este endpoint — sin
+          // confirmar todavía si registrarfichero exige lo mismo que
+          // inicproc o, como documenta el manual, los espera vacíos.
+          'registro': <String, Object?>{},
+          'identificacion': {'category': 'NIF', 'nifcif': documentNumber},
+          'identificacionrep': <String, Object?>{},
+          'asunto': datos?.asunto ?? '',
+          'asudescripcion': datos?.desasunto ?? '',
+          'source': datos?.source ?? '',
+          'datossolicitante': {
+            'nombre': datos?.nombre ?? '',
+            'apellido1': datos?.apellido1 ?? '',
+            'apellido2': datos?.apellido2 ?? '',
+            'entidad': '',
+            'domicilio': '${datos?.calle ?? ''} ${datos?.ncalle ?? ''}'.trim(),
+            'numero': datos?.tlfno ?? '',
+            'poblacion': datos?.bezei ?? '',
+            'provincia': datos?.bland ?? '',
+            'codigopostal': datos?.codpos ?? '',
+          },
+          'datosprocedimiento': null,
+          'datospago': <String, Object?>{},
+          'adjuntos': {'adjunto': <String>[]},
+          'firma': '',
+        },
+        'pdatos': {
+          // Confirmado contra backend real de UAT: `inicproc` devolvió
+          // `pregistro.asuid`/`descrip` vacíos para este expediente (ya
+          // tenía un registro de entrada previo) — se reutilizan los datos
+          // ya existentes del expediente (`asunto`/`desasunto`) en su lugar
+          // de enviarlos vacíos.
+          'asuid': inicio.asuid.isNotEmpty ? inicio.asuid : (datos?.asunto ?? ''),
+          'descrip': inicio.descrip.isNotEmpty ? inicio.descrip : (datos?.desasunto ?? ''),
+          'uniorg': inicio.uniorg,
+          'numdoc': inicio.numdoc,
+          'nombre': inicio.nombre,
+          'apellido1': inicio.apellido1,
+          'apellido2': inicio.apellido2,
+          'idunico': inicio.idunico,
+        },
+      },
+      'documentos': documentos
+          .map(
+            (final d) => {
+              'nombre': d.nombre,
+              // Suposición sin confirmar: subiradjuntosinfirma no informa
+              // el algoritmo de hash usado; se toma el valor del ejemplo
+              // del manual de integración como mejor estimación.
+              'algoritmo': 'SHA-512',
+              'hash': d.hash,
+              // El manual documenta `fileSize` como String (ejemplo: "80kb")
+              // — formato exacto sin confirmar, se sigue el ejemplo literal.
+              'fileSize': '${(d.tamanioBytes / 1024).round()}kb',
+            },
+          )
+          .toList(growable: false),
+      // Sin correspondencia documentada con ningún campo del expediente en
+      // ninguna de las 3 fuentes — se reutiliza `desuniorg` (descripción de
+      // la unidad orgánica, ya mapeada en `Expediente.oficinaTramitadora`
+      // desde `selectbynumexp`) como la aproximación real más cercana
+      // disponible; pendiente de confirmar contra UAT real.
+      'oficinaTramitadora': expediente.oficinaTramitadora ?? '',
+      'procedimiento': datos?.desasunto ?? expediente.titulo,
+      'fechaInicioTramitacion': datos?.fechareg ?? '',
+      // Fecha de cierre de esta tramitación: se cierra precisamente con esta
+      // llamada, de ahí "hoy". Formato yyyy-MM-dd tomado del ejemplo
+      // específico de este endpoint en api-rest-doc.html (el ejemplo
+      // genérico del manual/swagger usa yyyy-MM-dd HH:mm) — sin confirmar
+      // cuál exige realmente el backend.
+      'fechaCierreTramitacion': _formatearFechaIso(DateTime.now()),
+      'estadoTramitacion': 'En curso',
+      // Claves raíz presentes en los ejemplos oficiales de las 3 fuentes
+      // (manual, swagger/v3 y api-rest-doc.html) que ninguna iteración
+      // anterior enviaba. `xmlRegistro.xmlClave` es consumida por la lógica
+      // de registro según el manual ("se adjunta posteriormente al
+      // expediente junto con el justificante de presentación") — su
+      // ausencia es candidata directa al NPE detrás del 500 crudo sin
+      // `info-error`; ídem un unboxing de `esPorContraste` nulo o una
+      // cadena de getters sobre `datosRepresentante` ausente. Sin confirmar
+      // contra UAT real.
+      'consejeriaTramitadora': expediente.consejeria,
+      'xmlRegistro': {'xmlClave': ''},
+      // Aportación como interesado, no como tercero por contraste.
+      'esPorContraste': false,
+      // Sin representante — se envía la estructura vacía para blindar
+      // posibles cadenas de getters incondicionales en el backend.
+      'datosRepresentante': {
+        'nombre': '',
+        'apellido1': '',
+        'apellido2': '',
+        'nifcif': '',
+        'tipodoc': '',
+      },
+    };
+  }
+
+  String _formatearFechaIso(final DateTime fecha) {
+    final anio = fecha.year.toString().padLeft(4, '0');
+    final mes = fecha.month.toString().padLeft(2, '0');
+    final dia = fecha.day.toString().padLeft(2, '0');
+    return '$anio-$mes-$dia';
+  }
+
+  // "PDF" en el ejemplo oficial de subiradjuntosinfirma ("Formato del
+  // documento"); se deriva de la extensión real del fichero.
+  String _extensionMayusculas(final String nombreFichero) {
+    final punto = nombreFichero.lastIndexOf('.');
+    if (punto <= 0 || punto == nombreFichero.length - 1) {
+      return 'PDF';
+    }
+    return nombreFichero.substring(punto + 1).toUpperCase();
+  }
+
+  Object? _decode(final Object? raw) {
+    Object? current = raw;
+    for (var i = 0; i < 3; i++) {
+      if (current is! String) {
+        return current;
+      }
+      final trimmed = current.trim();
+      if (trimmed.isEmpty) {
+        return null;
+      }
+      try {
+        current = jsonDecode(trimmed);
+      } on FormatException {
+        return trimmed;
+      }
+    }
+    return current;
+  }
+
+  Map<String, Object?>? _asMap(final Object? value) {
+    if (value is Map<String, Object?>) {
+      return value;
+    }
+    if (value is Map<dynamic, dynamic>) {
+      return {
+        for (final entry in value.entries)
+          if (entry.key != null) entry.key.toString(): entry.value,
+      };
+    }
+    return null;
+  }
+
+  String? _string(final Map<String, Object?>? map, final String key) {
+    final value = map?[key];
+    if (value is String) {
+      final trimmed = value.trim();
+      return trimmed.isEmpty ? null : trimmed;
+    }
+    return null;
   }
 }

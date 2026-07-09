@@ -3151,6 +3151,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportarDocumentacionDescargarJustificanteButton => 'Descargar justificante';
 
   @override
+  String get gestionAportarDocumentacionJustificanteDescargado => 'Justificante de aportación descargado';
+
+  @override
+  String get gestionAportarDocumentacionFinalizacionError => 'Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.';
+
+  @override
   String get gestionRegistrosPageTitle => 'Mis registros';
 
   @override

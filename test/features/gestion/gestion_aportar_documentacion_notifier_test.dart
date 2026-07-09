@@ -98,8 +98,8 @@ void main() {
     test('updateProgreso only affects the matching file', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf'), archivo('b.pdf')]);
-      notifier
+      container.read(gestionAportarDocumentacionProvider.notifier)
+        ..addArchivos([archivo('a.pdf'), archivo('b.pdf')])
         ..beginUpload('/tmp/a.pdf')
         ..beginUpload('/tmp/b.pdf')
         ..updateProgreso('/tmp/a.pdf', 0.5);
@@ -109,25 +109,26 @@ void main() {
       expect(result.firstWhere((final a) => a.nombre == 'b.pdf').progreso, 0);
     });
 
-    test('marcarCompletado sets estado completado and clears progreso', () {
+    test('marcarCompletado sets estado completado, clears progreso and stores the hash', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
-      notifier
+      container.read(gestionAportarDocumentacionProvider.notifier)
+        ..addArchivos([archivo('a.pdf')])
         ..beginUpload('/tmp/a.pdf')
         ..updateProgreso('/tmp/a.pdf', 0.7)
-        ..marcarCompletado('/tmp/a.pdf');
+        ..marcarCompletado('/tmp/a.pdf', 'abc123');
 
       final result = container.read(gestionAportarDocumentacionProvider).single;
       expect(result.estado, AportacionArchivoEstado.completado);
       expect(result.progreso, isNull);
+      expect(result.hash, 'abc123');
     });
 
     test('marcarError sets estado error and clears progreso', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
-      notifier
+      container.read(gestionAportarDocumentacionProvider.notifier)
+        ..addArchivos([archivo('a.pdf')])
         ..beginUpload('/tmp/a.pdf')
         ..marcarError('/tmp/a.pdf');
 
@@ -161,6 +162,22 @@ void main() {
 
       expect(tokenA.isCancelled, isTrue);
       expect(tokenB.isCancelled, isTrue);
+    });
+
+    test('marcarErrorTodos reverts every file to error and clears hash/progreso', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      container.read(gestionAportarDocumentacionProvider.notifier)
+        ..addArchivos([archivo('a.pdf'), archivo('b.pdf')])
+        ..beginUpload('/tmp/a.pdf')
+        ..marcarCompletado('/tmp/a.pdf', 'hash-a')
+        ..beginUpload('/tmp/b.pdf')
+        ..marcarCompletado('/tmp/b.pdf', 'hash-b')
+        ..marcarErrorTodos();
+
+      final result = container.read(gestionAportarDocumentacionProvider);
+      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.estado, 'estado', AportacionArchivoEstado.error)));
+      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.hash, 'hash', isNull)));
     });
   });
 }

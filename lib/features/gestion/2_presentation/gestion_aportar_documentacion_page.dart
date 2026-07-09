@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +12,8 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_aportar_documentacion_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_documento_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
@@ -29,10 +34,12 @@ const List<String> _iosUniformTypeIdentifiersAportacion = [
 /// Aportar documentación — Figma node 44242:24884, subida en paralelo con
 /// progreso (44198:64251) y diálogo de éxito (44242:24055).
 ///
-/// **Integración de backend no verificada**: `procedimiento/subiradjuntosinfirma`
-/// exige un `idunico` que ningún endpoint de lectura devuelve para un
-/// expediente ya existente; aquí se autogenera como `{NIF}_{timestamp}` por
-/// inferencia de los ejemplos del swagger, sin confirmación del backend.
+/// **Integración de backend no verificada**: el flujo completo
+/// (`procedimiento/inicproc` → `procedimiento/subiradjuntosinfirma` por
+/// fichero → `documentacion/registrarfichero`) se ha inferido cruzando el
+/// swagger del proyecto con el manual de integración público — ningún paso
+/// se ha podido probar contra un backend real. `idunico` se autogenera como
+/// `{NIF}_{timestamp}` y se sustituye por el que confirme `inicproc`.
 class GestionAportarDocumentacionPage extends ConsumerWidget {
   const GestionAportarDocumentacionPage({required this.numexp, super.key});
 
@@ -158,9 +165,14 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     }
   }
 
-  /// Sube en paralelo todos los ficheros que no estén ya `completado`
-  /// (`noEnviado` o `error` — así "Reintentar" en una tarjeta y "Registrar"
-  /// comparten el mismo flujo, sin reenviar los ya completados).
+  /// Orquesta el flujo completo: `iniciarProcedimiento` → subir en paralelo
+  /// todos los ficheros que no estén ya `completado` (`noEnviado` o `error`
+  /// — así "Reintentar" en una tarjeta y "Registrar" comparten el mismo
+  /// flujo) → `registrarFicheros` para cerrar la transacción y obtener el
+  /// justificante. Si `registrarFicheros` falla tras subir todo, se
+  /// revierten todos los ficheros a `error` para reintentar la secuencia
+  /// completa desde cero (ver riesgos conocidos en el plan de la
+  /// iteración).
   Future<void> _registrar(
     final BuildContext context,
     final WidgetRef ref,
@@ -180,10 +192,9 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       return;
     }
 
-    final String tipoProcedimiento;
+    final Expediente expediente;
     try {
-      final expediente = await ref.read(expedienteDetailProvider(_decodedNumexp).future);
-      tipoProcedimiento = expediente.tipoproc ?? '';
+      expediente = await ref.read(expedienteDetailProvider(_decodedNumexp).future);
     } on Object catch (error, stackTrace) {
       logger.e('Error al obtener el expediente para aportar documentación', error: error, stackTrace: stackTrace);
       if (context.mounted) {
@@ -192,7 +203,18 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       return;
     }
 
-    final idUnico = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
+    final repository = ref.read(gestionDocumentoRepositoryProvider);
+    final InicioProcedimientoResultado inicio;
+    try {
+      final idUnicoLocal = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
+      inicio = await repository.iniciarProcedimiento(idUnico: idUnicoLocal, documentNumber: documentNumber, expediente: expediente);
+    } on Object catch (error, stackTrace) {
+      logger.e('Error al iniciar el procedimiento de aportación', error: error, stackTrace: stackTrace);
+      if (context.mounted) {
+        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
+      }
+      return;
+    }
 
     await Future.wait(
       pendientes.map(
@@ -200,8 +222,8 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
           ref: ref,
           archivo: archivo,
           documentNumber: documentNumber,
-          idUnico: idUnico,
-          tipoProcedimiento: tipoProcedimiento,
+          idUnico: inicio.idunico,
+          tipoProcedimiento: expediente.tipoproc ?? '',
         ),
       ),
     );
@@ -216,6 +238,28 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       return;
     }
 
+    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
+    final Uint8List justificante;
+    try {
+      justificante = await repository.registrarFicheros(
+        documentNumber: documentNumber,
+        expediente: expediente,
+        inicio: inicio,
+        documentos: [for (final a in actuales) (nombre: a.nombre, hash: a.hash!, tamanioBytes: a.tamanioBytes)],
+      );
+    } on Object catch (error, stackTrace) {
+      logger.e('Error al finalizar el registro de la aportación', error: error, stackTrace: stackTrace);
+      notifier.marcarErrorTodos();
+      if (context.mounted) {
+        AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionFinalizacionError, severity: AppAlertSeverity.error);
+      }
+      return;
+    }
+
+    if (!context.mounted) {
+      return;
+    }
+
     await AppSuccessDialog.show(
       context,
       title: l10n.gestionAportarDocumentacionExitoTitulo,
@@ -223,7 +267,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       secondaryLabel: l10n.gestionAportarDocumentacionCerrarSinDescargarButton,
       primaryLabel: l10n.gestionAportarDocumentacionDescargarJustificanteButton,
       onSecondary: () => context.go(expedienteRoute),
-      onPrimary: () => AppAlertSnackbar.show(context, message: l10n.gestionSectionComingSoon),
+      onPrimary: () => _descargarJustificante(context, justificante, expediente.numexp),
     );
   }
 
@@ -240,7 +284,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
 
     try {
       final bytes = await XFile(archivo.path).readAsBytes();
-      await repository.subirDocumentoSinFirma(
+      final hash = await repository.subirDocumentoSinFirma(
         documentNumber: documentNumber,
         idUnico: idUnico,
         tipoProcedimiento: tipoProcedimiento,
@@ -249,7 +293,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         cancelToken: token,
         onProgress: (final progreso) => notifier.updateProgreso(archivo.path, progreso),
       );
-      notifier.marcarCompletado(archivo.path);
+      notifier.marcarCompletado(archivo.path, hash);
     } on DioException catch (error, stackTrace) {
       if (error.type == DioExceptionType.cancel) {
         // Cancelación manual del usuario — `cancelarSubida` ya revirtió el
@@ -262,6 +306,26 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       logger.e('Error al subir ${archivo.nombre}', error: error, stackTrace: stackTrace);
       notifier.marcarError(archivo.path);
     }
+  }
+
+  /// Guarda el justificante ya obtenido (por `registrarFicheros`) usando el
+  /// selector nativo de destino — no hace ninguna llamada de red nueva.
+  Future<void> _descargarJustificante(
+    final BuildContext context,
+    final Uint8List bytes,
+    final String numexp,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+    final location = await getSaveLocation(suggestedName: 'justificante_$numexp.pdf');
+    if (location == null || !context.mounted) {
+      // El usuario canceló el selector nativo.
+      return;
+    }
+    await File(location.path).writeAsBytes(bytes);
+    if (!context.mounted) {
+      return;
+    }
+    AppAlertToast.show(context, message: l10n.gestionAportarDocumentacionJustificanteDescargado, severity: AppAlertSeverity.success);
   }
 }
 

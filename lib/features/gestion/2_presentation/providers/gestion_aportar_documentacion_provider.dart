@@ -92,14 +92,22 @@ class GestionAportarDocumentacionNotifier extends Notifier<List<AportacionArchiv
     _updateArchivo(path, (final a) => a.copyWith(progreso: progreso));
   }
 
-  void marcarCompletado(final String path) {
+  void marcarCompletado(final String path, final String hash) {
     _cancelTokens.remove(path);
-    _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.completado, clearProgreso: true));
+    _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.completado, clearProgreso: true, hash: hash));
   }
 
   void marcarError(final String path) {
     _cancelTokens.remove(path);
     _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.error, clearProgreso: true));
+  }
+
+  /// Revierte todos los ficheros a `error` — usado cuando `registrarFicheros`
+  /// falla tras haber subido correctamente todos los ficheros: la
+  /// transacción no llegó a cerrarse, así que "Reintentar"/"Registrar" deben
+  /// volver a ejecutar la secuencia completa desde `iniciarProcedimiento`.
+  void marcarErrorTodos() {
+    state = [for (final archivo in state) archivo.copyWith(estado: AportacionArchivoEstado.error, clearProgreso: true, clearHash: true)];
   }
 
   /// Cancela la subida en curso de [path] (si la hay) y lo revierte a
