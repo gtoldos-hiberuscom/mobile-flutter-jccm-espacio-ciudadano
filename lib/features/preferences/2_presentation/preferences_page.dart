@@ -9,21 +9,19 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/reset_consent_clauses_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
-import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
-import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/usecases/load_notification_contact_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-typedef _PreferencesArgs = ({String idAgente, String notificationCitizenId});
+typedef _PreferencesArgs = ({String idAgente});
 
 final _preferencesStateProvider = FutureProvider.autoDispose.family<_PreferencesState, _PreferencesArgs>(
   (final ref, final args) async {
@@ -40,7 +38,6 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
       CheckAcceptedConsentClauseFailed() => false,
     };
     final selectedLifeEvents = lifeEventsEnabled ? await _selectedLifeEvents(ref, args.idAgente) : const <LifeEvent>[];
-    final contact = await _loadNotificationContact(ref, args.notificationCitizenId);
     final lifeEventsUpdatedAt = _readLifeEventsUpdatedAt(appStorage, args.idAgente);
 
     return _PreferencesState(
@@ -51,7 +48,6 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
           : AppPreferenceStatus.disabled,
       selectedLifeEvents: selectedLifeEvents,
       lifeEventsUpdatedAt: lifeEventsUpdatedAt,
-      notificationContact: contact,
       biometricEnabled: appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false,
     );
   },
@@ -72,33 +68,17 @@ Future<List<LifeEvent>> _selectedLifeEvents(
   };
 }
 
-Future<NotificationContact?> _loadNotificationContact(
-  final Ref ref,
-  final String citizenId,
-) async {
-  if (citizenId.isEmpty) {
-    return null;
-  }
-  final result = await ref.watch(loadNotificationContactUsecaseProvider).execute(citizenId: citizenId);
-  return switch (result) {
-    LoadNotificationContactSuccess(:final contact) => contact,
-    LoadNotificationContactFailed() => null,
-  };
-}
-
 final class _PreferencesState {
   const _PreferencesState({
     required this.lifeEventsStatus,
     required this.selectedLifeEvents,
     required this.lifeEventsUpdatedAt,
-    required this.notificationContact,
     required this.biometricEnabled,
   });
 
   final AppPreferenceStatus lifeEventsStatus;
   final List<LifeEvent> selectedLifeEvents;
   final DateTime? lifeEventsUpdatedAt;
-  final NotificationContact? notificationContact;
   final bool biometricEnabled;
 }
 
@@ -120,7 +100,6 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     final idAgente = claims?.idAgente ?? '';
     final preferencesArgs = (
       idAgente: idAgente,
-      notificationCitizenId: _notificationCitizenId(claims),
     );
     final state = ref.watch(_preferencesStateProvider(preferencesArgs));
 
@@ -189,24 +168,17 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           activeFooterText: preferences.lifeEventsUpdatedAt == null ? null : 'Actualizado el ${_formatLifeEventsUpdate(preferences.lifeEventsUpdatedAt!)}',
         ),
         const SizedBox(height: AppDimensions.space16),
-        if (preferences.notificationContact?.hasAnyContact ?? false)
-          AppNotificationContactPreferenceCard(
-            phone: preferences.notificationContact!.phone,
-            email: preferences.notificationContact!.email,
-            onEdit: () => context.go(Routes.notificationContact),
-          )
-        else
-          AppPreferenceCard(
-            title: 'Datos de contacto para notificaciones',
-            icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-            status: AppPreferenceStatus.disabled,
-            inactiveDescription: 'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.',
-            pendingDescription: 'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.',
-            activeDescription: 'Tienes configurado al menos un medio de aviso para recibir notificaciones electrónicas.',
-            actionLabel: 'Dar de alta',
-            actionIcon: AppIcons.edit,
-            onAction: () => context.go(Routes.notificationContact),
-          ),
+        AppPreferenceCard(
+          title: 'Datos de contacto para notificaciones',
+          icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
+          status: AppPreferenceStatus.pending,
+          inactiveDescription: 'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.',
+          pendingDescription: 'Gestiona el medio de aviso para recibir notificaciones electrónicas.',
+          activeDescription: 'Tienes configurado al menos un medio de aviso para recibir notificaciones electrónicas.',
+          actionLabel: 'Gestionar',
+          actionIcon: AppIcons.edit,
+          onAction: () => context.go(Routes.notificationContact),
+        ),
         const SizedBox(height: AppDimensions.space16),
         AppPreferenceCard(
           title: 'Activación de acceso biométrico',
@@ -286,7 +258,6 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     ref.invalidate(
       _preferencesStateProvider((
         idAgente: idAgente,
-        notificationCitizenId: _notificationCitizenId(ref.read(jwtClaimsProvider)),
       )),
     );
     AppAlertSnackbar.show(
@@ -347,6 +318,9 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     }
 
     await ref.read(appStorageProvider).write(StorageKeys.forceClaveLoginOnNextLogin, true);
+    ref
+      ..invalidate(_preferencesStateProvider((idAgente: idAgente)))
+      ..invalidate(consentProvider(idAgente));
     await ref.read(authSessionControllerProvider).clear();
     if (!mounted) {
       return;
@@ -359,9 +333,16 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     if (lifeEventsError != null) {
       return lifeEventsError;
     }
+    final clausesError = await _resetConsentClauses(idAgente);
+    if (clausesError != null) {
+      return clausesError;
+    }
 
     final appStorage = ref.read(appStorageProvider);
     final writes = await Future.wait([
+      appStorage.remove(StorageKeys.consentAccepted),
+      appStorage.remove(StorageKeys.biometricQuickAccessEnabled),
+      appStorage.remove(StorageKeys.biometricQuickAccessPromptSeen),
       appStorage.remove('${StorageKeys.consentAcceptedPrefix}$idAgente'),
       appStorage.remove('${StorageKeys.consentAcceptedClausesPrefix}$idAgente'),
       appStorage.remove('${StorageKeys.lifeEventsOnboardingSeenPrefix}$idAgente'),
@@ -374,34 +355,20 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   }
 
   Future<String?> _resetLifeEvents(final String idAgente) async {
-    final loadResult = await ref.read(loadLifeEventsUsecaseProvider).execute(idAgente: idAgente);
-    if (!mounted) {
-      return null;
-    }
-    switch (loadResult) {
-      case LoadLifeEventsSuccess(:final events):
-        if (events.isEmpty || !events.any((final event) => event.selected)) {
-          return null;
-        }
-        final clearedEvents = events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
-        final saveResult = await ref
-            .read(saveLifeEventsUsecaseProvider)
-            .execute(
-              idAgente: idAgente,
-              events: clearedEvents,
-            );
-        return switch (saveResult) {
-          SaveLifeEventsSuccess() => null,
-          SaveLifeEventsFailed(:final message) => message,
-        };
-      case LoadLifeEventsFailed(:final message):
-        return message;
-    }
+    final result = await ref.read(resetLifeEventsUsecaseProvider).execute(idAgente: idAgente);
+    return switch (result) {
+      ResetLifeEventsSuccess() => null,
+      ResetLifeEventsFailed(:final message) => message,
+    };
   }
-}
 
-String _notificationCitizenId(final JwtClaims? claims) {
-  return claims?.normalizedPersonIdentifier ?? '';
+  Future<String?> _resetConsentClauses(final String idAgente) async {
+    final resetResult = await ref.read(resetConsentClausesUsecaseProvider).execute(idAgente: idAgente);
+    return switch (resetResult) {
+      ResetConsentClausesSuccess() => null,
+      ResetConsentClausesFailed(:final message) => message,
+    };
+  }
 }
 
 DateTime? _readLifeEventsUpdatedAt(final AppStorage appStorage, final String idAgente) {

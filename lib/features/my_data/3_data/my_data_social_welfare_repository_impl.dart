@@ -17,8 +17,12 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
   Future<LargeFamilyTitle?> loadLargeFamilyTitle({
     required final String documentNumber,
   }) async {
-    final response = await _getOptional(
-      '/api/v1/carnet-digital/familia-numerosa/${Uri.encodeComponent(documentNumber)}',
+    final response = await _postOptional(
+      '/api/v1/ccaa/familia-numerosa/${Uri.encodeComponent(documentNumber)}',
+      data: {
+        'tipdoc': _documentType(documentNumber),
+        'docu': documentNumber,
+      },
     );
     if (response == null) {
       return null;
@@ -99,19 +103,6 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     return _parseParkingCard(_decodePayload(response.data));
   }
 
-  Future<Response<Object?>?> _getOptional(final String path) async {
-    final response = await _dio.get<Object?>(
-      path,
-      options: Options(
-        validateStatus: (final status) => status != null && status < 500,
-      ),
-    );
-    if (response.statusCode == 404) {
-      return null;
-    }
-    return response;
-  }
-
   Future<Response<Object?>?> _postOptional(
     final String path, {
     required final Map<String, Object?> data,
@@ -144,6 +135,7 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
       'numero_titulo',
       'numeroTitulo',
       'numTitulo',
+      'nutitulo',
       'titulo',
     ]);
     final category = _firstString(titleMap, const ['categoria', 'category']);
@@ -153,13 +145,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     }
 
     return LargeFamilyTitle(
-      region: _regionName(_firstString(titleMap, const ['codigo_comunidad_automa', 'codigoComunidadAutoma', 'comunidadAutonoma', 'ccaa'])),
+      region: _regionName(_firstString(titleMap, const ['codigo_comunidad_automa', 'codigoComunidadAutoma', 'comunidadAutonoma', 'comaut', 'ccaa'])),
       titleNumber: titleNumber ?? '',
       category: _normalizeCategory(category),
       isValid: _parseBool(_firstString(titleMap, const ['titulo_vigente', 'tituloVigente', 'vigente'])) ?? true,
-      issueDate: _parseDate(_firstString(titleMap, const ['fecha_efecto', 'fechaEfecto', 'fechaExpedicion', 'fecha_validez_desde', 'fechaValidezDesde'])),
-      expiryDate: _parseDate(_firstString(titleMap, const ['fecha_caducidad', 'fechaCaducidad', 'fecha_validez_hasta', 'fechaValidezHasta'])),
-      childrenCount: _firstInt(titleMap, const ['numero_hijos', 'numeroHijos', 'hijos']),
+      issueDate: _parseDate(_firstString(titleMap, const ['fecha_efecto', 'fechaEfecto', 'fechaExpedicion', 'fecexpedi', 'fecha_validez_desde', 'fechaValidezDesde'])),
+      expiryDate: _parseDate(_firstString(titleMap, const ['fecha_caducidad', 'fechaCaducidad', 'feccaduci', 'fecha_validez_hasta', 'fechaValidezHasta'])),
+      childrenCount: _firstInt(titleMap, const ['numero_hijos', 'numeroHijos', 'numhij', 'hijos']),
       beneficiaries: _parseBeneficiaries(maps),
     );
   }
@@ -358,7 +350,7 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
   }
 
   bool _looksLikeTitle(final Map<String, Object?> map) {
-    return _firstString(map, const ['numero_titulo', 'numeroTitulo', 'numTitulo']) != null || _firstString(map, const ['categoria', 'titulo_vigente', 'tituloVigente']) != null;
+    return _firstString(map, const ['numero_titulo', 'numeroTitulo', 'numTitulo', 'nutitulo']) != null || _firstString(map, const ['categoria', 'titulo_vigente', 'tituloVigente', 'vigente']) != null;
   }
 
   bool _looksLikeDisabilityTitle(final Map<String, Object?> map) {
@@ -406,9 +398,9 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
   List<LargeFamilyBeneficiary> _parseBeneficiaries(final List<Map<String, Object?>> maps) {
     final beneficiaries = <LargeFamilyBeneficiary>[];
     for (final map in maps) {
-      final document = _firstString(map, const ['documentacion', 'documento', 'numeroDocumento', 'dni']);
+      final document = _firstString(map, const ['documentacion', 'documento', 'numeroDocumento', 'numdoc', 'dni']);
       final name = _fullName(map);
-      final birthDate = _parseDate(_firstString(map, const ['fecha_nacimiento', 'fechaNacimiento']));
+      final birthDate = _parseDate(_firstString(map, const ['fecha_nacimiento', 'fechaNacimiento', 'fecnac']));
       final holder = _parseBool(_firstString(map, const ['titular', 'esTitular']));
 
       if (document == null && name == null && birthDate == null && holder == null) {
@@ -556,7 +548,7 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
       return 'Castilla-La Mancha';
     }
     return switch (raw.trim().toUpperCase()) {
-      '08' || 'CLM' || 'CASTILLA-LA MANCHA' => 'Castilla-La Mancha',
+      '08' || '13' || 'CLM' || 'CASTILLA-LA MANCHA' => 'Castilla-La Mancha',
       _ => raw,
     };
   }

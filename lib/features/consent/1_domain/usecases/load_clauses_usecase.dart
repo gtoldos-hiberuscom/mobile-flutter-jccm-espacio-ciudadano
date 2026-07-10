@@ -26,18 +26,7 @@ class LoadClausesUsecase {
     final String? idAgente,
   }) async {
     try {
-      var clauses = await _repository.fetchClauses();
-      if (idAgente != null && idAgente.isNotEmpty) {
-        clauses = await Future.wait(
-          clauses.map((final clause) async {
-            final isAccepted = await _repository.hasAcceptedClause(
-              idAgente: idAgente,
-              clauseId: clause.id,
-            );
-            return clause.copyWith(isSelected: isAccepted);
-          }),
-        );
-      }
+      final clauses = await _repository.fetchClauses(idAgente: idAgente);
       return LoadClausesSuccess(clauses);
     } catch (e) {
       return LoadClausesFailed(e.toString());
