@@ -9,7 +9,9 @@ import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -50,8 +52,15 @@ void showAuthenticatedProfileMenu({
       Navigator.of(context, rootNavigator: true).pop();
     }
 
-    await ref.read(appStorageProvider).write(StorageKeys.forceClaveLoginOnNextLogin, true);
-    await ref.read(authSessionControllerProvider).clear();
+    try {
+      final idToken = ref.read(tokenResponseProvider)?.idToken ?? '';
+      if (idToken.isNotEmpty) {
+        await ref.read(logoutUseCaseProvider).call(idToken: idToken);
+      }
+    } finally {
+      await ref.read(appStorageProvider).write(StorageKeys.forceClaveLoginOnNextLogin, true);
+      await ref.read(authSessionControllerProvider).clear();
+    }
 
     if (context.mounted) {
       context.go(Routes.landing);
