@@ -6,6 +6,8 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/dependency_care_status.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_contact_actions.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_social_welfare_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Dependency care detail — Figma nodes 43973:1934 and 43973:1987.
@@ -130,15 +132,10 @@ class _DependencyEmpty extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Text(
-          l10n.socialWelfareDependenciaUnavailableMessage,
-          style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-          textAlign: TextAlign.center,
-        ),
-      ),
+    return MyDataNoData(
+      message: l10n.socialWelfareDependencyNoDataMessage,
+      actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+      onAction: () => launchSocialWelfareOfficeContacts(context, ref),
     );
   }
 }
@@ -152,26 +149,10 @@ class _DependencyError extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.socialWelfareDependenciaErrorMessage,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.discapacidadRetry,
-              hierarchy: AppButtonHierarchy.secondary,
-              onPressed: () => ref.invalidate(dependencyCareStatusProvider),
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.socialWelfareDependencyServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: () => ref.invalidate(dependencyCareStatusProvider),
     );
   }
 }

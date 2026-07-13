@@ -6,6 +6,8 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/parking_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_contact_actions.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_social_welfare_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Parking card detail — Figma nodes 43973:1942 and 43973:1988.
@@ -83,15 +85,10 @@ class _ParkingEmpty extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Text(
-          l10n.socialWelfareParkingUnavailableMessage,
-          style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-          textAlign: TextAlign.center,
-        ),
-      ),
+    return MyDataNoData(
+      message: l10n.socialWelfareParkingNoDataMessage,
+      actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+      onAction: () => launchSocialWelfareOfficeContacts(context, ref),
     );
   }
 }
@@ -105,26 +102,10 @@ class _ParkingError extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.socialWelfareParkingErrorMessage,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.discapacidadRetry,
-              hierarchy: AppButtonHierarchy.secondary,
-              onPressed: () => ref.invalidate(parkingCardProvider),
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.socialWelfareParkingServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: () => ref.invalidate(parkingCardProvider),
     );
   }
 }

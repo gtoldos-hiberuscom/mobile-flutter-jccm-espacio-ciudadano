@@ -8,6 +8,8 @@ import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Health data detail — Figma node 43973:1861.
@@ -255,14 +257,11 @@ class _AppointmentsContent extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     if (appointments.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(top: AppDimensions.space24),
-        child: Text(
-          l10n.myDataHealthAppointmentsEmpty,
-          style: AppTypography.bodyRegular.copyWith(
-            color: AppColors.primary,
-          ),
-        ),
+      return MyDataNoData(
+        message: l10n.myDataHealthAppointmentsNoDataMessage,
+        actionLabel: l10n.myDataNoDataContact,
+        contactUrl: 'https://sanidad.castillalamancha.es/ciudadanos',
+        scrollable: false,
       );
     }
 
@@ -331,25 +330,11 @@ class _HealthErrorState extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(top: AppDimensions.space24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l10n.myDataHealthAppointmentsError,
-            style: AppTypography.bodyRegular.copyWith(
-              color: AppColors.primary,
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          AppButton(
-            label: l10n.errorStateRetry,
-            onPressed: onRetry,
-            isExpanded: true,
-          ),
-        ],
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.myDataHealthAppointmentsServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: onRetry,
+      scrollable: false,
     );
   }
 }

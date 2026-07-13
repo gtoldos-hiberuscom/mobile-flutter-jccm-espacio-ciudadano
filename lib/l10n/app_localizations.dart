@@ -1475,7 +1475,7 @@ abstract class AppLocalizations {
   /// Educación — botón de contacto en el modal de ayuda de títulos universitarios.
   ///
   /// In es, this message translates to:
-  /// **'Contactar'**
+  /// **'Contacto'**
   String get educationUniversityTitlesInfoContactButton;
 
   /// Educación — sección títulos no universitarios.
@@ -4463,7 +4463,7 @@ abstract class AppLocalizations {
   /// Familia numerosa detail — botón externo hacia oficinas y contactos.
   ///
   /// In es, this message translates to:
-  /// **'Listado de oficinas y contactos'**
+  /// **'Contacto'**
   String get familiaNumerosaOfficeContactsButton;
 
   /// Familia numerosa detail page — printed carnet number row.
@@ -4555,6 +4555,162 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se ha podido cargar tu carnet de familia numerosa.'**
   String get familiaNumerosaErrorMessage;
+
+  /// Familia numerosa — mensaje mostrado cuando el servicio de consulta no está disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tu título de familia numerosa no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get familiaNumerosaServiceUnavailableMessage;
+
+  /// Acción común para volver a consultar un servicio no disponible de Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get myDataServiceUnavailableUpdate;
+
+  /// No description provided for @myDataNoDataContact.
+  ///
+  /// In es, this message translates to:
+  /// **'Contacto'**
+  String get myDataNoDataContact;
+
+  /// No description provided for @myDataNoDataOfficeContacts.
+  ///
+  /// In es, this message translates to:
+  /// **'Contacto'**
+  String get myDataNoDataOfficeContacts;
+
+  /// No description provided for @discapacidadNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de discapacidad asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get discapacidadNoDataMessage;
+
+  /// No description provided for @socialWelfareParkingNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get socialWelfareParkingNoDataMessage;
+
+  /// No description provided for @socialWelfareThermalSpaNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de termalismo asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get socialWelfareThermalSpaNoDataMessage;
+
+  /// No description provided for @socialWelfareDependencyNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de atención a la dependencia asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get socialWelfareDependencyNoDataMessage;
+
+  /// No description provided for @educationUniversityTitlesNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado títulos universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Ciencia, Innovación y Universidades.'**
+  String get educationUniversityTitlesNoDataMessage;
+
+  /// No description provided for @educationNonUniversityTitlesNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado títulos no universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Educación, Formación Profesional y Deportes.'**
+  String get educationNonUniversityTitlesNoDataMessage;
+
+  /// No description provided for @myDataVehiclesNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado vehículos asociados a tus datos en el servicio de consulta de la DGT.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General de Tráfico.'**
+  String get myDataVehiclesNoDataMessage;
+
+  /// No description provided for @myDataHousingAddressNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de domicilio asociada a tus datos en el servicio de consulta del padrón.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Ayuntamiento.'**
+  String get myDataHousingAddressNoDataMessage;
+
+  /// No description provided for @myDataHousingRealEstateNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado bienes inmuebles asociados a tus datos en el servicio de consulta de Catastro.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General del Catastro.'**
+  String get myDataHousingRealEstateNoDataMessage;
+
+  /// No description provided for @myDataHealthAppointmentsNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.'**
+  String get myDataHealthAppointmentsNoDataMessage;
+
+  /// No description provided for @myDataEmploymentDemandNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.'**
+  String get myDataEmploymentDemandNoDataMessage;
+
+  /// No description provided for @myDataEmploymentOffersNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.'**
+  String get myDataEmploymentOffersNoDataMessage;
+
+  /// No description provided for @discapacidadServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get discapacidadServiceUnavailableMessage;
+
+  /// No description provided for @socialWelfareParkingServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tu tarjeta de estacionamiento no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get socialWelfareParkingServiceUnavailableMessage;
+
+  /// No description provided for @socialWelfareThermalSpaServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tu información de termalismo no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get socialWelfareThermalSpaServiceUnavailableMessage;
+
+  /// No description provided for @socialWelfareDependencyServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tu información de atención a la dependencia no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get socialWelfareDependencyServiceUnavailableMessage;
+
+  /// No description provided for @educationUniversityTitlesServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tus títulos universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get educationUniversityTitlesServiceUnavailableMessage;
+
+  /// No description provided for @educationNonUniversityTitlesServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tus títulos no universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get educationNonUniversityTitlesServiceUnavailableMessage;
+
+  /// No description provided for @myDataVehiclesServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get myDataVehiclesServiceUnavailableMessage;
+
+  /// No description provided for @myDataHousingAddressServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get myDataHousingAddressServiceUnavailableMessage;
+
+  /// No description provided for @myDataHousingRealEstateServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get myDataHousingRealEstateServiceUnavailableMessage;
+
+  /// No description provided for @myDataHealthAppointmentsServiceUnavailableMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  String get myDataHealthAppointmentsServiceUnavailableMessage;
 
   /// Familia numerosa detail — retry button label.
   ///
@@ -4979,7 +5135,7 @@ abstract class AppLocalizations {
   /// Botón externo hacia oficinas y contactos en el modal informativo de Mis datos de Empleo.
   ///
   /// In es, this message translates to:
-  /// **'Listado de oficinas y contactos'**
+  /// **'Contacto'**
   String get myDataEmploymentInfoSheetOfficeContactsButton;
 
   /// Primera pestaña del detalle de Empleo.
@@ -5549,7 +5705,7 @@ abstract class AppLocalizations {
   /// Etiqueta del botón de contacto en el modal informativo de Mis datos de Vehículos.
   ///
   /// In es, this message translates to:
-  /// **'Contactar'**
+  /// **'Contacto'**
   String get myDataVehiclesInfoSheetContactButton;
 
   /// Primera pestaña del detalle de Vehículos.

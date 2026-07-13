@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/large_family_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_contact_actions.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_social_welfare_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Large family detail — Figma nodes 43973:1908 and 43973:1903.
@@ -181,26 +182,10 @@ class _LargeFamilyError extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.familiaNumerosaErrorMessage,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.familiaNumerosaRetry,
-              hierarchy: AppButtonHierarchy.secondary,
-              onPressed: () => ref.invalidate(largeFamilyTitleProvider),
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.familiaNumerosaServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: () => ref.invalidate(largeFamilyTitleProvider),
     );
   }
 }

@@ -732,7 +732,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get educationUniversityTitlesInfoFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.';
 
   @override
-  String get educationUniversityTitlesInfoContactButton => 'Contactar';
+  String get educationUniversityTitlesInfoContactButton => 'Contacto';
 
   @override
   String get educationNonUniversityTitlesTitle => 'Títulos no universitarios';
@@ -2289,7 +2289,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get familiaNumerosaContactHint => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
 
   @override
-  String get familiaNumerosaOfficeContactsButton => 'Listado de oficinas y contactos';
+  String get familiaNumerosaOfficeContactsButton => 'Contacto';
 
   @override
   String familiaNumerosaCardNumberLabel(String number) {
@@ -2339,6 +2339,84 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get familiaNumerosaErrorMessage => 'No se ha podido cargar tu carnet de familia numerosa.';
+
+  @override
+  String get familiaNumerosaServiceUnavailableMessage => 'El servicio de consulta de tu título de familia numerosa no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get myDataServiceUnavailableUpdate => 'Actualizar';
+
+  @override
+  String get myDataNoDataContact => 'Contacto';
+
+  @override
+  String get myDataNoDataOfficeContacts => 'Contacto';
+
+  @override
+  String get discapacidadNoDataMessage => 'No hemos encontrado información de discapacidad asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareParkingNoDataMessage => 'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareThermalSpaNoDataMessage => 'No hemos encontrado información de termalismo asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareDependencyNoDataMessage => 'No hemos encontrado información de atención a la dependencia asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get educationUniversityTitlesNoDataMessage => 'No hemos encontrado títulos universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Ciencia, Innovación y Universidades.';
+
+  @override
+  String get educationNonUniversityTitlesNoDataMessage => 'No hemos encontrado títulos no universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Educación, Formación Profesional y Deportes.';
+
+  @override
+  String get myDataVehiclesNoDataMessage => 'No hemos encontrado vehículos asociados a tus datos en el servicio de consulta de la DGT.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General de Tráfico.';
+
+  @override
+  String get myDataHousingAddressNoDataMessage => 'No hemos encontrado información de domicilio asociada a tus datos en el servicio de consulta del padrón.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Ayuntamiento.';
+
+  @override
+  String get myDataHousingRealEstateNoDataMessage => 'No hemos encontrado bienes inmuebles asociados a tus datos en el servicio de consulta de Catastro.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General del Catastro.';
+
+  @override
+  String get myDataHealthAppointmentsNoDataMessage => 'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.';
+
+  @override
+  String get myDataEmploymentDemandNoDataMessage => 'No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentOffersNoDataMessage => 'No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.';
+
+  @override
+  String get discapacidadServiceUnavailableMessage => 'El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get socialWelfareParkingServiceUnavailableMessage => 'El servicio de consulta de tu tarjeta de estacionamiento no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get socialWelfareThermalSpaServiceUnavailableMessage => 'El servicio de consulta de tu información de termalismo no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get socialWelfareDependencyServiceUnavailableMessage => 'El servicio de consulta de tu información de atención a la dependencia no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get educationUniversityTitlesServiceUnavailableMessage => 'El servicio de consulta de tus títulos universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get educationNonUniversityTitlesServiceUnavailableMessage => 'El servicio de consulta de tus títulos no universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get myDataVehiclesServiceUnavailableMessage => 'El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get myDataHousingAddressServiceUnavailableMessage => 'El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get myDataHousingRealEstateServiceUnavailableMessage => 'El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+
+  @override
+  String get myDataHealthAppointmentsServiceUnavailableMessage => 'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
 
   @override
   String get familiaNumerosaRetry => 'Reintentar';
@@ -2559,7 +2637,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentInfoSheetFooter => 'Si tus datos como demandante de empleo no son correctos, contacta con Servicio Público de Empleo Estatal (SEPE).';
 
   @override
-  String get myDataEmploymentInfoSheetOfficeContactsButton => 'Listado de oficinas y contactos';
+  String get myDataEmploymentInfoSheetOfficeContactsButton => 'Contacto';
 
   @override
   String get myDataEmploymentDataTab => 'Mis datos de Empleo';
@@ -2846,7 +2924,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataVehiclesInfoSheetFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)';
 
   @override
-  String get myDataVehiclesInfoSheetContactButton => 'Contactar';
+  String get myDataVehiclesInfoSheetContactButton => 'Contacto';
 
   @override
   String get myDataVehiclesDataTab => 'Mis datos de Vehículos';

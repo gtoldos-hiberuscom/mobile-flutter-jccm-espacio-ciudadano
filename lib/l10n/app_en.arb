@@ -3097,7 +3097,7 @@
   "@familiaNumerosaContactHint": {
     "description": "Familia numerosa detail — helper below data."
   },
-  "familiaNumerosaOfficeContactsButton": "Office and contact list",
+  "familiaNumerosaOfficeContactsButton": "Contact",
   "@familiaNumerosaOfficeContactsButton": {
     "description": "Familia numerosa detail — external office and contact button."
   },
@@ -3170,6 +3170,32 @@
     "description": "Familia numerosa detail — body shown when the citizen has no vigente carnet."
   },
   "familiaNumerosaErrorMessage": "Your large-family card could not be loaded.",
+  "familiaNumerosaServiceUnavailableMessage": "The service for consulting your large-family title is unavailable. You can reload the information or try again later.",
+  "myDataServiceUnavailableUpdate": "Refresh",
+  "myDataNoDataContact": "Contact",
+  "myDataNoDataOfficeContacts": "Contact",
+  "discapacidadNoDataMessage": "We could not find disability information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
+  "socialWelfareParkingNoDataMessage": "We could not find parking-card information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
+  "socialWelfareThermalSpaNoDataMessage": "We could not find thermal-spa information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
+  "socialWelfareDependencyNoDataMessage": "We could not find dependency-care information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
+  "educationUniversityTitlesNoDataMessage": "We could not find university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry responsible for universities.",
+  "educationNonUniversityTitlesNoDataMessage": "We could not find non-university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry of Education.",
+  "myDataVehiclesNoDataMessage": "We could not find vehicles associated with your details in the DGT consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Traffic.",
+  "myDataHousingAddressNoDataMessage": "We could not find address information associated with your details in the municipal-register consultation service.\n\nIf this is incorrect or outdated, contact your local council.",
+  "myDataHousingRealEstateNoDataMessage": "We could not find real-estate assets associated with your details in the Cadastre consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Cadastre.",
+  "myDataHealthAppointmentsNoDataMessage": "We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.",
+  "myDataEmploymentDemandNoDataMessage": "We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.",
+  "myDataEmploymentOffersNoDataMessage": "We could not find job-offer registrations associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.",
+  "discapacidadServiceUnavailableMessage": "The service for consulting your disability title is unavailable. You can reload the information or try again later.",
+  "socialWelfareParkingServiceUnavailableMessage": "The service for consulting your parking card is unavailable. You can reload the information or try again later.",
+  "socialWelfareThermalSpaServiceUnavailableMessage": "The service for consulting your thermal-spa information is unavailable. You can reload the information or try again later.",
+  "socialWelfareDependencyServiceUnavailableMessage": "The service for consulting your dependency care information is unavailable. You can reload the information or try again later.",
+  "educationUniversityTitlesServiceUnavailableMessage": "The service for consulting your university titles is unavailable. You can reload the information or try again later.",
+  "educationNonUniversityTitlesServiceUnavailableMessage": "The service for consulting your non-university titles is unavailable. You can reload the information or try again later.",
+  "myDataVehiclesServiceUnavailableMessage": "The service for consulting your vehicles is unavailable. You can reload the information or try again later.",
+  "myDataHousingAddressServiceUnavailableMessage": "The service for consulting your address details is unavailable. You can reload the information or try again later.",
+  "myDataHousingRealEstateServiceUnavailableMessage": "The service for consulting your real-estate assets is unavailable. You can reload the information or try again later.",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "The service for consulting your health appointments is unavailable. You can reload the information or try again later.",
   "@familiaNumerosaErrorMessage": {
     "description": "Familia numerosa detail — generic error message."
   },
@@ -3477,7 +3503,7 @@
   "@myDataEmploymentInfoSheetFooter": {
     "description": "Contact text in the My Employment data information modal."
   },
-  "myDataEmploymentInfoSheetOfficeContactsButton": "List of offices and contacts",
+  "myDataEmploymentInfoSheetOfficeContactsButton": "Contact",
   "@myDataEmploymentInfoSheetOfficeContactsButton": {
     "description": "External button to offices and contacts in the My Employment data information modal."
   },

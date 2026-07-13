@@ -5,6 +5,8 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_education_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -59,17 +61,10 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
     final BuildContext context,
     final AppLocalizations l10n,
   ) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Text(
-          l10n.educationUniversityTitlesEmpty,
-          style: AppTypography.bodyRegular.copyWith(
-            color: AppColors.textBase,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
+    return MyDataNoData(
+      message: l10n.educationUniversityTitlesNoDataMessage,
+      actionLabel: l10n.educationUniversityTitlesInfoContactButton,
+      contactUrl: 'https://www.ciencia.gob.es/',
     );
   }
 
@@ -78,28 +73,10 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
     final AppLocalizations l10n,
     final WidgetRef ref,
   ) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.educationUniversityTitlesError,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.textBase,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.maintenanceRetry,
-              onPressed: () => ref.invalidate(universityTitlesProvider),
-              hierarchy: AppButtonHierarchy.secondary,
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.educationUniversityTitlesServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: () => ref.invalidate(universityTitlesProvider),
     );
   }
 

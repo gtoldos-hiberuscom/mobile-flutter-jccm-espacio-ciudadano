@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/employment_demand.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class MyDataEmploymentDemandCard extends StatelessWidget {
@@ -59,15 +60,11 @@ class MyDataEmploymentDemandEmpty extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return AppInfoCard(
-      leadingBorderWidth: AppDimensions.space4,
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space16),
-        child: Text(
-          l10n.myDataEmploymentDemandEmpty,
-          style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-        ),
-      ),
+    return MyDataNoData(
+      message: l10n.myDataEmploymentDemandNoDataMessage,
+      actionLabel: l10n.myDataEmploymentInfoSheetOfficeContactsButton,
+      contactUrl: 'https://www.jccm.es/oficinas-oir',
+      scrollable: false,
     );
   }
 }

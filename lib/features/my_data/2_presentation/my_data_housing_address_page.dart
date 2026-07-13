@@ -5,6 +5,8 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Housing address detail — Figma node 43973:2103.
@@ -113,15 +115,10 @@ class _AddressEmpty extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Text(
-          l10n.myDataHousingAddressEmpty,
-          style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-          textAlign: TextAlign.center,
-        ),
-      ),
+    return MyDataNoData(
+      message: l10n.myDataHousingAddressNoDataMessage,
+      actionLabel: l10n.myDataNoDataOfficeContacts,
+      contactUrl: 'https://www.jccm.es/oficinas-oir',
     );
   }
 }
@@ -134,26 +131,10 @@ class _AddressError extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.myDataHousingAddressError,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.errorStateRetry,
-              hierarchy: AppButtonHierarchy.secondary,
-              onPressed: onRetry,
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.myDataHousingAddressServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: onRetry,
     );
   }
 }

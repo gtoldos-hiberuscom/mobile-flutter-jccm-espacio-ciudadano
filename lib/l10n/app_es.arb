@@ -976,7 +976,7 @@
   "@educationUniversityTitlesInfoFooter": {
     "description": "Educación — texto de pie del modal de ayuda de títulos universitarios."
   },
-  "educationUniversityTitlesInfoContactButton": "Contactar",
+  "educationUniversityTitlesInfoContactButton": "Contacto",
   "@educationUniversityTitlesInfoContactButton": {
     "description": "Educación — botón de contacto en el modal de ayuda de títulos universitarios."
   },
@@ -3093,7 +3093,7 @@
   "@familiaNumerosaContactHint": {
     "description": "Familia numerosa detail — helper bajo los datos."
   },
-  "familiaNumerosaOfficeContactsButton": "Listado de oficinas y contactos",
+  "familiaNumerosaOfficeContactsButton": "Contacto",
   "@familiaNumerosaOfficeContactsButton": {
     "description": "Familia numerosa detail — botón externo hacia oficinas y contactos."
   },
@@ -3169,6 +3169,38 @@
   "@familiaNumerosaErrorMessage": {
     "description": "Familia numerosa detail — generic error message."
   },
+  "familiaNumerosaServiceUnavailableMessage": "El servicio de consulta de tu título de familia numerosa no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "@familiaNumerosaServiceUnavailableMessage": {
+    "description": "Familia numerosa — mensaje mostrado cuando el servicio de consulta no está disponible."
+  },
+  "myDataServiceUnavailableUpdate": "Actualizar",
+  "@myDataServiceUnavailableUpdate": {
+    "description": "Acción común para volver a consultar un servicio no disponible de Mis datos."
+  },
+  "myDataNoDataContact": "Contacto",
+  "myDataNoDataOfficeContacts": "Contacto",
+  "discapacidadNoDataMessage": "No hemos encontrado información de discapacidad asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "socialWelfareParkingNoDataMessage": "No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "socialWelfareThermalSpaNoDataMessage": "No hemos encontrado información de termalismo asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "socialWelfareDependencyNoDataMessage": "No hemos encontrado información de atención a la dependencia asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "educationUniversityTitlesNoDataMessage": "No hemos encontrado títulos universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Ciencia, Innovación y Universidades.",
+  "educationNonUniversityTitlesNoDataMessage": "No hemos encontrado títulos no universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Educación, Formación Profesional y Deportes.",
+  "myDataVehiclesNoDataMessage": "No hemos encontrado vehículos asociados a tus datos en el servicio de consulta de la DGT.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General de Tráfico.",
+  "myDataHousingAddressNoDataMessage": "No hemos encontrado información de domicilio asociada a tus datos en el servicio de consulta del padrón.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Ayuntamiento.",
+  "myDataHousingRealEstateNoDataMessage": "No hemos encontrado bienes inmuebles asociados a tus datos en el servicio de consulta de Catastro.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General del Catastro.",
+  "myDataHealthAppointmentsNoDataMessage": "No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.",
+  "myDataEmploymentDemandNoDataMessage": "No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.",
+  "myDataEmploymentOffersNoDataMessage": "No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.",
+  "discapacidadServiceUnavailableMessage": "El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "socialWelfareParkingServiceUnavailableMessage": "El servicio de consulta de tu tarjeta de estacionamiento no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "socialWelfareThermalSpaServiceUnavailableMessage": "El servicio de consulta de tu información de termalismo no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "socialWelfareDependencyServiceUnavailableMessage": "El servicio de consulta de tu información de atención a la dependencia no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "educationUniversityTitlesServiceUnavailableMessage": "El servicio de consulta de tus títulos universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "educationNonUniversityTitlesServiceUnavailableMessage": "El servicio de consulta de tus títulos no universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataVehiclesServiceUnavailableMessage": "El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataHousingAddressServiceUnavailableMessage": "El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataHousingRealEstateServiceUnavailableMessage": "El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
   "familiaNumerosaRetry": "Reintentar",
   "@familiaNumerosaRetry": {
     "description": "Familia numerosa detail — retry button label."
@@ -3473,7 +3505,7 @@
   "@myDataEmploymentInfoSheetFooter": {
     "description": "Texto de contacto del modal informativo de Mis datos de Empleo."
   },
-  "myDataEmploymentInfoSheetOfficeContactsButton": "Listado de oficinas y contactos",
+  "myDataEmploymentInfoSheetOfficeContactsButton": "Contacto",
   "@myDataEmploymentInfoSheetOfficeContactsButton": {
     "description": "Botón externo hacia oficinas y contactos en el modal informativo de Mis datos de Empleo."
   },
@@ -3858,7 +3890,7 @@
   "@myDataVehiclesInfoSheetFooter": {
     "description": "Texto del pie de página del modal informativo de Mis datos de Vehículos."
   },
-  "myDataVehiclesInfoSheetContactButton": "Contactar",
+  "myDataVehiclesInfoSheetContactButton": "Contacto",
   "@myDataVehiclesInfoSheetContactButton": {
     "description": "Etiqueta del botón de contacto en el modal informativo de Mis datos de Vehículos."
   },

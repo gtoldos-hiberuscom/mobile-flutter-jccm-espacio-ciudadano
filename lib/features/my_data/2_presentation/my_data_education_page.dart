@@ -31,7 +31,6 @@ class _MyDataEducationPageState extends State<MyDataEducationPage> {
     return AppTabbedDetailScaffold(
       title: l10n.myDataEducationTitle,
       onBack: () => context.go(widget.backRoute),
-      onInfo: () => _showEducationInfoSheet(context),
       tabs: [l10n.myDataEducationDataTab, l10n.myDataEducationServicesTab],
       selectedIndex: _selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _EducationTab.values[index]),
@@ -42,14 +41,6 @@ class _MyDataEducationPageState extends State<MyDataEducationPage> {
     );
   }
 
-  Future<void> _showEducationInfoSheet(final BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
-    await AppInfoSheet.show(
-      context: context,
-      title: l10n.myDataEducationInfoSheetTitle,
-      bodyText: l10n.myDataEducationInfoSheetDescription,
-    );
-  }
 }
 
 enum _EducationTab { data, services }

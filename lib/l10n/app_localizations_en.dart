@@ -2288,7 +2288,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familiaNumerosaContactHint => 'If any of your data is incorrect or not up to date, contact the Social Welfare Department of Castilla-La Mancha.';
 
   @override
-  String get familiaNumerosaOfficeContactsButton => 'Office and contact list';
+  String get familiaNumerosaOfficeContactsButton => 'Contact';
 
   @override
   String familiaNumerosaCardNumberLabel(String number) {
@@ -2338,6 +2338,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get familiaNumerosaErrorMessage => 'Your large-family card could not be loaded.';
+
+  @override
+  String get familiaNumerosaServiceUnavailableMessage => 'The service for consulting your large-family title is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get myDataServiceUnavailableUpdate => 'Refresh';
+
+  @override
+  String get myDataNoDataContact => 'Contact';
+
+  @override
+  String get myDataNoDataOfficeContacts => 'Contact';
+
+  @override
+  String get discapacidadNoDataMessage => 'We could not find disability information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareParkingNoDataMessage => 'We could not find parking-card information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareThermalSpaNoDataMessage => 'We could not find thermal-spa information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+
+  @override
+  String get socialWelfareDependencyNoDataMessage => 'We could not find dependency-care information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+
+  @override
+  String get educationUniversityTitlesNoDataMessage => 'We could not find university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry responsible for universities.';
+
+  @override
+  String get educationNonUniversityTitlesNoDataMessage => 'We could not find non-university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry of Education.';
+
+  @override
+  String get myDataVehiclesNoDataMessage => 'We could not find vehicles associated with your details in the DGT consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Traffic.';
+
+  @override
+  String get myDataHousingAddressNoDataMessage => 'We could not find address information associated with your details in the municipal-register consultation service.\n\nIf this is incorrect or outdated, contact your local council.';
+
+  @override
+  String get myDataHousingRealEstateNoDataMessage => 'We could not find real-estate assets associated with your details in the Cadastre consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Cadastre.';
+
+  @override
+  String get myDataHealthAppointmentsNoDataMessage => 'We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.';
+
+  @override
+  String get myDataEmploymentDemandNoDataMessage => 'We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentOffersNoDataMessage => 'We could not find job-offer registrations associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.';
+
+  @override
+  String get discapacidadServiceUnavailableMessage => 'The service for consulting your disability title is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get socialWelfareParkingServiceUnavailableMessage => 'The service for consulting your parking card is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get socialWelfareThermalSpaServiceUnavailableMessage => 'The service for consulting your thermal-spa information is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get socialWelfareDependencyServiceUnavailableMessage => 'The service for consulting your dependency care information is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get educationUniversityTitlesServiceUnavailableMessage => 'The service for consulting your university titles is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get educationNonUniversityTitlesServiceUnavailableMessage => 'The service for consulting your non-university titles is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get myDataVehiclesServiceUnavailableMessage => 'The service for consulting your vehicles is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get myDataHousingAddressServiceUnavailableMessage => 'The service for consulting your address details is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get myDataHousingRealEstateServiceUnavailableMessage => 'The service for consulting your real-estate assets is unavailable. You can reload the information or try again later.';
+
+  @override
+  String get myDataHealthAppointmentsServiceUnavailableMessage => 'The service for consulting your health appointments is unavailable. You can reload the information or try again later.';
 
   @override
   String get familiaNumerosaRetry => 'Retry';
@@ -2558,7 +2636,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentInfoSheetFooter => 'If any of your data is incorrect or not up to date, contact the Castilla-La Mancha Regional Ministry of Social Welfare.';
 
   @override
-  String get myDataEmploymentInfoSheetOfficeContactsButton => 'List of offices and contacts';
+  String get myDataEmploymentInfoSheetOfficeContactsButton => 'Contact';
 
   @override
   String get myDataEmploymentDataTab => 'My Employment data';

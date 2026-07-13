@@ -7,6 +7,8 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_vehicles_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -127,7 +129,11 @@ class _VehiclesDataTab extends ConsumerWidget {
     final List<Vehicle> vehicles,
   ) {
     if (vehicles.isEmpty) {
-      return _buildEmptyState(context, l10n);
+      return MyDataNoData(
+        message: l10n.myDataVehiclesNoDataMessage,
+        actionLabel: l10n.myDataVehiclesInfoSheetContactButton,
+        contactUrl: 'https://sede.dgt.gob.es/es/contacto/',
+      );
     }
 
     return SingleChildScrollView(
@@ -161,51 +167,15 @@ class _VehiclesDataTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(
-    final BuildContext context,
-    final AppLocalizations l10n,
-  ) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Text(
-          l10n.myDataVehiclesEmpty,
-          style: AppTypography.bodyRegular.copyWith(
-            color: AppColors.textBase,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-
   Widget _buildErrorState(
     final BuildContext context,
     final AppLocalizations l10n,
     final WidgetRef ref,
   ) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.myDataVehiclesError,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.textBase,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.maintenanceRetry,
-              onPressed: () => ref.invalidate(vehiclesProvider),
-              hierarchy: AppButtonHierarchy.secondary,
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.myDataVehiclesServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: () => ref.invalidate(vehiclesProvider),
     );
   }
 

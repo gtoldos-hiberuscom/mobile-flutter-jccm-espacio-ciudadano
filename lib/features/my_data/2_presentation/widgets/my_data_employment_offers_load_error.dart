@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class MyDataEmploymentOffersLoadError extends StatelessWidget {
@@ -13,26 +13,10 @@ class MyDataEmploymentOffersLoadError extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.myDataEmploymentOffersLoadError,
-              textAlign: TextAlign.center,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.errorStateRetry,
-              onPressed: onRetry,
-              hierarchy: AppButtonHierarchy.secondary,
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.myDataEmploymentOffersServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: onRetry,
     );
   }
 }

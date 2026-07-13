@@ -5,6 +5,8 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Real-estate assets detail — Figma nodes 43973:2113 and 43973:1978.
@@ -92,9 +94,14 @@ class _PropertiesContent extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space16),
           if (filteredProperties.isEmpty)
-            _PropertiesEmpty(
-              message: properties.isEmpty ? l10n.myDataHousingRealEstateEmpty : l10n.myDataHousingRealEstateFilteredEmpty,
-            )
+            properties.isEmpty
+                ? MyDataNoData(
+                    message: l10n.myDataHousingRealEstateNoDataMessage,
+                    actionLabel: l10n.myDataNoDataContact,
+                    contactUrl: 'https://www.sedecatastro.gob.es/',
+                    scrollable: false,
+                  )
+                : _PropertiesEmpty(message: l10n.myDataHousingRealEstateFilteredEmpty)
           else
             ...filteredProperties.map(
               (final property) => Padding(
@@ -192,26 +199,10 @@ class _PropertiesError extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.myDataHousingRealEstateError,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: l10n.errorStateRetry,
-              hierarchy: AppButtonHierarchy.secondary,
-              onPressed: onRetry,
-            ),
-          ],
-        ),
-      ),
+    return MyDataServiceUnavailable(
+      message: l10n.myDataHousingRealEstateServiceUnavailableMessage,
+      actionLabel: l10n.myDataServiceUnavailableUpdate,
+      onRetry: onRetry,
     );
   }
 }
