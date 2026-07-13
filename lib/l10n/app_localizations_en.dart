@@ -3153,6 +3153,90 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionExpedientesEmpty => 'No tienes expedientes activos';
 
   @override
+  String get gestionExpedientesDetalleTitle => 'Detalle de expediente';
+
+  @override
+  String get gestionExpedientesDatosExpedienteTitle => 'Datos del Expediente';
+
+  @override
+  String get gestionExpedientesEstadoTramitacionTitle => 'Estado de tramitación';
+
+  @override
+  String get gestionExpedientesConsejeriaLabel => 'CONSEJERÍA';
+
+  @override
+  String get gestionExpedientesOficinaTramitadoraLabel => 'OFICINA TRAMITADORA';
+
+  @override
+  String get gestionExpedientesFechaCierreLabel => 'FECHA DE CIERRE';
+
+  @override
+  String get gestionExpedientesAportarDocumentacionButton => 'Aportar documentación';
+
+  @override
+  String get gestionExpedientesDetalleLoadError => 'No hemos podido cargar el detalle del expediente';
+
+  @override
+  String get gestionAportarDocumentacionTitle => 'Aportar documentación';
+
+  @override
+  String get gestionAportarDocumentacionHelperText => 'Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.';
+
+  @override
+  String get gestionAportarDocumentacionCancelarButton => 'Cancelar';
+
+  @override
+  String get gestionAportarDocumentacionSeleccionarButton => 'Seleccionar documentos';
+
+  @override
+  String get gestionAportarDocumentacionRegistrarButton => 'Registrar documentos aportados';
+
+  @override
+  String get gestionAportarDocumentacionMaxFilesError => 'No puedes aportar más de 5 ficheros.';
+
+  @override
+  String get gestionAportarDocumentacionMaxSizeError => 'Cada fichero debe pesar como máximo 20MB.';
+
+  @override
+  String get gestionAportarDocumentacionInvalidTypeError => 'Formato de fichero no permitido.';
+
+  @override
+  String get gestionAportarDocumentacionDuplicateError => 'Ese fichero ya se ha añadido.';
+
+  @override
+  String get gestionAportarDocumentacionNoFilesError => 'Selecciona al menos un fichero antes de registrar.';
+
+  @override
+  String get gestionAportarDocumentacionRegistroSuccess => 'Documentación registrada correctamente.';
+
+  @override
+  String get gestionAportarDocumentacionRegistroError => 'No hemos podido registrar la documentación. Inténtalo de nuevo.';
+
+  @override
+  String get gestionAportarDocumentacionUploadErrorParcial => 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
+
+  @override
+  String get gestionAportarDocumentacionExitoTitulo => 'Los documentos han sido enviados correctamente';
+
+  @override
+  String get gestionAportarDocumentacionExitoDescripcion => 'La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante';
+
+  @override
+  String get gestionAportarDocumentacionCerrarSinDescargarButton => 'Cerrar sin descargar';
+
+  @override
+  String get gestionAportarDocumentacionDescargarJustificanteButton => 'Descargar justificante';
+
+  @override
+  String get gestionAportarDocumentacionJustificanteDescargado => 'Justificante de aportación descargado';
+
+  @override
+  String get gestionAportarDocumentacionJustificanteError => 'No se pudo guardar el justificante. Inténtalo de nuevo.';
+
+  @override
+  String get gestionAportarDocumentacionFinalizacionError => 'Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.';
+
+  @override
   String get gestionRegistrosPageTitle => 'Mis registros';
 
   @override
@@ -3234,10 +3318,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';
 
   @override
-  String get gestionAportacionInfoTitle => 'Aportación de documentos de terceros';
+  String get gestionAportacionInfoHeading => 'Aportar documentos a un expediente';
 
   @override
-  String get gestionAportacionInfoBody => 'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.';
+  String get gestionAportacionInfoBody => 'Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:';
+
+  @override
+  String get gestionAportacionInfoBullet1 => 'La persona interesada';
+
+  @override
+  String get gestionAportacionInfoBullet2 => 'Su representante legal';
+
+  @override
+  String get gestionAportacionInfoBullet3 => 'Una persona autorizada';
 
   @override
   String get gestionAportacionSeleccionarTipo => 'Seleccionar tipo de documento';
@@ -3259,6 +3352,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionAportacionFindButton => 'Encontrar expediente';
+
+  @override
+  String get gestionAportacionDocNumberRequiredError => 'Introduce el número de documento de la persona interesada.';
+
+  @override
+  String get gestionAportacionCamposExpedienteError => 'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).';
 
   @override
   String get gestionNotificacionesContextualMessage => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';

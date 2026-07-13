@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// A centred loading indicator with an optional message.
@@ -29,7 +30,10 @@ class LoadingStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CircularProgressIndicator.adaptive(),
+            // Not `.adaptive()`: this app renders one consistent (Material)
+            // spinner on every platform, matching `AppLoadingIndicator`
+            // elsewhere — the Cupertino variant would look out of place here.
+            const CircularProgressIndicator(color: AppColors.primary),
             if (message != null) ...[
               const SizedBox(height: 16),
               Text(

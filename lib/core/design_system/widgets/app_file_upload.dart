@@ -13,7 +13,10 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_l
 ///   colour) and a remove action.
 /// - [uploaded]  — file is already stored (no progress bar); shows the file
 ///   details and a delete action.
-enum AppFileUploadStatus { uploading, complete, uploaded }
+/// - [error]     — the upload failed; shows an error-coloured bar and a
+///   retry action. Not part of the original Figma component — added to
+///   surface per-file upload failures without losing progress on siblings.
+enum AppFileUploadStatus { uploading, complete, uploaded, error }
 
 /// Displays a file row with upload progress and contextual actions.
 ///
@@ -39,8 +42,10 @@ class AppFileUpload extends StatelessWidget {
     this.onCancel,
     this.onRemove,
     this.onDelete,
+    this.onRetry,
     this.cancelLabel = 'Cancelar',
     this.removeLabel = 'Eliminar',
+    this.retryLabel = 'Reintentar',
   });
 
   /// Displayed file name — rendered as bold underlined link text.
@@ -64,11 +69,17 @@ class AppFileUpload extends StatelessWidget {
   /// Called when the user taps the delete icon on an already-uploaded file.
   final VoidCallback? onDelete;
 
+  /// Called when the user taps the retry action after a failed upload.
+  final VoidCallback? onRetry;
+
   /// Label for the cancel action. Defaults to `'Cancelar'`.
   final String cancelLabel;
 
   /// Label for the remove action. Defaults to `'Eliminar'`.
   final String removeLabel;
+
+  /// Label for the retry action. Defaults to `'Reintentar'`.
+  final String retryLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -90,6 +101,12 @@ class AppFileUpload extends StatelessWidget {
         fileName: fileName,
         fileInfo: fileInfo,
         onDelete: onDelete,
+      ),
+      AppFileUploadStatus.error => _ErrorRow(
+        fileName: fileName,
+        fileInfo: fileInfo,
+        onRetry: onRetry,
+        retryLabel: retryLabel,
       ),
     };
   }
@@ -302,6 +319,61 @@ class _UploadedRow extends StatelessWidget {
           color: AppColors.primary,
           iconSize: AppDimensions.iconMedium,
           tooltip: 'Eliminar archivo',
+        ),
+      ],
+    );
+  }
+}
+
+// ── Error ─────────────────────────────────────────────────────────────────────
+
+class _ErrorRow extends StatelessWidget {
+  const _ErrorRow({
+    required this.fileName,
+    required this.fileInfo,
+    required this.retryLabel,
+    this.onRetry,
+  });
+
+  final String fileName;
+  final String fileInfo;
+  final VoidCallback? onRetry;
+  final String retryLabel;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _FileNameRow(fileName: fileName),
+        const SizedBox(height: AppDimensions.space8),
+        const AppProgressBar(value: 1, color: AppColors.errorDark),
+        const SizedBox(height: AppDimensions.space8),
+        _FileMetaRow(
+          fileInfo: fileInfo,
+          action: TextButton.icon(
+            onPressed: onRetry,
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: const Size(0, AppDimensions.minTouchTarget),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            icon: const Icon(
+              Icons.refresh_rounded,
+              size: AppDimensions.iconSmall,
+              color: AppColors.errorDark,
+            ),
+            iconAlignment: IconAlignment.end,
+            label: Text(
+              retryLabel,
+              style: AppTypography.smallRegular.copyWith(
+                color: AppColors.primary,
+                decoration: TextDecoration.underline,
+                decorationColor: AppColors.primary,
+              ),
+            ),
+          ),
         ),
       ],
     );

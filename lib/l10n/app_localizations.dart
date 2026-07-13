@@ -6158,6 +6158,174 @@ abstract class AppLocalizations {
   /// **'No tienes expedientes activos'**
   String get gestionExpedientesEmpty;
 
+  /// Título de la barra de navegación en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Detalle de expediente'**
+  String get gestionExpedientesDetalleTitle;
+
+  /// Encabezado de la primera sección en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del Expediente'**
+  String get gestionExpedientesDatosExpedienteTitle;
+
+  /// Encabezado de la segunda sección en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado de tramitación'**
+  String get gestionExpedientesEstadoTramitacionTitle;
+
+  /// Etiqueta de la consejería en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'CONSEJERÍA'**
+  String get gestionExpedientesConsejeriaLabel;
+
+  /// Etiqueta de la oficina tramitadora en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'OFICINA TRAMITADORA'**
+  String get gestionExpedientesOficinaTramitadoraLabel;
+
+  /// Etiqueta de la fecha de cierre en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA DE CIERRE'**
+  String get gestionExpedientesFechaCierreLabel;
+
+  /// Etiqueta del botón fijo inferior en la pantalla de detalle de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get gestionExpedientesAportarDocumentacionButton;
+
+  /// Error al cargar el detalle de un expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar el detalle del expediente'**
+  String get gestionExpedientesDetalleLoadError;
+
+  /// Título de la pantalla de aportar documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Aportar documentación'**
+  String get gestionAportarDocumentacionTitle;
+
+  /// Aviso persistente con las condiciones de subida de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.'**
+  String get gestionAportarDocumentacionHelperText;
+
+  /// Botón para cancelar la aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get gestionAportarDocumentacionCancelarButton;
+
+  /// Botón para abrir el selector de ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar documentos'**
+  String get gestionAportarDocumentacionSeleccionarButton;
+
+  /// Botón para registrar los documentos aportados.
+  ///
+  /// In es, this message translates to:
+  /// **'Registrar documentos aportados'**
+  String get gestionAportarDocumentacionRegistrarButton;
+
+  /// Error al superar el número máximo de ficheros permitidos.
+  ///
+  /// In es, this message translates to:
+  /// **'No puedes aportar más de 5 ficheros.'**
+  String get gestionAportarDocumentacionMaxFilesError;
+
+  /// Error al superar el tamaño máximo permitido por fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada fichero debe pesar como máximo 20MB.'**
+  String get gestionAportarDocumentacionMaxSizeError;
+
+  /// Error al seleccionar un fichero con un formato no admitido.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato de fichero no permitido.'**
+  String get gestionAportarDocumentacionInvalidTypeError;
+
+  /// Error al seleccionar un fichero ya añadido previamente.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese fichero ya se ha añadido.'**
+  String get gestionAportarDocumentacionDuplicateError;
+
+  /// Error al intentar registrar sin haber seleccionado ningún fichero.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona al menos un fichero antes de registrar.'**
+  String get gestionAportarDocumentacionNoFilesError;
+
+  /// Mensaje de éxito al registrar los documentos aportados.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentación registrada correctamente.'**
+  String get gestionAportarDocumentacionRegistroSuccess;
+
+  /// Mensaje de error al fallar el registro de los documentos aportados.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido registrar la documentación. Inténtalo de nuevo.'**
+  String get gestionAportarDocumentacionRegistroError;
+
+  /// Mensaje cuando alguno de los ficheros subidos en paralelo falla.
+  ///
+  /// In es, this message translates to:
+  /// **'Algunos ficheros no se han podido enviar. Puedes reintentarlo.'**
+  String get gestionAportarDocumentacionUploadErrorParcial;
+
+  /// Título del diálogo de éxito al completar la aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Los documentos han sido enviados correctamente'**
+  String get gestionAportarDocumentacionExitoTitulo;
+
+  /// Descripción del diálogo de éxito al completar la aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante'**
+  String get gestionAportarDocumentacionExitoDescripcion;
+
+  /// Botón secundario del diálogo de éxito de aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sin descargar'**
+  String get gestionAportarDocumentacionCerrarSinDescargarButton;
+
+  /// Botón primario del diálogo de éxito de aportación de documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar justificante'**
+  String get gestionAportarDocumentacionDescargarJustificanteButton;
+
+  /// Toast mostrado tras guardar el justificante con el selector nativo de destino.
+  ///
+  /// In es, this message translates to:
+  /// **'Justificante de aportación descargado'**
+  String get gestionAportarDocumentacionJustificanteDescargado;
+
+  /// Snackbar de error cuando falla el guardado del justificante en el destino elegido; el diálogo de éxito se reabre para reintentar.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo guardar el justificante. Inténtalo de nuevo.'**
+  String get gestionAportarDocumentacionJustificanteError;
+
+  /// Mensaje de error cuando registrarFicheros falla tras haber subido todos los ficheros.
+  ///
+  /// In es, this message translates to:
+  /// **'Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.'**
+  String get gestionAportarDocumentacionFinalizacionError;
+
   /// Título de la pantalla de mis registros.
   ///
   /// In es, this message translates to:
@@ -6320,17 +6488,35 @@ abstract class AppLocalizations {
   /// **'Este número se encuentra en la documentación del expediente'**
   String get gestionAportacionCodIdentificadorHelper;
 
-  /// Título del bottom sheet informativo de aportación.
+  /// Encabezado del bottom sheet informativo de aportación.
   ///
   /// In es, this message translates to:
-  /// **'Aportación de documentos de terceros'**
-  String get gestionAportacionInfoTitle;
+  /// **'Aportar documentos a un expediente'**
+  String get gestionAportacionInfoHeading;
 
   /// Cuerpo del bottom sheet informativo de aportación.
   ///
   /// In es, this message translates to:
-  /// **'A lo largo de la tramitación de un expediente administrativo las personas interesadas, sus representantes legales o aquellas personas autorizadas, pueden aportar los documentos que estimen oportunos, o bien documentos necesarios para cumplir con requisitos legales o administrativos. En general, se puede presentar documentos en cualquier fase de la tramitación del expediente anterior a la resolución final y siempre que el procedimiento esté abierto y la administración no haya emitido una resolución definitiva.'**
+  /// **'Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:'**
   String get gestionAportacionInfoBody;
+
+  /// Primera viñeta del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'La persona interesada'**
+  String get gestionAportacionInfoBullet1;
+
+  /// Segunda viñeta del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Su representante legal'**
+  String get gestionAportacionInfoBullet2;
+
+  /// Tercera viñeta del bottom sheet informativo de aportación.
+  ///
+  /// In es, this message translates to:
+  /// **'Una persona autorizada'**
+  String get gestionAportacionInfoBullet3;
 
   /// Título del bottom sheet para seleccionar tipo de documento.
   ///
@@ -6373,6 +6559,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Encontrar expediente'**
   String get gestionAportacionFindButton;
+
+  /// Error de validación cuando el número de documento está vacío.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce el número de documento de la persona interesada.'**
+  String get gestionAportacionDocNumberRequiredError;
+
+  /// Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).'**
+  String get gestionAportacionCamposExpedienteError;
 
   /// Texto del helper contextual bajo la card desactivada de notificaciones.
   ///

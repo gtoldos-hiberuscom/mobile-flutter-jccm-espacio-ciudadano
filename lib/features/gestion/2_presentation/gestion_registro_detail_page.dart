@@ -21,19 +21,19 @@ class GestionRegistroDetailPage extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundWhite,
       appBar: AppNavBar(
         type: AppNavBarType.detail,
         title: isEntrada ? l10n.gestionRegistrosDetalleEntradaTitle : l10n.gestionRegistrosDetalleSalidaTitle,
-        onBack: () => context.go(Routes.gestionRegistros),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () => AppAlertSnackbar.show(
-              context,
-              message: l10n.gestionSectionComingSoon,
-            ),
+        leading: IconButton(
+          icon: const AppIcon(
+            AppIcons.arrowBack,
+            size: AppDimensions.iconLarge,
+            color: AppColors.textPrimary,
           ),
-        ],
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: () => context.go(Routes.gestionRegistros),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

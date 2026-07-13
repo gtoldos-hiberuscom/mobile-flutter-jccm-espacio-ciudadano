@@ -14,7 +14,9 @@
       "Bash(awk -F'\"' '{print $2}')",
       "Bash(find /Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano -path \"*/generated/dart_dio_client/lib/*\" -name \"*.dart\" | head -20)",
       "Read(//Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano/**)",
-      "mcp__claude_ai_Figma__get_design_context"
+      "mcp__claude_ai_Figma__get_design_context",
+      "Bash(fvm dart *)",
+      "Bash(cd *)"
     ]
   }
 }

@@ -204,7 +204,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     return DecoratedBox(
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: AppColors.backgroundBlueMutedLight),
+          bottom: BorderSide(color: AppColors.borderBlueMutedLighter),
         ),
         boxShadow: AppShadows.low,
       ),

@@ -12,12 +12,15 @@ import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pag
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportacion_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportar_documentacion_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expediente_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expedientes_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_alta_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registro_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registros_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/help_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
@@ -203,6 +206,28 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.gestionExpedientes,
               builder: (final BuildContext context, final GoRouterState state) => const GestionExpedientesPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionExpedienteDetalle,
+              builder: (final BuildContext context, final GoRouterState state) {
+                final extra = state.extra;
+                return GestionExpedienteDetallePage(
+                  numexp: state.pathParameters['numexp'] ?? '',
+                  tercero: extra is TerceroIdentificacion ? extra : null,
+                );
+              },
+            ),
+
+            GoRoute(
+              path: Routes.gestionExpedienteAportarDocumentacion,
+              builder: (final BuildContext context, final GoRouterState state) {
+                final extra = state.extra;
+                return GestionAportarDocumentacionPage(
+                  numexp: state.pathParameters['numexp'] ?? '',
+                  tercero: extra is TerceroIdentificacion ? extra : null,
+                );
+              },
             ),
 
             GoRoute(

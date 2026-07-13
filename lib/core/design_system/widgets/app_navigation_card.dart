@@ -12,15 +12,15 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.d
 class AppNavigationCard extends StatelessWidget {
   const AppNavigationCard({
     required this.title,
-    required this.description,
     required this.onTap,
     super.key,
+    this.description,
     this.semanticLabel,
     this.isDisabled = false,
   });
 
   final String title;
-  final String description;
+  final String? description;
   final VoidCallback onTap;
   final String? semanticLabel;
   final bool isDisabled;
@@ -32,7 +32,7 @@ class AppNavigationCard extends StatelessWidget {
 
     return Semantics(
       button: !isDisabled,
-      label: semanticLabel ?? '$title. $description',
+      label: semanticLabel ?? (description != null ? '$title. $description' : title),
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -70,13 +70,15 @@ class AppNavigationCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: AppTypography.leadingMedium.copyWith(color: textColor),
                               ),
-                              const SizedBox(height: AppDimensions.space4),
-                              Text(
-                                description,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTypography.smallRegular.copyWith(color: textColor),
-                              ),
+                              if (description != null) ...[
+                                const SizedBox(height: AppDimensions.space4),
+                                Text(
+                                  description!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTypography.smallRegular.copyWith(color: textColor),
+                                ),
+                              ],
                             ],
                           ),
                         ),
