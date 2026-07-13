@@ -17,7 +17,7 @@ class DigitalCardsPage extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final cardsAsync = ref.watch(digitalCardsProvider);
+    final authorizationAsync = ref.watch(digitalCardsAuthorizationProvider);
     final isDownloading = ref.watch(digitalCardsDownloadingProvider);
 
     return Scaffold(
@@ -38,53 +38,76 @@ class DigitalCardsPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: cardsAsync.when(
+      body: authorizationAsync.when(
         loading: () => const AppLoadingIndicator(),
         error: (final error, final stackTrace) => _DigitalCardsMessage(
-          message: l10n.digitalCardsErrorMessage,
+          message: 'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.',
           actionLabel: 'Reintentar',
-          onAction: () => ref.invalidate(digitalCardsProvider),
+          onAction: () => ref.invalidate(digitalCardsAuthorizationProvider),
         ),
-        data: (final cards) {
-          if (cards.isEmpty) {
-            return _DigitalCardsMessage(message: l10n.digitalCardsEmptyMessage);
+        data: (final isAuthorized) {
+          if (!isAuthorized) {
+            return _UnauthorizedCardsContent(
+              onEditPreferences: () => _openPreferences(context, ref),
+            );
           }
-
-          return RefreshIndicator(
-            onRefresh: () async => ref.refresh(digitalCardsProvider.future),
-            child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space16,
-                AppDimensions.space24,
-                AppDimensions.space16,
-                AppDimensions.space64,
-              ),
-              itemBuilder: (final context, final index) {
-                final card = cards[index];
-                return AppDigitalCard(
-                  title: _title(card, l10n),
-                  number: card.number,
-                  primaryDateLabel: switch (card.type) {
-                    DigitalCardType.largeFamily => l10n.digitalCardsIssueDate,
-                    DigitalCardType.disability => l10n.digitalCardsEffectiveDate,
-                    DigitalCardType.youth => l10n.digitalCardsExpiryDate,
-                  },
-                  primaryDate: _formatDate(context, card.type == DigitalCardType.youth ? card.expiresAt : card.validFrom),
-                  secondaryDateLabel: card.type == DigitalCardType.largeFamily ? l10n.digitalCardsExpiryDate : null,
-                  secondaryDate: card.type == DigitalCardType.largeFamily ? _formatDate(context, card.expiresAt) : null,
-                  statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
-                  downloadLabel: 'Descargar',
-                  isDownloading: isDownloading,
-                  onDownload: () => _showDownloadSheet(context, ref, card),
-                );
-              },
-              separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-              itemCount: cards.length,
+          final cardsAsync = ref.watch(digitalCardsProvider);
+          return cardsAsync.when(
+            loading: () => const AppLoadingIndicator(),
+            error: (final error, final stackTrace) => _DigitalCardsMessage(
+              message: l10n.digitalCardsErrorMessage,
+              actionLabel: 'Reintentar',
+              onAction: () => ref.invalidate(digitalCardsProvider),
             ),
+            data: (final cards) {
+              if (cards.isEmpty) {
+                return _DigitalCardsMessage(message: l10n.digitalCardsEmptyMessage);
+              }
+
+              return RefreshIndicator(
+                onRefresh: () async => ref.refresh(digitalCardsProvider.future),
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppDimensions.space16,
+                    AppDimensions.space24,
+                    AppDimensions.space16,
+                    AppDimensions.space64,
+                  ),
+                  itemBuilder: (final context, final index) {
+                    final card = cards[index];
+                    return AppDigitalCard(
+                      title: _title(card, l10n),
+                      number: card.number,
+                      primaryDateLabel: switch (card.type) {
+                        DigitalCardType.largeFamily => l10n.digitalCardsIssueDate,
+                        DigitalCardType.disability => l10n.digitalCardsEffectiveDate,
+                        DigitalCardType.youth => l10n.digitalCardsExpiryDate,
+                      },
+                      primaryDate: _formatDate(context, card.type == DigitalCardType.youth ? card.expiresAt : card.validFrom),
+                      secondaryDateLabel: card.type == DigitalCardType.largeFamily ? l10n.digitalCardsExpiryDate : null,
+                      secondaryDate: card.type == DigitalCardType.largeFamily ? _formatDate(context, card.expiresAt) : null,
+                      statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
+                      downloadLabel: 'Descargar',
+                      isDownloading: isDownloading,
+                      onDownload: () => _showDownloadSheet(context, ref, card),
+                    );
+                  },
+                  separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
+                  itemCount: cards.length,
+                ),
+              );
+            },
           );
         },
       ),
     );
+  }
+
+  Future<void> _openPreferences(final BuildContext context, final WidgetRef ref) async {
+    await context.push<void>(Routes.preferences);
+    ref
+      ..invalidate(digitalCardsAuthorizationProvider)
+      ..invalidate(digitalCardsProvider);
   }
 
   Future<void> _showInfo(final BuildContext context) async {
@@ -193,6 +216,55 @@ class DigitalCardsPage extends ConsumerWidget {
       return null;
     }
     return DateFormat('dd MMM yyyy', Localizations.localeOf(context).languageCode).format(value);
+  }
+}
+
+class _UnauthorizedCardsContent extends StatelessWidget {
+  const _UnauthorizedCardsContent({required this.onEditPreferences});
+
+  final VoidCallback onEditPreferences;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppDimensions.space20,
+          AppDimensions.space24,
+          AppDimensions.space20,
+          AppDimensions.space8,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const AppIcon(AppIcons.info, color: AppColors.primaryDark),
+            const SizedBox(width: AppDimensions.space8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: AppDimensions.space4),
+                child: Text(
+                  'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.',
+                  style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
+                ),
+              ),
+            ),
+            const SizedBox(width: AppDimensions.space16),
+            SizedBox(
+              width: AppDimensions.minTouchTarget,
+              height: AppDimensions.minTouchTarget,
+              child: AppIconButton(
+                icon: AppIcons.settings,
+                onPressed: onEditPreferences,
+                hierarchy: AppButtonHierarchy.secondary,
+                semanticsLabel: l10n.drawerPreferences,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

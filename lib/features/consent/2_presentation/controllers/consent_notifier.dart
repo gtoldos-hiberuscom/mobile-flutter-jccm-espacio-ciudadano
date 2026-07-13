@@ -1,8 +1,6 @@
 import 'dart:async' show unawaited;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
@@ -10,9 +8,8 @@ import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept_consent_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/load_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
 // ── Status ────────────────────────────────────────────────────────────────────
 
@@ -78,6 +75,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
   ConsentNotifier(this._idAgente);
   final String _idAgente;
   bool _isPreferencesEditing = false;
+  bool _hasReachedLegalTextEnd = false;
   Set<int> _initialSelectedClauseIds = const {};
 
   @override
@@ -99,13 +97,15 @@ class ConsentNotifier extends Notifier<ConsentState> {
     switch (result) {
       case LoadClausesSuccess(:final clauses):
         state = ConsentState(
-          status: ConsentStatus.step1Locked,
+          status: _hasReachedLegalTextEnd ? ConsentStatus.step1Unlocked : ConsentStatus.step1Locked,
           clauses: clauses,
         );
       case LoadClausesFailed():
         // Degrade gracefully — show step 1 with empty clause list so the
         // citizen can still read the legal text and accept.
-        state = const ConsentState(status: ConsentStatus.step1Locked);
+        state = ConsentState(
+          status: _hasReachedLegalTextEnd ? ConsentStatus.step1Unlocked : ConsentStatus.step1Locked,
+        );
     }
   }
 
@@ -114,6 +114,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
   /// Called when the citizen's scroll position reaches the bottom of the
   /// legal text in step 1. Unlocks the "Aceptar y continuar" CTA.
   void onScrollReachedEnd() {
+    _hasReachedLegalTextEnd = true;
     if (state.status == ConsentStatus.step1Locked) {
       state = state.copyWith(status: ConsentStatus.step1Unlocked);
     }
@@ -158,19 +159,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
     }
     switch (result) {
       case AcceptConsentSuccess():
-        final resetError = await _resetLifeEventsIfClauseWasDisabled(clausesToPersist);
-        if (!ref.mounted) {
-          return;
-        }
-        if (resetError != null) {
-          state = ConsentState(
-            status: ConsentStatus.saveError,
-            clauses: clausesToPersist,
-            errorMessage: resetError,
-          );
-          return;
-        }
-        final onboardingError = await _resetLifeEventsOnboardingIfClauseWasEnabledFromPreferences(clausesToPersist);
+        final onboardingError = await _skipLifeEventsOnboardingIfClauseWasEnabledFromPreferences(clausesToPersist);
         if (!ref.mounted) {
           return;
         }
@@ -212,7 +201,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
         .toList(growable: false);
   }
 
-  Future<String?> _resetLifeEventsOnboardingIfClauseWasEnabledFromPreferences(final List<Clause> clauses) async {
+  Future<String?> _skipLifeEventsOnboardingIfClauseWasEnabledFromPreferences(final List<Clause> clauses) async {
     if (!_isPreferencesEditing || _initialSelectedClauseIds.contains(3)) {
       return null;
     }
@@ -220,8 +209,11 @@ class ConsentNotifier extends Notifier<ConsentState> {
     if (!lifeEventsClauseSelected) {
       return null;
     }
-    final removed = await ref.read(appStorageProvider).remove('${StorageKeys.lifeEventsOnboardingSeenPrefix}$_idAgente');
-    return removed ? null : 'No hemos podido reiniciar el asistente de hechos vitales. Inténtalo de nuevo.';
+    final result = await ref.read(markLifeEventsOnboardingSeenUsecaseProvider).execute(idAgente: _idAgente);
+    return switch (result) {
+      MarkLifeEventsOnboardingSeenSuccess() => null,
+      MarkLifeEventsOnboardingSeenFailed(:final message) => message,
+    };
   }
 
   Future<bool> _persistCurrentSession() async {
@@ -229,40 +221,6 @@ class ConsentNotifier extends Notifier<ConsentState> {
       return await ref.read(authSessionControllerProvider).persistCurrentSession();
     } on Object {
       return false;
-    }
-  }
-
-  Future<String?> _resetLifeEventsIfClauseWasDisabled(final List<Clause> clauses) async {
-    if (!_isPreferencesEditing || !_initialSelectedClauseIds.contains(3)) {
-      return null;
-    }
-    final lifeEventsClauseStillSelected = clauses.any((final clause) => clause.id == 3 && clause.isSelected);
-    if (lifeEventsClauseStillSelected) {
-      return null;
-    }
-
-    final loadResult = await ref.read(loadLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
-    if (!ref.mounted) {
-      return null;
-    }
-    switch (loadResult) {
-      case LoadLifeEventsSuccess(:final events):
-        if (events.isEmpty || !events.any((final event) => event.selected)) {
-          return null;
-        }
-        final clearedEvents = events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
-        final saveResult = await ref
-            .read(saveLifeEventsUsecaseProvider)
-            .execute(
-              idAgente: _idAgente,
-              events: clearedEvents,
-            );
-        return switch (saveResult) {
-          SaveLifeEventsSuccess() => null,
-          SaveLifeEventsFailed(:final message) => message,
-        };
-      case LoadLifeEventsFailed(:final message):
-        return message;
     }
   }
 

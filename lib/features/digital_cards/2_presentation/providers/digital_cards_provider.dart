@@ -4,12 +4,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/3_data/digital_cards_repository_impl.dart';
 
 final digitalCardsRepositoryProvider = Provider<DigitalCardsRepository>((final ref) {
   return DigitalCardsRepositoryImpl(dio: ref.watch(dioProvider));
+});
+
+final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((final ref) async {
+  final idAgente = ref.watch(jwtClaimsProvider)?.idAgente?.trim();
+  if (idAgente == null || idAgente.isEmpty) {
+    throw StateError('No se ha encontrado el identificador de la persona usuaria.');
+  }
+
+  final result = await ref
+      .watch(checkAcceptedConsentClauseUsecaseProvider)
+      .execute(
+        idAgente: idAgente,
+        clauseId: 1,
+      );
+  return switch (result) {
+    AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
+    CheckAcceptedConsentClauseFailed(:final message) => throw StateError(message),
+  };
 });
 
 final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>((final ref) async {

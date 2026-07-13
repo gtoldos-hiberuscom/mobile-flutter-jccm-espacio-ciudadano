@@ -38,6 +38,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     _scrollController = ScrollController()..addListener(_onScroll);
     _searchController = TextEditingController()..addListener(_onSearchChanged);
     _searchFocusNode = FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((final _) => _onScroll());
   }
 
   @override
@@ -140,7 +141,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       body: Column(
         children: [
           Expanded(
-            child: NotificationListener<ScrollUpdateNotification>(
+            child: NotificationListener<ScrollNotification>(
               onNotification: (final notification) {
                 if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - AppDimensions.space64) {
                   _onScroll();
