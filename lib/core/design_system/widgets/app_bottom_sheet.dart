@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
@@ -236,33 +237,50 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _QrPreview(
-            imageBytes: qrImageBytes,
-            isLoading: isQrLoading,
+          if (onQrPressed != null) ...[
+            _QrPreview(
+              imageBytes: qrImageBytes,
+              isLoading: isQrLoading,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.space16,
+                vertical: AppDimensions.space8,
+              ),
+              child: Divider(height: 1, color: AppColors.neutral100),
+            ),
+          ],
+          Padding(
+            padding: const EdgeInsets.only(
+              top: AppDimensions.space4,
+              bottom: AppDimensions.space8,
+            ),
+            child: Text(
+              'Formato de descarga',
+              style: AppTypography.leadingBold.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
           ),
-          const SizedBox(height: AppDimensions.space16),
-          const Divider(height: 1, color: AppColors.neutral100),
-          const SizedBox(height: AppDimensions.space16),
-          Text(
-            'Formato de descarga',
-            style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          _DownloadFormatButton(
-            label: 'QR',
-            onPressed: onQrPressed,
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          _DownloadFormatButton(
-            label: 'PASSPK',
-            onPressed: onPkPassPressed,
-          ),
-          const SizedBox(height: AppDimensions.space16),
-          _DownloadFormatButton(
-            label: 'PDF',
-            onPressed: onPdfPressed,
-            primary: true,
-          ),
+          const SizedBox(height: AppDimensions.space8),
+          if (onQrPressed != null) ...[
+            _DownloadFormatButton(label: 'QR', onPressed: onQrPressed),
+            const SizedBox(height: AppDimensions.space16),
+          ],
+          if (onPkPassPressed != null) ...[
+            _DownloadFormatButton(
+              label: 'PKPASS',
+              onPressed: onPkPassPressed,
+              primary: onPdfPressed == null,
+            ),
+            if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
+          ],
+          if (onPdfPressed != null)
+            _DownloadFormatButton(
+              label: 'PDF',
+              onPressed: onPdfPressed,
+              primary: true,
+            ),
         ],
       ),
     );
@@ -280,33 +298,47 @@ class _QrPreview extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Semantics(
-      label: 'Código QR',
-      image: true,
-      child: ExcludeSemantics(
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: AppColors.backgroundWhite,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-              border: Border.all(color: AppColors.neutral100),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(AppDimensions.space12),
-              child: isLoading
-                  ? const AppLoadingIndicator(strokeWidth: 3)
-                  : imageBytes == null
-                  ? const CustomPaint(painter: _QrPreviewPainter())
-                  : Image.memory(
-                      imageBytes!,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.none,
-                    ),
+    return LayoutBuilder(
+      builder: (final context, final constraints) {
+        final heightLimit = MediaQuery.sizeOf(context).height * 0.42;
+        final availableWidth = constraints.maxWidth < 326 ? constraints.maxWidth : 326.0;
+        final desiredHeight = availableWidth * 331 / 326;
+        final scale = desiredHeight > heightLimit ? heightLimit / desiredHeight : 1.0;
+        final previewWidth = availableWidth * scale;
+        final previewHeight = desiredHeight * scale;
+
+        return Center(
+          child: Semantics(
+            label: 'Código QR',
+            image: true,
+            child: ExcludeSemantics(
+              child: SizedBox(
+                width: previewWidth,
+                height: previewHeight,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundWhite,
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    border: Border.all(color: AppColors.neutral100),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimensions.space12),
+                    child: isLoading
+                        ? const AppLoadingIndicator(strokeWidth: 3)
+                        : imageBytes == null
+                        ? const CustomPaint(painter: _QrPreviewPainter())
+                        : Image.memory(
+                            imageBytes!,
+                            fit: BoxFit.contain,
+                            filterQuality: FilterQuality.none,
+                          ),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -332,22 +364,40 @@ class _DownloadFormatButton extends StatelessWidget {
       button: true,
       label: 'Descargar $label',
       child: ExcludeSemantics(
-        child: SizedBox(
-          height: AppDimensions.minTouchTarget,
-          child: OutlinedButton(
-            onPressed: onPressed,
-            style: OutlinedButton.styleFrom(
-              backgroundColor: background,
-              foregroundColor: foreground,
-              side: BorderSide(color: border, width: 2),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(AppDimensions.radiusXs),
-                ),
-              ),
-              textStyle: AppTypography.leadingMedium,
+        child: DecoratedBox(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(AppDimensions.radiusXs),
             ),
-            child: Text('+  $label  +'),
+            boxShadow: AppShadows.low,
+          ),
+          child: SizedBox(
+            height: AppDimensions.minTouchTarget,
+            child: OutlinedButton(
+              onPressed: onPressed,
+              style: OutlinedButton.styleFrom(
+                backgroundColor: background,
+                foregroundColor: foreground,
+                side: BorderSide(color: border, width: 2),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(AppDimensions.radiusXs),
+                  ),
+                ),
+                textStyle: AppTypography.leadingMedium,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppIcon(AppIcons.add, size: 20, color: foreground),
+                  const SizedBox(width: AppDimensions.space8),
+                  Text(label),
+                  const SizedBox(width: AppDimensions.space8),
+                  AppIcon(AppIcons.add, size: 20, color: foreground),
+                ],
+              ),
+            ),
           ),
         ),
       ),

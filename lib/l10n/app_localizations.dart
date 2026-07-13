@@ -2747,20 +2747,44 @@ abstract class AppLocalizations {
   /// Carnets — etiqueta del tipo familia numerosa.
   ///
   /// In es, this message translates to:
-  /// **'Carnet de familia numerosa'**
+  /// **'Familia Numerosa'**
   String get digitalCardsTypeFamiliaNumerosa;
 
   /// Carnets — etiqueta del tipo carnet joven.
   ///
   /// In es, this message translates to:
-  /// **'Carnet joven'**
+  /// **'Joven'**
   String get digitalCardsTypeJoven;
 
   /// Carnets — etiqueta del tipo discapacidad.
   ///
   /// In es, this message translates to:
-  /// **'Carnet de discapacidad'**
+  /// **'Discapacidad'**
   String get digitalCardsTypeDiscapacidad;
+
+  /// No description provided for @digitalCardsIssueDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de emisión'**
+  String get digitalCardsIssueDate;
+
+  /// No description provided for @digitalCardsEffectiveDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de entrada en vigor'**
+  String get digitalCardsEffectiveDate;
+
+  /// No description provided for @digitalCardsExpiryDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de caducidad'**
+  String get digitalCardsExpiryDate;
+
+  /// No description provided for @digitalCardsDefinitive.
+  ///
+  /// In es, this message translates to:
+  /// **'DEFINITIVO'**
+  String get digitalCardsDefinitive;
 
   /// Carnets — badge para estado disponible.
   ///

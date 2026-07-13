@@ -1382,13 +1382,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsPageTitle => 'Mis carnets digitales';
 
   @override
-  String get digitalCardsTypeFamiliaNumerosa => 'Carnet de familia numerosa';
+  String get digitalCardsTypeFamiliaNumerosa => 'Familia Numerosa';
 
   @override
-  String get digitalCardsTypeJoven => 'Carnet joven';
+  String get digitalCardsTypeJoven => 'Joven';
 
   @override
-  String get digitalCardsTypeDiscapacidad => 'Carnet de discapacidad';
+  String get digitalCardsTypeDiscapacidad => 'Discapacidad';
+
+  @override
+  String get digitalCardsIssueDate => 'Fecha de emisión';
+
+  @override
+  String get digitalCardsEffectiveDate => 'Fecha de entrada en vigor';
+
+  @override
+  String get digitalCardsExpiryDate => 'Fecha de caducidad';
+
+  @override
+  String get digitalCardsDefinitive => 'DEFINITIVO';
 
   @override
   String get digitalCardsStatusAvailable => 'Disponible';

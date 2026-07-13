@@ -21,13 +21,13 @@ final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>((fina
   return ref.watch(digitalCardsRepositoryProvider).loadCards(documentNumber: documentNumber);
 });
 
-final digitalCardQrImageProvider = FutureProvider.autoDispose<Uint8List?>((final ref) async {
+final digitalCardQrImageProvider = FutureProvider.autoDispose.family<Uint8List?, DigitalCard>((final ref, final card) async {
   final documentNumber = _documentNumber(ref.watch(jwtClaimsProvider));
   if (documentNumber == null) {
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  return ref.watch(digitalCardsRepositoryProvider).loadQrImage(documentNumber: documentNumber);
+  return ref.watch(digitalCardsRepositoryProvider).loadQrImage(documentNumber: documentNumber, card: card);
 });
 
 final digitalCardsDownloadingProvider = NotifierProvider.autoDispose<DigitalCardsDownloadingNotifier, bool>(
@@ -47,31 +47,31 @@ final class DigitalCardsDownloadingNotifier extends Notifier<bool> {
   }
 }
 
-Future<void> downloadDigitalCardsPdf(final WidgetRef ref) async {
+Future<DigitalCardArtifact> downloadDigitalCardsPdf(final WidgetRef ref, final DigitalCard card) async {
   final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
   if (documentNumber == null) {
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  await ref.read(digitalCardsRepositoryProvider).downloadPdf(documentNumber: documentNumber);
+  return ref.read(digitalCardsRepositoryProvider).downloadPdf(documentNumber: documentNumber, card: card);
 }
 
-Future<void> downloadDigitalCardsQr(final WidgetRef ref) async {
+Future<DigitalCardArtifact> downloadDigitalCardsQr(final WidgetRef ref, final DigitalCard card) async {
   final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
   if (documentNumber == null) {
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  await ref.read(digitalCardsRepositoryProvider).downloadQr(documentNumber: documentNumber);
+  return ref.read(digitalCardsRepositoryProvider).downloadQr(documentNumber: documentNumber, card: card);
 }
 
-Future<void> downloadDigitalCardsPkPass(final WidgetRef ref) async {
+Future<DigitalCardArtifact> downloadDigitalCardsPkPass(final WidgetRef ref, final DigitalCard card) async {
   final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
   if (documentNumber == null) {
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  await ref.read(digitalCardsRepositoryProvider).downloadPkPass(documentNumber: documentNumber);
+  return ref.read(digitalCardsRepositoryProvider).downloadPkPass(documentNumber: documentNumber, card: card);
 }
 
 String? _documentNumber(final JwtClaims? claims) {

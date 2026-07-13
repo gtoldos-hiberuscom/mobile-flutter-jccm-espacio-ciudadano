@@ -1381,13 +1381,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsPageTitle => 'My digital cards';
 
   @override
-  String get digitalCardsTypeFamiliaNumerosa => 'Large-family card';
+  String get digitalCardsTypeFamiliaNumerosa => 'Large Family';
 
   @override
-  String get digitalCardsTypeJoven => 'Youth card';
+  String get digitalCardsTypeJoven => 'Youth';
 
   @override
-  String get digitalCardsTypeDiscapacidad => 'Disability card';
+  String get digitalCardsTypeDiscapacidad => 'Disability';
+
+  @override
+  String get digitalCardsIssueDate => 'Issue date';
+
+  @override
+  String get digitalCardsEffectiveDate => 'Effective date';
+
+  @override
+  String get digitalCardsExpiryDate => 'Expiry date';
+
+  @override
+  String get digitalCardsDefinitive => 'PERMANENT';
 
   @override
   String get digitalCardsStatusAvailable => 'Available';

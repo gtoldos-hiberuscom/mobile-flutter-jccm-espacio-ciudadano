@@ -5,11 +5,11 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_c
 abstract interface class DigitalCardsRepository {
   Future<List<DigitalCard>> loadCards({required final String documentNumber});
 
-  Future<Uint8List?> loadQrImage({required final String documentNumber});
+  Future<Uint8List?> loadQrImage({required final String documentNumber, required final DigitalCard card});
 
-  Future<void> downloadQr({required final String documentNumber});
+  Future<DigitalCardArtifact> downloadQr({required final String documentNumber, required final DigitalCard card});
 
-  Future<void> downloadPkPass({required final String documentNumber});
+  Future<DigitalCardArtifact> downloadPkPass({required final String documentNumber, required final DigitalCard card});
 
-  Future<void> downloadPdf({required final String documentNumber});
+  Future<DigitalCardArtifact> downloadPdf({required final String documentNumber, required final DigitalCard card});
 }

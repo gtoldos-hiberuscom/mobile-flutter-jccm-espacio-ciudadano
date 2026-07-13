@@ -1851,15 +1851,19 @@
   "@digitalCardsPageTitle": {
     "description": "Digital cards catalogue page title (STORY-48)."
   },
-  "digitalCardsTypeFamiliaNumerosa": "Large-family card",
+  "digitalCardsTypeFamiliaNumerosa": "Large Family",
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Cards — label for the familia numerosa type."
   },
-  "digitalCardsTypeJoven": "Youth card",
+  "digitalCardsTypeJoven": "Youth",
   "@digitalCardsTypeJoven": {
     "description": "Cards — label for the carnet joven type."
   },
-  "digitalCardsTypeDiscapacidad": "Disability card",
+  "digitalCardsTypeDiscapacidad": "Disability",
+  "digitalCardsIssueDate": "Issue date",
+  "digitalCardsEffectiveDate": "Effective date",
+  "digitalCardsExpiryDate": "Expiry date",
+  "digitalCardsDefinitive": "PERMANENT",
   "@digitalCardsTypeDiscapacidad": {
     "description": "Cards — label for the disability card type."
   },

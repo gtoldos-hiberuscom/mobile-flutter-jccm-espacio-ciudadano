@@ -1847,15 +1847,19 @@
   "@digitalCardsPageTitle": {
     "description": "Título de la pantalla de catálogo de carnets digitales (STORY-48)."
   },
-  "digitalCardsTypeFamiliaNumerosa": "Carnet de familia numerosa",
+  "digitalCardsTypeFamiliaNumerosa": "Familia Numerosa",
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Carnets — etiqueta del tipo familia numerosa."
   },
-  "digitalCardsTypeJoven": "Carnet joven",
+  "digitalCardsTypeJoven": "Joven",
   "@digitalCardsTypeJoven": {
     "description": "Carnets — etiqueta del tipo carnet joven."
   },
-  "digitalCardsTypeDiscapacidad": "Carnet de discapacidad",
+  "digitalCardsTypeDiscapacidad": "Discapacidad",
+  "digitalCardsIssueDate": "Fecha de emisión",
+  "digitalCardsEffectiveDate": "Fecha de entrada en vigor",
+  "digitalCardsExpiryDate": "Fecha de caducidad",
+  "digitalCardsDefinitive": "DEFINITIVO",
   "@digitalCardsTypeDiscapacidad": {
     "description": "Carnets — etiqueta del tipo discapacidad."
   },

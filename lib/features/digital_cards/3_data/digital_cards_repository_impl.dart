@@ -17,14 +17,18 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
     final results = await Future.wait<Object?>([
       _loadLargeFamilyCard(documentNumber),
       _loadYouthCard(documentNumber),
+      _loadDisabilityCard(documentNumber),
     ]);
 
     return results.whereType<DigitalCard>().toList(growable: false);
   }
 
   @override
-  Future<void> downloadPdf({required final String documentNumber}) async {
-    await _fetchRequiredArtifact(
+  Future<DigitalCardArtifact> downloadPdf({required final String documentNumber, required final DigitalCard card}) async {
+    if (card.type != DigitalCardType.youth) {
+      throw UnsupportedError('El PDF solo está disponible para el Carnet Joven.');
+    }
+    final bytes = await _fetchRequiredArtifact(
       () => _api.obtenerPdf(
         dni: documentNumber,
         extra: _generatedExtra,
@@ -32,23 +36,41 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
       ),
       keys: const ['pdf', 'documento', 'datos', 'body'],
     );
+    return _artifact(bytes, card, DigitalCardArtifactFormat.pdf);
   }
 
   @override
-  Future<void> downloadPkPass({required final String documentNumber}) async {
-    await _fetchRequiredArtifact(
-      () => _api.obtenerPkPass(
+  Future<DigitalCardArtifact> downloadPkPass({required final String documentNumber, required final DigitalCard card}) async {
+    final fetch = switch (card.type) {
+      DigitalCardType.youth => () => _api.obtenerPkPass(
         dni: documentNumber,
         extra: _generatedExtra,
         validateStatus: (final status) => status != null && status < 500,
       ),
+      DigitalCardType.largeFamily => () => _api.obtenerPkPassFamiliaNumerosa(
+        dni: documentNumber,
+        extra: _generatedExtra,
+        validateStatus: (final status) => status != null && status < 500,
+      ),
+      DigitalCardType.disability => () => _api.obtenerPkPassDiscapacidad(
+        dni: documentNumber,
+        extra: _generatedExtra,
+        validateStatus: (final status) => status != null && status < 500,
+      ),
+    };
+    final bytes = await _fetchRequiredArtifact(
+      fetch,
       keys: const ['pkpass', 'passpk', 'datos', 'body'],
     );
+    return _artifact(bytes, card, DigitalCardArtifactFormat.pkPass);
   }
 
   @override
-  Future<void> downloadQr({required final String documentNumber}) async {
-    await _fetchRequiredArtifact(
+  Future<DigitalCardArtifact> downloadQr({required final String documentNumber, required final DigitalCard card}) async {
+    if (card.type != DigitalCardType.youth) {
+      throw UnsupportedError('El QR solo está disponible para el Carnet Joven.');
+    }
+    final bytes = await _fetchRequiredArtifact(
       () => _api.obtenerQr(
         dni: documentNumber,
         extra: _generatedExtra,
@@ -56,10 +78,14 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
       ),
       keys: const ['qr', 'datos', 'body'],
     );
+    return _artifact(bytes, card, DigitalCardArtifactFormat.qr);
   }
 
   @override
-  Future<Uint8List?> loadQrImage({required final String documentNumber}) async {
+  Future<Uint8List?> loadQrImage({required final String documentNumber, required final DigitalCard card}) async {
+    if (card.type != DigitalCardType.youth) {
+      return null;
+    }
     final payload = await _fetchOptionalArtifact(
       () => _api.obtenerQr(
         dni: documentNumber,
@@ -71,7 +97,11 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
     if (payload == null) {
       return null;
     }
-    return _decodeBase64Bytes(payload);
+    final bytes = _decodeBase64Bytes(payload);
+    if (bytes == null || bytes.isEmpty) {
+      throw const FormatException('El fichero descargado no contiene Base64 válido.');
+    }
+    return bytes;
   }
 
   Future<DigitalCard?> _loadLargeFamilyCard(final String documentNumber) async {
@@ -102,6 +132,7 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
       type: DigitalCardType.largeFamily,
       title: 'Familia Numerosa',
       number: number,
+      validFrom: _parseDate(_firstString(dataMap, const ['fechaValidezDesde', 'fecha_validez_desde', 'fechaEmision', 'fecha_emision'])),
       expiresAt: _parseDate(_firstString(dataMap, const ['fechaValidezHasta', 'fecha_validez_hasta', 'fechaCaducidad', 'fecha_caducidad'])),
     );
   }
@@ -134,7 +165,39 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
       type: DigitalCardType.youth,
       title: 'Carné Internacional de Estudiante (ISIC)',
       number: number,
+      validFrom: null,
       expiresAt: _parseDate(_firstString(dataMap, const ['fechaFinValidez', 'FechaFinValidez', 'fecha_fin_validez', 'fechaCaducidad', 'FechaCaducidad', 'fecha_caducidad'])),
+    );
+  }
+
+  Future<DigitalCard?> _loadDisabilityCard(final String documentNumber) async {
+    final response = await _getOptional(
+      () => _api.obtenerDatosDiscapacidad(
+        dni: documentNumber,
+        extra: _generatedExtra,
+        validateStatus: (final status) => status != null && status < 500,
+      ),
+    );
+    if (response == null) {
+      return null;
+    }
+    final map = _firstMap(_decodePayload(response));
+    if (map == null || _hasBusinessError(map)) {
+      return null;
+    }
+    final dataMap = _payloadBody(map);
+    final effectiveDate = _parseDate(_firstString(dataMap, const ['fechaEfectos', 'FechaEfectos', 'fecha_efectos']));
+    final definitive = _firstString(dataMap, const ['validezDefinitiva', 'ValidezDefinitiva'])?.toUpperCase() == 'S';
+    if (effectiveDate == null && !definitive) {
+      return null;
+    }
+    return DigitalCard(
+      type: DigitalCardType.disability,
+      title: 'Carnet de discapacidad',
+      number: null,
+      validFrom: effectiveDate,
+      expiresAt: null,
+      isDefinitive: definitive,
     );
   }
 
@@ -153,7 +216,7 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
     return response.data;
   }
 
-  Future<String> _fetchRequiredArtifact(
+  Future<Uint8List> _fetchRequiredArtifact(
     final Future<Response<Respuesta>> Function() fetch, {
     required final List<String> keys,
   }) async {
@@ -161,7 +224,29 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
     if (payload == null || payload.isEmpty) {
       throw StateError('La respuesta de descarga esta vacia.');
     }
-    return payload;
+    final bytes = _decodeBase64Bytes(payload);
+    if (bytes == null || bytes.isEmpty) {
+      throw const FormatException('El fichero descargado no contiene Base64 válido.');
+    }
+    return bytes;
+  }
+
+  DigitalCardArtifact _artifact(final Uint8List bytes, final DigitalCard card, final DigitalCardArtifactFormat format) {
+    final extension = switch (format) {
+      DigitalCardArtifactFormat.qr => 'png',
+      DigitalCardArtifactFormat.pkPass => 'pkpass',
+      DigitalCardArtifactFormat.pdf => 'pdf',
+    };
+    final type = switch (card.type) {
+      DigitalCardType.largeFamily => 'familia_numerosa',
+      DigitalCardType.youth => 'carnet_joven',
+      DigitalCardType.disability => 'discapacidad',
+    };
+    return DigitalCardArtifact(
+      bytes: bytes,
+      fileName: card.number == null ? '$type.$extension' : '${type}_${card.number!.replaceAll(RegExp('[^A-Za-z0-9_-]'), '_')}.$extension',
+      extension: extension,
+    );
   }
 
   Future<String?> _fetchOptionalArtifact(

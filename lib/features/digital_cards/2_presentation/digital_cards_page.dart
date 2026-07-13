@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -61,10 +64,18 @@ class DigitalCardsPage extends ConsumerWidget {
                 return AppDigitalCard(
                   title: _title(card, l10n),
                   number: card.number,
-                  expiryDate: _formatDate(context, card.expiresAt),
+                  primaryDateLabel: switch (card.type) {
+                    DigitalCardType.largeFamily => l10n.digitalCardsIssueDate,
+                    DigitalCardType.disability => l10n.digitalCardsEffectiveDate,
+                    DigitalCardType.youth => l10n.digitalCardsExpiryDate,
+                  },
+                  primaryDate: _formatDate(context, card.type == DigitalCardType.youth ? card.expiresAt : card.validFrom),
+                  secondaryDateLabel: card.type == DigitalCardType.largeFamily ? l10n.digitalCardsExpiryDate : null,
+                  secondaryDate: card.type == DigitalCardType.largeFamily ? _formatDate(context, card.expiresAt) : null,
+                  statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
                   downloadLabel: 'Descargar',
                   isDownloading: isDownloading,
-                  onDownload: () => _showDownloadSheet(context, ref),
+                  onDownload: () => _showDownloadSheet(context, ref, card),
                 );
               },
               separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
@@ -79,39 +90,47 @@ class DigitalCardsPage extends ConsumerWidget {
   Future<void> _showInfo(final BuildContext context) async {
     await AppInfoSheet.show(
       context: context,
-      title: 'Mis carnets digitales',
-      bodyText: 'Consulta tus carnets digitales disponibles y descarga el PDF asociado desde los servicios de la JCCM.',
+      title: 'Sobre Mis Carnets Digitales',
+      bodyText: 'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.',
     );
   }
 
-  Future<void> _showDownloadSheet(final BuildContext context, final WidgetRef ref) async {
-    ref.invalidate(digitalCardQrImageProvider);
+  Future<void> _showDownloadSheet(final BuildContext context, final WidgetRef ref, final DigitalCard card) async {
+    ref.invalidate(digitalCardQrImageProvider(card));
+    final supportsQrAndPdf = card.type == DigitalCardType.youth;
     await AppBottomSheet.show<void>(
       context: context,
       body: Consumer(
         builder: (final context, final ref, final child) {
-          final qrImage = ref.watch(digitalCardQrImageProvider);
+          final qrImage = supportsQrAndPdf ? ref.watch(digitalCardQrImageProvider(card)) : null;
           return AppQrDownloadBottomSheetBody(
-            qrImageBytes: qrImage.asData?.value,
-            isQrLoading: qrImage.isLoading,
-            onQrPressed: () => _downloadFormat(
-              context,
-              ref,
-              label: 'QR',
-              action: downloadDigitalCardsQr,
-            ),
+            qrImageBytes: qrImage?.asData?.value,
+            isQrLoading: qrImage?.isLoading ?? false,
+            onQrPressed: !supportsQrAndPdf
+                ? null
+                : () => _downloadFormat(
+                    context,
+                    ref,
+                    card,
+                    label: 'QR',
+                    action: downloadDigitalCardsQr,
+                  ),
             onPkPassPressed: () => _downloadFormat(
               context,
               ref,
-              label: 'PASSPK',
+              card,
+              label: 'PKPASS',
               action: downloadDigitalCardsPkPass,
             ),
-            onPdfPressed: () => _downloadFormat(
-              context,
-              ref,
-              label: 'PDF',
-              action: downloadDigitalCardsPdf,
-            ),
+            onPdfPressed: !supportsQrAndPdf
+                ? null
+                : () => _downloadFormat(
+                    context,
+                    ref,
+                    card,
+                    label: 'PDF',
+                    action: downloadDigitalCardsPdf,
+                  ),
           );
         },
       ),
@@ -121,19 +140,33 @@ class DigitalCardsPage extends ConsumerWidget {
 
   Future<void> _downloadFormat(
     final BuildContext context,
-    final WidgetRef ref, {
+    final WidgetRef ref,
+    final DigitalCard card, {
     required final String label,
-    required final Future<void> Function(WidgetRef ref) action,
+    required final Future<DigitalCardArtifact> Function(WidgetRef ref, DigitalCard card) action,
   }) async {
     ref.read(digitalCardsDownloadingProvider.notifier).startDownload();
     try {
-      await action(ref);
+      final artifact = await action(ref, card);
+      final path = await FilePicker.saveFile(
+        dialogTitle: 'Guardar $label',
+        fileName: artifact.fileName,
+        type: FileType.custom,
+        allowedExtensions: [artifact.extension],
+        bytes: artifact.bytes,
+      );
+      if (path == null) {
+        return;
+      }
+      if (!Platform.isAndroid && !Platform.isIOS) {
+        await File(path).writeAsBytes(artifact.bytes);
+      }
       if (!context.mounted) {
         return;
       }
       AppAlertSnackbar.show(
         context,
-        message: '$label recibido correctamente.',
+        message: '$label guardado correctamente.',
       );
     } catch (_) {
       if (!context.mounted) {
@@ -151,12 +184,13 @@ class DigitalCardsPage extends ConsumerWidget {
 
   String _title(final DigitalCard card, final AppLocalizations l10n) => switch (card.type) {
     DigitalCardType.largeFamily => l10n.digitalCardsTypeFamiliaNumerosa,
-    DigitalCardType.youth => card.title,
+    DigitalCardType.youth => l10n.digitalCardsTypeJoven,
+    DigitalCardType.disability => l10n.digitalCardsTypeDiscapacidad,
   };
 
-  String _formatDate(final BuildContext context, final DateTime? value) {
+  String? _formatDate(final BuildContext context, final DateTime? value) {
     if (value == null) {
-      return '-';
+      return null;
     }
     return DateFormat('dd MMM yyyy', Localizations.localeOf(context).languageCode).format(value);
   }
