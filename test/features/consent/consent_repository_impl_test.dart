@@ -148,36 +148,26 @@ void main() {
         clauses,
         [
           const Clause(
-            id: 0,
+            id: 1,
             label: 'He leído y acepto la información de protección de datos.',
             isSelected: true,
             version: '1',
           ),
           const Clause(
-            id: 1,
-            label:
-                'Autorizo la consulta de los hechos administrativos que obren en poder '
-                'de la JCCM en materia de Bienestar social, Empleo, Educación y Salud '
-                'para que se muestren en Espacio ciudadano.',
+            id: 2,
+            label: 'Autorizo la consulta de los hechos administrativos JCCM.',
             isSelected: true,
             version: '1',
           ),
           const Clause(
-            id: 2,
-            label:
-                'Autorizo la consulta de los datos que la Otras temas de interés tiene '
-                'sobre mí para que se muestren en Espacio Ciudadano.',
+            id: 4,
+            label: 'Autorizo la consulta de datos AGE.',
             isSelected: false,
             version: '1',
           ),
           const Clause(
             id: 3,
-            label:
-                'Consiento que mis datos sean tratados para recibir recomendaciones '
-                'relativas a trámites mediante la elaboración de un perfil basado '
-                'exclusivamente en los hechos vitales que he marcado. Podrá retirar en '
-                'cualquier momento desmarcando la autorización inicial en el apartado '
-                'de perfil usuario',
+            label: 'Consiento recomendaciones.',
             isSelected: false,
             version: '1',
           ),
@@ -188,7 +178,7 @@ void main() {
     test('hasAcceptedClause checks backend state before local cache', () async {
       final adapter = _CapturingAdapter();
       final storage = _MemoryAppStorage();
-      await storage.write('${StorageKeys.consentAcceptedClausesPrefix}PER9998001', const ['2']);
+      await storage.write('${StorageKeys.consentAcceptedClausesPrefix}PER9998001', const ['4']);
       final repository = ConsentRepositoryImpl(
         storage: storage,
         dio: _dioWith(adapter),
@@ -196,7 +186,7 @@ void main() {
 
       final accepted = await repository.hasAcceptedClause(
         idAgente: 'PER9998001',
-        clauseId: 2,
+        clauseId: 4,
       );
 
       expect(accepted, isFalse);
@@ -257,17 +247,17 @@ void main() {
       ]);
       expect(adapter.jsonBodies.single['clausulas'], [
         {
-          'idClausula': 0,
-          'seleccionado': false,
-          'version': '1',
-        },
-        {
           'idClausula': 1,
           'seleccionado': false,
           'version': '1',
         },
         {
           'idClausula': 2,
+          'seleccionado': false,
+          'version': '1',
+        },
+        {
+          'idClausula': 4,
           'seleccionado': false,
           'version': '1',
         },
@@ -386,19 +376,19 @@ final class _CapturingAdapter implements HttpClientAdapter {
             'clausulaPendiente': false,
             'textosClausulas': [
               {
-                'idClausula': '0',
+                'idClausula': '1',
                 'version': '1',
                 'textoCheck': '<p><b>He leído y acepto la información de protección de datos.</b></p>',
                 'seleccionado': requiredClauseSelected,
               },
               {
-                'idClausula': '1',
+                'idClausula': '2',
                 'version': '1',
                 'textoCheck': '<p>Autorizo la consulta de los hechos administrativos JCCM.</p>',
                 'seleccionado': true,
               },
               {
-                'idClausula': '2',
+                'idClausula': '4',
                 'version': '1',
                 'textoCheck': '<p>Autorizo la consulta de datos AGE.</p>',
                 'seleccionado': false,

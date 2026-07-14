@@ -8,7 +8,6 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Two-step mandatory legal-consent onboarding gate (JCCMEC-11).
@@ -51,14 +50,7 @@ class ConsentPage extends ConsumerWidget {
         }
         switch (next.status) {
           case ConsentStatus.accepted:
-            if (isPreferencesEditing && context.canPop()) {
-              ref
-                ..invalidate(jccmDataAuthorizationProvider)
-                ..invalidate(ageDataAuthorizationProvider);
-              context.pop();
-            } else {
-              context.go(isPreferencesEditing ? returnTo : Routes.home);
-            }
+            context.go(isPreferencesEditing ? returnTo : Routes.home);
           case ConsentStatus.rejected:
             context.go(Routes.landing);
           case ConsentStatus.saveError:
@@ -95,14 +87,7 @@ class ConsentPage extends ConsumerWidget {
     if (isBeforeClauses) {
       WidgetsBinding.instance.addPostFrameCallback((final _) {
         if (context.mounted) {
-          context.go(
-            Uri(
-              path: Routes.legalPrivacy,
-              queryParameters: {
-                if (isOnboarding) 'mode': 'onboarding',
-              },
-            ).toString(),
-          );
+          context.go(Routes.legalPrivacy);
         }
       });
       return const Scaffold(
@@ -170,23 +155,21 @@ class _Step2Scaffold extends StatelessWidget {
                   }
                 },
               ),
-        actions: isOnboarding
-            ? const []
-            : [
-                Semantics(
-                  label: l10n.consentInfoButtonSemantics,
-                  button: true,
-                  child: ExcludeSemantics(
-                    child: IconButton(
-                      icon: const AppIcon(
-                        AppIcons.info,
-                        color: AppColors.textPrimary,
-                      ),
-                      onPressed: onShowLegalInfo,
-                    ),
-                  ),
+        actions: [
+          Semantics(
+            label: l10n.consentInfoButtonSemantics,
+            button: true,
+            child: ExcludeSemantics(
+              child: IconButton(
+                icon: const AppIcon(
+                  AppIcons.info,
+                  color: AppColors.textPrimary,
                 ),
-              ],
+                onPressed: onShowLegalInfo,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -208,7 +191,7 @@ class _Step2Scaffold extends StatelessWidget {
                 const SizedBox(height: AppDimensions.space8),
                 for (final clause in state.clauses.where((final clause) => clause.id != requiredConsentClauseId))
                   AppCheckbox(
-                    label: consentClauseLabel(clause.id, clause.label),
+                    label: clause.label,
                     value: clause.isSelected,
                     labelStyle: AppTypography.leadingMedium,
                     onChanged: (final _) => notifier.toggleClause(clause.id),

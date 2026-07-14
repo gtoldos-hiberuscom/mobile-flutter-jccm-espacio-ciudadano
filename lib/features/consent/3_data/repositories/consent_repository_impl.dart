@@ -40,17 +40,27 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     ),
     Clause(
       id: jccmDataConsentClauseId,
-      label: jccmDataConsentClauseLabel,
+      label:
+          'Autorizo la consulta de los hechos administrativos que obren en poder '
+          'de la JCCM en materia de Bienestar social, Empleo, Educación y Salud '
+          'para que se muestren en Espacio Ciudadano.',
       isSelected: false,
     ),
     Clause(
       id: ageDataConsentClauseId,
-      label: otherTopicsConsentClauseLabel,
+      label:
+          'Autorizo la consulta de los datos que la Administración General del '
+          'Estado tiene sobre mí para que se muestren en Espacio Ciudadano.',
       isSelected: false,
     ),
     Clause(
       id: recommendationsConsentClauseId,
-      label: recommendationsConsentClauseLabel,
+      label:
+          'Consiento que mis datos sean tratados para recibir recomendaciones '
+          'relativas a trámites mediante la elaboración de un perfil basado '
+          'exclusivamente en los hechos vitales que he marcado. Podrá retirar '
+          'en cualquier momento desmarcando la autorización inicial '
+          'apartado de perfil usuario.',
       isSelected: false,
     ),
   ];
@@ -301,10 +311,7 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     }
     return Clause(
       id: id,
-      label: consentClauseLabel(
-        id,
-        _htmlToText(map['textoCheck']?.toString() ?? map['descripcion']?.toString() ?? 'Cláusula $id'),
-      ),
+      label: _htmlToText(map['textoCheck']?.toString() ?? map['descripcion']?.toString() ?? 'Cláusula $id'),
       isSelected: _asBool(map['seleccionado']) ?? false,
       version: map['version']?.toString() ?? '1',
     );

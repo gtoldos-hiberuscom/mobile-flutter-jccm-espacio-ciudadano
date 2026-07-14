@@ -1,20 +1,9 @@
 import 'package:meta/meta.dart';
 
-const requiredConsentClauseId = 0;
-const jccmDataConsentClauseId = 1;
+const requiredConsentClauseId = 1;
+const jccmDataConsentClauseId = 2;
 const recommendationsConsentClauseId = 3;
-const ageDataConsentClauseId = 2;
-
-const jccmDataConsentClauseLabel = 'Autorizo la consulta de los hechos administrativos que obren en poder de la JCCM en materia de Bienestar social, Empleo, Educación y Salud para que se muestren en Espacio ciudadano.';
-const otherTopicsConsentClauseLabel = 'Autorizo la consulta de los datos que la Otras temas de interés tiene sobre mí para que se muestren en Espacio Ciudadano.';
-const recommendationsConsentClauseLabel = 'Consiento que mis datos sean tratados para recibir recomendaciones relativas a trámites mediante la elaboración de un perfil basado exclusivamente en los hechos vitales que he marcado. Podrá retirar en cualquier momento desmarcando la autorización inicial en el apartado de perfil usuario';
-
-String consentClauseLabel(final int id, final String fallback) => switch (id) {
-  jccmDataConsentClauseId => jccmDataConsentClauseLabel,
-  ageDataConsentClauseId => otherTopicsConsentClauseLabel,
-  recommendationsConsentClauseId => recommendationsConsentClauseLabel,
-  _ => fallback,
-};
+const ageDataConsentClauseId = 4;
 
 /// Domain entity representing a single legal authorisation clause.
 ///

@@ -130,7 +130,6 @@ final goRouterProvider = Provider<GoRouter>(
             state,
             PrivacyPage(
               fromHome: state.uri.queryParameters['from'] == 'home',
-              isOnboarding: state.uri.queryParameters['mode'] == 'onboarding',
             ),
           ),
         ),
