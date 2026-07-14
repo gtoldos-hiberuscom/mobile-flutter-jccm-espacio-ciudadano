@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -134,7 +136,7 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
     if (!hasAuthorization) {
       await MyDataEmploymentAuthorizationDialog.show(
         context,
-        onOpenAuthorizations: () => context.go(
+        onOpenAuthorizations: () => context.push(
           Uri(
             path: Routes.consent,
             queryParameters: {
@@ -151,14 +153,16 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
   }
 
   void _openSettings() {
-    context.go(
-      Uri(
-        path: Routes.consent,
-        queryParameters: {
-          'mode': 'preferences',
-          'returnTo': Routes.myDataEmployment,
-        },
-      ).toString(),
+    unawaited(
+      context.push(
+        Uri(
+          path: Routes.consent,
+          queryParameters: {
+            'mode': 'preferences',
+            'returnTo': Routes.myDataEmployment,
+          },
+        ).toString(),
+      ),
     );
   }
 }

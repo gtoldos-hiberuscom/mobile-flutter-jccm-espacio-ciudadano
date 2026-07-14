@@ -140,7 +140,7 @@ class _SocialWelfareDataList extends StatelessWidget {
         // Show contextual helper at the top when authorization is missing
         if (!hasJccmAuthorization && index == 0) {
           return MyDataAuthorizationContextualHelper(
-            onOpenSettings: () => context.go(
+            onOpenSettings: () => context.push(
               Uri(
                 path: Routes.consent,
                 queryParameters: {

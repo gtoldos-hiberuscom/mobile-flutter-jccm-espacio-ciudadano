@@ -16,9 +16,11 @@ class PrivacyPage extends ConsumerStatefulWidget {
   const PrivacyPage({
     super.key,
     this.fromHome = false,
+    this.isOnboarding = false,
   });
 
   final bool fromHome;
+  final bool isOnboarding;
 
   @override
   ConsumerState<PrivacyPage> createState() => _PrivacyPageState();
@@ -111,32 +113,34 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
               type: AppNavBarType.detail,
               title: l10n.legalPrivacyTitle,
               showLeading: false,
-              actions: [
-                Semantics(
-                  label: l10n.legalPrivacyTitle,
-                  button: true,
-                  child: ExcludeSemantics(
-                    child: IconButton(
-                      icon: const AppIcon(
-                        AppIcons.info,
-                        color: AppColors.textPrimary,
-                      ),
-                      onPressed: () {
-                        AppAlertSnackbar.show(
-                          context,
-                          message: l10n.consentLegalInfoSnackBar,
-                          margin: EdgeInsets.fromLTRB(
-                            AppDimensions.space16,
-                            0,
-                            AppDimensions.space16,
-                            MediaQuery.of(context).padding.bottom + AppDimensions.space48 + AppDimensions.space16,
+              actions: widget.isOnboarding
+                  ? const []
+                  : [
+                      Semantics(
+                        label: l10n.legalPrivacyTitle,
+                        button: true,
+                        child: ExcludeSemantics(
+                          child: IconButton(
+                            icon: const AppIcon(
+                              AppIcons.info,
+                              color: AppColors.textPrimary,
+                            ),
+                            onPressed: () {
+                              AppAlertSnackbar.show(
+                                context,
+                                message: l10n.consentLegalInfoSnackBar,
+                                margin: EdgeInsets.fromLTRB(
+                                  AppDimensions.space16,
+                                  0,
+                                  AppDimensions.space16,
+                                  MediaQuery.of(context).padding.bottom + AppDimensions.space48 + AppDimensions.space16,
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
+                        ),
+                      ),
+                    ],
             ),
       body: Column(
         children: [
