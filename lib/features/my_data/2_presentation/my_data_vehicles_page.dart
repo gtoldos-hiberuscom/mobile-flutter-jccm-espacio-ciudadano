@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_vehicles_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -84,42 +82,12 @@ class _VehiclesDataTab extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final authorizationAsync = ref.watch(ageDataAuthorizationProvider);
+    final vehiclesAsync = ref.watch(vehiclesProvider);
 
-    return authorizationAsync.when(
-      data: (final hasAgeAuthorization) {
-        if (!hasAgeAuthorization) {
-          return _buildAuthorizationRequired(context, l10n);
-        }
-
-        final vehiclesAsync = ref.watch(vehiclesProvider);
-        return vehiclesAsync.when(
-          data: (final vehicles) => _buildVehiclesList(context, l10n, vehicles),
-          loading: () => const Center(child: AppLoadingIndicator()),
-          error: (final error, final stack) => _buildErrorState(context, l10n, ref),
-        );
-      },
+    return vehiclesAsync.when(
+      data: (final vehicles) => _buildVehiclesList(context, l10n, vehicles),
       loading: () => const Center(child: AppLoadingIndicator()),
-      error: (final error, final stack) => _buildAuthorizationRequired(context, l10n),
-    );
-  }
-
-  Widget _buildAuthorizationRequired(
-    final BuildContext context,
-    final AppLocalizations l10n,
-  ) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
-      child: MyDataAuthorizationContextualHelper(
-        message: l10n.myDataAgeAuthorizationRequiredMessage,
-        semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-        onOpenSettings: () => _openSettings(context),
-      ),
+      error: (final error, final stack) => _buildErrorState(context, l10n, ref),
     );
   }
 
@@ -144,7 +112,7 @@ class _VehiclesDataTab extends ConsumerWidget {
         AppDimensions.space64,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Section title
           Padding(
@@ -178,18 +146,6 @@ class _VehiclesDataTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(vehiclesProvider),
     );
   }
-
-  void _openSettings(final BuildContext context) {
-    context.go(
-      Uri(
-        path: Routes.consent,
-        queryParameters: {
-          'mode': 'preferences',
-          'returnTo': Routes.myDataVehicles,
-        },
-      ).toString(),
-    );
-  }
 }
 
 class _VehicleCard extends StatelessWidget {
@@ -203,31 +159,26 @@ class _VehicleCard extends StatelessWidget {
 
     return AppInfoCard(
       leadingBorderWidth: AppDimensions.space4,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space8,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // License plate (bold)
-            Text(
-              vehicle.licensePlate,
-              style: AppTypography.bodyBold.copyWith(
-                color: AppColors.textPrimary,
-              ),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.space8,
+        vertical: AppDimensions.space16,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            vehicle.licensePlate,
+            style: AppTypography.bodyBold.copyWith(
+              color: AppColors.textPrimary,
             ),
-            const SizedBox(height: AppDimensions.space4),
-            // Description
-            Text(
-              l10n.myDataVehiclesLicensePlateLabel,
-              style: AppTypography.smallRegular.copyWith(
-                color: AppColors.textPrimary,
-              ),
+          ),
+          Text(
+            l10n.myDataVehiclesLicensePlateLabel,
+            style: AppTypography.smallRegular.copyWith(
+              color: AppColors.textPrimary,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -9,12 +9,14 @@ class AppInfoCard extends StatelessWidget {
     this.leadingBorderColor = AppColors.borderBlueMutedLight,
     this.borderColor = AppColors.borderBlueMutedLight,
     this.leadingBorderWidth = AppDimensions.space8,
+    this.contentPadding = const EdgeInsets.all(AppDimensions.space8),
   });
 
   final Widget child;
   final Color leadingBorderColor;
   final Color borderColor;
   final double leadingBorderWidth;
+  final EdgeInsetsGeometry contentPadding;
 
   @override
   Widget build(final BuildContext context) {
@@ -30,7 +32,7 @@ class AppInfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(1),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space8),
+        padding: contentPadding,
         child: child,
       ),
     );
