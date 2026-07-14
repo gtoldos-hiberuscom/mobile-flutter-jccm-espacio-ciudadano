@@ -1,5 +1,10 @@
 import 'package:meta/meta.dart';
 
+const requiredConsentClauseId = 1;
+const jccmDataConsentClauseId = 2;
+const recommendationsConsentClauseId = 3;
+const ageDataConsentClauseId = 4;
+
 /// Domain entity representing a single legal authorisation clause.
 ///
 /// Pure Dart — no Flutter, Riverpod, Dio, or infrastructure imports.

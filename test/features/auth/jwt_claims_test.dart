@@ -14,6 +14,18 @@ void main() {
 
       expect(claims.normalizedPersonIdentifier, isNull);
     });
+
+    test('extracts the document from an eIDAS person identifier', () {
+      final claims = _claims(personIdentifier: 'ES/ES/99999999r');
+
+      expect(claims.normalizedPersonIdentifier, '99999999R');
+    });
+
+    test('extracts the document from a namespaced person identifier', () {
+      final claims = _claims(personIdentifier: 'urn:oid:person:99999999r');
+
+      expect(claims.normalizedPersonIdentifier, '99999999R');
+    });
   });
 }
 

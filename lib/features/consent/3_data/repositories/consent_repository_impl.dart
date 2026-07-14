@@ -32,14 +32,14 @@ final class ConsentRepositoryImpl implements ConsentRepository {
   // when the text changes.
   static const _fallbackClauses = [
     Clause(
-      id: 0,
+      id: requiredConsentClauseId,
       label:
           'He leído y acepto la información de protección de datos sobre el '
           'tratamiento de datos personales.',
       isSelected: false,
     ),
     Clause(
-      id: 1,
+      id: jccmDataConsentClauseId,
       label:
           'Autorizo la consulta de los hechos administrativos que obren en poder '
           'de la JCCM en materia de Bienestar social, Empleo, Educación y Salud '
@@ -47,14 +47,14 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       isSelected: false,
     ),
     Clause(
-      id: 2,
+      id: ageDataConsentClauseId,
       label:
           'Autorizo la consulta de los datos que la Administración General del '
           'Estado tiene sobre mí para que se muestren en Espacio Ciudadano.',
       isSelected: false,
     ),
     Clause(
-      id: 3,
+      id: recommendationsConsentClauseId,
       label:
           'Consiento que mis datos sean tratados para recibir recomendaciones '
           'relativas a trámites mediante la elaboración de un perfil basado '
@@ -224,7 +224,7 @@ final class ConsentRepositoryImpl implements ConsentRepository {
   }
 
   bool _hasCompletedConsent(final _RemoteClauses remote) {
-    final hasAcceptedRequiredClause = remote.clauses.any((final clause) => clause.id == 0 && clause.isSelected);
+    final hasAcceptedRequiredClause = remote.clauses.any((final clause) => clause.id == requiredConsentClauseId && clause.isSelected);
     return !remote.hasPending && hasAcceptedRequiredClause;
   }
 

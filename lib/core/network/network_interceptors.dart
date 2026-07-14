@@ -171,7 +171,10 @@ class EmojiDioLogger extends Interceptor {
       return;
     }
 
-    logger.e('$dioNote 💥 Error: ${err.type} ${err.message}');
+    final request = err.requestOptions;
+    logger
+      ..e('$dioNote 💥 Error: ${err.type} ${err.message}')
+      ..e('$dioNote 💥 Request: ${request.method} ${request.uri} — status ${err.response?.statusCode ?? 'unavailable'}');
     if (err.response != null) {
       logger.e('$dioNote 💥 Error Response: ${_redact(err.response?.data)}');
     }

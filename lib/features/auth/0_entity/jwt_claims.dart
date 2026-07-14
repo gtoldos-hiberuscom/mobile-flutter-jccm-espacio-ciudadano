@@ -52,8 +52,17 @@ final class JwtClaims {
 
   /// Document identifier expected by `/api/v1/ciudadanos/{id}` endpoints.
   String? get normalizedPersonIdentifier {
-    final value = personIdentifier?.trim();
-    return value == null || value.isEmpty ? null : value.toUpperCase();
+    final value = personIdentifier?.trim().toUpperCase();
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    // Cl@ve/eIDAS may expose PersonIdentifier as `ES/ES/12345678Z` or as a
+    // namespaced URN. Ciudadanos endpoints expect only the NIF/NIE value and
+    // reject prefixed identifiers with 403 because they no longer match the
+    // document embedded in the access token.
+    final segments = value.split(RegExp(r'[/\\:]')).where((final segment) => segment.isNotEmpty).toList(growable: false);
+    return segments.isEmpty ? null : segments.last;
   }
 
   /// Parses a raw JWT payload map into a [JwtClaims] instance.

@@ -85,6 +85,35 @@ void main() {
       );
     });
 
+    test('uses the bare document when Cl@ve provides an eIDAS identifier', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 404, body: <String, dynamic>{}),
+        const AdapterResponse(
+          statusCode: 200,
+          body: <String, dynamic>{
+            'body': {
+              'telefono': 640559754,
+              'email': null,
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = NotificationContactRepositoryImpl(dio: dio);
+
+      await repository.saveContact(
+        citizenId: 'ES/ES/12345678z',
+        dni: 'ES/ES/12345678z',
+        contact: const NotificationContact(phone: '640559754'),
+      );
+
+      expect(adapter.requests.map((final request) => request.path), [
+        '/api/v1/ciudadanos/12345678Z/contacto',
+        '/api/v1/ciudadanos/12345678Z/contacto',
+      ]);
+      expect(adapter.requests.last.jsonBody, containsPair('dni', '12345678Z'));
+    });
+
     test('updates contact including idTercero when backend already has a record', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(

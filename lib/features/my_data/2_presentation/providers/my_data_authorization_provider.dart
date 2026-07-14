@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 
-const jccmDataAuthorizationClauseId = 1;
-const ageDataAuthorizationClauseId = 2;
+const jccmDataAuthorizationClauseId = jccmDataConsentClauseId;
+const ageDataAuthorizationClauseId = ageDataConsentClauseId;
 
 final jccmDataAuthorizationProvider = FutureProvider.autoDispose<bool>((final ref) async {
   return _hasAcceptedClause(ref, jccmDataAuthorizationClauseId);

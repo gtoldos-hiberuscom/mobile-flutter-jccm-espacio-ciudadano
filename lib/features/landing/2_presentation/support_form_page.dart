@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
@@ -174,10 +175,12 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       return;
     }
     setState(() => _submitted = true);
-    if (!_isValid) {
+    final validationError = _firstValidationError;
+    if (validationError != null) {
+      logger.d('[SUPPORT] Submission blocked by form validation: $validationError');
       AppAlertSnackbar.show(
         context,
-        message: AppLocalizations.of(context).supportSubmissionError,
+        message: validationError,
         severity: AppAlertSeverity.error,
       );
       return;
@@ -209,6 +212,10 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       return;
     }
 
+    logger.d(
+      '[SUPPORT] Sending support request '
+      '(attachment: ${request.attachment != null})',
+    );
     final result = await ref.read(submitSupportRequestUsecaseProvider).execute(request);
     if (!mounted) {
       return;
@@ -216,11 +223,13 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
     switch (result) {
       case SubmitSupportRequestSuccess():
+        logger.d('[SUPPORT] Support request sent successfully');
         setState(() {
           _sent = true;
           _isSubmitting = false;
         });
       case SubmitSupportRequestFailed(:final message):
+        logger.e('[SUPPORT] Support request failed: $message');
         setState(() => _isSubmitting = false);
         AppAlertSnackbar.show(
           context,
@@ -265,7 +274,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
     });
   }
 
-  bool get _isValid => _nameError == null && _emailError == null && _emailConfirmError == null && _subjectError == null && _descriptionError == null && _consentError == null && _captchaError == null;
+  String? get _firstValidationError => _nameError ?? _emailError ?? _emailConfirmError ?? _subjectError ?? _descriptionError ?? _consentError ?? _captchaError;
 
   bool get _requiresPublicVerification => ref.read(jwtClaimsProvider) == null;
 

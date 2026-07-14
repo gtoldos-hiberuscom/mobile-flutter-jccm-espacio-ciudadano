@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
@@ -24,7 +25,7 @@ final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((fina
       .watch(checkAcceptedConsentClauseUsecaseProvider)
       .execute(
         idAgente: idAgente,
-        clauseId: 1,
+        clauseId: jccmDataConsentClauseId,
       );
   return switch (result) {
     AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,

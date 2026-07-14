@@ -130,7 +130,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
 
   /// Toggles the selected state of the clause with the given [id].
   void toggleClause(final int id) {
-    if (id == 0) {
+    if (id == requiredConsentClauseId) {
       return;
     }
     if (state.status != ConsentStatus.step2 && state.status != ConsentStatus.saveError) {
@@ -196,16 +196,16 @@ class ConsentNotifier extends Notifier<ConsentState> {
   List<Clause> _clausesForPersistence(final List<Clause> clauses) {
     return clauses
         .map(
-          (final clause) => clause.id == 0 ? clause.copyWith(isSelected: true) : clause,
+          (final clause) => clause.id == requiredConsentClauseId ? clause.copyWith(isSelected: true) : clause,
         )
         .toList(growable: false);
   }
 
   Future<String?> _skipLifeEventsOnboardingIfClauseWasEnabledFromPreferences(final List<Clause> clauses) async {
-    if (!_isPreferencesEditing || _initialSelectedClauseIds.contains(3)) {
+    if (!_isPreferencesEditing || _initialSelectedClauseIds.contains(recommendationsConsentClauseId)) {
       return null;
     }
-    final lifeEventsClauseSelected = clauses.any((final clause) => clause.id == 3 && clause.isSelected);
+    final lifeEventsClauseSelected = clauses.any((final clause) => clause.id == recommendationsConsentClauseId && clause.isSelected);
     if (!lifeEventsClauseSelected) {
       return null;
     }

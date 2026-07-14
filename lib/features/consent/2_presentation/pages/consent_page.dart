@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -188,7 +189,7 @@ class _Step2Scaffold extends StatelessWidget {
                   color: AppColors.textBase,
                 ),
                 const SizedBox(height: AppDimensions.space8),
-                for (final clause in state.clauses.where((final clause) => clause.id != 0))
+                for (final clause in state.clauses.where((final clause) => clause.id != requiredConsentClauseId))
                   AppCheckbox(
                     label: clause.label,
                     value: clause.isSelected,

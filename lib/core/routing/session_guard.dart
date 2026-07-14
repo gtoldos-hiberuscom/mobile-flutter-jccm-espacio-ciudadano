@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
@@ -114,11 +115,11 @@ final class SessionGuard {
 
   int? _requiredOptionalClauseId(final String path) {
     if (path == Routes.myDataEmploymentOffers || path.startsWith(Routes.myDataSocialWelfareFamily) || path.startsWith(Routes.myDataSocialWelfareDisability) || path.startsWith(Routes.myDataSocialWelfareThermalSpa) || path.startsWith(Routes.myDataSocialWelfareDependency) || path.startsWith(Routes.myDataSocialWelfareParking)) {
-      return 1;
+      return jccmDataConsentClauseId;
     }
 
     if (path.startsWith(Routes.myDataEducationUniversityTitles) || path.startsWith(Routes.myDataEducationNonUniversityTitles) || path.startsWith(Routes.myDataHousingRealEstate) || path.startsWith(Routes.myDataHousingAddress)) {
-      return 2;
+      return ageDataConsentClauseId;
     }
 
     return null;
@@ -159,7 +160,7 @@ final class SessionGuard {
   }
 
   Future<bool> _hasAcceptedLifeEventsClause(final String idAgente) async {
-    return _hasAcceptedClause(idAgente, 3);
+    return _hasAcceptedClause(idAgente, recommendationsConsentClauseId);
   }
 
   Future<bool> _hasAcceptedClause(final String idAgente, final int clauseId) async {

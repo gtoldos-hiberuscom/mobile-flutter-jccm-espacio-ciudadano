@@ -13,7 +13,7 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
 
   @override
   Future<NotificationContact?> loadContact({required final String citizenId}) async {
-    final storedContact = await _loadStoredContact(citizenId: citizenId);
+    final storedContact = await _loadStoredContact(citizenId: _documentIdentifier(citizenId));
     return _visibleContact(storedContact);
   }
 
@@ -49,21 +49,23 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     required final String dni,
     required final NotificationContact contact,
   }) async {
-    final existingContact = await _loadStoredContact(citizenId: citizenId);
+    final normalizedCitizenId = _documentIdentifier(citizenId);
+    final normalizedDni = _documentIdentifier(dni);
+    final existingContact = await _loadStoredContact(citizenId: normalizedCitizenId);
     if (existingContact == null) {
-      final data = _toJson(dni, contact);
-      return _createContact(citizenId: citizenId, data: data, fallback: contact);
+      final data = _toJson(normalizedDni, contact);
+      return _createContact(citizenId: normalizedCitizenId, data: data, fallback: contact);
     }
 
-    final data = _toJson(dni, contact, idTercero: existingContact.idTercero);
+    final data = _toJson(normalizedDni, contact, idTercero: existingContact.idTercero);
     final fallback = contact.copyWith(idTercero: existingContact.idTercero);
     try {
-      return await _updateContact(citizenId: citizenId, data: data, fallback: fallback);
+      return await _updateContact(citizenId: normalizedCitizenId, data: data, fallback: fallback);
     } on DioException catch (error) {
       if (error.response?.statusCode != 404) {
         rethrow;
       }
-      return _createContact(citizenId: citizenId, data: _toJson(dni, contact), fallback: contact);
+      return _createContact(citizenId: normalizedCitizenId, data: _toJson(normalizedDni, contact), fallback: contact);
     }
   }
 
@@ -193,6 +195,12 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
   String? _emptyToNull(final String? value) {
     final text = value?.trim();
     return text == null || text.isEmpty ? null : text;
+  }
+
+  String _documentIdentifier(final String value) {
+    final normalized = value.trim().toUpperCase();
+    final segments = normalized.split(RegExp(r'[/\\:]')).where((final segment) => segment.isNotEmpty).toList(growable: false);
+    return segments.isEmpty ? normalized : segments.last;
   }
 
   Object? _decode(final Object? raw) {
