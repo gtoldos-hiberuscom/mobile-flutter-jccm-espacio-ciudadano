@@ -1,5 +1,4 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 
 const List<String> authDefaultScopes = ['openid'];
 
@@ -19,9 +18,5 @@ abstract interface class AuthRepository {
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,
-  });
-
-  Future<JwtClaims> fetchUserInfo({
-    required final String accessToken,
   });
 }
