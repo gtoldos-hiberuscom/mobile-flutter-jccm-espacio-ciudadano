@@ -1,5 +1,6 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 
 // ── Sealed result ─────────────────────────────────────────────────────────────
@@ -41,7 +42,7 @@ final class LoginUseCase {
         scopes: scopes,
         forceLogin: forceLogin,
       );
-      final JwtClaims user = await _repository.fetchUserInfo(accessToken: session.accessToken!);
+      final JwtClaims user = JwtDecoder.decode(session.accessToken!);
 
       return LoginSuccess(tokenResponse: session, jwtClaims: user);
     } on Object catch (e) {
