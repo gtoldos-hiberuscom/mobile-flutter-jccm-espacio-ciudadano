@@ -9,13 +9,8 @@ import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dar
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
-import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/check_life_events_onboarding_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -65,10 +60,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Future<void> _handleInitialPrompts() async {
     await _showBiometricDialog();
-    if (!mounted) {
-      return;
-    }
-    await _redirectToLifeEventsOnboardingIfNeeded();
   }
 
   Future<void> _showBiometricDialog() async {
@@ -105,44 +96,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       message: 'Acceso biométrico activado',
       severity: AppAlertSeverity.success,
     );
-  }
-
-  Future<void> _redirectToLifeEventsOnboardingIfNeeded() async {
-    final idAgente = ref.read(jwtClaimsProvider)?.idAgente ?? '';
-    if (idAgente.isEmpty) {
-      return;
-    }
-    final hasAcceptedLifeEventsClause = await _hasAcceptedLifeEventsClause(idAgente);
-    if (!mounted || !hasAcceptedLifeEventsClause) {
-      return;
-    }
-
-    final result = await ref.read(checkLifeEventsOnboardingUsecaseProvider).execute(idAgente: idAgente);
-    if (!mounted) {
-      return;
-    }
-
-    switch (result) {
-      case CheckLifeEventsOnboardingFailed():
-        context.go(Routes.lifeEventsOnboarding);
-      case CheckLifeEventsOnboardingSuccess(:final hasSeen):
-        if (!hasSeen) {
-          context.go(Routes.lifeEventsOnboarding);
-        }
-    }
-  }
-
-  Future<bool> _hasAcceptedLifeEventsClause(final String idAgente) async {
-    final result = await ref
-        .read(checkAcceptedConsentClauseUsecaseProvider)
-        .execute(
-          idAgente: idAgente,
-          clauseId: 3,
-        );
-    return switch (result) {
-      AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
-      CheckAcceptedConsentClauseFailed() => false,
-    };
   }
 
   void _showComingSoon() {

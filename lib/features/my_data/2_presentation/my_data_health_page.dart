@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -147,14 +149,16 @@ class _HealthAppointmentsTab extends ConsumerWidget {
   }
 
   void _openSettings(final BuildContext context) {
-    context.go(
-      Uri(
-        path: Routes.consent,
-        queryParameters: {
-          'mode': 'preferences',
-          'returnTo': Routes.myDataHealth,
-        },
-      ).toString(),
+    unawaited(
+      context.push(
+        Uri(
+          path: Routes.consent,
+          queryParameters: {
+            'mode': 'preferences',
+            'returnTo': Routes.myDataHealth,
+          },
+        ).toString(),
+      ),
     );
   }
 }
