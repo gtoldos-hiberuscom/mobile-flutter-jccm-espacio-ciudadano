@@ -25,13 +25,13 @@ class GestionExpedientesPage extends ConsumerWidget {
         title: l10n.gestionExpedientesPageTitle,
         onBack: () => context.go(Routes.gestion),
         actions: [
-          IconButton(
-            icon: const Icon(AppIcons.search),
-            onPressed: () => AppAlertSnackbar.show(
-              context,
-              message: l10n.gestionSectionComingSoon,
-            ),
-          ),
+          // IconButton(
+          //   icon: const Icon(AppIcons.search),
+          //   onPressed: () => AppAlertSnackbar.show(
+          //     context,
+          //     message: l10n.gestionSectionComingSoon,
+          //   ),
+          // ),
         ],
       ),
       body: Container(

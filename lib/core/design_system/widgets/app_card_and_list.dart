@@ -462,7 +462,7 @@ class AppCard extends StatelessWidget {
         bottom: AppDimensions.space8,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (effectiveTitleIcon != null) ...[
             SizedBox(width: 32, height: 32, child: effectiveTitleIcon),

@@ -133,90 +133,17 @@ class _RegistroCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return AppSurfaceCard(
-      padding: EdgeInsets.zero,
+    return AppCard(
+      title: registro.titulo,
+      showArrow: true,
+      refNumber: registro.numregistro,
+      refNumberLabel: l10n.gestionRegistrosNumRegistroLabel,
+      expiryDate: registro.fecha ?? '-',
+      expiryDateLabel: l10n.gestionRegistrosFechaLabel,
       onTap: () => context.go(
         Routes.gestionRegistrosDetail,
         extra: (registro, isEntrada),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space16,
-              AppDimensions.space12,
-              AppDimensions.space16,
-              AppDimensions.space12,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    registro.titulo,
-                    style: AppTypography.leadingMedium.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                const Icon(AppIcons.arrowForward, size: 20, color: AppColors.primary),
-              ],
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            color: AppColors.backgroundLightBlue,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-              vertical: AppDimensions.space12,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _RefRow(
-                  label: l10n.gestionRegistrosNumRegistroLabel,
-                  value: registro.numregistro,
-                ),
-                const SizedBox(height: AppDimensions.space8),
-                _RefRow(
-                  label: l10n.gestionRegistrosFechaLabel,
-                  value: registro.fecha ?? '-',
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RefRow extends StatelessWidget {
-  const _RefRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
-        ),
-        const SizedBox(width: AppDimensions.space8),
-        Expanded(
-          child: Text(
-            value,
-            style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-          ),
-        ),
-      ],
     );
   }
 }
