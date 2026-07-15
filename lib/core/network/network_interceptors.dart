@@ -142,25 +142,37 @@ final class ErrorInterceptor extends Interceptor {
 
 // ─── Emoji Dio Logger ───────────────────────────────────────────────────────
 
+/// Toggles full request/response body dumping for [EmojiDioLogger] and the
+/// curl logging interceptor on the success path.
+///
+/// Pretty-printing full JSON bodies (e.g. large expediente listings) on every
+/// successful call is a noticeable source of debug-mode slowdown, so it's off
+/// by default. Flip to `true` locally when you need to inspect a response in
+/// detail. Error responses are always logged in full regardless of this flag.
+const bool kVerboseNetworkLogging = false;
+
 class EmojiDioLogger extends Interceptor {
   final String dioNote = '[DIO]';
   @override
   void onRequest(final RequestOptions options, final RequestInterceptorHandler handler) {
     logger.d('$dioNote 📑 Request: ${options.method} ${options.uri}');
-    if (options.headers.isNotEmpty) {
-      logger.d('$dioNote 📑 Headers: ${_redact(options.headers)}');
-    }
-    if (options.data != null) {
-      logger.d('$dioNote 📑 Body: ${_redact(options.data)}');
+    if (kVerboseNetworkLogging) {
+      if (options.headers.isNotEmpty) {
+        logger.d('$dioNote 📑 Headers: ${_redact(options.headers)}');
+      }
+      if (options.data != null) {
+        logger.d('$dioNote 📑 Body: ${_redact(options.data)}');
+      }
     }
     handler.next(options);
   }
 
   @override
   void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
-    logger
-      ..d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}')
-      ..d('$dioNote 📦 Response Data: ${_redact(response.data)}');
+    logger.d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}');
+    if (kVerboseNetworkLogging) {
+      logger.d('$dioNote 📦 Response Data: ${_redact(response.data)}');
+    }
     handler.next(response);
   }
 

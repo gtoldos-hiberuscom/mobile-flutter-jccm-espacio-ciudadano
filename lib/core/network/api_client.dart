@@ -27,7 +27,7 @@ Dio buildDioClient({
   dio.interceptors.add(AuthRefreshInterceptor(dio, tokenGetter, refreshSession));
   dio.interceptors.add(ErrorInterceptor());
   dio.interceptors.add(EmojiDioLogger());
-  dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
+  dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: kVerboseNetworkLogging));
 
   return dio;
 }

@@ -29,9 +29,8 @@ class SimpleEmojiPrinter extends LogPrinter {
     final emoji = _levelEmojis[event.level] ?? '';
     final formattedTime = _timeFormat.format(DateTime.now());
 
-    final fileInfo = _extractCallerFileInfo();
-
     final includeLocation = event.level == Level.warning || event.level == Level.error || event.level == Level.fatal;
+    final fileInfo = includeLocation ? _extractCallerFileInfo() : '';
 
     final message = event.message;
 
