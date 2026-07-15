@@ -94,13 +94,15 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     required final String numRegistro,
     final String tipodoc = 'NIF',
   }) async {
-    logger.d('[selectbynumreg] req pnumdoc=$documentNumber pregistro=$numRegistro ptipodoc=$tipodoc');
+    logger.d('[selectbynumreg] req pnumdoc=$documentNumber pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
     final response = await _api.myPubliNumRegOperation(
       zcsrfcpubliselectbynumregBody: ZCSRFCPUBLISELECTBYNUMREG(
         (final builder) => builder
           ..pnumdoc = documentNumber
           ..pregistro = numRegistro
-          ..ptipodoc = tipodoc,
+          // El backend rechaza ptipodoc='DNI' con 403; igual que
+          // selectbynumexp, siempre debe enviarse 'NIF'.
+          ..ptipodoc = 'NIF',
       ),
       extra: {
         generatedApiDecodeStringResponseExtraKey: true,

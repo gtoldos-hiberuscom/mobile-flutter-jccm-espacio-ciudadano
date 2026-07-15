@@ -26,6 +26,21 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
   bool _isSearching = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Solo puede consultarse por uno de los dos identificadores. Al escribir
+    // en uno, el otro se deshabilita; al limpiarlo, ambos vuelven a habilitarse.
+    _numRegistroController.addListener(_onExpedienteFieldChanged);
+    _codIdentificadorController.addListener(_onExpedienteFieldChanged);
+  }
+
+  void _onExpedienteFieldChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
   void dispose() {
     _docNumberController.dispose();
     _numRegistroController.dispose();
@@ -213,6 +228,7 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
                         controller: _numRegistroController,
                         helperText: l10n.gestionAportacionNumRegistroHelper,
                         prefixIcon: const Icon(AppIcons.docs),
+                        enabled: _codIdentificadorController.text.trim().isEmpty,
                       ),
                       const SizedBox(height: AppDimensions.space8),
                       AppInputCase(
@@ -221,6 +237,7 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
                         controller: _codIdentificadorController,
                         helperText: l10n.gestionAportacionCodIdentificadorHelper,
                         prefixIcon: const Icon(AppIcons.docs),
+                        enabled: _numRegistroController.text.trim().isEmpty,
                       ),
                     ],
                   ),
