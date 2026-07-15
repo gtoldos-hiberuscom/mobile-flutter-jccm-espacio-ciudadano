@@ -117,10 +117,14 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: _HomeDashboard(onComingSoon: _showComingSoon),
       floatingActionButton: AppFab(
         icon: AppIcons.license,
-        onPressed: _showComingSoon,
+        onPressed: _goToDigitalCards,
         semanticsLabel: 'Identificación digital',
       ),
     );
+  }
+
+  void _goToDigitalCards() {
+    context.go(Routes.digitalCards);
   }
 
   void _goToNotifications() {
