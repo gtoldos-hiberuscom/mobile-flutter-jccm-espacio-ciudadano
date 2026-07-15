@@ -30,7 +30,7 @@ class GestionExpedienteDetallePage extends ConsumerWidget {
 
     return AppDetailScaffold(
       title: l10n.gestionExpedientesDetalleTitle,
-      onBack: () => context.go(Routes.gestionExpedientes),
+      onBack: () => context.go(tercero != null ? Routes.gestionAportacion : Routes.gestionExpedientes),
       body: detailAsync.when(
         loading: () => const LoadingStateWidget(),
         error: (final error, final _) => ErrorStateWidget(

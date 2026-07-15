@@ -12,7 +12,9 @@ final gestionNotificacionesRepositoryProvider = Provider<GestionNotificacionesRe
 /// Family param: estado filter — null = all, 'pendiente', 'aceptada', etc.
 final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, String?>((final ref, final estado) async {
   final claims = ref.watch(jwtClaimsProvider);
-  final citizenId = claims?.normalizedPersonIdentifier ?? '';
+  // Notifica endpoints in UAT/PRE identify the citizen by idAgente (e.g. PER9998003),
+  // not by DNI. Using the DNI now returns 403.
+  final citizenId = claims?.idAgente ?? '';
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
   }

@@ -174,10 +174,13 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
   }
 }
 
+/// URL path identifier for the Notifica endpoints. In UAT/PRE the contacto
+/// endpoints identify the citizen by idAgente (e.g. PER9998003), not by DNI.
 String _notificationCitizenId(final JwtClaims? claims) {
-  return claims?.normalizedPersonIdentifier ?? '';
+  return claims?.idAgente ?? '';
 }
 
+/// DNI carried inside the request body (not the URL). Stays the document number.
 String _notificationDni(final JwtClaims? claims) {
   return claims?.normalizedPersonIdentifier ?? '';
 }

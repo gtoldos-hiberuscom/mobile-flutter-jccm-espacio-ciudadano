@@ -234,6 +234,9 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-String _citizenId(final JwtClaims? claims) => claims?.normalizedPersonIdentifier ?? '';
+/// URL path identifier for the Notifica endpoints: idAgente (e.g. PER9998003),
+/// not the DNI, which now returns 403 in UAT/PRE.
+String _citizenId(final JwtClaims? claims) => claims?.idAgente ?? '';
 
+/// DNI carried inside the request body (not the URL). Stays the document number.
 String _dni(final JwtClaims? claims) => claims?.normalizedPersonIdentifier ?? '';

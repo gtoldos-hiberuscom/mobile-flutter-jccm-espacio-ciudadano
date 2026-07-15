@@ -35,7 +35,8 @@ class GestionPage extends ConsumerWidget {
     final sections = _sections.map((final s) => s.resolve(l10n)).toList(growable: false);
 
     final claims = ref.watch(jwtClaimsProvider);
-    final citizenId = claims?.normalizedPersonIdentifier ?? '';
+    // Notifica (contacto) is queried by idAgente, not DNI, in UAT/PRE.
+    final citizenId = claims?.idAgente ?? '';
     final contactState = ref.watch(notificationContactProvider(citizenId));
     final hasContact = contactState.asData?.value != null;
 
