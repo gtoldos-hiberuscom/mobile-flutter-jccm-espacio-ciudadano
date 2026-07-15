@@ -4,6 +4,11 @@ import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 
+// Valores del enum `estado` del endpoint GET .../notificaciones.
+// El DTO indexado no expone el estado por notificación, así que para "Todo"
+// consultamos cada estado y etiquetamos el resultado con el estado consultado.
+const List<String> _kEstadosConocidos = ['pendiente', 'expirada', 'aceptada', 'rechazada'];
+
 final class GestionNotificacionesRepositoryImpl implements GestionNotificacionesRepository {
   GestionNotificacionesRepositoryImpl({required final Dio dio}) : _api = CiudadanosApi(withGeneratedApiCompat(dio), standardSerializers);
 
@@ -13,6 +18,45 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   Future<List<Notificacion>> loadNotificaciones({
     required final String citizenId,
     final String? estado,
+  }) async {
+    if (estado != null) {
+      return _loadForEstado(citizenId: citizenId, estado: estado);
+    }
+
+    // "Todo": el DTO no trae estado y el backend no garantiza el conjunto
+    // completo al omitir el filtro, así que consultamos cada estado en paralelo
+    // y fusionamos. Toleramos fallos parciales; solo propagamos si todos fallan.
+    final results = await Future.wait(
+      _kEstadosConocidos.map(
+        (final e) => _loadForEstado(citizenId: citizenId, estado: e).then<(List<Notificacion>?, Object?, StackTrace?)>((final list) => (list, null, null)).catchError((final Object error, final StackTrace stack) => (null, error, stack)),
+      ),
+    );
+
+    final merged = <int, Notificacion>{};
+    Object? lastError;
+    StackTrace? lastStack;
+    var anySuccess = false;
+    for (final (list, error, stack) in results) {
+      if (list != null) {
+        anySuccess = true;
+        for (final notif in list) {
+          merged.putIfAbsent(notif.id, () => notif);
+        }
+      } else if (error != null) {
+        lastError = error;
+        lastStack = stack;
+      }
+    }
+
+    if (!anySuccess && lastError != null) {
+      Error.throwWithStackTrace(lastError, lastStack ?? StackTrace.current);
+    }
+    return merged.values.toList(growable: false);
+  }
+
+  Future<List<Notificacion>> _loadForEstado({
+    required final String citizenId,
+    required final String estado,
   }) async {
     try {
       final response = await _api.obtenerNotificacionesCiudadano(
@@ -31,16 +75,16 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
       final data = response.data;
       if (data != null) {
-        return data.map(_toNotificacionDto).toList(growable: false);
+        return data.map((final dto) => _toNotificacionDto(dto, estado)).toList(growable: false);
       }
 
-      return _rawNotificaciones(response.extra[generatedApiRawResponseDataExtraKey]);
+      return _rawNotificaciones(response.extra[generatedApiRawResponseDataExtraKey], estado);
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
         return const [];
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
-      final parsed = _rawNotificaciones(rawData);
+      final parsed = _rawNotificaciones(rawData, estado);
       if (parsed.isNotEmpty) {
         return parsed;
       }
@@ -48,7 +92,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
   }
 
-  Notificacion _toNotificacionDto(final NotificacionIndexaDto data) {
+  Notificacion _toNotificacionDto(final NotificacionIndexaDto data, final String estado) {
     return Notificacion(
       id: data.idNotificacion ?? 0,
       concepto: _emptyToNull(data.concepto) ?? '',
@@ -57,10 +101,11 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       procedimientoIdFicha: _emptyToNull(data.procedimientoAdministrativo?.idFicha),
       unidadOrganicaNombre: _emptyToNull(data.unidadOrganica?.nombre),
       sistemaOrigen: _emptyToNull(data.sistemaOrigen),
+      estado: estado,
     );
   }
 
-  List<Notificacion> _rawNotificaciones(final Object? data) {
+  List<Notificacion> _rawNotificaciones(final Object? data, final String estado) {
     final payload = switch (data) {
       final Map<dynamic, dynamic> map => map['body'],
       _ => data,
@@ -77,11 +122,11 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
               if (entry.key != null) entry.key.toString(): entry.value,
           },
         )
-        .map(_toNotificacionMap)
+        .map((final map) => _toNotificacionMap(map, estado))
         .toList(growable: false);
   }
 
-  Notificacion _toNotificacionMap(final Map<String, Object?> data) {
+  Notificacion _toNotificacionMap(final Map<String, Object?> data, final String estado) {
     final procRaw = data['procedimientoAdministrativo'];
     final procMap = procRaw is Map<String, Object?> ? procRaw : null;
     final unidadRaw = data['unidadOrganica'];
@@ -96,6 +141,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       procedimientoIdFicha: _string(procMap, 'idFicha'),
       unidadOrganicaNombre: _string(unidadMap, 'nombre'),
       sistemaOrigen: _string(data, 'sistemaOrigen'),
+      estado: estado,
     );
   }
 

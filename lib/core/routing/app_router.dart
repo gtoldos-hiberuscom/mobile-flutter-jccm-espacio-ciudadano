@@ -386,7 +386,9 @@ final goRouterProvider = Provider<GoRouter>(
 
         GoRoute(
           path: Routes.notificationContact,
-          builder: (final BuildContext context, final GoRouterState state) => const NotificationContactPage(),
+          builder: (final BuildContext context, final GoRouterState state) => NotificationContactPage(
+            returnTo: Routes.isKnownRoute(state.uri.queryParameters['returnTo']) ? state.uri.queryParameters['returnTo']! : Routes.preferences,
+          ),
         ),
 
         // ── Personalization — Mis hechos vitales (STORY-54 / JCCMEC-53) ──────

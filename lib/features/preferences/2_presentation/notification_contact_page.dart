@@ -12,7 +12,14 @@ import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/usecases/sa
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
 
 class NotificationContactPage extends ConsumerStatefulWidget {
-  const NotificationContactPage({super.key});
+  const NotificationContactPage({
+    super.key,
+    this.returnTo = Routes.preferences,
+  });
+
+  /// Ruta a la que volver al cerrar o guardar. La pantalla se abre desde varias
+  /// rutas (Preferencias, Notificaciones…), así que el origen se pasa por query.
+  final String returnTo;
 
   @override
   ConsumerState<NotificationContactPage> createState() => _NotificationContactPageState();
@@ -155,7 +162,7 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
           message: 'Datos de contacto guardados',
           severity: AppAlertSeverity.success,
         );
-        context.go(Routes.preferences);
+        context.go(widget.returnTo);
       case SaveNotificationContactFailed(:final message):
         setState(() => _formError = message);
     }
@@ -169,7 +176,7 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go(Routes.preferences);
+      context.go(widget.returnTo);
     }
   }
 }

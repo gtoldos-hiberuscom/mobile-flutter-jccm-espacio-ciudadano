@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -54,7 +56,12 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
           IconButton(
             icon: const Icon(AppIcons.settings),
             tooltip: 'Configurar notificaciones',
-            onPressed: () => context.go(Routes.notificationContact),
+            onPressed: () => context.go(
+              Uri(
+                path: Routes.notificationContact,
+                queryParameters: {'returnTo': Routes.gestionNotificaciones},
+              ).toString(),
+            ),
           ),
         ],
       ),
@@ -78,7 +85,6 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                   labels: tabLabels,
                   selectedIndex: _selectedTab,
                   onSelected: (final i) => setState(() => _selectedTab = i),
-                  onMore: () => AppAlertSnackbar.show(context, message: l10n.gestionSectionComingSoon),
                 ),
               ),
               Expanded(
@@ -101,7 +107,6 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                           separatorBuilder: (final _, final _) => const SizedBox(height: AppDimensions.space16),
                           itemBuilder: (final context, final index) => _NotificacionCard(
                             notificacion: notifs[index],
-                            filterEstado: _currentEstado,
                             onTap: () => AppAlertSnackbar.show(context, message: l10n.gestionSectionComingSoon),
                           ),
                         ),
@@ -117,18 +122,71 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
 
 // ─── Filter bar ──────────────────────────────────────────────────────────────
 
-class _FilterBar extends StatelessWidget {
+class _FilterBar extends StatefulWidget {
   const _FilterBar({
     required this.labels,
     required this.selectedIndex,
     required this.onSelected,
-    required this.onMore,
   });
 
   final List<String> labels;
   final int selectedIndex;
   final ValueChanged<int> onSelected;
-  final VoidCallback onMore;
+
+  @override
+  State<_FilterBar> createState() => _FilterBarState();
+}
+
+class _FilterBarState extends State<_FilterBar> {
+  final ScrollController _controller = ScrollController();
+  bool _showLeft = false;
+  bool _showRight = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_updateChevrons);
+    WidgetsBinding.instance.addPostFrameCallback((final _) => _updateChevrons());
+  }
+
+  @override
+  void dispose() {
+    _controller
+      ..removeListener(_updateChevrons)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _updateChevrons() {
+    if (!_controller.hasClients) {
+      return;
+    }
+    final position = _controller.position;
+    const epsilon = 1.0;
+    final showLeft = position.pixels > position.minScrollExtent + epsilon;
+    final showRight = position.pixels < position.maxScrollExtent - epsilon;
+    if (showLeft != _showLeft || showRight != _showRight) {
+      setState(() {
+        _showLeft = showLeft;
+        _showRight = showRight;
+      });
+    }
+  }
+
+  void _scrollBy(final double delta) {
+    if (!_controller.hasClients) {
+      return;
+    }
+    final position = _controller.position;
+    final target = (position.pixels + delta).clamp(position.minScrollExtent, position.maxScrollExtent);
+    unawaited(
+      _controller.animateTo(
+        target,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      ),
+    );
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -142,29 +200,73 @@ class _FilterBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          for (var i = 0; i < labels.length; i++) ...[
-            if (i > 0) const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: _TabSegment(
-                label: labels[i],
-                isSelected: i == selectedIndex,
-                onTap: () => onSelected(i),
-              ),
+          if (_showLeft)
+            _ScrollChevron(
+              icon: AppIcons.chevronLeft,
+              semanticLabel: 'Desplazar filtros a la izquierda',
+              onTap: () => _scrollBy(-_scrollStep()),
             ),
-          ],
-          const SizedBox(width: AppDimensions.space8),
-          Semantics(
-            button: true,
-            label: 'Ver más filtros',
-            child: GestureDetector(
-              onTap: onMore,
-              child: const Padding(
-                padding: EdgeInsets.all(AppDimensions.space8),
-                child: Icon(AppIcons.arrowForward, size: AppDimensions.iconMedium, color: AppColors.textPrimary),
+          Expanded(
+            child: SingleChildScrollView(
+              controller: _controller,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (var i = 0; i < widget.labels.length; i++) ...[
+                    if (i > 0) const SizedBox(width: AppDimensions.space8),
+                    _TabSegment(
+                      label: widget.labels[i],
+                      isSelected: i == widget.selectedIndex,
+                      onTap: () => widget.onSelected(i),
+                    ),
+                  ],
+                ],
               ),
             ),
           ),
+          if (_showRight)
+            _ScrollChevron(
+              icon: AppIcons.chevronRight,
+              semanticLabel: 'Desplazar filtros a la derecha',
+              onTap: () => _scrollBy(_scrollStep()),
+            ),
         ],
+      ),
+    );
+  }
+
+  double _scrollStep() {
+    if (!_controller.hasClients) {
+      return 160;
+    }
+    // Desplaza ~80% del viewport visible por pulsación.
+    return _controller.position.viewportDimension * 0.8;
+  }
+}
+
+class _ScrollChevron extends StatelessWidget {
+  const _ScrollChevron({
+    required this.icon,
+    required this.semanticLabel,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String semanticLabel;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimensions.space8),
+          child: Icon(icon, size: AppDimensions.iconMedium, color: AppColors.textPrimary),
+        ),
       ),
     );
   }
@@ -227,11 +329,9 @@ class _NotificacionCard extends StatelessWidget {
   const _NotificacionCard({
     required this.notificacion,
     required this.onTap,
-    this.filterEstado,
   });
 
   final Notificacion notificacion;
-  final String? filterEstado;
   final VoidCallback onTap;
 
   @override
@@ -337,7 +437,7 @@ class _NotificacionCard extends StatelessWidget {
     if (idFicha == null && fecha == null) {
       return const SizedBox.shrink();
     }
-    final isWarning = filterEstado == _kEstadoPendiente;
+    final isWarning = notificacion.estado == _kEstadoPendiente;
 
     return Container(
       width: double.infinity,
@@ -375,7 +475,7 @@ class _NotificacionCard extends StatelessWidget {
   }
 
   Widget? _statusTag() {
-    return switch (filterEstado) {
+    return switch (notificacion.estado) {
       _kEstadoPendiente => const AppTag(status: AppTagStatus.warning, label: 'Pendiente', showIcon: false),
       _kEstadoAceptada => const AppTag(status: AppTagStatus.success, label: 'Aceptada', showIcon: false),
       'rechazada' => const AppTag(status: AppTagStatus.error, label: 'Rechazada', showIcon: false),

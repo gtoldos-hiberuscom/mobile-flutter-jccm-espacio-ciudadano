@@ -177,7 +177,12 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           activeDescription: 'Tienes configurado al menos un medio de aviso para recibir notificaciones electrónicas.',
           actionLabel: 'Gestionar',
           actionIcon: AppIcons.edit,
-          onAction: () => context.go(Routes.notificationContact),
+          onAction: () => context.go(
+            Uri(
+              path: Routes.notificationContact,
+              queryParameters: {'returnTo': Routes.preferences},
+            ).toString(),
+          ),
         ),
         const SizedBox(height: AppDimensions.space16),
         AppPreferenceCard(
