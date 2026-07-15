@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
@@ -62,9 +63,14 @@ class ConsentPage extends ConsumerWidget {
           case ConsentStatus.rejected:
             context.go(Routes.landing);
           case ConsentStatus.saveError:
+            // Never surface raw backend/exception detail to the user; only a
+            // curated localized message reaches the UI. Detail goes to logs.
+            if (next.errorMessage != null) {
+              logger.w('Consent saveError: ${next.errorMessage}');
+            }
             AppAlertSnackbar.show(
               context,
-              message: next.errorMessage ?? l10n.consentSaveError,
+              message: l10n.consentSaveError,
               severity: AppAlertSeverity.error,
             );
           case ConsentStatus.loading:

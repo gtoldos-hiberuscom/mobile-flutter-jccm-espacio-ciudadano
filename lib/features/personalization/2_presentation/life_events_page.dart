@@ -14,6 +14,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_in
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
@@ -180,9 +181,14 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
       context.go(widget.returnTo);
     }
     if (next.status == LifeEventsStatus.saveError) {
+      // Never surface raw backend/exception detail to the user; only a curated
+      // localized message reaches the UI. The technical detail goes to logs.
+      if (next.errorMessage != null) {
+        logger.w('LifeEvents saveError: ${next.errorMessage}');
+      }
       _showFeedback(
         context,
-        next.errorMessage ?? l10n.lifeEventsErrorFeedback,
+        l10n.lifeEventsErrorFeedback,
         severity: AppAlertSeverity.error,
       );
     }
