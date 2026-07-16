@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/dependency_care_status.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/disability_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/large_family_title.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/parking_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/thermal_spa_award.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_social_welfare_repository.dart';
@@ -139,17 +140,40 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
       if (response.statusCode == 404) {
         return null;
       }
-      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+      final data = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+      if (_isAuthorizationRequired(data)) {
+        throw const MyDataAuthorizationRequired();
+      }
+      return data;
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
         return null;
       }
       final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
       if (rawData != null) {
+        if (_isAuthorizationRequired(rawData)) {
+          throw const MyDataAuthorizationRequired();
+        }
         return rawData;
       }
       rethrow;
     }
+  }
+
+  bool _isAuthorizationRequired(final Object? data) {
+    final decoded = _decodePayload(data);
+    if (decoded is! Map) {
+      return false;
+    }
+    if (decoded['codigo-respuesta']?.toString() == '412.00') {
+      return true;
+    }
+    final infoError = decoded['info-error'];
+    if (infoError is! Map) {
+      return false;
+    }
+    final errors = infoError['errores'];
+    return errors is List && errors.whereType<Map<dynamic, dynamic>>().any((final error) => error['codigo-error']?.toString() == '3034');
   }
 
   LargeFamilyTitle? _parseLargeFamilyTitle(final Object? payload) {
@@ -253,7 +277,9 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     final name = _firstString(awardMap, const [
       'nombre_balneario',
       'nombreBalneario',
+      'NombreBalneario',
       'balneario',
+      'Balneario',
       'denominacion_balneario',
       'denominacionBalneario',
       'nombre',
@@ -270,6 +296,8 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
           'fechaDesde',
           'fecha_inicio',
           'fechaInicio',
+          'FechaInicio',
+          'FechaEntrada',
           'fec_desde',
           'fecDesde',
         ]),
@@ -280,6 +308,8 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
           'fechaHasta',
           'fecha_fin',
           'fechaFin',
+          'FechaFin',
+          'FechaSalida',
           'fec_hasta',
           'fecHasta',
         ]),
@@ -390,7 +420,7 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
   }
 
   bool _looksLikeThermalSpaAward(final Map<String, Object?> map) {
-    return _firstString(map, const ['nombre_balneario', 'nombreBalneario', 'balneario', 'denominacion_balneario', 'nombre']) != null;
+    return _firstString(map, const ['nombre_balneario', 'nombreBalneario', 'NombreBalneario', 'balneario', 'Balneario', 'denominacion_balneario', 'nombre']) != null;
   }
 
   bool _looksLikeDependencyCareStatus(final Map<String, Object?> map) {
@@ -561,6 +591,29 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     final iso = DateTime.tryParse(trimmed);
     if (iso != null) {
       return iso;
+    }
+    final textMonthMatch = RegExp(r'^(\d{1,2})-([A-Za-z]{3})-(\d{2}|\d{4})$', caseSensitive: false).firstMatch(trimmed);
+    if (textMonthMatch != null) {
+      final day = int.tryParse(textMonthMatch.group(1)!);
+      final month = const {
+        'JAN': 1,
+        'FEB': 2,
+        'MAR': 3,
+        'APR': 4,
+        'MAY': 5,
+        'JUN': 6,
+        'JUL': 7,
+        'AUG': 8,
+        'SEP': 9,
+        'OCT': 10,
+        'NOV': 11,
+        'DEC': 12,
+      }[textMonthMatch.group(2)!.toUpperCase()];
+      final parsedYear = int.tryParse(textMonthMatch.group(3)!);
+      if (day != null && month != null && parsedYear != null) {
+        final year = parsedYear < 100 ? 2000 + parsedYear : parsedYear;
+        return DateTime(year, month, day);
+      }
     }
     final match = RegExp(r'^(\d{1,2})[/-](\d{1,2})[/-](\d{4})').firstMatch(trimmed);
     if (match == null) {

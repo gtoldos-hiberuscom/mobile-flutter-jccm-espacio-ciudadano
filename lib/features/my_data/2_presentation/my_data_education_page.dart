@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Education data detail — Figma node 43973:1875.
 class MyDataEducationPage extends StatefulWidget {
@@ -156,15 +157,15 @@ class _EducationServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataEducationProcedureEquivalence,
-                onTap: () => _showComingSoon(context, l10n.myDataEducationProcedureEquivalence),
+                onTap: () => _launchExternalUrl(context, 'https://www.educacionfpydeportes.gob.es/servicios-al-ciudadano/catalogo/general/05/051270/ficha/051270.html'),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataEducationProcedureScholarships,
-                onTap: () => _showComingSoon(context, l10n.myDataEducationProcedureScholarships),
+                onTap: () => _launchExternalUrl(context, 'https://www.becaseducacion.gob.es/'),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataEducationProcedureSecondaryDegree,
-                onTap: () => _showComingSoon(context, l10n.myDataEducationProcedureSecondaryDegree),
+                onTap: () => _launchExternalUrl(context, 'https://www.educa.jccm.es/es/estperadult/estudiar-epa/ensenanzas-conducentes-titulacion/pruebas-libres-graduado-educacion-secundaria'),
               ),
             ],
           ),
@@ -173,16 +174,16 @@ class _EducationServicesTab extends StatelessWidget {
             title: l10n.myDataEducationInterestLinksTitle,
             links: [
               AppExternalLinkItem(
-                label: l10n.myDataEducationInterestLinkPlaceholder,
-                onTap: () => _showComingSoon(context, l10n.myDataEducationInterestLinkPlaceholder),
+                label: l10n.myDataEducationLinkEducationPortal,
+                onTap: () => _launchExternalUrl(context, 'https://www.educa.jccm.es/'),
               ),
               AppExternalLinkItem(
-                label: l10n.myDataEducationInterestLinkPlaceholder,
-                onTap: () => _showComingSoon(context, l10n.myDataEducationInterestLinkPlaceholder),
+                label: l10n.externalLinkEducamosClmLabel,
+                onTap: () => _launchExternalUrl(context, 'https://educamosclm.castillalamancha.es/'),
               ),
               AppExternalLinkItem(
-                label: l10n.myDataEducationInterestLinkPlaceholder,
-                onTap: () => _showComingSoon(context, l10n.myDataEducationInterestLinkPlaceholder),
+                label: l10n.myDataEducationLinkScholarships,
+                onTap: () => _launchExternalUrl(context, 'https://www.becaseducacion.gob.es/'),
               ),
             ],
           ),
@@ -191,10 +192,10 @@ class _EducationServicesTab extends StatelessWidget {
     );
   }
 
-  void _showComingSoon(final BuildContext context, final String label) {
-    AppAlertSnackbar.show(
-      context,
-      message: AppLocalizations.of(context).myDataSectionComingSoon(label),
-    );
+  Future<void> _launchExternalUrl(final BuildContext context, final String url) async {
+    final opened = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (!opened && context.mounted) {
+      AppAlertSnackbar.show(context, message: AppLocalizations.of(context).externalLinkOpenFailed);
+    }
   }
 }

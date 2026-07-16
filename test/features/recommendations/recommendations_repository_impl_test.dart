@@ -12,7 +12,10 @@ void main() {
     test('loads recommendations for selected life events', () async {
       final adapter = _RecommendationsAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
-      final repository = RecommendationsRepositoryImpl(dio: dio);
+      final repository = RecommendationsRepositoryImpl(
+        dio: dio,
+        sedeBaseUrl: Uri.parse('https://sede-uat.cm-pre.jccm.es/'),
+      );
 
       final recommendations = await repository.loadRecommendations(
         idAgente: 'agent-123',
@@ -28,12 +31,16 @@ void main() {
       expect(recommendations.single.lifeEventName, 'Busco vivienda');
       expect(recommendations.single.responsibleUnit, 'Vivienda');
       expect(recommendations.single.badge, RecommendationBadge.immediate);
+      expect(recommendations.single.detailUrl, Uri.parse('https://sede-uat.cm-pre.jccm.es/tramites/100'));
     });
 
     test('returns empty list when backend reports no matching results', () async {
       final adapter = _RecommendationsAdapter(responseKind: _RecommendationsResponseKind.noResults);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
-      final repository = RecommendationsRepositoryImpl(dio: dio);
+      final repository = RecommendationsRepositoryImpl(
+        dio: dio,
+        sedeBaseUrl: Uri.parse('https://sede-uat.cm-pre.jccm.es/'),
+      );
 
       final recommendations = await repository.loadRecommendations(
         idAgente: 'agent-123',
@@ -46,7 +53,10 @@ void main() {
     test('returns empty list when backend cannot register recommendations support', () async {
       final adapter = _RecommendationsAdapter(responseKind: _RecommendationsResponseKind.supportUnavailable);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
-      final repository = RecommendationsRepositoryImpl(dio: dio);
+      final repository = RecommendationsRepositoryImpl(
+        dio: dio,
+        sedeBaseUrl: Uri.parse('https://sede-uat.cm-pre.jccm.es/'),
+      );
 
       final recommendations = await repository.loadRecommendations(
         idAgente: 'agent-123',

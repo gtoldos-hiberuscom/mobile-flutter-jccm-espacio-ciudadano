@@ -28,6 +28,21 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     unawaited(context.push(Routes.preferences));
   }
 
+  Future<void> _reviewConsents() async {
+    await context.push<void>(
+      Uri(
+        path: Routes.consent,
+        queryParameters: const {
+          'mode': 'preferences',
+          'returnTo': Routes.recommendations,
+        },
+      ).toString(),
+    );
+    if (mounted) {
+      ref.invalidate(recommendationsProvider);
+    }
+  }
+
   Future<void> _openLifeEventFilters(final RecommendationsState state) async {
     final events = state.selectedLifeEventOptions;
     if (events.isEmpty) {
@@ -124,6 +139,12 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
   }
 
   Widget _buildLoadedContent(final BuildContext context, final RecommendationsState state) {
+    if (!state.hasLifeEventsConsent) {
+      return _RecommendationsAuthorizationRequired(
+        onReviewConsents: () => unawaited(_reviewConsents()),
+      );
+    }
+
     final lifeEventFilteredRecommendations = _filterByLifeEvents(
       recommendations: state.recommendations,
       events: state.selectedLifeEventOptions,
@@ -204,6 +225,31 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
           label: l10n.recommendationsLoadingErrorRetry,
           onPressed: () => ref.invalidate(recommendationsProvider),
           leadingIcon: AppIcons.autorenew,
+        ),
+      ],
+    );
+  }
+}
+
+class _RecommendationsAuthorizationRequired extends StatelessWidget {
+  const _RecommendationsAuthorizationRequired({required this.onReviewConsents});
+
+  final VoidCallback onReviewConsents;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _FilterNavigation(
+          selectedFilter: _RecommendationFilter.all,
+          recommendations: [],
+        ),
+        const SizedBox(height: AppDimensions.space24),
+        _PreferencesHint(
+          message: l10n.recommendationsEmptyUnauthorisedBody,
+          onEditPreferences: onReviewConsents,
         ),
       ],
     );
@@ -307,9 +353,10 @@ class _FloatingNavigationArrow extends StatelessWidget {
 }
 
 class _PreferencesHint extends StatelessWidget {
-  const _PreferencesHint({required this.onEditPreferences});
+  const _PreferencesHint({required this.onEditPreferences, this.message});
 
   final VoidCallback onEditPreferences;
+  final String? message;
 
   @override
   Widget build(final BuildContext context) {
@@ -328,7 +375,7 @@ class _PreferencesHint extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: AppDimensions.space4),
               child: Text(
-                'Personaliza tus recomendaciones editando tus hechos vitales en Preferencias siempre que quieras.',
+                message ?? 'Personaliza tus recomendaciones editando tus hechos vitales en Preferencias siempre que quieras.',
                 style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
               ),
             ),
@@ -451,7 +498,8 @@ enum _RecommendationFilter {
   all,
   recent,
   news,
-  immediate;
+  immediate
+  ;
 
   String label(final BuildContext context) {
     final l10n = AppLocalizations.of(context);

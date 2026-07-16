@@ -3030,6 +3030,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEducationInterestLinkPlaceholder => 'Lorem ipsum dolor sit amet';
 
   @override
+  String get myDataEducationLinkEducationPortal => 'Portal de Educación de Castilla-La Mancha';
+
+  @override
+  String get myDataEducationLinkScholarships => 'Becas y ayudas para estudiantes';
+
+  @override
   String get myDataHealthInfoSheetTitle => 'About My Health data';
 
   @override
@@ -3439,6 +3445,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionNotificacionesTabAceptadas => 'Aceptadas';
+
+  @override
+  String get gestionNotificacionesTabExpiradas => 'Expiradas';
 
   @override
   String get gestionNotificacionesProcedimientoLabel => 'Procedimiento';

@@ -168,9 +168,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         l10n.lifeEventsSavedFeedback,
         severity: AppAlertSeverity.success,
       );
-      if (widget.returnTo == Routes.recommendations) {
-        ref.invalidate(recommendationsProvider);
-      }
+      ref.invalidate(recommendationsProvider);
       if (widget.returnTo == Routes.preferences && context.canPop()) {
         context.pop();
         return;

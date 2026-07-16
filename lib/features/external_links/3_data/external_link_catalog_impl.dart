@@ -16,9 +16,11 @@ import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external
 ///  3. Update the catalog test in
 ///     `test/features/external_links/external_link_catalog_test.dart`.
 final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
-  const ExternalLinkCatalogImpl();
+  const ExternalLinkCatalogImpl({required this.sedeBaseUrl});
 
-  static final List<ExternalLink> _entries = <ExternalLink>[
+  final Uri sedeBaseUrl;
+
+  static final List<ExternalLink> _baseEntries = <ExternalLink>[
     ExternalLink(
       id: 'educamos_clm',
       displayKey: 'externalLinkEducamosClmLabel',
@@ -117,6 +119,16 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
       displayKey: 'legalNoticeTitle',
       url: Uri.parse('https://rat.castillalamancha.es/info/2309'),
       category: ExternalLinkCategory.dataProtection,
+    ),
+  ];
+
+  List<ExternalLink> get _entries => [
+    ..._baseEntries,
+    ExternalLink(
+      id: 'sede_jccm',
+      displayKey: 'drawerGoToSedeElectronica',
+      url: sedeBaseUrl,
+      category: ExternalLinkCategory.jccmElectronic,
     ),
   ];
 

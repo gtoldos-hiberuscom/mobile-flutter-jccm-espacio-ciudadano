@@ -14,6 +14,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jw
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void showAuthenticatedProfileMenu({
@@ -23,14 +24,21 @@ void showAuthenticatedProfileMenu({
   final claims = ref.read(jwtClaimsProvider);
   final l10n = AppLocalizations.of(context);
 
+  Future<void> pushAndRefresh(final String route) async {
+    await context.push<void>(route);
+    if (context.mounted && route == Routes.preferences) {
+      ref.invalidate(recommendationsProvider);
+    }
+  }
+
   void closeMenuAndPush(final String route) {
     Navigator.of(context, rootNavigator: true).pop();
-    unawaited(context.push<void>(route));
+    unawaited(pushAndRefresh(route));
   }
 
   Future<void> openElectronicOffice() async {
     final catalog = ref.read(externalLinkCatalogProvider);
-    final link = catalog.findById('sede_dgt');
+    final link = catalog.findById('sede_jccm');
     if (link == null) {
       return;
     }

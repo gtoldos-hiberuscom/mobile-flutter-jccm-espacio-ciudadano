@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_social_welfare_repository_impl.dart';
 
 void main() {
@@ -35,10 +36,66 @@ void main() {
       expect(title.beneficiaries.first.isHolder, isTrue);
       expect(title.beneficiaries.last.birthDate, DateTime(2012, 10, 8));
     });
+
+    test('loads thermal spa award from intermediacion contract', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        responseData: {
+          'body': {
+            'respuesta': {
+              'codestado': '0',
+              'datosespecificos': {
+                'Balneario': 'LA CONCEPCION',
+                'FechaEntrada': '05-OCT-25',
+                'FechaSalida': '10-OCT-25',
+              },
+            },
+          },
+          'codigo-respuesta': '200.00',
+        },
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      final award = await repository.loadThermalSpaAward(documentNumber: '24540447E');
+
+      expect(adapter.requests.single.path, '/api/v1/intermediacion/termalismo/datos');
+      expect(adapter.requests.single.data, {
+        'docu': '24540447E',
+        'tipodoc': 'NIF',
+      });
+      expect(award, isNotNull);
+      expect(award!.name, 'LA CONCEPCION');
+      expect(award.startDate, DateTime(2025, 10, 5));
+      expect(award.endDate, DateTime(2025, 10, 10));
+    });
+
+    test('reports authorization required for business response 412.00', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        responseData: {
+          'body': null,
+          'codigo-respuesta': '412.00',
+          'info-error': {
+            'errores': [
+              {'codigo-error': 3034},
+            ],
+          },
+        },
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      expect(
+        () => repository.loadLargeFamilyTitle(documentNumber: '99999999R'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
   });
 }
 
 final class _MyDataSocialWelfareAdapter implements HttpClientAdapter {
+  _MyDataSocialWelfareAdapter({this.responseData});
+
+  final Object? responseData;
   final List<_RecordedRequest> requests = [];
 
   @override
@@ -56,44 +113,47 @@ final class _MyDataSocialWelfareAdapter implements HttpClientAdapter {
     );
 
     return ResponseBody.fromString(
-      jsonEncode({
-        'body': {
-          'resul': '0',
-          'mensaje': 'Existe el titulo de familia numerosa',
-          'idpeticion': '7a7479f7fa5fec7a5t0013342',
-          'comaut': '13',
-          'nutitulo': '28/000028/2015.3',
-          'categoria': 'G',
-          'vigente': 'S',
-          'fecexpedi': '19/10/2015',
-          'feccaduci': '19/10/2025',
-          'numhij': '2',
-          'beneficiarios': [
+      jsonEncode(
+        responseData ??
             {
-              'tipdoc': 'NIF',
-              'numdoc': '99046202Z',
-              'fecnac': null,
-              'nombre': 'Adela',
-              'apellido1': 'San Juan',
-              'apellido2': 'Martin',
-              'titular': 'S',
+              'body': {
+                'resul': '0',
+                'mensaje': 'Existe el titulo de familia numerosa',
+                'idpeticion': '7a7479f7fa5fec7a5t0013342',
+                'comaut': '13',
+                'nutitulo': '28/000028/2015.3',
+                'categoria': 'G',
+                'vigente': 'S',
+                'fecexpedi': '19/10/2015',
+                'feccaduci': '19/10/2025',
+                'numhij': '2',
+                'beneficiarios': [
+                  {
+                    'tipdoc': 'NIF',
+                    'numdoc': '99046202Z',
+                    'fecnac': null,
+                    'nombre': 'Adela',
+                    'apellido1': 'San Juan',
+                    'apellido2': 'Martin',
+                    'titular': 'S',
+                  },
+                  {
+                    'tipdoc': null,
+                    'numdoc': null,
+                    'fecnac': '08/10/2012',
+                    'nombre': 'Alberto',
+                    'apellido1': 'Manzanares',
+                    'apellido2': 'San Juan',
+                    'titular': 'N',
+                  },
+                ],
+              },
+              'timestamp': '2025-07-28T08:04:57.184',
+              'mensaje-respuesta': 'Respuesta correcta',
+              'codigo-respuesta': '200.00',
+              'info-error': null,
             },
-            {
-              'tipdoc': null,
-              'numdoc': null,
-              'fecnac': '08/10/2012',
-              'nombre': 'Alberto',
-              'apellido1': 'Manzanares',
-              'apellido2': 'San Juan',
-              'titular': 'N',
-            },
-          ],
-        },
-        'timestamp': '2025-07-28T08:04:57.184',
-        'mensaje-respuesta': 'Respuesta correcta',
-        'codigo-respuesta': '200.00',
-        'info-error': null,
-      }),
+      ),
       200,
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],

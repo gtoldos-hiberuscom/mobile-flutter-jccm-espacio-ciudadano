@@ -27,6 +27,16 @@ class AppConfig {
   /// Base URL for the remote API.
   String get baseUrl => _getConfigValue('BASE_URL', (final v) => v as String);
 
+  /// Base URL of the JCCM electronic office for the active environment.
+  Uri get sedeBaseUrl => switch (environment.trim().toLowerCase()) {
+    'development' || 'uat' => Uri.parse('https://sede-uat.cm-pre.jccm.es/'),
+    'preproduction' || 'pre' => Uri.parse('https://sede.cm-pre.jccm.es/'),
+    'production' || 'pro' => Uri.parse('https://www.jccm.es/'),
+    final flavor => throw Exception('Unsupported APP_FLAVOR for Sede URL: $flavor'),
+  };
+
+  Uri procedureUrl(final int procedureId) => sedeBaseUrl.resolve('tramites/$procedureId');
+
   /// Human-readable application name used in UI and analytics.
   String get appName => _getConfigValue('APP_NAME', (final v) => v as String);
 

@@ -1,11 +1,15 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/large_family_title.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_contact_actions.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_social_welfare_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -26,7 +30,31 @@ class MyDataSocialWelfareFamilyPage extends ConsumerWidget {
       body: familyAsync.when(
         data: (final title) => title == null ? _NoLargeFamilyData(ref: ref) : _LargeFamilyContent(title: title, ref: ref),
         loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stackTrace) => _LargeFamilyError(ref: ref),
+        error: (final error, final stackTrace) => error is MyDataAuthorizationRequired ? const _LargeFamilyAuthorizationRequired() : _LargeFamilyError(ref: ref),
+      ),
+    );
+  }
+}
+
+class _LargeFamilyAuthorizationRequired extends StatelessWidget {
+  const _LargeFamilyAuthorizationRequired();
+
+  @override
+  Widget build(final BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(AppDimensions.space16),
+      child: MyDataAuthorizationContextualHelper(
+        onOpenSettings: () => unawaited(
+          context.push(
+            Uri(
+              path: Routes.consent,
+              queryParameters: const {
+                'mode': 'preferences',
+                'returnTo': Routes.myDataSocialWelfareFamily,
+              },
+            ).toString(),
+          ),
+        ),
       ),
     );
   }

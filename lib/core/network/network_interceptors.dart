@@ -170,7 +170,9 @@ class EmojiDioLogger extends Interceptor {
   @override
   void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
     logger.d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}');
-    if (kVerboseNetworkLogging) {
+    final path = response.requestOptions.path;
+    final logResponseBody = kVerboseNetworkLogging || path == '/api/v1/intermediacion/termalismo/datos' || path == '/api/v1/intermediacion/atencion-dependencia/datos' || path.startsWith('/api/v1/ccaa/familia-numerosa/');
+    if (logResponseBody) {
       logger.d('$dioNote 📦 Response Data: ${_redact(response.data)}');
     }
     handler.next(response);
@@ -223,6 +225,9 @@ class EmojiDioLogger extends Interceptor {
     'token',
     'dni',
     'nif',
+    'docu',
+    'documento',
+    'numdoc',
     'email',
     'telefono',
     'phone',

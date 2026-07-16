@@ -4475,7 +4475,7 @@ abstract class AppLocalizations {
   /// Familia numerosa detail — helper mostrado cuando no hay datos.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'No existe el título de familia numerosa indicado.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
   String get familiaNumerosaNoDataMessage;
 
   /// Familia numerosa detail — helper bajo los datos.
@@ -4979,13 +4979,13 @@ abstract class AppLocalizations {
   /// Recommendations — STORY-57 unauthorised empty state title shown when the citizen has preferences but the consent is missing.
   ///
   /// In es, this message translates to:
-  /// **'Falta autorizar tus preferencias'**
+  /// **'Activa la cláusula de recomendaciones'**
   String get recommendationsEmptyUnauthorisedTitle;
 
   /// Recommendations — STORY-57 unauthorised empty state body explaining the missing consent.
   ///
   /// In es, this message translates to:
-  /// **'Para mostrarte recomendaciones personalizadas necesitamos tu autorización para tratar tus datos.'**
+  /// **'Para mostrarte recomendaciones debes activar la cláusula de recomendaciones en condiciones de uso y autorizaciones.'**
   String get recommendationsEmptyUnauthorisedBody;
 
   /// Recommendations — STORY-57 unauthorised empty state primary CTA navigating to the consent surface.
@@ -5912,6 +5912,18 @@ abstract class AppLocalizations {
   /// **'Lorem ipsum dolor sit amet'**
   String get myDataEducationInterestLinkPlaceholder;
 
+  /// Enlace al Portal de Educación de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Portal de Educación de Castilla-La Mancha'**
+  String get myDataEducationLinkEducationPortal;
+
+  /// Enlace al portal de becas y ayudas del Ministerio de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Becas y ayudas para estudiantes'**
+  String get myDataEducationLinkScholarships;
+
   /// Título del modal informativo de Mis datos de Salud.
   ///
   /// In es, this message translates to:
@@ -6733,6 +6745,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aceptadas'**
   String get gestionNotificacionesTabAceptadas;
+
+  /// Pestaña 'Expiradas' en el filtro de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Expiradas'**
+  String get gestionNotificacionesTabExpiradas;
 
   /// Etiqueta del campo procedimiento en la card de notificación.
   ///

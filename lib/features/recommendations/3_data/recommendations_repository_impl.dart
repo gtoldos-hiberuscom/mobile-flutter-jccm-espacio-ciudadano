@@ -5,9 +5,10 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recomme
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 
 final class RecommendationsRepositoryImpl implements RecommendationsRepository {
-  RecommendationsRepositoryImpl({required final Dio dio}) : _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
+  RecommendationsRepositoryImpl({required final Dio dio, required this.sedeBaseUrl}) : _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
 
   final HechosVitalesApi _api;
+  final Uri sedeBaseUrl;
 
   @override
   Future<List<Recommendation>> loadRecommendations({
@@ -146,7 +147,7 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         ),
         submissionStartDate: startDate,
         submissionEndDate: endDate,
-        detailUrl: _uri(rawProcedure['url'] ?? rawProcedure['urlDetalle'] ?? rawProcedure['enlace']),
+        detailUrl: sedeBaseUrl.resolve('tramites/$procedureId'),
       );
     }
   }
@@ -201,10 +202,5 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
       }
     }
     return null;
-  }
-
-  Uri? _uri(final Object? value) {
-    final text = _stringOrNull(value);
-    return text == null ? null : Uri.tryParse(text);
   }
 }

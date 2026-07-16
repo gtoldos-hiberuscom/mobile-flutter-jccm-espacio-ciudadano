@@ -19,6 +19,8 @@ import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_ev
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
+import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 typedef _PreferencesArgs = ({String idAgente});
@@ -39,6 +41,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
     };
     final selectedLifeEvents = lifeEventsEnabled ? await _selectedLifeEvents(ref, args.idAgente) : const <LifeEvent>[];
     final lifeEventsUpdatedAt = _readLifeEventsUpdatedAt(appStorage, args.idAgente);
+    final notificationContact = await ref.watch(notificationContactProvider(args.idAgente).future);
 
     return _PreferencesState(
       lifeEventsStatus: lifeEventsEnabled
@@ -48,6 +51,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
           : AppPreferenceStatus.disabled,
       selectedLifeEvents: selectedLifeEvents,
       lifeEventsUpdatedAt: lifeEventsUpdatedAt,
+      notificationContact: notificationContact,
       biometricEnabled: appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false,
     );
   },
@@ -73,12 +77,14 @@ final class _PreferencesState {
     required this.lifeEventsStatus,
     required this.selectedLifeEvents,
     required this.lifeEventsUpdatedAt,
+    required this.notificationContact,
     required this.biometricEnabled,
   });
 
   final AppPreferenceStatus lifeEventsStatus;
   final List<LifeEvent> selectedLifeEvents;
   final DateTime? lifeEventsUpdatedAt;
+  final NotificationContact? notificationContact;
   final bool biometricEnabled;
 }
 
@@ -171,12 +177,16 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
         AppPreferenceCard(
           title: 'Datos de contacto para notificaciones',
           icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-          status: AppPreferenceStatus.pending,
+          status: preferences.notificationContact == null ? AppPreferenceStatus.pending : AppPreferenceStatus.enabled,
           inactiveDescription: 'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.',
           pendingDescription: 'Gestiona el medio de aviso para recibir notificaciones electrónicas.',
           activeDescription: 'Tienes configurado al menos un medio de aviso para recibir notificaciones electrónicas.',
           actionLabel: 'Gestionar',
           actionIcon: AppIcons.edit,
+          summaryItems: [
+            ?preferences.notificationContact?.phone,
+            ?preferences.notificationContact?.email,
+          ],
           onAction: () => context.go(
             Uri(
               path: Routes.notificationContact,

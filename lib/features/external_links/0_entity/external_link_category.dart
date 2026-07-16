@@ -9,6 +9,9 @@
 /// Carpeta Ciudadana AGE, Sede Electrónica DGT, Empleo CLM, Empleo
 /// público CLM, Historia social única, Infancia y familias).
 enum ExternalLinkCategory {
+  /// Sede Electrónica de la Junta de Comunidades de Castilla-La Mancha.
+  jccmElectronic,
+
   /// Educamos CLM portal (general education services).
   educationCLM,
 

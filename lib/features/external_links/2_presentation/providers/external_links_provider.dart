@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/3_data/external_link_catalog_impl.dart';
@@ -11,7 +12,11 @@ import 'package:jccm_espacio_ciudadano/features/external_links/3_data/url_launch
 /// many places (home dashboard, landings, sitemap). The DI composition
 /// happens here — presentation widgets must not import the
 /// `3_data/` implementation directly (canon §13).
-final externalLinkCatalogProvider = Provider<ExternalLinkCatalog>((final ref) => const ExternalLinkCatalogImpl());
+final externalLinkCatalogProvider = Provider<ExternalLinkCatalog>(
+  (final ref) => ExternalLinkCatalogImpl(
+    sedeBaseUrl: ref.watch(appConfigProvider).sedeBaseUrl,
+  ),
+);
 
 /// Provides the application-wide [ExternalLinkLauncher].
 ///

@@ -3089,7 +3089,7 @@
   "@familiaNumerosaNo": {
     "description": "Familia numerosa detail — valor negativo."
   },
-  "familiaNumerosaNoDataMessage": "No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "familiaNumerosaNoDataMessage": "No existe el título de familia numerosa indicado.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
   "@familiaNumerosaNoDataMessage": {
     "description": "Familia numerosa detail — helper mostrado cuando no hay datos."
   },
@@ -3389,11 +3389,11 @@
   "@recommendationsEmptyUnconfiguredSecondaryCta": {
     "description": "Recommendations — STORY-57 onboarding empty state secondary CTA. The dedicated 'Mis hechos vitales' route does not exist yet, so the page shows a SnackBar fallback."
   },
-  "recommendationsEmptyUnauthorisedTitle": "Falta autorizar tus preferencias",
+  "recommendationsEmptyUnauthorisedTitle": "Activa la cláusula de recomendaciones",
   "@recommendationsEmptyUnauthorisedTitle": {
     "description": "Recommendations — STORY-57 unauthorised empty state title shown when the citizen has preferences but the consent is missing."
   },
-  "recommendationsEmptyUnauthorisedBody": "Para mostrarte recomendaciones personalizadas necesitamos tu autorización para tratar tus datos.",
+  "recommendationsEmptyUnauthorisedBody": "Para mostrarte recomendaciones debes activar la cláusula de recomendaciones en condiciones de uso y autorizaciones.",
   "@recommendationsEmptyUnauthorisedBody": {
     "description": "Recommendations — STORY-57 unauthorised empty state body explaining the missing consent."
   },
@@ -4024,6 +4024,14 @@
   "@myDataEducationInterestLinkPlaceholder": {
     "description": "Placeholder de enlace de interés de Educación según el diseño de Figma."
   },
+  "myDataEducationLinkEducationPortal": "Portal de Educación de Castilla-La Mancha",
+  "@myDataEducationLinkEducationPortal": {
+    "description": "Enlace al Portal de Educación de Castilla-La Mancha."
+  },
+  "myDataEducationLinkScholarships": "Becas y ayudas para estudiantes",
+  "@myDataEducationLinkScholarships": {
+    "description": "Enlace al portal de becas y ayudas del Ministerio de Educación."
+  },
   "myDataHealthInfoSheetTitle": "Sobre Mis datos de Salud",
   "@myDataHealthInfoSheetTitle": {
     "description": "Título del modal informativo de Mis datos de Salud."
@@ -4574,6 +4582,10 @@
   "gestionNotificacionesTabAceptadas": "Aceptadas",
   "@gestionNotificacionesTabAceptadas": {
     "description": "Pestaña 'Aceptadas' en el filtro de notificaciones."
+  },
+  "gestionNotificacionesTabExpiradas": "Expiradas",
+  "@gestionNotificacionesTabExpiradas": {
+    "description": "Pestaña 'Expiradas' en el filtro de notificaciones."
   },
   "gestionNotificacionesProcedimientoLabel": "Procedimiento",
   "@gestionNotificacionesProcedimientoLabel": {

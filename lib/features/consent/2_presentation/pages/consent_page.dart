@@ -6,10 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Two-step mandatory legal-consent onboarding gate (JCCMEC-11).
@@ -52,6 +54,9 @@ class ConsentPage extends ConsumerWidget {
         }
         switch (next.status) {
           case ConsentStatus.accepted:
+            ref
+              ..invalidate(agendaAppointmentsProvider)
+              ..invalidate(recommendationsProvider);
             if (isPreferencesEditing && context.canPop()) {
               ref
                 ..invalidate(jccmDataAuthorizationProvider)

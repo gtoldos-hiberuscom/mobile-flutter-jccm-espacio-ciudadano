@@ -2295,7 +2295,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get familiaNumerosaNo => 'No';
 
   @override
-  String get familiaNumerosaNoDataMessage => 'No hemos encontrado información de familia numerosa asociado a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get familiaNumerosaNoDataMessage => 'No existe el título de familia numerosa indicado.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
 
   @override
   String get familiaNumerosaContactHint => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
@@ -2559,10 +2559,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsEmptyUnconfiguredSecondaryCta => 'Ver mis hechos vitales';
 
   @override
-  String get recommendationsEmptyUnauthorisedTitle => 'Falta autorizar tus preferencias';
+  String get recommendationsEmptyUnauthorisedTitle => 'Activa la cláusula de recomendaciones';
 
   @override
-  String get recommendationsEmptyUnauthorisedBody => 'Para mostrarte recomendaciones personalizadas necesitamos tu autorización para tratar tus datos.';
+  String get recommendationsEmptyUnauthorisedBody => 'Para mostrarte recomendaciones debes activar la cláusula de recomendaciones en condiciones de uso y autorizaciones.';
 
   @override
   String get recommendationsEmptyUnauthorisedPrimaryCta => 'Revisar consentimientos';
@@ -3031,6 +3031,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEducationInterestLinkPlaceholder => 'Lorem ipsum dolor sit amet';
 
   @override
+  String get myDataEducationLinkEducationPortal => 'Portal de Educación de Castilla-La Mancha';
+
+  @override
+  String get myDataEducationLinkScholarships => 'Becas y ayudas para estudiantes';
+
+  @override
   String get myDataHealthInfoSheetTitle => 'Sobre Mis datos de Salud';
 
   @override
@@ -3440,6 +3446,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gestionNotificacionesTabAceptadas => 'Aceptadas';
+
+  @override
+  String get gestionNotificacionesTabExpiradas => 'Expiradas';
 
   @override
   String get gestionNotificacionesProcedimientoLabel => 'Procedimiento';

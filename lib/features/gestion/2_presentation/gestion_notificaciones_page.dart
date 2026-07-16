@@ -1,5 +1,3 @@
-import 'dart:async' show unawaited;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +13,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 // API estado values aligned with GET /api/v1/ciudadanos/{id}/notificaciones?estado=
 const _kEstadoPendiente = 'pendiente';
 const _kEstadoAceptada = 'aceptada';
+const _kEstadoExpirada = 'expirada';
 
 /// Pantalla de listado de notificaciones — Figma node 41972:6649.
 class GestionNotificacionesPage extends ConsumerStatefulWidget {
@@ -32,8 +31,8 @@ class GestionNotificacionesPage extends ConsumerStatefulWidget {
 class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacionesPage> {
   int _selectedTab = 0;
 
-  // null → no filter (Todo), 'pendiente', 'aceptada'
-  static const List<String?> _tabEstados = [null, _kEstadoPendiente, _kEstadoAceptada];
+  // null → no filter (Todo), 'pendiente', 'aceptada', 'expirada'
+  static const List<String?> _tabEstados = [null, _kEstadoPendiente, _kEstadoAceptada, _kEstadoExpirada];
 
   String? get _currentEstado => _tabEstados[_selectedTab];
 
@@ -44,6 +43,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
       l10n.gestionNotificacionesTabTodo,
       l10n.gestionNotificacionesTabPendientes,
       l10n.gestionNotificacionesTabAceptadas,
+      l10n.gestionNotificacionesTabExpiradas,
     ];
     final notifAsync = ref.watch(gestionNotificacionesProvider(_currentEstado));
 
@@ -138,186 +138,68 @@ class _FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<_FilterBar> {
-  final ScrollController _controller = ScrollController();
-  bool _showLeft = false;
-  bool _showRight = false;
+  static const _primaryFilterIndexes = [0, 1, 2];
+  static const _expiredFilterIndexes = [2, 3];
+
+  bool _showExpired = false;
 
   @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_updateChevrons);
-    WidgetsBinding.instance.addPostFrameCallback((final _) => _updateChevrons());
-  }
-
-  @override
-  void dispose() {
-    _controller
-      ..removeListener(_updateChevrons)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _updateChevrons() {
-    if (!_controller.hasClients) {
-      return;
+  void didUpdateWidget(covariant final _FilterBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedIndex == 3) {
+      _showExpired = true;
     }
-    final position = _controller.position;
-    const epsilon = 1.0;
-    final showLeft = position.pixels > position.minScrollExtent + epsilon;
-    final showRight = position.pixels < position.maxScrollExtent - epsilon;
-    if (showLeft != _showLeft || showRight != _showRight) {
-      setState(() {
-        _showLeft = showLeft;
-        _showRight = showRight;
-      });
-    }
-  }
-
-  void _scrollBy(final double delta) {
-    if (!_controller.hasClients) {
-      return;
-    }
-    final position = _controller.position;
-    final target = (position.pixels + delta).clamp(position.minScrollExtent, position.maxScrollExtent);
-    unawaited(
-      _controller.animateTo(
-        target,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-      ),
-    );
   }
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.space8),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        border: Border.all(color: AppColors.borderNeutralLight),
-      ),
-      child: Row(
-        children: [
-          if (_showLeft)
-            _ScrollChevron(
-              icon: AppIcons.chevronLeft,
-              semanticLabel: 'Desplazar filtros a la izquierda',
-              onTap: () => _scrollBy(-_scrollStep()),
-            ),
-          Expanded(
-            child: SingleChildScrollView(
-              controller: _controller,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  for (var i = 0; i < widget.labels.length; i++) ...[
-                    if (i > 0) const SizedBox(width: AppDimensions.space8),
-                    _TabSegment(
-                      label: widget.labels[i],
-                      isSelected: i == widget.selectedIndex,
-                      onTap: () => widget.onSelected(i),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-          if (_showRight)
-            _ScrollChevron(
-              icon: AppIcons.chevronRight,
-              semanticLabel: 'Desplazar filtros a la derecha',
-              onTap: () => _scrollBy(_scrollStep()),
-            ),
-        ],
-      ),
-    );
-  }
+    final indexes = _showExpired ? _expiredFilterIndexes : _primaryFilterIndexes;
+    final selectedIndex = indexes.contains(widget.selectedIndex) ? indexes.indexOf(widget.selectedIndex) : indexes.indexOf(2);
 
-  double _scrollStep() {
-    if (!_controller.hasClients) {
-      return 160;
-    }
-    // Desplaza ~80% del viewport visible por pulsación.
-    return _controller.position.viewportDimension * 0.8;
+    return AppFloatingNavigation(
+      tabs: indexes.map((final index) => widget.labels[index]).toList(growable: false),
+      selectedIndex: selectedIndex,
+      minTabWidths: _showExpired ? const [128, 206] : const [76, 150, 150],
+      onTabSelected: (final index) => widget.onSelected(indexes[index]),
+      leading: _showExpired
+          ? _FloatingNavigationArrow(
+              icon: AppIcons.arrowBack,
+              tooltip: 'Mostrar filtros anteriores',
+              onPressed: () => setState(() => _showExpired = false),
+            )
+          : null,
+      trailing: !_showExpired
+          ? _FloatingNavigationArrow(
+              icon: AppIcons.arrowForward,
+              tooltip: widget.labels[3],
+              onPressed: () => setState(() => _showExpired = true),
+            )
+          : null,
+    );
   }
 }
 
-class _ScrollChevron extends StatelessWidget {
-  const _ScrollChevron({
+class _FloatingNavigationArrow extends StatelessWidget {
+  const _FloatingNavigationArrow({
     required this.icon,
-    required this.semanticLabel,
-    required this.onTap,
+    required this.tooltip,
+    required this.onPressed,
   });
 
   final IconData icon;
-  final String semanticLabel;
-  final VoidCallback onTap;
+  final String tooltip;
+  final VoidCallback onPressed;
 
   @override
   Widget build(final BuildContext context) {
-    return Semantics(
-      button: true,
-      label: semanticLabel,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimensions.space8),
-          child: Icon(icon, size: AppDimensions.iconMedium, color: AppColors.textPrimary),
-        ),
-      ),
-    );
-  }
-}
-
-class _TabSegment extends StatelessWidget {
-  const _TabSegment({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Semantics(
-      button: true,
-      selected: isSelected,
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          child: Container(
-            height: 40,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundWhite,
-              border: Border.all(
-                color: isSelected ? AppColors.borderDarkPrimary : AppColors.neutral500,
-              ),
-              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-              boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
-            ),
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.textBlack,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-              ),
-            ),
-          ),
-        ),
+    return SizedBox(
+      width: AppDimensions.minTouchTarget,
+      height: 40,
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        icon: AppIcon(icon, color: AppColors.textPrimary),
+        onPressed: onPressed,
+        tooltip: tooltip,
       ),
     );
   }

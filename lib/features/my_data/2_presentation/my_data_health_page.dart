@@ -13,6 +13,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/m
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Health data detail — Figma node 43973:1861.
 class MyDataHealthPage extends ConsumerStatefulWidget {
@@ -185,15 +186,15 @@ class _HealthServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureComplaints,
-                onTap: () => _showComingSoon(context, l10n.myDataHealthProcedureComplaints),
+                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/mi-salud-digital/sugerencias-y-reclamaciones'),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureHealthCard,
-                onTap: () => _showComingSoon(context, l10n.myDataHealthProcedureHealthCard),
+                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/tarjeta-sanitaria'),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureSpecializedCare,
-                onTap: () => _showComingSoon(context, l10n.myDataHealthProcedureSpecializedCare),
+                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/tramites'),
               ),
             ],
           ),
@@ -203,15 +204,15 @@ class _HealthServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkSescam,
-                onTap: () => _showComingSoon(context, l10n.myDataHealthLinkSescam),
+                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/'),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkDigitalHealth,
-                onTap: () => _showComingSoon(context, l10n.myDataHealthLinkDigitalHealth),
+                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/mi-salud-digital'),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkClinicalHistory,
-                onTap: () => _showComingSoon(context, l10n.myDataHealthLinkClinicalHistory),
+                onTap: () => _launchExternalUrl(context, 'https://www.sanidad.gob.es/areas/saludDigital/historiaClinicaSNS/home.htm'),
               ),
             ],
           ),
@@ -220,11 +221,11 @@ class _HealthServicesTab extends StatelessWidget {
     );
   }
 
-  void _showComingSoon(final BuildContext context, final String label) {
-    AppAlertSnackbar.show(
-      context,
-      message: AppLocalizations.of(context).myDataSectionComingSoon(label),
-    );
+  Future<void> _launchExternalUrl(final BuildContext context, final String url) async {
+    final opened = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (!opened && context.mounted) {
+      AppAlertSnackbar.show(context, message: AppLocalizations.of(context).externalLinkOpenFailed);
+    }
   }
 }
 
