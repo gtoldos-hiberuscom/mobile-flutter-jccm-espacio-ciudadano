@@ -156,6 +156,21 @@ class EmojiDioLogger extends Interceptor {
   @override
   void onRequest(final RequestOptions options, final RequestInterceptorHandler handler) {
     logger.d('$dioNote 📑 Request: ${options.method} ${options.uri}');
+    final requestData = options.data;
+    if (options.path == '/api/v1/soporte' && requestData is FormData) {
+      final formData = requestData;
+      final attachments = formData.files
+          .where((final entry) => entry.key == 'adjunto')
+          .map(
+            (final entry) => {
+              'filename': entry.value.filename,
+              'contentType': entry.value.contentType.toString(),
+              'length': entry.value.length,
+            },
+          )
+          .toList(growable: false);
+      logger.d('$dioNote 📎 Support attachments: $attachments');
+    }
     if (kVerboseNetworkLogging) {
       if (options.headers.isNotEmpty) {
         logger.d('$dioNote 📑 Headers: ${_redact(options.headers)}');
@@ -171,7 +186,7 @@ class EmojiDioLogger extends Interceptor {
   void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
     logger.d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}');
     final path = response.requestOptions.path;
-    final logResponseBody = kVerboseNetworkLogging || path == '/api/v1/intermediacion/termalismo/datos' || path == '/api/v1/intermediacion/atencion-dependencia/datos' || path.startsWith('/api/v1/ccaa/familia-numerosa/');
+    final logResponseBody = kVerboseNetworkLogging || path == '/api/v1/intermediacion/termalismo/datos' || path == '/api/v1/intermediacion/atencion-dependencia/datos' || path.startsWith('/api/v1/ccaa/familia-numerosa/') || (path.startsWith('/api/v1/agenda/') && path.contains('/eventos/'));
     if (logResponseBody) {
       logger.d('$dioNote 📦 Response Data: ${_redact(response.data)}');
     }
@@ -180,7 +195,10 @@ class EmojiDioLogger extends Interceptor {
 
   @override
   void onError(final DioException err, final ErrorInterceptorHandler handler) {
-    if (_isHandledBusinessResponse(err.response?.data)) {
+    if (_isHandledBusinessResponse(
+      path: err.requestOptions.path,
+      data: err.response?.data,
+    )) {
       handler.next(err);
       return;
     }
@@ -195,7 +213,13 @@ class EmojiDioLogger extends Interceptor {
     handler.next(err);
   }
 
-  bool _isHandledBusinessResponse(final Object? data) {
+  bool _isHandledBusinessResponse({
+    required final String path,
+    required final Object? data,
+  }) {
+    if (path == '/api/v1/soporte') {
+      return false;
+    }
     if (data is! Map) {
       return false;
     }

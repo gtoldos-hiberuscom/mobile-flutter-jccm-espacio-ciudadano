@@ -145,10 +145,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consentPagePrivacyLink => 'Ver política de privacidad completa';
 
   @override
-  String get consentAcceptButton => 'Aceptar y continuar';
+  String get consentAcceptButton => 'Continuar';
 
   @override
-  String get consentRejectButton => 'Rechazar y salir';
+  String get consentRejectButton => 'Salir';
 
   @override
   String get consentPageSemantics => 'Pantalla de aceptación de condiciones de uso';

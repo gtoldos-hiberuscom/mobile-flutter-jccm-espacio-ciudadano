@@ -112,7 +112,7 @@ class ConsentNotifier extends Notifier<ConsentState> {
   // ── Public actions ────────────────────────────────────────────────────────
 
   /// Called when the citizen's scroll position reaches the bottom of the
-  /// legal text in step 1. Unlocks the "Aceptar y continuar" CTA.
+  /// legal text in step 1. Unlocks the "Continuar" CTA.
   void onScrollReachedEnd() {
     _hasReachedLegalTextEnd = true;
     if (state.status == ConsentStatus.step1Locked) {

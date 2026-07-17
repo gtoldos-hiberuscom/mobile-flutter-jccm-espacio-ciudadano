@@ -47,15 +47,16 @@ final class _AgendaAdapter implements HttpClientAdapter {
       return ResponseBody.fromString(
         jsonEncode(
           {
-            'body': [
-              {
-                'fecha': '01/06/2026',
-                'hora': '09:15',
-                'titulo': 'Registro',
-                'tipoEvento': 'Trámite administrativo',
-                'ubicacion': 'Oficina de atención',
-              },
-            ],
+            'body': {
+              'eventos': [
+                {
+                  'fechaVencimiento': '2026-06-01T09:15:00',
+                  'titulo': 'Registro',
+                  'tipoEvento': 'Trámite administrativo',
+                  'ubicacion': 'Oficina de atención',
+                },
+              ],
+            },
           },
         ),
         200,

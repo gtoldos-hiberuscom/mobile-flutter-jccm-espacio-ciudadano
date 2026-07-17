@@ -1,9 +1,15 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 
 /// Agency agenda screen — Figma node 43716:12909.
 class AgendaPage extends ConsumerStatefulWidget {
@@ -15,6 +21,23 @@ class AgendaPage extends ConsumerStatefulWidget {
 
 class _AgendaPageState extends ConsumerState<AgendaPage> {
   _AgendaFilter _selectedFilter = _AgendaFilter.all;
+
+  Future<void> _openJccmAuthorization() async {
+    await context.push<void>(
+      Uri(
+        path: Routes.consent,
+        queryParameters: const {
+          'mode': 'preferences',
+          'returnTo': Routes.agenda,
+        },
+      ).toString(),
+    );
+    if (mounted) {
+      ref
+        ..invalidate(jccmDataAuthorizationProvider)
+        ..invalidate(agendaAppointmentsProvider);
+    }
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -67,16 +90,23 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _FilterNavigation(
-          selectedFilter: _selectedFilter,
-          onSelected: (final filter) => setState(() => _selectedFilter = filter),
-        ),
-        const SizedBox(height: AppDimensions.space8),
-        _LastUpdateRow(
-          updatedAt: state.updatedAt,
-          onRefresh: () => ref.invalidate(agendaAppointmentsProvider),
-        ),
-        const SizedBox(height: AppDimensions.space8),
+        if (state.hasJccmAuthorization) ...[
+          _FilterNavigation(
+            selectedFilter: _selectedFilter,
+            onSelected: (final filter) => setState(() => _selectedFilter = filter),
+          ),
+          const SizedBox(height: AppDimensions.space8),
+          _LastUpdateRow(
+            updatedAt: state.updatedAt,
+            onRefresh: () => ref.invalidate(agendaAppointmentsProvider),
+          ),
+          const SizedBox(height: AppDimensions.space8),
+        ] else ...[
+          MyDataAuthorizationContextualHelper(
+            onOpenSettings: () => unawaited(_openJccmAuthorization()),
+          ),
+          const SizedBox(height: AppDimensions.space8),
+        ],
         ClipRRect(
           borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
           child: AppCalendar(
@@ -86,7 +116,9 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           ),
         ),
         const SizedBox(height: AppDimensions.space12),
-        if (appointments.isEmpty)
+        if (!state.hasJccmAuthorization)
+          const SizedBox.shrink()
+        else if (appointments.isEmpty)
           const _AgendaEmptyState()
         else
           for (final section in sections) ...[
@@ -433,7 +465,8 @@ enum _AgendaFilter {
   all(label: 'Todos'),
   next7Days(label: '7 días', days: 7),
   next30Days(label: '30 días', days: 30),
-  next365Days(label: '365 dias', days: 365);
+  next365Days(label: '365 dias', days: 365)
+  ;
 
   const _AgendaFilter({
     required this.label,

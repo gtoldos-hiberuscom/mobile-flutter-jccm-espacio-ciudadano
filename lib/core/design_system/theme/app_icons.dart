@@ -104,6 +104,7 @@ abstract final class AppIconAssets {
   static const String docs = 'assets/icons/docs.svg';
   static const String fingerprint = 'assets/icons/fingerprint.svg';
   static const String help = 'assets/icons/help.svg';
+  static const String idCard = 'assets/icons/id_card.svg';
   static const String license = 'assets/icons/license.svg';
   static const String notifications = 'assets/icons/notifications.svg';
   static const String person = 'assets/icons/person.svg';

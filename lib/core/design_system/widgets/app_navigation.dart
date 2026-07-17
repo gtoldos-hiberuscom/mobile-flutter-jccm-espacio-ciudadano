@@ -982,11 +982,13 @@ class AppFab extends StatelessWidget {
     super.key,
     this.icon,
     this.iconAsset,
+    this.iconSize = 20,
     this.semanticsLabel,
   }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
 
   final IconData? icon;
   final String? iconAsset;
+  final double iconSize;
   final VoidCallback? onPressed;
   final String? semanticsLabel;
 
@@ -1006,13 +1008,15 @@ class AppFab extends StatelessWidget {
           child: SizedBox(
             width: 56,
             height: 56,
-            child: iconAsset == null
-                ? AppIcon(icon!, color: AppColors.textWhite, size: 20)
-                : AppSvgIcon(
-                    iconAsset!,
-                    color: AppColors.textWhite,
-                    size: 20,
-                  ),
+            child: Center(
+              child: iconAsset == null
+                  ? AppIcon(icon!, color: AppColors.textWhite, size: iconSize)
+                  : AppSvgIcon(
+                      iconAsset!,
+                      color: AppColors.textWhite,
+                      size: iconSize,
+                    ),
+            ),
           ),
         ),
       ),

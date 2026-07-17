@@ -365,13 +365,13 @@ abstract class AppLocalizations {
   /// Botón para aceptar las condiciones de uso y continuar a la pantalla principal.
   ///
   /// In es, this message translates to:
-  /// **'Aceptar y continuar'**
+  /// **'Continuar'**
   String get consentAcceptButton;
 
   /// Botón para rechazar las condiciones de uso y cerrar la aplicación.
   ///
   /// In es, this message translates to:
-  /// **'Rechazar y salir'**
+  /// **'Salir'**
   String get consentRejectButton;
 
   /// Etiqueta de accesibilidad para la pantalla de consentimiento.

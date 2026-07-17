@@ -23,7 +23,6 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         () => _sescamApi.citasFuturas(
           numDocumento: documentNumber,
           extra: _generatedExtra,
-          validateStatus: (final status) => status != null && status < 500,
         ),
         source: _AgendaAppointmentSource.health,
       ),
@@ -33,7 +32,6 @@ final class AgendaRepositoryImpl implements AgendaRepository {
             idAgente: trimmedAgentId,
             periodo: 'todos',
             extra: _generatedExtra,
-            validateStatus: (final status) => status != null && status < 500,
           ),
           source: _AgendaAppointmentSource.general,
           ignoreBadRequest: true,
@@ -277,6 +275,8 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'start',
       'fechaInicio',
       'fecha_inicio',
+      'fechaVencimiento',
+      'fecha_vencimiento',
       'startDate',
       'start_date',
     ]);

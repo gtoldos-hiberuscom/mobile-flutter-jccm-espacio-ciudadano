@@ -184,11 +184,11 @@
   "@consentPagePrivacyLink": {
     "description": "Link to view the full privacy policy in the browser."
   },
-  "consentAcceptButton": "Accept and continue",
+  "consentAcceptButton": "Continue",
   "@consentAcceptButton": {
     "description": "Button to accept the terms of use and continue to the main screen."
   },
-  "consentRejectButton": "Reject and exit",
+  "consentRejectButton": "Exit",
   "@consentRejectButton": {
     "description": "Button to reject the terms of use and close the application."
   },

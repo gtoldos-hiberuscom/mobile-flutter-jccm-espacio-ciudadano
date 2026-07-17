@@ -180,11 +180,11 @@
   "@consentPagePrivacyLink": {
     "description": "Enlace para ver la política de privacidad completa en el navegador."
   },
-  "consentAcceptButton": "Aceptar y continuar",
+  "consentAcceptButton": "Continuar",
   "@consentAcceptButton": {
     "description": "Botón para aceptar las condiciones de uso y continuar a la pantalla principal."
   },
-  "consentRejectButton": "Rechazar y salir",
+  "consentRejectButton": "Salir",
   "@consentRejectButton": {
     "description": "Botón para rechazar las condiciones de uso y cerrar la aplicación."
   },

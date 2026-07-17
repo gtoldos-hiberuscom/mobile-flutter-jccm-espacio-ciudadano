@@ -16,7 +16,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Two-step mandatory legal-consent onboarding gate (JCCMEC-11).
 ///
-/// **Step 1** — Scrollable legal text. The "Aceptar y continuar" CTA is locked
+/// **Step 1** — Scrollable legal text. The "Continuar" CTA is locked
 /// until the citizen scrolls to the very bottom of the content.
 ///
 /// **Step 2** — Variable list of optional authorisation checkboxes. "Aceptar"
