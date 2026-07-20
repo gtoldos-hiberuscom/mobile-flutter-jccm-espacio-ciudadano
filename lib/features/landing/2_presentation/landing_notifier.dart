@@ -85,9 +85,7 @@ class LandingNotifier extends Notifier<LandingState> {
     }
     state = const LandingState(isLoggingIn: true);
 
-    final appStorage = ref.read(appStorageProvider);
-    final forceClaveLogin = appStorage.read<bool>(StorageKeys.forceClaveLoginOnNextLogin) ?? false;
-    final result = await ref.read(loginUseCaseProvider).call(forceLogin: forceClaveLogin);
+    final result = await ref.read(loginUseCaseProvider).call();
 
     if (!ref.mounted) {
       return;
@@ -95,12 +93,6 @@ class LandingNotifier extends Notifier<LandingState> {
 
     switch (result) {
       case LoginSuccess(:final tokenResponse, :final jwtClaims):
-        if (forceClaveLogin) {
-          await appStorage.remove(StorageKeys.forceClaveLoginOnNextLogin);
-          if (!ref.mounted) {
-            return;
-          }
-        }
         ref.read(authSessionControllerProvider).startInMemory(tokenResponse, claims: jwtClaims);
         ref.invalidate(consentProvider(jwtClaims.idAgente ?? ''));
         state = const LandingState(loginSuccess: true);

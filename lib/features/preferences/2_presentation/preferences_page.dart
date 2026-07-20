@@ -10,7 +10,9 @@ import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dar
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/reset_consent_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
@@ -332,11 +334,19 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       return;
     }
 
-    await ref.read(appStorageProvider).write(StorageKeys.forceClaveLoginOnNextLogin, true);
-    ref
-      ..invalidate(_preferencesStateProvider((idAgente: idAgente)))
-      ..invalidate(consentProvider(idAgente));
-    await ref.read(authSessionControllerProvider).clear();
+    // Terminate the federated Cl@ve session (RP-initiated logout) so the
+    // broker's SSO cookie is invalidated, then always clear the local session.
+    try {
+      final idToken = ref.read(tokenResponseProvider)?.idToken ?? '';
+      if (idToken.isNotEmpty) {
+        await ref.read(logoutUseCaseProvider).call(idToken: idToken);
+      }
+    } finally {
+      ref
+        ..invalidate(_preferencesStateProvider((idAgente: idAgente)))
+        ..invalidate(consentProvider(idAgente));
+      await ref.read(authSessionControllerProvider).clear();
+    }
     if (!mounted) {
       return;
     }

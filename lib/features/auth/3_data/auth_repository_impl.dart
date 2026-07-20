@@ -15,9 +15,13 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<AuthorizationTokenResponse> login({
     final List<String> scopes = const ['openid'],
     final String? loginHint,
-    final bool forceLogin = false,
   }) async {
     try {
+      // `prompt=login` and `max_age=0` are sent on every attempt so the
+      // Keycloak/Cl@ve broker always re-runs authentication and re-shows the
+      // method selector, even when a browser cookie remembers a previous
+      // (possibly failed) Cl@ve Permanente attempt. AppAuth generates a fresh
+      // state, nonce and PKCE (S256) code_verifier per request.
       return await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
           _config.ssoClientId,
@@ -25,7 +29,12 @@ final class AuthRepositoryImpl implements AuthRepository {
           discoveryUrl: _discoveryUrl,
           loginHint: loginHint,
           scopes: scopes,
-          promptValues: forceLogin ? const [Prompt.login] : null,
+          promptValues: const [Prompt.login, Prompt.selectAccount],
+          additionalParameters: const {'max_age': '0'},
+          // iOS/macOS only: ephemeral ASWebAuthenticationSession so no SSO
+          // cookies are shared with (or persisted between) login attempts.
+          // Android (Custom Tabs) ignores this value.
+          externalUserAgent: ExternalUserAgent.ephemeralAsWebAuthenticationSession,
         ),
       );
     } on FlutterAppAuthUserCancelledException catch (error, stackTrace) {
@@ -35,10 +44,7 @@ final class AuthRepositoryImpl implements AuthRepository {
       );
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
       Error.throwWithStackTrace(
-        AuthException.remoteFailure(
-          message: _appAuthErrorMessage(error),
-          cause: error,
-        ),
+        _mapPlatformException(error),
         stackTrace,
       );
     } on AuthException {
@@ -70,10 +76,7 @@ final class AuthRepositoryImpl implements AuthRepository {
       );
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
       Error.throwWithStackTrace(
-        AuthException.remoteFailure(
-          message: _appAuthErrorMessage(error),
-          cause: error,
-        ),
+        _mapPlatformException(error),
         stackTrace,
       );
     } on AuthException {
@@ -102,16 +105,15 @@ final class AuthRepositoryImpl implements AuthRepository {
           additionalParameters: {
             'client_id': _config.ssoClientId,
           },
+          // Match the login flow: ephemeral session on iOS/macOS.
+          externalUserAgent: ExternalUserAgent.ephemeralAsWebAuthenticationSession,
         ),
       );
     } on FlutterAppAuthUserCancelledException {
       return;
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
       Error.throwWithStackTrace(
-        AuthException.remoteFailure(
-          message: _appAuthErrorMessage(error),
-          cause: error,
-        ),
+        _mapPlatformException(error),
         stackTrace,
       );
     } catch (error, stackTrace) {
@@ -147,20 +149,25 @@ final class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  static String _appAuthErrorMessage(
+  /// Maps a plugin platform exception to a domain [AuthException],
+  /// distinguishing an OAuth error returned by the authorization server
+  /// (`error`/`error_description` per RFC 6749) from a technical failure in
+  /// the AppAuth SDK or the browser session.
+  static AuthException _mapPlatformException(
     final FlutterAppAuthPlatformException error,
   ) {
     final details = error.platformErrorDetails;
-    final description = details.errorDescription?.trim();
-    if (description != null && description.isNotEmpty) {
-      return 'Cl@ve authentication failed: $description';
-    }
-
     final oauthError = details.error?.trim();
+    final description = details.errorDescription?.trim();
+
     if (oauthError != null && oauthError.isNotEmpty) {
-      return 'Cl@ve authentication failed: $oauthError';
+      final suffix = (description != null && description.isNotEmpty) ? '$oauthError — $description' : oauthError;
+      return AuthException.remoteFailure(
+        message: 'Cl@ve authentication failed: $suffix',
+        cause: error,
+      );
     }
 
-    return 'Cl@ve authentication failed.';
+    return AuthException.unexpected(cause: error);
   }
 }

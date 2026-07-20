@@ -49,7 +49,6 @@ Future<void> _clearRestoredSecureSessionOnFreshInstall({
   final isFreshInstall = sharedPreferences.getKeys().isEmpty;
   if (isFreshInstall) {
     await FlutterSecureStorageImpl(const FlutterSecureStorage()).clear();
-    await appStorage.write(StorageKeys.forceClaveLoginOnNextLogin, true);
   }
   await appStorage.write(StorageKeys.installBootstrapped, true);
 }
