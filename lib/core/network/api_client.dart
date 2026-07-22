@@ -6,7 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 Dio buildDioClient({
   required final AppConfig config,
   required final String? Function() tokenGetter,
-  required final Future<bool> Function() refreshSession,
+  required final Future<bool> Function({bool force}) refreshSession,
 }) {
   final timeoutDuration = Duration(seconds: config.timeout);
 

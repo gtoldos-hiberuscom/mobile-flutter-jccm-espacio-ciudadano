@@ -16,7 +16,12 @@
       "Read(//Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano/**)",
       "mcp__claude_ai_Figma__get_design_context",
       "Bash(fvm dart *)",
-      "Bash(cd *)"
+      "Bash(cd *)",
+      "Bash(grep -B2 -A8 'name: dio$' /Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano/jccm_espacio_ciudadano/pubspec.lock)",
+      "Bash(xargs ls)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(git log *)",
+      "Bash(python3 *)"
     ]
   }
 }

@@ -32,6 +32,16 @@ final class AuthSessionController {
   final AuthRepository _repository;
   final SecureStorage _storage;
 
+  /// Small skew applied to the synchronous validity short-circuit in [refresh]
+  /// so a token on the edge of expiry is renewed rather than reused (aligned
+  /// with the proactive threshold of [refreshIfNeeded]).
+  static const Duration _refreshSkew = Duration(seconds: 30);
+
+  /// Monotonic session generation. Every [clear] (logout) bumps it; an in-flight
+  /// [_doRefresh] captures it at start and discards its result if it changed —
+  /// preventing a refresh that completes after logout from resurrecting tokens.
+  int _sessionGeneration = 0;
+
   /// Single-flight guard: while a refresh is in progress, concurrent callers
   /// (the `SessionGuard` plus every 401 that hits `AuthRefreshInterceptor`)
   /// share this same [Future] instead of each firing an independent
@@ -55,13 +65,14 @@ final class AuthSessionController {
     }
 
     final refreshToken = await _storage.read(StorageKeys.refreshToken);
+    final idToken = await _storage.read(StorageKeys.idToken);
     final expiresAtValue = await _storage.read(StorageKeys.sessionExpiresAt);
     final expiresAt = expiresAtValue == null ? null : DateTime.tryParse(expiresAtValue);
     final session = TokenResponse(
       accessToken,
       refreshToken,
       expiresAt,
-      null,
+      idToken,
       null,
       null,
       null,
@@ -86,7 +97,7 @@ final class AuthSessionController {
     // single-flight guard: a caller with a still-valid token never joins (or
     // starts) a refresh.
     final currentExpiry = _ref.read(tokenResponseProvider)?.accessTokenExpirationDateTime;
-    if (!force && currentExpiry != null && currentExpiry.isAfter(DateTime.now())) {
+    if (!force && currentExpiry != null && currentExpiry.isAfter(DateTime.now().add(_refreshSkew))) {
       return Future<bool>.value(true);
     }
 
@@ -101,6 +112,7 @@ final class AuthSessionController {
   }
 
   Future<bool> _doRefresh() async {
+    final generation = _sessionGeneration;
     final persistedAccessToken = await _storage.read(StorageKeys.accessToken);
     final hasPersistedSession = persistedAccessToken != null && persistedAccessToken.isNotEmpty;
     final refreshToken = _ref.read(tokenResponseProvider)?.refreshToken ?? await _storage.read(StorageKeys.refreshToken);
@@ -112,6 +124,11 @@ final class AuthSessionController {
 
     try {
       final newSession = await _repository.refreshToken(refreshToken: refreshToken);
+      if (generation != _sessionGeneration) {
+        // A logout (clear()) landed while this refresh was in flight. Drop the
+        // rotated tokens instead of re-persisting a session the user just ended.
+        return false;
+      }
       final mergedSession = _mergeWithCurrentSession(newSession);
       if (hasPersistedSession) {
         await persist(mergedSession);
@@ -144,6 +161,7 @@ final class AuthSessionController {
     await Future.wait([
       if (session.accessToken != null) _storage.write(StorageKeys.accessToken, session.accessToken!),
       if (session.refreshToken != null) _storage.write(StorageKeys.refreshToken, session.refreshToken!),
+      if (session.idToken != null) _storage.write(StorageKeys.idToken, session.idToken!),
       if (session.accessTokenExpirationDateTime != null)
         _storage.write(
           StorageKeys.sessionExpiresAt,
@@ -168,9 +186,13 @@ final class AuthSessionController {
   }
 
   Future<void> clear() async {
+    // Bump first, synchronously, so any refresh already awaiting the network
+    // sees a changed generation and discards its result (see [_doRefresh]).
+    _sessionGeneration++;
     await Future.wait([
       _storage.delete(StorageKeys.accessToken),
       _storage.delete(StorageKeys.refreshToken),
+      _storage.delete(StorageKeys.idToken),
       _storage.delete(StorageKeys.sessionExpiresAt),
     ]);
     _ref.read(tokenResponseProvider.notifier).update(null);

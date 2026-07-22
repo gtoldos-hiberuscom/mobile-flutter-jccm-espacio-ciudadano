@@ -108,8 +108,7 @@ void main() {
   group('AuthSessionController.refresh single-flight', () {
     test('concurrent refreshes share a single token() call', () async {
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider)
-        ..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
       repository.gate = Completer<void>();
 
       final futures = List.generate(5, (_) => controller.refresh(force: true));
@@ -124,8 +123,7 @@ void main() {
   group('AuthSessionController.refresh error handling', () {
     test('remoteFailure (invalid_grant) clears the session', () async {
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider)
-        ..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
       repository.errorToThrow = const AuthException.remoteFailure(message: 'invalid_grant');
 
       final refreshed = await controller.refresh(force: true);
@@ -136,8 +134,7 @@ void main() {
 
     test('transient error (unexpected) keeps the session', () async {
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider)
-        ..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
       repository.errorToThrow = const AuthException.unexpected();
 
       final refreshed = await controller.refresh(force: true);
@@ -161,8 +158,7 @@ void main() {
   group('AuthSessionController.refreshIfNeeded proactive threshold', () {
     test('refreshes when the token expires within the threshold', () async {
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider)
-        ..startInMemory(tokenExpiringIn(const Duration(seconds: 30)));
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: 30)));
 
       final valid = await controller.refreshIfNeeded();
 
@@ -172,8 +168,7 @@ void main() {
 
     test('does not refresh when the token outlives the threshold', () async {
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider)
-        ..startInMemory(tokenExpiringIn(const Duration(minutes: 5)));
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(minutes: 5)));
 
       final valid = await controller.refreshIfNeeded();
 
@@ -198,14 +193,79 @@ void main() {
 
     test('memory-only session does not touch storage', () async {
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider)
-        ..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
 
       final refreshed = await controller.refresh(force: true);
 
       expect(refreshed, isTrue);
       expect(storage.store, isEmpty);
       expect(container.read(tokenResponseProvider)?.accessToken, 'new-access-1');
+    });
+  });
+
+  group('AuthSessionController logout↔refresh race (AUTH-3)', () {
+    test('a refresh completing after clear() does not resurrect the session', () async {
+      storage.store[StorageKeys.accessToken] = 'old-access';
+      storage.store[StorageKeys.refreshToken] = 'old-refresh';
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
+      repository.gate = Completer<void>();
+
+      final refreshFuture = controller.refresh(force: true);
+      await controller.clear(); // logout lands while the refresh is in flight
+      repository.gate!.complete();
+      final refreshed = await refreshFuture;
+
+      expect(refreshed, isFalse);
+      expect(repository.refreshCount, 1, reason: 'the network refresh did run and complete');
+      expect(container.read(tokenResponseProvider), isNull);
+      expect(storage.store[StorageKeys.accessToken], isNull);
+      expect(storage.store[StorageKeys.refreshToken], isNull);
+    });
+  });
+
+  group('AuthSessionController idToken persistence (F-23)', () {
+    test('persist writes the idToken to secure storage', () async {
+      storage.store[StorageKeys.accessToken] = 'old-access';
+      storage.store[StorageKeys.refreshToken] = 'old-refresh';
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+      repository.responseBuilder = (final count) => TokenResponse(
+        'new-access',
+        'new-refresh',
+        DateTime.now().add(const Duration(minutes: 5)),
+        'id-token-xyz',
+        null,
+        null,
+        null,
+      );
+
+      final refreshed = await controller.refresh(force: true);
+
+      expect(refreshed, isTrue);
+      expect(storage.store[StorageKeys.idToken], 'id-token-xyz');
+    });
+
+    test('hydrateFromStorage restores the persisted idToken', () async {
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.idToken] = 'id-token-xyz';
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+
+      final session = await controller.hydrateFromStorage();
+
+      expect(session?.idToken, 'id-token-xyz');
+    });
+
+    test('clear removes the persisted idToken', () async {
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.idToken] = 'id-token-xyz';
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+
+      await controller.clear();
+
+      expect(storage.store[StorageKeys.idToken], isNull);
     });
   });
 }
