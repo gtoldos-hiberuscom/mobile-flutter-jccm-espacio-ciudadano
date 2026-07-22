@@ -1995,6 +1995,22 @@
   "@lifeEventsEmpty": {
     "description": "Personalization — empty state for the catalog."
   },
+  "lifeEventsDiscardConfirmTitle": "Descartar cambios",
+  "@lifeEventsDiscardConfirmTitle": {
+    "description": "Personalization — discard changes dialog title."
+  },
+  "lifeEventsDiscardConfirmBody": "Tienes cambios sin guardar. Si sales ahora, perderás las modificaciones realizadas.",
+  "@lifeEventsDiscardConfirmBody": {
+    "description": "Personalization — discard changes dialog body."
+  },
+  "lifeEventsDiscardStay": "Seguir editando",
+  "@lifeEventsDiscardStay": {
+    "description": "Personalization — cancel discard changes dialog."
+  },
+  "lifeEventsDiscardAction": "Descartar",
+  "@lifeEventsDiscardAction": {
+    "description": "Personalization — confirm discard changes dialog."
+  },
   "lifeEventsCategoryFamilia": "Familia",
   "@lifeEventsCategoryFamilia": {
     "description": "Personalization — familia category header."
