@@ -86,7 +86,13 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
     // the current onError, deadlocking it permanently and poisoning the queue
     // for every later failure. The retry error surfaces via handler.next to the
     // primary chain's ErrorInterceptor, which maps it to an AppError.
-    final retryDio = Dio(_dio.options)..httpClientAdapter = _dio.httpClientAdapter;
+    // Shares the transport (options + adapter) but carries only the logger, so
+    // the retry is still visible in the `[DIO]` logs — never the
+    // AuthRefreshInterceptor (a QueuedInterceptor) nor the ErrorInterceptor
+    // (the primary chain maps the error when we forward via handler.next).
+    final retryDio = Dio(_dio.options)
+      ..httpClientAdapter = _dio.httpClientAdapter
+      ..interceptors.add(EmojiDioLogger());
     try {
       final requestOptions = err.requestOptions;
       final headers = Map<String, dynamic>.from(requestOptions.headers)..[HttpHeaders.authorizationHeader] = 'Bearer $token';
