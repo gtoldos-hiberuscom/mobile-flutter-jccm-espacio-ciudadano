@@ -149,7 +149,7 @@ final class ErrorInterceptor extends Interceptor {
 /// successful call is a noticeable source of debug-mode slowdown, so it's off
 /// by default. Flip to `true` locally when you need to inspect a response in
 /// detail. Error responses are always logged in full regardless of this flag.
-const bool kVerboseNetworkLogging = false;
+const bool kVerboseNetworkLogging = true;
 
 class EmojiDioLogger extends Interceptor {
   final String dioNote = '[DIO]';

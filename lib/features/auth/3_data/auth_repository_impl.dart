@@ -13,7 +13,7 @@ final class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthorizationTokenResponse> login({
-    final List<String> scopes = const ['openid'],
+    final List<String> scopes = authDefaultScopes,
     final String? loginHint,
   }) async {
     try {
@@ -60,7 +60,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<TokenResponse> refreshToken({
     required final String refreshToken,
-    final List<String> scopes = const ['openid'],
+    final List<String> scopes = authDefaultScopes,
   }) async {
     _requireNotBlank(refreshToken, 'refreshToken');
 

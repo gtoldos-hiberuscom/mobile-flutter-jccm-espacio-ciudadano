@@ -10,6 +10,10 @@ final dioProvider = Provider<Dio>((final ref) {
   return buildDioClient(
     config: config,
     tokenGetter: () => ref.read(tokenResponseProvider)?.accessToken,
-    refreshSession: () => ref.read(authSessionControllerProvider).refresh(force: true),
+    // `force: false` so a 401 that lands after a peer (the guard or an earlier
+    // 401) already renewed the token retries with the fresh token instead of
+    // triggering another refresh. `AuthSessionController.refresh` de-dupes
+    // genuinely concurrent refreshes via its single-flight guard.
+    refreshSession: () => ref.read(authSessionControllerProvider).refresh(),
   );
 });
