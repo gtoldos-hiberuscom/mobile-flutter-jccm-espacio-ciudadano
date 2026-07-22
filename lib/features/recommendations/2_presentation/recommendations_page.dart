@@ -28,6 +28,18 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     unawaited(context.push(Routes.preferences));
   }
 
+  Future<void> _openLifeEvents() async {
+    await context.push<void>(
+      Uri(
+        path: Routes.lifeEvents,
+        queryParameters: const {'returnTo': Routes.recommendations},
+      ).toString(),
+    );
+    if (mounted) {
+      ref.invalidate(recommendationsProvider);
+    }
+  }
+
   Future<void> _reviewConsents() async {
     await context.push<void>(
       Uri(
@@ -179,7 +191,10 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
             const SizedBox(height: AppDimensions.space24),
           ],
         ],
-        _PreferencesHint(onEditPreferences: _goToPreferences),
+        _PreferencesHint(
+          onEditPreferences: () => unawaited(_openLifeEvents()),
+          actionSemanticsLabel: AppLocalizations.of(context).lifeEventsTitle,
+        ),
         if (recommendations.isNotEmpty) ...[
           const SizedBox(height: AppDimensions.space24),
           for (final recommendation in recommendations) ...[
@@ -272,6 +287,8 @@ class _FilterNavigation extends StatefulWidget {
 }
 
 class _FilterNavigationState extends State<_FilterNavigation> {
+  static const _swipeDistanceThreshold = 48.0;
+  static const _swipeVelocityThreshold = 200.0;
   static const _primaryFilters = [
     _RecommendationFilter.all,
     _RecommendationFilter.recent,
@@ -283,6 +300,7 @@ class _FilterNavigationState extends State<_FilterNavigation> {
   ];
 
   bool _showImmediate = false;
+  double _horizontalDragDistance = 0;
 
   @override
   void didUpdateWidget(covariant final _FilterNavigation oldWidget) {
@@ -290,6 +308,27 @@ class _FilterNavigationState extends State<_FilterNavigation> {
     if (widget.selectedFilter == _RecommendationFilter.immediate) {
       _showImmediate = true;
     }
+  }
+
+  void _onHorizontalDragStart(final DragStartDetails _) {
+    _horizontalDragDistance = 0;
+  }
+
+  void _onHorizontalDragUpdate(final DragUpdateDetails details) {
+    _horizontalDragDistance += details.delta.dx;
+  }
+
+  void _onHorizontalDragEnd(final DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    final swipedLeft = _horizontalDragDistance <= -_swipeDistanceThreshold || velocity <= -_swipeVelocityThreshold;
+    final swipedRight = _horizontalDragDistance >= _swipeDistanceThreshold || velocity >= _swipeVelocityThreshold;
+
+    if (!_showImmediate && swipedLeft) {
+      setState(() => _showImmediate = true);
+    } else if (_showImmediate && swipedRight) {
+      setState(() => _showImmediate = false);
+    }
+    _horizontalDragDistance = 0;
   }
 
   @override
@@ -300,28 +339,34 @@ class _FilterNavigationState extends State<_FilterNavigation> {
         if (filter != _RecommendationFilter.all && filter.apply(widget.recommendations).isNotEmpty) filter,
     };
     final filters = _showImmediate ? _immediateFilters : _primaryFilters;
-    final selectedIndex = filters.contains(widget.selectedFilter) ? filters.indexOf(widget.selectedFilter) : filters.indexOf(_RecommendationFilter.news);
+    final selectedIndex = filters.indexOf(widget.selectedFilter);
 
-    return AppFloatingNavigation(
-      tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
-      selectedIndex: selectedIndex,
-      enabledTabs: filters.map(enabledFilters.contains).toList(growable: false),
-      minTabWidths: _showImmediate ? const [128, 206] : const [76, 150, 150],
-      onTabSelected: (final index) => widget.onSelected?.call(filters[index]),
-      leading: _showImmediate
-          ? _FloatingNavigationArrow(
-              icon: AppIcons.arrowBack,
-              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-              onPressed: () => setState(() => _showImmediate = false),
-            )
-          : null,
-      trailing: !_showImmediate
-          ? _FloatingNavigationArrow(
-              icon: AppIcons.arrowForward,
-              tooltip: _RecommendationFilter.immediate.label(context),
-              onPressed: () => setState(() => _showImmediate = true),
-            )
-          : null,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onHorizontalDragStart: _onHorizontalDragStart,
+      onHorizontalDragUpdate: _onHorizontalDragUpdate,
+      onHorizontalDragEnd: _onHorizontalDragEnd,
+      child: AppFloatingNavigation(
+        tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
+        selectedIndex: selectedIndex,
+        enabledTabs: filters.map(enabledFilters.contains).toList(growable: false),
+        minTabWidths: _showImmediate ? const [128, 206] : const [76, 150, 150],
+        onTabSelected: (final index) => widget.onSelected?.call(filters[index]),
+        leading: _showImmediate
+            ? _FloatingNavigationArrow(
+                icon: AppIcons.arrowBack,
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                onPressed: () => setState(() => _showImmediate = false),
+              )
+            : null,
+        trailing: !_showImmediate
+            ? _FloatingNavigationArrow(
+                icon: AppIcons.arrowForward,
+                tooltip: _RecommendationFilter.immediate.label(context),
+                onPressed: () => setState(() => _showImmediate = true),
+              )
+            : null,
+      ),
     );
   }
 }
@@ -353,10 +398,15 @@ class _FloatingNavigationArrow extends StatelessWidget {
 }
 
 class _PreferencesHint extends StatelessWidget {
-  const _PreferencesHint({required this.onEditPreferences, this.message});
+  const _PreferencesHint({
+    required this.onEditPreferences,
+    this.message,
+    this.actionSemanticsLabel,
+  });
 
   final VoidCallback onEditPreferences;
   final String? message;
+  final String? actionSemanticsLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -388,7 +438,7 @@ class _PreferencesHint extends StatelessWidget {
               icon: AppIcons.settings,
               onPressed: onEditPreferences,
               hierarchy: AppButtonHierarchy.secondary,
-              semanticsLabel: l10n.drawerPreferences,
+              semanticsLabel: actionSemanticsLabel ?? l10n.drawerPreferences,
             ),
           ),
         ],

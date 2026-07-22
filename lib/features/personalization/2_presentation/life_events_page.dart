@@ -72,7 +72,28 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     final isResetting = lifeState.status == LifeEventsStatus.resetting;
     final isPreferencesEditing = widget.returnTo == Routes.preferences;
 
-    return Scaffold(
+    return PopScope(
+      canPop: !lifeState.isDirty,
+      onPopInvokedWithResult: (final didPop, final _) async {
+        if (didPop) {
+          return;
+        }
+        final confirm = await showDialog<bool>(
+          context: context,
+          builder: (final _) => _DiscardChangesDialog(
+            l10n: l10n,
+            onDiscard: () => Navigator.of(context).pop(true),
+            onStay: () => Navigator.of(context).pop(false),
+          ),
+        );
+        if (confirm ?? false) {
+          notifier.discardChanges();
+          if (context.mounted && context.canPop()) {
+            context.pop();
+          }
+        }
+      },
+      child: Scaffold(
       backgroundColor: AppColors.backgroundWhite,
       // Figma node 41779:22466 — bg #f1f8f9, border bluemuted-lighter, Shadow/Low
       appBar: AppNavBar(
@@ -150,6 +171,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
               primaryLeadingIcon: Icons.check,
             ),
         ],
+      ),
       ),
     );
   }
@@ -524,6 +546,42 @@ class _ResetConfirmDialog extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DISCARD CHANGES DIALOG — shown when user presses back with unsaved changes
+// ═══════════════════════════════════════════════════════════════════════════════
+
+class _DiscardChangesDialog extends StatelessWidget {
+  const _DiscardChangesDialog({
+    required this.l10n,
+    required this.onDiscard,
+    required this.onStay,
+  });
+
+  final AppLocalizations l10n;
+  final VoidCallback onDiscard;
+  final VoidCallback onStay;
+
+  @override
+  Widget build(final BuildContext context) {
+    return AlertDialog(
+      title: Text(l10n.lifeEventsDiscardConfirmTitle),
+      content: Text(l10n.lifeEventsDiscardConfirmBody),
+      actions: [
+        AppButton(
+          label: l10n.lifeEventsDiscardStay,
+          onPressed: onStay,
+          hierarchy: AppButtonHierarchy.ghost,
+        ),
+        AppButton(
+          label: l10n.lifeEventsDiscardAction,
+          onPressed: onDiscard,
+          intent: AppButtonIntent.destructive,
+        ),
+      ],
     );
   }
 }

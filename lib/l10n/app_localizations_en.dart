@@ -1501,6 +1501,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifeEventsEmpty => 'There are no life events available at the moment.';
 
   @override
+  String get lifeEventsDiscardConfirmTitle => 'Discard changes';
+
+  @override
+  String get lifeEventsDiscardConfirmBody => 'You have unsaved changes. If you leave now, your changes will be lost.';
+
+  @override
+  String get lifeEventsDiscardStay => 'Keep editing';
+
+  @override
+  String get lifeEventsDiscardAction => 'Discard';
+
+  @override
   String get lifeEventsCategoryFamilia => 'Family';
 
   @override

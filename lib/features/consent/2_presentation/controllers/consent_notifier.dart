@@ -278,4 +278,4 @@ class ConsentNotifier extends Notifier<ConsentState> {
 /// Family provider keyed by `idAgente`.
 ///
 /// Usage: `ref.watch(consentProvider(idAgente))`.
-final consentProvider = NotifierProvider.family<ConsentNotifier, ConsentState, String>(ConsentNotifier.new);
+final consentProvider = NotifierProvider.autoDispose.family<ConsentNotifier, ConsentState, String>(ConsentNotifier.new);

@@ -1502,6 +1502,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lifeEventsEmpty => 'No hay hechos vitales disponibles en este momento.';
 
   @override
+  String get lifeEventsDiscardConfirmTitle => 'Descartar cambios';
+
+  @override
+  String get lifeEventsDiscardConfirmBody => 'Tienes cambios sin guardar. Si sales ahora, perderás las modificaciones realizadas.';
+
+  @override
+  String get lifeEventsDiscardStay => 'Seguir editando';
+
+  @override
+  String get lifeEventsDiscardAction => 'Descartar';
+
+  @override
   String get lifeEventsCategoryFamilia => 'Familia';
 
   @override

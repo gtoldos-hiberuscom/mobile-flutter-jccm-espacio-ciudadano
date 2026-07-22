@@ -283,6 +283,14 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
     }
   }
 
+  /// Discards unsaved local changes and marks the state as clean.
+  void discardChanges() {
+    if (!state.isDirty) {
+      return;
+    }
+    state = state.copyWith(isDirty: false);
+  }
+
   /// Retries a failed load operation.
   Future<void> retry() => _load();
 
@@ -331,4 +339,4 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
 ///
 /// Usage:
 /// `ref.watch(lifeEventsProvider((idAgente: idAgente, clearSelectionsOnLoad: true)))`.
-final lifeEventsProvider = NotifierProvider.family<LifeEventsNotifier, LifeEventsState, LifeEventsProviderArgs>(LifeEventsNotifier.new);
+final lifeEventsProvider = NotifierProvider.autoDispose.family<LifeEventsNotifier, LifeEventsState, LifeEventsProviderArgs>(LifeEventsNotifier.new);

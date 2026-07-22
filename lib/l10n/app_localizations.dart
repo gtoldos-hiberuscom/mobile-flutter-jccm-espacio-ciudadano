@@ -2984,6 +2984,30 @@ abstract class AppLocalizations {
   /// **'No hay hechos vitales disponibles en este momento.'**
   String get lifeEventsEmpty;
 
+  /// Personalization — discard changes dialog title.
+  ///
+  /// In es, this message translates to:
+  /// **'Descartar cambios'**
+  String get lifeEventsDiscardConfirmTitle;
+
+  /// Personalization — discard changes dialog body.
+  ///
+  /// In es, this message translates to:
+  /// **'Tienes cambios sin guardar. Si sales ahora, perderás las modificaciones realizadas.'**
+  String get lifeEventsDiscardConfirmBody;
+
+  /// Personalization — cancel discard changes dialog.
+  ///
+  /// In es, this message translates to:
+  /// **'Seguir editando'**
+  String get lifeEventsDiscardStay;
+
+  /// Personalization — confirm discard changes dialog.
+  ///
+  /// In es, this message translates to:
+  /// **'Descartar'**
+  String get lifeEventsDiscardAction;
+
   /// Personalization — familia category header.
   ///
   /// In es, this message translates to:
