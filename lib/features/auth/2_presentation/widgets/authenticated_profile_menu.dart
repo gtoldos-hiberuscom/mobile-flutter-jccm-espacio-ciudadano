@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
@@ -60,13 +58,14 @@ void showAuthenticatedProfileMenu({
       Navigator.of(context, rootNavigator: true).pop();
     }
 
+    // Terminate the federated Cl@ve session (RP-initiated logout) so the
+    // broker's SSO cookie is invalidated, then always clear the local session.
     try {
       final idToken = ref.read(tokenResponseProvider)?.idToken ?? '';
       if (idToken.isNotEmpty) {
         await ref.read(logoutUseCaseProvider).call(idToken: idToken);
       }
     } finally {
-      await ref.read(appStorageProvider).write(StorageKeys.forceClaveLoginOnNextLogin, true);
       await ref.read(authSessionControllerProvider).clear();
     }
 

@@ -35,9 +35,6 @@ abstract final class StorageKeys {
   /// Marker written after the app has completed its first boot for this install.
   static const String installBootstrapped = 'install_bootstrapped';
 
-  /// Forces the next manual Cl@ve login to ask for credentials.
-  static const String forceClaveLoginOnNextLogin = 'force_clave_login_on_next_login';
-
   /// Prefix for per-user life-events onboarding-seen flag.
   /// Full key = lifeEventsOnboardingSeenPrefix + idAgente
   static const String lifeEventsOnboardingSeenPrefix = 'life_events_onboarding_seen_';

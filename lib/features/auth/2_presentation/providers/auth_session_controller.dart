@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
@@ -19,7 +20,7 @@ final authSessionControllerProvider = Provider<AuthSessionController>(
 );
 
 final class AuthSessionController {
-  const AuthSessionController({
+  AuthSessionController({
     required final Ref ref,
     required final AuthRepository repository,
     required final SecureStorage storage,
@@ -30,6 +31,14 @@ final class AuthSessionController {
   final Ref _ref;
   final AuthRepository _repository;
   final SecureStorage _storage;
+
+  /// Single-flight guard: while a refresh is in progress, concurrent callers
+  /// (the `SessionGuard` plus every 401 that hits `AuthRefreshInterceptor`)
+  /// share this same [Future] instead of each firing an independent
+  /// `token()` call. That prevents two requests from racing on the same
+  /// refresh token — which, with Keycloak refresh-token rotation enabled,
+  /// would make the loser fail with `invalid_grant` and wipe the session.
+  Future<bool>? _inFlightRefresh;
 
   JwtClaims? get currentClaims => _ref.read(jwtClaimsProvider);
 
@@ -62,7 +71,7 @@ final class AuthSessionController {
   }
 
   Future<bool> refreshIfNeeded({
-    final Duration threshold = Duration.zero,
+    final Duration threshold = const Duration(seconds: 60),
   }) async {
     final session = _ref.read(tokenResponseProvider) ?? await hydrateFromStorage();
     final expiresAt = session?.accessTokenExpirationDateTime;
@@ -72,16 +81,31 @@ final class AuthSessionController {
     return refresh(force: true);
   }
 
-  Future<bool> refresh({final bool force = false}) async {
+  Future<bool> refresh({final bool force = false}) {
+    // Validity short-circuit — synchronous, so it runs before we touch the
+    // single-flight guard: a caller with a still-valid token never joins (or
+    // starts) a refresh.
     final currentExpiry = _ref.read(tokenResponseProvider)?.accessTokenExpirationDateTime;
     if (!force && currentExpiry != null && currentExpiry.isAfter(DateTime.now())) {
-      return true;
+      return Future<bool>.value(true);
     }
 
+    final inFlight = _inFlightRefresh;
+    if (inFlight != null) {
+      return inFlight;
+    }
+
+    final future = _doRefresh();
+    _inFlightRefresh = future;
+    return future.whenComplete(() => _inFlightRefresh = null);
+  }
+
+  Future<bool> _doRefresh() async {
     final persistedAccessToken = await _storage.read(StorageKeys.accessToken);
     final hasPersistedSession = persistedAccessToken != null && persistedAccessToken.isNotEmpty;
     final refreshToken = _ref.read(tokenResponseProvider)?.refreshToken ?? await _storage.read(StorageKeys.refreshToken);
     if (refreshToken == null || refreshToken.isEmpty) {
+      // No refresh token at all — nothing can renew this session.
       await clear();
       return false;
     }
@@ -95,13 +119,20 @@ final class AuthSessionController {
         _updateMemory(mergedSession);
       }
       return true;
-    } on Object catch (error, stackTrace) {
-      // Sin este log no hay forma de distinguir, a posteriori, un refresh
-      // token ausente/expirado (invalid_grant real de Keycloak) de un fallo
-      // de red o de configuración — todos acababan indistinguibles como
-      // "Session expired" en el interceptor.
+    } on AuthException catch (error, stackTrace) {
+      // Only a definitive rejection from the authorization server
+      // (`invalid_grant` and friends → `remoteFailure`) means the refresh
+      // token is dead: clear so the user re-authenticates. A transient
+      // failure (timeout/network → `unexpected`, or a misconfig →
+      // `configuration`) keeps the session so a later attempt can renew.
       logger.e('Failed to refresh session', error: error, stackTrace: stackTrace);
-      await clear();
+      if (error.reason == AuthFailureReason.remoteFailure) {
+        await clear();
+      }
+      return false;
+    } on Object catch (error, stackTrace) {
+      // Unexpected non-auth error — treat as transient, keep the session.
+      logger.e('Failed to refresh session', error: error, stackTrace: stackTrace);
       return false;
     }
   }
