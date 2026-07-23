@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
@@ -25,7 +26,10 @@ import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notificatio
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-typedef _PreferencesArgs = ({String idAgente});
+// `idAgente` drives consent/life-events/storage; `contactId` is the identifier
+// for the `/ciudadanos/{id}` contacto endpoint, which differs per environment
+// during the backend migration (PRE: numDocumento/DNI, UAT: idAgente).
+typedef _PreferencesArgs = ({String idAgente, String contactId});
 
 final _preferencesStateProvider = FutureProvider.autoDispose.family<_PreferencesState, _PreferencesArgs>(
   (final ref, final args) async {
@@ -43,7 +47,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
     };
     final selectedLifeEvents = lifeEventsEnabled ? await _selectedLifeEvents(ref, args.idAgente) : const <LifeEvent>[];
     final lifeEventsUpdatedAt = _readLifeEventsUpdatedAt(appStorage, args.idAgente);
-    final notificationContact = await ref.watch(notificationContactProvider(args.idAgente).future);
+    final notificationContact = await ref.watch(notificationContactProvider(args.contactId).future);
 
     return _PreferencesState(
       lifeEventsStatus: lifeEventsEnabled
@@ -106,8 +110,10 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     final l10n = AppLocalizations.of(context);
     final claims = ref.watch(jwtClaimsProvider);
     final idAgente = claims?.idAgente ?? '';
+    final contactId = ref.watch(ciudadanosEndpointIdProvider);
     final preferencesArgs = (
       idAgente: idAgente,
+      contactId: contactId,
     );
     final state = ref.watch(_preferencesStateProvider(preferencesArgs));
 
@@ -275,6 +281,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     ref.invalidate(
       _preferencesStateProvider((
         idAgente: idAgente,
+        contactId: ref.read(ciudadanosEndpointIdProvider),
       )),
     );
     AppAlertSnackbar.show(
@@ -343,7 +350,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       }
     } finally {
       ref
-        ..invalidate(_preferencesStateProvider((idAgente: idAgente)))
+        ..invalidate(_preferencesStateProvider((idAgente: idAgente, contactId: ref.read(ciudadanosEndpointIdProvider))))
         ..invalidate(consentProvider(idAgente));
       await ref.read(authSessionControllerProvider).clear();
     }

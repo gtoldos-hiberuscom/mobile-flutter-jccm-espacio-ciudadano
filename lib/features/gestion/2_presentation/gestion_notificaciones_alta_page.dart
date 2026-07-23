@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/usecases/save_notification_contact_usecase.dart';
@@ -121,7 +122,7 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final claims = ref.watch(jwtClaimsProvider);
-    final citizenId = _citizenId(claims);
+    final citizenId = ref.watch(ciudadanosEndpointIdProvider);
     final dni = _dni(claims);
 
     return Scaffold(
@@ -234,9 +235,6 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-/// URL path identifier for the Notifica endpoints: idAgente (e.g. PER9998003),
-/// not the DNI, which now returns 403 in UAT/PRE.
-String _citizenId(final JwtClaims? claims) => claims?.idAgente ?? '';
-
 /// DNI carried inside the request body (not the URL). Stays the document number.
+/// The URL path id comes from `ciudadanosEndpointIdProvider` (per-environment).
 String _dni(final JwtClaims? claims) => claims?.normalizedPersonIdentifier ?? '';

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/usecases/save_notification_contact_usecase.dart';
@@ -44,7 +45,7 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
   @override
   Widget build(final BuildContext context) {
     final claims = ref.watch(jwtClaimsProvider);
-    final citizenId = _notificationCitizenId(claims);
+    final citizenId = ref.watch(ciudadanosEndpointIdProvider);
     final dni = _notificationDni(claims);
     final contactState = ref.watch(notificationContactProvider(citizenId));
 
@@ -179,12 +180,6 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
       context.go(widget.returnTo);
     }
   }
-}
-
-/// URL path identifier for the Notifica endpoints. In UAT/PRE the contacto
-/// endpoints identify the citizen by idAgente (e.g. PER9998003), not by DNI.
-String _notificationCitizenId(final JwtClaims? claims) {
-  return claims?.idAgente ?? '';
 }
 
 /// DNI carried inside the request body (not the URL). Stays the document number.
