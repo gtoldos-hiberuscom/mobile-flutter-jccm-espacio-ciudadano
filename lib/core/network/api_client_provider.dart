@@ -10,10 +10,14 @@ final dioProvider = Provider<Dio>((final ref) {
   return buildDioClient(
     config: config,
     tokenGetter: () => ref.read(tokenResponseProvider)?.accessToken,
-    // `force: false` so a 401 that lands after a peer (the guard or an earlier
-    // 401) already renewed the token retries with the fresh token instead of
-    // triggering another refresh. `AuthSessionController.refresh` de-dupes
-    // genuinely concurrent refreshes via its single-flight guard.
-    refreshSession: () => ref.read(authSessionControllerProvider).refresh(),
+    // `force: false` on the first attempt so a 401 that lands after a peer (the
+    // guard or an earlier 401) already renewed the token retries with the fresh
+    // token instead of triggering another refresh. `AuthRefreshInterceptor`
+    // escalates to `force: true` when the refreshed token is identical to the
+    // one the server just rejected (revoked session / clock skew), so that path
+    // ends in a clean logout rather than a reused stale token.
+    // `AuthSessionController.refresh` de-dupes genuinely concurrent refreshes
+    // via its single-flight guard.
+    refreshSession: ({final bool force = false}) => ref.read(authSessionControllerProvider).refresh(force: force),
   );
 });

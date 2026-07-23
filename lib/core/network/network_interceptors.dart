@@ -49,7 +49,7 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
 
   final Dio _dio;
   final String? Function() _tokenGetter;
-  final Future<bool> Function() _refreshSession;
+  final Future<bool> Function({bool force}) _refreshSession;
 
   @override
   Future<void> onError(
@@ -62,13 +62,37 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
       return;
     }
 
-    final refreshed = await _refreshSession();
-    final token = _tokenGetter();
+    final staleToken = _bearerOf(err.requestOptions.headers);
+    var refreshed = await _refreshSession(force: false);
+    var token = _tokenGetter();
+    // If the refresh short-circuited on a peer's still-valid token, the token
+    // is the very one the server just rejected (revoked session, clock skew,
+    // facade rejection). Retrying with it would only earn a second 401; force a
+    // real refresh so a definitive rejection ends in a clean logout instead of
+    // a wasted retry.
+    if (refreshed && token != null && token.isNotEmpty && token == staleToken) {
+      refreshed = await _refreshSession(force: true);
+      token = _tokenGetter();
+    }
     if (!refreshed || token == null || token.isEmpty) {
       handler.next(err);
       return;
     }
 
+    // Retry on a bare secondary Dio that shares the transport (options +
+    // adapter) but carries no interceptors — crucially not this
+    // QueuedInterceptor. Retrying on the primary Dio would route the retry's
+    // error back into this interceptor's error queue, which is still blocked on
+    // the current onError, deadlocking it permanently and poisoning the queue
+    // for every later failure. The retry error surfaces via handler.next to the
+    // primary chain's ErrorInterceptor, which maps it to an AppError.
+    // Shares the transport (options + adapter) but carries only the logger, so
+    // the retry is still visible in the `[DIO]` logs — never the
+    // AuthRefreshInterceptor (a QueuedInterceptor) nor the ErrorInterceptor
+    // (the primary chain maps the error when we forward via handler.next).
+    final retryDio = Dio(_dio.options)
+      ..httpClientAdapter = _dio.httpClientAdapter
+      ..interceptors.add(EmojiDioLogger());
     try {
       final requestOptions = err.requestOptions;
       final headers = Map<String, dynamic>.from(requestOptions.headers)..[HttpHeaders.authorizationHeader] = 'Bearer $token';
@@ -79,11 +103,29 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
           _authRetryKey: true,
         },
       );
-      final retryResponse = await _dio.fetch<dynamic>(retryOptions);
+      final retryResponse = await retryDio.fetch<dynamic>(retryOptions);
       handler.resolve(retryResponse);
     } on DioException catch (retryError) {
       handler.next(retryError);
+    } on Object {
+      // e.g. a StateError from re-sending an already-finalized FormData
+      // (/api/v1/soporte). Surface the original 401 rather than letting it
+      // escape the handler and hang the request.
+      handler.next(err);
     }
+  }
+
+  /// Returns the raw bearer token from an Authorization header (case-insensitive
+  /// key, `Bearer ` prefix stripped), or null when absent.
+  String? _bearerOf(final Map<String, dynamic> headers) {
+    for (final entry in headers.entries) {
+      if (entry.key.toLowerCase() == HttpHeaders.authorizationHeader) {
+        final value = entry.value?.toString() ?? '';
+        const prefix = 'Bearer ';
+        return value.startsWith(prefix) ? value.substring(prefix.length) : value;
+      }
+    }
+    return null;
   }
 }
 

@@ -12,6 +12,11 @@ abstract final class StorageKeys {
   /// JWT refresh token for silent re-authentication.
   static const String refreshToken = 'refresh_token';
 
+  /// OIDC ID token, kept so logout can send `id_token_hint` to `end_session`
+  /// even after an app restart (otherwise the Keycloak/Cl@ve SSO session and
+  /// its server-side refresh token would survive local logout).
+  static const String idToken = 'id_token';
+
   /// Federated user identifier from the Cl@ve identity assertion (DNI / NIE).
   static const String idAgente = 'id_agente';
 

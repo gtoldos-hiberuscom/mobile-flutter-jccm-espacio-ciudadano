@@ -1,11 +1,8 @@
 import 'dart:async' show unawaited;
 
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
@@ -169,14 +166,10 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
       return;
     }
     state = state.copyWith(status: LifeEventsStatus.saving);
-    await _refreshSessionIfNeeded();
-    var result = await _saveCurrentEvents();
-    if (result case SaveLifeEventsFailed(:final cause) when _isUnauthorized(cause)) {
-      final refreshed = await _refreshSession(force: true);
-      if (ref.mounted && refreshed) {
-        result = await _saveCurrentEvents();
-      }
-    }
+    // A 401 mid-save is handled transparently by `AuthRefreshInterceptor`
+    // (refresh + retry, or a clean logout on a definitive rejection), so no
+    // per-feature refresh/retry is needed here.
+    final result = await _saveCurrentEvents();
     if (!ref.mounted) {
       return;
     }
@@ -303,14 +296,6 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
         );
   }
 
-  Future<void> _refreshSessionIfNeeded() async {
-    await ref.read(authSessionControllerProvider).refreshIfNeeded(threshold: const Duration(minutes: 1));
-  }
-
-  Future<bool> _refreshSession({final bool force = false}) async {
-    return ref.read(authSessionControllerProvider).refresh(force: force);
-  }
-
   Future<void> _markUpdatedNow() async {
     if (_idAgente.isEmpty) {
       return;
@@ -326,10 +311,6 @@ class LifeEventsNotifier extends Notifier<LifeEventsState> {
       // The backend save has already succeeded; this timestamp is auxiliary UI
       // metadata and must not make the user repeat the operation.
     }
-  }
-
-  bool _isUnauthorized(final Object? cause) {
-    return cause is DioException && cause.error is UnauthorizedError;
   }
 }
 

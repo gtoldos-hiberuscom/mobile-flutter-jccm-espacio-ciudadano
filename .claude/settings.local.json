@@ -17,7 +17,10 @@
       "mcp__claude_ai_Figma__get_design_context",
       "Bash(fvm dart *)",
       "Bash(cd *)",
-      "Bash(grep -rInE \"['\\\\\"/]contacto|/notifica|ciudadanos/\\\\\\\\\\\\$|ciudadanos/\\\\\\\\\\\\$\\\\{\" /Users/gtoldos/Projecs/mobile-flutter-jccm-espacio-ciudadano/jccm_espacio_ciudadano/lib --include=\"*.dart\")"
+      "Bash(xargs ls)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(git log *)",
+      "Bash(python3 *)"
     ]
   }
 }
