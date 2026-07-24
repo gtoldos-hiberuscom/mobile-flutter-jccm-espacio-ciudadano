@@ -108,6 +108,9 @@ abstract final class AppColors {
   /// Figma: Color(new)/Text — White  {Neutral/000}
   static const Color textWhite = neutral000;
 
+  /// Figma: Color(new)/Text — Light  {Neutral/000}
+  static const Color textLight = neutral000;
+
   /// Figma: Color(new)/Text — Link on light  {Blue/500}
   static const Color textLinkOnLight = blue500;
 
@@ -180,6 +183,9 @@ abstract final class AppColors {
   /// Used in card description blocks (disabled), NavBar grey type,
   /// and progress-bar track.
   static const Color backgroundBlueMutedLight = Color(0xFFE0E5EB);
+
+  /// Figma: Color(new)/Background — Bluemuted-dark.
+  static const Color backgroundBlueMutedDark = Color(0xFF65717D);
 
   /// Figma: Color(new)/Background — Success  {Green/100}
   static const Color backgroundSuccess = green100;

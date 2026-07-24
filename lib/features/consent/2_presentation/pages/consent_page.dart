@@ -63,7 +63,14 @@ class ConsentPage extends ConsumerWidget {
                 ..invalidate(ageDataAuthorizationProvider);
               context.pop();
             } else {
-              context.go(isPreferencesEditing ? returnTo : Routes.home);
+              context.go(
+                consentAcceptedDestination(
+                  isOnboarding: isOnboarding,
+                  isPreferencesEditing: isPreferencesEditing,
+                  returnTo: returnTo,
+                  clauses: next.clauses,
+                ),
+              );
             }
           case ConsentStatus.rejected:
             context.go(Routes.landing);
@@ -131,6 +138,30 @@ class ConsentPage extends ConsumerWidget {
       onShowLegalInfo: () => context.push(Routes.legalPrivacy),
     );
   }
+}
+
+/// Resolves the next route after the consent choices have been persisted.
+///
+/// The life-events onboarding is part of the first-login flow only and is
+/// shown when the citizen has opted into personalised recommendations.
+String consentAcceptedDestination({
+  required final bool isOnboarding,
+  required final bool isPreferencesEditing,
+  required final String returnTo,
+  required final List<Clause> clauses,
+}) {
+  if (isPreferencesEditing) {
+    return returnTo;
+  }
+
+  final recommendationsAccepted = clauses.any(
+    (final clause) => clause.id == recommendationsConsentClauseId && clause.isSelected,
+  );
+  if (isOnboarding && recommendationsAccepted) {
+    return Routes.lifeEventsOnboarding;
+  }
+
+  return Routes.home;
 }
 
 // ── Step 2 scaffold ────────────────────────────────────────────────────────────

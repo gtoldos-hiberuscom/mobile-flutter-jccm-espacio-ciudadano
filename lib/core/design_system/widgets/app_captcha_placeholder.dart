@@ -40,7 +40,7 @@ class AppCaptchaPlaceholder extends StatelessWidget {
           },
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: isVerified ? AppColors.backgroundSuccess : AppColors.borderBlueMutedBase,
+              color: isVerified ? AppColors.backgroundSuccess : AppColors.backgroundBlueMutedDark,
               border: Border.all(
                 color: borderColor,
                 width: borderWidth,
@@ -72,7 +72,7 @@ class AppCaptchaPlaceholder extends StatelessWidget {
                       : Text(
                           label,
                           key: const ValueKey('pending'),
-                          style: AppTypography.leadingMedium.copyWith(color: AppColors.textWhite),
+                          style: AppTypography.leadingMedium.copyWith(color: AppColors.textLight),
                         ),
                 ),
               ),

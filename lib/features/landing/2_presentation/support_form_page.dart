@@ -331,7 +331,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   }
 
   String? get _consentError {
-    if (!_submitted || _consentAccepted) {
+    if (!_submitted || !_requiresPublicVerification || _consentAccepted) {
       return null;
     }
     return AppLocalizations.of(context).supportErrorConsentRequired;
@@ -438,7 +438,7 @@ class _FormView extends StatelessWidget {
         const SizedBox(height: AppDimensions.space24),
         AppInputCase(
           label: 'Confirma tu correo electrónico',
-          hint: 'Ejemplo:  María Pérez',
+          hint: 'Ejemplo:  maríapérez@correo.es',
           controller: emailConfirmController,
           keyboardType: TextInputType.emailAddress,
           isRequired: true,
@@ -485,14 +485,14 @@ class _FormView extends StatelessWidget {
           onRemove: onRemoveAttachment,
         ),
         const SizedBox(height: AppDimensions.space32),
-        AppCheckbox(
-          label: 'Autorizo el uso y gestión de mis datos',
-          value: consentAccepted,
-          isError: consentError != null,
-          errorText: consentError,
-          onChanged: (final value) => onConsentChanged(value ?? false),
-        ),
         if (showCaptcha) ...[
+          AppCheckbox(
+            label: 'Autorizo el uso y gestión de mis datos',
+            value: consentAccepted,
+            isError: consentError != null,
+            errorText: consentError,
+            onChanged: (final value) => onConsentChanged(value ?? false),
+          ),
           const SizedBox(height: AppDimensions.space24),
           GestureDetector(
             onTap: onCaptchaTap,
@@ -502,12 +502,12 @@ class _FormView extends StatelessWidget {
               errorText: captchaError,
             ),
           ),
+          const SizedBox(height: AppDimensions.space24),
+          AppPrivacyInfoText(
+            text: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en https://rat.castillalamancha.es/info/2309',
+            onTap: onOpenPrivacyInfo,
+          ),
         ],
-        const SizedBox(height: AppDimensions.space24),
-        AppPrivacyInfoText(
-          text: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en https://rat.castillalamancha.es/info/2309',
-          onTap: onOpenPrivacyInfo,
-        ),
       ],
     );
   }
