@@ -73,6 +73,27 @@ void main() {
         throwsA(isA<LifeEventsSupportUnavailableException>()),
       );
     });
+
+    test('resetPreferences deletes all life events for the agent', () async {
+      final adapter = _CapturingAdapter();
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: 'https://example.test',
+          headers: const {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+        ),
+      )..httpClientAdapter = adapter;
+      final repository = LifeEventsRepositoryImpl(dio: dio);
+
+      await repository.resetPreferences(idAgente: 'agent-123');
+
+      expect(adapter.method, 'DELETE');
+      expect(
+        adapter.path,
+        '/api/v1/hechos-vitales/preferencias/agent-123',
+      );
+    });
   });
 }
 
@@ -102,7 +123,9 @@ final class _CapturingAdapter implements HttpClientAdapter {
     await for (final chunk in requestStream ?? const Stream<Uint8List>.empty()) {
       chunk.forEach(bodyBytes.add);
     }
-    jsonBody = jsonDecode(utf8.decode(bodyBytes)) as Map<String, dynamic>;
+    if (bodyBytes.isNotEmpty) {
+      jsonBody = jsonDecode(utf8.decode(bodyBytes)) as Map<String, dynamic>;
+    }
 
     return ResponseBody.fromString(
       jsonEncode(_payload()),

@@ -9,6 +9,8 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/load_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
 // ── Status ────────────────────────────────────────────────────────────────────
@@ -159,6 +161,18 @@ class ConsentNotifier extends Notifier<ConsentState> {
     }
     switch (result) {
       case AcceptConsentSuccess():
+        final resetError = await _resetLifeEventsIfRecommendationsClauseWasRevoked(clausesToPersist);
+        if (!ref.mounted) {
+          return;
+        }
+        if (resetError != null) {
+          state = ConsentState(
+            status: ConsentStatus.saveError,
+            clauses: clausesToPersist,
+            errorMessage: resetError,
+          );
+          return;
+        }
         final onboardingError = await _skipLifeEventsOnboardingIfClauseWasEnabledFromPreferences(clausesToPersist);
         if (!ref.mounted) {
           return;
@@ -213,6 +227,23 @@ class ConsentNotifier extends Notifier<ConsentState> {
     return switch (result) {
       MarkLifeEventsOnboardingSeenSuccess() => null,
       MarkLifeEventsOnboardingSeenFailed(:final message) => message,
+    };
+  }
+
+  Future<String?> _resetLifeEventsIfRecommendationsClauseWasRevoked(final List<Clause> clauses) async {
+    if (!_isPreferencesEditing || !_initialSelectedClauseIds.contains(recommendationsConsentClauseId)) {
+      return null;
+    }
+    final recommendationsClauseSelected = clauses.any(
+      (final clause) => clause.id == recommendationsConsentClauseId && clause.isSelected,
+    );
+    if (recommendationsClauseSelected) {
+      return null;
+    }
+    final result = await ref.read(resetLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
+    return switch (result) {
+      ResetLifeEventsSuccess() => null,
+      ResetLifeEventsFailed(:final message) => message,
     };
   }
 
