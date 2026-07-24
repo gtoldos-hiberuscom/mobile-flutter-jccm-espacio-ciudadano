@@ -13,7 +13,7 @@ final class Recommendation {
     required this.title,
     required this.lifeEventId,
     required this.lifeEventName,
-    required this.badge,
+    required this.badges,
     this.responsibleUnit,
     this.submissionStartDate,
     this.submissionEndDate,
@@ -24,11 +24,24 @@ final class Recommendation {
   final String title;
   final int lifeEventId;
   final String lifeEventName;
-  final RecommendationBadge badge;
+  final Set<RecommendationBadge> badges;
+  RecommendationBadge? get badge {
+    if (badges.contains(RecommendationBadge.immediate)) {
+      return RecommendationBadge.immediate;
+    }
+    if (badges.contains(RecommendationBadge.news)) {
+      return RecommendationBadge.news;
+    }
+    if (badges.contains(RecommendationBadge.recent)) {
+      return RecommendationBadge.recent;
+    }
+    return null;
+  }
+
   final String? responsibleUnit;
   final DateTime? submissionStartDate;
   final DateTime? submissionEndDate;
   final Uri? detailUrl;
 
-  bool get isImmediate => badge == RecommendationBadge.immediate;
+  bool get isImmediate => badges.contains(RecommendationBadge.immediate);
 }

@@ -128,9 +128,10 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
             context.go(Routes.homeFromDrawer);
           }
         },
-        onInfo: () => AppAlertSnackbar.show(
-          context,
-          message: 'Gestiona tus autorizaciones, avisos y acceso biométrico.',
+        onInfo: () => AppInfoSheet.show(
+          context: context,
+          title: l10n.drawerPreferences,
+          bodyText: 'Gestiona tus autorizaciones, avisos y acceso biométrico.',
         ),
       ),
       body: state.when(

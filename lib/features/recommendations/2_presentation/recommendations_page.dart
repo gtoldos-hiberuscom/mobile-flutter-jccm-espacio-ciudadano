@@ -490,7 +490,7 @@ Future<void> _openRecommendationDetail(
 class _RecommendationBadge extends StatelessWidget {
   const _RecommendationBadge({required this.badge});
 
-  final RecommendationBadge badge;
+  final RecommendationBadge? badge;
 
   @override
   Widget build(final BuildContext context) {
@@ -514,6 +514,7 @@ class _RecommendationBadge extends StatelessWidget {
         icon: AppIcons.check,
         showIcon: false,
       ),
+      null => const SizedBox.shrink(),
     };
   }
 }
@@ -564,9 +565,9 @@ enum _RecommendationFilter {
   List<Recommendation> apply(final List<Recommendation> recommendations) {
     return switch (this) {
       _RecommendationFilter.all => recommendations,
-      _RecommendationFilter.recent => recommendations.where((final rec) => rec.badge == RecommendationBadge.recent).toList(growable: false),
-      _RecommendationFilter.news => recommendations.where((final rec) => rec.badge == RecommendationBadge.news).toList(growable: false),
-      _RecommendationFilter.immediate => recommendations.where((final rec) => rec.badge == RecommendationBadge.immediate).toList(growable: false),
+      _RecommendationFilter.recent => recommendations.where((final rec) => rec.badges.contains(RecommendationBadge.recent)).toList(growable: false),
+      _RecommendationFilter.news => recommendations.where((final rec) => rec.badges.contains(RecommendationBadge.news)).toList(growable: false),
+      _RecommendationFilter.immediate => recommendations.where((final rec) => rec.badges.contains(RecommendationBadge.immediate)).toList(growable: false),
     };
   }
 }

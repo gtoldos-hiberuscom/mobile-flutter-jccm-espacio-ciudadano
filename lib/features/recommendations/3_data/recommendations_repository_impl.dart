@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
@@ -19,7 +20,7 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
       return const [];
     }
 
-    final Object? payload;
+    Object? payload;
     try {
       final response = await _api.getServicios(
         idAgente: idAgente,
@@ -34,18 +35,115 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         return const [];
       }
       if (rawData != null) {
-        final groups = _extractGroups(rawData);
-        return [
-          for (final group in groups) ..._mapGroup(group),
-        ];
+        payload = rawData;
+      } else {
+        rethrow;
+      }
+    }
+
+    final badgeIds = await _loadBadgeIds(
+      idAgente: idAgente,
+      lifeEventIds: lifeEventIds,
+    );
+    final groups = _extractGroups(payload);
+    return [
+      for (final group in groups) ..._mapGroup(group, badgeIds),
+    ];
+  }
+
+  Future<Map<int, Set<RecommendationBadge>>?> _loadBadgeIds({
+    required final String idAgente,
+    required final List<int> lifeEventIds,
+  }) async {
+    final segments = await Future.wait([
+      _loadSegmentIds(
+        idAgente: idAgente,
+        lifeEventIds: lifeEventIds,
+        operation: 'ultimos_dias',
+      ),
+      _loadSegmentIds(
+        idAgente: idAgente,
+        lifeEventIds: lifeEventIds,
+        operation: 'novedades',
+      ),
+      _loadSegmentIds(
+        idAgente: idAgente,
+        lifeEventIds: lifeEventIds,
+        operation: 'inmediatos',
+      ),
+    ]);
+    if (segments.any((final segment) => !segment.available)) {
+      return null;
+    }
+    final result = <int, Set<RecommendationBadge>>{};
+    const badges = [
+      RecommendationBadge.recent,
+      RecommendationBadge.news,
+      RecommendationBadge.immediate,
+    ];
+    for (var index = 0; index < segments.length; index++) {
+      for (final id in segments[index].ids) {
+        result.putIfAbsent(id, () => <RecommendationBadge>{}).add(badges[index]);
+      }
+    }
+    return result;
+  }
+
+  Future<({bool available, Set<int> ids})> _loadSegmentIds({
+    required final String idAgente,
+    required final List<int> lifeEventIds,
+    required final String operation,
+  }) async {
+    final Object? payload;
+    try {
+      final response = await _api.getServiciosSegmentados(
+        idAgente: idAgente,
+        operacion: operation,
+        hechosvitales: BuiltList<int>(lifeEventIds),
+        extra: const {
+          generatedApiDecodeStringResponseExtraKey: true,
+        },
+      );
+      payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      if (_isNoResultsResponse(rawData)) {
+        return (available: true, ids: const <int>{});
+      }
+      if (error.response?.statusCode == 404) {
+        return (available: false, ids: const <int>{});
       }
       rethrow;
     }
+    return (available: true, ids: _extractProcedureIds(payload));
+  }
 
-    final groups = _extractGroups(payload);
-    return [
-      for (final group in groups) ..._mapGroup(group),
-    ];
+  Set<int> _extractProcedureIds(final Object? data) {
+    final root = _asStringMap(data);
+    final body = root?['body'] ?? data;
+    final ids = <int>{};
+
+    void addProcedure(final Object? value) {
+      final procedure = _asStringMap(value);
+      final id = _int(
+        procedure?['idTramite'] ?? procedure?['idServicio'] ?? procedure?['id'],
+      );
+      if (id != null) {
+        ids.add(id);
+      }
+    }
+
+    if (body is List) {
+      body.forEach(addProcedure);
+      return ids;
+    }
+    for (final group in _extractGroups(data)) {
+      final procedures = group['tramites'] ?? group['listaTramites'] ?? group['servicios'] ?? group['listaServicios'];
+      if (procedures is List) {
+        procedures.forEach(addProcedure);
+      }
+    }
+    return ids;
   }
 
   List<Map<String, dynamic>> _extractGroups(final Object? data) {
@@ -118,7 +216,10 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     return null;
   }
 
-  Iterable<Recommendation> _mapGroup(final Map<String, dynamic> group) sync* {
+  Iterable<Recommendation> _mapGroup(
+    final Map<String, dynamic> group,
+    final Map<int, Set<RecommendationBadge>>? badgeIds,
+  ) sync* {
     final lifeEventId = _int(group['idHecho']) ?? 0;
     final lifeEventName = _string(group['nombreHecho']);
     final rawProcedures = group['tramites'] ?? group['listaTramites'] ?? group['servicios'] ?? group['listaServicios'];
@@ -141,7 +242,14 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         title: title,
         lifeEventId: lifeEventId,
         lifeEventName: lifeEventName,
-        badge: _badge(startDate: startDate, endDate: endDate),
+        badges: Set.unmodifiable(
+          badgeIds?[procedureId] ??
+              _fallbackBadges(
+                rawStartDate: rawProcedure['fechaPresentacionIni'] ?? rawProcedure['fechaPresentacion'] ?? rawProcedure['fechaInicio'],
+                startDate: startDate,
+                endDate: endDate,
+              ),
+        ),
         responsibleUnit: _stringOrNull(
           rawProcedure['nombreUnidadOrganicaResponsable'] ?? rawProcedure['nombreUnidadResponsable'] ?? rawProcedure['unidadResponsable'],
         ),
@@ -152,18 +260,22 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     }
   }
 
-  RecommendationBadge _badge({
+  Set<RecommendationBadge> _fallbackBadges({
+    required final Object? rawStartDate,
     required final DateTime? startDate,
     required final DateTime? endDate,
   }) {
     final now = DateTime.now();
-    if (startDate != null && !startDate.isAfter(now) && (endDate == null || !endDate.isBefore(now))) {
-      return RecommendationBadge.immediate;
+    final startText = _stringOrNull(rawStartDate)?.toLowerCase();
+    final isPermanentlyOpen = startText?.contains('abierto permanentemente') ?? false;
+    final isActive = startDate != null && !startDate.isAfter(now) && (endDate == null || !endDate.isBefore(now));
+    if (isPermanentlyOpen || isActive) {
+      return const {RecommendationBadge.immediate};
     }
-    if (startDate != null && !startDate.isBefore(now.subtract(const Duration(days: 7)))) {
-      return RecommendationBadge.news;
+    if (startDate != null && !startDate.isAfter(now) && !startDate.isBefore(now.subtract(const Duration(days: 7)))) {
+      return const {RecommendationBadge.recent};
     }
-    return RecommendationBadge.recent;
+    return const {};
   }
 
   String _string(final Object? value) => _stringOrNull(value) ?? '';
@@ -192,6 +304,17 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     if (isoDate != null) {
       return isoDate;
     }
+    final javaDate = RegExp(
+      r'^\w{3} (\w{3}) (\d{1,2}) \d{2}:\d{2}:\d{2} \w+ (\d{4})$',
+    ).firstMatch(text);
+    if (javaDate != null) {
+      final month = _monthNumber(javaDate.group(1)!);
+      final day = int.tryParse(javaDate.group(2)!);
+      final year = int.tryParse(javaDate.group(3)!);
+      if (month != null && day != null && year != null) {
+        return DateTime(year, month, day);
+      }
+    }
     final parts = text.split('/');
     if (parts.length == 3) {
       final day = int.tryParse(parts[0]);
@@ -203,4 +326,19 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     }
     return null;
   }
+
+  int? _monthNumber(final String month) => const {
+    'Jan': 1,
+    'Feb': 2,
+    'Mar': 3,
+    'Apr': 4,
+    'May': 5,
+    'Jun': 6,
+    'Jul': 7,
+    'Aug': 8,
+    'Sep': 9,
+    'Oct': 10,
+    'Nov': 11,
+    'Dec': 12,
+  }[month];
 }

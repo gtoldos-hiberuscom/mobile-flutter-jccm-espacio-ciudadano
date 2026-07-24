@@ -26,7 +26,7 @@ class AppPreferenceList extends StatelessWidget {
         AppDimensions.space16,
         AppDimensions.space24,
         AppDimensions.space16,
-        AppDimensions.space24,
+        AppDimensions.space64,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

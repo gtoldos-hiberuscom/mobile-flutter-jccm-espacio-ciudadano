@@ -611,7 +611,7 @@ class _RecommendedProcedureCard extends StatelessWidget {
 class _RecommendationBadge extends StatelessWidget {
   const _RecommendationBadge({required this.badge});
 
-  final RecommendationBadge badge;
+  final RecommendationBadge? badge;
 
   @override
   Widget build(final BuildContext context) {
@@ -635,6 +635,7 @@ class _RecommendationBadge extends StatelessWidget {
         icon: AppIcons.check,
         showIcon: false,
       ),
+      null => const SizedBox.shrink(),
     };
   }
 }

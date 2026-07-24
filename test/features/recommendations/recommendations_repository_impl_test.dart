@@ -22,15 +22,26 @@ void main() {
         lifeEventIds: const [10, 20],
       );
 
-      expect(adapter.method, 'GET');
-      expect(adapter.path, '/api/v1/hechos-vitales/servicios/agent-123');
-      expect(adapter.queryParameters, isEmpty);
+      expect(adapter.requests, hasLength(4));
+      expect(
+        adapter.requests.first.path,
+        '/api/v1/hechos-vitales/servicios/agent-123',
+      );
+      expect(adapter.requests.first.queryParameters, isEmpty);
+      expect(
+        adapter.requests.skip(1).map((final request) => request.queryParameters['operacion']),
+        unorderedEquals(['ultimos_dias', 'novedades', 'inmediatos']),
+      );
       expect(recommendations, hasLength(1));
       expect(recommendations.single.title, 'Ayuda para alquiler joven');
       expect(recommendations.single.lifeEventId, 10);
       expect(recommendations.single.lifeEventName, 'Busco vivienda');
       expect(recommendations.single.responsibleUnit, 'Vivienda');
       expect(recommendations.single.badge, RecommendationBadge.immediate);
+      expect(
+        recommendations.single.badges,
+        {RecommendationBadge.immediate},
+      );
       expect(recommendations.single.detailUrl, Uri.parse('https://sede-uat.cm-pre.jccm.es/tramites/100'));
     });
 
@@ -65,6 +76,26 @@ void main() {
 
       expect(recommendations, isEmpty);
     });
+
+    test('uses date fallback when segmentation endpoint is not deployed', () async {
+      final adapter = _RecommendationsAdapter(segmentationUnavailable: true);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = RecommendationsRepositoryImpl(
+        dio: dio,
+        sedeBaseUrl: Uri.parse('https://sede-uat.cm-pre.jccm.es/'),
+      );
+
+      final recommendations = await repository.loadRecommendations(
+        idAgente: 'agent-123',
+        lifeEventIds: const [10],
+      );
+
+      expect(recommendations, hasLength(1));
+      expect(
+        recommendations.single.badges,
+        {RecommendationBadge.immediate},
+      );
+    });
   });
 }
 
@@ -75,12 +106,14 @@ enum _RecommendationsResponseKind {
 }
 
 final class _RecommendationsAdapter implements HttpClientAdapter {
-  _RecommendationsAdapter({this.responseKind = _RecommendationsResponseKind.recommendations});
+  _RecommendationsAdapter({
+    this.responseKind = _RecommendationsResponseKind.recommendations,
+    this.segmentationUnavailable = false,
+  });
 
   final _RecommendationsResponseKind responseKind;
-  String? method;
-  String? path;
-  Map<String, dynamic> queryParameters = const {};
+  final bool segmentationUnavailable;
+  final List<RequestOptions> requests = [];
 
   @override
   Future<ResponseBody> fetch(
@@ -88,13 +121,11 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
     final Stream<Uint8List>? requestStream,
     final Future<void>? cancelFuture,
   ) async {
-    method = options.method;
-    path = options.path;
-    queryParameters = options.queryParameters;
+    requests.add(options);
 
     return ResponseBody.fromString(
-      jsonEncode(_payload()),
-      _statusCode,
+      jsonEncode(_payload(options)),
+      _statusCode(options),
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],
       },
@@ -104,7 +135,10 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
   @override
   void close({final bool force = false}) {}
 
-  int get _statusCode {
+  int _statusCode(final RequestOptions options) {
+    if (segmentationUnavailable && options.path.contains('/segmentacion/')) {
+      return 404;
+    }
     return switch (responseKind) {
       _RecommendationsResponseKind.recommendations => 200,
       _RecommendationsResponseKind.noResults => 404,
@@ -112,7 +146,20 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
     };
   }
 
-  Map<String, dynamic> _payload() {
+  Map<String, dynamic> _payload(final RequestOptions options) {
+    if (options.path.contains('/segmentacion/')) {
+      final operation = options.queryParameters['operacion'];
+      return <String, dynamic>{
+        'body': operation == 'inmediatos'
+            ? [
+                {
+                  'idTramite': 100,
+                  'nombreTramite': 'Ayuda para alquiler joven',
+                },
+              ]
+            : <Map<String, dynamic>>[],
+      };
+    }
     return switch (responseKind) {
       _RecommendationsResponseKind.recommendations => _recommendationsPayload(),
       _RecommendationsResponseKind.noResults => _noResultsPayload(),
