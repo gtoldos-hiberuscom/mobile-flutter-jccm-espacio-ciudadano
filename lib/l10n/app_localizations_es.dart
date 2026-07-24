@@ -157,7 +157,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consentStep1FullTitle => 'Condiciones de uso y autorizaciones';
 
   @override
-  String get consentFinalAcceptButton => 'Aceptar';
+  String get consentFinalAcceptButton => 'Continuar';
 
   @override
   String get consentSaveError => 'No se ha podido guardar el consentimiento. Por favor, inténtalo de nuevo.';

@@ -155,29 +155,19 @@ void main() {
           ),
           const Clause(
             id: 1,
-            label:
-                'Autorizo la consulta de los hechos administrativos que obren en poder '
-                'de la JCCM en materia de Bienestar social, Empleo, Educación y Salud '
-                'para que se muestren en Espacio ciudadano.',
+            label: 'Autorizo la consulta de los hechos administrativos JCCM.',
             isSelected: true,
             version: '1',
           ),
           const Clause(
             id: 2,
-            label:
-                'Autorizo la consulta de los datos que la Otras temas de interés tiene '
-                'sobre mí para que se muestren en Espacio Ciudadano.',
+            label: 'Autorizo la consulta de datos AGE.',
             isSelected: false,
             version: '1',
           ),
           const Clause(
             id: 3,
-            label:
-                'Consiento que mis datos sean tratados para recibir recomendaciones '
-                'relativas a trámites mediante la elaboración de un perfil basado '
-                'exclusivamente en los hechos vitales que he marcado. Podrá retirar en '
-                'cualquier momento desmarcando la autorización inicial en el apartado '
-                'de perfil usuario',
+            label: 'Consiento recomendaciones.',
             isSelected: false,
             version: '1',
           ),
@@ -395,6 +385,7 @@ final class _CapturingAdapter implements HttpClientAdapter {
                 'idClausula': '1',
                 'version': '1',
                 'textoCheck': '<p>Autorizo la consulta de los hechos administrativos JCCM.</p>',
+                'descripcion': '<p>Texto ampliado que no debe mostrarse.</p>',
                 'seleccionado': true,
               },
               {

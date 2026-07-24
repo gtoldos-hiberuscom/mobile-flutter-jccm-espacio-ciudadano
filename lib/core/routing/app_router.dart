@@ -21,6 +21,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_p
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registro_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registros_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/faq_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/help_contact_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/home_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
@@ -113,6 +114,17 @@ final goRouterProvider = Provider<GoRouter>(
             state,
             const HelpContactPage(),
           ),
+        ),
+
+        GoRoute(
+          path: Routes.faqDetail,
+          pageBuilder: (final BuildContext context, final GoRouterState state) {
+            final entry = faqEntryById(state.pathParameters['id'] ?? '');
+            return noTransitionPage(
+              state,
+              entry == null ? const NotFoundScreen() : FaqDetailPage(entry: entry),
+            );
+          },
         ),
 
         GoRoute(

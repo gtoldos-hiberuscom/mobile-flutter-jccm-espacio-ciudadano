@@ -196,7 +196,7 @@
   "@consentStep1FullTitle": {
     "description": "Título completo del paso 1 del flujo de consentimiento legal (JCCMEC-11)."
   },
-  "consentFinalAcceptButton": "Aceptar",
+  "consentFinalAcceptButton": "Continuar",
   "@consentFinalAcceptButton": {
     "description": "Botón de confirmación final del consentimiento en el paso 2."
   },

@@ -25,36 +25,6 @@ final class ConsentRepositoryImpl implements ConsentRepository {
   final Map<String, _RemoteClauses> _remoteClausesCache = {};
   final Map<String, Future<_RemoteClauses?>> _remoteClausesRequests = {};
 
-  // ── Fallback clause catalogue ─────────────────────────────────────────────
-  //
-  // Labels are legal text validated by the JCCM legal team. Version '1.0'
-  // is the initial release. Update the version string to force re-consent
-  // when the text changes.
-  static const _fallbackClauses = [
-    Clause(
-      id: requiredConsentClauseId,
-      label:
-          'He leído y acepto la información de protección de datos sobre el '
-          'tratamiento de datos personales.',
-      isSelected: false,
-    ),
-    Clause(
-      id: jccmDataConsentClauseId,
-      label: jccmDataConsentClauseLabel,
-      isSelected: false,
-    ),
-    Clause(
-      id: ageDataConsentClauseId,
-      label: otherTopicsConsentClauseLabel,
-      isSelected: false,
-    ),
-    Clause(
-      id: recommendationsConsentClauseId,
-      label: recommendationsConsentClauseLabel,
-      isSelected: false,
-    ),
-  ];
-
   // ── ConsentRepository ──────────────────────────────────────────────────────
 
   @override
@@ -162,19 +132,18 @@ final class ConsentRepositoryImpl implements ConsentRepository {
   @override
   Future<List<Clause>> fetchClauses({final String? idAgente}) async {
     final normalizedId = idAgente?.trim();
-    if (normalizedId != null && normalizedId.isNotEmpty) {
-      final remote = await _fetchRemoteClauses(normalizedId);
-      if (remote != null) {
-        await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
-        await _storage.write(_key(normalizedId), _hasCompletedConsent(remote));
-        return remote.clauses;
-      }
-
-      final acceptedClauseIds = _storage.read<List<String>>(_acceptedClausesKey(normalizedId)) ?? const [];
-      return _fallbackClauses.map((final clause) => clause.copyWith(isSelected: acceptedClauseIds.contains(clause.id.toString()))).toList(growable: false);
+    if (normalizedId == null || normalizedId.isEmpty) {
+      throw StateError('An agent id is required to fetch consent clauses');
     }
 
-    return _fallbackClauses;
+    final remote = await _fetchRemoteClauses(normalizedId);
+    if (remote == null) {
+      throw StateError('Consent clauses were not returned by the API');
+    }
+
+    await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
+    await _storage.write(_key(normalizedId), _hasCompletedConsent(remote));
+    return remote.clauses;
   }
 
   // ── Private ───────────────────────────────────────────────────────────────
@@ -301,10 +270,7 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     }
     return Clause(
       id: id,
-      label: consentClauseLabel(
-        id,
-        _htmlToText(map['textoCheck']?.toString() ?? map['descripcion']?.toString() ?? 'Cláusula $id'),
-      ),
+      label: _htmlToText(map['textoCheck']?.toString() ?? ''),
       isSelected: _asBool(map['seleccionado']) ?? false,
       version: map['version']?.toString() ?? '1',
     );

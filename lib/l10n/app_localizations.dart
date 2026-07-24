@@ -389,7 +389,7 @@ abstract class AppLocalizations {
   /// Botón de confirmación final del consentimiento en el paso 2.
   ///
   /// In es, this message translates to:
-  /// **'Aceptar'**
+  /// **'Continuar'**
   String get consentFinalAcceptButton;
 
   /// Mensaje de error cuando el guardado del consentimiento falla.

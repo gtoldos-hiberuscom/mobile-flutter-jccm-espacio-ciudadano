@@ -19,7 +19,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// **Step 1** — Scrollable legal text. The "Continuar" CTA is locked
 /// until the citizen scrolls to the very bottom of the content.
 ///
-/// **Step 2** — Variable list of optional authorisation checkboxes. "Aceptar"
+/// **Step 2** — Variable list of optional authorisation checkboxes. "Continuar"
 /// persists the citizen's chosen combination.
 /// The `info` icon in the app bar reopens the full legal text without losing
 /// checkbox state.
@@ -219,7 +219,7 @@ class _Step2Scaffold extends StatelessWidget {
                 const SizedBox(height: AppDimensions.space8),
                 for (final clause in state.clauses.where((final clause) => clause.id != requiredConsentClauseId))
                   AppCheckbox(
-                    label: consentClauseLabel(clause.id, clause.label),
+                    label: clause.label,
                     value: clause.isSelected,
                     labelStyle: AppTypography.leadingMedium,
                     onChanged: (final _) => notifier.toggleClause(clause.id),

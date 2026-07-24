@@ -17,6 +17,8 @@ abstract final class Routes {
   static const String landingHelp = '/landing/help';
   static const String landingAbout = '/landing/about';
   static const String helpContact = '/help-contact';
+  static const String faqDetail = '/help-contact/faq/:id';
+  static String faqDetailPath(final String id) => '/help-contact/faq/$id';
   static const String supportForm = '/support-form';
   static const String legalPrivacy = '/legal/privacy';
   static const String legalNotice = '/legal/notice';

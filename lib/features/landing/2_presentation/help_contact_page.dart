@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/faq_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,16 +68,19 @@ class _HelpContactPageState extends ConsumerState<HelpContactPage> with SingleTi
             ),
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _FaqTab(onOpenGuides: () => _openExternalLink('help_guides')),
-                _ContactTab(
-                  onCallPhone: _callPhone,
-                  onOpenOffices: () => _openExternalLink('jccm_offices_oir'),
-                  onOpenSupport: _navigateToSupportForm,
-                ),
-              ],
+            child: SafeArea(
+              top: false,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _FaqTab(onOpenGuides: () => _openExternalLink('help_guides')),
+                  _ContactTab(
+                    onCallPhone: _callPhone,
+                    onOpenOffices: () => _openExternalLink('jccm_offices_oir'),
+                    onOpenSupport: _navigateToSupportForm,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -129,7 +133,6 @@ class _FaqTab extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         AppDimensions.space16,
@@ -142,58 +145,19 @@ class _FaqTab extends StatelessWidget {
         const SizedBox(height: AppDimensions.space16),
         AppList(
           padding: const EdgeInsets.all(AppDimensions.space8),
-          variant: AppListVariant.expandable,
-          children: [
-            AppListExpandableItem(
-              title: '¿Cómo puedo acceder a Espacio Ciudadano?',
-              initiallyExpanded: true,
-              children: [
-                Text(l10n.landingHelpBody1),
-              ],
-            ),
-            const AppListExpandableItem(
-              title: '¿Qué necesito para acceder?',
-              children: [
-                Text('Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado.'),
-              ],
-            ),
-            const AppListExpandableItem(
-              title: '¿Qué datos personales se almacenan en Espacio Ciudadano?',
-              children: [
-                Text('Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.'),
-              ],
-            ),
-            const AppListExpandableItem(
-              title: 'Los datos mostrados contienen algún error, ¿puedo corregirlo?',
-              children: [
-                Text('Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.'),
-              ],
-            ),
-            const AppListExpandableItem(
-              title: '¿Qué eventos se muestran en Mi Agenda?',
-              children: [
-                Text('Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.'),
-              ],
-            ),
-            const AppListExpandableItem(
-              title: 'Lorem ipsum',
-              children: [
-                Text('Lorem ipsum'),
-              ],
-            ),
-            const AppListExpandableItem(
-              title: 'Lorem ipsum',
-              children: [
-                Text('Lorem ipsum'),
-              ],
-            ),
-            const AppListExpandableItem(
-              title: 'Lorem ipsum',
-              children: [
-                Text('Lorem ipsum'),
-              ],
-            ),
-          ],
+          children: faqEntries
+              .map(
+                (final entry) => AppListItem(
+                  title: entry.question,
+                  trailing: const Icon(
+                    Icons.arrow_forward,
+                    color: AppColors.primaryDark,
+                    size: AppDimensions.iconMedium,
+                  ),
+                  onTap: () => context.push(Routes.faqDetailPath(entry.id)),
+                ),
+              )
+              .toList(),
         ),
         const SizedBox(height: AppDimensions.space24),
         const AppSectionHeading('Guías de ayuda'),

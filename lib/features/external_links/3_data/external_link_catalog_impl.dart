@@ -99,13 +99,15 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
     ExternalLink(
       id: 'jccm_offices_oir',
       displayKey: 'legalAccessibilityTitle',
-      url: Uri.parse('https://www.jccm.es/oficinas-oir'),
+      url: Uri.parse(
+        'https://www.jccm.es/index.php/atencion-a-la-ciudadania/oficinas-de-registro/oficinas-oir',
+      ),
       category: ExternalLinkCategory.legalInformation,
     ),
     ExternalLink(
       id: 'help_guides',
       displayKey: 'helpPageTitle',
-      url: Uri.parse('https://www.jccm.es/'),
+      url: Uri.parse('https://www.jccm.es/ayuda/guias-ayuda'),
       category: ExternalLinkCategory.legalInformation,
     ),
     ExternalLink(

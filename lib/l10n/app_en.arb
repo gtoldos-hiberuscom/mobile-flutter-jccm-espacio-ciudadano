@@ -200,7 +200,7 @@
   "@consentStep1FullTitle": {
     "description": "Full title of consent flow step 1 (JCCMEC-11)."
   },
-  "consentFinalAcceptButton": "Accept",
+  "consentFinalAcceptButton": "Continue",
   "@consentFinalAcceptButton": {
     "description": "Final consent confirmation button in step 2."
   },
