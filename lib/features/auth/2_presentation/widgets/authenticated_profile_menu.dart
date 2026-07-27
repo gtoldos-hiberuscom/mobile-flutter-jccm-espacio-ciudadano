@@ -11,10 +11,19 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/au
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+
+/// Initials of the authenticated person's name and first surname.
+String authenticatedProfileInitials(final WidgetRef ref) {
+  final claims = ref.watch(jwtClaimsProvider);
+  return [
+    _initial(claims?.givenName),
+    _initial(claims?.firstSurname),
+  ].whereType<String>().join();
+}
 
 void showAuthenticatedProfileMenu({
   required final BuildContext context,
@@ -81,7 +90,8 @@ void showAuthenticatedProfileMenu({
   showAppDrawerMenu(
     context: context,
     userName: _userName(claims),
-    nif: claims?.personIdentifier ?? claims?.idAgente ?? '-',
+    nif: claims?.normalizedPersonIdentifier ?? claims?.idAgente ?? '-',
+    identifierLabel: _identifierLabel(claims),
     primaryItems: [
       AppDrawerMenuItem(
         label: l10n.drawerPreferences,
@@ -121,5 +131,31 @@ void showAuthenticatedProfileMenu({
 }
 
 String _userName(final JwtClaims? claims) {
-  return claims?.name ?? claims?.givenName ?? claims?.preferredUsername ?? 'Ciudadano/a';
+  final givenName = claims?.givenName?.trim();
+  final firstSurname = claims?.firstSurname?.trim();
+  final nameParts = [
+    if (givenName != null && givenName.isNotEmpty) givenName,
+    if (firstSurname != null && firstSurname.isNotEmpty) firstSurname,
+  ];
+
+  if (nameParts.isNotEmpty) {
+    return nameParts.join(' ');
+  }
+
+  return claims?.preferredUsername?.trim().isNotEmpty ?? false ? claims!.preferredUsername!.trim() : 'Ciudadano/a';
 }
+
+String? _initial(final String? value) {
+  final normalized = value?.trim();
+  if (normalized == null || normalized.isEmpty) {
+    return null;
+  }
+  return normalized[0].toUpperCase();
+}
+
+String _identifierLabel(final JwtClaims? claims) => switch (claims?.identificationDocumentType) {
+  IdentificationDocumentType.dni => 'DNI',
+  IdentificationDocumentType.nie => 'NIE',
+  IdentificationDocumentType.legalEntityNif => 'NIF',
+  IdentificationDocumentType.other || null => 'Identificador',
+};

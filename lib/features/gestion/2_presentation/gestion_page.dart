@@ -42,6 +42,7 @@ class GestionPage extends ConsumerWidget {
       appBar: AppNavBar(
         title: l10n.gestionTitle,
         isLoggedIn: true,
+        profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
       ),
@@ -64,7 +65,6 @@ class GestionPage extends ConsumerWidget {
                     const SizedBox(height: AppDimensions.space8),
                     const AppDivider(strength: AppDividerStrength.medium),
                     const SizedBox(height: AppDimensions.space8),
-                    
                   ],
                   AppNavigationCard(
                     title: section.title,
@@ -150,7 +150,8 @@ enum _GestionText {
   aportacionTitle,
   aportacionDescription,
   notificacionesTitle,
-  notificacionesDescription;
+  notificacionesDescription
+  ;
 
   String resolve(final AppLocalizations l10n) {
     return switch (this) {

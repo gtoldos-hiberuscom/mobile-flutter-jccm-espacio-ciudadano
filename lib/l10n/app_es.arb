@@ -3473,7 +3473,7 @@
   "@drawerPreferences": {
     "description": "Etiqueta del ítem de Preferencias en el menú desplegable del perfil."
   },
-  "drawerHelpAndContact": "Ayuda y Contacto",
+  "drawerHelpAndContact": "Ayuda y contacto",
   "@drawerHelpAndContact": {
     "description": "Etiqueta del ítem de Ayuda y Contacto en la sección secundaria del menú de perfil."
   },

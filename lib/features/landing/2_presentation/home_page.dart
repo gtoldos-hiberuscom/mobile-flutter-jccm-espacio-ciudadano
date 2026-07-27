@@ -131,6 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppNavBar(
         type: AppNavBarType.inicio,
         isLoggedIn: true,
+        profileInitials: authenticatedProfileInitials(ref),
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
         onNotificationsTap: _goToNotifications,
       ),

@@ -47,6 +47,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
       appBar: AppNavBar(
         title: 'Agenda',
         isLoggedIn: true,
+        profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
       ),

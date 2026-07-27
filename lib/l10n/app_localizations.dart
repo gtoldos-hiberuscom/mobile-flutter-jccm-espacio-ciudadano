@@ -5105,7 +5105,7 @@ abstract class AppLocalizations {
   /// Etiqueta del ítem de Ayuda y Contacto en la sección secundaria del menú de perfil.
   ///
   /// In es, this message translates to:
-  /// **'Ayuda y Contacto'**
+  /// **'Ayuda y contacto'**
   String get drawerHelpAndContact;
 
   /// Botón de acción del menú de perfil que enlaza con la Sede Electrónica.

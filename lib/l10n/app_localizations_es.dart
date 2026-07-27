@@ -2622,7 +2622,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get drawerPreferences => 'Preferencias';
 
   @override
-  String get drawerHelpAndContact => 'Ayuda y Contacto';
+  String get drawerHelpAndContact => 'Ayuda y contacto';
 
   @override
   String get drawerGoToSedeElectronica => 'Ir a Sede Electrónica';

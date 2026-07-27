@@ -1,3 +1,10 @@
+enum IdentificationDocumentType {
+  dni,
+  nie,
+  legalEntityNif,
+  other,
+}
+
 /// Parsed representation of the JWT claims returned by Cerbero.
 ///
 /// Pure Dart — no Flutter, Riverpod, Dio, or infrastructure imports.
@@ -63,6 +70,27 @@ final class JwtClaims {
     // document embedded in the access token.
     final segments = value.split(RegExp(r'[/\\:]')).where((final segment) => segment.isNotEmpty).toList(growable: false);
     return segments.isEmpty ? null : segments.last;
+  }
+
+  /// Document type inferred from the normalized Spanish identifier format.
+  ///
+  /// Cerbero currently provides the identifier but no explicit claim that
+  /// distinguishes natural persons from legal entities.
+  IdentificationDocumentType get identificationDocumentType {
+    final identifier = normalizedPersonIdentifier;
+    if (identifier == null) {
+      return IdentificationDocumentType.other;
+    }
+    if (RegExp(r'^\d{8}[A-Z]$').hasMatch(identifier)) {
+      return IdentificationDocumentType.dni;
+    }
+    if (RegExp(r'^[XYZ]\d{7}[A-Z]$').hasMatch(identifier)) {
+      return IdentificationDocumentType.nie;
+    }
+    if (RegExp(r'^[ABCDEFGHJNPQRSUVW]\d{7}[0-9A-J]$').hasMatch(identifier)) {
+      return IdentificationDocumentType.legalEntityNif;
+    }
+    return IdentificationDocumentType.other;
   }
 
   /// Parses a raw JWT payload map into a [JwtClaims] instance.

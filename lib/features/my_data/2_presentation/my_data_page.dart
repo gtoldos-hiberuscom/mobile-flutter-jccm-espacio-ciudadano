@@ -58,6 +58,7 @@ class MyDataPage extends ConsumerWidget {
       appBar: AppNavBar(
         title: l10n.myDataTitle,
         isLoggedIn: true,
+        profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
       ),
@@ -147,7 +148,8 @@ enum _MyDataText {
   housingTitle,
   housingDescription,
   vehiclesTitle,
-  vehiclesDescription;
+  vehiclesDescription
+  ;
 
   String resolve(final AppLocalizations l10n) {
     return switch (this) {

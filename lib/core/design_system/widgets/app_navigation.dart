@@ -24,6 +24,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.showLeading = true,
     this.onAvatarTap,
     this.onNotificationsTap,
+    this.profileInitials,
   });
 
   final AppNavBarType type;
@@ -38,6 +39,9 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Called when the user avatar is tapped (opens the profile drawer).
   final VoidCallback? onAvatarTap;
+
+  /// Initials of the authenticated person shown in the profile avatar.
+  final String? profileInitials;
 
   /// Called when the notifications icon is tapped.
   final VoidCallback? onNotificationsTap;
@@ -115,8 +119,8 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
           child: IconButton(
             onPressed: onAvatarTap,
             tooltip: 'Perfil',
-            icon: const AppAvatar(
-              initials: 'AM',
+            icon: AppAvatar(
+              initials: profileInitials,
               size: AppAvatarSize.small,
               semanticsLabel: 'Perfil',
             ),
@@ -152,6 +156,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
         actions: actions,
         onAvatarTap: onAvatarTap,
         onNotificationsTap: onNotificationsTap,
+        profileInitials: profileInitials,
       );
     }
 
@@ -219,12 +224,14 @@ class _InicioNavBar extends StatelessWidget {
     this.actions,
     this.onAvatarTap,
     this.onNotificationsTap,
+    this.profileInitials,
   });
 
   final bool isLoggedIn;
   final List<Widget>? actions;
   final VoidCallback? onAvatarTap;
   final VoidCallback? onNotificationsTap;
+  final String? profileInitials;
 
   @override
   Widget build(final BuildContext context) {
@@ -280,8 +287,8 @@ class _InicioNavBar extends StatelessWidget {
                       padding: const EdgeInsets.all(AppDimensions.space8),
                       onPressed: onAvatarTap,
                       tooltip: 'Perfil',
-                      icon: const AppAvatar(
-                        initials: 'AM',
+                      icon: AppAvatar(
+                        initials: profileInitials,
                         size: AppAvatarSize.small,
                         semanticsLabel: 'Perfil',
                       ),

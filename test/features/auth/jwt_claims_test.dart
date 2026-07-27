@@ -27,6 +27,36 @@ void main() {
       expect(claims.normalizedPersonIdentifier, '99999999R');
     });
   });
+
+  group('JwtClaims.identificationDocumentType', () {
+    test('recognizes a DNI', () {
+      expect(
+        _claims(personIdentifier: '12345678Z').identificationDocumentType,
+        IdentificationDocumentType.dni,
+      );
+    });
+
+    test('recognizes a NIE', () {
+      expect(
+        _claims(personIdentifier: 'X1234567L').identificationDocumentType,
+        IdentificationDocumentType.nie,
+      );
+    });
+
+    test('recognizes a legal entity NIF', () {
+      expect(
+        _claims(personIdentifier: 'A12345678').identificationDocumentType,
+        IdentificationDocumentType.legalEntityNif,
+      );
+    });
+
+    test('uses other for an unknown identifier format', () {
+      expect(
+        _claims(personIdentifier: 'FOREIGN-123').identificationDocumentType,
+        IdentificationDocumentType.other,
+      );
+    });
+  });
 }
 
 JwtClaims _claims({final String? personIdentifier}) {
