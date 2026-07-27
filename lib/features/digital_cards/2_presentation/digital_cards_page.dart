@@ -46,7 +46,7 @@ class DigitalCardsPage extends ConsumerWidget {
         data: (final isAuthorized) {
           if (!isAuthorized) {
             return _UnauthorizedCardsContent(
-              onEditPreferences: () => _openPreferences(context, ref),
+              onOpenAuthorizations: () => _openAuthorizations(context, ref),
             );
           }
           final cardsAsync = ref.watch(digitalCardsProvider);
@@ -101,8 +101,16 @@ class DigitalCardsPage extends ConsumerWidget {
     );
   }
 
-  Future<void> _openPreferences(final BuildContext context, final WidgetRef ref) async {
-    await context.push<void>(Routes.preferences);
+  Future<void> _openAuthorizations(final BuildContext context, final WidgetRef ref) async {
+    await context.push<void>(
+      Uri(
+        path: Routes.consent,
+        queryParameters: {
+          'mode': 'preferences',
+          'returnTo': Routes.digitalCards,
+        },
+      ).toString(),
+    );
     ref
       ..invalidate(digitalCardsAuthorizationProvider)
       ..invalidate(digitalCardsProvider);
@@ -131,9 +139,9 @@ class DigitalCardsPage extends ConsumerWidget {
 }
 
 class _UnauthorizedCardsContent extends StatelessWidget {
-  const _UnauthorizedCardsContent({required this.onEditPreferences});
+  const _UnauthorizedCardsContent({required this.onOpenAuthorizations});
 
-  final VoidCallback onEditPreferences;
+  final VoidCallback onOpenAuthorizations;
 
   @override
   Widget build(final BuildContext context) {
@@ -156,7 +164,7 @@ class _UnauthorizedCardsContent extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: AppDimensions.space4),
                 child: Text(
-                  'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.',
+                  'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.',
                   style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
                 ),
               ),
@@ -167,9 +175,9 @@ class _UnauthorizedCardsContent extends StatelessWidget {
               height: AppDimensions.minTouchTarget,
               child: AppIconButton(
                 icon: AppIcons.settings,
-                onPressed: onEditPreferences,
+                onPressed: onOpenAuthorizations,
                 hierarchy: AppButtonHierarchy.secondary,
-                semanticsLabel: l10n.drawerPreferences,
+                semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
               ),
             ),
           ],

@@ -5,8 +5,8 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
@@ -35,7 +35,6 @@ class _MyDataSocialWelfarePageState extends State<MyDataSocialWelfarePage> {
     return AppTabbedDetailScaffold(
       title: l10n.socialWelfareScreenTitle,
       onBack: () => context.go(widget.backRoute),
-      onInfo: () => _showInfoSheet(context),
       tabs: [
         l10n.socialWelfareDataTab,
         l10n.socialWelfareServicesTab,
@@ -48,15 +47,6 @@ class _MyDataSocialWelfarePageState extends State<MyDataSocialWelfarePage> {
         _SocialWelfareDataTab(),
         _SocialWelfareServicesTab(),
       ],
-    );
-  }
-
-  Future<void> _showInfoSheet(final BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
-    await AppInfoSheet.show(
-      context: context,
-      title: l10n.socialWelfareInfoSheetTitle,
-      bodyText: l10n.socialWelfareInfoSheetDescription,
     );
   }
 }
@@ -194,19 +184,6 @@ class _SocialWelfareServicesTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final linkSections = [
       _SocialWelfareLinkSectionData(
-        title: l10n.socialWelfareInterestLinksTitle,
-        links: [
-          _SocialWelfareLinkData(
-            label: l10n.externalLinkHistoriaSocialUnicaLabel,
-            linkId: 'historia_social_unica',
-          ),
-          _SocialWelfareLinkData(
-            label: l10n.externalLinkInfanciaFamiliasLabel,
-            linkId: 'infancia_familias',
-          ),
-        ],
-      ),
-      _SocialWelfareLinkSectionData(
         title: l10n.socialWelfareSuggestedProceduresTitle,
         links: [
           _SocialWelfareLinkData(
@@ -220,6 +197,19 @@ class _SocialWelfareServicesTab extends ConsumerWidget {
           _SocialWelfareLinkData(
             label: l10n.socialWelfareTemporaryResidentialStayProcedure,
             linkId: 'bienestar_social_clm',
+          ),
+        ],
+      ),
+      _SocialWelfareLinkSectionData(
+        title: l10n.socialWelfareInterestLinksTitle,
+        links: [
+          _SocialWelfareLinkData(
+            label: l10n.externalLinkHistoriaSocialUnicaLabel,
+            linkId: 'historia_social_unica',
+          ),
+          _SocialWelfareLinkData(
+            label: l10n.externalLinkInfanciaFamiliasLabel,
+            linkId: 'infancia_familias',
           ),
         ],
       ),

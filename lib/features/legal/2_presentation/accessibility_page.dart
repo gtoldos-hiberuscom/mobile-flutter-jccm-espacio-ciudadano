@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Accessibility statement screen from Figma node `41853:13694`.
@@ -19,20 +17,6 @@ class AccessibilityPage extends ConsumerStatefulWidget {
 }
 
 class _AccessibilityPageState extends ConsumerState<AccessibilityPage> {
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -56,29 +40,8 @@ class _AccessibilityPageState extends ConsumerState<AccessibilityPage> {
             }
           },
         ),
-        actions: [
-          IconButton(
-            icon: const AppIcon(
-              AppIcons.info,
-              color: AppColors.textPrimary,
-            ),
-            tooltip: l10n.legalAccessibilityTitle,
-            onPressed: () {
-              if (_scrollController.hasClients) {
-                unawaited(
-                  _scrollController.animateTo(
-                    0,
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeOut,
-                  ),
-                );
-              }
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
-        controller: _scrollController,
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.space16,
           vertical: AppDimensions.space24,

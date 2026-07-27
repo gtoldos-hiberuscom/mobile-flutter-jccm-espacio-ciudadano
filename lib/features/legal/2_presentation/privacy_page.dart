@@ -8,8 +8,8 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Data-protection information screen from Figma node `41775:12413`.
@@ -114,34 +114,6 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
               type: AppNavBarType.detail,
               title: l10n.legalPrivacyTitle,
               showLeading: false,
-              actions: widget.isOnboarding
-                  ? const []
-                  : [
-                      Semantics(
-                        label: l10n.legalPrivacyTitle,
-                        button: true,
-                        child: ExcludeSemantics(
-                          child: IconButton(
-                            icon: const AppIcon(
-                              AppIcons.info,
-                              color: AppColors.textPrimary,
-                            ),
-                            onPressed: () {
-                              AppAlertSnackbar.show(
-                                context,
-                                message: l10n.consentLegalInfoSnackBar,
-                                margin: EdgeInsets.fromLTRB(
-                                  AppDimensions.space16,
-                                  0,
-                                  AppDimensions.space16,
-                                  MediaQuery.of(context).padding.bottom + AppDimensions.space48 + AppDimensions.space16,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
             ),
       body: Column(
         children: [

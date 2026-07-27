@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 /// Housing detail page — Figma nodes 43973:2061 and 43973:2085.
 class MyDataHousingPage extends StatefulWidget {
@@ -34,7 +34,6 @@ class _MyDataHousingPageState extends State<MyDataHousingPage> {
     return AppTabbedDetailScaffold(
       title: l10n.myDataHousingTitle,
       onBack: () => context.go(widget.backRoute),
-      onInfo: () => _showHousingInfoSheet(context),
       tabs: [l10n.myDataHousingDataTab, l10n.myDataHousingServicesTab],
       selectedIndex: _selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _HousingTab.values[index]),
@@ -42,16 +41,6 @@ class _MyDataHousingPageState extends State<MyDataHousingPage> {
         _HousingDataTab(),
         _HousingServicesTab(),
       ],
-    );
-  }
-
-  Future<void> _showHousingInfoSheet(final BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
-
-    await AppInfoSheet.show(
-      context: context,
-      title: l10n.myDataHousingInfoSheetTitle,
-      bodyText: l10n.myDataHousingInfoSheetDescription,
     );
   }
 }

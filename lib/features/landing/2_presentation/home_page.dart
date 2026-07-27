@@ -13,10 +13,10 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/auth
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 final _biometricQuickAccessPromptShownInSessionProvider = NotifierProvider<_BiometricQuickAccessPromptSessionNotifier, bool>(
@@ -275,7 +275,7 @@ class _HomeDigitalCardsFab extends StatelessWidget {
         ],
         AppFab(
           iconAsset: AppIconAssets.idCard,
-          iconSize: 16,
+          label: 'Carnets',
           onPressed: onToggle,
           semanticsLabel: isExpanded ? 'Cerrar accesos a carnés digitales' : 'Mostrar carnés digitales',
         ),
@@ -446,18 +446,19 @@ class _HomeNewsSection extends ConsumerWidget {
       children: [
         const _SectionTitle(text: 'Mis novedades'),
         const SizedBox(height: AppDimensions.space8),
-        AppSimpleNavCard(
-          label: _labelWithCount('Notificaciones', notificationsCount),
-          description: 'Consulta tus notificaciones pendientes',
-          onTap: () => context.go(
-            Uri(
-              path: Routes.gestionNotificaciones,
-              queryParameters: const {'from': 'home'},
-            ).toString(),
+        if (notificationsCount == null || notificationsCount > 0)
+          AppSimpleNavCard(
+            label: _labelWithCount('Notificaciones', notificationsCount),
+            description: 'Consulta tus notificaciones pendientes',
+            onTap: () => context.go(
+              Uri(
+                path: Routes.gestionNotificaciones,
+                queryParameters: const {'from': 'home'},
+              ).toString(),
+            ),
           ),
-        ),
         if (upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0) ...[
-          const SizedBox(height: AppDimensions.space8),
+          if (notificationsCount == null || notificationsCount > 0) const SizedBox(height: AppDimensions.space8),
           AppSimpleNavCard(
             label: _labelWithCount('Próximas citas', upcomingAppointmentsCount),
             description: 'Revisa tus citas que tienes agendadas próximamente',
@@ -566,7 +567,7 @@ class _HomeRecommendationsSection extends ConsumerWidget {
             const _SectionTitle(text: 'Trámites recomendados'),
             const SizedBox(height: AppDimensions.space8),
             SizedBox(
-              height: 304,
+              height: 328,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
@@ -577,6 +578,13 @@ class _HomeRecommendationsSection extends ConsumerWidget {
                   child: _RecommendedProcedureCard(recommendation: recommendations[index]),
                 ),
               ),
+            ),
+            const SizedBox(height: AppDimensions.space16),
+            AppButton(
+              label: 'Ir a recomendaciones',
+              trailingIcon: AppIcons.arrowForward,
+              isExpanded: true,
+              onPressed: () => context.go(Routes.recommendations),
             ),
           ],
         );

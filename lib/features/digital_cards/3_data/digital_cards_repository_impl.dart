@@ -14,13 +14,34 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
 
   @override
   Future<List<DigitalCard>> loadCards({required final String documentNumber}) async {
-    final results = await Future.wait<Object?>([
-      _loadLargeFamilyCard(documentNumber),
-      _loadYouthCard(documentNumber),
-      _loadDisabilityCard(documentNumber),
+    final results = await Future.wait([
+      _captureCard(() => _loadLargeFamilyCard(documentNumber)),
+      _captureCard(() => _loadYouthCard(documentNumber)),
+      _captureCard(() => _loadDisabilityCard(documentNumber)),
     ]);
+    final cards = results.map((final result) => result.card).whereType<DigitalCard>().toList(growable: false);
+    if (cards.isNotEmpty) {
+      return cards;
+    }
 
-    return results.whereType<DigitalCard>().toList(growable: false);
+    final firstError = results.map((final result) => result.error).whereType<Object>().firstOrNull;
+    if (firstError != null) {
+      Error.throwWithStackTrace(
+        firstError,
+        results.firstWhere((final result) => result.error != null).stackTrace!,
+      );
+    }
+    return const [];
+  }
+
+  Future<({DigitalCard? card, Object? error, StackTrace? stackTrace})> _captureCard(
+    final Future<DigitalCard?> Function() load,
+  ) async {
+    try {
+      return (card: await load(), error: null, stackTrace: null);
+    } catch (error, stackTrace) {
+      return (card: null, error: error, stackTrace: stackTrace);
+    }
   }
 
   @override
@@ -207,13 +228,31 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
 
   Future<Object?> _getOptional(final Future<Response<Respuesta>> Function() fetch) async {
     final response = await _rawResponse(fetch);
-    if (response.statusCode == 404) {
+    if (response.statusCode == 404 || _isCardNotFoundResponse(response.data)) {
       return null;
     }
     if ((response.statusCode ?? 500) >= 400) {
       throw StateError('No se ha podido cargar el carnet.');
     }
     return response.data;
+  }
+
+  bool _isCardNotFoundResponse(final Object? data) {
+    final response = _firstMap(_decodePayload(data));
+    final errorInfo = _firstMap(response?['info-error']);
+    final errors = errorInfo?['errores'];
+    if (errors is! List) {
+      return false;
+    }
+
+    return errors.any(
+      (final error) =>
+          _firstString(
+            _firstMap(error),
+            const ['codigo-error', 'codigoError', 'errorCode'],
+          ) ==
+          '3033',
+    );
   }
 
   Future<Uint8List> _fetchRequiredArtifact(

@@ -779,8 +779,8 @@ class AppQuickAccessCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppDimensions.space8),
-                SizedBox(
-                  height: 44,
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 44),
                   child: Center(
                     child: Text(
                       label,
@@ -980,9 +980,9 @@ class AppBottomTabBar extends StatelessWidget {
 
 // ── AppFab ────────────────────────────────────────────────────────────────────
 
-/// A dark round FAB matching Figma "FAB" (node 41773:16536).
+/// A dark FAB matching the compact and extended Figma variants.
 ///
-/// Size: 56×56, dark primary background, white icon, high shadow.
+/// The extended variant uses a 48 dp-high pill with a 24 dp icon and label.
 class AppFab extends StatelessWidget {
   const AppFab({
     required this.onPressed,
@@ -990,42 +990,106 @@ class AppFab extends StatelessWidget {
     this.icon,
     this.iconAsset,
     this.iconSize = 20,
+    this.label,
     this.semanticsLabel,
   }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
 
   final IconData? icon;
   final String? iconAsset;
   final double iconSize;
+  final String? label;
   final VoidCallback? onPressed;
   final String? semanticsLabel;
 
   @override
   Widget build(final BuildContext context) {
+    final isExtended = label != null;
+    final borderRadius = BorderRadius.circular(AppDimensions.radiusRound);
+
     return Semantics(
       button: true,
-      label: semanticsLabel,
-      child: Material(
-        color: AppColors.primary,
-        shape: const CircleBorder(),
-        elevation: 8,
-        shadowColor: Colors.black.withValues(alpha: 0.2),
-        child: InkWell(
-          onTap: onPressed,
-          customBorder: const CircleBorder(),
-          child: SizedBox(
-            width: 56,
-            height: 56,
-            child: Center(
-              child: iconAsset == null
-                  ? AppIcon(icon!, color: AppColors.textWhite, size: iconSize)
-                  : AppSvgIcon(
-                      iconAsset!,
-                      color: AppColors.textWhite,
-                      size: iconSize,
+      label: semanticsLabel ?? label,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          shape: isExtended ? BoxShape.rectangle : BoxShape.circle,
+          borderRadius: isExtended ? borderRadius : null,
+          boxShadow: AppShadows.high,
+        ),
+        child: Material(
+          color: AppColors.primary,
+          shape: isExtended ? const StadiumBorder() : const CircleBorder(),
+          child: InkWell(
+            onTap: onPressed,
+            customBorder: isExtended ? null : const CircleBorder(),
+            borderRadius: isExtended ? borderRadius : null,
+            child: isExtended
+                ? ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 48),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimensions.space16,
+                        vertical: AppDimensions.space8,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _AppFabIcon(
+                            icon: icon,
+                            iconAsset: iconAsset,
+                            size: iconSize,
+                          ),
+                          const SizedBox(width: AppDimensions.space4),
+                          Text(
+                            label!,
+                            style: AppTypography.bodyRegular.copyWith(
+                              color: AppColors.textWhite,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-            ),
+                  )
+                : SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: Center(
+                      child: _AppFabIcon(
+                        icon: icon,
+                        iconAsset: iconAsset,
+                        size: iconSize,
+                      ),
+                    ),
+                  ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AppFabIcon extends StatelessWidget {
+  const _AppFabIcon({
+    required this.icon,
+    required this.iconAsset,
+    required this.size,
+  });
+
+  final IconData? icon;
+  final String? iconAsset;
+  final double size;
+
+  @override
+  Widget build(final BuildContext context) {
+    return SizedBox.square(
+      dimension: size,
+      child: Center(
+        child: iconAsset == null
+            ? AppIcon(icon!, color: AppColors.textWhite, size: size)
+            : AppSvgIcon(
+                iconAsset!,
+                color: AppColors.textWhite,
+                size: size,
+              ),
       ),
     );
   }

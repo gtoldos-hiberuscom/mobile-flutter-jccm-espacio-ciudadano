@@ -66,6 +66,29 @@ void main() {
       throwsUnsupportedError,
     );
   });
+
+  test('keeps a valid youth card when another card endpoint fails', () async {
+    adapter.failingPaths.add('/api/v1/carnet-digital/familia-numerosa/12345678Z');
+
+    final cards = await repository.loadCards(documentNumber: '12345678Z');
+
+    final youthCard = cards.singleWhere((final card) => card.type == DigitalCardType.youth);
+    expect(youthCard.number, '99999999R-R955-C233-J452-Z864');
+    expect(youthCard.expiresAt, DateTime(2030, 1, 30));
+  });
+
+  test('keeps a valid youth card when the other cards return business code 3033', () async {
+    adapter.noDataPaths.addAll({
+      '/api/v1/carnet-digital/familia-numerosa/12345678Z',
+      '/api/v1/carnet-digital/grado-discapacidad/12345678Z',
+    });
+
+    final cards = await repository.loadCards(documentNumber: '12345678Z');
+
+    expect(cards, hasLength(1));
+    expect(cards.single.type, DigitalCardType.youth);
+    expect(cards.single.number, '99999999R-R955-C233-J452-Z864');
+  });
 }
 
 DigitalCard _card(final DigitalCardType type) => DigitalCard(
@@ -78,6 +101,8 @@ DigitalCard _card(final DigitalCardType type) => DigitalCard(
 
 final class _DigitalCardsAdapter implements HttpClientAdapter {
   final List<String> paths = [];
+  final Set<String> failingPaths = {};
+  final Set<String> noDataPaths = {};
 
   @override
   Future<ResponseBody> fetch(
@@ -86,14 +111,41 @@ final class _DigitalCardsAdapter implements HttpClientAdapter {
     final Future<void>? cancelFuture,
   ) async {
     paths.add(options.path);
+    if (failingPaths.contains(options.path)) {
+      return ResponseBody.fromString('Service unavailable', 500);
+    }
+    if (noDataPaths.contains(options.path)) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': null,
+          'codigo-respuesta': '400.00',
+          'mensaje-respuesta': 'No se pudo procesar la petición recibida',
+          'info-error': {
+            'errores': [
+              {
+                'mensaje-error': 'El documento indicado no existe, no es válido o no tiene datos asociados',
+                'codigo-error': 3033,
+              },
+            ],
+          },
+        }),
+        400,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
+    }
     final body = switch (options.path) {
       final path when path.contains('/familia-numerosa/') => {
         'numeroTitulo': 'FN-1',
         'fechaValidezHasta': '30/11/2026',
       },
       final path when path.contains('/joven/') => {
-        'Numero': 'CJ-1',
+        'enTramitacion': 'E',
         'FechaFinValidez': '30/01/2030',
+        'FechaNacimiento': '26/06/2006',
+        'Numero': '99999999R-R955-C233-J452-Z864',
+        'Titular': 'USUARIO CMD PRUEBAS',
       },
       final path when path.contains('/grado-discapacidad/') => {
         'validezDefinitiva': 'S',
