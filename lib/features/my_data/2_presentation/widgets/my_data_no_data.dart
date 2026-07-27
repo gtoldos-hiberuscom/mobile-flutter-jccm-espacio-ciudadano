@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
-import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 /// Shared empty state for successful "Mis datos" queries with no records.
 class MyDataNoData extends StatelessWidget {
@@ -47,15 +46,6 @@ class MyDataNoData extends StatelessWidget {
     if (url == null) {
       return;
     }
-    final accepted = await launchUrl(
-      Uri.parse(url),
-      mode: LaunchMode.externalApplication,
-    );
-    if (!accepted && context.mounted) {
-      AppAlertSnackbar.show(
-        context,
-        message: AppLocalizations.of(context).externalLinkOpenFailed,
-      );
-    }
+    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
   }
 }

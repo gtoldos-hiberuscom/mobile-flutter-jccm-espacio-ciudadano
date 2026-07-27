@@ -177,6 +177,7 @@ class AppAlertContextual extends StatelessWidget {
     this.horizontal = false,
     this.title,
     this.action,
+    this.actionSpacing = AppDimensions.space16,
   });
 
   final AppAlertSeverity severity;
@@ -185,6 +186,7 @@ class AppAlertContextual extends StatelessWidget {
   final AppAlertContextualSize size;
   final bool horizontal;
   final Widget? action;
+  final double actionSpacing;
 
   @override
   Widget build(final BuildContext context) {
@@ -231,7 +233,7 @@ class AppAlertContextual extends StatelessWidget {
             children: [
               Align(alignment: Alignment.centerLeft, child: contentRow),
               if (action != null) ...[
-                const SizedBox(height: AppDimensions.space16),
+                SizedBox(height: actionSpacing),
                 action!,
               ],
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 class MyDataEmploymentServicesTab extends StatelessWidget {
   const MyDataEmploymentServicesTab({super.key});
@@ -58,16 +58,5 @@ class MyDataEmploymentServicesTab extends StatelessWidget {
 }
 
 Future<void> _launchExternalUrl(final BuildContext context, final String urlString) async {
-  final uri = Uri.parse(urlString);
-  final accepted = await launchUrl(
-    uri,
-    mode: LaunchMode.externalApplication,
-  );
-
-  if (!accepted && context.mounted) {
-    AppAlertSnackbar.show(
-      context,
-      message: AppLocalizations.of(context).externalLinkOpenFailed,
-    );
-  }
+  await launchExternalUrlWithConfirmation(context, Uri.parse(urlString));
 }

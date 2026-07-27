@@ -236,6 +236,8 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
 
       final startDate = _date(rawProcedure['fechaPresentacionIni'] ?? rawProcedure['fechaPresentacion'] ?? rawProcedure['fechaInicio']);
       final endDate = _date(rawProcedure['fechaPresentacionFin'] ?? rawProcedure['fechaFin']);
+      final rawSubmissionStatus = rawProcedure['fechaPresentacion'];
+      final submissionStatusText = _date(rawSubmissionStatus) == null ? _stringOrNull(rawSubmissionStatus) : null;
 
       yield Recommendation(
         id: '$lifeEventId-$procedureId',
@@ -255,6 +257,7 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         ),
         submissionStartDate: startDate,
         submissionEndDate: endDate,
+        submissionStatusText: submissionStatusText,
         detailUrl: sedeBaseUrl.resolve('tramites/$procedureId'),
       );
     }

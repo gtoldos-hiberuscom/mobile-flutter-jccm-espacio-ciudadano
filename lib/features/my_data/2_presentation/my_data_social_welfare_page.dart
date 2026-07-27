@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
@@ -263,6 +264,9 @@ class _SocialWelfareServicesTab extends ConsumerWidget {
       return;
     }
 
+    if (!await confirmExternalNavigation(context) || !context.mounted) {
+      return;
+    }
     final result = await ref.read(externalLinkLauncherProvider).launch(link);
 
     if (!context.mounted || result is ExternalLinkLaunchSuccess) {

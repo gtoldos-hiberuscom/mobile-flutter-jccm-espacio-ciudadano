@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -71,6 +72,9 @@ class ExternalLinkButton extends ConsumerWidget {
     final BuildContext context,
     final WidgetRef ref,
   ) async {
+    if (!await confirmExternalNavigation(context) || !context.mounted) {
+      return;
+    }
     final launcher = ref.read(externalLinkLauncherProvider);
     final result = await launcher.launch(link);
     if (!context.mounted) {

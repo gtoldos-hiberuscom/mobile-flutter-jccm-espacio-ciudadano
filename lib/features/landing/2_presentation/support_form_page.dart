@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/support_request.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/usecases/submit_support_request_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/providers/support_form_providers.dart';
@@ -151,6 +152,9 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       return;
     }
 
+    if (!await confirmExternalNavigation(context) || !mounted) {
+      return;
+    }
     final result = await ref.read(externalLinkLauncherProvider).launch(link);
     if (!mounted || result is! ExternalLinkLaunchFailure) {
       return;

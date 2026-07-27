@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jw
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Data-protection information screen from Figma node `41775:12413`.
@@ -449,6 +450,9 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       return;
     }
 
+    if (!await confirmExternalNavigation(context) || !context.mounted) {
+      return;
+    }
     final result = await ref.read(externalLinkLauncherProvider).launch(link);
     if (!context.mounted || result is! ExternalLinkLaunchFailure) {
       return;

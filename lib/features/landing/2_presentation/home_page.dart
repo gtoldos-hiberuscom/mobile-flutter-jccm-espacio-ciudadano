@@ -16,8 +16,8 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/pro
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final _biometricQuickAccessPromptShownInSessionProvider = NotifierProvider<_BiometricQuickAccessPromptSessionNotifier, bool>(
   _BiometricQuickAccessPromptSessionNotifier.new,
@@ -593,51 +593,30 @@ class _RecommendedProcedureCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final responsibleUnit = recommendation.responsibleUnit;
     final deadline = _deadlineText(recommendation);
     final lifeEventName = recommendation.lifeEventName.trim();
     return AppRecommendationCard(
       onTap: () => unawaited(_openRecommendationDetail(context, recommendation)),
       title: recommendation.title,
-      badge: _RecommendationBadge(badge: recommendation.badge),
+      categoryLabels: _categoryLabels(context, recommendation.badges),
       detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
       detailText: lifeEventName.isEmpty ? l10n.homeBlockLastUpdatedUnknown : lifeEventName,
-      responsibleUnitText: responsibleUnit == null ? null : '${l10n.recommendationsResponsibleUnitPrefix} $responsibleUnit',
-      deadlineText: deadline == null ? null : '${l10n.recommendationsDeadlinePrefix} $deadline',
+      statusLabel: 'Estado',
+      statusText: recommendation.submissionStatusText ?? deadline,
     );
   }
 }
 
-class _RecommendationBadge extends StatelessWidget {
-  const _RecommendationBadge({required this.badge});
-
-  final RecommendationBadge? badge;
-
-  @override
-  Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return switch (badge) {
-      RecommendationBadge.recent => AppTag(
-        status: AppTagStatus.warning,
-        label: l10n.recommendationsTabRecent,
-        icon: AppIcons.hourglass,
-        showIcon: false,
-      ),
-      RecommendationBadge.news => AppTag(
-        status: AppTagStatus.infoActive,
-        label: l10n.recommendationsTabNew,
-        icon: AppIcons.autorenew,
-        showIcon: false,
-      ),
-      RecommendationBadge.immediate => AppTag(
-        status: AppTagStatus.success,
-        label: l10n.recommendationsImmediateBadge,
-        icon: AppIcons.check,
-        showIcon: false,
-      ),
-      null => const SizedBox.shrink(),
-    };
-  }
+List<String> _categoryLabels(
+  final BuildContext context,
+  final Set<RecommendationBadge> badges,
+) {
+  final l10n = AppLocalizations.of(context);
+  return [
+    if (badges.contains(RecommendationBadge.recent)) l10n.recommendationsTabRecent,
+    if (badges.contains(RecommendationBadge.news)) l10n.recommendationsTabNew,
+    if (badges.contains(RecommendationBadge.immediate)) l10n.recommendationsImmediateBadge,
+  ];
 }
 
 Future<void> _openRecommendationDetail(
@@ -651,11 +630,7 @@ Future<void> _openRecommendationDetail(
     return;
   }
 
-  final accepted = await launchUrl(url, mode: LaunchMode.externalApplication);
-  if (!context.mounted || accepted) {
-    return;
-  }
-  AppAlertSnackbar.show(context, message: l10n.externalLinkOpenFailed);
+  await launchExternalUrlWithConfirmation(context, url);
 }
 
 String? _deadlineText(final Recommendation recommendation) {

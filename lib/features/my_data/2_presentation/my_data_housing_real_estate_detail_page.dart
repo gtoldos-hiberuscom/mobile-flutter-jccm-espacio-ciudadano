@@ -6,8 +6,8 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Real-estate asset detail — Figma node 43973:2120.
 class MyDataHousingRealEstateDetailPage extends ConsumerWidget {
@@ -124,13 +124,7 @@ class _PropertyDetailContent extends StatelessWidget {
       return;
     }
 
-    final accepted = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!accepted && context.mounted) {
-      AppAlertSnackbar.show(
-        context,
-        message: AppLocalizations.of(context).externalLinkOpenFailed,
-      );
-    }
+    await launchExternalUrlWithConfirmation(context, uri);
   }
 }
 

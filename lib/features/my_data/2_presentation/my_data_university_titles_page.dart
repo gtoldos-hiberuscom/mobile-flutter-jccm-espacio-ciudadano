@@ -7,8 +7,8 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/university_titl
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_education_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// University titles list page — Figma node 43973:1882.
 class MyDataUniversityTitlesPage extends ConsumerWidget {
@@ -91,31 +91,15 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
       footerText: l10n.educationUniversityTitlesInfoFooter,
       actionLabel: l10n.educationUniversityTitlesInfoContactButton,
       actionIcon: AppIcons.openInNew,
-      onActionPressed: () => _openContactUrl(context, l10n),
+      onActionPressed: () => _openContactUrl(context),
     );
   }
 
-  Future<void> _openContactUrl(
-    final BuildContext context,
-    final AppLocalizations l10n,
-  ) async {
+  Future<void> _openContactUrl(final BuildContext context) async {
     // URL del Ministerio de Ciencia, Innovación y Universidades
     const url = 'https://www.ciencia.gob.es/';
 
-    final accepted = await launchUrl(
-      Uri.parse(url),
-      mode: LaunchMode.externalApplication,
-    );
-
-    if (!context.mounted || accepted) {
-      return;
-    }
-
-    AppAlertSnackbar.show(
-      context,
-      message: l10n.externalLinkOpenFailed,
-      severity: AppAlertSeverity.error,
-    );
+    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
   }
 }
 

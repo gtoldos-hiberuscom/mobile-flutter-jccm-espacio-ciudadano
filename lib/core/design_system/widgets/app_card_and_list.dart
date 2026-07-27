@@ -74,21 +74,21 @@ class AppSurfaceCard extends StatelessWidget {
 class AppRecommendationCard extends StatelessWidget {
   const AppRecommendationCard({
     required this.title,
-    required this.badge,
+    required this.categoryLabels,
     required this.detailLabel,
     required this.detailText,
     super.key,
-    this.responsibleUnitText,
-    this.deadlineText,
+    this.statusLabel,
+    this.statusText,
     this.onTap,
   });
 
   final String title;
-  final Widget badge;
+  final List<String> categoryLabels;
   final String detailLabel;
   final String detailText;
-  final String? responsibleUnitText;
-  final String? deadlineText;
+  final String? statusLabel;
+  final String? statusText;
   final VoidCallback? onTap;
 
   @override
@@ -103,10 +103,29 @@ class AppRecommendationCard extends StatelessWidget {
         boxShadow: AppShadows.medium,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          badge,
-          const SizedBox(height: AppDimensions.space8),
+          if (categoryLabels.isNotEmpty) ...[
+            Wrap(
+              spacing: AppDimensions.space16,
+              children: [
+                for (final label in categoryLabels)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: AppDimensions.space4,
+                      bottom: AppDimensions.space8,
+                    ),
+                    child: Text(
+                      '#${label.toUpperCase()}',
+                      style: AppTypography.captionUppercase.copyWith(
+                        color: AppColors.textBlueMutedDark,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: AppDimensions.space8),
+          ],
           Padding(
             padding: const EdgeInsets.only(
               top: AppDimensions.space4,
@@ -125,7 +144,7 @@ class AppRecommendationCard extends StatelessWidget {
                 const SizedBox(width: AppDimensions.space8),
                 const AppIcon(
                   AppIcons.openInNew,
-                  color: AppColors.textBase,
+                  color: AppColors.textPrimary,
                 ),
               ],
             ),
@@ -148,32 +167,38 @@ class AppRecommendationCard extends StatelessWidget {
                 const SizedBox(height: AppDimensions.space8),
                 Text(
                   detailText,
-                  maxLines: 3,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
                 ),
-                if (responsibleUnitText != null) ...[
-                  const SizedBox(height: AppDimensions.space8),
-                  Text(
-                    responsibleUnitText!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
-                  ),
-                ],
-                if (deadlineText != null) ...[
-                  const SizedBox(height: AppDimensions.space4),
-                  Text(
-                    deadlineText!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
-                  ),
-                ],
                 const SizedBox(height: AppDimensions.space4),
               ],
             ),
           ),
+          if (statusText != null) ...[
+            const SizedBox(height: AppDimensions.space8),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    (statusLabel ?? 'Estado').toUpperCase(),
+                    style: AppTypography.captionUppercase.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space8),
+                  Text(
+                    statusText!,
+                    style: AppTypography.smallRegular.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -462,7 +487,6 @@ class AppCard extends StatelessWidget {
         bottom: AppDimensions.space8,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (effectiveTitleIcon != null) ...[
             SizedBox(width: 32, height: 32, child: effectiveTitleIcon),

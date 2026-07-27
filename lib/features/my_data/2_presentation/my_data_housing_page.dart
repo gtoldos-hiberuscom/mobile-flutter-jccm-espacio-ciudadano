@@ -9,7 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 /// Housing detail page — Figma nodes 43973:2061 and 43973:2085.
 class MyDataHousingPage extends StatefulWidget {
@@ -201,16 +201,5 @@ class _HousingServicesTab extends StatelessWidget {
 }
 
 Future<void> _launchExternalUrl(final BuildContext context, final String urlString) async {
-  final uri = Uri.parse(urlString);
-  final accepted = await launchUrl(
-    uri,
-    mode: LaunchMode.externalApplication,
-  );
-
-  if (!accepted && context.mounted) {
-    AppAlertSnackbar.show(
-      context,
-      message: AppLocalizations.of(context).externalLinkOpenFailed,
-    );
-  }
+  await launchExternalUrlWithConfirmation(context, Uri.parse(urlString));
 }

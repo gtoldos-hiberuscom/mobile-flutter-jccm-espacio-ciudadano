@@ -9,7 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 /// Education data detail — Figma node 43973:1875.
 class MyDataEducationPage extends StatefulWidget {
@@ -193,9 +193,6 @@ class _EducationServicesTab extends StatelessWidget {
   }
 
   Future<void> _launchExternalUrl(final BuildContext context, final String url) async {
-    final opened = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-    if (!opened && context.mounted) {
-      AppAlertSnackbar.show(context, message: AppLocalizations.of(context).externalLinkOpenFailed);
-    }
+    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
   }
 }

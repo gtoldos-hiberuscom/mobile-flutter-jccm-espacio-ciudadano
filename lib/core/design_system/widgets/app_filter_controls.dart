@@ -16,7 +16,7 @@ class AppFilterButton extends StatelessWidget {
 
   final String label;
   final int activeFilterCount;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(final BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_data_tab.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_services_tab.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 /// Employment detail page — Figma nodes 43973:1993 and 43973:2077.
 class MyDataEmploymentPage extends StatefulWidget {
@@ -58,16 +58,5 @@ class _MyDataEmploymentPageState extends State<MyDataEmploymentPage> {
 enum _EmploymentTab { data, services }
 
 Future<void> _launchExternalUrl(final BuildContext context, final String urlString) async {
-  final uri = Uri.parse(urlString);
-  final accepted = await launchUrl(
-    uri,
-    mode: LaunchMode.externalApplication,
-  );
-
-  if (!accepted && context.mounted) {
-    AppAlertSnackbar.show(
-      context,
-      message: AppLocalizations.of(context).externalLinkOpenFailed,
-    );
-  }
+  await launchExternalUrlWithConfirmation(context, Uri.parse(urlString));
 }

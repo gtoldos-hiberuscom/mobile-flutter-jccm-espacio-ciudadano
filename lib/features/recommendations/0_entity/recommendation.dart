@@ -17,6 +17,7 @@ final class Recommendation {
     this.responsibleUnit,
     this.submissionStartDate,
     this.submissionEndDate,
+    this.submissionStatusText,
     this.detailUrl,
   });
 
@@ -41,6 +42,7 @@ final class Recommendation {
   final String? responsibleUnit;
   final DateTime? submissionStartDate;
   final DateTime? submissionEndDate;
+  final String? submissionStatusText;
   final Uri? detailUrl;
 
   bool get isImmediate => badges.contains(RecommendationBadge.immediate);

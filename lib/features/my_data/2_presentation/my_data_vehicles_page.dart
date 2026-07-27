@@ -7,8 +7,8 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_vehicles_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Vehicles list page — Figma node 43973:2068.
 class MyDataVehiclesPage extends StatefulWidget {
@@ -60,17 +60,7 @@ class _MyDataVehiclesPageState extends State<MyDataVehiclesPage> {
   Future<void> _launchDgtContactUrl(final BuildContext context) async {
     const dgtContactUrl = 'https://sede.dgt.gob.es/es/contacto/';
     final uri = Uri.parse(dgtContactUrl);
-    final accepted = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
-
-    if (!accepted && context.mounted) {
-      AppAlertSnackbar.show(
-        context,
-        message: 'No se pudo abrir el enlace de contacto de la DGT',
-      );
-    }
+    await launchExternalUrlWithConfirmation(context, uri);
   }
 }
 
@@ -239,16 +229,6 @@ class _VehiclesServicesTab extends StatelessWidget {
 
   Future<void> _launchUrl(final BuildContext context, final String urlString) async {
     final uri = Uri.parse(urlString);
-    final accepted = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
-
-    if (!accepted && context.mounted) {
-      AppAlertSnackbar.show(
-        context,
-        message: 'No se pudo abrir el enlace: $urlString',
-      );
-    }
+    await launchExternalUrlWithConfirmation(context, uri);
   }
 }
