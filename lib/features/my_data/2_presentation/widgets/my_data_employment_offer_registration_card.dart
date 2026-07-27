@@ -35,10 +35,11 @@ class MyDataEmploymentOfferRegistrationCard extends StatelessWidget {
               label: l10n.myDataEmploymentOfferRegistrationDateLabel,
               value: _formatDate(context, offer.registrationDate),
             ),
-            MyDataEmploymentOfferFieldRow(
-              label: l10n.myDataEmploymentOfferSelectionEndDateLabel,
-              value: _formatDate(context, offer.selectionEndDate),
-            ),
+            if (offer.selectionEndDate != null)
+              MyDataEmploymentOfferFieldRow(
+                label: l10n.myDataEmploymentOfferSelectionEndDateLabel,
+                value: _formatDate(context, offer.selectionEndDate),
+              ),
             MyDataEmploymentOfferFieldRow(
               label: l10n.myDataEmploymentOfferApplicationStatusLabel,
               value: _display(offer.applicationStatus),

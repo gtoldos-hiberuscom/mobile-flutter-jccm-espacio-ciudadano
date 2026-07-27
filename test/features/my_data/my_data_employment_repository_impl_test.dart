@@ -45,6 +45,29 @@ void main() {
 
       expect(demand?.status, 'No Inscrito');
     });
+
+    test('loads registered employment offers from intermediacion endpoint', () async {
+      final adapter = _EmploymentAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      final offers = await repository.loadOfferRegistrations(documentNumber: 'X1234567L');
+
+      expect(adapter.request?.method, 'POST');
+      expect(adapter.request?.path, '/api/v1/intermediacion/empleo/ofertas-inscritas');
+      expect(adapter.request?.jsonBody, {
+        'docu': 'X1234567L',
+        'tipodoc': 'NIE',
+      });
+      expect(offers, hasLength(2));
+      expect(offers.first.title, 'ATS/DUE');
+      expect(offers.first.publicationDate, DateTime(2026, 7, 3));
+      expect(offers.first.registrationDate, DateTime(2026, 7, 20));
+      expect(offers.first.selectionEndDate, isNull);
+      expect(offers.first.applicationStatus, 'Inscrita');
+      expect(offers.last.title, 'MOZO ALMACEN');
+      expect(offers.last.selectionEndDate, DateTime(2026, 8, 31));
+    });
   });
 }
 
@@ -85,6 +108,38 @@ final class _EmploymentAdapter implements HttpClientAdapter {
 
     if (returnNotFound) {
       return ResponseBody.fromString('', 404);
+    }
+
+    if (options.path == '/api/v1/intermediacion/empleo/ofertas-inscritas') {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': {
+            'respuesta': {
+              'codestado': '0',
+              'datosespecificos': [
+                {
+                  'NombreOfertaEmpleo': 'ATS/DUE',
+                  'EstadoCandidatura': 'Inscrita',
+                  'FechaPublicacion': '2026-07-03',
+                  'FechaInscripcion': '2026-07-20',
+                  'FechaFinalizacionProceso': '',
+                },
+                {
+                  'NombreOfertaEmpleo': 'MOZO ALMACEN',
+                  'EstadoCandidatura': 'Inscrita',
+                  'FechaPublicacion': '2026-07-03',
+                  'FechaInscripcion': '2026-07-20',
+                  'FechaFinalizacionProceso': '2026-08-31',
+                },
+              ],
+            },
+          },
+        }),
+        200,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
     }
 
     return ResponseBody.fromString(

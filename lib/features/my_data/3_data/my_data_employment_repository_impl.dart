@@ -4,12 +4,14 @@ import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/employment_demand.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/employment_offer_registration.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_employment_repository.dart';
 
 final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository {
-  MyDataEmploymentRepositoryImpl({required final Dio dio}) : _api = SepeApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataEmploymentRepositoryImpl({required final Dio dio}) : _sepeApi = SepeApi(withGeneratedApiCompat(dio), standardSerializers), _intermediacionApi = IntermediacionApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final SepeApi _api;
+  final SepeApi _sepeApi;
+  final IntermediacionApi _intermediacionApi;
 
   @override
   Future<EmploymentDemand?> loadDemand({
@@ -20,7 +22,7 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
       'tipodoc': _documentType(documentNumber),
     };
     final payload = await _rawResponse(
-      () => _api.getDemandanteEmpleoFechaActual(
+      () => _sepeApi.getDemandanteEmpleoFechaActual(
         numDocumento: documentNumber,
         dtsepesvdidefareqBody: DTSEPESVDIDEFAREQ(
           (final builder) => builder
@@ -58,6 +60,108 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
     );
 
     return demand.hasData ? demand : null;
+  }
+
+  @override
+  Future<List<EmploymentOfferRegistration>> loadOfferRegistrations({
+    required final String documentNumber,
+  }) async {
+    final requestData = {
+      'docu': documentNumber,
+      'tipodoc': _documentType(documentNumber),
+    };
+    final payload = await _rawResponse(
+      () => _intermediacionApi.obtenerOfertasEmpleoInscritas(
+        baseRequestIntermediacion: BaseRequestIntermediacion(
+          (final builder) => builder
+            ..docu = documentNumber
+            ..tipodoc = _documentType(documentNumber),
+        ),
+        extra: {
+          generatedApiRequestDataExtraKey: requestData,
+          generatedApiDecodeStringResponseExtraKey: true,
+        },
+        validateStatus: (final status) => status != null && status < 500,
+      ),
+    );
+
+    if (payload == null) {
+      return const [];
+    }
+
+    return _parseOfferRegistrations(_decodePayload(payload));
+  }
+
+  List<EmploymentOfferRegistration> _parseOfferRegistrations(final Object? payload) {
+    final specificData = <Object?>[];
+
+    void findSpecificData(final Object? node) {
+      switch (node) {
+        case final Map<dynamic, dynamic> map:
+          for (final entry in map.entries) {
+            if (entry.key.toString().toLowerCase() == 'datosespecificos') {
+              specificData.add(_decodePayload(entry.value));
+            } else {
+              findSpecificData(entry.value);
+            }
+          }
+        case final List<dynamic> list:
+          list.forEach(findSpecificData);
+      }
+    }
+
+    findSpecificData(payload);
+    final candidates = specificData.expand(_collectMaps);
+    final offers = <EmploymentOfferRegistration>[];
+
+    for (final data in candidates) {
+      final title = _firstString(data, const [
+        'nombreOfertaEmpleo',
+        'titulo',
+        'denominacion',
+        'descripcion',
+        'nombreOferta',
+        'oferta',
+        'puesto',
+      ]);
+      final registrationDate = _parseDate(
+        _firstString(data, const ['fechaInscripcion', 'fechainscrip', 'fecha_inscripcion']),
+      );
+      final publicationDate = _parseDate(
+        _firstString(data, const ['fechaPublicacion', 'fechapublicacion', 'fecha_publicacion']),
+      );
+      final selectionEndDate = _parseDate(
+        _firstString(data, const [
+          'fechaFinalizacionProceso',
+          'fechaFinSeleccion',
+          'fechafinseleccion',
+          'fechaFin',
+          'fechafin',
+          'fecha_cierre',
+        ]),
+      );
+      final applicationStatus = _firstString(data, const [
+        'estadoCandidatura',
+        'estadocandidatura',
+        'estado',
+        'situacion',
+      ]);
+
+      if (title == null || title.isEmpty) {
+        continue;
+      }
+      offers.add(
+        EmploymentOfferRegistration(
+          title: title,
+          publicationDate: publicationDate,
+          registrationDate: registrationDate,
+          selectionEndDate: selectionEndDate,
+          applicationStatus: applicationStatus,
+        ),
+      );
+    }
+
+    return offers;
   }
 
   Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
