@@ -166,7 +166,7 @@ class _PropertyCard extends StatelessWidget {
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateConstructionValueLabel, value: _display(property.constructionValue)),
       ],
       footerItems: [
-        AppDataSummaryEntry(label: l10n.myDataHousingRealEstateStatusLabel, value: _display(property.status)),
+        AppDataSummaryEntry(label: l10n.myDataHousingRealEstateUseLabel, value: _displayUse(property.use)),
       ],
     );
   }
@@ -213,4 +213,13 @@ String _display(final String? value) {
     return '-';
   }
   return normalized;
+}
+
+String _displayUse(final String? value) {
+  final normalized = value?.replaceAll('_', ' ').replaceAll(RegExp(r'\s+'), ' ').trim().toLowerCase();
+  if (normalized == null || normalized.isEmpty) {
+    return '-';
+  }
+
+  return '${normalized[0].toUpperCase()}${normalized.substring(1)}';
 }
