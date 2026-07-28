@@ -1,4 +1,4 @@
-package com.example.jccm_espacio_ciudadano
+package es.jccm.espaciociudadano
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
