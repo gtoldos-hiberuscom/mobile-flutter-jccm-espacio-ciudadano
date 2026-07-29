@@ -51,20 +51,24 @@ final digitalCardQrImageProvider = FutureProvider.autoDispose.family<Uint8List?,
   return ref.watch(digitalCardsRepositoryProvider).loadQrImage(documentNumber: documentNumber, card: card);
 });
 
-final digitalCardsDownloadingProvider = NotifierProvider.autoDispose<DigitalCardsDownloadingNotifier, bool>(
+final digitalCardsDownloadingProvider = NotifierProvider.autoDispose<DigitalCardsDownloadingNotifier, String?>(
   DigitalCardsDownloadingNotifier.new,
 );
 
-final class DigitalCardsDownloadingNotifier extends Notifier<bool> {
+final class DigitalCardsDownloadingNotifier extends Notifier<String?> {
   @override
-  bool build() => false;
+  String? build() => null;
 
-  void startDownload() {
-    state = true;
+  bool tryStartDownload(final String format) {
+    if (state != null) {
+      return false;
+    }
+    state = format;
+    return true;
   }
 
   void finishDownload() {
-    state = false;
+    state = null;
   }
 }
 

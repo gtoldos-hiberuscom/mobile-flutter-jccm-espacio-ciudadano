@@ -220,6 +220,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
     super.key,
     this.qrImageBytes,
     this.isQrLoading = false,
+    this.downloadingFormat,
     this.onQrPressed,
     this.onPkPassPressed,
     this.onPdfPressed,
@@ -227,6 +228,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
 
   final Uint8List? qrImageBytes;
   final bool isQrLoading;
+  final String? downloadingFormat;
   final VoidCallback? onQrPressed;
   final VoidCallback? onPkPassPressed;
   final VoidCallback? onPdfPressed;
@@ -264,13 +266,18 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space8),
           if (onQrPressed != null) ...[
-            _DownloadFormatButton(label: 'QR', onPressed: onQrPressed),
+            _DownloadFormatButton(
+              label: 'QR',
+              onPressed: downloadingFormat == null ? onQrPressed : null,
+              isLoading: downloadingFormat == 'QR',
+            ),
             const SizedBox(height: AppDimensions.space16),
           ],
           if (onPkPassPressed != null) ...[
             _DownloadFormatButton(
               label: 'PKPASS',
-              onPressed: onPkPassPressed,
+              onPressed: downloadingFormat == null ? onPkPassPressed : null,
+              isLoading: downloadingFormat == 'PKPASS',
               primary: onPdfPressed == null,
             ),
             if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
@@ -278,7 +285,8 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
           if (onPdfPressed != null)
             _DownloadFormatButton(
               label: 'PDF',
-              onPressed: onPdfPressed,
+              onPressed: downloadingFormat == null ? onPdfPressed : null,
+              isLoading: downloadingFormat == 'PDF',
               primary: true,
             ),
         ],
@@ -348,11 +356,13 @@ class _DownloadFormatButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.primary = false,
+    this.isLoading = false,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final bool primary;
+  final bool isLoading;
 
   @override
   Widget build(final BuildContext context) {
@@ -362,7 +372,8 @@ class _DownloadFormatButton extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Descargar $label',
+      enabled: onPressed != null,
+      label: isLoading ? 'Descargando $label' : 'Descargar $label',
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: const BoxDecoration(
@@ -386,17 +397,25 @@ class _DownloadFormatButton extends StatelessWidget {
                 ),
                 textStyle: AppTypography.leadingMedium,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppIcon(AppIcons.add, size: 20, color: foreground),
-                  const SizedBox(width: AppDimensions.space8),
-                  Text(label),
-                  const SizedBox(width: AppDimensions.space8),
-                  AppIcon(AppIcons.add, size: 20, color: foreground),
-                ],
-              ),
+              child: isLoading
+                  ? SizedBox.square(
+                      dimension: AppDimensions.iconSmall,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: foreground,
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppIcon(AppIcons.add, size: 20, color: foreground),
+                        const SizedBox(width: AppDimensions.space8),
+                        Text(label),
+                        const SizedBox(width: AppDimensions.space8),
+                        AppIcon(AppIcons.add, size: 20, color: foreground),
+                      ],
+                    ),
             ),
           ),
         ),

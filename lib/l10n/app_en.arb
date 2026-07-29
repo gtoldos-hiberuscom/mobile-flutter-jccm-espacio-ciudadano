@@ -393,6 +393,22 @@
   "@externalLinkOpenFailed": {
     "description": "SnackBar message shown when an external link cannot be opened (validation or system rejection)."
   },
+  "externalNavigationDialogTitle": "You are about to leave the application",
+  "@externalNavigationDialogTitle": {
+    "description": "Title of the confirmation dialog shown before opening an external link."
+  },
+  "externalNavigationDialogBody": "The content will open in a browser window",
+  "@externalNavigationDialogBody": {
+    "description": "Message in the confirmation dialog shown before opening an external link."
+  },
+  "externalNavigationDialogCancel": "Go back",
+  "@externalNavigationDialogCancel": {
+    "description": "Button that cancels opening an external link."
+  },
+  "externalNavigationDialogContinue": "Continue",
+  "@externalNavigationDialogContinue": {
+    "description": "Button that confirms opening an external link."
+  },
   "externalLinkEducamosClmLabel": "Educamos CLM",
   "@externalLinkEducamosClmLabel": {
     "description": "Label of the external link to the Educamos CLM portal."

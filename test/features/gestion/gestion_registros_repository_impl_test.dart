@@ -11,7 +11,7 @@ void main() {
         const AdapterResponse(
           statusCode: 200,
           contentType: Headers.textPlainContentType,
-          body: '{"publicacionportal":{"item":{"registro":"ENT-1","asunto":"Entrada general","fechareg":"2026-06-21","desconsej":"Consejería B"}}}',
+          body: '{"publicacionportal":{"item":{"registro":"ENT-1","asunto":"S020","desasunto":"Entrada general","fechareg":"2026-06-21","desconsej":"Consejería B"}}}',
         ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
@@ -39,7 +39,7 @@ void main() {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
-          body: '{"body":{"publicacionportal":{"item":{"registro":"SAL-1","desasunto":"Salida registrada","fechareg":"2026-06-22","desconsej":"Consejería C"}}}}',
+          body: '{"body":{"publicacionportal":{"item":{"registro":"SAL-1","asunto":"SIM2","desasunto":"Salida registrada","fechareg":"2026-06-22","desconsej":"Consejería C"}}}}',
         ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
@@ -61,6 +61,21 @@ void main() {
           'tipodocumento': 'NIF',
         },
       );
+    });
+
+    test('does not use the SIACI code as title when the summary is absent', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: '{"publicacionportal":{"item":{"registro":"ENT-1","asunto":"S020"}}}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionRegistrosRepositoryImpl(dio: dio);
+
+      final result = await repository.loadEntradas(documentNumber: '99999999R');
+
+      expect(result.single.titulo, isEmpty);
     });
   });
 }

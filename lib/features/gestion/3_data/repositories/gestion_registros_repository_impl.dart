@@ -92,7 +92,7 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   Registro _toRegistroMap(final Map<String, Object?> data) {
     return Registro(
       numregistro: _string(data, 'registro') ?? '',
-      titulo: _string(data, 'asunto') ?? _string(data, 'titulo') ?? _string(data, 'desasunto') ?? _string(data, 'descrip') ?? '',
+      titulo: _string(data, 'desasunto') ?? _string(data, 'asuntoResumen') ?? _string(data, 'resumenAsunto') ?? '',
       fecha: _string(data, 'fechareg'),
       consejeria: _string(data, 'desconsej'),
     );

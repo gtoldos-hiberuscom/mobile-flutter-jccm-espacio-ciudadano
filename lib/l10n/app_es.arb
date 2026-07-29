@@ -389,6 +389,22 @@
   "@externalLinkOpenFailed": {
     "description": "Mensaje de SnackBar mostrado cuando un enlace externo no se puede abrir (validación o rechazo del sistema)."
   },
+  "externalNavigationDialogTitle": "Vas a salir de la aplicación",
+  "@externalNavigationDialogTitle": {
+    "description": "Título del diálogo de confirmación antes de abrir un enlace externo."
+  },
+  "externalNavigationDialogBody": "El contenido se abrirá en una ventana de tu navegador",
+  "@externalNavigationDialogBody": {
+    "description": "Mensaje del diálogo de confirmación antes de abrir un enlace externo."
+  },
+  "externalNavigationDialogCancel": "Volver",
+  "@externalNavigationDialogCancel": {
+    "description": "Botón para cancelar la apertura de un enlace externo."
+  },
+  "externalNavigationDialogContinue": "Continuar",
+  "@externalNavigationDialogContinue": {
+    "description": "Botón para confirmar la apertura de un enlace externo."
+  },
   "externalLinkEducamosClmLabel": "Educamos CLM",
   "@externalLinkEducamosClmLabel": {
     "description": "Etiqueta del enlace externo al portal Educamos CLM."

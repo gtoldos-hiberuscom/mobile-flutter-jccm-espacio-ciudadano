@@ -644,6 +644,30 @@ abstract class AppLocalizations {
   /// **'No se pudo abrir el enlace. Inténtalo de nuevo más tarde.'**
   String get externalLinkOpenFailed;
 
+  /// Título del diálogo de confirmación antes de abrir un enlace externo.
+  ///
+  /// In es, this message translates to:
+  /// **'Vas a salir de la aplicación'**
+  String get externalNavigationDialogTitle;
+
+  /// Mensaje del diálogo de confirmación antes de abrir un enlace externo.
+  ///
+  /// In es, this message translates to:
+  /// **'El contenido se abrirá en una ventana de tu navegador'**
+  String get externalNavigationDialogBody;
+
+  /// Botón para cancelar la apertura de un enlace externo.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get externalNavigationDialogCancel;
+
+  /// Botón para confirmar la apertura de un enlace externo.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar'**
+  String get externalNavigationDialogContinue;
+
   /// Etiqueta del enlace externo al portal Educamos CLM.
   ///
   /// In es, this message translates to:

@@ -410,6 +410,7 @@ class AppCard extends StatelessWidget {
       ?date,
       ?time,
       ?description,
+      ?extraText,
     ];
     final composedLabel = semanticSegments.join(', ');
 
@@ -455,10 +456,15 @@ class AppCard extends StatelessWidget {
   Widget _headerRow() {
     return SizedBox(
       width: double.infinity,
-      child: Row(
+      child: Wrap(
+        alignment: WrapAlignment.end,
         children: [
           if (categoryLabel != null)
-            Expanded(
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 215,
+                maxWidth: 290,
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(
                   top: AppDimensions.space4,
@@ -466,6 +472,7 @@ class AppCard extends StatelessWidget {
                 ),
                 child: Text(
                   categoryLabel!,
+                  textAlign: TextAlign.right,
                   style: AppTypography.captionUppercase.copyWith(
                     color: _isDisabled ? AppColors.neutralDark : AppColors.textBlueMutedDark,
                   ),
@@ -511,7 +518,7 @@ class AppCard extends StatelessWidget {
   }
 
   Widget _refBlock() {
-    final bgColor = _isDisabled ? AppColors.backgroundBlueMutedLight : AppColors.backgroundBlueLighter;
+    final bgColor = _isDisabled ? AppColors.backgroundBlueMutedLight : AppColors.backgroundLightBlue;
 
     final labelColor = _isDisabled ? AppColors.neutralDark : AppColors.primary;
     final valueColor = _isDisabled ? AppColors.neutralDark : AppColors.primary;

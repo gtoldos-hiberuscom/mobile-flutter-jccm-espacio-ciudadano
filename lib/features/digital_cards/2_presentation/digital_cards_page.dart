@@ -16,7 +16,7 @@ class DigitalCardsPage extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final authorizationAsync = ref.watch(digitalCardsAuthorizationProvider);
-    final isDownloading = ref.watch(digitalCardsDownloadingProvider);
+    final isDownloading = ref.watch(digitalCardsDownloadingProvider) != null;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundBlueLighter,

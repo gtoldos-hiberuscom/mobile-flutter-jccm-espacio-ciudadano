@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Blocking confirmation shown before content opens outside the application.
 ///
@@ -34,6 +35,8 @@ class AppExternalNavigationDialog extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(
@@ -78,7 +81,7 @@ class AppExternalNavigationDialog extends StatelessWidget {
                 bottom: AppDimensions.space8,
               ),
               child: Text(
-                'Vas a salir de la aplicación',
+                l10n.externalNavigationDialogTitle,
                 textAlign: TextAlign.center,
                 style: AppTypography.h3.copyWith(color: AppColors.primary),
               ),
@@ -88,7 +91,7 @@ class AppExternalNavigationDialog extends StatelessWidget {
                 vertical: AppDimensions.space4,
               ),
               child: Text(
-                'El contenido se abrirá en una ventana de tu navegador',
+                l10n.externalNavigationDialogBody,
                 style: AppTypography.bodyRegular.copyWith(
                   color: AppColors.primary,
                 ),
@@ -103,7 +106,7 @@ class AppExternalNavigationDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: AppButton(
-                      label: 'Volver',
+                      label: l10n.externalNavigationDialogCancel,
                       hierarchy: AppButtonHierarchy.tertiary,
                       onPressed: onCancel,
                       isExpanded: true,
@@ -112,7 +115,7 @@ class AppExternalNavigationDialog extends StatelessWidget {
                   const SizedBox(width: AppDimensions.space16),
                   Expanded(
                     child: AppButton(
-                      label: 'Continuar',
+                      label: l10n.externalNavigationDialogContinue,
                       onPressed: onContinue,
                       isExpanded: true,
                     ),

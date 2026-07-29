@@ -303,6 +303,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalLinkOpenFailed => 'The link could not be opened. Please try again later.';
 
   @override
+  String get externalNavigationDialogTitle => 'You are about to leave the application';
+
+  @override
+  String get externalNavigationDialogBody => 'The content will open in a browser window';
+
+  @override
+  String get externalNavigationDialogCancel => 'Go back';
+
+  @override
+  String get externalNavigationDialogContinue => 'Continue';
+
+  @override
   String get externalLinkEducamosClmLabel => 'Educamos CLM';
 
   @override

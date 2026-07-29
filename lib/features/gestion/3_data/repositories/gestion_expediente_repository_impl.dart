@@ -65,7 +65,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
           ..pnumdoc = documentNumber
           ..pnumexp = numexp
           ..ptipodoc = 'NIF',
-          // ..ptipodoc = tipodoc,
+        // ..ptipodoc = tipodoc,
       ),
       extra: {
         generatedApiDecodeStringResponseExtraKey: true,
@@ -181,7 +181,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   Expediente _toExpedienteDetailMap(final Map<String, Object?> data) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
-      titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      titulo: _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
       // "Oficina tramitadora": mejor candidato disponible es `desuniorg`
       // (descripción de la unidad orgánica, campo paralelo a `desconsej`).
@@ -189,7 +189,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
       // "0000-00-00" es el sentinel SAP de fecha nula; se trata como ausente.
       fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
-      estado: _string(data, 'descrip') ?? _string(data, 'estado'),
+      estado: _estadoDescripcion(data),
       tipoproc: _string(data, 'tipoproc'),
       // Campos en bruto necesarios para `inicproc`/`registrarfichero` al
       // aportar documentación — ver ExpedienteAportacionDatos.
@@ -240,11 +240,21 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   Expediente _toExpedienteByNifMap(final Map<String, Object?> data) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
-      titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      titulo: _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
       fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
-      estado: _string(data, 'estado'),
+      estado: _estadoDescripcion(data),
     );
+  }
+
+  String? _estadoDescripcion(final Map<String, Object?> data) {
+    final description = _string(data, 'descrip') ?? _string(data, 'desestado') ?? _string(data, 'descestado') ?? _string(data, 'estadoDescripcion');
+    if (description != null) {
+      return description;
+    }
+
+    final estado = _string(data, 'estado');
+    return estado != null && !RegExp(r'^\d+$').hasMatch(estado) ? estado : null;
   }
 
   Object? _decode(final Object? raw) {

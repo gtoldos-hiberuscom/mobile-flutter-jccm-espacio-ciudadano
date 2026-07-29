@@ -52,7 +52,8 @@ void main() {
           "desproc": "MODIFICACIÓN DE DECLARACIONES",
           "desconsej": "CONSEJERÍA DE AGRICULTURA",
           "fechareg": "2026-06-18",
-          "estado": "01"
+          "estado": "01",
+          "descrip": "SOLICITUD ENTRADA EN ÓRGANO COMPETENTE"
         }
       ]
     },
@@ -73,7 +74,22 @@ void main() {
       expect(result.single.titulo, 'MODIFICACIÓN DE DECLARACIONES');
       expect(result.single.consejeria, 'CONSEJERÍA DE AGRICULTURA');
       expect(result.single.fechaInicio, '2026-06-18');
-      expect(result.single.estado, '01');
+      expect(result.single.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
+    });
+
+    test('does not expose a numeric status code when its description is absent', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: '{"publicacionportal":{"item":{"numexp":"EXP-1","desproc":"Solicitud general","estado":"01"}}}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+
+      expect(result.single.estado, isNull);
     });
 
     test('returns an empty list when selectbynif returns 404', () async {
@@ -147,7 +163,7 @@ void main() {
       );
 
       expect(result.numexp, 'S020/2024/0001-PR');
-      expect(result.titulo, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
+      expect(result.titulo, 'SOLICITUD DE AYUDAS PARA EL FOMENTO DE LA ACUICULTURA');
       expect(result.consejeria, 'CONSEJERÍA DE DESARROLLO SOSTENIBLE');
       expect(result.oficinaTramitadora, isNull);
       expect(result.fechaInicio, '2024-10-22');

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
@@ -134,16 +135,43 @@ class _RegistroCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return AppCard(
-      title: registro.titulo,
+      title: _sentenceCase(registro.titulo),
       showArrow: true,
       refNumber: registro.numregistro,
       refNumberLabel: l10n.gestionRegistrosNumRegistroLabel,
-      expiryDate: registro.fecha ?? '-',
+      expiryDate: _formatDate(context, registro.fecha),
       expiryDateLabel: l10n.gestionRegistrosFechaLabel,
-      onTap: () => context.go(
+      onTap: () => context.push(
         Routes.gestionRegistrosDetail,
         extra: (registro, isEntrada),
       ),
     );
+  }
+
+  String? _formatDate(final BuildContext context, final String? rawDate) {
+    if (rawDate == null || rawDate.trim().isEmpty) {
+      return null;
+    }
+    final date = DateTime.tryParse(rawDate);
+    if (date == null) {
+      return rawDate;
+    }
+    final parts = DateFormat(
+      'd MMM yyyy',
+      Localizations.localeOf(context).languageCode,
+    ).format(date).split(' ');
+    if (parts.length >= 3 && parts[1].isNotEmpty) {
+      parts[1] = '${parts[1][0].toUpperCase()}${parts[1].substring(1)}';
+    }
+    return parts.join(' ');
+  }
+
+  String _sentenceCase(final String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty || trimmed != trimmed.toUpperCase()) {
+      return trimmed;
+    }
+    final lowerCase = trimmed.toLowerCase();
+    return '${lowerCase[0].toUpperCase()}${lowerCase.substring(1)}';
   }
 }

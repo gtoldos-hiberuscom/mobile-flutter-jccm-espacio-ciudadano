@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
@@ -24,15 +25,6 @@ class GestionExpedientesPage extends ConsumerWidget {
         type: AppNavBarType.level2,
         title: l10n.gestionExpedientesPageTitle,
         onBack: () => context.go(Routes.gestion),
-        actions: [
-          // IconButton(
-          //   icon: const Icon(AppIcons.search),
-          //   onPressed: () => AppAlertSnackbar.show(
-          //     context,
-          //     message: l10n.gestionSectionComingSoon,
-          //   ),
-          // ),
-        ],
       ),
       body: Container(
         width: double.infinity,
@@ -74,18 +66,56 @@ class _GestionExpedienteCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return AppCard(
-      title: expediente.titulo,
+      title: _sentenceCase(expediente.titulo),
       categoryLabel: expediente.consejeria.toUpperCase(),
       showArrow: true,
       refNumber: expediente.numexp,
       refNumberLabel: l10n.gestionExpedientesNumExpedienteLabel,
-      expiryDate: expediente.fechaInicio ?? '-',
+      expiryDate: _formatDate(context, expediente.fechaInicio),
       expiryDateLabel: l10n.gestionExpedientesFechaInicioLabel,
       extraLabel: expediente.estado != null ? l10n.gestionExpedientesEstadoLabel : null,
-      extraText: expediente.estado,
-      onTap: () => context.go(
+      extraText: expediente.estado == null ? null : _sentenceCase(expediente.estado!),
+      onTap: () => context.push(
         '${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}',
       ),
     );
   }
+
+  String _formatDate(final BuildContext context, final String? rawDate) {
+    final date = rawDate == null ? null : DateTime.tryParse(rawDate);
+    if (date == null) {
+      return rawDate ?? '-';
+    }
+    final formatted = DateFormat(
+      'd MMM yyyy',
+      Localizations.localeOf(context).languageCode,
+    ).format(date);
+    final parts = formatted.split(' ');
+    if (parts.length < 3 || parts[1].isEmpty) {
+      return formatted;
+    }
+    parts[1] = '${parts[1][0].toUpperCase()}${parts[1].substring(1)}';
+    return parts.join(' ');
+  }
+
+  String _sentenceCase(final String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty || trimmed != trimmed.toUpperCase()) {
+      return trimmed;
+    }
+    return _formatExpedienteSentenceCase(trimmed);
+  }
+}
+
+String _formatExpedienteSentenceCase(final String value) {
+  const acronyms = {'EOI', 'FSP', 'JCCM', 'CLM', 'NIF', 'CIF', 'DNI', 'NIE'};
+  final words = value.toLowerCase().split(' ');
+  for (var index = 0; index < words.length; index++) {
+    final uppercaseWord = words[index].toUpperCase();
+    if (acronyms.contains(uppercaseWord)) {
+      words[index] = uppercaseWord;
+    }
+  }
+  final formatted = words.join(' ');
+  return '${formatted[0].toUpperCase()}${formatted.substring(1)}';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
@@ -30,7 +31,15 @@ class GestionExpedienteDetallePage extends ConsumerWidget {
 
     return AppDetailScaffold(
       title: l10n.gestionExpedientesDetalleTitle,
-      onBack: () => context.go(tercero != null ? Routes.gestionAportacion : Routes.gestionExpedientes),
+      onBack: () {
+        if (context.canPop()) {
+          context.pop();
+          return;
+        }
+        context.go(
+          tercero != null ? Routes.gestionAportacion : Routes.gestionExpedientes,
+        );
+      },
       body: detailAsync.when(
         loading: () => const LoadingStateWidget(),
         error: (final error, final _) => ErrorStateWidget(
@@ -52,6 +61,44 @@ class _ExpedienteDetalleBody extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final dataItems = <AppInfoLabelEntry>[
+      if (_hasValue(expediente.consejeria))
+        AppInfoLabelEntry(
+          label: l10n.gestionExpedientesConsejeriaLabel,
+          value: _sentenceCase(expediente.consejeria),
+        ),
+      if (_hasValue(expediente.oficinaTramitadora))
+        AppInfoLabelEntry(
+          label: l10n.gestionExpedientesOficinaTramitadoraLabel,
+          value: _sentenceCase(expediente.oficinaTramitadora!),
+          valueColor: AppColors.textBase,
+        ),
+      if (_hasValue(expediente.numexp))
+        AppInfoLabelEntry(
+          label: l10n.gestionExpedientesNumExpedienteLabel,
+          value: expediente.numexp,
+          valueColor: AppColors.textBase,
+        ),
+    ];
+    final statusItems = <AppInfoLabelEntry>[
+      if (_hasValue(expediente.fechaInicio))
+        AppInfoLabelEntry(
+          label: l10n.gestionExpedientesFechaInicioLabel,
+          value: _formatDate(context, expediente.fechaInicio!),
+        ),
+      if (_hasValue(expediente.fechaFin))
+        AppInfoLabelEntry(
+          label: l10n.gestionExpedientesFechaCierreLabel,
+          value: _formatDate(context, expediente.fechaFin!),
+          valueColor: AppColors.textBase,
+        ),
+      if (_hasValue(expediente.estado))
+        AppInfoLabelEntry(
+          label: l10n.gestionExpedientesEstadoLabel,
+          value: _sentenceCase(expediente.estado!),
+          valueColor: AppColors.textBase,
+        ),
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -65,61 +112,42 @@ class _ExpedienteDetalleBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppTextBlock(
-                  text: expediente.titulo,
-                  variant: AppTextBlockVariant.h2,
-                  color: AppColors.textBase,
-                  showLeadingIcon: false,
-                  showTrailingIcon: false,
-                ),
-                AppTextBlock(
-                  text: l10n.gestionExpedientesDatosExpedienteTitle,
-                  variant: AppTextBlockVariant.h3,
-                  color: AppColors.textBase,
-                  showLeadingIcon: false,
-                  showTrailingIcon: false,
-                ),
-                AppInfoLabelList(
-                  items: [
-                    AppInfoLabelEntry(
-                      label: l10n.gestionExpedientesConsejeriaLabel,
-                      value: expediente.consejeria.isNotEmpty ? expediente.consejeria : '-',
-                    ),
-                    AppInfoLabelEntry(
-                      label: l10n.gestionExpedientesOficinaTramitadoraLabel,
-                      value: expediente.oficinaTramitadora ?? '-',
-                    ),
-                    AppInfoLabelEntry(
-                      label: l10n.gestionExpedientesNumExpedienteLabel,
-                      value: expediente.numexp,
-                    ),
-                  ],
-                ),
-                const AppDivider(dark: true, strength: AppDividerStrength.soft),
-                AppTextBlock(
-                  text: l10n.gestionExpedientesEstadoTramitacionTitle,
-                  variant: AppTextBlockVariant.h3,
-                  color: AppColors.textBase,
-                  showLeadingIcon: false,
-                  showTrailingIcon: false,
-                ),
-                AppInfoLabelList(
-                  items: [
-                    AppInfoLabelEntry(
-                      label: l10n.gestionExpedientesFechaInicioLabel,
-                      value: expediente.fechaInicio ?? '-',
-                    ),
-                    AppInfoLabelEntry(
-                      label: l10n.gestionExpedientesFechaCierreLabel,
-                      value: expediente.fechaFin ?? '-',
-                    ),
-                    AppInfoLabelEntry(
-                      label: l10n.gestionExpedientesEstadoLabel,
-                      value: expediente.estado ?? '-',
-                    ),
-                  ],
-                ),
-                const AppDivider(dark: true, strength: AppDividerStrength.soft),
+                if (_hasValue(expediente.titulo))
+                  AppTextBlock(
+                    text: _sentenceCase(expediente.titulo),
+                    variant: AppTextBlockVariant.h2,
+                    color: AppColors.textBase,
+                    showLeadingIcon: false,
+                    showTrailingIcon: false,
+                  ),
+                if (dataItems.isNotEmpty) ...[
+                  AppTextBlock(
+                    text: l10n.gestionExpedientesDatosExpedienteTitle,
+                    variant: AppTextBlockVariant.h3,
+                    color: AppColors.textBase,
+                    showLeadingIcon: false,
+                    showTrailingIcon: false,
+                  ),
+                  AppInfoLabelList(items: dataItems, horizontal: false),
+                  const AppDivider(
+                    dark: true,
+                    strength: AppDividerStrength.soft,
+                  ),
+                ],
+                if (statusItems.isNotEmpty) ...[
+                  AppTextBlock(
+                    text: l10n.gestionExpedientesEstadoTramitacionTitle,
+                    variant: AppTextBlockVariant.h3,
+                    color: AppColors.textBase,
+                    showLeadingIcon: false,
+                    showTrailingIcon: false,
+                  ),
+                  AppInfoLabelList(items: statusItems, horizontal: false),
+                  const AppDivider(
+                    dark: true,
+                    strength: AppDividerStrength.soft,
+                  ),
+                ],
               ],
             ),
           ),
@@ -136,5 +164,44 @@ class _ExpedienteDetalleBody extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool _hasValue(final String? value) => value != null && value.trim().isNotEmpty;
+
+  String _sentenceCase(final String value) {
+    final trimmed = value.trim();
+    if (trimmed != trimmed.toUpperCase()) {
+      return trimmed;
+    }
+    const acronyms = {
+      'EOI',
+      'FSP',
+      'JCCM',
+      'CLM',
+      'NIF',
+      'CIF',
+      'DNI',
+      'NIE',
+    };
+    final words = trimmed.toLowerCase().split(' ');
+    for (var index = 0; index < words.length; index++) {
+      final uppercaseWord = words[index].toUpperCase();
+      if (acronyms.contains(uppercaseWord)) {
+        words[index] = uppercaseWord;
+      }
+    }
+    final formatted = words.join(' ');
+    return '${formatted[0].toUpperCase()}${formatted.substring(1)}';
+  }
+
+  String _formatDate(final BuildContext context, final String rawDate) {
+    final date = DateTime.tryParse(rawDate);
+    if (date == null) {
+      return rawDate;
+    }
+    return DateFormat(
+      'd MMM yyyy',
+      Localizations.localeOf(context).languageCode,
+    ).format(date);
   }
 }

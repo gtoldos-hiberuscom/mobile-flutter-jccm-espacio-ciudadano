@@ -304,6 +304,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get externalLinkOpenFailed => 'No se pudo abrir el enlace. Inténtalo de nuevo más tarde.';
 
   @override
+  String get externalNavigationDialogTitle => 'Vas a salir de la aplicación';
+
+  @override
+  String get externalNavigationDialogBody => 'El contenido se abrirá en una ventana de tu navegador';
+
+  @override
+  String get externalNavigationDialogCancel => 'Volver';
+
+  @override
+  String get externalNavigationDialogContinue => 'Continuar';
+
+  @override
   String get externalLinkEducamosClmLabel => 'Educamos CLM';
 
   @override

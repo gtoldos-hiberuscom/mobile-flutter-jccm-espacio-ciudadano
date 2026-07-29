@@ -36,6 +36,7 @@ class AppInfoLabel extends StatelessWidget {
     required this.value,
     super.key,
     this.horizontal = true,
+    this.valueColor,
   });
 
   /// Uppercase caption label shown on the left (horizontal) or above (vertical).
@@ -47,6 +48,9 @@ class AppInfoLabel extends StatelessWidget {
   /// When `true` (default) the label and value are laid out side-by-side.
   /// When `false` they are stacked vertically.
   final bool horizontal;
+
+  /// Optional value colour. Defaults to [AppColors.primary].
+  final Color? valueColor;
 
   @override
   Widget build(final BuildContext context) {
@@ -65,7 +69,9 @@ class AppInfoLabel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
       child: Text(
         value,
-        style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+        style: AppTypography.bodyRegular.copyWith(
+          color: valueColor ?? AppColors.primary,
+        ),
       ),
     );
 
@@ -128,6 +134,7 @@ class AppInfoLabelList extends StatelessWidget {
               label: e.label,
               value: e.value,
               horizontal: horizontal,
+              valueColor: e.valueColor,
             ),
           )
           .toList(),
@@ -137,8 +144,13 @@ class AppInfoLabelList extends StatelessWidget {
 
 /// A single label/value entry used by [AppInfoLabelList].
 class AppInfoLabelEntry {
-  const AppInfoLabelEntry({required this.label, required this.value});
+  const AppInfoLabelEntry({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
 
   final String label;
   final String value;
+  final Color? valueColor;
 }

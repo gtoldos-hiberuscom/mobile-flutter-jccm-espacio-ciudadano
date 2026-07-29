@@ -190,7 +190,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_isLoadingDigitalCards) {
       AppAlertSnackbar.show(
         context,
-        message: 'Estamos consultando tus carnés digitales.',
+        message: 'Estamos consultando tus carnets digitales.',
       );
       return;
     }
