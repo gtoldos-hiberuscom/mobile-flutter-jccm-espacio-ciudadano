@@ -566,25 +566,34 @@ class _HomeRecommendationsSection extends ConsumerWidget {
           children: [
             const _SectionTitle(text: 'Trámites recomendados'),
             const SizedBox(height: AppDimensions.space8),
-            SizedBox(
-              height: 328,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                clipBehavior: Clip.none,
-                itemCount: recommendations.length,
-                separatorBuilder: (final context, final index) => const SizedBox(width: AppDimensions.space16),
-                itemBuilder: (final context, final index) => SizedBox(
-                  width: 288,
-                  child: _RecommendedProcedureCard(recommendation: recommendations[index]),
-                ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (var index = 0; index < recommendations.length; index++) ...[
+                    SizedBox(
+                      width: 288,
+                      child: _RecommendedProcedureCard(recommendation: recommendations[index]),
+                    ),
+                    if (index < recommendations.length - 1) const SizedBox(width: AppDimensions.space16),
+                  ],
+                ],
               ),
             ),
             const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: 'Ir a recomendaciones',
-              trailingIcon: AppIcons.arrowForward,
-              isExpanded: true,
-              onPressed: () => context.go(Routes.recommendations),
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
+                boxShadow: AppShadows.low,
+              ),
+              child: AppButton(
+                label: 'Ir a recomendaciones',
+                hierarchy: AppButtonHierarchy.secondary,
+                isExpanded: true,
+                onPressed: () => context.go(Routes.recommendations),
+              ),
             ),
           ],
         );

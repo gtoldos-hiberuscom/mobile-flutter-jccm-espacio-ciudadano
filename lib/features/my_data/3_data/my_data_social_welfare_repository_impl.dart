@@ -12,28 +12,18 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/thermal_spa_awa
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_social_welfare_repository.dart';
 
 final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepository {
-  MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _ccaaApi = CcaaApi(withGeneratedApiCompat(dio), standardSerializers), _intermediacionApi = IntermediacionApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _intermediacionApi = IntermediacionApi(withGeneratedApiCompat(dio), standardSerializers);
 
-  final CcaaApi _ccaaApi;
   final IntermediacionApi _intermediacionApi;
 
   @override
   Future<LargeFamilyTitle?> loadLargeFamilyTitle({
     required final String documentNumber,
   }) async {
-    final data = {
-      'tipdoc': _documentType(documentNumber),
-      'docu': documentNumber,
-    };
     final response = await _rawResponse(
-      () => _ccaaApi.getDatosFamiliaNumerosa(
-        numDocumento: documentNumber,
-        dtminhafpcccafnreqBody: DTMINHAFPCCCAFNREQ(
-          (final builder) => builder
-            ..tipdoc = _documentType(documentNumber)
-            ..docu = documentNumber,
-        ),
-        extra: _generatedExtra(data),
+      () => _intermediacionApi.obtenerDatosFamiliaNumerosaIntermediacion(
+        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
+        extra: _generatedExtra(_intermediacionData(documentNumber)),
         validateStatus: (final status) => status != null && status < 500,
       ),
     );
@@ -180,11 +170,12 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   void _throwIfLargeFamilyQueryFailed(final Object? payload) {
     for (final map in _collectMaps(payload)) {
-      if (!map.containsKey('resul')) {
+      final resultValue = map['codestado'] ?? map['resul'];
+      if (resultValue == null) {
         continue;
       }
-      final result = map['resul']?.toString().trim();
-      if (result == null || result.isEmpty || result == '0') {
+      final result = resultValue.toString().trim();
+      if (result.isEmpty || result == '0') {
         return;
       }
       final message = map['mensaje']?.toString().trim();
@@ -651,7 +642,7 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
       return 'Castilla-La Mancha';
     }
     return switch (raw.trim().toUpperCase()) {
-      '08' || '13' || 'CLM' || 'CASTILLA-LA MANCHA' => 'Castilla-La Mancha',
+      '8' || '08' || '13' || 'CLM' || 'CASTILLA-LA MANCHA' => 'Castilla-La Mancha',
       _ => raw,
     };
   }

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
@@ -13,7 +14,6 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/m
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 /// Health data detail — Figma node 43973:1861.
 class MyDataHealthPage extends ConsumerStatefulWidget {
@@ -31,6 +31,7 @@ class MyDataHealthPage extends ConsumerStatefulWidget {
 class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
   _HealthTab _selectedTab = _HealthTab.data;
   HealthAppointmentFilter _selectedAppointmentFilter = HealthAppointmentFilter.pending;
+  AppListFilters _appointmentFilters = const AppListFilters();
 
   @override
   Widget build(final BuildContext context) {
@@ -40,6 +41,19 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
       title: l10n.myDataHealthTitle,
       onBack: () => context.go(widget.backRoute),
       onInfo: () => _showHealthInfoSheet(context),
+      actions: _selectedTab == _HealthTab.data
+          ? [
+              IconButton(
+                tooltip: _appointmentFilters.activeCount > 0 ? 'Criterios de búsqueda activos: ${_appointmentFilters.activeCount}' : 'Buscar citas',
+                icon: Badge.count(
+                  count: _appointmentFilters.activeCount,
+                  isLabelVisible: _appointmentFilters.activeCount > 0,
+                  child: const AppIcon(AppIcons.search, color: AppColors.textPrimary),
+                ),
+                onPressed: _showAppointmentFilters,
+              ),
+            ]
+          : const [],
       tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
       selectedIndex: _selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _HealthTab.values[index]),
@@ -47,10 +61,27 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
         _HealthAppointmentsTab(
           selectedAppointmentFilter: _selectedAppointmentFilter,
           onAppointmentFilterSelected: (final filter) => setState(() => _selectedAppointmentFilter = filter),
+          filters: _appointmentFilters,
         ),
         const _HealthServicesTab(),
       ],
     );
+  }
+
+  Future<void> _showAppointmentFilters() async {
+    final result = await AppBottomSheet.show<AppListFilters>(
+      context: context,
+      title: 'Filtrar citas de primaria',
+      body: AppListFilterSheet(
+        initialFilters: _appointmentFilters,
+        fields: const [
+          AppListDateRangeFilterField(id: 'date', label: 'Fecha de la cita'),
+        ],
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() => _appointmentFilters = result);
+    }
   }
 
   Future<void> _showHealthInfoSheet(final BuildContext context) async {
@@ -70,10 +101,12 @@ class _HealthAppointmentsTab extends ConsumerWidget {
   const _HealthAppointmentsTab({
     required this.selectedAppointmentFilter,
     required this.onAppointmentFilterSelected,
+    required this.filters,
   });
 
   final HealthAppointmentFilter selectedAppointmentFilter;
   final ValueChanged<HealthAppointmentFilter> onAppointmentFilterSelected;
+  final AppListFilters filters;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -122,7 +155,7 @@ class _HealthAppointmentsTab extends ConsumerWidget {
                   const SizedBox(height: AppDimensions.space20),
                   healthState.when(
                     data: (final state) => _AppointmentsContent(
-                      appointments: state.appointments,
+                      appointments: state.appointments.where((final appointment) => appFilterDateInRange(appointment.dateTime, filters.range('date'))).toList(growable: false),
                       l10n: l10n,
                     ),
                     loading: () => const Padding(

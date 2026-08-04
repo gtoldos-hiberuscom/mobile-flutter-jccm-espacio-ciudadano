@@ -46,6 +46,7 @@ export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_info_sheet
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_input_case.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_label.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_list.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_list_filter_sheet.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation_card.dart';

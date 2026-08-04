@@ -17,6 +17,7 @@ class AppTabbedDetailScaffold extends StatelessWidget {
     required this.tabViews,
     super.key,
     this.onInfo,
+    this.actions = const [],
     this.backgroundColor = AppColors.backgroundBlueLighter,
     this.appBarBackgroundColor = AppColors.backgroundWhite,
   }) : assert(tabs.length == tabViews.length, 'tabs and tabViews must have the same length');
@@ -24,6 +25,7 @@ class AppTabbedDetailScaffold extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
   final VoidCallback? onInfo;
+  final List<Widget> actions;
   final List<String> tabs;
   final int selectedIndex;
   final ValueChanged<int> onTabSelected;
@@ -38,6 +40,7 @@ class AppTabbedDetailScaffold extends StatelessWidget {
         title: title,
         onBack: onBack,
         onInfo: onInfo,
+        actions: actions,
         backgroundColor: appBarBackgroundColor,
       ),
       body: Container(

@@ -21,6 +21,10 @@ class GestionRegistrosPage extends StatefulWidget {
 
 class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
   _RegistrosTab _selectedTab = _RegistrosTab.entradas;
+  AppListFilters _entryFilters = const AppListFilters();
+  AppListFilters _exitFilters = const AppListFilters();
+
+  AppListFilters get _filters => _selectedTab == _RegistrosTab.entradas ? _entryFilters : _exitFilters;
 
   @override
   Widget build(final BuildContext context) {
@@ -31,6 +35,17 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
         type: AppNavBarType.level2,
         title: l10n.gestionRegistrosPageTitle,
         onBack: () => context.go(Routes.gestion),
+        actions: [
+          IconButton(
+            tooltip: _selectedTab == _RegistrosTab.entradas ? 'Buscar entradas de registro' : 'Buscar salidas de registro',
+            icon: Badge.count(
+              count: _filters.activeCount,
+              isLabelVisible: _filters.activeCount > 0,
+              child: const AppIcon(AppIcons.search, color: AppColors.textPrimary),
+            ),
+            onPressed: _showFilters,
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -46,8 +61,8 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
               child: SafeArea(
                 top: false,
                 child: switch (_selectedTab) {
-                  _RegistrosTab.entradas => const _EntradasTab(),
-                  _RegistrosTab.salidas => const _SalidasTab(),
+                  _RegistrosTab.entradas => _EntradasTab(filters: _entryFilters),
+                  _RegistrosTab.salidas => _SalidasTab(filters: _exitFilters),
                 },
               ),
             ),
@@ -56,12 +71,43 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
       ),
     );
   }
+
+  Future<void> _showFilters() async {
+    final isEntry = _selectedTab == _RegistrosTab.entradas;
+    final result = await AppBottomSheet.show<AppListFilters>(
+      context: context,
+      title: isEntry ? 'Filtrar entradas de registro' : 'Filtrar salidas de registro',
+      body: AppListFilterSheet(
+        initialFilters: _filters,
+        fields: [
+          const AppListTextFilterField(id: 'number', label: 'Número de registro', hint: 'Introduce el número'),
+          AppListTextFilterField(
+            id: 'description',
+            label: isEntry ? 'Descripción de la entrada' : 'Descripción de la salida',
+            hint: 'Introduce palabras de la descripción',
+          ),
+          AppListDateRangeFilterField(id: 'date', label: isEntry ? 'Fecha de entrada' : 'Fecha de salida'),
+        ],
+      ),
+    );
+    if (result == null || !mounted) {
+      return;
+    }
+    setState(() {
+      if (isEntry) {
+        _entryFilters = result;
+      } else {
+        _exitFilters = result;
+      }
+    });
+  }
 }
 
 enum _RegistrosTab { entradas, salidas }
 
 class _EntradasTab extends ConsumerWidget {
-  const _EntradasTab();
+  const _EntradasTab({required this.filters});
+  final AppListFilters filters;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -74,26 +120,14 @@ class _EntradasTab extends ConsumerWidget {
             message: l10n.gestionRegistrosEntradasLoadError,
             onRetry: () => ref.invalidate(entradasProvider),
           ),
-          data: (final registros) => registros.isEmpty
-              ? EmptyStateWidget(message: l10n.gestionRegistrosEntradasEmpty)
-              : ListView.separated(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space16,
-                    vertical: AppDimensions.space24,
-                  ),
-                  itemCount: registros.length,
-                  separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-                  itemBuilder: (final context, final index) => _RegistroCard(
-                    registro: registros[index],
-                    isEntrada: true,
-                  ),
-                ),
+          data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: true),
         );
   }
 }
 
 class _SalidasTab extends ConsumerWidget {
-  const _SalidasTab();
+  const _SalidasTab({required this.filters});
+  final AppListFilters filters;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -106,21 +140,37 @@ class _SalidasTab extends ConsumerWidget {
             message: l10n.gestionRegistrosSalidasLoadError,
             onRetry: () => ref.invalidate(salidasProvider),
           ),
-          data: (final registros) => registros.isEmpty
-              ? EmptyStateWidget(message: l10n.gestionRegistrosSalidasEmpty)
-              : ListView.separated(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space16,
-                    vertical: AppDimensions.space24,
-                  ),
-                  itemCount: registros.length,
-                  separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-                  itemBuilder: (final context, final index) => _RegistroCard(
-                    registro: registros[index],
-                    isEntrada: false,
-                  ),
-                ),
+          data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: false),
         );
+  }
+}
+
+class _RegistrosList extends StatelessWidget {
+  const _RegistrosList({required this.registros, required this.filters, required this.isEntrada});
+  final List<Registro> registros;
+  final AppListFilters filters;
+  final bool isEntrada;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    if (registros.isEmpty) {
+      return EmptyStateWidget(message: isEntrada ? l10n.gestionRegistrosEntradasEmpty : l10n.gestionRegistrosSalidasEmpty);
+    }
+    final filtered = registros
+        .where((final registro) {
+          return appFilterContains(registro.numregistro, filters.text('number')) && appFilterContains(registro.titulo, filters.text('description')) && appFilterDateInRange(DateTime.tryParse(registro.fecha ?? ''), filters.range('date'));
+        })
+        .toList(growable: false);
+    if (filtered.isEmpty) {
+      return EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search);
+    }
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16, vertical: AppDimensions.space24),
+      itemCount: filtered.length,
+      separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
+      itemBuilder: (final context, final index) => _RegistroCard(registro: filtered[index], isEntrada: isEntrada),
+    );
   }
 }
 

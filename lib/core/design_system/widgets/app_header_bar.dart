@@ -10,6 +10,7 @@ class AppHeaderBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onBack,
     super.key,
     this.onInfo,
+    this.actions = const [],
     this.backgroundColor = AppColors.backgroundWhite,
     this.leadingIcon = AppIcons.arrowBack,
     this.leadingTooltip = 'Volver',
@@ -18,6 +19,7 @@ class AppHeaderBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onBack;
   final VoidCallback? onInfo;
+  final List<Widget> actions;
   final Color backgroundColor;
   final IconData leadingIcon;
   final String leadingTooltip;
@@ -53,6 +55,7 @@ class AppHeaderBar extends StatelessWidget implements PreferredSizeWidget {
               style: AppTypography.h3.copyWith(color: AppColors.primary),
             ),
           ),
+          ...actions,
           if (onInfo != null)
             IconButton(
               icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
