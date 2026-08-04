@@ -247,20 +247,50 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'subtipoCita',
       'observaciones',
     ]);
+    final message = _cleanHtml(
+      _firstString(raw, const [
+        'mensaje',
+        'message',
+        'contenido',
+        'texto',
+      ]),
+    );
 
     final description = switch (source) {
       _AgendaAppointmentSource.health => specialty ?? 'Cita sanitaria',
-      _AgendaAppointmentSource.general => specialty ?? title ?? 'Cita',
+      _AgendaAppointmentSource.general => message ?? specialty ?? title ?? 'Cita',
     };
 
     return AgendaAppointment(
       dateTime: dateTime,
       title: source == _AgendaAppointmentSource.health ? professional ?? specialty ?? 'Cita sanitaria' : title ?? specialty ?? 'Cita',
       description: description,
+      kind: switch (source) {
+        _AgendaAppointmentSource.health => AgendaAppointmentKind.health,
+        _AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
+        _AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
+      },
       channel: channel,
       detail: detail ?? center,
       center: center,
     );
+  }
+
+  bool _isCredentialEvent(
+    final String? title,
+    final String? specialty,
+    final String? message,
+  ) {
+    final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''}'.toLowerCase();
+    return searchableText.contains('carnet') || searchableText.contains('carné') || searchableText.contains('tarjeta');
+  }
+
+  String? _cleanHtml(final String? value) {
+    if (value == null) {
+      return null;
+    }
+    final cleaned = value.replaceAll(RegExp('<[^>]+>'), ' ').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll(RegExp(r'\s+'), ' ').trim();
+    return cleaned.isEmpty ? null : cleaned;
   }
 
   DateTime? _extractDateTime(final Map<String, dynamic> raw) {

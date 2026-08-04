@@ -110,7 +110,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (!mounted) {
       return;
     }
-
     AppAlertToast.show(
       context,
       message: 'Acceso biométrico activado',
@@ -131,6 +130,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppNavBar(
         type: AppNavBarType.inicio,
         isLoggedIn: true,
+        showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
         onNotificationsTap: _goToNotifications,
@@ -201,7 +201,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_digitalCardsLoadFailed) {
       AppAlertSnackbar.show(
         context,
-        message: 'No hemos podido consultar tus carnés digitales.',
+        message: 'No hemos podido consultar tus carnets digitales.',
         severity: AppAlertSeverity.error,
       );
       return;

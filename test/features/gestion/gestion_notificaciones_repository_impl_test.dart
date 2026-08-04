@@ -84,6 +84,81 @@ void main() {
       expect(adapter.requests.single.queryParameters, <String, dynamic>{'estado': 'pendiente'});
     });
 
+    test('loads the full notification detail through the generated client', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 7924,
+              'concepto': 'Gestión electrónica de contratación',
+              'estado': 'EXPIRADA',
+              'fecAlta': '2026-12-14T10:00:00Z',
+              'fecCaducidad': '2026-12-24T23:59:59Z',
+              'unidadOrganica': {
+                'sistema': 'notifica2',
+                'informacionAdicional': [
+                  {'clave': 'nombre', 'valor': 'Servicio de contratación electrónica y registros'},
+                ],
+              },
+              'procedimientoAdministrativo': {
+                'informacionAdicional': [
+                  {'clave': 'denominacion', 'valor': 'MD7K'},
+                ],
+              },
+              'expediente': {'identificador': '2026/09032976'},
+              'documentos': [
+                {'orden': 1, 'nombre': 'Notificacion.pdf', 'tamano': 125952},
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 7924,
+        estado: 'expirada',
+        sistemaOrigen: 'notifica2',
+      );
+
+      expect(detail.id, 7924);
+      expect(detail.estado, 'expirada');
+      expect(detail.organismo, 'Servicio de contratación electrónica y registros');
+      expect(detail.procedimiento, 'MD7K');
+      expect(detail.expediente, '2026/09032976');
+      expect(detail.fechaExpiracion, DateTime.parse('2026-12-24T23:59:59Z'));
+      expect(detail.documentos.single.nombre, 'Notificacion.pdf');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/notificaciones/7924');
+    });
+
+    test('accepts a pending notification through the UAT comparecer endpoint', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {'body': <String, dynamic>{}},
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      await repository.transitionNotificacion(
+        citizenId: 'PER9998003',
+        notificacionId: 7924,
+        accion: 'ACEPTAR',
+        sistemaOrigen: 'notifica2',
+      );
+
+      expect(adapter.requests.single.method, 'POST');
+      expect(
+        adapter.requests.single.path,
+        '/api/v1/ciudadanos/PER9998003/notificaciones/7924/comparecer',
+      );
+      expect(adapter.requests.single.jsonBody, isNull);
+    });
+
     test('"Todo" (sin estado) consulta cada estado y fusiona los resultados', () async {
       // Una respuesta por estado, cada una con un id único.
       final adapter = SequenceHttpClientAdapter([
@@ -122,10 +197,25 @@ void main() {
     test('"Todo" tolera fallos parciales y devuelve los estados que sí responden', () async {
       // El tercer estado consultado devuelve 500; los otros tres responden ok.
       final adapter = SequenceHttpClientAdapter([
-        const AdapterResponse(statusCode: 200, body: [{'idNotificacion': 1, 'concepto': 'A'}]),
-        const AdapterResponse(statusCode: 200, body: [{'idNotificacion': 2, 'concepto': 'B'}]),
+        const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 1, 'concepto': 'A'},
+          ],
+        ),
+        const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 2, 'concepto': 'B'},
+          ],
+        ),
         const AdapterResponse(statusCode: 500, body: <String, dynamic>{'mensaje': 'error'}),
-        const AdapterResponse(statusCode: 200, body: [{'idNotificacion': 4, 'concepto': 'D'}]),
+        const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 4, 'concepto': 'D'},
+          ],
+        ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);

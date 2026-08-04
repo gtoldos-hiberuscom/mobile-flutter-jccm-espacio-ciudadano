@@ -107,7 +107,10 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                           separatorBuilder: (final _, final _) => const SizedBox(height: AppDimensions.space16),
                           itemBuilder: (final context, final index) => _NotificacionCard(
                             notificacion: notifs[index],
-                            onTap: () => AppAlertSnackbar.show(context, message: l10n.gestionSectionComingSoon),
+                            onTap: () => context.push(
+                              Routes.gestionNotificacionDetallePath(notifs[index].id),
+                              extra: notifs[index],
+                            ),
                           ),
                         ),
                 ),
@@ -279,8 +282,12 @@ class _NotificacionCard extends StatelessWidget {
                   bottom: AppDimensions.space8,
                 ),
                 child: Text(
-                  orgName,
-                  style: AppTypography.captionUppercase.copyWith(color: AppColors.neutralDark),
+                  orgName.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.captionUppercase.copyWith(
+                    color: AppColors.textBlueMutedDark,
+                  ),
                 ),
               ),
             ),
@@ -316,7 +323,8 @@ class _NotificacionCard extends StatelessWidget {
   Widget _refBlock(final AppLocalizations l10n) {
     final idFicha = notificacion.procedimientoIdFicha;
     final fecha = notificacion.fechaCaducidad;
-    if (idFicha == null && fecha == null) {
+    final showsExpiration = notificacion.estado == _kEstadoPendiente || notificacion.estado == _kEstadoExpirada;
+    if (idFicha == null && (!showsExpiration || fecha == null)) {
       return const SizedBox.shrink();
     }
     final isWarning = notificacion.estado == _kEstadoPendiente;
@@ -327,7 +335,7 @@ class _NotificacionCard extends StatelessWidget {
         horizontal: AppDimensions.space8,
         vertical: AppDimensions.space4,
       ),
-      color: AppColors.backgroundBlueLighter,
+      color: AppColors.backgroundLightBlue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -337,9 +345,9 @@ class _NotificacionCard extends StatelessWidget {
               label: l10n.gestionNotificacionesProcedimientoLabel,
               value: idFicha,
             ),
-          if (fecha != null)
+          if (showsExpiration && fecha != null)
             _RefRow(
-              label: l10n.gestionNotificacionesFechaCaducidadLabel,
+              label: 'Fecha expiración',
               value: _formatFecha(fecha),
               valueColor: isWarning ? AppColors.warningDark : AppColors.textPrimary,
               valueFontWeight: isWarning ? FontWeight.w700 : FontWeight.w400,

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/3_data/agenda_repository_impl.dart';
 
 void main() {
@@ -26,9 +27,17 @@ void main() {
         '/api/v1/sescam/citas/12345678A',
         '/api/v1/agenda/agent-1/eventos/todos',
       ]);
-      expect(appointments, hasLength(2));
+      expect(appointments, hasLength(3));
       expect(appointments[0].description, 'Trámite administrativo');
+      expect(appointments[0].kind, AgendaAppointmentKind.notification);
       expect(appointments[1].description, 'Consulta Medicina de Familia');
+      expect(appointments[1].kind, AgendaAppointmentKind.health);
+      expect(appointments[2].title, 'Caducidad de carnet joven');
+      expect(
+        appointments[2].description,
+        'El carnet joven caduca el próximo 30/01/2030',
+      );
+      expect(appointments[2].kind, AgendaAppointmentKind.credential);
     });
   });
 }
@@ -54,6 +63,12 @@ final class _AgendaAdapter implements HttpClientAdapter {
                   'titulo': 'Registro',
                   'tipoEvento': 'Trámite administrativo',
                   'ubicacion': 'Oficina de atención',
+                },
+                {
+                  'fechaVencimiento': '2030-01-30T00:00:00',
+                  'titulo': 'Caducidad de carnet joven',
+                  'tipoEvento': 'EVENTO',
+                  'mensaje': '<p>El carnet joven caduca el próximo 30/01/2030</p>',
                 },
               ],
             },

@@ -22,6 +22,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.titleWidget,
     this.showLeading = true,
+    this.showNotifications = true,
     this.onAvatarTap,
     this.onNotificationsTap,
     this.profileInitials,
@@ -36,6 +37,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final Widget? titleWidget;
   final bool showLeading;
+  final bool showNotifications;
 
   /// Called when the user avatar is tapped (opens the profile drawer).
   final VoidCallback? onAvatarTap;
@@ -98,7 +100,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   List<Widget>? get _effectiveActions {
     final items = <Widget>[...?actions];
 
-    if (isLoggedIn && type != AppNavBarType.inicio) {
+    if (isLoggedIn && showNotifications && type != AppNavBarType.inicio) {
       items.add(
         IconButton(
           constraints: const BoxConstraints.tightFor(
@@ -153,6 +155,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     if (type == AppNavBarType.inicio) {
       return _InicioNavBar(
         isLoggedIn: isLoggedIn,
+        showNotifications: showNotifications,
         actions: actions,
         onAvatarTap: onAvatarTap,
         onNotificationsTap: onNotificationsTap,
@@ -221,6 +224,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 class _InicioNavBar extends StatelessWidget {
   const _InicioNavBar({
     required this.isLoggedIn,
+    required this.showNotifications,
     this.actions,
     this.onAvatarTap,
     this.onNotificationsTap,
@@ -228,6 +232,7 @@ class _InicioNavBar extends StatelessWidget {
   });
 
   final bool isLoggedIn;
+  final bool showNotifications;
   final List<Widget>? actions;
   final VoidCallback? onAvatarTap;
   final VoidCallback? onNotificationsTap;
@@ -265,20 +270,22 @@ class _InicioNavBar extends StatelessWidget {
                 children: [
                   ...?actions,
                   if (isLoggedIn) ...[
-                    IconButton(
-                      constraints: const BoxConstraints.tightFor(
-                        width: AppDimensions.iconLarge,
-                        height: AppDimensions.iconLarge,
+                    if (showNotifications) ...[
+                      IconButton(
+                        constraints: const BoxConstraints.tightFor(
+                          width: AppDimensions.iconLarge,
+                          height: AppDimensions.iconLarge,
+                        ),
+                        padding: EdgeInsets.zero,
+                        icon: const AppSvgIcon(
+                          AppIconAssets.notifications,
+                          color: AppColors.textPrimary,
+                        ),
+                        onPressed: onNotificationsTap,
+                        tooltip: 'Notificaciones',
                       ),
-                      padding: EdgeInsets.zero,
-                      icon: const AppSvgIcon(
-                        AppIconAssets.notifications,
-                        color: AppColors.textPrimary,
-                      ),
-                      onPressed: onNotificationsTap,
-                      tooltip: 'Notificaciones',
-                    ),
-                    const SizedBox(width: AppDimensions.space16),
+                      const SizedBox(width: AppDimensions.space16),
+                    ],
                     IconButton(
                       constraints: const BoxConstraints.tightFor(
                         width: AppDimensions.minTouchTarget,

@@ -89,6 +89,40 @@ void main() {
         throwsA(isA<MyDataAuthorizationRequired>()),
       );
     });
+
+    test('reports service unavailable when CCAA returns no response', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        responseData: {
+          'body': {
+            'resul': 1,
+            'mensaje': 'Comunicación sin respuesta',
+            'idpeticion': null,
+            'comaut': null,
+            'nutitulo': null,
+            'categoria': null,
+            'vigente': null,
+            'fecexpedi': null,
+            'feccaduci': null,
+            'numhij': null,
+            'beneficiarios': <Object?>[],
+          },
+          'codigo-respuesta': '200.00',
+        },
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      expect(
+        () => repository.loadLargeFamilyTitle(documentNumber: '99999999R'),
+        throwsA(
+          isA<StateError>().having(
+            (final error) => error.message,
+            'message',
+            'Comunicación sin respuesta',
+          ),
+        ),
+      );
+    });
   });
 }
 

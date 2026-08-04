@@ -24,6 +24,7 @@ export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_calendar.d
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_captcha_check.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_captcha_placeholder.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_list.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_agenda_info_card.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_checkbox.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_confirmation_state.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_contact_content.dart';

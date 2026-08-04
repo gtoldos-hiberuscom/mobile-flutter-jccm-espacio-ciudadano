@@ -128,6 +128,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       appBar: AppNavBar(
         title: l10n.recommendationsTitle,
         isLoggedIn: true,
+        showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),

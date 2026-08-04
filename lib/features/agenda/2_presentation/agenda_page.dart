@@ -47,6 +47,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
       appBar: AppNavBar(
         title: 'Agenda',
         isLoggedIn: true,
+        showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
@@ -97,11 +98,6 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             onSelected: (final filter) => setState(() => _selectedFilter = filter),
           ),
           const SizedBox(height: AppDimensions.space8),
-          _LastUpdateRow(
-            updatedAt: state.updatedAt,
-            onRefresh: () => ref.invalidate(agendaAppointmentsProvider),
-          ),
-          const SizedBox(height: AppDimensions.space8),
         ] else ...[
           MyDataAuthorizationContextualHelper(
             onOpenSettings: () => unawaited(_openJccmAuthorization()),
@@ -116,6 +112,13 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             eventDates: eventDates,
           ),
         ),
+        if (state.hasJccmAuthorization) ...[
+          const SizedBox(height: AppDimensions.space8),
+          _LastUpdateRow(
+            updatedAt: state.updatedAt,
+            onRefresh: () => ref.invalidate(agendaAppointmentsProvider),
+          ),
+        ],
         const SizedBox(height: AppDimensions.space12),
         if (!state.hasJccmAuthorization)
           const SizedBox.shrink()
@@ -293,119 +296,21 @@ class _AgendaAppointmentCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final date = appointment.dateTime;
-    final day = date.day.toString();
-    final weekday = _weekdayName(date.weekday);
-    final time = _formatTime(date);
     final detail = appointment.detail ?? appointment.center ?? '';
-    final channel = _appointmentChannel(appointment.channel, detail);
 
-    return Semantics(
-      label: '$day $weekday, $time, $channel, ${appointment.title}, ${appointment.description}, $detail',
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space8,
-          vertical: AppDimensions.space16,
-        ),
-        decoration: const BoxDecoration(
-          color: AppColors.surface,
-          border: Border(
-            left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
-            top: BorderSide(color: AppColors.borderBlueMutedLight),
-            right: BorderSide(color: AppColors.borderBlueMutedLight),
-            bottom: BorderSide(color: AppColors.borderBlueMutedLight),
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(1)),
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    right: BorderSide(color: AppColors.backgroundBlueMutedLight),
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      day,
-                      style: AppTypography.h1.copyWith(color: AppColors.textPrimary),
-                      maxLines: 1,
-                      softWrap: false,
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      weekday,
-                      style: AppTypography.captionRegular.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppDimensions.space8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          time,
-                          style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                        ),
-                        const SizedBox(width: AppDimensions.space16),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                channel.toUpperCase(),
-                                style: AppTypography.captionUppercase.copyWith(color: AppColors.borderBlueMutedBase),
-                                maxLines: 1,
-                                softWrap: false,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      appointment.title,
-                      style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      appointment.description,
-                      style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (detail.isNotEmpty)
-                      Text(
-                        detail,
-                        style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return AppAgendaInfoCard(
+      type: switch (appointment.kind) {
+        AgendaAppointmentKind.notification => AppAgendaInfoCardType.notification,
+        AgendaAppointmentKind.health => AppAgendaInfoCardType.health,
+        AgendaAppointmentKind.credential => AppAgendaInfoCardType.credential,
+      },
+      day: date.day.toString(),
+      weekday: _weekdayName(date.weekday),
+      time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatTime(date),
+      title: appointment.kind == AgendaAppointmentKind.health ? appointment.description : appointment.title,
+      channel: appointment.kind == AgendaAppointmentKind.health ? _appointmentChannel(appointment.channel, detail) : null,
+      primaryText: appointment.kind == AgendaAppointmentKind.health ? appointment.title : appointment.description,
+      secondaryText: appointment.kind == AgendaAppointmentKind.credential ? null : detail,
     );
   }
 }

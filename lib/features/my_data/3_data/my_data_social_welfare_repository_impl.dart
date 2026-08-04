@@ -41,7 +41,9 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
       return null;
     }
 
-    return _parseLargeFamilyTitle(_decodePayload(response));
+    final payload = _decodePayload(response);
+    _throwIfLargeFamilyQueryFailed(payload);
+    return _parseLargeFamilyTitle(payload);
   }
 
   @override
@@ -174,6 +176,22 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     }
     final errors = infoError['errores'];
     return errors is List && errors.whereType<Map<dynamic, dynamic>>().any((final error) => error['codigo-error']?.toString() == '3034');
+  }
+
+  void _throwIfLargeFamilyQueryFailed(final Object? payload) {
+    for (final map in _collectMaps(payload)) {
+      if (!map.containsKey('resul')) {
+        continue;
+      }
+      final result = map['resul']?.toString().trim();
+      if (result == null || result.isEmpty || result == '0') {
+        return;
+      }
+      final message = map['mensaje']?.toString().trim();
+      throw StateError(
+        message == null || message.isEmpty ? 'El servicio de familia numerosa no devolvió una respuesta válida.' : message,
+      );
+    }
   }
 
   LargeFamilyTitle? _parseLargeFamilyTitle(final Object? payload) {

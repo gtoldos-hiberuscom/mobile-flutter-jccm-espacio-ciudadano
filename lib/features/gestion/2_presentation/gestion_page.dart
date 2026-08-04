@@ -42,6 +42,7 @@ class GestionPage extends ConsumerWidget {
       appBar: AppNavBar(
         title: l10n.gestionTitle,
         isLoggedIn: true,
+        showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
