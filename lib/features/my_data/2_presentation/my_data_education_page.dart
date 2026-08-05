@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -135,12 +136,13 @@ class _EducationDataContent extends StatelessWidget {
   }
 }
 
-class _EducationServicesTab extends StatelessWidget {
+class _EducationServicesTab extends ConsumerWidget {
   const _EducationServicesTab();
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final config = ref.watch(appConfigProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -157,15 +159,15 @@ class _EducationServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataEducationProcedureEquivalence,
-                onTap: () => _launchExternalUrl(context, 'https://www.educacionfpydeportes.gob.es/servicios-al-ciudadano/catalogo/general/05/051270/ficha/051270.html'),
+                onTap: () => _launchExternalUrl(context, config.educationProcedure(0)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataEducationProcedureScholarships,
-                onTap: () => _launchExternalUrl(context, 'https://www.becaseducacion.gob.es/'),
+                onTap: () => _launchExternalUrl(context, config.educationProcedure(1)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataEducationProcedureSecondaryDegree,
-                onTap: () => _launchExternalUrl(context, 'https://www.educa.jccm.es/es/estperadult/estudiar-epa/ensenanzas-conducentes-titulacion/pruebas-libres-graduado-educacion-secundaria'),
+                onTap: () => _launchExternalUrl(context, config.educationProcedure(2)),
               ),
             ],
           ),
@@ -174,16 +176,12 @@ class _EducationServicesTab extends StatelessWidget {
             title: l10n.myDataEducationInterestLinksTitle,
             links: [
               AppExternalLinkItem(
-                label: l10n.myDataEducationLinkEducationPortal,
-                onTap: () => _launchExternalUrl(context, 'https://www.educa.jccm.es/'),
-              ),
-              AppExternalLinkItem(
                 label: l10n.externalLinkEducamosClmLabel,
-                onTap: () => _launchExternalUrl(context, 'https://educamosclm.castillalamancha.es/'),
+                onTap: () => _launchExternalUrl(context, config.educamosUrl),
               ),
               AppExternalLinkItem(
-                label: l10n.myDataEducationLinkScholarships,
-                onTap: () => _launchExternalUrl(context, 'https://www.becaseducacion.gob.es/'),
+                label: l10n.myDataEducationLinkTeachingStaff,
+                onTap: () => _launchExternalUrl(context, config.teachingStaffUrl),
               ),
             ],
           ),
@@ -192,7 +190,7 @@ class _EducationServicesTab extends StatelessWidget {
     );
   }
 
-  Future<void> _launchExternalUrl(final BuildContext context, final String url) async {
-    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
+  Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
+    await launchExternalUrlWithConfirmation(context, url);
   }
 }

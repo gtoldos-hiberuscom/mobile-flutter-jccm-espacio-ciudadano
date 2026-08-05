@@ -3058,6 +3058,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEducationLinkEducationPortal => 'Portal de Educación de Castilla-La Mancha';
 
   @override
+  String get myDataEducationLinkTeachingStaff => 'Personal Docente';
+
+  @override
   String get myDataEducationLinkScholarships => 'Becas y ayudas para estudiantes';
 
   @override

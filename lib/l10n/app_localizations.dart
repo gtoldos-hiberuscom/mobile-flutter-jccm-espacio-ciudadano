@@ -5966,6 +5966,12 @@ abstract class AppLocalizations {
   /// **'Portal de Educación de Castilla-La Mancha'**
   String get myDataEducationLinkEducationPortal;
 
+  /// Enlace al portal de Personal Docente.
+  ///
+  /// In es, this message translates to:
+  /// **'Personal Docente'**
+  String get myDataEducationLinkTeachingStaff;
+
   /// Enlace al portal de becas y ayudas del Ministerio de Educación.
   ///
   /// In es, this message translates to:

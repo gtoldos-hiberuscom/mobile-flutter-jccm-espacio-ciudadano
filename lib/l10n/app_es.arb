@@ -4060,6 +4060,10 @@
   "@myDataEducationLinkEducationPortal": {
     "description": "Enlace al Portal de Educación de Castilla-La Mancha."
   },
+  "myDataEducationLinkTeachingStaff": "Personal Docente",
+  "@myDataEducationLinkTeachingStaff": {
+    "description": "Enlace al portal de Personal Docente."
+  },
   "myDataEducationLinkScholarships": "Becas y ayudas para estudiantes",
   "@myDataEducationLinkScholarships": {
     "description": "Enlace al portal de becas y ayudas del Ministerio de Educación."

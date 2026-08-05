@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -135,12 +136,13 @@ class _HousingDataContent extends StatelessWidget {
   }
 }
 
-class _HousingServicesTab extends StatelessWidget {
+class _HousingServicesTab extends ConsumerWidget {
   const _HousingServicesTab();
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final config = ref.watch(appConfigProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -157,11 +159,11 @@ class _HousingServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHousingLinkClmHousing,
-                onTap: () => _launchExternalUrl(context, 'https://vivienda.castillalamancha.es/'),
+                onTap: () => _launchExternalUrl(context, config.housingUrl),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHousingLinkCadastre,
-                onTap: () => _launchExternalUrl(context, 'https://www.sedecatastro.gob.es/'),
+                onTap: () => _launchExternalUrl(context, config.cadastreUrl),
               ),
             ],
           ),
@@ -171,15 +173,15 @@ class _HousingServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHousingProcedureProtectedHousingRegister,
-                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/'),
+                onTap: () => _launchExternalUrl(context, config.housingProcedure(1)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHousingProcedureSocialEmergencyAid,
-                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/'),
+                onTap: () => _launchExternalUrl(context, config.housingProcedure(2)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHousingProcedureRentalHousingAid,
-                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/tramites/1021878'),
+                onTap: () => _launchExternalUrl(context, config.housingProcedure(0)),
               ),
             ],
           ),
@@ -189,6 +191,6 @@ class _HousingServicesTab extends StatelessWidget {
   }
 }
 
-Future<void> _launchExternalUrl(final BuildContext context, final String urlString) async {
-  await launchExternalUrlWithConfirmation(context, Uri.parse(urlString));
+Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
+  await launchExternalUrlWithConfirmation(context, url);
 }

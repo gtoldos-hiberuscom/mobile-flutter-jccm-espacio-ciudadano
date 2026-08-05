@@ -4054,6 +4054,10 @@
   "@myDataEducationInterestLinkPlaceholder": {
     "description": "Education link placeholder from the Figma design."
   },
+  "myDataEducationLinkTeachingStaff": "Teaching staff",
+  "@myDataEducationLinkTeachingStaff": {
+    "description": "Link to the teaching staff portal."
+  },
   "myDataHealthInfoSheetTitle": "About My Health data",
   "@myDataHealthInfoSheetTitle": {
     "description": "Title of the My Health data information modal."

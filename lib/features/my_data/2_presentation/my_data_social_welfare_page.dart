@@ -188,15 +188,15 @@ class _SocialWelfareServicesTab extends ConsumerWidget {
         links: [
           _SocialWelfareLinkData(
             label: l10n.socialWelfareDisabilityRecognitionProcedure,
-            linkId: 'bienestar_social_clm',
+            linkId: 'social_welfare_procedure_0',
           ),
           _SocialWelfareLinkData(
             label: l10n.socialWelfareEarlyCareProcedure,
-            linkId: 'bienestar_social_clm',
+            linkId: 'social_welfare_procedure_1',
           ),
           _SocialWelfareLinkData(
             label: l10n.socialWelfareTemporaryResidentialStayProcedure,
-            linkId: 'bienestar_social_clm',
+            linkId: 'social_welfare_procedure_2',
           ),
         ],
       ),

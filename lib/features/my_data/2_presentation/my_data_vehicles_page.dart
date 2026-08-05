@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -218,12 +219,13 @@ class _VehicleCard extends StatelessWidget {
   }
 }
 
-class _VehiclesServicesTab extends StatelessWidget {
+class _VehiclesServicesTab extends ConsumerWidget {
   const _VehiclesServicesTab();
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final config = ref.watch(appConfigProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -240,11 +242,11 @@ class _VehiclesServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataVehiclesLinkDgt,
-                onTap: () => _launchUrl(context, 'https://sede.dgt.gob.es/'),
+                onTap: () => _launchUrl(context, config.dgtUrl),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataVehiclesLinkAge,
-                onTap: () => _launchUrl(context, 'https://carpetaciudadana.gob.es/'),
+                onTap: () => _launchUrl(context, config.ageCitizenFolderUrl),
               ),
             ],
           ),
@@ -254,15 +256,15 @@ class _VehiclesServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataVehiclesProcedureMoves3Vehicle,
-                onTap: () => _launchUrl(context, 'https://www.castillalamancha.es/'),
+                onTap: () => _launchUrl(context, config.vehiclesProcedure(0)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataVehiclesProcedureMoves3Infrastructure,
-                onTap: () => _launchUrl(context, 'https://www.castillalamancha.es/'),
+                onTap: () => _launchUrl(context, config.vehiclesProcedure(1)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataVehiclesProcedureCap,
-                onTap: () => _launchUrl(context, 'https://www.castillalamancha.es/'),
+                onTap: () => _launchUrl(context, config.vehiclesProcedure(2)),
               ),
             ],
           ),
@@ -271,8 +273,7 @@ class _VehiclesServicesTab extends StatelessWidget {
     );
   }
 
-  Future<void> _launchUrl(final BuildContext context, final String urlString) async {
-    final uri = Uri.parse(urlString);
-    await launchExternalUrlWithConfirmation(context, uri);
+  Future<void> _launchUrl(final BuildContext context, final Uri url) async {
+    await launchExternalUrlWithConfirmation(context, url);
   }
 }

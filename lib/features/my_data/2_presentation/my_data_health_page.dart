@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -197,12 +198,13 @@ class _HealthAppointmentsTab extends ConsumerWidget {
   }
 }
 
-class _HealthServicesTab extends StatelessWidget {
+class _HealthServicesTab extends ConsumerWidget {
   const _HealthServicesTab();
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final config = ref.watch(appConfigProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -219,15 +221,15 @@ class _HealthServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureComplaints,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/mi-salud-digital/sugerencias-y-reclamaciones'),
+                onTap: () => _launchExternalUrl(context, config.healthProcedure(0)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureHealthCard,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/tarjeta-sanitaria'),
+                onTap: () => _launchExternalUrl(context, config.healthProcedure(1)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureSpecializedCare,
-                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/tramites'),
+                onTap: () => _launchExternalUrl(context, config.healthProcedure(2)),
               ),
             ],
           ),
@@ -237,15 +239,15 @@ class _HealthServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkSescam,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/'),
+                onTap: () => _launchExternalUrl(context, config.sescamUrl),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkDigitalHealth,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/mi-salud-digital'),
+                onTap: () => _launchExternalUrl(context, config.digitalHealthUrl),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkClinicalHistory,
-                onTap: () => _launchExternalUrl(context, 'https://www.sanidad.gob.es/areas/saludDigital/historiaClinicaSNS/home.htm'),
+                onTap: () => _launchExternalUrl(context, config.clinicalHistoryUrl),
               ),
             ],
           ),
@@ -254,8 +256,8 @@ class _HealthServicesTab extends StatelessWidget {
     );
   }
 
-  Future<void> _launchExternalUrl(final BuildContext context, final String url) async {
-    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
+  Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
+    await launchExternalUrlWithConfirmation(context, url);
   }
 }
 
