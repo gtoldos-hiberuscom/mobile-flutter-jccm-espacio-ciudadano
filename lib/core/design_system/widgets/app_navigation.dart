@@ -921,6 +921,7 @@ class AppBottomTabBar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
     return Container(
       padding: EdgeInsets.only(
         left: AppDimensions.space4,
@@ -933,49 +934,56 @@ class AppBottomTabBar extends StatelessWidget {
         children: List.generate(items.length, (final int index) {
           final item = items[index];
           final isSelected = index == currentIndex;
+          final icon = item.iconAsset == null ? AppIcon(item.icon!, color: AppColors.textWhite) : AppSvgIcon(item.iconAsset!, color: AppColors.textWhite);
           return Expanded(
             child: GestureDetector(
               onTap: () => onTap(index),
               behavior: HitTestBehavior.opaque,
               child: SizedBox(
-                height: AppDimensions.bottomNavHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (item.iconAsset == null)
-                      AppIcon(
-                        item.icon!,
-                        color: AppColors.textWhite,
+                height: isLandscape ? 56 : AppDimensions.bottomNavHeight,
+                child: isLandscape
+                    ? Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              icon,
+                              const SizedBox(width: AppDimensions.space8),
+                              Flexible(
+                                child: Text(
+                                  item.label,
+                                  style: AppTypography.smallRegular.copyWith(color: AppColors.textWhite),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            child: _BottomTabIndicator(isSelected: isSelected),
+                          ),
+                        ],
                       )
-                    else
-                      AppSvgIcon(
-                        item.iconAsset!,
-                        color: AppColors.textWhite,
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          icon,
+                          const SizedBox(height: AppDimensions.space8),
+                          Text(
+                            item.label,
+                            style: AppTypography.smallRegular.copyWith(
+                              color: AppColors.textWhite,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: AppDimensions.space4),
+                          _BottomTabIndicator(isSelected: isSelected),
+                        ],
                       ),
-                    const SizedBox(height: AppDimensions.space8),
-                    Text(
-                      item.label,
-                      style: AppTypography.smallRegular.copyWith(
-                        color: AppColors.textWhite,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: AppDimensions.space4),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      height: 4,
-                      width: 24,
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.secondaryLight300 : Colors.transparent,
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(AppDimensions.radiusXs),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
           );
@@ -986,6 +994,23 @@ class AppBottomTabBar extends StatelessWidget {
 }
 
 // ── AppFab ────────────────────────────────────────────────────────────────────
+
+class _BottomTabIndicator extends StatelessWidget {
+  const _BottomTabIndicator({required this.isSelected});
+
+  final bool isSelected;
+
+  @override
+  Widget build(final BuildContext context) => AnimatedContainer(
+    duration: const Duration(milliseconds: 200),
+    height: 4,
+    width: 24,
+    decoration: BoxDecoration(
+      color: isSelected ? AppColors.secondaryLight300 : Colors.transparent,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXs)),
+    ),
+  );
+}
 
 /// A dark FAB matching the compact and extended Figma variants.
 ///

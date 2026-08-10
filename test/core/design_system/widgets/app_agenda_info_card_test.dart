@@ -50,6 +50,12 @@ void main() {
     expect(find.text('Cita de atención primaria'), findsOneWidget);
     expect(find.text('Carnet familia numerosa'), findsOneWidget);
     expect(find.text('Presencial'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (final widget) => widget is AppSvgIcon && widget.assetPath == AppIconAssets.health && widget.size == AppDimensions.iconMedium && widget.semanticsLabel == 'Atención primaria',
+      ),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 }

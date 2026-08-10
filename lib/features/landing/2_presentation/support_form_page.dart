@@ -481,7 +481,8 @@ class _FormView extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space24),
           AppPrivacyInfoText(
-            text: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en https://rat.castillalamancha.es/info/2309',
+            description: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en',
+            linkText: 'https://rat.castillalamancha.es/info/2309',
             onTap: onOpenPrivacyInfo,
           ),
         ],

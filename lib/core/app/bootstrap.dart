@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,6 +20,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// requiring a `BuildContext`.
 Future<void> bootstrap(final AppConfig config) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   final sharedPreferences = await SharedPreferences.getInstance();
   final appStorage = SharedPreferencesAppStorage(sharedPreferences);
   await _clearRestoredSecureSessionOnFreshInstall(

@@ -15,13 +15,13 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<List<Expediente>> loadExpedientes({required final String documentNumber}) async {
-    logger.d('[selectbynif] req numerodocumento=$documentNumber tipodoc=NIF');
+    logger.d('[selectbynifexp] req numerodocumento=$documentNumber tipodocumento=NIF');
     try {
-      final response = await _api.myPubliSelecByNifOperation(
-        dtselectbynifreqBody: DTSELECTBYNIFREQ(
+      final response = await _api.myPubliSelecByNifTipoProcExpOperation(
+        dtselectbynifv2reqBody: DTSELECTBYNIFV2REQ(
           (final builder) => builder
             ..numerodocumento = documentNumber
-            ..tipodoc = 'NIF',
+            ..tipodocumento = 'NIF',
         ),
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
@@ -31,23 +31,23 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       );
 
       final raw = response.extra[generatedApiRawResponseDataExtraKey];
-      _logEnvelope('selectbynif', raw);
+      _logEnvelope('selectbynifexp', raw);
       final expedientes = _rawExpedientesByNif(raw);
-      logger.d('[selectbynif] ok ${expedientes.length} expediente(s)');
+      logger.d('[selectbynifexp] ok ${expedientes.length} expediente(s)');
       return expedientes;
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
-        logger.w('[selectbynif] 404 → lista vacía');
+        logger.w('[selectbynifexp] 404 → lista vacía');
         return const [];
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
-      _logEnvelope('selectbynif(error)', rawData);
+      _logEnvelope('selectbynifexp(error)', rawData);
       final parsed = _rawExpedientesByNif(rawData);
       if (parsed.isNotEmpty) {
-        logger.w('[selectbynif] error HTTP pero cuerpo con ${parsed.length} expediente(s) → se usa el cuerpo');
+        logger.w('[selectbynifexp] error HTTP pero cuerpo con ${parsed.length} expediente(s) → se usa el cuerpo');
         return parsed;
       }
-      logger.e('[selectbynif] error sin cuerpo aprovechable', error: error);
+      logger.e('[selectbynifexp] error sin cuerpo aprovechable', error: error);
       rethrow;
     }
   }
@@ -155,7 +155,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     };
 
     final first = items.map(_asMap).whereType<Map<String, Object?>>().firstOrNull;
-    return first == null ? null : _toExpedienteDetailMap(first);
+    return first == null ? null : _toExpedienteDetailMap(first, canAttachDocuments: _canAttachDocuments(root));
   }
 
   Expediente? _rawExpedienteDetail(final Object? data) {
@@ -166,7 +166,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     if (portal == null) {
       return null;
     }
-    final expediente = _toExpedienteDetailMap(portal);
+    final expediente = _toExpedienteDetailMap(portal, canAttachDocuments: _canAttachDocuments(root));
     // El backend devuelve 200 con `publicacionportal` presente pero con todos
     // los campos a `null` (isubrc:1, "No hay publicaciones...") cuando no
     // encuentra el expediente. Sin este guard se mapearía un `Expediente` con
@@ -178,7 +178,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   // Los nombres de campo del backend (estilo SAP) no se corresponden
   // literalmente con las etiquetas de Figma; se documenta la inferencia
   // porque no es obvia a partir de la clave sola.
-  Expediente _toExpedienteDetailMap(final Map<String, Object?> data) {
+  Expediente _toExpedienteDetailMap(final Map<String, Object?> data, {required final bool canAttachDocuments}) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
       titulo: _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
@@ -191,6 +191,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
       estado: _estadoDescripcion(data),
       tipoproc: _string(data, 'tipoproc'),
+      canAttachDocuments: canAttachDocuments,
       // Campos en bruto necesarios para `inicproc`/`registrarfichero` al
       // aportar documentación — ver ExpedienteAportacionDatos.
       datosAportacion: ExpedienteAportacionDatos(
@@ -214,6 +215,8 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       ),
     );
   }
+
+  bool _canAttachDocuments(final Map<String, Object?>? responseBody) => responseBody != null && _string(responseBody, 'adjuntar') == 'X';
 
   String? _nonSentinelDate(final String? value) => (value == null || value == '0000-00-00') ? null : value;
 

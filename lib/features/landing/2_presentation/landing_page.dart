@@ -89,102 +89,108 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         children: [
           // ── Scrollable hero content ─────────────────────────────────────
           Expanded(
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space16,
-                  ),
-                  // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
-                  child: Stack(
-                    children: [
-                      // ── H1 semantic heading — 1×1px node announced first by SR ──
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        child: Semantics(
-                          header: true,
-                          headingLevel: 1,
-                          focusable: true,
-                          label: l10n.a11yLandingH1Label,
-                          child: const SizedBox(width: 1, height: 1),
-                        ),
-                      ),
-                      Column(
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space16,
+                ),
+                child: LayoutBuilder(
+                  builder: (final context, final constraints) => FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: 353.15,
+                      // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
+                      child: Stack(
                         children: [
-                          const SizedBox(height: AppDimensions.space16),
-
-                          // ── Castilla-La Mancha institutional logo ───────────
-                          Semantics(
-                            label: l10n.a11yCastillaLogoLabel,
-                            image: true,
-                            excludeSemantics: true,
-                            child: SvgPicture.asset(
-                              'assets/images/castilla_logo.svg',
-                              width: 116,
-                              height: 68,
+                          // ── H1 semantic heading — 1×1px node announced first by SR ──
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            child: Semantics(
+                              header: true,
+                              headingLevel: 1,
+                              focusable: true,
+                              label: l10n.a11yLandingH1Label,
+                              child: const SizedBox(width: 1, height: 1),
                             ),
                           ),
-                          const SizedBox(height: AppDimensions.space24),
+                          Column(
+                            children: [
+                              const SizedBox(height: AppDimensions.space16),
 
-                          // ── Espacio Ciudadano logo ──────────────────────────
-                          ExcludeSemantics(
-                            child: SvgPicture.asset(
-                              'assets/images/espacioCiudadano_logo.svg',
-                              width: 256,
-                              height: 64,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.space24),
-
-                          // ── Tagline ─────────────────────────────────────────
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: _TaglineText(),
-                          ),
-                          const SizedBox(height: AppDimensions.space24),
-
-                          // ── Hero composition (splash_logo bg + mask group) ──
-                          ExcludeSemantics(
-                            child: AspectRatio(
-                              aspectRatio: 353.15 / 301.45,
-                              child: LayoutBuilder(
-                                builder: (final context, final constraints) {
-                                  final w = constraints.maxWidth;
-                                  final h = constraints.maxHeight;
-                                  return Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      // Background decorative shape (full size)
-                                      Positioned.fill(
-                                        child: Image.asset(
-                                          'assets/images/splash_logo.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                      // Foreground mask group (windmill + hands)
-                                      Positioned(
-                                        left: w * (75.0 / 353.15),
-                                        right: w * (-5.0 / 353.15),
-                                        bottom: h * (25.0 / 301.45),
-                                        child: Image.asset(
-                                          'assets/images/splash_image.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
+                              // ── Castilla-La Mancha institutional logo ───────────
+                              Semantics(
+                                label: l10n.a11yCastillaLogoLabel,
+                                image: true,
+                                excludeSemantics: true,
+                                child: SvgPicture.asset(
+                                  'assets/images/castilla_logo.svg',
+                                  width: 116,
+                                  height: 68,
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.space16),
+                              const SizedBox(height: AppDimensions.space24),
+
+                              // ── Espacio Ciudadano logo ──────────────────────────
+                              ExcludeSemantics(
+                                child: SvgPicture.asset(
+                                  'assets/images/espacioCiudadano_logo.svg',
+                                  width: 256,
+                                  height: 64,
+                                ),
+                              ),
+                              const SizedBox(height: AppDimensions.space24),
+
+                              // ── Tagline ─────────────────────────────────────────
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: _TaglineText(),
+                              ),
+                              const SizedBox(height: AppDimensions.space24),
+
+                              // ── Hero composition (splash_logo bg + mask group) ──
+                              ExcludeSemantics(
+                                child: AspectRatio(
+                                  aspectRatio: 353.15 / 301.45,
+                                  child: LayoutBuilder(
+                                    builder: (final context, final constraints) {
+                                      final w = constraints.maxWidth;
+                                      final h = constraints.maxHeight;
+                                      return Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          // Background decorative shape (full size)
+                                          Positioned.fill(
+                                            child: Image.asset(
+                                              'assets/images/splash_logo.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                          // Foreground mask group (windmill + hands)
+                                          Positioned(
+                                            left: w * (75.0 / 353.15),
+                                            right: w * (-5.0 / 353.15),
+                                            bottom: h * (25.0 / 301.45),
+                                            child: Image.asset(
+                                              'assets/images/splash_image.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: AppDimensions.space16),
+                            ],
+                          ), // Column
                         ],
-                      ), // Column
-                    ],
-                  ), // Stack
+                      ), // Stack
+                    ),
+                  ),
                 ),
               ),
             ),

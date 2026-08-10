@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 
@@ -81,10 +82,22 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
             sistemaOrigen: widget.sistemaOrigen,
           );
 
-      // La transición se aplica en Notifica antes de que el índice usado por
-      // el listado refleje el nuevo estado. Esperamos brevemente para evitar
-      // que desaparezca de Pendientes y todavía no figure en Aceptadas.
-      await _waitUntilAcceptedIsIndexed(citizenId);
+      final args = (id: widget.notificacionId, estado: widget.estado, sistemaOrigen: widget.sistemaOrigen);
+      final detail = await ref.read(gestionNotificacionDetalleProvider(args).future);
+      ref
+          .read(gestionNotificacionesOptimisticAcceptedProvider.notifier)
+          .add(
+            citizenId: citizenId,
+              notification: Notificacion(
+                id: widget.notificacionId,
+              concepto: detail.titulo,
+              procedimientoDenominacion: detail.procedimiento ?? '',
+              fechaCaducidad: detail.fechaExpiracion,
+              unidadOrganicaNombre: detail.organismo,
+              sistemaOrigen: detail.sistemaOrigen ?? widget.sistemaOrigen,
+              estado: 'aceptada',
+            ),
+          );
 
       ref
         ..invalidate(gestionNotificacionesProvider(null))
@@ -111,28 +124,6 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
     } finally {
       if (mounted) {
         setState(() => _accepting = false);
-      }
-    }
-  }
-
-  Future<void> _waitUntilAcceptedIsIndexed(final String citizenId) async {
-    final repository = ref.read(gestionNotificacionesRepositoryProvider);
-    const attempts = 6;
-    for (var attempt = 0; attempt < attempts; attempt++) {
-      try {
-        final accepted = await repository.loadNotificaciones(
-          citizenId: citizenId,
-          estado: 'aceptada',
-        );
-        if (accepted.any((final notification) => notification.id == widget.notificacionId)) {
-          return;
-        }
-      } on Object {
-        // La aceptación ya se completó. Un fallo puntual del refresco no debe
-        // convertirla en un error ni provocar que el usuario repita la acción.
-      }
-      if (attempt < attempts - 1) {
-        await Future<void>.delayed(const Duration(milliseconds: 500));
       }
     }
   }

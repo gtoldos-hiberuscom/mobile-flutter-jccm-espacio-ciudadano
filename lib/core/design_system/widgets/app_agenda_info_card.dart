@@ -74,7 +74,7 @@ class AppAgendaInfoCard extends StatelessWidget {
                   showVerticalDivider: _isCredential,
                 ),
                 SizedBox(
-                  width: _isCredential ? AppDimensions.space8 : AppDimensions.space4,
+                  width: _isNotification ? AppDimensions.space4 : AppDimensions.space8,
                 ),
                 Expanded(
                   child: _ContentBlock(
@@ -274,15 +274,14 @@ class _TypeIcon extends StatelessWidget {
     };
 
     return SizedBox.square(
-      dimension: AppDimensions.space20,
+      dimension: AppDimensions.iconMedium,
       child: Center(
         child: AppSvgIcon(
           assetPath,
-          size: AppDimensions.space20,
           color: AppColors.borderBlueMutedBase,
           semanticsLabel: switch (type) {
             AppAgendaInfoCardType.notification => 'Notificación',
-            AppAgendaInfoCardType.health => 'Salud',
+            AppAgendaInfoCardType.health => 'Atención primaria',
             AppAgendaInfoCardType.credential => 'Carnet',
           },
         ),

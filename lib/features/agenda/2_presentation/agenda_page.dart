@@ -306,7 +306,7 @@ class _AgendaAppointmentCard extends StatelessWidget {
       },
       day: date.day.toString(),
       weekday: _weekdayName(date.weekday),
-      time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatTime(date),
+      time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatAppointmentTime(date),
       title: appointment.kind == AgendaAppointmentKind.health ? appointment.description : appointment.title,
       channel: appointment.kind == AgendaAppointmentKind.health ? _appointmentChannel(appointment.channel, detail) : null,
       primaryText: appointment.kind == AgendaAppointmentKind.health ? appointment.title : appointment.description,
@@ -405,9 +405,13 @@ String _formatUpdateDate(final DateTime dateTime) {
 }
 
 String _formatTime(final DateTime dateTime) {
+  return '${_formatAppointmentTime(dateTime)}h';
+}
+
+String _formatAppointmentTime(final DateTime dateTime) {
   final hour = dateTime.hour.toString().padLeft(2, '0');
   final minute = dateTime.minute.toString().padLeft(2, '0');
-  return '$hour:${minute}h';
+  return '$hour:$minute';
 }
 
 String _appointmentChannel(final String? channel, final String detail) {

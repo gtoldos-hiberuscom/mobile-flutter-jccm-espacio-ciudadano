@@ -93,25 +93,72 @@ class AppCaptchaPlaceholder extends StatelessWidget {
 
 class AppPrivacyInfoText extends StatelessWidget {
   const AppPrivacyInfoText({
-    required this.text,
+    required this.description,
+    required this.linkText,
     this.onTap,
     super.key,
   });
 
-  final String text;
+  final String description;
+  final String linkText;
   final VoidCallback? onTap;
 
   @override
   Widget build(final BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 8),
-      child: InkWell(
-        onTap: onTap,
-        child: Text(
-          text,
-          style: AppTypography.leadingMedium.copyWith(
-            color: AppColors.primary,
-            height: 1.5,
+      child: Semantics(
+        label: '$description $linkText',
+        hint: 'Enlace externo. Se abrirá fuera de la aplicación.',
+        link: true,
+        button: true,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text.rich(
+                  TextSpan(
+                    style: AppTypography.leadingMedium.copyWith(
+                      color: AppColors.textBase,
+                      height: 1.5,
+                    ),
+                    children: [
+                      TextSpan(text: '$description '),
+                      TextSpan(
+                        text: linkText,
+                        style: AppTypography.leadingMedium.copyWith(
+                          color: AppColors.primary,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.primary,
+                          decorationThickness: 1.5,
+                        ),
+                      ),
+                      const WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: AppDimensions.space4),
+                          child: Icon(
+                            Icons.open_in_new,
+                            size: AppDimensions.iconSmall,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppDimensions.space4),
+                Text(
+                  'Enlace externo · Se abrirá fuera de la aplicación',
+                  style: AppTypography.smallRegular.copyWith(color: AppColors.textSecondary),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -27,17 +27,26 @@ void main() {
         '/api/v1/sescam/citas/12345678A',
         '/api/v1/agenda/agent-1/eventos/todos',
       ]);
-      expect(appointments, hasLength(3));
+      expect(appointments, hasLength(5));
       expect(appointments[0].description, 'Trámite administrativo');
       expect(appointments[0].kind, AgendaAppointmentKind.notification);
-      expect(appointments[1].description, 'Consulta Medicina de Familia');
+      expect(appointments[1].title, 'LAGUNA RUIDERA MONTESINOS');
+      expect(appointments[1].description, 'Cita de Atención Primaria');
       expect(appointments[1].kind, AgendaAppointmentKind.health);
-      expect(appointments[2].title, 'Caducidad de carnet joven');
+      expect(appointments[1].channel, 'Presencial');
+      expect(appointments[1].detail, 'Consulta a demanda');
+      expect(appointments[2].title, 'CAMPO CRIPTANA MOLINO');
+      expect(appointments[2].kind, AgendaAppointmentKind.health);
+      expect(appointments[2].channel, 'Telefónica');
+      expect(appointments[2].detail, 'Teleconsulta a demanda');
+      expect(appointments[3].description, 'Consulta Medicina de Familia');
+      expect(appointments[3].kind, AgendaAppointmentKind.health);
+      expect(appointments[4].title, 'Caducidad de carnet joven');
       expect(
-        appointments[2].description,
+        appointments[4].description,
         'El carnet joven caduca el próximo 30/01/2030',
       );
-      expect(appointments[2].kind, AgendaAppointmentKind.credential);
+      expect(appointments[4].kind, AgendaAppointmentKind.credential);
     });
   });
 }
@@ -63,6 +72,18 @@ final class _AgendaAdapter implements HttpClientAdapter {
                   'titulo': 'Registro',
                   'tipoEvento': 'Trámite administrativo',
                   'ubicacion': 'Oficina de atención',
+                },
+                {
+                  'fechaVencimiento': '2026-06-15T09:00:00',
+                  'titulo': 'Cita de Atención Primaria',
+                  'tipoEvento': 'CITA',
+                  'mensaje': '<p>Tiene una cita de atención primaria el próximo 15/06/2026</p> <p>Hora:09:00</p> <p>Profesional:LAGUNA RUIDERA MONTESINOS</p> <p>Tipo de cita:DEMANDA</p> <p>Modo de cita:Presencial</p>',
+                },
+                {
+                  'fechaVencimiento': '2026-06-16T08:25:00',
+                  'titulo': 'Cita de atención primaria',
+                  'tipoEvento': 'CITA',
+                  'mensaje': '<p>Tiene una cita de atención primaria el próximo 16/06/2026</p> <p>Hora:08:25</p> <p>Profesional:CAMPO CRIPTANA MOLINO</p> <p>Tipo de cita:TELECONSULTA DEMANDA</p> <p>Modo de cita:Telefónica</p>',
                 },
                 {
                   'fechaVencimiento': '2030-01-30T00:00:00',

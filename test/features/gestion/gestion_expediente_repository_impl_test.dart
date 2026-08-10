@@ -6,7 +6,7 @@ import '../../test_support/sequence_http_client_adapter.dart';
 
 void main() {
   group('GestionExpedienteRepositoryImpl', () {
-    test('loads expedientes from selectbynif when backend sends a singleton item as object', () async {
+    test('loads expedientes from selectbynifexp when backend sends a singleton item as object', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
@@ -26,12 +26,12 @@ void main() {
       expect(result.single.fechaInicio, '2026-06-20');
       expect(result.single.estado, 'ABIERTO');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynif');
+      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifexp');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
           'numerodocumento': '99999999R',
-          'tipodoc': 'NIF',
+          'tipodocumento': 'NIF',
         },
       );
     });
@@ -92,7 +92,7 @@ void main() {
       expect(result.single.estado, isNull);
     });
 
-    test('returns an empty list when selectbynif returns 404', () async {
+    test('returns an empty list when selectbynifexp returns 404', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 404,
@@ -106,7 +106,7 @@ void main() {
 
       expect(result, isEmpty);
       expect(adapter.requests, hasLength(1));
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynif');
+      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifexp');
     });
 
     test('loads expediente detail from selectbynumexp mapping the flat publicacionportal object', () async {
@@ -170,6 +170,7 @@ void main() {
       expect(result.fechaFin, isNull);
       expect(result.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
       expect(result.tipoproc, '020');
+      expect(result.canAttachDocuments, isTrue);
       expect(result.datosAportacion?.uniorg, '012848');
       expect(result.datosAportacion?.consej, '001952');
       expect(result.datosAportacion?.bland, '45');
@@ -197,6 +198,31 @@ void main() {
           'ptipodoc': 'NIF',
         },
       );
+    });
+
+    test('does not allow attachments when adjuntar is absent', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'publicacionportal': {
+                'numexp': 'EXP-NO-ADJUNTA',
+                'desproc': 'Expediente sin aportación',
+              },
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      final result = await repository.loadExpedienteDetail(
+        documentNumber: '03874761C',
+        numexp: 'EXP-NO-ADJUNTA',
+      );
+
+      expect(result.canAttachDocuments, isFalse);
     });
 
     test('rethrows when selectbynumexp returns 404', () async {

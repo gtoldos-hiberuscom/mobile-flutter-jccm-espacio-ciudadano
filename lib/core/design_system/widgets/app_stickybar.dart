@@ -35,6 +35,7 @@ class AppStickybar extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
     return Semantics(
       container: true,
       label: l10n.a11yStickybarLabel,
@@ -59,17 +60,22 @@ class AppStickybar extends StatelessWidget {
             child: SafeArea(
               top: false,
               child: Padding(
-                padding: const EdgeInsets.only(
+                padding: EdgeInsets.only(
                   top: AppDimensions.space16,
                   left: AppDimensions.space16,
                   right: AppDimensions.space16,
-                  bottom: AppDimensions.space48,
+                  bottom: isLandscape ? AppDimensions.space16 : AppDimensions.space48,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: _buildSpacedChildren(),
-                ),
+                child: isLandscape && children.length > 1
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _buildHorizontalChildren(),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: _buildSpacedChildren(),
+                      ),
               ),
             ),
           ),
@@ -84,6 +90,17 @@ class AppStickybar extends StatelessWidget {
       spaced.add(children[i]);
       if (i < children.length - 1) {
         spaced.add(const SizedBox(height: AppDimensions.space16));
+      }
+    }
+    return spaced;
+  }
+
+  List<Widget> _buildHorizontalChildren() {
+    final spaced = <Widget>[];
+    for (int i = 0; i < children.length; i++) {
+      spaced.add(Expanded(child: children[i]));
+      if (i < children.length - 1) {
+        spaced.add(const SizedBox(width: AppDimensions.space12));
       }
     }
     return spaced;

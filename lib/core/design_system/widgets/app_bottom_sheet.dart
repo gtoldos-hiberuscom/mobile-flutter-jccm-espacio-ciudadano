@@ -73,6 +73,7 @@ class AppBottomSheet extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
     return Semantics(
       container: true,
       scopesRoute: true,
@@ -82,9 +83,9 @@ class AppBottomSheet extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding:
-              const EdgeInsets.only(
-                bottom: AppDimensions.space40,
-                top: AppDimensions.space32,
+              EdgeInsets.only(
+                bottom: isLandscape ? AppDimensions.space8 : AppDimensions.space40,
+                top: isLandscape ? AppDimensions.space8 : AppDimensions.space32,
               ).copyWith(
                 left: horizontalMargin,
                 right: horizontalMargin,
@@ -123,7 +124,7 @@ class AppBottomSheet extends StatelessWidget {
                     ),
                     child: footer,
                   ),
-                const SizedBox(height: AppDimensions.space32),
+                SizedBox(height: isLandscape ? AppDimensions.space16 : AppDimensions.space32),
               ],
             ),
           ),

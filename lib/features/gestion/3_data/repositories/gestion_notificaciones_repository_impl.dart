@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/ge
 // El DTO indexado no expone el estado por notificación, así que para "Todo"
 // consultamos cada estado y etiquetamos el resultado con el estado consultado.
 const List<String> _kEstadosConocidos = ['pendiente', 'expirada', 'aceptada', 'rechazada'];
+const int _kNotificationsPageSize = 100;
 
 final class GestionNotificacionesRepositoryImpl implements GestionNotificacionesRepository {
   GestionNotificacionesRepositoryImpl({required final Dio dio}) : _dio = withGeneratedApiCompat(dio), _api = CiudadanosApi(withGeneratedApiCompat(dio), standardSerializers);
@@ -48,10 +49,6 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       throw UnsupportedError('UAT solo publica la comparecencia para aceptar notificaciones.');
     }
 
-    // El contrato publicado actualmente en UAT (v1.88.0-RC) expone
-    // `.../comparecer` sin body. El cliente generado del repositorio procede
-    // de un contrato distinto y todavía apunta a `.../transiciones`, ruta que
-    // UAT responde con 404.
     final encodedCitizenId = Uri.encodeComponent(citizenId);
     await _dio.post<void>(
       '/api/v1/ciudadanos/$encodedCitizenId/notificaciones/$notificacionId/comparecer',
@@ -123,27 +120,47 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     required final String citizenId,
     required final String estado,
   }) async {
-    try {
-      final response = await _api.obtenerNotificacionesCiudadano(
-        id: citizenId,
+    final notifications = <int, Notificacion>{};
+    for (var page = 0; ; page++) {
+      final pageNotifications = await _loadPageForEstado(
+        citizenId: citizenId,
         estado: estado,
-        extra: {
-          generatedApiDecodeStringResponseExtraKey: true,
-          generatedApiUnwrapBodyExtraKey: true,
+        page: page,
+      );
+      final previousLength = notifications.length;
+      for (final notification in pageNotifications) {
+        notifications[notification.id] = notification;
+      }
+
+      if (pageNotifications.length < _kNotificationsPageSize || notifications.length == previousLength) {
+        return notifications.values.toList(growable: false);
+      }
+    }
+  }
+
+  Future<List<Notificacion>> _loadPageForEstado({
+    required final String citizenId,
+    required final String estado,
+    required final int page,
+  }) async {
+    final encodedCitizenId = Uri.encodeComponent(citizenId);
+    try {
+      final response = await _dio.get<Object?>(
+        '/api/v1/ciudadanos/$encodedCitizenId/notificaciones',
+        queryParameters: {
+          'estado': estado,
+          'page': page,
+          'size': _kNotificationsPageSize,
         },
-        validateStatus: (final status) => status != null && status < 500,
+        options: Options(
+          validateStatus: (final status) => status == 404 || (status != null && status >= 200 && status < 300),
+        ),
       );
 
       if (response.statusCode == 404) {
         return const [];
       }
-
-      final data = response.data;
-      if (data != null) {
-        return data.map((final dto) => _toNotificacionDto(dto, estado)).toList(growable: false);
-      }
-
-      return _rawNotificaciones(response.extra[generatedApiRawResponseDataExtraKey], estado);
+      return _rawNotificaciones(response.data, estado);
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
         return const [];
@@ -157,26 +174,11 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
   }
 
-  Notificacion _toNotificacionDto(final NotificacionIndexaDto data, final String estado) {
-    return Notificacion(
-      id: data.idNotificacion ?? 0,
-      concepto: _emptyToNull(data.concepto) ?? '',
-      procedimientoDenominacion: _emptyToNull(data.procedimientoAdministrativo?.denominacion) ?? '',
-      fechaCaducidad: data.fechaCaducidad,
-      procedimientoIdFicha: _emptyToNull(data.procedimientoAdministrativo?.idFicha),
-      unidadOrganicaNombre: _emptyToNull(data.unidadOrganica?.nombre),
-      sistemaOrigen: _emptyToNull(data.sistemaOrigen),
-      estado: estado,
-    );
-  }
-
   List<Notificacion> _rawNotificaciones(final Object? data, final String estado) {
-    final payload = switch (data) {
-      final Map<dynamic, dynamic> map => map['body'],
-      _ => data,
-    };
+    final payload = _notificationPayload(data);
     final items = switch (payload) {
       final List<dynamic> list => list,
+      final Map<dynamic, dynamic> map when _hasNotificationId(map) => [map],
       _ => const <dynamic>[],
     };
     return items
@@ -191,21 +193,41 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
         .toList(growable: false);
   }
 
+  Object? _notificationPayload(final Object? data) {
+    Object? current = data;
+    for (var i = 0; i < 3 && current is String; i++) {
+      try {
+        current = jsonDecode(current);
+      } on FormatException {
+        return current;
+      }
+    }
+    if (current is! Map<dynamic, dynamic>) {
+      return current;
+    }
+    for (final key in const ['body', 'content', 'items', 'notificaciones', 'results', 'data']) {
+      if (current.containsKey(key)) {
+        return _notificationPayload(current[key]);
+      }
+    }
+    return current;
+  }
+
+  bool _hasNotificationId(final Map<dynamic, dynamic> data) => data.containsKey('idNotificacion') || data.containsKey('id');
+
   Notificacion _toNotificacionMap(final Map<String, Object?> data, final String estado) {
-    final procRaw = data['procedimientoAdministrativo'];
-    final procMap = procRaw is Map<String, Object?> ? procRaw : null;
-    final unidadRaw = data['unidadOrganica'];
-    final unidadMap = unidadRaw is Map<String, Object?> ? unidadRaw : null;
-    final fechaStr = _string(data, 'fechaCaducidad');
+    final procMap = _map(data['procedimientoAdministrativo']);
+    final unidadMap = _map(data['unidadOrganica']);
+    final fechaStr = _string(data, 'fechaCaducidad') ?? _string(data, 'fecCaducidad') ?? _string(data, 'fechaExpiracion');
 
     return Notificacion(
-      id: _int(data, 'idNotificacion') ?? 0,
-      concepto: _string(data, 'concepto') ?? '',
-      procedimientoDenominacion: _string(procMap, 'denominacion') ?? '',
+      id: _int(data, 'idNotificacion') ?? _int(data, 'id') ?? 0,
+      concepto: _string(data, 'concepto') ?? _string(data, 'descripcion') ?? '',
+      procedimientoDenominacion: _string(procMap, 'denominacion') ?? _additional(procMap, 'denominacion') ?? '',
       fechaCaducidad: fechaStr != null ? DateTime.tryParse(fechaStr) : null,
       procedimientoIdFicha: _string(procMap, 'idFicha'),
-      unidadOrganicaNombre: _string(unidadMap, 'nombre'),
-      sistemaOrigen: _string(data, 'sistemaOrigen'),
+      unidadOrganicaNombre: _string(unidadMap, 'nombre') ?? _additional(unidadMap, 'nombre'),
+      sistemaOrigen: _string(data, 'sistemaOrigen') ?? _string(unidadMap, 'sistema'),
       estado: estado,
     );
   }
@@ -232,11 +254,6 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       return trimmed.isEmpty ? null : trimmed;
     }
     return null;
-  }
-
-  String? _emptyToNull(final String? value) {
-    final text = value?.trim();
-    return text == null || text.isEmpty ? null : text;
   }
 
   Map<String, Object?> _bodyMap(final Object? raw, final int id) {

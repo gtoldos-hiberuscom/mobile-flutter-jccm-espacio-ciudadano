@@ -106,6 +106,7 @@ class AppFilterActionsBar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.backgroundWhite.withValues(alpha: 0.94),
@@ -116,28 +117,40 @@ class AppFilterActionsBar extends StatelessWidget {
         top: false,
         child: Padding(
           padding: const EdgeInsets.all(AppDimensions.space16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              AppButton(
-                label: clearLabel,
-                onPressed: onClear,
-                hierarchy: AppButtonHierarchy.secondary,
-                leadingIcon: AppIcons.autorenew,
-                isExpanded: true,
-              ),
-              const SizedBox(height: AppDimensions.space16),
-              AppButton(
-                label: applyLabel,
-                onPressed: onApply,
-                leadingIcon: AppIcons.check,
-                isExpanded: true,
-              ),
-            ],
-          ),
+          child: isLandscape
+              ? Row(
+                  children: [
+                    Expanded(child: _clearButton()),
+                    const SizedBox(width: AppDimensions.space16),
+                    Expanded(child: _applyButton()),
+                  ],
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _clearButton(),
+                    const SizedBox(height: AppDimensions.space16),
+                    _applyButton(),
+                  ],
+                ),
         ),
       ),
     );
   }
+
+  Widget _clearButton() => AppButton(
+    label: clearLabel,
+    onPressed: onClear,
+    hierarchy: AppButtonHierarchy.secondary,
+    leadingIcon: AppIcons.autorenew,
+    isExpanded: true,
+  );
+
+  Widget _applyButton() => AppButton(
+    label: applyLabel,
+    onPressed: onApply,
+    leadingIcon: AppIcons.check,
+    isExpanded: true,
+  );
 }

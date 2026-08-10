@@ -152,16 +152,17 @@ class _ExpedienteDetalleBody extends StatelessWidget {
             ),
           ),
         ),
-        AppStickybar(
-          children: [
-            AppButton(
-              label: l10n.gestionExpedientesAportarDocumentacionButton,
-              isExpanded: true,
-              leadingIcon: AppIcons.upload,
-              onPressed: () => context.go('${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}/aportar-documentacion', extra: tercero),
-            ),
-          ],
-        ),
+        if (expediente.canAttachDocuments)
+          AppStickybar(
+            children: [
+              AppButton(
+                label: l10n.gestionExpedientesAportarDocumentacionButton,
+                isExpanded: true,
+                leadingIcon: AppIcons.upload,
+                onPressed: () => context.go('${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}/aportar-documentacion', extra: tercero),
+              ),
+            ],
+          ),
       ],
     );
   }
