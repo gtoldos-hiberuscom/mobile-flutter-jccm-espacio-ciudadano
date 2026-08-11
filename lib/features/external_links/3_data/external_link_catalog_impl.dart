@@ -29,6 +29,12 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
       category: ExternalLinkCategory.educationCLM,
     ),
     ExternalLink(
+      id: 'educacion_clm',
+      displayKey: 'externalLinkEducacionClmLabel',
+      url: Uri.parse('https://educacion.castillalamancha.es/'),
+      category: ExternalLinkCategory.educationCLM,
+    ),
+    ExternalLink(
       id: 'empleo_clm',
       displayKey: 'externalLinkEmpleoClmLabel',
       url: Uri.parse('https://empleo.castillalamancha.es/'),

@@ -319,6 +319,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get externalLinkEducamosClmLabel => 'Educamos CLM';
 
   @override
+  String get externalLinkEducacionClmLabel => 'Educación Castilla-La Mancha';
+
+  @override
   String get externalLinkEmpleoClmLabel => 'Empleo CLM';
 
   @override

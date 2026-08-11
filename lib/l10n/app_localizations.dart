@@ -674,6 +674,12 @@ abstract class AppLocalizations {
   /// **'Educamos CLM'**
   String get externalLinkEducamosClmLabel;
 
+  /// Etiqueta del enlace externo al portal de Educación de Castilla-La Mancha.
+  ///
+  /// In es, this message translates to:
+  /// **'Educación Castilla-La Mancha'**
+  String get externalLinkEducacionClmLabel;
+
   /// Etiqueta del enlace externo al portal de Empleo de Castilla-La Mancha.
   ///
   /// In es, this message translates to:

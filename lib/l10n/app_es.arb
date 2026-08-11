@@ -409,6 +409,10 @@
   "@externalLinkEducamosClmLabel": {
     "description": "Etiqueta del enlace externo al portal Educamos CLM."
   },
+  "externalLinkEducacionClmLabel": "Educación Castilla-La Mancha",
+  "@externalLinkEducacionClmLabel": {
+    "description": "Etiqueta del enlace externo al portal de Educación de Castilla-La Mancha."
+  },
   "externalLinkEmpleoClmLabel": "Empleo CLM",
   "@externalLinkEmpleoClmLabel": {
     "description": "Etiqueta del enlace externo al portal de Empleo de Castilla-La Mancha."
