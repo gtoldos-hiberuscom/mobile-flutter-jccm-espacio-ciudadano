@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/3_data/recommendations_repository_impl.dart';
 
 void main() {
@@ -20,28 +21,22 @@ void main() {
       final recommendations = await repository.loadRecommendations(
         idAgente: 'agent-123',
         lifeEventIds: const [10, 20],
+        segment: RecommendationsSegment.all,
       );
 
-      expect(adapter.requests, hasLength(4));
+      expect(adapter.requests, hasLength(1));
       expect(
         adapter.requests.first.path,
         '/api/v1/hechos-vitales/servicios/agent-123',
       );
       expect(adapter.requests.first.queryParameters, isEmpty);
-      expect(
-        adapter.requests.skip(1).map((final request) => request.queryParameters['operacion']),
-        unorderedEquals(['ultimos_dias', 'novedades', 'inmediatos']),
-      );
       expect(recommendations, hasLength(1));
       expect(recommendations.single.title, 'Ayuda para alquiler joven');
       expect(recommendations.single.lifeEventId, 10);
       expect(recommendations.single.lifeEventName, 'Busco vivienda');
       expect(recommendations.single.responsibleUnit, 'Vivienda');
-      expect(recommendations.single.badge, RecommendationBadge.immediate);
-      expect(
-        recommendations.single.badges,
-        {RecommendationBadge.immediate},
-      );
+      expect(recommendations.single.badge, isNull);
+      expect(recommendations.single.badges, isEmpty);
       expect(recommendations.single.detailUrl, Uri.parse('https://sede-uat.cm-pre.jccm.es/tramites/100'));
     });
 
@@ -56,6 +51,7 @@ void main() {
       final recommendations = await repository.loadRecommendations(
         idAgente: 'agent-123',
         lifeEventIds: const [10],
+        segment: RecommendationsSegment.all,
       );
 
       expect(recommendations, isEmpty);
@@ -72,13 +68,14 @@ void main() {
       final recommendations = await repository.loadRecommendations(
         idAgente: 'agent-123',
         lifeEventIds: const [10],
+        segment: RecommendationsSegment.all,
       );
 
       expect(recommendations, isEmpty);
     });
 
-    test('uses date fallback when segmentation endpoint is not deployed', () async {
-      final adapter = _RecommendationsAdapter(segmentationUnavailable: true);
+    test('uses the selected segmented endpoint', () async {
+      final adapter = _RecommendationsAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = RecommendationsRepositoryImpl(
         dio: dio,
@@ -88,13 +85,72 @@ void main() {
       final recommendations = await repository.loadRecommendations(
         idAgente: 'agent-123',
         lifeEventIds: const [10],
+        segment: RecommendationsSegment.immediate,
       );
 
+      expect(adapter.requests, hasLength(1));
+      expect(adapter.requests.single.path, contains('/segmentacion/'));
+      expect(adapter.requests.single.queryParameters['operacion'], 'ti');
+      expect(adapter.requests.single.queryParameters['size'], '10');
+      expect(adapter.requests.single.queryParameters['page'], '0');
+      expect(adapter.requests.single.queryParameters, isNot(contains('hechosvitales')));
       expect(recommendations, hasLength(1));
       expect(
         recommendations.single.badges,
         {RecommendationBadge.immediate},
       );
+      expect(recommendations.single.lifeEventId, 10);
+      expect(recommendations.single.lifeEventName, 'Busco vivienda');
+    });
+
+    test('loads recent procedures using the ultimosDias filter', () async {
+      final adapter = _RecommendationsAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = RecommendationsRepositoryImpl(
+        dio: dio,
+        sedeBaseUrl: Uri.parse('https://sede-uat.cm-pre.jccm.es/'),
+      );
+
+      final recommendations = await repository.loadRecommendations(
+        idAgente: 'agent-123',
+        lifeEventIds: const [10],
+        segment: RecommendationsSegment.recent,
+      );
+
+      expect(adapter.requests, hasLength(1));
+      expect(adapter.requests.single.path, contains('/segmentacion/'));
+      expect(adapter.requests.single.queryParameters['operacion'], 'ut');
+      expect(adapter.requests.single.queryParameters['size'], '10');
+      expect(adapter.requests.single.queryParameters['page'], '0');
+      expect(adapter.requests.single.queryParameters['ultimosDias'], '30');
+      expect(recommendations.single.badges, {RecommendationBadge.recent});
+      expect(recommendations.single.lifeEventId, 10);
+      expect(recommendations.single.lifeEventName, 'Busco vivienda');
+    });
+
+    test('loads news procedures using the novedades operation', () async {
+      final adapter = _RecommendationsAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = RecommendationsRepositoryImpl(
+        dio: dio,
+        sedeBaseUrl: Uri.parse('https://sede-uat.cm-pre.jccm.es/'),
+      );
+
+      final recommendations = await repository.loadRecommendations(
+        idAgente: 'agent-123',
+        lifeEventIds: const [10],
+        segment: RecommendationsSegment.news,
+      );
+
+      expect(adapter.requests, hasLength(1));
+      expect(adapter.requests.single.path, contains('/segmentacion/'));
+      expect(adapter.requests.single.queryParameters['operacion'], 'no');
+      expect(adapter.requests.single.queryParameters['size'], '10');
+      expect(adapter.requests.single.queryParameters['page'], '0');
+      expect(adapter.requests.single.queryParameters, isNot(contains('ultimosDias')));
+      expect(recommendations.single.badges, {RecommendationBadge.news});
+      expect(recommendations.single.lifeEventId, 10);
+      expect(recommendations.single.lifeEventName, 'Busco vivienda');
     });
   });
 }
@@ -150,11 +206,17 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
     if (options.path.contains('/segmentacion/')) {
       final operation = options.queryParameters['operacion'];
       return <String, dynamic>{
-        'body': operation == 'inmediatos'
+        'body': operation == 'ti' || operation == 'no' || operation == 'ut'
             ? [
                 {
                   'idTramite': 100,
                   'nombreTramite': 'Ayuda para alquiler joven',
+                  'hechosVitales': [
+                    {
+                      'idHechoVital': 10,
+                      'nombreHechoVital': 'Busco vivienda',
+                    },
+                  ],
                 },
               ]
             : <Map<String, dynamic>>[],

@@ -13,8 +13,7 @@ final gestionNotificacionesRepositoryProvider = Provider<GestionNotificacionesRe
 });
 
 /// Citizen identifier used by the notification-transition endpoint.
-/// Uses the same per-environment strategy as listing and detail: UAT requires
-/// `idAgente`, while PRE currently requires the document number.
+/// Uses the identifier configured for the current backend environment.
 final gestionNotificacionesTransitionCitizenIdProvider = Provider<String>((final ref) {
   return ref.watch(ciudadanosEndpointIdProvider);
 });

@@ -7,11 +7,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.da
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 
-// Valores del enum `estado` del endpoint GET .../notificaciones.
-// El DTO indexado no expone el estado por notificación, así que para "Todo"
-// consultamos cada estado y etiquetamos el resultado con el estado consultado.
-const List<String> _kEstadosConocidos = ['pendiente', 'expirada', 'aceptada', 'rechazada'];
-const int _kNotificationsPageSize = 100;
+const int _kNotificationsPageSize = 10;
 
 final class GestionNotificacionesRepositoryImpl implements GestionNotificacionesRepository {
   GestionNotificacionesRepositoryImpl({required final Dio dio}) : _dio = withGeneratedApiCompat(dio), _api = CiudadanosApi(withGeneratedApiCompat(dio), standardSerializers);
@@ -45,18 +41,24 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     final String? sistemaOrigen,
     final String? justificacion,
   }) async {
-    if (accion.toUpperCase() != 'ACEPTAR') {
-      throw UnsupportedError('UAT solo publica la comparecencia para aceptar notificaciones.');
-    }
-
-    final encodedCitizenId = Uri.encodeComponent(citizenId);
-    await _dio.post<void>(
-      '/api/v1/ciudadanos/$encodedCitizenId/notificaciones/$notificacionId/comparecer',
-      options: Options(
-        headers: {
-          'sisOrigen': ?sistemaOrigen,
-        },
+    final transitionAction = switch (accion.trim().toUpperCase()) {
+      'COMPARECER' => TransicionDtoAccionEnum.COMPARECER,
+      'ACEPTAR' => TransicionDtoAccionEnum.ACEPTAR,
+      'RECHAZAR' => TransicionDtoAccionEnum.RECHAZAR,
+      final value => throw ArgumentError.value(value, 'accion', 'Transición no soportada'),
+    };
+    await _api.transicionNotificacion(
+      id: citizenId,
+      notificacionId: notificacionId,
+      sisOrigen: sistemaOrigen,
+      transicionDto: TransicionDto(
+        (final builder) => builder
+          ..accion = transitionAction
+          ..justificacion = justificacion,
       ),
+      extra: const {
+        generatedApiDecodeStringResponseExtraKey: true,
+      },
     );
   }
 
@@ -81,44 +83,12 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     required final String citizenId,
     final String? estado,
   }) async {
-    if (estado != null) {
-      return _loadForEstado(citizenId: citizenId, estado: estado);
-    }
-
-    // "Todo": el DTO no trae estado y el backend no garantiza el conjunto
-    // completo al omitir el filtro, así que consultamos cada estado en paralelo
-    // y fusionamos. Toleramos fallos parciales; solo propagamos si todos fallan.
-    final results = await Future.wait(
-      _kEstadosConocidos.map(
-        (final e) => _loadForEstado(citizenId: citizenId, estado: e).then<(List<Notificacion>?, Object?, StackTrace?)>((final list) => (list, null, null)).catchError((final Object error, final StackTrace stack) => (null, error, stack)),
-      ),
-    );
-
-    final merged = <int, Notificacion>{};
-    Object? lastError;
-    StackTrace? lastStack;
-    var anySuccess = false;
-    for (final (list, error, stack) in results) {
-      if (list != null) {
-        anySuccess = true;
-        for (final notif in list) {
-          merged.putIfAbsent(notif.id, () => notif);
-        }
-      } else if (error != null) {
-        lastError = error;
-        lastStack = stack;
-      }
-    }
-
-    if (!anySuccess && lastError != null) {
-      Error.throwWithStackTrace(lastError, lastStack ?? StackTrace.current);
-    }
-    return merged.values.toList(growable: false);
+    return _loadForEstado(citizenId: citizenId, estado: estado);
   }
 
   Future<List<Notificacion>> _loadForEstado({
     required final String citizenId,
-    required final String estado,
+    required final String? estado,
   }) async {
     final notifications = <int, Notificacion>{};
     for (var page = 0; ; page++) {
@@ -140,7 +110,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   Future<List<Notificacion>> _loadPageForEstado({
     required final String citizenId,
-    required final String estado,
+    required final String? estado,
     required final int page,
   }) async {
     final encodedCitizenId = Uri.encodeComponent(citizenId);
@@ -148,7 +118,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       final response = await _dio.get<Object?>(
         '/api/v1/ciudadanos/$encodedCitizenId/notificaciones',
         queryParameters: {
-          'estado': estado,
+          'estado': ?estado,
           'page': page,
           'size': _kNotificationsPageSize,
         },
@@ -174,7 +144,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
   }
 
-  List<Notificacion> _rawNotificaciones(final Object? data, final String estado) {
+  List<Notificacion> _rawNotificaciones(final Object? data, final String? estado) {
     final payload = _notificationPayload(data);
     final items = switch (payload) {
       final List<dynamic> list => list,
@@ -215,7 +185,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   bool _hasNotificationId(final Map<dynamic, dynamic> data) => data.containsKey('idNotificacion') || data.containsKey('id');
 
-  Notificacion _toNotificacionMap(final Map<String, Object?> data, final String estado) {
+  Notificacion _toNotificacionMap(final Map<String, Object?> data, final String? estado) {
     final procMap = _map(data['procedimientoAdministrativo']);
     final unidadMap = _map(data['unidadOrganica']);
     final fechaStr = _string(data, 'fechaCaducidad') ?? _string(data, 'fecCaducidad') ?? _string(data, 'fechaExpiracion');
@@ -228,7 +198,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       procedimientoIdFicha: _string(procMap, 'idFicha'),
       unidadOrganicaNombre: _string(unidadMap, 'nombre') ?? _additional(unidadMap, 'nombre'),
       sistemaOrigen: _string(data, 'sistemaOrigen') ?? _string(unidadMap, 'sistema'),
-      estado: estado,
+      estado: _string(data, 'estado')?.toLowerCase() ?? estado ?? '',
     );
   }
 

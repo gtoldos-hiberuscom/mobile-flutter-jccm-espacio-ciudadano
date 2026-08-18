@@ -6,14 +6,9 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jw
 /// Identifier used as the `{id}` path segment of the `/api/v1/ciudadanos/{id}`
 /// endpoints (contacto, notificaciones).
 ///
-/// The backend is mid-migration: PRE resolves the citizen by numDocumento (the
-/// DNI carried in the token), while UAT still resolves by `idAgente`. Sending
-/// the wrong one returns 403. The claim to use is driven per environment by
-/// [AppConfig.citizenIdStrategy] (config key `CIUDADANOS_ID_STRATEGY`).
-///
-/// This is the single source of truth for that path id — every caller of the
-/// ciudadanos endpoints must read it here rather than picking a claim directly,
-/// so the two environments stay consistent. Returns '' when there are no claims.
+/// PRE follows the documented contract and uses DNI/NIF. UAT still validates
+/// `idAgente`, so the identifier is selected from the environment strategy.
+/// Returns an empty string when there are no authenticated claims.
 final ciudadanosEndpointIdProvider = Provider<String>((final ref) {
   final claims = ref.watch(jwtClaimsProvider);
   return switch (ref.watch(appConfigProvider).citizenIdStrategy) {

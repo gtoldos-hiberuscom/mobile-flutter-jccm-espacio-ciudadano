@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendation_life_event_filters_page.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -23,12 +24,22 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
   _RecommendationFilter _selectedFilter = _RecommendationFilter.all;
   Set<int>? _selectedLifeEventFilterIds;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((final _) {
+      if (mounted) {
+        ref.invalidate(recommendationsProvider(RecommendationsSegment.all));
+      }
+    });
+  }
+
   void _selectRecommendationFilter(final _RecommendationFilter filter) {
     if (_selectedFilter == filter) {
       return;
     }
     setState(() => _selectedFilter = filter);
-    ref.invalidate(recommendationsProvider);
+    ref.invalidate(recommendationsProvider(filter.segment));
   }
 
   void _resetRecommendationFilters() {
@@ -36,7 +47,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       _selectedFilter = _RecommendationFilter.all;
       _selectedLifeEventFilterIds = null;
     });
-    ref.invalidate(recommendationsProvider);
+    ref.invalidate(recommendationsProvider(_selectedFilter.segment));
   }
 
   Future<void> _openLifeEvents() async {
@@ -47,7 +58,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       ).toString(),
     );
     if (mounted) {
-      ref.invalidate(recommendationsProvider);
+      ref.invalidate(recommendationsProvider(_selectedFilter.segment));
     }
   }
 
@@ -62,7 +73,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       ).toString(),
     );
     if (mounted) {
-      ref.invalidate(recommendationsProvider);
+      ref.invalidate(recommendationsProvider(_selectedFilter.segment));
     }
   }
 
@@ -88,7 +99,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
         _selectedFilter = _RecommendationFilter.all;
       }
     });
-    ref.invalidate(recommendationsProvider);
+    ref.invalidate(recommendationsProvider(_selectedFilter.segment));
   }
 
   List<Recommendation> _filterByLifeEvents({
@@ -122,7 +133,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final state = ref.watch(recommendationsProvider);
+    final state = ref.watch(recommendationsProvider(_selectedFilter.segment));
 
     return Scaffold(
       appBar: AppNavBar(
@@ -177,11 +188,11 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       recommendations: state.recommendations,
       events: state.selectedLifeEventOptions,
     );
-    final recommendations = _selectedFilter.apply(lifeEventFilteredRecommendations);
+    final recommendations = lifeEventFilteredRecommendations;
     final hasRecommendations = state.recommendations.isNotEmpty;
     final hasActiveFilters = _selectedFilter != _RecommendationFilter.all || _selectedLifeEventFilterIds != null;
-    final showNoRecommendationsHelper = state.hasLifeEventsConsent && state.hasConfiguredLifeEvents && !hasRecommendations;
-    final showNoFilteredRecommendationsHelper = hasRecommendations && hasActiveFilters && recommendations.isEmpty;
+    final showNoRecommendationsHelper = _selectedFilter == _RecommendationFilter.all && state.hasLifeEventsConsent && state.hasConfiguredLifeEvents && !hasRecommendations;
+    final showNoFilteredRecommendationsHelper = hasActiveFilters && recommendations.isEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +262,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
         const SizedBox(height: AppDimensions.space8),
         AppButton(
           label: l10n.recommendationsLoadingErrorRetry,
-          onPressed: () => ref.invalidate(recommendationsProvider),
+          onPressed: () => ref.invalidate(recommendationsProvider(_selectedFilter.segment)),
           leadingIcon: AppIcons.autorenew,
         ),
       ],
@@ -615,12 +626,12 @@ enum _RecommendationFilter {
     };
   }
 
-  List<Recommendation> apply(final List<Recommendation> recommendations) {
+  RecommendationsSegment get segment {
     return switch (this) {
-      _RecommendationFilter.all => recommendations,
-      _RecommendationFilter.recent => recommendations.where((final rec) => rec.badges.contains(RecommendationBadge.recent)).toList(growable: false),
-      _RecommendationFilter.news => recommendations.where((final rec) => rec.badges.contains(RecommendationBadge.news)).toList(growable: false),
-      _RecommendationFilter.immediate => recommendations.where((final rec) => rec.badges.contains(RecommendationBadge.immediate)).toList(growable: false),
+      _RecommendationFilter.all => RecommendationsSegment.all,
+      _RecommendationFilter.recent => RecommendationsSegment.recent,
+      _RecommendationFilter.news => RecommendationsSegment.news,
+      _RecommendationFilter.immediate => RecommendationsSegment.immediate,
     };
   }
 }

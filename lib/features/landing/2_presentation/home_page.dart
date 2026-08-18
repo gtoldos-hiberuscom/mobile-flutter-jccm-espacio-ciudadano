@@ -16,6 +16,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/pro
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -553,7 +554,9 @@ class _HomeRecommendationsSection extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
-    final state = ref.watch(recommendationsProvider);
+    final state = ref.watch(
+      recommendationsProvider(RecommendationsSegment.all),
+    );
     return state.maybeWhen(
       data: (final data) {
         if (!data.hasLifeEventsConsent || data.recommendations.isEmpty) {

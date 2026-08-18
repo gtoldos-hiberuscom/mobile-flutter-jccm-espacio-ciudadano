@@ -54,7 +54,7 @@ void main() {
       expect(adapter.requests.single.queryParameters, <String, dynamic>{
         'estado': 'aceptada',
         'page': 0,
-        'size': 100,
+        'size': 10,
       });
     });
 
@@ -88,7 +88,7 @@ void main() {
       expect(adapter.requests.single.queryParameters, <String, dynamic>{
         'estado': 'pendiente',
         'page': 0,
-        'size': 100,
+        'size': 10,
       });
     });
 
@@ -98,7 +98,7 @@ void main() {
           statusCode: 200,
           body: {
             'content': [
-              for (var id = 1; id <= 100; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
+              for (var id = 1; id <= 10; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
             ],
           },
         ),
@@ -106,7 +106,7 @@ void main() {
           statusCode: 200,
           body: {
             'content': [
-              {'idNotificacion': 101, 'concepto': 'Notificación 101'},
+              {'idNotificacion': 11, 'concepto': 'Notificación 11'},
             ],
           },
         ),
@@ -119,11 +119,11 @@ void main() {
         estado: 'aceptada',
       );
 
-      expect(result, hasLength(101));
+      expect(result, hasLength(11));
       expect(adapter.requests, hasLength(2));
       expect(adapter.requests[0].queryParameters['page'], 0);
       expect(adapter.requests[1].queryParameters['page'], 1);
-      expect(adapter.requests.every((final request) => request.queryParameters['size'] == 100), isTrue);
+      expect(adapter.requests.every((final request) => request.queryParameters['size'] == 10), isTrue);
     });
 
     test('loads accepted notifications when body uses the detailed Notifica shape', () async {
@@ -266,7 +266,7 @@ void main() {
       expect(detail.documentos, isEmpty);
     });
 
-    test('accepts a pending notification through the UAT comparecer endpoint', () async {
+    test('accepts a pending notification through the documented transitions endpoint', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
@@ -277,7 +277,7 @@ void main() {
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
       await repository.transitionNotificacion(
-        citizenId: 'PER9998003',
+        citizenId: '99999999R',
         notificacionId: 7924,
         accion: 'ACEPTAR',
         sistemaOrigen: 'notifica2',
@@ -286,76 +286,48 @@ void main() {
       expect(adapter.requests.single.method, 'POST');
       expect(
         adapter.requests.single.path,
-        '/api/v1/ciudadanos/PER9998003/notificaciones/7924/comparecer',
+        '/api/v1/ciudadanos/99999999R/notificaciones/7924/transiciones',
       );
-      expect(adapter.requests.single.jsonBody, isNull);
+      expect(adapter.requests.single.jsonBody, containsPair('accion', 'ACEPTAR'));
     });
 
-    test('"Todo" (sin estado) consulta cada estado y fusiona los resultados', () async {
-      // Una respuesta por estado, cada una con un id único.
+    test('"Todo" consulta una vez sin filtro de estado', () async {
       final adapter = SequenceHttpClientAdapter([
-        for (var i = 1; i <= 4; i++)
-          AdapterResponse(
-            statusCode: 200,
-            body: [
-              {
-                'idNotificacion': i,
-                'concepto': 'Notificación $i',
-                'procedimientoAdministrativo': {'denominacion': 'Proc $i'},
-              },
-            ],
-          ),
+        const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 1,
+              'concepto': 'Notificación 1',
+              'estado': 'pendiente',
+              'procedimientoAdministrativo': {'denominacion': 'Proc 1'},
+            },
+          ],
+        ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
       final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
 
-      const estadosEsperados = {'pendiente', 'expirada', 'aceptada', 'rechazada'};
-
-      // Se consultó cada estado del enum exactamente una vez.
-      expect(adapter.requests, hasLength(4));
-      expect(
-        adapter.requests.map((final r) => r.queryParameters['estado']).toSet(),
-        estadosEsperados,
-      );
-
-      // Se fusionan las 4 notificaciones, cada una etiquetada con su estado.
-      expect(result, hasLength(4));
-      expect(result.map((final n) => n.id).toSet(), {1, 2, 3, 4});
-      expect(result.map((final n) => n.estado).toSet(), estadosEsperados);
+      expect(adapter.requests, hasLength(1));
+      expect(adapter.requests.single.queryParameters, {'page': 0, 'size': 10});
+      expect(result.single.id, 1);
+      expect(result.single.estado, 'pendiente');
     });
 
-    test('"Todo" tolera fallos parciales y devuelve los estados que sí responden', () async {
-      // El tercer estado consultado devuelve 500; los otros tres responden ok.
+    test('"Todo" propaga el error del listado único', () async {
       final adapter = SequenceHttpClientAdapter([
-        const AdapterResponse(
-          statusCode: 200,
-          body: [
-            {'idNotificacion': 1, 'concepto': 'A'},
-          ],
-        ),
-        const AdapterResponse(
-          statusCode: 200,
-          body: [
-            {'idNotificacion': 2, 'concepto': 'B'},
-          ],
-        ),
         const AdapterResponse(statusCode: 500, body: <String, dynamic>{'mensaje': 'error'}),
-        const AdapterResponse(
-          statusCode: 200,
-          body: [
-            {'idNotificacion': 4, 'concepto': 'D'},
-          ],
-        ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
-      final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
-
-      expect(adapter.requests, hasLength(4));
-      expect(result.map((final n) => n.id).toSet(), {1, 2, 4});
+      await expectLater(
+        repository.loadNotificaciones(citizenId: '99999999R'),
+        throwsA(isA<DioException>()),
+      );
+      expect(adapter.requests, hasLength(1));
     });
   });
 }

@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_repository_provider.dart';
 
 final class RecommendationLifeEventOption {
@@ -35,7 +36,7 @@ final class RecommendationsState {
   bool get hasConfiguredLifeEvents => selectedLifeEvents.isNotEmpty;
 }
 
-final recommendationsProvider = FutureProvider.autoDispose<RecommendationsState>((final ref) async {
+final recommendationsProvider = FutureProvider.autoDispose.family<RecommendationsState, RecommendationsSegment>((final ref, final segment) async {
   final idAgente = ref.watch(jwtClaimsProvider)?.idAgente;
   if (idAgente == null || idAgente.trim().isEmpty) {
     throw StateError('No se ha encontrado el identificador del usuario.');
@@ -85,6 +86,7 @@ final recommendationsProvider = FutureProvider.autoDispose<RecommendationsState>
       .loadRecommendations(
         idAgente: normalizedIdAgente,
         lifeEventIds: selectedIds,
+        segment: segment,
       );
 
   return RecommendationsState(
