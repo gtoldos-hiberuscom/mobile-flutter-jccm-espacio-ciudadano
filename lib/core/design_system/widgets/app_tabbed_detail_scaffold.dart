@@ -20,7 +20,18 @@ class AppTabbedDetailScaffold extends StatelessWidget {
     this.actions = const [],
     this.backgroundColor = AppColors.backgroundBlueLighter,
     this.appBarBackgroundColor = AppColors.backgroundWhite,
-  }) : assert(tabs.length == tabViews.length, 'tabs and tabViews must have the same length');
+    this.titleSemanticsLabel,
+    this.leadingTooltip,
+    this.infoTooltip,
+    this.activeViewSemanticLabel,
+  }) : assert(title != '', 'title must not be empty'),
+       assert(tabs.length > 0, 'tabs must not be empty'),
+       assert(tabs.length == tabViews.length, 'tabs and tabViews must have the same length'),
+       assert(selectedIndex >= 0 && selectedIndex < tabs.length, 'selectedIndex is out of range'),
+       assert(titleSemanticsLabel == null || titleSemanticsLabel != '', 'titleSemanticsLabel must not be empty'),
+       assert(leadingTooltip == null || leadingTooltip != '', 'leadingTooltip must not be empty'),
+       assert(infoTooltip == null || infoTooltip != '', 'infoTooltip must not be empty'),
+       assert(activeViewSemanticLabel == null || activeViewSemanticLabel != '', 'activeViewSemanticLabel must not be empty');
 
   final String title;
   final VoidCallback onBack;
@@ -32,12 +43,20 @@ class AppTabbedDetailScaffold extends StatelessWidget {
   final List<Widget> tabViews;
   final Color backgroundColor;
   final Color appBarBackgroundColor;
+  final String? titleSemanticsLabel;
+  final String? leadingTooltip;
+  final String? infoTooltip;
+  final String? activeViewSemanticLabel;
 
   @override
   Widget build(final BuildContext context) {
+    assert(tabs.every((final tab) => tab.isNotEmpty), 'tab labels must not be empty');
     return Scaffold(
       appBar: AppHeaderBar(
         title: title,
+        titleSemanticsLabel: titleSemanticsLabel,
+        leadingTooltip: leadingTooltip,
+        infoTooltip: infoTooltip,
         onBack: onBack,
         onInfo: onInfo,
         actions: actions,
@@ -56,7 +75,14 @@ class AppTabbedDetailScaffold extends StatelessWidget {
                 selectedIndex: selectedIndex,
                 onTabSelected: onTabSelected,
               ),
-              Expanded(child: tabViews[selectedIndex]),
+              Expanded(
+                child: Semantics(
+                  container: true,
+                  explicitChildNodes: true,
+                  label: activeViewSemanticLabel,
+                  child: tabViews[selectedIndex],
+                ),
+              ),
             ],
           ),
         ),

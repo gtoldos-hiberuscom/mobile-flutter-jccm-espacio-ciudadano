@@ -3,13 +3,14 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class AppExternalLinkSection extends StatelessWidget {
   const AppExternalLinkSection({
     required this.title,
     required this.links,
     super.key,
-  });
+  }) : assert(title != '', 'title must not be empty');
 
   final String title;
   final List<AppExternalLinkItem> links;
@@ -21,9 +22,12 @@ class AppExternalLinkSection extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-          child: Text(
-            title,
-            style: AppTypography.h2.copyWith(color: AppColors.primary),
+          child: Semantics(
+            header: true,
+            child: Text(
+              title,
+              style: AppTypography.h2.copyWith(color: AppColors.primary),
+            ),
           ),
         ),
         const SizedBox(height: AppDimensions.space16),
@@ -42,49 +46,57 @@ class AppExternalLinkItem extends StatelessWidget {
     required this.onTap,
     super.key,
     this.semanticLabel,
+    this.semanticHint,
   });
 
   final String label;
   final VoidCallback onTap;
   final String? semanticLabel;
+  final String? semanticHint;
 
   @override
   Widget build(final BuildContext context) {
+    final effectiveLabel = semanticLabel ?? label;
+
     return Semantics(
-      button: true,
-      label: semanticLabel ?? label,
+      link: true,
+      label: effectiveLabel,
+      hint: semanticHint ?? AppLocalizations.of(context).externalLinkA11yHint,
+      onTap: onTap,
       child: ExcludeSemantics(
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.only(left: AppDimensions.space16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const _AppDoubleBullet(),
-                  const SizedBox(width: AppDimensions.space8),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                      child: Text(
-                        label,
-                        style: AppTypography.bodyLink.copyWith(
-                          color: AppColors.primary,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+              child: Padding(
+                padding: const EdgeInsets.only(left: AppDimensions.space16),
+                child: Row(
+                  children: [
+                    const _AppDoubleBullet(),
+                    const SizedBox(width: AppDimensions.space8),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                        child: Text(
+                          label,
+                          style: AppTypography.bodyLink.copyWith(
+                            color: AppColors.primary,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: AppDimensions.space8),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                    child: AppIcon(
-                      AppIcons.openInNew,
-                      color: AppColors.textBase,
+                    const SizedBox(width: AppDimensions.space8),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                      child: AppIcon(
+                        AppIcons.openInNew,
+                        color: AppColors.textBase,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
@@ -26,7 +28,11 @@ class ExternalLinkButton extends ConsumerWidget {
     super.key,
     this.variant = AppButtonVariant.outlined,
     this.icon,
-  });
+    this.semanticLabel,
+    this.semanticHint,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty'),
+       assert(semanticHint == null || semanticHint != '', 'semanticHint must not be empty');
 
   /// The outbound destination. Resolved against the catalog at launch
   /// time as a defence-in-depth measure.
@@ -43,16 +49,26 @@ class ExternalLinkButton extends ConsumerWidget {
   /// Optional leading icon. If null, an `open_in_new` icon is used.
   final Widget? icon;
 
+  /// Optional spoken name for labels containing abbreviations.
+  final String? semanticLabel;
+
+  /// Optional replacement for the localized external-navigation hint.
+  final String? semanticHint;
+
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final hint = l10n.externalLinkA11yHint;
+    final accessibleLabel = semanticLabel ?? label;
+    final hint = semanticHint ?? l10n.externalLinkA11yHint;
 
     return Semantics(
-      label: label,
+      container: true,
+      excludeSemantics: true,
+      label: accessibleLabel,
       hint: hint,
-      button: true,
       link: true,
+      enabled: true,
+      onTap: () => unawaited(_onPressed(context, ref)),
       child: AppButton(
         label: label,
         variant: variant,
@@ -62,7 +78,7 @@ class ExternalLinkButton extends ConsumerWidget {
               Icons.open_in_new,
               size: AppDimensions.iconSmall,
             ),
-        semanticsLabel: label,
+        semanticsLabel: accessibleLabel,
         onPressed: () => _onPressed(context, ref),
       ),
     );

@@ -15,43 +15,85 @@ class PlaceholderControlledCard extends StatelessWidget {
     required this.badge,
     required this.description,
     super.key,
-  });
+    this.titleSemanticLabel,
+  }) : assert(title != '', 'title must not be empty'),
+       assert(tooltip != '', 'tooltip must not be empty'),
+       assert(badge != '', 'badge must not be empty'),
+       assert(description != '', 'description must not be empty'),
+       assert(
+         titleSemanticLabel == null || titleSemanticLabel != '',
+         'titleSemanticLabel must not be empty',
+       );
 
   final String title;
   final String tooltip;
   final String badge;
   final String description;
 
+  /// Optional spoken form of [title] when it contains abbreviations.
+  final String? titleSemanticLabel;
+
   @override
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
+    final tooltipKey = GlobalKey<TooltipState>();
+    final usesLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.3;
+    final heading = Semantics(
+      header: true,
+      headingLevel: 3,
+      label: titleSemanticLabel,
+      excludeSemantics: titleSemanticLabel != null,
+      child: Text(
+        title,
+        style: theme.textTheme.titleSmall?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+    final infoButton = Semantics(
+      container: true,
+      excludeSemantics: true,
+      button: true,
+      label: tooltip,
+      onTap: () => tooltipKey.currentState?.ensureTooltipVisible(),
+      child: Tooltip(
+        key: tooltipKey,
+        message: tooltip,
+        excludeFromSemantics: true,
+        triggerMode: TooltipTriggerMode.manual,
+        child: IconButton(
+          onPressed: () => tooltipKey.currentState?.ensureTooltipVisible(),
+          icon: Icon(
+            Icons.info_outline,
+            size: AppDimensions.iconSmall,
+            color: theme.colorScheme.outline,
+          ),
+        ),
+      ),
+    );
     return Card(
+      semanticContainer: false,
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.space16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Tooltip(
-                  message: tooltip,
-                  child: Icon(
-                    Icons.info_outline,
-                    size: AppDimensions.iconSmall,
-                    color: theme.colorScheme.outline,
-                    semanticLabel: tooltip,
-                  ),
-                ),
-              ],
-            ),
+            if (usesLargeText)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  heading,
+                  Align(alignment: AlignmentDirectional.centerEnd, child: infoButton),
+                ],
+              )
+            else
+              Row(
+                children: [
+                  Expanded(child: heading),
+                  const SizedBox(width: AppDimensions.space8),
+                  infoButton,
+                ],
+              ),
             const SizedBox(height: AppDimensions.space8),
             Container(
               padding: const EdgeInsets.symmetric(

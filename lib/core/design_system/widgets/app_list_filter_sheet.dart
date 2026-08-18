@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_bottom_she
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_calendar.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_input_case.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 @immutable
 class AppListFilters {
@@ -22,13 +23,13 @@ class AppListFilters {
 }
 
 sealed class AppListFilterField {
-  const AppListFilterField({required this.id, required this.label});
+  const AppListFilterField({required this.id, required this.label}) : assert(id != '', 'id must not be empty'), assert(label != '', 'label must not be empty');
   final String id;
   final String label;
 }
 
 final class AppListTextFilterField extends AppListFilterField {
-  const AppListTextFilterField({required super.id, required super.label, required this.hint});
+  const AppListTextFilterField({required super.id, required super.label, required this.hint}) : assert(hint != '', 'hint must not be empty');
   final String hint;
 }
 
@@ -53,6 +54,11 @@ class _AppListFilterSheetState extends State<AppListFilterSheet> {
   @override
   void initState() {
     super.initState();
+    assert(widget.fields.isNotEmpty, 'fields must not be empty');
+    assert(
+      widget.fields.map((final field) => field.id).toSet().length == widget.fields.length,
+      'field ids must be unique',
+    );
     _controllers = {
       for (final field in widget.fields.whereType<AppListTextFilterField>()) field.id: TextEditingController(text: widget.initialFilters.text(field.id)),
     };
@@ -69,8 +75,12 @@ class _AppListFilterSheetState extends State<AppListFilterSheet> {
 
   @override
   Widget build(final BuildContext context) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(top: AppDimensions.space8, bottom: MediaQuery.viewInsetsOf(context).bottom + AppDimensions.space16),
+    final l10n = AppLocalizations.of(context);
+    return Padding(
+      padding: EdgeInsets.only(
+        top: AppDimensions.space8,
+        bottom: MediaQuery.viewInsetsOf(context).bottom + AppDimensions.space16,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -86,9 +96,28 @@ class _AppListFilterSheetState extends State<AppListFilterSheet> {
             },
           ],
           const SizedBox(height: AppDimensions.space24),
-          AppButton(label: 'Limpiar filtros', hierarchy: AppButtonHierarchy.secondary, isExpanded: true, onPressed: () => Navigator.of(context).pop(const AppListFilters())),
-          const SizedBox(height: AppDimensions.space12),
-          AppButton(label: 'Aplicar filtros', isExpanded: true, onPressed: _apply),
+          Semantics(
+            container: true,
+            explicitChildNodes: true,
+            label: l10n.a11yFilterActions,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AppButton(
+                  label: l10n.listFilterClear,
+                  hierarchy: AppButtonHierarchy.secondary,
+                  isExpanded: true,
+                  onPressed: () => Navigator.of(context).pop(const AppListFilters()),
+                ),
+                const SizedBox(height: AppDimensions.space12),
+                AppButton(
+                  label: l10n.listFilterApply,
+                  isExpanded: true,
+                  onPressed: _apply,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -142,19 +171,27 @@ class _DateRangePickerState extends State<_DateRangePicker> {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final range = _start == null || _end == null ? null : DateTimeRange(start: _start!, end: _end!);
-    return SingleChildScrollView(
+    final status = _start == null
+        ? l10n.listFilterSelectStartDate
+        : _end == null
+        ? l10n.listFilterSelectEndDate
+        : l10n.listFilterRangeSelected;
+    return Padding(
       padding: const EdgeInsets.only(top: AppDimensions.space8, bottom: AppDimensions.space16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            _start == null
-                ? 'Selecciona la fecha inicial.'
-                : _end == null
-                ? 'Selecciona la fecha final.'
-                : 'Rango seleccionado.',
-            style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+          Semantics(
+            liveRegion: true,
+            label: status,
+            child: ExcludeSemantics(
+              child: Text(
+                status,
+                style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
+              ),
+            ),
           ),
           const SizedBox(height: AppDimensions.space12),
           AppCalendar(
@@ -167,7 +204,7 @@ class _DateRangePickerState extends State<_DateRangePicker> {
           const SizedBox(height: AppDimensions.space16),
           if (widget.onClear != null) ...[
             AppButton(
-              label: 'Quitar rango',
+              label: l10n.listFilterRemoveRange,
               hierarchy: AppButtonHierarchy.secondary,
               isExpanded: true,
               onPressed: () {
@@ -178,7 +215,7 @@ class _DateRangePickerState extends State<_DateRangePicker> {
             const SizedBox(height: AppDimensions.space12),
           ],
           AppButton(
-            label: 'Seleccionar rango',
+            label: l10n.listFilterConfirmRange,
             isExpanded: true,
             onPressed: range == null ? null : () => Navigator.of(context).pop(range),
           ),
@@ -211,14 +248,31 @@ class _DateRangeField extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final formatter = DateFormat('dd/MM/yyyy', Localizations.localeOf(context).languageCode);
-    final text = value == null ? 'Seleccionar rango de fechas' : '${formatter.format(value!.start)} – ${formatter.format(value!.end)}';
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
+    final formatter = DateFormat('dd/MM/yyyy', locale);
+    final spokenFormatter = DateFormat.yMMMMd(locale);
+    final text = value == null ? l10n.listFilterSelectDateRange : '${formatter.format(value!.start)} – ${formatter.format(value!.end)}';
+    final semanticsLabel = value == null
+        ? '$label. ${l10n.listFilterSelectDateRange}'
+        : l10n.a11yListFilterDateRange(
+            label,
+            spokenFormatter.format(value!.start),
+            spokenFormatter.format(value!.end),
+          );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary)),
         const SizedBox(height: AppDimensions.space8),
-        AppButton(label: text, hierarchy: AppButtonHierarchy.secondary, leadingIcon: AppIcons.calendarToday, isExpanded: true, onPressed: onPressed),
+        AppButton(
+          label: text,
+          semanticsLabel: semanticsLabel,
+          hierarchy: AppButtonHierarchy.secondary,
+          leadingIcon: AppIcons.calendarToday,
+          isExpanded: true,
+          onPressed: onPressed,
+        ),
       ],
     );
   }

@@ -37,7 +37,18 @@ class AppInfoLabel extends StatelessWidget {
     super.key,
     this.horizontal = true,
     this.valueColor,
-  });
+    this.semanticLabel,
+    this.semanticValue,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(value != '', 'value must not be empty'),
+       assert(
+         semanticLabel == null || semanticLabel != '',
+         'semanticLabel must not be empty',
+       ),
+       assert(
+         semanticValue == null || semanticValue != '',
+         'semanticValue must not be empty',
+       );
 
   /// Uppercase caption label shown on the left (horizontal) or above (vertical).
   final String label;
@@ -52,8 +63,15 @@ class AppInfoLabel extends StatelessWidget {
   /// Optional value colour. Defaults to [AppColors.primary].
   final Color? valueColor;
 
+  /// Optional pronunciation-friendly alternative for [label].
+  final String? semanticLabel;
+
+  /// Optional pronunciation-friendly alternative for [value].
+  final String? semanticValue;
+
   @override
   Widget build(final BuildContext context) {
+    final useHorizontalLayout = horizontal && MediaQuery.textScalerOf(context).scale(1) <= 1.5;
     final labelWidget = ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 124, minHeight: 32),
       child: Align(
@@ -75,19 +93,25 @@ class AppInfoLabel extends StatelessWidget {
       ),
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-      child: horizontal
-          ? Wrap(
-              spacing: AppDimensions.space16,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [labelWidget, valueWidget],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [labelWidget, valueWidget],
-            ),
+    return Semantics(
+      container: true,
+      label: '${semanticLabel ?? label}: ${semanticValue ?? value}',
+      child: ExcludeSemantics(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+          child: useHorizontalLayout
+              ? Wrap(
+                  spacing: AppDimensions.space16,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [labelWidget, valueWidget],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [labelWidget, valueWidget],
+                ),
+        ),
+      ),
     );
   }
 }
@@ -135,6 +159,8 @@ class AppInfoLabelList extends StatelessWidget {
               value: e.value,
               horizontal: horizontal,
               valueColor: e.valueColor,
+              semanticLabel: e.semanticLabel,
+              semanticValue: e.semanticValue,
             ),
           )
           .toList(),
@@ -148,9 +174,14 @@ class AppInfoLabelEntry {
     required this.label,
     required this.value,
     this.valueColor,
-  });
+    this.semanticLabel,
+    this.semanticValue,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(value != '', 'value must not be empty');
 
   final String label;
   final String value;
   final Color? valueColor;
+  final String? semanticLabel;
+  final String? semanticValue;
 }

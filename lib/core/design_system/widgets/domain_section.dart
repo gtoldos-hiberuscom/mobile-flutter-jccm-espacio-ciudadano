@@ -16,7 +16,9 @@ class DomainSection extends StatelessWidget {
     this.subtitle,
     this.infoTooltip,
     this.trailing,
-  });
+  }) : assert(title != '', 'title must not be empty'),
+       assert(subtitle == null || subtitle != '', 'subtitle must not be empty'),
+       assert(infoTooltip == null || infoTooltip != '', 'infoTooltip must not be empty');
 
   final String title;
   final String? subtitle;
@@ -27,6 +29,44 @@ class DomainSection extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final theme = Theme.of(context);
+    final tooltipKey = GlobalKey<TooltipState>();
+    final hasHeaderActions = infoTooltip != null || trailing != null;
+    final usesLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.3;
+    final heading = Semantics(
+      header: true,
+      headingLevel: 2,
+      child: Text(
+        title,
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+    final headerActions = <Widget>[
+      if (infoTooltip != null)
+        Semantics(
+          container: true,
+          excludeSemantics: true,
+          button: true,
+          label: infoTooltip,
+          onTap: () => tooltipKey.currentState?.ensureTooltipVisible(),
+          child: Tooltip(
+            key: tooltipKey,
+            message: infoTooltip,
+            excludeFromSemantics: true,
+            triggerMode: TooltipTriggerMode.manual,
+            child: IconButton(
+              onPressed: () => tooltipKey.currentState?.ensureTooltipVisible(),
+              icon: Icon(
+                Icons.info_outline,
+                size: AppDimensions.iconSmall,
+                color: theme.colorScheme.outline,
+              ),
+            ),
+          ),
+        ),
+      ?trailing,
+    ];
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.space16,
@@ -35,33 +75,29 @@ class DomainSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              if (infoTooltip != null) ...[
-                Tooltip(
-                  message: infoTooltip,
-                  child: Icon(
-                    Icons.info_outline,
-                    size: AppDimensions.iconSmall,
-                    color: theme.colorScheme.outline,
-                    semanticLabel: infoTooltip,
-                  ),
+          if (usesLargeText && hasHeaderActions)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                heading,
+                Wrap(
+                  alignment: WrapAlignment.end,
+                  spacing: AppDimensions.space8,
+                  runSpacing: AppDimensions.space4,
+                  children: headerActions,
                 ),
               ],
-              if (trailing != null) ...[
-                const SizedBox(width: AppDimensions.space8),
-                trailing!,
+            )
+          else
+            Row(
+              children: [
+                Expanded(child: heading),
+                if (hasHeaderActions) ...[
+                  const SizedBox(width: AppDimensions.space8),
+                  ...headerActions,
+                ],
               ],
-            ],
-          ),
+            ),
           if (subtitle != null) ...[
             const SizedBox(height: AppDimensions.space4),
             Text(

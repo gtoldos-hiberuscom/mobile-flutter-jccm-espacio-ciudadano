@@ -21,7 +21,9 @@ class AppDivider extends StatelessWidget {
     this.extent,
     this.indent = 0,
     this.endIndent = 0,
-  });
+  }) : assert(extent == null || extent > 0, 'extent must be positive'),
+       assert(indent >= 0, 'indent must not be negative'),
+       assert(endIndent >= 0, 'endIndent must not be negative');
 
   final AppDividerStrength strength;
   final bool dark;
@@ -30,7 +32,7 @@ class AppDivider extends StatelessWidget {
   final double indent;
   final double endIndent;
 
-  double get _thickness => 1.0;
+  double get _thickness => 1;
 
   Color get _color {
     if (dark) {
@@ -52,20 +54,24 @@ class AppDivider extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     if (axis == Axis.vertical) {
-      return Container(
-        width: _thickness,
-        height: extent,
-        margin: EdgeInsets.symmetric(vertical: indent),
-        color: _color,
+      return ExcludeSemantics(
+        child: Container(
+          width: _thickness,
+          height: extent,
+          margin: EdgeInsets.only(top: indent, bottom: endIndent),
+          color: _color,
+        ),
       );
     }
 
-    return Divider(
-      thickness: _thickness,
-      color: _color,
-      indent: indent,
-      endIndent: endIndent,
-      height: extent ?? _thickness * 2,
+    return ExcludeSemantics(
+      child: Divider(
+        thickness: _thickness,
+        color: _color,
+        indent: indent,
+        endIndent: endIndent,
+        height: extent ?? _thickness * 2,
+      ),
     );
   }
 }

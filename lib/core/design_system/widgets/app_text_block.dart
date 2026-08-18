@@ -82,7 +82,12 @@ class AppTextBlock extends StatelessWidget {
     this.isLink = false,
     this.onTap,
     this.color,
-  });
+    this.semanticLabel,
+  }) : assert(text != '', 'text must not be empty'),
+       assert(
+         semanticLabel == null || semanticLabel != '',
+         'semanticLabel must not be empty',
+       );
 
   /// The text to display.
   final String text;
@@ -112,6 +117,9 @@ class AppTextBlock extends StatelessWidget {
 
   /// Override the text / icon color. Defaults to [AppColors.primary].
   final Color? color;
+
+  /// Accessible name override when [text] is not suitable for speech.
+  final String? semanticLabel;
 
   // ── Typography ─────────────────────────────────────────────────────────────
 
@@ -163,6 +171,10 @@ class AppTextBlock extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final resolvedColor = color ?? AppColors.primary;
+    final isHeading = switch (variant) {
+      AppTextBlockVariant.h1 || AppTextBlockVariant.h2 || AppTextBlockVariant.h3 => true,
+      _ => false,
+    };
 
     Widget row = Padding(
       padding: _padding,
@@ -215,9 +227,14 @@ class AppTextBlock extends StatelessWidget {
     }
 
     return Semantics(
-      button: onTap != null,
-      link: isLink,
-      label: text,
+      container: true,
+      excludeSemantics: true,
+      header: isHeading,
+      button: onTap != null && !isLink,
+      link: onTap != null && isLink,
+      enabled: onTap == null ? null : true,
+      label: semanticLabel ?? text,
+      onTap: onTap,
       child: row,
     );
   }

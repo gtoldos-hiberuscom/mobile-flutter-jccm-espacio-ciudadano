@@ -619,7 +619,6 @@ class _RecommendedProcedureCard extends StatelessWidget {
       categoryLabels: _categoryLabels(context, recommendation.badges),
       detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
       detailText: lifeEventName.isEmpty ? l10n.homeBlockLastUpdatedUnknown : lifeEventName,
-      statusLabel: 'Estado',
       statusText: recommendation.submissionStatusText ?? deadline,
     );
   }

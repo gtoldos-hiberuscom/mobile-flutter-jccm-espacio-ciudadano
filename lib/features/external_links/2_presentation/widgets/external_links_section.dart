@@ -24,7 +24,7 @@ class ExternalLinksSection extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final catalog = ref.watch(externalLinkCatalogProvider);
     final links = <ExternalLink>[
-      for (final id in linkIds)
+      for (final id in linkIds.toSet())
         if (catalog.findById(id) != null) catalog.findById(id)!,
     ];
     if (links.isEmpty) {
@@ -32,17 +32,23 @@ class ExternalLinksSection extends ConsumerWidget {
     }
     return DomainSection(
       title: l10n.domainExternalLinksTitle,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final link in links) ...[
-            ExternalLinkButton(
-              link: link,
-              label: resolveExternalLinkLabel(l10n, link.displayKey),
-            ),
-            const SizedBox(height: AppDimensions.space8),
+      child: FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var index = 0; index < links.length; index++) ...[
+              FocusTraversalOrder(
+                order: NumericFocusOrder(index.toDouble()),
+                child: ExternalLinkButton(
+                  link: links[index],
+                  label: resolveExternalLinkLabel(l10n, links[index].displayKey),
+                ),
+              ),
+              const SizedBox(height: AppDimensions.space8),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

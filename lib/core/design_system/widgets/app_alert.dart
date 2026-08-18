@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ENUMS
@@ -43,20 +45,37 @@ class AppAlertBanner extends StatelessWidget {
     this.title,
     this.onDismiss,
     this.action,
-  });
+    this.semanticsLabel,
+    this.announce = true,
+    this.dismissSemanticsLabel,
+  }) : assert(message.length > 0, 'message must not be empty'),
+       assert(title == null || title.length > 0, 'title must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
+       assert(
+         dismissSemanticsLabel == null || dismissSemanticsLabel.length > 0,
+         'dismissSemanticsLabel must not be empty',
+       );
 
   final AppAlertSeverity severity;
   final String? title;
   final String message;
   final VoidCallback? onDismiss;
   final Widget? action;
+  final String? semanticsLabel;
+  final bool announce;
+  final String? dismissSemanticsLabel;
 
   @override
   Widget build(final BuildContext context) {
     final (bg, titleColor, borderColor, icon) = _tokens(severity);
+    final l10n = AppLocalizations.of(context);
+    final effectiveTitle = title ?? _defaultTitle(l10n, severity);
+    final alertLabel = semanticsLabel ?? l10n.a11yAlert(effectiveTitle, message);
+    final dismissLabel = dismissSemanticsLabel ?? MaterialLocalizations.of(context).closeButtonTooltip;
 
     return Semantics(
-      liveRegion: true,
+      container: true,
+      explicitChildNodes: true,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(AppDimensions.space16),
@@ -66,62 +85,85 @@ class AppAlertBanner extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
           boxShadow: AppShadows.high,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                AppIcon(icon, color: titleColor),
-                const SizedBox(width: AppDimensions.space8),
-                Expanded(
-                  child: Text(
-                    (title ?? _defaultTitle(severity)).toUpperCase(),
-                    style: AppTypography.captionUppercase.copyWith(
-                      color: titleColor,
-                    ),
-                  ),
-                ),
-                if (onDismiss != null)
-                  SizedBox(
-                    width: AppDimensions.minTouchTarget,
-                    height: AppDimensions.minTouchTarget,
-                    child: InkWell(
-                      onTap: onDismiss,
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                      child: Center(
-                        child: AppIcon(
-                          AppIcons.close,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Semantics(
+                container: true,
+                label: alertLabel,
+                liveRegion: announce,
+                child: const SizedBox(width: 1, height: 1),
+              ),
+              Row(
+                children: [
+                  ExcludeSemantics(child: AppIcon(icon, color: titleColor)),
+                  const SizedBox(width: AppDimensions.space8),
+                  Expanded(
+                    child: Semantics(
+                      header: true,
+                      headingLevel: 2,
+                      child: Text(
+                        effectiveTitle.toUpperCase(),
+                        style: AppTypography.captionUppercase.copyWith(
                           color: titleColor,
                         ),
                       ),
                     ),
                   ),
-              ],
-            ),
-            // Body indented by 32 dp (24 icon + 8 gap)
-            Padding(
-              padding: const EdgeInsets.only(
-                left: AppDimensions.space32,
-                top: AppDimensions.space4,
+                  if (onDismiss != null)
+                    Semantics(
+                      label: dismissLabel,
+                      button: true,
+                      onTap: onDismiss,
+                      child: ExcludeSemantics(
+                        child: SizedBox(
+                          width: AppDimensions.minTouchTarget,
+                          height: AppDimensions.minTouchTarget,
+                          child: InkWell(
+                            onTap: onDismiss,
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                            child: Center(
+                              child: AppIcon(
+                                AppIcons.close,
+                                color: titleColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-              child: Text(
-                message,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.textBlack,
+              // Body indented by 32 dp (24 icon + 8 gap)
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: AppDimensions.space32,
+                  top: AppDimensions.space4,
+                ),
+                child: ExcludeSemantics(
+                  child: Text(
+                    message,
+                    style: AppTypography.bodyRegular.copyWith(
+                      color: AppColors.textBlack,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            if (action != null) Align(alignment: Alignment.centerRight, child: action),
-          ],
+              if (action != null) Align(alignment: Alignment.centerRight, child: action),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  static String _defaultTitle(final AppAlertSeverity severity) => switch (severity) {
-    AppAlertSeverity.warning => 'Sin conexión a internet',
-    AppAlertSeverity.error => 'Error',
-    _ => 'Aviso del sistema',
+  static String _defaultTitle(final AppLocalizations l10n, final AppAlertSeverity severity) => switch (severity) {
+    AppAlertSeverity.neutral => l10n.a11yAlertNeutral,
+    AppAlertSeverity.success => l10n.a11yAlertSuccess,
+    AppAlertSeverity.warning => l10n.a11yAlertWarning,
+    AppAlertSeverity.error => l10n.a11yAlertError,
   };
 
   static (Color bg, Color fg, Color border, IconData icon) _tokens(
@@ -178,7 +220,12 @@ class AppAlertContextual extends StatelessWidget {
     this.title,
     this.action,
     this.actionSpacing = AppDimensions.space16,
-  });
+    this.semanticsLabel,
+    this.announce = false,
+  }) : assert(message.length > 0, 'message must not be empty'),
+       assert(title == null || title.length > 0, 'title must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
+       assert(actionSpacing >= 0, 'actionSpacing must not be negative');
 
   final AppAlertSeverity severity;
   final String? title;
@@ -187,10 +234,20 @@ class AppAlertContextual extends StatelessWidget {
   final bool horizontal;
   final Widget? action;
   final double actionSpacing;
+  final String? semanticsLabel;
+
+  /// Contextual help is persistent by default; enable for dynamic insertion.
+  final bool announce;
 
   @override
   Widget build(final BuildContext context) {
-    final textStyle = size == AppAlertContextualSize.medium ? AppTypography.bodyRegular.copyWith(color: AppColors.primaryDark) : AppTypography.smallRegular.copyWith(color: AppColors.primaryDark);
+    final l10n = AppLocalizations.of(context);
+    final (_, severityColor, _, severityIcon) = AppAlertBanner._tokens(severity);
+    final severityTitle = AppAlertBanner._defaultTitle(l10n, severity);
+    final effectiveTitle = title ?? severityTitle;
+    final alertLabel = semanticsLabel ?? l10n.a11yAlert(effectiveTitle, message);
+    final useHorizontalLayout = horizontal && MediaQuery.textScalerOf(context).scale(1) <= 1.5;
+    final textStyle = size == AppAlertContextualSize.medium ? AppTypography.bodyRegular.copyWith(color: severityColor) : AppTypography.smallRegular.copyWith(color: severityColor);
 
     final textWidget = title == null
         ? Text(message, style: textStyle)
@@ -206,19 +263,18 @@ class AppAlertContextual extends StatelessWidget {
             ),
           );
 
-    final contentRow = Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const AppIcon(
-          AppIcons.info,
-          color: AppColors.primaryDark,
-        ),
-        const SizedBox(width: AppDimensions.space8),
-        Expanded(child: textWidget),
-      ],
+    final contentRow = ExcludeSemantics(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppIcon(severityIcon, color: severityColor),
+          const SizedBox(width: AppDimensions.space8),
+          Expanded(child: textWidget),
+        ],
+      ),
     );
 
-    final body = horizontal
+    final body = useHorizontalLayout
         ? Row(
             children: [
               Expanded(child: contentRow),
@@ -240,13 +296,27 @@ class AppAlertContextual extends StatelessWidget {
           );
 
     return Semantics(
-      liveRegion: true,
+      container: true,
+      explicitChildNodes: true,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.space4,
           vertical: AppDimensions.space8,
         ),
-        child: body,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Semantics(
+                container: true,
+                label: alertLabel,
+                liveRegion: announce,
+                child: const SizedBox(width: 1, height: 1),
+              ),
+              body,
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -269,38 +339,37 @@ class AppAlertToast extends StatelessWidget {
     required this.message,
     super.key,
     this.severity = AppAlertSeverity.neutral,
-  });
+    this.semanticsLabel,
+    this.announce = true,
+  }) : assert(message.length > 0, 'message must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final AppAlertSeverity severity;
   final String message;
+  final String? semanticsLabel;
+  final bool announce;
 
   /// Shows this toast via [ScaffoldMessenger]. Auto-dismisses after [duration].
   static void show(
     final BuildContext context, {
     required final String message,
     final AppAlertSeverity severity = AppAlertSeverity.neutral,
-    final Duration duration = const Duration(seconds: 2),
+    final Duration duration = const Duration(seconds: 4),
+    final String? semanticsLabel,
   }) {
-    final icon = _icon(severity);
+    assert(message.isNotEmpty, 'message must not be empty');
+    assert(semanticsLabel == null || semanticsLabel.isNotEmpty, 'semanticsLabel must not be empty');
+    assert(duration >= const Duration(seconds: 4), 'duration must be at least four seconds');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: AppColors.primaryDark,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        padding: EdgeInsets.zero,
         duration: duration,
-        content: Row(
-          children: [
-            AppIcon(icon, color: Colors.white),
-            const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: Text(
-                message,
-                style: AppTypography.bodyBold.copyWith(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-          side: const BorderSide(color: AppColors.borderBlueMutedBase),
+        content: AppAlertToast(
+          message: message,
+          severity: severity,
+          semanticsLabel: semanticsLabel,
         ),
         behavior: SnackBarBehavior.floating,
       ),
@@ -310,28 +379,34 @@ class AppAlertToast extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final icon = _icon(severity);
+    final title = AppAlertBanner._defaultTitle(AppLocalizations.of(context), severity);
+    final alertLabel = semanticsLabel ?? AppLocalizations.of(context).a11yAlert(title, message);
 
     return Semantics(
-      liveRegion: true,
-      child: Container(
-        padding: const EdgeInsets.all(AppDimensions.space16),
-        decoration: BoxDecoration(
-          color: AppColors.primaryDark,
-          border: Border.all(color: AppColors.borderBlueMutedBase),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-          boxShadow: AppShadows.high,
-        ),
-        child: Row(
-          children: [
-            AppIcon(icon, color: Colors.white),
-            const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: Text(
-                message,
-                style: AppTypography.bodyBold.copyWith(color: Colors.white),
+      container: true,
+      label: alertLabel,
+      liveRegion: announce,
+      child: ExcludeSemantics(
+        child: Container(
+          padding: const EdgeInsets.all(AppDimensions.space16),
+          decoration: BoxDecoration(
+            color: AppColors.primaryDark,
+            border: Border.all(color: AppColors.borderBlueMutedBase),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+            boxShadow: AppShadows.high,
+          ),
+          child: Row(
+            children: [
+              AppIcon(icon, color: Colors.white),
+              const SizedBox(width: AppDimensions.space8),
+              Expanded(
+                child: Text(
+                  message,
+                  style: AppTypography.bodyBold.copyWith(color: Colors.white),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -369,12 +444,22 @@ class AppAlertSnackbar extends StatelessWidget {
     this.severity = AppAlertSeverity.neutral,
     this.actionLabel,
     this.onAction,
-  });
+    this.semanticsLabel,
+    this.announce = true,
+  }) : assert(message.length > 0, 'message must not be empty'),
+       assert(actionLabel == null || actionLabel.length > 0, 'actionLabel must not be empty'),
+       assert(
+         (actionLabel == null) == (onAction == null),
+         'actionLabel and onAction must be provided together',
+       ),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final AppAlertSeverity severity;
   final String message;
   final String? actionLabel;
   final VoidCallback? onAction;
+  final String? semanticsLabel;
+  final bool announce;
 
   /// Shows this snackbar via [ScaffoldMessenger].
   static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> show(
@@ -384,11 +469,16 @@ class AppAlertSnackbar extends StatelessWidget {
     final String? actionLabel,
     final VoidCallback? onAction,
     final EdgeInsetsGeometry? margin,
+    final Duration duration = const Duration(seconds: 5),
+    final String? semanticsLabel,
+    final bool announce = true,
   }) {
+    assert(duration >= const Duration(seconds: 4), 'duration must be at least four seconds');
+
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.transparent,
-        duration: const Duration(seconds: 5),
+        duration: duration,
         elevation: 0,
         padding: EdgeInsets.zero,
         content: AppAlertSnackbar(
@@ -396,6 +486,8 @@ class AppAlertSnackbar extends StatelessWidget {
           severity: severity,
           actionLabel: actionLabel,
           onAction: onAction,
+          semanticsLabel: semanticsLabel,
+          announce: announce,
         ),
         behavior: SnackBarBehavior.floating,
         margin: margin,
@@ -406,9 +498,39 @@ class AppAlertSnackbar extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final icon = _icon(severity);
+    final l10n = AppLocalizations.of(context);
+    final alertLabel = semanticsLabel ?? l10n.a11yAlert(AppAlertBanner._defaultTitle(l10n, severity), message);
+    final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+
+    final messageContent = Expanded(
+      child: ExcludeSemantics(
+        child: Text(
+          message,
+          style: AppTypography.bodyBold.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+    final action = actionLabel == null
+        ? null
+        : TextButton(
+            onPressed: onAction,
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.space8,
+                vertical: AppDimensions.space8,
+              ),
+              minimumSize: const Size(48, AppDimensions.minTouchTarget),
+            ),
+            child: Text(
+              actionLabel!,
+              style: AppTypography.bodyRegular.copyWith(color: Colors.white),
+            ),
+          );
 
     return Semantics(
-      liveRegion: true,
+      container: true,
+      explicitChildNodes: true,
       child: Container(
         padding: const EdgeInsets.all(AppDimensions.space16),
         decoration: BoxDecoration(
@@ -417,38 +539,45 @@ class AppAlertSnackbar extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
           boxShadow: AppShadows.high,
         ),
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (icon != null) ...[
-              AppIcon(icon, color: Colors.white),
-              const SizedBox(width: AppDimensions.space8),
-            ],
-            Expanded(
-              child: Text(
-                message,
-                style: AppTypography.bodyBold.copyWith(color: Colors.white),
-              ),
+            Semantics(
+              container: true,
+              label: alertLabel,
+              liveRegion: announce,
+              child: const SizedBox(width: 1, height: 1),
             ),
-            if (actionLabel != null)
-              Padding(
-                padding: const EdgeInsets.only(left: AppDimensions.space4),
-                child: TextButton(
-                  onPressed: onAction ?? () {},
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.space8,
-                      vertical: AppDimensions.space8,
-                    ),
-                    minimumSize: const Size(48, 40),
-                  ),
-                  child: Text(
-                    actionLabel!,
-                    style: AppTypography.bodyRegular.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
+            if (useVerticalLayout) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (icon != null) ...[
+                    ExcludeSemantics(child: AppIcon(icon, color: Colors.white)),
+                    const SizedBox(width: AppDimensions.space8),
+                  ],
+                  messageContent,
+                ],
+              ),
+              if (action != null)
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: action,
                 ),
+            ] else
+              Row(
+                children: [
+                  if (icon != null) ...[
+                    ExcludeSemantics(child: AppIcon(icon, color: Colors.white)),
+                    const SizedBox(width: AppDimensions.space8),
+                  ],
+                  messageContent,
+                  if (action != null) ...[
+                    const SizedBox(width: AppDimensions.space4),
+                    action,
+                  ],
+                ],
               ),
           ],
         ),
@@ -500,7 +629,14 @@ class AppAlertDialog extends StatelessWidget {
     this.checkboxLabel,
     this.isChecked = false,
     this.onCheckboxChanged,
-  });
+    this.semanticsLabel,
+  }) : assert(confirmLabel.length > 0, 'confirmLabel must not be empty'),
+       assert(cancelLabel.length > 0, 'cancelLabel must not be empty'),
+       assert(title == null || title.length > 0, 'title must not be empty'),
+       assert(description == null || description.length > 0, 'description must not be empty'),
+       assert(infoLabel == null || infoLabel.length > 0, 'infoLabel must not be empty'),
+       assert(checkboxLabel == null || checkboxLabel.length > 0, 'checkboxLabel must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   /// Icon inside the circular avatar. Defaults to [AppIcons.info].
   final IconData? icon;
@@ -528,6 +664,10 @@ class AppAlertDialog extends StatelessWidget {
   final VoidCallback? onConfirm;
   final VoidCallback? onCancel;
 
+  /// Accessible route name. Falls back to [title] or the localized dialog
+  /// label when no visible title is provided.
+  final String? semanticsLabel;
+
   /// Displays this dialog and returns `true` on confirm, `false` on cancel.
   static Future<bool?> show(
     final BuildContext context, {
@@ -542,9 +682,11 @@ class AppAlertDialog extends StatelessWidget {
     final String? checkboxLabel,
     final bool isChecked = false,
     final ValueChanged<bool>? onCheckboxChanged,
+    final String? semanticsLabel,
   }) {
     return showDialog<bool>(
       context: context,
+      requestFocus: true,
       barrierDismissible: false,
       barrierColor: const Color(0xCC031B35),
       builder: (final ctx) => AppAlertDialog(
@@ -557,6 +699,7 @@ class AppAlertDialog extends StatelessWidget {
         checkboxLabel: checkboxLabel,
         isChecked: isChecked,
         onCheckboxChanged: onCheckboxChanged,
+        semanticsLabel: semanticsLabel,
         confirmLabel: confirmLabel,
         cancelLabel: cancelLabel,
         onConfirm: () => Navigator.of(ctx).pop(true),
@@ -567,77 +710,107 @@ class AppAlertDialog extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space16,
-        vertical: AppDimensions.space64,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: Border.all(color: AppColors.borderBlueMutedLight),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-          boxShadow: AppShadows.overAll,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space32,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (showIconContainer) ...[
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(AppDimensions.space8),
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundBlueMutedLight,
-                    borderRadius: BorderRadius.circular(64),
-                  ),
-                  child: AppIcon(
-                    icon ?? AppIcons.info,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppDimensions.space8),
-            ],
-            if (title != null) ...[
-              Text(
-                title!,
-                textAlign: TextAlign.center,
-                style: AppTypography.h3.copyWith(color: AppColors.primary),
-              ),
-              const SizedBox(height: AppDimensions.space8),
-            ],
-            if (description != null) ...[
-              Text(
-                description!,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(height: AppDimensions.space8),
-            ],
-            if (checkboxLabel != null) ...[
-              _DialogCheckboxRow(
-                label: checkboxLabel!,
-                isChecked: isChecked,
-                onChanged: onCheckboxChanged,
-              ),
-              const SizedBox(height: AppDimensions.space8),
-            ],
-            _DialogActions(
-              infoLabel: infoLabel,
-              onInfo: onInfo,
-              confirmLabel: confirmLabel,
-              cancelLabel: cancelLabel,
-              onConfirm: onConfirm,
-              onCancel: onCancel,
+    final dialogLabel = semanticsLabel ?? title ?? MaterialLocalizations.of(context).alertDialogLabel;
+
+    return Semantics(
+      container: true,
+      scopesRoute: true,
+      namesRoute: true,
+      explicitChildNodes: true,
+      label: dialogLabel,
+      child: FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.space16,
+            vertical: AppDimensions.space64,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              border: Border.all(color: AppColors.borderBlueMutedLight),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+              boxShadow: AppShadows.overAll,
             ),
-          ],
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.space16,
+              vertical: AppDimensions.space32,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (showIconContainer) ...[
+                    Center(
+                      child: ExcludeSemantics(
+                        child: Container(
+                          padding: const EdgeInsets.all(AppDimensions.space8),
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundBlueMutedLight,
+                            borderRadius: BorderRadius.circular(64),
+                          ),
+                          child: AppIcon(
+                            icon ?? AppIcons.info,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.space8),
+                  ],
+                  if (title != null) ...[
+                    Semantics(
+                      header: true,
+                      headingLevel: 1,
+                      sortKey: const OrdinalSortKey(1),
+                      child: Text(
+                        title!,
+                        textAlign: TextAlign.center,
+                        style: AppTypography.h3.copyWith(color: AppColors.primary),
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.space8),
+                  ],
+                  if (description != null) ...[
+                    Semantics(
+                      sortKey: const OrdinalSortKey(2),
+                      child: Text(
+                        description!,
+                        style: AppTypography.bodyRegular.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.space8),
+                  ],
+                  if (checkboxLabel != null) ...[
+                    Semantics(
+                      sortKey: const OrdinalSortKey(3),
+                      child: _DialogCheckboxRow(
+                        label: checkboxLabel!,
+                        isChecked: isChecked,
+                        onChanged: onCheckboxChanged,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.space8),
+                  ],
+                  Semantics(
+                    sortKey: const OrdinalSortKey(4),
+                    child: _DialogActions(
+                      infoLabel: infoLabel,
+                      onInfo: onInfo,
+                      confirmLabel: confirmLabel,
+                      cancelLabel: cancelLabel,
+                      onConfirm: onConfirm,
+                      onCancel: onCancel,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -660,7 +833,12 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
     required this.onCancel,
     super.key,
     this.icon = AppIcons.info,
-  });
+    this.semanticsLabel,
+  }) : assert(title.length > 0, 'title must not be empty'),
+       assert(description.length > 0, 'description must not be empty'),
+       assert(confirmLabel.length > 0, 'confirmLabel must not be empty'),
+       assert(cancelLabel.length > 0, 'cancelLabel must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final String title;
   final String description;
@@ -669,6 +847,7 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
   final IconData icon;
+  final String? semanticsLabel;
 
   /// Displays this dialog and returns `true` on confirm, `false` on cancel.
   static Future<bool?> show(
@@ -678,9 +857,11 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
     required final String confirmLabel,
     required final String cancelLabel,
     final IconData icon = AppIcons.info,
+    final String? semanticsLabel,
   }) {
     return showDialog<bool>(
       context: context,
+      requestFocus: true,
       barrierDismissible: false,
       barrierColor: const Color(0xCC031B35),
       builder: (final ctx) => AppDestructiveConfirmDialog(
@@ -689,6 +870,7 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
         confirmLabel: confirmLabel,
         cancelLabel: cancelLabel,
         icon: icon,
+        semanticsLabel: semanticsLabel,
         onConfirm: () => Navigator.of(ctx).pop(true),
         onCancel: () => Navigator.of(ctx).pop(false),
       ),
@@ -697,75 +879,106 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space16,
-        vertical: AppDimensions.space64,
-      ),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.backgroundWhite,
-          border: Border.all(color: AppColors.borderBlueMutedLight),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-          boxShadow: AppShadows.overAll,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space32,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                padding: const EdgeInsets.all(AppDimensions.space8),
-                decoration: BoxDecoration(
-                  color: AppColors.errorLight,
-                  borderRadius: BorderRadius.circular(64),
-                ),
-                child: AppIcon(
-                  icon,
-                  color: AppColors.errorDark,
-                ),
+    final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final cancelButton = AppButton(
+      label: cancelLabel,
+      hierarchy: AppButtonHierarchy.tertiary,
+      isExpanded: true,
+      onPressed: onCancel,
+    );
+    final confirmButton = AppButton(
+      label: confirmLabel,
+      intent: AppButtonIntent.destructive,
+      isExpanded: true,
+      onPressed: onConfirm,
+    );
+
+    return Semantics(
+      container: true,
+      scopesRoute: true,
+      namesRoute: true,
+      explicitChildNodes: true,
+      label: semanticsLabel ?? title,
+      child: FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.space16,
+            vertical: AppDimensions.space64,
+          ),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.backgroundWhite,
+              border: Border.all(color: AppColors.borderBlueMutedLight),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+              boxShadow: AppShadows.overAll,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.space16,
+              vertical: AppDimensions.space32,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: ExcludeSemantics(
+                      child: Container(
+                        padding: const EdgeInsets.all(AppDimensions.space8),
+                        decoration: BoxDecoration(
+                          color: AppColors.errorLight,
+                          borderRadius: BorderRadius.circular(64),
+                        ),
+                        child: AppIcon(icon, color: AppColors.errorDark),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space12),
+                  Semantics(
+                    header: true,
+                    headingLevel: 1,
+                    sortKey: const OrdinalSortKey(1),
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.h3.copyWith(color: AppColors.primary),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space24),
+                  Semantics(
+                    sortKey: const OrdinalSortKey(2),
+                    child: Text(
+                      description,
+                      style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space16),
+                  Semantics(
+                    sortKey: const OrdinalSortKey(3),
+                    child: useVerticalLayout
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              cancelButton,
+                              const SizedBox(height: AppDimensions.space8),
+                              confirmButton,
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              Expanded(child: cancelButton),
+                              const SizedBox(width: AppDimensions.space16),
+                              Expanded(child: confirmButton),
+                            ],
+                          ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: AppDimensions.space12),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: AppTypography.h3.copyWith(color: AppColors.primary),
-            ),
-            const SizedBox(height: AppDimensions.space24),
-            Text(
-              description,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            Row(
-              children: [
-                Expanded(
-                  child: AppButton(
-                    label: cancelLabel,
-                    hierarchy: AppButtonHierarchy.tertiary,
-                    isExpanded: true,
-                    onPressed: onCancel,
-                  ),
-                ),
-                const SizedBox(width: AppDimensions.space16),
-                Expanded(
-                  child: AppButton(
-                    label: confirmLabel,
-                    intent: AppButtonIntent.destructive,
-                    isExpanded: true,
-                    onPressed: onConfirm,
-                  ),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -788,7 +1001,12 @@ class AppSuccessDialog extends StatelessWidget {
     required this.onSecondary,
     required this.onPrimary,
     super.key,
-  });
+    this.semanticsLabel,
+  }) : assert(title.length > 0, 'title must not be empty'),
+       assert(description.length > 0, 'description must not be empty'),
+       assert(secondaryLabel.length > 0, 'secondaryLabel must not be empty'),
+       assert(primaryLabel.length > 0, 'primaryLabel must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final String title;
   final String description;
@@ -796,6 +1014,7 @@ class AppSuccessDialog extends StatelessWidget {
   final String primaryLabel;
   final VoidCallback onSecondary;
   final VoidCallback onPrimary;
+  final String? semanticsLabel;
 
   /// Displays this dialog. Dismissal is only via [onSecondary]/[onPrimary],
   /// each of which pops this dialog (using its own route context, not the
@@ -809,9 +1028,11 @@ class AppSuccessDialog extends StatelessWidget {
     required final String primaryLabel,
     required final VoidCallback onSecondary,
     required final VoidCallback onPrimary,
+    final String? semanticsLabel,
   }) {
     return showDialog<void>(
       context: context,
+      requestFocus: true,
       barrierDismissible: false,
       barrierColor: const Color(0xCC031B35),
       builder: (final ctx) => AppSuccessDialog(
@@ -819,6 +1040,7 @@ class AppSuccessDialog extends StatelessWidget {
         description: description,
         secondaryLabel: secondaryLabel,
         primaryLabel: primaryLabel,
+        semanticsLabel: semanticsLabel,
         onSecondary: () {
           Navigator.of(ctx).pop();
           onSecondary();
@@ -833,66 +1055,99 @@ class AppSuccessDialog extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space16,
-        vertical: AppDimensions.space64,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: Border.all(color: AppColors.borderBlueMutedLight),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-          boxShadow: AppShadows.overAll,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space32,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                padding: const EdgeInsets.all(AppDimensions.space8),
-                decoration: BoxDecoration(
-                  color: AppColors.successLight,
-                  borderRadius: BorderRadius.circular(64),
-                ),
-                child: const AppIcon(
-                  AppIcons.checkCircle,
-                  color: AppColors.successDark,
-                ),
+    final l10n = AppLocalizations.of(context);
+    final dialogLabel = semanticsLabel ?? l10n.a11yAlert(l10n.a11yAlertSuccess, title);
+
+    return Semantics(
+      container: true,
+      scopesRoute: true,
+      namesRoute: true,
+      explicitChildNodes: true,
+      label: dialogLabel,
+      child: FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.space16,
+            vertical: AppDimensions.space64,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              border: Border.all(color: AppColors.borderBlueMutedLight),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+              boxShadow: AppShadows.overAll,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.space16,
+              vertical: AppDimensions.space32,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: ExcludeSemantics(
+                      child: Container(
+                        padding: const EdgeInsets.all(AppDimensions.space8),
+                        decoration: BoxDecoration(
+                          color: AppColors.successLight,
+                          borderRadius: BorderRadius.circular(64),
+                        ),
+                        child: const AppIcon(
+                          AppIcons.checkCircle,
+                          color: AppColors.successDark,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space12),
+                  Semantics(
+                    header: true,
+                    headingLevel: 1,
+                    sortKey: const OrdinalSortKey(1),
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.h3.copyWith(color: AppColors.primary),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space16),
+                  Semantics(
+                    sortKey: const OrdinalSortKey(2),
+                    child: Text(
+                      description,
+                      style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space16),
+                  Semantics(
+                    sortKey: const OrdinalSortKey(3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        AppButton(
+                          label: secondaryLabel,
+                          hierarchy: AppButtonHierarchy.tertiary,
+                          isExpanded: true,
+                          onPressed: onSecondary,
+                        ),
+                        const SizedBox(height: AppDimensions.space16),
+                        AppButton(
+                          label: primaryLabel,
+                          leadingIcon: AppIcons.check,
+                          isExpanded: true,
+                          onPressed: onPrimary,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: AppDimensions.space12),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: AppTypography.h3.copyWith(color: AppColors.primary),
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            Text(
-              description,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: secondaryLabel,
-              hierarchy: AppButtonHierarchy.tertiary,
-              isExpanded: true,
-              onPressed: onSecondary,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: primaryLabel,
-              leadingIcon: AppIcons.check,
-              isExpanded: true,
-              onPressed: onPrimary,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -906,19 +1161,16 @@ class AppSuccessDialog extends StatelessWidget {
 class AppBiometricAccessDialog {
   const AppBiometricAccessDialog._();
 
-  static const title = '¿Quieres activar el acceso rápido con huella/reconocimiento facial?';
-  static const description = 'Esto te permitirá entrar en la aplicación sin la necesidad de autenticarte. Cada cierto tiempo se te pedirá autenticación para mantener siempre tus datos a salvo.';
-  static const cancelLabel = 'Cancelar';
-  static const confirmLabel = 'Activar';
-
   static Future<bool?> show(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AppAlertDialog.show(
       context,
       icon: AppIcons.fingerprint,
-      title: title,
-      description: description,
-      confirmLabel: confirmLabel,
-      cancelLabel: cancelLabel,
+      title: l10n.biometricAccessDialogTitle,
+      description: l10n.biometricAccessDialogDescription,
+      confirmLabel: l10n.biometricAccessDialogConfirm,
+      cancelLabel: l10n.biometricAccessDialogCancel,
     );
   }
 }
@@ -938,29 +1190,37 @@ class _DialogCheckboxRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space16),
-      child: InkWell(
-        onTap: () => onChanged?.call(!isChecked),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              isChecked ? Icons.check_box_outlined : Icons.check_box_outline_blank,
-              size: AppDimensions.iconMedium,
-              color: AppColors.primary,
-            ),
-            const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: Text(
-                label,
-                style: AppTypography.leadingMedium.copyWith(
+    return Semantics(
+      container: true,
+      label: label,
+      checked: isChecked,
+      enabled: onChanged == null ? false : null,
+      onTap: onChanged == null ? null : () => onChanged?.call(!isChecked),
+      child: ExcludeSemantics(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+          child: InkWell(
+            onTap: onChanged == null ? null : () => onChanged?.call(!isChecked),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+            child: Row(
+              children: [
+                Icon(
+                  isChecked ? Icons.check_box_outlined : Icons.check_box_outline_blank,
+                  size: AppDimensions.iconMedium,
                   color: AppColors.primary,
                 ),
-              ),
+                const SizedBox(width: AppDimensions.space8),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: AppTypography.leadingMedium.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -986,6 +1246,21 @@ class _DialogActions extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final cancelButton = AppButton(
+      label: cancelLabel,
+      onPressed: onCancel,
+      hierarchy: AppButtonHierarchy.tertiary,
+      leadingIcon: AppIcons.cancel,
+      isExpanded: true,
+    );
+    final confirmButton = AppButton(
+      label: confirmLabel,
+      onPressed: onConfirm,
+      leadingIcon: AppIcons.check,
+      isExpanded: true,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -998,34 +1273,18 @@ class _DialogActions extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space16),
         ],
-        Row(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: AppDimensions.minTouchTarget,
-                child: AppButton(
-                  label: cancelLabel,
-                  onPressed: onCancel,
-                  hierarchy: AppButtonHierarchy.tertiary,
-                  leadingIcon: AppIcons.cancel,
-                  isExpanded: true,
-                ),
-              ),
-            ),
-            const SizedBox(width: AppDimensions.space16),
-            Expanded(
-              child: SizedBox(
-                height: AppDimensions.minTouchTarget,
-                child: AppButton(
-                  label: confirmLabel,
-                  onPressed: onConfirm,
-                  leadingIcon: AppIcons.check,
-                  isExpanded: true,
-                ),
-              ),
-            ),
-          ],
-        ),
+        if (useVerticalLayout) ...[
+          cancelButton,
+          const SizedBox(height: AppDimensions.space8),
+          confirmButton,
+        ] else
+          Row(
+            children: [
+              Expanded(child: cancelButton),
+              const SizedBox(width: AppDimensions.space16),
+              Expanded(child: confirmButton),
+            ],
+          ),
       ],
     );
   }

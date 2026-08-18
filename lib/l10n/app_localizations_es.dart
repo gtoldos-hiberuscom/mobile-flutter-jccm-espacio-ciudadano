@@ -24,6 +24,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingTaglineHighlight => 'Castilla-La Mancha';
 
   @override
+  String landingAccessStepLabel(int stepNumber) {
+    return 'Paso $stepNumber';
+  }
+
+  @override
   String get landingCtaButton => 'Acceder a mi Espacio ciudadano';
 
   @override
@@ -130,6 +135,18 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sessionUnlockBiometricReason => 'Confirma tu identidad para acceder a tu espacio';
+
+  @override
+  String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella o reconocimiento facial?';
+
+  @override
+  String get biometricAccessDialogDescription => 'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.';
+
+  @override
+  String get biometricAccessDialogCancel => 'Ahora no';
+
+  @override
+  String get biometricAccessDialogConfirm => 'Activar acceso rápido';
 
   @override
   String get consentPageTitle => 'Condiciones de uso';
@@ -299,6 +316,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get externalLinkA11yHint => 'Abre en navegador externo';
+
+  @override
+  String get externalLinkVisibleNotice => 'Enlace externo · Se abrirá fuera de la aplicación';
 
   @override
   String get externalLinkOpenFailed => 'No se pudo abrir el enlace. Inténtalo de nuevo más tarde.';
@@ -1418,6 +1438,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsDefinitive => 'DEFINITIVO';
 
   @override
+  String get digitalCardTitleLabel => 'Título / Carnet';
+
+  @override
+  String get digitalCardNumberLabel => 'Número de carnet';
+
+  @override
+  String get digitalCardDownload => 'Descargar';
+
+  @override
   String get digitalCardsStatusAvailable => 'Disponible';
 
   @override
@@ -1667,6 +1696,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get caseworkUploadStatusFailed => 'Error';
+
+  @override
+  String get fileUploadCancel => 'Cancelar';
+
+  @override
+  String get fileUploadRemove => 'Eliminar';
+
+  @override
+  String get fileUploadDelete => 'Eliminar archivo';
+
+  @override
+  String get fileUploadRetry => 'Reintentar';
+
+  @override
+  String a11yFileUpload(String fileName, String fileInfo, String status) {
+    return 'Archivo: $fileName, $fileInfo. Estado: $status';
+  }
 
   @override
   String get caseworkUploadErrorUnsupportedMime => 'Formato no admitido.';
@@ -2544,7 +2590,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsTitle => 'Mis Recomendaciones';
 
   @override
-  String get recommendationsTabAll => 'Todos';
+  String get recommendationsTabAll => 'Todo';
 
   @override
   String get recommendationsTabRecent => 'Últimos días';
@@ -2569,6 +2615,58 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get recommendationsAssociatedLifeEventsLabel => 'Hechos vitales asociados';
+
+  @override
+  String get recommendationsStatusLabel => 'Estado';
+
+  @override
+  String get appCardReferenceLabel => 'N.º ref.';
+
+  @override
+  String get appCardExpiryLabel => 'Expiración';
+
+  @override
+  String get appProgressLabel => 'Progreso';
+
+  @override
+  String get appProgressIndeterminateValue => 'En curso';
+
+  @override
+  String appProgressPercentage(int percentage) {
+    return '$percentage %';
+  }
+
+  @override
+  String get appAvatarLabel => 'Avatar';
+
+  @override
+  String get appAvatarAvailableStatus => 'Disponible';
+
+  @override
+  String appPhoneCallLabel(String number, String subtitle) {
+    return 'Llamar al $number. $subtitle';
+  }
+
+  @override
+  String get appPhoneCallHint => 'Inicia una llamada telefónica';
+
+  @override
+  String get a11yBack => 'Volver';
+
+  @override
+  String get a11yClose => 'Cerrar';
+
+  @override
+  String get a11yHelp => 'Ayuda';
+
+  @override
+  String get a11yAppName => 'Espacio Ciudadano';
+
+  @override
+  String get a11yCancel => 'Cancelar';
+
+  @override
+  String get a11yInformation => 'Información';
 
   @override
   String get recommendationsLoadMore => 'Ver más';
@@ -2634,7 +2732,172 @@ class AppLocalizationsEs extends AppLocalizations {
   String get a11yContentLoaded => 'Contenido cargado';
 
   @override
+  String a11yFieldError(String field, String error) {
+    return 'Error, $field: $error';
+  }
+
+  @override
+  String a11yExpandTextArea(String field) {
+    return 'Ampliar $field';
+  }
+
+  @override
+  String a11yCollapseTextArea(String field) {
+    return 'Contraer $field';
+  }
+
+  @override
+  String a11ySelectPhoneCountryCode(String countryCode) {
+    return 'Seleccionar prefijo telefónico, actual $countryCode';
+  }
+
+  @override
+  String a11yFilterButtonActiveCount(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count filtros activos',
+      one: '1 filtro activo',
+    );
+    return '$label, $_temp0';
+  }
+
+  @override
+  String get a11yFilterActions => 'Acciones de filtros';
+
+  @override
+  String get listFilterClear => 'Limpiar filtros';
+
+  @override
+  String get listFilterApply => 'Aplicar filtros';
+
+  @override
+  String get listFilterSelectDateRange => 'Seleccionar rango de fechas';
+
+  @override
+  String get listFilterSelectStartDate => 'Selecciona la fecha inicial.';
+
+  @override
+  String get listFilterSelectEndDate => 'Selecciona la fecha final.';
+
+  @override
+  String get listFilterRangeSelected => 'Rango seleccionado.';
+
+  @override
+  String get listFilterRemoveRange => 'Quitar rango';
+
+  @override
+  String get listFilterConfirmRange => 'Seleccionar rango';
+
+  @override
+  String a11yListFilterDateRange(String label, String startDate, String endDate) {
+    return '$label. Desde $startDate hasta $endDate';
+  }
+
+  @override
+  String a11yErrorState(String message) {
+    return 'Error: $message';
+  }
+
+  @override
+  String a11yEmptyState(String message) {
+    return 'Sin contenido: $message';
+  }
+
+  @override
+  String a11yBlockedState(String message) {
+    return 'Acceso no disponible: $message';
+  }
+
+  @override
+  String a11yAlert(String title, String message) {
+    return '$title: $message';
+  }
+
+  @override
+  String get a11yAlertNeutral => 'Aviso del sistema';
+
+  @override
+  String get a11yAlertSuccess => 'Operación correcta';
+
+  @override
+  String get a11yAgendaTypeNotification => 'Notificación';
+
+  @override
+  String get a11yAgendaTypeHealth => 'Cita sanitaria';
+
+  @override
+  String get a11yAgendaTypeCredential => 'Caducidad de acreditación';
+
+  @override
+  String a11yAgendaCard(String type, String details) {
+    return '$type: $details';
+  }
+
+  @override
+  String a11yAttachmentField(String label, String hint) {
+    return '$label. $hint';
+  }
+
+  @override
+  String a11yRequiredAttachmentField(String label, String hint) {
+    return '$label, obligatorio. $hint';
+  }
+
+  @override
+  String a11yAttachmentSelected(String fileName, String fileInfo) {
+    return 'Archivo adjunto: $fileName, $fileInfo';
+  }
+
+  @override
+  String get a11yBottomSheet => 'Panel inferior';
+
+  @override
+  String get a11yBottomSheetClose => 'Salir';
+
+  @override
+  String get a11yCalendar => 'Calendario';
+
+  @override
+  String a11yCalendarMonth(String monthYear) {
+    return 'Mes mostrado: $monthYear';
+  }
+
+  @override
+  String a11ySelectCalendarMonthYear(String monthYear) {
+    return 'Seleccionar mes y año, actual $monthYear';
+  }
+
+  @override
+  String get a11yCalendarHasEvent => 'con evento';
+
+  @override
+  String get a11yCalendarOutsideMonth => 'fuera del mes mostrado';
+
+  @override
+  String a11yCaptcha(String label, String badge) {
+    return '$label, verificación $badge';
+  }
+
+  @override
+  String get a11yCaptchaVerified => 'Captcha verificado';
+
+  @override
+  String get a11yAlertWarning => 'Advertencia';
+
+  @override
+  String get a11yAlertError => 'Error';
+
+  @override
   String get drawerPreferences => 'Preferencias';
+
+  @override
+  String drawerGreeting(String userName) {
+    return 'Hola, $userName';
+  }
+
+  @override
+  String get drawerLogout => 'Cerrar sesión';
 
   @override
   String get drawerHelpAndContact => 'Ayuda y contacto';

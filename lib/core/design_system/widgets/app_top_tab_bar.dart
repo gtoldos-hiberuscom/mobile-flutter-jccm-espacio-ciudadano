@@ -22,7 +22,18 @@ class AppTopTabBar extends StatelessWidget {
     required this.selectedIndex,
     required this.onTabSelected,
     super.key,
-  });
+    this.semanticLabels,
+    this.semanticLabel,
+  }) : assert(tabs.length > 0, 'tabs must not be empty'),
+       assert(
+         selectedIndex >= 0 && selectedIndex < tabs.length,
+         'selectedIndex must identify an existing tab',
+       ),
+       assert(
+         semanticLabels == null || semanticLabels.length == tabs.length,
+         'semanticLabels must match tabs length',
+       ),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   /// List of tab labels to display.
   final List<String> tabs;
@@ -33,35 +44,47 @@ class AppTopTabBar extends StatelessWidget {
   /// Callback when a tab is tapped.
   final ValueChanged<int> onTabSelected;
 
+  /// Optional spoken names for labels containing abbreviations or symbols.
+  final List<String>? semanticLabels;
+
+  /// Optional accessible name for the complete tab group.
+  final String? semanticLabel;
+
   @override
   Widget build(final BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: AppColors.statusNeutralLight,
-        border: Border(
-          bottom: BorderSide(color: AppColors.borderBlueMutedLight),
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: semanticLabel,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: AppColors.statusNeutralLight,
+          border: Border(
+            bottom: BorderSide(color: AppColors.borderBlueMutedLight),
+          ),
         ),
-      ),
-      child: SizedBox(
-        height: 40,
-        child: Row(
-          children: [
-            for (var i = 0; i < tabs.length; i++) ...[
-              if (i > 0)
-                const VerticalDivider(
-                  width: 1,
-                  thickness: 1,
-                  color: AppColors.borderBlueMutedLight,
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < tabs.length; i++) ...[
+                if (i > 0)
+                  const VerticalDivider(
+                    width: 1,
+                    thickness: 1,
+                    color: AppColors.borderBlueMutedLight,
+                  ),
+                Expanded(
+                  child: _TopTab(
+                    label: tabs[i],
+                    semanticLabel: semanticLabels?[i],
+                    isSelected: i == selectedIndex,
+                    onTap: () => onTabSelected(i),
+                  ),
                 ),
-              Expanded(
-                child: _TopTab(
-                  label: tabs[i],
-                  isSelected: i == selectedIndex,
-                  onTap: () => onTabSelected(i),
-                ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -71,52 +94,62 @@ class AppTopTabBar extends StatelessWidget {
 class _TopTab extends StatelessWidget {
   const _TopTab({
     required this.label,
+    required this.semanticLabel,
     required this.isSelected,
     required this.onTap,
   });
 
   final String label;
+  final String? semanticLabel;
   final bool isSelected;
   final VoidCallback onTap;
 
   @override
   Widget build(final BuildContext context) {
     return Semantics(
+      container: true,
+      excludeSemantics: true,
       button: true,
       selected: isSelected,
+      label: semanticLabel ?? label,
+      onTap: onTap,
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: AppTypography.smallRegular.copyWith(
-                      color: AppColors.textBase,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+          child: InkWell(
+            onTap: onTap,
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.space8,
+                      vertical: AppDimensions.space8,
+                    ),
+                    child: Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.smallRegular.copyWith(
+                        color: AppColors.textBase,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (isSelected)
-                Container(
-                  width: AppDimensions.iconMedium,
-                  height: AppDimensions.space4,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(AppDimensions.radiusXs),
+                if (isSelected)
+                  Container(
+                    width: AppDimensions.iconMedium,
+                    height: AppDimensions.space4,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(AppDimensions.radiusXs),
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

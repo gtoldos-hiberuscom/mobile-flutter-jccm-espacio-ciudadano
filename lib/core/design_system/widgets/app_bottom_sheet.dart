@@ -1,12 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// A modal bottom-sheet following the JCCM design system (Figma node 113:5701).
 ///
@@ -26,7 +28,10 @@ class AppBottomSheet extends StatelessWidget {
     this.footer,
     this.onClose,
     this.horizontalMargin = AppDimensions.space16,
-  });
+    this.semanticsLabel,
+  }) : assert(title == null || title.length > 0, 'title must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
+       assert(horizontalMargin >= 0, 'horizontalMargin must not be negative');
 
   /// Bold title displayed below the drag handle.
   final String? title;
@@ -43,6 +48,10 @@ class AppBottomSheet extends StatelessWidget {
   /// Horizontal spacing between the sheet and the viewport edge.
   final double horizontalMargin;
 
+  /// Accessible route name. Falls back to [title] or a localized generic
+  /// bottom-sheet label.
+  final String? semanticsLabel;
+
   /// Shows the bottom sheet as a modal with the JCCM scrim colour.
   static Future<T?> show<T>({
     required final BuildContext context,
@@ -53,9 +62,11 @@ class AppBottomSheet extends StatelessWidget {
     final bool isDismissible = true,
     final bool enableDrag = true,
     final double horizontalMargin = AppDimensions.space16,
+    final String? semanticsLabel,
   }) {
     return showModalBottomSheet<T>(
       context: context,
+      requestFocus: true,
       backgroundColor: Colors.transparent,
       barrierColor: const Color(0xCC031B35),
       isDismissible: isDismissible,
@@ -67,6 +78,7 @@ class AppBottomSheet extends StatelessWidget {
         footer: footer,
         onClose: onClose,
         horizontalMargin: horizontalMargin,
+        semanticsLabel: semanticsLabel,
       ),
     );
   }
@@ -74,58 +86,76 @@ class AppBottomSheet extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
+    final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
+    final l10n = AppLocalizations.of(context);
     return Semantics(
       container: true,
       scopesRoute: true,
       namesRoute: true,
       explicitChildNodes: true,
-      label: title ?? 'Panel inferior',
-      child: SafeArea(
-        child: Padding(
-          padding:
-              EdgeInsets.only(
-                bottom: isLandscape ? AppDimensions.space8 : AppDimensions.space40,
-                top: isLandscape ? AppDimensions.space8 : AppDimensions.space32,
-              ).copyWith(
-                left: horizontalMargin,
-                right: horizontalMargin,
-              ),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.backgroundWhite,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-              border: Border.all(color: AppColors.neutral300),
-              boxShadow: AppShadows.overAll,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildHeader(context),
-                if (title != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.space16,
-                    ),
-                    child: _buildTitle(),
-                  ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.space16,
-                    ),
-                    child: body,
-                  ),
+      label: semanticsLabel ?? title ?? l10n.a11yBottomSheet,
+      child: FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: SafeArea(
+          child: Padding(
+            padding:
+                EdgeInsets.only(
+                  bottom: (isLandscape ? AppDimensions.space8 : AppDimensions.space40) + keyboardInset,
+                  top: isLandscape ? AppDimensions.space8 : AppDimensions.space32,
+                ).copyWith(
+                  left: horizontalMargin,
+                  right: horizontalMargin,
                 ),
-                if (footer != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.space16,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.backgroundWhite,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+                border: Border.all(color: AppColors.neutral300),
+                boxShadow: AppShadows.overAll,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildHeader(context, l10n),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (title != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.space16,
+                              ),
+                              child: _buildTitle(),
+                            ),
+                          Semantics(
+                            sortKey: const OrdinalSortKey(2),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.space16,
+                              ),
+                              child: body,
+                            ),
+                          ),
+                          if (footer != null)
+                            Semantics(
+                              sortKey: const OrdinalSortKey(3),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.space16,
+                                ),
+                                child: footer,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                    child: footer,
                   ),
-                SizedBox(height: isLandscape ? AppDimensions.space16 : AppDimensions.space32),
-              ],
+                  SizedBox(height: isLandscape ? AppDimensions.space16 : AppDimensions.space32),
+                ],
+              ),
             ),
           ),
         ),
@@ -133,7 +163,7 @@ class AppBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(final BuildContext context) {
+  Widget _buildHeader(final BuildContext context, final AppLocalizations l10n) {
     return SizedBox(
       height: AppDimensions.space48,
       child: Stack(
@@ -154,34 +184,39 @@ class AppBottomSheet extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: Semantics(
-              label: 'Cerrar',
+              sortKey: const OrdinalSortKey(4),
+              label: MaterialLocalizations.of(context).closeButtonTooltip,
               button: true,
-              child: GestureDetector(
-                onTap: onClose ?? () => Navigator.of(context).pop(),
-                child: ExcludeSemantics(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.space8,
-                      vertical: AppDimensions.space4,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Salir',
-                          style: AppTypography.leadingMedium.copyWith(
-                            color: AppColors.textBase,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w400,
-                          ),
+              onTap: onClose ?? () => Navigator.of(context).pop(),
+              child: ExcludeSemantics(
+                child: InkWell(
+                  onTap: onClose ?? () => Navigator.of(context).pop(),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  child: ExcludeSemantics(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              l10n.a11yBottomSheetClose,
+                              style: AppTypography.leadingMedium.copyWith(
+                                color: AppColors.textBase,
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: AppDimensions.space8),
+                            const Icon(
+                              Icons.close,
+                              size: 20,
+                              color: AppColors.textBase,
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: AppDimensions.space8),
-                        const Icon(
-                          Icons.close,
-                          size: 20,
-                          color: AppColors.textBase,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -194,17 +229,22 @@ class AppBottomSheet extends StatelessWidget {
   }
 
   Widget _buildTitle() {
-    return SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: AppDimensions.space4,
-          bottom: AppDimensions.space8,
-        ),
-        child: Text(
-          title ?? '',
-          style: AppTypography.leadingBold.copyWith(
-            color: AppColors.primary,
+    return Semantics(
+      header: true,
+      headingLevel: 1,
+      sortKey: const OrdinalSortKey(1),
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: AppDimensions.space4,
+            bottom: AppDimensions.space8,
+          ),
+          child: Text(
+            title ?? '',
+            style: AppTypography.leadingBold.copyWith(
+              color: AppColors.primary,
+            ),
           ),
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// State for [AppDescriptionText] — mirrors Figma "Description Text" node.
 enum AppDescriptionTextState {
@@ -17,13 +19,20 @@ class AppDescriptionText extends StatelessWidget {
     required this.text,
     super.key,
     this.state = AppDescriptionTextState.helper,
-  });
+    this.semanticsLabel,
+    this.announceChanges = true,
+  }) : assert(text.length > 0, 'text must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final String text;
   final AppDescriptionTextState state;
+  final String? semanticsLabel;
+  final bool announceChanges;
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final isError = state == AppDescriptionTextState.error;
     final (color, icon) = switch (state) {
       AppDescriptionTextState.helper => (
         AppColors.neutralDark,
@@ -35,26 +44,25 @@ class AppDescriptionText extends StatelessWidget {
       ),
     };
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: AppDimensions.iconMedium, color: color),
-        const SizedBox(width: AppDimensions.space8),
-        Flexible(
-          child: Text(
-            text,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              height: 1.5,
-              letterSpacing: 0,
-            ).copyWith(color: color),
-          ),
+    return Semantics(
+      container: true,
+      label: semanticsLabel ?? (isError ? l10n.a11yErrorState(text) : text),
+      liveRegion: isError && announceChanges,
+      child: ExcludeSemantics(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: AppDimensions.iconMedium, color: color),
+            const SizedBox(width: AppDimensions.space8),
+            Expanded(
+              child: Text(
+                text,
+                style: (isError ? AppTypography.bodyRegular : AppTypography.smallRegular).copyWith(color: color),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

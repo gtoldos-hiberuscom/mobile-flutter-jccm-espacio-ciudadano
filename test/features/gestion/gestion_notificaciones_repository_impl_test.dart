@@ -202,6 +202,70 @@ void main() {
       expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/notificaciones/7924');
     });
 
+    test('ignores a document that only contains technical references', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 152,
+              'concepto': 'Transmisiones patrimoniales',
+              'estado': 'EXPIRADA',
+              'documentos': [
+                {
+                  'orden': 1,
+                  'identificadorReferencia': 'DOC-001',
+                  'documento': {
+                    'id': 12345,
+                    'identificador': 'notifica-doc-12345',
+                    'aplicacion': 'notifica2',
+                    'tipoEntidad': 'DOCUMENTO',
+                  },
+                },
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 152,
+        estado: 'expirada',
+      );
+
+      expect(detail.documentos, isEmpty);
+    });
+
+    test('ignores unnamed documents instead of inventing visible names', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 152,
+              'documentos': [
+                {'orden': 0},
+                <String, Object?>{},
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 152,
+        estado: 'expirada',
+      );
+
+      expect(detail.documentos, isEmpty);
+    });
+
     test('accepts a pending notification through the UAT comparecer endpoint', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_captcha_placeholder.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('privacy URL is visibly identified as an external link', (final tester) async {
@@ -8,6 +9,9 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: AppPrivacyInfoText(
             description: 'Información publicada en',

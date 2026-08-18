@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
@@ -7,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_list.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 enum AppNavBarType { inicio, main, level2, detail, grey }
 
@@ -25,8 +27,13 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.showNotifications = true,
     this.onAvatarTap,
     this.onNotificationsTap,
+    this.onHelpTap,
     this.profileInitials,
-  });
+  }) : assert(title == null || title != '', 'title must not be empty'),
+       assert(
+         profileInitials == null || profileInitials != '',
+         'profileInitials must not be empty',
+       );
 
   final AppNavBarType type;
   final String? title;
@@ -47,6 +54,9 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// Called when the notifications icon is tapped.
   final VoidCallback? onNotificationsTap;
+
+  /// Called from the help action shown to unauthenticated users on Inicio.
+  final VoidCallback? onHelpTap;
 
   @override
   Size get preferredSize => Size.fromHeight(
@@ -74,7 +84,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     _ => AppColors.textPrimary,
   };
 
-  Widget? get _leadingWidget {
+  Widget? _leadingWidget(final AppLocalizations l10n) {
     if (!showLeading) {
       return null;
     }
@@ -83,7 +93,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       return leading;
     }
 
-    return switch (type) {
+    final button = switch (type) {
       AppNavBarType.level2 || AppNavBarType.detail => IconButton(
         icon: Icon(
           type == AppNavBarType.detail ? Icons.close_rounded : Icons.arrow_back_rounded,
@@ -91,13 +101,14 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
           size: type == AppNavBarType.level2 ? AppDimensions.iconLarge : null,
         ),
         onPressed: onBack ?? onClose,
-        tooltip: type == AppNavBarType.detail ? 'Cerrar' : 'Volver',
+        tooltip: type == AppNavBarType.detail ? l10n.a11yClose : l10n.a11yBack,
       ),
       _ => null,
     };
+    return button == null ? null : Semantics(sortKey: const OrdinalSortKey(1), child: button);
   }
 
-  List<Widget>? get _effectiveActions {
+  List<Widget>? _effectiveActions(final AppLocalizations l10n) {
     final items = <Widget>[...?actions];
 
     if (isLoggedIn && showNotifications && type != AppNavBarType.inicio) {
@@ -109,7 +120,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           icon: const AppSvgIcon(AppIconAssets.notifications, color: AppColors.textPrimary),
           onPressed: onNotificationsTap,
-          tooltip: 'Notificaciones',
+          tooltip: l10n.userMenuNotifications,
         ),
       );
     }
@@ -120,11 +131,10 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: AppDimensions.space8),
           child: IconButton(
             onPressed: onAvatarTap,
-            tooltip: 'Perfil',
+            tooltip: l10n.userMenuProfile,
             icon: AppAvatar(
               initials: profileInitials,
               size: AppAvatarSize.small,
-              semanticsLabel: 'Perfil',
             ),
           ),
         ),
@@ -152,6 +162,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (type == AppNavBarType.inicio) {
       return _InicioNavBar(
         isLoggedIn: isLoggedIn,
@@ -159,6 +170,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
         actions: actions,
         onAvatarTap: onAvatarTap,
         onNotificationsTap: onNotificationsTap,
+        onHelpTap: onHelpTap,
         profileInitials: profileInitials,
       );
     }
@@ -173,9 +185,20 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
         _ => AppDimensions.appBarHeight,
       },
       titleSpacing: showLeading ? null : AppDimensions.space16,
-      leading: _leadingWidget,
-      title: _titleWidget,
-      actions: _effectiveActions,
+      leading: _leadingWidget(l10n),
+      title: title == null
+          ? _titleWidget
+          : Semantics(
+              header: true,
+              headingLevel: 1,
+              sortKey: const OrdinalSortKey(0),
+              child: Text(
+                title!,
+                maxLines: 2,
+                style: AppTypography.h3.copyWith(color: _foregroundColor),
+              ),
+            ),
+      actions: _effectiveActions(l10n),
       elevation: 0,
       shadowColor: Colors.transparent,
       bottom: type == AppNavBarType.level2
@@ -228,6 +251,7 @@ class _InicioNavBar extends StatelessWidget {
     this.actions,
     this.onAvatarTap,
     this.onNotificationsTap,
+    this.onHelpTap,
     this.profileInitials,
   });
 
@@ -236,11 +260,13 @@ class _InicioNavBar extends StatelessWidget {
   final List<Widget>? actions;
   final VoidCallback? onAvatarTap;
   final VoidCallback? onNotificationsTap;
+  final VoidCallback? onHelpTap;
   final String? profileInitials;
 
   @override
   Widget build(final BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
+    final l10n = AppLocalizations.of(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -261,9 +287,17 @@ class _InicioNavBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
-                height: 48,
-                child: AppBrandLogo(),
+              Semantics(
+                header: true,
+                headingLevel: 1,
+                sortKey: const OrdinalSortKey(0),
+                label: l10n.a11yAppName,
+                child: const ExcludeSemantics(
+                  child: SizedBox(
+                    height: 48,
+                    child: AppBrandLogo(),
+                  ),
+                ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -273,8 +307,8 @@ class _InicioNavBar extends StatelessWidget {
                     if (showNotifications) ...[
                       IconButton(
                         constraints: const BoxConstraints.tightFor(
-                          width: AppDimensions.iconLarge,
-                          height: AppDimensions.iconLarge,
+                          width: AppDimensions.minTouchTarget,
+                          height: AppDimensions.minTouchTarget,
                         ),
                         padding: EdgeInsets.zero,
                         icon: const AppSvgIcon(
@@ -282,7 +316,7 @@ class _InicioNavBar extends StatelessWidget {
                           color: AppColors.textPrimary,
                         ),
                         onPressed: onNotificationsTap,
-                        tooltip: 'Notificaciones',
+                        tooltip: l10n.userMenuNotifications,
                       ),
                       const SizedBox(width: AppDimensions.space16),
                     ],
@@ -293,26 +327,25 @@ class _InicioNavBar extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.all(AppDimensions.space8),
                       onPressed: onAvatarTap,
-                      tooltip: 'Perfil',
+                      tooltip: l10n.userMenuProfile,
                       icon: AppAvatar(
                         initials: profileInitials,
                         size: AppAvatarSize.small,
-                        semanticsLabel: 'Perfil',
                       ),
                     ),
                   ] else
                     IconButton(
                       constraints: const BoxConstraints.tightFor(
-                        width: AppDimensions.iconLarge,
-                        height: AppDimensions.iconLarge,
+                        width: AppDimensions.minTouchTarget,
+                        height: AppDimensions.minTouchTarget,
                       ),
                       padding: EdgeInsets.zero,
                       icon: const AppSvgIcon(
                         AppIconAssets.help,
                         color: AppColors.textPrimary,
                       ),
-                      onPressed: () {},
-                      tooltip: 'Ayuda',
+                      onPressed: onHelpTap,
+                      tooltip: l10n.a11yHelp,
                     ),
                 ],
               ),
@@ -333,14 +366,29 @@ class _InicioNavBar extends StatelessWidget {
 ///
 /// Uses `assets/images/logo.svg`.
 class AppBrandLogo extends StatelessWidget {
-  const AppBrandLogo({super.key, this.height = 40});
+  const AppBrandLogo({
+    super.key,
+    this.height = 40,
+    this.semanticsLabel,
+    this.decorative = false,
+  }) : assert(height > 0, 'height must be greater than zero'),
+       assert(
+         semanticsLabel == null || semanticsLabel != '',
+         'semanticsLabel must not be empty',
+       );
 
   /// Overall height constraint for the logo.
   final double height;
 
+  /// Optional accessible brand name. Defaults to the localized application name.
+  final String? semanticsLabel;
+
+  /// Excludes the logo when the surrounding component already announces it.
+  final bool decorative;
+
   @override
   Widget build(final BuildContext context) {
-    return Row(
+    final logo = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
@@ -349,29 +397,45 @@ class AppBrandLogo extends StatelessWidget {
           child: SvgPicture.asset(
             'assets/images/logo.svg',
             height: height,
-            semanticsLabel: 'Escudo de Castilla-La Mancha',
+            excludeFromSemantics: true,
           ),
         ),
         const SizedBox(width: AppDimensions.space4),
         SizedBox(
-          height: 32,
-          width: 128,
+          height: height * 0.8,
+          width: height * 3.2,
           child: SvgPicture.asset(
             'assets/images/espacioCiudadano_logo.svg',
-            height: 32,
-            semanticsLabel: 'Espacio Ciudadano',
+            height: height * 0.8,
+            excludeFromSemantics: true,
           ),
         ),
       ],
+    );
+
+    if (decorative) {
+      return ExcludeSemantics(child: logo);
+    }
+    return Semantics(
+      container: true,
+      image: true,
+      label: semanticsLabel ?? AppLocalizations.of(context).a11yAppName,
+      child: ExcludeSemantics(child: logo),
     );
   }
 }
 
 class AppTabItem {
-  const AppTabItem({required this.label, this.icon});
+  const AppTabItem({required this.label, this.icon, this.semanticsLabel})
+    : assert(label != '', 'label must not be empty'),
+      assert(
+        semanticsLabel == null || semanticsLabel != '',
+        'semanticsLabel must not be empty',
+      );
 
   final String label;
   final IconData? icon;
+  final String? semanticsLabel;
 }
 
 class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
@@ -387,27 +451,37 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController? controller;
 
   @override
-  Size get preferredSize => const Size.fromHeight(48);
+  Size get preferredSize => Size.fromHeight(
+    tabs.any((final tab) => tab.icon != null) ? 72 : kTextTabBarHeight,
+  );
 
   @override
   Widget build(final BuildContext context) {
+    assert(tabs.length >= 2, 'tabs must contain at least two items');
     final isNivel1 = level == AppTabBarLevel.nivel1;
+    final isScrollable = MediaQuery.textScalerOf(context).scale(1) > 1.5;
 
     return TabBar(
       controller: controller,
+      isScrollable: isScrollable,
+      tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
       indicatorColor: AppColors.primary,
       labelColor: AppColors.primary,
       unselectedLabelColor: AppColors.textSecondary,
       labelStyle: isNivel1 ? AppTypography.bodyBold : AppTypography.bodyRegular.copyWith(fontWeight: FontWeight.w600),
       unselectedLabelStyle: isNivel1 ? AppTypography.bodyRegular : AppTypography.smallRegular,
-      tabs: tabs
-          .map(
-            (final AppTabItem tab) => Tab(
-              text: tab.label,
-              icon: tab.icon != null ? Icon(tab.icon, size: 20) : null,
-            ),
-          )
-          .toList(),
+      tabs: tabs.map((final AppTabItem tab) {
+        final text = Text(tab.label, textAlign: TextAlign.center);
+        return Tab(
+          icon: tab.icon != null ? ExcludeSemantics(child: Icon(tab.icon, size: 20)) : null,
+          child: tab.semanticsLabel == null
+              ? text
+              : Semantics(
+                  label: tab.semanticsLabel,
+                  child: ExcludeSemantics(child: text),
+                ),
+        );
+      }).toList(),
     );
   }
 }
@@ -426,7 +500,15 @@ class AppStickyBar extends StatelessWidget {
     this.secondaryHierarchy = AppButtonHierarchy.secondary,
     this.primaryLeadingIcon,
     this.secondaryLeadingIcon,
-  });
+  }) : assert(primaryLabel != '', 'primaryLabel must not be empty'),
+       assert(
+         secondaryLabel == null || secondaryLabel != '',
+         'secondaryLabel must not be empty',
+       ),
+       assert(
+         onSecondary == null || secondaryLabel != null || type == AppStickyBarType.dicotomy,
+         'secondaryLabel is required when onSecondary is provided',
+       );
 
   final AppStickyBarType type;
   final String primaryLabel;
@@ -452,103 +534,92 @@ class AppStickyBar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16 + MediaQuery.of(context).padding.bottom,
-      ),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        // Figma node 41779:23195 — Shadow/Low + border neutral-lighter
-        border: Border(
-          top: BorderSide(color: Color(0xFFE5E2E1)), // Color/Border/neutral-lighter
+    final l10n = AppLocalizations.of(context);
+    final effectiveSecondaryLabel = type == AppStickyBarType.dicotomy ? secondaryLabel ?? l10n.a11yCancel : secondaryLabel;
+    final useVerticalLayout = type == AppStickyBarType.vertical || MediaQuery.textScalerOf(context).scale(1) > 1.5;
+
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: l10n.a11yStickybarLabel,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(
+          AppDimensions.space16,
+          AppDimensions.space16,
+          AppDimensions.space16,
+          AppDimensions.space16 + MediaQuery.paddingOf(context).bottom,
         ),
-        boxShadow: AppShadows.low,
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          border: Border(
+            top: BorderSide(color: Color(0xFFE5E2E1)),
+          ),
+          boxShadow: AppShadows.low,
+        ),
+        child: useVerticalLayout ? _buildVertical(effectiveSecondaryLabel) : _buildHorizontal(effectiveSecondaryLabel),
       ),
-      child: switch (type) {
-        AppStickyBarType.flow => _buildFlow(),
-        AppStickyBarType.dicotomy => _buildDicotomy(),
-        AppStickyBarType.vertical => _buildVertical(),
-      },
     );
   }
 
-  Widget _buildFlow() {
+  Widget _buildHorizontal(final String? effectiveSecondaryLabel) {
     return Row(
       children: [
-        if (secondaryLabel != null) ...[
+        if (effectiveSecondaryLabel != null) ...[
           Expanded(
-            child: AppButton(
-              label: secondaryLabel!,
-              onPressed: onSecondary,
-              hierarchy: secondaryHierarchy,
-              leadingIcon: secondaryLeadingIcon,
+            child: Semantics(
+              sortKey: const OrdinalSortKey(1),
+              child: AppButton(
+                label: effectiveSecondaryLabel,
+                onPressed: onSecondary,
+                hierarchy: secondaryHierarchy,
+                leadingIcon: secondaryLeadingIcon,
+              ),
             ),
           ),
           const SizedBox(width: AppDimensions.space12),
         ],
         Expanded(
-          flex: secondaryLabel != null ? 2 : 1,
-          child: AppButton(
-            label: primaryLabel,
-            onPressed: onPrimary,
-            isLoading: isPrimaryLoading,
-            leadingIcon: primaryLeadingIcon,
+          flex: type == AppStickyBarType.flow && effectiveSecondaryLabel != null ? 2 : 1,
+          child: Semantics(
+            sortKey: const OrdinalSortKey(2),
+            child: AppButton(
+              label: primaryLabel,
+              onPressed: onPrimary,
+              isLoading: isPrimaryLoading,
+              leadingIcon: primaryLeadingIcon,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildDicotomy() {
-    return Row(
-      children: [
-        Expanded(
-          child: AppButton(
-            label: secondaryLabel ?? 'Cancelar',
-            onPressed: onSecondary,
-            hierarchy: secondaryHierarchy,
-            leadingIcon: secondaryLeadingIcon,
-          ),
-        ),
-        const SizedBox(width: AppDimensions.space12),
-        Expanded(
-          child: AppButton(
-            label: primaryLabel,
-            onPressed: onPrimary,
-            isLoading: isPrimaryLoading,
-            leadingIcon: primaryLeadingIcon,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildVertical() {
+  Widget _buildVertical(final String? effectiveSecondaryLabel) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (secondaryLabel != null) ...[
-          SizedBox(
-            width: double.infinity,
+        if (effectiveSecondaryLabel != null) ...[
+          Semantics(
+            sortKey: const OrdinalSortKey(1),
             child: AppButton(
-              label: secondaryLabel!,
+              label: effectiveSecondaryLabel,
               onPressed: onSecondary,
               hierarchy: secondaryHierarchy,
               leadingIcon: secondaryLeadingIcon,
+              isExpanded: true,
             ),
           ),
           const SizedBox(height: AppDimensions.space16),
         ],
-        SizedBox(
-          width: double.infinity,
+        Semantics(
+          sortKey: const OrdinalSortKey(2),
           child: AppButton(
             label: primaryLabel,
             onPressed: onPrimary,
             isLoading: isPrimaryLoading,
             leadingIcon: primaryLeadingIcon,
+            isExpanded: true,
           ),
         ),
       ],
@@ -566,31 +637,41 @@ class AppNavCard extends StatelessWidget {
     this.icon,
     this.iconAsset,
     this.description,
+    this.semanticLabel,
     this.isDisabled = false,
-  }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
+  }) : assert(label != '', 'label must not be empty'),
+       assert(description == null || description != '', 'description must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty'),
+       assert(
+         (icon == null) != (iconAsset == null),
+         'Provide exactly one of icon or iconAsset',
+       );
 
   final String label;
   final IconData? icon;
   final String? iconAsset;
   final VoidCallback? onTap;
   final String? description;
+  final String? semanticLabel;
   final bool isDisabled;
 
   @override
   Widget build(final BuildContext context) {
-    final bgColor = isDisabled ? const Color(0xFFE5E2E1) : AppColors.surface;
-    final titleColor = isDisabled ? AppColors.textDisabled : AppColors.primary;
-    final descColor = isDisabled ? AppColors.textDisabled : AppColors.primary;
-    final leadingBg = isDisabled ? Colors.black.withValues(alpha: 0.05) : const Color(0xFFF1F8F9);
-    final iconColor = isDisabled ? AppColors.textDisabled : AppColors.primary;
+    final isEnabled = !isDisabled && onTap != null;
+    final bgColor = isEnabled ? AppColors.surface : const Color(0xFFE5E2E1);
+    final titleColor = isEnabled ? AppColors.primary : AppColors.textDisabled;
+    final descColor = isEnabled ? AppColors.primary : AppColors.textDisabled;
+    final leadingBg = isEnabled ? const Color(0xFFF1F8F9) : Colors.black.withValues(alpha: 0.05);
+    final iconColor = isEnabled ? AppColors.primary : AppColors.textDisabled;
 
     return Semantics(
       button: true,
-      label: [label, if (description != null) description].join(', '),
-      enabled: !isDisabled,
+      label: semanticLabel ?? [label, if (description != null) description].join('. '),
+      enabled: isEnabled,
+      onTap: isEnabled ? onTap : null,
       child: ExcludeSemantics(
         child: InkWell(
-          onTap: isDisabled ? null : onTap,
+          onTap: isEnabled ? onTap : null,
           borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
           child: Container(
             padding: const EdgeInsets.only(
@@ -603,9 +684,9 @@ class AppNavCard extends StatelessWidget {
               color: bgColor,
               borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
               border: Border.all(
-                color: isDisabled ? Colors.black.withValues(alpha: 0.08) : const Color(0xFFA0B2C5),
+                color: isEnabled ? const Color(0xFFA0B2C5) : Colors.black.withValues(alpha: 0.08),
               ),
-              boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.medium,
+              boxShadow: isEnabled ? AppShadows.medium : const <BoxShadow>[],
             ),
             child: Row(
               children: [
@@ -671,17 +752,23 @@ class AppSimpleNavCard extends StatelessWidget {
     required this.description,
     required this.onTap,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(description != '', 'description must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String label;
   final String description;
   final VoidCallback? onTap;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
     return Semantics(
       button: true,
-      label: '$label, $description',
+      label: semanticLabel ?? '$label. $description',
+      enabled: onTap != null,
+      onTap: onTap,
       child: ExcludeSemantics(
         child: InkWell(
           onTap: onTap,
@@ -709,15 +796,11 @@ class AppSimpleNavCard extends StatelessWidget {
                     children: [
                       Text(
                         label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                         style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
                       ),
                       const SizedBox(height: AppDimensions.space4),
                       Text(
                         description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                         style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
                       ),
                     ],
@@ -744,17 +827,22 @@ class AppQuickAccessCard extends StatelessWidget {
     required this.icon,
     required this.onTap,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String label;
   final IconData icon;
   final VoidCallback? onTap;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
     return Semantics(
       button: true,
-      label: label,
+      label: semanticLabel ?? label,
+      enabled: onTap != null,
+      onTap: onTap,
       child: ExcludeSemantics(
         child: InkWell(
           onTap: onTap,
@@ -791,8 +879,6 @@ class AppQuickAccessCard extends StatelessWidget {
                   child: Center(
                     child: Text(
                       label,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: AppTypography.bodyRegular.copyWith(
                         color: AppColors.primary,
@@ -828,6 +914,12 @@ class AppFloatingNavigation extends StatelessWidget {
     this.minTabWidths,
     this.leading,
     this.trailing,
+    this.scrollable = false,
+    this.padding = const EdgeInsets.all(AppDimensions.space8),
+    this.tabHorizontalPadding = AppDimensions.space8,
+    this.spacing = AppDimensions.space8,
+    this.compact = false,
+    this.tabMinHeight = AppDimensions.minTouchTarget,
   });
 
   final List<String> tabs;
@@ -837,9 +929,21 @@ class AppFloatingNavigation extends StatelessWidget {
   final List<double>? minTabWidths;
   final Widget? leading;
   final Widget? trailing;
+  final bool scrollable;
+  final EdgeInsetsGeometry padding;
+  final double tabHorizontalPadding;
+  final double spacing;
+  final bool compact;
+  final double tabMinHeight;
 
   @override
   Widget build(final BuildContext context) {
+    assert(tabs.isNotEmpty, 'tabs must not be empty');
+    assert(tabs.every((final tab) => tab.isNotEmpty), 'tab labels must not be empty');
+    assert(
+      selectedIndex == -1 || (selectedIndex >= 0 && selectedIndex < tabs.length),
+      'selectedIndex is out of range',
+    );
     assert(
       enabledTabs == null || enabledTabs!.length == tabs.length,
       'enabledTabs must match tabs length',
@@ -849,35 +953,47 @@ class AppFloatingNavigation extends StatelessWidget {
       'minTabWidths must match tabs length',
     );
 
+    final tabsContent = List.generate(tabs.length, (final int index) {
+      final bool isSelected = index == selectedIndex;
+      final bool isEnabled = enabledTabs?[index] ?? true;
+      return _FloatingNavTab(
+        label: tabs[index],
+        isSelected: isSelected,
+        isEnabled: isEnabled,
+        minWidth: minTabWidths?[index] ?? AppDimensions.minTouchTarget,
+        horizontalPadding: tabHorizontalPadding,
+        compact: compact,
+        minHeight: tabMinHeight,
+        onTap: () => onTabSelected(index),
+      );
+    });
+    final usesScrollableLayout = scrollable || MediaQuery.textScalerOf(context).scale(1) > 1.5;
+
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.space8),
+      padding: padding,
       decoration: BoxDecoration(
         color: AppColors.backgroundWhite,
         borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
         border: Border.all(color: AppColors.borderNeutralLight),
       ),
-      child: Row(
-        spacing: AppDimensions.space8,
-        children: [
-          ?leading,
-          ...List.generate(tabs.length, (final int index) {
-            final bool isSelected = index == selectedIndex;
-            final bool isEnabled = enabledTabs?[index] ?? true;
-            final tab = _FloatingNavTab(
-              label: tabs[index],
-              isSelected: isSelected,
-              isEnabled: isEnabled,
-              minWidth: minTabWidths?[index] ?? AppDimensions.minTouchTarget,
-              onTap: () => onTabSelected(index),
-            );
-            if (isSelected) {
-              return tab;
-            }
-            return Expanded(child: tab);
-          }),
-          ?trailing,
-        ],
-      ),
+      child: usesScrollableLayout
+          ? SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: spacing,
+                children: [?leading, ...tabsContent, ?trailing],
+              ),
+            )
+          : Row(
+              spacing: spacing,
+              children: [
+                ?leading,
+                ...tabsContent.indexed.map(
+                  (final entry) => entry.$1 == selectedIndex ? entry.$2 : Expanded(child: entry.$2),
+                ),
+                ?trailing,
+              ],
+            ),
     );
   }
 }
@@ -890,7 +1006,13 @@ class AppBottomTabBarItem {
     required this.label,
     this.icon,
     this.iconAsset,
-  }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
+    this.semanticLabel,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty'),
+       assert(
+         (icon == null) != (iconAsset == null),
+         'Provide exactly one of icon or iconAsset',
+       );
 
   final String label;
 
@@ -899,6 +1021,9 @@ class AppBottomTabBarItem {
 
   /// SVG icon asset — use a constant from [AppIconAssets].
   final String? iconAsset;
+
+  /// Alternative pronunciation for abbreviations or ambiguous labels.
+  final String? semanticLabel;
 }
 
 /// A dark-themed bottom navigation bar matching Figma "Tabs/ BottomTabBar".
@@ -921,7 +1046,96 @@ class AppBottomTabBar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    assert(items.isNotEmpty, 'items must not be empty');
+    assert(
+      currentIndex >= 0 && currentIndex < items.length,
+      'currentIndex is out of range',
+    );
     final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
+    final usesScrollableLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final tabs = List.generate(items.length, (final int index) {
+      final item = items[index];
+      final isSelected = index == currentIndex;
+      final icon = item.iconAsset == null ? AppIcon(item.icon!, color: AppColors.textWhite) : AppSvgIcon(item.iconAsset!, color: AppColors.textWhite);
+      final tab = Semantics(
+        container: true,
+        sortKey: OrdinalSortKey(index.toDouble()),
+        button: true,
+        label: item.semanticLabel ?? item.label,
+        selected: isSelected,
+        onTap: () => onTap(index),
+        child: ExcludeSemantics(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => onTap(index),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+                child: SizedBox(
+                  height: usesScrollableLayout
+                      ? null
+                      : isLandscape
+                      ? 56
+                      : AppDimensions.bottomNavHeight,
+                  child: usesScrollableLayout || isLandscape
+                      ? Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.space8,
+                                vertical: AppDimensions.space8,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  icon,
+                                  const SizedBox(width: AppDimensions.space8),
+                                  Flexible(
+                                    child: Text(
+                                      item.label,
+                                      style: AppTypography.smallRegular.copyWith(
+                                        color: AppColors.textWhite,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              child: _BottomTabIndicator(isSelected: isSelected),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            icon,
+                            const SizedBox(height: AppDimensions.space8),
+                            Text(
+                              item.label,
+                              style: AppTypography.smallRegular.copyWith(
+                                color: AppColors.textWhite,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: AppDimensions.space4),
+                            _BottomTabIndicator(isSelected: isSelected),
+                          ],
+                        ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      return usesScrollableLayout ? SizedBox(width: 160, child: tab) : tab;
+    });
+
     return Container(
       padding: EdgeInsets.only(
         left: AppDimensions.space4,
@@ -930,65 +1144,12 @@ class AppBottomTabBar extends StatelessWidget {
         bottom: MediaQuery.of(context).padding.bottom,
       ),
       color: AppColors.primary,
-      child: Row(
-        children: List.generate(items.length, (final int index) {
-          final item = items[index];
-          final isSelected = index == currentIndex;
-          final icon = item.iconAsset == null ? AppIcon(item.icon!, color: AppColors.textWhite) : AppSvgIcon(item.iconAsset!, color: AppColors.textWhite);
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => onTap(index),
-              behavior: HitTestBehavior.opaque,
-              child: SizedBox(
-                height: isLandscape ? 56 : AppDimensions.bottomNavHeight,
-                child: isLandscape
-                    ? Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              icon,
-                              const SizedBox(width: AppDimensions.space8),
-                              Flexible(
-                                child: Text(
-                                  item.label,
-                                  style: AppTypography.smallRegular.copyWith(color: AppColors.textWhite),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: _BottomTabIndicator(isSelected: isSelected),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          icon,
-                          const SizedBox(height: AppDimensions.space8),
-                          Text(
-                            item.label,
-                            style: AppTypography.smallRegular.copyWith(
-                              color: AppColors.textWhite,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: AppDimensions.space4),
-                          _BottomTabIndicator(isSelected: isSelected),
-                        ],
-                      ),
-              ),
-            ),
-          );
-        }),
-      ),
+      child: usesScrollableLayout
+          ? SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: tabs),
+            )
+          : Row(children: tabs.map((final tab) => Expanded(child: tab)).toList()),
     );
   }
 }
@@ -1024,7 +1185,14 @@ class AppFab extends StatelessWidget {
     this.iconSize = 20,
     this.label,
     this.semanticsLabel,
-  }) : assert(icon != null || iconAsset != null, 'Provide either icon or iconAsset');
+  }) : assert(
+         (icon == null) != (iconAsset == null),
+         'Provide exactly one of icon or iconAsset',
+       ),
+       assert(iconSize > 0, 'iconSize must be greater than zero'),
+       assert(label == null || label != '', 'label must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel != '', 'semanticsLabel must not be empty'),
+       assert(label != null || semanticsLabel != null, 'Compact FABs require a semanticsLabel');
 
   final IconData? icon;
   final String? iconAsset;
@@ -1037,61 +1205,69 @@ class AppFab extends StatelessWidget {
   Widget build(final BuildContext context) {
     final isExtended = label != null;
     final borderRadius = BorderRadius.circular(AppDimensions.radiusRound);
+    final isEnabled = onPressed != null;
 
     return Semantics(
+      container: true,
       button: true,
       label: semanticsLabel ?? label,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: isExtended ? BoxShape.rectangle : BoxShape.circle,
-          borderRadius: isExtended ? borderRadius : null,
-          boxShadow: AppShadows.high,
-        ),
-        child: Material(
-          color: AppColors.primary,
-          shape: isExtended ? const StadiumBorder() : const CircleBorder(),
-          child: InkWell(
-            onTap: onPressed,
-            customBorder: isExtended ? null : const CircleBorder(),
+      enabled: isEnabled,
+      onTap: onPressed,
+      child: ExcludeSemantics(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: isExtended ? BoxShape.rectangle : BoxShape.circle,
             borderRadius: isExtended ? borderRadius : null,
-            child: isExtended
-                ? ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 48),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.space16,
-                        vertical: AppDimensions.space8,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _AppFabIcon(
-                            icon: icon,
-                            iconAsset: iconAsset,
-                            size: iconSize,
-                          ),
-                          const SizedBox(width: AppDimensions.space4),
-                          Text(
-                            label!,
-                            style: AppTypography.bodyRegular.copyWith(
-                              color: AppColors.textWhite,
+            boxShadow: isEnabled ? AppShadows.high : const <BoxShadow>[],
+          ),
+          child: Material(
+            color: isEnabled ? AppColors.primary : AppColors.textDisabled,
+            shape: isExtended ? const StadiumBorder() : const CircleBorder(),
+            child: InkWell(
+              onTap: onPressed,
+              customBorder: isExtended ? null : const CircleBorder(),
+              borderRadius: isExtended ? borderRadius : null,
+              child: isExtended
+                  ? ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 48),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.space16,
+                          vertical: AppDimensions.space8,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _AppFabIcon(
+                              icon: icon,
+                              iconAsset: iconAsset,
+                              size: iconSize,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: AppDimensions.space4),
+                            Flexible(
+                              child: Text(
+                                label!,
+                                style: AppTypography.bodyRegular.copyWith(
+                                  color: AppColors.textWhite,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      width: 56,
+                      height: 56,
+                      child: Center(
+                        child: _AppFabIcon(
+                          icon: icon,
+                          iconAsset: iconAsset,
+                          size: iconSize,
+                        ),
                       ),
                     ),
-                  )
-                : SizedBox(
-                    width: 56,
-                    height: 56,
-                    child: Center(
-                      child: _AppFabIcon(
-                        icon: icon,
-                        iconAsset: iconAsset,
-                        size: iconSize,
-                      ),
-                    ),
-                  ),
+            ),
           ),
         ),
       ),
@@ -1133,6 +1309,9 @@ class _FloatingNavTab extends StatelessWidget {
     required this.isSelected,
     required this.isEnabled,
     required this.minWidth,
+    required this.horizontalPadding,
+    required this.compact,
+    required this.minHeight,
     required this.onTap,
   });
 
@@ -1140,11 +1319,13 @@ class _FloatingNavTab extends StatelessWidget {
   final bool isSelected;
   final bool isEnabled;
   final double minWidth;
+  final double horizontalPadding;
+  final bool compact;
+  final double minHeight;
   final VoidCallback onTap;
 
   @override
   Widget build(final BuildContext context) {
-    final isInteractive = isSelected || isEnabled;
     final backgroundColor = isSelected
         ? AppColors.backgroundBlueLighter
         : isEnabled
@@ -1153,45 +1334,53 @@ class _FloatingNavTab extends StatelessWidget {
     final borderColor = isSelected
         ? AppColors.primaryDark
         : isEnabled
-        ? AppColors.borderNeutralLight
+        ? AppColors.neutral500
         : Colors.transparent;
     final textStyle = isSelected
-        ? AppTypography.bodyBold.copyWith(color: AppColors.textBlack)
+        ? (compact ? AppTypography.smallBold : AppTypography.bodyBold).copyWith(color: AppColors.textBlack)
         : isEnabled
-        ? AppTypography.bodyRegular.copyWith(color: AppColors.textBlack)
-        : AppTypography.bodyRegular.copyWith(color: AppColors.textDisabled);
+        ? (compact ? AppTypography.smallRegular : AppTypography.bodyRegular).copyWith(color: AppColors.textBlack)
+        : (compact ? AppTypography.smallRegular : AppTypography.bodyRegular).copyWith(color: AppColors.textDisabled);
 
     return Semantics(
+      container: true,
       button: true,
+      label: label,
       selected: isSelected,
-      enabled: isInteractive,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        height: AppDimensions.minTouchTarget,
-        constraints: BoxConstraints(minWidth: minWidth),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          border: Border.all(color: borderColor),
-          boxShadow: AppShadows.low,
-        ),
-        child: Material(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          child: InkWell(
-            onTap: isInteractive ? onTap : null,
+      enabled: isEnabled,
+      onTap: isEnabled ? onTap : null,
+      child: ExcludeSemantics(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          constraints: BoxConstraints(
+            minWidth: minWidth,
+            minHeight: minHeight,
+          ),
+          decoration: BoxDecoration(
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-              child: Center(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: textStyle,
-                  textAlign: TextAlign.center,
+            border: Border.all(color: borderColor),
+            boxShadow: AppShadows.low,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+            child: InkWell(
+              onTap: isEnabled ? onTap : null,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppDimensions.space8,
+                ).copyWith(left: horizontalPadding, right: horizontalPadding),
+                child: Center(
+                  child: Text(
+                    label,
+                    style: textStyle,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
                 ),
               ),
             ),

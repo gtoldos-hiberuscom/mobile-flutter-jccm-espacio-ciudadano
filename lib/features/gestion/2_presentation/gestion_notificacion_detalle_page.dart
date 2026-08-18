@@ -88,8 +88,8 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
           .read(gestionNotificacionesOptimisticAcceptedProvider.notifier)
           .add(
             citizenId: citizenId,
-              notification: Notificacion(
-                id: widget.notificacionId,
+            notification: Notificacion(
+              id: widget.notificacionId,
               concepto: detail.titulo,
               procedimientoDenominacion: detail.procedimiento ?? '',
               fechaCaducidad: detail.fechaExpiracion,
@@ -171,9 +171,9 @@ class _DetalleContent extends StatelessWidget {
             label: 'Fecha de lectura',
             value: _formatDate(context, value.fechaLectura!),
           ),
-        if (!_isPending(value.estado)) ...[
+        if (!_isPending(value.estado) && value.documentos.isNotEmpty) ...[
           const _SectionTitle('Documentos'),
-          if (value.documentos.isEmpty) const Text('No hay documentos asociados a esta notificación.', style: AppTypography.bodyRegular) else ...value.documentos.map((final document) => _DocumentCard(document: document)),
+          ...value.documentos.map((final document) => _DocumentCard(document: document)),
         ],
       ],
     ),

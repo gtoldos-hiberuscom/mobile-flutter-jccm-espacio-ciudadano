@@ -348,6 +348,12 @@ class _FilterNavigationState extends State<_FilterNavigation> {
   double _horizontalDragDistance = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _showImmediate = widget.selectedFilter == _RecommendationFilter.immediate;
+  }
+
+  @override
   void didUpdateWidget(covariant final _FilterNavigation oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedFilter == _RecommendationFilter.immediate) {
@@ -386,26 +392,37 @@ class _FilterNavigationState extends State<_FilterNavigation> {
       onHorizontalDragStart: _onHorizontalDragStart,
       onHorizontalDragUpdate: _onHorizontalDragUpdate,
       onHorizontalDragEnd: _onHorizontalDragEnd,
-      child: AppFloatingNavigation(
-        tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
-        selectedIndex: selectedIndex,
-        enabledTabs: List<bool>.filled(filters.length, true),
-        minTabWidths: _showImmediate ? const [128, 206] : const [76, 150, 150],
-        onTabSelected: (final index) => widget.onSelected?.call(filters[index]),
-        leading: _showImmediate
-            ? _FloatingNavigationArrow(
-                icon: AppIcons.arrowBack,
-                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                onPressed: () => setState(() => _showImmediate = false),
-              )
-            : null,
-        trailing: !_showImmediate
-            ? _FloatingNavigationArrow(
-                icon: AppIcons.arrowForward,
-                tooltip: _RecommendationFilter.immediate.label(context),
-                onPressed: () => setState(() => _showImmediate = true),
-              )
-            : null,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 220),
+        transitionBuilder: (final child, final animation) => SlideTransition(
+          position: Tween<Offset>(begin: const Offset(0.12, 0), end: Offset.zero).animate(
+            CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+          ),
+          child: FadeTransition(opacity: animation, child: child),
+        ),
+        child: AppFloatingNavigation(
+          key: ValueKey(_showImmediate),
+          tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
+          selectedIndex: selectedIndex,
+          enabledTabs: List<bool>.filled(filters.length, true),
+          minTabWidths: List<double>.filled(filters.length, 40),
+          tabMinHeight: AppDimensions.space40,
+          onTabSelected: (final index) => widget.onSelected?.call(filters[index]),
+          leading: _showImmediate
+              ? _FloatingNavigationArrow(
+                  icon: AppIcons.arrowBack,
+                  tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                  onPressed: () => setState(() => _showImmediate = false),
+                )
+              : null,
+          trailing: !_showImmediate
+              ? _FloatingNavigationArrow(
+                  icon: AppIcons.arrowForward,
+                  tooltip: _RecommendationFilter.immediate.label(context),
+                  onPressed: () => setState(() => _showImmediate = true),
+                )
+              : null,
+        ),
       ),
     );
   }
@@ -499,7 +516,6 @@ class _RecommendationCard extends StatelessWidget {
       categoryLabels: _categoryLabels(context, recommendation.badges),
       detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
       detailText: recommendation.lifeEventName,
-      statusLabel: 'Estado',
       statusText: recommendation.submissionStatusText ?? deadline,
       onTap: () => unawaited(_openRecommendationDetail(context, recommendation)),
     );

@@ -17,7 +17,9 @@ class AppNavigationCard extends StatelessWidget {
     this.description,
     this.semanticLabel,
     this.isDisabled = false,
-  });
+  }) : assert(title != '', 'title must not be empty'),
+       assert(description == null || description != '', 'description must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String title;
   final String? description;
@@ -31,8 +33,11 @@ class AppNavigationCard extends StatelessWidget {
     final textColor = isDisabled ? AppColors.textDisabled : AppColors.primary;
 
     return Semantics(
-      button: !isDisabled,
+      container: true,
+      button: true,
       label: semanticLabel ?? (description != null ? '$title. $description' : title),
+      enabled: !isDisabled,
+      onTap: isDisabled ? null : onTap,
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -66,16 +71,12 @@ class AppNavigationCard extends StatelessWidget {
                             children: [
                               Text(
                                 title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                                 style: AppTypography.leadingMedium.copyWith(color: textColor),
                               ),
                               if (description != null) ...[
                                 const SizedBox(height: AppDimensions.space4),
                                 Text(
                                   description!,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
                                   style: AppTypography.smallRegular.copyWith(color: textColor),
                                 ),
                               ],

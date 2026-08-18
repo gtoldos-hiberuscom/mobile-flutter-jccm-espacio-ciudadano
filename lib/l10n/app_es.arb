@@ -20,6 +20,13 @@
   "@landingTaglineHighlight": {
     "description": "Nombre de la región resaltado con tipografía H2 en el eslogan."
   },
+  "landingAccessStepLabel": "Paso {stepNumber}",
+  "@landingAccessStepLabel": {
+    "description": "Etiqueta accesible para un paso numerado de la sección Cómo acceder.",
+    "placeholders": {
+      "stepNumber": {"type": "int"}
+    }
+  },
   "landingCtaButton": "Acceder a mi Espacio ciudadano",
   "@landingCtaButton": {
     "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
@@ -163,6 +170,22 @@
   "sessionUnlockBiometricReason": "Confirma tu identidad para acceder a tu espacio",
   "@sessionUnlockBiometricReason": {
     "description": "Texto mostrado por el sistema al solicitar autenticación biométrica para reanudar una sesión guardada."
+  },
+  "biometricAccessDialogTitle": "¿Quieres activar el acceso rápido con huella o reconocimiento facial?",
+  "@biometricAccessDialogTitle": {
+    "description": "Título del diálogo para activar el acceso rápido biométrico."
+  },
+  "biometricAccessDialogDescription": "Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.",
+  "@biometricAccessDialogDescription": {
+    "description": "Descripción del funcionamiento y la seguridad del acceso rápido biométrico."
+  },
+  "biometricAccessDialogCancel": "Ahora no",
+  "@biometricAccessDialogCancel": {
+    "description": "Botón que rechaza la activación del acceso rápido biométrico."
+  },
+  "biometricAccessDialogConfirm": "Activar acceso rápido",
+  "@biometricAccessDialogConfirm": {
+    "description": "Botón que confirma la activación del acceso rápido biométrico."
   },
   "consentPageTitle": "Condiciones de uso",
   "@consentPageTitle": {
@@ -384,6 +407,10 @@
   "externalLinkA11yHint": "Abre en navegador externo",
   "@externalLinkA11yHint": {
     "description": "Pista de accesibilidad anunciada por lectores de pantalla en cualquier botón que abre un enlace externo."
+  },
+  "externalLinkVisibleNotice": "Enlace externo · Se abrirá fuera de la aplicación",
+  "@externalLinkVisibleNotice": {
+    "description": "Aviso visual que identifica un enlace que abre contenido fuera de la aplicación."
   },
   "externalLinkOpenFailed": "No se pudo abrir el enlace. Inténtalo de nuevo más tarde.",
   "@externalLinkOpenFailed": {
@@ -1880,6 +1907,9 @@
   "digitalCardsEffectiveDate": "Fecha de entrada en vigor",
   "digitalCardsExpiryDate": "Fecha de caducidad",
   "digitalCardsDefinitive": "DEFINITIVO",
+  "digitalCardTitleLabel": "Título / Carnet",
+  "digitalCardNumberLabel": "Número de carnet",
+  "digitalCardDownload": "Descargar",
   "@digitalCardsTypeDiscapacidad": {
     "description": "Carnets — etiqueta del tipo discapacidad."
   },
@@ -2215,6 +2245,19 @@
   "caseworkUploadStatusFailed": "Error",
   "@caseworkUploadStatusFailed": {
     "description": "Casework upload — status: failed."
+  },
+  "fileUploadCancel": "Cancelar",
+  "fileUploadRemove": "Eliminar",
+  "fileUploadDelete": "Eliminar archivo",
+  "fileUploadRetry": "Reintentar",
+  "a11yFileUpload": "Archivo: {fileName}, {fileInfo}. Estado: {status}",
+  "@a11yFileUpload": {
+    "description": "Resumen accesible de un archivo y su estado de carga.",
+    "placeholders": {
+      "fileName": {"type": "String"},
+      "fileInfo": {"type": "String"},
+      "status": {"type": "String"}
+    }
   },
   "caseworkUploadErrorUnsupportedMime": "Formato no admitido.",
   "@caseworkUploadErrorUnsupportedMime": {
@@ -3369,7 +3412,7 @@
   "@recommendationsTitle": {
     "description": "Recommendations — app bar title for the citizen recommendations list."
   },
-  "recommendationsTabAll": "Todos",
+  "recommendationsTabAll": "Todo",
   "@recommendationsTabAll": {
     "description": "Recommendations — tab label for the unfiltered bucket."
   },
@@ -3404,6 +3447,71 @@
   "recommendationsAssociatedLifeEventsLabel": "Hechos vitales asociados",
   "@recommendationsAssociatedLifeEventsLabel": {
     "description": "Recommendations — label shown above the life events associated with a recommendation card."
+  },
+  "recommendationsStatusLabel": "Estado",
+  "@recommendationsStatusLabel": {
+    "description": "Recommendations — default label shown above the status of a recommendation card."
+  },
+  "appCardReferenceLabel": "N.º ref.",
+  "@appCardReferenceLabel": {
+    "description": "Design system — default label for a reference number displayed in a card."
+  },
+  "appCardExpiryLabel": "Expiración",
+  "@appCardExpiryLabel": {
+    "description": "Design system — default label for an expiry date displayed in a card."
+  },
+  "appProgressLabel": "Progreso",
+  "@appProgressLabel": {
+    "description": "Design system — default accessible name for a progress indicator."
+  },
+  "appProgressIndeterminateValue": "En curso",
+  "@appProgressIndeterminateValue": {
+    "description": "Design system — accessible value for a progress indicator with no known percentage."
+  },
+  "appProgressPercentage": "{percentage} %",
+  "@appProgressPercentage": {
+    "description": "Design system — accessible percentage reported by a progress indicator.",
+    "placeholders": {
+      "percentage": {
+        "type": "int"
+      }
+    }
+  },
+  "appAvatarLabel": "Avatar",
+  "@appAvatarLabel": {
+    "description": "Design system — generic accessible name for an avatar that exposes a status but has no specific person name."
+  },
+  "appAvatarAvailableStatus": "Disponible",
+  "@appAvatarAvailableStatus": {
+    "description": "Design system — default accessible status for an avatar with the standard green status indicator."
+  },
+  "appPhoneCallLabel": "Llamar al {number}. {subtitle}",
+  "@appPhoneCallLabel": {
+    "description": "Design system — accessible name for a card that starts a phone call.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      },
+      "subtitle": {
+        "type": "String"
+      }
+    }
+  },
+  "appPhoneCallHint": "Inicia una llamada telefónica",
+  "@appPhoneCallHint": {
+    "description": "Design system — accessible hint for an action that starts a phone call."
+  },
+  "a11yBack": "Volver",
+  "a11yClose": "Cerrar",
+  "a11yHelp": "Ayuda",
+  "a11yAppName": "Espacio Ciudadano",
+  "a11yCancel": "Cancelar",
+  "a11yInformation": "Información",
+  "@a11yInformation": {
+    "description": "Etiqueta accesible del botón que abre información adicional."
+  },
+  "@a11yBack": {
+    "description": "Accessibility — generic label and tooltip for navigating back."
   },
   "recommendationsLoadMore": "Ver más",
   "@recommendationsLoadMore": {
@@ -3486,10 +3594,152 @@
     "description": "Accessibility — announced by screen reader when a loading state starts."
   },
   "a11yContentLoaded": "Contenido cargado",
+  "a11yFieldError": "Error, {field}: {error}",
+  "@a11yFieldError": {
+    "description": "Anuncio accesible cuando aparece un error de validación en un campo.",
+    "placeholders": {
+      "field": {"type": "String"},
+      "error": {"type": "String"}
+    }
+  },
+  "a11yExpandTextArea": "Ampliar {field}",
+  "@a11yExpandTextArea": {
+    "description": "Etiqueta del botón que amplía un área de texto.",
+    "placeholders": {"field": {"type": "String"}}
+  },
+  "a11yCollapseTextArea": "Contraer {field}",
+  "@a11yCollapseTextArea": {
+    "description": "Etiqueta del botón que contrae un área de texto.",
+    "placeholders": {"field": {"type": "String"}}
+  },
+  "a11ySelectPhoneCountryCode": "Seleccionar prefijo telefónico, actual {countryCode}",
+  "@a11ySelectPhoneCountryCode": {
+    "description": "Etiqueta del botón selector de prefijo telefónico.",
+    "placeholders": {"countryCode": {"type": "String"}}
+  },
+  "a11yFilterButtonActiveCount": "{label}, {count, plural, one {1 filtro activo} other {{count} filtros activos}}",
+  "@a11yFilterButtonActiveCount": {
+    "description": "Etiqueta accesible de un botón de filtros con el número de filtros activos.",
+    "placeholders": {
+      "label": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "a11yFilterActions": "Acciones de filtros",
+  "@a11yFilterActions": {
+    "description": "Etiqueta accesible del grupo de acciones para limpiar y aplicar filtros."
+  },
+  "listFilterClear": "Limpiar filtros",
+  "listFilterApply": "Aplicar filtros",
+  "listFilterSelectDateRange": "Seleccionar rango de fechas",
+  "listFilterSelectStartDate": "Selecciona la fecha inicial.",
+  "listFilterSelectEndDate": "Selecciona la fecha final.",
+  "listFilterRangeSelected": "Rango seleccionado.",
+  "listFilterRemoveRange": "Quitar rango",
+  "listFilterConfirmRange": "Seleccionar rango",
+  "a11yListFilterDateRange": "{label}. Desde {startDate} hasta {endDate}",
+  "@a11yListFilterDateRange": {
+    "description": "Etiqueta accesible de un filtro de rango de fechas.",
+    "placeholders": {
+      "label": {"type": "String"},
+      "startDate": {"type": "String"},
+      "endDate": {"type": "String"}
+    }
+  },
+  "a11yErrorState": "Error: {message}",
+  "@a11yErrorState": {
+    "description": "Anuncio accesible de un estado de error.",
+    "placeholders": {"message": {"type": "String"}}
+  },
+  "a11yEmptyState": "Sin contenido: {message}",
+  "@a11yEmptyState": {
+    "description": "Anuncio accesible de un estado sin contenido o resultados.",
+    "placeholders": {"message": {"type": "String"}}
+  },
+  "a11yBlockedState": "Acceso no disponible: {message}",
+  "@a11yBlockedState": {
+    "description": "Anuncio accesible de un estado de acceso bloqueado o no disponible.",
+    "placeholders": {"message": {"type": "String"}}
+  },
+  "a11yAlert": "{title}: {message}",
+  "@a11yAlert": {
+    "description": "Etiqueta accesible unificada de una alerta.",
+    "placeholders": {
+      "title": {"type": "String"},
+      "message": {"type": "String"}
+    }
+  },
+  "a11yAlertNeutral": "Aviso del sistema",
+  "a11yAlertSuccess": "Operación correcta",
+  "a11yAgendaTypeNotification": "Notificación",
+  "a11yAgendaTypeHealth": "Cita sanitaria",
+  "a11yAgendaTypeCredential": "Caducidad de acreditación",
+  "a11yAgendaCard": "{type}: {details}",
+  "@a11yAgendaCard": {
+    "description": "Resumen accesible de una tarjeta de agenda.",
+    "placeholders": {
+      "type": {"type": "String"},
+      "details": {"type": "String"}
+    }
+  },
+  "a11yAttachmentField": "{label}. {hint}",
+  "@a11yAttachmentField": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "hint": {"type": "String"}
+    }
+  },
+  "a11yRequiredAttachmentField": "{label}, obligatorio. {hint}",
+  "@a11yRequiredAttachmentField": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "hint": {"type": "String"}
+    }
+  },
+  "a11yAttachmentSelected": "Archivo adjunto: {fileName}, {fileInfo}",
+  "@a11yAttachmentSelected": {
+    "description": "Estado anunciado al seleccionar un archivo adjunto.",
+    "placeholders": {
+      "fileName": {"type": "String"},
+      "fileInfo": {"type": "String"}
+    }
+  },
+  "a11yBottomSheet": "Panel inferior",
+  "a11yBottomSheetClose": "Salir",
+  "a11yCalendar": "Calendario",
+  "a11yCalendarMonth": "Mes mostrado: {monthYear}",
+  "@a11yCalendarMonth": {
+    "placeholders": {"monthYear": {"type": "String"}}
+  },
+  "a11ySelectCalendarMonthYear": "Seleccionar mes y año, actual {monthYear}",
+  "@a11ySelectCalendarMonthYear": {
+    "placeholders": {"monthYear": {"type": "String"}}
+  },
+  "a11yCalendarHasEvent": "con evento",
+  "a11yCalendarOutsideMonth": "fuera del mes mostrado",
+  "a11yCaptcha": "{label}, verificación {badge}",
+  "@a11yCaptcha": {
+    "placeholders": {
+      "label": {"type": "String"},
+      "badge": {"type": "String"}
+    }
+  },
+  "a11yCaptchaVerified": "Captcha verificado",
+  "a11yAlertWarning": "Advertencia",
+  "a11yAlertError": "Error",
   "@a11yContentLoaded": {
     "description": "Accessibility — announced by screen reader when loading finishes."
   },
   "drawerPreferences": "Preferencias",
+  "drawerGreeting": "Hola, {userName}",
+  "@drawerGreeting": {
+    "description": "Saludo del menú de perfil.",
+    "placeholders": {"userName": {"type": "String"}}
+  },
+  "drawerLogout": "Cerrar sesión",
+  "@drawerLogout": {
+    "description": "Acción para cerrar la sesión desde el menú de perfil."
+  },
   "@drawerPreferences": {
     "description": "Etiqueta del ítem de Preferencias en el menú desplegable del perfil."
   },

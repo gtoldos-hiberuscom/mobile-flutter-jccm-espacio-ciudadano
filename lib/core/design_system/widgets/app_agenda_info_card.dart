@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 enum AppAgendaInfoCardType {
   notification,
@@ -24,7 +25,11 @@ class AppAgendaInfoCard extends StatelessWidget {
     this.channel,
     this.primaryText,
     this.secondaryText,
-  });
+    this.semanticsLabel,
+  }) : assert(day.length > 0, 'day must not be empty'),
+       assert(weekday.length > 0, 'weekday must not be empty'),
+       assert(title.length > 0, 'title must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final AppAgendaInfoCardType type;
   final String day;
@@ -34,24 +39,47 @@ class AppAgendaInfoCard extends StatelessWidget {
   final String? channel;
   final String? primaryText;
   final String? secondaryText;
+  final String? semanticsLabel;
 
   bool get _isNotification => type == AppAgendaInfoCardType.notification;
   bool get _isCredential => type == AppAgendaInfoCardType.credential;
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final typeLabel = switch (type) {
+      AppAgendaInfoCardType.notification => l10n.a11yAgendaTypeNotification,
+      AppAgendaInfoCardType.health => l10n.a11yAgendaTypeHealth,
+      AppAgendaInfoCardType.credential => l10n.a11yAgendaTypeCredential,
+    };
     final semanticParts = [
       day,
       weekday,
       ?time,
       _displayCase(title),
-      if (channel != null) _displayCase(channel!),
-      if (primaryText != null) _displayCase(primaryText!),
-      if (secondaryText != null) _displayCase(secondaryText!),
-    ];
+      if (channel case final value? when value.isNotEmpty) _displayCase(value),
+      if (primaryText case final value? when value.isNotEmpty) _displayCase(value),
+      if (secondaryText case final value? when value.isNotEmpty) _displayCase(value),
+    ].where((final part) => part.isNotEmpty);
+    final effectiveLabel = semanticsLabel ?? l10n.a11yAgendaCard(typeLabel, semanticParts.join(', '));
+    final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final dateBlock = _DateBlock(
+      day: day,
+      weekday: weekday,
+      time: time,
+      showVerticalDivider: _isCredential && !useVerticalLayout,
+    );
+    final contentBlock = _ContentBlock(
+      title: title,
+      channel: channel,
+      primaryText: primaryText,
+      secondaryText: secondaryText,
+    );
+    final typeIcon = _TypeIcon(type: type, semanticsLabel: typeLabel);
 
     return Semantics(
-      label: semanticParts.join(', '),
+      container: true,
+      label: effectiveLabel,
       child: ExcludeSemantics(
         child: Container(
           width: double.infinity,
@@ -63,35 +91,36 @@ class AppAgendaInfoCard extends StatelessWidget {
                 bottom: AppDimensions.space16,
               ),
           decoration: _decoration,
-          child: IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _DateBlock(
-                  day: day,
-                  weekday: weekday,
-                  time: time,
-                  showVerticalDivider: _isCredential,
-                ),
-                SizedBox(
-                  width: _isNotification ? AppDimensions.space4 : AppDimensions.space8,
-                ),
-                Expanded(
-                  child: _ContentBlock(
-                    title: title,
-                    channel: channel,
-                    primaryText: primaryText,
-                    secondaryText: secondaryText,
+          child: useVerticalLayout
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: dateBlock),
+                        const SizedBox(width: AppDimensions.space8),
+                        typeIcon,
+                      ],
+                    ),
+                    const SizedBox(height: AppDimensions.space8),
+                    contentBlock,
+                  ],
+                )
+              : IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      dateBlock,
+                      SizedBox(
+                        width: _isNotification ? AppDimensions.space4 : AppDimensions.space8,
+                      ),
+                      Expanded(child: contentBlock),
+                      const SizedBox(width: AppDimensions.space4),
+                      Align(alignment: Alignment.topCenter, child: typeIcon),
+                    ],
                   ),
                 ),
-                const SizedBox(width: AppDimensions.space4),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: _TypeIcon(type: type),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -261,9 +290,10 @@ String _displayCase(final String value) {
 }
 
 class _TypeIcon extends StatelessWidget {
-  const _TypeIcon({required this.type});
+  const _TypeIcon({required this.type, required this.semanticsLabel});
 
   final AppAgendaInfoCardType type;
+  final String semanticsLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -279,11 +309,7 @@ class _TypeIcon extends StatelessWidget {
         child: AppSvgIcon(
           assetPath,
           color: AppColors.borderBlueMutedBase,
-          semanticsLabel: switch (type) {
-            AppAgendaInfoCardType.notification => 'Notificación',
-            AppAgendaInfoCardType.health => 'Atención primaria',
-            AppAgendaInfoCardType.credential => 'Carnet',
-          },
+          semanticsLabel: semanticsLabel,
         ),
       ),
     );

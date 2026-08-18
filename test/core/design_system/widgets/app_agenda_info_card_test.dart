@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('renders notification, health and credential variants', (
@@ -8,6 +9,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: SizedBox(
             width: 398,
@@ -52,7 +56,7 @@ void main() {
     expect(find.text('Presencial'), findsOneWidget);
     expect(
       find.byWidgetPredicate(
-        (final widget) => widget is AppSvgIcon && widget.assetPath == AppIconAssets.health && widget.size == AppDimensions.iconMedium && widget.semanticsLabel == 'Atención primaria',
+        (final widget) => widget is AppSvgIcon && widget.assetPath == AppIconAssets.health && widget.size == AppDimensions.iconMedium && widget.semanticsLabel == 'Cita sanitaria',
       ),
       findsOneWidget,
     );

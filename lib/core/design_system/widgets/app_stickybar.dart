@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart' show AppButton;
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
@@ -27,18 +28,23 @@ class AppStickybar extends StatelessWidget {
   const AppStickybar({
     required this.children,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(children.length > 0, 'children must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   /// Ordered list of actions (top to bottom). Typically [AppButton] instances.
   final List<Widget> children;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
+    final usesVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
     return Semantics(
       container: true,
-      label: l10n.a11yStickybarLabel,
+      explicitChildNodes: true,
+      label: semanticLabel ?? l10n.a11yStickybarLabel,
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
@@ -66,7 +72,7 @@ class AppStickybar extends StatelessWidget {
                   right: AppDimensions.space16,
                   bottom: isLandscape ? AppDimensions.space16 : AppDimensions.space48,
                 ),
-                child: isLandscape && children.length > 1
+                child: isLandscape && children.length > 1 && !usesVerticalLayout
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _buildHorizontalChildren(),
@@ -87,7 +93,12 @@ class AppStickybar extends StatelessWidget {
   List<Widget> _buildSpacedChildren() {
     final spaced = <Widget>[];
     for (int i = 0; i < children.length; i++) {
-      spaced.add(children[i]);
+      spaced.add(
+        Semantics(
+          sortKey: OrdinalSortKey(i.toDouble()),
+          child: children[i],
+        ),
+      );
       if (i < children.length - 1) {
         spaced.add(const SizedBox(height: AppDimensions.space16));
       }
@@ -98,7 +109,14 @@ class AppStickybar extends StatelessWidget {
   List<Widget> _buildHorizontalChildren() {
     final spaced = <Widget>[];
     for (int i = 0; i < children.length; i++) {
-      spaced.add(Expanded(child: children[i]));
+      spaced.add(
+        Expanded(
+          child: Semantics(
+            sortKey: OrdinalSortKey(i.toDouble()),
+            child: children[i],
+          ),
+        ),
+      );
       if (i < children.length - 1) {
         spaced.add(const SizedBox(width: AppDimensions.space12));
       }

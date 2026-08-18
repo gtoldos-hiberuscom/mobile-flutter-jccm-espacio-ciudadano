@@ -12,12 +12,20 @@ class DocumentActionBar extends StatelessWidget {
     this.onDownload,
     this.onShare,
     this.isLoading = false,
-  });
+    this.documentSemanticLabel,
+  }) : assert(documentName != '', 'documentName must not be empty'),
+       assert(
+         documentSemanticLabel == null || documentSemanticLabel != '',
+         'documentSemanticLabel must not be empty',
+       );
 
   final String documentName;
   final VoidCallback? onOpen;
   final VoidCallback? onDownload;
   final VoidCallback? onShare;
+
+  /// Optional spoken form of [documentName] for technical file names.
+  final String? documentSemanticLabel;
 
   /// When true replaces the action icons with a small adaptive spinner.
   final bool isLoading;
@@ -25,14 +33,20 @@ class DocumentActionBar extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final accessibleDocumentName = documentSemanticLabel ?? documentName;
 
     if (isLoading) {
-      return const Padding(
-        padding: EdgeInsets.all(8),
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+      return Semantics(
+        container: true,
+        excludeSemantics: true,
+        liveRegion: true,
+        label: '${l10n.a11yLoading}: $accessibleDocumentName',
+        child: const SizedBox.square(
+          dimension: 48,
+          child: Padding(
+            padding: EdgeInsets.all(12),
+            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+          ),
         ),
       );
     }
@@ -42,8 +56,12 @@ class DocumentActionBar extends StatelessWidget {
       children: [
         if (onOpen != null)
           Semantics(
-            label: '${l10n.documentOpen}: $documentName',
+            container: true,
+            excludeSemantics: true,
+            label: '${l10n.documentOpen}: $accessibleDocumentName',
             button: true,
+            enabled: true,
+            onTap: onOpen,
             child: IconButton(
               icon: const Icon(Icons.open_in_new),
               onPressed: onOpen,
@@ -52,8 +70,12 @@ class DocumentActionBar extends StatelessWidget {
           ),
         if (onDownload != null)
           Semantics(
-            label: '${l10n.documentDownload}: $documentName',
+            container: true,
+            excludeSemantics: true,
+            label: '${l10n.documentDownload}: $accessibleDocumentName',
             button: true,
+            enabled: true,
+            onTap: onDownload,
             child: IconButton(
               icon: const Icon(Icons.download_outlined),
               onPressed: onDownload,
@@ -62,8 +84,12 @@ class DocumentActionBar extends StatelessWidget {
           ),
         if (onShare != null)
           Semantics(
-            label: '${l10n.documentShare}: $documentName',
+            container: true,
+            excludeSemantics: true,
+            label: '${l10n.documentShare}: $accessibleDocumentName',
             button: true,
+            enabled: true,
+            onTap: onShare,
             child: IconButton(
               icon: const Icon(Icons.share_outlined),
               onPressed: onShare,

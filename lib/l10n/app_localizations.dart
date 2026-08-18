@@ -122,6 +122,12 @@ abstract class AppLocalizations {
   /// **'Castilla-La Mancha'**
   String get landingTaglineHighlight;
 
+  /// Etiqueta accesible para un paso numerado de la sección Cómo acceder.
+  ///
+  /// In es, this message translates to:
+  /// **'Paso {stepNumber}'**
+  String landingAccessStepLabel(int stepNumber);
+
   /// Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve.
   ///
   /// In es, this message translates to:
@@ -337,6 +343,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Confirma tu identidad para acceder a tu espacio'**
   String get sessionUnlockBiometricReason;
+
+  /// Título del diálogo para activar el acceso rápido biométrico.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Quieres activar el acceso rápido con huella o reconocimiento facial?'**
+  String get biometricAccessDialogTitle;
+
+  /// Descripción del funcionamiento y la seguridad del acceso rápido biométrico.
+  ///
+  /// In es, this message translates to:
+  /// **'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.'**
+  String get biometricAccessDialogDescription;
+
+  /// Botón que rechaza la activación del acceso rápido biométrico.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get biometricAccessDialogCancel;
+
+  /// Botón que confirma la activación del acceso rápido biométrico.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar acceso rápido'**
+  String get biometricAccessDialogConfirm;
 
   /// Título principal de la pantalla de aceptación de condiciones de uso.
   ///
@@ -637,6 +667,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Abre en navegador externo'**
   String get externalLinkA11yHint;
+
+  /// Aviso visual que identifica un enlace que abre contenido fuera de la aplicación.
+  ///
+  /// In es, this message translates to:
+  /// **'Enlace externo · Se abrirá fuera de la aplicación'**
+  String get externalLinkVisibleNotice;
 
   /// Mensaje de SnackBar mostrado cuando un enlace externo no se puede abrir (validación o rechazo del sistema).
   ///
@@ -2816,6 +2852,24 @@ abstract class AppLocalizations {
   /// **'DEFINITIVO'**
   String get digitalCardsDefinitive;
 
+  /// No description provided for @digitalCardTitleLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Título / Carnet'**
+  String get digitalCardTitleLabel;
+
+  /// No description provided for @digitalCardNumberLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de carnet'**
+  String get digitalCardNumberLabel;
+
+  /// No description provided for @digitalCardDownload.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar'**
+  String get digitalCardDownload;
+
   /// Carnets — badge para estado disponible.
   ///
   /// In es, this message translates to:
@@ -3295,6 +3349,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error'**
   String get caseworkUploadStatusFailed;
+
+  /// No description provided for @fileUploadCancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get fileUploadCancel;
+
+  /// No description provided for @fileUploadRemove.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar'**
+  String get fileUploadRemove;
+
+  /// No description provided for @fileUploadDelete.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar archivo'**
+  String get fileUploadDelete;
+
+  /// No description provided for @fileUploadRetry.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get fileUploadRetry;
+
+  /// Resumen accesible de un archivo y su estado de carga.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivo: {fileName}, {fileInfo}. Estado: {status}'**
+  String a11yFileUpload(String fileName, String fileInfo, String status);
 
   /// Casework upload — error: unsupported mime.
   ///
@@ -4949,7 +5033,7 @@ abstract class AppLocalizations {
   /// Recommendations — tab label for the unfiltered bucket.
   ///
   /// In es, this message translates to:
-  /// **'Todos'**
+  /// **'Todo'**
   String get recommendationsTabAll;
 
   /// Recommendations — tab label for the recently published bucket.
@@ -4999,6 +5083,102 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Hechos vitales asociados'**
   String get recommendationsAssociatedLifeEventsLabel;
+
+  /// Recommendations — default label shown above the status of a recommendation card.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado'**
+  String get recommendationsStatusLabel;
+
+  /// Design system — default label for a reference number displayed in a card.
+  ///
+  /// In es, this message translates to:
+  /// **'N.º ref.'**
+  String get appCardReferenceLabel;
+
+  /// Design system — default label for an expiry date displayed in a card.
+  ///
+  /// In es, this message translates to:
+  /// **'Expiración'**
+  String get appCardExpiryLabel;
+
+  /// Design system — default accessible name for a progress indicator.
+  ///
+  /// In es, this message translates to:
+  /// **'Progreso'**
+  String get appProgressLabel;
+
+  /// Design system — accessible value for a progress indicator with no known percentage.
+  ///
+  /// In es, this message translates to:
+  /// **'En curso'**
+  String get appProgressIndeterminateValue;
+
+  /// Design system — accessible percentage reported by a progress indicator.
+  ///
+  /// In es, this message translates to:
+  /// **'{percentage} %'**
+  String appProgressPercentage(int percentage);
+
+  /// Design system — generic accessible name for an avatar that exposes a status but has no specific person name.
+  ///
+  /// In es, this message translates to:
+  /// **'Avatar'**
+  String get appAvatarLabel;
+
+  /// Design system — default accessible status for an avatar with the standard green status indicator.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible'**
+  String get appAvatarAvailableStatus;
+
+  /// Design system — accessible name for a card that starts a phone call.
+  ///
+  /// In es, this message translates to:
+  /// **'Llamar al {number}. {subtitle}'**
+  String appPhoneCallLabel(String number, String subtitle);
+
+  /// Design system — accessible hint for an action that starts a phone call.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicia una llamada telefónica'**
+  String get appPhoneCallHint;
+
+  /// Accessibility — generic label and tooltip for navigating back.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get a11yBack;
+
+  /// No description provided for @a11yClose.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get a11yClose;
+
+  /// No description provided for @a11yHelp.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda'**
+  String get a11yHelp;
+
+  /// No description provided for @a11yAppName.
+  ///
+  /// In es, this message translates to:
+  /// **'Espacio Ciudadano'**
+  String get a11yAppName;
+
+  /// No description provided for @a11yCancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get a11yCancel;
+
+  /// Etiqueta accesible del botón que abre información adicional.
+  ///
+  /// In es, this message translates to:
+  /// **'Información'**
+  String get a11yInformation;
 
   /// Recommendations — load-more button label at the bottom of the list.
   ///
@@ -5126,11 +5306,257 @@ abstract class AppLocalizations {
   /// **'Contenido cargado'**
   String get a11yContentLoaded;
 
+  /// Anuncio accesible cuando aparece un error de validación en un campo.
+  ///
+  /// In es, this message translates to:
+  /// **'Error, {field}: {error}'**
+  String a11yFieldError(String field, String error);
+
+  /// Etiqueta del botón que amplía un área de texto.
+  ///
+  /// In es, this message translates to:
+  /// **'Ampliar {field}'**
+  String a11yExpandTextArea(String field);
+
+  /// Etiqueta del botón que contrae un área de texto.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraer {field}'**
+  String a11yCollapseTextArea(String field);
+
+  /// Etiqueta del botón selector de prefijo telefónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar prefijo telefónico, actual {countryCode}'**
+  String a11ySelectPhoneCountryCode(String countryCode);
+
+  /// Etiqueta accesible de un botón de filtros con el número de filtros activos.
+  ///
+  /// In es, this message translates to:
+  /// **'{label}, {count, plural, one {1 filtro activo} other {{count} filtros activos}}'**
+  String a11yFilterButtonActiveCount(String label, int count);
+
+  /// Etiqueta accesible del grupo de acciones para limpiar y aplicar filtros.
+  ///
+  /// In es, this message translates to:
+  /// **'Acciones de filtros'**
+  String get a11yFilterActions;
+
+  /// No description provided for @listFilterClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar filtros'**
+  String get listFilterClear;
+
+  /// No description provided for @listFilterApply.
+  ///
+  /// In es, this message translates to:
+  /// **'Aplicar filtros'**
+  String get listFilterApply;
+
+  /// No description provided for @listFilterSelectDateRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar rango de fechas'**
+  String get listFilterSelectDateRange;
+
+  /// No description provided for @listFilterSelectStartDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona la fecha inicial.'**
+  String get listFilterSelectStartDate;
+
+  /// No description provided for @listFilterSelectEndDate.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona la fecha final.'**
+  String get listFilterSelectEndDate;
+
+  /// No description provided for @listFilterRangeSelected.
+  ///
+  /// In es, this message translates to:
+  /// **'Rango seleccionado.'**
+  String get listFilterRangeSelected;
+
+  /// No description provided for @listFilterRemoveRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar rango'**
+  String get listFilterRemoveRange;
+
+  /// No description provided for @listFilterConfirmRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar rango'**
+  String get listFilterConfirmRange;
+
+  /// Etiqueta accesible de un filtro de rango de fechas.
+  ///
+  /// In es, this message translates to:
+  /// **'{label}. Desde {startDate} hasta {endDate}'**
+  String a11yListFilterDateRange(String label, String startDate, String endDate);
+
+  /// Anuncio accesible de un estado de error.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: {message}'**
+  String a11yErrorState(String message);
+
+  /// Anuncio accesible de un estado sin contenido o resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin contenido: {message}'**
+  String a11yEmptyState(String message);
+
+  /// Anuncio accesible de un estado de acceso bloqueado o no disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso no disponible: {message}'**
+  String a11yBlockedState(String message);
+
+  /// Etiqueta accesible unificada de una alerta.
+  ///
+  /// In es, this message translates to:
+  /// **'{title}: {message}'**
+  String a11yAlert(String title, String message);
+
+  /// No description provided for @a11yAlertNeutral.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso del sistema'**
+  String get a11yAlertNeutral;
+
+  /// No description provided for @a11yAlertSuccess.
+  ///
+  /// In es, this message translates to:
+  /// **'Operación correcta'**
+  String get a11yAlertSuccess;
+
+  /// No description provided for @a11yAgendaTypeNotification.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificación'**
+  String get a11yAgendaTypeNotification;
+
+  /// No description provided for @a11yAgendaTypeHealth.
+  ///
+  /// In es, this message translates to:
+  /// **'Cita sanitaria'**
+  String get a11yAgendaTypeHealth;
+
+  /// No description provided for @a11yAgendaTypeCredential.
+  ///
+  /// In es, this message translates to:
+  /// **'Caducidad de acreditación'**
+  String get a11yAgendaTypeCredential;
+
+  /// Resumen accesible de una tarjeta de agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'{type}: {details}'**
+  String a11yAgendaCard(String type, String details);
+
+  /// No description provided for @a11yAttachmentField.
+  ///
+  /// In es, this message translates to:
+  /// **'{label}. {hint}'**
+  String a11yAttachmentField(String label, String hint);
+
+  /// No description provided for @a11yRequiredAttachmentField.
+  ///
+  /// In es, this message translates to:
+  /// **'{label}, obligatorio. {hint}'**
+  String a11yRequiredAttachmentField(String label, String hint);
+
+  /// Estado anunciado al seleccionar un archivo adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Archivo adjunto: {fileName}, {fileInfo}'**
+  String a11yAttachmentSelected(String fileName, String fileInfo);
+
+  /// No description provided for @a11yBottomSheet.
+  ///
+  /// In es, this message translates to:
+  /// **'Panel inferior'**
+  String get a11yBottomSheet;
+
+  /// No description provided for @a11yBottomSheetClose.
+  ///
+  /// In es, this message translates to:
+  /// **'Salir'**
+  String get a11yBottomSheetClose;
+
+  /// No description provided for @a11yCalendar.
+  ///
+  /// In es, this message translates to:
+  /// **'Calendario'**
+  String get a11yCalendar;
+
+  /// No description provided for @a11yCalendarMonth.
+  ///
+  /// In es, this message translates to:
+  /// **'Mes mostrado: {monthYear}'**
+  String a11yCalendarMonth(String monthYear);
+
+  /// No description provided for @a11ySelectCalendarMonthYear.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar mes y año, actual {monthYear}'**
+  String a11ySelectCalendarMonthYear(String monthYear);
+
+  /// No description provided for @a11yCalendarHasEvent.
+  ///
+  /// In es, this message translates to:
+  /// **'con evento'**
+  String get a11yCalendarHasEvent;
+
+  /// No description provided for @a11yCalendarOutsideMonth.
+  ///
+  /// In es, this message translates to:
+  /// **'fuera del mes mostrado'**
+  String get a11yCalendarOutsideMonth;
+
+  /// No description provided for @a11yCaptcha.
+  ///
+  /// In es, this message translates to:
+  /// **'{label}, verificación {badge}'**
+  String a11yCaptcha(String label, String badge);
+
+  /// No description provided for @a11yCaptchaVerified.
+  ///
+  /// In es, this message translates to:
+  /// **'Captcha verificado'**
+  String get a11yCaptchaVerified;
+
+  /// No description provided for @a11yAlertWarning.
+  ///
+  /// In es, this message translates to:
+  /// **'Advertencia'**
+  String get a11yAlertWarning;
+
+  /// No description provided for @a11yAlertError.
+  ///
+  /// In es, this message translates to:
+  /// **'Error'**
+  String get a11yAlertError;
+
   /// Etiqueta del ítem de Preferencias en el menú desplegable del perfil.
   ///
   /// In es, this message translates to:
   /// **'Preferencias'**
   String get drawerPreferences;
+
+  /// Saludo del menú de perfil.
+  ///
+  /// In es, this message translates to:
+  /// **'Hola, {userName}'**
+  String drawerGreeting(String userName);
+
+  /// Acción para cerrar la sesión desde el menú de perfil.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sesión'**
+  String get drawerLogout;
 
   /// Etiqueta del ítem de Ayuda y Contacto en la sección secundaria del menú de perfil.
   ///

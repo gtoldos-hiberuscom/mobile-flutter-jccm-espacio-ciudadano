@@ -48,7 +48,10 @@ class AppTag extends StatelessWidget {
     super.key,
     this.icon,
     this.showIcon = true,
-  });
+    this.semanticLabel,
+    this.announceChanges = false,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   /// The semantic status that drives the colour palette and default icon.
   final AppTagStatus status;
@@ -62,37 +65,49 @@ class AppTag extends StatelessWidget {
   /// Whether the leading status icon is rendered.
   final bool showIcon;
 
+  /// Alternative pronunciation for the visible label.
+  final String? semanticLabel;
+
+  /// Announces the tag when its status changes dynamically.
+  final bool announceChanges;
+
   @override
   Widget build(final BuildContext context) {
     final (:bg, :border, :fg, :defaultIcon) = _resolve(status);
     final IconData effectiveIcon = icon ?? defaultIcon;
 
     return Semantics(
-      label: label,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(
-          AppDimensions.space4, // l = XS = 4 dp
-          2,
-          AppDimensions.space8, // r = S  = 8 dp
-          2,
-        ),
-        decoration: BoxDecoration(
-          color: bg,
-          border: Border.all(color: border),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (showIcon) ...[
-              AppIcon(effectiveIcon, size: 16, color: fg),
-              const SizedBox(width: AppDimensions.space4),
+      container: true,
+      label: semanticLabel ?? label,
+      liveRegion: announceChanges,
+      child: ExcludeSemantics(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(
+            AppDimensions.space4,
+            2,
+            AppDimensions.space8,
+            2,
+          ),
+          decoration: BoxDecoration(
+            color: bg,
+            border: Border.all(color: border),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (showIcon) ...[
+                AppIcon(effectiveIcon, size: 16, color: fg),
+                const SizedBox(width: AppDimensions.space4),
+              ],
+              Flexible(
+                child: Text(
+                  label.toUpperCase(),
+                  style: AppTypography.captionUppercase.copyWith(color: fg),
+                ),
+              ),
             ],
-            Text(
-              label.toUpperCase(),
-              style: AppTypography.captionUppercase.copyWith(color: fg),
-            ),
-          ],
+          ),
         ),
       ),
     );

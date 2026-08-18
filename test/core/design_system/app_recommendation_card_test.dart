@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('renders the recommendation card from the current design', (
@@ -8,6 +9,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: AppRecommendationCard(
             title: 'Nombre del trámite recomendado que puede ser muy largo pero con elipsis a la tercera línea',
@@ -35,7 +39,6 @@ void main() {
     final title = tester.widget<Text>(
       find.textContaining('Nombre del trámite recomendado'),
     );
-    expect(title.maxLines, 3);
-    expect(title.overflow, TextOverflow.ellipsis);
+    expect(title.maxLines, isNull);
   });
 }

@@ -85,7 +85,7 @@ class DigitalCardsPage extends ConsumerWidget {
                       secondaryDateLabel: card.type == DigitalCardType.largeFamily ? l10n.digitalCardsExpiryDate : null,
                       secondaryDate: card.type == DigitalCardType.largeFamily ? _formatDate(context, card.expiresAt) : null,
                       statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
-                      downloadLabel: 'Descargar',
+                      downloadLabel: l10n.digitalCardDownload,
                       isDownloading: isDownloading,
                       onDownload: () => showDigitalCardDownloadSheet(context, ref, card),
                     );

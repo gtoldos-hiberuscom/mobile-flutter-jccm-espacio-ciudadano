@@ -10,7 +10,12 @@ class AppInfoCard extends StatelessWidget {
     this.borderColor = AppColors.borderBlueMutedLight,
     this.leadingBorderWidth = AppDimensions.space8,
     this.contentPadding = const EdgeInsets.all(AppDimensions.space8),
-  });
+    this.semanticLabel,
+  }) : assert(leadingBorderWidth >= 0, 'leadingBorderWidth must not be negative'),
+       assert(
+         semanticLabel == null || semanticLabel != '',
+         'semanticLabel must not be empty',
+       );
 
   final Widget child;
   final Color leadingBorderColor;
@@ -18,16 +23,20 @@ class AppInfoCard extends StatelessWidget {
   final double leadingBorderWidth;
   final EdgeInsetsGeometry contentPadding;
 
+  /// Optional name for the information group. Descendants remain independently
+  /// navigable so links and buttons inside the card keep their own actions.
+  final String? semanticLabel;
+
   @override
   Widget build(final BuildContext context) {
-    return DecoratedBox(
+    final card = DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.backgroundWhite,
-        border: Border(
+        border: BorderDirectional(
           top: BorderSide(color: borderColor),
-          right: BorderSide(color: borderColor),
+          end: BorderSide(color: borderColor),
           bottom: BorderSide(color: borderColor),
-          left: BorderSide(color: leadingBorderColor, width: leadingBorderWidth),
+          start: BorderSide(color: leadingBorderColor, width: leadingBorderWidth),
         ),
         borderRadius: BorderRadius.circular(1),
       ),
@@ -35,6 +44,16 @@ class AppInfoCard extends StatelessWidget {
         padding: contentPadding,
         child: child,
       ),
+    );
+
+    if (semanticLabel == null) {
+      return card;
+    }
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: semanticLabel,
+      child: card,
     );
   }
 }

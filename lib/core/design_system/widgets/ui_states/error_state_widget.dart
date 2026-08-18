@@ -11,7 +11,12 @@ class ErrorStateWidget extends StatelessWidget {
     this.detail,
     this.onRetry,
     this.retryLabel,
-  });
+    this.semanticsLabel,
+    this.announce = true,
+  }) : assert(message.length > 0, 'message must not be empty'),
+       assert(detail == null || detail.length > 0, 'detail must not be empty'),
+       assert(retryLabel == null || retryLabel.length > 0, 'retryLabel must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final String message;
   final String? detail;
@@ -22,32 +27,54 @@ class ErrorStateWidget extends StatelessWidget {
   /// Override for the retry button label.
   final String? retryLabel;
 
+  /// Override for the error announcement.
+  final String? semanticsLabel;
+
+  /// Whether this dynamically inserted state should be a live region.
+  final bool announce;
+
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final errorLabel = semanticsLabel ?? [l10n.a11yErrorState(message), if (detail != null) detail].join('. ');
 
     return Semantics(
-      liveRegion: true,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
+      container: true,
+      explicitChildNodes: true,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(32),
+        child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              Semantics(
+                container: true,
+                label: errorLabel,
+                liveRegion: announce,
+                child: const SizedBox(width: 1, height: 1),
+              ),
+              const ExcludeSemantics(
+                child: Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              ),
               const SizedBox(height: 16),
-              Text(
-                message,
-                style: theme.textTheme.titleMedium,
-                textAlign: TextAlign.center,
+              Semantics(
+                header: true,
+                headingLevel: 2,
+                child: Text(
+                  message,
+                  style: theme.textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
               ),
               if (detail != null) ...[
                 const SizedBox(height: 8),
-                Text(
-                  detail!,
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.outline),
-                  textAlign: TextAlign.center,
+                ExcludeSemantics(
+                  child: Text(
+                    detail!,
+                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.outline),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
               if (onRetry != null) ...[

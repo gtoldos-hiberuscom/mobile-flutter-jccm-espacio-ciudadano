@@ -307,17 +307,23 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       return null;
     }
 
-    final docs = _list(data['documentos'])
-        .map((final item) {
+    final docs = _list(data['documentos']).indexed
+        .map((final entry) {
+          final (index, item) = entry;
           final map = _map(item);
           final nested = _map(map?['documento']);
-          final order = _int(map, 'orden') ?? 0;
+          final name = _documentName(map) ?? _documentName(nested);
+          if (name == null) {
+            return null;
+          }
+          final order = _int(map, 'orden') ?? index + 1;
           return NotificacionDocumento(
             orden: order,
-            nombre: _string(map, 'nombre') ?? _string(map, 'nombreFichero') ?? _string(nested, 'nombre') ?? 'Documento $order.pdf',
-            tamanoBytes: _int(map, 'tamano') ?? _int(map, 'tamanoBytes'),
+            nombre: name,
+            tamanoBytes: _int(map, 'tamano') ?? _int(map, 'tamanoBytes') ?? _int(nested, 'tamano') ?? _int(nested, 'tamanoBytes'),
           );
         })
+        .nonNulls
         .toList(growable: false);
     return NotificacionDetalle(
       id: _int(data, 'id') ?? _int(data, 'idNotificacion') ?? 0,
@@ -337,6 +343,8 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   Map<String, Object?>? _map(final Object? value) => value is Map ? _stringKeyMap(value) : null;
   List<Object?> _list(final Object? value) => value is List ? value.cast<Object?>() : const [];
   DateTime? _date(final Object? value) => value is String ? DateTime.tryParse(value) : null;
+  String? _documentName(final Map<String, Object?>? map) => _string(map, 'nombre') ?? _string(map, 'nombreFichero') ?? _string(map, 'nombreDocumento') ?? _string(map, 'titulo') ?? _string(map, 'descripcion');
+
   String? _additional(final Map<String, Object?>? map, final String key) {
     for (final item in _list(map?['informacionAdicional'])) {
       final entry = _map(item);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_bottom_sheet.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 
 /// A standardized info sheet for displaying help information with optional footer.
 ///
@@ -57,13 +57,27 @@ class AppInfoSheet {
     final String? actionLabel,
     final VoidCallback? onActionPressed,
     final IconData? actionIcon,
+    final String? semanticsLabel,
   }) async {
+    assert(title != '', 'title must not be empty');
+    assert(bodyText != '', 'bodyText must not be empty');
+    assert(footerText == null || footerText != '', 'footerText must not be empty');
+    assert(
+      (actionLabel == null) == (onActionPressed == null),
+      'actionLabel and onActionPressed must be provided together',
+    );
+    assert(actionLabel == null || actionLabel != '', 'actionLabel must not be empty');
+    assert(
+      semanticsLabel == null || semanticsLabel != '',
+      'semanticsLabel must not be empty',
+    );
     final hasFooter = footerText != null;
-    final hasAction = actionLabel != null && onActionPressed != null;
+    final hasAction = actionLabel != null;
 
     await AppBottomSheet.show<void>(
       context: context,
       title: title,
+      semanticsLabel: semanticsLabel,
       horizontalMargin: AppDimensions.space4,
       body: _AppInfoSheetBody(
         bodyText: bodyText,
@@ -99,22 +113,22 @@ class _AppInfoSheetBody extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-            child: Text(
-              bodyText,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.textPrimary,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+          child: Text(
+            bodyText,
+            style: AppTypography.bodyRegular.copyWith(
+              color: AppColors.textPrimary,
             ),
           ),
+        ),
 
-          if (hasFooter || hasAction) ...[
-            const Padding(
+        if (hasFooter || hasAction) ...[
+          const ExcludeSemantics(
+            child: Padding(
               padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
               child: Divider(
                 color: AppColors.neutral100,
@@ -122,30 +136,30 @@ class _AppInfoSheetBody extends StatelessWidget {
                 height: 1,
               ),
             ),
-          ],
+          ),
+        ],
 
-          if (footerText != null) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-              child: Text(
-                footerText!,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.textPrimary,
-                ),
+        if (footerText != null) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+            child: Text(
+              footerText!,
+              style: AppTypography.bodyRegular.copyWith(
+                color: AppColors.textPrimary,
               ),
             ),
-          ],
-
-          if (hasAction) ...[
-            const SizedBox(height: AppDimensions.space8),
-            _AppInfoSheetActionButton(
-              label: actionLabel!,
-              onPressed: onActionPressed!,
-              icon: actionIcon,
-            ),
-          ],
+          ),
         ],
-      ),
+
+        if (hasAction) ...[
+          const SizedBox(height: AppDimensions.space8),
+          _AppInfoSheetActionButton(
+            label: actionLabel!,
+            onPressed: onActionPressed!,
+            icon: actionIcon,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -163,39 +177,12 @@ class _AppInfoSheetActionButton extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: AppDimensions.space48,
-      child: DecoratedBox(
-        decoration: const BoxDecoration(boxShadow: AppShadows.low),
-        child: OutlinedButton(
-          onPressed: onPressed,
-          style: OutlinedButton.styleFrom(
-            backgroundColor: AppColors.backgroundWhite,
-            foregroundColor: AppColors.textBlack,
-            side: const BorderSide(color: AppColors.primary, width: 2),
-            padding: const EdgeInsets.all(AppDimensions.space8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.textBlack,
-                ),
-              ),
-              if (icon != null) ...[
-                const SizedBox(width: AppDimensions.space8),
-                Icon(icon, size: AppDimensions.iconMedium, color: AppColors.textBlack),
-              ],
-            ],
-          ),
-        ),
-      ),
+    return AppButton(
+      label: label,
+      onPressed: onPressed,
+      hierarchy: AppButtonHierarchy.secondary,
+      trailingIcon: icon,
+      isExpanded: true,
     );
   }
 }

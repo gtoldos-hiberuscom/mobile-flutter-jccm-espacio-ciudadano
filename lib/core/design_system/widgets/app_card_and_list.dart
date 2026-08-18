@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Variant for [AppCard] — mirrors the Figma `propClass` property.
 enum AppCardClass {
@@ -32,41 +33,59 @@ class AppSurfaceCard extends StatelessWidget {
     super.key,
     this.padding = const EdgeInsets.all(AppDimensions.space16),
     this.semanticLabel,
+    this.semanticHint,
     this.onTap,
-  });
+  }) : assert(semanticLabel == null || semanticLabel.length > 0, 'semanticLabel must not be empty'),
+       assert(semanticHint == null || semanticHint.length > 0, 'semanticHint must not be empty'),
+       assert(onTap == null || semanticLabel != null, 'interactive cards require a semanticLabel');
 
   final Widget child;
   final EdgeInsetsGeometry padding;
   final String? semanticLabel;
+  final String? semanticHint;
   final VoidCallback? onTap;
 
   @override
   Widget build(final BuildContext context) {
     final borderRadius = BorderRadius.circular(AppDimensions.radiusMedium);
-    final card = Material(
-      color: AppColors.surface,
-      borderRadius: borderRadius,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: borderRadius,
-        child: Container(
-          width: double.infinity,
-          padding: padding,
-          decoration: BoxDecoration(
-            borderRadius: borderRadius,
-            border: Border.all(color: AppColors.backgroundBlueMutedLight),
-            boxShadow: AppShadows.low,
-            color: AppColors.surface,
-          ),
-          child: child,
+    final content = ConstrainedBox(
+      constraints: onTap == null ? const BoxConstraints() : const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+      child: Container(
+        width: double.infinity,
+        padding: padding,
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          border: Border.all(color: AppColors.backgroundBlueMutedLight),
+          boxShadow: AppShadows.low,
+          color: AppColors.surface,
         ),
+        child: child,
       ),
     );
+    final card = onTap == null
+        ? content
+        : Material(
+            color: AppColors.surface,
+            borderRadius: borderRadius,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: borderRadius,
+              child: content,
+            ),
+          );
+
+    if (semanticLabel == null) {
+      return card;
+    }
 
     return Semantics(
+      container: true,
       label: semanticLabel,
+      hint: semanticHint,
       button: onTap != null,
-      child: semanticLabel == null ? card : ExcludeSemantics(child: card),
+      enabled: onTap == null ? null : true,
+      onTap: onTap,
+      child: ExcludeSemantics(child: card),
     );
   }
 }
@@ -80,8 +99,14 @@ class AppRecommendationCard extends StatelessWidget {
     super.key,
     this.statusLabel,
     this.statusText,
+    this.semanticLabel,
     this.onTap,
-  });
+  }) : assert(title.length > 0, 'title must not be empty'),
+       assert(detailLabel.length > 0, 'detailLabel must not be empty'),
+       assert(detailText.length > 0, 'detailText must not be empty'),
+       assert(statusLabel == null || statusLabel.length > 0, 'statusLabel must not be empty'),
+       assert(statusText == null || statusText.length > 0, 'statusText must not be empty'),
+       assert(semanticLabel == null || semanticLabel.length > 0, 'semanticLabel must not be empty');
 
   final String title;
   final List<String> categoryLabels;
@@ -89,10 +114,21 @@ class AppRecommendationCard extends StatelessWidget {
   final String detailText;
   final String? statusLabel;
   final String? statusText;
+  final String? semanticLabel;
   final VoidCallback? onTap;
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final effectiveStatusLabel = statusLabel ?? l10n.recommendationsStatusLabel;
+    final effectiveSemanticLabel =
+        semanticLabel ??
+        [
+          ...categoryLabels,
+          title,
+          '$detailLabel: $detailText',
+          if (statusText != null) '$effectiveStatusLabel: $statusText',
+        ].join('. ');
     final content = Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppDimensions.space16),
@@ -136,16 +172,16 @@ class AppRecommendationCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
                     style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
                   ),
                 ),
-                const SizedBox(width: AppDimensions.space8),
-                const AppIcon(
-                  AppIcons.openInNew,
-                  color: AppColors.textPrimary,
-                ),
+                if (onTap != null) ...[
+                  const SizedBox(width: AppDimensions.space8),
+                  const AppIcon(
+                    AppIcons.openInNew,
+                    color: AppColors.textPrimary,
+                  ),
+                ],
               ],
             ),
           ),
@@ -167,8 +203,6 @@ class AppRecommendationCard extends StatelessWidget {
                 const SizedBox(height: AppDimensions.space8),
                 Text(
                   detailText,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                   style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
                 ),
                 const SizedBox(height: AppDimensions.space4),
@@ -183,7 +217,7 @@ class AppRecommendationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    (statusLabel ?? 'Estado').toUpperCase(),
+                    effectiveStatusLabel.toUpperCase(),
                     style: AppTypography.captionUppercase.copyWith(
                       color: AppColors.primary,
                     ),
@@ -209,10 +243,20 @@ class AppRecommendationCard extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      child: InkWell(
+      child: Semantics(
+        container: true,
+        label: effectiveSemanticLabel,
+        hint: l10n.externalLinkA11yHint,
+        link: true,
+        enabled: true,
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        child: content,
+        child: ExcludeSemantics(
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+            child: content,
+          ),
+        ),
       ),
     );
   }
@@ -279,8 +323,8 @@ class AppCard extends StatelessWidget {
     this.actionButton,
     this.lastUpdateText,
     this.showArrow = false,
-    this.refNumberLabel = 'Nº ref.',
-    this.expiryDateLabel = 'Expir.',
+    this.refNumberLabel,
+    this.expiryDateLabel,
     this.extraLabel,
     this.extraText,
     // ── Agenda slots ─────────────────────────────────────────────────────────
@@ -289,12 +333,20 @@ class AppCard extends StatelessWidget {
     this.description,
     // ── Interaction ───────────────────────────────────────────────────────────
     this.onTap,
+    this.semanticLabel,
+    this.semanticHint,
     // ── Legacy compat ─────────────────────────────────────────────────────────
     @Deprecated('Use titleIcon') this.leading,
     @Deprecated('Use actionButton') this.trailing,
     @Deprecated('Use date') this.month,
     @Deprecated('Use description') this.subtitle,
-  });
+  }) : assert(title.length > 0, 'title must not be empty'),
+       assert(refNumberLabel == null || refNumberLabel.length > 0, 'refNumberLabel must not be empty'),
+       assert(expiryDateLabel == null || expiryDateLabel.length > 0, 'expiryDateLabel must not be empty'),
+       assert(semanticLabel == null || semanticLabel.length > 0, 'semanticLabel must not be empty'),
+       assert(semanticHint == null || semanticHint.length > 0, 'semanticHint must not be empty'),
+       assert(state != AppCardState.disabled || onAttachmentTap == null, 'disabled cards cannot have attachment actions'),
+       assert(state != AppCardState.disabled || actionButton == null, 'disabled cards cannot have action buttons');
 
   final AppCardClass cardClass;
   final AppCardState state;
@@ -344,10 +396,10 @@ class AppCard extends StatelessWidget {
   final bool showArrow;
 
   /// Overrides the "Nº ref." label in the ref block's first row.
-  final String refNumberLabel;
+  final String? refNumberLabel;
 
   /// Overrides the "Expir." label in the ref block's second row.
-  final String expiryDateLabel;
+  final String? expiryDateLabel;
 
   /// Uppercase caption label for the optional info block rendered below the
   /// ref block (e.g. "Estado").
@@ -370,6 +422,8 @@ class AppCard extends StatelessWidget {
   // ── Interaction ───────────────────────────────────────────────────────────
 
   final VoidCallback? onTap;
+  final String? semanticLabel;
+  final String? semanticHint;
 
   // ── Legacy compat (unused internally) ────────────────────────────────────
   @Deprecated('Use titleIcon')
@@ -401,56 +455,72 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final effectiveRefNumberLabel = refNumberLabel ?? l10n.appCardReferenceLabel;
+    final effectiveExpiryDateLabel = expiryDateLabel ?? l10n.appCardExpiryLabel;
     // WCAG 4.1.2 — unified semantic label for complex cards.
     final semanticSegments = <String>[
       ?categoryLabel,
       title,
-      ?refNumber,
-      ?expiryDate,
+      if (refNumber != null) '$effectiveRefNumberLabel: $refNumber',
+      if (expiryDate != null) '$effectiveExpiryDateLabel: $expiryDate',
       ?date,
       ?time,
       ?description,
-      ?extraText,
+      if (extraText != null) '${extraLabel ?? l10n.recommendationsStatusLabel}: $extraText',
+      ?lastUpdateText,
     ];
-    final composedLabel = semanticSegments.join(', ');
+    final composedLabel = semanticLabel ?? semanticSegments.join('. ');
+    final effectiveOnTap = _isDisabled ? null : onTap;
+    final content = Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: _borderRadius,
+        border: Border.all(color: AppColors.borderBlueMutedLight),
+        boxShadow: _shadow,
+      ),
+      padding: const EdgeInsets.all(AppDimensions.space16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: cardClass == AppCardClass.agenda ? _agendaSlots() : _basicSlots(effectiveRefNumberLabel, effectiveExpiryDateLabel),
+      ),
+    );
+    final visualCard = effectiveOnTap == null
+        ? content
+        : Material(
+            color: Colors.transparent,
+            borderRadius: _borderRadius,
+            child: InkWell(
+              onTap: effectiveOnTap,
+              borderRadius: _borderRadius,
+              child: content,
+            ),
+          );
 
     return Semantics(
+      container: true,
+      explicitChildNodes: true,
       label: composedLabel,
       button: onTap != null,
-      enabled: !_isDisabled,
-      child: ExcludeSemantics(
-        child: InkWell(
-          onTap: _isDisabled ? null : onTap,
-          borderRadius: _borderRadius,
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: _borderRadius,
-              border: Border.all(color: AppColors.borderBlueMutedLight),
-              boxShadow: _shadow,
-            ),
-            padding: const EdgeInsets.all(AppDimensions.space16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: cardClass == AppCardClass.agenda ? _agendaSlots() : _basicSlots(),
-            ),
-          ),
-        ),
-      ),
+      enabled: _isDisabled ? false : (onTap != null ? true : null),
+      hint: semanticHint,
+      onTap: effectiveOnTap,
+      child: visualCard,
     );
   }
 
   // ── Basic slots ───────────────────────────────────────────────────────────
 
-  List<Widget> _basicSlots() => [
-    if (categoryLabel != null || statusTag != null) _headerRow(),
-    _titleRow(),
-    if (refNumber != null || expiryDate != null) _refBlock(),
-    if (extraLabel != null && extraText != null) _extraInfoBlock(),
+  List<Widget> _basicSlots(final String effectiveRefNumberLabel, final String effectiveExpiryDateLabel) => [
+    if (categoryLabel != null || statusTag != null) ExcludeSemantics(child: _headerRow()),
+    ExcludeSemantics(child: _titleRow()),
+    if (refNumber != null || expiryDate != null) ExcludeSemantics(child: _refBlock(effectiveRefNumberLabel, effectiveExpiryDateLabel)),
+    if (extraLabel != null && extraText != null) ExcludeSemantics(child: _extraInfoBlock()),
     if (attachmentLabel != null) _attachmentRow(),
     if (actionButton != null) SizedBox(width: double.infinity, child: actionButton),
-    if (lastUpdateText != null) _lastUpdateRow(),
+    if (lastUpdateText != null) ExcludeSemantics(child: _lastUpdateRow()),
   ];
 
   Widget _headerRow() {
@@ -517,7 +587,7 @@ class AppCard extends StatelessWidget {
     );
   }
 
-  Widget _refBlock() {
+  Widget _refBlock(final String effectiveRefNumberLabel, final String effectiveExpiryDateLabel) {
     final bgColor = _isDisabled ? AppColors.backgroundBlueMutedLight : AppColors.backgroundLightBlue;
 
     final labelColor = _isDisabled ? AppColors.neutralDark : AppColors.primary;
@@ -536,14 +606,14 @@ class AppCard extends StatelessWidget {
         children: [
           if (refNumber != null)
             _refRow(
-              label: refNumberLabel,
+              label: effectiveRefNumberLabel,
               value: refNumber!,
               labelColor: labelColor,
               valueColor: valueColor,
             ),
           if (expiryDate != null)
             _refRow(
-              label: expiryDateLabel,
+              label: effectiveExpiryDateLabel,
               value: expiryDate!,
               labelColor: labelColor,
               valueColor: expiryWarning ? AppColors.warningDark : valueColor,
@@ -571,25 +641,23 @@ class AppCard extends StatelessWidget {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-      child: Wrap(
-        spacing: AppDimensions.space8,
-        crossAxisAlignment: WrapCrossAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 124),
-            child: Text(
-              label.toUpperCase(),
-              style: AppTypography.captionUppercase.copyWith(color: labelColor),
-            ),
+          Text(
+            label.toUpperCase(),
+            style: AppTypography.captionUppercase.copyWith(color: labelColor),
           ),
+          const SizedBox(height: AppDimensions.space4),
           Row(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                value,
-                style: AppTypography.smallRegular.copyWith(
-                  color: valueColor,
-                  fontWeight: valueWeight,
+              Expanded(
+                child: Text(
+                  value,
+                  style: AppTypography.smallRegular.copyWith(
+                    color: valueColor,
+                    fontWeight: valueWeight,
+                  ),
                 ),
               ),
               if (trailingIcon != null) ...[
@@ -631,24 +699,33 @@ class AppCard extends StatelessWidget {
   }
 
   Widget _attachmentRow() {
-    return InkWell(
-      onTap: _isDisabled ? null : onAttachmentTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-        child: Row(
-          children: [
-            AppIcon(
-              AppIcons.attachment,
-              color: _textColor(),
+    final effectiveOnTap = _isDisabled ? null : onAttachmentTap;
+    return Semantics(
+      label: attachmentLabel,
+      button: true,
+      enabled: effectiveOnTap != null,
+      onTap: effectiveOnTap,
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: effectiveOnTap,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+            child: Row(
+              children: [
+                AppIcon(
+                  AppIcons.attachment,
+                  color: _textColor(),
+                ),
+                const SizedBox(width: AppDimensions.space8),
+                Expanded(
+                  child: Text(
+                    attachmentLabel!,
+                    style: AppTypography.bodyRegular.copyWith(color: _textColor()),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: Text(
-                attachmentLabel!,
-                style: AppTypography.bodyRegular.copyWith(color: _textColor()),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -676,53 +753,52 @@ class AppCard extends StatelessWidget {
   // ── Agenda slots ──────────────────────────────────────────────────────────
 
   List<Widget> _agendaSlots() => [
-    if (date != null || time != null) _agendaHeaderRow(),
-    _agendaTitleRow(),
-    if (description != null) _agendaContentBlock(),
+    if (date != null || time != null) ExcludeSemantics(child: _agendaHeaderRow()),
+    ExcludeSemantics(child: _agendaTitleRow()),
+    if (description != null) ExcludeSemantics(child: _agendaContentBlock()),
     if (actionButton != null) SizedBox(width: double.infinity, child: actionButton),
-    if (lastUpdateText != null) _lastUpdateRow(),
+    if (lastUpdateText != null) ExcludeSemantics(child: _lastUpdateRow()),
   ];
 
   Widget _agendaHeaderRow() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (date != null)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.calendar_today_outlined,
-                  size: AppDimensions.iconMedium,
-                  color: _textColor(),
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                Text(
-                  date!,
-                  style: AppTypography.bodyRegular.copyWith(color: _textColor()),
-                ),
-              ],
+            _agendaMetadata(
+              icon: Icons.calendar_today_outlined,
+              value: date!,
             ),
+          if (date != null && time != null) const SizedBox(height: AppDimensions.space8),
           if (time != null)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.schedule_outlined,
-                  size: AppDimensions.iconMedium,
-                  color: _textColor(),
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                Text(
-                  time!,
-                  style: AppTypography.bodyRegular.copyWith(color: _textColor()),
-                ),
-              ],
+            _agendaMetadata(
+              icon: Icons.schedule_outlined,
+              value: time!,
             ),
         ],
       ),
+    );
+  }
+
+  Widget _agendaMetadata({required final IconData icon, required final String value}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          icon,
+          size: AppDimensions.iconMedium,
+          color: _textColor(),
+        ),
+        const SizedBox(width: AppDimensions.space8),
+        Expanded(
+          child: Text(
+            value,
+            style: AppTypography.bodyRegular.copyWith(color: _textColor()),
+          ),
+        ),
+      ],
     );
   }
 
@@ -767,30 +843,44 @@ class AppProgressBar extends StatelessWidget {
     this.color,
     this.backgroundColor,
     this.semanticsLabel,
+    this.semanticsValue,
+    this.announceChanges = false,
     this.height = 16,
     this.borderRadius,
-  });
+  }) : assert(value == null || (value >= 0 && value <= 1), 'value must be between 0 and 1'),
+       assert(height > 0, 'height must be positive'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
+       assert(semanticsValue == null || semanticsValue.length > 0, 'semanticsValue must not be empty');
 
   final double? value;
   final Color? color;
   final Color? backgroundColor;
   final String? semanticsLabel;
+  final String? semanticsValue;
+  final bool announceChanges;
   final double height;
   final BorderRadius? borderRadius;
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final percentage = value == null ? null : (value! * 100).round();
+
     return Semantics(
-      label: semanticsLabel ?? 'Progreso',
-      value: value != null ? '${(value! * 100).round()}%' : null,
-      child: ClipRRect(
-        borderRadius: borderRadius ?? BorderRadius.circular(AppDimensions.radiusRound),
-        child: LinearProgressIndicator(
-          value: value,
-          minHeight: height,
-          backgroundColor: backgroundColor ?? const Color(0xFFE0E5EB),
-          valueColor: AlwaysStoppedAnimation<Color>(
-            color ?? AppColors.secondary,
+      container: true,
+      label: semanticsLabel ?? l10n.appProgressLabel,
+      value: semanticsValue ?? (percentage == null ? l10n.appProgressIndeterminateValue : l10n.appProgressPercentage(percentage)),
+      liveRegion: announceChanges,
+      child: ExcludeSemantics(
+        child: ClipRRect(
+          borderRadius: borderRadius ?? BorderRadius.circular(AppDimensions.radiusRound),
+          child: LinearProgressIndicator(
+            value: value,
+            minHeight: height,
+            backgroundColor: backgroundColor ?? const Color(0xFFE0E5EB),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              color ?? AppColors.secondary,
+            ),
           ),
         ),
       ),
@@ -807,7 +897,12 @@ class AppAvatar extends StatelessWidget {
     this.hasStatus = false,
     this.statusColor,
     this.semanticsLabel,
-  });
+    this.statusLabel,
+  }) : assert(imageUrl == null || imageUrl.length > 0, 'imageUrl must not be empty'),
+       assert(initials == null || initials.length > 0, 'initials must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
+       assert(statusLabel == null || statusLabel.length > 0, 'statusLabel must not be empty'),
+       assert(!hasStatus || statusColor == null || statusLabel != null, 'a custom statusColor requires a statusLabel');
 
   final String? imageUrl;
   final String? initials;
@@ -815,6 +910,7 @@ class AppAvatar extends StatelessWidget {
   final bool hasStatus;
   final Color? statusColor;
   final String? semanticsLabel;
+  final String? statusLabel;
 
   double get _radius => switch (size) {
     AppAvatarSize.small => 16,
@@ -824,6 +920,7 @@ class AppAvatar extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final normalizedInitials = initials?.trim() ?? '';
     final child = imageUrl == null
         ? normalizedInitials.isNotEmpty
@@ -835,6 +932,7 @@ class AppAvatar extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.15,
                   ),
+                  textScaler: TextScaler.noScaling,
                 )
               : Icon(
                   Icons.person_rounded,
@@ -856,34 +954,41 @@ class AppAvatar extends StatelessWidget {
       ),
     );
 
-    if (!hasStatus) {
-      return Semantics(label: semanticsLabel, child: avatarWidget);
+    final visualAvatar = hasStatus
+        ? Stack(
+            clipBehavior: Clip.none,
+            children: [
+              avatarWidget,
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  width: _radius * 0.5,
+                  height: _radius * 0.5,
+                  decoration: BoxDecoration(
+                    color: statusColor ?? AppColors.success,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.surface,
+                      width: 1.5,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        : avatarWidget;
+
+    if (semanticsLabel == null && !hasStatus) {
+      return ExcludeSemantics(child: visualAvatar);
     }
 
     return Semantics(
-      label: semanticsLabel,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          avatarWidget,
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: Container(
-              width: _radius * 0.5,
-              height: _radius * 0.5,
-              decoration: BoxDecoration(
-                color: statusColor ?? AppColors.success,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.surface,
-                  width: 1.5,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      container: true,
+      image: true,
+      label: semanticsLabel ?? l10n.appAvatarLabel,
+      value: hasStatus ? (statusLabel ?? l10n.appAvatarAvailableStatus) : null,
+      child: ExcludeSemantics(child: visualAvatar),
     );
   }
 }
@@ -899,7 +1004,12 @@ class AppListItem extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.isDisabled = false,
-  });
+    this.semanticsLabel,
+    this.semanticsHint,
+  }) : assert(title.length > 0, 'title must not be empty'),
+       assert(subtitle == null || subtitle.length > 0, 'subtitle must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
+       assert(semanticsHint == null || semanticsHint.length > 0, 'semanticsHint must not be empty');
 
   final String title;
   final String? subtitle;
@@ -907,11 +1017,15 @@ class AppListItem extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
   final bool isDisabled;
+  final String? semanticsLabel;
+  final String? semanticsHint;
 
   @override
   Widget build(final BuildContext context) {
-    return ListTile(
-      onTap: isDisabled ? null : onTap,
+    final effectiveOnTap = isDisabled ? null : onTap;
+    final tile = ListTile(
+      minTileHeight: AppDimensions.minTouchTarget,
+      onTap: effectiveOnTap,
       leading: leading,
       trailing:
           trailing ??
@@ -936,6 +1050,25 @@ class AppListItem extends StatelessWidget {
               ),
             )
           : null,
+    );
+
+    if (onTap == null) {
+      return Semantics(
+        container: true,
+        label: semanticsLabel ?? [title, ?subtitle].join('. '),
+        hint: semanticsHint,
+        child: ExcludeSemantics(child: tile),
+      );
+    }
+
+    return Semantics(
+      container: true,
+      label: semanticsLabel ?? [title, ?subtitle].join('. '),
+      hint: semanticsHint,
+      button: true,
+      enabled: !isDisabled,
+      onTap: effectiveOnTap,
+      child: ExcludeSemantics(child: tile),
     );
   }
 }
