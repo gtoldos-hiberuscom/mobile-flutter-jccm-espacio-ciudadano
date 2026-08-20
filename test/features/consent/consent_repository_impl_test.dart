@@ -11,6 +11,29 @@ import 'package:jccm_espacio_ciudadano/features/consent/3_data/repositories/cons
 
 void main() {
   group('ConsentRepositoryImpl', () {
+    test('uses sub_alt in the gateway path and idAgente in the write body', () async {
+      final adapter = _CapturingAdapter();
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(adapter),
+        agentId: 'PER9998003',
+      );
+
+      await repository.markConsentAccepted(
+        idAgente: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6',
+        clauses: const [
+          Clause(id: 1, label: 'A', isSelected: true),
+        ],
+      );
+
+      expect(adapter.methods, ['GET', 'PATCH']);
+      expect(adapter.paths, [
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/clausulas',
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/clausulas',
+      ]);
+      expect(adapter.jsonBodies.single['idAgente'], 'PER9998003');
+    });
+
     test('markConsentAccepted creates clauses when agent has no remote preference', () async {
       final adapter = _CapturingAdapter(getStatusCode: 404);
       final repository = ConsentRepositoryImpl(
@@ -28,8 +51,8 @@ void main() {
 
       expect(adapter.methods, ['GET', 'POST']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(
         adapter.jsonBodies.single,
@@ -68,8 +91,8 @@ void main() {
 
       expect(adapter.methods, ['GET', 'PATCH']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.single['clausulas'], [
         {
@@ -101,9 +124,9 @@ void main() {
 
       expect(adapter.methods, ['GET', 'POST', 'PATCH']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.first, adapter.jsonBodies.last);
     });
@@ -126,9 +149,9 @@ void main() {
 
       expect(adapter.methods, ['GET', 'PATCH', 'POST']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.first, adapter.jsonBodies.last);
     });
@@ -143,7 +166,7 @@ void main() {
       final clauses = await repository.fetchClauses(idAgente: 'PER9998001');
 
       expect(adapter.methods, ['GET']);
-      expect(adapter.paths, ['/api/v1/hechos-vitales/clausulas/PER9998001']);
+      expect(adapter.paths, ['/api/v1/ciudadanos/PER9998001/clausulas']);
       expect(
         clauses,
         [
@@ -242,8 +265,8 @@ void main() {
 
       expect(adapter.methods, ['GET', 'PATCH']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.single['clausulas'], [
         {
@@ -284,7 +307,7 @@ void main() {
       await repository.resetConsentClauses(idAgente: 'PER9998003');
 
       expect(adapter.methods, ['GET']);
-      expect(adapter.paths, ['/api/v1/hechos-vitales/clausulas/PER9998003']);
+      expect(adapter.paths, ['/api/v1/ciudadanos/PER9998003/clausulas']);
       expect(adapter.jsonBodies, isEmpty);
       expect(storage.read<bool>('${StorageKeys.consentAcceptedPrefix}PER9998003'), isNull);
       expect(storage.read<List<String>>('${StorageKeys.consentAcceptedClausesPrefix}PER9998003'), isNull);

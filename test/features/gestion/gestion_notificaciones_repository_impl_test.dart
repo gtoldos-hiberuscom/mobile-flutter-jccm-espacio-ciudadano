@@ -266,7 +266,7 @@ void main() {
       expect(detail.documentos, isEmpty);
     });
 
-    test('accepts a pending notification through the documented transitions endpoint', () async {
+    test('accepts a pending notification through the comparecer endpoint', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
@@ -284,11 +284,12 @@ void main() {
       );
 
       expect(adapter.requests.single.method, 'POST');
+      // API 1.86: el endpoint de transiciones con cuerpo fue sustituido por
+      // POST .../comparecer sin cuerpo; la acción ya no viaja al backend.
       expect(
         adapter.requests.single.path,
-        '/api/v1/ciudadanos/99999999R/notificaciones/7924/transiciones',
+        '/api/v1/ciudadanos/99999999R/notificaciones/7924/comparecer',
       );
-      expect(adapter.requests.single.jsonBody, containsPair('accion', 'ACEPTAR'));
     });
 
     test('"Todo" consulta una vez sin filtro de estado', () async {

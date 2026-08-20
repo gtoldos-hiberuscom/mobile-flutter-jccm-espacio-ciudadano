@@ -17,7 +17,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionRegistrosRepositoryImpl(dio: dio);
 
-      final result = await repository.loadEntradas(documentNumber: '99999999R');
+      final result = await repository.loadEntradas(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, hasLength(1));
       expect(result.single.numregistro, 'ENT-1');
@@ -25,7 +25,7 @@ void main() {
       expect(result.single.fecha, '2026-06-21');
       expect(result.single.consejeria, 'Consejería B');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifentrada');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/listado-registro-entrada');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -45,7 +45,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionRegistrosRepositoryImpl(dio: dio);
 
-      final result = await repository.loadSalidas(documentNumber: '99999999R');
+      final result = await repository.loadSalidas(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, hasLength(1));
       expect(result.single.numregistro, 'SAL-1');
@@ -53,7 +53,7 @@ void main() {
       expect(result.single.fecha, '2026-06-22');
       expect(result.single.consejeria, 'Consejería C');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifsalida');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/listado-registro-salida');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -73,7 +73,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionRegistrosRepositoryImpl(dio: dio);
 
-      final result = await repository.loadEntradas(documentNumber: '99999999R');
+      final result = await repository.loadEntradas(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result.single.titulo, isEmpty);
     });

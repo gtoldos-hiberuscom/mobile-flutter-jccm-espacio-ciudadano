@@ -1,7 +1,7 @@
 {
   "APP_FLAVOR": "preproduction",
   "APP_NAME": "Espacio Ciudadano (Pre)",
-  "BASE_URL": "https://fachada-sede-api-pre.cm-pre.jccm.es",
+  "BASE_URL": "https://gateway-espacio-ciudadano-pre.cm-pre.jccm.es",
   "CIUDADANOS_ID_STRATEGY": "numDocumento",
   "TIMEOUT": "20",
   "DEBUG_MODE": "true",

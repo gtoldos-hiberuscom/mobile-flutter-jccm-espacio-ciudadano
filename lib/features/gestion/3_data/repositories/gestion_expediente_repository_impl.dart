@@ -14,10 +14,17 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   final PublicacionApi _api;
 
   @override
-  Future<List<Expediente>> loadExpedientes({required final String documentNumber}) async {
+  Future<List<Expediente>> loadExpedientes({
+    required final String citizenId,
+    required final String documentNumber,
+  }) async {
     logger.d('[selectbynifexp] req numerodocumento=$documentNumber tipodocumento=NIF');
     try {
-      final response = await _api.myPubliSelecByNifTipoProcExpOperation(
+      // La variante `1` apunta al path gateway POST
+      // /api/v1/ciudadanos/{sid}/expedientes (el sufijo del generador se
+      // reparte de forma arbitraria entre legacy y gateway).
+      final response = await _api.myPubliSelecByNifTipoProcExpOperation1(
+        idAgente: citizenId,
         dtselectbynifv2reqBody: DTSELECTBYNIFV2REQ(
           (final builder) => builder
             ..numerodocumento = documentNumber
@@ -54,12 +61,21 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<Expediente> loadExpedienteDetail({
+    required final String citizenId,
     required final String documentNumber,
     required final String numexp,
     final String tipodoc = 'NIF',
   }) async {
     logger.d('[selectbynumexp] req pnumdoc=$documentNumber pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    // Path gateway POST /api/v1/ciudadanos/{sid}/expedientes/{idExpediente}.
+    // El segmento `{idExpediente}` va fijo a `detalle` — como documenta el
+    // gateway — porque los números de expediente llevan barras
+    // (`S020/2024/0001-PR`) y romperían la ruta; el backend identifica el
+    // expediente por el `pnumexp` del cuerpo (los path params de la fachada
+    // son decorativos: los alias legacy los declaran sin tenerlos en la ruta).
     final response = await _api.myPubliSelecByNumExpOperation(
+      idAgente: citizenId,
+      idExpediente: 'detalle',
       zcsrfcpubliselectbynumexpBody: ZCSRFCPUBLISELECTBYNUMEXP(
         (final builder) => builder
           ..pnumdoc = documentNumber
@@ -90,12 +106,18 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<Expediente> loadExpedienteByRegistro({
+    required final String citizenId,
     required final String documentNumber,
     required final String numRegistro,
     final String tipodoc = 'NIF',
   }) async {
     logger.d('[selectbynumreg] req pnumdoc=$documentNumber pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
-    final response = await _api.myPubliNumRegOperation(
+    // La variante `1` apunta al path gateway POST
+    // /api/v1/ciudadanos/{sid}/registros/{idRegistro}. El backend identifica
+    // el registro por el `pregistro` del cuerpo; el path param es decorativo.
+    final response = await _api.myPubliNumRegOperation1(
+      idAgente: citizenId,
+      idRegistro: numRegistro,
       zcsrfcpubliselectbynumregBody: ZCSRFCPUBLISELECTBYNUMREG(
         (final builder) => builder
           ..pnumdoc = documentNumber

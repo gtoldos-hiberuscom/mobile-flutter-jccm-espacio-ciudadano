@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -50,9 +50,13 @@ class _LoginCallbackPageState extends ConsumerState<LoginCallbackPage> {
     );
     _navigateWhenLoginCompletes(state);
 
+    // Mismo velo que la landing, para que el regreso de Cl@ve se vea igual
+    // llegue por donde llegue el deep link.
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.loginPageTitle)),
-      body: AppLoadingIndicator(semanticsLabel: l10n.loginPageLoading),
+      body: AppLoadingScreen(
+        title: l10n.loginPageTitle,
+        description: l10n.loginPageLoadingDescription,
+      ),
     );
   }
 }

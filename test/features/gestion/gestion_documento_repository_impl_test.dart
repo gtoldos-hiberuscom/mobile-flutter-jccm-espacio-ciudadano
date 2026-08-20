@@ -38,6 +38,7 @@ void main() {
       final bytes = Uint8List.fromList('contenido de prueba'.codeUnits);
 
       final hash = await repository.subirDocumentoSinFirma(
+        citizenId: 'sid-1',
         documentNumber: '03874761C',
         idUnico: '03874761C_1700000000000',
         tipoProcedimiento: '020',
@@ -47,7 +48,7 @@ void main() {
 
       expect(hash, '2AACB86A2DDD8C8A41E9C51C4B0207732B10FDBB231D06D086D5A225D21B61B');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/procedimiento/subiradjuntosinfirma');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/03874761C_1700000000000/ficheros');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -80,6 +81,7 @@ void main() {
 
       await expectLater(
         repository.subirDocumentoSinFirma(
+          citizenId: 'sid-1',
           documentNumber: '03874761C',
           idUnico: '03874761C_1700000000000',
           tipoProcedimiento: '020',
@@ -100,6 +102,7 @@ void main() {
 
       await expectLater(
         repository.subirDocumentoSinFirma(
+          citizenId: 'sid-1',
           documentNumber: '03874761C',
           idUnico: '03874761C_1700000000000',
           tipoProcedimiento: '020',
@@ -158,6 +161,7 @@ void main() {
       );
 
       final resultado = await repository.iniciarProcedimiento(
+        citizenId: 'sid-1',
         idUnico: '03874761C_171447919011019',
         documentNumber: '03874761C',
         expediente: expediente,
@@ -167,7 +171,7 @@ void main() {
       expect(resultado.estado, 'OK');
       expect(resultado.uniorg, '012848');
       expect(resultado.nombre, 'Juan');
-      expect(adapter.requests.single.path, '/api/v1/procedimiento/inicproc');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/03874761C_171447919011019/ficheros/iniciar');
       // Confirmado contra backend real de UAT: enviar `registro` vacío
       // ({fecha: "", noregistro: ""}) para un expediente que ya tiene un
       // registro de entrada real provocó un 500 del servidor — debe
@@ -202,7 +206,7 @@ void main() {
       const expediente = Expediente(numexp: 'EXP-1', titulo: 't', consejeria: 'c');
 
       await expectLater(
-        repository.iniciarProcedimiento(idUnico: 'x', documentNumber: '03874761C', expediente: expediente),
+        repository.iniciarProcedimiento(citizenId: 'sid-1', idUnico: 'x', documentNumber: '03874761C', expediente: expediente),
         throwsA(isA<StateError>()),
       );
     });
@@ -235,6 +239,7 @@ void main() {
       );
 
       final bytes = await repository.registrarFicheros(
+        citizenId: 'sid-1',
         documentNumber: '03874761C',
         expediente: expediente,
         inicio: inicio,
@@ -242,7 +247,7 @@ void main() {
       );
 
       expect(utf8.decode(bytes), pdfContent);
-      expect(adapter.requests.single.path, '/api/v1/documentacion/registrarfichero');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/03874761C_171447919011026/ficheros/registrar');
       final requestBody = adapter.requests.single.jsonBody as Map<String, dynamic>?;
       final confirmarProcedimiento = requestBody?['confirmarProcedimiento'] as Map<String, dynamic>?;
       final procedimiento = confirmarProcedimiento?['procedimiento'] as Map<String, dynamic>?;

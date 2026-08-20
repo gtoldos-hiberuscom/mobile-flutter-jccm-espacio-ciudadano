@@ -314,6 +314,12 @@ abstract class AppLocalizations {
   /// **'Iniciando autenticación...'**
   String get loginPageLoading;
 
+  /// Detalle bajo el título de la pantalla de carga posterior al acceso con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Estamos validando tu identidad y preparando tus datos. Puede tardar unos segundos.'**
+  String get loginPageLoadingDescription;
+
   /// Título del mensaje de error mostrado cuando falla la autenticación.
   ///
   /// In es, this message translates to:
@@ -4802,6 +4808,12 @@ abstract class AppLocalizations {
   /// **'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.'**
   String get myDataHealthAppointmentsNoDataMessage;
 
+  /// No description provided for @myDataHealthHospitalAppointmentsNoDataMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado citas hospitalarias asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu centro hospitalario.'**
+  String get myDataHealthHospitalAppointmentsNoDataMessage;
+
   /// No description provided for @myDataEmploymentDemandNoDataMessage.
   ///
   /// In es, this message translates to:
@@ -6523,6 +6535,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Pasadas'**
   String get myDataHealthPastTab;
+
+  /// Selector de ámbito asistencial en Salud: atención primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Primaria'**
+  String get myDataHealthScopePrimaryCare;
+
+  /// Selector de ámbito asistencial en Salud: atención hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Hospitalaria'**
+  String get myDataHealthScopeHospital;
+
+  /// Título del bloque de citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas hospitalarias'**
+  String get myDataHealthHospitalAppointmentsTitle;
+
+  /// Botón para cargar la siguiente página de citas pasadas de primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargar más citas'**
+  String get myDataHealthLoadMoreAppointments;
 
   /// Año mostrado en la lista de citas de Salud de la maqueta.
   ///

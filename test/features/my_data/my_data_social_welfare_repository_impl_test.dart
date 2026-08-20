@@ -59,13 +59,18 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
-      final title = await repository.loadLargeFamilyTitle(documentNumber: '99999999R');
+      final title = await repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R');
 
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/intermediacion/familia-numerosa/datos');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/bienestar-social/familia-numerosa');
+      // El contrato de intermediación exige tipo, idaut y proc además del
+      // documento; la fachada los resolvía internamente y por eso no se enviaban.
       expect(adapter.requests.single.data, {
-        'docu': '99999999R',
+        'tipo': 'A',
+        'idaut': 'ESP-CIUDADANO',
+        'proc': 'JCCMEC',
         'tipodoc': 'NIF',
+        'docu': '99999999R',
       });
       expect(title, isNotNull);
       expect(title!.region, 'Castilla-La Mancha');
@@ -101,12 +106,17 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
-      final award = await repository.loadThermalSpaAward(documentNumber: '24540447E');
+      final award = await repository.loadThermalSpaAward(citizenId: 'PER9998003', documentNumber: '24540447E');
 
-      expect(adapter.requests.single.path, '/api/v1/intermediacion/termalismo/datos');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/PER9998003/bienestar-social/termalismo');
+      // El contrato de intermediación exige tipo, idaut y proc además del
+      // documento; la fachada los resolvía internamente y por eso no se enviaban.
       expect(adapter.requests.single.data, {
-        'docu': '24540447E',
+        'tipo': 'A',
+        'idaut': 'ESP-CIUDADANO',
+        'proc': 'JCCMEC',
         'tipodoc': 'NIF',
+        'docu': '24540447E',
       });
       expect(award, isNotNull);
       expect(award!.name, 'LA CONCEPCION');
@@ -130,7 +140,7 @@ void main() {
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
       expect(
-        () => repository.loadLargeFamilyTitle(documentNumber: '99999999R'),
+        () => repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
         throwsA(isA<MyDataAuthorizationRequired>()),
       );
     });
@@ -152,7 +162,7 @@ void main() {
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
       expect(
-        () => repository.loadLargeFamilyTitle(documentNumber: '99999999R'),
+        () => repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
         throwsA(
           isA<StateError>().having(
             (final error) => error.message,

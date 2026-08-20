@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
@@ -40,6 +41,15 @@ class LandingPage extends ConsumerStatefulWidget {
 class _LandingPageState extends ConsumerState<LandingPage> {
   bool _didTrySessionUnlock = false;
 
+  /// Si hay un acceso en curso iniciado *mientras esta página está montada*.
+  ///
+  /// No se deriva de `landingProvider` directamente: `loginSuccess` es una señal
+  /// de un solo uso que nadie limpia, y el provider no es `autoDispose`, así que
+  /// al volver a la landing tras cerrar sesión seguiría valiendo `true` y el
+  /// velo se quedaría pegado. Al alimentarlo sólo desde las transiciones que
+  /// observa `ref.listen`, un valor heredado de la sesión anterior no lo activa.
+  bool _isAuthenticating = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -69,6 +79,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     final l10n = AppLocalizations.of(context);
 
     ref.listen<LandingState>(landingProvider, (final previous, final next) {
+      final isAuthenticating = next.isLoggingIn || next.loginSuccess;
+      if (mounted && isAuthenticating != _isAuthenticating) {
+        setState(() => _isAuthenticating = isAuthenticating);
+      }
       if (next.loginSuccess) {
         ref.read(goRouterProvider).go(Routes.home);
       }
@@ -83,7 +97,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       }
     });
 
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: AppColors.surface,
       body: Column(
         children: [
@@ -226,6 +240,25 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
         ],
       ),
+    );
+
+    // El guard de sesión hace comprobaciones asíncronas antes de que el router
+    // pinte la home privada, así que sin este velo la home pública se queda a la
+    // vista durante ese hueco y se percibe como una redirección extraña.
+    if (!_isAuthenticating) {
+      return scaffold;
+    }
+
+    return Stack(
+      children: [
+        scaffold,
+        Positioned.fill(
+          child: AppLoadingScreen(
+            title: l10n.loginPageTitle,
+            description: l10n.loginPageLoadingDescription,
+          ),
+        ),
+      ],
     );
   }
 }

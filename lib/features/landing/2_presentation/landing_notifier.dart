@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart'
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
@@ -67,7 +68,8 @@ class LandingNotifier extends Notifier<LandingState> {
     if (session == null || jwtClaims == null) {
       return;
     }
-    final consentResult = await ref.read(checkConsentRequiredUsecaseProvider).execute(idAgente: jwtClaims.idAgente ?? '');
+    final consentId = ref.read(citizenEndpointIdsProvider).idAgente ?? '';
+    final consentResult = await ref.read(checkConsentRequiredUsecaseProvider).execute(idAgente: consentId);
     if (!ref.mounted) {
       return;
     }
@@ -75,7 +77,7 @@ class LandingNotifier extends Notifier<LandingState> {
       await ref.read(authSessionControllerProvider).clear();
       return;
     }
-    ref.invalidate(consentProvider(jwtClaims.idAgente ?? ''));
+    ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
     state = const LandingState(loginSuccess: true);
   }
 
@@ -94,7 +96,7 @@ class LandingNotifier extends Notifier<LandingState> {
     switch (result) {
       case LoginSuccess(:final tokenResponse, :final jwtClaims):
         ref.read(authSessionControllerProvider).startInMemory(tokenResponse, claims: jwtClaims);
-        ref.invalidate(consentProvider(jwtClaims.idAgente ?? ''));
+        ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
         state = const LandingState(loginSuccess: true);
 
       case LoginFailed(:final cause):

@@ -16,5 +16,14 @@ void main() {
       // TODO
     });
 
+    // Obtener datos catastrales
+    //
+    // Consulta los datos catastrales del ciudadano en el servicio de Catastro.
+    //
+    //Future<Respuesta> getDatosCatastrales1(String numDocumento, DTCTROCDATREQ DTCTROCDATREQ, { String authorization }) async
+    test('test getDatosCatastrales1', () async {
+      // TODO
+    });
+
   });
 }

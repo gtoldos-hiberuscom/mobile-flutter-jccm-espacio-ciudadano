@@ -255,15 +255,17 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
           onSelected: _selectRecommendationFilter,
         ),
         const SizedBox(height: AppDimensions.space32),
-        Text(
-          l10n.recommendationsLoadingError,
-          style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
-        ),
-        const SizedBox(height: AppDimensions.space8),
-        AppButton(
-          label: l10n.recommendationsLoadingErrorRetry,
-          onPressed: () => ref.invalidate(recommendationsProvider(_selectedFilter.segment)),
-          leadingIcon: AppIcons.autorenew,
+        // Mismo tratamiento visual que el error de servicio de "Mis datos":
+        // aviso contextual con la acción de recarga dentro, en vez de un título
+        // suelto con un botón primario debajo.
+        AppAlertContextual(
+          message: l10n.recommendationsLoadingError,
+          action: AppButton(
+            label: l10n.recommendationsLoadingErrorRetry,
+            hierarchy: AppButtonHierarchy.tertiary,
+            trailingIcon: AppIcons.autorenew,
+            onPressed: () => ref.invalidate(recommendationsProvider(_selectedFilter.segment)),
+          ),
         ),
       ],
     );

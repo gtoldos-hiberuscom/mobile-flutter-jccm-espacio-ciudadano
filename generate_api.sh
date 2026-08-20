@@ -52,15 +52,15 @@ cleanup_generated_api_imports() {
   find "$api_dir" -name '*.dart' -print0 | while IFS= read -r -d '' file; do
     perl -0pi -e 'my %seen; s{^(import .+\n)}{$seen{$1}++ ? q{} : $1}gme;' "$file"
 
-    if ! rg -q '\bJsonObject\b' "$file"; then
+    if ! grep -qw 'JsonObject' "$file"; then
       perl -0pi -e "s@^import 'package:built_value/json_object\\.dart';\\n@@m" "$file"
     fi
 
-    if ! rg -q '\bRespuesta\b' "$file"; then
+    if ! grep -qw 'Respuesta' "$file"; then
       perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/respuesta\\.dart';\\n@@m" "$file"
     fi
 
-    if ! rg -q '\bRespuestaRESULTADOPROCEDIMIENTO\b' "$file"; then
+    if ! grep -qw 'RespuestaRESULTADOPROCEDIMIENTO' "$file"; then
       perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/respuesta_resultadoprocedimiento\\.dart';\\n@@m" "$file"
     fi
   done

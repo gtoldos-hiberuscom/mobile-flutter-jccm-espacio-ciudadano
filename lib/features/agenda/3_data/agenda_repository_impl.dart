@@ -28,9 +28,13 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       ),
       if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
         _loadAppointmentsFrom(
-          () => _agendaApi.obtenerEventosAgenda(
+          // La variante `1` apunta al path gateway
+          // /api/v1/ciudadanos/{sid}/eventos/{periodo} (el legacy
+          // /api/v1/agenda/... no existe en el gateway y responde 404). El
+          // periodo va en mayúsculas: TODOS, SEMANA, MES o ANIO.
+          () => _agendaApi.obtenerEventosAgenda1(
             idAgente: trimmedAgentId,
-            periodo: 'todos',
+            periodo: 'TODOS',
             extra: _generatedExtra,
           ),
           source: _AgendaAppointmentSource.general,
@@ -41,6 +45,16 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final appointments = responses.expand((final appointments) => appointments).toList(growable: false)..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
 
     return appointments;
+  }
+
+  @override
+  Future<void> refreshEvents({required final String agentId}) async {
+    // El resultado (RefrescarAgendaDTO: contadores ok/error por fuente) no se
+    // muestra; el refresco se refleja recargando los eventos después.
+    await _agendaApi.refrescarAgendaEvents1(
+      idAgente: agentId,
+      extra: _generatedExtra,
+    );
   }
 
   Future<List<AgendaAppointment>> _loadAppointmentsFrom(

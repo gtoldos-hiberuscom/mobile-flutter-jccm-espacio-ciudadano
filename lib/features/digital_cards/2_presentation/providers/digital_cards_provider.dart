@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
@@ -16,7 +16,7 @@ final digitalCardsRepositoryProvider = Provider<DigitalCardsRepository>((final r
 });
 
 final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((final ref) async {
-  final idAgente = ref.watch(jwtClaimsProvider)?.idAgente?.trim();
+  final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente;
   if (idAgente == null || idAgente.isEmpty) {
     throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
@@ -34,21 +34,21 @@ final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((fina
 });
 
 final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>((final ref) async {
-  final documentNumber = _documentNumber(ref.watch(jwtClaimsProvider));
-  if (documentNumber == null) {
-    throw StateError('No se ha encontrado el documento de la persona usuaria.');
+  final citizenId = ref.watch(ciudadanosEndpointIdProvider).trim();
+  if (citizenId.isEmpty) {
+    throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
 
-  return ref.watch(digitalCardsRepositoryProvider).loadCards(documentNumber: documentNumber);
+  return ref.watch(digitalCardsRepositoryProvider).loadCards(citizenId: citizenId);
 });
 
 final digitalCardQrImageProvider = FutureProvider.autoDispose.family<Uint8List?, DigitalCard>((final ref, final card) async {
-  final documentNumber = _documentNumber(ref.watch(jwtClaimsProvider));
-  if (documentNumber == null) {
-    throw StateError('No se ha encontrado el documento de la persona usuaria.');
+  final citizenId = ref.watch(ciudadanosEndpointIdProvider).trim();
+  if (citizenId.isEmpty) {
+    throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
 
-  return ref.watch(digitalCardsRepositoryProvider).loadQrImage(documentNumber: documentNumber, card: card);
+  return ref.watch(digitalCardsRepositoryProvider).loadQrImage(citizenId: citizenId, card: card);
 });
 
 final digitalCardsDownloadingProvider = NotifierProvider.autoDispose<DigitalCardsDownloadingNotifier, String?>(
@@ -73,43 +73,28 @@ final class DigitalCardsDownloadingNotifier extends Notifier<String?> {
 }
 
 Future<DigitalCardArtifact> downloadDigitalCardsPdf(final WidgetRef ref, final DigitalCard card) async {
-  final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
-  if (documentNumber == null) {
-    throw StateError('No se ha encontrado el documento de la persona usuaria.');
+  final citizenId = ref.read(ciudadanosEndpointIdProvider).trim();
+  if (citizenId.isEmpty) {
+    throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
 
-  return ref.read(digitalCardsRepositoryProvider).downloadPdf(documentNumber: documentNumber, card: card);
+  return ref.read(digitalCardsRepositoryProvider).downloadPdf(citizenId: citizenId, card: card);
 }
 
 Future<DigitalCardArtifact> downloadDigitalCardsQr(final WidgetRef ref, final DigitalCard card) async {
-  final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
-  if (documentNumber == null) {
-    throw StateError('No se ha encontrado el documento de la persona usuaria.');
+  final citizenId = ref.read(ciudadanosEndpointIdProvider).trim();
+  if (citizenId.isEmpty) {
+    throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
 
-  return ref.read(digitalCardsRepositoryProvider).downloadQr(documentNumber: documentNumber, card: card);
+  return ref.read(digitalCardsRepositoryProvider).downloadQr(citizenId: citizenId, card: card);
 }
 
 Future<DigitalCardArtifact> downloadDigitalCardsPkPass(final WidgetRef ref, final DigitalCard card) async {
-  final documentNumber = _documentNumber(ref.read(jwtClaimsProvider));
-  if (documentNumber == null) {
-    throw StateError('No se ha encontrado el documento de la persona usuaria.');
+  final citizenId = ref.read(ciudadanosEndpointIdProvider).trim();
+  if (citizenId.isEmpty) {
+    throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
 
-  return ref.read(digitalCardsRepositoryProvider).downloadPkPass(documentNumber: documentNumber, card: card);
-}
-
-String? _documentNumber(final JwtClaims? claims) {
-  final candidates = [
-    claims?.personIdentifier,
-    claims?.preferredUsername,
-    claims?.sub,
-  ];
-  for (final candidate in candidates) {
-    final normalized = candidate?.trim();
-    if (normalized != null && normalized.isNotEmpty) {
-      return normalized;
-    }
-  }
-  return null;
+  return ref.read(digitalCardsRepositoryProvider).downloadPkPass(citizenId: citizenId, card: card);
 }

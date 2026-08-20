@@ -21,6 +21,7 @@ import 'package:espacio_ciudadano_api/src/model/base_request_intermediacion.dart
 import 'package:espacio_ciudadano_api/src/model/confirmarprocedimiento.dart';
 import 'package:espacio_ciudadano_api/src/model/clausulas.dart';
 import 'package:espacio_ciudadano_api/src/model/clausulas_agente.dart';
+import 'package:espacio_ciudadano_api/src/model/contacto_registro_poblacional_request_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/datospago.dart';
 import 'package:espacio_ciudadano_api/src/model/datosregistro.dart';
 import 'package:espacio_ciudadano_api/src/model/datossolicitante.dart';
@@ -52,11 +53,12 @@ import 'package:espacio_ciudadano_api/src/model/resultadoprocedimiento.dart';
 import 'package:espacio_ciudadano_api/src/model/registrar_fichero_request.dart';
 import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 import 'package:espacio_ciudadano_api/src/model/respuesta_resultadoprocedimiento.dart';
+import 'package:espacio_ciudadano_api/src/model/respuesta_zcsrfcpubliselectbynifv2_response.dart';
 import 'package:espacio_ciudadano_api/src/model/tercero_n2_dto.dart';
-import 'package:espacio_ciudadano_api/src/model/transicion_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/unidad_organica_indexa_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/xml_registro.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynif_response.dart';
+import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynifv2_response.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynumexp.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynumreg.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsstpubportal.dart';
@@ -73,6 +75,7 @@ part 'serializers.g.dart';
   CONFIRMARPROCEDIMIENTO,
   Clausulas,
   ClausulasAgente,
+  ContactoRegistroPoblacionalRequestDto,
   DATOSPAGO,
   DATOSREGISTRO,
   DATOSSOLICITANTE,
@@ -104,11 +107,12 @@ part 'serializers.g.dart';
   RegistrarFicheroRequest,
   Respuesta,
   RespuestaRESULTADOPROCEDIMIENTO,
+  RespuestaZCSRFCPUBLISELECTBYNIFV2Response,
   TerceroN2Dto,
-  TransicionDto,
   UnidadOrganicaIndexaDto,
   XMLRegistro,
   ZCSRFCPUBLISELECTBYNIFResponse,
+  ZCSRFCPUBLISELECTBYNIFV2Response,
   ZCSRFCPUBLISELECTBYNUMEXP,
   ZCSRFCPUBLISELECTBYNUMREG,
   ZCSSTPUBPORTAL,

@@ -122,6 +122,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginPageLoading => 'Iniciando autenticación...';
 
   @override
+  String get loginPageLoadingDescription => 'Estamos validando tu identidad y preparando tus datos. Puede tardar unos segundos.';
+
+  @override
   String get loginPageError => 'Error al iniciar sesión';
 
   @override
@@ -2468,6 +2471,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthAppointmentsNoDataMessage => 'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.';
 
   @override
+  String get myDataHealthHospitalAppointmentsNoDataMessage => 'No hemos encontrado citas hospitalarias asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu centro hospitalario.';
+
+  @override
   String get myDataEmploymentDemandNoDataMessage => 'No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.';
 
   @override
@@ -3385,6 +3391,18 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myDataHealthPastTab => 'Pasadas';
+
+  @override
+  String get myDataHealthScopePrimaryCare => 'Primaria';
+
+  @override
+  String get myDataHealthScopeHospital => 'Hospitalaria';
+
+  @override
+  String get myDataHealthHospitalAppointmentsTitle => 'Citas hospitalarias';
+
+  @override
+  String get myDataHealthLoadMoreAppointments => 'Cargar más citas';
 
   @override
   String get myDataHealthYear => '2026';

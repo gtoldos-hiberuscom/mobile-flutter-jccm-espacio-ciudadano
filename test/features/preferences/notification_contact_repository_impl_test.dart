@@ -7,6 +7,23 @@ import '../../test_support/sequence_http_client_adapter.dart';
 
 void main() {
   group('NotificationContactRepositoryImpl', () {
+    test('preserves the case of sub_alt in the citizen path', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 404, body: <String, dynamic>{}),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = NotificationContactRepositoryImpl(dio: dio);
+
+      await repository.loadContact(
+        citizenId: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6',
+      );
+
+      expect(
+        adapter.requests.single.path,
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/contacto',
+      );
+    });
+
     test('loads contact when API returns the direct DTO shape from the generated client', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
@@ -85,7 +102,7 @@ void main() {
       );
     });
 
-    test('uses the bare document when Cl@ve provides an eIDAS identifier', () async {
+    test('normalizes only the DNI body when Cl@ve provides an eIDAS identifier', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(statusCode: 404, body: <String, dynamic>{}),
         const AdapterResponse(
@@ -108,8 +125,8 @@ void main() {
       );
 
       expect(adapter.requests.map((final request) => request.path), [
-        '/api/v1/ciudadanos/12345678Z/contacto',
-        '/api/v1/ciudadanos/12345678Z/contacto',
+        '/api/v1/ciudadanos/ES/ES/12345678z/contacto',
+        '/api/v1/ciudadanos/ES/ES/12345678z/contacto',
       ]);
       expect(adapter.requests.last.jsonBody, containsPair('dni', '12345678Z'));
     });

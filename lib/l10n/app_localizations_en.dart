@@ -122,6 +122,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginPageLoading => 'Starting authentication...';
 
   @override
+  String get loginPageLoadingDescription => 'We are validating your identity and preparing your data. This may take a few seconds.';
+
+  @override
   String get loginPageError => 'Sign-in error';
 
   @override
@@ -2467,6 +2470,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthAppointmentsNoDataMessage => 'We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.';
 
   @override
+  String get myDataHealthHospitalAppointmentsNoDataMessage => 'We could not find any hospital appointments linked to your data in the SESCAM query service.\n\nIf this is not correct or up to date, contact your hospital.';
+
+  @override
   String get myDataEmploymentDemandNoDataMessage => 'We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.';
 
   @override
@@ -3384,6 +3390,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myDataHealthPastTab => 'Past';
+
+  @override
+  String get myDataHealthScopePrimaryCare => 'Primary care';
+
+  @override
+  String get myDataHealthScopeHospital => 'Hospital';
+
+  @override
+  String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
+
+  @override
+  String get myDataHealthLoadMoreAppointments => 'Load more appointments';
 
   @override
   String get myDataHealthYear => '2026';

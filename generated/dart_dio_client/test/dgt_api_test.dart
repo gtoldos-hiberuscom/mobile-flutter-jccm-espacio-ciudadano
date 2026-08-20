@@ -16,5 +16,14 @@ void main() {
       // TODO
     });
 
+    // Consultar listado de vehiculos de un ciudadano
+    //
+    // Consulta en el servicio DGT el listado de vehiculos asociados a un ciudadano identificado por NIF y devuelve el resultado completo de la tramitacion.
+    //
+    //Future<Respuesta> getListaVehiculos1(String numDocumento, DTDGTLISTADOVEHICULOSREQ DTDGTLISTADOVEHICULOSREQ, { String authorization }) async
+    test('test getListaVehiculos1', () async {
+      // TODO
+    });
+
   });
 }

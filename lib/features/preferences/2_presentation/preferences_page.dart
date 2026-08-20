@@ -11,8 +11,8 @@ import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/reset_consent_clauses_usecase.dart';
@@ -108,8 +108,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final claims = ref.watch(jwtClaimsProvider);
-    final idAgente = claims?.idAgente ?? '';
+    final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente ?? '';
     final contactId = ref.watch(ciudadanosEndpointIdProvider);
     final preferencesArgs = (
       idAgente: idAgente,

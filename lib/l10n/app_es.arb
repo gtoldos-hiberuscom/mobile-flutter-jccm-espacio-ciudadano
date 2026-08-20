@@ -151,6 +151,10 @@
   "@loginPageLoading": {
     "description": "Mensaje de estado mientras se inicia la autenticación con Cl@ve."
   },
+  "loginPageLoadingDescription": "Estamos validando tu identidad y preparando tus datos. Puede tardar unos segundos.",
+  "@loginPageLoadingDescription": {
+    "description": "Detalle bajo el título de la pantalla de carga posterior al acceso con Cl@ve."
+  },
   "loginPageError": "Error al iniciar sesión",
   "@loginPageError": {
     "description": "Título del mensaje de error mostrado cuando falla la autenticación."
@@ -3272,6 +3276,7 @@
   "myDataHousingAddressNoDataMessage": "No hemos encontrado información de domicilio asociada a tus datos en el servicio de consulta del padrón.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Ayuntamiento.",
   "myDataHousingRealEstateNoDataMessage": "No hemos encontrado bienes inmuebles asociados a tus datos en el servicio de consulta de Catastro.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General del Catastro.",
   "myDataHealthAppointmentsNoDataMessage": "No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.",
+  "myDataHealthHospitalAppointmentsNoDataMessage": "No hemos encontrado citas hospitalarias asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu centro hospitalario.",
   "myDataEmploymentDemandNoDataMessage": "No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.",
   "myDataEmploymentOffersNoDataMessage": "No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.",
   "discapacidadServiceUnavailableMessage": "El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
@@ -4397,6 +4402,22 @@
   "myDataHealthPastTab": "Pasadas",
   "@myDataHealthPastTab": {
     "description": "Pestaña de citas pasadas en Salud."
+  },
+  "myDataHealthScopePrimaryCare": "Primaria",
+  "@myDataHealthScopePrimaryCare": {
+    "description": "Selector de ámbito asistencial en Salud: atención primaria."
+  },
+  "myDataHealthScopeHospital": "Hospitalaria",
+  "@myDataHealthScopeHospital": {
+    "description": "Selector de ámbito asistencial en Salud: atención hospitalaria."
+  },
+  "myDataHealthHospitalAppointmentsTitle": "Citas hospitalarias",
+  "@myDataHealthHospitalAppointmentsTitle": {
+    "description": "Título del bloque de citas hospitalarias."
+  },
+  "myDataHealthLoadMoreAppointments": "Cargar más citas",
+  "@myDataHealthLoadMoreAppointments": {
+    "description": "Botón para cargar la siguiente página de citas pasadas de primaria."
   },
   "myDataHealthYear": "2026",
   "@myDataHealthYear": {

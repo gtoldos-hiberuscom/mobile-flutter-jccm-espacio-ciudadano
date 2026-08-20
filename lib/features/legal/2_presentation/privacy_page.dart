@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -72,14 +72,14 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     if (position.pixels < position.maxScrollExtent - AppDimensions.space64) {
       return;
     }
-    final idAgente = ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente ?? '';
     ref.read(consentProvider(idAgente).notifier).onScrollReachedEnd();
   }
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final idAgente = ref.watch(jwtClaimsProvider)?.idAgente ?? '';
+    final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente ?? '';
     final consentState = ref.watch(consentProvider(idAgente));
     final consentNotifier = ref.read(consentProvider(idAgente).notifier);
     final canAccept = consentState.status == ConsentStatus.step1Unlocked;

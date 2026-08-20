@@ -1,36 +1,30 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_housing_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/vivienda_api.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
 
 final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
-  MyDataHousingRepositoryImpl({required final Dio dio}) : _ineApi = IneApi(withGeneratedApiCompat(dio), standardSerializers), _catastroApi = CatastroApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataHousingRepositoryImpl({required final Dio dio}) : _api = ViviendaApi(dio);
 
-  final IneApi _ineApi;
-  final CatastroApi _catastroApi;
+  final ViviendaApi _api;
 
   @override
   Future<HousingAddress?> loadAddress({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
-    final requestData = {
-      'docu': documentNumber,
-      'tipodoc': _documentType(documentNumber),
-    };
     final payload = await _rawResponse(
-      () => _ineApi.getDatosResidencia(
-        numDocumento: documentNumber,
-        dtinecdrfreqBody: DTINECDRFREQ(
-          (final builder) => builder
-            ..docu = documentNumber
-            ..tipodoc = _documentType(documentNumber),
-        ),
-        extra: _generatedExtra(requestData),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.datosResidencia(
+        citizenId: citizenId,
+        // `DTINECDRFREQ` usa `tipodoc`, con la `o`.
+        body: {
+          'tipodoc': documentTypeOf(documentNumber),
+          'docu': documentNumber,
+        },
       ),
     );
     if (payload == null) {
@@ -62,22 +56,20 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
 
   @override
   Future<List<RealEstateProperty>> loadRealEstateProperties({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
-    final requestData = {
-      'docu': documentNumber,
-      'tipdoc': _documentType(documentNumber),
-    };
     final payload = await _rawResponse(
-      () => _catastroApi.getDatosCatastrales(
-        numDocumento: documentNumber,
-        dtctrocdatreqBody: DTCTROCDATREQ(
-          (final builder) => builder
-            ..docu = documentNumber
-            ..tipdoc = _documentType(documentNumber),
-        ),
-        extra: _generatedExtra(requestData),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.datosCatastrales(
+        citizenId: citizenId,
+        // `DTCTROCDATREQ` usa `tipdoc`, **sin** la `o`, a diferencia de los
+        // otros DTO de intermediación. No es una errata: es el nombre del campo
+        // en el OpenAPI de la fachada. La documentación del gateway lo escribe
+        // `tipodoc` y se equivoca.
+        body: {
+          'tipdoc': documentTypeOf(documentNumber),
+          'docu': documentNumber,
+        },
       ),
     );
 
@@ -93,27 +85,19 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
     return candidates.map(_parseRealEstateProperty).where((final property) => property.hasData).toList(growable: false);
   }
 
-  Map<String, dynamic> _generatedExtra(final Map<String, Object?> data) => {
-    generatedApiRequestDataExtraKey: data,
-    generatedApiDecodeStringResponseExtraKey: true,
-  };
-
-  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+  /// El cliente ya devuelve `null` en 404 y la carga cruda en el resto.
+  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) async {
     try {
-      final response = await fetch();
-      if (response.statusCode == 404) {
-        return null;
-      }
-      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+      return await fetch();
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
         return null;
       }
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (rawData != null) {
-        return rawData;
+      final rawData = error.response?.data;
+      if (rawData == null) {
+        rethrow;
       }
-      rethrow;
+      return rawData;
     }
   }
 
@@ -479,13 +463,5 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
       return null;
     }
     return DateTime(year, month, day);
-  }
-
-  String _documentType(final String documentNumber) {
-    final normalized = documentNumber.trim().toUpperCase();
-    if (RegExp('^[XYZ]').hasMatch(normalized)) {
-      return 'NIE';
-    }
-    return 'NIF';
   }
 }

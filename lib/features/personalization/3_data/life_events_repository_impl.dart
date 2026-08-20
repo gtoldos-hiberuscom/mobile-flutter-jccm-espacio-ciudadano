@@ -1,9 +1,8 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
+import 'package:jccm_espacio_ciudadano/core/network/api_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/repositories/life_events_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/3_data/api/hechos_api.dart';
 
 const lifeEventsSupportUnavailableMessage = 'No se han podido guardar tus hechos vitales. Inténtalo de nuevo más tarde.';
 
@@ -19,31 +18,23 @@ final class LifeEventsSupportUnavailableException implements Exception {
 /// Lives in `3_data/` — all API types are mapped to domain entities before
 /// returning. No generated model, DTO, or Dio type escapes this class.
 ///
-/// **Note on `loadLifeEvents`**: the GET endpoint wraps its payload in a
-/// `Respuesta` envelope (`{ body: { idAgente, listaHechos: [...] }, ... }`)
-/// even though the OpenAPI spec declares the return type as `ListaHechos`
-/// directly. The generated client therefore deserialises to an empty object.
-/// Raw Dio is used here to extract `body.listaHechos` from the actual JSON.
+/// La respuesta llega en el sobre habitual: `{ body: { idAgente, listaHechos },
+/// timestamp, mensaje-respuesta, codigo-respuesta, info-error }`.
 final class LifeEventsRepositoryImpl implements LifeEventsRepository {
   LifeEventsRepositoryImpl({
     required final Dio dio,
-  }) : _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
+    final String? agentId,
+  }) : _agentId = agentId?.trim(),
+       _api = HechosApi(dio);
 
-  final HechosVitalesApi _api;
+  final HechosApi _api;
+  final String? _agentId;
 
   @override
   Future<List<LifeEvent>> loadLifeEvents({required final String idAgente}) async {
-    // Actual response shape:
-    //   { body: { idAgente, listaHechos: [{ idHecho, nombreHecho, seleccionado }] },
-    //     timestamp, mensaje-respuesta, codigo-respuesta, info-error }
-    final payload = await _rawResponse(
-      () => _api.obtenerListaHechosByIdAgente(
-        idAgente: idAgente,
-        extra: _generatedExtra,
-      ),
-    );
-
-    final body = _asStringMap(_asStringMap(payload)?['body']);
+    // body.listaHechos: [{ idHecho, nombreHecho, seleccionado }]
+    final envelope = await _obtenerHechos(idAgente);
+    final body = _asStringMap(envelope?['body']);
     final rawList = body?['listaHechos'] as List<dynamic>?;
     if (rawList == null) {
       return const [];
@@ -68,30 +59,12 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     required final List<LifeEvent> events,
   }) async {
     try {
-      await _api.actualizarListaHechos(
-        listaHechosAgente: ListaHechosAgente(
-          (final builder) => builder
-            ..idAgente = idAgente
-            ..listaHechos.replace(
-              events
-                  .map(
-                    (final event) => Hecho(
-                      (final hecho) => hecho
-                        ..idHecho = event.id
-                        ..nombreHecho = event.label
-                        ..seleccionado = event.selected,
-                    ),
-                  )
-                  .toBuiltList(),
-            ),
-        ),
-        extra: {
-          generatedApiRequestDataExtraKey: _requestBody(idAgente, events),
-          generatedApiDecodeStringResponseExtraKey: true,
-        },
+      await _api.actualizarHechos(
+        citizenId: idAgente,
+        body: _requestBody(_requestAgentId(idAgente), events),
       );
     } on DioException catch (error) {
-      if (_isSupportUnavailableResponse(error.response?.data)) {
+      if (_isSupportUnavailableResponse(decodeApiEnvelope(error.response?.data))) {
         throw const LifeEventsSupportUnavailableException();
       }
       rethrow;
@@ -100,15 +73,8 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
 
   @override
   Future<void> resetPreferences({required final String idAgente}) async {
-    await _api.eliminarPreferencias(
-      idAgente: idAgente,
-      extra: _generatedExtra,
-    );
+    await _api.eliminarPreferencias(citizenId: idAgente);
   }
-
-  Map<String, dynamic> get _generatedExtra => const {
-    generatedApiDecodeStringResponseExtraKey: true,
-  };
 
   Map<String, dynamic> _requestBody(final String idAgente, final List<LifeEvent> events) {
     return <String, dynamic>{
@@ -125,16 +91,22 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     };
   }
 
-  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+  String _requestAgentId(final String citizenId) {
+    final agentId = _agentId;
+    return agentId == null || agentId.isEmpty ? citizenId : agentId;
+  }
+
+  /// Un 4xx con sobre se aprovecha igual: el backend informa ahí el motivo y el
+  /// listado vacío resultante es preferible a propagar el fallo de transporte.
+  Future<Map<String, dynamic>?> _obtenerHechos(final String idAgente) async {
     try {
-      final response = await fetch();
-      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+      return await _api.obtenerHechos(citizenId: idAgente);
     } on DioException catch (error) {
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (rawData != null) {
-        return rawData;
+      final envelope = decodeApiEnvelope(error.response?.data);
+      if (envelope == null) {
+        rethrow;
       }
-      rethrow;
+      return envelope;
     }
   }
 
@@ -151,8 +123,8 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     return null;
   }
 
-  bool _isSupportUnavailableResponse(final Object? data) {
-    if (data is! Map<String, dynamic>) {
+  bool _isSupportUnavailableResponse(final Map<String, dynamic>? data) {
+    if (data == null) {
       return false;
     }
     final responseCode = data['codigo-respuesta']?.toString();

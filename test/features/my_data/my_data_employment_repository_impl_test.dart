@@ -8,22 +8,51 @@ import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_employmen
 
 void main() {
   group('MyDataEmploymentRepositoryImpl', () {
-    test('loads current employment demand from SEPE endpoint', () async {
+    test('loads current employment demand from the ciudadano employment resource', () async {
       final adapter = _EmploymentAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataEmploymentRepositoryImpl(dio: dio);
 
-      final demand = await repository.loadDemand(documentNumber: '12345678A');
+      final demand = await repository.loadDemand(
+        citizenId: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6',
+        documentNumber: '12345678A',
+        givenName: 'JUAN',
+        firstSurname: 'PEREZ',
+        secondSurname: 'SANCHEZ',
+      );
 
       expect(adapter.request?.method, 'POST');
-      expect(adapter.request?.path, '/api/v1/sepe/demandante-empleo-fecha-actual/12345678A');
+      expect(
+        adapter.request?.path,
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/empleo/demandante-empleo-fecha-actual',
+      );
       expect(adapter.request?.jsonBody, {
-        'docu': '12345678A',
         'tipodoc': 'NIF',
+        'docu': '12345678A',
+        'nombretitular': 'JUAN',
+        'apellido1TITULAR': 'PEREZ',
+        'apellido2TITULAR': 'SANCHEZ',
       });
       expect(demand?.status, 'Activa');
       expect(demand?.uninterruptedRegistrationDate, DateTime(2000, 7));
       expect(demand?.message, 'Tramitada');
+    });
+
+    test('omits holder name fields when the token does not provide them', () async {
+      final adapter = _EmploymentAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      await repository.loadDemand(
+        citizenId: 'citizen-1',
+        documentNumber: 'B12345674',
+        firstSurname: '   ',
+      );
+
+      expect(adapter.request?.jsonBody, {
+        'tipodoc': 'CIF',
+        'docu': 'B12345674',
+      });
     });
 
     test('returns null when employment demand is not found', () async {
@@ -31,7 +60,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataEmploymentRepositoryImpl(dio: dio);
 
-      final demand = await repository.loadDemand(documentNumber: '00000000T');
+      final demand = await repository.loadDemand(citizenId: 'citizen-1', documentNumber: '00000000T');
 
       expect(demand, isNull);
     });
@@ -41,23 +70,32 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataEmploymentRepositoryImpl(dio: dio);
 
-      final demand = await repository.loadDemand(documentNumber: '12345678A');
+      final demand = await repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A');
 
       expect(demand?.status, 'No Inscrito');
     });
 
-    test('loads registered employment offers from intermediacion endpoint', () async {
+    test('loads registered employment offers from the ciudadano employment resource', () async {
       final adapter = _EmploymentAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataEmploymentRepositoryImpl(dio: dio);
 
-      final offers = await repository.loadOfferRegistrations(documentNumber: 'X1234567L');
+      final offers = await repository.loadOfferRegistrations(
+        citizenId: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6',
+        documentNumber: 'X1234567L',
+      );
 
       expect(adapter.request?.method, 'POST');
-      expect(adapter.request?.path, '/api/v1/intermediacion/empleo/ofertas-inscritas');
+      expect(
+        adapter.request?.path,
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/empleo/ofertas',
+      );
       expect(adapter.request?.jsonBody, {
-        'docu': 'X1234567L',
+        'tipo': 'A',
+        'idaut': 'ESP-CIUDADANO',
+        'proc': 'JCCMEC',
         'tipodoc': 'NIE',
+        'docu': 'X1234567L',
       });
       expect(offers, hasLength(2));
       expect(offers.first.title, 'ATS/DUE');
@@ -110,7 +148,7 @@ final class _EmploymentAdapter implements HttpClientAdapter {
       return ResponseBody.fromString('', 404);
     }
 
-    if (options.path == '/api/v1/intermediacion/empleo/ofertas-inscritas') {
+    if (options.path.endsWith('/empleo/ofertas')) {
       return ResponseBody.fromString(
         jsonEncode({
           'body': {
@@ -144,9 +182,17 @@ final class _EmploymentAdapter implements HttpClientAdapter {
 
     return ResponseBody.fromString(
       jsonEncode({
-        'inscrito': inscrito,
-        'ultimainscrip': '20000701',
-        'mensaje': 'Tramitada',
+        'body': {
+          'resul': '0',
+          'mensaje': 'Tramitada',
+          'idpeticion': '7a7479f7fa5fec7a5t0014795',
+          'inscrito': inscrito,
+          'ultimainscrip': '20000701',
+        },
+        'timestamp': '2026-08-20T08:35:53.157147',
+        'mensaje-respuesta': 'Respuesta correcta',
+        'codigo-respuesta': '200.00',
+        'info-error': null,
       }),
       200,
       headers: {

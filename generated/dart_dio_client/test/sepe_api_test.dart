@@ -16,5 +16,14 @@ void main() {
       // TODO
     });
 
+    // Consultar situacion de demandante de empleo a fecha actual
+    //
+    // Consulta en el servicio SEPE si el ciudadano figura como demandante de empleo en la fecha actual y devuelve el resultado de la tramitacion.
+    //
+    //Future<Respuesta> getDemandanteEmpleoFechaActual1(String numDocumento, DTSEPESVDIDEFAREQ DTSEPESVDIDEFAREQ, { String authorization }) async
+    test('test getDemandanteEmpleoFechaActual1', () async {
+      // TODO
+    });
+
   });
 }

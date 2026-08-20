@@ -4,16 +4,21 @@
 /// The backend is mid-migration: PRE already resolves the citizen by document
 /// number (the DNI carried in the token), while UAT still resolves by
 /// `idAgente`. Sending the wrong one yields a 403. This is therefore configured
-/// per environment and should collapse to [numDocumento] everywhere once every
+/// per environment and should collapse to a single value everywhere once every
 /// backend environment has migrated.
+///
+/// [subAlt] es el valor que espera el gateway de Espacio Ciudadano, que resuelve
+/// el ciudadano a partir del claim `sub_alt` del token.
 enum CitizenIdStrategy {
   idAgente,
-  numDocumento
+  numDocumento,
+  subAlt
   ;
 
   static CitizenIdStrategy fromConfigValue(final String value) => switch (value.trim().toLowerCase()) {
     'idagente' => CitizenIdStrategy.idAgente,
     'numdocumento' => CitizenIdStrategy.numDocumento,
+    'subalt' => CitizenIdStrategy.subAlt,
     _ => throw FormatException('Unsupported CIUDADANOS_ID_STRATEGY: $value'),
   };
 }

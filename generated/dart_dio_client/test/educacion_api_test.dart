@@ -25,5 +25,14 @@ void main() {
       // TODO
     });
 
+    // Obtener titulos universitarios
+    //
+    // Consulta los titulos universitarios del ciudadano en el servicio de Educacion.
+    //
+    //Future<Respuesta> getTitulosUniversitarios1(String numDocumento, DTEDUTUOREQ DTEDUTUOREQ, { String authorization }) async
+    test('test getTitulosUniversitarios1', () async {
+      // TODO
+    });
+
   });
 }

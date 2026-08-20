@@ -41,21 +41,20 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     final String? sistemaOrigen,
     final String? justificacion,
   }) async {
-    final transitionAction = switch (accion.trim().toUpperCase()) {
-      'COMPARECER' => TransicionDtoAccionEnum.COMPARECER,
-      'ACEPTAR' => TransicionDtoAccionEnum.ACEPTAR,
-      'RECHAZAR' => TransicionDtoAccionEnum.RECHAZAR,
-      final value => throw ArgumentError.value(value, 'accion', 'Transición no soportada'),
-    };
+    // API 1.86: el endpoint de transiciones con cuerpo (TransicionDto) fue
+    // sustituido por POST .../notificaciones/{id}/comparecer sin cuerpo. La
+    // acción y la justificación ya no viajan al backend, que aplica la
+    // transición según sus reglas de negocio; se conserva la validación de
+    // acciones conocidas para no silenciar llamadas erróneas.
+    const supportedActions = {'COMPARECER', 'ACEPTAR', 'RECHAZAR'};
+    final normalizedAction = accion.trim().toUpperCase();
+    if (!supportedActions.contains(normalizedAction)) {
+      throw ArgumentError.value(accion, 'accion', 'Transición no soportada');
+    }
     await _api.transicionNotificacion(
       id: citizenId,
       notificacionId: notificacionId,
       sisOrigen: sistemaOrigen,
-      transicionDto: TransicionDto(
-        (final builder) => builder
-          ..accion = transitionAction
-          ..justificacion = justificacion,
-      ),
       extra: const {
         generatedApiDecodeStringResponseExtraKey: true,
       },

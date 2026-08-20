@@ -6,8 +6,10 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+
 import 'package:espacio_ciudadano_api/src/api_util.dart';
+import 'package:espacio_ciudadano_api/src/model/dtminhafpcccafnreq.dart';
+import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
 
 class CcaaApi {
 

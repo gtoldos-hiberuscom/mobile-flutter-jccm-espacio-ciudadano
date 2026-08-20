@@ -9,6 +9,35 @@ import 'package:jccm_espacio_ciudadano/features/personalization/3_data/life_even
 
 void main() {
   group('LifeEventsRepositoryImpl', () {
+    test('uses sub_alt in the gateway path and idAgente in the write body', () async {
+      final adapter = _CapturingAdapter();
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: 'https://example.test',
+          headers: const {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+        ),
+      )..httpClientAdapter = adapter;
+      final repository = LifeEventsRepositoryImpl(
+        dio: dio,
+        agentId: 'PER9998003',
+      );
+
+      await repository.saveLifeEvents(
+        idAgente: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6',
+        events: const [
+          LifeEvent(id: 1, label: 'Familia', selected: true),
+        ],
+      );
+
+      expect(
+        adapter.path,
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/hechos',
+      );
+      expect(adapter.jsonBody?['idAgente'], 'PER9998003');
+    });
+
     test('saveLifeEvents persists user preferences in backend', () async {
       final adapter = _CapturingAdapter();
       final dio = Dio(
@@ -30,7 +59,7 @@ void main() {
       );
 
       expect(adapter.method, 'PATCH');
-      expect(adapter.path, '/api/v1/hechos-vitales/hechos');
+      expect(adapter.path, '/api/v1/ciudadanos/agent-123/hechos');
       expect(
         adapter.jsonBody,
         <String, dynamic>{
@@ -91,7 +120,7 @@ void main() {
       expect(adapter.method, 'DELETE');
       expect(
         adapter.path,
-        '/api/v1/hechos-vitales/preferencias/agent-123',
+        '/api/v1/ciudadanos/agent-123/preferencias',
       );
     });
   });

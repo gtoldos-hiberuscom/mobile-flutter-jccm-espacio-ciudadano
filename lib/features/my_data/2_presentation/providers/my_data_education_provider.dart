@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/non_university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/university_title.dart';
@@ -18,7 +19,10 @@ final universityTitlesProvider = FutureProvider.autoDispose<List<UniversityTitle
   }
 
   final repository = ref.watch(myDataEducationRepositoryProvider);
-  return repository.loadUniversityTitles(documentNumber: documentNumber);
+  return repository.loadUniversityTitles(
+    citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
+    documentNumber: documentNumber,
+  );
 });
 
 final nonUniversityTitlesProvider = FutureProvider.autoDispose<List<NonUniversityTitle>>((final ref) async {
@@ -28,7 +32,10 @@ final nonUniversityTitlesProvider = FutureProvider.autoDispose<List<NonUniversit
   }
 
   final repository = ref.watch(myDataEducationRepositoryProvider);
-  return repository.loadNonUniversityTitles(documentNumber: documentNumber);
+  return repository.loadNonUniversityTitles(
+    citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
+    documentNumber: documentNumber,
+  );
 });
 
 String? _documentNumber(final JwtClaims? claims) {

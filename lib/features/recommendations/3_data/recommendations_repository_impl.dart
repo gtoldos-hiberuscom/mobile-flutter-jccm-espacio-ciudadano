@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/3_data/api/recomendaciones_api.dart';
 
 final class RecommendationsRepositoryImpl implements RecommendationsRepository {
-  RecommendationsRepositoryImpl({required final Dio dio, required this.sedeBaseUrl}) : _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
+  RecommendationsRepositoryImpl({required final Dio dio, required this.sedeBaseUrl}) : _api = RecomendacionesApi(dio);
 
-  final HechosVitalesApi _api;
+  final RecomendacionesApi _api;
   final Uri sedeBaseUrl;
 
   @override
@@ -16,32 +17,26 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     required final List<int> lifeEventIds,
     required final RecommendationsSegment segment,
   }) async {
+    // Sin hechos configurados no hay nada que recomendar: se corta la llamada.
+    // La lista no viaja en la petición (ver RecomendacionesApi.obtener).
     if (lifeEventIds.isEmpty) {
       return const [];
     }
 
+    final isAll = segment == RecommendationsSegment.all;
+
     Object? payload;
     try {
-      final response = segment == RecommendationsSegment.all
-          ? await _api.getServicios(
-              idAgente: idAgente,
-              extra: const {
-                generatedApiDecodeStringResponseExtraKey: true,
-              },
-            )
-          : await _api.getServiciosSegmentados(
-              idAgente: idAgente,
-              operacion: _operationFor(segment),
-              size: '10',
-              page: '0',
-              ultimosDias: segment == RecommendationsSegment.recent ? '30' : null,
-              extra: const {
-                generatedApiDecodeStringResponseExtraKey: true,
-              },
-            );
-      payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+      payload = await _api.obtener(
+        citizenId: idAgente,
+        operacion: _operationFor(segment),
+        size: isAll ? null : '10',
+        page: isAll ? null : '0',
+        ultimosDias: segment == RecommendationsSegment.recent ? '30' : null,
+      );
     } on DioException catch (error) {
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
+      _logEnvelope(segment, rawData);
       if (_isNoResultsResponse(rawData)) {
         return const [];
       }
@@ -50,6 +45,11 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
       } else {
         rethrow;
       }
+    }
+
+    _logEnvelope(segment, payload);
+    if (_isNoResultsResponse(payload)) {
+      return const [];
     }
 
     final groups = _extractGroups(payload);
@@ -62,8 +62,14 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     ];
   }
 
+  /// Valor del query `operacion` para cada segmento.
+  ///
+  /// "Todos" era una ruta aparte (`hechos-vitales/servicios/{idAgente}`) y ahora
+  /// es el mismo endpoint con `operacion=todo` (el valor que cita el OpenAPI
+  /// 1.86). Omitir el parámetro —que el contrato declara opcional— devuelve
+  /// vacío contra el gateway UAT, así que se envía siempre.
   String _operationFor(final RecommendationsSegment segment) => switch (segment) {
-    RecommendationsSegment.all => throw ArgumentError.value(segment),
+    RecommendationsSegment.all => 'todo',
     RecommendationsSegment.recent => 'ut',
     RecommendationsSegment.news => 'no',
     RecommendationsSegment.immediate => 'ti',
@@ -75,6 +81,25 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
     RecommendationsSegment.news => RecommendationBadge.news,
     RecommendationsSegment.immediate => RecommendationBadge.immediate,
   };
+
+  /// Registra los campos de diagnóstico del sobre de respuesta del backend.
+  /// Esta pantalla traduce los errores de negocio (`404.01`, `412.00`, sobres
+  /// 4xx no reconocidos) a listado vacío en silencio; esta traza hace visible
+  /// qué contestó realmente el backend cuando la lista sale vacía.
+  void _logEnvelope(final RecommendationsSegment segment, final Object? raw) {
+    final map = _asStringMap(raw);
+    final body = map?['body'];
+    final bodySummary = switch (body) {
+      final List<dynamic> list => 'lista(${list.length})',
+      final Map<dynamic, dynamic> _ => 'objeto',
+      null => 'null',
+      _ => body.runtimeType.toString(),
+    };
+    logger.d(
+      '[recomendaciones/$segment] envelope codigo-respuesta=${map?['codigo-respuesta']} '
+      'mensaje=${map?['mensaje-respuesta']} body=$bodySummary',
+    );
+  }
 
   List<Map<String, dynamic>> _extractGroups(final Object? data) {
     final root = _asStringMap(data) ?? const <String, dynamic>{};

@@ -14,6 +14,7 @@ final ciudadanosEndpointIdProvider = Provider<String>((final ref) {
   return switch (ref.watch(appConfigProvider).citizenIdStrategy) {
         CitizenIdStrategy.idAgente => claims?.idAgente,
         CitizenIdStrategy.numDocumento => claims?.normalizedPersonIdentifier,
+        CitizenIdStrategy.subAlt => claims?.subAlt,
       } ??
       '';
 });

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/usecases/buscar_expediente_tercero_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
@@ -65,6 +66,9 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
     setState(() => _isSearching = true);
     final usecase = ref.read(buscarExpedienteTerceroUsecaseProvider);
     final result = await usecase.execute(
+      // El path /ciudadanos/{sid} lleva al ciudadano autenticado; el documento
+      // del formulario (posible tercero) viaja en el cuerpo.
+      citizenId: ref.read(citizenEndpointIdsProvider).requireIdAgente(),
       documentNumber: documentNumber,
       tipodoc: _selectedDocType.tipodoc,
       numRegistro: numRegistro.isEmpty ? null : numRegistro,

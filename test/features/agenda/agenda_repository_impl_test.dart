@@ -23,9 +23,12 @@ void main() {
         adapter.paths,
         isNot(contains('/api/v1/sescam/citas-pasadas/12345678A')),
       );
+      // Los eventos van por el path gateway /ciudadanos/{sid}/eventos/{periodo}
+      // (el legacy /api/v1/agenda/... no existe en el gateway) y el periodo en
+      // mayúsculas.
       expect(adapter.paths, [
         '/api/v1/sescam/citas/12345678A',
-        '/api/v1/agenda/agent-1/eventos/todos',
+        '/api/v1/ciudadanos/agent-1/eventos/TODOS',
       ]);
       expect(appointments, hasLength(5));
       expect(appointments[0].description, 'Trámite administrativo');
@@ -48,6 +51,16 @@ void main() {
       );
       expect(appointments[4].kind, AgendaAppointmentKind.credential);
     });
+
+    test('refreshes events through the gateway refrescar endpoint', () async {
+      final adapter = _AgendaAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      await repository.refreshEvents(agentId: 'agent-1');
+
+      expect(adapter.paths, ['/api/v1/ciudadanos/agent-1/eventos/refrescar']);
+    });
   });
 }
 
@@ -61,7 +74,18 @@ final class _AgendaAdapter implements HttpClientAdapter {
     final Future<void>? cancelFuture,
   ) async {
     paths.add(options.path);
-    if (options.path.startsWith('/api/v1/agenda/')) {
+    if (options.path.contains('/eventos/refrescar')) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': {'notificacionesOk': 1, 'notificacionesError': 0},
+        }),
+        200,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
+    }
+    if (options.path.contains('/eventos/')) {
       return ResponseBody.fromString(
         jsonEncode(
           {

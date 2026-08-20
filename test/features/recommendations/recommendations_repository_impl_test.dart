@@ -25,11 +25,15 @@ void main() {
       );
 
       expect(adapter.requests, hasLength(1));
-      expect(
-        adapter.requests.first.path,
-        '/api/v1/hechos-vitales/servicios/agent-123',
-      );
-      expect(adapter.requests.first.queryParameters, isEmpty);
+      expect(adapter.requests.first.path, '/api/v1/ciudadanos/agent-123/recomendaciones');
+      // El OpenAPI 1.86 documenta `operacion=todo` para recuperar todos los
+      // trámites; omitir el parámetro devuelve vacío contra el gateway UAT.
+      expect(adapter.requests.first.queryParameters['operacion'], 'todo');
+      // `hechosvitales` no viaja en la petición: con él el backend devuelve
+      // vacío; el filtrado por hechos se hace en presentación.
+      expect(adapter.requests.first.queryParameters, isNot(contains('hechosvitales')));
+      expect(adapter.requests.first.queryParameters, isNot(contains('size')));
+      expect(adapter.requests.first.queryParameters, isNot(contains('page')));
       expect(recommendations, hasLength(1));
       expect(recommendations.single.title, 'Ayuda para alquiler joven');
       expect(recommendations.single.lifeEventId, 10);
@@ -89,7 +93,7 @@ void main() {
       );
 
       expect(adapter.requests, hasLength(1));
-      expect(adapter.requests.single.path, contains('/segmentacion/'));
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/agent-123/recomendaciones');
       expect(adapter.requests.single.queryParameters['operacion'], 'ti');
       expect(adapter.requests.single.queryParameters['size'], '10');
       expect(adapter.requests.single.queryParameters['page'], '0');
@@ -118,7 +122,7 @@ void main() {
       );
 
       expect(adapter.requests, hasLength(1));
-      expect(adapter.requests.single.path, contains('/segmentacion/'));
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/agent-123/recomendaciones');
       expect(adapter.requests.single.queryParameters['operacion'], 'ut');
       expect(adapter.requests.single.queryParameters['size'], '10');
       expect(adapter.requests.single.queryParameters['page'], '0');
@@ -143,7 +147,7 @@ void main() {
       );
 
       expect(adapter.requests, hasLength(1));
-      expect(adapter.requests.single.path, contains('/segmentacion/'));
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/agent-123/recomendaciones');
       expect(adapter.requests.single.queryParameters['operacion'], 'no');
       expect(adapter.requests.single.queryParameters['size'], '10');
       expect(adapter.requests.single.queryParameters['page'], '0');
@@ -164,11 +168,9 @@ enum _RecommendationsResponseKind {
 final class _RecommendationsAdapter implements HttpClientAdapter {
   _RecommendationsAdapter({
     this.responseKind = _RecommendationsResponseKind.recommendations,
-    this.segmentationUnavailable = false,
   });
 
   final _RecommendationsResponseKind responseKind;
-  final bool segmentationUnavailable;
   final List<RequestOptions> requests = [];
 
   @override
@@ -192,9 +194,6 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
   void close({final bool force = false}) {}
 
   int _statusCode(final RequestOptions options) {
-    if (segmentationUnavailable && options.path.contains('/segmentacion/')) {
-      return 404;
-    }
     return switch (responseKind) {
       _RecommendationsResponseKind.recommendations => 200,
       _RecommendationsResponseKind.noResults => 404,
@@ -202,8 +201,12 @@ final class _RecommendationsAdapter implements HttpClientAdapter {
     };
   }
 
+  /// Todas comparten ruta; "Todos" lleva `operacion=todo` y las segmentadas
+  /// `ut`/`no`/`ti`.
+  bool _isSegmented(final RequestOptions options) => options.queryParameters['operacion'] != 'todo';
+
   Map<String, dynamic> _payload(final RequestOptions options) {
-    if (options.path.contains('/segmentacion/')) {
+    if (_isSegmented(options)) {
       final operation = options.queryParameters['operacion'];
       return <String, dynamic>{
         'body': operation == 'ti' || operation == 'no' || operation == 'ut'

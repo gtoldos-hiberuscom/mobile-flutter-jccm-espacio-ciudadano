@@ -7,6 +7,8 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
@@ -21,6 +23,28 @@ class AgendaPage extends ConsumerStatefulWidget {
 
 class _AgendaPageState extends ConsumerState<AgendaPage> {
   _AgendaFilter _selectedFilter = _AgendaFilter.all;
+  bool _refreshing = false;
+
+  /// Pide al backend que consulte los sistemas origen (`eventos/refrescar`) y
+  /// después recarga los eventos. Si el refresco falla se recarga igualmente:
+  /// el usuario pidió actualizar y los datos cacheados pueden haber cambiado.
+  Future<void> _refreshAgenda() async {
+    if (_refreshing) {
+      return;
+    }
+    setState(() => _refreshing = true);
+    try {
+      final agentId = ref.read(citizenEndpointIdsProvider).idAgente;
+      if (agentId != null && agentId.isNotEmpty) {
+        await ref.read(refreshAgendaEventsUsecaseProvider).execute(agentId: agentId);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _refreshing = false);
+        ref.invalidate(agendaAppointmentsProvider);
+      }
+    }
+  }
 
   Future<void> _openJccmAuthorization() async {
     await context.push<void>(
@@ -116,7 +140,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           const SizedBox(height: AppDimensions.space8),
           _LastUpdateRow(
             updatedAt: state.updatedAt,
-            onRefresh: () => ref.invalidate(agendaAppointmentsProvider),
+            onRefresh: _refreshing ? null : () => unawaited(_refreshAgenda()),
           ),
         ],
         const SizedBox(height: AppDimensions.space12),
@@ -208,7 +232,7 @@ class _LastUpdateRow extends StatelessWidget {
   });
 
   final DateTime updatedAt;
-  final VoidCallback onRefresh;
+  final VoidCallback? onRefresh;
 
   @override
   Widget build(final BuildContext context) {
@@ -337,20 +361,15 @@ class _AgendaErrorState extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'No hemos podido cargar tu agenda.',
-          style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
-        ),
-        const SizedBox(height: AppDimensions.space8),
-        AppButton(
-          label: 'Intentar de nuevo',
-          onPressed: onRetry,
-          leadingIcon: AppIcons.autorenew,
-        ),
-      ],
+    // Mismo tratamiento visual que el resto de errores de servicio de la app.
+    return AppAlertContextual(
+      message: 'No hemos podido cargar tu agenda.',
+      action: AppButton(
+        label: 'Intentar de nuevo',
+        hierarchy: AppButtonHierarchy.tertiary,
+        trailingIcon: AppIcons.autorenew,
+        onPressed: onRetry,
+      ),
     );
   }
 }

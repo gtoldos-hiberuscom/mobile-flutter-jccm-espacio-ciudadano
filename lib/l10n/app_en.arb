@@ -155,6 +155,10 @@
   "@loginPageLoading": {
     "description": "Status message while the Cl@ve authentication is being initiated."
   },
+  "loginPageLoadingDescription": "We are validating your identity and preparing your data. This may take a few seconds.",
+  "@loginPageLoadingDescription": {
+    "description": "Detail under the title of the loading screen shown after signing in with Cl@ve."
+  },
   "loginPageError": "Sign-in error",
   "@loginPageError": {
     "description": "Error title shown when the login process fails."
@@ -3267,6 +3271,7 @@
   "myDataHousingAddressNoDataMessage": "We could not find address information associated with your details in the municipal-register consultation service.\n\nIf this is incorrect or outdated, contact your local council.",
   "myDataHousingRealEstateNoDataMessage": "We could not find real-estate assets associated with your details in the Cadastre consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Cadastre.",
   "myDataHealthAppointmentsNoDataMessage": "We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.",
+  "myDataHealthHospitalAppointmentsNoDataMessage": "We could not find any hospital appointments linked to your data in the SESCAM query service.\n\nIf this is not correct or up to date, contact your hospital.",
   "myDataEmploymentDemandNoDataMessage": "We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.",
   "myDataEmploymentOffersNoDataMessage": "We could not find job-offer registrations associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.",
   "discapacidadServiceUnavailableMessage": "The service for consulting your disability title is unavailable. You can reload the information or try again later.",
@@ -4387,6 +4392,22 @@
   "myDataHealthPastTab": "Past",
   "@myDataHealthPastTab": {
     "description": "Past appointments tab in Health."
+  },
+  "myDataHealthScopePrimaryCare": "Primary care",
+  "@myDataHealthScopePrimaryCare": {
+    "description": "Care scope selector in Health: primary care."
+  },
+  "myDataHealthScopeHospital": "Hospital",
+  "@myDataHealthScopeHospital": {
+    "description": "Care scope selector in Health: hospital care."
+  },
+  "myDataHealthHospitalAppointmentsTitle": "Hospital appointments",
+  "@myDataHealthHospitalAppointmentsTitle": {
+    "description": "Title of the hospital appointments block."
+  },
+  "myDataHealthLoadMoreAppointments": "Load more appointments",
+  "@myDataHealthLoadMoreAppointments": {
+    "description": "Button that loads the next page of past primary care appointments."
   },
   "myDataHealthYear": "2026",
   "@myDataHealthYear": {
