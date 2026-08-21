@@ -1,28 +1,3 @@
-/// Which token claim is sent as the `{id}` path segment for the
-/// `/api/v1/ciudadanos/{id}/...` endpoints (contacto, notificaciones).
-///
-/// The backend is mid-migration: PRE already resolves the citizen by document
-/// number (the DNI carried in the token), while UAT still resolves by
-/// `idAgente`. Sending the wrong one yields a 403. This is therefore configured
-/// per environment and should collapse to a single value everywhere once every
-/// backend environment has migrated.
-///
-/// [subAlt] es el valor que espera el gateway de Espacio Ciudadano, que resuelve
-/// el ciudadano a partir del claim `sub_alt` del token.
-enum CitizenIdStrategy {
-  idAgente,
-  numDocumento,
-  subAlt
-  ;
-
-  static CitizenIdStrategy fromConfigValue(final String value) => switch (value.trim().toLowerCase()) {
-    'idagente' => CitizenIdStrategy.idAgente,
-    'numdocumento' => CitizenIdStrategy.numDocumento,
-    'subalt' => CitizenIdStrategy.subAlt,
-    _ => throw FormatException('Unsupported CIUDADANOS_ID_STRATEGY: $value'),
-  };
-}
-
 /// Typed runtime configuration for the application.
 ///
 /// An [AppConfig] instance is created from compile-time environment values or
@@ -36,7 +11,6 @@ class AppConfig {
         'APP_FLAVOR': String.fromEnvironment('APP_FLAVOR'),
         'APP_NAME': String.fromEnvironment('APP_NAME'),
         'BASE_URL': String.fromEnvironment('BASE_URL'),
-        'CIUDADANOS_ID_STRATEGY': String.fromEnvironment('CIUDADANOS_ID_STRATEGY'),
         'TIMEOUT': String.fromEnvironment('TIMEOUT'),
         'DEBUG_MODE': String.fromEnvironment('DEBUG_MODE'),
         'SSO_CLIENT_ID': String.fromEnvironment('SSO_CLIENT_ID'),
@@ -52,12 +26,6 @@ class AppConfig {
 
   /// Base URL for the remote API.
   String get baseUrl => _getConfigValue('BASE_URL', (final v) => v as String);
-
-  /// Identifier strategy for the `/api/v1/ciudadanos/{id}` endpoints.
-  ///
-  /// See [CitizenIdStrategy] — PRE uses `numDocumento` (DNI), UAT uses
-  /// `idAgente` while the backend migration is in progress.
-  CitizenIdStrategy get citizenIdStrategy => _getConfigValue('CIUDADANOS_ID_STRATEGY', (final v) => CitizenIdStrategy.fromConfigValue(v as String));
 
   /// Base URL of the JCCM electronic office for the active environment.
   Uri get sedeBaseUrl => switch (environment.trim().toLowerCase()) {
@@ -195,5 +163,5 @@ class AppConfig {
   };
 
   @override
-  String toString() => 'AppConfig(env: $environment, baseUrl: $baseUrl, citizenIdStrategy: ${citizenIdStrategy.name}, appName: $appName, timeout: $timeout, debugMode: $debugMode, ssoClientId: $ssoClientId, ssoRedirectUri: $ssoRedirectUri, ssoRealm: $ssoRealm, ssoBaseUrl: $ssoBaseUrl)';
+  String toString() => 'AppConfig(env: $environment, baseUrl: $baseUrl, appName: $appName, timeout: $timeout, debugMode: $debugMode, ssoClientId: $ssoClientId, ssoRedirectUri: $ssoRedirectUri, ssoRealm: $ssoRealm, ssoBaseUrl: $ssoBaseUrl)';
 }

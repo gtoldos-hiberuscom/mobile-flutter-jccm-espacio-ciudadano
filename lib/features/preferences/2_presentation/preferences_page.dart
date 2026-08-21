@@ -28,7 +28,8 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 // `idAgente` drives consent/life-events/storage; `contactId` is the identifier
 // for the `/ciudadanos/{id}` contacto endpoint, which differs per environment
-// during the backend migration (PRE: numDocumento/DNI, UAT: idAgente).
+// El gateway usa `sub_alt` en todos los entornos; `contactId` se mantiene
+// separado del id de almacenamiento para no mezclar identidad remota y caché.
 typedef _PreferencesArgs = ({String idAgente, String contactId});
 
 final _preferencesStateProvider = FutureProvider.autoDispose.family<_PreferencesState, _PreferencesArgs>(

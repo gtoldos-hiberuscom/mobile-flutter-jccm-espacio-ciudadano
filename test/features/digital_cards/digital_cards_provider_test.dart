@@ -2,8 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
-import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
@@ -15,16 +13,10 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositor
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
 
 void main() {
-  test('checks authorization with sub_alt when the gateway strategy is active', () async {
+  test('checks authorization with sub_alt', () async {
     final repository = _RecordingConsentRepository();
     final container = ProviderContainer(
       overrides: [
-        appConfigProvider.overrideWithValue(
-          const AppConfig.fromMap({
-            'APP_FLAVOR': 'development',
-            'CIUDADANOS_ID_STRATEGY': 'subAlt',
-          }),
-        ),
         jwtClaimsProvider.overrideWith(
           () => _StubJwtClaimsNotifier(
             const JwtClaims(
@@ -50,16 +42,10 @@ void main() {
     expect(repository.lastClauseId, jccmDataConsentClauseId);
   });
 
-  test('loads cards with sub_alt when the gateway strategy is active', () async {
+  test('loads cards with sub_alt', () async {
     final repository = _RecordingDigitalCardsRepository();
     final container = ProviderContainer(
       overrides: [
-        appConfigProvider.overrideWithValue(
-          const AppConfig.fromMap({
-            'APP_FLAVOR': 'development',
-            'CIUDADANOS_ID_STRATEGY': 'subAlt',
-          }),
-        ),
         jwtClaimsProvider.overrideWith(
           () => _StubJwtClaimsNotifier(
             const JwtClaims(
