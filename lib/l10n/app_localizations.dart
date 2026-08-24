@@ -7019,7 +7019,7 @@ abstract class AppLocalizations {
   /// Placeholder del campo número de registro del expediente.
   ///
   /// In es, this message translates to:
-  /// **'000 0 00000 0 00'**
+  /// **'Introduce el número de registro'**
   String get gestionAportacionNumRegistroHint;
 
   /// Texto de ayuda del campo número de registro.
@@ -7037,7 +7037,7 @@ abstract class AppLocalizations {
   /// Placeholder del campo código identificador del expediente.
   ///
   /// In es, this message translates to:
-  /// **'Ejemplo: 600 000 000'**
+  /// **'Introduce el código identificador'**
   String get gestionAportacionCodIdentificadorHint;
 
   /// Texto de ayuda del campo código identificador.

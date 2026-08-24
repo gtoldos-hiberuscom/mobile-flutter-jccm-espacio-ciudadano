@@ -212,7 +212,7 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
                         label: l10n.gestionAportacionTipoIdLabel,
                         controller: _docNumberController,
                         countryLabel: _selectedDocType.label(l10n),
-                        hint: l10n.gestionAportacionTipoIdHint,
+                        hint: _selectedDocType.hint(l10n),
                         helperText: l10n.gestionAportacionTipoIdHelper,
                         onSelectorTap: () => _showDocTypePicker(context, l10n),
                         inputFormatters: const [],
@@ -274,7 +274,8 @@ enum _DocType {
   nie,
   cif,
   pasaporte,
-  cee;
+  cee
+  ;
 
   String label(final AppLocalizations l10n) => switch (this) {
     _DocType.dni => l10n.gestionAportacionDni,
@@ -282,6 +283,14 @@ enum _DocType {
     _DocType.cif => l10n.gestionAportacionCif,
     _DocType.pasaporte => l10n.gestionAportacionPasaporte,
     _DocType.cee => l10n.gestionAportacionCee,
+  };
+
+  String hint(final AppLocalizations l10n) => switch (this) {
+    _DocType.dni => '00000000A',
+    _DocType.nie => 'X0000000A',
+    _DocType.cif => 'A00000000',
+    _DocType.pasaporte => 'N.º de ${l10n.gestionAportacionPasaporte.toLowerCase()}',
+    _DocType.cee => 'N.º de ${l10n.gestionAportacionCee}',
   };
 
   /// Valor enviado al backend en `ptipodoc`/`identificacion.category`. Sin

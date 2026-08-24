@@ -3633,7 +3633,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionNumRegistroLabel => 'NÚMERO DE REGISTRO DEL EXPEDIENTE';
 
   @override
-  String get gestionAportacionNumRegistroHint => '000 0 00000 0 00';
+  String get gestionAportacionNumRegistroHint => 'Introduce el número de registro';
 
   @override
   String get gestionAportacionNumRegistroHelper => 'Este número se obtiene en el momento de la presentación del expediente';
@@ -3642,7 +3642,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionCodIdentificadorLabel => 'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE';
 
   @override
-  String get gestionAportacionCodIdentificadorHint => 'Ejemplo: 600 000 000';
+  String get gestionAportacionCodIdentificadorHint => 'Introduce el código identificador';
 
   @override
   String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';

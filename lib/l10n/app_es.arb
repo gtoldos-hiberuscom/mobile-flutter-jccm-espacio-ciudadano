@@ -4726,7 +4726,7 @@
   "@gestionAportacionNumRegistroLabel": {
     "description": "Label del campo número de registro del expediente."
   },
-  "gestionAportacionNumRegistroHint": "000 0 00000 0 00",
+  "gestionAportacionNumRegistroHint": "Introduce el número de registro",
   "@gestionAportacionNumRegistroHint": {
     "description": "Placeholder del campo número de registro del expediente."
   },
@@ -4738,7 +4738,7 @@
   "@gestionAportacionCodIdentificadorLabel": {
     "description": "Label del campo código identificador del expediente."
   },
-  "gestionAportacionCodIdentificadorHint": "Ejemplo: 600 000 000",
+  "gestionAportacionCodIdentificadorHint": "Introduce el código identificador",
   "@gestionAportacionCodIdentificadorHint": {
     "description": "Placeholder del campo código identificador del expediente."
   },
