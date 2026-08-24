@@ -20,7 +20,10 @@
       "Bash(xargs ls)",
       "Bash(echo \"exit=$?\")",
       "Bash(git log *)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(mkdir -p store_assets/play)",
+      "Bash(magick assets/images/app_icon.png -resize 512x512 -background white -alpha remove -alpha off -flatten -strip store_assets/play/app_icon_512.png)",
+      "Bash(sips -g pixelWidth -g pixelHeight -g hasAlpha -g format store_assets/play/app_icon_512.png)"
     ]
   }
 }
