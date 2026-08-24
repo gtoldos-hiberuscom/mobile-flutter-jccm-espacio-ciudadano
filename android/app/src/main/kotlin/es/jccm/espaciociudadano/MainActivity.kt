@@ -1,4 +1,4 @@
-package com.example.jccm_espacio_ciudadano
+package es.jccm.espaciociudadano
 
 import android.app.Activity
 import android.content.Intent
