@@ -191,7 +191,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     final recommendations = lifeEventFilteredRecommendations;
     final hasRecommendations = state.recommendations.isNotEmpty;
     final hasActiveFilters = _selectedFilter != _RecommendationFilter.all || _selectedLifeEventFilterIds != null;
-    final showNoRecommendationsHelper = _selectedFilter == _RecommendationFilter.all && state.hasLifeEventsConsent && state.hasConfiguredLifeEvents && !hasRecommendations;
+    final showNoRecommendationsHelper = _selectedFilter == _RecommendationFilter.all && state.hasLifeEventsConsent && !hasRecommendations;
     final showNoFilteredRecommendationsHelper = hasActiveFilters && recommendations.isEmpty;
 
     return Column(
