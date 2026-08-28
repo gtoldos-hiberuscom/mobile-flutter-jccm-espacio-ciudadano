@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
@@ -43,7 +44,7 @@ class AppCheckbox extends StatelessWidget {
       AppDimensions.space4,
       AppDimensions.space8,
     ),
-  });
+  }) : assert(label.length > 0, 'label must not be empty');
 
   /// `null` triggers the indeterminate (Mixed) state; requires [tristate].
   final bool? value;
@@ -65,6 +66,23 @@ class AppCheckbox extends StatelessWidget {
     AppCheckboxSize.large => AppDimensions.iconLarge,
   };
 
+  void _toggle() {
+    if (_isDisabled) {
+      return;
+    }
+    if (tristate) {
+      onChanged?.call(
+        switch (value) {
+          false => true,
+          true => null,
+          null => false,
+        },
+      );
+      return;
+    }
+    onChanged?.call(!(value ?? false));
+  }
+
   @override
   Widget build(final BuildContext context) {
     return Column(
@@ -72,29 +90,19 @@ class AppCheckbox extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Semantics(
+          container: true,
           label: [
             label,
-            if (isError && errorText != null) 'Error: $errorText',
+            if (isError && errorText != null) errorText,
           ].join(', '),
           checked: value ?? false,
+          mixed: tristate ? value == null : null,
           enabled: !_isDisabled,
+          validationResult: isError ? SemanticsValidationResult.invalid : SemanticsValidationResult.none,
+          onTap: _isDisabled ? null : _toggle,
           child: ExcludeSemantics(
             child: InkWell(
-              onTap: _isDisabled
-                  ? null
-                  : () {
-                      if (tristate) {
-                        onChanged?.call(
-                          switch (value) {
-                            false => true,
-                            true => null,
-                            null => false,
-                          },
-                        );
-                      } else {
-                        onChanged?.call(!(value ?? false));
-                      }
-                    },
+              onTap: _isDisabled ? null : _toggle,
               borderRadius: BorderRadius.circular(AppDimensions.space4),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
@@ -130,9 +138,11 @@ class AppCheckbox extends StatelessWidget {
         ),
         if (isError && errorText != null) ...[
           const SizedBox(height: AppDimensions.space4),
-          Text(
-            errorText!,
-            style: AppTypography.captionRegular.copyWith(color: AppColors.error),
+          ExcludeSemantics(
+            child: Text(
+              errorText!,
+              style: AppTypography.captionRegular.copyWith(color: AppColors.error),
+            ),
           ),
         ],
       ],

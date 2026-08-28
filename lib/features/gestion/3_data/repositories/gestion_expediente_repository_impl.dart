@@ -14,14 +14,21 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   final PublicacionApi _api;
 
   @override
-  Future<List<Expediente>> loadExpedientes({required final String documentNumber}) async {
-    logger.d('[selectbynif] req numerodocumento=$documentNumber tipodoc=NIF');
+  Future<List<Expediente>> loadExpedientes({
+    required final String citizenId,
+    required final String documentNumber,
+  }) async {
+    logger.d('[selectbynifexp] req numerodocumento=$documentNumber tipodocumento=NIF');
     try {
-      final response = await _api.myPubliSelecByNifOperation(
-        dtselectbynifreqBody: DTSELECTBYNIFREQ(
+      // La variante `1` apunta al path gateway POST
+      // /api/v1/ciudadanos/{sid}/expedientes (el sufijo del generador se
+      // reparte de forma arbitraria entre legacy y gateway).
+      final response = await _api.myPubliSelecByNifTipoProcExpOperation1(
+        idAgente: citizenId,
+        dtselectbynifv2reqBody: DTSELECTBYNIFV2REQ(
           (final builder) => builder
             ..numerodocumento = documentNumber
-            ..tipodoc = 'NIF',
+            ..tipodocumento = 'NIF',
         ),
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
@@ -31,41 +38,50 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       );
 
       final raw = response.extra[generatedApiRawResponseDataExtraKey];
-      _logEnvelope('selectbynif', raw);
+      _logEnvelope('selectbynifexp', raw);
       final expedientes = _rawExpedientesByNif(raw);
-      logger.d('[selectbynif] ok ${expedientes.length} expediente(s)');
+      logger.d('[selectbynifexp] ok ${expedientes.length} expediente(s)');
       return expedientes;
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
-        logger.w('[selectbynif] 404 → lista vacía');
+        logger.w('[selectbynifexp] 404 → lista vacía');
         return const [];
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
-      _logEnvelope('selectbynif(error)', rawData);
+      _logEnvelope('selectbynifexp(error)', rawData);
       final parsed = _rawExpedientesByNif(rawData);
       if (parsed.isNotEmpty) {
-        logger.w('[selectbynif] error HTTP pero cuerpo con ${parsed.length} expediente(s) → se usa el cuerpo');
+        logger.w('[selectbynifexp] error HTTP pero cuerpo con ${parsed.length} expediente(s) → se usa el cuerpo');
         return parsed;
       }
-      logger.e('[selectbynif] error sin cuerpo aprovechable', error: error);
+      logger.e('[selectbynifexp] error sin cuerpo aprovechable', error: error);
       rethrow;
     }
   }
 
   @override
   Future<Expediente> loadExpedienteDetail({
+    required final String citizenId,
     required final String documentNumber,
     required final String numexp,
     final String tipodoc = 'NIF',
   }) async {
     logger.d('[selectbynumexp] req pnumdoc=$documentNumber pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    // Path gateway POST /api/v1/ciudadanos/{sid}/expedientes/{idExpediente}.
+    // El segmento `{idExpediente}` va fijo a `detalle` — como documenta el
+    // gateway — porque los números de expediente llevan barras
+    // (`S020/2024/0001-PR`) y romperían la ruta; el backend identifica el
+    // expediente por el `pnumexp` del cuerpo (los path params de la fachada
+    // son decorativos: los alias legacy los declaran sin tenerlos en la ruta).
     final response = await _api.myPubliSelecByNumExpOperation(
+      idAgente: citizenId,
+      idExpediente: 'detalle',
       zcsrfcpubliselectbynumexpBody: ZCSRFCPUBLISELECTBYNUMEXP(
         (final builder) => builder
           ..pnumdoc = documentNumber
           ..pnumexp = numexp
           ..ptipodoc = 'NIF',
-          // ..ptipodoc = tipodoc,
+        // ..ptipodoc = tipodoc,
       ),
       extra: {
         generatedApiDecodeStringResponseExtraKey: true,
@@ -90,12 +106,18 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<Expediente> loadExpedienteByRegistro({
+    required final String citizenId,
     required final String documentNumber,
     required final String numRegistro,
     final String tipodoc = 'NIF',
   }) async {
     logger.d('[selectbynumreg] req pnumdoc=$documentNumber pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
-    final response = await _api.myPubliNumRegOperation(
+    // La variante `1` apunta al path gateway POST
+    // /api/v1/ciudadanos/{sid}/registros/{idRegistro}. El backend identifica
+    // el registro por el `pregistro` del cuerpo; el path param es decorativo.
+    final response = await _api.myPubliNumRegOperation1(
+      idAgente: citizenId,
+      idRegistro: numRegistro,
       zcsrfcpubliselectbynumregBody: ZCSRFCPUBLISELECTBYNUMREG(
         (final builder) => builder
           ..pnumdoc = documentNumber
@@ -155,7 +177,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     };
 
     final first = items.map(_asMap).whereType<Map<String, Object?>>().firstOrNull;
-    return first == null ? null : _toExpedienteDetailMap(first);
+    return first == null ? null : _toExpedienteDetailMap(first, canAttachDocuments: _canAttachDocuments(root));
   }
 
   Expediente? _rawExpedienteDetail(final Object? data) {
@@ -166,7 +188,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     if (portal == null) {
       return null;
     }
-    final expediente = _toExpedienteDetailMap(portal);
+    final expediente = _toExpedienteDetailMap(portal, canAttachDocuments: _canAttachDocuments(root));
     // El backend devuelve 200 con `publicacionportal` presente pero con todos
     // los campos a `null` (isubrc:1, "No hay publicaciones...") cuando no
     // encuentra el expediente. Sin este guard se mapearía un `Expediente` con
@@ -178,10 +200,10 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   // Los nombres de campo del backend (estilo SAP) no se corresponden
   // literalmente con las etiquetas de Figma; se documenta la inferencia
   // porque no es obvia a partir de la clave sola.
-  Expediente _toExpedienteDetailMap(final Map<String, Object?> data) {
+  Expediente _toExpedienteDetailMap(final Map<String, Object?> data, {required final bool canAttachDocuments}) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
-      titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      titulo: _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
       // "Oficina tramitadora": mejor candidato disponible es `desuniorg`
       // (descripción de la unidad orgánica, campo paralelo a `desconsej`).
@@ -189,8 +211,9 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
       // "0000-00-00" es el sentinel SAP de fecha nula; se trata como ausente.
       fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
-      estado: _string(data, 'descrip') ?? _string(data, 'estado'),
+      estado: _estadoDescripcion(data),
       tipoproc: _string(data, 'tipoproc'),
+      canAttachDocuments: canAttachDocuments,
       // Campos en bruto necesarios para `inicproc`/`registrarfichero` al
       // aportar documentación — ver ExpedienteAportacionDatos.
       datosAportacion: ExpedienteAportacionDatos(
@@ -214,6 +237,8 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       ),
     );
   }
+
+  bool _canAttachDocuments(final Map<String, Object?>? responseBody) => responseBody != null && _string(responseBody, 'adjuntar') == 'X';
 
   String? _nonSentinelDate(final String? value) => (value == null || value == '0000-00-00') ? null : value;
 
@@ -240,11 +265,21 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   Expediente _toExpedienteByNifMap(final Map<String, Object?> data) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
-      titulo: _string(data, 'titulo') ?? _string(data, 'descrip') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      titulo: _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
       fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
-      estado: _string(data, 'estado'),
+      estado: _estadoDescripcion(data),
     );
+  }
+
+  String? _estadoDescripcion(final Map<String, Object?> data) {
+    final description = _string(data, 'descrip') ?? _string(data, 'desestado') ?? _string(data, 'descestado') ?? _string(data, 'estadoDescripcion');
+    if (description != null) {
+      return description;
+    }
+
+    final estado = _string(data, 'estado');
+    return estado != null && !RegExp(r'^\d+$').hasMatch(estado) ? estado : null;
   }
 
   Object? _decode(final Object? raw) {

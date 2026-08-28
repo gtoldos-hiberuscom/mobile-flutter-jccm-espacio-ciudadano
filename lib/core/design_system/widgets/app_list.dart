@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart' show AppListItem;
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
@@ -56,7 +57,20 @@ class AppList extends StatelessWidget {
     this.header,
     this.variant = AppListVariant.basic,
     this.padding,
-  });
+    this.headingLevel = 2,
+    this.semanticsLabel,
+  }) : assert(title == null || title != '', 'title must not be empty'),
+       assert(subtitle == null || subtitle != '', 'subtitle must not be empty'),
+       assert(header == null || header != '', 'header must not be empty'),
+       assert(title == null || header == null, 'title and header cannot both be provided'),
+       assert(
+         headingLevel >= 1 && headingLevel <= 6,
+         'headingLevel must be between 1 and 6',
+       ),
+       assert(
+         semanticsLabel == null || semanticsLabel != '',
+         'semanticsLabel must not be empty',
+       );
 
   /// Optional H3 title displayed above the list container (Figma title block).
   final String? title;
@@ -76,6 +90,12 @@ class AppList extends StatelessWidget {
   /// Override container padding. Defaults to zero (items handle their own).
   final EdgeInsetsGeometry? padding;
 
+  /// Semantic level used by [title] or legacy [header].
+  final int headingLevel;
+
+  /// Optional accessible name for the list group.
+  final String? semanticsLabel;
+
   @override
   Widget build(final BuildContext context) {
     return Column(
@@ -87,9 +107,13 @@ class AppList extends StatelessWidget {
             padding: const EdgeInsets.only(
               bottom: AppDimensions.space4,
             ),
-            child: Text(
-              title!,
-              style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+            child: Semantics(
+              header: true,
+              headingLevel: headingLevel,
+              child: Text(
+                title!,
+                style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
+              ),
             ),
           ),
         ] else if (header != null)
@@ -98,10 +122,14 @@ class AppList extends StatelessWidget {
               left: AppDimensions.space16,
               bottom: AppDimensions.space8,
             ),
-            child: Text(
-              header!,
-              style: AppTypography.bodyBold.copyWith(
-                color: AppColors.textPrimary,
+            child: Semantics(
+              header: true,
+              headingLevel: headingLevel,
+              child: Text(
+                header!,
+                style: AppTypography.bodyBold.copyWith(
+                  color: AppColors.textPrimary,
+                ),
               ),
             ),
           ),
@@ -113,30 +141,36 @@ class AppList extends StatelessWidget {
               style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
             ),
           ),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(
-              variant == AppListVariant.dropDownList ? AppDimensions.radiusMedium : AppDimensions.radiusSmall,
-            ),
-            border: Border.all(color: AppColors.borderNeutralLight),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x29000000),
-                blurRadius: 6,
-                offset: Offset(0, 4),
+        Semantics(
+          container: true,
+          explicitChildNodes: true,
+          role: SemanticsRole.list,
+          label: semanticsLabel,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(
+                variant == AppListVariant.dropDownList ? AppDimensions.radiusMedium : AppDimensions.radiusSmall,
               ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(
-              variant == AppListVariant.dropDownList ? AppDimensions.radiusMedium : AppDimensions.radiusSmall,
+              border: Border.all(color: AppColors.borderNeutralLight),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x29000000),
+                  blurRadius: 6,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
-            child: Padding(
-              padding: padding ?? const EdgeInsets.all(AppDimensions.space16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: _interleaveWithDividers(children),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                variant == AppListVariant.dropDownList ? AppDimensions.radiusMedium : AppDimensions.radiusSmall,
+              ),
+              child: Padding(
+                padding: padding ?? const EdgeInsets.all(AppDimensions.space16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: _interleaveWithDividers(children),
+                ),
               ),
             ),
           ),
@@ -151,15 +185,24 @@ class AppList extends StatelessWidget {
     }
     final result = <Widget>[];
     for (var i = 0; i < items.length; i++) {
-      result.add(items[i]);
+      result.add(
+        Semantics(
+          container: true,
+          explicitChildNodes: true,
+          role: SemanticsRole.listItem,
+          child: items[i],
+        ),
+      );
       if (i < items.length - 1) {
         result.add(
-          const Divider(
-            height: 1,
-            thickness: 1,
-            indent: AppDimensions.space16,
-            endIndent: AppDimensions.space16,
-            color: AppColors.dividerColor,
+          const ExcludeSemantics(
+            child: Divider(
+              height: 1,
+              thickness: 1,
+              indent: AppDimensions.space16,
+              endIndent: AppDimensions.space16,
+              color: AppColors.dividerColor,
+            ),
           ),
         );
       }

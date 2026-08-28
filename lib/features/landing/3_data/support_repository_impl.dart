@@ -16,6 +16,10 @@ final class SupportRepositoryImpl implements SupportRepository {
   @override
   Future<void> submitSupportRequest(final SupportRequest request) async {
     await _api.crearTareaSoporte(
+      // El path legacy /api/v1/soporte no interpola `idAgente` (solo la
+      // variante gateway /ciudadanos/{idAgente}/soporte lo usa) y el soporte
+      // puede enviarse sin sesión, así que no hay identificador que aportar.
+      idAgente: '',
       datos: _requestData(request),
       adjunto: _attachment(request),
     );

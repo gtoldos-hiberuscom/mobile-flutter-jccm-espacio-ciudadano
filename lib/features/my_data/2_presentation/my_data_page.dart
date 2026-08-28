@@ -58,6 +58,7 @@ class MyDataPage extends ConsumerWidget {
       appBar: AppNavBar(
         title: l10n.myDataTitle,
         isLoggedIn: true,
+        showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),

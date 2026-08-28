@@ -5,9 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
@@ -16,19 +13,9 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/pro
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-
-final _biometricQuickAccessPromptShownInSessionProvider = NotifierProvider<_BiometricQuickAccessPromptSessionNotifier, bool>(
-  _BiometricQuickAccessPromptSessionNotifier.new,
-);
-
-class _BiometricQuickAccessPromptSessionNotifier extends Notifier<bool> {
-  @override
-  bool build() => false;
-
-  void markShown() => state = true;
-}
 
 /// Authenticated home screen — Figma node 43716:13302 "Inicio".
 ///
@@ -37,7 +24,6 @@ class _BiometricQuickAccessPromptSessionNotifier extends Notifier<bool> {
 /// - Content area (light blue-lighter background)
 /// - [AppBottomTabBar] (5 tabs: Inicio, Gestión, Mi Carpeta, Agenda, Recomendados)
 /// - [AppFab] (ID card icon, bottom-right)
-/// - Shows the biometric quick-access dialog on first load.
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -46,7 +32,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  bool _biometricDialogShown = false;
   bool _isCardsFabExpanded = false;
   bool _isLoadingDigitalCards = false;
   bool? _hasDigitalCardsAuthorization;
@@ -65,59 +50,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_biometricDialogShown) {
-      _biometricDialogShown = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          unawaited(_handleInitialPrompts());
-        }
-      });
-    }
-  }
-
-  Future<void> _handleInitialPrompts() async {
-    await _showBiometricDialog();
-  }
-
-  Future<void> _showBiometricDialog() async {
-    final appStorage = ref.read(appStorageProvider);
-    final enabled = appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false;
-    final promptShownInSession = ref.read(_biometricQuickAccessPromptShownInSessionProvider);
-    if (enabled || promptShownInSession) {
-      return;
-    }
-
-    final hasBiometrics = await ref.read(biometricAuthenticatorProvider).canAuthenticateWithBiometrics();
-    if (!mounted || !hasBiometrics) {
-      return;
-    }
-    ref.read(_biometricQuickAccessPromptShownInSessionProvider.notifier).markShown();
-
-    final accepted = await AppBiometricAccessDialog.show(context);
-
-    if (!mounted) {
-      return;
-    }
-
-    if (accepted != true) {
-      return;
-    }
-
-    await appStorage.write(StorageKeys.biometricQuickAccessEnabled, true);
-    if (!mounted) {
-      return;
-    }
-
-    AppAlertToast.show(
-      context,
-      message: 'Acceso biométrico activado',
-      severity: AppAlertSeverity.success,
-    );
-  }
-
   void _showComingSoon() {
     AppAlertSnackbar.show(
       context,
@@ -131,6 +63,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppNavBar(
         type: AppNavBarType.inicio,
         isLoggedIn: true,
+        showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
         onNotificationsTap: _goToNotifications,
@@ -190,7 +123,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_isLoadingDigitalCards) {
       AppAlertSnackbar.show(
         context,
-        message: 'Estamos consultando tus carnés digitales.',
+        message: 'Estamos consultando tus carnets digitales.',
       );
       return;
     }
@@ -201,7 +134,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_digitalCardsLoadFailed) {
       AppAlertSnackbar.show(
         context,
-        message: 'No hemos podido consultar tus carnés digitales.',
+        message: 'No hemos podido consultar tus carnets digitales.',
         severity: AppAlertSeverity.error,
       );
       return;
@@ -553,7 +486,9 @@ class _HomeRecommendationsSection extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
-    final state = ref.watch(recommendationsProvider);
+    final state = ref.watch(
+      recommendationsProvider(RecommendationsSegment.all),
+    );
     return state.maybeWhen(
       data: (final data) {
         if (!data.hasLifeEventsConsent || data.recommendations.isEmpty) {
@@ -566,25 +501,34 @@ class _HomeRecommendationsSection extends ConsumerWidget {
           children: [
             const _SectionTitle(text: 'Trámites recomendados'),
             const SizedBox(height: AppDimensions.space8),
-            SizedBox(
-              height: 328,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                clipBehavior: Clip.none,
-                itemCount: recommendations.length,
-                separatorBuilder: (final context, final index) => const SizedBox(width: AppDimensions.space16),
-                itemBuilder: (final context, final index) => SizedBox(
-                  width: 288,
-                  child: _RecommendedProcedureCard(recommendation: recommendations[index]),
-                ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (var index = 0; index < recommendations.length; index++) ...[
+                    SizedBox(
+                      width: 288,
+                      child: _RecommendedProcedureCard(recommendation: recommendations[index]),
+                    ),
+                    if (index < recommendations.length - 1) const SizedBox(width: AppDimensions.space16),
+                  ],
+                ],
               ),
             ),
             const SizedBox(height: AppDimensions.space16),
-            AppButton(
-              label: 'Ir a recomendaciones',
-              trailingIcon: AppIcons.arrowForward,
-              isExpanded: true,
-              onPressed: () => context.go(Routes.recommendations),
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
+                boxShadow: AppShadows.low,
+              ),
+              child: AppButton(
+                label: 'Ir a recomendaciones',
+                hierarchy: AppButtonHierarchy.secondary,
+                isExpanded: true,
+                onPressed: () => context.go(Routes.recommendations),
+              ),
             ),
           ],
         );
@@ -610,7 +554,6 @@ class _RecommendedProcedureCard extends StatelessWidget {
       categoryLabels: _categoryLabels(context, recommendation.badges),
       detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
       detailText: lifeEventName.isEmpty ? l10n.homeBlockLastUpdatedUnknown : lifeEventName,
-      statusLabel: 'Estado',
       statusText: recommendation.submissionStatusText ?? deadline,
     );
   }

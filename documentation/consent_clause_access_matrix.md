@@ -2,6 +2,11 @@
 
 Este documento define qué información puede consultarse en función de las cláusulas aceptadas por el ciudadano.
 
+Refleja la matriz facilitada por el cliente (revisión del 2026-08-20), que es la
+fuente de verdad. La documentación funcional del gateway dice que bienestar
+social exige la cláusula de recomendaciones: es una errata, la matriz del cliente
+y el propio texto de la cláusula JCCM lo desmienten.
+
 Las cláusulas se guardan por usuario en `SharedPreferences` usando:
 
 - Flag de paso por pantalla legal: `consent_accepted_<idAgente>`
@@ -9,16 +14,25 @@ Las cláusulas se guardan por usuario en `SharedPreferences` usando:
 
 ## Cláusulas
 
-| ID | Cláusula | Uso |
-| --- | --- | --- |
-| 1 | Cláusula inicial | Acceso básico a la información inicial del Espacio Ciudadano. |
-| 2 | Cláusula JCCM | Consulta y tratamiento de información gestionada por JCCM. |
-| 3 | Cláusula AGE | Consulta de información procedente de la Administración General del Estado. |
-| 4 | Cláusula recomendaciones | Uso de preferencias y hechos vitales para recomendaciones personalizadas. |
+Los identificadores son los `idClausula` que devuelve el API en
+`GET /api/v1/ciudadanos/{id}/clausulas`, **no una numeración propia**: son los
+valores que se envían en las altas y actualizaciones y con los que se comparan
+las autorizaciones. Empiezan en 0.
+
+| `idClausula` | Cláusula | Constante en código | Uso |
+| --- | --- | --- | --- |
+| 0 | Protección de datos | `requiredConsentClauseId` | Obligatoria. Acceso básico al Espacio Ciudadano. |
+| 1 | Condiciones de uso (JCCM) | `jccmDataConsentClauseId` | Consulta de hechos administrativos de la JCCM en bienestar social, empleo, educación y salud. |
+| 2 | Espacio Ciudadano (AGE) | `ageDataConsentClauseId` | Consulta de información de la Administración General del Estado. |
+| 3 | Recomendaciones | `recommendationsConsentClauseId` | Uso de preferencias y hechos vitales para recomendaciones personalizadas. |
+
+> Una versión anterior de este documento numeraba las cláusulas de 1 a 4, con un
+> desfase de uno respecto al API. Quien tradujera la matriz a código directamente
+> pedía la cláusula equivocada, y el síntoma era un 403 difícil de rastrear.
 
 ## Información
 
-| Área | Información | Origen | Cláusula inicial | Cláusula JCCM | Cláusula AGE | Cláusula recomendaciones |
+| Área | Información | Origen | 0 · Protección de datos | 1 · JCCM | 2 · AGE | 3 · Recomendaciones |
 | --- | --- | --- | --- | --- | --- | --- |
 | Información | Notificaciones | JCCM | Sí | No | No | No |
 | Información | Expedientes | JCCM | Sí | No | No | No |
@@ -39,7 +53,7 @@ Las cláusulas se guardan por usuario en `SharedPreferences` usando:
 
 ## Carnet
 
-| Área | Información | Origen | Cláusula inicial | Cláusula JCCM | Cláusula AGE | Cláusula recomendaciones |
+| Área | Información | Origen | 0 · Protección de datos | 1 · JCCM | 2 · AGE | 3 · Recomendaciones |
 | --- | --- | --- | --- | --- | --- | --- |
 | Carnet | Discapacidad | JCCM | Sí | Sí | No | No |
 | Carnet | Familia Numerosa | JCCM | Sí | Sí | No | No |
@@ -47,9 +61,9 @@ Las cláusulas se guardan por usuario en `SharedPreferences` usando:
 
 ## Agenda
 
-| Área | Información | Origen | Cláusula inicial | Cláusula JCCM | Cláusula AGE | Cláusula recomendaciones |
+| Área | Información | Origen | 0 · Protección de datos | 1 · JCCM | 2 · AGE | 3 · Recomendaciones |
 | --- | --- | --- | --- | --- | --- | --- |
-| Agenda | Notificaciones | JCCM | Sí | No | No | No |
+| Agenda | Notificaciones | JCCM | Sí | Sí | No | No |
 | Agenda | Carnet discapacidad | JCCM | Sí | Sí | No | No |
 | Agenda | Carnet familia numerosa | JCCM | Sí | Sí | No | No |
 | Agenda | Carnet joven | JCCM | Sí | Sí | No | No |
@@ -57,7 +71,7 @@ Las cláusulas se guardan por usuario en `SharedPreferences` usando:
 
 ## Recomendaciones
 
-| Área | Información | Origen | Cláusula inicial | Cláusula JCCM | Cláusula AGE | Cláusula recomendaciones |
+| Área | Información | Origen | 0 · Protección de datos | 1 · JCCM | 2 · AGE | 3 · Recomendaciones |
 | --- | --- | --- | --- | --- | --- | --- |
 | Recomendaciones | Recomendaciones | JCCM | Sí | No | No | Sí |
 
@@ -65,11 +79,11 @@ Las cláusulas se guardan por usuario en `SharedPreferences` usando:
 
 Para una ruta o funcionalidad concreta, `app_routes` debe permitir el acceso solo si el ciudadano ha aceptado todas las cláusulas marcadas como `Sí` para esa funcionalidad.
 
-Ejemplos:
+Ejemplos, con los `idClausula` reales:
 
-- `Notificaciones`: requiere cláusula `1`.
-- `Citas primaria`: requiere cláusulas `1` y `2`.
-- `Títulos Universitarios`: requiere cláusulas `1` y `3`.
-- `Recomendaciones`: requiere cláusulas `1` y `4`.
+- `Notificaciones`: requiere la cláusula `0`.
+- `Citas primaria`: requiere las cláusulas `0` y `1`.
+- `Títulos Universitarios`: requiere las cláusulas `0` y `2`.
+- `Recomendaciones`: requiere las cláusulas `0` y `3`.
 
 Si el ciudadano no ha aceptado una cláusula requerida, la ruta debería bloquear el acceso a esa funcionalidad concreta, no cerrar sesión ni forzar a repetir todo el onboarding legal.

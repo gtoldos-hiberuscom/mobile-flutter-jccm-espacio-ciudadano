@@ -51,7 +51,11 @@ void main() {
         adapter.requests.single.path,
         '/api/v1/ciudadanos/99999999R/notificaciones',
       );
-      expect(adapter.requests.single.queryParameters, <String, dynamic>{'estado': 'aceptada'});
+      expect(adapter.requests.single.queryParameters, <String, dynamic>{
+        'estado': 'aceptada',
+        'page': 0,
+        'size': 10,
+      });
     });
 
     test('loads notificaciones from a stringified JSON response and tags estado', () async {
@@ -81,59 +85,250 @@ void main() {
       expect(result.single.fechaCaducidad, DateTime.parse('2026-06-25T10:15:00Z'));
       expect(adapter.requests.single.method, 'GET');
       expect(adapter.requests.single.path, '/api/v1/ciudadanos/PER9998003/notificaciones');
-      expect(adapter.requests.single.queryParameters, <String, dynamic>{'estado': 'pendiente'});
+      expect(adapter.requests.single.queryParameters, <String, dynamic>{
+        'estado': 'pendiente',
+        'page': 0,
+        'size': 10,
+      });
     });
 
-    test('"Todo" (sin estado) consulta cada estado y fusiona los resultados', () async {
-      // Una respuesta por estado, cada una con un id único.
+    test('loads every notification page for a status', () async {
       final adapter = SequenceHttpClientAdapter([
-        for (var i = 1; i <= 4; i++)
-          AdapterResponse(
-            statusCode: 200,
-            body: [
-              {
-                'idNotificacion': i,
-                'concepto': 'Notificación $i',
-                'procedimientoAdministrativo': {'denominacion': 'Proc $i'},
-              },
+        AdapterResponse(
+          statusCode: 200,
+          body: {
+            'content': [
+              for (var id = 1; id <= 10; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
             ],
-          ),
+          },
+        ),
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'content': [
+              {'idNotificacion': 11, 'concepto': 'Notificación 11'},
+            ],
+          },
+        ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
-      final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
-
-      const estadosEsperados = {'pendiente', 'expirada', 'aceptada', 'rechazada'};
-
-      // Se consultó cada estado del enum exactamente una vez.
-      expect(adapter.requests, hasLength(4));
-      expect(
-        adapter.requests.map((final r) => r.queryParameters['estado']).toSet(),
-        estadosEsperados,
+      final result = await repository.loadNotificaciones(
+        citizenId: 'PER9998003',
+        estado: 'aceptada',
       );
 
-      // Se fusionan las 4 notificaciones, cada una etiquetada con su estado.
-      expect(result, hasLength(4));
-      expect(result.map((final n) => n.id).toSet(), {1, 2, 3, 4});
-      expect(result.map((final n) => n.estado).toSet(), estadosEsperados);
+      expect(result, hasLength(11));
+      expect(adapter.requests, hasLength(2));
+      expect(adapter.requests[0].queryParameters['page'], 0);
+      expect(adapter.requests[1].queryParameters['page'], 1);
+      expect(adapter.requests.every((final request) => request.queryParameters['size'] == 10), isTrue);
     });
 
-    test('"Todo" tolera fallos parciales y devuelve los estados que sí responden', () async {
-      // El tercer estado consultado devuelve 500; los otros tres responden ok.
+    test('loads accepted notifications when body uses the detailed Notifica shape', () async {
       final adapter = SequenceHttpClientAdapter([
-        const AdapterResponse(statusCode: 200, body: [{'idNotificacion': 1, 'concepto': 'A'}]),
-        const AdapterResponse(statusCode: 200, body: [{'idNotificacion': 2, 'concepto': 'B'}]),
-        const AdapterResponse(statusCode: 500, body: <String, dynamic>{'mensaje': 'error'}),
-        const AdapterResponse(statusCode: 200, body: [{'idNotificacion': 4, 'concepto': 'D'}]),
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': '[{"id":7924,"concepto":"Notificación aceptada","fecCaducidad":"2026-12-24T23:59:59Z","unidadOrganica":{"sistema":"notifica2","informacionAdicional":[{"clave":"nombre","valor":"Unidad aceptada"}]},"procedimientoAdministrativo":{"informacionAdicional":[{"clave":"denominacion","valor":"Procedimiento aceptado"}]}}]',
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(
+        citizenId: 'PER9998003',
+        estado: 'aceptada',
+      );
+
+      expect(result, hasLength(1));
+      expect(result.single.id, 7924);
+      expect(result.single.concepto, 'Notificación aceptada');
+      expect(result.single.procedimientoDenominacion, 'Procedimiento aceptado');
+      expect(result.single.unidadOrganicaNombre, 'Unidad aceptada');
+      expect(result.single.sistemaOrigen, 'notifica2');
+      expect(result.single.estado, 'aceptada');
+    });
+
+    test('loads the full notification detail through the generated client', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 7924,
+              'concepto': 'Gestión electrónica de contratación',
+              'estado': 'EXPIRADA',
+              'fecAlta': '2026-12-14T10:00:00Z',
+              'fecCaducidad': '2026-12-24T23:59:59Z',
+              'unidadOrganica': {
+                'sistema': 'notifica2',
+                'informacionAdicional': [
+                  {'clave': 'nombre', 'valor': 'Servicio de contratación electrónica y registros'},
+                ],
+              },
+              'procedimientoAdministrativo': {
+                'informacionAdicional': [
+                  {'clave': 'denominacion', 'valor': 'MD7K'},
+                ],
+              },
+              'expediente': {'identificador': '2026/09032976'},
+              'documentos': [
+                {'orden': 1, 'nombre': 'Notificacion.pdf', 'tamano': 125952},
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 7924,
+        estado: 'expirada',
+        sistemaOrigen: 'notifica2',
+      );
+
+      expect(detail.id, 7924);
+      expect(detail.estado, 'expirada');
+      expect(detail.organismo, 'Servicio de contratación electrónica y registros');
+      expect(detail.procedimiento, 'MD7K');
+      expect(detail.expediente, '2026/09032976');
+      expect(detail.fechaExpiracion, DateTime.parse('2026-12-24T23:59:59Z'));
+      expect(detail.documentos.single.nombre, 'Notificacion.pdf');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/notificaciones/7924');
+    });
+
+    test('ignores a document that only contains technical references', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 152,
+              'concepto': 'Transmisiones patrimoniales',
+              'estado': 'EXPIRADA',
+              'documentos': [
+                {
+                  'orden': 1,
+                  'identificadorReferencia': 'DOC-001',
+                  'documento': {
+                    'id': 12345,
+                    'identificador': 'notifica-doc-12345',
+                    'aplicacion': 'notifica2',
+                    'tipoEntidad': 'DOCUMENTO',
+                  },
+                },
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 152,
+        estado: 'expirada',
+      );
+
+      expect(detail.documentos, isEmpty);
+    });
+
+    test('ignores unnamed documents instead of inventing visible names', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 152,
+              'documentos': [
+                {'orden': 0},
+                <String, Object?>{},
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 152,
+        estado: 'expirada',
+      );
+
+      expect(detail.documentos, isEmpty);
+    });
+
+    test('accepts a pending notification through the comparecer endpoint', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {'body': <String, dynamic>{}},
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      await repository.transitionNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 7924,
+        accion: 'ACEPTAR',
+        sistemaOrigen: 'notifica2',
+      );
+
+      expect(adapter.requests.single.method, 'POST');
+      // API 1.86: el endpoint de transiciones con cuerpo fue sustituido por
+      // POST .../comparecer sin cuerpo; la acción ya no viaja al backend.
+      expect(
+        adapter.requests.single.path,
+        '/api/v1/ciudadanos/99999999R/notificaciones/7924/comparecer',
+      );
+    });
+
+    test('"Todo" consulta una vez sin filtro de estado', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 1,
+              'concepto': 'Notificación 1',
+              'estado': 'pendiente',
+              'procedimientoAdministrativo': {'denominacion': 'Proc 1'},
+            },
+          ],
+        ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
       final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
 
-      expect(adapter.requests, hasLength(4));
-      expect(result.map((final n) => n.id).toSet(), {1, 2, 4});
+      expect(adapter.requests, hasLength(1));
+      expect(adapter.requests.single.queryParameters, {'page': 0, 'size': 10});
+      expect(result.single.id, 1);
+      expect(result.single.estado, 'pendiente');
+    });
+
+    test('"Todo" propaga el error del listado único', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 500, body: <String, dynamic>{'mensaje': 'error'}),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadNotificaciones(citizenId: '99999999R'),
+        throwsA(isA<DioException>()),
+      );
+      expect(adapter.requests, hasLength(1));
     });
   });
 }

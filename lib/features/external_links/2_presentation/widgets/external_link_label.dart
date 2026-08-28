@@ -12,6 +12,8 @@ String resolveExternalLinkLabel(
   switch (displayKey) {
     case 'externalLinkEducamosClmLabel':
       return l10n.externalLinkEducamosClmLabel;
+    case 'externalLinkEducacionClmLabel':
+      return l10n.externalLinkEducacionClmLabel;
     case 'externalLinkEmpleoClmLabel':
       return l10n.externalLinkEmpleoClmLabel;
     case 'externalLinkEmpleoPublicoClmLabel':

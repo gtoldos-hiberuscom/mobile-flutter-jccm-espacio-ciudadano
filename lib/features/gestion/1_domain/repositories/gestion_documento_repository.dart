@@ -6,6 +6,10 @@ import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedim
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/representante.dart';
 
 abstract interface class GestionDocumentoRepository {
+  /// En los tres métodos, [citizenId] es el identificador del ciudadano
+  /// autenticado para el path `/ciudadanos/{sid}/...` (sub_alt contra el
+  /// gateway); el documento real viaja siempre en el cuerpo.
+
   /// Sube un fichero sin firma electrónica al buzón de tramitación.
   /// Devuelve el hash del documento confirmado por el backend.
   ///
@@ -13,6 +17,7 @@ abstract interface class GestionDocumentoRepository {
   /// el contrato de `idunico` para continuar un expediente ya existente no
   /// está documentado por el backend.
   Future<String> subirDocumentoSinFirma({
+    required final String citizenId,
     required final String documentNumber,
     required final String idUnico,
     required final String tipoProcedimiento,
@@ -36,6 +41,7 @@ abstract interface class GestionDocumentoRepository {
   ///
   /// **No verificado contra backend real.**
   Future<InicioProcedimientoResultado> iniciarProcedimiento({
+    required final String citizenId,
     required final String idUnico,
     required final String documentNumber,
     required final Expediente expediente,
@@ -53,6 +59,7 @@ abstract interface class GestionDocumentoRepository {
   ///
   /// **No verificado contra backend real.**
   Future<Uint8List> registrarFicheros({
+    required final String citizenId,
     required final String documentNumber,
     required final Expediente expediente,
     required final InicioProcedimientoResultado inicio,

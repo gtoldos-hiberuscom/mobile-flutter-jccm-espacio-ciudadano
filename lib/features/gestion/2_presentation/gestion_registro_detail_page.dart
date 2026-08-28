@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
@@ -19,6 +20,23 @@ class GestionRegistroDetailPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final detailFields = <Widget>[
+      if (_hasValue(registro.numregistro))
+        _DetailField(
+          label: l10n.gestionRegistrosNumRegistroLabel,
+          value: registro.numregistro,
+        ),
+      if (_hasValue(registro.fecha))
+        _DetailField(
+          label: l10n.gestionRegistrosFechaLabel,
+          value: _formatDate(context, registro.fecha!),
+        ),
+      if (_hasValue(registro.consejeria))
+        _DetailField(
+          label: isEntrada ? l10n.gestionRegistrosConsejeriaDestinoLabel : l10n.gestionRegistrosConsejeriaOrigenLabel,
+          value: _sentenceCase(registro.consejeria!),
+        ),
+    ];
 
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
@@ -32,7 +50,13 @@ class GestionRegistroDetailPage extends StatelessWidget {
             color: AppColors.textPrimary,
           ),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          onPressed: () => context.go(Routes.gestionRegistros),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+              return;
+            }
+            context.go(Routes.gestionRegistros);
+          },
         ),
       ),
       body: SafeArea(
@@ -44,45 +68,63 @@ class GestionRegistroDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space4,
-                  vertical: AppDimensions.space8,
+              if (_hasValue(registro.titulo))
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.space4,
+                    vertical: AppDimensions.space8,
+                  ),
+                  child: Text(
+                    _sentenceCase(registro.titulo),
+                    style: AppTypography.h2.copyWith(
+                      color: AppColors.textBase,
+                    ),
+                  ),
                 ),
-                child: Text(
-                  registro.titulo,
-                  style: AppTypography.h2.copyWith(color: AppColors.textBase),
+              if (detailFields.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppDimensions.space4,
+                    AppDimensions.space4,
+                    AppDimensions.space4,
+                    AppDimensions.space8,
+                  ),
+                  child: Text(
+                    l10n.gestionRegistrosDatosRegistroTitle,
+                    style: AppTypography.h3.copyWith(
+                      color: AppColors.textBase,
+                    ),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppDimensions.space4,
-                  AppDimensions.space4,
-                  AppDimensions.space4,
-                  AppDimensions.space8,
-                ),
-                child: Text(
-                  l10n.gestionRegistrosDatosRegistroTitle,
-                  style: AppTypography.h3.copyWith(color: AppColors.textBase),
-                ),
-              ),
-              _DetailField(
-                label: l10n.gestionRegistrosNumRegistroLabel,
-                value: registro.numregistro,
-              ),
-              _DetailField(
-                label: l10n.gestionRegistrosFechaLabel,
-                value: registro.fecha ?? '-',
-              ),
-              _DetailField(
-                label: isEntrada ? l10n.gestionRegistrosConsejeriaDestinoLabel : l10n.gestionRegistrosConsejeriaOrigenLabel,
-                value: registro.consejeria ?? '-',
-              ),
+                ...detailFields,
+              ],
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _sentenceCase(final String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty || trimmed != trimmed.toUpperCase()) {
+      return trimmed;
+    }
+    final lowerCase = trimmed.toLowerCase();
+    return '${lowerCase[0].toUpperCase()}${lowerCase.substring(1)}';
+  }
+
+  bool _hasValue(final String? value) => value != null && value.trim().isNotEmpty;
+
+  String _formatDate(final BuildContext context, final String rawDate) {
+    final date = DateTime.tryParse(rawDate);
+    if (date == null) {
+      return rawDate;
+    }
+    return DateFormat(
+      'd MMM yyyy',
+      Localizations.localeOf(context).languageCode,
+    ).format(date);
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Digital credential card matching the Carnets Digitales Figma component.
 class AppDigitalCard extends StatelessWidget {
@@ -19,7 +20,13 @@ class AppDigitalCard extends StatelessWidget {
     this.statusLabel,
     this.onDownload,
     this.isDownloading = false,
-  });
+    this.semanticLabel,
+  }) : assert(title.length > 0, 'title must not be empty'),
+       assert(downloadLabel.length > 0, 'downloadLabel must not be empty'),
+       assert(number == null || number.length > 0, 'number must not be empty'),
+       assert(primaryDate == null || primaryDateLabel != null, 'primaryDateLabel is required with primaryDate'),
+       assert(secondaryDate == null || secondaryDateLabel != null, 'secondaryDateLabel is required with secondaryDate'),
+       assert(semanticLabel == null || semanticLabel.length > 0, 'semanticLabel must not be empty');
 
   final String title;
   final String? number;
@@ -31,22 +38,32 @@ class AppDigitalCard extends StatelessWidget {
   final String downloadLabel;
   final VoidCallback? onDownload;
   final bool isDownloading;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final enabled = onDownload != null && !isDownloading;
+    final summary =
+        semanticLabel ??
+        [
+          title,
+          if (number != null) '${l10n.digitalCardNumberLabel}: $number',
+          if (primaryDate != null) '$primaryDateLabel: $primaryDate',
+          if (secondaryDate != null) '$secondaryDateLabel: $secondaryDate',
+          ?statusLabel,
+        ].join('. ');
 
-    return Semantics(
-      button: enabled,
-      label: [title, if (number != null) 'Número de carnet $number', if (primaryDate != null) '$primaryDateLabel $primaryDate'].join('. '),
-      child: Container(
-        height: statusLabel == null ? 234 : 180,
-        decoration: BoxDecoration(
-          color: AppColors.primaryLight,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-          border: Border.all(color: AppColors.primary),
-          boxShadow: AppShadows.high,
-        ),
+    return Container(
+      constraints: const BoxConstraints(minHeight: 180),
+      decoration: BoxDecoration(
+        color: AppColors.primaryLight,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+        border: Border.all(color: AppColors.primary),
+        boxShadow: AppShadows.high,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
         child: Stack(
           children: [
             Positioned(
@@ -54,98 +71,107 @@ class AppDigitalCard extends StatelessWidget {
               bottom: statusLabel == null ? -23 : -48,
               child: const _DigitalCardDots(),
             ),
-            if (statusLabel != null) ...[
-              Positioned(
-                right: AppDimensions.space8,
-                top: AppDimensions.space8,
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(4, 2, 8, 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.successContainer,
-                    border: Border.all(color: AppColors.successDark),
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const AppIcon(AppIcons.check, color: AppColors.successDark, size: 16),
-                      const SizedBox(width: AppDimensions.space4),
-                      Text(
-                        statusLabel!.toUpperCase(),
-                        style: AppTypography.captionRegular.copyWith(color: AppColors.successDark),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: statusLabel == null ? AppDimensions.space16 : 9,
-                vertical: AppDimensions.space8,
-              ),
+              padding: const EdgeInsets.all(AppDimensions.space16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Título / Carnet',
-                    style: _cardCaptionStyle,
-                  ),
-                  const SizedBox(height: AppDimensions.space2),
-                  Padding(
-                    padding: EdgeInsets.only(right: statusLabel == null ? 84 : 116),
-                    child: Text(
-                      title,
-                      style: AppTypography.h2.copyWith(color: AppColors.textWhite),
-                    ),
-                  ),
-                  SizedBox(height: statusLabel == null ? AppDimensions.space8 : AppDimensions.space16),
-                  if (number != null) ...[
-                    Text('Número de carnet', style: _cardCaptionStyle),
-                    Text(
-                      number!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.h3.copyWith(color: AppColors.textWhite),
-                    ),
-                    const SizedBox(height: AppDimensions.space8),
-                  ],
-                  if (primaryDate != null)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _CardDate(label: primaryDateLabel!, value: primaryDate!),
-                        ),
-                        if (secondaryDate != null) ...[
-                          const SizedBox(width: AppDimensions.space16),
-                          Expanded(
-                            child: _CardDate(label: secondaryDateLabel!, value: secondaryDate!),
+                  if (statusLabel != null)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ExcludeSemantics(
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(4, 2, 8, 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.successContainer,
+                            border: Border.all(color: AppColors.successDark),
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
                           ),
-                        ],
-                      ],
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const AppIcon(AppIcons.check, color: AppColors.successDark, size: 16),
+                              const SizedBox(width: AppDimensions.space4),
+                              Text(
+                                statusLabel!.toUpperCase(),
+                                style: AppTypography.captionRegular.copyWith(color: AppColors.successDark),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  const Spacer(),
-                  TextButton.icon(
-                    onPressed: enabled ? onDownload : null,
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.blue300,
-                      disabledForegroundColor: AppColors.blue300.withValues(alpha: 0.55),
-                      minimumSize: const Size(0, AppDimensions.minTouchTarget),
-                      padding: const EdgeInsets.all(AppDimensions.space8),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    icon: isDownloading
-                        ? const SizedBox.square(
-                            dimension: AppDimensions.iconSmall,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.blue300,
+                  Semantics(
+                    container: true,
+                    label: summary,
+                    child: ExcludeSemantics(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.digitalCardTitleLabel,
+                            style: _cardCaptionStyle,
+                          ),
+                          const SizedBox(height: AppDimensions.space2),
+                          Text(
+                            title,
+                            style: AppTypography.h2.copyWith(color: AppColors.textWhite),
+                          ),
+                          SizedBox(height: statusLabel == null ? AppDimensions.space8 : AppDimensions.space16),
+                          if (number != null) ...[
+                            Text(l10n.digitalCardNumberLabel, style: _cardCaptionStyle),
+                            Text(
+                              number!,
+                              style: AppTypography.h3.copyWith(color: AppColors.textWhite),
                             ),
-                          )
-                        : const AppIcon(AppIcons.download),
-                    label: Text(
-                      downloadLabel,
-                      style: AppTypography.bodyBold,
+                            const SizedBox(height: AppDimensions.space8),
+                          ],
+                          if (primaryDate != null)
+                            Wrap(
+                              spacing: AppDimensions.space16,
+                              runSpacing: AppDimensions.space8,
+                              children: [
+                                _CardDate(label: primaryDateLabel!, value: primaryDate!),
+                                if (secondaryDate != null) _CardDate(label: secondaryDateLabel!, value: secondaryDate!),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space8),
+                  Semantics(
+                    button: true,
+                    enabled: enabled,
+                    label: downloadLabel,
+                    value: isDownloading ? l10n.a11yLoading : null,
+                    liveRegion: isDownloading,
+                    onTap: enabled ? onDownload : null,
+                    child: ExcludeSemantics(
+                      child: TextButton.icon(
+                        onPressed: enabled ? onDownload : null,
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.blue300,
+                          disabledForegroundColor: AppColors.blue300.withValues(alpha: 0.55),
+                          minimumSize: const Size(0, AppDimensions.minTouchTarget),
+                          padding: const EdgeInsets.all(AppDimensions.space8),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        icon: isDownloading
+                            ? const SizedBox.square(
+                                dimension: AppDimensions.iconSmall,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.blue300,
+                                ),
+                              )
+                            : const AppIcon(AppIcons.download),
+                        label: Text(
+                          downloadLabel,
+                          style: AppTypography.bodyBold,
+                        ),
+                      ),
                     ),
                   ),
                 ],

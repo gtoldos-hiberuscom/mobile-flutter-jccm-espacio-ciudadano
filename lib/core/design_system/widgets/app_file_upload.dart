@@ -3,6 +3,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_list.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Upload status for [AppFileUpload].
 ///
@@ -43,10 +44,12 @@ class AppFileUpload extends StatelessWidget {
     this.onRemove,
     this.onDelete,
     this.onRetry,
-    this.cancelLabel = 'Cancelar',
-    this.removeLabel = 'Eliminar',
-    this.retryLabel = 'Reintentar',
-  });
+    this.cancelLabel,
+    this.removeLabel,
+    this.deleteLabel,
+    this.retryLabel,
+  }) : assert(fileName != '', 'fileName must not be empty'),
+       assert(fileInfo != '', 'fileInfo must not be empty');
 
   /// Displayed file name — rendered as bold underlined link text.
   final String fileName;
@@ -73,42 +76,68 @@ class AppFileUpload extends StatelessWidget {
   final VoidCallback? onRetry;
 
   /// Label for the cancel action. Defaults to `'Cancelar'`.
-  final String cancelLabel;
+  final String? cancelLabel;
 
   /// Label for the remove action. Defaults to `'Eliminar'`.
-  final String removeLabel;
+  final String? removeLabel;
+
+  /// Accessible and visible tooltip for deleting an uploaded file.
+  final String? deleteLabel;
 
   /// Label for the retry action. Defaults to `'Reintentar'`.
-  final String retryLabel;
+  final String? retryLabel;
 
   @override
   Widget build(final BuildContext context) {
-    return switch (status) {
+    final l10n = AppLocalizations.of(context);
+    final statusLabel = switch (status) {
+      AppFileUploadStatus.uploading => l10n.caseworkUploadStatusUploading,
+      AppFileUploadStatus.complete || AppFileUploadStatus.uploaded => l10n.caseworkUploadStatusUploaded,
+      AppFileUploadStatus.error => l10n.caseworkUploadStatusFailed,
+    };
+    final content = switch (status) {
       AppFileUploadStatus.uploading => _UploadingRow(
         fileName: fileName,
         fileInfo: fileInfo,
         progress: progress,
         onCancel: onCancel,
-        cancelLabel: cancelLabel,
+        cancelLabel: cancelLabel ?? l10n.fileUploadCancel,
       ),
       AppFileUploadStatus.complete => _CompleteRow(
         fileName: fileName,
         fileInfo: fileInfo,
         onRemove: onRemove,
-        removeLabel: removeLabel,
+        removeLabel: removeLabel ?? l10n.fileUploadRemove,
       ),
       AppFileUploadStatus.uploaded => _UploadedRow(
         fileName: fileName,
         fileInfo: fileInfo,
         onDelete: onDelete,
+        deleteLabel: deleteLabel ?? l10n.fileUploadDelete,
       ),
       AppFileUploadStatus.error => _ErrorRow(
         fileName: fileName,
         fileInfo: fileInfo,
         onRetry: onRetry,
-        retryLabel: retryLabel,
+        retryLabel: retryLabel ?? l10n.fileUploadRetry,
       ),
     };
+
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Semantics(
+            label: l10n.a11yFileUpload(fileName, fileInfo, statusLabel),
+            liveRegion: true,
+            child: const SizedBox(width: 1, height: 1),
+          ),
+          content,
+        ],
+      ),
+    );
   }
 }
 
@@ -122,26 +151,27 @@ class _FileNameRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Row(
-      children: [
-        const Icon(
-          Icons.description_outlined,
-          size: AppDimensions.iconMedium,
-          color: AppColors.primary,
-        ),
-        const SizedBox(width: AppDimensions.space8),
-        Expanded(
-          child: Text(
-            fileName,
-            overflow: TextOverflow.ellipsis,
-            style: AppTypography.bodyBold.copyWith(
-              color: AppColors.primary,
-              decoration: TextDecoration.underline,
-              decorationColor: AppColors.primary,
+    return ExcludeSemantics(
+      child: Row(
+        children: [
+          const Icon(
+            Icons.description_outlined,
+            size: AppDimensions.iconMedium,
+            color: AppColors.primary,
+          ),
+          const SizedBox(width: AppDimensions.space8),
+          Expanded(
+            child: Text(
+              fileName,
+              style: AppTypography.bodyBold.copyWith(
+                color: AppColors.primary,
+                decoration: TextDecoration.underline,
+                decorationColor: AppColors.primary,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -155,16 +185,22 @@ class _FileMetaRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          fileInfo,
-          style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-        ),
-        const Spacer(),
-        action,
-      ],
+    final info = ExcludeSemantics(
+      child: Text(
+        fileInfo,
+        style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
+      ),
     );
+    if (MediaQuery.textScalerOf(context).scale(1) > 1.5) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          info,
+          Align(alignment: AlignmentDirectional.centerEnd, child: action),
+        ],
+      );
+    }
+    return Row(children: [info, const Spacer(), action]);
   }
 }
 
@@ -200,8 +236,11 @@ class _UploadingRow extends StatelessWidget {
           action: TextButton.icon(
             onPressed: onCancel,
             style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
-              minimumSize: const Size(0, AppDimensions.minTouchTarget),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+              minimumSize: const Size(
+                AppDimensions.minTouchTarget,
+                AppDimensions.minTouchTarget,
+              ),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             icon: const Icon(
@@ -255,8 +294,11 @@ class _CompleteRow extends StatelessWidget {
           action: TextButton.icon(
             onPressed: onRemove,
             style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
-              minimumSize: const Size(0, AppDimensions.minTouchTarget),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+              minimumSize: const Size(
+                AppDimensions.minTouchTarget,
+                AppDimensions.minTouchTarget,
+              ),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             icon: const Icon(
@@ -286,11 +328,13 @@ class _UploadedRow extends StatelessWidget {
   const _UploadedRow({
     required this.fileName,
     required this.fileInfo,
+    required this.deleteLabel,
     this.onDelete,
   });
 
   final String fileName;
   final String fileInfo;
+  final String deleteLabel;
   final VoidCallback? onDelete;
 
   @override
@@ -304,10 +348,12 @@ class _UploadedRow extends StatelessWidget {
             children: [
               _FileNameRow(fileName: fileName),
               const SizedBox(height: AppDimensions.space4),
-              Text(
-                fileInfo,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.textPrimary,
+              ExcludeSemantics(
+                child: Text(
+                  fileInfo,
+                  style: AppTypography.bodyRegular.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
             ],
@@ -315,10 +361,14 @@ class _UploadedRow extends StatelessWidget {
         ),
         IconButton(
           onPressed: onDelete,
+          constraints: const BoxConstraints(
+            minWidth: AppDimensions.minTouchTarget,
+            minHeight: AppDimensions.minTouchTarget,
+          ),
           icon: const Icon(Icons.delete_outline_rounded),
           color: AppColors.primary,
           iconSize: AppDimensions.iconMedium,
-          tooltip: 'Eliminar archivo',
+          tooltip: deleteLabel,
         ),
       ],
     );
@@ -355,8 +405,11 @@ class _ErrorRow extends StatelessWidget {
           action: TextButton.icon(
             onPressed: onRetry,
             style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
-              minimumSize: const Size(0, AppDimensions.minTouchTarget),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+              minimumSize: const Size(
+                AppDimensions.minTouchTarget,
+                AppDimensions.minTouchTarget,
+              ),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             icon: const Icon(

@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
@@ -53,7 +53,7 @@ final class SessionGuard {
   /// Returns [Routes.consent] when the citizen has not yet accepted the
   /// current consent version. Returns `null` when consent is already on record.
   Future<String?> _consentRedirect(final String path) async {
-    final String idAgente = _ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    final String idAgente = _ref.read(citizenEndpointIdsProvider).idAgente ?? '';
     if (idAgente.isEmpty) {
       return null;
     }
@@ -84,7 +84,7 @@ final class SessionGuard {
   }
 
   Future<String?> _optionalConsentRedirect(final String path) async {
-    final String idAgente = _ref.read(jwtClaimsProvider)?.idAgente ?? '';
+    final String idAgente = _ref.read(citizenEndpointIdsProvider).idAgente ?? '';
     if (idAgente.isEmpty) {
       return null;
     }

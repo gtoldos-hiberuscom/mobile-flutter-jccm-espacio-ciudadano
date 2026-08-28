@@ -10,6 +10,7 @@ void main() {
     bool? result;
     await tester.pumpWidget(
       MaterialApp(
+        locale: const Locale('es'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
@@ -42,6 +43,7 @@ void main() {
     bool? result;
     await tester.pumpWidget(
       MaterialApp(
+        locale: const Locale('es'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(

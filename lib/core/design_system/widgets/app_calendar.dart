@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// A month calendar widget following the JCCM design system (Figma node
-/// 43716:12920).
+/// `44641:24305`).
 ///
 /// Displays a header with navigation arrows + month/year selector, weekday
 /// labels, and a 7-column day grid with the following states:
@@ -18,17 +20,27 @@ class AppCalendar extends StatefulWidget {
     super.key,
     this.initialDate,
     this.selectedDates = const {},
+    this.selectedRange,
     this.eventDates = const {},
     this.onDateSelected,
     this.onMonthChanged,
     this.firstDayOfWeek = DateTime.monday,
-  });
+    this.compact = false,
+    this.semanticsLabel,
+  }) : assert(
+         firstDayOfWeek >= DateTime.monday && firstDayOfWeek <= DateTime.sunday,
+         'firstDayOfWeek must be between Monday and Sunday',
+       ),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   /// The initial month to display. Defaults to today.
   final DateTime? initialDate;
 
   /// Dates that should appear as selected (light-blue + border).
   final Set<DateTime> selectedDates;
+
+  /// Optional inclusive range that should appear as selected.
+  final DateTimeRange? selectedRange;
 
   /// Dates that should display the event indicator dot.
   final Set<DateTime> eventDates;
@@ -42,6 +54,10 @@ class AppCalendar extends StatefulWidget {
   /// First day of the week (1 = Monday, 7 = Sunday).
   final int firstDayOfWeek;
 
+  /// Uses reduced typography and spacing. Agenda keeps the regular variant.
+  final bool compact;
+  final String? semanticsLabel;
+
   @override
   State<AppCalendar> createState() => _AppCalendarState();
 }
@@ -49,31 +65,6 @@ class AppCalendar extends StatefulWidget {
 class _AppCalendarState extends State<AppCalendar> {
   late DateTime _currentMonth;
   late DateTime _today;
-
-  static const List<String> _weekdayLabels = [
-    'Lun',
-    'Mar',
-    'Mié',
-    'Jue',
-    'Vie',
-    'Sáb',
-    'Dom',
-  ];
-
-  static const List<String> _monthLabels = [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre',
-  ];
 
   @override
   void initState() {
@@ -105,8 +96,10 @@ class _AppCalendarState extends State<AppCalendar> {
   }
 
   Future<void> _showMonthYearPicker() async {
+    final locale = Localizations.localeOf(context).toLanguageTag();
     final selectedMonth = await showModalBottomSheet<DateTime>(
       context: context,
+      requestFocus: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -115,7 +108,9 @@ class _AppCalendarState extends State<AppCalendar> {
       ),
       builder: (final context) => _CalendarMonthYearPicker(
         initialMonth: _currentMonth,
-        monthLabels: _monthLabels,
+        monthLabels: [
+          for (var month = 1; month <= 12; month++) _capitalize(DateFormat.MMMM(locale).format(DateTime(2024, month))),
+        ],
       ),
     );
     if (selectedMonth == null || !mounted) {
@@ -125,9 +120,13 @@ class _AppCalendarState extends State<AppCalendar> {
   }
 
   bool _isSelected(final DateTime date) {
-    return widget.selectedDates.any(
-      (final d) => d.year == date.year && d.month == date.month && d.day == date.day,
-    );
+    final normalizedDate = DateUtils.dateOnly(date);
+    final range = widget.selectedRange;
+    final isInRange = range != null && !normalizedDate.isBefore(DateUtils.dateOnly(range.start)) && !normalizedDate.isAfter(DateUtils.dateOnly(range.end));
+    return isInRange ||
+        widget.selectedDates.any(
+          (final d) => d.year == date.year && d.month == date.month && d.day == date.day,
+        );
   }
 
   bool _isToday(final DateTime date) {
@@ -146,10 +145,6 @@ class _AppCalendarState extends State<AppCalendar> {
     );
   }
 
-  String _monthYearLabel() {
-    return '${_monthLabels[_currentMonth.month - 1]} ${_currentMonth.year}';
-  }
-
   List<DateTime> _daysInGrid() {
     final firstOfMonth = DateTime(_currentMonth.year, _currentMonth.month);
     // Weekday offset (Monday = 0 ... Sunday = 6)
@@ -166,16 +161,52 @@ class _AppCalendarState extends State<AppCalendar> {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final monthLabel = _capitalize('${DateFormat.MMMM(locale).format(_currentMonth)} ${_currentMonth.year}');
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: widget.semanticsLabel ?? l10n.a11yCalendar,
+      child: LayoutBuilder(
+        builder: (final context, final constraints) {
+          // Seven 48 dp touch targets plus the 8 dp horizontal grid padding.
+          // This fits the 358 dp content width used by Agenda on a 390 dp
+          // viewport, so the Sunday column is not pushed off-screen.
+          const minimumWidth = (AppDimensions.minTouchTarget * DateTime.daysPerWeek) + (AppDimensions.space8 * 2);
+          final calendar = SizedBox(
+            width: constraints.maxWidth < minimumWidth ? minimumWidth : constraints.maxWidth,
+            child: _buildCalendarContent(l10n, monthLabel),
+          );
+          if (constraints.maxWidth >= minimumWidth) {
+            return calendar;
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: calendar,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCalendarContent(final AppLocalizations l10n, final String monthLabel) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Semantics(
+            container: true,
+            label: l10n.a11yCalendarMonth(monthLabel),
+            liveRegion: true,
+            child: const SizedBox(width: 1, height: 1),
+          ),
           ColoredBox(
             color: AppColors.secondary,
             child: Column(
               children: [
-                _buildHeader(),
+                _buildHeader(monthLabel),
                 _buildWeekdayRow(),
               ],
             ),
@@ -187,7 +218,27 @@ class _AppCalendarState extends State<AppCalendar> {
   }
 
   // ── Header ────────────────────────────────────────────────────────────────
-  Widget _buildHeader() {
+  Widget _buildHeader(final String monthLabel) {
+    final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    if (useVerticalLayout) {
+      return Padding(
+        padding: const EdgeInsets.all(AppDimensions.space8),
+        child: Column(
+          children: [
+            _monthSelector(monthLabel),
+            const SizedBox(height: AppDimensions.space8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _navButton(Icons.chevron_left, _previousMonth),
+                _navButton(Icons.chevron_right, _nextMonth),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(AppDimensions.space8),
       child: Row(
@@ -201,7 +252,7 @@ class _AppCalendarState extends State<AppCalendar> {
                 right: AppDimensions.space4,
                 bottom: AppDimensions.space4,
               ),
-              child: _monthSelector(),
+              child: _monthSelector(monthLabel),
             ),
           ),
           const SizedBox(width: AppDimensions.space8),
@@ -223,67 +274,82 @@ class _AppCalendarState extends State<AppCalendar> {
   }
 
   Widget _navButton(final IconData icon, final VoidCallback onTap) {
-    final label = icon == Icons.chevron_left ? 'Mes anterior' : 'Mes siguiente';
+    final materialL10n = MaterialLocalizations.of(context);
+    final label = icon == Icons.chevron_left ? materialL10n.previousMonthTooltip : materialL10n.nextMonthTooltip;
     return Semantics(
       label: label,
       button: true,
-      child: GestureDetector(
-        onTap: onTap,
-        child: ExcludeSemantics(
-          child: SizedBox(
-            width: AppDimensions.space48,
-            height: AppDimensions.space48,
-            child: Icon(icon, color: AppColors.textWhite, size: 24),
+      onTap: onTap,
+      child: ExcludeSemantics(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+            child: SizedBox.square(
+              dimension: AppDimensions.minTouchTarget,
+              child: Icon(
+                icon,
+                color: AppColors.textWhite,
+                size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _monthSelector() {
+  Widget _monthSelector(final String monthLabel) {
+    final l10n = AppLocalizations.of(context);
     return Semantics(
-      label: 'Seleccionar mes y año',
+      label: l10n.a11ySelectCalendarMonthYear(monthLabel),
       button: true,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: _showMonthYearPicker,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-          child: Container(
-            constraints: const BoxConstraints(minHeight: AppDimensions.space48),
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space8,
-              vertical: AppDimensions.space4,
-            ),
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(12, 13, 13, 0.16),
-              border: Border.all(color: AppColors.borderBlueMutedBase),
-              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-              boxShadow: AppShadows.low,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.calendar_today_outlined,
-                  size: AppDimensions.iconMedium,
-                  color: AppColors.textWhite,
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                Expanded(
-                  child: Text(
-                    _monthYearLabel(),
-                    style: AppTypography.h2.copyWith(color: AppColors.textWhite),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+      onTap: _showMonthYearPicker,
+      child: ExcludeSemantics(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: _showMonthYearPicker,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: widget.compact ? AppDimensions.space40 : AppDimensions.space48,
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.space8,
+                vertical: AppDimensions.space4,
+              ),
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(12, 13, 13, 0.16),
+                border: Border.all(color: AppColors.borderBlueMutedBase),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                boxShadow: AppShadows.low,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
+                    color: AppColors.textWhite,
                   ),
-                ),
-                const Icon(
-                  Icons.keyboard_arrow_down,
-                  size: 24,
-                  color: AppColors.textWhite,
-                ),
-              ],
+                  const SizedBox(width: AppDimensions.space8),
+                  Expanded(
+                    child: Text(
+                      monthLabel,
+                      style: (widget.compact ? AppTypography.bodyBold : AppTypography.h2).copyWith(color: AppColors.textWhite),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_down,
+                    size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
+                    color: AppColors.textWhite,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -293,18 +359,27 @@ class _AppCalendarState extends State<AppCalendar> {
 
   // ── Weekday labels ────────────────────────────────────────────────────────
   Widget _buildWeekdayRow() {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final labels = [
+      for (var offset = 0; offset < 7; offset++)
+        _capitalize(
+          DateFormat.E(locale).format(
+            DateTime(2024, 1, 1 + ((widget.firstDayOfWeek - DateTime.monday + offset) % 7)),
+          ),
+        ),
+    ];
     return Padding(
       padding: const EdgeInsets.only(bottom: AppDimensions.space4),
       child: Row(
-        children: _weekdayLabels
+        children: labels
             .map(
               (final label) => Expanded(
                 child: SizedBox(
-                  height: AppDimensions.space32,
+                  height: widget.compact ? AppDimensions.space24 : AppDimensions.space32,
                   child: Center(
                     child: Text(
                       label,
-                      style: AppTypography.smallRegular.copyWith(
+                      style: (widget.compact ? AppTypography.captionRegular : AppTypography.smallRegular).copyWith(
                         color: AppColors.textWhite,
                       ),
                     ),
@@ -326,9 +401,6 @@ class _AppCalendarState extends State<AppCalendar> {
       final cells = <Widget>[];
       for (var col = 0; col < 7; col++) {
         final date = days[row * 7 + col];
-        if (col > 0) {
-          cells.add(const SizedBox(width: AppDimensions.space8));
-        }
         cells.add(Expanded(child: Center(child: _dayCell(date))));
       }
       rows.add(
@@ -349,23 +421,29 @@ class _AppCalendarState extends State<AppCalendar> {
           bottom: BorderSide(color: Color.fromRGBO(12, 13, 13, 0.16)),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
-      child: Column(
-        children: [
-          for (var i = 0; i < rows.length; i++) ...[
-            if (i > 0) const SizedBox(height: AppDimensions.space8),
-            rows[i],
-          ],
-        ],
+      padding: EdgeInsets.symmetric(
+        vertical: widget.compact ? AppDimensions.space4 : AppDimensions.space8,
       ),
+      child: Column(children: rows),
     );
   }
 
   Widget _dayCell(final DateTime date) {
     final isCurrentMonth = date.month == _currentMonth.month;
     final hasEvent = _hasEvent(date) && isCurrentMonth;
-    final selected = _isSelected(date) || hasEvent;
-    final today = _isToday(date) && !selected;
+    final selected = _isSelected(date);
+    final highlighted = selected || hasEvent;
+    final today = _isToday(date) && !highlighted;
+    final canSelect = isCurrentMonth && widget.onDateSelected != null;
+    final materialL10n = MaterialLocalizations.of(context);
+    final l10n = AppLocalizations.of(context);
+    final hasLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final semanticParts = [
+      materialL10n.formatFullDate(date),
+      if (today) materialL10n.currentDateLabel,
+      if (hasEvent) l10n.a11yCalendarHasEvent,
+      if (!isCurrentMonth) l10n.a11yCalendarOutsideMonth,
+    ];
 
     Color backgroundColor;
     Color textColor;
@@ -376,7 +454,7 @@ class _AppCalendarState extends State<AppCalendar> {
       backgroundColor = AppColors.backgroundBlueMutedLight;
       textColor = AppColors.borderBlueMutedLight; // #A0B2C5
       fontWeight = FontWeight.w400;
-    } else if (selected) {
+    } else if (highlighted) {
       backgroundColor = AppColors.secondaryLight200; // #BAE3EE
       textColor = AppColors.textBlack;
       fontWeight = FontWeight.w400;
@@ -392,51 +470,69 @@ class _AppCalendarState extends State<AppCalendar> {
     }
 
     return Semantics(
-      label: '${date.day}${selected ? ", seleccionado" : ""}${today ? ", hoy" : ""}',
-      button: true,
+      container: true,
+      label: semanticParts.join(', '),
+      button: widget.onDateSelected != null,
+      enabled: widget.onDateSelected == null ? null : canSelect,
       selected: selected,
-      child: GestureDetector(
-        onTap: () => widget.onDateSelected?.call(date),
-        child: SizedBox.square(
-          dimension: AppDimensions.minTouchTarget,
-          child: Center(
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                border: border,
-                boxShadow: selected ? AppShadows.low : null,
-              ),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '${date.day}',
-                    style: AppTypography.smallRegular.copyWith(
-                      color: textColor,
-                      fontWeight: fontWeight,
-                    ),
-                    textAlign: TextAlign.center,
+      onTap: canSelect ? () => widget.onDateSelected?.call(date) : null,
+      child: ExcludeSemantics(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: canSelect ? () => widget.onDateSelected?.call(date) : null,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+            child: SizedBox.square(
+              dimension: AppDimensions.minTouchTarget,
+              child: Center(
+                child: Container(
+                  width: hasLargeText
+                      ? AppDimensions.space40
+                      : widget.compact
+                      ? AppDimensions.space32
+                      : 36,
+                  height: hasLargeText
+                      ? AppDimensions.space40
+                      : widget.compact
+                      ? AppDimensions.space32
+                      : 36,
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    border: border,
+                    boxShadow: highlighted ? AppShadows.low : null,
                   ),
-                  SizedBox(
-                    height: AppDimensions.space8,
-                    child: Center(
-                      child: hasEvent
-                          ? Container(
-                              width: AppDimensions.space8,
-                              height: AppDimensions.space8,
-                              decoration: const BoxDecoration(
-                                color: AppColors.primaryDark,
-                                shape: BoxShape.circle,
-                              ),
-                            )
-                          : null,
-                    ),
+                  alignment: Alignment.center,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.none,
+                    fit: StackFit.expand,
+                    children: [
+                      Center(
+                        child: Text(
+                          '${date.day}',
+                          style: (widget.compact ? AppTypography.captionRegular : AppTypography.smallRegular).copyWith(
+                            color: textColor,
+                            fontWeight: fontWeight,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      if (hasEvent)
+                        Positioned(
+                          bottom: 1,
+                          child: Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                              color: AppColors.primaryDark,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -455,6 +551,13 @@ class _AppCalendarState extends State<AppCalendar> {
       ),
     );
   }
+}
+
+String _capitalize(final String value) {
+  if (value.isEmpty) {
+    return value;
+  }
+  return '${value[0].toUpperCase()}${value.substring(1)}';
 }
 
 class _CalendarMonthYearPicker extends StatefulWidget {

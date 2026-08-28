@@ -1,193 +1,109 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/salud_api.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/mappers/hospital_appointment_mapper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/mappers/sescam_date.dart';
 
 final class MyDataHealthRepositoryImpl implements MyDataHealthRepository {
-  MyDataHealthRepositoryImpl({required final Dio dio}) : _api = SescamApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataHealthRepositoryImpl({required final Dio dio}) : _api = SaludApi(dio);
 
-  final SescamApi _api;
+  final SaludApi _api;
 
   @override
-  Future<String?> loadCip({required final String documentNumber}) async {
-    final payload = await _rawResponse(
-      () => _api.getCipFromNif(
-        numDocumento: documentNumber,
-        extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
-      ),
-    );
-    if (payload == null) {
-      return null;
-    }
-
-    final body = _asStringMap(_asStringMap(_decodePayload(payload))?['body']);
-    return _firstString(body, const ['cip', 'CIP']);
+  Future<String?> loadCip({required final String citizenId}) async {
+    final envelope = await _api.getCip(citizenId: citizenId);
+    final body = _asStringMap(envelope?['body']);
+    return _firstString(body, const ['cip']);
   }
 
   @override
-  Future<List<HealthAppointment>> loadAppointments({
-    required final String documentNumber,
+  Future<List<HealthAppointment>> loadPrimaryCareAppointments({
+    required final String citizenId,
     required final HealthAppointmentFilter filter,
+    final int page = 0,
   }) async {
-    final payload = switch (filter) {
-      HealthAppointmentFilter.pending => await _rawResponse(
-        () => _api.citasFuturas(
-          numDocumento: documentNumber,
-          extra: _generatedExtra,
-          validateStatus: (final status) => status != null && status < 500,
-        ),
-      ),
-      HealthAppointmentFilter.past => await _rawResponse(
-        () => _api.citasPasadas(
-          numDocumento: documentNumber,
-          extra: _generatedExtra,
-          validateStatus: (final status) => status != null && status < 500,
-        ),
-      ),
+    final envelope = switch (filter) {
+      HealthAppointmentFilter.pending => await _api.getPrimaryCarePendingAppointments(citizenId: citizenId),
+      HealthAppointmentFilter.past => await _api.getPrimaryCarePastAppointments(citizenId: citizenId, page: page),
     };
-
-    if (payload == null) {
+    if (envelope == null) {
       return const [];
     }
 
-    return _appointmentMaps(_decodePayload(payload)).map(_tryParseAppointment).nonNulls.toList(growable: false)..sort(
-      (final a, final b) => filter == HealthAppointmentFilter.past ? b.dateTime.compareTo(a.dateTime) : a.dateTime.compareTo(b.dateTime),
+    final appointments = _primaryCareAppointmentMaps(envelope).map(_tryParsePrimaryCareAppointment).nonNulls.toList();
+    return _sortedByDate(appointments, (final appointment) => appointment.dateTime, filter);
+  }
+
+  @override
+  Future<List<HospitalAppointment>> loadHospitalAppointments({
+    required final String citizenId,
+    required final HealthAppointmentFilter filter,
+  }) async {
+    final envelope = switch (filter) {
+      HealthAppointmentFilter.pending => await _api.getHospitalPendingAppointments(citizenId: citizenId),
+      HealthAppointmentFilter.past => await _api.getHospitalPastAppointments(citizenId: citizenId),
+    };
+    if (envelope == null) {
+      return const [];
+    }
+
+    final appointments = mapHospitalAppointments(envelope['body']).toList();
+    return _sortedByDate(appointments, (final appointment) => appointment.dateTime, filter);
+  }
+
+  /// Ordena ascendente las citas pendientes y descendente las pasadas.
+  List<T> _sortedByDate<T>(
+    final List<T> appointments,
+    final DateTime Function(T appointment) dateOf,
+    final HealthAppointmentFilter filter,
+  ) {
+    appointments.sort(
+      (final a, final b) => filter == HealthAppointmentFilter.past ? dateOf(b).compareTo(dateOf(a)) : dateOf(a).compareTo(dateOf(b)),
     );
+    return List.unmodifiable(appointments);
   }
 
-  Map<String, dynamic> get _generatedExtra => const {
-    generatedApiDecodeStringResponseExtraKey: true,
-  };
-
-  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
-    try {
-      final response = await fetch();
-      if (response.statusCode == 404) {
-        return null;
-      }
-      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (rawData != null) {
-        return rawData;
-      }
-      rethrow;
-    }
-  }
-
-  Object? _decodePayload(final Object? payload) {
-    Object? current = payload;
-    for (var i = 0; i < 3; i++) {
-      if (current is! String) {
-        return current;
-      }
-      final trimmed = current.trim();
-      if (trimmed.isEmpty) {
-        return null;
-      }
-      try {
-        current = jsonDecode(trimmed);
-      } on FormatException {
-        return trimmed;
-      }
-    }
-    return current;
-  }
-
-  List<Map<String, dynamic>> _appointmentMaps(final Object? value) {
-    final root = _asStringMap(value);
-    final body = _asStringMap(root?['body']);
+  /// Aplana `body.listaCitas` fusionando en cada cita los datos del centro, que
+  /// el contrato de primaria informa una sola vez al nivel de `body`.
+  List<Map<String, dynamic>> _primaryCareAppointmentMaps(final Map<String, dynamic> envelope) {
+    final body = _asStringMap(envelope['body']);
     final rawAppointments = body?['listaCitas'];
-    if (body != null && rawAppointments is List<dynamic>) {
-      final centerData = <String, dynamic>{
-        for (final entry in body.entries)
-          if (entry.key != 'listaCitas') entry.key: entry.value,
-      };
-      return rawAppointments
-          .map(_asStringMap)
-          .nonNulls
-          .map(
-            (final appointment) => <String, dynamic>{
-              ...centerData,
-              ...appointment,
-            },
-          )
-          .toList(growable: false);
+    if (body == null || rawAppointments is! List) {
+      return const [];
     }
 
-    return _collectMaps(value);
+    final centerData = <String, dynamic>{
+      for (final entry in body.entries)
+        if (entry.key != 'listaCitas') entry.key: entry.value,
+    };
+
+    return rawAppointments
+        .map(_asStringMap)
+        .nonNulls
+        .map(
+          (final appointment) => <String, dynamic>{
+            ...centerData,
+            ...appointment,
+          },
+        )
+        .toList(growable: false);
   }
 
-  List<Map<String, dynamic>> _collectMaps(final Object? value) {
-    final maps = <Map<String, dynamic>>[];
-
-    void visit(final Object? node) {
-      switch (node) {
-        case final Map<String, dynamic> map:
-          maps.add(map);
-          map.values.forEach(visit);
-        case final Map<dynamic, dynamic> map:
-          final normalized = <String, dynamic>{
-            for (final entry in map.entries)
-              if (entry.key != null) entry.key.toString(): entry.value,
-          };
-          maps.add(normalized);
-          normalized.values.forEach(visit);
-        case final List<dynamic> list:
-          list.forEach(visit);
-      }
-    }
-
-    visit(value);
-    return maps;
-  }
-
-  HealthAppointment? _tryParseAppointment(final Map<String, dynamic> raw) {
-    final dateTime = _extractDateTime(raw);
+  HealthAppointment? _tryParsePrimaryCareAppointment(final Map<String, dynamic> raw) {
+    final dateTime = parseSescamDateAndTime(
+      date: _firstString(raw, const ['fecha']),
+      time: _firstString(raw, const ['hora']),
+    );
     if (dateTime == null) {
       return null;
     }
 
-    final professional = _firstString(raw, const [
-      'nomProfesionalRealizador',
-      'profesionalRealizador',
-      'nombreProfesional',
-      'nombreCompletoProfesional',
-      'profesional',
-      'medico',
-      'doctor',
-    ]);
-    final description = _firstString(raw, const [
-      'nomTvisita',
-      'nomTVisita',
-      'nomTipoVisita',
-      'tipoCita',
-      'descTipoCita',
-      'descripcionCita',
-      'descripcion',
-      'especialidad',
-    ]);
-    final modality = _firstString(raw, const [
-      'nomModoVisita',
-      'modalidad',
-      'descripcionModalidad',
-      'tipoConsulta',
-      'tipoAsistencia',
-    ]);
-    final center = _firstString(raw, const [
-      'nombreCentro',
-      'centroSalud',
-      'centro',
-      'dirCentro',
-      'municipioCentro',
-    ]);
+    final professional = _firstString(raw, const ['nomProfesionalRealizador']);
+    final description = _firstString(raw, const ['nomTvisita']);
+    final modality = _firstString(raw, const ['nomModoVisita']);
+    final center = _firstString(raw, const ['nombreCentro', 'dirCentro', 'municipioCentro']);
 
     return HealthAppointment(
       dateTime: dateTime,
@@ -197,53 +113,6 @@ final class MyDataHealthRepositoryImpl implements MyDataHealthRepository {
       modality: modality,
       center: center,
     );
-  }
-
-  DateTime? _extractDateTime(final Map<String, dynamic> raw) {
-    final combined = _firstString(raw, const [
-      'fechaHora',
-      'fecha_hora',
-      'fechaCita',
-      'fecha_cita',
-      'dateTime',
-      'datetime',
-    ]);
-    final parsedCombined = _parseDateTime(combined);
-    if (parsedCombined != null) {
-      return parsedCombined;
-    }
-
-    final date = _firstString(raw, const ['fecha', 'date', 'dia']);
-    final time = _firstString(raw, const ['hora', 'time']);
-    if (date == null) {
-      return null;
-    }
-    return _parseDateTime('${date.trim()} ${time?.trim().isNotEmpty ?? false ? time!.trim() : '00:00'}') ?? _parseDateTime(date);
-  }
-
-  DateTime? _parseDateTime(final String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return null;
-    }
-    final trimmed = value.trim();
-    final iso = DateTime.tryParse(trimmed);
-    if (iso != null) {
-      return iso;
-    }
-
-    final match = RegExp(r'^(\d{1,2})[/-](\d{1,2})[/-](\d{4})(?:\s+(\d{1,2}):(\d{2}))?').firstMatch(trimmed);
-    if (match == null) {
-      return null;
-    }
-    final day = int.tryParse(match.group(1)!);
-    final month = int.tryParse(match.group(2)!);
-    final year = int.tryParse(match.group(3)!);
-    final hour = int.tryParse(match.group(4) ?? '0');
-    final minute = int.tryParse(match.group(5) ?? '0');
-    if (day == null || month == null || year == null || hour == null || minute == null) {
-      return null;
-    }
-    return DateTime(year, month, day, hour, minute);
   }
 
   Map<String, dynamic>? _asStringMap(final Object? value) {
@@ -259,6 +128,8 @@ final class MyDataHealthRepositoryImpl implements MyDataHealthRepository {
     return null;
   }
 
+  /// Busca la primera clave con contenido, ignorando mayúsculas: el backend ha
+  /// alternado `cip`/`CIP` y capitalizaciones distintas en `nomTvisita`.
   String? _firstString(final Map<String, dynamic>? raw, final List<String> keys) {
     if (raw == null) {
       return null;

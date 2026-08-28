@@ -13,7 +13,7 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
 
   @override
   Future<NotificationContact?> loadContact({required final String citizenId}) async {
-    final storedContact = await _loadStoredContact(citizenId: _documentIdentifier(citizenId));
+    final storedContact = await _loadStoredContact(citizenId: _pathIdentifier(citizenId));
     return _visibleContact(storedContact);
   }
 
@@ -49,7 +49,7 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     required final String dni,
     required final NotificationContact contact,
   }) async {
-    final normalizedCitizenId = _documentIdentifier(citizenId);
+    final normalizedCitizenId = _pathIdentifier(citizenId);
     final normalizedDni = _documentIdentifier(dni);
     final existingContact = await _loadStoredContact(citizenId: normalizedCitizenId);
     if (existingContact == null) {
@@ -202,6 +202,8 @@ final class NotificationContactRepositoryImpl implements NotificationContactRepo
     final segments = normalized.split(RegExp(r'[/\\:]')).where((final segment) => segment.isNotEmpty).toList(growable: false);
     return segments.isEmpty ? normalized : segments.last;
   }
+
+  String _pathIdentifier(final String value) => value.trim();
 
   Object? _decode(final Object? raw) {
     Object? current = raw;

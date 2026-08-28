@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Numbered step row used in the "Cómo acceder" section.
 ///
@@ -16,9 +17,11 @@ class LandingAccessStepWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context);
 
     return Semantics(
-      label: 'Paso ${step.stepNumber}: ${step.title}. ${step.description}',
+      container: true,
+      explicitChildNodes: true,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -49,11 +52,18 @@ class LandingAccessStepWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    step.title,
-                    style: textTheme.titleSmall?.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w600,
+                  Semantics(
+                    container: true,
+                    excludeSemantics: true,
+                    header: true,
+                    headingLevel: 3,
+                    label: '${l10n.landingAccessStepLabel(step.stepNumber)}: ${step.title}',
+                    child: Text(
+                      step.title,
+                      style: textTheme.titleSmall?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppDimensions.space4),

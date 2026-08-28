@@ -14,7 +14,12 @@ class AppConfirmationState extends StatelessWidget {
     super.key,
     this.icon = AppIcons.checkCircle,
     this.iconColor = AppColors.successDark,
-  });
+    this.semanticsLabel,
+    this.announceChanges = true,
+  }) : assert(title.length > 0, 'title must not be empty'),
+       assert(message.length > 0, 'message must not be empty'),
+       assert(actionLabel.length > 0, 'actionLabel must not be empty'),
+       assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final String title;
   final String message;
@@ -22,31 +27,48 @@ class AppConfirmationState extends StatelessWidget {
   final VoidCallback onAction;
   final IconData icon;
   final Color iconColor;
+  final String? semanticsLabel;
+  final bool announceChanges;
 
   @override
   Widget build(final BuildContext context) {
+    final effectiveSemanticsLabel = semanticsLabel ?? '$title. $message';
+
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.space16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppIcon(
-              icon,
-              size: AppDimensions.space64,
-              color: iconColor,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: AppTypography.h2.copyWith(color: AppColors.primary),
-            ),
-            const SizedBox(height: AppDimensions.space8),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
+            Semantics(
+              container: true,
+              header: true,
+              headingLevel: 1,
+              liveRegion: announceChanges,
+              label: effectiveSemanticsLabel,
+              child: ExcludeSemantics(
+                child: Column(
+                  children: [
+                    AppIcon(
+                      icon,
+                      size: AppDimensions.space64,
+                      color: iconColor,
+                    ),
+                    const SizedBox(height: AppDimensions.space16),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.h2.copyWith(color: AppColors.primary),
+                    ),
+                    const SizedBox(height: AppDimensions.space8),
+                    Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: AppDimensions.space24),
             AppButton(

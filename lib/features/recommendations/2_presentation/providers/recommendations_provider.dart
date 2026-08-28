@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_repository_provider.dart';
 
 final class RecommendationLifeEventOption {
@@ -35,18 +37,18 @@ final class RecommendationsState {
   bool get hasConfiguredLifeEvents => selectedLifeEvents.isNotEmpty;
 }
 
-final recommendationsProvider = FutureProvider.autoDispose<RecommendationsState>((final ref) async {
-  final idAgente = ref.watch(jwtClaimsProvider)?.idAgente;
-  if (idAgente == null || idAgente.trim().isEmpty) {
-    throw StateError('No se ha encontrado el identificador del usuario.');
-  }
-  final normalizedIdAgente = idAgente.trim();
+final recommendationsProvider = FutureProvider.autoDispose.family<RecommendationsState, RecommendationsSegment>((final ref, final segment) async {
+  // Antes leía `idAgente` directamente del token, saltándose
+  // `citizenEndpointIdsProvider`. Con el gateway eso mandaba `PER…` en la ruta
+  // mientras el resto de la app mandaba `sub_alt`, y las tres llamadas de esta
+  // pantalla —cláusula, hechos y recomendaciones— respondían 403.
+  final normalizedIdAgente = ref.watch(citizenEndpointIdsProvider).requireIdAgente();
 
   final consentResult = await ref
       .read(checkAcceptedConsentClauseUsecaseProvider)
       .execute(
         idAgente: normalizedIdAgente,
-        clauseId: 3,
+        clauseId: recommendationsConsentClauseId,
       );
   final hasLifeEventsConsent = switch (consentResult) {
     AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
@@ -85,6 +87,7 @@ final recommendationsProvider = FutureProvider.autoDispose<RecommendationsState>
       .loadRecommendations(
         idAgente: normalizedIdAgente,
         lifeEventIds: selectedIds,
+        segment: segment,
       );
 
   return RecommendationsState(

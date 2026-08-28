@@ -17,12 +17,18 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/p
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Initials of the authenticated person's name and first surname.
-String authenticatedProfileInitials(final WidgetRef ref) {
+///
+/// Returns `null` instead of an empty string when there are no claims — the
+/// case while the session is being cleared and the authenticated pages are
+/// still mounted for a frame. `AppNavBar` accepts `null` but asserts against
+/// the empty string.
+String? authenticatedProfileInitials(final WidgetRef ref) {
   final claims = ref.watch(jwtClaimsProvider);
-  return [
+  final initials = [
     _initial(claims?.givenName),
     _initial(claims?.firstSurname),
   ].whereType<String>().join();
+  return initials.isEmpty ? null : initials;
 }
 
 void showAuthenticatedProfileMenu({

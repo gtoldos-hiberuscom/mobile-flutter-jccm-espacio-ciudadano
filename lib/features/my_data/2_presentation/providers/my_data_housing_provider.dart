@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
@@ -18,7 +19,10 @@ final housingAddressProvider = FutureProvider.autoDispose<HousingAddress?>((fina
   }
 
   final repository = ref.watch(myDataHousingRepositoryProvider);
-  return repository.loadAddress(documentNumber: documentNumber);
+  return repository.loadAddress(
+    citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
+    documentNumber: documentNumber,
+  );
 });
 
 final housingRealEstatePropertiesProvider = FutureProvider.autoDispose<List<RealEstateProperty>>((final ref) async {
@@ -28,7 +32,10 @@ final housingRealEstatePropertiesProvider = FutureProvider.autoDispose<List<Real
   }
 
   final repository = ref.watch(myDataHousingRepositoryProvider);
-  return repository.loadRealEstateProperties(documentNumber: documentNumber);
+  return repository.loadRealEstateProperties(
+    citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
+    documentNumber: documentNumber,
+  );
 });
 
 String? _documentNumber(final JwtClaims? claims) {

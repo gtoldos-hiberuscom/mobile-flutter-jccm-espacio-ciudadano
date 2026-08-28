@@ -16,7 +16,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empt
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/life_events_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
@@ -51,8 +51,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final claims = ref.watch(jwtClaimsProvider);
-    final idAgente = claims?.idAgente ?? '';
+    final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente ?? '';
     final providerArgs = (
       idAgente: idAgente,
       clearSelectionsOnLoad: widget.isOnboarding,
@@ -94,84 +93,68 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         }
       },
       child: Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
-      // Figma node 41779:22466 — bg #f1f8f9, border bluemuted-lighter, Shadow/Low
-      appBar: AppNavBar(
-        type: widget.isOnboarding ? AppNavBarType.detail : AppNavBarType.level2,
-        title: l10n.lifeEventsTitle,
-        leading: widget.isOnboarding
-            ? IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: AppColors.textPrimary,
-                  size: AppDimensions.iconLarge,
-                ),
-                onPressed: () {
-                  if (context.canPop()) {
-                    context.pop();
-                  } else {
-                    context.go(widget.returnTo);
-                  }
-                },
-                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        backgroundColor: AppColors.backgroundWhite,
+        // Figma node 41779:22466 — bg #f1f8f9, border bluemuted-lighter, Shadow/Low
+        appBar: AppNavBar(
+          type: widget.isOnboarding ? AppNavBarType.detail : AppNavBarType.level2,
+          title: l10n.lifeEventsTitle,
+          showLeading: !widget.isOnboarding,
+          onBack: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(widget.returnTo);
+            }
+          },
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: () {},
+              tooltip: 'Información',
+            ),
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // ── Intro heading + description ─────────────────────────────────
+            _IntroSection(l10n: l10n),
+
+            // ── Body content ────────────────────────────────────────────────
+            Expanded(
+              child: _buildBody(
+                context,
+                l10n,
+                lifeState,
+                isResetting,
+                notifier,
+              ),
+            ),
+
+            // ── Sticky bottom bar ───────────────────────────────────────────
+            if (widget.isOnboarding)
+              _OnboardingStickyBar(
+                l10n: l10n,
+                canSave: !isSaving,
+                isSaving: isSaving,
+                onFillLater: () => unawaited(notifier.skipOnboarding()),
+                onClearAll: notifier.clearSelection,
+                onSave: () => unawaited(notifier.save()),
               )
-            : null,
-        onBack: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go(widget.returnTo);
-          }
-        },
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () {},
-            tooltip: 'Información',
-          ),
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ── Intro heading + description ─────────────────────────────────
-          _IntroSection(l10n: l10n),
-
-          // ── Body content ────────────────────────────────────────────────
-          Expanded(
-            child: _buildBody(
-              context,
-              l10n,
-              lifeState,
-              isResetting,
-              notifier,
-            ),
-          ),
-
-          // ── Sticky bottom bar ───────────────────────────────────────────
-          if (widget.isOnboarding)
-            _OnboardingStickyBar(
-              l10n: l10n,
-              canSave: !isSaving,
-              isSaving: isSaving,
-              onFillLater: () => unawaited(notifier.skipOnboarding()),
-              onClearAll: notifier.clearSelection,
-              onSave: () => unawaited(notifier.save()),
-            )
-          else
-            AppStickyBar(
-              type: AppStickyBarType.dicotomy,
-              secondaryLabel: isPreferencesEditing ? 'Limpiar' : l10n.lifeEventsResetCancel,
-              onSecondary: isPreferencesEditing ? notifier.clearSelection : notifier.requestReset,
-              secondaryHierarchy: AppButtonHierarchy.tertiary,
-              secondaryLeadingIcon: Icons.highlight_off,
-              primaryLabel: l10n.lifeEventsSaveAction,
-              onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
-              isPrimaryLoading: isSaving,
-              primaryLeadingIcon: Icons.check,
-            ),
-        ],
-      ),
+            else
+              AppStickyBar(
+                type: AppStickyBarType.dicotomy,
+                secondaryLabel: isPreferencesEditing ? 'Limpiar' : l10n.lifeEventsResetCancel,
+                onSecondary: isPreferencesEditing ? notifier.clearSelection : notifier.requestReset,
+                secondaryHierarchy: AppButtonHierarchy.tertiary,
+                secondaryLeadingIcon: Icons.highlight_off,
+                primaryLabel: l10n.lifeEventsSaveAction,
+                onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
+                isPrimaryLoading: isSaving,
+                primaryLeadingIcon: Icons.check,
+              ),
+          ],
+        ),
       ),
     );
   }

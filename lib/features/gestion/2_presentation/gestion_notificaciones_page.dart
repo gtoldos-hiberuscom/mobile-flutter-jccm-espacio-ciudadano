@@ -30,6 +30,7 @@ class GestionNotificacionesPage extends ConsumerStatefulWidget {
 
 class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacionesPage> {
   int _selectedTab = 0;
+  AppListFilters _filters = const AppListFilters();
 
   // null → no filter (Todo), 'pendiente', 'aceptada', 'expirada'
   static const List<String?> _tabEstados = [null, _kEstadoPendiente, _kEstadoAceptada, _kEstadoExpirada];
@@ -53,6 +54,15 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
         title: l10n.gestionNotificacionesPageTitle,
         onBack: () => context.go(widget.backRoute),
         actions: [
+          IconButton(
+            tooltip: 'Buscar notificaciones',
+            icon: Badge.count(
+              count: _filters.activeCount,
+              isLabelVisible: _filters.activeCount > 0,
+              child: const AppIcon(AppIcons.search, color: AppColors.textPrimary),
+            ),
+            onPressed: _showFilters,
+          ),
           IconButton(
             icon: const Icon(AppIcons.settings),
             tooltip: 'Configurar notificaciones',
@@ -94,22 +104,35 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                     message: l10n.gestionNotificacionesLoadError,
                     onRetry: () => ref.invalidate(gestionNotificacionesProvider(_currentEstado)),
                   ),
-                  data: (final notifs) => notifs.isEmpty
-                      ? EmptyStateWidget(message: l10n.gestionNotificacionesEmpty)
-                      : ListView.separated(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppDimensions.space16,
-                            0,
-                            AppDimensions.space16,
-                            AppDimensions.space24,
-                          ),
-                          itemCount: notifs.length,
-                          separatorBuilder: (final _, final _) => const SizedBox(height: AppDimensions.space16),
-                          itemBuilder: (final context, final index) => _NotificacionCard(
-                            notificacion: notifs[index],
-                            onTap: () => AppAlertSnackbar.show(context, message: l10n.gestionSectionComingSoon),
-                          ),
-                        ),
+                  data: (final notifs) {
+                    final filtered = notifs
+                        .where((final notification) {
+                          final description = notification.concepto.isNotEmpty ? notification.concepto : notification.procedimientoDenominacion;
+                          return appFilterContains(description, _filters.text('description')) && appFilterDateInRange(notification.fechaCaducidad, _filters.range('date'));
+                        })
+                        .toList(growable: false);
+                    return notifs.isEmpty
+                        ? EmptyStateWidget(message: l10n.gestionNotificacionesEmpty)
+                        : filtered.isEmpty
+                        ? EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search)
+                        : ListView.separated(
+                            padding: const EdgeInsets.fromLTRB(
+                              AppDimensions.space16,
+                              0,
+                              AppDimensions.space16,
+                              AppDimensions.space24,
+                            ),
+                            itemCount: filtered.length,
+                            separatorBuilder: (final _, final _) => const SizedBox(height: AppDimensions.space16),
+                            itemBuilder: (final context, final index) => _NotificacionCard(
+                              notificacion: filtered[index],
+                              onTap: () => context.push(
+                                Routes.gestionNotificacionDetallePath(filtered[index].id),
+                                extra: filtered[index],
+                              ),
+                            ),
+                          );
+                  },
                 ),
               ),
             ],
@@ -117,6 +140,23 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
         ),
       ),
     );
+  }
+
+  Future<void> _showFilters() async {
+    final result = await AppBottomSheet.show<AppListFilters>(
+      context: context,
+      title: 'Filtrar notificaciones',
+      body: AppListFilterSheet(
+        initialFilters: _filters,
+        fields: const [
+          AppListTextFilterField(id: 'description', label: 'Descripción de la notificación', hint: 'Introduce palabras de la descripción'),
+          AppListDateRangeFilterField(id: 'date', label: 'Fecha de expiración'),
+        ],
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() => _filters = result);
+    }
   }
 }
 
@@ -279,8 +319,12 @@ class _NotificacionCard extends StatelessWidget {
                   bottom: AppDimensions.space8,
                 ),
                 child: Text(
-                  orgName,
-                  style: AppTypography.captionUppercase.copyWith(color: AppColors.neutralDark),
+                  orgName.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.captionUppercase.copyWith(
+                    color: AppColors.textBlueMutedDark,
+                  ),
                 ),
               ),
             ),
@@ -316,7 +360,8 @@ class _NotificacionCard extends StatelessWidget {
   Widget _refBlock(final AppLocalizations l10n) {
     final idFicha = notificacion.procedimientoIdFicha;
     final fecha = notificacion.fechaCaducidad;
-    if (idFicha == null && fecha == null) {
+    final showsExpiration = notificacion.estado == _kEstadoPendiente || notificacion.estado == _kEstadoExpirada;
+    if (idFicha == null && (!showsExpiration || fecha == null)) {
       return const SizedBox.shrink();
     }
     final isWarning = notificacion.estado == _kEstadoPendiente;
@@ -327,7 +372,7 @@ class _NotificacionCard extends StatelessWidget {
         horizontal: AppDimensions.space8,
         vertical: AppDimensions.space4,
       ),
-      color: AppColors.backgroundBlueLighter,
+      color: AppColors.backgroundLightBlue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -337,9 +382,9 @@ class _NotificacionCard extends StatelessWidget {
               label: l10n.gestionNotificacionesProcedimientoLabel,
               value: idFicha,
             ),
-          if (fecha != null)
+          if (showsExpiration && fecha != null)
             _RefRow(
-              label: l10n.gestionNotificacionesFechaCaducidadLabel,
+              label: 'Fecha expiración',
               value: _formatFecha(fecha),
               valueColor: isWarning ? AppColors.warningDark : AppColors.textPrimary,
               valueFontWeight: isWarning ? FontWeight.w700 : FontWeight.w400,

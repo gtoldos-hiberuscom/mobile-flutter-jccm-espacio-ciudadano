@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
@@ -24,7 +25,10 @@ class AppSegmentedControl extends StatelessWidget {
     required this.selectedIndex,
     required this.onSelected,
     super.key,
-  });
+    this.enabledSegments,
+    this.semanticLabels,
+    this.semanticLabel,
+  }) : assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   /// List of segment labels to display.
   final List<String> segments;
@@ -35,29 +39,68 @@ class AppSegmentedControl extends StatelessWidget {
   /// Callback when a segment is tapped.
   final ValueChanged<int> onSelected;
 
+  final List<bool>? enabledSegments;
+  final List<String>? semanticLabels;
+  final String? semanticLabel;
+
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.space8),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-        border: Border.all(color: AppColors.borderNeutralLight),
+    assert(segments.isNotEmpty, 'segments must not be empty');
+    assert(segments.every((final segment) => segment.isNotEmpty), 'segment labels must not be empty');
+    assert(selectedIndex >= 0 && selectedIndex < segments.length, 'selectedIndex is out of range');
+    assert(enabledSegments == null || enabledSegments!.length == segments.length, 'enabledSegments must match segments length');
+    assert(semanticLabels == null || semanticLabels!.length == segments.length, 'semanticLabels must match segments length');
+    assert(semanticLabels == null || semanticLabels!.every((final label) => label.isNotEmpty), 'semanticLabels must not contain empty values');
+
+    final usesScrollableLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final buttons = List.generate(
+      segments.length,
+      (final index) => _SegmentButton(
+        label: segments[index],
+        semanticLabel: semanticLabels?[index],
+        isSelected: index == selectedIndex,
+        isEnabled: enabledSegments?[index] ?? true,
+        sortKey: OrdinalSortKey(index.toDouble()),
+        onTap: () => onSelected(index),
       ),
-      child: Row(
-        children: [
-          for (var i = 0; i < segments.length; i++) ...[
-            if (i > 0) const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: _SegmentButton(
-                label: segments[i],
-                isSelected: i == selectedIndex,
-                onTap: () => onSelected(i),
+    );
+
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: semanticLabel,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppDimensions.space8),
+        decoration: BoxDecoration(
+          color: AppColors.backgroundWhite,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          border: Border.all(color: AppColors.borderNeutralLight),
+        ),
+        child: usesScrollableLayout
+            ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: buttons.indexed
+                      .expand(
+                        (final entry) => [
+                          if (entry.$1 > 0) const SizedBox(width: AppDimensions.space8),
+                          SizedBox(width: 160, child: entry.$2),
+                        ],
+                      )
+                      .toList(growable: false),
+                ),
+              )
+            : Row(
+                children: buttons.indexed
+                    .expand(
+                      (final entry) => [
+                        if (entry.$1 > 0) const SizedBox(width: AppDimensions.space8),
+                        Expanded(child: entry.$2),
+                      ],
+                    )
+                    .toList(growable: false),
               ),
-            ),
-          ],
-        ],
       ),
     );
   }
@@ -67,44 +110,58 @@ class _SegmentButton extends StatelessWidget {
   const _SegmentButton({
     required this.label,
     required this.isSelected,
+    required this.isEnabled,
+    required this.sortKey,
     required this.onTap,
+    this.semanticLabel,
   });
 
   final String label;
   final bool isSelected;
+  final bool isEnabled;
+  final SemanticsSortKey sortKey;
   final VoidCallback onTap;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
     return Semantics(
+      container: true,
       button: true,
+      label: semanticLabel ?? label,
       selected: isSelected,
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-        child: InkWell(
-          onTap: onTap,
+      enabled: isEnabled,
+      sortKey: sortKey,
+      onTap: isEnabled ? onTap : null,
+      child: ExcludeSemantics(
+        child: Material(
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          child: Container(
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundWhite,
-              border: Border.all(
-                color: isSelected ? AppColors.borderDarkPrimary : AppColors.neutral500,
+          child: InkWell(
+            onTap: isEnabled ? onTap : null,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+            child: Container(
+              constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundWhite,
+                border: Border.all(
+                  color: isSelected ? AppColors.borderDarkPrimary : AppColors.neutral500,
+                ),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+                boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
               ),
-              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-              boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.textBlack,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.space8,
+                vertical: AppDimensions.space8,
+              ),
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: AppTypography.bodyRegular.copyWith(
+                  color: isEnabled ? AppColors.textBlack : AppColors.textDisabled,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                ),
               ),
             ),
           ),

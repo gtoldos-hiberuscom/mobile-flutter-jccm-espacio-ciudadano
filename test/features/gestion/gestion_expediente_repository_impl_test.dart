@@ -6,7 +6,7 @@ import '../../test_support/sequence_http_client_adapter.dart';
 
 void main() {
   group('GestionExpedienteRepositoryImpl', () {
-    test('loads expedientes from selectbynif when backend sends a singleton item as object', () async {
+    test('loads expedientes from selectbynifexp when backend sends a singleton item as object', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
@@ -17,7 +17,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
-      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, hasLength(1));
       expect(result.single.numexp, 'EXP-1');
@@ -26,12 +26,12 @@ void main() {
       expect(result.single.fechaInicio, '2026-06-20');
       expect(result.single.estado, 'ABIERTO');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynif');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
           'numerodocumento': '99999999R',
-          'tipodoc': 'NIF',
+          'tipodocumento': 'NIF',
         },
       );
     });
@@ -52,7 +52,8 @@ void main() {
           "desproc": "MODIFICACIÓN DE DECLARACIONES",
           "desconsej": "CONSEJERÍA DE AGRICULTURA",
           "fechareg": "2026-06-18",
-          "estado": "01"
+          "estado": "01",
+          "descrip": "SOLICITUD ENTRADA EN ÓRGANO COMPETENTE"
         }
       ]
     },
@@ -66,17 +67,32 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
-      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, hasLength(1));
       expect(result.single.numexp, 'WMEQ/2026/000002');
       expect(result.single.titulo, 'MODIFICACIÓN DE DECLARACIONES');
       expect(result.single.consejeria, 'CONSEJERÍA DE AGRICULTURA');
       expect(result.single.fechaInicio, '2026-06-18');
-      expect(result.single.estado, '01');
+      expect(result.single.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
     });
 
-    test('returns an empty list when selectbynif returns 404', () async {
+    test('does not expose a numeric status code when its description is absent', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: '{"publicacionportal":{"item":{"numexp":"EXP-1","desproc":"Solicitud general","estado":"01"}}}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
+
+      expect(result.single.estado, isNull);
+    });
+
+    test('returns an empty list when selectbynifexp returns 404', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 404,
@@ -86,11 +102,11 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
-      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, isEmpty);
       expect(adapter.requests, hasLength(1));
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynif');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes');
     });
 
     test('loads expediente detail from selectbynumexp mapping the flat publicacionportal object', () async {
@@ -142,18 +158,20 @@ void main() {
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
       final result = await repository.loadExpedienteDetail(
+        citizenId: 'sid-1',
         documentNumber: '03874761C',
         numexp: 'S020/2024/0001-PR',
       );
 
       expect(result.numexp, 'S020/2024/0001-PR');
-      expect(result.titulo, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
+      expect(result.titulo, 'SOLICITUD DE AYUDAS PARA EL FOMENTO DE LA ACUICULTURA');
       expect(result.consejeria, 'CONSEJERÍA DE DESARROLLO SOSTENIBLE');
       expect(result.oficinaTramitadora, isNull);
       expect(result.fechaInicio, '2024-10-22');
       expect(result.fechaFin, isNull);
       expect(result.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
       expect(result.tipoproc, '020');
+      expect(result.canAttachDocuments, isTrue);
       expect(result.datosAportacion?.uniorg, '012848');
       expect(result.datosAportacion?.consej, '001952');
       expect(result.datosAportacion?.bland, '45');
@@ -172,7 +190,7 @@ void main() {
       expect(result.datosAportacion?.tlfno, '600000000');
       expect(result.datosAportacion?.bezei, 'Toledo');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynumexp');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/detalle');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -181,6 +199,32 @@ void main() {
           'ptipodoc': 'NIF',
         },
       );
+    });
+
+    test('does not allow attachments when adjuntar is absent', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'publicacionportal': {
+                'numexp': 'EXP-NO-ADJUNTA',
+                'desproc': 'Expediente sin aportación',
+              },
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      final result = await repository.loadExpedienteDetail(
+        citizenId: 'sid-1',
+        documentNumber: '03874761C',
+        numexp: 'EXP-NO-ADJUNTA',
+      );
+
+      expect(result.canAttachDocuments, isFalse);
     });
 
     test('rethrows when selectbynumexp returns 404', () async {
@@ -194,7 +238,7 @@ void main() {
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
       await expectLater(
-        repository.loadExpedienteDetail(documentNumber: '99999999R', numexp: 'EXP-1'),
+        repository.loadExpedienteDetail(citizenId: 'sid-1', documentNumber: '99999999R', numexp: 'EXP-1'),
         throwsA(isA<DioException>()),
       );
     });

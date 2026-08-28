@@ -236,5 +236,5 @@ class _SectionLabel extends StatelessWidget {
 }
 
 /// DNI carried inside the request body (not the URL). Stays the document number.
-/// The URL path id comes from `ciudadanosEndpointIdProvider` (per-environment).
+/// The URL path id comes from `ciudadanosEndpointIdProvider`.
 String _dni(final JwtClaims? claims) => claims?.normalizedPersonIdentifier ?? '';

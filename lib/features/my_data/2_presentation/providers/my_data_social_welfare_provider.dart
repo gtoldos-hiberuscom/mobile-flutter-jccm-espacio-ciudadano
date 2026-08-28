@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/dependency_care_status.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/disability_title.dart';
@@ -23,6 +24,7 @@ final largeFamilyTitleProvider = FutureProvider.autoDispose<LargeFamilyTitle?>((
   return ref
       .watch(myDataSocialWelfareRepositoryProvider)
       .loadLargeFamilyTitle(
+        citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
         documentNumber: documentNumber,
       );
 });
@@ -36,6 +38,7 @@ final disabilityTitleProvider = FutureProvider.autoDispose<DisabilityTitle?>((fi
   return ref
       .watch(myDataSocialWelfareRepositoryProvider)
       .loadDisabilityTitle(
+        citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
         documentNumber: documentNumber,
       );
 });
@@ -49,6 +52,7 @@ final thermalSpaAwardProvider = FutureProvider.autoDispose<ThermalSpaAward?>((fi
   return ref
       .watch(myDataSocialWelfareRepositoryProvider)
       .loadThermalSpaAward(
+        citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
         documentNumber: documentNumber,
       );
 });
@@ -62,6 +66,7 @@ final dependencyCareStatusProvider = FutureProvider.autoDispose<DependencyCareSt
   return ref
       .watch(myDataSocialWelfareRepositoryProvider)
       .loadDependencyCareStatus(
+        citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
         documentNumber: documentNumber,
       );
 });
@@ -75,6 +80,7 @@ final parkingCardProvider = FutureProvider.autoDispose<ParkingCard?>((final ref)
   return ref
       .watch(myDataSocialWelfareRepositoryProvider)
       .loadParkingCard(
+        citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
         documentNumber: documentNumber,
       );
 });

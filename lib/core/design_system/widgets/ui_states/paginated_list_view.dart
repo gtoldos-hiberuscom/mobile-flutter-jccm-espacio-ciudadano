@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// A generic paginated list with optional pull-to-refresh and a load-more footer.
@@ -15,7 +16,8 @@ class PaginatedListView<T> extends StatelessWidget {
     this.onRefresh,
     this.emptyState,
     this.padding,
-  });
+    this.semanticLabel,
+  }) : assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final List<T> items;
   final Widget Function(BuildContext context, T item, int index) itemBuilder;
@@ -37,6 +39,9 @@ class PaginatedListView<T> extends StatelessWidget {
 
   final EdgeInsets? padding;
 
+  /// Optional accessible name for the list.
+  final String? semanticLabel;
+
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -52,25 +57,33 @@ class PaginatedListView<T> extends StatelessWidget {
     Widget listView = ListView.builder(
       padding: padding,
       itemCount: itemCount,
+      semanticChildCount: items.length,
       itemBuilder: (final context, final index) {
         if (index < items.length) {
           return itemBuilder(context, items[index], index);
         }
         // Footer
         if (isLoadingMore) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Center(child: CircularProgressIndicator.adaptive()),
-          );
-        }
-        return Semantics(
-          button: true,
-          label: l10n.loadMoreItems,
-          child: GestureDetector(
-            onTap: onLoadMore,
+          return Semantics(
+            container: true,
+            excludeSemantics: true,
+            liveRegion: true,
+            label: '${l10n.a11yLoading}: ${l10n.loadMoreItems}',
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Center(child: CircularProgressIndicator.adaptive()),
+            ),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Center(
+            child: TextButton(
+              onPressed: onLoadMore,
+              child: Text(
+                l10n.loadMoreItems,
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         );
@@ -79,11 +92,25 @@ class PaginatedListView<T> extends StatelessWidget {
 
     if (onRefresh != null) {
       listView = Semantics(
-        label: l10n.pullToRefresh,
+        container: true,
+        explicitChildNodes: true,
+        label: semanticLabel,
+        customSemanticsActions: {
+          CustomSemanticsAction(label: l10n.pullToRefresh): () {
+            onRefresh!().ignore();
+          },
+        },
         child: RefreshIndicator.adaptive(
           onRefresh: onRefresh!,
           child: listView,
         ),
+      );
+    } else if (semanticLabel != null) {
+      listView = Semantics(
+        container: true,
+        explicitChildNodes: true,
+        label: semanticLabel,
+        child: listView,
       );
     }
 

@@ -14,7 +14,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/3_data/url_launch
 /// `3_data/` implementation directly (canon §13).
 final externalLinkCatalogProvider = Provider<ExternalLinkCatalog>(
   (final ref) => ExternalLinkCatalogImpl(
-    sedeBaseUrl: ref.watch(appConfigProvider).sedeBaseUrl,
+    config: ref.watch(appConfigProvider),
   ),
 );
 

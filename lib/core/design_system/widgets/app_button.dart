@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
@@ -115,6 +116,26 @@ class _AppButtonState extends State<AppButton> {
   }
 
   @override
+  void didUpdateWidget(covariant final AppButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isLoading == widget.isLoading) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final l10n = AppLocalizations.of(context);
+      SemanticsService.sendAnnouncement(
+        View.of(context),
+        widget.isLoading ? l10n.a11yLoading : l10n.a11yContentLoaded,
+        Directionality.of(context),
+      ).ignore();
+    });
+  }
+
+  @override
   void dispose() {
     _focusNode
       ..removeListener(_onFocusChange)
@@ -170,10 +191,13 @@ class _AppButtonState extends State<AppButton> {
       button = SizedBox(width: double.infinity, child: button);
     }
 
+    final semanticLabel = widget.semanticsLabel ?? widget.label;
+
     return Semantics(
-      label: widget.semanticsLabel ?? widget.label,
+      label: widget.isLoading ? '$semanticLabel, ${l10n.a11yLoading}' : semanticLabel,
       button: true,
       enabled: !isDisabled && !widget.isLoading,
+      onTap: isDisabled || widget.isLoading ? null : widget.onPressed,
       child: ExcludeSemantics(child: button),
     );
   }
@@ -189,18 +213,13 @@ class _AppButtonState extends State<AppButton> {
     );
     final minSize = Size(AppDimensions.minTouchTarget, _height);
 
-    Widget spinner(final Color fg) => Semantics(
-      liveRegion: true,
-      label: l10n.a11yLoading,
-      focusable: false,
-      child: ExcludeSemantics(
-        child: SizedBox(
-          width: AppDimensions.iconSmall,
-          height: AppDimensions.iconSmall,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(fg),
-          ),
+    Widget spinner(final Color fg) => ExcludeSemantics(
+      child: SizedBox(
+        width: AppDimensions.iconSmall,
+        height: AppDimensions.iconSmall,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(fg),
         ),
       ),
     );
@@ -323,8 +342,6 @@ class _AppButtonState extends State<AppButton> {
       widget.label,
       style: textStyle,
       textAlign: TextAlign.center,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
     );
 
     if (!hasLeading && !hasTrailing) {
@@ -365,7 +382,7 @@ class AppIconButton extends StatefulWidget {
     this.size = AppButtonSize.medium,
     this.intent = AppButtonIntent.none,
     this.isLoading = false,
-  });
+  }) : assert(semanticsLabel.length > 0, 'semanticsLabel must not be empty');
 
   final IconData icon;
   final VoidCallback? onPressed;
@@ -396,6 +413,26 @@ class _AppIconButtonState extends State<AppIconButton> {
   }
 
   @override
+  void didUpdateWidget(covariant final AppIconButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isLoading == widget.isLoading) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final l10n = AppLocalizations.of(context);
+      SemanticsService.sendAnnouncement(
+        View.of(context),
+        widget.isLoading ? l10n.a11yLoading : l10n.a11yContentLoaded,
+        Directionality.of(context),
+      ).ignore();
+    });
+  }
+
+  @override
   void dispose() {
     _focusNode
       ..removeListener(_onFocusChange)
@@ -405,22 +442,25 @@ class _AppIconButtonState extends State<AppIconButton> {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final isDisabled = widget.onPressed == null || widget.hierarchy == AppButtonHierarchy.disabled;
     const double dimension = AppDimensions.minTouchTarget;
     final double iconSize = widget.size == AppButtonSize.medium ? AppDimensions.iconMedium : AppDimensions.iconSmall;
 
     final colors = _ButtonColors.resolve(widget.hierarchy, widget.intent, isDisabled);
 
-    final Widget iconChild = widget.isLoading
-        ? SizedBox(
-            width: AppDimensions.iconSmall,
-            height: AppDimensions.iconSmall,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(colors.foreground),
-            ),
-          )
-        : Icon(widget.icon, size: iconSize, color: colors.foreground);
+    final Widget iconChild = ExcludeSemantics(
+      child: widget.isLoading
+          ? SizedBox(
+              width: AppDimensions.iconSmall,
+              height: AppDimensions.iconSmall,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(colors.foreground),
+              ),
+            )
+          : Icon(widget.icon, size: iconSize, color: colors.foreground),
+    );
 
     const shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
@@ -506,9 +546,10 @@ class _AppIconButtonState extends State<AppIconButton> {
     }
 
     return Semantics(
-      label: widget.semanticsLabel,
+      label: widget.isLoading ? '${widget.semanticsLabel}, ${l10n.a11yLoading}' : widget.semanticsLabel,
       button: true,
       enabled: !isDisabled && !widget.isLoading,
+      onTap: effectiveOnPressed,
       child: ExcludeSemantics(
         child: SizedBox(width: dimension, height: dimension, child: button),
       ),

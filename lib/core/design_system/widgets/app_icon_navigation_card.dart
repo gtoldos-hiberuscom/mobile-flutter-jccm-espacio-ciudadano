@@ -16,7 +16,12 @@ class AppIconNavigationCard extends StatelessWidget {
     required this.onTap,
     super.key,
     this.semanticLabel,
-  });
+  }) : assert(title != '', 'title must not be empty'),
+       assert(description != '', 'description must not be empty'),
+       assert(
+         semanticLabel == null || semanticLabel != '',
+         'semanticLabel must not be empty',
+       );
 
   final String title;
   final String description;
@@ -31,6 +36,7 @@ class AppIconNavigationCard extends StatelessWidget {
     return Semantics(
       button: true,
       label: semanticLabel ?? '$title. $description',
+      onTap: onTap,
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -64,8 +70,6 @@ class AppIconNavigationCard extends StatelessWidget {
                           children: [
                             Text(
                               title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                               style: AppTypography.leadingMedium.copyWith(
                                 color: AppColors.primary,
                               ),
@@ -73,8 +77,6 @@ class AppIconNavigationCard extends StatelessWidget {
                             const SizedBox(height: AppDimensions.space4),
                             Text(
                               description,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                               style: AppTypography.smallRegular.copyWith(
                                 color: AppColors.primary,
                               ),

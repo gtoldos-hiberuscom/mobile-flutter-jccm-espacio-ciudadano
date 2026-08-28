@@ -49,6 +49,8 @@ abstract final class Routes {
   static const String gestionExpedienteDetalle = '/gestion/expedientes/:numexp';
   static const String gestionExpedienteAportarDocumentacion = '/gestion/expedientes/:numexp/aportar-documentacion';
   static const String gestionNotificaciones = '/gestion/notificaciones';
+  static const String gestionNotificacionDetalle = '/gestion/notificaciones/:id';
+  static String gestionNotificacionDetallePath(final int id) => '/gestion/notificaciones/$id';
   static const String gestionNotificacionesAlta = '/gestion/notificaciones/alta';
   static const String gestionRegistros = '/gestion/registros';
   static const String gestionRegistrosDetail = '/gestion/registros/detail';

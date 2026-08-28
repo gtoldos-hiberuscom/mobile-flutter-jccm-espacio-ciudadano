@@ -1,3 +1,4 @@
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link_category.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart';
@@ -16,15 +17,21 @@ import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external
 ///  3. Update the catalog test in
 ///     `test/features/external_links/external_link_catalog_test.dart`.
 final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
-  const ExternalLinkCatalogImpl({required this.sedeBaseUrl});
+  const ExternalLinkCatalogImpl({required this.config});
 
-  final Uri sedeBaseUrl;
+  final AppConfig config;
 
   static final List<ExternalLink> _baseEntries = <ExternalLink>[
     ExternalLink(
       id: 'educamos_clm',
       displayKey: 'externalLinkEducamosClmLabel',
       url: Uri.parse('https://educamosclm.castillalamancha.es/'),
+      category: ExternalLinkCategory.educationCLM,
+    ),
+    ExternalLink(
+      id: 'educacion_clm',
+      displayKey: 'externalLinkEducacionClmLabel',
+      url: Uri.parse('https://educacion.castillalamancha.es/'),
       category: ExternalLinkCategory.educationCLM,
     ),
     ExternalLink(
@@ -125,11 +132,16 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
   ];
 
   List<ExternalLink> get _entries => [
-    ..._baseEntries,
+    ..._baseEntries.where((final entry) => !const {'educamos_clm', 'empleo_clm', 'historia_social_unica', 'infancia_familias'}.contains(entry.id)),
+    ExternalLink(id: 'educamos_clm', displayKey: 'externalLinkEducamosClmLabel', url: config.educamosUrl, category: ExternalLinkCategory.educationCLM),
+    ExternalLink(id: 'empleo_clm', displayKey: 'externalLinkEmpleoClmLabel', url: config.employmentUrl, category: ExternalLinkCategory.employmentCLM),
+    ExternalLink(id: 'historia_social_unica', displayKey: 'externalLinkHistoriaSocialUnicaLabel', url: config.socialHistoryUrl, category: ExternalLinkCategory.socialHistoria),
+    ExternalLink(id: 'infancia_familias', displayKey: 'externalLinkInfanciaFamiliasLabel', url: config.childrenAndFamiliesUrl, category: ExternalLinkCategory.infanciaFamilias),
+    for (var index = 0; index < 3; index++) ExternalLink(id: 'social_welfare_procedure_$index', displayKey: 'externalLinkBienestarSocialClmLabel', url: config.socialWelfareProcedure(index), category: ExternalLinkCategory.socialWelfareCLM),
     ExternalLink(
       id: 'sede_jccm',
       displayKey: 'drawerGoToSedeElectronica',
-      url: sedeBaseUrl,
+      url: config.sedeBaseUrl,
       category: ExternalLinkCategory.jccmElectronic,
     ),
   ];

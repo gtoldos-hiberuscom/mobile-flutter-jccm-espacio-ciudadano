@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
@@ -15,22 +16,39 @@ class AppPreferenceList extends StatelessWidget {
   const AppPreferenceList({
     required this.children,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(
+         semanticLabel == null || semanticLabel != '',
+         'semanticLabel must not be empty',
+       );
 
   final List<Widget> children;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space24,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: children,
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: semanticLabel,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          AppDimensions.space16,
+          AppDimensions.space24,
+          AppDimensions.space16,
+          AppDimensions.space64,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: children.indexed
+              .map(
+                (final entry) => Semantics(
+                  sortKey: OrdinalSortKey(entry.$1.toDouble()),
+                  child: entry.$2,
+                ),
+              )
+              .toList(growable: false),
+        ),
       ),
     );
   }
@@ -46,41 +64,52 @@ class AppConsentPreferenceCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        border: Border.all(color: AppColors.secondaryLight400),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        boxShadow: AppShadows.medium,
-      ),
-      padding: const EdgeInsets.all(AppDimensions.space16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                width: AppDimensions.iconMedium,
-                height: AppDimensions.space32,
-                child: AppIcon(AppIcons.verified, color: AppColors.textPrimary),
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.backgroundWhite,
+          border: Border.all(color: AppColors.secondaryLight400),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+          boxShadow: AppShadows.medium,
+        ),
+        padding: const EdgeInsets.all(AppDimensions.space16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Semantics(
+              sortKey: const OrdinalSortKey(0),
+              header: true,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ExcludeSemantics(
+                    child: SizedBox(
+                      width: AppDimensions.iconMedium,
+                      height: AppDimensions.space32,
+                      child: AppIcon(AppIcons.verified, color: AppColors.textPrimary),
+                    ),
+                  ),
+                  const SizedBox(width: AppDimensions.space4),
+                  Expanded(
+                    child: Text(
+                      'Condiciones de uso y autorizaciones',
+                      style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: AppDimensions.space4),
-              Expanded(
-                child: Text(
-                  'Condiciones de uso y autorizaciones',
-                  style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.space8),
-          AppPreferenceActionButton(
-            label: 'Editar',
-            icon: AppIcons.edit,
-            onPressed: onEdit,
-          ),
-        ],
+            ),
+            const SizedBox(height: AppDimensions.space8),
+            AppPreferenceActionButton(
+              label: 'Editar',
+              icon: AppIcons.edit,
+              onPressed: onEdit,
+              semanticSortKey: const OrdinalSortKey(1),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -102,7 +131,12 @@ class AppPreferenceCard extends StatelessWidget {
     this.filledAction = false,
     this.summaryItems = const [],
     this.activeFooterText,
-  });
+  }) : assert(title != '', 'title must not be empty'),
+       assert(inactiveDescription != '', 'inactiveDescription must not be empty'),
+       assert(pendingDescription != '', 'pendingDescription must not be empty'),
+       assert(activeDescription != '', 'activeDescription must not be empty'),
+       assert(actionLabel != '', 'actionLabel must not be empty'),
+       assert(activeFooterText == null || activeFooterText != '', 'activeFooterText must not be empty');
 
   final String title;
   final Widget icon;
@@ -120,6 +154,10 @@ class AppPreferenceCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    assert(
+      summaryItems.every((final item) => item.isNotEmpty),
+      'summary items must not be empty',
+    );
     final contentColor = status == AppPreferenceStatus.enabled ? AppColors.textPrimary : AppColors.borderBlueMutedBase;
     final hasActiveSummary = status == AppPreferenceStatus.enabled && summaryItems.isNotEmpty;
     final description = switch (status) {
@@ -127,73 +165,104 @@ class AppPreferenceCard extends StatelessWidget {
       AppPreferenceStatus.pending => pendingDescription,
       AppPreferenceStatus.enabled => activeDescription,
     };
+    final statusLabel = switch (status) {
+      AppPreferenceStatus.disabled => 'Desactivado',
+      AppPreferenceStatus.pending => 'Pendiente',
+      AppPreferenceStatus.enabled => 'Activado',
+    };
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        border: Border.all(color: hasActiveSummary ? AppColors.secondaryLight400 : AppColors.backgroundBlueMutedLight),
-        borderRadius: BorderRadius.circular(hasActiveSummary ? AppDimensions.radiusMedium : AppDimensions.radiusXs),
-        boxShadow: hasActiveSummary ? AppShadows.medium : AppShadows.low,
-      ),
-      padding: const EdgeInsets.all(AppDimensions.space16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (!hasActiveSummary) ...[
-            AppPreferenceStatusTag(
-              status: status,
-              showInactiveIcon: showInactiveIcon,
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.backgroundWhite,
+          border: Border.all(
+            color: hasActiveSummary ? AppColors.secondaryLight400 : AppColors.backgroundBlueMutedLight,
+          ),
+          borderRadius: BorderRadius.circular(
+            hasActiveSummary ? AppDimensions.radiusMedium : AppDimensions.radiusXs,
+          ),
+          boxShadow: hasActiveSummary ? AppShadows.medium : AppShadows.low,
+        ),
+        padding: const EdgeInsets.all(AppDimensions.space16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Semantics(
+              sortKey: const OrdinalSortKey(0),
+              label: statusLabel,
+              child: ExcludeSemantics(
+                child: hasActiveSummary
+                    ? const SizedBox.square(dimension: 1)
+                    : AppPreferenceStatusTag(
+                        status: status,
+                        showInactiveIcon: showInactiveIcon,
+                      ),
+              ),
+            ),
+            if (!hasActiveSummary) const SizedBox(height: AppDimensions.space8),
+            Semantics(
+              sortKey: const OrdinalSortKey(1),
+              header: true,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ExcludeSemantics(
+                    child: SizedBox(
+                      width: AppDimensions.iconMedium,
+                      height: AppDimensions.space32,
+                      child: icon,
+                    ),
+                  ),
+                  const SizedBox(width: AppDimensions.space4),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: AppDimensions.space4),
+                      child: Text(
+                        title,
+                        style: AppTypography.leadingBold.copyWith(color: contentColor),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: AppDimensions.space8),
-          ],
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: AppDimensions.iconMedium,
-                height: AppDimensions.space32,
-                child: icon,
-              ),
-              const SizedBox(width: AppDimensions.space4),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: AppDimensions.space4),
-                  child: Text(
-                    title,
-                    style: AppTypography.leadingBold.copyWith(color: contentColor),
-                  ),
-                ),
+            Semantics(
+              sortKey: const OrdinalSortKey(2),
+              child: hasActiveSummary
+                  ? AppPreferenceSummaryList(items: summaryItems)
+                  : Container(
+                      width: double.infinity,
+                      color: status == AppPreferenceStatus.enabled ? AppColors.backgroundBlueLighter : AppColors.backgroundBlueMutedLight,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimensions.space8,
+                        vertical: AppDimensions.space8,
+                      ),
+                      child: Text(
+                        description,
+                        style: AppTypography.smallRegular.copyWith(color: contentColor),
+                      ),
+                    ),
+            ),
+            const SizedBox(height: AppDimensions.space12),
+            AppPreferenceActionButton(
+              label: actionLabel,
+              icon: actionIcon,
+              onPressed: onAction,
+              filled: filledAction,
+              semanticSortKey: const OrdinalSortKey(3),
+            ),
+            if (hasActiveSummary && activeFooterText != null) ...[
+              const SizedBox(height: AppDimensions.space12),
+              Semantics(
+                sortKey: const OrdinalSortKey(4),
+                child: AppPreferenceFooter(text: activeFooterText!),
               ),
             ],
-          ),
-          const SizedBox(height: AppDimensions.space8),
-          if (hasActiveSummary)
-            AppPreferenceSummaryList(items: summaryItems)
-          else
-            Container(
-              width: double.infinity,
-              color: status == AppPreferenceStatus.enabled ? AppColors.backgroundBlueLighter : AppColors.backgroundBlueMutedLight,
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space8,
-                vertical: AppDimensions.space8,
-              ),
-              child: Text(
-                description,
-                style: AppTypography.smallRegular.copyWith(color: contentColor),
-              ),
-            ),
-          const SizedBox(height: AppDimensions.space12),
-          AppPreferenceActionButton(
-            label: actionLabel,
-            icon: actionIcon,
-            onPressed: onAction,
-            filled: filledAction,
-          ),
-          if (hasActiveSummary && activeFooterText != null) ...[
-            const SizedBox(height: AppDimensions.space12),
-            AppPreferenceFooter(text: activeFooterText!),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -206,7 +275,11 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
     this.phone,
     this.email,
     this.footerText = 'Actualizado el 21 abr 2026 a las 23:00h',
-  });
+  }) : assert(
+         (phone != null && phone != '') || (email != null && email != ''),
+         'Provide at least one contact method',
+       ),
+       assert(footerText != '', 'footerText must not be empty');
 
   final String? phone;
   final String? email;
@@ -215,80 +288,134 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.backgroundWhite,
-        border: Border.all(color: AppColors.secondaryLight400),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        boxShadow: AppShadows.medium,
-      ),
-      padding: const EdgeInsets.all(AppDimensions.space16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          const AppActiveStatusTag(),
-          const SizedBox(height: AppDimensions.space8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                width: AppDimensions.iconMedium,
-                height: AppDimensions.space32,
-                child: AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-              ),
-              const SizedBox(width: AppDimensions.space4),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: AppDimensions.space4),
-                  child: Text(
-                    'Datos de contacto para notificaciones',
-                    style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
+    final phoneValue = phone?.trim();
+    final emailValue = email?.trim();
+
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.backgroundWhite,
+          border: Border.all(color: AppColors.secondaryLight400),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+          boxShadow: AppShadows.medium,
+        ),
+        padding: const EdgeInsets.all(AppDimensions.space16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Semantics(
+              sortKey: const OrdinalSortKey(0),
+              label: 'Activo',
+              child: const ExcludeSemantics(child: AppActiveStatusTag()),
+            ),
+            const SizedBox(height: AppDimensions.space8),
+            Semantics(
+              sortKey: const OrdinalSortKey(1),
+              header: true,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ExcludeSemantics(
+                    child: SizedBox(
+                      width: AppDimensions.iconMedium,
+                      height: AppDimensions.space32,
+                      child: AppIcon(
+                        AppIcons.alternateEmail,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
                   ),
+                  const SizedBox(width: AppDimensions.space4),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: AppDimensions.space4),
+                      child: Text(
+                        'Datos de contacto para notificaciones',
+                        style: AppTypography.leadingBold.copyWith(
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppDimensions.space8),
+            Semantics(
+              sortKey: const OrdinalSortKey(2),
+              container: true,
+              explicitChildNodes: true,
+              child: Container(
+                width: double.infinity,
+                color: AppColors.backgroundBlueLighter,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space8,
+                  vertical: AppDimensions.space8,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (phoneValue != null && phoneValue.isNotEmpty) ...[
+                      Semantics(
+                        sortKey: const OrdinalSortKey(0),
+                        label: 'Teléfono móvil. ${_formatPhoneForDisplay(phoneValue)}',
+                        child: ExcludeSemantics(
+                          child: AppPreferenceDataRow(
+                            label: 'TELÉFONO MÓVIL',
+                            value: _formatPhoneForDisplay(phoneValue),
+                          ),
+                        ),
+                      ),
+                      if (emailValue != null && emailValue.isNotEmpty) const SizedBox(height: AppDimensions.space12),
+                    ],
+                    if (emailValue != null && emailValue.isNotEmpty)
+                      Semantics(
+                        sortKey: const OrdinalSortKey(1),
+                        label: 'Correo electrónico. $emailValue',
+                        child: ExcludeSemantics(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'CORREO ELECTRÓNICO',
+                                style: AppTypography.captionUppercase.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(height: AppDimensions.space4),
+                              Text(
+                                emailValue,
+                                style: AppTypography.bodyRegular.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.space8),
-          Container(
-            width: double.infinity,
-            color: AppColors.backgroundBlueLighter,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space8,
-              vertical: AppDimensions.space8,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (phone case final phoneValue? when phoneValue.isNotEmpty) ...[
-                  AppPreferenceDataRow(
-                    label: 'TELÉFONO MÓVIL',
-                    value: _formatPhoneForDisplay(phoneValue),
-                  ),
-                  const SizedBox(height: AppDimensions.space12),
-                ],
-                if (email case final emailValue? when emailValue.isNotEmpty) ...[
-                  Text(
-                    'CORREO ELECTRÓNICO',
-                    style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
-                  ),
-                  const SizedBox(height: AppDimensions.space4),
-                  Text(
-                    emailValue,
-                    style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-                  ),
-                ],
-              ],
+            const SizedBox(height: AppDimensions.space12),
+            AppPreferenceActionButton(
+              label: 'Editar datos',
+              icon: AppIcons.edit,
+              onPressed: onEdit,
+              semanticSortKey: const OrdinalSortKey(3),
             ),
-          ),
-          const SizedBox(height: AppDimensions.space12),
-          AppPreferenceActionButton(
-            label: 'Editar datos',
-            icon: AppIcons.edit,
-            onPressed: onEdit,
-          ),
-          const SizedBox(height: AppDimensions.space12),
-          AppPreferenceFooter(text: footerText),
-        ],
+            const SizedBox(height: AppDimensions.space12),
+            Semantics(
+              sortKey: const OrdinalSortKey(4),
+              label: footerText,
+              child: ExcludeSemantics(
+                child: AppPreferenceFooter(text: footerText),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -307,49 +434,67 @@ class AppPreferenceDataRow extends StatelessWidget {
     required this.label,
     required this.value,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(value != '', 'value must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String label;
   final String value;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
-    return Wrap(
-      spacing: AppDimensions.space16,
-      runSpacing: AppDimensions.space4,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Text(
-          label,
-          style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+    return Semantics(
+      container: true,
+      label: semanticLabel ?? '$label. $value',
+      child: ExcludeSemantics(
+        child: Wrap(
+          spacing: AppDimensions.space16,
+          runSpacing: AppDimensions.space4,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(
+              label,
+              style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+            ),
+            Text(
+              value,
+              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+            ),
+          ],
         ),
-        Text(
-          value,
-          style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-        ),
-      ],
+      ),
     );
   }
 }
 
 class AppActiveStatusTag extends StatelessWidget {
-  const AppActiveStatusTag({super.key});
+  const AppActiveStatusTag({super.key, this.semanticLabel}) : assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
+
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space8,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.successLight,
-        border: Border.all(color: AppColors.successDark),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-      ),
-      child: Text(
-        'ACTIVO',
-        style: AppTypography.captionUppercase.copyWith(color: AppColors.successDark),
+    return Semantics(
+      container: true,
+      label: semanticLabel ?? 'Activo',
+      child: ExcludeSemantics(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.space8,
+            vertical: 2,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.successLight,
+            border: Border.all(color: AppColors.successDark),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+          ),
+          child: Text(
+            'ACTIVO',
+            style: AppTypography.captionUppercase.copyWith(color: AppColors.successDark),
+          ),
+        ),
       ),
     );
   }
@@ -359,46 +504,68 @@ class AppPreferenceSummaryList extends StatelessWidget {
   const AppPreferenceSummaryList({
     required this.items,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final List<String> items;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: AppColors.secondaryLight100,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space8,
-        vertical: AppDimensions.space4,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final item in items)
-            Padding(
-              padding: const EdgeInsets.only(left: AppDimensions.space16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: AppDimensions.space8),
-                    child: AppDoubleBullet(),
-                  ),
-                  const SizedBox(width: AppDimensions.space8),
-                  Expanded(
+    assert(items.isNotEmpty, 'items must not be empty');
+    assert(items.every((final item) => item.isNotEmpty), 'items must not contain empty values');
+
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: semanticLabel,
+      child: Container(
+        width: double.infinity,
+        color: AppColors.secondaryLight100,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.space8,
+          vertical: AppDimensions.space4,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: items.indexed
+              .map(
+                (final entry) => Semantics(
+                  container: true,
+                  sortKey: OrdinalSortKey(entry.$1.toDouble()),
+                  label: entry.$2,
+                  child: ExcludeSemantics(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                      child: Text(
-                        item,
-                        style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+                      padding: const EdgeInsets.only(left: AppDimensions.space16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: AppDimensions.space8),
+                            child: AppDoubleBullet(),
+                          ),
+                          const SizedBox(width: AppDimensions.space8),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: AppDimensions.space4,
+                              ),
+                              child: Text(
+                                entry.$2,
+                                style: AppTypography.bodyRegular.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-        ],
+                ),
+              )
+              .toList(growable: false),
+        ),
       ),
     );
   }
@@ -409,27 +576,29 @@ class AppDoubleBullet extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 8,
-          height: 8,
-          decoration: const BoxDecoration(
-            color: AppColors.primary,
-            shape: BoxShape.circle,
+    return ExcludeSemantics(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              shape: BoxShape.circle,
+            ),
           ),
-        ),
-        const SizedBox(width: AppDimensions.space4),
-        Container(
-          width: 8,
-          height: 8,
-          decoration: const BoxDecoration(
-            color: AppColors.secondaryLight400,
-            shape: BoxShape.circle,
+          const SizedBox(width: AppDimensions.space4),
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: AppColors.secondaryLight400,
+              shape: BoxShape.circle,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -438,25 +607,33 @@ class AppPreferenceFooter extends StatelessWidget {
   const AppPreferenceFooter({
     required this.text,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(text != '', 'text must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String text;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
-    return Row(
-      children: [
-        const AppIcon(AppIcons.autorenew, color: AppColors.borderBlueMutedBase),
-        const SizedBox(width: AppDimensions.space8),
-        Expanded(
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTypography.smallRegular.copyWith(color: AppColors.blueMuted900),
-          ),
+    return Semantics(
+      container: true,
+      label: semanticLabel ?? text,
+      child: ExcludeSemantics(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const AppIcon(AppIcons.autorenew, color: AppColors.borderBlueMutedBase),
+            const SizedBox(width: AppDimensions.space8),
+            Expanded(
+              child: Text(
+                text,
+                style: AppTypography.smallRegular.copyWith(color: AppColors.blueMuted900),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -466,10 +643,12 @@ class AppPreferenceStatusTag extends StatelessWidget {
     required this.status,
     required this.showInactiveIcon,
     super.key,
-  });
+    this.semanticLabel,
+  }) : assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final AppPreferenceStatus status;
   final bool showInactiveIcon;
+  final String? semanticLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -501,31 +680,34 @@ class AppPreferenceStatusTag extends StatelessWidget {
     final showIcon = showInactiveIcon;
 
     return Semantics(
-      label: label,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(
-          showIcon ? AppDimensions.space4 : AppDimensions.space8,
-          2,
-          AppDimensions.space8,
-          2,
-        ),
-        decoration: BoxDecoration(
-          color: background,
-          border: Border.all(color: border),
-          borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (showIcon) ...[
-              AppIcon(icon, size: AppDimensions.iconSmall, color: foreground),
-              const SizedBox(width: AppDimensions.space4),
+      container: true,
+      label: semanticLabel ?? label,
+      child: ExcludeSemantics(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+            showIcon ? AppDimensions.space4 : AppDimensions.space8,
+            2,
+            AppDimensions.space8,
+            2,
+          ),
+          decoration: BoxDecoration(
+            color: background,
+            border: Border.all(color: border),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (showIcon) ...[
+                AppIcon(icon, size: AppDimensions.iconSmall, color: foreground),
+                const SizedBox(width: AppDimensions.space4),
+              ],
+              Text(
+                label.toUpperCase(),
+                style: AppTypography.captionUppercase.copyWith(color: foreground),
+              ),
             ],
-            Text(
-              label.toUpperCase(),
-              style: AppTypography.captionUppercase.copyWith(color: foreground),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -539,12 +721,17 @@ class AppPreferenceActionButton extends StatelessWidget {
     required this.onPressed,
     super.key,
     this.filled = false,
-  });
+    this.semanticLabel,
+    this.semanticSortKey,
+  }) : assert(label != '', 'label must not be empty'),
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String label;
   final IconData? icon;
   final VoidCallback? onPressed;
   final bool filled;
+  final String? semanticLabel;
+  final SemanticsSortKey? semanticSortKey;
 
   @override
   Widget build(final BuildContext context) {
@@ -562,9 +749,12 @@ class AppPreferenceActionButton extends StatelessWidget {
         : AppColors.borderBlueMutedLight;
 
     return Semantics(
+      container: true,
       button: true,
       enabled: enabled,
-      label: label,
+      label: semanticLabel ?? label,
+      onTap: onPressed,
+      sortKey: semanticSortKey,
       child: ExcludeSemantics(
         child: Material(
           color: background,
@@ -593,9 +783,8 @@ class AppPreferenceActionButton extends StatelessWidget {
                   Flexible(
                     child: Text(
                       label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: AppTypography.bodyRegular.copyWith(color: foreground),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],

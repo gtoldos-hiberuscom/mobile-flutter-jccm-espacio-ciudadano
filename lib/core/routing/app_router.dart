@@ -11,12 +11,14 @@ import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/pages/con
 import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pages/design_system_catalog_page.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportacion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportar_documentacion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expediente_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expedientes_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_alta_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificacion_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registro_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registros_page.dart';
@@ -214,6 +216,18 @@ final goRouterProvider = Provider<GoRouter>(
             GoRoute(
               path: Routes.gestionNotificacionesAlta,
               builder: (final BuildContext context, final GoRouterState state) => const GestionNotificacionesAltaPage(),
+            ),
+
+            GoRoute(
+              path: Routes.gestionNotificacionDetalle,
+              builder: (final BuildContext context, final GoRouterState state) {
+                final summary = state.extra;
+                return GestionNotificacionDetallePage(
+                  notificacionId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+                  estado: summary is Notificacion ? summary.estado ?? 'expirada' : state.uri.queryParameters['estado'] ?? 'expirada',
+                  sistemaOrigen: summary is Notificacion ? summary.sistemaOrigen : null,
+                );
+              },
             ),
 
             GoRoute(

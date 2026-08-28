@@ -7,8 +7,8 @@ import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/support_request.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/usecases/submit_support_request_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/providers/support_form_providers.dart';
@@ -33,7 +33,6 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   XFile? _attachment;
   int? _attachmentBytes;
   bool _consentAccepted = false;
-  bool _captchaAccepted = false;
   bool _submitted = false;
   bool _sent = false;
   bool _isSubmitting = false;
@@ -81,15 +80,12 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 descriptionError: _descriptionError,
                 consentAccepted: _consentAccepted,
                 consentError: _consentError,
-                captchaAccepted: _captchaAccepted,
-                captchaError: _captchaError,
                 attachment: _attachment,
                 attachmentBytes: _attachmentBytes,
                 showNameField: !isAuthenticated,
-                showCaptcha: !isAuthenticated,
+                showConsent: !isAuthenticated,
                 onChanged: _refreshValidation,
                 onConsentChanged: (final value) => setState(() => _consentAccepted = value),
-                onCaptchaTap: () => setState(() => _captchaAccepted = true),
                 onPickAttachment: _pickAttachment,
                 onRemoveAttachment: _removeAttachment,
                 onOpenPrivacyInfo: _openPrivacyInfo,
@@ -271,14 +267,13 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       _attachment = null;
       _attachmentBytes = null;
       _consentAccepted = false;
-      _captchaAccepted = false;
       _submitted = false;
       _sent = false;
       _isSubmitting = false;
     });
   }
 
-  String? get _firstValidationError => _nameError ?? _emailError ?? _emailConfirmError ?? _subjectError ?? _descriptionError ?? _consentError ?? _captchaError;
+  String? get _firstValidationError => _nameError ?? _emailError ?? _emailConfirmError ?? _subjectError ?? _descriptionError ?? _consentError;
 
   bool get _requiresPublicVerification => ref.read(jwtClaimsProvider) == null;
 
@@ -340,13 +335,6 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
     }
     return AppLocalizations.of(context).supportErrorConsentRequired;
   }
-
-  String? get _captchaError {
-    if (!_submitted || !_requiresPublicVerification || _captchaAccepted) {
-      return null;
-    }
-    return AppLocalizations.of(context).supportErrorCaptchaRequired;
-  }
 }
 
 class _FormView extends StatelessWidget {
@@ -363,15 +351,12 @@ class _FormView extends StatelessWidget {
     required this.descriptionError,
     required this.consentAccepted,
     required this.consentError,
-    required this.captchaAccepted,
-    required this.captchaError,
     required this.attachment,
     required this.attachmentBytes,
     required this.showNameField,
-    required this.showCaptcha,
+    required this.showConsent,
     required this.onChanged,
     required this.onConsentChanged,
-    required this.onCaptchaTap,
     required this.onPickAttachment,
     required this.onRemoveAttachment,
     required this.onOpenPrivacyInfo,
@@ -389,15 +374,12 @@ class _FormView extends StatelessWidget {
   final String? descriptionError;
   final bool consentAccepted;
   final String? consentError;
-  final bool captchaAccepted;
-  final String? captchaError;
   final XFile? attachment;
   final int? attachmentBytes;
   final bool showNameField;
-  final bool showCaptcha;
+  final bool showConsent;
   final VoidCallback onChanged;
   final ValueChanged<bool> onConsentChanged;
-  final VoidCallback onCaptchaTap;
   final VoidCallback onPickAttachment;
   final VoidCallback onRemoveAttachment;
   final VoidCallback onOpenPrivacyInfo;
@@ -489,7 +471,7 @@ class _FormView extends StatelessWidget {
           onRemove: onRemoveAttachment,
         ),
         const SizedBox(height: AppDimensions.space32),
-        if (showCaptcha) ...[
+        if (showConsent) ...[
           AppCheckbox(
             label: 'Autorizo el uso y gestión de mis datos',
             value: consentAccepted,
@@ -498,17 +480,9 @@ class _FormView extends StatelessWidget {
             onChanged: (final value) => onConsentChanged(value ?? false),
           ),
           const SizedBox(height: AppDimensions.space24),
-          GestureDetector(
-            onTap: onCaptchaTap,
-            child: AppCaptchaPlaceholder(
-              label: 'Captcha*',
-              isVerified: captchaAccepted,
-              errorText: captchaError,
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space24),
           AppPrivacyInfoText(
-            text: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en https://rat.castillalamancha.es/info/2309',
+            description: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en',
+            linkText: 'https://rat.castillalamancha.es/info/2309',
             onTap: onOpenPrivacyInfo,
           ),
         ],

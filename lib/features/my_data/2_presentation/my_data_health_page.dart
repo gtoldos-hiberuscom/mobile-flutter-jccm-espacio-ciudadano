@@ -3,17 +3,21 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/controllers/past_primary_care_appointments_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 
 /// Health data detail — Figma node 43973:1861.
 class MyDataHealthPage extends ConsumerStatefulWidget {
@@ -30,7 +34,9 @@ class MyDataHealthPage extends ConsumerStatefulWidget {
 
 class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
   _HealthTab _selectedTab = _HealthTab.data;
+  HealthAppointmentScope _selectedScope = HealthAppointmentScope.primaryCare;
   HealthAppointmentFilter _selectedAppointmentFilter = HealthAppointmentFilter.pending;
+  AppListFilters _appointmentFilters = const AppListFilters();
 
   @override
   Widget build(final BuildContext context) {
@@ -40,17 +46,52 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
       title: l10n.myDataHealthTitle,
       onBack: () => context.go(widget.backRoute),
       onInfo: () => _showHealthInfoSheet(context),
+      actions: _selectedTab == _HealthTab.data
+          ? [
+              IconButton(
+                tooltip: _appointmentFilters.activeCount > 0 ? 'Criterios de búsqueda activos: ${_appointmentFilters.activeCount}' : 'Buscar citas',
+                icon: Badge.count(
+                  count: _appointmentFilters.activeCount,
+                  isLabelVisible: _appointmentFilters.activeCount > 0,
+                  child: const AppIcon(AppIcons.search, color: AppColors.textPrimary),
+                ),
+                onPressed: _showAppointmentFilters,
+              ),
+            ]
+          : const [],
       tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
       selectedIndex: _selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _HealthTab.values[index]),
       tabViews: [
         _HealthAppointmentsTab(
+          selectedScope: _selectedScope,
+          onScopeSelected: (final scope) => setState(() => _selectedScope = scope),
           selectedAppointmentFilter: _selectedAppointmentFilter,
           onAppointmentFilterSelected: (final filter) => setState(() => _selectedAppointmentFilter = filter),
+          filters: _appointmentFilters,
         ),
         const _HealthServicesTab(),
       ],
     );
+  }
+
+  Future<void> _showAppointmentFilters() async {
+    final result = await AppBottomSheet.show<AppListFilters>(
+      context: context,
+      title: switch (_selectedScope) {
+        HealthAppointmentScope.primaryCare => 'Filtrar citas de primaria',
+        HealthAppointmentScope.hospital => 'Filtrar citas hospitalarias',
+      },
+      body: AppListFilterSheet(
+        initialFilters: _appointmentFilters,
+        fields: const [
+          AppListDateRangeFilterField(id: 'date', label: 'Fecha de la cita'),
+        ],
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() => _appointmentFilters = result);
+    }
   }
 
   Future<void> _showHealthInfoSheet(final BuildContext context) async {
@@ -66,110 +107,287 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
 
 enum _HealthTab { data, services }
 
+/// Muestra el selector de ámbito asistencial y, con él, las citas hospitalarias.
+///
+/// Desactivado mientras `BASE_URL` siga apuntando a la fachada: sus rutas
+/// (`/ciudadanos/{sid}/salud/hospitalaria-citas-*`) sólo existen en el gateway,
+/// así que hoy responderían 403 y la pantalla mostraría el aviso de autorización
+/// sin que el ciudadano pueda hacer nada al respecto.
+///
+/// La capa de datos, el mapeo y los tests siguen activos; para volver a
+/// publicarlo basta poner esto a `true`.
+const bool kHospitalAppointmentsEnabled = false;
+
+/// Distancia al final del listado, en píxeles, a la que se pide la página
+/// siguiente de citas pasadas de primaria.
+const double _loadMoreScrollThreshold = 240;
+
 class _HealthAppointmentsTab extends ConsumerWidget {
   const _HealthAppointmentsTab({
+    required this.selectedScope,
+    required this.onScopeSelected,
     required this.selectedAppointmentFilter,
     required this.onAppointmentFilterSelected,
+    required this.filters,
   });
 
+  final HealthAppointmentScope selectedScope;
+  final ValueChanged<HealthAppointmentScope> onScopeSelected;
   final HealthAppointmentFilter selectedAppointmentFilter;
   final ValueChanged<HealthAppointmentFilter> onAppointmentFilterSelected;
+  final AppListFilters filters;
+
+  /// Sólo las citas pasadas de primaria se paginan: es la única operación del
+  /// gateway que acepta el parámetro `pagina`.
+  bool get _isPaginated => selectedScope == HealthAppointmentScope.primaryCare && selectedAppointmentFilter == HealthAppointmentFilter.past;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final authorizationAsync = ref.watch(jccmDataAuthorizationProvider);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space24,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.myDataHealthAppointmentsTitle,
-            style: AppTypography.h2.copyWith(
-              color: AppColors.primary,
+    return NotificationListener<ScrollNotification>(
+      onNotification: (final notification) {
+        if (_isPaginated && notification.metrics.axis == Axis.vertical && notification.metrics.extentAfter <= _loadMoreScrollThreshold) {
+          unawaited(ref.read(pastPrimaryCareAppointmentsProvider.notifier).loadMore());
+        }
+        return false;
+      },
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          AppDimensions.space16,
+          AppDimensions.space24,
+          AppDimensions.space16,
+          AppDimensions.space24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              switch (selectedScope) {
+                HealthAppointmentScope.primaryCare => l10n.myDataHealthAppointmentsTitle,
+                HealthAppointmentScope.hospital => l10n.myDataHealthHospitalAppointmentsTitle,
+              },
+              style: AppTypography.h2.copyWith(
+                color: AppColors.primary,
+              ),
             ),
-          ),
-          const SizedBox(height: AppDimensions.space24),
-          authorizationAsync.when(
-            data: (final hasJccmAuthorization) {
-              if (!hasJccmAuthorization) {
-                return MyDataAuthorizationContextualHelper(
-                  onOpenSettings: () => _openSettings(context),
+            const SizedBox(height: AppDimensions.space24),
+            authorizationAsync.when(
+              data: (final hasJccmAuthorization) {
+                if (!hasJccmAuthorization) {
+                  return MyDataAuthorizationContextualHelper(
+                    onOpenSettings: () => _openConsentSettings(context),
+                  );
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _CipText(cip: ref.watch(myDataHealthCipProvider).asData?.value),
+                    const SizedBox(height: AppDimensions.space16),
+                    if (kHospitalAppointmentsEnabled) ...[
+                      AppSegmentedControl(
+                        segments: [l10n.myDataHealthScopePrimaryCare, l10n.myDataHealthScopeHospital],
+                        selectedIndex: selectedScope == HealthAppointmentScope.primaryCare ? 0 : 1,
+                        onSelected: (final index) => onScopeSelected(
+                          index == 0 ? HealthAppointmentScope.primaryCare : HealthAppointmentScope.hospital,
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.space12),
+                    ],
+                    AppSegmentedControl(
+                      segments: [l10n.myDataHealthPendingTab, l10n.myDataHealthPastTab],
+                      selectedIndex: selectedAppointmentFilter == HealthAppointmentFilter.pending ? 0 : 1,
+                      onSelected: (final index) => onAppointmentFilterSelected(
+                        index == 0 ? HealthAppointmentFilter.pending : HealthAppointmentFilter.past,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.space20),
+                    if (_isPaginated)
+                      _PastPrimaryCareAppointmentsList(filters: filters, l10n: l10n)
+                    else
+                      _SingleShotAppointmentsList(
+                        scope: selectedScope,
+                        filter: selectedAppointmentFilter,
+                        filters: filters,
+                        l10n: l10n,
+                      ),
+                  ],
                 );
-              }
-
-              final healthState = ref.watch(myDataHealthProvider(selectedAppointmentFilter));
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _CipText(cip: healthState.asData?.value.cip),
-                  const SizedBox(height: AppDimensions.space16),
-                  AppSegmentedControl(
-                    segments: [l10n.myDataHealthPendingTab, l10n.myDataHealthPastTab],
-                    selectedIndex: selectedAppointmentFilter == HealthAppointmentFilter.pending ? 0 : 1,
-                    onSelected: (final index) => onAppointmentFilterSelected(
-                      index == 0 ? HealthAppointmentFilter.pending : HealthAppointmentFilter.past,
-                    ),
-                  ),
-                  const SizedBox(height: AppDimensions.space20),
-                  healthState.when(
-                    data: (final state) => _AppointmentsContent(
-                      appointments: state.appointments,
-                      l10n: l10n,
-                    ),
-                    loading: () => const Padding(
-                      padding: EdgeInsets.only(top: AppDimensions.space24),
-                      child: Center(child: AppLoadingIndicator()),
-                    ),
-                    error: (final error, final stackTrace) => _HealthErrorState(
-                      onRetry: () => ref.invalidate(myDataHealthProvider(selectedAppointmentFilter)),
-                    ),
-                  ),
-                ],
-              );
-            },
-            loading: () => const Padding(
-              padding: EdgeInsets.only(top: AppDimensions.space24),
-              child: Center(child: AppLoadingIndicator()),
+              },
+              loading: () => const Padding(
+                padding: EdgeInsets.only(top: AppDimensions.space24),
+                child: Center(child: AppLoadingIndicator()),
+              ),
+              error: (final error, final stackTrace) => MyDataAuthorizationContextualHelper(
+                onOpenSettings: () => _openConsentSettings(context),
+              ),
             ),
-            error: (final error, final stackTrace) => MyDataAuthorizationContextualHelper(
-              onOpenSettings: () => _openSettings(context),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  void _openSettings(final BuildContext context) {
-    unawaited(
-      context.push(
-        Uri(
-          path: Routes.consent,
-          queryParameters: {
-            'mode': 'preferences',
-            'returnTo': Routes.myDataHealth,
-          },
-        ).toString(),
+}
+
+/// Abre las autorizaciones en modo preferencias y vuelve a Salud al terminar.
+void _openConsentSettings(final BuildContext context) {
+  unawaited(
+    context.push(
+      Uri(
+        path: Routes.consent,
+        queryParameters: {
+          'mode': 'preferences',
+          'returnTo': Routes.myDataHealth,
+        },
+      ).toString(),
+    ),
+  );
+}
+
+/// Listados que se resuelven en una sola llamada: pendientes de primaria y
+/// ambos listados de hospitalaria.
+class _SingleShotAppointmentsList extends ConsumerWidget {
+  const _SingleShotAppointmentsList({
+    required this.scope,
+    required this.filter,
+    required this.filters,
+    required this.l10n,
+  });
+
+  final HealthAppointmentScope scope;
+  final HealthAppointmentFilter filter;
+  final AppListFilters filters;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final appointmentsAsync = switch (scope) {
+      HealthAppointmentScope.primaryCare => ref.watch(myDataPrimaryCarePendingAppointmentsProvider),
+      HealthAppointmentScope.hospital => ref.watch(myDataHospitalAppointmentsProvider(filter)),
+    };
+
+    return appointmentsAsync.when(
+      data: (final appointments) => _AppointmentsContent(
+        entries: _appointmentEntries(appointments, filters),
+        emptyMessage: switch (scope) {
+          HealthAppointmentScope.primaryCare => l10n.myDataHealthAppointmentsNoDataMessage,
+          HealthAppointmentScope.hospital => l10n.myDataHealthHospitalAppointmentsNoDataMessage,
+        },
+        l10n: l10n,
       ),
+      loading: () => const Padding(
+        padding: EdgeInsets.only(top: AppDimensions.space24),
+        child: Center(child: AppLoadingIndicator()),
+      ),
+      error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
+          ? MyDataAuthorizationContextualHelper(
+              onOpenSettings: () => _openConsentSettings(context),
+            )
+          : _HealthErrorState(
+              onRetry: () => switch (scope) {
+                HealthAppointmentScope.primaryCare => ref.invalidate(myDataPrimaryCarePendingAppointmentsProvider),
+                HealthAppointmentScope.hospital => ref.invalidate(myDataHospitalAppointmentsProvider(filter)),
+              },
+            ),
     );
   }
 }
 
-class _HealthServicesTab extends StatelessWidget {
+/// Citas pasadas de primaria, acumuladas por páginas.
+///
+/// El scroll dispara la carga automáticamente, pero el botón se mantiene visible
+/// mientras queden páginas: es el único camino accesible por teclado y lector de
+/// pantalla, y también rescata el caso en el que el filtro de fechas deja la
+/// lista tan corta que no hay scroll que disparar.
+class _PastPrimaryCareAppointmentsList extends ConsumerWidget {
+  const _PastPrimaryCareAppointmentsList({
+    required this.filters,
+    required this.l10n,
+  });
+
+  final AppListFilters filters;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final state = ref.watch(pastPrimaryCareAppointmentsProvider);
+
+    switch (state.status) {
+      case PastPrimaryCareAppointmentsStatus.loading:
+        return const Padding(
+          padding: EdgeInsets.only(top: AppDimensions.space24),
+          child: Center(child: AppLoadingIndicator()),
+        );
+      case PastPrimaryCareAppointmentsStatus.authorizationRequired:
+        return MyDataAuthorizationContextualHelper(
+          onOpenSettings: () => _openConsentSettings(context),
+        );
+      case PastPrimaryCareAppointmentsStatus.loadError:
+        return _HealthErrorState(
+          onRetry: () => unawaited(ref.read(pastPrimaryCareAppointmentsProvider.notifier).retry()),
+        );
+      case PastPrimaryCareAppointmentsStatus.loaded:
+        final entries = _appointmentEntries(state.appointments, filters);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Con páginas pendientes no se afirma que no hay citas: puede que
+            // simplemente no se hayan cargado todavía.
+            if (entries.isNotEmpty || !state.hasMore)
+              _AppointmentsContent(
+                entries: entries,
+                emptyMessage: l10n.myDataHealthAppointmentsNoDataMessage,
+                l10n: l10n,
+              ),
+            if (state.hasMore) ...[
+              const SizedBox(height: AppDimensions.space16),
+              AppButton(
+                label: l10n.myDataHealthLoadMoreAppointments,
+                hierarchy: AppButtonHierarchy.secondary,
+                isExpanded: true,
+                isLoading: state.isLoadingMore,
+                onPressed: state.isLoadingMore ? null : () => unawaited(ref.read(pastPrimaryCareAppointmentsProvider.notifier).loadMore()),
+              ),
+            ],
+          ],
+        );
+    }
+  }
+}
+
+/// Convierte primaria u hospitalaria en tarjetas fechadas para que el listado
+/// agrupe por año y mes de la misma forma en ambos ámbitos.
+List<_AppointmentEntry> _appointmentEntries(final List<Object> appointments, final AppListFilters filters) {
+  final range = filters.range('date');
+  final entries = <_AppointmentEntry>[];
+
+  for (final appointment in appointments) {
+    switch (appointment) {
+      case final HealthAppointment primaryCare:
+        if (appFilterDateInRange(primaryCare.dateTime, range)) {
+          entries.add(_AppointmentEntry(dateTime: primaryCare.dateTime, card: _AppointmentCard(appointment: primaryCare)));
+        }
+      case final HospitalAppointment hospital:
+        if (appFilterDateInRange(hospital.dateTime, range)) {
+          entries.add(_AppointmentEntry(dateTime: hospital.dateTime, card: _HospitalAppointmentCard(appointment: hospital)));
+        }
+    }
+  }
+
+  return entries;
+}
+
+class _HealthServicesTab extends ConsumerWidget {
   const _HealthServicesTab();
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final config = ref.watch(appConfigProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -186,15 +404,15 @@ class _HealthServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureComplaints,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/mi-salud-digital/sugerencias-y-reclamaciones'),
+                onTap: () => _launchExternalUrl(context, config.healthProcedure(0)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureHealthCard,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/tarjeta-sanitaria'),
+                onTap: () => _launchExternalUrl(context, config.healthProcedure(1)),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthProcedureSpecializedCare,
-                onTap: () => _launchExternalUrl(context, 'https://www.jccm.es/tramites'),
+                onTap: () => _launchExternalUrl(context, config.healthProcedure(2)),
               ),
             ],
           ),
@@ -204,15 +422,15 @@ class _HealthServicesTab extends StatelessWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkSescam,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/'),
+                onTap: () => _launchExternalUrl(context, config.sescamUrl),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkDigitalHealth,
-                onTap: () => _launchExternalUrl(context, 'https://sanidad.castillalamancha.es/ciudadanos/mi-salud-digital'),
+                onTap: () => _launchExternalUrl(context, config.digitalHealthUrl),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkClinicalHistory,
-                onTap: () => _launchExternalUrl(context, 'https://www.sanidad.gob.es/areas/saludDigital/historiaClinicaSNS/home.htm'),
+                onTap: () => _launchExternalUrl(context, config.clinicalHistoryUrl),
               ),
             ],
           ),
@@ -221,8 +439,8 @@ class _HealthServicesTab extends StatelessWidget {
     );
   }
 
-  Future<void> _launchExternalUrl(final BuildContext context, final String url) async {
-    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
+  Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
+    await launchExternalUrlWithConfirmation(context, url);
   }
 }
 
@@ -249,25 +467,27 @@ class _CipText extends StatelessWidget {
 
 class _AppointmentsContent extends StatelessWidget {
   const _AppointmentsContent({
-    required this.appointments,
+    required this.entries,
+    required this.emptyMessage,
     required this.l10n,
   });
 
-  final List<HealthAppointment> appointments;
+  final List<_AppointmentEntry> entries;
+  final String emptyMessage;
   final AppLocalizations l10n;
 
   @override
   Widget build(final BuildContext context) {
-    if (appointments.isEmpty) {
+    if (entries.isEmpty) {
       return MyDataNoData(
-        message: l10n.myDataHealthAppointmentsNoDataMessage,
+        message: emptyMessage,
         actionLabel: l10n.myDataNoDataContact,
         contactUrl: 'https://sanidad.castillalamancha.es/ciudadanos',
         scrollable: false,
       );
     }
 
-    final sections = _buildSections(appointments);
+    final sections = _buildSections(entries);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -287,8 +507,8 @@ class _AppointmentsContent extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppDimensions.space8),
-            for (final appointment in monthSection.appointments) ...[
-              _AppointmentCard(appointment: appointment),
+            for (final entry in monthSection.entries) ...[
+              entry.card,
               const SizedBox(height: AppDimensions.space12),
             ],
           ],
@@ -297,13 +517,13 @@ class _AppointmentsContent extends StatelessWidget {
     );
   }
 
-  List<_AppointmentYearSection> _buildSections(final List<HealthAppointment> appointments) {
-    final yearSections = <int, Map<int, List<HealthAppointment>>>{};
-    for (final appointment in appointments) {
-      final date = appointment.dateTime;
-      yearSections.putIfAbsent(date.year, () => <int, List<HealthAppointment>>{});
-      yearSections[date.year]!.putIfAbsent(date.month, () => <HealthAppointment>[]);
-      yearSections[date.year]![date.month]!.add(appointment);
+  List<_AppointmentYearSection> _buildSections(final List<_AppointmentEntry> entries) {
+    final yearSections = <int, Map<int, List<_AppointmentEntry>>>{};
+    for (final entry in entries) {
+      final date = entry.dateTime;
+      yearSections.putIfAbsent(date.year, () => <int, List<_AppointmentEntry>>{});
+      yearSections[date.year]!.putIfAbsent(date.month, () => <_AppointmentEntry>[]);
+      yearSections[date.year]![date.month]!.add(entry);
     }
 
     return yearSections.entries
@@ -314,7 +534,7 @@ class _AppointmentsContent extends StatelessWidget {
                 .map(
                   (final monthEntry) => _AppointmentMonthSection(
                     month: monthEntry.key,
-                    appointments: monthEntry.value,
+                    entries: monthEntry.value,
                   ),
                 )
                 .toList(growable: false),
@@ -348,6 +568,60 @@ class _AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    return _AppointmentCardShell(
+      dateTime: appointment.dateTime,
+      heading: _appointmentType(appointment),
+      title: appointment.professional,
+      lines: [
+        appointment.description,
+        appointment.modality ?? appointment.center ?? '',
+      ],
+    );
+  }
+}
+
+class _HospitalAppointmentCard extends StatelessWidget {
+  const _HospitalAppointmentCard({required this.appointment});
+
+  final HospitalAppointment appointment;
+
+  @override
+  Widget build(final BuildContext context) {
+    final location = [appointment.room, appointment.center].nonNulls.where((final value) => value.isNotEmpty).join(' · ');
+
+    return _AppointmentCardShell(
+      dateTime: appointment.dateTime,
+      heading: appointment.service.toUpperCase(),
+      title: appointment.agendaDescription ?? appointment.provision,
+      lines: [
+        appointment.provision,
+        location,
+      ],
+    );
+  }
+}
+
+/// Tarjeta de cita: raíl de fecha a la izquierda y detalle a la derecha.
+///
+/// La comparten primaria y hospitalaria; sólo cambian los textos.
+class _AppointmentCardShell extends StatelessWidget {
+  const _AppointmentCardShell({
+    required this.dateTime,
+    required this.heading,
+    required this.title,
+    required this.lines,
+  });
+
+  final DateTime dateTime;
+
+  /// Texto en mayúsculas junto a la hora: modalidad en primaria, servicio en
+  /// hospitalaria.
+  final String heading;
+  final String title;
+  final List<String> lines;
+
+  @override
+  Widget build(final BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -376,13 +650,13 @@ class _AppointmentCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    appointment.dateTime.day.toString(),
+                    dateTime.day.toString(),
                     style: AppTypography.h1.copyWith(
                       color: AppColors.primary,
                     ),
                   ),
                   Text(
-                    _weekdayName(appointment.dateTime.weekday, AppLocalizations.of(context).localeName),
+                    _weekdayName(dateTime.weekday, AppLocalizations.of(context).localeName),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.captionRegular.copyWith(
@@ -409,7 +683,7 @@ class _AppointmentCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          _formatTime(appointment.dateTime),
+                          _formatTime(dateTime),
                           style: AppTypography.smallRegular.copyWith(
                             color: AppColors.primary,
                           ),
@@ -417,7 +691,7 @@ class _AppointmentCard extends StatelessWidget {
                         const SizedBox(width: AppDimensions.space16),
                         Flexible(
                           child: Text(
-                            _appointmentType(appointment),
+                            heading,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppTypography.captionUppercase.copyWith(
@@ -429,24 +703,19 @@ class _AppointmentCard extends StatelessWidget {
                     ),
                     const SizedBox(height: AppDimensions.space4),
                     Text(
-                      appointment.professional,
+                      title,
                       style: AppTypography.bodyBold.copyWith(
                         color: AppColors.primary,
                       ),
                     ),
                     const SizedBox(height: AppDimensions.space4),
-                    Text(
-                      appointment.description,
-                      style: AppTypography.smallRegular.copyWith(
-                        color: AppColors.primary,
+                    for (final line in lines)
+                      Text(
+                        line,
+                        style: AppTypography.smallRegular.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                    Text(
-                      appointment.modality ?? appointment.center ?? '',
-                      style: AppTypography.captionRegular.copyWith(
-                        color: AppColors.primary,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -456,6 +725,16 @@ class _AppointmentCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _AppointmentEntry {
+  const _AppointmentEntry({
+    required this.dateTime,
+    required this.card,
+  });
+
+  final DateTime dateTime;
+  final Widget card;
 }
 
 class _AppointmentYearSection {
@@ -471,11 +750,11 @@ class _AppointmentYearSection {
 class _AppointmentMonthSection {
   const _AppointmentMonthSection({
     required this.month,
-    required this.appointments,
+    required this.entries,
   });
 
   final int month;
-  final List<HealthAppointment> appointments;
+  final List<_AppointmentEntry> entries;
 }
 
 String _formatTime(final DateTime dateTime) {

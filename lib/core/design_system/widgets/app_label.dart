@@ -31,12 +31,20 @@ class AppLabel extends StatelessWidget {
     this.size = AppLabelSize.m,
     this.required = false,
     this.color,
-  });
+    this.semanticsLabel,
+  }) : assert(text != '', 'text must not be empty'),
+       assert(
+         semanticsLabel == null || semanticsLabel != '',
+         'semanticsLabel must not be empty',
+       );
 
   final String text;
   final AppLabelSize size;
   final bool required;
   final Color? color;
+
+  /// Optional pronunciation-friendly alternative for [text].
+  final String? semanticsLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -58,20 +66,26 @@ class AppLabel extends StatelessWidget {
         displayText = text;
     }
 
-    if (!required) {
-      return Text(displayText, style: textStyle);
-    }
+    final visibleLabel = required
+        ? Text.rich(
+            TextSpan(
+              text: displayText,
+              style: textStyle,
+              children: [
+                TextSpan(
+                  text: '*',
+                  style: textStyle.copyWith(color: AppColors.error),
+                ),
+              ],
+            ),
+          )
+        : Text(displayText, style: textStyle);
 
-    return Text.rich(
-      TextSpan(
-        text: displayText,
-        style: textStyle,
-        children: [
-          TextSpan(
-            text: '*',
-            style: textStyle.copyWith(color: AppColors.error),
-          ),
-        ],
+    return Semantics(
+      label: semanticsLabel ?? text,
+      isRequired: required,
+      child: ExcludeSemantics(
+        child: visibleLabel,
       ),
     );
   }

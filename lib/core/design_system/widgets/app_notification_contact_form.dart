@@ -49,14 +49,22 @@ class AppNotificationContactForm extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Datos de contacto para notificaciones electrónicas',
-                  style: AppTypography.h2.copyWith(color: AppColors.textBase),
+                Semantics(
+                  header: true,
+                  child: Text(
+                    'Datos de contacto para notificaciones electrónicas',
+                    style: AppTypography.h2.copyWith(color: AppColors.textBase),
+                  ),
                 ),
                 const SizedBox(height: AppDimensions.space24),
-                Text(
-                  '*Obligatorio rellenar al menos uno de los medios de contacto',
-                  style: AppTypography.smallRegular.copyWith(color: AppColors.textBase),
+                Semantics(
+                  label: 'Obligatorio: rellena al menos uno de los medios de contacto',
+                  child: ExcludeSemantics(
+                    child: Text(
+                      '* Obligatorio rellenar al menos uno de los medios de contacto',
+                      style: AppTypography.smallRegular.copyWith(color: AppColors.textBase),
+                    ),
+                  ),
                 ),
                 if (formError != null) ...[
                   const SizedBox(height: AppDimensions.space12),
@@ -68,34 +76,49 @@ class AppNotificationContactForm extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: AppDimensions.space24),
-                AppPhoneInputCase(
-                  label: 'Teléfono móvil',
-                  controller: phoneController,
-                  errorText: phoneError,
-                  onChanged: (_) => onClearError(),
-                ),
-                if (phoneError == null) ...[
-                  const SizedBox(height: AppDimensions.space8),
-                  const AppDescriptionText(text: 'Para recibir las notificaciones  en mensaje SMS'),
-                ],
-                const SizedBox(height: AppDimensions.space24),
-                AppInputCase(
-                  label: 'Correo electrónico',
-                  hint: 'Ejemplo: mperez@correo.es',
-                  controller: emailController,
-                  state: emailError == null ? AppInputState.defaultState : AppInputState.error,
-                  errorText: emailError,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(
-                    AppIcons.alternateEmail,
-                    color: AppColors.textPrimary,
+                AutofillGroup(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppPhoneInputCase(
+                        label: 'Teléfono móvil',
+                        controller: phoneController,
+                        errorText: phoneError,
+                        onChanged: (_) => onClearError(),
+                      ),
+                      if (phoneError == null) ...[
+                        const SizedBox(height: AppDimensions.space8),
+                        const AppDescriptionText(
+                          text: 'Para recibir las notificaciones en mensaje SMS',
+                        ),
+                      ],
+                      const SizedBox(height: AppDimensions.space24),
+                      AppInputCase(
+                        label: 'Correo electrónico',
+                        hint: 'Ejemplo: mperez@correo.es',
+                        controller: emailController,
+                        state: emailError == null ? AppInputState.defaultState : AppInputState.error,
+                        errorText: emailError,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.done,
+                        autofillHints: const [AutofillHints.email],
+                        autocorrect: false,
+                        prefixIcon: const Icon(
+                          AppIcons.alternateEmail,
+                          color: AppColors.textPrimary,
+                        ),
+                        onChanged: (_) => onClearError(),
+                        onSubmitted: saving ? null : (_) => onSave(),
+                      ),
+                      if (emailError == null) ...[
+                        const SizedBox(height: AppDimensions.space8),
+                        const AppDescriptionText(
+                          text: 'Para recibir las notificaciones en tu correo electrónico',
+                        ),
+                      ],
+                    ],
                   ),
-                  onChanged: (_) => onClearError(),
                 ),
-                if (emailError == null) ...[
-                  const SizedBox(height: AppDimensions.space8),
-                  const AppDescriptionText(text: 'Para recibir las notificaciones en tu correo electrónico'),
-                ],
               ],
             ),
           ),

@@ -7,6 +7,8 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
@@ -21,6 +23,28 @@ class AgendaPage extends ConsumerStatefulWidget {
 
 class _AgendaPageState extends ConsumerState<AgendaPage> {
   _AgendaFilter _selectedFilter = _AgendaFilter.all;
+  bool _refreshing = false;
+
+  /// Pide al backend que consulte los sistemas origen (`eventos/refrescar`) y
+  /// después recarga los eventos. Si el refresco falla se recarga igualmente:
+  /// el usuario pidió actualizar y los datos cacheados pueden haber cambiado.
+  Future<void> _refreshAgenda() async {
+    if (_refreshing) {
+      return;
+    }
+    setState(() => _refreshing = true);
+    try {
+      final agentId = ref.read(citizenEndpointIdsProvider).idAgente;
+      if (agentId != null && agentId.isNotEmpty) {
+        await ref.read(refreshAgendaEventsUsecaseProvider).execute(agentId: agentId);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _refreshing = false);
+        ref.invalidate(agendaAppointmentsProvider);
+      }
+    }
+  }
 
   Future<void> _openJccmAuthorization() async {
     await context.push<void>(
@@ -47,6 +71,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
       appBar: AppNavBar(
         title: 'Agenda',
         isLoggedIn: true,
+        showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
@@ -97,11 +122,6 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             onSelected: (final filter) => setState(() => _selectedFilter = filter),
           ),
           const SizedBox(height: AppDimensions.space8),
-          _LastUpdateRow(
-            updatedAt: state.updatedAt,
-            onRefresh: () => ref.invalidate(agendaAppointmentsProvider),
-          ),
-          const SizedBox(height: AppDimensions.space8),
         ] else ...[
           MyDataAuthorizationContextualHelper(
             onOpenSettings: () => unawaited(_openJccmAuthorization()),
@@ -116,6 +136,13 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             eventDates: eventDates,
           ),
         ),
+        if (state.hasJccmAuthorization) ...[
+          const SizedBox(height: AppDimensions.space8),
+          _LastUpdateRow(
+            updatedAt: state.updatedAt,
+            onRefresh: _refreshing ? null : () => unawaited(_refreshAgenda()),
+          ),
+        ],
         const SizedBox(height: AppDimensions.space12),
         if (!state.hasJccmAuthorization)
           const SizedBox.shrink()
@@ -205,7 +232,7 @@ class _LastUpdateRow extends StatelessWidget {
   });
 
   final DateTime updatedAt;
-  final VoidCallback onRefresh;
+  final VoidCallback? onRefresh;
 
   @override
   Widget build(final BuildContext context) {
@@ -293,119 +320,21 @@ class _AgendaAppointmentCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final date = appointment.dateTime;
-    final day = date.day.toString();
-    final weekday = _weekdayName(date.weekday);
-    final time = _formatTime(date);
     final detail = appointment.detail ?? appointment.center ?? '';
-    final channel = _appointmentChannel(appointment.channel, detail);
 
-    return Semantics(
-      label: '$day $weekday, $time, $channel, ${appointment.title}, ${appointment.description}, $detail',
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space8,
-          vertical: AppDimensions.space16,
-        ),
-        decoration: const BoxDecoration(
-          color: AppColors.surface,
-          border: Border(
-            left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
-            top: BorderSide(color: AppColors.borderBlueMutedLight),
-            right: BorderSide(color: AppColors.borderBlueMutedLight),
-            bottom: BorderSide(color: AppColors.borderBlueMutedLight),
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(1)),
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    right: BorderSide(color: AppColors.backgroundBlueMutedLight),
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      day,
-                      style: AppTypography.h1.copyWith(color: AppColors.textPrimary),
-                      maxLines: 1,
-                      softWrap: false,
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      weekday,
-                      style: AppTypography.captionRegular.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppDimensions.space8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          time,
-                          style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                        ),
-                        const SizedBox(width: AppDimensions.space16),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                channel.toUpperCase(),
-                                style: AppTypography.captionUppercase.copyWith(color: AppColors.borderBlueMutedBase),
-                                maxLines: 1,
-                                softWrap: false,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      appointment.title,
-                      style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      appointment.description,
-                      style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (detail.isNotEmpty)
-                      Text(
-                        detail,
-                        style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return AppAgendaInfoCard(
+      type: switch (appointment.kind) {
+        AgendaAppointmentKind.notification => AppAgendaInfoCardType.notification,
+        AgendaAppointmentKind.health => AppAgendaInfoCardType.health,
+        AgendaAppointmentKind.credential => AppAgendaInfoCardType.credential,
+      },
+      day: date.day.toString(),
+      weekday: _weekdayName(date.weekday),
+      time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatAppointmentTime(date),
+      title: appointment.kind == AgendaAppointmentKind.health ? appointment.description : appointment.title,
+      channel: appointment.kind == AgendaAppointmentKind.health ? _appointmentChannel(appointment.channel, detail) : null,
+      primaryText: appointment.kind == AgendaAppointmentKind.health ? appointment.title : appointment.description,
+      secondaryText: appointment.kind == AgendaAppointmentKind.credential ? null : detail,
     );
   }
 }
@@ -432,20 +361,15 @@ class _AgendaErrorState extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'No hemos podido cargar tu agenda.',
-          style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
-        ),
-        const SizedBox(height: AppDimensions.space8),
-        AppButton(
-          label: 'Intentar de nuevo',
-          onPressed: onRetry,
-          leadingIcon: AppIcons.autorenew,
-        ),
-      ],
+    // Mismo tratamiento visual que el resto de errores de servicio de la app.
+    return AppAlertContextual(
+      message: 'No hemos podido cargar tu agenda.',
+      action: AppButton(
+        label: 'Intentar de nuevo',
+        hierarchy: AppButtonHierarchy.tertiary,
+        trailingIcon: AppIcons.autorenew,
+        onPressed: onRetry,
+      ),
     );
   }
 }
@@ -500,9 +424,13 @@ String _formatUpdateDate(final DateTime dateTime) {
 }
 
 String _formatTime(final DateTime dateTime) {
+  return '${_formatAppointmentTime(dateTime)}h';
+}
+
+String _formatAppointmentTime(final DateTime dateTime) {
   final hour = dateTime.hour.toString().padLeft(2, '0');
   final minute = dateTime.minute.toString().padLeft(2, '0');
-  return '$hour:${minute}h';
+  return '$hour:$minute';
 }
 
 String _appointmentChannel(final String? channel, final String detail) {

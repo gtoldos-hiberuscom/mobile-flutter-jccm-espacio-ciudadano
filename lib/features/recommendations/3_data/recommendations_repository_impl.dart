@@ -1,36 +1,42 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/recommendations/3_data/api/recomendaciones_api.dart';
 
 final class RecommendationsRepositoryImpl implements RecommendationsRepository {
-  RecommendationsRepositoryImpl({required final Dio dio, required this.sedeBaseUrl}) : _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
+  RecommendationsRepositoryImpl({required final Dio dio, required this.sedeBaseUrl}) : _api = RecomendacionesApi(dio);
 
-  final HechosVitalesApi _api;
+  final RecomendacionesApi _api;
   final Uri sedeBaseUrl;
 
   @override
   Future<List<Recommendation>> loadRecommendations({
     required final String idAgente,
     required final List<int> lifeEventIds,
+    required final RecommendationsSegment segment,
   }) async {
+    // Sin hechos configurados no hay nada que recomendar: se corta la llamada.
+    // La lista no viaja en la petición (ver RecomendacionesApi.obtener).
     if (lifeEventIds.isEmpty) {
       return const [];
     }
 
+    final isAll = segment == RecommendationsSegment.all;
+
     Object? payload;
     try {
-      final response = await _api.getServicios(
-        idAgente: idAgente,
-        extra: const {
-          generatedApiDecodeStringResponseExtraKey: true,
-        },
+      payload = await _api.obtener(
+        citizenId: idAgente,
+        operacion: _operationFor(segment),
+        size: isAll ? null : '10',
+        page: isAll ? null : '0',
+        ultimosDias: segment == RecommendationsSegment.recent ? '30' : null,
       );
-      payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
     } on DioException catch (error) {
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
+      final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
+      _logEnvelope(segment, rawData);
       if (_isNoResultsResponse(rawData)) {
         return const [];
       }
@@ -41,109 +47,58 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
       }
     }
 
-    final badgeIds = await _loadBadgeIds(
-      idAgente: idAgente,
-      lifeEventIds: lifeEventIds,
-    );
+    _logEnvelope(segment, payload);
+    if (_isNoResultsResponse(payload)) {
+      return const [];
+    }
+
     final groups = _extractGroups(payload);
     return [
-      for (final group in groups) ..._mapGroup(group, badgeIds),
+      for (final group in groups)
+        ..._mapGroup(
+          group,
+          segment == RecommendationsSegment.all ? null : _badgeFor(segment),
+        ),
     ];
   }
 
-  Future<Map<int, Set<RecommendationBadge>>?> _loadBadgeIds({
-    required final String idAgente,
-    required final List<int> lifeEventIds,
-  }) async {
-    final segments = await Future.wait([
-      _loadSegmentIds(
-        idAgente: idAgente,
-        lifeEventIds: lifeEventIds,
-        operation: 'ultimos_dias',
-      ),
-      _loadSegmentIds(
-        idAgente: idAgente,
-        lifeEventIds: lifeEventIds,
-        operation: 'novedades',
-      ),
-      _loadSegmentIds(
-        idAgente: idAgente,
-        lifeEventIds: lifeEventIds,
-        operation: 'inmediatos',
-      ),
-    ]);
-    if (segments.any((final segment) => !segment.available)) {
-      return null;
-    }
-    final result = <int, Set<RecommendationBadge>>{};
-    const badges = [
-      RecommendationBadge.recent,
-      RecommendationBadge.news,
-      RecommendationBadge.immediate,
-    ];
-    for (var index = 0; index < segments.length; index++) {
-      for (final id in segments[index].ids) {
-        result.putIfAbsent(id, () => <RecommendationBadge>{}).add(badges[index]);
-      }
-    }
-    return result;
-  }
+  /// Valor del query `operacion` para cada segmento.
+  ///
+  /// "Todos" era una ruta aparte (`hechos-vitales/servicios/{idAgente}`) y ahora
+  /// es el mismo endpoint con `operacion=todo` (el valor que cita el OpenAPI
+  /// 1.86). Omitir el parámetro —que el contrato declara opcional— devuelve
+  /// vacío contra el gateway UAT, así que se envía siempre.
+  String _operationFor(final RecommendationsSegment segment) => switch (segment) {
+    RecommendationsSegment.all => 'todo',
+    RecommendationsSegment.recent => 'ut',
+    RecommendationsSegment.news => 'no',
+    RecommendationsSegment.immediate => 'ti',
+  };
 
-  Future<({bool available, Set<int> ids})> _loadSegmentIds({
-    required final String idAgente,
-    required final List<int> lifeEventIds,
-    required final String operation,
-  }) async {
-    final Object? payload;
-    try {
-      final response = await _api.getServiciosSegmentados(
-        idAgente: idAgente,
-        operacion: operation,
-        hechosvitales: BuiltList<int>(lifeEventIds),
-        extra: const {
-          generatedApiDecodeStringResponseExtraKey: true,
-        },
-      );
-      payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
-    } on DioException catch (error) {
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (_isNoResultsResponse(rawData)) {
-        return (available: true, ids: const <int>{});
-      }
-      if (error.response?.statusCode == 404) {
-        return (available: false, ids: const <int>{});
-      }
-      rethrow;
-    }
-    return (available: true, ids: _extractProcedureIds(payload));
-  }
+  RecommendationBadge _badgeFor(final RecommendationsSegment segment) => switch (segment) {
+    RecommendationsSegment.all => throw ArgumentError.value(segment),
+    RecommendationsSegment.recent => RecommendationBadge.recent,
+    RecommendationsSegment.news => RecommendationBadge.news,
+    RecommendationsSegment.immediate => RecommendationBadge.immediate,
+  };
 
-  Set<int> _extractProcedureIds(final Object? data) {
-    final root = _asStringMap(data);
-    final body = root?['body'] ?? data;
-    final ids = <int>{};
-
-    void addProcedure(final Object? value) {
-      final procedure = _asStringMap(value);
-      final id = _int(
-        procedure?['idTramite'] ?? procedure?['idServicio'] ?? procedure?['id'],
-      );
-      if (id != null) {
-        ids.add(id);
-      }
-    }
-
-    if (body is List) {
-      body.forEach(addProcedure);
-      return ids;
-    }
-    for (final group in _extractGroups(data)) {
-      final procedures = group['tramites'] ?? group['listaTramites'] ?? group['servicios'] ?? group['listaServicios'];
-      if (procedures is List) {
-        procedures.forEach(addProcedure);
-      }
-    }
-    return ids;
+  /// Registra los campos de diagnóstico del sobre de respuesta del backend.
+  /// Esta pantalla traduce los errores de negocio (`404.01`, `412.00`, sobres
+  /// 4xx no reconocidos) a listado vacío en silencio; esta traza hace visible
+  /// qué contestó realmente el backend cuando la lista sale vacía.
+  void _logEnvelope(final RecommendationsSegment segment, final Object? raw) {
+    final map = _asStringMap(raw);
+    final body = map?['body'];
+    final bodySummary = switch (body) {
+      final List<dynamic> list => 'lista(${list.length})',
+      final Map<dynamic, dynamic> _ => 'objeto',
+      null => 'null',
+      _ => body.runtimeType.toString(),
+    };
+    logger.d(
+      '[recomendaciones/$segment] envelope codigo-respuesta=${map?['codigo-respuesta']} '
+      'mensaje=${map?['mensaje-respuesta']} body=$bodySummary',
+    );
   }
 
   List<Map<String, dynamic>> _extractGroups(final Object? data) {
@@ -218,10 +173,10 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
 
   Iterable<Recommendation> _mapGroup(
     final Map<String, dynamic> group,
-    final Map<int, Set<RecommendationBadge>>? badgeIds,
+    final RecommendationBadge? segmentBadge,
   ) sync* {
-    final lifeEventId = _int(group['idHecho']) ?? 0;
-    final lifeEventName = _string(group['nombreHecho']);
+    final groupLifeEventId = _int(group['idHecho']);
+    final groupLifeEventName = _string(group['nombreHecho']);
     final rawProcedures = group['tramites'] ?? group['listaTramites'] ?? group['servicios'] ?? group['listaServicios'];
     if (rawProcedures is! List) {
       return;
@@ -234,6 +189,10 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         continue;
       }
 
+      final procedureLifeEvents = (rawProcedure['hechosVitales'] as List?)?.map(_asStringMap).whereType<Map<String, dynamic>>().toList(growable: false) ?? const [];
+      final lifeEventId = groupLifeEventId ?? (procedureLifeEvents.isEmpty ? 0 : _int(procedureLifeEvents.first['idHechoVital'] ?? procedureLifeEvents.first['idHecho'])) ?? 0;
+      final lifeEventName = groupLifeEventName.isNotEmpty ? groupLifeEventName : procedureLifeEvents.map((final event) => _string(event['nombreHechoVital'] ?? event['nombreHecho'])).where((final name) => name.isNotEmpty).join(', ');
+
       final startDate = _date(rawProcedure['fechaPresentacionIni'] ?? rawProcedure['fechaPresentacion'] ?? rawProcedure['fechaInicio']);
       final endDate = _date(rawProcedure['fechaPresentacionFin'] ?? rawProcedure['fechaFin']);
       final rawSubmissionStatus = rawProcedure['fechaPresentacion'];
@@ -244,14 +203,7 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         title: title,
         lifeEventId: lifeEventId,
         lifeEventName: lifeEventName,
-        badges: Set.unmodifiable(
-          badgeIds?[procedureId] ??
-              _fallbackBadges(
-                rawStartDate: rawProcedure['fechaPresentacionIni'] ?? rawProcedure['fechaPresentacion'] ?? rawProcedure['fechaInicio'],
-                startDate: startDate,
-                endDate: endDate,
-              ),
-        ),
+        badges: segmentBadge == null ? const {} : {segmentBadge},
         responsibleUnit: _stringOrNull(
           rawProcedure['nombreUnidadOrganicaResponsable'] ?? rawProcedure['nombreUnidadResponsable'] ?? rawProcedure['unidadResponsable'],
         ),
@@ -261,24 +213,6 @@ final class RecommendationsRepositoryImpl implements RecommendationsRepository {
         detailUrl: sedeBaseUrl.resolve('tramites/$procedureId'),
       );
     }
-  }
-
-  Set<RecommendationBadge> _fallbackBadges({
-    required final Object? rawStartDate,
-    required final DateTime? startDate,
-    required final DateTime? endDate,
-  }) {
-    final now = DateTime.now();
-    final startText = _stringOrNull(rawStartDate)?.toLowerCase();
-    final isPermanentlyOpen = startText?.contains('abierto permanentemente') ?? false;
-    final isActive = startDate != null && !startDate.isAfter(now) && (endDate == null || !endDate.isBefore(now));
-    if (isPermanentlyOpen || isActive) {
-      return const {RecommendationBadge.immediate};
-    }
-    if (startDate != null && !startDate.isAfter(now) && !startDate.isBefore(now.subtract(const Duration(days: 7)))) {
-      return const {RecommendationBadge.recent};
-    }
-    return const {};
   }
 
   String _string(final Object? value) => _stringOrNull(value) ?? '';

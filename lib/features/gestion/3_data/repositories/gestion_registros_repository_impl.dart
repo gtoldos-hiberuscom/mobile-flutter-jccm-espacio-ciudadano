@@ -12,10 +12,18 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   final PublicacionApi _api;
 
   @override
-  Future<List<Registro>> loadEntradas({required final String documentNumber}) async {
+  Future<List<Registro>> loadEntradas({
+    required final String citizenId,
+    required final String documentNumber,
+  }) async {
     return _loadRegistros(
       request: _request(documentNumber),
+      // Path gateway POST
+      // /api/v1/ciudadanos/{sid}/expedientes/listado-registro-entrada (aquí el
+      // método base es el del gateway; el sufijo `1` del generador se reparte
+      // de forma arbitraria entre legacy y gateway).
       fetch: (final request) => _api.myPubliSelecByNifTipoProcEntradaOperation(
+        idAgente: citizenId,
         dtselectbynifv2reqBody: request,
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
@@ -27,10 +35,16 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   }
 
   @override
-  Future<List<Registro>> loadSalidas({required final String documentNumber}) async {
+  Future<List<Registro>> loadSalidas({
+    required final String citizenId,
+    required final String documentNumber,
+  }) async {
     return _loadRegistros(
       request: _request(documentNumber),
-      fetch: (final request) => _api.myPubliSelecByNifTipoProcSalidaOperation(
+      // La variante `1` apunta al path gateway POST
+      // /api/v1/ciudadanos/{sid}/expedientes/listado-registro-salida.
+      fetch: (final request) => _api.myPubliSelecByNifTipoProcSalidaOperation1(
+        idAgente: citizenId,
         dtselectbynifv2reqBody: request,
         extra: {
           generatedApiDecodeStringResponseExtraKey: true,
@@ -92,7 +106,7 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   Registro _toRegistroMap(final Map<String, Object?> data) {
     return Registro(
       numregistro: _string(data, 'registro') ?? '',
-      titulo: _string(data, 'asunto') ?? _string(data, 'titulo') ?? _string(data, 'desasunto') ?? _string(data, 'descrip') ?? '',
+      titulo: _string(data, 'desasunto') ?? _string(data, 'asuntoResumen') ?? _string(data, 'resumenAsunto') ?? '',
       fecha: _string(data, 'fechareg'),
       consejeria: _string(data, 'desconsej'),
     );

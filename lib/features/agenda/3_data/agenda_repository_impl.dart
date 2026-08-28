@@ -28,9 +28,13 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       ),
       if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
         _loadAppointmentsFrom(
-          () => _agendaApi.obtenerEventosAgenda(
+          // La variante `1` apunta al path gateway
+          // /api/v1/ciudadanos/{sid}/eventos/{periodo} (el legacy
+          // /api/v1/agenda/... no existe en el gateway y responde 404). El
+          // periodo va en mayúsculas: TODOS, SEMANA, MES o ANIO.
+          () => _agendaApi.obtenerEventosAgenda1(
             idAgente: trimmedAgentId,
-            periodo: 'todos',
+            periodo: 'TODOS',
             extra: _generatedExtra,
           ),
           source: _AgendaAppointmentSource.general,
@@ -41,6 +45,16 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final appointments = responses.expand((final appointments) => appointments).toList(growable: false)..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
 
     return appointments;
+  }
+
+  @override
+  Future<void> refreshEvents({required final String agentId}) async {
+    // El resultado (RefrescarAgendaDTO: contadores ok/error por fuente) no se
+    // muestra; el refresco se refleja recargando los eventos después.
+    await _agendaApi.refrescarAgendaEvents1(
+      idAgente: agentId,
+      extra: _generatedExtra,
+    );
   }
 
   Future<List<AgendaAppointment>> _loadAppointmentsFrom(
@@ -247,20 +261,100 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'subtipoCita',
       'observaciones',
     ]);
+    final message = _cleanHtml(
+      _firstString(raw, const [
+        'mensaje',
+        'message',
+        'contenido',
+        'texto',
+      ]),
+    );
+    final primaryCareDetails = _parsePrimaryCareMessage(message);
+    final isPrimaryCare = source == _AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
 
     final description = switch (source) {
       _AgendaAppointmentSource.health => specialty ?? 'Cita sanitaria',
-      _AgendaAppointmentSource.general => specialty ?? title ?? 'Cita',
+      _AgendaAppointmentSource.general when isPrimaryCare => title ?? 'Cita de Atención Primaria',
+      _AgendaAppointmentSource.general => message ?? specialty ?? title ?? 'Cita',
     };
 
     return AgendaAppointment(
       dateTime: dateTime,
-      title: source == _AgendaAppointmentSource.health ? professional ?? specialty ?? 'Cita sanitaria' : title ?? specialty ?? 'Cita',
+      title: source == _AgendaAppointmentSource.health
+          ? professional ?? specialty ?? 'Cita sanitaria'
+          : isPrimaryCare
+          ? primaryCareDetails?.professional ?? professional ?? title ?? 'Cita de Atención Primaria'
+          : title ?? specialty ?? 'Cita',
       description: description,
-      channel: channel,
-      detail: detail ?? center,
+      kind: switch (source) {
+        _AgendaAppointmentSource.health => AgendaAppointmentKind.health,
+        _AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
+        _AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
+        _AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
+      },
+      channel: primaryCareDetails?.channel ?? channel,
+      detail: primaryCareDetails?.appointmentDetail ?? detail ?? center,
       center: center,
     );
+  }
+
+  _PrimaryCareMessageDetails? _parsePrimaryCareMessage(final String? message) {
+    if (message == null || !_isPrimaryCareEvent(null, null, message, null, null)) {
+      return null;
+    }
+
+    String? valueBetween(final String start, final String? end) {
+      final endPattern = end == null ? r'$' : RegExp.escape(end);
+      final match = RegExp('${RegExp.escape(start)}\\s*(.*?)\\s*$endPattern', caseSensitive: false).firstMatch(message);
+      final value = match?.group(1)?.trim();
+      return value == null || value.isEmpty ? null : value;
+    }
+
+    final professional = valueBetween('Profesional:', 'Tipo de cita:');
+    final appointmentType = valueBetween('Tipo de cita:', 'Modo de cita:');
+    final channel = valueBetween('Modo de cita:', null);
+    final normalizedType = appointmentType?.toLowerCase();
+    final isOnDemand = normalizedType?.contains('demanda') ?? false;
+    final isRemote = (channel?.toLowerCase().contains('telef') ?? false) || (normalizedType?.contains('teleconsulta') ?? false);
+    final appointmentDetail = isOnDemand
+        ? isRemote
+              ? 'Teleconsulta a demanda'
+              : 'Consulta a demanda'
+        : appointmentType;
+
+    return (
+      professional: professional,
+      channel: channel,
+      appointmentDetail: appointmentDetail,
+    );
+  }
+
+  bool _isPrimaryCareEvent(
+    final String? title,
+    final String? specialty,
+    final String? message,
+    final String? detail,
+    final String? center,
+  ) {
+    final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''} ${detail ?? ''} ${center ?? ''}'.toLowerCase();
+    return searchableText.contains('atención primaria') || searchableText.contains('atencion primaria');
+  }
+
+  bool _isCredentialEvent(
+    final String? title,
+    final String? specialty,
+    final String? message,
+  ) {
+    final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''}'.toLowerCase();
+    return searchableText.contains('carnet') || searchableText.contains('carné') || searchableText.contains('tarjeta');
+  }
+
+  String? _cleanHtml(final String? value) {
+    if (value == null) {
+      return null;
+    }
+    final cleaned = value.replaceAll(RegExp('<[^>]+>'), ' ').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll(RegExp(r'\s+'), ' ').trim();
+    return cleaned.isEmpty ? null : cleaned;
   }
 
   DateTime? _extractDateTime(final Map<String, dynamic> raw) {
@@ -365,3 +459,5 @@ enum _AgendaAppointmentSource {
   health,
   general,
 }
+
+typedef _PrimaryCareMessageDetails = ({String? professional, String? channel, String? appointmentDetail});

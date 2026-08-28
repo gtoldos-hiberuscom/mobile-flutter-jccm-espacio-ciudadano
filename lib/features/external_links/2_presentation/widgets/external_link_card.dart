@@ -21,10 +21,25 @@ class ExternalLinkCard extends ConsumerWidget {
     required this.description,
     required this.linkId,
     super.key,
-  });
+    this.headingLevel = 3,
+    this.titleSemanticLabel,
+  }) : assert(title != '', 'title must not be empty'),
+       assert(description != '', 'description must not be empty'),
+       assert(linkId != '', 'linkId must not be empty'),
+       assert(headingLevel >= 1 && headingLevel <= 6, 'headingLevel must be between 1 and 6'),
+       assert(
+         titleSemanticLabel == null || titleSemanticLabel != '',
+         'titleSemanticLabel must not be empty',
+       );
 
   final String title;
   final String description;
+
+  /// Semantic heading level for the card title.
+  final int headingLevel;
+
+  /// Optional spoken form of [title] when it contains abbreviations.
+  final String? titleSemanticLabel;
 
   /// Stable id from the [ExternalLinkCatalog].
   final String linkId;
@@ -37,9 +52,15 @@ class ExternalLinkCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
+          Semantics(
+            header: true,
+            headingLevel: headingLevel,
+            label: titleSemanticLabel,
+            excludeSemantics: titleSemanticLabel != null,
+            child: Text(
+              title,
+              style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
+            ),
           ),
           const SizedBox(height: AppDimensions.space8),
           Text(

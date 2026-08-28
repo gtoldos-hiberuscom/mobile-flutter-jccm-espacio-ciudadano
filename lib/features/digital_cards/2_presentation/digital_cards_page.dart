@@ -16,7 +16,7 @@ class DigitalCardsPage extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final authorizationAsync = ref.watch(digitalCardsAuthorizationProvider);
-    final isDownloading = ref.watch(digitalCardsDownloadingProvider);
+    final isDownloading = ref.watch(digitalCardsDownloadingProvider) != null;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundBlueLighter,
@@ -85,7 +85,7 @@ class DigitalCardsPage extends ConsumerWidget {
                       secondaryDateLabel: card.type == DigitalCardType.largeFamily ? l10n.digitalCardsExpiryDate : null,
                       secondaryDate: card.type == DigitalCardType.largeFamily ? _formatDate(context, card.expiresAt) : null,
                       statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
-                      downloadLabel: 'Descargar',
+                      downloadLabel: l10n.digitalCardDownload,
                       isDownloading: isDownloading,
                       onDownload: () => showDigitalCardDownloadSheet(context, ref, card),
                     );

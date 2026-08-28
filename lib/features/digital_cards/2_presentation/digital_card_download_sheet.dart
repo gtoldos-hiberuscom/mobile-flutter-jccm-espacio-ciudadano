@@ -2,10 +2,15 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
+
+const _pkPassChannel = MethodChannel(
+  'es.jccm.espaciociudadano/pkpass',
+);
 
 Future<void> showDigitalCardDownloadSheet(
   final BuildContext context,
@@ -19,9 +24,11 @@ Future<void> showDigitalCardDownloadSheet(
     body: Consumer(
       builder: (final context, final ref, final child) {
         final qrImage = supportsQrAndPdf ? ref.watch(digitalCardQrImageProvider(card)) : null;
+        final downloadingFormat = ref.watch(digitalCardsDownloadingProvider);
         return AppQrDownloadBottomSheetBody(
           qrImageBytes: qrImage?.asData?.value,
           isQrLoading: qrImage?.isLoading ?? false,
+          downloadingFormat: downloadingFormat,
           onQrPressed: !supportsQrAndPdf
               ? null
               : () => _downloadFormat(
@@ -65,21 +72,14 @@ Future<void> _downloadFormat(
   )
   action,
 }) async {
-  ref.read(digitalCardsDownloadingProvider.notifier).startDownload();
+  if (!ref.read(digitalCardsDownloadingProvider.notifier).tryStartDownload(label)) {
+    return;
+  }
   try {
     final artifact = await action(ref, card);
-    final path = await FilePicker.saveFile(
-      dialogTitle: 'Guardar $label',
-      fileName: artifact.fileName,
-      type: FileType.custom,
-      allowedExtensions: [artifact.extension],
-      bytes: artifact.bytes,
-    );
-    if (path == null) {
+    final saved = await _saveArtifact(artifact, dialogTitle: 'Guardar $label');
+    if (!saved) {
       return;
-    }
-    if (!Platform.isAndroid && !Platform.isIOS) {
-      await File(path).writeAsBytes(artifact.bytes);
     }
     if (!context.mounted) {
       return;
@@ -100,4 +100,32 @@ Future<void> _downloadFormat(
   } finally {
     ref.read(digitalCardsDownloadingProvider.notifier).finishDownload();
   }
+}
+
+Future<bool> _saveArtifact(
+  final DigitalCardArtifact artifact, {
+  required final String dialogTitle,
+}) async {
+  if (Platform.isAndroid && artifact.extension.toLowerCase() == 'pkpass') {
+    return await _pkPassChannel.invokeMethod<bool>('savePkPass', {
+          'fileName': artifact.fileName,
+          'bytes': artifact.bytes,
+        }) ??
+        false;
+  }
+
+  final path = await FilePicker.saveFile(
+    dialogTitle: dialogTitle,
+    fileName: artifact.fileName,
+    type: FileType.custom,
+    allowedExtensions: [artifact.extension],
+    bytes: artifact.bytes,
+  );
+  if (path == null) {
+    return false;
+  }
+  if (!Platform.isAndroid && !Platform.isIOS) {
+    await File(path).writeAsBytes(artifact.bytes);
+  }
+  return true;
 }

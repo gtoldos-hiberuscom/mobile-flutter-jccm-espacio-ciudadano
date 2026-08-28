@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
@@ -38,30 +37,14 @@ class LandingPage extends ConsumerStatefulWidget {
 }
 
 class _LandingPageState extends ConsumerState<LandingPage> {
-  bool _didTrySessionUnlock = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_didTrySessionUnlock) {
-      return;
-    }
-    _didTrySessionUnlock = true;
-
-    final l10n = AppLocalizations.of(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      unawaited(
-        ref
-            .read(landingProvider.notifier)
-            .tryUnlockStoredSession(
-              localizedReason: l10n.sessionUnlockBiometricReason,
-            ),
-      );
-    });
-  }
+  /// Si hay un acceso en curso iniciado *mientras esta página está montada*.
+  ///
+  /// No se deriva de `landingProvider` directamente: `loginSuccess` es una señal
+  /// de un solo uso que nadie limpia, y el provider no es `autoDispose`, así que
+  /// al volver a la landing tras cerrar sesión seguiría valiendo `true` y el
+  /// velo se quedaría pegado. Al alimentarlo sólo desde las transiciones que
+  /// observa `ref.listen`, un valor heredado de la sesión anterior no lo activa.
+  bool _isAuthenticating = false;
 
   @override
   Widget build(final BuildContext context) {
@@ -69,6 +52,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     final l10n = AppLocalizations.of(context);
 
     ref.listen<LandingState>(landingProvider, (final previous, final next) {
+      final isAuthenticating = next.isLoggingIn || next.loginSuccess;
+      if (mounted && isAuthenticating != _isAuthenticating) {
+        setState(() => _isAuthenticating = isAuthenticating);
+      }
       if (next.loginSuccess) {
         ref.read(goRouterProvider).go(Routes.home);
       }
@@ -83,108 +70,114 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       }
     });
 
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: AppColors.surface,
       body: Column(
         children: [
           // ── Scrollable hero content ─────────────────────────────────────
           Expanded(
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space16,
-                  ),
-                  // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
-                  child: Stack(
-                    children: [
-                      // ── H1 semantic heading — 1×1px node announced first by SR ──
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        child: Semantics(
-                          header: true,
-                          headingLevel: 1,
-                          focusable: true,
-                          label: l10n.a11yLandingH1Label,
-                          child: const SizedBox(width: 1, height: 1),
-                        ),
-                      ),
-                      Column(
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space16,
+                ),
+                child: LayoutBuilder(
+                  builder: (final context, final constraints) => FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: 353.15,
+                      // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
+                      child: Stack(
                         children: [
-                          const SizedBox(height: AppDimensions.space16),
-
-                          // ── Castilla-La Mancha institutional logo ───────────
-                          Semantics(
-                            label: l10n.a11yCastillaLogoLabel,
-                            image: true,
-                            excludeSemantics: true,
-                            child: SvgPicture.asset(
-                              'assets/images/castilla_logo.svg',
-                              width: 116,
-                              height: 68,
+                          // ── H1 semantic heading — 1×1px node announced first by SR ──
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            child: Semantics(
+                              header: true,
+                              headingLevel: 1,
+                              focusable: true,
+                              label: l10n.a11yLandingH1Label,
+                              child: const SizedBox(width: 1, height: 1),
                             ),
                           ),
-                          const SizedBox(height: AppDimensions.space24),
+                          Column(
+                            children: [
+                              const SizedBox(height: AppDimensions.space16),
 
-                          // ── Espacio Ciudadano logo ──────────────────────────
-                          ExcludeSemantics(
-                            child: SvgPicture.asset(
-                              'assets/images/espacioCiudadano_logo.svg',
-                              width: 256,
-                              height: 64,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.space24),
-
-                          // ── Tagline ─────────────────────────────────────────
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: _TaglineText(),
-                          ),
-                          const SizedBox(height: AppDimensions.space24),
-
-                          // ── Hero composition (splash_logo bg + mask group) ──
-                          ExcludeSemantics(
-                            child: AspectRatio(
-                              aspectRatio: 353.15 / 301.45,
-                              child: LayoutBuilder(
-                                builder: (final context, final constraints) {
-                                  final w = constraints.maxWidth;
-                                  final h = constraints.maxHeight;
-                                  return Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      // Background decorative shape (full size)
-                                      Positioned.fill(
-                                        child: Image.asset(
-                                          'assets/images/splash_logo.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                      // Foreground mask group (windmill + hands)
-                                      Positioned(
-                                        left: w * (75.0 / 353.15),
-                                        right: w * (-5.0 / 353.15),
-                                        bottom: h * (25.0 / 301.45),
-                                        child: Image.asset(
-                                          'assets/images/splash_image.png',
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
+                              // ── Castilla-La Mancha institutional logo ───────────
+                              Semantics(
+                                label: l10n.a11yCastillaLogoLabel,
+                                image: true,
+                                excludeSemantics: true,
+                                child: SvgPicture.asset(
+                                  'assets/images/castilla_logo.svg',
+                                  width: 116,
+                                  height: 68,
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.space16),
+                              const SizedBox(height: AppDimensions.space24),
+
+                              // ── Espacio Ciudadano logo ──────────────────────────
+                              ExcludeSemantics(
+                                child: SvgPicture.asset(
+                                  'assets/images/espacioCiudadano_logo.svg',
+                                  width: 256,
+                                  height: 64,
+                                ),
+                              ),
+                              const SizedBox(height: AppDimensions.space24),
+
+                              // ── Tagline ─────────────────────────────────────────
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: _TaglineText(),
+                              ),
+                              const SizedBox(height: AppDimensions.space24),
+
+                              // ── Hero composition (splash_logo bg + mask group) ──
+                              ExcludeSemantics(
+                                child: AspectRatio(
+                                  aspectRatio: 353.15 / 301.45,
+                                  child: LayoutBuilder(
+                                    builder: (final context, final constraints) {
+                                      final w = constraints.maxWidth;
+                                      final h = constraints.maxHeight;
+                                      return Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          // Background decorative shape (full size)
+                                          Positioned.fill(
+                                            child: Image.asset(
+                                              'assets/images/splash_logo.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                          // Foreground mask group (windmill + hands)
+                                          Positioned(
+                                            left: w * (75.0 / 353.15),
+                                            right: w * (-5.0 / 353.15),
+                                            bottom: h * (25.0 / 301.45),
+                                            child: Image.asset(
+                                              'assets/images/splash_image.png',
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: AppDimensions.space16),
+                            ],
+                          ), // Column
                         ],
-                      ), // Column
-                    ],
-                  ), // Stack
+                      ), // Stack
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -220,6 +213,25 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
         ],
       ),
+    );
+
+    // El guard de sesión hace comprobaciones asíncronas antes de que el router
+    // pinte la home privada, así que sin este velo la home pública se queda a la
+    // vista durante ese hueco y se percibe como una redirección extraña.
+    if (!_isAuthenticating) {
+      return scaffold;
+    }
+
+    return Stack(
+      children: [
+        scaffold,
+        Positioned.fill(
+          child: AppLoadingScreen(
+            title: l10n.loginPageTitle,
+            description: l10n.loginPageLoadingDescription,
+          ),
+        ),
+      ],
     );
   }
 }

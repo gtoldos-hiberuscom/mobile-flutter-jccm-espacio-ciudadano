@@ -18,6 +18,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
 
   @override
   Future<String> subirDocumentoSinFirma({
+    required final String citizenId,
     required final String documentNumber,
     required final String idUnico,
     required final String tipoProcedimiento,
@@ -50,7 +51,15 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     );
 
     try {
-      await _procedimientoApi.miSubirAdjuntoSinFirmaOperation(
+      // La variante `1` apunta al path gateway POST
+      // /api/v1/ciudadanos/{sid}/expedientes/{idExpediente}/ficheros. El
+      // segmento `{idExpediente}` es decorativo (el backend opera con el
+      // cuerpo ADJUNTO) y los números de expediente llevan barras que
+      // romperían la ruta, así que se pasa el idunico de la transacción,
+      // que es path-safe.
+      await _procedimientoApi.miSubirAdjuntoSinFirmaOperation1(
+        idAgente: citizenId,
+        idExpediente: idUnico,
         adjuntoBody: adjunto,
         cancelToken: cancelToken,
         onSendProgress: (final sent, final total) {
@@ -85,6 +94,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
 
   @override
   Future<InicioProcedimientoResultado> iniciarProcedimiento({
+    required final String citizenId,
     required final String idUnico,
     required final String documentNumber,
     required final Expediente expediente,
@@ -109,8 +119,13 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     logger.d('[inicproc] req idunico=$idUnico noexpediente=${expediente.numexp} tipoproc=${expediente.tipoproc ?? ''} category=NIF titular=$documentNumber repNif=${representante?.nifcif ?? documentNumber}');
     Map<String, Object?>? responseBody;
     try {
+      // Path gateway (el legacy /api/v1/procedimiento/inicproc no existe en el
+      // gateway y responde 404). `{idExpediente}` es decorativo — el backend
+      // opera con el cuerpo — y los números de expediente llevan barras que
+      // romperían la ruta, así que se pasa el idunico, que es path-safe. Se
+      // mantiene el POST crudo por el bypass de `datosprocedimiento: null`.
       final response = await _dio.post<Object?>(
-        '/api/v1/procedimiento/inicproc',
+        '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/expedientes/${Uri.encodeComponent(idUnico)}/ficheros/iniciar',
         data: body,
         options: Options(contentType: Headers.jsonContentType),
       );
@@ -200,6 +215,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
 
   @override
   Future<Uint8List> registrarFicheros({
+    required final String citizenId,
     required final String documentNumber,
     required final Expediente expediente,
     required final InicioProcedimientoResultado inicio,
@@ -223,8 +239,10 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     logger.d('[registrarfichero] req idunico=${inicio.idunico} noexpediente=${expediente.numexp} esPorContraste=${representante != null} documentos=${documentos.length}');
     Uint8List? bytes;
     try {
+      // Path gateway; mismo criterio que en iniciarProcedimiento: segmento
+      // `{idExpediente}` decorativo cubierto con el idunico confirmado.
       final response = await _dio.post<Uint8List>(
-        '/api/v1/documentacion/registrarfichero',
+        '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/expedientes/${Uri.encodeComponent(inicio.idunico)}/ficheros/registrar',
         data: body,
         options: Options(contentType: Headers.jsonContentType, responseType: ResponseType.bytes),
       );

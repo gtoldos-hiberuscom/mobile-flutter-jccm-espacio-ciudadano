@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_description_text.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_label.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Interaction state for [AppInputCase].
 ///
@@ -29,6 +30,10 @@ class AppSearchField extends StatelessWidget {
     this.autofocus = false,
     this.onChanged,
     this.onSubmitted,
+    this.semanticsLabel,
+    this.enabled = true,
+    this.readOnly = false,
+    this.autofillHints,
   });
 
   final TextEditingController? controller;
@@ -37,35 +42,66 @@ class AppSearchField extends StatelessWidget {
   final bool autofocus;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final String? semanticsLabel;
+  final bool enabled;
+  final bool readOnly;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(final BuildContext context) {
-    return TextField(
-      controller: controller,
-      focusNode: focusNode,
-      autofocus: autofocus,
-      onChanged: onChanged,
-      onSubmitted: onSubmitted,
-      textInputAction: TextInputAction.search,
-      decoration: InputDecoration(
-        hintText: hintText,
-        filled: true,
-        fillColor: AppColors.backgroundWhite,
-        isDense: true,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space12,
-          vertical: AppDimensions.space8,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-          borderSide: const BorderSide(color: AppColors.backgroundBlueMutedLight),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+    final label = semanticsLabel ?? MaterialLocalizations.of(context).searchFieldLabel;
+    assert(label.isNotEmpty, 'semanticsLabel must not be empty');
+
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+      child: MergeSemantics(
+        child: Semantics(
+          label: label,
+          onDidGainAccessibilityFocus: () {
+            Scrollable.ensureVisible(
+              context,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            ).ignore();
+          },
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            autofocus: autofocus,
+            onChanged: onChanged,
+            onSubmitted: onSubmitted,
+            enabled: enabled,
+            readOnly: readOnly,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.search,
+            autofillHints: autofillHints,
+            decoration: InputDecoration(
+              hintText: hintText,
+              filled: true,
+              fillColor: AppColors.backgroundWhite,
+              isDense: true,
+              constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.space12,
+                vertical: AppDimensions.space12,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                borderSide: const BorderSide(color: AppColors.borderBlueMutedBase),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                borderSide: const BorderSide(color: AppColors.primary, width: 2),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                borderSide: const BorderSide(color: AppColors.outline),
+              ),
+            ),
+            style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
+          ),
         ),
       ),
-      style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
     );
   }
 }
@@ -99,6 +135,10 @@ class AppInputCase extends StatefulWidget {
     this.onSubmitted,
     this.obscureText = false,
     this.keyboardType,
+    this.textInputAction,
+    this.autofillHints,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
     this.prefixIcon,
     this.suffixIcon,
     this.enabled = true,
@@ -106,7 +146,7 @@ class AppInputCase extends StatefulWidget {
     this.maxLines = 1,
     this.focusNode,
     this.isRequired = false,
-  });
+  }) : assert(label.length > 0, 'label must not be empty');
 
   final String label;
   final String? hint;
@@ -118,6 +158,10 @@ class AppInputCase extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final bool obscureText;
   final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
+  final bool autocorrect;
+  final bool enableSuggestions;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool enabled;
@@ -152,11 +196,12 @@ class _AppInputCaseState extends State<AppInputCase> {
     if (newError != null && newError.isNotEmpty && oldWidget.errorText != newError) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          // ignore: deprecated_member_use, discarded_futures
-          SemanticsService.announce(
-            'Error, ${widget.label}: $newError',
-            TextDirection.ltr,
-          );
+          final l10n = AppLocalizations.of(context);
+          SemanticsService.sendAnnouncement(
+            View.of(context),
+            l10n.a11yFieldError(widget.label, newError),
+            Directionality.of(context),
+          ).ignore();
         }
       });
     }
@@ -246,90 +291,108 @@ class _AppInputCaseState extends State<AppInputCase> {
     final isDisabled = _effectiveState == AppInputState.disabled;
 
     // WCAG 4.1.2 — compose semantic label: field name + current value + error.
-    final semanticSegments = <String>[
-      widget.label,
-      if (widget.errorText != null && widget.errorText!.isNotEmpty) 'Error: ${widget.errorText}',
-    ];
+    final hasError = widget.errorText?.isNotEmpty ?? false;
+    final semanticSegments = <String>[widget.label];
+    if (hasError) {
+      semanticSegments.add(widget.errorText!);
+    }
     final composedLabel = semanticSegments.join(', ');
 
-    return Semantics(
-      label: composedLabel,
-      textField: true,
-      enabled: !isDisabled,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppLabel(
-            text: widget.label,
-            color: labelColor,
-            required: widget.isRequired,
-          ),
-          const SizedBox(height: AppDimensions.space4),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-              boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.low,
-            ),
-            child: TextField(
-              controller: widget.controller,
-              focusNode: _focusNode,
-              onChanged: widget.onChanged,
-              onSubmitted: widget.onSubmitted,
-              obscureText: widget.obscureText,
-              keyboardType: widget.keyboardType,
-              enabled: !isDisabled && !widget.readOnly,
-              readOnly: widget.readOnly,
-              maxLines: widget.maxLines,
-              style: AppTypography.leadingMedium.copyWith(
-                color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+    return MergeSemantics(
+      child: Semantics(
+        label: composedLabel,
+        isRequired: widget.isRequired,
+        validationResult: hasError ? SemanticsValidationResult.invalid : SemanticsValidationResult.none,
+        onDidGainAccessibilityFocus: () {
+          Scrollable.ensureVisible(
+            context,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          ).ignore();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ExcludeSemantics(
+              child: AppLabel(
+                text: widget.label,
+                color: labelColor,
+                required: widget.isRequired,
               ),
-              decoration: InputDecoration(
-                hintText: widget.hint,
-                hintStyle: AppTypography.leadingMedium.copyWith(
-                  color: AppColors.borderBlueMutedBase,
+            ),
+            const SizedBox(height: AppDimensions.space4),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.low,
+              ),
+              child: TextField(
+                controller: widget.controller,
+                focusNode: _focusNode,
+                onChanged: widget.onChanged,
+                onSubmitted: widget.onSubmitted,
+                obscureText: widget.obscureText,
+                keyboardType: widget.keyboardType,
+                textInputAction: widget.textInputAction,
+                autofillHints: widget.autofillHints,
+                autocorrect: widget.autocorrect,
+                enableSuggestions: widget.enableSuggestions,
+                enabled: !isDisabled,
+                readOnly: widget.readOnly,
+                maxLines: widget.maxLines,
+                style: AppTypography.leadingMedium.copyWith(
+                  color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
                 ),
-                filled: true,
-                fillColor: fillColor,
-                prefixIcon: widget.prefixIcon,
-                suffixIcon: _trailIcon,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space8,
-                  vertical: AppDimensions.space12,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                  borderSide: BorderSide(color: borderColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                  borderSide: BorderSide(color: borderColor, width: 2),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                  borderSide: BorderSide(
-                    color: AppColors.outline.withValues(alpha: 0.5),
+                decoration: InputDecoration(
+                  hintText: widget.hint,
+                  hintStyle: AppTypography.leadingMedium.copyWith(
+                    color: AppColors.borderBlueMutedBase,
+                  ),
+                  filled: true,
+                  fillColor: fillColor,
+                  prefixIcon: widget.prefixIcon,
+                  suffixIcon: _trailIcon,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.space8,
+                    vertical: AppDimensions.space12,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    borderSide: BorderSide(color: borderColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    borderSide: BorderSide(color: borderColor, width: 2),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    borderSide: BorderSide(
+                      color: AppColors.outline.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    borderSide: const BorderSide(color: AppColors.error),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                    borderSide: const BorderSide(color: AppColors.error, width: 2),
                   ),
                 ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                  borderSide: const BorderSide(color: AppColors.error),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                  borderSide: const BorderSide(color: AppColors.error, width: 2),
-                ),
               ),
             ),
-          ),
-          if (widget.errorText != null && widget.errorText!.isNotEmpty) ...[
-            const SizedBox(height: AppDimensions.space4),
-            AppDescriptionText(text: widget.errorText!, state: AppDescriptionTextState.error),
-          ] else if (widget.helperText != null) ...[
-            const SizedBox(height: AppDimensions.space4),
-            AppDescriptionText(text: widget.helperText!),
+            if (widget.errorText != null && widget.errorText!.isNotEmpty) ...[
+              const SizedBox(height: AppDimensions.space4),
+              ExcludeSemantics(
+                child: AppDescriptionText(text: widget.errorText!, state: AppDescriptionTextState.error),
+              ),
+            ] else if (widget.helperText != null) ...[
+              const SizedBox(height: AppDimensions.space4),
+              ExcludeSemantics(child: AppDescriptionText(text: widget.helperText!)),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -371,7 +434,12 @@ class AppInputArea extends StatefulWidget {
     this.focusNode,
     this.isRequired = false,
     this.collapsedHeight = 140.0,
-  });
+    this.textInputAction = TextInputAction.newline,
+    this.autofillHints,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
+  }) : assert(label.length > 0, 'label must not be empty'),
+       assert(collapsedHeight >= AppDimensions.minTouchTarget, 'collapsedHeight must be at least 48 dp');
 
   final String label;
   final String? hint;
@@ -389,6 +457,10 @@ class AppInputArea extends StatefulWidget {
 
   /// Height of the field when collapsed. Defaults to `140.0`.
   final double collapsedHeight;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
+  final bool autocorrect;
+  final bool enableSuggestions;
 
   @override
   State<AppInputArea> createState() => _AppInputAreaState();
@@ -408,6 +480,30 @@ class _AppInputAreaState extends State<AppInputArea> {
 
   void _onFocusChange() {
     setState(() => _hasFocus = _focusNode.hasFocus);
+  }
+
+  void _toggleExpanded() => setState(() => _isExpanded = !_isExpanded);
+
+  @override
+  void didUpdateWidget(covariant final AppInputArea oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newError = widget.descriptionState == AppDescriptionTextState.error ? widget.description : null;
+    final oldError = oldWidget.descriptionState == AppDescriptionTextState.error ? oldWidget.description : null;
+    if (newError == null || newError.isEmpty || newError == oldError) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final l10n = AppLocalizations.of(context);
+      SemanticsService.sendAnnouncement(
+        View.of(context),
+        l10n.a11yFieldError(widget.label, newError),
+        Directionality.of(context),
+      ).ignore();
+    });
   }
 
   @override
@@ -445,25 +541,30 @@ class _AppInputAreaState extends State<AppInputArea> {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final (borderColor, fillColor, labelColor) = _stateColors;
     final isDisabled = _effectiveState == AppInputState.disabled;
     final borderWidth = _effectiveState == AppInputState.focus ? 2.0 : 1.0;
+    final hasError = widget.descriptionState == AppDescriptionTextState.error && (widget.description?.isNotEmpty ?? false);
+    final semanticLabel = hasError ? '${widget.label}, ${widget.description}' : widget.label;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppLabel(
-          text: widget.label,
-          color: labelColor,
-          required: widget.isRequired,
+        ExcludeSemantics(
+          child: AppLabel(
+            text: widget.label,
+            color: labelColor,
+            required: widget.isRequired,
+          ),
         ),
         const SizedBox(height: AppDimensions.space8),
         // ── Textarea container ───────────────────────────────────────────────
         AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
-          height: _isExpanded ? null : widget.collapsedHeight,
+          height: _isExpanded ? widget.collapsedHeight * 2 : widget.collapsedHeight,
           decoration: BoxDecoration(
             color: fillColor,
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
@@ -474,33 +575,51 @@ class _AppInputAreaState extends State<AppInputArea> {
             children: [
               // ── Text field ─────────────────────────────────────────────────
               Positioned.fill(
-                child: TextField(
-                  controller: widget.controller,
-                  focusNode: _focusNode,
-                  onChanged: widget.onChanged,
-                  enabled: !isDisabled,
-                  maxLines: _isExpanded ? null : 999,
-                  expands: _isExpanded,
-                  textAlignVertical: TextAlignVertical.top,
-                  keyboardType: TextInputType.multiline,
-                  style: AppTypography.bodyRegular.copyWith(
-                    color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: widget.hint,
-                    hintStyle: AppTypography.bodyRegular.copyWith(
-                      color: AppColors.neutralDark,
-                    ),
-                    filled: false,
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    contentPadding: const EdgeInsets.fromLTRB(
-                      AppDimensions.space8,
-                      AppDimensions.space4,
-                      AppDimensions.space40, // leave room for toggle icon
-                      AppDimensions.space4,
+                child: MergeSemantics(
+                  child: Semantics(
+                    label: semanticLabel,
+                    isRequired: widget.isRequired,
+                    validationResult: hasError ? SemanticsValidationResult.invalid : SemanticsValidationResult.none,
+                    onDidGainAccessibilityFocus: () {
+                      Scrollable.ensureVisible(
+                        context,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                      ).ignore();
+                    },
+                    child: TextField(
+                      controller: widget.controller,
+                      focusNode: _focusNode,
+                      onChanged: widget.onChanged,
+                      enabled: !isDisabled,
+                      maxLines: null,
+                      expands: true,
+                      textAlignVertical: TextAlignVertical.top,
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: widget.textInputAction,
+                      autofillHints: widget.autofillHints,
+                      autocorrect: widget.autocorrect,
+                      enableSuggestions: widget.enableSuggestions,
+                      style: AppTypography.bodyRegular.copyWith(
+                        color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: widget.hint,
+                        hintStyle: AppTypography.bodyRegular.copyWith(
+                          color: AppColors.neutralDark,
+                        ),
+                        filled: false,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: const EdgeInsets.fromLTRB(
+                          AppDimensions.space8,
+                          AppDimensions.space4,
+                          AppDimensions.space40,
+                          AppDimensions.space4,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -509,12 +628,21 @@ class _AppInputAreaState extends State<AppInputArea> {
               Positioned(
                 top: AppDimensions.space4,
                 right: AppDimensions.space4,
-                child: GestureDetector(
-                  onTap: () => setState(() => _isExpanded = !_isExpanded),
-                  child: SizedBox.square(
-                    dimension: AppDimensions.minTouchTarget,
-                    child: Center(
-                      child: Icon(
+                child: Semantics(
+                  label: _isExpanded ? l10n.a11yCollapseTextArea(widget.label) : l10n.a11yExpandTextArea(widget.label),
+                  button: true,
+                  enabled: !isDisabled,
+                  expanded: _isExpanded,
+                  onTap: isDisabled ? null : _toggleExpanded,
+                  child: ExcludeSemantics(
+                    child: IconButton(
+                      onPressed: isDisabled ? null : _toggleExpanded,
+                      constraints: const BoxConstraints.tightFor(
+                        width: AppDimensions.minTouchTarget,
+                        height: AppDimensions.minTouchTarget,
+                      ),
+                      padding: EdgeInsets.zero,
+                      icon: Icon(
                         _isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
                         size: AppDimensions.iconMedium,
                         color: isDisabled ? AppColors.textDisabled : AppColors.neutralDark,
@@ -529,9 +657,11 @@ class _AppInputAreaState extends State<AppInputArea> {
         // ── Description text ────────────────────────────────────────────────
         if (widget.description != null) ...[
           const SizedBox(height: AppDimensions.space8),
-          AppDescriptionText(
-            text: widget.description!,
-            state: widget.descriptionState,
+          ExcludeSemantics(
+            child: AppDescriptionText(
+              text: widget.description!,
+              state: widget.descriptionState,
+            ),
           ),
         ],
       ],

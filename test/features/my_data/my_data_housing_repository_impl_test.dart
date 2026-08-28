@@ -13,13 +13,13 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataHousingRepositoryImpl(dio: dio);
 
-      final address = await repository.loadAddress(documentNumber: '12345678A');
+      final address = await repository.loadAddress(citizenId: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6', documentNumber: '12345678A');
 
       expect(adapter.request?.method, 'POST');
-      expect(adapter.request?.path, '/api/v1/ine/datos-residencia/12345678A');
+      expect(adapter.request?.path, '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/vivienda/datos-residencia');
       expect(adapter.request?.jsonBody, {
-        'docu': '12345678A',
         'tipodoc': 'NIF',
+        'docu': '12345678A',
       });
       expect(address?.address, 'Calle goya lorem ipsum dolor sit amet consectetur');
       expect(address?.postalCode, '25400');
@@ -37,7 +37,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataHousingRepositoryImpl(dio: dio);
 
-      final address = await repository.loadAddress(documentNumber: '00000000T');
+      final address = await repository.loadAddress(citizenId: 'citizen-1', documentNumber: '00000000T');
 
       expect(address, isNull);
     });
@@ -47,13 +47,14 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataHousingRepositoryImpl(dio: dio);
 
-      final properties = await repository.loadRealEstateProperties(documentNumber: '12345678A');
+      final properties = await repository.loadRealEstateProperties(citizenId: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6', documentNumber: '12345678A');
 
       expect(adapter.request?.method, 'POST');
-      expect(adapter.request?.path, '/api/v1/catastro/datos-catastrales/12345678A');
+      expect(adapter.request?.path, '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/vivienda/datos-catastrales');
+      // `tipdoc`, sin la `o`: es el nombre del campo en `DTCTROCDATREQ`.
       expect(adapter.request?.jsonBody, {
-        'docu': '12345678A',
         'tipdoc': 'NIF',
+        'docu': '12345678A',
       });
       expect(properties, hasLength(2));
       expect(properties.first.cadastralReference, '0009323VBD');
@@ -69,7 +70,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataHousingRepositoryImpl(dio: dio);
 
-      final properties = await repository.loadRealEstateProperties(documentNumber: '27799274W');
+      final properties = await repository.loadRealEstateProperties(citizenId: 'citizen-1', documentNumber: '27799274W');
 
       expect(properties, hasLength(3));
       expect(properties.first.cadastralReference, '1180217UF0818S0001YQ');
@@ -91,7 +92,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataHousingRepositoryImpl(dio: dio);
 
-      final properties = await repository.loadRealEstateProperties(documentNumber: '00000000T');
+      final properties = await repository.loadRealEstateProperties(citizenId: 'citizen-1', documentNumber: '00000000T');
 
       expect(properties, isEmpty);
     });

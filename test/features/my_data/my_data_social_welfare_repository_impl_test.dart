@@ -9,17 +9,67 @@ import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_social_we
 
 void main() {
   group('MyDataSocialWelfareRepositoryImpl', () {
-    test('loads large family title from CCAA contract', () async {
-      final adapter = _MyDataSocialWelfareAdapter();
+    test('loads large family title from intermediacion contract', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        responseData: {
+          'body': {
+            'respuesta': {
+              'codestado': '0',
+              'mensaje': 'Existe el título de familia numerosa.',
+              'datosespecificos': {
+                'datos_titulo': {
+                  'row': [
+                    {
+                      'codigo_comunidad_automa': '8',
+                      'numero_titulo': '28/000028/2015.3',
+                      'categoria': 'G',
+                      'titulo_vigente': 'S',
+                      'fecha_efecto': '19/10/2015',
+                      'fecha_caducidad': '19/10/2025',
+                      'numero_hijos': 2,
+                    },
+                  ],
+                },
+                'beneficiarios': {
+                  'row': [
+                    {
+                      'documentacion': '99046202Z',
+                      'fecha_nacimiento': null,
+                      'nombre': 'Adela',
+                      'apellido1': 'San Juan',
+                      'apellido2': 'Martin',
+                      'titular': 'S',
+                    },
+                    {
+                      'documentacion': null,
+                      'fecha_nacimiento': '08/10/2012',
+                      'nombre': 'Alberto',
+                      'apellido1': 'Manzanares',
+                      'apellido2': 'San Juan',
+                      'titular': 'N',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          'codigo-respuesta': '200.00',
+        },
+      );
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
-      final title = await repository.loadLargeFamilyTitle(documentNumber: '99999999R');
+      final title = await repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R');
 
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/ccaa/familia-numerosa/99999999R');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/bienestar-social/familia-numerosa');
+      // El contrato de intermediación exige tipo, idaut y proc además del
+      // documento; la fachada los resolvía internamente y por eso no se enviaban.
       expect(adapter.requests.single.data, {
-        'tipdoc': 'NIF',
+        'tipo': 'A',
+        'idaut': 'ESP-CIUDADANO',
+        'proc': 'JCCMEC',
+        'tipodoc': 'NIF',
         'docu': '99999999R',
       });
       expect(title, isNotNull);
@@ -56,12 +106,17 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
-      final award = await repository.loadThermalSpaAward(documentNumber: '24540447E');
+      final award = await repository.loadThermalSpaAward(citizenId: 'PER9998003', documentNumber: '24540447E');
 
-      expect(adapter.requests.single.path, '/api/v1/intermediacion/termalismo/datos');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/PER9998003/bienestar-social/termalismo');
+      // El contrato de intermediación exige tipo, idaut y proc además del
+      // documento; la fachada los resolvía internamente y por eso no se enviaban.
       expect(adapter.requests.single.data, {
-        'docu': '24540447E',
+        'tipo': 'A',
+        'idaut': 'ESP-CIUDADANO',
+        'proc': 'JCCMEC',
         'tipodoc': 'NIF',
+        'docu': '24540447E',
       });
       expect(award, isNotNull);
       expect(award!.name, 'LA CONCEPCION');
@@ -85,8 +140,36 @@ void main() {
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
       expect(
-        () => repository.loadLargeFamilyTitle(documentNumber: '99999999R'),
+        () => repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
         throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('reports service unavailable when intermediacion returns no response', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        responseData: {
+          'body': {
+            'respuesta': {
+              'codestado': '1',
+              'mensaje': 'Comunicación sin respuesta',
+              'datosespecificos': null,
+            },
+          },
+          'codigo-respuesta': '200.00',
+        },
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      expect(
+        () => repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(
+          isA<StateError>().having(
+            (final error) => error.message,
+            'message',
+            'Comunicación sin respuesta',
+          ),
+        ),
       );
     });
   });

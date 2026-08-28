@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
@@ -198,7 +199,10 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
 
     final claims = ref.read(jwtClaimsProvider);
     final documentNumber = tercero?.documentNumber ?? _documentNumber(claims);
-    if (documentNumber == null) {
+    // `citizenId` va en el path /ciudadanos/{sid} (sub_alt contra el gateway);
+    // `documentNumber` es el titular del expediente y viaja en el cuerpo.
+    final citizenId = ref.read(citizenEndpointIdsProvider).idAgente;
+    if (documentNumber == null || citizenId == null || citizenId.isEmpty) {
       AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
       return;
     }
@@ -231,7 +235,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     final InicioProcedimientoResultado inicio;
     try {
       final idUnicoLocal = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
-      inicio = await repository.iniciarProcedimiento(idUnico: idUnicoLocal, documentNumber: documentNumber, expediente: expediente, representante: representante);
+      inicio = await repository.iniciarProcedimiento(citizenId: citizenId, idUnico: idUnicoLocal, documentNumber: documentNumber, expediente: expediente, representante: representante);
     } on Object catch (error, stackTrace) {
       logger.e('Error al iniciar el procedimiento de aportación', error: error, stackTrace: stackTrace);
       if (context.mounted) {
@@ -245,6 +249,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         (final archivo) => _subirArchivo(
           ref: ref,
           archivo: archivo,
+          citizenId: citizenId,
           documentNumber: documentNumber,
           idUnico: inicio.idunico,
           tipoProcedimiento: expediente.tipoproc ?? '',
@@ -266,6 +271,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     final Uint8List justificante;
     try {
       justificante = await repository.registrarFicheros(
+        citizenId: citizenId,
         documentNumber: documentNumber,
         expediente: expediente,
         inicio: inicio,
@@ -322,6 +328,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
   Future<void> _subirArchivo({
     required final WidgetRef ref,
     required final AportacionArchivo archivo,
+    required final String citizenId,
     required final String documentNumber,
     required final String idUnico,
     required final String tipoProcedimiento,
@@ -333,6 +340,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     try {
       final bytes = await XFile(archivo.path).readAsBytes();
       final hash = await repository.subirDocumentoSinFirma(
+        citizenId: citizenId,
         documentNumber: documentNumber,
         idUnico: idUnico,
         tipoProcedimiento: tipoProcedimiento,

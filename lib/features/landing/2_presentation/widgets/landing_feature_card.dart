@@ -7,38 +7,56 @@ import 'package:jccm_espacio_ciudadano/features/landing/0_entity/landing_content
 /// Fully accessible: icon has a semantic label and the card respects the
 /// minimum touch target size. Stateless — all data flows in via [item].
 class LandingFeatureCard extends StatelessWidget {
-  const LandingFeatureCard({required this.item, super.key});
+  const LandingFeatureCard({
+    required this.item,
+    super.key,
+    this.headingLevel = 3,
+    this.titleSemanticLabel,
+  }) : assert(headingLevel >= 1 && headingLevel <= 6, 'headingLevel must be between 1 and 6'),
+       assert(
+         titleSemanticLabel == null || titleSemanticLabel != '',
+         'titleSemanticLabel must not be empty',
+       );
 
   /// The feature item to render.
   final LandingFeatureItem item;
 
+  /// Semantic heading level for the feature title.
+  final int headingLevel;
+
+  /// Optional spoken form of the title when it contains abbreviations.
+  final String? titleSemanticLabel;
+
   @override
   Widget build(final BuildContext context) {
     return AppSurfaceCard(
-      semanticLabel: '${item.title}: ${item.description}',
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            _resolveIcon(item.icon),
-            size: AppDimensions.iconLarge,
-            color: AppColors.primary,
-            semanticLabel: item.title,
+          ExcludeSemantics(
+            child: Icon(
+              _resolveIcon(item.icon),
+              size: AppDimensions.iconLarge,
+              color: AppColors.primary,
+            ),
           ),
           const SizedBox(height: AppDimensions.space8),
-          Text(
-            item.title,
-            style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Semantics(
+            container: true,
+            excludeSemantics: titleSemanticLabel != null,
+            header: true,
+            headingLevel: headingLevel,
+            label: titleSemanticLabel,
+            child: Text(
+              item.title,
+              style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
+            ),
           ),
           const SizedBox(height: AppDimensions.space4),
           Text(
             item.description,
             style: AppTypography.smallRegular.copyWith(color: AppColors.textSecondary),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

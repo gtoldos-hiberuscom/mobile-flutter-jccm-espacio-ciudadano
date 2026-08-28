@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/usecases/buscar_expediente_tercero_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
@@ -65,6 +66,9 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
     setState(() => _isSearching = true);
     final usecase = ref.read(buscarExpedienteTerceroUsecaseProvider);
     final result = await usecase.execute(
+      // El path /ciudadanos/{sid} lleva al ciudadano autenticado; el documento
+      // del formulario (posible tercero) viaja en el cuerpo.
+      citizenId: ref.read(citizenEndpointIdsProvider).requireIdAgente(),
       documentNumber: documentNumber,
       tipodoc: _selectedDocType.tipodoc,
       numRegistro: numRegistro.isEmpty ? null : numRegistro,
@@ -208,7 +212,7 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
                         label: l10n.gestionAportacionTipoIdLabel,
                         controller: _docNumberController,
                         countryLabel: _selectedDocType.label(l10n),
-                        hint: l10n.gestionAportacionTipoIdHint,
+                        hint: _selectedDocType.hint(l10n),
                         helperText: l10n.gestionAportacionTipoIdHelper,
                         onSelectorTap: () => _showDocTypePicker(context, l10n),
                         inputFormatters: const [],
@@ -270,7 +274,8 @@ enum _DocType {
   nie,
   cif,
   pasaporte,
-  cee;
+  cee
+  ;
 
   String label(final AppLocalizations l10n) => switch (this) {
     _DocType.dni => l10n.gestionAportacionDni,
@@ -278,6 +283,14 @@ enum _DocType {
     _DocType.cif => l10n.gestionAportacionCif,
     _DocType.pasaporte => l10n.gestionAportacionPasaporte,
     _DocType.cee => l10n.gestionAportacionCee,
+  };
+
+  String hint(final AppLocalizations l10n) => switch (this) {
+    _DocType.dni => '00000000A',
+    _DocType.nie => 'X0000000A',
+    _DocType.cif => 'A00000000',
+    _DocType.pasaporte => 'N.º de ${l10n.gestionAportacionPasaporte.toLowerCase()}',
+    _DocType.cee => 'N.º de ${l10n.gestionAportacionCee}',
   };
 
   /// Valor enviado al backend en `ptipodoc`/`identificacion.category`. Sin

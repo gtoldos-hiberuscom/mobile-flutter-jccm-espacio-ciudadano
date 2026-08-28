@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// A single item in the drawer menu (primary section with icon).
 class AppDrawerMenuItem {
@@ -87,34 +88,35 @@ class AppDrawerMenu extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Semantics(
-      container: true,
-      scopesRoute: true,
-      namesRoute: true,
-      explicitChildNodes: true,
-      label: 'Menú de navegación',
-      child: Drawer(
-        width: MediaQuery.sizeOf(context).width - AppDimensions.space64,
-        shape: const RoundedRectangleBorder(),
-        backgroundColor: AppColors.primary,
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: MediaQuery.paddingOf(context).top,
-              color: AppColors.secondary,
-            ),
+    final l10n = AppLocalizations.of(context);
+    final materialL10n = MaterialLocalizations.of(context);
+    final availableWidth = MediaQuery.sizeOf(context).width;
 
-            // ── Close bar (secondary bg) ─────────────────────────────────
-            Container(
-              width: double.infinity,
-              color: AppColors.secondary,
-              padding: const EdgeInsets.all(AppDimensions.space8),
-              child: Align(
-                alignment: Alignment.centerRight,
+    return Drawer(
+      width: availableWidth > AppDimensions.space64 ? availableWidth - AppDimensions.space64 : null,
+      shape: const RoundedRectangleBorder(),
+      backgroundColor: AppColors.primary,
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: MediaQuery.paddingOf(context).top,
+            color: AppColors.secondary,
+          ),
+
+          // ── Close bar (secondary bg) ─────────────────────────────────
+          Container(
+            width: double.infinity,
+            color: AppColors.secondary,
+            padding: const EdgeInsets.all(AppDimensions.space8),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Focus(
+                autofocus: true,
                 child: Semantics(
-                  label: 'Cerrar menu',
+                  label: materialL10n.closeButtonLabel,
                   button: true,
+                  onTap: onClose ?? () => Navigator.of(context).pop(),
                   child: ExcludeSemantics(
                     child: Material(
                       color: Colors.transparent,
@@ -123,14 +125,14 @@ class AppDrawerMenu extends StatelessWidget {
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(
                             minWidth: AppDimensions.minTouchTarget,
-                            minHeight: AppDimensions.space32,
+                            minHeight: AppDimensions.minTouchTarget,
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.end,
+                          child: Wrap(
+                            alignment: WrapAlignment.end,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text(
-                                'Cerrar menu',
+                                materialL10n.closeButtonLabel,
                                 style: AppTypography.leadingMedium.copyWith(
                                   color: AppColors.neutral000,
                                   decoration: TextDecoration.underline,
@@ -152,163 +154,162 @@ class AppDrawerMenu extends StatelessWidget {
                 ),
               ),
             ),
+          ),
 
-            // ── Primary section (secondary bg) ───────────────────────────
-            Expanded(
-              child: LayoutBuilder(
-                builder: (final context, final constraints) {
-                  return SingleChildScrollView(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.paddingOf(context).bottom,
-                    ),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                      child: IntrinsicHeight(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Header + items block
-                            Container(
-                              width: double.infinity,
-                              color: AppColors.secondary,
-                              padding: const EdgeInsets.all(AppDimensions.space16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Greeting
-                                  SizedBox(
-                                    height: 52,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Hola, $userName',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppTypography.h2.copyWith(
+          // ── Primary section (secondary bg) ───────────────────────────
+          Expanded(
+            child: LayoutBuilder(
+              builder: (final context, final constraints) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Header + items block
+                          Container(
+                            width: double.infinity,
+                            color: AppColors.secondary,
+                            padding: const EdgeInsets.all(AppDimensions.space16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Greeting
+                                Semantics(
+                                  header: true,
+                                  child: Text(
+                                    l10n.drawerGreeting(userName),
+                                    style: AppTypography.h2.copyWith(
+                                      color: AppColors.textWhite,
+                                    ),
+                                  ),
+                                ),
+                                // NIF
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '$identifierLabel:',
+                                        style: AppTypography.smallBold.copyWith(
                                           color: AppColors.textWhite,
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  // NIF
-                                  SizedBox(
-                                    height: 25,
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: '$identifierLabel:',
-                                              style: AppTypography.smallBold.copyWith(
-                                                color: AppColors.textWhite,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: ' $nif',
-                                              style: AppTypography.smallRegular.copyWith(
-                                                color: AppColors.textWhite,
-                                              ),
-                                            ),
-                                          ],
+                                      TextSpan(
+                                        text: ' $nif',
+                                        style: AppTypography.smallRegular.copyWith(
+                                          color: AppColors.textWhite,
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: AppDimensions.space8),
+                                // Primary nav items
+                                for (var index = 0; index < primaryItems.length; index++) ...[
+                                  if (index > 0) const SizedBox(height: AppDimensions.space8),
+                                  _DrawerPrimaryTile(item: primaryItems[index]),
+                                ],
+                                // Divider before logout
+                                if (onLogout != null) ...[
+                                  const SizedBox(height: AppDimensions.space8),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppDimensions.space16,
+                                      vertical: AppDimensions.space8,
+                                    ),
+                                    child: Container(
+                                      height: 1,
+                                      color: AppColors.secondaryDark,
                                     ),
                                   ),
                                   const SizedBox(height: AppDimensions.space8),
-                                  // Primary nav items
-                                  for (var index = 0; index < primaryItems.length; index++) ...[
-                                    if (index > 0) const SizedBox(height: AppDimensions.space8),
-                                    _DrawerPrimaryTile(item: primaryItems[index]),
-                                  ],
-                                  // Divider before logout
-                                  if (onLogout != null) ...[
-                                    const SizedBox(height: AppDimensions.space8),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: AppDimensions.space16,
-                                        vertical: AppDimensions.space8,
-                                      ),
-                                      child: Container(
-                                        height: 1,
-                                        color: AppColors.secondaryDark,
-                                      ),
+                                  _DrawerPrimaryTile(
+                                    item: AppDrawerMenuItem(
+                                      label: l10n.drawerLogout,
+                                      icon: Icons.logout_rounded,
+                                      onTap: onLogout,
                                     ),
-                                    const SizedBox(height: AppDimensions.space8),
-                                    _DrawerPrimaryTile(
-                                      item: AppDrawerMenuItem(
-                                        label: 'Cerrar sesión',
-                                        icon: Icons.logout_rounded,
-                                        onTap: onLogout,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ],
+                              ],
+                            ),
+                          ),
+
+                          // ── Secondary links (primary bg) ─────────────────────
+                          ...secondaryLinks.map(
+                            (final link) => _DrawerSecondaryTile(link: link),
+                          ),
+
+                          const Spacer(),
+
+                          // ── Bottom action ────────────────────────────────────
+                          if (actionButtonLabel != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.space24,
+                                vertical: AppDimensions.space16,
                               ),
-                            ),
-
-                            // ── Secondary links (primary bg) ─────────────────────
-                            ...secondaryLinks.map(
-                              (final link) => _DrawerSecondaryTile(link: link),
-                            ),
-
-                            const Spacer(),
-
-                            // ── Bottom action ────────────────────────────────────
-                            if (actionButtonLabel != null)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: AppDimensions.space24,
-                                  vertical: AppDimensions.space16,
-                                ),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 47,
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: onActionButton,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: AppDimensions.space8,
-                                          vertical: AppDimensions.space8,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                actionButtonLabel!,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: AppTypography.bodyRegular.copyWith(
-                                                  color: AppColors.textWhite,
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Semantics(
+                                  label: actionButtonLabel,
+                                  button: true,
+                                  enabled: onActionButton != null,
+                                  onTap: onActionButton,
+                                  child: ExcludeSemantics(
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: onActionButton,
+                                        child: ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                            minHeight: AppDimensions.minTouchTarget,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: AppDimensions.space8,
+                                              vertical: AppDimensions.space8,
+                                            ),
+                                            child: Wrap(
+                                              alignment: WrapAlignment.center,
+                                              crossAxisAlignment: WrapCrossAlignment.center,
+                                              children: [
+                                                Text(
+                                                  actionButtonLabel!,
+                                                  textAlign: TextAlign.center,
+                                                  style: AppTypography.bodyRegular.copyWith(
+                                                    color: AppColors.textWhite,
+                                                  ),
                                                 ),
-                                              ),
+                                                const SizedBox(width: AppDimensions.space4),
+                                                const Icon(
+                                                  Icons.open_in_new,
+                                                  color: AppColors.textWhite,
+                                                  size: AppDimensions.iconMedium,
+                                                ),
+                                              ],
                                             ),
-                                            const SizedBox(width: AppDimensions.space4),
-                                            const Icon(
-                                              Icons.open_in_new,
-                                              color: AppColors.textWhite,
-                                              size: AppDimensions.iconMedium,
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -321,31 +322,32 @@ class _DrawerPrimaryTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return InkWell(
+    return Semantics(
+      label: item.label,
+      button: true,
+      enabled: item.onTap != null,
       onTap: item.onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: AppDimensions.space8,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              item.icon,
-              color: AppColors.textWhite,
-              size: AppDimensions.iconMedium,
-            ),
-            const SizedBox(width: AppDimensions.space16),
-            Expanded(
-              child: Text(
-                item.label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.leadingMedium.copyWith(
-                  color: AppColors.textWhite,
-                ),
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: item.onTap,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
+              child: Row(
+                children: [
+                  Icon(item.icon, color: AppColors.textWhite, size: AppDimensions.iconMedium),
+                  const SizedBox(width: AppDimensions.space16),
+                  Expanded(
+                    child: Text(
+                      item.label,
+                      style: AppTypography.leadingMedium.copyWith(color: AppColors.textWhite),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -362,35 +364,38 @@ class _DrawerSecondaryTile extends StatelessWidget {
     return Semantics(
       label: link.label,
       button: true,
+      enabled: link.onTap != null,
+      onTap: link.onTap,
       child: InkWell(
         onTap: link.onTap,
         child: ExcludeSemantics(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
-              vertical: AppDimensions.space12,
-            ),
-            child: Row(
-              children: [
-                if (link.icon != null) ...[
-                  Icon(
-                    link.icon,
-                    color: AppColors.neutral000,
-                    size: AppDimensions.iconMedium,
-                  ),
-                  const SizedBox(width: AppDimensions.space16),
-                ],
-                Expanded(
-                  child: Text(
-                    link.label,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.leadingMedium.copyWith(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.space16,
+                vertical: AppDimensions.space12,
+              ),
+              child: Row(
+                children: [
+                  if (link.icon != null) ...[
+                    Icon(
+                      link.icon,
                       color: AppColors.neutral000,
+                      size: AppDimensions.iconMedium,
+                    ),
+                    const SizedBox(width: AppDimensions.space16),
+                  ],
+                  Expanded(
+                    child: Text(
+                      link.label,
+                      style: AppTypography.leadingMedium.copyWith(
+                        color: AppColors.neutral000,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -424,7 +429,7 @@ void showAppDrawerMenu({
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'Cerrar menú',
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black54,
       transitionDuration: Duration.zero,
       pageBuilder: (final context, final animation, final secondaryAnimation) {

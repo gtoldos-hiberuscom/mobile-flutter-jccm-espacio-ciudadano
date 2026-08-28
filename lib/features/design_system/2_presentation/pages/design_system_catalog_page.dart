@@ -89,7 +89,6 @@ class _DesignSystemCatalogPageState extends State<DesignSystemCatalogPage> with 
           _BottomSheetSection(),
           _CalendarSection(),
           _DrawerMenuSection(),
-          _BiometricAlertSection(),
         ],
       ),
     );
@@ -619,7 +618,6 @@ class _IconsSection extends StatelessWidget {
     'educacion.svg',
     'estacionamiento.svg',
     'familianumerosa.svg',
-    'fingerprint.svg',
     'globe_location_pin.svg',
     'graph_2.svg',
     'help.svg',
@@ -709,7 +707,6 @@ class _IconsSection extends StatelessWidget {
     ('graph', AppIcons.graph),
     // Identity & people
     ('person', AppIcons.person),
-    ('fingerprint', AppIcons.fingerprint),
     ('login', AppIcons.login),
     ('logout', AppIcons.logout),
     // Places & organisations
@@ -871,15 +868,9 @@ class _ButtonsSection extends StatelessWidget {
       // ── Leading icon ──
       const _SectionTitle('Con leading icon'),
       AppButton(
-        label: 'Fingerprint',
-        onPressed: () {},
-        leadingIcon: Icons.fingerprint_rounded,
-      ),
-      const SizedBox(height: AppDimensions.space8),
-      AppButton(
         label: 'Legacy icon widget',
         onPressed: () {},
-        icon: const Icon(Icons.fingerprint_rounded, size: 18),
+        icon: const Icon(Icons.download_rounded, size: 18),
       ),
 
       // ── Trailing icon ──
@@ -1352,12 +1343,6 @@ class _NavigationSection extends StatelessWidget {
               onTap: () {},
             ),
             const SizedBox(height: AppDimensions.space8),
-            AppNavCard(
-              label: 'Biométrico',
-              icon: Icons.fingerprint_rounded,
-              onTap: () {},
-            ),
-            const SizedBox(height: AppDimensions.space8),
             const AppNavCard(
               label: 'Desactivado',
               icon: Icons.lock_outline_rounded,
@@ -1758,27 +1743,6 @@ class _DrawerMenuSection extends StatelessWidget {
           onActionButton: () {},
         ),
         child: const Text('Abrir Drawer Menu'),
-      ),
-    ],
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// BIOMETRIC ALERT SECTION
-// ═══════════════════════════════════════════════════════════════════════════════
-
-class _BiometricAlertSection extends StatelessWidget {
-  @override
-  Widget build(final BuildContext context) => _CatalogSection(
-    children: [
-      const _SectionTitle('Alerta biométrica'),
-      const Text('Diálogo de activación del acceso rápido con huella o reconocimiento facial.'),
-      const SizedBox(height: AppDimensions.space16),
-      ElevatedButton(
-        onPressed: () async {
-          await AppBiometricAccessDialog.show(context);
-        },
-        child: const Text('Mostrar alerta biométrica'),
       ),
     ],
   );

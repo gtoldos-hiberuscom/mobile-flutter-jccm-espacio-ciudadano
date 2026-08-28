@@ -24,6 +24,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingTaglineHighlight => 'Castilla-La Mancha';
 
   @override
+  String landingAccessStepLabel(int stepNumber) {
+    return 'Step $stepNumber';
+  }
+
+  @override
   String get landingCtaButton => 'Access your space';
 
   @override
@@ -117,6 +122,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginPageLoading => 'Starting authentication...';
 
   @override
+  String get loginPageLoadingDescription => 'We are validating your identity and preparing your data. This may take a few seconds.';
+
+  @override
   String get loginPageError => 'Sign-in error';
 
   @override
@@ -127,9 +135,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionExpired => 'Your session has expired';
-
-  @override
-  String get sessionUnlockBiometricReason => 'Confirm your identity to access your space';
 
   @override
   String get consentPageTitle => 'Terms of Use';
@@ -300,10 +305,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalLinkA11yHint => 'Opens in external browser';
 
   @override
+  String get externalLinkVisibleNotice => 'External link · Opens outside the application';
+
+  @override
   String get externalLinkOpenFailed => 'The link could not be opened. Please try again later.';
 
   @override
+  String get externalNavigationDialogTitle => 'You are about to leave the application';
+
+  @override
+  String get externalNavigationDialogBody => 'The content will open in a browser window';
+
+  @override
+  String get externalNavigationDialogCancel => 'Go back';
+
+  @override
+  String get externalNavigationDialogContinue => 'Continue';
+
+  @override
   String get externalLinkEducamosClmLabel => 'Educamos CLM';
+
+  @override
+  String get externalLinkEducacionClmLabel => 'Castilla-La Mancha Education';
 
   @override
   String get externalLinkEmpleoClmLabel => 'Castilla-La Mancha Employment';
@@ -1402,6 +1425,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsDefinitive => 'PERMANENT';
 
   @override
+  String get digitalCardTitleLabel => 'Title / Card';
+
+  @override
+  String get digitalCardNumberLabel => 'Card number';
+
+  @override
+  String get digitalCardDownload => 'Download';
+
+  @override
   String get digitalCardsStatusAvailable => 'Available';
 
   @override
@@ -1651,6 +1683,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get caseworkUploadStatusFailed => 'Error';
+
+  @override
+  String get fileUploadCancel => 'Cancel';
+
+  @override
+  String get fileUploadRemove => 'Remove';
+
+  @override
+  String get fileUploadDelete => 'Delete file';
+
+  @override
+  String get fileUploadRetry => 'Retry';
+
+  @override
+  String a11yFileUpload(String fileName, String fileInfo, String status) {
+    return 'File: $fileName, $fileInfo. Status: $status';
+  }
 
   @override
   String get caseworkUploadErrorUnsupportedMime => 'Unsupported file format.';
@@ -2406,6 +2455,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthAppointmentsNoDataMessage => 'We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.';
 
   @override
+  String get myDataHealthHospitalAppointmentsNoDataMessage => 'We could not find any hospital appointments linked to your data in the SESCAM query service.\n\nIf this is not correct or up to date, contact your hospital.';
+
+  @override
   String get myDataEmploymentDemandNoDataMessage => 'We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.';
 
   @override
@@ -2555,6 +2607,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recommendationsAssociatedLifeEventsLabel => 'Associated life events';
 
   @override
+  String get recommendationsStatusLabel => 'Status';
+
+  @override
+  String get appCardReferenceLabel => 'Ref. no.';
+
+  @override
+  String get appCardExpiryLabel => 'Expiry';
+
+  @override
+  String get appProgressLabel => 'Progress';
+
+  @override
+  String get appProgressIndeterminateValue => 'In progress';
+
+  @override
+  String appProgressPercentage(int percentage) {
+    return '$percentage%';
+  }
+
+  @override
+  String get appAvatarLabel => 'Avatar';
+
+  @override
+  String get appAvatarAvailableStatus => 'Available';
+
+  @override
+  String appPhoneCallLabel(String number, String subtitle) {
+    return 'Call $number. $subtitle';
+  }
+
+  @override
+  String get appPhoneCallHint => 'Starts a phone call';
+
+  @override
+  String get a11yBack => 'Back';
+
+  @override
+  String get a11yClose => 'Close';
+
+  @override
+  String get a11yHelp => 'Help';
+
+  @override
+  String get a11yAppName => 'Citizen Space';
+
+  @override
+  String get a11yCancel => 'Cancel';
+
+  @override
+  String get a11yInformation => 'Information';
+
+  @override
   String get recommendationsLoadMore => 'Load more';
 
   @override
@@ -2618,7 +2722,172 @@ class AppLocalizationsEn extends AppLocalizations {
   String get a11yContentLoaded => 'Content loaded';
 
   @override
+  String a11yFieldError(String field, String error) {
+    return 'Error, $field: $error';
+  }
+
+  @override
+  String a11yExpandTextArea(String field) {
+    return 'Expand $field';
+  }
+
+  @override
+  String a11yCollapseTextArea(String field) {
+    return 'Collapse $field';
+  }
+
+  @override
+  String a11ySelectPhoneCountryCode(String countryCode) {
+    return 'Select phone country code, current $countryCode';
+  }
+
+  @override
+  String a11yFilterButtonActiveCount(String label, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count active filters',
+      one: '1 active filter',
+    );
+    return '$label, $_temp0';
+  }
+
+  @override
+  String get a11yFilterActions => 'Filter actions';
+
+  @override
+  String get listFilterClear => 'Clear filters';
+
+  @override
+  String get listFilterApply => 'Apply filters';
+
+  @override
+  String get listFilterSelectDateRange => 'Select date range';
+
+  @override
+  String get listFilterSelectStartDate => 'Select the start date.';
+
+  @override
+  String get listFilterSelectEndDate => 'Select the end date.';
+
+  @override
+  String get listFilterRangeSelected => 'Date range selected.';
+
+  @override
+  String get listFilterRemoveRange => 'Remove range';
+
+  @override
+  String get listFilterConfirmRange => 'Select range';
+
+  @override
+  String a11yListFilterDateRange(String label, String startDate, String endDate) {
+    return '$label. From $startDate to $endDate';
+  }
+
+  @override
+  String a11yErrorState(String message) {
+    return 'Error: $message';
+  }
+
+  @override
+  String a11yEmptyState(String message) {
+    return 'No content: $message';
+  }
+
+  @override
+  String a11yBlockedState(String message) {
+    return 'Access unavailable: $message';
+  }
+
+  @override
+  String a11yAlert(String title, String message) {
+    return '$title: $message';
+  }
+
+  @override
+  String get a11yAlertNeutral => 'System notice';
+
+  @override
+  String get a11yAlertSuccess => 'Success';
+
+  @override
+  String get a11yAgendaTypeNotification => 'Notification';
+
+  @override
+  String get a11yAgendaTypeHealth => 'Healthcare appointment';
+
+  @override
+  String get a11yAgendaTypeCredential => 'Credential expiry';
+
+  @override
+  String a11yAgendaCard(String type, String details) {
+    return '$type: $details';
+  }
+
+  @override
+  String a11yAttachmentField(String label, String hint) {
+    return '$label. $hint';
+  }
+
+  @override
+  String a11yRequiredAttachmentField(String label, String hint) {
+    return '$label, required. $hint';
+  }
+
+  @override
+  String a11yAttachmentSelected(String fileName, String fileInfo) {
+    return 'Attached file: $fileName, $fileInfo';
+  }
+
+  @override
+  String get a11yBottomSheet => 'Bottom sheet';
+
+  @override
+  String get a11yBottomSheetClose => 'Close';
+
+  @override
+  String get a11yCalendar => 'Calendar';
+
+  @override
+  String a11yCalendarMonth(String monthYear) {
+    return 'Displayed month: $monthYear';
+  }
+
+  @override
+  String a11ySelectCalendarMonthYear(String monthYear) {
+    return 'Select month and year, current $monthYear';
+  }
+
+  @override
+  String get a11yCalendarHasEvent => 'has event';
+
+  @override
+  String get a11yCalendarOutsideMonth => 'outside displayed month';
+
+  @override
+  String a11yCaptcha(String label, String badge) {
+    return '$label, $badge verification';
+  }
+
+  @override
+  String get a11yCaptchaVerified => 'Captcha verified';
+
+  @override
+  String get a11yAlertWarning => 'Warning';
+
+  @override
+  String get a11yAlertError => 'Error';
+
+  @override
   String get drawerPreferences => 'Preferences';
+
+  @override
+  String drawerGreeting(String userName) {
+    return 'Hello, $userName';
+  }
+
+  @override
+  String get drawerLogout => 'Sign out';
 
   @override
   String get drawerHelpAndContact => 'Help & Contact';
@@ -3045,6 +3314,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEducationLinkEducationPortal => 'Portal de Educación de Castilla-La Mancha';
 
   @override
+  String get myDataEducationLinkTeachingStaff => 'Teaching staff';
+
+  @override
   String get myDataEducationLinkScholarships => 'Becas y ayudas para estudiantes';
 
   @override
@@ -3103,6 +3375,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myDataHealthPastTab => 'Past';
+
+  @override
+  String get myDataHealthScopePrimaryCare => 'Primary care';
+
+  @override
+  String get myDataHealthScopeHospital => 'Hospital';
+
+  @override
+  String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
+
+  @override
+  String get myDataHealthLoadMoreAppointments => 'Load more appointments';
 
   @override
   String get myDataHealthYear => '2026';
@@ -3333,7 +3617,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionNumRegistroLabel => 'NÚMERO DE REGISTRO DEL EXPEDIENTE';
 
   @override
-  String get gestionAportacionNumRegistroHint => '000 0 00000 0 00';
+  String get gestionAportacionNumRegistroHint => 'Introduce el número de registro';
 
   @override
   String get gestionAportacionNumRegistroHelper => 'Este número se obtiene en el momento de la presentación del expediente';
@@ -3342,7 +3626,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionCodIdentificadorLabel => 'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE';
 
   @override
-  String get gestionAportacionCodIdentificadorHint => 'Ejemplo: 600 000 000';
+  String get gestionAportacionCodIdentificadorHint => 'Introduce el código identificador';
 
   @override
   String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';

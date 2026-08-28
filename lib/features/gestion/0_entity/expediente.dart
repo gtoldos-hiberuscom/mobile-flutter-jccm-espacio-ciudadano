@@ -13,6 +13,7 @@ final class Expediente {
     this.fechaFin,
     this.tipoproc,
     this.datosAportacion,
+    this.canAttachDocuments = false,
   });
 
   final String numexp;
@@ -32,11 +33,15 @@ final class Expediente {
   /// detalle de expediente, no en el listado.
   final ExpedienteAportacionDatos? datosAportacion;
 
-  @override
-  bool operator ==(final Object other) => identical(this, other) || other is Expediente && runtimeType == other.runtimeType && numexp == other.numexp && titulo == other.titulo && consejeria == other.consejeria && fechaInicio == other.fechaInicio && estado == other.estado && oficinaTramitadora == other.oficinaTramitadora && fechaFin == other.fechaFin && tipoproc == other.tipoproc && datosAportacion == other.datosAportacion;
+  /// Whether the backend allows attaching documentation to this expediente.
+  /// Only `adjuntar: "X"` in the detail response enables the action.
+  final bool canAttachDocuments;
 
   @override
-  int get hashCode => Object.hash(numexp, titulo, consejeria, fechaInicio, estado, oficinaTramitadora, fechaFin, tipoproc, datosAportacion);
+  bool operator ==(final Object other) => identical(this, other) || other is Expediente && runtimeType == other.runtimeType && numexp == other.numexp && titulo == other.titulo && consejeria == other.consejeria && fechaInicio == other.fechaInicio && estado == other.estado && oficinaTramitadora == other.oficinaTramitadora && fechaFin == other.fechaFin && tipoproc == other.tipoproc && datosAportacion == other.datosAportacion && canAttachDocuments == other.canAttachDocuments;
+
+  @override
+  int get hashCode => Object.hash(numexp, titulo, consejeria, fechaInicio, estado, oficinaTramitadora, fechaFin, tipoproc, datosAportacion, canAttachDocuments);
 
   Expediente copyWith({
     final String? numexp,
@@ -48,6 +53,7 @@ final class Expediente {
     final String? fechaFin,
     final String? tipoproc,
     final ExpedienteAportacionDatos? datosAportacion,
+    final bool? canAttachDocuments,
   }) {
     return Expediente(
       numexp: numexp ?? this.numexp,
@@ -59,6 +65,7 @@ final class Expediente {
       fechaFin: fechaFin ?? this.fechaFin,
       tipoproc: tipoproc ?? this.tipoproc,
       datosAportacion: datosAportacion ?? this.datosAportacion,
+      canAttachDocuments: canAttachDocuments ?? this.canAttachDocuments,
     );
   }
 }

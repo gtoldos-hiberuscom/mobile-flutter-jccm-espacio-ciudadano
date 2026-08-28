@@ -1,8 +1,8 @@
+
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/dependency_care_status.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/disability_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/large_family_title.dart';
@@ -10,49 +10,43 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authori
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/parking_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/thermal_spa_award.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_social_welfare_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/bienestar_social_api.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_request.dart';
 
 final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepository {
-  MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _ccaaApi = CcaaApi(withGeneratedApiCompat(dio), standardSerializers), _intermediacionApi = IntermediacionApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _api = BienestarSocialApi(dio);
 
-  final CcaaApi _ccaaApi;
-  final IntermediacionApi _intermediacionApi;
+  final BienestarSocialApi _api;
 
   @override
   Future<LargeFamilyTitle?> loadLargeFamilyTitle({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
-    final data = {
-      'tipdoc': _documentType(documentNumber),
-      'docu': documentNumber,
-    };
     final response = await _rawResponse(
-      () => _ccaaApi.getDatosFamiliaNumerosa(
-        numDocumento: documentNumber,
-        dtminhafpcccafnreqBody: DTMINHAFPCCCAFNREQ(
-          (final builder) => builder
-            ..tipdoc = _documentType(documentNumber)
-            ..docu = documentNumber,
-        ),
-        extra: _generatedExtra(data),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.familiaNumerosa(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
       return null;
     }
 
-    return _parseLargeFamilyTitle(_decodePayload(response));
+    final payload = _decodePayload(response);
+    _throwIfLargeFamilyQueryFailed(payload);
+    return _parseLargeFamilyTitle(payload);
   }
 
   @override
   Future<DisabilityTitle?> loadDisabilityTitle({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosDiscapacidadIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.discapacidad(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -64,13 +58,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   @override
   Future<ThermalSpaAward?> loadThermalSpaAward({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosTermalismoIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.termalismo(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -82,13 +76,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   @override
   Future<DependencyCareStatus?> loadDependencyCareStatus({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosAtencionDependenciaIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.atencionDependencia(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -100,13 +94,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   @override
   Future<ParkingCard?> loadParkingCard({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosTarjetaEstacionamientoIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.tarjetaEstacionamiento(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -116,32 +110,12 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     return _parseParkingCard(_decodePayload(response));
   }
 
-  BaseRequestIntermediacion _intermediacionRequest(final String documentNumber) {
-    return BaseRequestIntermediacion(
-      (final builder) => builder
-        ..docu = documentNumber
-        ..tipodoc = _documentType(documentNumber),
-    );
-  }
-
-  Map<String, Object?> _intermediacionData(final String documentNumber) => {
-    'docu': documentNumber,
-    'tipodoc': _documentType(documentNumber),
-  };
-
-  Map<String, dynamic> _generatedExtra(final Map<String, Object?> data) => {
-    generatedApiRequestDataExtraKey: data,
-    generatedApiDecodeStringResponseExtraKey: true,
-  };
-
-  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
+  /// El cliente ya devuelve `null` en 404 y la carga cruda en el resto, incluidos
+  /// los 4xx con error de negocio.
+  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) async {
     try {
-      final response = await fetch();
-      if (response.statusCode == 404) {
-        return null;
-      }
-      final data = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
-      if (_isAuthorizationRequired(data)) {
+      final data = await fetch();
+      if (data != null && _isAuthorizationRequired(data)) {
         throw const MyDataAuthorizationRequired();
       }
       return data;
@@ -149,14 +123,14 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
       if (error.response?.statusCode == 404) {
         return null;
       }
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (rawData != null) {
-        if (_isAuthorizationRequired(rawData)) {
-          throw const MyDataAuthorizationRequired();
-        }
-        return rawData;
+      final rawData = error.response?.data;
+      if (rawData == null) {
+        rethrow;
       }
-      rethrow;
+      if (_isAuthorizationRequired(rawData)) {
+        throw const MyDataAuthorizationRequired();
+      }
+      return rawData;
     }
   }
 
@@ -174,6 +148,23 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     }
     final errors = infoError['errores'];
     return errors is List && errors.whereType<Map<dynamic, dynamic>>().any((final error) => error['codigo-error']?.toString() == '3034');
+  }
+
+  void _throwIfLargeFamilyQueryFailed(final Object? payload) {
+    for (final map in _collectMaps(payload)) {
+      final resultValue = map['codestado'] ?? map['resul'];
+      if (resultValue == null) {
+        continue;
+      }
+      final result = resultValue.toString().trim();
+      if (result.isEmpty || result == '0') {
+        return;
+      }
+      final message = map['mensaje']?.toString().trim();
+      throw StateError(
+        message == null || message.isEmpty ? 'El servicio de familia numerosa no devolvió una respuesta válida.' : message,
+      );
+    }
   }
 
   LargeFamilyTitle? _parseLargeFamilyTitle(final Object? payload) {
@@ -633,7 +624,7 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
       return 'Castilla-La Mancha';
     }
     return switch (raw.trim().toUpperCase()) {
-      '08' || '13' || 'CLM' || 'CASTILLA-LA MANCHA' => 'Castilla-La Mancha',
+      '8' || '08' || '13' || 'CLM' || 'CASTILLA-LA MANCHA' => 'Castilla-La Mancha',
       _ => raw,
     };
   }
@@ -667,11 +658,4 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     return trimmed;
   }
 
-  String _documentType(final String documentNumber) {
-    final first = documentNumber.trim().toUpperCase();
-    if (first.startsWith('X') || first.startsWith('Y') || first.startsWith('Z')) {
-      return 'NIE';
-    }
-    return 'NIF';
-  }
 }
