@@ -344,36 +344,6 @@ abstract class AppLocalizations {
   /// **'Tu sesión ha caducado'**
   String get sessionExpired;
 
-  /// Texto mostrado por el sistema al solicitar autenticación biométrica para reanudar una sesión guardada.
-  ///
-  /// In es, this message translates to:
-  /// **'Confirma tu identidad para acceder a tu espacio'**
-  String get sessionUnlockBiometricReason;
-
-  /// Título del diálogo para activar el acceso rápido biométrico.
-  ///
-  /// In es, this message translates to:
-  /// **'¿Quieres activar el acceso rápido con huella o reconocimiento facial?'**
-  String get biometricAccessDialogTitle;
-
-  /// Descripción del funcionamiento y la seguridad del acceso rápido biométrico.
-  ///
-  /// In es, this message translates to:
-  /// **'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.'**
-  String get biometricAccessDialogDescription;
-
-  /// Botón que rechaza la activación del acceso rápido biométrico.
-  ///
-  /// In es, this message translates to:
-  /// **'Ahora no'**
-  String get biometricAccessDialogCancel;
-
-  /// Botón que confirma la activación del acceso rápido biométrico.
-  ///
-  /// In es, this message translates to:
-  /// **'Activar acceso rápido'**
-  String get biometricAccessDialogConfirm;
-
   /// Título principal de la pantalla de aceptación de condiciones de uso.
   ///
   /// In es, this message translates to:

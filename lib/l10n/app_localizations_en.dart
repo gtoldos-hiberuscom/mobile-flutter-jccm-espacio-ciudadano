@@ -137,21 +137,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sessionExpired => 'Your session has expired';
 
   @override
-  String get sessionUnlockBiometricReason => 'Confirm your identity to access your space';
-
-  @override
-  String get biometricAccessDialogTitle => 'Would you like to enable quick access with fingerprint or facial recognition?';
-
-  @override
-  String get biometricAccessDialogDescription => 'This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.';
-
-  @override
-  String get biometricAccessDialogCancel => 'Not now';
-
-  @override
-  String get biometricAccessDialogConfirm => 'Enable quick access';
-
-  @override
   String get consentPageTitle => 'Terms of Use';
 
   @override

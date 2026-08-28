@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
@@ -59,7 +58,6 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
       selectedLifeEvents: selectedLifeEvents,
       lifeEventsUpdatedAt: lifeEventsUpdatedAt,
       notificationContact: notificationContact,
-      biometricEnabled: appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false,
     );
   },
   name: 'preferencesStateProvider',
@@ -85,14 +83,12 @@ final class _PreferencesState {
     required this.selectedLifeEvents,
     required this.lifeEventsUpdatedAt,
     required this.notificationContact,
-    required this.biometricEnabled,
   });
 
   final AppPreferenceStatus lifeEventsStatus;
   final List<LifeEvent> selectedLifeEvents;
   final DateTime? lifeEventsUpdatedAt;
   final NotificationContact? notificationContact;
-  final bool biometricEnabled;
 }
 
 class PreferencesPage extends ConsumerStatefulWidget {
@@ -103,7 +99,6 @@ class PreferencesPage extends ConsumerStatefulWidget {
 }
 
 class _PreferencesPageState extends ConsumerState<PreferencesPage> {
-  bool _updatingBiometrics = false;
   bool _deletingAccount = false;
 
   @override
@@ -131,7 +126,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
         onInfo: () => AppInfoSheet.show(
           context: context,
           title: l10n.drawerPreferences,
-          bodyText: 'Gestiona tus autorizaciones, avisos y acceso biométrico.',
+          bodyText: 'Gestiona tus autorizaciones y avisos.',
         ),
       ),
       body: state.when(
@@ -203,22 +198,9 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
             ).toString(),
           ),
         ),
-        const SizedBox(height: AppDimensions.space16),
-        AppPreferenceCard(
-          title: 'Activación de acceso biométrico',
-          icon: const AppIcon(AppIcons.fingerprint, color: AppColors.textPrimary),
-          status: preferences.biometricEnabled ? AppPreferenceStatus.enabled : AppPreferenceStatus.disabled,
-          inactiveDescription: 'No se ha activado el acceso biométrico a la aplicación.',
-          pendingDescription: 'No se ha activado el acceso biométrico a la aplicación.',
-          activeDescription: 'El acceso biométrico a la aplicación está activado.',
-          actionLabel: preferences.biometricEnabled ? 'Desactivar' : 'Activar',
-          actionIcon: preferences.biometricEnabled ? AppIcons.close : AppIcons.check,
-          onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(idAgente, preferences.biometricEnabled)),
-          showInactiveIcon: true,
-        ),
         const SizedBox(height: AppDimensions.space24),
         AppButton(
-          label: 'Eliminar cuenta',
+          label: 'Borrar preferencias',
           leadingIcon: AppIcons.close,
           intent: AppButtonIntent.destructive,
           isExpanded: true,
@@ -226,69 +208,6 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           onPressed: _deletingAccount ? null : () => unawaited(_confirmAndDeleteAccount(idAgente)),
         ),
       ],
-    );
-  }
-
-  Future<void> _toggleBiometrics(
-    final String idAgente,
-    final bool currentlyEnabled,
-  ) async {
-    if (_updatingBiometrics) {
-      return;
-    }
-    setState(() => _updatingBiometrics = true);
-
-    final l10n = AppLocalizations.of(context);
-    final appStorage = ref.read(appStorageProvider);
-    var updated = false;
-
-    if (currentlyEnabled) {
-      updated = await appStorage.write(StorageKeys.biometricQuickAccessEnabled, false);
-    } else {
-      final authenticator = ref.read(biometricAuthenticatorProvider);
-      final canAuthenticate = await authenticator.canAuthenticateWithBiometrics();
-      if (!mounted) {
-        return;
-      }
-      if (!canAuthenticate) {
-        AppAlertSnackbar.show(
-          context,
-          message: l10n.walletErrorNoCapability,
-          severity: AppAlertSeverity.warning,
-        );
-        setState(() => _updatingBiometrics = false);
-        return;
-      }
-
-      final authenticated = await authenticator.authenticateForSessionUnlock(
-        localizedReason: 'Activa el acceso biométrico a Espacio Ciudadano.',
-      );
-      if (!mounted) {
-        return;
-      }
-      if (authenticated) {
-        updated = await appStorage.write(StorageKeys.biometricQuickAccessEnabled, true);
-      }
-    }
-
-    if (!mounted) {
-      return;
-    }
-    setState(() => _updatingBiometrics = false);
-    if (!updated) {
-      return;
-    }
-
-    ref.invalidate(
-      _preferencesStateProvider((
-        idAgente: idAgente,
-        contactId: ref.read(ciudadanosEndpointIdProvider),
-      )),
-    );
-    AppAlertSnackbar.show(
-      context,
-      message: currentlyEnabled ? 'Acceso biométrico desactivado' : 'Acceso biométrico activado',
-      severity: AppAlertSeverity.success,
     );
   }
 
@@ -308,7 +227,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   Future<void> _confirmAndDeleteAccount(final String idAgente) async {
     final confirmed = await AppDestructiveConfirmDialog.show(
       context,
-      title: 'Eliminación de cuenta y revocación de permisos',
+      title: 'Revocación de permisos',
       description:
           '¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\n'
           'Al hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.',
@@ -374,8 +293,6 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     final appStorage = ref.read(appStorageProvider);
     final writes = await Future.wait([
       appStorage.remove(StorageKeys.consentAccepted),
-      appStorage.remove(StorageKeys.biometricQuickAccessEnabled),
-      appStorage.remove(StorageKeys.biometricQuickAccessPromptSeen),
       appStorage.remove('${StorageKeys.consentAcceptedPrefix}$idAgente'),
       appStorage.remove('${StorageKeys.consentAcceptedClausesPrefix}$idAgente'),
       appStorage.remove('${StorageKeys.lifeEventsOnboardingSeenPrefix}$idAgente'),

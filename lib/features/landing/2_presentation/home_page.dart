@@ -5,9 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
@@ -20,17 +17,6 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recomme
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-final _biometricQuickAccessPromptShownInSessionProvider = NotifierProvider<_BiometricQuickAccessPromptSessionNotifier, bool>(
-  _BiometricQuickAccessPromptSessionNotifier.new,
-);
-
-class _BiometricQuickAccessPromptSessionNotifier extends Notifier<bool> {
-  @override
-  bool build() => false;
-
-  void markShown() => state = true;
-}
-
 /// Authenticated home screen — Figma node 43716:13302 "Inicio".
 ///
 /// Composed of:
@@ -38,7 +24,6 @@ class _BiometricQuickAccessPromptSessionNotifier extends Notifier<bool> {
 /// - Content area (light blue-lighter background)
 /// - [AppBottomTabBar] (5 tabs: Inicio, Gestión, Mi Carpeta, Agenda, Recomendados)
 /// - [AppFab] (ID card icon, bottom-right)
-/// - Shows the biometric quick-access dialog on first load.
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -47,7 +32,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  bool _biometricDialogShown = false;
   bool _isCardsFabExpanded = false;
   bool _isLoadingDigitalCards = false;
   bool? _hasDigitalCardsAuthorization;
@@ -63,58 +47,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           await _preloadDigitalCards();
         }
       }),
-    );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_biometricDialogShown) {
-      _biometricDialogShown = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          unawaited(_handleInitialPrompts());
-        }
-      });
-    }
-  }
-
-  Future<void> _handleInitialPrompts() async {
-    await _showBiometricDialog();
-  }
-
-  Future<void> _showBiometricDialog() async {
-    final appStorage = ref.read(appStorageProvider);
-    final enabled = appStorage.read<bool>(StorageKeys.biometricQuickAccessEnabled) ?? false;
-    final promptShownInSession = ref.read(_biometricQuickAccessPromptShownInSessionProvider);
-    if (enabled || promptShownInSession) {
-      return;
-    }
-
-    final hasBiometrics = await ref.read(biometricAuthenticatorProvider).canAuthenticateWithBiometrics();
-    if (!mounted || !hasBiometrics) {
-      return;
-    }
-    ref.read(_biometricQuickAccessPromptShownInSessionProvider.notifier).markShown();
-
-    final accepted = await AppBiometricAccessDialog.show(context);
-
-    if (!mounted) {
-      return;
-    }
-
-    if (accepted != true) {
-      return;
-    }
-
-    await appStorage.write(StorageKeys.biometricQuickAccessEnabled, true);
-    if (!mounted) {
-      return;
-    }
-    AppAlertToast.show(
-      context,
-      message: 'Acceso biométrico activado',
-      severity: AppAlertSeverity.success,
     );
   }
 

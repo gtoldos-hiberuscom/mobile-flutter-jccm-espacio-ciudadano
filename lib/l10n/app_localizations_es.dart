@@ -137,21 +137,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sessionExpired => 'Tu sesión ha caducado';
 
   @override
-  String get sessionUnlockBiometricReason => 'Confirma tu identidad para acceder a tu espacio';
-
-  @override
-  String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella o reconocimiento facial?';
-
-  @override
-  String get biometricAccessDialogDescription => 'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.';
-
-  @override
-  String get biometricAccessDialogCancel => 'Ahora no';
-
-  @override
-  String get biometricAccessDialogConfirm => 'Activar acceso rápido';
-
-  @override
   String get consentPageTitle => 'Condiciones de uso';
 
   @override

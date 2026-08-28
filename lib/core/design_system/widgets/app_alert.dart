@@ -1154,27 +1154,6 @@ class AppSuccessDialog extends StatelessWidget {
   }
 }
 
-/// Biometric quick-access opt-in dialog.
-///
-/// Built from existing design-system pieces: [AppAlertDialog], [AppButton],
-/// [AppIcon], and [AppIcons.fingerprint].
-class AppBiometricAccessDialog {
-  const AppBiometricAccessDialog._();
-
-  static Future<bool?> show(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    return AppAlertDialog.show(
-      context,
-      icon: AppIcons.fingerprint,
-      title: l10n.biometricAccessDialogTitle,
-      description: l10n.biometricAccessDialogDescription,
-      confirmLabel: l10n.biometricAccessDialogConfirm,
-      cancelLabel: l10n.biometricAccessDialogCancel,
-    );
-  }
-}
-
 // ─── Dialog internals ─────────────────────────────────────────────────────────
 
 class _DialogCheckboxRow extends StatelessWidget {

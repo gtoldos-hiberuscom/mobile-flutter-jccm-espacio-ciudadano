@@ -175,26 +175,6 @@
   "@sessionExpired": {
     "description": "Message shown when the user's session has expired."
   },
-  "sessionUnlockBiometricReason": "Confirm your identity to access your space",
-  "@sessionUnlockBiometricReason": {
-    "description": "System prompt shown when requesting biometric authentication to restore a stored session."
-  },
-  "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
-  "@biometricAccessDialogTitle": {
-    "description": "Title of the dialog for enabling biometric quick access."
-  },
-  "biometricAccessDialogDescription": "This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.",
-  "@biometricAccessDialogDescription": {
-    "description": "Description of how biometric quick access works and keeps data secure."
-  },
-  "biometricAccessDialogCancel": "Not now",
-  "@biometricAccessDialogCancel": {
-    "description": "Button that declines biometric quick access activation."
-  },
-  "biometricAccessDialogConfirm": "Enable quick access",
-  "@biometricAccessDialogConfirm": {
-    "description": "Button that confirms biometric quick access activation."
-  },
   "consentPageTitle": "Terms of Use",
   "@consentPageTitle": {
     "description": "Main title of the terms of use acceptance screen."

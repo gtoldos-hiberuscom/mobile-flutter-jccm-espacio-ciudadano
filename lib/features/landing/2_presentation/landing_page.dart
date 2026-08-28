@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,8 +37,6 @@ class LandingPage extends ConsumerStatefulWidget {
 }
 
 class _LandingPageState extends ConsumerState<LandingPage> {
-  bool _didTrySessionUnlock = false;
-
   /// Si hay un acceso en curso iniciado *mientras esta página está montada*.
   ///
   /// No se deriva de `landingProvider` directamente: `loginSuccess` es una señal
@@ -49,29 +45,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   /// velo se quedaría pegado. Al alimentarlo sólo desde las transiciones que
   /// observa `ref.listen`, un valor heredado de la sesión anterior no lo activa.
   bool _isAuthenticating = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_didTrySessionUnlock) {
-      return;
-    }
-    _didTrySessionUnlock = true;
-
-    final l10n = AppLocalizations.of(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      unawaited(
-        ref
-            .read(landingProvider.notifier)
-            .tryUnlockStoredSession(
-              localizedReason: l10n.sessionUnlockBiometricReason,
-            ),
-      );
-    });
-  }
 
   @override
   Widget build(final BuildContext context) {

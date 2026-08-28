@@ -31,12 +31,6 @@ abstract final class StorageKeys {
   /// The locale code last selected by the user (e.g. `'es'`).
   static const String selectedLocale = 'selected_locale';
 
-  /// Whether biometric quick access has been explicitly enabled by the user.
-  static const String biometricQuickAccessEnabled = 'biometric_quick_access_enabled';
-
-  /// Whether the biometric quick-access prompt has already been shown.
-  static const String biometricQuickAccessPromptSeen = 'biometric_quick_access_prompt_seen';
-
   /// Marker written after the app has completed its first boot for this install.
   static const String installBootstrapped = 'install_bootstrapped';
 
