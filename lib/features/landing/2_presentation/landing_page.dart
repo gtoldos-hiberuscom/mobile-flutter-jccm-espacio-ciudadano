@@ -48,14 +48,20 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   /// observa `ref.listen`, un valor heredado de la sesión anterior no lo activa.
   bool _isAuthenticating = false;
 
+  /// Cached notifier for safe use in [dispose] (where ref is no longer valid).
+  /// Assigned once in [initState] — assigning a `late final` in [build] would
+  /// throw on the second build (this page rebuilds on every veil toggle).
+  late final LandingNotifier _landingNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _landingNotifier = ref.read(landingProvider.notifier);
+  }
+
   @override
   void dispose() {
-    // The landing leaving the tree means the one-shot signal served its
-    // purpose (navigation happened). Clearing it keeps a stale `loginSuccess`
-    // from auto-navigating a later /callback deep link. Deferred because
-    // provider state must not change while the tree is locked for disposal.
-    final notifier = ref.read(landingProvider.notifier);
-    unawaited(Future.microtask(notifier.consumeLoginSuccess));
+    unawaited(Future.microtask(_landingNotifier.consumeLoginSuccess));
     super.dispose();
   }
 
