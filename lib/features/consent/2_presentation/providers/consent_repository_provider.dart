@@ -12,6 +12,9 @@ import 'package:jccm_espacio_ciudadano/features/consent/3_data/repositories/cons
 final consentRepositoryProvider = Provider<ConsentRepository>((final ref) {
   final storage = ref.watch(appStorageProvider);
   final dio = ref.watch(dioProvider);
-  final agentId = ref.watch(jwtClaimsProvider)?.idAgente;
+  // select() keeps the repository instance (and its in-memory clause cache)
+  // stable across token refreshes: JwtClaims has no `==`, so watching the
+  // whole provider would rebuild the repository on every refresh.
+  final agentId = ref.watch(jwtClaimsProvider.select((final claims) => claims?.idAgente));
   return ConsentRepositoryImpl(storage: storage, dio: dio, agentId: agentId);
 });

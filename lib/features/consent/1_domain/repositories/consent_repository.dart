@@ -4,6 +4,13 @@ import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 abstract interface class ConsentRepository {
   /// Returns `true` when the citizen identified by [idAgente] has already
   /// accepted the legal consent for the current version.
+  ///
+  /// Returns `true`/`false` only when the status is *known*: the remote
+  /// service answered (a genuine 404 means "not registered" → `false`), or
+  /// trusted local evidence of a previous acceptance exists. When the remote
+  /// service cannot answer and there is no such evidence, throws
+  /// `ConsentStatusUnknownException` — callers must not read that as
+  /// "not accepted".
   Future<bool> hasAcceptedConsent({required final String idAgente});
 
   /// Persists that the citizen completed the legal consent step and records
@@ -20,13 +27,17 @@ abstract interface class ConsentRepository {
   Future<void> resetConsentClauses({required final String idAgente});
 
   /// Returns `true` when the citizen accepted the optional clause [clauseId].
+  ///
+  /// Same three-state contract as [hasAcceptedConsent]: throws
+  /// `ConsentStatusUnknownException` when the remote service cannot answer
+  /// and no trusted local evidence of acceptance exists.
   Future<bool> hasAcceptedClause({
     required final String idAgente,
     required final int clauseId,
   });
 
   /// Returns the ordered list of optional authorisation clauses presented to
-  /// the citizen. Falls back to a hardcoded static list when remote data is
-  /// unavailable.
+  /// the citizen. Throws `ConsentStatusUnknownException` when the remote
+  /// service cannot answer, and [StateError] when it answers with no clauses.
   Future<List<Clause>> fetchClauses({final String? idAgente});
 }

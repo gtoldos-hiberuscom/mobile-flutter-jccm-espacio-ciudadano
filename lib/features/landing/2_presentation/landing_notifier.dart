@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
@@ -50,6 +51,9 @@ class LandingNotifier extends Notifier<LandingState> {
         state = const LandingState(loginSuccess: true);
 
       case LoginFailed(:final cause):
+        // The user only ever sees a curated generic message; this log line is
+        // the sole record of the real OAuth error/error_description.
+        logger.e('Cl@ve login failed: $cause');
         if (cause is AuthException) {
           // Cancellations are silent — user deliberately dismissed the flow.
           state = cause.reason == AuthFailureReason.cancelled ? const LandingState() : LandingState(error: cause);
