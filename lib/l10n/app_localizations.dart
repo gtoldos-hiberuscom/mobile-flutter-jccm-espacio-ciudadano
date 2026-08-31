@@ -320,6 +320,12 @@ abstract class AppLocalizations {
   /// **'Estamos validando tu identidad y preparando tus datos. Puede tardar unos segundos.'**
   String get loginPageLoadingDescription;
 
+  /// Mensaje de error cuando el flujo de acceso con Cl@ve supera el tiempo máximo de espera.
+  ///
+  /// In es, this message translates to:
+  /// **'El acceso está tardando demasiado. Inténtalo de nuevo.'**
+  String get loginTimeoutError;
+
   /// Título del mensaje de error mostrado cuando falla la autenticación.
   ///
   /// In es, this message translates to:
@@ -403,6 +409,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se ha podido guardar el consentimiento. Por favor, inténtalo de nuevo.'**
   String get consentSaveError;
+
+  /// Mensaje de error cuando el catálogo de cláusulas no está disponible al guardar el consentimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'No se han podido cargar las autorizaciones. Comprueba tu conexión e inténtalo de nuevo.'**
+  String get consentClausesUnavailableError;
 
   /// Indicación para el usuario de que debe desplazarse hasta el final del contenido.
   ///

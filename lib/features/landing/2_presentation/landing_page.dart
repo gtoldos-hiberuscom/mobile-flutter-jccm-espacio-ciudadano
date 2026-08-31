@@ -1,3 +1,5 @@
+import 'dart:async' show TimeoutException, unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,6 +49,17 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   bool _isAuthenticating = false;
 
   @override
+  void dispose() {
+    // The landing leaving the tree means the one-shot signal served its
+    // purpose (navigation happened). Clearing it keeps a stale `loginSuccess`
+    // from auto-navigating a later /callback deep link. Deferred because
+    // provider state must not change while the tree is locked for disposal.
+    final notifier = ref.read(landingProvider.notifier);
+    unawaited(Future.microtask(notifier.consumeLoginSuccess));
+    super.dispose();
+  }
+
+  @override
   Widget build(final BuildContext context) {
     final landingState = ref.watch(landingProvider);
     final l10n = AppLocalizations.of(context);
@@ -60,7 +73,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         ref.read(goRouterProvider).go(Routes.home);
       }
       if (next.error != null) {
-        final errorMsg = l10n.domainGenericLoadError;
+        final errorMsg = next.error!.cause is TimeoutException ? l10n.loginTimeoutError : l10n.domainGenericLoadError;
         AppAlertSnackbar.show(
           context,
           message: errorMsg,

@@ -159,6 +159,10 @@
   "@loginPageLoadingDescription": {
     "description": "Detail under the title of the loading screen shown after signing in with Cl@ve."
   },
+  "loginTimeoutError": "Sign-in is taking too long. Please try again.",
+  "@loginTimeoutError": {
+    "description": "Error message when the Cl@ve sign-in flow exceeds the maximum wait time."
+  },
   "loginPageError": "Sign-in error",
   "@loginPageError": {
     "description": "Error title shown when the login process fails."
@@ -214,6 +218,10 @@
   "consentSaveError": "Could not save your consent. Please try again.",
   "@consentSaveError": {
     "description": "Error message when saving consent fails."
+  },
+  "consentClausesUnavailableError": "The authorisations could not be loaded. Check your connection and try again.",
+  "@consentClausesUnavailableError": {
+    "description": "Error message when the clause catalogue is unavailable while saving consent."
   },
   "consentScrollHint": "Scroll to the end to continue",
   "@consentScrollHint": {

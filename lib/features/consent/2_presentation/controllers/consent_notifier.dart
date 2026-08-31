@@ -1,6 +1,7 @@
 import 'dart:async' show unawaited;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
@@ -12,6 +13,11 @@ import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecase
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
+
+/// Marker recorded in [ConsentState.errorMessage] when [ConsentNotifier.accept]
+/// was blocked because the clause catalogue never loaded (P-04 guard). Pages
+/// map it to a curated localized message; it is never shown raw.
+const consentClauseCatalogueUnavailable = 'consent-clause-catalogue-unavailable';
 
 // ── Status ────────────────────────────────────────────────────────────────────
 
@@ -153,7 +159,31 @@ class ConsentNotifier extends Notifier<ConsentState> {
     if (state.status == ConsentStatus.saving) {
       return;
     }
-    final clausesToPersist = _clausesForPersistence(state.clauses);
+    var clausesToPersist = _clausesForPersistence(state.clauses);
+    if (!_isPreferencesEditing && !clausesToPersist.any((final clause) => clause.id == requiredConsentClauseId)) {
+      // P-04 guard: the catalogue never loaded, so accepting would POST a body
+      // without clause 0 — the backend records it and every later read reports
+      // the consent as pending forever. Retry the load once, then block.
+      state = state.copyWith(status: ConsentStatus.saving);
+      final reload = await ref.read(loadClausesUsecaseProvider).execute(idAgente: _idAgente);
+      if (!ref.mounted) {
+        return;
+      }
+      final reloadedClauses = switch (reload) {
+        LoadClausesSuccess(:final clauses) => clauses,
+        LoadClausesFailed() => const <Clause>[],
+      };
+      if (!reloadedClauses.any((final clause) => clause.id == requiredConsentClauseId)) {
+        logger.e('Consent accept blocked: clause catalogue unavailable (P-04 guard)');
+        state = state.copyWith(
+          status: ConsentStatus.saveError,
+          errorMessage: consentClauseCatalogueUnavailable,
+        );
+        return;
+      }
+      clausesToPersist = _clausesForPersistence(reloadedClauses);
+      state = state.copyWith(clauses: reloadedClauses);
+    }
     state = state.copyWith(status: ConsentStatus.saving);
     final result = await ref.read(acceptConsentUsecaseProvider).execute(idAgente: _idAgente, clauses: clausesToPersist);
     if (!ref.mounted) {

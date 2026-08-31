@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 import 'package:meta/meta.dart';
 
 /// Route guard that enforces session validity before any authenticated route
@@ -48,9 +49,20 @@ final class SessionGuard {
 
     final isValid = await sessionController.refreshIfNeeded();
     if (!isValid) {
-      return Routes.landing;
+      return _bounceToLanding();
     }
     return _consentRedirect(path);
+  }
+
+  /// Redirects to the landing after also resetting its login state.
+  ///
+  /// When the bounce happens right after a login (`loginSuccess` still set)
+  /// and the landing page is already what is on screen, the redirect produces
+  /// no route change — nothing would ever clear `isLoggingIn`/`loginSuccess`,
+  /// leaving the "Accediendo con Cl@ve" veil up and the CTA dead forever.
+  String _bounceToLanding() {
+    _ref.invalidate(landingProvider);
+    return Routes.landing;
   }
 
   /// Enforces the mandatory legal-consent gate (JCCMEC-11).
@@ -78,7 +90,7 @@ final class SessionGuard {
         if (await sessionController.hasPersistedSession()) {
           logger.w('Consent gate: remote reports consent not accepted — clearing persisted session');
           await sessionController.clear();
-          return Routes.landing;
+          return _bounceToLanding();
         }
         // Allow legal-gate pages themselves — prevents infinite redirect loops
         // for the temporary in-memory session created immediately after login.
