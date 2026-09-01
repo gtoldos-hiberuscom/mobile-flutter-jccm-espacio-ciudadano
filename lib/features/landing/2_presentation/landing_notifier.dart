@@ -1,4 +1,7 @@
+import 'dart:async' show TimeoutException;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
@@ -28,6 +31,12 @@ final class LandingState {
 /// Orchestration: UI -> login() -> [LoginUseCase] -> notifier updates -> [LandingState].
 /// Navigation is triggered by the page via `ref.listen` on `loginSuccess`.
 class LandingNotifier extends Notifier<LandingState> {
+  /// Hard ceiling for the whole interactive login round-trip. If the AppAuth
+  /// future never resolves (browser tab dismissed without a callback reaching
+  /// the plugin), `isLoggingIn` would otherwise stay latched and the landing
+  /// CTA would be dead until process death.
+  static const loginTimeout = Duration(minutes: 3);
+
   @override
   LandingState build() => const LandingState();
 
@@ -37,9 +46,20 @@ class LandingNotifier extends Notifier<LandingState> {
     }
     state = const LandingState(isLoggingIn: true);
 
-    final result = await ref.read(loginUseCaseProvider).call();
+    final LoginResult result;
+    try {
+      result = await ref.read(loginUseCaseProvider).call().timeout(loginTimeout);
+    } on TimeoutException catch (e) {
+      if (!ref.mounted) {
+        return;
+      }
+      logger.e('Cl@ve login timed out after $loginTimeout');
+      state = LandingState(error: AuthException.unexpected(cause: e));
+      return;
+    }
 
     if (!ref.mounted) {
+      logger.w('Cl@ve login completed after LandingNotifier was disposed; result dropped');
       return;
     }
 
@@ -50,6 +70,9 @@ class LandingNotifier extends Notifier<LandingState> {
         state = const LandingState(loginSuccess: true);
 
       case LoginFailed(:final cause):
+        // The user only ever sees a curated generic message; this log line is
+        // the sole record of the real OAuth error/error_description.
+        logger.e('Cl@ve login failed: $cause');
         if (cause is AuthException) {
           // Cancellations are silent — user deliberately dismissed the flow.
           state = cause.reason == AuthFailureReason.cancelled ? const LandingState() : LandingState(error: cause);
@@ -62,6 +85,16 @@ class LandingNotifier extends Notifier<LandingState> {
   }
 
   void clearError() => state = const LandingState();
+
+  /// Consumes the one-shot [LandingState.loginSuccess] signal once a consumer
+  /// has acted on it. The provider is not `autoDispose`, so without this a
+  /// stale `true` survives for the rest of the process and auto-navigates any
+  /// later visit to the /callback page.
+  void consumeLoginSuccess() {
+    if (state.loginSuccess) {
+      state = const LandingState();
+    }
+  }
 }
 
 final landingProvider = NotifierProvider<LandingNotifier, LandingState>(LandingNotifier.new);

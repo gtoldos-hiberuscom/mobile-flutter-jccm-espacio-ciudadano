@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/network/api_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_status_unknown_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/consent_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/3_data/api/clausulas_api.dart';
 
@@ -38,15 +39,28 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       return false;
     }
 
-    final remote = await _fetchRemoteClauses(normalizedId);
-    if (remote != null) {
-      final hasCompletedConsent = _hasCompletedConsent(remote);
-      await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
-      await _storage.write(_key(normalizedId), hasCompletedConsent);
-      return hasCompletedConsent;
+    final _RemoteClauses? remote;
+    try {
+      remote = await _fetchRemoteClauses(normalizedId);
+    } on ConsentStatusUnknownException {
+      // Positive-only local fallback: the cached flag is written `true` solely
+      // after a confirmed remote answer or a successful accept, so it is
+      // trustworthy evidence. A cached `false` (or nothing) proves nothing —
+      // propagate UNKNOWN instead of reporting "not accepted".
+      if (_storage.read<bool>(_key(normalizedId)) ?? false) {
+        return true;
+      }
+      rethrow;
+    }
+    if (remote == null) {
+      // Genuine 404 — consent really is not registered for this citizen.
+      return false;
     }
 
-    return _storage.read<bool>(_key(normalizedId)) ?? false;
+    final hasCompletedConsent = _hasCompletedConsent(remote);
+    await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
+    await _storage.write(_key(normalizedId), hasCompletedConsent);
+    return hasCompletedConsent;
   }
 
   @override
@@ -59,7 +73,17 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       throw ArgumentError.value(idAgente, 'idAgente', 'No puede estar vacío.');
     }
 
-    final hasExistingRemoteClauses = _remoteClausesCache.containsKey(normalizedId) || await _fetchRemoteClauses(normalizedId) != null;
+    bool hasExistingRemoteClauses = _remoteClausesCache.containsKey(normalizedId);
+    if (!hasExistingRemoteClauses) {
+      try {
+        hasExistingRemoteClauses = await _fetchRemoteClauses(normalizedId) != null;
+      } on ConsentStatusUnknownException {
+        // The probe only chooses the initial verb; _syncClauses self-heals a
+        // wrong guess (404 → POST, 400/409 → PATCH), so an unavailable GET
+        // must not abort the write.
+        hasExistingRemoteClauses = false;
+      }
+    }
     final requestBody = _requestBody(_requestAgentId(normalizedId), clauses);
 
     try {
@@ -124,14 +148,25 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       return false;
     }
 
-    final remote = await _fetchRemoteClauses(normalizedId);
-    if (remote != null) {
-      await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
-      return remote.clauses.any((final clause) => clause.id == clauseId && clause.isSelected);
+    final _RemoteClauses? remote;
+    try {
+      remote = await _fetchRemoteClauses(normalizedId);
+    } on ConsentStatusUnknownException {
+      // Positive-only fallback, mirroring [hasAcceptedConsent]: an id present
+      // in the cached accepted list was confirmed remotely at some point; its
+      // absence proves nothing while the backend cannot answer.
+      final acceptedClauseIds = _storage.read<List<String>>(_acceptedClausesKey(normalizedId)) ?? const [];
+      if (acceptedClauseIds.contains(clauseId.toString())) {
+        return true;
+      }
+      rethrow;
+    }
+    if (remote == null) {
+      return false;
     }
 
-    final acceptedClauseIds = _storage.read<List<String>>(_acceptedClausesKey(normalizedId)) ?? const [];
-    return acceptedClauseIds.contains(clauseId.toString());
+    await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
+    return remote.clauses.any((final clause) => clause.id == clauseId && clause.isSelected);
   }
 
   @override
@@ -227,15 +262,22 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     try {
       return _remoteClausesFromData(await _api.obtener(citizenId: idAgente));
     } on DioException catch (error, stackTrace) {
-      if (error.response?.statusCode == 404) {
+      final statusCode = error.response?.statusCode;
+      // 404 is the only failure that carries meaning: the citizen genuinely
+      // has no clauses registered yet. Anything else leaves the status UNKNOWN.
+      if (statusCode == 404) {
         return null;
       }
       final remote = _remoteClausesFromData(decodeApiEnvelope(error.response?.data));
       if (remote != null) {
         return remote;
       }
-      logger.e('Failed to fetch remote clausulas: $error', stackTrace: stackTrace);
-      return null;
+      logger.e('GET clausulas failed (status: $statusCode, type: ${error.type}): $error', stackTrace: stackTrace);
+      throw ConsentStatusUnknownException(
+        message: 'Clausulas endpoint unavailable',
+        statusCode: statusCode,
+        cause: error,
+      );
     }
   }
 

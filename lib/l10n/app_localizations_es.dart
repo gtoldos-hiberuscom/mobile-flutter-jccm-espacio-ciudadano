@@ -125,6 +125,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginPageLoadingDescription => 'Estamos validando tu identidad y preparando tus datos. Puede tardar unos segundos.';
 
   @override
+  String get loginTimeoutError => 'El acceso está tardando demasiado. Inténtalo de nuevo.';
+
+  @override
   String get loginPageError => 'Error al iniciar sesión';
 
   @override
@@ -166,6 +169,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get consentSaveError => 'No se ha podido guardar el consentimiento. Por favor, inténtalo de nuevo.';
+
+  @override
+  String get consentClausesUnavailableError => 'No se han podido cargar las autorizaciones. Comprueba tu conexión e inténtalo de nuevo.';
 
   @override
   String get consentScrollHint => 'Desliza hasta el final para continuar';

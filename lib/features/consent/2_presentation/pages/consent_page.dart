@@ -82,7 +82,7 @@ class ConsentPage extends ConsumerWidget {
             }
             AppAlertSnackbar.show(
               context,
-              message: l10n.consentSaveError,
+              message: next.errorMessage == consentClauseCatalogueUnavailable ? l10n.consentClausesUnavailableError : l10n.consentSaveError,
               severity: AppAlertSeverity.error,
             );
           case ConsentStatus.loading:

@@ -1,3 +1,5 @@
+import 'dart:async' show TimeoutException, unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -46,6 +48,23 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   /// observa `ref.listen`, un valor heredado de la sesión anterior no lo activa.
   bool _isAuthenticating = false;
 
+  /// Cached notifier for safe use in [dispose] (where ref is no longer valid).
+  /// Assigned once in [initState] — assigning a `late final` in [build] would
+  /// throw on the second build (this page rebuilds on every veil toggle).
+  late final LandingNotifier _landingNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _landingNotifier = ref.read(landingProvider.notifier);
+  }
+
+  @override
+  void dispose() {
+    unawaited(Future.microtask(_landingNotifier.consumeLoginSuccess));
+    super.dispose();
+  }
+
   @override
   Widget build(final BuildContext context) {
     final landingState = ref.watch(landingProvider);
@@ -60,7 +79,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         ref.read(goRouterProvider).go(Routes.home);
       }
       if (next.error != null) {
-        final errorMsg = l10n.domainGenericLoadError;
+        final errorMsg = next.error!.cause is TimeoutException ? l10n.loginTimeoutError : l10n.domainGenericLoadError;
         AppAlertSnackbar.show(
           context,
           message: errorMsg,

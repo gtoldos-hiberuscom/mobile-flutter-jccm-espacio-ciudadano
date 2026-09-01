@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_status_unknown_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/3_data/repositories/consent_repository_impl.dart';
 
 void main() {
@@ -311,6 +312,98 @@ void main() {
       expect(adapter.jsonBodies, isEmpty);
       expect(storage.read<bool>('${StorageKeys.consentAcceptedPrefix}PER9998003'), isNull);
       expect(storage.read<List<String>>('${StorageKeys.consentAcceptedClausesPrefix}PER9998003'), isNull);
+    });
+  });
+
+  group('ConsentRepositoryImpl three-state contract (backend unavailable)', () {
+    test('hasAcceptedConsent throws ConsentStatusUnknownException on 500 with no local evidence', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      await expectLater(
+        repository.hasAcceptedConsent(idAgente: 'PER9998001'),
+        throwsA(isA<ConsentStatusUnknownException>().having((final e) => e.statusCode, 'statusCode', 500)),
+      );
+    });
+
+    test('hasAcceptedConsent still throws when the cached flag is false — only a positive is evidence', () async {
+      final storage = _MemoryAppStorage();
+      await storage.write('${StorageKeys.consentAcceptedPrefix}PER9998001', false);
+      final repository = ConsentRepositoryImpl(
+        storage: storage,
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 403)),
+      );
+
+      await expectLater(
+        repository.hasAcceptedConsent(idAgente: 'PER9998001'),
+        throwsA(isA<ConsentStatusUnknownException>()),
+      );
+    });
+
+    test('hasAcceptedConsent returns true on failure when a confirmed acceptance is cached', () async {
+      final storage = _MemoryAppStorage();
+      await storage.write('${StorageKeys.consentAcceptedPrefix}PER9998001', true);
+      final repository = ConsentRepositoryImpl(
+        storage: storage,
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      expect(await repository.hasAcceptedConsent(idAgente: 'PER9998001'), isTrue);
+    });
+
+    test('hasAcceptedConsent returns false on a genuine 404', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 404)),
+      );
+
+      expect(await repository.hasAcceptedConsent(idAgente: 'PER9998001'), isFalse);
+    });
+
+    test('hasAcceptedClause on failure: true when cached as accepted, throws otherwise', () async {
+      final storage = _MemoryAppStorage();
+      await storage.write('${StorageKeys.consentAcceptedClausesPrefix}PER9998001', const ['2']);
+      final repository = ConsentRepositoryImpl(
+        storage: storage,
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      expect(await repository.hasAcceptedClause(idAgente: 'PER9998001', clauseId: 2), isTrue);
+      await expectLater(
+        repository.hasAcceptedClause(idAgente: 'PER9998001', clauseId: 3),
+        throwsA(isA<ConsentStatusUnknownException>()),
+      );
+    });
+
+    test('markConsentAccepted still writes when the verb-probe GET is unavailable', () async {
+      final adapter = _CapturingAdapter(getStatusCode: 500);
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(adapter),
+      );
+
+      await repository.markConsentAccepted(
+        idAgente: 'PER9998003',
+        clauses: const [
+          Clause(id: 0, label: 'A', isSelected: true),
+        ],
+      );
+
+      expect(adapter.methods, ['GET', 'POST']);
+    });
+
+    test('fetchClauses propagates ConsentStatusUnknownException on backend failure', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      await expectLater(
+        repository.fetchClauses(idAgente: 'PER9998001'),
+        throwsA(isA<ConsentStatusUnknownException>()),
+      );
     });
   });
 }

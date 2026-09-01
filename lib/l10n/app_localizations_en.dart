@@ -125,6 +125,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginPageLoadingDescription => 'We are validating your identity and preparing your data. This may take a few seconds.';
 
   @override
+  String get loginTimeoutError => 'Sign-in is taking too long. Please try again.';
+
+  @override
   String get loginPageError => 'Sign-in error';
 
   @override
@@ -165,6 +168,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentSaveError => 'Could not save your consent. Please try again.';
+
+  @override
+  String get consentClausesUnavailableError => 'The authorisations could not be loaded. Check your connection and try again.';
 
   @override
   String get consentScrollHint => 'Scroll to the end to continue';
