@@ -6818,6 +6818,12 @@ abstract class AppLocalizations {
   /// **'No hemos podido registrar la documentación. Inténtalo de nuevo.'**
   String get gestionAportarDocumentacionRegistroError;
 
+  /// Aviso al pulsar Registrar cuando algún fichero no llegó a subirse (cancelado a mitad, por ejemplo)
+  ///
+  /// In es, this message translates to:
+  /// **'Falta algún fichero por enviar. Al registrar de nuevo se enviarán todos otra vez.'**
+  String get gestionAportarDocumentacionUploadIncompleto;
+
   /// Mensaje cuando alguno de los ficheros subidos en paralelo falla.
   ///
   /// In es, this message translates to:

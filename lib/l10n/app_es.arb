@@ -4593,6 +4593,10 @@
   "@gestionAportarDocumentacionRegistroError": {
     "description": "Mensaje de error al fallar el registro de los documentos aportados."
   },
+  "gestionAportarDocumentacionUploadIncompleto": "Falta algún fichero por enviar. Al registrar de nuevo se enviarán todos otra vez.",
+  "@gestionAportarDocumentacionUploadIncompleto": {
+    "description": "Aviso al pulsar Registrar cuando algún fichero no llegó a subirse (cancelado a mitad, por ejemplo)"
+  },
   "gestionAportarDocumentacionUploadErrorParcial": "Algunos ficheros no se han podido enviar. Puedes reintentarlo.",
   "@gestionAportarDocumentacionUploadErrorParcial": {
     "description": "Mensaje cuando alguno de los ficheros subidos en paralelo falla."

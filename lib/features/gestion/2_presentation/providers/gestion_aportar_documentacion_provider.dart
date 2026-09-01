@@ -110,6 +110,19 @@ class GestionAportarDocumentacionNotifier extends Notifier<List<AportacionArchiv
     state = [for (final archivo in state) archivo.copyWith(estado: AportacionArchivoEstado.error, clearProgreso: true, clearHash: true)];
   }
 
+  /// Descarta un intento de registro que no llegó a cerrarse: todos los
+  /// ficheros vuelven a `noEnviado` y pierden su hash.
+  ///
+  /// Un hash solo vale dentro del `idunico` con el que se subió el fichero (el
+  /// adjunto queda en el buzón de esa transacción y `registrarfichero` procesa
+  /// los de la suya), así que un intento incompleto no puede reaprovechar las
+  /// subidas que sí terminaron: el siguiente arranca de nuevo desde
+  /// `iniciarProcedimiento` y vuelve a subirlo todo.
+  void reiniciarSubidas() {
+    cancelarTodas();
+    state = [for (final archivo in state) archivo.copyWith(estado: AportacionArchivoEstado.noEnviado, clearProgreso: true, clearHash: true)];
+  }
+
   /// Cancela la subida en curso de [path] (si la hay) y lo revierte a
   /// `noEnviado`.
   void cancelarSubida(final String path) {

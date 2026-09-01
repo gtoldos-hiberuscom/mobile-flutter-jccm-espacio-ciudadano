@@ -3533,6 +3533,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportarDocumentacionRegistroError => 'No hemos podido registrar la documentación. Inténtalo de nuevo.';
 
   @override
+  String get gestionAportarDocumentacionUploadIncompleto => 'Falta algún fichero por enviar. Al registrar de nuevo se enviarán todos otra vez.';
+
+  @override
   String get gestionAportarDocumentacionUploadErrorParcial => 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
 
   @override
