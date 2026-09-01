@@ -222,9 +222,13 @@ final goRouterProvider = Provider<GoRouter>(
               path: Routes.gestionNotificacionDetalle,
               builder: (final BuildContext context, final GoRouterState state) {
                 final summary = state.extra;
+                // El estado del resumen solo se pasa si se conoce: la página lo
+                // usa como respaldo del que informa el detalle. Sin resumen
+                // (deep link, restauración) viaja `null`, nunca un estado
+                // inventado.
                 return GestionNotificacionDetallePage(
                   notificacionId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-                  estado: summary is Notificacion ? summary.estado ?? 'expirada' : state.uri.queryParameters['estado'] ?? 'expirada',
+                  estado: summary is Notificacion ? summary.estado : null,
                   sistemaOrigen: summary is Notificacion ? summary.sistemaOrigen : null,
                 );
               },

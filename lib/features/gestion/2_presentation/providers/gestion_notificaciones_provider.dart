@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
 
@@ -42,7 +43,7 @@ final class GestionNotificacionesOptimisticAcceptedNotifier extends Notifier<Map
       procedimientoIdFicha: notification.procedimientoIdFicha,
       unidadOrganicaNombre: notification.unidadOrganicaNombre,
       sistemaOrigen: notification.sistemaOrigen,
-      estado: 'aceptada',
+      estado: NotificacionEstado.aceptada,
     );
     final key = (citizenId: citizenId, notificationId: accepted.id);
     state = {...state, key: accepted};
@@ -58,15 +59,15 @@ final gestionNotificacionesOptimisticAcceptedProvider = NotifierProvider<Gestion
   GestionNotificacionesOptimisticAcceptedNotifier.new,
 );
 
-/// Family param: estado filter — null = all, 'pendiente', 'aceptada', etc.
-final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, String?>((final ref, final estado) async {
+/// Family param: filtro de estado — null = "Todo" (sin filtro).
+final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>((final ref, final estado) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
   }
   final repo = ref.watch(gestionNotificacionesRepositoryProvider);
   final notifications = await repo.loadNotificaciones(citizenId: citizenId, estado: estado);
-  if (estado != null && estado != 'aceptada') {
+  if (estado != null && estado != NotificacionEstado.aceptada) {
     return notifications;
   }
 
@@ -84,7 +85,9 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
   return merged.values.toList(growable: false);
 });
 
-typedef NotificacionDetalleArgs = ({int id, String estado, String? sistemaOrigen});
+/// `estado` es el estado que traía el resumen del listado, o `null` si no se
+/// conocía (pestaña "Todo"): solo sirve de respaldo si el detalle no lo informa.
+typedef NotificacionDetalleArgs = ({int id, NotificacionEstado? estado, String? sistemaOrigen});
 
 final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>((final ref, final args) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
@@ -96,7 +99,7 @@ final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<Not
       .loadNotificacion(
         citizenId: citizenId,
         notificacionId: args.id,
-        estado: args.estado,
+        fallbackEstado: args.estado,
         sistemaOrigen: args.sistemaOrigen,
       );
 });

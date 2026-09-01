@@ -1,3 +1,4 @@
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -21,10 +22,13 @@ final class Notificacion {
   final String? unidadOrganicaNombre;
   final String? sistemaOrigen;
 
-  /// Estado de la notificación (`pendiente`, `expirada`, `aceptada`,
-  /// `rechazada`). El DTO indexado no lo expone, así que se rellena a partir
-  /// del filtro `estado` con el que se consultó al backend.
-  final String? estado;
+  /// Estado de la notificación, o `null` si no se conoce.
+  ///
+  /// El DTO indexado no lo expone: solo se conoce cuando el propio elemento del
+  /// listado lo informa o cuando se consultó filtrando por un estado concreto.
+  /// En la pestaña "Todo" no hay filtro, así que aquí llega `null` y el estado
+  /// real lo aporta el detalle (`NotificacionDetalle.estado`).
+  final NotificacionEstado? estado;
 
   @override
   bool operator ==(final Object other) => identical(this, other) || other is Notificacion && runtimeType == other.runtimeType && id == other.id && concepto == other.concepto && procedimientoDenominacion == other.procedimientoDenominacion && fechaCaducidad == other.fechaCaducidad && procedimientoIdFicha == other.procedimientoIdFicha && unidadOrganicaNombre == other.unidadOrganicaNombre && sistemaOrigen == other.sistemaOrigen && estado == other.estado;

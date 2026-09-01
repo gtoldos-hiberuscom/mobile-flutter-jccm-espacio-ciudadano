@@ -7,13 +7,9 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/erro
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-
-// API estado values aligned with GET /api/v1/ciudadanos/{id}/notificaciones?estado=
-const _kEstadoPendiente = 'pendiente';
-const _kEstadoAceptada = 'aceptada';
-const _kEstadoExpirada = 'expirada';
 
 /// Pantalla de listado de notificaciones — Figma node 41972:6649.
 class GestionNotificacionesPage extends ConsumerStatefulWidget {
@@ -32,10 +28,15 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
   int _selectedTab = 0;
   AppListFilters _filters = const AppListFilters();
 
-  // null → no filter (Todo), 'pendiente', 'aceptada', 'expirada'
-  static const List<String?> _tabEstados = [null, _kEstadoPendiente, _kEstadoAceptada, _kEstadoExpirada];
+  // null → sin filtro (Todo)
+  static const List<NotificacionEstado?> _tabEstados = [
+    null,
+    NotificacionEstado.pendiente,
+    NotificacionEstado.aceptada,
+    NotificacionEstado.expirada,
+  ];
 
-  String? get _currentEstado => _tabEstados[_selectedTab];
+  NotificacionEstado? get _currentEstado => _tabEstados[_selectedTab];
 
   @override
   Widget build(final BuildContext context) {
@@ -360,11 +361,11 @@ class _NotificacionCard extends StatelessWidget {
   Widget _refBlock(final AppLocalizations l10n) {
     final idFicha = notificacion.procedimientoIdFicha;
     final fecha = notificacion.fechaCaducidad;
-    final showsExpiration = notificacion.estado == _kEstadoPendiente || notificacion.estado == _kEstadoExpirada;
+    final showsExpiration = notificacion.estado == NotificacionEstado.pendiente || notificacion.estado == NotificacionEstado.expirada;
     if (idFicha == null && (!showsExpiration || fecha == null)) {
       return const SizedBox.shrink();
     }
-    final isWarning = notificacion.estado == _kEstadoPendiente;
+    final isWarning = notificacion.estado == NotificacionEstado.pendiente;
 
     return Container(
       width: double.infinity,
@@ -401,13 +402,15 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
+  /// Sin estado conocido no se pinta etiqueta: el listado indexado no informa
+  /// el estado y en "Todo" no hay filtro del que deducirlo.
   Widget? _statusTag() {
     return switch (notificacion.estado) {
-      _kEstadoPendiente => const AppTag(status: AppTagStatus.warning, label: 'Pendiente', showIcon: false),
-      _kEstadoAceptada => const AppTag(status: AppTagStatus.success, label: 'Aceptada', showIcon: false),
-      'rechazada' => const AppTag(status: AppTagStatus.error, label: 'Rechazada', showIcon: false),
-      'expirada' => const AppTag(status: AppTagStatus.infoInactive, label: 'Expirada', showIcon: false),
-      _ => null,
+      NotificacionEstado.pendiente => const AppTag(status: AppTagStatus.warning, label: 'Pendiente', showIcon: false),
+      NotificacionEstado.aceptada => const AppTag(status: AppTagStatus.success, label: 'Aceptada', showIcon: false),
+      NotificacionEstado.rechazada => const AppTag(status: AppTagStatus.error, label: 'Rechazada', showIcon: false),
+      NotificacionEstado.expirada => const AppTag(status: AppTagStatus.infoInactive, label: 'Expirada', showIcon: false),
+      null => null,
     };
   }
 }

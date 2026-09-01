@@ -5,7 +5,9 @@ import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificacion_estado_mapper.dart';
 
 const int _kNotificationsPageSize = 10;
 
@@ -19,7 +21,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   Future<NotificacionDetalle> loadNotificacion({
     required final String citizenId,
     required final int notificacionId,
-    required final String estado,
+    final NotificacionEstado? fallbackEstado,
     final String? sistemaOrigen,
   }) async {
     final response = await _api.obtenerNotificacion(
@@ -30,7 +32,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     );
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     final body = _bodyMap(raw, notificacionId);
-    return _toDetalle(body, fallbackEstado: estado, fallbackSistema: sistemaOrigen);
+    return _toDetalle(body, fallbackEstado: fallbackEstado, fallbackSistema: sistemaOrigen);
   }
 
   @override
@@ -80,14 +82,14 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   @override
   Future<List<Notificacion>> loadNotificaciones({
     required final String citizenId,
-    final String? estado,
+    final NotificacionEstado? estado,
   }) async {
     return _loadForEstado(citizenId: citizenId, estado: estado);
   }
 
   Future<List<Notificacion>> _loadForEstado({
     required final String citizenId,
-    required final String? estado,
+    required final NotificacionEstado? estado,
   }) async {
     final notifications = <int, Notificacion>{};
     for (var page = 0; ; page++) {
@@ -109,15 +111,16 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   Future<List<Notificacion>> _loadPageForEstado({
     required final String citizenId,
-    required final String? estado,
+    required final NotificacionEstado? estado,
     required final int page,
   }) async {
     final encodedCitizenId = Uri.encodeComponent(citizenId);
+    final estadoQuery = estado == null ? null : notificacionEstadoQueryValue(estado);
     try {
       final response = await _dio.get<Object?>(
         '/api/v1/ciudadanos/$encodedCitizenId/notificaciones',
         queryParameters: {
-          'estado': ?estado,
+          'estado': ?estadoQuery,
           'page': page,
           'size': _kNotificationsPageSize,
         },
@@ -143,7 +146,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
   }
 
-  List<Notificacion> _rawNotificaciones(final Object? data, final String? estado) {
+  List<Notificacion> _rawNotificaciones(final Object? data, final NotificacionEstado? estado) {
     final payload = _notificationPayload(data);
     final items = switch (payload) {
       final List<dynamic> list => list,
@@ -184,7 +187,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   bool _hasNotificationId(final Map<dynamic, dynamic> data) => data.containsKey('idNotificacion') || data.containsKey('id');
 
-  Notificacion _toNotificacionMap(final Map<String, Object?> data, final String? estado) {
+  Notificacion _toNotificacionMap(final Map<String, Object?> data, final NotificacionEstado? estado) {
     final procMap = _map(data['procedimientoAdministrativo']);
     final unidadMap = _map(data['unidadOrganica']);
     final fechaStr = _string(data, 'fechaCaducidad') ?? _string(data, 'fecCaducidad') ?? _string(data, 'fechaExpiracion');
@@ -197,7 +200,10 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       procedimientoIdFicha: _string(procMap, 'idFicha'),
       unidadOrganicaNombre: _string(unidadMap, 'nombre') ?? _additional(unidadMap, 'nombre'),
       sistemaOrigen: _string(data, 'sistemaOrigen') ?? _string(unidadMap, 'sistema'),
-      estado: _string(data, 'estado')?.toLowerCase() ?? estado ?? '',
+      // El DTO indexado no informa el estado; si el elemento no lo trae, solo
+      // se conoce cuando se consultó filtrando por uno. Sin ninguno de los dos,
+      // queda desconocido (`null`) — nunca `''`, que la UI leía como expirada.
+      estado: notificacionEstadoFromBackend(_string(data, 'estado')) ?? estado,
     );
   }
 
@@ -259,7 +265,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   NotificacionDetalle _toDetalle(
     final Map<String, Object?> data, {
-    required final String fallbackEstado,
+    final NotificacionEstado? fallbackEstado,
     final String? fallbackSistema,
   }) {
     final unidad = _map(data['unidadOrganica']);
@@ -297,7 +303,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     return NotificacionDetalle(
       id: _int(data, 'id') ?? _int(data, 'idNotificacion') ?? 0,
       titulo: _string(data, 'concepto') ?? _string(data, 'descripcion') ?? 'Notificación',
-      estado: (_string(data, 'estado') ?? fallbackEstado).toLowerCase(),
+      estado: notificacionEstadoFromBackend(_string(data, 'estado')) ?? fallbackEstado,
       organismo: _string(data, 'organismo') ?? _string(unidad, 'nombre') ?? _additional(unidad, 'nombre'),
       procedimiento: _string(data, 'procedimiento') ?? _string(procedimiento, 'idFicha') ?? _string(procedimiento, 'denominacion') ?? _additional(procedimiento, 'denominacion'),
       expediente: _string(data, 'numeroExpediente') ?? _string(expediente, 'identificador'),

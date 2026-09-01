@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
 
 import '../../test_support/sequence_http_client_adapter.dart';
@@ -32,7 +33,7 @@ void main() {
 
       final result = await repository.loadNotificaciones(
         citizenId: '99999999R',
-        estado: 'aceptada',
+        estado: NotificacionEstado.aceptada,
       );
 
       expect(result, hasLength(1));
@@ -41,7 +42,7 @@ void main() {
       expect(result.single.procedimientoDenominacion, 'procedimiento');
       expect(result.single.unidadOrganicaNombre, '00');
       expect(result.single.sistemaOrigen, 'notifica2');
-      expect(result.single.estado, 'aceptada');
+      expect(result.single.estado, NotificacionEstado.aceptada);
       expect(
         result.single.fechaCaducidad,
         DateTime.parse('2025-03-01T23:59:59.000+00:00'),
@@ -71,7 +72,7 @@ void main() {
 
       final result = await repository.loadNotificaciones(
         citizenId: 'PER9998003',
-        estado: 'pendiente',
+        estado: NotificacionEstado.pendiente,
       );
 
       expect(result, hasLength(1));
@@ -81,7 +82,7 @@ void main() {
       expect(result.single.procedimientoIdFicha, 'FICHA-1');
       expect(result.single.unidadOrganicaNombre, 'Unidad A');
       expect(result.single.sistemaOrigen, 'INDEXA');
-      expect(result.single.estado, 'pendiente');
+      expect(result.single.estado, NotificacionEstado.pendiente);
       expect(result.single.fechaCaducidad, DateTime.parse('2026-06-25T10:15:00Z'));
       expect(adapter.requests.single.method, 'GET');
       expect(adapter.requests.single.path, '/api/v1/ciudadanos/PER9998003/notificaciones');
@@ -116,7 +117,7 @@ void main() {
 
       final result = await repository.loadNotificaciones(
         citizenId: 'PER9998003',
-        estado: 'aceptada',
+        estado: NotificacionEstado.aceptada,
       );
 
       expect(result, hasLength(11));
@@ -140,7 +141,7 @@ void main() {
 
       final result = await repository.loadNotificaciones(
         citizenId: 'PER9998003',
-        estado: 'aceptada',
+        estado: NotificacionEstado.aceptada,
       );
 
       expect(result, hasLength(1));
@@ -149,7 +150,7 @@ void main() {
       expect(result.single.procedimientoDenominacion, 'Procedimiento aceptado');
       expect(result.single.unidadOrganicaNombre, 'Unidad aceptada');
       expect(result.single.sistemaOrigen, 'notifica2');
-      expect(result.single.estado, 'aceptada');
+      expect(result.single.estado, NotificacionEstado.aceptada);
     });
 
     test('loads the full notification detail through the generated client', () async {
@@ -188,12 +189,12 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: '99999999R',
         notificacionId: 7924,
-        estado: 'expirada',
+        fallbackEstado: NotificacionEstado.expirada,
         sistemaOrigen: 'notifica2',
       );
 
       expect(detail.id, 7924);
-      expect(detail.estado, 'expirada');
+      expect(detail.estado, NotificacionEstado.expirada);
       expect(detail.organismo, 'Servicio de contratación electrónica y registros');
       expect(detail.procedimiento, 'MD7K');
       expect(detail.expediente, '2026/09032976');
@@ -233,7 +234,7 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: '99999999R',
         notificacionId: 152,
-        estado: 'expirada',
+        fallbackEstado: NotificacionEstado.expirada,
       );
 
       expect(detail.documentos, isEmpty);
@@ -260,7 +261,7 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: '99999999R',
         notificacionId: 152,
-        estado: 'expirada',
+        fallbackEstado: NotificacionEstado.expirada,
       );
 
       expect(detail.documentos, isEmpty);
@@ -314,7 +315,7 @@ void main() {
       expect(adapter.requests, hasLength(1));
       expect(adapter.requests.single.queryParameters, {'page': 0, 'size': 10});
       expect(result.single.id, 1);
-      expect(result.single.estado, 'pendiente');
+      expect(result.single.estado, NotificacionEstado.pendiente);
     });
 
     test('"Todo" propaga el error del listado único', () async {
@@ -329,6 +330,109 @@ void main() {
         throwsA(isA<DioException>()),
       );
       expect(adapter.requests, hasLength(1));
+    });
+    test('un elemento sin estado consultado sin filtro queda con estado desconocido', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 31,
+              'concepto': 'Notificación sin estado',
+              'procedimientoAdministrativo': {'denominacion': 'Proc'},
+            },
+          ],
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
+
+      // Antes se rellenaba con cadena vacía, que la UI leía como "expirada" y
+      // ocultaba la acción de comparecer (H-03).
+      expect(result.single.estado, isNull);
+      expect(adapter.requests.single.queryParameters, {'page': 0, 'size': 10});
+    });
+
+    test('el detalle informa el estado real aunque el resumen no lo conociera', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 7924,
+              'concepto': 'Requerimiento de subsanación',
+              'estado': 'PENDIENTE',
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 7924);
+
+      expect(detail.estado, NotificacionEstado.pendiente);
+    });
+
+    test('el detalle acepta el vocabulario del histórico de Notifica', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 7924,
+              'concepto': 'Requerimiento de subsanación',
+              'estado': 'PUESTO_A_DISPOSICION',
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 7924);
+
+      expect(detail.estado, NotificacionEstado.pendiente);
+    });
+
+    test('sin estado en el detalle ni en el resumen, el estado queda desconocido', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {'id': 7924, 'concepto': 'Requerimiento de subsanación'},
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 7924);
+
+      expect(detail.estado, isNull);
+    });
+
+    test('el estado del resumen solo se usa si el detalle no informa el suyo', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {'id': 7924, 'concepto': 'Requerimiento de subsanación'},
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 7924,
+        fallbackEstado: NotificacionEstado.pendiente,
+      );
+
+      expect(detail.estado, NotificacionEstado.pendiente);
     });
   });
 }
