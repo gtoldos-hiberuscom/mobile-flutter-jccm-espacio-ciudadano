@@ -145,19 +145,7 @@ class _AppCalendarState extends State<AppCalendar> {
     );
   }
 
-  List<DateTime> _daysInGrid() {
-    final firstOfMonth = DateTime(_currentMonth.year, _currentMonth.month);
-    // Weekday offset (Monday = 0 ... Sunday = 6)
-    final startWeekday = (firstOfMonth.weekday - widget.firstDayOfWeek + 7) % 7;
-    final startDate = firstOfMonth.subtract(Duration(days: startWeekday));
-
-    final days = <DateTime>[];
-    // Always show 5 weeks (35 days) for consistent height
-    for (var i = 0; i < 35; i++) {
-      days.add(startDate.add(Duration(days: i)));
-    }
-    return days;
-  }
+  List<DateTime> _daysInGrid() => calendarGridDays(month: _currentMonth, firstDayOfWeek: widget.firstDayOfWeek);
 
   @override
   Widget build(final BuildContext context) {
@@ -397,10 +385,12 @@ class _AppCalendarState extends State<AppCalendar> {
     final days = _daysInGrid();
     final rows = <Widget>[];
 
-    for (var row = 0; row < 5; row++) {
+    // Five or six rows depending on the month: a fixed row count leaves the
+    // last days of the month unpainted.
+    for (var row = 0; row < days.length ~/ DateTime.daysPerWeek; row++) {
       final cells = <Widget>[];
-      for (var col = 0; col < 7; col++) {
-        final date = days[row * 7 + col];
+      for (var col = 0; col < DateTime.daysPerWeek; col++) {
+        final date = days[row * DateTime.daysPerWeek + col];
         cells.add(Expanded(child: Center(child: _dayCell(date))));
       }
       rows.add(
@@ -551,6 +541,30 @@ class _AppCalendarState extends State<AppCalendar> {
       ),
     );
   }
+}
+
+/// Dates rendered by the month grid of [AppCalendar]: whole weeks covering
+/// every day of [month], starting on [firstDayOfWeek] (1 = Monday … 7 =
+/// Sunday, as in [DateTime.weekday]).
+///
+/// Returns 35 or 42 dates. Six rows are needed whenever the month starts late
+/// enough in the week; a grid fixed at 35 cells simply dropped the last days
+/// of those months, which could not be seen, selected, nor show their event
+/// dot (March, August and November 2026, for instance).
+///
+/// The arithmetic is civil — `DateTime(y, m, d + n)` — and never
+/// `Duration(days: n)`: a duration is exactly 24 h, so on the 25-hour day of
+/// the autumn DST change it does not reach the next day and the grid repeats
+/// that date while dragging a 23:00 time into every cell after it.
+List<DateTime> calendarGridDays({required final DateTime month, final int firstDayOfWeek = DateTime.monday}) {
+  final firstOfMonth = DateTime(month.year, month.month);
+  // Weekday offset (first day of week = 0 ... last = 6).
+  final leadingDays = (firstOfMonth.weekday - firstDayOfWeek + DateTime.daysPerWeek) % DateTime.daysPerWeek;
+  final daysInMonth = DateUtils.getDaysInMonth(month.year, month.month);
+  final weeks = (leadingDays + daysInMonth + DateTime.daysPerWeek - 1) ~/ DateTime.daysPerWeek;
+  return [
+    for (var cell = 0; cell < weeks * DateTime.daysPerWeek; cell++) DateTime(firstOfMonth.year, firstOfMonth.month, cell + 1 - leadingDays),
+  ];
 }
 
 String _capitalize(final String value) {
