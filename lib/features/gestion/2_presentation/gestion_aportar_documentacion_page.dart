@@ -244,18 +244,23 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       return;
     }
 
-    await Future.wait(
-      pendientes.map(
-        (final archivo) => _subirArchivo(
-          ref: ref,
-          archivo: archivo,
-          citizenId: citizenId,
-          documentNumber: documentNumber,
-          idUnico: inicio.idunico,
-          tipoProcedimiento: expediente.tipoproc ?? '',
-        ),
-      ),
-    );
+    // De una en una, no en paralelo: el plazo de cada subida está dimensionado
+    // por el tamaño de ESE fichero, y cinco subidas simultáneas comparten el
+    // mismo enlace, así que con ficheros grandes ninguna llegaría a tiempo
+    // (5 × 20 MB son ~133 MB en base64 por el mismo tubo). En serie el tiempo
+    // total es el mismo — lo limita el ancho de banda, no la concurrencia —,
+    // cada plazo es el que corresponde y solo hay un fichero codificado en
+    // memoria a la vez.
+    for (final archivo in pendientes) {
+      await _subirArchivo(
+        ref: ref,
+        archivo: archivo,
+        citizenId: citizenId,
+        documentNumber: documentNumber,
+        idUnico: inicio.idunico,
+        tipoProcedimiento: expediente.tipoproc ?? '',
+      );
+    }
 
     if (!context.mounted) {
       return;
