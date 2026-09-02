@@ -70,6 +70,34 @@ void main() {
     expect(notifications.single.concepto, 'Versión del servidor');
   });
 
+  test('la aceptación que el índice aún no devuelve se muestra arriba, no al final', () async {
+    final repository = _FakeGestionNotificacionesRepository(
+      accepted: [
+        _notification(id: 100, concepto: 'Aceptada antigua'),
+        _notification(id: 101, concepto: 'Otra aceptada'),
+      ],
+    );
+    final container = ProviderContainer(
+      overrides: [
+        ciudadanosEndpointIdProvider.overrideWithValue('PER9998003'),
+        gestionNotificacionesRepositoryProvider.overrideWithValue(repository),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    container
+        .read(gestionNotificacionesOptimisticAcceptedProvider.notifier)
+        .add(
+          citizenId: 'PER9998003',
+          notification: _notification(concepto: 'Aceptación local'),
+        );
+
+    final notifications = await container.read(gestionNotificacionesProvider(NotificacionEstado.aceptada).future);
+
+    expect(notifications, hasLength(3));
+    expect(notifications.first.concepto, 'Aceptación local');
+  });
+
   test('"Todo" mantiene la aceptación local mientras el índice la da por pendiente', () async {
     final repository = _FakeGestionNotificacionesRepository(
       todo: [_notification(concepto: 'Versión del servidor', estado: NotificacionEstado.pendiente)],
@@ -102,8 +130,9 @@ void main() {
 Notificacion _notification({
   required final String concepto,
   final NotificacionEstado estado = NotificacionEstado.aceptada,
+  final int id = 7924,
 }) => Notificacion(
-  id: 7924,
+  id: id,
   concepto: concepto,
   procedimientoDenominacion: 'Procedimiento',
   sistemaOrigen: 'notifica2',

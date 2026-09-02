@@ -107,6 +107,10 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   /// Fusiona por `id` los barridos de "Todo", recorridos en orden de enum y
   /// resolviendo las colisiones con [pickByNotificacionEstadoPrecedence]: un
   /// elemento solo aparece en dos barridos si transitó durante la consulta.
+  ///
+  /// El resultado se ordena con [compareNotificacionesForInbox]: al fusionar
+  /// cuatro listas filtradas no queda ningún orden del backend que preservar,
+  /// así que "Todo" define el suyo en vez de heredar el del mapa.
   List<Notificacion> _mergeSweeps(final List<List<Notificacion>> sweeps) {
     final merged = <int, Notificacion>{};
     for (final sweep in sweeps) {
@@ -115,7 +119,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
         merged[notification.id] = current == null ? notification : pickByNotificacionEstadoPrecedence(current, notification);
       }
     }
-    return merged.values.toList(growable: false);
+    return merged.values.toList()..sort(compareNotificacionesForInbox);
   }
 
   Future<List<Notificacion>> _loadForEstado({

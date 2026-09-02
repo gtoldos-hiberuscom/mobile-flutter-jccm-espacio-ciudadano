@@ -365,6 +365,40 @@ void main() {
       );
     });
 
+    test('"Todo" llega ordenado como una bandeja: pendientes por vencimiento, resto por recencia', () async {
+      final adapter = _estadoAdapter({
+        NotificacionEstado.pendiente: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 2, 'concepto': 'Pendiente tardía', 'fechaCaducidad': '2026-09-21T23:59:59Z'},
+            {'idNotificacion': 4, 'concepto': 'Pendiente urgente', 'fechaCaducidad': '2026-09-04T23:59:59Z'},
+          ],
+        ),
+        NotificacionEstado.aceptada: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 5, 'concepto': 'Aceptada antigua', 'fechaCaducidad': '2026-08-28T23:59:59Z'},
+            {'idNotificacion': 1, 'concepto': 'Aceptada reciente', 'fechaCaducidad': '2026-09-30T23:59:59Z'},
+          ],
+        ),
+        NotificacionEstado.rechazada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.expirada: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 3, 'concepto': 'Expirada', 'fechaCaducidad': '2026-07-03T23:59:59Z'},
+          ],
+        ),
+      });
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
+
+      // Fusionar cuatro listas filtradas no deja ningún orden del backend que
+      // preservar, así que "Todo" define el suyo en vez de heredar el del mapa.
+      expect(result.map((final notification) => notification.id), [4, 2, 1, 5, 3]);
+    });
+
     test('"Todo" propaga el error de cualquiera de los barridos', () async {
       final adapter = _estadoAdapter({
         NotificacionEstado.pendiente: const AdapterResponse(

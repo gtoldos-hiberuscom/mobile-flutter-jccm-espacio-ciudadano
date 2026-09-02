@@ -80,15 +80,28 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
   // de hacer el usuario gana a la copia que el servidor sigue devolviendo como
   // pendiente, y en empate se conserva la del servidor, con los campos frescos.
   final merged = {for (final notification in notifications) notification.id: notification};
+  // Lo que el índice del servidor todavía no devuelve se añade delante: acabas
+  // de aceptar esa notificación, no tiene sentido enterrarla al final.
+  final additions = <Notificacion>[];
   for (final entry in optimistic.entries) {
     if (entry.key.citizenId != citizenId) {
       continue;
     }
     final accepted = entry.value;
     final current = merged[accepted.id];
-    merged[accepted.id] = current == null ? accepted : pickByNotificacionEstadoPrecedence(current, accepted);
+    if (current == null) {
+      additions.add(accepted);
+    } else {
+      merged[accepted.id] = pickByNotificacionEstadoPrecedence(current, accepted);
+    }
   }
-  return merged.values.toList(growable: false);
+  final result = [...additions, ...merged.values];
+  if (estado == null) {
+    // "Todo" tiene orden propio (ver `compareNotificacionesForInbox`); las
+    // pestañas filtradas conservan el orden del backend.
+    result.sort(compareNotificacionesForInbox);
+  }
+  return result;
 });
 
 /// `estado` es el estado que traía el resumen del listado, o `null` si no se
