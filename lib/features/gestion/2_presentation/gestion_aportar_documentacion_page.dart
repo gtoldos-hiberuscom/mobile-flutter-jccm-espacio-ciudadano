@@ -262,12 +262,26 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     }
 
     final actuales = ref.read(gestionAportarDocumentacionProvider);
-    if (actuales.any((final a) => a.estado == AportacionArchivoEstado.error)) {
-      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionUploadErrorParcial, severity: AppAlertSeverity.error);
+    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
+    // Registrar exige que TODOS los ficheros estén subidos, no solo que
+    // ninguno haya fallado: un fichero cancelado a mitad de la subida se queda
+    // en `noEnviado` y sin hash, y pasaba esta comprobación cuando solo miraba
+    // `error`, para reventar después al construir el cuerpo.
+    final documentos = _documentosParaRegistro(actuales);
+    if (documentos == null) {
+      // Este intento muere aquí, así que los hashes que sí se obtuvieron dejan
+      // de servir (pertenecen a este `idunico`): se descartan y el siguiente
+      // registro vuelve a subir todos los ficheros.
+      final huboError = actuales.any((final a) => a.estado == AportacionArchivoEstado.error);
+      notifier.reiniciarSubidas();
+      AppAlertSnackbar.show(
+        context,
+        message: huboError ? l10n.gestionAportarDocumentacionUploadErrorParcial : l10n.gestionAportarDocumentacionUploadIncompleto,
+        severity: AppAlertSeverity.error,
+      );
       return;
     }
 
-    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
     final Uint8List justificante;
     try {
       justificante = await repository.registrarFicheros(
@@ -275,7 +289,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         documentNumber: documentNumber,
         expediente: expediente,
         inicio: inicio,
-        documentos: [for (final a in actuales) (nombre: a.nombre, hash: a.hash!, tamanioBytes: a.tamanioBytes)],
+        documentos: documentos,
         representante: representante,
       );
     } on Object catch (error, stackTrace) {
@@ -409,6 +423,21 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       }
       return false;
     }
+  }
+
+  /// Documentos listos para `registrarfichero`, o `null` si alguno no está
+  /// subido: cada entrada necesita el hash que devolvió su subida y solo un
+  /// fichero `completado` lo tiene.
+  List<({String nombre, String hash, int tamanioBytes})>? _documentosParaRegistro(final List<AportacionArchivo> archivos) {
+    final documentos = <({String nombre, String hash, int tamanioBytes})>[];
+    for (final archivo in archivos) {
+      final hash = archivo.hash;
+      if (archivo.estado != AportacionArchivoEstado.completado || hash == null) {
+        return null;
+      }
+      documentos.add((nombre: archivo.nombre, hash: hash, tamanioBytes: archivo.tamanioBytes));
+    }
+    return documentos;
   }
 
   /// `numexp` contiene `/` (ej. `WMEQ/2026/000002`), inválido en un nombre de

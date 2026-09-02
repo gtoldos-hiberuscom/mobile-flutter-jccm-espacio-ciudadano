@@ -179,5 +179,25 @@ void main() {
       expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.estado, 'estado', AportacionArchivoEstado.error)));
       expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.hash, 'hash', isNull)));
     });
+
+    test('reiniciarSubidas devuelve todo a noEnviado, sin hash y cancelando lo que hubiera en vuelo', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)
+        ..addArchivos([archivo('a.pdf'), archivo('b.pdf')])
+        ..beginUpload('/tmp/a.pdf')
+        ..marcarCompletado('/tmp/a.pdf', 'hash-a');
+      final tokenB = notifier.beginUpload('/tmp/b.pdf');
+
+      notifier.reiniciarSubidas();
+
+      final result = container.read(gestionAportarDocumentacionProvider);
+      // El hash de a.pdf pertenece al idunico del intento que acaba de morir,
+      // así que se descarta: el siguiente registro sube los dos otra vez.
+      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.estado, 'estado', AportacionArchivoEstado.noEnviado)));
+      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.hash, 'hash', isNull)));
+      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.progreso, 'progreso', isNull)));
+      expect(tokenB.isCancelled, isTrue);
+    });
   });
 }
