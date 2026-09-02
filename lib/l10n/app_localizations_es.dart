@@ -3778,4 +3778,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gestionNotificacionesLoadError => 'No se han podido cargar las notificaciones';
+
+  @override
+  String get consentRevokedSessionClosed => 'Has retirado la autorización para consultar tus datos, así que hemos cerrado la sesión. Vuelve a iniciarla para concederla de nuevo.';
+
+  @override
+  String get authorizationRevokedMessage => 'Ya no tienes autorizada esta consulta. Cerramos la sesión para que puedas volver a concederla al entrar.';
 }

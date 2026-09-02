@@ -4921,5 +4921,13 @@
   "gestionNotificacionesLoadError": "No se han podido cargar las notificaciones",
   "@gestionNotificacionesLoadError": {
     "description": "Mensaje de error al cargar la lista de notificaciones."
+  },
+  "consentRevokedSessionClosed": "Has retirado la autorización para consultar tus datos, así que hemos cerrado la sesión. Vuelve a iniciarla para concederla de nuevo.",
+  "@consentRevokedSessionClosed": {
+    "description": "Aviso al cerrar la sesión porque la cláusula obligatoria de consentimiento ya no está aceptada."
+  },
+  "authorizationRevokedMessage": "Ya no tienes autorizada esta consulta. Cerramos la sesión para que puedas volver a concederla al entrar.",
+  "@authorizationRevokedMessage": {
+    "description": "Estado de pantalla cuando la cláusula obligatoria se ha retirado y la sesión se está cerrando."
   }
 }

@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 
 /// Manejo común de las respuestas de intermediación del recurso ciudadano.
@@ -47,40 +46,8 @@ Future<Object?> intermediacionRawResponse(final Future<Object?> Function() fetch
 bool isHandledIntermediacionStatus(final int? status) => status != null && ((status >= 200 && status < 300) || status == 403 || status == 404);
 
 /// `true` cuando el sobre expresa que la consulta requiere autorización
-/// (cláusula sin aceptar): `codigo-respuesta` `412.00`, o `codigo-error`
-/// `3034` dentro de `info-error.errores`.
-bool isIntermediacionAuthorizationRequired(final Object? data) {
-  final decoded = _decodePayload(data);
-  if (decoded is! Map) {
-    return false;
-  }
-  if (decoded['codigo-respuesta']?.toString() == '412.00') {
-    return true;
-  }
-  final infoError = decoded['info-error'];
-  if (infoError is! Map) {
-    return false;
-  }
-  final errors = infoError['errores'];
-  return errors is List && errors.whereType<Map<dynamic, dynamic>>().any((final error) => error['codigo-error']?.toString() == '3034');
-}
-
-/// Desempaqueta cargas que el backend entrega como JSON anidado en cadenas.
-Object? _decodePayload(final Object? payload) {
-  Object? current = payload;
-  for (var i = 0; i < 4; i++) {
-    if (current is! String) {
-      return current;
-    }
-    final trimmed = current.trim();
-    if (trimmed.isEmpty) {
-      return null;
-    }
-    try {
-      current = jsonDecode(trimmed);
-    } on FormatException {
-      return current;
-    }
-  }
-  return current;
-}
+/// (cláusula sin aceptar).
+///
+/// Delega en [isAuthorizationRequiredEnvelope]: el sobre es de la fachada, no
+/// de Mis Datos, y lo comparten notificaciones, carnets y vivienda.
+bool isIntermediacionAuthorizationRequired(final Object? data) => isAuthorizationRequiredEnvelope(data);

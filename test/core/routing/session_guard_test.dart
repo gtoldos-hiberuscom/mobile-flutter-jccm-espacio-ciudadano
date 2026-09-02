@@ -199,6 +199,9 @@ final class _FakeConsentRepository implements ConsentRepository {
   Future<List<Clause>> fetchClauses({final String? idAgente}) => throw UnimplementedError();
 
   @override
+  Future<List<Clause>> refreshClauses({required final String idAgente}) => throw UnimplementedError();
+
+  @override
   Future<void> markConsentAccepted({required final String idAgente, required final List<Clause> clauses}) => throw UnimplementedError();
 
   @override

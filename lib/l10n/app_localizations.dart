@@ -7309,6 +7309,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se han podido cargar las notificaciones'**
   String get gestionNotificacionesLoadError;
+
+  /// Aviso al cerrar la sesión porque la cláusula obligatoria de consentimiento ya no está aceptada.
+  ///
+  /// In es, this message translates to:
+  /// **'Has retirado la autorización para consultar tus datos, así que hemos cerrado la sesión. Vuelve a iniciarla para concederla de nuevo.'**
+  String get consentRevokedSessionClosed;
+
+  /// Estado de pantalla cuando la cláusula obligatoria se ha retirado y la sesión se está cerrando.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya no tienes autorizada esta consulta. Cerramos la sesión para que puedas volver a concederla al entrar.'**
+  String get authorizationRevokedMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

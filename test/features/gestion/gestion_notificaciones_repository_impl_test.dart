@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificacion_estado_mapper.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
@@ -397,6 +398,52 @@ void main() {
       // Fusionar cuatro listas filtradas no deja ningún orden del backend que
       // preservar, así que "Todo" define el suyo en vez de heredar el del mapa.
       expect(result.map((final notification) => notification.id), [4, 2, 1, 5, 3]);
+    });
+
+    test('el sobre de autorización sale como señal tipada, no como DioException', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 403,
+          body: <String, dynamic>{
+            'body': null,
+            'mensaje-respuesta': 'No se pudo dar de alta el soporte.',
+            'codigo-respuesta': '412.00',
+            'info-error': {
+              'errores': [
+                {'codigo-error': '3034', 'mensaje-error': 'Cuando autorizas a que Espacio Ciudadano…'},
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      // Quién decide qué significa es la capa de presentación: aquí no se sabe
+      // si el ciudadano revocó o si el gateway no pudo leer preferencias.
+      await expectLater(
+        repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.expirada),
+        throwsA(isA<AuthorizationRequiredException>()),
+      );
+    });
+
+    test('en "Todo" basta con que un estado responda el sobre de autorización', () async {
+      final adapter = _estadoAdapter({
+        NotificacionEstado.pendiente: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.aceptada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.rechazada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.expirada: const AdapterResponse(
+          statusCode: 403,
+          body: <String, dynamic>{'codigo-respuesta': '412.00'},
+        ),
+      });
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadNotificaciones(citizenId: 'PER9998003'),
+        throwsA(isA<AuthorizationRequiredException>()),
+      );
     });
 
     test('"Todo" propaga el error de cualquiera de los barridos', () async {

@@ -405,6 +405,34 @@ void main() {
         throwsA(isA<ConsentStatusUnknownException>()),
       );
     });
+    test('refreshClauses relee del backend; fetchClauses reutiliza la copia en memoria', () async {
+      final adapter = _CapturingAdapter();
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(adapter),
+        agentId: 'PER9998003',
+      );
+
+      await repository.fetchClauses(idAgente: 'PER9998003');
+      await repository.fetchClauses(idAgente: 'PER9998003');
+      expect(adapter.paths.where((final path) => path.endsWith('/clausulas')), hasLength(1));
+
+      await repository.refreshClauses(idAgente: 'PER9998003');
+
+      // La caché en memoria es deliberada (una revocación no debe expulsar a
+      // nadie por un bache), pero por eso mismo oculta las revocaciones: la
+      // relectura es la única fuente admisible para decidir un cierre de sesión.
+      expect(adapter.paths.where((final path) => path.endsWith('/clausulas')), hasLength(2));
+    });
+
+    test('refreshClauses exige idAgente', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter()),
+      );
+
+      await expectLater(repository.refreshClauses(idAgente: '  '), throwsA(isA<StateError>()));
+    });
   });
 }
 

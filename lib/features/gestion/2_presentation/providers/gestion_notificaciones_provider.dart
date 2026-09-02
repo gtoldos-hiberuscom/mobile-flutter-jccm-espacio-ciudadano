@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
@@ -60,13 +63,21 @@ final gestionNotificacionesOptimisticAcceptedProvider = NotifierProvider<Gestion
 );
 
 /// Family param: filtro de estado — null = "Todo" (unión de todos los estados).
-final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>((final ref, final estado) async {
+final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>(retry: _noRetryOnAuthorization, (final ref, final estado) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
   }
   final repo = ref.watch(gestionNotificacionesRepositoryProvider);
-  final notifications = await repo.loadNotificaciones(citizenId: citizenId, estado: estado);
+  // Notificaciones solo exige la cláusula obligatoria (ver
+  // `documentation/consent_clause_access_matrix.md`): no hay cláusula
+  // intermedia que ofrecer, así que el rechazo por autorización solo puede ser
+  // revocación (cierra sesión) o fallo transitorio (error con reintento).
+  final notifications = await withAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId},
+    request: () => repo.loadNotificaciones(citizenId: citizenId, estado: estado),
+  );
   if (estado != null && estado != NotificacionEstado.aceptada) {
     return notifications;
   }
@@ -108,17 +119,32 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
 /// conocía: solo sirve de respaldo si el detalle no lo informa.
 typedef NotificacionDetalleArgs = ({int id, NotificacionEstado? estado, String? sistemaOrigen});
 
-final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>((final ref, final args) async {
+final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>(retry: _noRetryOnAuthorization, (final ref, final args) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
   }
-  return ref
-      .watch(gestionNotificacionesRepositoryProvider)
-      .loadNotificacion(
-        citizenId: citizenId,
-        notificacionId: args.id,
-        fallbackEstado: args.estado,
-        sistemaOrigen: args.sistemaOrigen,
-      );
+  final repo = ref.watch(gestionNotificacionesRepositoryProvider);
+  return withAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId},
+    request: () => repo.loadNotificacion(
+      citizenId: citizenId,
+      notificacionId: args.id,
+      fallbackEstado: args.estado,
+      sistemaOrigen: args.sistemaOrigen,
+    ),
+  );
 });
+
+/// Riverpod reintenta con espera creciente cualquier provider que falle. Un
+/// desenlace de autorización no es un fallo transitorio: reintentarlo repite el
+/// rechazo del backend y la relectura de cláusulas mientras el usuario mira una
+/// pantalla que ya le dice qué hacer (o mientras se cierra la sesión). El resto
+/// de errores mantienen el comportamiento por defecto.
+Duration? _noRetryOnAuthorization(final int retryCount, final Object error) {
+  if (error is AuthorizationFailure) {
+    return null;
+  }
+  return ProviderContainer.defaultRetry(retryCount, error);
+}

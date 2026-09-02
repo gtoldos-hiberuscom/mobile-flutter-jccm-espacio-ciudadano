@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
@@ -35,12 +36,22 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     final NotificacionEstado? fallbackEstado,
     final String? sistemaOrigen,
   }) async {
-    final response = await _api.obtenerNotificacion(
-      id: citizenId,
-      notificacionId: notificacionId,
-      sisOrigen: sistemaOrigen,
-      extra: {generatedApiDecodeStringResponseExtraKey: true},
-    );
+    final Response<Object?> response;
+    try {
+      response = await _api.obtenerNotificacion(
+        id: citizenId,
+        notificacionId: notificacionId,
+        sisOrigen: sistemaOrigen,
+        extra: {generatedApiDecodeStringResponseExtraKey: true},
+      );
+    } on DioException catch (error) {
+      _throwIfAuthorizationRequired(
+        error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey],
+        statusCode: error.response?.statusCode,
+        path: 'notificaciones/$notificacionId',
+      );
+      rethrow;
+    }
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     final body = _bodyMap(raw, notificacionId);
     return _toDetalle(body, requestedId: notificacionId, fallbackEstado: fallbackEstado, fallbackSistema: sistemaOrigen);
@@ -178,17 +189,43 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       if (response.statusCode == 404) {
         return const [];
       }
+      _throwIfAuthorizationRequired(
+        response.data,
+        statusCode: response.statusCode,
+        path: 'notificaciones',
+      );
       return _rawNotificaciones(response.data, estado);
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
         return const [];
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
+      _throwIfAuthorizationRequired(
+        rawData,
+        statusCode: error.response?.statusCode,
+        path: 'notificaciones',
+      );
       final parsed = _rawNotificaciones(rawData, estado);
       if (parsed.isNotEmpty) {
         return parsed;
       }
       rethrow;
+    }
+  }
+
+  /// Traduce el sobre de autorización de la fachada a una señal tipada.
+  ///
+  /// La fachada lo devuelve con 403, pero también aparece dentro de un 2xx, así
+  /// que se comprueban los dos caminos. Quien lo resuelve es
+  /// `withAuthorizationGuard`: aquí no se sabe **qué** autorización falta, y el
+  /// sobre tampoco distingue una revocación de un fallo de preferencias.
+  void _throwIfAuthorizationRequired(
+    final Object? data, {
+    required final String path,
+    final int? statusCode,
+  }) {
+    if (isAuthorizationRequiredEnvelope(data)) {
+      throw AuthorizationRequiredException(statusCode: statusCode, path: path);
     }
   }
 
