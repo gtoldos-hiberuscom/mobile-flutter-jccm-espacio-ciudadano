@@ -10,7 +10,17 @@ import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_es
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificacion_estado_mapper.dart';
 
-const int _kNotificationsPageSize = 10;
+/// Tamaño de página del listado de notificaciones.
+///
+/// La pestaña "Todo" barre los cuatro estados, así que cada página de más son
+/// cuatro peticiones de más: con 10 (el ejemplo del swagger) un ciudadano con
+/// ~45 aceptadas costaba 9 peticiones por visita.
+///
+/// **Asume que el gateway respeta el `size` pedido**, porque la paginación se
+/// detiene en la primera página incompleta. Si el backend recortara el tamaño
+/// por su cuenta, la primera página parecería la última y se perderían
+/// notificaciones: hay que comprobarlo en UAT antes de mergear.
+const int _kNotificationsPageSize = 50;
 
 final class GestionNotificacionesRepositoryImpl implements GestionNotificacionesRepository {
   GestionNotificacionesRepositoryImpl({required final Dio dio}) : _dio = withGeneratedApiCompat(dio), _api = CiudadanosApi(withGeneratedApiCompat(dio), standardSerializers);

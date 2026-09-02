@@ -57,7 +57,7 @@ void main() {
       expect(adapter.requests.single.queryParameters, <String, dynamic>{
         'estado': 'aceptada',
         'page': 0,
-        'size': 10,
+        'size': 50,
       });
     });
 
@@ -91,7 +91,7 @@ void main() {
       expect(adapter.requests.single.queryParameters, <String, dynamic>{
         'estado': 'pendiente',
         'page': 0,
-        'size': 10,
+        'size': 50,
       });
     });
 
@@ -101,7 +101,7 @@ void main() {
           statusCode: 200,
           body: {
             'content': [
-              for (var id = 1; id <= 10; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
+              for (var id = 1; id <= 50; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
             ],
           },
         ),
@@ -109,7 +109,7 @@ void main() {
           statusCode: 200,
           body: {
             'content': [
-              {'idNotificacion': 11, 'concepto': 'Notificación 11'},
+              {'idNotificacion': 51, 'concepto': 'Notificación 51'},
             ],
           },
         ),
@@ -122,11 +122,11 @@ void main() {
         estado: NotificacionEstado.aceptada,
       );
 
-      expect(result, hasLength(11));
+      expect(result, hasLength(51));
       expect(adapter.requests, hasLength(2));
       expect(adapter.requests[0].queryParameters['page'], 0);
       expect(adapter.requests[1].queryParameters['page'], 1);
-      expect(adapter.requests.every((final request) => request.queryParameters['size'] == 10), isTrue);
+      expect(adapter.requests.every((final request) => request.queryParameters['size'] == 50), isTrue);
     });
 
     test('loads accepted notifications when body uses the detailed Notifica shape', () async {
@@ -351,7 +351,7 @@ void main() {
         {'pendiente', 'aceptada', 'rechazada', 'expirada'},
       );
       expect(
-        adapter.requests.every((final request) => request.path == '/api/v1/ciudadanos/PER9998003/notificaciones' && request.queryParameters['page'] == 0 && request.queryParameters['size'] == 10),
+        adapter.requests.every((final request) => request.path == '/api/v1/ciudadanos/PER9998003/notificaciones' && request.queryParameters['page'] == 0 && request.queryParameters['size'] == 50),
         isTrue,
       );
       expect(
