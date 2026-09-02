@@ -13,11 +13,13 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
 
-riverpod_lint:
-  rules:
-    # Enable or disable specific rules
-    missing_provider_scope: true
-    prefer_final_provider_parameters: true
+# Las reglas de `riverpod_lint` se cargan a través de `custom_lint` (ver el pin
+# de la versión en pubspec.yaml) y se ejecutan con `dart run custom_lint`.
+# Están todas activas: el bloque anterior pretendía habilitar solo dos, pero
+# una de ellas (`prefer_final_provider_parameters`) no existe en riverpod_lint
+# —la regla de parámetros de family se llama `provider_parameters`— y ese
+# bloque, además, no era un esquema válido ni de custom_lint ni del analizador,
+# así que no configuraba nada.
 
 formatter:
   page_width: 1024
