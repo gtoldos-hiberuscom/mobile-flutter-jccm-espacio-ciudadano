@@ -64,21 +64,7 @@ void main() {
       expect(await intermediacionRawResponse(() async => payload), same(payload));
     });
   });
-}
 
-DioException _dioError(final int? statusCode, final Object? data) {
-  final requestOptions = RequestOptions(path: '/x');
-  return DioException(
-    requestOptions: requestOptions,
-    type: statusCode == null ? DioExceptionType.connectionTimeout : DioExceptionType.badResponse,
-    response: statusCode == null
-        ? null
-        : Response<Object?>(
-            requestOptions: requestOptions,
-            statusCode: statusCode,
-            data: data,
-          ),
-  );
   group('isHandledIntermediacionStatus', () {
     test('acepta 2xx, la negativa de autorización y la ausencia de datos', () {
       expect(isHandledIntermediacionStatus(200), isTrue);
@@ -103,4 +89,19 @@ DioException _dioError(final int? statusCode, final Object? data) {
       expect(isHandledIntermediacionStatus(null), isFalse);
     });
   });
+}
+
+DioException _dioError(final int? statusCode, final Object? data) {
+  final requestOptions = RequestOptions(path: '/x');
+  return DioException(
+    requestOptions: requestOptions,
+    type: statusCode == null ? DioExceptionType.connectionTimeout : DioExceptionType.badResponse,
+    response: statusCode == null
+        ? null
+        : Response<Object?>(
+            requestOptions: requestOptions,
+            statusCode: statusCode,
+            data: data,
+          ),
+  );
 }
