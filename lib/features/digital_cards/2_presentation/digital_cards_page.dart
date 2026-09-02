@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
@@ -52,11 +53,22 @@ class DigitalCardsPage extends ConsumerWidget {
           final cardsAsync = ref.watch(digitalCardsProvider);
           return cardsAsync.when(
             loading: () => const AppLoadingIndicator(),
-            error: (final error, final stackTrace) => _DigitalCardsMessage(
-              message: l10n.digitalCardsErrorMessage,
-              actionLabel: 'Reintentar',
-              onAction: () => ref.invalidate(digitalCardsProvider),
-            ),
+            // El rechazo por autorización ya está resuelto: si falta la
+            // cláusula de la JCCM se ofrece concederla, y si se ha retirado la
+            // obligatoria la sesión se está cerrando. Antes ambos casos caían
+            // en la lista vacía —"no tienes carnets digitales"— porque el sobre
+            // `412.00` entraba por la rama de error de negocio del repositorio.
+            error: (final error, final stackTrace) => switch (error) {
+              ClauseMissing() => _UnauthorizedCardsContent(
+                onOpenAuthorizations: () => _openAuthorizations(context, ref),
+              ),
+              ConsentRevoked() => _DigitalCardsMessage(message: l10n.authorizationRevokedMessage),
+              _ => _DigitalCardsMessage(
+                message: l10n.digitalCardsErrorMessage,
+                actionLabel: 'Reintentar',
+                onAction: () => ref.invalidate(digitalCardsProvider),
+              ),
+            },
             data: (final cards) {
               if (cards.isEmpty) {
                 return _DigitalCardsMessage(message: l10n.digitalCardsEmptyMessage);

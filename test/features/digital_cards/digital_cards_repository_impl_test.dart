@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/3_data/digital_cards_repository_impl.dart';
 
@@ -33,6 +34,33 @@ void main() {
         '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
       ]),
     );
+  });
+
+  test('los tres carnets rechazados por autorización no son "no tienes carnets"', () async {
+    adapter.unauthorizedPaths.addAll([
+      '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/joven',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
+    ]);
+
+    // Antes el sobre 412.00 entraba por la rama de error de negocio, cada
+    // carnet salía `null` y la pantalla decía "no tienes carnets digitales" a
+    // quien en realidad no tenía la cláusula aceptada.
+    await expectLater(
+      repository.loadCards(citizenId: 'sid-123'),
+      throwsA(isA<AuthorizationRequiredException>()),
+    );
+  });
+
+  test('un carnet válido sobrevive al rechazo por autorización de los otros', () async {
+    adapter.unauthorizedPaths.addAll([
+      '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
+    ]);
+
+    final cards = await repository.loadCards(citizenId: 'sid-123');
+
+    expect(cards.map((final card) => card.type), [DigitalCardType.youth]);
   });
 
   test('uses the card-specific PKPASS endpoint', () async {
@@ -103,6 +131,7 @@ final class _DigitalCardsAdapter implements HttpClientAdapter {
   final List<String> paths = [];
   final Set<String> failingPaths = {};
   final Set<String> noDataPaths = {};
+  final Set<String> unauthorizedPaths = {};
 
   @override
   Future<ResponseBody> fetch(
@@ -113,6 +142,24 @@ final class _DigitalCardsAdapter implements HttpClientAdapter {
     paths.add(options.path);
     if (failingPaths.contains(options.path)) {
       return ResponseBody.fromString('Service unavailable', 500);
+    }
+    if (unauthorizedPaths.contains(options.path)) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': null,
+          'mensaje-respuesta': 'No se pudo dar de alta el soporte.',
+          'codigo-respuesta': '412.00',
+          'info-error': {
+            'errores': [
+              {'codigo-error': '3034', 'mensaje-error': 'Cuando autorizas a que Espacio Ciudadano…'},
+            ],
+          },
+        }),
+        403,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
     }
     if (noDataPaths.contains(options.path)) {
       return ResponseBody.fromString(
