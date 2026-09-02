@@ -34,6 +34,18 @@ Future<Object?> intermediacionRawResponse(final Future<Object?> Function() fetch
   return data;
 }
 
+/// Códigos de estado que la capa de datos de intermediación sabe interpretar:
+/// una respuesta correcta (2xx), la negativa por falta de autorización (403) o
+/// la ausencia de datos del ciudadano (404). Cualquier otro debe salir como
+/// `DioException` para que los interceptores de red hagan su trabajo.
+///
+/// Los 3xx quedan **fuera** a propósito: una redirección del gateway o de un
+/// portal cautivo entraba por la rama «manejada» y su HTML se decodificaba a
+/// `null`, es decir, a «sin datos». Dio sigue las redirecciones por su cuenta,
+/// así que un 3xx que llega hasta aquí es precisamente el caso raro que no hay
+/// que interpretar como negocio.
+bool isHandledIntermediacionStatus(final int? status) => status != null && ((status >= 200 && status < 300) || status == 403 || status == 404);
+
 /// `true` cuando el sobre expresa que la consulta requiere autorización
 /// (cláusula sin aceptar): `codigo-respuesta` `412.00`, o `codigo-error`
 /// `3034` dentro de `info-error.errores`.

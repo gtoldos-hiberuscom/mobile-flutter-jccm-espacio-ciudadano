@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 /// Cliente de las consultas de vivienda del recurso ciudadano.
 ///
@@ -35,7 +36,7 @@ final class ViviendaApi {
     final response = await _dio.post<Object?>(
       '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/vivienda/$operation',
       data: body,
-      options: Options(validateStatus: _isHandledStatus),
+      options: Options(validateStatus: isHandledIntermediacionStatus),
     );
     if (response.statusCode == 403) {
       throw const MyDataAuthorizationRequired();
@@ -45,8 +46,4 @@ final class ViviendaApi {
     }
     return decodeApiEnvelope(response.data) ?? response.data;
   }
-
-  /// Códigos que esta capa sabe interpretar. El resto debe fallar para que los
-  /// interceptores de red hagan su trabajo.
-  bool _isHandledStatus(final int? status) => status != null && (status < 400 || status == 403 || status == 404);
 }

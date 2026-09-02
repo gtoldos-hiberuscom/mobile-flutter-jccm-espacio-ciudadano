@@ -79,4 +79,28 @@ DioException _dioError(final int? statusCode, final Object? data) {
             data: data,
           ),
   );
+  group('isHandledIntermediacionStatus', () {
+    test('acepta 2xx, la negativa de autorización y la ausencia de datos', () {
+      expect(isHandledIntermediacionStatus(200), isTrue);
+      expect(isHandledIntermediacionStatus(204), isTrue);
+      expect(isHandledIntermediacionStatus(403), isTrue);
+      expect(isHandledIntermediacionStatus(404), isTrue);
+    });
+
+    test('rechaza los 3xx: una redirección no es un dato de negocio', () {
+      // Un 302 de portal cautivo o del gateway entraba por la rama «manejada»
+      // y su HTML se decodificaba a null, es decir, a «sin datos» (R-19).
+      expect(isHandledIntermediacionStatus(301), isFalse);
+      expect(isHandledIntermediacionStatus(302), isFalse);
+      expect(isHandledIntermediacionStatus(304), isFalse);
+    });
+
+    test('rechaza el resto para que salga como DioException', () {
+      expect(isHandledIntermediacionStatus(400), isFalse);
+      expect(isHandledIntermediacionStatus(401), isFalse);
+      expect(isHandledIntermediacionStatus(429), isFalse);
+      expect(isHandledIntermediacionStatus(500), isFalse);
+      expect(isHandledIntermediacionStatus(null), isFalse);
+    });
+  });
 }
