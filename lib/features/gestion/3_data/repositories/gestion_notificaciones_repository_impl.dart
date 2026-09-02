@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
@@ -32,7 +33,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     );
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     final body = _bodyMap(raw, notificacionId);
-    return _toDetalle(body, fallbackEstado: fallbackEstado, fallbackSistema: sistemaOrigen);
+    return _toDetalle(body, requestedId: notificacionId, fallbackEstado: fallbackEstado, fallbackSistema: sistemaOrigen);
   }
 
   @override
@@ -197,6 +198,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
           },
         )
         .map((final map) => _toNotificacionMap(map, estado))
+        .nonNulls
         .toList(growable: false);
   }
 
@@ -222,13 +224,29 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   bool _hasNotificationId(final Map<dynamic, dynamic> data) => data.containsKey('idNotificacion') || data.containsKey('id');
 
-  Notificacion _toNotificacionMap(final Map<String, Object?> data, final NotificacionEstado estado) {
+  /// `null` cuando el elemento no trae un id utilizable.
+  ///
+  /// Esta capa indexa por id cuanto hace con un listado: la acumulación de
+  /// páginas de un estado y la fusión de los cuatro barridos de la pestaña
+  /// "Todo". Un id fabricado (antes `?? 0`) convertía **dos notificaciones
+  /// distintas sin id en una sola tarjeta**, con los datos de una y el estado de
+  /// la otra al resolver la precedencia entre barridos; y podía cortar la
+  /// paginación antes de tiempo, porque una página que no aporta ids nuevos se
+  /// interpreta como final del listado.
+  Notificacion? _toNotificacionMap(final Map<String, Object?> data, final NotificacionEstado estado) {
+    final id = _int(data, 'idNotificacion') ?? _int(data, 'id');
+    if (id == null) {
+      // Solo las claves, nunca los valores: el concepto de una notificación es
+      // dato personal.
+      logger.w('[notificaciones] elemento sin id utilizable descartado (claves: ${data.keys.join(', ')})');
+      return null;
+    }
     final procMap = _map(data['procedimientoAdministrativo']);
     final unidadMap = _map(data['unidadOrganica']);
     final fechaStr = _string(data, 'fechaCaducidad') ?? _string(data, 'fecCaducidad') ?? _string(data, 'fechaExpiracion');
 
     return Notificacion(
-      id: _int(data, 'idNotificacion') ?? _int(data, 'id') ?? 0,
+      id: id,
       concepto: _string(data, 'concepto') ?? _string(data, 'descripcion') ?? '',
       procedimientoDenominacion: _string(procMap, 'denominacion') ?? _additional(procMap, 'denominacion') ?? '',
       fechaCaducidad: fechaStr != null ? DateTime.tryParse(fechaStr) : null,
@@ -301,6 +319,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   NotificacionDetalle _toDetalle(
     final Map<String, Object?> data, {
+    required final int requestedId,
     final NotificacionEstado? fallbackEstado,
     final String? fallbackSistema,
   }) {
@@ -337,7 +356,9 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
         .nonNulls
         .toList(growable: false);
     return NotificacionDetalle(
-      id: _int(data, 'id') ?? _int(data, 'idNotificacion') ?? 0,
+      // El detalle se pide POR id, así que si el sobre no lo repite se conoce
+      // igualmente: el respaldo es el id consultado, no un 0 fabricado.
+      id: _int(data, 'id') ?? _int(data, 'idNotificacion') ?? requestedId,
       titulo: _string(data, 'concepto') ?? _string(data, 'descripcion') ?? 'Notificación',
       estado: notificacionEstadoFromBackend(_string(data, 'estado')) ?? fallbackEstado,
       organismo: _string(data, 'organismo') ?? _string(unidad, 'nombre') ?? _additional(unidad, 'nombre'),

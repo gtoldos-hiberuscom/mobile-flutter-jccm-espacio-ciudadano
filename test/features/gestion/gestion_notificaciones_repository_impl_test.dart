@@ -460,6 +460,75 @@ void main() {
       expect(result.single.estado, NotificacionEstado.aceptada);
     });
 
+    test('"Todo" no fusiona dos elementos distintos que llegan sin id', () async {
+      // El caso que abre el barrido de los cuatro estados: con el id fabricado
+      // (`?? 0`) estas dos notificaciones distintas colapsaban en una sola
+      // tarjeta, con los datos de una y el estado de la otra al resolver la
+      // precedencia entre barridos.
+      final adapter = _estadoAdapter({
+        NotificacionEstado.pendiente: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'concepto': 'Sin id, pendiente'},
+            {'idNotificacion': 7, 'concepto': 'Con id'},
+          ],
+        ),
+        NotificacionEstado.aceptada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.rechazada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.expirada: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'concepto': 'Sin id, expirada'},
+          ],
+        ),
+      });
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
+
+      // Los dos elementos sin id se descartan: es preferible perder una
+      // notificación que no se puede identificar a inventar una mezclando dos.
+      expect(result.map((final notification) => notification.id), [7]);
+      expect(result.single.estado, NotificacionEstado.pendiente);
+    });
+
+    test('un elemento sin id utilizable se descarta dentro de un estado concreto', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 11, 'concepto': 'Con id'},
+            {'concepto': 'Sin id'},
+            {'idNotificacion': 'no-numérico', 'concepto': 'Id que no parsea'},
+          ],
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.pendiente);
+
+      expect(result.map((final notification) => notification.id), [11]);
+    });
+
+    test('el detalle sin id en el sobre usa el id consultado, no un 0', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {'concepto': 'Detalle sin id', 'estado': 'PENDIENTE'},
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 7924);
+
+      expect(detail.id, 7924);
+    });
+
     test('un elemento con estado en el payload conserva el suyo, no el consultado', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
