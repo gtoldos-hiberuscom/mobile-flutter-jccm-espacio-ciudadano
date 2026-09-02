@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/load
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 
 /// Detalle de notificación — Figma node 44641:24980 (expirada).
@@ -20,7 +21,11 @@ class GestionNotificacionDetallePage extends ConsumerStatefulWidget {
   });
 
   final int notificacionId;
-  final String estado;
+
+  /// Estado que traía el resumen del listado, o `null` si no se conocía
+  /// (pestaña "Todo", deep link). Solo se usa como respaldo mientras el detalle
+  /// carga o si el backend no informa el estado.
+  final NotificacionEstado? estado;
   final String? sistemaOrigen;
 
   @override
@@ -54,7 +59,10 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
           data: (final value) => _DetalleContent(value: value),
         ),
       ),
-      bottomNavigationBar: widget.estado.toLowerCase() == 'pendiente'
+      // La comparecencia se decide con el estado del detalle cargado, no con el
+      // del resumen: en "Todo" el resumen no trae estado y la acción con
+      // efectos jurídicos desaparecía de la pantalla.
+      bottomNavigationBar: (detail.asData?.value.estado ?? widget.estado) == NotificacionEstado.pendiente
           ? _PendingActionBar(
               accepting: _accepting,
               onAccept: _accept,
@@ -95,14 +103,14 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
               fechaCaducidad: detail.fechaExpiracion,
               unidadOrganicaNombre: detail.organismo,
               sistemaOrigen: detail.sistemaOrigen ?? widget.sistemaOrigen,
-              estado: 'aceptada',
+              estado: NotificacionEstado.aceptada,
             ),
           );
 
       ref
         ..invalidate(gestionNotificacionesProvider(null))
-        ..invalidate(gestionNotificacionesProvider('pendiente'))
-        ..invalidate(gestionNotificacionesProvider('aceptada'));
+        ..invalidate(gestionNotificacionesProvider(NotificacionEstado.pendiente))
+        ..invalidate(gestionNotificacionesProvider(NotificacionEstado.aceptada));
       if (!mounted) {
         return;
       }
@@ -139,8 +147,13 @@ class _DetalleContent extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTag(status: _tagStatus(value.estado), label: _statusLabel(value.estado)),
-        const SizedBox(height: AppDimensions.space8),
+        // Sin estado conocido no se etiqueta la notificación: antes se pintaba
+        // "Expirada" por defecto, justo lo contrario de lo que le pasa a una
+        // notificación pendiente.
+        if (value.estado case final estado?) ...[
+          AppTag(status: _tagStatus(estado), label: _statusLabel(estado)),
+          const SizedBox(height: AppDimensions.space8),
+        ],
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space4, vertical: AppDimensions.space8),
           child: Text(value.titulo, style: AppTypography.h2.copyWith(color: AppColors.textBase)),
@@ -315,14 +328,19 @@ class _DocumentCard extends StatelessWidget {
   );
 }
 
-AppTagStatus _tagStatus(final String estado) => switch (estado.toLowerCase()) {
-  'aceptada' => AppTagStatus.success,
-  'pendiente' => AppTagStatus.warning,
-  'rechazada' => AppTagStatus.error,
-  _ => AppTagStatus.infoInactive,
+AppTagStatus _tagStatus(final NotificacionEstado estado) => switch (estado) {
+  NotificacionEstado.aceptada => AppTagStatus.success,
+  NotificacionEstado.pendiente => AppTagStatus.warning,
+  NotificacionEstado.rechazada => AppTagStatus.error,
+  NotificacionEstado.expirada => AppTagStatus.infoInactive,
 };
-String _statusLabel(final String estado) => estado.isEmpty ? 'Expirada' : '${estado[0].toUpperCase()}${estado.substring(1).toLowerCase()}';
-bool _showsExpiration(final String estado) => const {'pendiente', 'expirada'}.contains(estado.toLowerCase());
-bool _isPending(final String estado) => estado.toLowerCase() == 'pendiente';
+String _statusLabel(final NotificacionEstado estado) => switch (estado) {
+  NotificacionEstado.pendiente => 'Pendiente',
+  NotificacionEstado.aceptada => 'Aceptada',
+  NotificacionEstado.rechazada => 'Rechazada',
+  NotificacionEstado.expirada => 'Expirada',
+};
+bool _showsExpiration(final NotificacionEstado? estado) => estado == NotificacionEstado.pendiente || estado == NotificacionEstado.expirada;
+bool _isPending(final NotificacionEstado? estado) => estado == NotificacionEstado.pendiente;
 String _formatDate(final BuildContext context, final DateTime date) => DateFormat('d MMM yyyy', Localizations.localeOf(context).languageCode).format(date);
 String _formatSize(final int bytes) => bytes >= 1048576 ? '${(bytes / 1048576).toStringAsFixed(1)} MB' : '${(bytes / 1024).ceil()} KB';

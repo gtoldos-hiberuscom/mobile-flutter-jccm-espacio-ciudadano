@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_c
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
@@ -352,7 +353,7 @@ class _SectionTitle extends StatelessWidget {
 class _HomeNewsSection extends ConsumerWidget {
   const _HomeNewsSection();
 
-  static const _pendingNotificationStatus = 'pendiente';
+  static const _pendingNotificationStatus = NotificacionEstado.pendiente;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {

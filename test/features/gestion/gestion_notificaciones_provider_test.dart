@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 
@@ -37,11 +38,11 @@ void main() {
           notification: _notification(concepto: 'Aceptación local'),
         );
 
-    final notifications = await container.read(gestionNotificacionesProvider('aceptada').future);
+    final notifications = await container.read(gestionNotificacionesProvider(NotificacionEstado.aceptada).future);
 
     expect(notifications, hasLength(1));
     expect(notifications.single.concepto, 'Aceptación local');
-    expect(notifications.single.estado, 'aceptada');
+    expect(notifications.single.estado, NotificacionEstado.aceptada);
   });
 
   test('server version replaces the optimistic copy without duplication', () async {
@@ -63,7 +64,7 @@ void main() {
           notification: _notification(concepto: 'Aceptación local'),
         );
 
-    final notifications = await container.read(gestionNotificacionesProvider('aceptada').future);
+    final notifications = await container.read(gestionNotificacionesProvider(NotificacionEstado.aceptada).future);
 
     expect(notifications, hasLength(1));
     expect(notifications.single.concepto, 'Versión del servidor');
@@ -75,7 +76,7 @@ Notificacion _notification({required final String concepto}) => Notificacion(
   concepto: concepto,
   procedimientoDenominacion: 'Procedimiento',
   sistemaOrigen: 'notifica2',
-  estado: 'aceptada',
+  estado: NotificacionEstado.aceptada,
 );
 
 final class _FakeGestionNotificacionesRepository implements GestionNotificacionesRepository {
@@ -84,8 +85,8 @@ final class _FakeGestionNotificacionesRepository implements GestionNotificacione
   final List<Notificacion> accepted;
 
   @override
-  Future<List<Notificacion>> loadNotificaciones({required final String citizenId, final String? estado}) async {
-    return estado == 'aceptada' ? accepted : const [];
+  Future<List<Notificacion>> loadNotificaciones({required final String citizenId, final NotificacionEstado? estado}) async {
+    return estado == NotificacionEstado.aceptada ? accepted : const [];
   }
 
   @override
