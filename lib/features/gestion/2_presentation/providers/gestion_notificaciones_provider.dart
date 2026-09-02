@@ -59,7 +59,7 @@ final gestionNotificacionesOptimisticAcceptedProvider = NotifierProvider<Gestion
   GestionNotificacionesOptimisticAcceptedNotifier.new,
 );
 
-/// Family param: filtro de estado — null = "Todo" (sin filtro).
+/// Family param: filtro de estado — null = "Todo" (unión de todos los estados).
 final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>((final ref, final estado) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
@@ -75,18 +75,24 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
   if (optimistic.isEmpty) {
     return notifications;
   }
-  final merged = {
-    for (final entry in optimistic.entries)
-      if (entry.key.citizenId == citizenId) entry.value.id: entry.value,
-  };
-  for (final notification in notifications) {
-    merged[notification.id] = notification;
+  // Primero el servidor y después lo optimista, resolviendo con la misma
+  // precedencia de estados que usa la fusión de "Todo": la aceptación que acaba
+  // de hacer el usuario gana a la copia que el servidor sigue devolviendo como
+  // pendiente, y en empate se conserva la del servidor, con los campos frescos.
+  final merged = {for (final notification in notifications) notification.id: notification};
+  for (final entry in optimistic.entries) {
+    if (entry.key.citizenId != citizenId) {
+      continue;
+    }
+    final accepted = entry.value;
+    final current = merged[accepted.id];
+    merged[accepted.id] = current == null ? accepted : pickByNotificacionEstadoPrecedence(current, accepted);
   }
   return merged.values.toList(growable: false);
 });
 
 /// `estado` es el estado que traía el resumen del listado, o `null` si no se
-/// conocía (pestaña "Todo"): solo sirve de respaldo si el detalle no lo informa.
+/// conocía: solo sirve de respaldo si el detalle no lo informa.
 typedef NotificacionDetalleArgs = ({int id, NotificacionEstado? estado, String? sistemaOrigen});
 
 final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>((final ref, final args) async {

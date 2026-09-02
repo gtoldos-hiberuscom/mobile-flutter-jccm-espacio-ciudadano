@@ -84,12 +84,43 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     required final String citizenId,
     final NotificacionEstado? estado,
   }) async {
-    return _loadForEstado(citizenId: citizenId, estado: estado);
+    if (estado != null) {
+      return _loadForEstado(citizenId: citizenId, estado: estado);
+    }
+    // "Todo": el listado indexado no informa el estado de cada elemento, y sin
+    // estado la tarjeta no puede pintar ni la etiqueta ni la fecha de
+    // expiración. El parámetro `estado` del contrato es un enum cerrado, así
+    // que se consultan los cuatro en paralelo y cada elemento queda etiquetado
+    // con el estado por el que se encontró (`_toNotificacionMap`).
+    //
+    // `Future.wait` espera a los cuatro y propaga el primer error: si un estado
+    // falla, "Todo" falla — nunca se muestra una lista incompleta como si
+    // estuviera completa. Un 404 no es fallo, ya se traduce a lista vacía.
+    final sweeps = await Future.wait(
+      NotificacionEstado.values.map(
+        (final value) => _loadForEstado(citizenId: citizenId, estado: value),
+      ),
+    );
+    return _mergeSweeps(sweeps);
+  }
+
+  /// Fusiona por `id` los barridos de "Todo", recorridos en orden de enum y
+  /// resolviendo las colisiones con [pickByNotificacionEstadoPrecedence]: un
+  /// elemento solo aparece en dos barridos si transitó durante la consulta.
+  List<Notificacion> _mergeSweeps(final List<List<Notificacion>> sweeps) {
+    final merged = <int, Notificacion>{};
+    for (final sweep in sweeps) {
+      for (final notification in sweep) {
+        final current = merged[notification.id];
+        merged[notification.id] = current == null ? notification : pickByNotificacionEstadoPrecedence(current, notification);
+      }
+    }
+    return merged.values.toList(growable: false);
   }
 
   Future<List<Notificacion>> _loadForEstado({
     required final String citizenId,
-    required final NotificacionEstado? estado,
+    required final NotificacionEstado estado,
   }) async {
     final notifications = <int, Notificacion>{};
     for (var page = 0; ; page++) {
@@ -111,16 +142,16 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   Future<List<Notificacion>> _loadPageForEstado({
     required final String citizenId,
-    required final NotificacionEstado? estado,
+    required final NotificacionEstado estado,
     required final int page,
   }) async {
     final encodedCitizenId = Uri.encodeComponent(citizenId);
-    final estadoQuery = estado == null ? null : notificacionEstadoQueryValue(estado);
+    final estadoQuery = notificacionEstadoQueryValue(estado);
     try {
       final response = await _dio.get<Object?>(
         '/api/v1/ciudadanos/$encodedCitizenId/notificaciones',
         queryParameters: {
-          'estado': ?estadoQuery,
+          'estado': estadoQuery,
           'page': page,
           'size': _kNotificationsPageSize,
         },
@@ -146,7 +177,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
   }
 
-  List<Notificacion> _rawNotificaciones(final Object? data, final NotificacionEstado? estado) {
+  List<Notificacion> _rawNotificaciones(final Object? data, final NotificacionEstado estado) {
     final payload = _notificationPayload(data);
     final items = switch (payload) {
       final List<dynamic> list => list,
@@ -187,7 +218,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
 
   bool _hasNotificationId(final Map<dynamic, dynamic> data) => data.containsKey('idNotificacion') || data.containsKey('id');
 
-  Notificacion _toNotificacionMap(final Map<String, Object?> data, final NotificacionEstado? estado) {
+  Notificacion _toNotificacionMap(final Map<String, Object?> data, final NotificacionEstado estado) {
     final procMap = _map(data['procedimientoAdministrativo']);
     final unidadMap = _map(data['unidadOrganica']);
     final fechaStr = _string(data, 'fechaCaducidad') ?? _string(data, 'fecCaducidad') ?? _string(data, 'fechaExpiracion');
@@ -200,9 +231,10 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       procedimientoIdFicha: _string(procMap, 'idFicha'),
       unidadOrganicaNombre: _string(unidadMap, 'nombre') ?? _additional(unidadMap, 'nombre'),
       sistemaOrigen: _string(data, 'sistemaOrigen') ?? _string(unidadMap, 'sistema'),
-      // El DTO indexado no informa el estado; si el elemento no lo trae, solo
-      // se conoce cuando se consultó filtrando por uno. Sin ninguno de los dos,
-      // queda desconocido (`null`) — nunca `''`, que la UI leía como expirada.
+      // El DTO indexado no informa el estado; cuando el elemento no lo trae,
+      // el estado conocido es el que se consultó. Todo listado se pide filtrando
+      // por un estado (también "Todo", que pide los cuatro), así que aquí nunca
+      // queda `null` — y desde luego nunca `''`, que la UI leía como expirada.
       estado: notificacionEstadoFromBackend(_string(data, 'estado')) ?? estado,
     );
   }

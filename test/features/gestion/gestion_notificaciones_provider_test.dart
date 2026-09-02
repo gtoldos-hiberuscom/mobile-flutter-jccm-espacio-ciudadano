@@ -69,24 +69,60 @@ void main() {
     expect(notifications, hasLength(1));
     expect(notifications.single.concepto, 'Versión del servidor');
   });
+
+  test('"Todo" mantiene la aceptación local mientras el índice la da por pendiente', () async {
+    final repository = _FakeGestionNotificacionesRepository(
+      todo: [_notification(concepto: 'Versión del servidor', estado: NotificacionEstado.pendiente)],
+    );
+    final container = ProviderContainer(
+      overrides: [
+        ciudadanosEndpointIdProvider.overrideWithValue('PER9998003'),
+        gestionNotificacionesRepositoryProvider.overrideWithValue(repository),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    container
+        .read(gestionNotificacionesOptimisticAcceptedProvider.notifier)
+        .add(
+          citizenId: 'PER9998003',
+          notification: _notification(concepto: 'Aceptación local'),
+        );
+
+    final notifications = await container.read(gestionNotificacionesProvider(null).future);
+
+    // R-14: antes el servidor sobreescribía la entrada optimista, así que la
+    // notificación recién aceptada volvía a aparecer como pendiente en "Todo".
+    expect(notifications, hasLength(1));
+    expect(notifications.single.estado, NotificacionEstado.aceptada);
+    expect(notifications.single.concepto, 'Aceptación local');
+  });
 }
 
-Notificacion _notification({required final String concepto}) => Notificacion(
+Notificacion _notification({
+  required final String concepto,
+  final NotificacionEstado estado = NotificacionEstado.aceptada,
+}) => Notificacion(
   id: 7924,
   concepto: concepto,
   procedimientoDenominacion: 'Procedimiento',
   sistemaOrigen: 'notifica2',
-  estado: NotificacionEstado.aceptada,
+  estado: estado,
 );
 
 final class _FakeGestionNotificacionesRepository implements GestionNotificacionesRepository {
-  _FakeGestionNotificacionesRepository({this.accepted = const []});
+  _FakeGestionNotificacionesRepository({this.accepted = const [], this.todo = const []});
 
   final List<Notificacion> accepted;
+  final List<Notificacion> todo;
 
   @override
   Future<List<Notificacion>> loadNotificaciones({required final String citizenId, final NotificacionEstado? estado}) async {
-    return estado == NotificacionEstado.aceptada ? accepted : const [];
+    return switch (estado) {
+      NotificacionEstado.aceptada => accepted,
+      null => todo,
+      _ => const [],
+    };
   }
 
   @override

@@ -26,8 +26,10 @@ final class Notificacion {
   ///
   /// El DTO indexado no lo expone: solo se conoce cuando el propio elemento del
   /// listado lo informa o cuando se consultó filtrando por un estado concreto.
-  /// En la pestaña "Todo" no hay filtro, así que aquí llega `null` y el estado
-  /// real lo aporta el detalle (`NotificacionDetalle.estado`).
+  /// La pestaña "Todo" consulta los cuatro estados del contrato y fusiona, así
+  /// que también llega informado; si el backend dejara de clasificar alguna
+  /// notificación, `null` sigue significando "no lo sé" y el estado real lo
+  /// aporta el detalle (`NotificacionDetalle.estado`).
   final NotificacionEstado? estado;
 
   @override
@@ -44,4 +46,14 @@ final class Notificacion {
     sistemaOrigen,
     estado,
   );
+}
+
+/// Elige, entre dos vistas del mismo elemento, la que informa el estado más
+/// nuevo según [notificacionEstadoPrecedence].
+///
+/// Devuelve [candidate] solo si su estado tiene precedencia **estrictamente**
+/// mayor; el empate conserva [current], de modo que fusionar es determinista y
+/// no depende del orden en que terminen las consultas.
+Notificacion pickByNotificacionEstadoPrecedence(final Notificacion current, final Notificacion candidate) {
+  return notificacionEstadoPrecedence(candidate.estado) > notificacionEstadoPrecedence(current.estado) ? candidate : current;
 }

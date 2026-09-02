@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificacion_estado_mapper.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
 
+import '../../test_support/keyed_http_client_adapter.dart';
 import '../../test_support/sequence_http_client_adapter.dart';
 
 void main() {
@@ -293,52 +295,146 @@ void main() {
       );
     });
 
-    test('"Todo" consulta una vez sin filtro de estado', () async {
-      final adapter = SequenceHttpClientAdapter([
-        const AdapterResponse(
+    test('"Todo" consulta los cuatro estados y etiqueta cada elemento', () async {
+      final adapter = _estadoAdapter({
+        NotificacionEstado.pendiente: const AdapterResponse(
           statusCode: 200,
           body: [
             {
               'idNotificacion': 1,
-              'concepto': 'Notificación 1',
-              'estado': 'pendiente',
+              'concepto': 'Pendiente',
               'procedimientoAdministrativo': {'denominacion': 'Proc 1'},
             },
           ],
         ),
-      ]);
+        NotificacionEstado.aceptada: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 2,
+              'concepto': 'Aceptada',
+              'procedimientoAdministrativo': {'denominacion': 'Proc 2'},
+            },
+          ],
+        ),
+        NotificacionEstado.rechazada: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 3,
+              'concepto': 'Rechazada',
+              'procedimientoAdministrativo': {'denominacion': 'Proc 3'},
+            },
+          ],
+        ),
+        NotificacionEstado.expirada: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 4,
+              'concepto': 'Expirada',
+              'procedimientoAdministrativo': {'denominacion': 'Proc 4'},
+            },
+          ],
+        ),
+      });
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
       final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
 
-      expect(adapter.requests, hasLength(1));
-      expect(adapter.requests.single.queryParameters, {'page': 0, 'size': 10});
-      expect(result.single.id, 1);
-      expect(result.single.estado, NotificacionEstado.pendiente);
+      // Sin este barrido por estados, el listado indexado deja el estado en
+      // `null` y la tarjeta de "Todo" pierde etiqueta y fecha de expiración.
+      expect(adapter.requests, hasLength(4));
+      expect(
+        adapter.requestedKeys.toSet(),
+        {'pendiente', 'aceptada', 'rechazada', 'expirada'},
+      );
+      expect(
+        adapter.requests.every((final request) => request.path == '/api/v1/ciudadanos/PER9998003/notificaciones' && request.queryParameters['page'] == 0 && request.queryParameters['size'] == 10),
+        isTrue,
+      );
+      expect(
+        {for (final notification in result) notification.id: notification.estado},
+        {
+          1: NotificacionEstado.pendiente,
+          2: NotificacionEstado.aceptada,
+          3: NotificacionEstado.rechazada,
+          4: NotificacionEstado.expirada,
+        },
+      );
     });
 
-    test('"Todo" propaga el error del listado único', () async {
-      final adapter = SequenceHttpClientAdapter([
-        const AdapterResponse(statusCode: 500, body: <String, dynamic>{'mensaje': 'error'}),
-      ]);
+    test('"Todo" propaga el error de cualquiera de los barridos', () async {
+      final adapter = _estadoAdapter({
+        NotificacionEstado.pendiente: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {'idNotificacion': 1, 'concepto': 'Pendiente'},
+          ],
+        ),
+        NotificacionEstado.aceptada: const AdapterResponse(statusCode: 500, body: <String, dynamic>{'mensaje': 'error'}),
+        NotificacionEstado.rechazada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.expirada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+      });
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
+      // Preferimos fallar la pestaña a mostrar una lista incompleta como si
+      // estuviera completa.
       await expectLater(
-        repository.loadNotificaciones(citizenId: '99999999R'),
+        repository.loadNotificaciones(citizenId: 'PER9998003'),
         throwsA(isA<DioException>()),
       );
-      expect(adapter.requests, hasLength(1));
+      expect(adapter.requests, hasLength(4));
     });
-    test('un elemento sin estado consultado sin filtro queda con estado desconocido', () async {
+
+    test('"Todo" fusiona el mismo id que aparece en dos barridos con el estado terminal', () async {
+      final adapter = _estadoAdapter({
+        NotificacionEstado.pendiente: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 31,
+              'concepto': 'Notificación en tránsito',
+              'procedimientoAdministrativo': {'denominacion': 'Proc'},
+            },
+          ],
+        ),
+        NotificacionEstado.aceptada: const AdapterResponse(
+          statusCode: 200,
+          body: [
+            {
+              'idNotificacion': 31,
+              'concepto': 'Notificación en tránsito',
+              'procedimientoAdministrativo': {'denominacion': 'Proc'},
+            },
+          ],
+        ),
+        NotificacionEstado.rechazada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+        NotificacionEstado.expirada: const AdapterResponse(statusCode: 200, body: <dynamic>[]),
+      });
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
+
+      // Solo pasa si la notificación transitó mientras se consultaba: gana el
+      // estado terminal, que es el dato más nuevo, y no se duplica la tarjeta.
+      expect(result, hasLength(1));
+      expect(result.single.id, 31);
+      expect(result.single.estado, NotificacionEstado.aceptada);
+    });
+
+    test('un elemento con estado en el payload conserva el suyo, no el consultado', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
           body: [
             {
-              'idNotificacion': 31,
-              'concepto': 'Notificación sin estado',
+              'idNotificacion': 44,
+              'concepto': 'Notificación con estado propio',
+              'estado': 'rechazada',
               'procedimientoAdministrativo': {'denominacion': 'Proc'},
             },
           ],
@@ -347,12 +443,12 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio);
 
-      final result = await repository.loadNotificaciones(citizenId: 'PER9998003');
+      final result = await repository.loadNotificaciones(
+        citizenId: 'PER9998003',
+        estado: NotificacionEstado.pendiente,
+      );
 
-      // Antes se rellenaba con cadena vacía, que la UI leía como "expirada" y
-      // ocultaba la acción de comparecer (H-03).
-      expect(result.single.estado, isNull);
-      expect(adapter.requests.single.queryParameters, {'page': 0, 'size': 10});
+      expect(result.single.estado, NotificacionEstado.rechazada);
     });
 
     test('el detalle informa el estado real aunque el resumen no lo conociera', () async {
@@ -435,4 +531,15 @@ void main() {
       expect(detail.estado, NotificacionEstado.pendiente);
     });
   });
+}
+
+/// Adaptador con una respuesta por estado del contrato: la pestaña "Todo" pide
+/// los cuatro en paralelo, así que hay que emparejar por `estado` y no por
+/// orden de llegada.
+KeyedHttpClientAdapter _estadoAdapter(final Map<NotificacionEstado, AdapterResponse> responses) {
+  return KeyedHttpClientAdapter(
+    responses: {
+      for (final entry in responses.entries) notificacionEstadoQueryValue(entry.key): [entry.value],
+    },
+  );
 }
