@@ -22,12 +22,19 @@ final class CapturedRequest {
     required this.path,
     required this.queryParameters,
     required this.jsonBody,
+    this.sendTimeout,
+    this.receiveTimeout,
   });
 
   final String method;
   final String path;
   final Map<String, dynamic> queryParameters;
   final Object? jsonBody;
+
+  /// Plazos efectivos de la petición, ya resueltos con los de la instancia de
+  /// Dio y con cualquier override por petición.
+  final Duration? sendTimeout;
+  final Duration? receiveTimeout;
 }
 
 final class SequenceHttpClientAdapter implements HttpClientAdapter {
@@ -53,6 +60,8 @@ final class SequenceHttpClientAdapter implements HttpClientAdapter {
         path: options.path,
         queryParameters: Map<String, dynamic>.from(options.queryParameters),
         jsonBody: _decodeRequestBody(bodyBytes),
+        sendTimeout: options.sendTimeout,
+        receiveTimeout: options.receiveTimeout,
       ),
     );
 

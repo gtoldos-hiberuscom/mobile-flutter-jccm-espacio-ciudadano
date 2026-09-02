@@ -6,6 +6,7 @@ import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
+import 'package:jccm_espacio_ciudadano/core/network/transfer_timeout.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/representante.dart';
@@ -16,6 +17,11 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
 
   final Dio _dio;
   final ProcedimientoApi _procedimientoApi;
+
+  /// Timeout configurado para el entorno (`TIMEOUT` del config), que aquí solo
+  /// cubre la conexión y el trabajo del servidor: el tiempo de transferencia se
+  /// suma aparte.
+  Duration get _baseTimeout => _dio.options.sendTimeout ?? _dio.options.connectTimeout ?? const Duration(seconds: 20);
 
   @override
   Future<String> subirDocumentoSinFirma({
@@ -28,13 +34,14 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     final CancelToken? cancelToken,
     final void Function(double progreso)? onProgress,
   }) async {
+    final encoded = base64Encode(bytes);
     final adjunto = ADJUNTO(
       (final builder) => builder
         ..idunico = idUnico
         ..nifcif = documentNumber
         ..nombre = nombreFichero
         ..tipoprocedimiento = tipoProcedimiento
-        ..data = base64Encode(bytes)
+        ..data = encoded
         // Metadatos del documento que api-rest-doc.html marca como
         // `required` (`categoria`, `idprop`, `tipodoc`) y que el ejemplo
         // oficial envía siempre. La subida devuelve 200 + hash también sin
@@ -63,6 +70,15 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         idExpediente: idUnico,
         adjuntoBody: adjunto,
         cancelToken: cancelToken,
+        // El timeout general de la app (10 s en producción) es un plazo total
+        // para empujar el cuerpo, así que un adjunto grande no podría subirse
+        // nunca: este va dimensionado por lo que realmente se envía.
+        extra: {
+          generatedApiTimeoutExtraKey: payloadTransferTimeout(
+            payloadBytes: encoded.length,
+            baseTimeout: _baseTimeout,
+          ),
+        },
         onSendProgress: (final sent, final total) {
           if (total > 0) {
             onProgress?.call(sent / total);

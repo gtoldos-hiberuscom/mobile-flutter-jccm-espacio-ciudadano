@@ -8,6 +8,13 @@ const generatedApiDecodeStringResponseExtraKey = 'generated_api.decode_string_re
 const generatedApiUnwrapBodyExtraKey = 'generated_api.unwrap_body';
 const generatedApiNormalizeSingletonCollectionsExtraKey = 'generated_api.normalize_singleton_collections';
 
+/// Plazo propio para una petición concreta, en `extra` porque los métodos del
+/// cliente generado no aceptan `Options`: construyen las suyas y solo
+/// propagan `headers`, `extra`, `validateStatus` y los callbacks de progreso.
+/// Se aplica a `send` y `receive`, no a `connect`: conectar no depende del
+/// tamaño del cuerpo.
+const generatedApiTimeoutExtraKey = 'generated_api.timeout';
+
 Dio withGeneratedApiCompat(final Dio dio) {
   if (dio.interceptors.any((final interceptor) => interceptor is GeneratedApiCompatInterceptor)) {
     return dio;
@@ -24,6 +31,12 @@ final class GeneratedApiCompatInterceptor extends Interceptor {
     final requestData = options.extra[generatedApiRequestDataExtraKey];
     if (requestData is Map<String, dynamic>) {
       options.data = requestData;
+    }
+    final timeout = options.extra[generatedApiTimeoutExtraKey];
+    if (timeout is Duration) {
+      options
+        ..sendTimeout = timeout
+        ..receiveTimeout = timeout;
     }
     handler.next(options);
   }
