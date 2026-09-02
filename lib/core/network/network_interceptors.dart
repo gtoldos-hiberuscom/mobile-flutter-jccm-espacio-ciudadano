@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 
 // ─── Auth interceptor ────────────────────────────────────────────────────────
@@ -184,16 +185,14 @@ final class ErrorInterceptor extends Interceptor {
 
 // ─── Emoji Dio Logger ───────────────────────────────────────────────────────
 
-/// Toggles full request/response body dumping for [EmojiDioLogger] and the
-/// curl logging interceptor on the success path.
-///
-/// Pretty-printing full JSON bodies (e.g. large expediente listings) on every
-/// successful call is a noticeable source of debug-mode slowdown, so it's off
-/// by default. Flip to `true` locally when you need to inspect a response in
-/// detail. Error responses are always logged in full regardless of this flag.
-const bool kVerboseNetworkLogging = true;
-
 class EmojiDioLogger extends Interceptor {
+  /// [verboseBodies] activa el volcado de cabeceras y cuerpos completos. Lo
+  /// decide `buildDioClient` (`kDebugMode && config.debugMode`): nunca en una
+  /// build de release o profile, y nunca con la configuración de producción.
+  EmojiDioLogger({this.verboseBodies = false});
+
+  final bool verboseBodies;
+
   final String dioNote = '[DIO]';
   @override
   void onRequest(final RequestOptions options, final RequestInterceptorHandler handler) {
@@ -213,12 +212,12 @@ class EmojiDioLogger extends Interceptor {
           .toList(growable: false);
       logger.d('$dioNote 📎 Support attachments: $attachments');
     }
-    if (kVerboseNetworkLogging) {
+    if (verboseBodies) {
       if (options.headers.isNotEmpty) {
-        logger.d('$dioNote 📑 Headers: ${_redact(options.headers)}');
+        logger.d('$dioNote 📑 Headers: ${redactForLog(options.headers)}');
       }
       if (options.data != null) {
-        logger.d('$dioNote 📑 Body: ${_redact(options.data)}');
+        logger.d('$dioNote 📑 Body: ${redactForLog(options.data)}');
       }
     }
     handler.next(options);
@@ -228,9 +227,9 @@ class EmojiDioLogger extends Interceptor {
   void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
     logger.d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}');
     final path = response.requestOptions.path;
-    final logResponseBody = kVerboseNetworkLogging || path == '/api/v1/intermediacion/termalismo/datos' || path == '/api/v1/intermediacion/atencion-dependencia/datos' || path.startsWith('/api/v1/ccaa/familia-numerosa/') || (path.startsWith('/api/v1/agenda/') && path.contains('/eventos/'));
+    final logResponseBody = verboseBodies || path == '/api/v1/intermediacion/termalismo/datos' || path == '/api/v1/intermediacion/atencion-dependencia/datos' || path.startsWith('/api/v1/ccaa/familia-numerosa/') || (path.startsWith('/api/v1/agenda/') && path.contains('/eventos/'));
     if (logResponseBody) {
-      logger.d('$dioNote 📦 Response Data: ${_redact(response.data)}');
+      logger.d('$dioNote 📦 Response Data: ${redactForLog(response.data)}');
     }
     handler.next(response);
   }
@@ -250,7 +249,7 @@ class EmojiDioLogger extends Interceptor {
       ..e('$dioNote 💥 Error: ${err.type} ${err.message}')
       ..e('$dioNote 💥 Request: ${request.method} ${request.uri} — status ${err.response?.statusCode ?? 'unavailable'}');
     if (err.response != null) {
-      logger.e('$dioNote 💥 Error Response: ${_redact(err.response?.data)}');
+      logger.e('$dioNote 💥 Error Response: ${redactForLog(err.response?.data)}');
     }
     handler.next(err);
   }
@@ -269,33 +268,4 @@ class EmojiDioLogger extends Interceptor {
     final message = data['mensaje-respuesta']?.toString().toLowerCase() ?? '';
     return responseCode == '412.00' && message.contains('no se pudo dar de alta el soporte');
   }
-
-  Object? _redact(final Object? value) {
-    if (value is Map) {
-      return value.map((final key, final nestedValue) {
-        final keyText = key.toString().toLowerCase();
-        if (_sensitiveKeyFragments.any(keyText.contains)) {
-          return MapEntry(key, '***');
-        }
-        return MapEntry(key, _redact(nestedValue));
-      });
-    }
-    if (value is Iterable) {
-      return value.map(_redact).toList(growable: false);
-    }
-    return value;
-  }
-
-  static const _sensitiveKeyFragments = [
-    'authorization',
-    'token',
-    'dni',
-    'nif',
-    'docu',
-    'documento',
-    'numdoc',
-    'email',
-    'telefono',
-    'phone',
-  ];
 }

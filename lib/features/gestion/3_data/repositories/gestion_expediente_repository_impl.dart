@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
@@ -18,7 +19,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     required final String citizenId,
     required final String documentNumber,
   }) async {
-    logger.d('[selectbynifexp] req numerodocumento=$documentNumber tipodocumento=NIF');
+    logger.d('[selectbynifexp] req numerodocumento=${maskedDocument(documentNumber)} tipodocumento=NIF');
     try {
       // La variante `1` apunta al path gateway POST
       // /api/v1/ciudadanos/{sid}/expedientes (el sufijo del generador se
@@ -66,7 +67,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     required final String numexp,
     final String tipodoc = 'NIF',
   }) async {
-    logger.d('[selectbynumexp] req pnumdoc=$documentNumber pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    logger.d('[selectbynumexp] req pnumdoc=${maskedDocument(documentNumber)} pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
     // Path gateway POST /api/v1/ciudadanos/{sid}/expedientes/{idExpediente}.
     // El segmento `{idExpediente}` va fijo a `detalle` — como documenta el
     // gateway — porque los números de expediente llevan barras
@@ -111,7 +112,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     required final String numRegistro,
     final String tipodoc = 'NIF',
   }) async {
-    logger.d('[selectbynumreg] req pnumdoc=$documentNumber pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    logger.d('[selectbynumreg] req pnumdoc=${maskedDocument(documentNumber)} pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
     // La variante `1` apunta al path gateway POST
     // /api/v1/ciudadanos/{sid}/registros/{idRegistro}. El backend identifica
     // el registro por el `pregistro` del cuerpo; el path param es decorativo.

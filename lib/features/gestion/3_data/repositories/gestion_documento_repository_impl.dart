@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
@@ -116,7 +117,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       representante: representante,
     );
 
-    logger.d('[inicproc] req idunico=$idUnico noexpediente=${expediente.numexp} tipoproc=${expediente.tipoproc ?? ''} category=NIF titular=$documentNumber repNif=${representante?.nifcif ?? documentNumber}');
+    logger.d('[inicproc] req idunico=${maskedIdUnico(idUnico)} noexpediente=${expediente.numexp} tipoproc=${expediente.tipoproc ?? ''} category=NIF titular=${maskedDocument(documentNumber)} repNif=${maskedDocument(representante?.nifcif ?? documentNumber)}');
     Map<String, Object?>? responseBody;
     try {
       // Path gateway (el legacy /api/v1/procedimiento/inicproc no existe en el
@@ -236,7 +237,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       representante: representante,
     );
 
-    logger.d('[registrarfichero] req idunico=${inicio.idunico} noexpediente=${expediente.numexp} esPorContraste=${representante != null} documentos=${documentos.length}');
+    logger.d('[registrarfichero] req idunico=${maskedIdUnico(inicio.idunico)} noexpediente=${expediente.numexp} esPorContraste=${representante != null} documentos=${documentos.length}');
     Uint8List? bytes;
     try {
       // Path gateway; mismo criterio que en iniciarProcedimiento: segmento
@@ -444,6 +445,10 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
   /// `registrarfichero` responde con bytes crudos (el justificante). En un
   /// error el cuerpo suele ser el sobre JSON del 500; se decodifica a texto
   /// (recortado) para verlo en la traza sin volcar un binario.
+  ///
+  /// La redacción va **antes** del recorte: así los campos de diagnóstico del
+  /// sobre siguen visibles y cualquier dato personal que traiga queda
+  /// enmascarado (recortar primero rompería el JSON y lo enmascararía entero).
   void _logBytesBody(final String op, final int? statusCode, final Object? data) {
     String preview;
     if (data is Uint8List) {
@@ -455,6 +460,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     } else {
       preview = data?.toString() ?? 'null';
     }
+    preview = redactForLog(preview).toString();
     if (preview.length > 600) {
       preview = '${preview.substring(0, 600)}…';
     }
