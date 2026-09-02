@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_employment_repository_impl.dart';
 
 void main() {
@@ -75,6 +76,41 @@ void main() {
       expect(demand?.status, 'No Inscrito');
     });
 
+    test('never fabricates an "Activa" demand from a payload without real data', () async {
+      // Sin ninguna clave de estado/mensaje/fecha: solo el default fabricado
+      // podía convertir esto en una demanda visible.
+      final adapter = _StaticAdapter(200, {
+        'codigo-respuesta': '200.00',
+        'body': {'idpeticion': '7a7479f7fa5fec7a5t0014795'},
+      });
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      final demand = await repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A');
+
+      expect(demand, isNull, reason: 'the default status used to be a fabricated "Activa"');
+    });
+
+    test('HTTP 403 surfaces as MyDataAuthorizationRequired', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(403, {'codigo-respuesta': '403.00'});
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('a 500 with body propagates instead of becoming a fabricated demand', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(500, {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error'});
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A'),
+        throwsA(isA<DioException>()),
+      );
+    });
+
     test('loads registered employment offers from the ciudadano employment resource', () async {
       final adapter = _EmploymentAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
@@ -107,6 +143,32 @@ void main() {
       expect(offers.last.selectionEndDate, DateTime(2026, 8, 31));
     });
   });
+}
+
+final class _StaticAdapter implements HttpClientAdapter {
+  _StaticAdapter(this.statusCode, this.body);
+
+  final int statusCode;
+  final Object? body;
+
+  @override
+  Future<ResponseBody> fetch(
+    final RequestOptions options,
+    final Stream<Uint8List>? requestStream,
+    final Future<void>? cancelFuture,
+  ) async {
+    await (requestStream ?? const Stream<Uint8List>.empty()).drain<void>();
+    return ResponseBody.fromString(
+      body == null ? '' : jsonEncode(body),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({final bool force = false}) {}
 }
 
 final class _CapturedRequest {

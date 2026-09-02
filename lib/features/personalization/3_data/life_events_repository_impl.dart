@@ -96,17 +96,20 @@ final class LifeEventsRepositoryImpl implements LifeEventsRepository {
     return agentId == null || agentId.isEmpty ? citizenId : agentId;
   }
 
-  /// Un 4xx con sobre se aprovecha igual: el backend informa ahí el motivo y el
-  /// listado vacío resultante es preferible a propagar el fallo de transporte.
+  /// Un 4xx solo se aprovecha si su sobre trae realmente el listado
+  /// (`body.listaHechos`); cualquier otro error se propaga. Aceptar un sobre de
+  /// error genérico fabricaba un "no tienes hechos configurados" falso durante
+  /// caídas del backend.
   Future<Map<String, dynamic>?> _obtenerHechos(final String idAgente) async {
     try {
       return await _api.obtenerHechos(citizenId: idAgente);
     } on DioException catch (error) {
       final envelope = decodeApiEnvelope(error.response?.data);
-      if (envelope == null) {
-        rethrow;
+      final body = _asStringMap(envelope?['body']);
+      if (envelope != null && body?['listaHechos'] is List) {
+        return envelope;
       }
-      return envelope;
+      rethrow;
     }
   }
 

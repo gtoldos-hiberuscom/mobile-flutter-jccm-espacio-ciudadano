@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_pro
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_housing_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/vivienda_api.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
   MyDataHousingRepositoryImpl({required final Dio dio}) : _api = ViviendaApi(dio);
@@ -85,21 +86,9 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
     return candidates.map(_parseRealEstateProperty).where((final property) => property.hasData).toList(growable: false);
   }
 
-  /// El cliente ya devuelve `null` en 404 y la carga cruda en el resto.
-  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) async {
-    try {
-      return await fetch();
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.data;
-      if (rawData == null) {
-        rethrow;
-      }
-      return rawData;
-    }
-  }
+  /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
+  /// resto de errores → se propagan. Ver [intermediacionRawResponse].
+  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) => intermediacionRawResponse(fetch);
 
   String? _composeAddress(final Map<String, Object?> data) {
     final parts = [

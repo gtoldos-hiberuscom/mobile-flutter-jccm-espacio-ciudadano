@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
@@ -11,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jw
 import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/usecases/save_notification_contact_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class NotificationContactPage extends ConsumerStatefulWidget {
   const NotificationContactPage({
@@ -63,16 +65,12 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
       body: SafeArea(
         child: contactState.when(
           loading: () => const AppLoadingIndicator(),
-          error: (final _, final _) => AppNotificationContactForm(
-            formError: null,
-            phoneError: null,
-            emailError: null,
-            saving: _saving,
-            phoneController: _phoneController,
-            emailController: _emailController,
-            onClearError: _clearError,
-            onLeave: _leave,
-            onSave: () => unawaited(_save(citizenId: citizenId, dni: dni)),
+          // Nunca el formulario en blanco: guardarlo haría un reemplazo completo
+          // que borra el contacto ya registrado. Sin los datos actuales solo
+          // cabe error + reintentar.
+          error: (final _, final _) => ErrorStateWidget(
+            message: AppLocalizations.of(context).domainGenericLoadError,
+            onRetry: () => ref.invalidate(notificationContactProvider(citizenId)),
           ),
           data: (final contact) {
             _initialize(contact);

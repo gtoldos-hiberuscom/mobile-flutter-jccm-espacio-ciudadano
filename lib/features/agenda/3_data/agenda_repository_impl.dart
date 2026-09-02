@@ -78,7 +78,13 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       if (rawData == null) {
         rethrow;
       }
-      return _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+      // Salvage-or-rethrow: si el cuerpo del error no contiene citas parseables,
+      // el fallo se propaga — un 401/403/5xx nunca debe leerse como "sin citas".
+      final salvaged = _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+      if (salvaged.isNotEmpty) {
+        return salvaged;
+      }
+      rethrow;
     }
     if (payload == null) {
       return const [];

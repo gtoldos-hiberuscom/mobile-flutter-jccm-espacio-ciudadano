@@ -61,7 +61,43 @@ void main() {
 
       expect(adapter.paths, ['/api/v1/ciudadanos/agent-1/eventos/refrescar']);
     });
+
+    test('a 500 whose body carries no parseable appointments propagates instead of becoming "no appointments"', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(500, {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error'});
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadAppointments(documentNumber: '12345678A', agentId: 'agent-1'),
+        throwsA(isA<DioException>()),
+      );
+    });
   });
+}
+
+final class _StaticAdapter implements HttpClientAdapter {
+  _StaticAdapter(this.statusCode, this.body);
+
+  final int statusCode;
+  final Object? body;
+
+  @override
+  Future<ResponseBody> fetch(
+    final RequestOptions options,
+    final Stream<Uint8List>? requestStream,
+    final Future<void>? cancelFuture,
+  ) async {
+    await (requestStream ?? const Stream<Uint8List>.empty()).drain<void>();
+    return ResponseBody.fromString(
+      jsonEncode(body),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({final bool force = false}) {}
 }
 
 final class _AgendaAdapter implements HttpClientAdapter {

@@ -145,6 +145,59 @@ void main() {
       );
     });
 
+    test('un 403 pide autorizar en vez de afirmar que no hay título', () async {
+      // Antes: `validateStatus` aceptaba cualquier código < 500, así que el
+      // sobre del 403 se parseaba como datos y la pantalla afirmaba que el
+      // ciudadano no tiene título de familia numerosa (R-02).
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 403,
+        responseData: {'body': null, 'codigo-respuesta': '403.00', 'mensaje-respuesta': 'Forbidden'},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('un 404 es «el organismo no tiene datos», no un error', () async {
+      final adapter = _MyDataSocialWelfareAdapter(statusCode: 404, responseData: {'body': null});
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      expect(await repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'), isNull);
+    });
+
+    test('un 500 se propaga en vez de convertirse en «sin título»', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 500,
+        responseData: {'body': null, 'codigo-respuesta': '500.00', 'info-error': null},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<DioException>()),
+      );
+    });
+
+    test('un 400 con sobre de error tampoco pasa por datos', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 400,
+        responseData: {'body': null, 'codigo-respuesta': '400.00', 'mensaje-respuesta': 'Petición inválida'},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadDisabilityTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<DioException>()),
+      );
+    });
+
     test('reports service unavailable when intermediacion returns no response', () async {
       final adapter = _MyDataSocialWelfareAdapter(
         responseData: {
@@ -176,9 +229,10 @@ void main() {
 }
 
 final class _MyDataSocialWelfareAdapter implements HttpClientAdapter {
-  _MyDataSocialWelfareAdapter({this.responseData});
+  _MyDataSocialWelfareAdapter({this.responseData, this.statusCode = 200});
 
   final Object? responseData;
+  final int statusCode;
   final List<_RecordedRequest> requests = [];
 
   @override
@@ -237,7 +291,7 @@ final class _MyDataSocialWelfareAdapter implements HttpClientAdapter {
               'info-error': null,
             },
       ),
-      200,
+      statusCode,
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],
       },
