@@ -58,6 +58,19 @@ import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/prefe
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendation_life_event_filters_page.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendations_page.dart';
 
+/// Pantalla de detalle de un registro a partir del `extra` de la ruta.
+///
+/// El registro completo viaja en `extra`, que **no** sobrevive a un deep link,
+/// a la restauración de estado ni a un `go()` externo. Sin él no hay nada que
+/// mostrar, así que se cae a [NotFoundScreen] en lugar de castear a ciegas
+/// (`state.extra! as (Registro, bool)` lanzaba dentro del builder, es decir,
+/// pantalla de error de GoRouter). Es el mismo criterio que el resto de rutas
+/// con `extra`.
+Widget buildGestionRegistroDetail(final Object? extra) => switch (extra) {
+  (final Registro registro, final bool isEntrada) => GestionRegistroDetailPage(registro: registro, isEntrada: isEntrada),
+  _ => const NotFoundScreen(),
+};
+
 /// Riverpod provider that owns the application [GoRouter].
 ///
 /// Kept alive for the entire app lifetime so the router is never recreated
@@ -268,10 +281,7 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.gestionRegistrosDetail,
-              builder: (final BuildContext context, final GoRouterState state) {
-                final args = state.extra! as (Registro, bool);
-                return GestionRegistroDetailPage(registro: args.$1, isEntrada: args.$2);
-              },
+              builder: (final BuildContext context, final GoRouterState state) => buildGestionRegistroDetail(state.extra),
             ),
 
             GoRoute(
