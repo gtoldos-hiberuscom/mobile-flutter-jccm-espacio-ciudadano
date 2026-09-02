@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_envelope.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 
 /// Cliente del listado de vehículos (DGT) del recurso ciudadano.
 ///
@@ -20,9 +21,9 @@ final class VehiculosApi {
 
   /// Listado de vehículos. Cuerpo `DTDGTLISTADOVEHICULOSREQ`.
   ///
-  /// Devuelve la carga cruda, incluida la de los 4xx. El 401 queda fuera para
-  /// que salga como `DioException` y `AuthRefreshInterceptor` refresque la
-  /// sesión.
+  /// Mismo contrato de estados que `SaludApi`: 403 → [MyDataAuthorizationRequired],
+  /// 404 → `null`, y todo lo demás (401 tras refresco fallido, 429, 4xx de
+  /// negocio, 5xx) sale como `DioException` — nunca como «sin datos».
   Future<Object?> listado({
     required final String citizenId,
     required final Map<String, Object?> body,
@@ -30,11 +31,18 @@ final class VehiculosApi {
     final response = await _dio.post<Object?>(
       '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/$operationPath',
       data: body,
-      options: Options(validateStatus: (final status) => status != null && status < 500 && status != 401),
+      options: Options(validateStatus: _isHandledStatus),
     );
+    if (response.statusCode == 403) {
+      throw const MyDataAuthorizationRequired();
+    }
     if (response.statusCode == 404) {
       return null;
     }
     return decodeApiEnvelope(response.data) ?? response.data;
   }
+
+  /// Códigos que esta capa sabe interpretar. El resto debe fallar para que los
+  /// interceptores de red hagan su trabajo.
+  bool _isHandledStatus(final int? status) => status != null && (status < 400 || status == 403 || status == 404);
 }

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_education_repository_impl.dart';
 
@@ -52,6 +53,33 @@ void main() {
       // el documento dejó de viajar en la ruta.
       expect(adapter.jsonBody, {'tipodoc': 'NIE', 'docu': 'X1234567L'});
     });
+
+    test('HTTP 403 surfaces as MyDataAuthorizationRequired', () async {
+      final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(403, {'codigo-respuesta': '403.00'})));
+
+      await expectLater(
+        repository.loadUniversityTitles(citizenId: 'id', documentNumber: '99999999R'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('a 500 with body propagates instead of becoming an empty degree list', () async {
+      final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(500, {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error'})));
+
+      await expectLater(
+        repository.loadUniversityTitles(citizenId: 'id', documentNumber: '99999999R'),
+        throwsA(isA<DioException>()),
+      );
+    });
+
+    test('a genuine 404 still means no degrees on record', () async {
+      final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(404, null)));
+
+      expect(
+        await repository.loadUniversityTitles(citizenId: 'id', documentNumber: '99999999R'),
+        isEmpty,
+      );
+    });
   });
 
   group('documentTypeOf', () {
@@ -65,13 +93,39 @@ void main() {
   });
 }
 
-Dio _dio(final _CapturingAdapter adapter) {
+Dio _dio(final HttpClientAdapter adapter) {
   return Dio(
     BaseOptions(
       baseUrl: 'https://example.test',
       headers: const {Headers.contentTypeHeader: Headers.jsonContentType},
     ),
   )..httpClientAdapter = adapter;
+}
+
+final class _StaticAdapter implements HttpClientAdapter {
+  _StaticAdapter(this.statusCode, this.body);
+
+  final int statusCode;
+  final Object? body;
+
+  @override
+  Future<ResponseBody> fetch(
+    final RequestOptions options,
+    final Stream<Uint8List>? requestStream,
+    final Future<void>? cancelFuture,
+  ) async {
+    await (requestStream ?? const Stream<Uint8List>.empty()).drain<void>();
+    return ResponseBody.fromString(
+      body == null ? '' : jsonEncode(body),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({final bool force = false}) {}
 }
 
 final class _CapturingAdapter implements HttpClientAdapter {
