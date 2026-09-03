@@ -45,6 +45,22 @@ void main() {
     expect(node.flagsCollection.isLiveRegion, isTrue);
   });
 
+  testWidgets('un fichero pendiente se anuncia Seleccionado, nunca Subido', (final tester) async {
+    // AP-7: un fichero sin enviar (recién elegido o tras abortarse el lote)
+    // se anunciaba «Subido» junto al snackbar rojo que decía lo contrario.
+    var deletes = 0;
+    await tester.pumpWidget(buildApp(upload(AppFileUploadStatus.pending, onDelete: () => deletes++)));
+
+    expect(
+      find.semantics.byLabel('Archivo: documento_acreditativo.pdf, PDF, 245 KB. Estado: Seleccionado').evaluate(),
+      hasLength(1),
+    );
+
+    // Conserva la acción de quitar el fichero, como la fila de subido.
+    await tester.tap(find.byTooltip('Eliminar archivo'));
+    expect(deletes, 1);
+  });
+
   testWidgets('mantiene cada acción como botón independiente', (final tester) async {
     var taps = 0;
     await tester.pumpWidget(

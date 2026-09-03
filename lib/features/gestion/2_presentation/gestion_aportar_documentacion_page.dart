@@ -622,7 +622,10 @@ class _AportacionArchivoCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final status = switch (archivo.estado) {
-      AportacionArchivoEstado.noEnviado => AppFileUploadStatus.uploaded,
+      // Un fichero sin enviar (recién elegido o tras abortarse el lote) se
+      // anuncia «Seleccionado»: mapearlo a `uploaded` lo anunciaba «Subido»
+      // junto al snackbar rojo de «falta algún fichero por enviar» (AP-7).
+      AportacionArchivoEstado.noEnviado => AppFileUploadStatus.pending,
       AportacionArchivoEstado.enviando => AppFileUploadStatus.uploading,
       AportacionArchivoEstado.completado => AppFileUploadStatus.complete,
       AportacionArchivoEstado.error => AppFileUploadStatus.error,

@@ -8,6 +8,11 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// Upload status for [AppFileUpload].
 ///
 /// Mirrors the three Figma states of the "FileUpload" component (node `102:1689`):
+/// - [pending]   — file selected but not sent yet (same layout as [uploaded]
+///   with a delete action); its status reads "Seleccionado", never "Subido".
+///   Not in the Figma component — added because announcing a never-sent file
+///   as uploaded (AP-7) contradicted the red "some files missing" snackbar
+///   right below it. Visual treatment still pending a design pass.
 /// - [uploading] — file is being transferred; shows an indeterminate/partial
 ///   progress bar and a cancel action.
 /// - [complete]  — transfer finished; shows a full progress bar (success
@@ -17,7 +22,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// - [error]     — the upload failed; shows an error-coloured bar and a
 ///   retry action. Not part of the original Figma component — added to
 ///   surface per-file upload failures without losing progress on siblings.
-enum AppFileUploadStatus { uploading, complete, uploaded, error }
+enum AppFileUploadStatus { pending, uploading, complete, uploaded, error }
 
 /// Displays a file row with upload progress and contextual actions.
 ///
@@ -91,11 +96,18 @@ class AppFileUpload extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final statusLabel = switch (status) {
+      AppFileUploadStatus.pending => l10n.caseworkUploadStatusSelected,
       AppFileUploadStatus.uploading => l10n.caseworkUploadStatusUploading,
       AppFileUploadStatus.complete || AppFileUploadStatus.uploaded => l10n.caseworkUploadStatusUploaded,
       AppFileUploadStatus.error => l10n.caseworkUploadStatusFailed,
     };
     final content = switch (status) {
+      AppFileUploadStatus.pending => _UploadedRow(
+        fileName: fileName,
+        fileInfo: fileInfo,
+        onDelete: onDelete,
+        deleteLabel: deleteLabel ?? l10n.fileUploadDelete,
+      ),
       AppFileUploadStatus.uploading => _UploadingRow(
         fileName: fileName,
         fileInfo: fileInfo,
