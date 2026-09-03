@@ -469,7 +469,12 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
   /// así que se registran tanto los campos del sobre como `body.estado`/
   /// `body.mensaje`.
   void _logEnvelope(final String op, final int? statusCode, final Object? raw) {
-    final payload = _asMap(_decode(raw));
+    // El sobre pasa por el redactor de lista blanca ANTES de interpolarse
+    // (LG-3): los campos de diagnóstico siguen visibles, pero cualquier campo
+    // no listado que viaje dentro de `info-error` o del `body` (texto libre
+    // del backend, posible dato personal) queda enmascarado — interpolar el
+    // payload crudo se saltaba esa política.
+    final payload = _asMap(redactForLog(_decode(raw)));
     final body = _asMap(payload?['body']);
     logger.d(
       '[$op] http=$statusCode codigo-respuesta=${payload?['codigo-respuesta']} '
