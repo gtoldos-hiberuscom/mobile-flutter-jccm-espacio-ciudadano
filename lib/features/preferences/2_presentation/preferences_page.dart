@@ -297,7 +297,6 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
 
     final appStorage = ref.read(appStorageProvider);
     final writes = await Future.wait([
-      appStorage.remove(StorageKeys.consentAccepted),
       appStorage.remove('${StorageKeys.consentAcceptedPrefix}$idAgente'),
       appStorage.remove('${StorageKeys.consentAcceptedClausesPrefix}$idAgente'),
       appStorage.remove('${StorageKeys.lifeEventsOnboardingSeenPrefix}$idAgente'),
