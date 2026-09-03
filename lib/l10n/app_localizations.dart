@@ -1523,7 +1523,7 @@ abstract class AppLocalizations {
   /// Educación — texto de pie del modal de ayuda de títulos universitarios.
   ///
   /// In es, this message translates to:
-  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.'**
+  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Sede Electrónica de Universidades.'**
   String get educationUniversityTitlesInfoFooter;
 
   /// Educación — botón de contacto en el modal de ayuda de títulos universitarios.
@@ -1531,6 +1531,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Contacto'**
   String get educationUniversityTitlesInfoContactButton;
+
+  /// Educación — título del modal de ayuda de títulos no universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre tus títulos no universitarios'**
+  String get educationNonUniversityTitlesInfoTitle;
+
+  /// Educación — cuerpo principal del modal de ayuda de títulos no universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los datos de los títulos no universitarios que figuren en el registro.'**
+  String get educationNonUniversityTitlesInfoBody;
+
+  /// Educación — texto de pie del modal de ayuda de títulos no universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación, Formación Profesional y Deportes.'**
+  String get educationNonUniversityTitlesInfoFooter;
 
   /// Educación — sección títulos no universitarios.
   ///
@@ -5737,6 +5755,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Inscripción en ofertas de empleo'**
   String get myDataEmploymentOffersPageTitle;
+
+  /// Texto de pie del modal informativo de la pantalla de inscripciones en ofertas.
+  ///
+  /// In es, this message translates to:
+  /// **'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.'**
+  String get myDataEmploymentOffersInfoSheetFooter;
 
   /// Descripción del modal informativo de la pantalla de inscripciones en ofertas.
   ///

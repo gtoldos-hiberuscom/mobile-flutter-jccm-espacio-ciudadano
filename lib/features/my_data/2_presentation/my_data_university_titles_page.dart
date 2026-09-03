@@ -64,7 +64,7 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
     return MyDataNoData(
       message: l10n.educationUniversityTitlesNoDataMessage,
       actionLabel: l10n.educationUniversityTitlesInfoContactButton,
-      contactUrl: 'https://www.ciencia.gob.es/',
+      contactUrl: _universityTitlesContactUrl,
     );
   }
 
@@ -96,12 +96,14 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
   }
 
   Future<void> _openContactUrl(final BuildContext context) async {
-    // URL del Ministerio de Ciencia, Innovación y Universidades
-    const url = 'https://www.ciencia.gob.es/';
-
-    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
+    await launchExternalUrlWithConfirmation(context, Uri.parse(_universityTitlesContactUrl));
   }
 }
+
+/// Sede electrónica de Universidades, que es donde se consultan y corrigen los
+/// títulos universitarios. Antes apuntaba al portal del ministerio, que no
+/// lleva a ningún trámite.
+const String _universityTitlesContactUrl = 'https://universidades.sede.gob.es/';
 
 class _UniversityTitleCard extends StatelessWidget {
   const _UniversityTitleCard({required this.title});

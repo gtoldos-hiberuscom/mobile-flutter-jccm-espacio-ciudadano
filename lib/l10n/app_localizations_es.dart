@@ -758,10 +758,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get educationUniversityTitlesInfoBody => 'Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.';
 
   @override
-  String get educationUniversityTitlesInfoFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.';
+  String get educationUniversityTitlesInfoFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Sede Electrónica de Universidades.';
 
   @override
   String get educationUniversityTitlesInfoContactButton => 'Contacto';
+
+  @override
+  String get educationNonUniversityTitlesInfoTitle => 'Sobre tus títulos no universitarios';
+
+  @override
+  String get educationNonUniversityTitlesInfoBody => 'Consulta los datos de los títulos no universitarios que figuren en el registro.';
+
+  @override
+  String get educationNonUniversityTitlesInfoFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación, Formación Profesional y Deportes.';
 
   @override
   String get educationNonUniversityTitlesTitle => 'Títulos no universitarios';
@@ -2988,6 +2997,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myDataEmploymentOffersPageTitle => 'Inscripción en ofertas de empleo';
+
+  @override
+  String get myDataEmploymentOffersInfoSheetFooter => 'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
   String get myDataEmploymentOffersInfoSheetDescription => 'Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.';

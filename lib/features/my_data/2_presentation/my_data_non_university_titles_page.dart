@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/non_university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_education_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
@@ -59,7 +60,7 @@ class MyDataNonUniversityTitlesPage extends ConsumerWidget {
     return MyDataNoData(
       message: l10n.educationNonUniversityTitlesNoDataMessage,
       actionLabel: l10n.myDataNoDataContact,
-      contactUrl: 'https://www.educacionfpydeportes.gob.es/',
+      contactUrl: _nonUniversityTitlesContactUrl,
     );
   }
 
@@ -81,12 +82,20 @@ class MyDataNonUniversityTitlesPage extends ConsumerWidget {
   ) async {
     await AppInfoSheet.show(
       context: context,
-      title: 'Sobre tus títulos no universitarios',
-      bodyText: 'Consulta los datos de los títulos no universitarios que figuren en el registro.',
-      footerText: 'Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación.',
+      title: l10n.educationNonUniversityTitlesInfoTitle,
+      bodyText: l10n.educationNonUniversityTitlesInfoBody,
+      footerText: l10n.educationNonUniversityTitlesInfoFooter,
+      // El pie decía "contacta con el Ministerio" sin dar forma de hacerlo.
+      actionLabel: l10n.myDataNoDataContact,
+      onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(_nonUniversityTitlesContactUrl)),
+      actionIcon: AppIcons.openInNew,
     );
   }
 }
+
+/// Portada del Ministerio de Educación, Formación Profesional y Deportes: sin
+/// `/portada.html` la raíz del dominio no resuelve a la página pública.
+const String _nonUniversityTitlesContactUrl = 'https://www.educacionfpydeportes.gob.es/portada.html';
 
 class _NonUniversityTitleCard extends StatelessWidget {
   const _NonUniversityTitleCard({required this.title});

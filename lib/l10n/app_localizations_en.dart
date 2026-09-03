@@ -757,10 +757,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationUniversityTitlesInfoBody => 'Check the data of degrees listed in the National Register of Official University Graduates of the Ministry of Science, Innovation and Universities.\nIf your degree is prior to 1996, your data may not be automatically displayed.';
 
   @override
-  String get educationUniversityTitlesInfoFooter => 'If any of your data is incorrect or not updated, contact the Ministry of Science, Innovation and Universities.';
+  String get educationUniversityTitlesInfoFooter => 'If any of your data is incorrect or not updated, contact the Universities e-Office.';
 
   @override
   String get educationUniversityTitlesInfoContactButton => 'Contact';
+
+  @override
+  String get educationNonUniversityTitlesInfoTitle => 'About your non-university qualifications';
+
+  @override
+  String get educationNonUniversityTitlesInfoBody => 'Check the details of the non-university qualifications on record.';
+
+  @override
+  String get educationNonUniversityTitlesInfoFooter => 'If any of your data is incorrect or not updated, contact the Ministry of Education, Vocational Training and Sports.';
 
   @override
   String get educationNonUniversityTitlesTitle => 'Non-university titles';
@@ -2987,6 +2996,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myDataEmploymentOffersPageTitle => 'Employment offer registration';
+
+  @override
+  String get myDataEmploymentOffersInfoSheetFooter => 'If your job offer applications are not correct, check your Employability Portal of the Regional Government of Castilla-La Mancha.';
 
   @override
   String get myDataEmploymentOffersInfoSheetDescription => 'Check the job offers you have registered for and the status of your application.';

@@ -1015,13 +1015,25 @@
   "@educationUniversityTitlesInfoBody": {
     "description": "Education — help modal main body for university titles."
   },
-  "educationUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Ministry of Science, Innovation and Universities.",
+  "educationUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Universities e-Office.",
   "@educationUniversityTitlesInfoFooter": {
     "description": "Education — help modal footer text for university titles."
   },
   "educationUniversityTitlesInfoContactButton": "Contact",
   "@educationUniversityTitlesInfoContactButton": {
     "description": "Education — contact button in help modal for university titles."
+  },
+  "educationNonUniversityTitlesInfoTitle": "About your non-university qualifications",
+  "@educationNonUniversityTitlesInfoTitle": {
+    "description": "Education — title of the non-university qualifications help modal."
+  },
+  "educationNonUniversityTitlesInfoBody": "Check the details of the non-university qualifications on record.",
+  "@educationNonUniversityTitlesInfoBody": {
+    "description": "Education — main body of the non-university qualifications help modal."
+  },
+  "educationNonUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Ministry of Education, Vocational Training and Sports.",
+  "@educationNonUniversityTitlesInfoFooter": {
+    "description": "Education — footer text of the non-university qualifications help modal."
   },
   "educationNonUniversityTitlesTitle": "Non-university titles",
   "@educationNonUniversityTitlesTitle": {
@@ -3857,6 +3869,10 @@
   "myDataEmploymentOffersPageTitle": "Employment offer registration",
   "@myDataEmploymentOffersPageTitle": {
     "description": "Title of the employment offer registrations screen."
+  },
+  "myDataEmploymentOffersInfoSheetFooter": "If your job offer applications are not correct, check your Employability Portal of the Regional Government of Castilla-La Mancha.",
+  "@myDataEmploymentOffersInfoSheetFooter": {
+    "description": "Footer text of the job offer applications screen help modal."
   },
   "myDataEmploymentOffersInfoSheetDescription": "Check the job offers you have registered for and the status of your application.",
   "@myDataEmploymentOffersInfoSheetDescription": {
