@@ -78,6 +78,10 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
 
   bool get _operacionEnCurso => _fase != _FaseRegistro.inactiva;
 
+  /// Mientras se cierra la transacción no se puede retirar nada: la petición de
+  /// `registrarfichero` ya viajó con la lista de documentos construida.
+  bool get _puedeEditarLista => _fase != _FaseRegistro.registrando;
+
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -116,8 +120,9 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                       padding: const EdgeInsets.only(bottom: AppDimensions.space16),
                       child: _AportacionArchivoCard(
                         archivo: archivo,
-                        onDelete: () => notifier.removeArchivo(archivo.path),
-                        onCancel: () => notifier.cancelarSubida(archivo.path),
+                        onDelete: _puedeEditarLista ? () => notifier.removeArchivo(archivo.path) : null,
+                        onCancel: _puedeEditarLista ? () => notifier.cancelarSubida(archivo.path) : null,
+                        onRemove: _puedeEditarLista ? () => _descartarSubido(archivo.path) : null,
                         // AP-1: reintentar con un intento en marcha abriría una
                         // segunda transacción.
                         onRetry: _operacionEnCurso ? null : _registrar,
@@ -143,13 +148,17 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                 leadingIcon: AppIcons.upload,
                 onPressed: _pickFiles,
               ),
-              AppButton(
-                label: l10n.gestionAportarDocumentacionRegistrarButton,
-                isExpanded: true,
-                leadingIcon: AppIcons.check,
-                isLoading: _operacionEnCurso,
-                onPressed: _operacionEnCurso ? null : _registrar,
-              ),
+              // Como en la web, no se ofrece registrar sin documentos. Se
+              // mantiene visible mientras la operación está en curso para que
+              // la acción no se esfume si se retira el último fichero del lote.
+              if (archivos.isNotEmpty || _operacionEnCurso)
+                AppButton(
+                  label: l10n.gestionAportarDocumentacionRegistrarButton,
+                  isExpanded: true,
+                  leadingIcon: AppIcons.check,
+                  isLoading: _operacionEnCurso,
+                  onPressed: _operacionEnCurso ? null : _registrar,
+                ),
             ],
           ),
         ],
@@ -540,6 +549,21 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     return documentos;
   }
 
+  /// "Eliminar" sobre un fichero ya subido.
+  ///
+  /// Quitarlo de la lista NO lo saca del buzón de la transacción, y sigue sin
+  /// confirmar si `registrarfichero` registra lo que se le lista en
+  /// `documentos` o el buzón entero. Bajo ese desconocimiento la única lectura
+  /// segura es abandonar el intento: se cancela lo que haya en vuelo, todos los
+  /// ficheros pierden su hash y el siguiente registro abre un `idunico` nuevo
+  /// sin el fichero retirado. El adjunto queda huérfano en un buzón que nunca
+  /// se va a registrar.
+  void _descartarSubido(final String path) {
+    ref.read(gestionAportarDocumentacionProvider.notifier)
+      ..removeArchivo(path)
+      ..reiniciarSubidas();
+  }
+
   /// Por qué murió el intento, para el aviso al ciudadano.
   String _mensajeIntentoIncompleto(final AppLocalizations l10n, final List<AportacionArchivo> actuales) {
     if (actuales.isEmpty) {
@@ -579,12 +603,14 @@ class _AportacionArchivoCard extends StatelessWidget {
     required this.archivo,
     required this.onDelete,
     required this.onCancel,
+    required this.onRemove,
     required this.onRetry,
   });
 
   final AportacionArchivo archivo;
-  final VoidCallback onDelete;
-  final VoidCallback onCancel;
+  final VoidCallback? onDelete;
+  final VoidCallback? onCancel;
+  final VoidCallback? onRemove;
   final VoidCallback? onRetry;
 
   @override
@@ -614,6 +640,7 @@ class _AportacionArchivoCard extends StatelessWidget {
         progress: archivo.progreso,
         onDelete: onDelete,
         onCancel: onCancel,
+        onRemove: onRemove,
         onRetry: onRetry,
       ),
     );

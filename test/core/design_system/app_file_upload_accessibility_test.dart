@@ -103,6 +103,46 @@ void main() {
     }
   });
 
+  testWidgets('la tarjeta en error ofrece reintentar y eliminar por separado', (final tester) async {
+    var reintentos = 0;
+    var borrados = 0;
+    await tester.pumpWidget(
+      buildApp(upload(AppFileUploadStatus.error, onRetry: () => reintentos++, onDelete: () => borrados++)),
+    );
+
+    final reintentar = find.widgetWithText(TextButton, 'Reintentar');
+    final eliminar = find.byTooltip('Eliminar archivo');
+    for (final control in [reintentar, eliminar]) {
+      expect(tester.getSize(control).width, greaterThanOrEqualTo(48));
+      expect(tester.getSize(control).height, greaterThanOrEqualTo(48));
+    }
+
+    await tester.tap(eliminar);
+    expect(borrados, 1);
+    expect(reintentos, 0);
+  });
+
+  testWidgets('la tarjeta en error sin acción de borrado no la pinta', (final tester) async {
+    await tester.pumpWidget(buildApp(upload(AppFileUploadStatus.error, onRetry: () {})));
+
+    expect(find.byTooltip('Eliminar archivo'), findsNothing);
+  });
+
+  testWidgets('las dos acciones del error caben a 320 dp con texto al 200 por ciento', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(320, 568);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      buildApp(
+        upload(AppFileUploadStatus.error, onRetry: () {}, onDelete: () {}),
+        textScaler: const TextScaler.linear(2),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('no trunca ni desborda a 320 dp con texto al 200 por ciento', (
     final tester,
   ) async {

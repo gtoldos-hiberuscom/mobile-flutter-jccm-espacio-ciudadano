@@ -347,6 +347,62 @@ void main() {
     expect(container.read(gestionAportarDocumentacionProvider), isEmpty);
     expect(find.text('Selecciona al menos un fichero antes de registrar.'), findsOneWidget);
   });
+
+  testWidgets('el botón de registrar no aparece hasta que hay documentos', (final tester) async {
+    final container = await pumpPage(tester, _FakeDocumentoRepository());
+
+    // Como en la web: sin documentos solo se ofrece seleccionarlos.
+    expect(find.text(_registrarLabel), findsNothing);
+    expect(find.text('Seleccionar documentos'), findsOneWidget);
+
+    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf')]);
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text(_registrarLabel), findsOneWidget);
+  });
+
+  testWidgets('un fichero en error se puede quitar del lote', (final tester) async {
+    final primero = file('primero.pdf');
+    final container = await pumpPage(tester, _FakeDocumentoRepository());
+    final notifier = container.read(gestionAportarDocumentacionProvider.notifier);
+
+    notifier.addArchivos([primero]);
+    notifier
+      ..beginUpload(primero.path)
+      ..marcarError(primero.path);
+    await tester.pump();
+
+    // Antes solo se ofrecía "Reintentar": el fichero que falla se quedaba
+    // clavado en el lote y solo se podía salir cancelando todo.
+    await tester.tap(find.byTooltip('Eliminar archivo'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(container.read(gestionAportarDocumentacionProvider), isEmpty);
+  });
+
+  testWidgets('quitar un fichero ya subido abandona el intento en curso', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final container = await pumpPage(tester, _FakeDocumentoRepository());
+    final notifier = container.read(gestionAportarDocumentacionProvider.notifier);
+
+    notifier.addArchivos([primero, segundo]);
+    notifier
+      ..beginUpload(primero.path)
+      ..marcarCompletado(primero.path, 'hash-primero.pdf');
+    await tester.pump();
+
+    // El botón de la tarjeta ya subida colgaba de `onRemove`, que la página no
+    // cableaba nunca: no hacía nada.
+    await tester.tap(find.widgetWithText(TextButton, 'Eliminar'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    final archivos = container.read(gestionAportarDocumentacionProvider);
+    expect(archivos.map((final a) => a.path), [segundo.path]);
+    // El hash del que quedaba muere con el `idunico` abandonado.
+    expect(archivos.single.hash, isNull);
+    expect(archivos.single.estado, AportacionArchivoEstado.noEnviado);
+  });
 }
 
 final class _FakeDocumentoRepository implements GestionDocumentoRepository {
