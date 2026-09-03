@@ -364,10 +364,8 @@ void main() {
   testWidgets('un fichero en error se puede quitar del lote', (final tester) async {
     final primero = file('primero.pdf');
     final container = await pumpPage(tester, _FakeDocumentoRepository());
-    final notifier = container.read(gestionAportarDocumentacionProvider.notifier);
-
-    notifier.addArchivos([primero]);
-    notifier
+    container.read(gestionAportarDocumentacionProvider.notifier)
+      ..addArchivos([primero])
       ..beginUpload(primero.path)
       ..marcarError(primero.path);
     await tester.pump();
@@ -384,10 +382,8 @@ void main() {
     final primero = file('primero.pdf');
     final segundo = file('segundo.pdf');
     final container = await pumpPage(tester, _FakeDocumentoRepository());
-    final notifier = container.read(gestionAportarDocumentacionProvider.notifier);
-
-    notifier.addArchivos([primero, segundo]);
-    notifier
+    container.read(gestionAportarDocumentacionProvider.notifier)
+      ..addArchivos([primero, segundo])
       ..beginUpload(primero.path)
       ..marcarCompletado(primero.path, 'hash-primero.pdf');
     await tester.pump();
