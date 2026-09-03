@@ -38,9 +38,7 @@ final class ViviendaApi {
       data: body,
       options: Options(validateStatus: isHandledIntermediacionStatus),
     );
-    if (response.statusCode == 403) {
-      throw const MyDataAuthorizationRequired();
-    }
+    checkIntermediacionAuthorization(response);
     if (response.statusCode == 404) {
       return null;
     }

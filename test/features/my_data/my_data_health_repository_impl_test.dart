@@ -94,8 +94,8 @@ void main() {
       ]);
     });
 
-    test('reports an authorization requirement when the gateway answers 403', () async {
-      final adapter = _MyDataHealthAdapter(errorStatus: 403);
+    test('reports an authorization requirement when the envelope says so', () async {
+      final adapter = _MyDataHealthAdapter(errorStatus: 403, errorBody: '{"codigo-respuesta":"412.00"}');
       final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
 
       // La cláusula 1 no autorizada no puede confundirse con "no hay citas":
@@ -116,6 +116,32 @@ void main() {
           citizenId: _citizenId,
           filter: HealthAppointmentFilter.pending,
         ),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('un 403 sin sobre es un fallo de servicio, no falta de autorización', () async {
+      // "403 Forbidden: [no body]" es la fachada fallando contra su
+      // microservicio: ofrecer "autorizar" ahí dejaba al ciudadano dando
+      // vueltas entre Preferencias y esta pantalla.
+      final adapter = _MyDataHealthAdapter(errorStatus: 403);
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadCip(citizenId: _citizenId),
+        throwsA(isA<DioException>()),
+      );
+    });
+
+    test('un 200 con el sobre de autorización no se pinta como datos', () async {
+      // El fallo cerrado del gateway: responde 200 y mete el 412.00 en el
+      // sobre. Se colaba como datos y la pantalla pintaba "CIP: -" y "no
+      // tienes citas" en vez del aviso de autorización (MD-1).
+      final adapter = _MyDataHealthAdapter(errorStatus: 200, errorBody: '{"codigo-respuesta":"412.00","body":null}');
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadCip(citizenId: _citizenId),
         throwsA(isA<MyDataAuthorizationRequired>()),
       );
     });
@@ -175,10 +201,14 @@ Dio _dio(final _MyDataHealthAdapter adapter) {
 }
 
 final class _MyDataHealthAdapter implements HttpClientAdapter {
-  _MyDataHealthAdapter({this.errorStatus});
+  _MyDataHealthAdapter({this.errorStatus, this.errorBody = ''});
 
   /// Código HTTP con el que responder a todo, en vez del cuerpo de ejemplo.
   final int? errorStatus;
+
+  /// Cuerpo de esa respuesta de error: vacío como el "[no body]" real de la
+  /// fachada, o el sobre de autorización.
+  final String errorBody;
   final List<String> paths = [];
   final List<Map<String, String>> queries = [];
 
@@ -193,7 +223,13 @@ final class _MyDataHealthAdapter implements HttpClientAdapter {
 
     final status = errorStatus;
     if (status != null) {
-      return ResponseBody.fromString('', status);
+      return ResponseBody.fromString(
+        errorBody,
+        status,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
     }
 
     if (options.path.endsWith('/salud/cip')) {

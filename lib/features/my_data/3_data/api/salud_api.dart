@@ -78,9 +78,7 @@ final class SaludApi {
       options: Options(validateStatus: isHandledIntermediacionStatus),
     );
 
-    if (response.statusCode == 403) {
-      throw const MyDataAuthorizationRequired();
-    }
+    checkIntermediacionAuthorization(response);
     return response.statusCode == 404 ? null : decodeApiEnvelope(response.data);
   }
 }

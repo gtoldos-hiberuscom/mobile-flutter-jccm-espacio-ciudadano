@@ -22,7 +22,21 @@ class ConsentRevocationNotifier extends Notifier<bool> {
   bool _closing = false;
 
   @override
-  bool build() => false;
+  bool build() {
+    // Una sesión nueva borra la señal. El provider no es `autoDispose`, así que
+    // sin esto `state`/`_closing` se quedaban en `true` para siempre: tras
+    // cerrar por revocación y volver a entrar en el mismo proceso, una segunda
+    // revocación no cerraba nada — el early-return la daba por atendida.
+    ref.listen(tokenResponseProvider, (final previous, final next) {
+      if (next == null || _closing || !state) {
+        return;
+      }
+      logger.d('[autorizacion] sesión nueva: se rearma la detección de revocación');
+      _closing = false;
+      state = false;
+    });
+    return false;
+  }
 
   /// Cierra la sesión si no se ha cerrado ya. Devuelve sin hacer nada en
   /// llamadas repetidas.
@@ -49,6 +63,10 @@ class ConsentRevocationNotifier extends Notifier<bool> {
         ref.invalidate(landingProvider);
         state = true;
       }
+      // A partir de aquí es `state` quien hace idempotente el aviso. `_closing`
+      // solo marca "cierre en vuelo", y dejarlo puesto impedía rearmar la
+      // detección al entrar de nuevo.
+      _closing = false;
     }
   }
 }

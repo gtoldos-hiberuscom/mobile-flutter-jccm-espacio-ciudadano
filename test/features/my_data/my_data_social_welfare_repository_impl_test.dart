@@ -145,10 +145,26 @@ void main() {
       );
     });
 
-    test('un 403 pide autorizar en vez de afirmar que no hay título', () async {
+    test('un 403 con el sobre de autorización pide autorizar en vez de afirmar que no hay título', () async {
       // Antes: `validateStatus` aceptaba cualquier código < 500, así que el
       // sobre del 403 se parseaba como datos y la pantalla afirmaba que el
       // ciudadano no tiene título de familia numerosa (R-02).
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 403,
+        responseData: {'body': null, 'codigo-respuesta': '412.00', 'mensaje-respuesta': 'Forbidden'},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('un 403 sin sobre es un fallo de servicio, no falta de autorización', () async {
+      // "403 Forbidden: [no body]" es la fachada fallando contra su
+      // microservicio: ofrecer "autorizar" ahí no lleva a ninguna parte.
       final adapter = _MyDataSocialWelfareAdapter(
         statusCode: 403,
         responseData: {'body': null, 'codigo-respuesta': '403.00', 'mensaje-respuesta': 'Forbidden'},
@@ -158,7 +174,7 @@ void main() {
 
       await expectLater(
         repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
-        throwsA(isA<MyDataAuthorizationRequired>()),
+        throwsA(isA<DioException>()),
       );
     });
 

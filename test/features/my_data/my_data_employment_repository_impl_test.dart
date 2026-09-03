@@ -91,13 +91,26 @@ void main() {
       expect(demand, isNull, reason: 'the default status used to be a fabricated "Activa"');
     });
 
-    test('HTTP 403 surfaces as MyDataAuthorizationRequired', () async {
-      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(403, {'codigo-respuesta': '403.00'});
+    test('un 403 con el sobre de autorización pide autorizar', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(403, {'codigo-respuesta': '412.00'});
       final repository = MyDataEmploymentRepositoryImpl(dio: dio);
 
       await expectLater(
         repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A'),
         throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('un 403 sin sobre es un fallo de servicio, no falta de autorización', () async {
+      // La fachada devuelve "403 Forbidden: [no body]" cuando falla contra su
+      // microservicio. Ofrecer "autorizar" ahí metía al ciudadano en un bucle:
+      // iba a Preferencias, veía la cláusula aceptada, volvía y seguía el 403.
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(403, {'codigo-respuesta': '403.00'});
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A'),
+        throwsA(isA<DioException>()),
       );
     });
 
