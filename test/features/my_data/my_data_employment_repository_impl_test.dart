@@ -124,6 +124,19 @@ void main() {
       );
     });
 
+    test('un 200 con el sobre de autorización no se pinta como datos', () async {
+      // El fallo cerrado del gateway: responde 200 y mete el 412.00 en el
+      // sobre. Leerlo como datos pintaba "sin demanda" en vez del aviso de
+      // autorización (MD-1, misma familia que salud).
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(200, {'codigo-respuesta': '412.00', 'body': null});
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
     test('loads registered employment offers from the ciudadano employment resource', () async {
       final adapter = _EmploymentAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;

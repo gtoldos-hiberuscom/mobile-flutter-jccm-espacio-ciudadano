@@ -5,6 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_calendar.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
+// CAL-2 — límite conocido de esta suite: la protección frente a la aritmética
+// de fechas con cambio de hora (DST) solo actúa si el runner ejecuta en una
+// zona horaria con DST (p. ej. Europe/Madrid, la del producto). En un runner
+// en UTC estos tests pasarían también contra la aritmética antigua basada en
+// `Duration`. Hoy no hay stage de tests en CI donde fijarlo; cuando lo haya,
+// exportar `TZ=Europe/Madrid` antes de `flutter test`.
 void main() {
   group('calendarGridDays', () {
     test('usa semanas completas: 35 o 42 celdas según el mes', () {
