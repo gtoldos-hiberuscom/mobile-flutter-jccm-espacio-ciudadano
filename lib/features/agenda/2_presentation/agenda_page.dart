@@ -390,7 +390,7 @@ enum _AgendaFilter {
   all(label: 'Todos'),
   next7Days(label: '7 días', days: 7),
   next30Days(label: '30 días', days: 30),
-  next365Days(label: '365 dias', days: 365)
+  next365Days(label: '365 días', days: 365)
   ;
 
   const _AgendaFilter({

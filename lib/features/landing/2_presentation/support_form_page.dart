@@ -402,7 +402,7 @@ class _FormView extends StatelessWidget {
         if (showNameField) ...[
           AppInputCase(
             label: 'Nombre y apellidos',
-            hint: 'Ejemplo:  María Pérez',
+            hint: 'Ejemplo: María Pérez',
             controller: nameController,
             isRequired: true,
             state: _inputState(nameError),
@@ -413,7 +413,7 @@ class _FormView extends StatelessWidget {
         ],
         AppInputCase(
           label: 'Correo electrónico',
-          hint: 'Ejemplo:  maríapérez@correo.es',
+          hint: 'Ejemplo: maríapérez@correo.es',
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
           isRequired: true,
@@ -424,7 +424,7 @@ class _FormView extends StatelessWidget {
         const SizedBox(height: AppDimensions.space24),
         AppInputCase(
           label: 'Confirma tu correo electrónico',
-          hint: 'Ejemplo:  maríapérez@correo.es',
+          hint: 'Ejemplo: maríapérez@correo.es',
           controller: emailConfirmController,
           keyboardType: TextInputType.emailAddress,
           isRequired: true,
@@ -435,7 +435,7 @@ class _FormView extends StatelessWidget {
         const SizedBox(height: AppDimensions.space24),
         AppInputCase(
           label: 'Asunto',
-          hint: 'Ejemplo:  María Pérez',
+          hint: 'Ejemplo: Consulta sobre una notificación',
           controller: subjectController,
           isRequired: true,
           state: _inputState(subjectError),

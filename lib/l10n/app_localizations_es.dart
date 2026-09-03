@@ -1140,9 +1140,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get supportCaptchaLabel => 'No soy un robot';
 
   @override
-  String get supportCaptchaMockBadge => 'MOCK';
-
-  @override
   String get supportSubmitButton => 'Enviar solicitud';
 
   @override
@@ -3345,9 +3342,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEducationInterestLinksTitle => 'Enlaces de interés';
 
   @override
-  String get myDataEducationInterestLinkPlaceholder => 'Lorem ipsum dolor sit amet';
-
-  @override
   String get myDataEducationLinkEducationPortal => 'Portal de Educación de Castilla-La Mancha';
 
   @override
@@ -3405,9 +3399,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthAppointmentsError => 'No hemos podido cargar tus citas sanitarias.';
 
   @override
-  String get myDataHealthCip => 'CIP: FCCT590551910012';
-
-  @override
   String get myDataHealthPendingTab => 'Pendientes';
 
   @override
@@ -3445,9 +3436,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myDataHealthAppointmentType => 'TELÉFONICA';
-
-  @override
-  String get myDataHealthAppointmentProfessional => 'Dr. José Manuel Fernández García';
 
   @override
   String get myDataHealthAppointmentDescription => 'Cita de Atención Primaria';

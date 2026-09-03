@@ -1532,10 +1532,6 @@
   "@supportCaptchaLabel": {
     "description": "Antibot checkbox label."
   },
-  "supportCaptchaMockBadge": "MOCK",
-  "@supportCaptchaMockBadge": {
-    "description": "Badge clarifying the captcha is a mock."
-  },
   "supportSubmitButton": "Send request",
   "@supportSubmitButton": {
     "description": "Submit button copy."
@@ -4337,10 +4333,6 @@
   "@myDataEducationInterestLinksTitle": {
     "description": "Title of the links of interest section on the Education information and services tab."
   },
-  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
-  "@myDataEducationInterestLinkPlaceholder": {
-    "description": "Education link placeholder from the Figma design."
-  },
   "myDataEducationLinkTeachingStaff": "Teaching staff",
   "@myDataEducationLinkTeachingStaff": {
     "description": "Link to the teaching staff portal."
@@ -4409,10 +4401,6 @@
   "@myDataHealthAppointmentsError": {
     "description": "Error message for the health appointments list."
   },
-  "myDataHealthCip": "CIP: FCCT590551910012",
-  "@myDataHealthCip": {
-    "description": "CIP code shown below the Health detail title."
-  },
   "myDataHealthPendingTab": "Pending",
   "@myDataHealthPendingTab": {
     "description": "Pending appointments tab in Health."
@@ -4464,10 +4452,6 @@
   "myDataHealthAppointmentType": "PHONE",
   "@myDataHealthAppointmentType": {
     "description": "Type of the sample health appointment."
-  },
-  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
-  "@myDataHealthAppointmentProfessional": {
-    "description": "Healthcare professional of the sample appointment."
   },
   "myDataHealthAppointmentDescription": "Primary Care appointment",
   "@myDataHealthAppointmentDescription": {

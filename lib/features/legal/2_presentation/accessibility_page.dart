@@ -294,7 +294,7 @@ class _AccessibilityBodyState extends State<_AccessibilityBody> {
               _A11yBulletList(
                 highlightQuery: q,
                 items: const [
-                  _A11yBullet('falta de conformidad con el RD 1112/2018, de 7 de septiembre: Podrían existir fallos puntuales de edición en alguna página web, tanto en contenidos HMTL como en documentos finales, publicados en fecha posterior al 20 de septiembre de 2018.'),
+                  _A11yBullet('falta de conformidad con el RD 1112/2018, de 7 de septiembre: Podrían existir fallos puntuales de edición en alguna página web, tanto en contenidos HTML como en documentos finales, publicados en fecha posterior al 20 de septiembre de 2018.'),
                   _A11yBullet('carga desproporcionada: No resulta aplicable.'),
                   _A11yBullet('el contenido no entra dentro del ámbito de la legislación aplicable: Podrían existir archivos ofimáticos en PDF u otros formatos publicados antes del 20 de septiembre de 2018 que no cumplan en su totalidad todos los requisitos de accesibilidad.'),
                 ],
