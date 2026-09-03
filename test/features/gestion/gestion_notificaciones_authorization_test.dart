@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
@@ -116,7 +117,7 @@ void main() {
 
 final class _RejectingNotificacionesRepository implements GestionNotificacionesRepository {
   @override
-  Future<List<Notificacion>> loadNotificaciones({required final String citizenId, final NotificacionEstado? estado}) async {
+  Future<List<Notificacion>> loadNotificaciones({required final String citizenId, final NotificacionEstado? estado, final CancelToken? cancelToken}) async {
     throw const AuthorizationRequiredException(statusCode: 403, path: 'notificaciones');
   }
 

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
@@ -43,6 +44,28 @@ void main() {
     expect(notifications, hasLength(1));
     expect(notifications.single.concepto, 'Aceptación local');
     expect(notifications.single.estado, NotificacionEstado.aceptada);
+  });
+
+  test('al liberar el provider se cancela el barrido en curso', () async {
+    final repository = _FakeGestionNotificacionesRepository();
+    final container = ProviderContainer(
+      overrides: [
+        ciudadanosEndpointIdProvider.overrideWithValue('PER9998003'),
+        gestionNotificacionesRepositoryProvider.overrideWithValue(repository),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    await container.read(gestionNotificacionesProvider(NotificacionEstado.aceptada).future);
+    final token = repository.tokensRecibidos.single;
+    expect(token, isNotNull);
+    expect(token!.isCancelled, isFalse);
+
+    // Es lo que ocurre al salir de la pantalla: sin esto los cuatro barridos de
+    // "Todo" seguían pidiendo páginas hasta agotarse.
+    container.invalidate(gestionNotificacionesProvider(NotificacionEstado.aceptada));
+
+    expect(token.isCancelled, isTrue);
   });
 
   test('server version replaces the optimistic copy without duplication', () async {
@@ -145,8 +168,13 @@ final class _FakeGestionNotificacionesRepository implements GestionNotificacione
   final List<Notificacion> accepted;
   final List<Notificacion> todo;
 
+  /// Tokens que el provider pasó en cada barrido, para comprobar que los
+  /// cancela al liberarse.
+  final List<CancelToken?> tokensRecibidos = [];
+
   @override
-  Future<List<Notificacion>> loadNotificaciones({required final String citizenId, final NotificacionEstado? estado}) async {
+  Future<List<Notificacion>> loadNotificaciones({required final String citizenId, final NotificacionEstado? estado, final CancelToken? cancelToken}) async {
+    tokensRecibidos.add(cancelToken);
     return switch (estado) {
       NotificacionEstado.aceptada => accepted,
       null => todo,
