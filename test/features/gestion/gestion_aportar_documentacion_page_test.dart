@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -5,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
@@ -19,6 +21,27 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_i
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _registrarLabel = 'Registrar documentos aportados';
+
+/// El botón "Registrar" de la barra inferior, localizado por tipo: mientras la
+/// operación está en curso `AppButton` sustituye el label por el spinner, así
+/// que `find.text` no sirve para un segundo tap.
+final Finder _registrarButton = find.byType(AppButton).last;
+
+/// Bombea con espera real (dentro de `runAsync` los timers son de verdad)
+/// hasta que se cumple [condicion].
+///
+/// Siempre da al menos una vuelta: la condición puede cumplirse ya durante el
+/// `tap` (que bombea por dentro) y hace falta el frame para ver el árbol
+/// repintado.
+Future<void> pumpHasta(final WidgetTester tester, final bool Function() condicion, {final int vueltas = 60}) async {
+  for (var i = 0; i < vueltas; i++) {
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    await tester.pump();
+    if (condicion()) {
+      return;
+    }
+  }
+}
 
 /// Pulsa "Registrar" y deja correr el flujo completo.
 ///
@@ -147,10 +170,69 @@ void main() {
     expect(archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.noEnviado));
     expect(archivos.map((final a) => a.hash), everyElement(isNull));
   });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un segundo tap en Registrar durante inicproc no abre una segunda transacción', (final tester) async {
+    final gate = Completer<void>();
+    final repository = _FakeDocumentoRepository()..inicioGate = gate;
+    final container = await pumpPage(tester, repository);
+
+    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf')]);
+    await tester.pump();
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text(_registrarLabel));
+      await pumpHasta(tester, () => repository.iniciarCalls == 1);
+
+      // La ventana de AP-1: la transacción ya está abierta y todavía no hay
+      // ningún fichero `enviando`, que era lo único que apagaba el botón.
+      expect(repository.iniciarCalls, 1);
+      expect(find.text(_registrarLabel), findsNothing);
+
+      await tester.tap(_registrarButton, warnIfMissed: false);
+      await tester.pump();
+      gate.complete();
+      await pumpHasta(tester, () => repository.registrarCalls == 1);
+    });
+    await tester.pump(const Duration(milliseconds: 300));
+
+    // Dos `idunico` entrelazados corrompen los hashes: cada uno solo vale
+    // dentro del suyo.
+    expect(repository.iniciarCalls, 1);
+    expect(repository.registrarCalls, 1);
+    expect(repository.registrados, hasLength(1));
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'Reintentar durante un intento en curso tampoco abre otra transacción', (final tester) async {
+    final repository = _FakeDocumentoRepository(registrarFalla: true);
+    final container = await pumpPage(tester, repository);
+
+    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf')]);
+    await tester.pump();
+
+    await tapRegistrar(tester);
+    expect(repository.iniciarCalls, 1);
+    expect(container.read(gestionAportarDocumentacionProvider).single.estado, AportacionArchivoEstado.error);
+
+    // Segundo intento, esta vez retenido en `inicproc` para pulsar Reintentar
+    // mientras corre.
+    final gate = Completer<void>();
+    repository.inicioGate = gate;
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Reintentar'));
+      await pumpHasta(tester, () => repository.iniciarCalls == 2);
+      await tester.tap(find.text('Reintentar'), warnIfMissed: false);
+      await tester.pump();
+      gate.complete();
+      await pumpHasta(tester, () => repository.registrarCalls == 2);
+    });
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(repository.iniciarCalls, 2);
+  });
 }
 
 final class _FakeDocumentoRepository implements GestionDocumentoRepository {
-  _FakeDocumentoRepository({this.cancelPath, this.failPath});
+  _FakeDocumentoRepository({this.cancelPath, this.failPath, this.registrarFalla = false});
 
   /// Fichero cuya subida cancela el ciudadano con la X mientras está en curso.
   final String? cancelPath;
@@ -158,7 +240,16 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
   /// Fichero cuya subida falla por un error de red.
   final String? failPath;
 
+  /// `registrarfichero` falla y deja las tarjetas en error, que es como se
+  /// llega al "Reintentar" de una tarjeta.
+  final bool registrarFalla;
+
+  /// Retiene `inicproc` para poder pulsar durante la ventana en la que todavía
+  /// no hay ningún fichero `enviando` — la ventana real de AP-1.
+  Completer<void>? inicioGate;
+
   late GestionAportarDocumentacionNotifier notifier;
+  int iniciarCalls = 0;
   int registrarCalls = 0;
   List<({String nombre, String hash, int tamanioBytes})> registrados = const [];
 
@@ -170,6 +261,8 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
     required final Expediente expediente,
     final Representante? representante,
   }) async {
+    iniciarCalls++;
+    await inicioGate?.future;
     return InicioProcedimientoResultado(
       idunico: idUnico,
       estado: 'OK',
@@ -224,6 +317,12 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
   }) async {
     registrarCalls++;
     registrados = documentos;
+    if (registrarFalla) {
+      throw DioException(
+        requestOptions: RequestOptions(path: 'registrarfichero'),
+        type: DioExceptionType.connectionError,
+      );
+    }
     return Uint8List.fromList('%PDF-1.4'.codeUnits);
   }
 

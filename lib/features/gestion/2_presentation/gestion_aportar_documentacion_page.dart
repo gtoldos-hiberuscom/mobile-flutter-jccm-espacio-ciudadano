@@ -45,7 +45,7 @@ const List<String> _iosUniformTypeIdentifiersAportacion = [
 /// swagger del proyecto con el manual de integración público — ningún paso
 /// se ha podido probar contra un backend real. `idunico` se autogenera como
 /// `{NIF}_{timestamp}` y se sustituye por el que confirme `inicproc`.
-class GestionAportarDocumentacionPage extends ConsumerWidget {
+class GestionAportarDocumentacionPage extends ConsumerStatefulWidget {
   const GestionAportarDocumentacionPage({required this.numexp, this.tercero, super.key});
 
   final String numexp;
@@ -55,18 +55,34 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
   /// consultar el detalle e iniciar/registrar la aportación.
   final TerceroIdentificacion? tercero;
 
-  String get _decodedNumexp => Uri.decodeComponent(numexp);
+  @override
+  ConsumerState<GestionAportarDocumentacionPage> createState() => _GestionAportarDocumentacionPageState();
+}
+
+/// Fase de la operación de registro. Cubre TODA la transacción — de
+/// `inicproc` a `registrarfichero` —, no solo la subida: dos `idunico`
+/// entrelazados corrompen los hashes, porque cada hash solo vale dentro del
+/// suyo.
+enum _FaseRegistro { inactiva, subiendo, registrando }
+
+class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportarDocumentacionPage> {
+  _FaseRegistro _fase = _FaseRegistro.inactiva;
+
+  String get _decodedNumexp => Uri.decodeComponent(widget.numexp);
+
+  String get _expedienteRoute => '${Routes.gestionExpedientes}/${Uri.encodeComponent(_decodedNumexp)}';
+
+  bool get _operacionEnCurso => _fase != _FaseRegistro.inactiva;
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final archivos = ref.watch(gestionAportarDocumentacionProvider);
-    final expedienteRoute = '${Routes.gestionExpedientes}/${Uri.encodeComponent(_decodedNumexp)}';
-    final estaSubiendo = archivos.any((final a) => a.estado == AportacionArchivoEstado.enviando);
+    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
 
     void volverAlExpediente() {
-      ref.read(gestionAportarDocumentacionProvider.notifier).cancelarTodas();
-      context.go(expedienteRoute, extra: tercero);
+      notifier.cancelarTodas();
+      context.go(_expedienteRoute, extra: widget.tercero);
     }
 
     return Scaffold(
@@ -96,9 +112,11 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
                       padding: const EdgeInsets.only(bottom: AppDimensions.space16),
                       child: _AportacionArchivoCard(
                         archivo: archivo,
-                        onDelete: () => ref.read(gestionAportarDocumentacionProvider.notifier).removeArchivo(archivo.path),
-                        onCancel: () => ref.read(gestionAportarDocumentacionProvider.notifier).cancelarSubida(archivo.path),
-                        onRetry: () => _registrar(context, ref, archivos, expedienteRoute),
+                        onDelete: () => notifier.removeArchivo(archivo.path),
+                        onCancel: () => notifier.cancelarSubida(archivo.path),
+                        // AP-1: reintentar con un intento en marcha abriría una
+                        // segunda transacción.
+                        onRetry: _operacionEnCurso ? null : _registrar,
                       ),
                     ),
                 ],
@@ -119,14 +137,14 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
                 hierarchy: AppButtonHierarchy.secondary,
                 isExpanded: true,
                 leadingIcon: AppIcons.upload,
-                onPressed: () => _pickFiles(context, ref, archivos),
+                onPressed: _pickFiles,
               ),
               AppButton(
                 label: l10n.gestionAportarDocumentacionRegistrarButton,
                 isExpanded: true,
                 leadingIcon: AppIcons.check,
-                isLoading: estaSubiendo,
-                onPressed: estaSubiendo ? null : () => _registrar(context, ref, archivos, expedienteRoute),
+                isLoading: _operacionEnCurso,
+                onPressed: _operacionEnCurso ? null : _registrar,
               ),
             ],
           ),
@@ -135,7 +153,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     );
   }
 
-  Future<void> _pickFiles(final BuildContext context, final WidgetRef ref, final List<AportacionArchivo> archivosActuales) async {
+  Future<void> _pickFiles() async {
     final l10n = AppLocalizations.of(context);
     final selected = await openFiles(
       acceptedTypeGroups: const [
@@ -146,7 +164,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         ),
       ],
     );
-    if (selected.isEmpty || !context.mounted) {
+    if (selected.isEmpty || !mounted) {
       return;
     }
 
@@ -159,7 +177,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         ),
       ),
     );
-    if (!context.mounted) {
+    if (!mounted) {
       return;
     }
 
@@ -176,6 +194,31 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     }
   }
 
+  /// Punto de entrada único del registro — el botón "Registrar" y el
+  /// "Reintentar" de una tarjeta —, con la guarda de reentrancia (AP-1) y la
+  /// fase que apaga ambos mientras la transacción está abierta.
+  Future<void> _registrar() async {
+    if (_operacionEnCurso) {
+      return;
+    }
+    setState(() => _fase = _FaseRegistro.subiendo);
+    ({Uint8List justificante, String numexp})? resultado;
+    try {
+      resultado = await _ejecutarRegistro();
+    } finally {
+      // Se libera antes del diálogo de éxito: es modal, y con todos los
+      // ficheros `completado` la guarda de `pendientes.isEmpty` ya impide un
+      // segundo registro.
+      if (mounted) {
+        setState(() => _fase = _FaseRegistro.inactiva);
+      }
+    }
+    if (resultado == null || !mounted) {
+      return;
+    }
+    await _mostrarExitoYDescargar(resultado.justificante, resultado.numexp);
+  }
+
   /// Orquesta el flujo completo: `iniciarProcedimiento` → subir en paralelo
   /// todos los ficheros que no estén ya `completado` (`noEnviado` o `error`
   /// — así "Reintentar" en una tarjeta y "Registrar" comparten el mismo
@@ -184,33 +227,30 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
   /// revierten todos los ficheros a `error` para reintentar la secuencia
   /// completa desde cero (ver riesgos conocidos en el plan de la
   /// iteración).
-  Future<void> _registrar(
-    final BuildContext context,
-    final WidgetRef ref,
-    final List<AportacionArchivo> archivos,
-    final String expedienteRoute,
-  ) async {
+  Future<({Uint8List justificante, String numexp})?> _ejecutarRegistro() async {
     final l10n = AppLocalizations.of(context);
-    final pendientes = archivos.where((final a) => a.estado != AportacionArchivoEstado.completado).toList(growable: false);
+    // Se lee el estado al invocar y no el capturado en `build`: entre el último
+    // repintado y el tap puede haber cambiado la lista.
+    final pendientes = ref.read(gestionAportarDocumentacionProvider).where((final a) => a.estado != AportacionArchivoEstado.completado).toList(growable: false);
     if (pendientes.isEmpty) {
       AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionNoFilesError, severity: AppAlertSeverity.error);
-      return;
+      return null;
     }
 
     final claims = ref.read(jwtClaimsProvider);
-    final documentNumber = tercero?.documentNumber ?? _documentNumber(claims);
+    final documentNumber = widget.tercero?.documentNumber ?? _documentNumber(claims);
     // `citizenId` va en el path /ciudadanos/{sid} (sub_alt contra el gateway);
     // `documentNumber` es el titular del expediente y viaja en el cuerpo.
     final citizenId = ref.read(citizenEndpointIdsProvider).idAgente;
     if (documentNumber == null || citizenId == null || citizenId.isEmpty) {
       AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
-      return;
+      return null;
     }
     // No nulo solo al aportar a un expediente de terceros: identifica ante
     // el backend a quien presenta realmente la documentación (el usuario
     // autenticado), distinto del titular del expediente que va en
     // `documentNumber`.
-    final representante = tercero == null
+    final representante = widget.tercero == null
         ? null
         : Representante(
             nombre: claims?.givenName ?? '',
@@ -222,13 +262,13 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
 
     final Expediente expediente;
     try {
-      expediente = await ref.read(expedienteDetailProvider((numexp: _decodedNumexp, tercero: tercero)).future);
+      expediente = await ref.read(expedienteDetailProvider((numexp: _decodedNumexp, tercero: widget.tercero)).future);
     } on Object catch (error, stackTrace) {
       logger.e('Error al obtener el expediente para aportar documentación', error: error, stackTrace: stackTrace);
-      if (context.mounted) {
+      if (mounted) {
         AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionRegistroError, error), severity: AppAlertSeverity.error);
       }
-      return;
+      return null;
     }
 
     final repository = ref.read(gestionDocumentoRepositoryProvider);
@@ -238,10 +278,10 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       inicio = await repository.iniciarProcedimiento(citizenId: citizenId, idUnico: idUnicoLocal, documentNumber: documentNumber, expediente: expediente, representante: representante);
     } on Object catch (error, stackTrace) {
       logger.e('Error al iniciar el procedimiento de aportación', error: error, stackTrace: stackTrace);
-      if (context.mounted) {
+      if (mounted) {
         AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionRegistroError, error), severity: AppAlertSeverity.error);
       }
-      return;
+      return null;
     }
 
     // De una en una, no en paralelo: el plazo de cada subida está dimensionado
@@ -253,7 +293,6 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     // memoria a la vez.
     for (final archivo in pendientes) {
       await _subirArchivo(
-        ref: ref,
         archivo: archivo,
         citizenId: citizenId,
         documentNumber: documentNumber,
@@ -262,8 +301,8 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       );
     }
 
-    if (!context.mounted) {
-      return;
+    if (!mounted) {
+      return null;
     }
 
     final actuales = ref.read(gestionAportarDocumentacionProvider);
@@ -284,9 +323,13 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         message: huboError ? l10n.gestionAportarDocumentacionUploadErrorParcial : l10n.gestionAportarDocumentacionUploadIncompleto,
         severity: AppAlertSeverity.error,
       );
-      return;
+      return null;
     }
 
+    // Desde aquí la petición viaja con la lista de documentos ya construida:
+    // retirar algo no se podría honrar, así que las acciones por fichero se
+    // apagan mientras dure.
+    setState(() => _fase = _FaseRegistro.registrando);
     final Uint8List justificante;
     try {
       justificante = await repository.registrarFicheros(
@@ -300,22 +343,25 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
     } on Object catch (error, stackTrace) {
       logger.e('Error al finalizar el registro de la aportación', error: error, stackTrace: stackTrace);
       notifier.marcarErrorTodos();
-      if (context.mounted) {
+      if (mounted) {
         AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionFinalizacionError, error), severity: AppAlertSeverity.error);
       }
-      return;
+      return null;
     }
 
-    if (!context.mounted) {
-      return;
-    }
+    return (justificante: justificante, numexp: expediente.numexp);
+  }
 
+  /// Diálogo de éxito y descarga del justificante, ya obtenido: aquí no hay
+  /// ninguna llamada de red al backend.
+  Future<void> _mostrarExitoYDescargar(final Uint8List justificante, final String numexp) async {
+    final l10n = AppLocalizations.of(context);
     // Bucle deliberado: los callbacks del diálogo solo registran la elección
     // (AppSuccessDialog se auto-cierra antes de invocarlos) y la acción se
     // ejecuta cuando `show` resuelve. Si el usuario cancela el selector de
     // guardado (o falla la escritura) se reabre el diálogo, porque el
     // justificante solo existe en memoria y no se puede recuperar después.
-    while (context.mounted) {
+    while (mounted) {
       var descargar = false;
       await AppSuccessDialog.show(
         context,
@@ -326,26 +372,25 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
         onSecondary: () {},
         onPrimary: () => descargar = true,
       );
-      if (!context.mounted) {
+      if (!mounted) {
         return;
       }
       if (!descargar) {
-        context.go(expedienteRoute, extra: tercero);
+        context.go(_expedienteRoute, extra: widget.tercero);
         return;
       }
-      final guardado = await _descargarJustificante(context, justificante, expediente.numexp);
-      if (!context.mounted) {
+      final guardado = await _descargarJustificante(justificante, numexp);
+      if (!mounted) {
         return;
       }
       if (guardado) {
-        context.go(expedienteRoute, extra: tercero);
+        context.go(_expedienteRoute, extra: widget.tercero);
         return;
       }
     }
   }
 
   Future<void> _subirArchivo({
-    required final WidgetRef ref,
     required final AportacionArchivo archivo,
     required final String citizenId,
     required final String documentNumber,
@@ -394,11 +439,7 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
   ///
   /// Devuelve `true` si el fichero quedó guardado; `false` si el usuario
   /// canceló el selector o falló la escritura (el llamador reabre el diálogo).
-  Future<bool> _descargarJustificante(
-    final BuildContext context,
-    final Uint8List bytes,
-    final String numexp,
-  ) async {
+  Future<bool> _descargarJustificante(final Uint8List bytes, final String numexp) async {
     final l10n = AppLocalizations.of(context);
     try {
       final ruta = await FilePicker.saveFile(
@@ -417,13 +458,13 @@ class GestionAportarDocumentacionPage extends ConsumerWidget {
       if (!Platform.isAndroid && !Platform.isIOS) {
         await File(ruta).writeAsBytes(bytes);
       }
-      if (context.mounted) {
+      if (mounted) {
         AppAlertToast.show(context, message: l10n.gestionAportarDocumentacionJustificanteDescargado, severity: AppAlertSeverity.success);
       }
       return true;
     } on Object catch (error, stackTrace) {
       logger.e('Error al guardar el justificante', error: error, stackTrace: stackTrace);
-      if (context.mounted) {
+      if (mounted) {
         AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionJustificanteError, severity: AppAlertSeverity.error);
       }
       return false;
@@ -479,7 +520,7 @@ class _AportacionArchivoCard extends StatelessWidget {
   final AportacionArchivo archivo;
   final VoidCallback onDelete;
   final VoidCallback onCancel;
-  final VoidCallback onRetry;
+  final VoidCallback? onRetry;
 
   @override
   Widget build(final BuildContext context) {
