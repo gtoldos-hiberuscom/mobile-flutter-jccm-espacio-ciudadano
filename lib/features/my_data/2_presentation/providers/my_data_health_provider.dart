@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_health_repository_impl.dart';
 
 final myDataHealthRepositoryProvider = Provider<MyDataHealthRepository>((final ref) {
@@ -14,7 +16,11 @@ final myDataHealthRepositoryProvider = Provider<MyDataHealthRepository>((final r
 /// en una consulta no deje sin datos a la otra.
 final myDataHealthCipProvider = FutureProvider.autoDispose<String?>((final ref) async {
   final citizenId = ref.watch(citizenEndpointIdsProvider).requireNumDocumento();
-  return ref.watch(myDataHealthRepositoryProvider).loadCip(citizenId: citizenId);
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref.watch(myDataHealthRepositoryProvider).loadCip(citizenId: citizenId),
+  );
 });
 
 /// Citas pendientes de atención primaria.
@@ -23,9 +29,15 @@ final myDataHealthCipProvider = FutureProvider.autoDispose<String?>((final ref) 
 /// el único paginado: sólo esa operación acepta el parámetro `pagina`.
 final myDataPrimaryCarePendingAppointmentsProvider = FutureProvider.autoDispose<List<HealthAppointment>>((final ref) async {
   final citizenId = ref.watch(citizenEndpointIdsProvider).requireNumDocumento();
-  return ref.watch(myDataHealthRepositoryProvider).loadPrimaryCareAppointments(
-    citizenId: citizenId,
-    filter: HealthAppointmentFilter.pending,
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref
+        .watch(myDataHealthRepositoryProvider)
+        .loadPrimaryCareAppointments(
+          citizenId: citizenId,
+          filter: HealthAppointmentFilter.pending,
+        ),
   );
 });
 
@@ -34,8 +46,14 @@ final myDataHospitalAppointmentsProvider = FutureProvider.autoDispose.family<Lis
   final filter,
 ) async {
   final citizenId = ref.watch(citizenEndpointIdsProvider).requireIdAgente();
-  return ref.watch(myDataHealthRepositoryProvider).loadHospitalAppointments(
-    citizenId: citizenId,
-    filter: filter,
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref
+        .watch(myDataHealthRepositoryProvider)
+        .loadHospitalAppointments(
+          citizenId: citizenId,
+          filter: filter,
+        ),
   );
 });

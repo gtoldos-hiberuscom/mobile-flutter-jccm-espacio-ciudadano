@@ -3,9 +3,11 @@ import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_housing_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_housing_repository_impl.dart';
 
 final myDataHousingRepositoryProvider = Provider<MyDataHousingRepository>((final ref) {
@@ -19,9 +21,13 @@ final housingAddressProvider = FutureProvider.autoDispose<HousingAddress?>((fina
   }
 
   final repository = ref.watch(myDataHousingRepositoryProvider);
-  return repository.loadAddress(
-    citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
-    documentNumber: documentNumber,
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, ageDataConsentClauseId},
+    request: () => repository.loadAddress(
+      citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
+      documentNumber: documentNumber,
+    ),
   );
 });
 
@@ -32,9 +38,13 @@ final housingRealEstatePropertiesProvider = FutureProvider.autoDispose<List<Real
   }
 
   final repository = ref.watch(myDataHousingRepositoryProvider);
-  return repository.loadRealEstateProperties(
-    citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
-    documentNumber: documentNumber,
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, ageDataConsentClauseId},
+    request: () => repository.loadRealEstateProperties(
+      citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
+      documentNumber: documentNumber,
+    ),
   );
 });
 
