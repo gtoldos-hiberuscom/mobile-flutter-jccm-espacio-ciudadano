@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
@@ -9,6 +10,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/notificaciones_paginacion_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
 
@@ -63,12 +65,17 @@ final gestionNotificacionesOptimisticAcceptedProvider = NotifierProvider<Gestion
 );
 
 /// Family param: filtro de estado — null = "Todo" (unión de todos los estados).
-final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>(retry: _noRetryOnAuthorization, (final ref, final estado) async {
+final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>(retry: _noRetryOnDeterministicFailures, (final ref, final estado) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
   }
   final repo = ref.watch(gestionNotificacionesRepositoryProvider);
+  // "Todo" lanza cuatro barridos y cada uno puede pedir varias páginas: al
+  // salir de la pantalla (o al invalidar el provider) seguían pidiendo hasta
+  // agotarse.
+  final cancelToken = CancelToken();
+  ref.onDispose(() => cancelToken.cancel('gestionNotificacionesProvider($estado) liberado'));
   // Notificaciones solo exige la cláusula obligatoria (ver
   // `documentation/consent_clause_access_matrix.md`): no hay cláusula
   // intermedia que ofrecer, así que el rechazo por autorización solo puede ser
@@ -76,7 +83,7 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
   final notifications = await withAuthorizationGuard(
     ref,
     requiredClauseIds: const {requiredConsentClauseId},
-    request: () => repo.loadNotificaciones(citizenId: citizenId, estado: estado),
+    request: () => repo.loadNotificaciones(citizenId: citizenId, estado: estado, cancelToken: cancelToken),
   );
   if (estado != null && estado != NotificacionEstado.aceptada) {
     return notifications;
@@ -119,7 +126,7 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
 /// conocía: solo sirve de respaldo si el detalle no lo informa.
 typedef NotificacionDetalleArgs = ({int id, NotificacionEstado? estado, String? sistemaOrigen});
 
-final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>(retry: _noRetryOnAuthorization, (final ref, final args) async {
+final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>(retry: _noRetryOnDeterministicFailures, (final ref, final args) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
@@ -142,8 +149,11 @@ final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<Not
 /// rechazo del backend y la relectura de cláusulas mientras el usuario mira una
 /// pantalla que ya le dice qué hacer (o mientras se cierra la sesión). El resto
 /// de errores mantienen el comportamiento por defecto.
-Duration? _noRetryOnAuthorization(final int retryCount, final Object error) {
-  if (error is AuthorizationFailure) {
+/// Los fallos deterministas no se reintentan con espera creciente: el rechazo
+/// por autorización lo resuelve el guard, y un barrido que no cabe en el tope
+/// de páginas volverá a no caber. El usuario ya tiene "Reintentar".
+Duration? _noRetryOnDeterministicFailures(final int retryCount, final Object error) {
+  if (error is AuthorizationFailure || error is NotificacionesPaginacionIncompletaException) {
     return null;
   }
   return ProviderContainer.defaultRetry(retryCount, error);

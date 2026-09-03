@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
@@ -7,9 +8,14 @@ abstract interface class GestionNotificacionesRepository {
   /// indexado del backend no informa el estado de cada elemento, "Todo" se
   /// construye consultando todos los estados y fusionando, de modo que cada
   /// elemento llega etiquetado con el suyo.
+  ///
+  /// [cancelToken] aborta el barrido: "Todo" lanza cuatro en paralelo y cada
+  /// uno puede pedir varias páginas, así que salir de la pantalla tiene que
+  /// poder cortarlos.
   Future<List<Notificacion>> loadNotificaciones({
     required final String citizenId,
     final NotificacionEstado? estado,
+    final CancelToken? cancelToken,
   });
 
   /// Detalle de una notificación. `fallbackEstado` es el estado que traía el

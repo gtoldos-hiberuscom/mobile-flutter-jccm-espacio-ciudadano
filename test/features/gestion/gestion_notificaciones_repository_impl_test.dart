@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/notificaciones_paginacion_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificacion_estado_mapper.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
 
@@ -128,6 +129,186 @@ void main() {
       expect(adapter.requests[0].queryParameters['page'], 0);
       expect(adapter.requests[1].queryParameters['page'], 1);
       expect(adapter.requests.every((final request) => request.queryParameters['size'] == 50), isTrue);
+    });
+
+    test('una página llena con un elemento sin id sigue pidiendo la siguiente', () async {
+      final adapter = SequenceHttpClientAdapter([
+        AdapterResponse(
+          statusCode: 200,
+          body: {
+            'content': [
+              for (var id = 1; id <= 49; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
+              // Elemento que el mapeo descarta: sin id no se puede abrir ni
+              // deduplicar. La página sigue viniendo llena.
+              const {'concepto': 'Sin id'},
+            ],
+          },
+        ),
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'content': [
+              {'idNotificacion': 50, 'concepto': 'Notificación 50'},
+            ],
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada);
+
+      // El corte iba por los elementos mapeados (49 < 50), así que la página 1
+      // no se pedía nunca y esa notificación desaparecía en silencio.
+      expect(adapter.requests, hasLength(2));
+      expect(result, hasLength(50));
+    });
+
+    test('el barrido falla si la última página cabía llena en el tope', () async {
+      final adapter = SequenceHttpClientAdapter([
+        for (var page = 0; page < 3; page++)
+          AdapterResponse(
+            statusCode: 200,
+            body: {
+              'content': [
+                for (var id = 1; id <= 50; id++) {'idNotificacion': page * 50 + id, 'concepto': 'Notificación $id'},
+              ],
+            },
+          ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio, maxPages: 3);
+
+      // Devolver las 150 acumuladas como si fueran todas es la vía silenciosa
+      // que este contrato no permite: la pantalla ofrece reintentar.
+      await expectLater(
+        repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada),
+        throwsA(isA<NotificacionesPaginacionIncompletaException>()),
+      );
+      expect(adapter.requests, hasLength(3));
+    });
+
+    test('una página que repite los ids de la anterior corta el barrido', () async {
+      AdapterResponse paginaLlena() => AdapterResponse(
+        statusCode: 200,
+        body: {
+          'content': [
+            for (var id = 1; id <= 50; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
+          ],
+        },
+      );
+      final adapter = SequenceHttpClientAdapter([paginaLlena(), paginaLlena()]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      // El backend está ignorando `page`: se corta a las dos peticiones en vez
+      // de gastar el tope entero.
+      await expectLater(
+        repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada),
+        throwsA(isA<NotificacionesPaginacionIncompletaException>()),
+      );
+      expect(adapter.requests, hasLength(2));
+    });
+
+    test('un token ya cancelado no llega a pedir ninguna página', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 200, body: {'content': <Object?>[]}),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadNotificaciones(
+          citizenId: 'PER9998003',
+          estado: NotificacionEstado.aceptada,
+          cancelToken: CancelToken()..cancel(),
+        ),
+        throwsA(isA<DioException>().having((final error) => error.type, 'type', DioExceptionType.cancel)),
+      );
+      expect(adapter.requests, isEmpty);
+    });
+
+    test('cancelar a mitad del barrido no pide más páginas', () async {
+      final cancelToken = CancelToken();
+      final adapter = SequenceHttpClientAdapter(
+        [
+          for (var page = 0; page < 2; page++)
+            AdapterResponse(
+              statusCode: 200,
+              body: {
+                'content': [
+                  for (var id = 1; id <= 50; id++) {'idNotificacion': page * 50 + id, 'concepto': 'Notificación $id'},
+                ],
+              },
+            ),
+        ],
+        // Lo que hace `ref.onDispose` al abandonar la pantalla con el barrido
+        // en marcha.
+        onRequest: (final _) => cancelToken.cancel(),
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada, cancelToken: cancelToken),
+        throwsA(isA<DioException>().having((final error) => error.type, 'type', DioExceptionType.cancel)),
+      );
+      expect(adapter.requests, hasLength(1));
+    });
+
+    test('un cuerpo de error que parsea como notificación no se acepta como página', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 500,
+          body: {
+            'content': [
+              {'idNotificacion': 1, 'concepto': 'Cuerpo de error'},
+            ],
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      // Devolvía la lista del cuerpo del error como si fuera una página válida:
+      // tercera vía de lista parcial sin avisar.
+      await expectLater(
+        repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada),
+        throwsA(isA<DioException>()),
+      );
+    });
+
+    test('un 404 es "no hay notificaciones", no un fallo', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 404, body: {'mensaje-respuesta': 'sin resultados'}),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada);
+
+      expect(result, isEmpty);
+    });
+
+    test('un 404 en la página siguiente cierra el barrido con lo que ya había', () async {
+      final adapter = SequenceHttpClientAdapter([
+        AdapterResponse(
+          statusCode: 200,
+          body: {
+            'content': [
+              for (var id = 1; id <= 50; id++) {'idNotificacion': id, 'concepto': 'Notificación $id'},
+            ],
+          },
+        ),
+        const AdapterResponse(statusCode: 404, body: {'mensaje-respuesta': 'sin resultados'}),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada);
+
+      expect(result, hasLength(50));
+      expect(adapter.requests, hasLength(2));
     });
 
     test('loads accepted notifications when body uses the detailed Notifica shape', () async {

@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/notificaciones_paginacion_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificacion_estado_mapper.dart';
 
@@ -18,16 +19,26 @@ import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificac
 /// ~45 aceptadas costaba 9 peticiones por visita.
 ///
 /// **Asume que el gateway respeta el `size` pedido**, porque la paginación se
-/// detiene en la primera página incompleta. Si el backend recortara el tamaño
-/// por su cuenta, la primera página parecería la última y se perderían
-/// notificaciones: hay que comprobarlo en UAT antes de mergear.
+/// detiene en la primera página que devuelve menos elementos de los pedidos.
+/// Si el backend recortara el tamaño por su cuenta, la primera página
+/// parecería la última y se perderían notificaciones: hay que comprobarlo en
+/// UAT antes de mergear.
 const int _kNotificationsPageSize = 50;
 
+/// Tope defensivo de páginas por estado: 20 × 50 = 1000 notificaciones, veinte
+/// veces el caso real más grande visto (~45 en un estado). No está para acotar
+/// datos legítimos, sino para que un contrato roto —un backend que ignore
+/// `page` y devuelva siempre lo mismo— no deje la app pidiendo páginas sin fin.
+const int _kNotificationsMaxPages = 20;
+
 final class GestionNotificacionesRepositoryImpl implements GestionNotificacionesRepository {
-  GestionNotificacionesRepositoryImpl({required final Dio dio}) : _dio = withGeneratedApiCompat(dio), _api = CiudadanosApi(withGeneratedApiCompat(dio), standardSerializers);
+  GestionNotificacionesRepositoryImpl({required final Dio dio, final int maxPages = _kNotificationsMaxPages}) : _dio = withGeneratedApiCompat(dio), _api = CiudadanosApi(withGeneratedApiCompat(dio), standardSerializers), _maxPages = maxPages;
 
   final Dio _dio;
   final CiudadanosApi _api;
+
+  /// Solo se cambia desde los tests, para no tener que preparar 20 respuestas.
+  final int _maxPages;
 
   @override
   Future<NotificacionDetalle> loadNotificacion({
@@ -105,9 +116,10 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   Future<List<Notificacion>> loadNotificaciones({
     required final String citizenId,
     final NotificacionEstado? estado,
+    final CancelToken? cancelToken,
   }) async {
     if (estado != null) {
-      return _loadForEstado(citizenId: citizenId, estado: estado);
+      return _loadForEstado(citizenId: citizenId, estado: estado, cancelToken: cancelToken);
     }
     // "Todo": el listado indexado no informa el estado de cada elemento, y sin
     // estado la tarjeta no puede pintar ni la etiqueta ni la fecha de
@@ -120,7 +132,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     // estuviera completa. Un 404 no es fallo, ya se traduce a lista vacía.
     final sweeps = await Future.wait(
       NotificacionEstado.values.map(
-        (final value) => _loadForEstado(citizenId: citizenId, estado: value),
+        (final value) => _loadForEstado(citizenId: citizenId, estado: value, cancelToken: cancelToken),
       ),
     );
     return _mergeSweeps(sweeps);
@@ -147,29 +159,56 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   Future<List<Notificacion>> _loadForEstado({
     required final String citizenId,
     required final NotificacionEstado estado,
+    final CancelToken? cancelToken,
   }) async {
     final notifications = <int, Notificacion>{};
-    for (var page = 0; ; page++) {
-      final pageNotifications = await _loadPageForEstado(
+    Set<int>? previousPageIds;
+    for (var page = 0; page < _maxPages; page++) {
+      final (:rawCount, :items) = await _loadPageForEstado(
         citizenId: citizenId,
         estado: estado,
         page: page,
+        cancelToken: cancelToken,
       );
-      final previousLength = notifications.length;
-      for (final notification in pageNotifications) {
+      for (final notification in items) {
         notifications[notification.id] = notification;
       }
 
-      if (pageNotifications.length < _kNotificationsPageSize || notifications.length == previousLength) {
+      // El corte va por los elementos **crudos** que devolvió el backend, no
+      // por los que sobrevivieron al mapeo: una página llena de 50 con un
+      // elemento sin id utilizable quedaba en 49, se tomaba por incompleta y
+      // las páginas siguientes no se pedían nunca.
+      if (rawCount < _kNotificationsPageSize) {
         return notifications.values.toList(growable: false);
       }
+      if (rawCount > _kNotificationsPageSize) {
+        logger.w('[notificaciones] el gateway devolvió $rawCount elementos para size=$_kNotificationsPageSize (estado ${notificacionEstadoQueryValue(estado)}): no respeta el tamaño pedido');
+      }
+
+      // Página llena que repite exactamente los ids de la anterior: el backend
+      // está ignorando `page`. Se corta aquí en vez de gastar el tope entero.
+      final pageIds = {for (final notification in items) notification.id};
+      if (previousPageIds != null && previousPageIds.length == pageIds.length && previousPageIds.containsAll(pageIds)) {
+        throw _paginacionIncompleta(estado, page + 1, notifications.length, 'la página $page repite los ids de la anterior');
+      }
+      previousPageIds = pageIds;
     }
+    throw _paginacionIncompleta(estado, _maxPages, notifications.length, 'tope de páginas alcanzado con la última página llena');
   }
 
-  Future<List<Notificacion>> _loadPageForEstado({
+  /// Traza y construye el fallo de barrido incompleto. Solo lleva el token del
+  /// filtro y conteos: nada personal.
+  NotificacionesPaginacionIncompletaException _paginacionIncompleta(final NotificacionEstado estado, final int paginas, final int acumuladas, final String motivo) {
+    final token = notificacionEstadoQueryValue(estado);
+    logger.w('[notificaciones] barrido incompleto de $token: $motivo (páginas: $paginas, acumuladas: $acumuladas)');
+    return NotificacionesPaginacionIncompletaException(estado: token, paginas: paginas, acumuladas: acumuladas, motivo: motivo);
+  }
+
+  Future<({int rawCount, List<Notificacion> items})> _loadPageForEstado({
     required final String citizenId,
     required final NotificacionEstado estado,
     required final int page,
+    final CancelToken? cancelToken,
   }) async {
     final encodedCitizenId = Uri.encodeComponent(citizenId);
     final estadoQuery = notificacionEstadoQueryValue(estado);
@@ -184,20 +223,23 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
         options: Options(
           validateStatus: (final status) => status == 404 || (status != null && status >= 200 && status < 300),
         ),
+        cancelToken: cancelToken,
       );
 
       if (response.statusCode == 404) {
-        return const [];
+        return const (rawCount: 0, items: <Notificacion>[]);
       }
       _throwIfAuthorizationRequired(
         response.data,
         statusCode: response.statusCode,
         path: 'notificaciones',
       );
-      return _rawNotificaciones(response.data, estado);
+      return _pageForEstado(response.data, estado);
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
-        return const [];
+        // Fin del listado, o el ciudadano no tiene notificaciones en ese
+        // estado: decisión validada, no es un fallo.
+        return const (rawCount: 0, items: <Notificacion>[]);
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
       _throwIfAuthorizationRequired(
@@ -205,10 +247,9 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
         statusCode: error.response?.statusCode,
         path: 'notificaciones',
       );
-      final parsed = _rawNotificaciones(rawData, estado);
-      if (parsed.isNotEmpty) {
-        return parsed;
-      }
+      // Un cuerpo de error que además parsea como notificación NO es una
+      // página: aceptarlo era una tercera vía de lista parcial sin error, con
+      // exposición ×4 en "Todo".
       rethrow;
     }
   }
@@ -229,24 +270,33 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
   }
 
-  List<Notificacion> _rawNotificaciones(final Object? data, final NotificacionEstado estado) {
+  /// Los elementos tal y como llegaron (`rawCount`) junto a los que se pueden
+  /// mapear (`items`).
+  ///
+  /// La distinción es el corte de la paginación: `rawCount` dice si la página
+  /// venía llena —lo único que indica que hay más— e `items` es lo que se puede
+  /// pintar. Contar por lo segundo perdía las páginas siguientes en silencio.
+  ({int rawCount, List<Notificacion> items}) _pageForEstado(final Object? data, final NotificacionEstado estado) {
     final payload = _notificationPayload(data);
-    final items = switch (payload) {
+    final raws = switch (payload) {
       final List<dynamic> list => list,
       final Map<dynamic, dynamic> map when _hasNotificationId(map) => [map],
       _ => const <dynamic>[],
     };
-    return items
-        .whereType<Map<dynamic, dynamic>>()
-        .map(
-          (final item) => <String, Object?>{
-            for (final entry in item.entries)
-              if (entry.key != null) entry.key.toString(): entry.value,
-          },
-        )
-        .map((final map) => _toNotificacionMap(map, estado))
-        .nonNulls
-        .toList(growable: false);
+    return (
+      rawCount: raws.length,
+      items: raws
+          .whereType<Map<dynamic, dynamic>>()
+          .map(
+            (final item) => <String, Object?>{
+              for (final entry in item.entries)
+                if (entry.key != null) entry.key.toString(): entry.value,
+            },
+          )
+          .map((final map) => _toNotificacionMap(map, estado))
+          .nonNulls
+          .toList(growable: false),
+    );
   }
 
   Object? _notificationPayload(final Object? data) {
