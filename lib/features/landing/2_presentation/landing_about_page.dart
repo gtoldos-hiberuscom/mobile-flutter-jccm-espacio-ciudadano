@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dar
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/clave_login_veil.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// "Saber más sobre Espacio Ciudadano" screen — per 02_About.png.
@@ -26,133 +27,138 @@ class LandingAboutPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final landingState = ref.watch(landingProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.surface,
-      appBar: AppNavBar(
-        type: AppNavBarType.level2,
-        title: l10n.landingAboutPageTitle,
-        onBack: () => Navigator.of(context).pop(),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ── Scrollable body ────────────────────────────────────────────
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space24,
-                vertical: AppDimensions.space24,
-              ),
-              child: Stack(
-                children: [
-                  // Rule 3.2 — H1 announced first by SR
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Semantics(
-                      header: true,
-                      headingLevel: 1,
-                      focusable: true,
-                      label: l10n.landingAboutTitle,
-                      child: const SizedBox(width: 1, height: 1),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Visual H1 title
-                      ExcludeSemantics(
-                        child: Text(
-                          l10n.landingAboutTitle,
-                          style: AppTypography.h1.copyWith(
-                            color: AppColors.textBase,
-                          ),
-                        ),
+    // Mismo velo que en la home pública: desde aquí también se accede con
+    // Cl@ve, y sin él se pulsaba "Acceder" y no ocurría nada visible.
+    return ClaveLoginVeil(
+      isAuthenticating: landingState.isLoggingIn || landingState.loginSuccess,
+      child: Scaffold(
+        backgroundColor: AppColors.surface,
+        appBar: AppNavBar(
+          type: AppNavBarType.level2,
+          title: l10n.landingAboutPageTitle,
+          onBack: () => Navigator.of(context).pop(),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // ── Scrollable body ────────────────────────────────────────────
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space24,
+                  vertical: AppDimensions.space24,
+                ),
+                child: Stack(
+                  children: [
+                    // Rule 3.2 — H1 announced first by SR
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      child: Semantics(
+                        header: true,
+                        headingLevel: 1,
+                        focusable: true,
+                        label: l10n.landingAboutTitle,
+                        child: const SizedBox(width: 1, height: 1),
                       ),
-                      const SizedBox(height: AppDimensions.space16),
-
-                      // Mixed-weight description paragraph — Figma: Body/Base 16px w400/w700
-                      Semantics(
-                        label: '${l10n.landingAboutBodyPrefix} ${l10n.landingAboutBodyBold} ${l10n.landingAboutBodySuffix}',
-                        child: ExcludeSemantics(
-                          child: RichText(
-                            text: TextSpan(
-                              style: AppTypography.bodyBase.copyWith(
-                                color: AppColors.textBase,
-                              ),
-                              children: [
-                                TextSpan(text: '${l10n.landingAboutBodyPrefix} '),
-                                TextSpan(
-                                  text: l10n.landingAboutBodyBold,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextSpan(text: ' ${l10n.landingAboutBodySuffix}'),
-                              ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Visual H1 title
+                        ExcludeSemantics(
+                          child: Text(
+                            l10n.landingAboutTitle,
+                            style: AppTypography.h1.copyWith(
+                              color: AppColors.textBase,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: AppDimensions.space32),
+                        const SizedBox(height: AppDimensions.space16),
 
-                      // "¿Qué encontrarás?" — Figma: Headings/H2 24px w600 h150%
-                      Semantics(
-                        header: true,
-                        headingLevel: 2,
-                        child: Text(
-                          l10n.landingAboutWhatYouFindTitle,
-                          style: AppTypography.h2.copyWith(
+                        // Mixed-weight description paragraph — Figma: Body/Base 16px w400/w700
+                        Semantics(
+                          label: '${l10n.landingAboutBodyPrefix} ${l10n.landingAboutBodyBold} ${l10n.landingAboutBodySuffix}',
+                          child: ExcludeSemantics(
+                            child: RichText(
+                              text: TextSpan(
+                                style: AppTypography.bodyBase.copyWith(
+                                  color: AppColors.textBase,
+                                ),
+                                children: [
+                                  TextSpan(text: '${l10n.landingAboutBodyPrefix} '),
+                                  TextSpan(
+                                    text: l10n.landingAboutBodyBold,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextSpan(text: ' ${l10n.landingAboutBodySuffix}'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppDimensions.space32),
+
+                        // "¿Qué encontrarás?" — Figma: Headings/H2 24px w600 h150%
+                        Semantics(
+                          header: true,
+                          headingLevel: 2,
+                          child: Text(
+                            l10n.landingAboutWhatYouFindTitle,
+                            style: AppTypography.h2.copyWith(
+                              color: AppColors.textBase,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppDimensions.space8),
+
+                        Text(
+                          l10n.landingAboutWhatYouFindIntro,
+                          style: AppTypography.bodyBase.copyWith(
                             color: AppColors.textBase,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: AppDimensions.space8),
+                        const SizedBox(height: AppDimensions.space16),
 
-                      Text(
-                        l10n.landingAboutWhatYouFindIntro,
-                        style: AppTypography.bodyBase.copyWith(
-                          color: AppColors.textBase,
-                        ),
-                      ),
-                      const SizedBox(height: AppDimensions.space16),
-
-                      // Bullet list — 6 items, color primary
-                      ...[
-                        l10n.landingAboutBullet1,
-                        l10n.landingAboutBullet2,
-                        l10n.landingAboutBullet3,
-                        l10n.landingAboutBullet4,
-                        l10n.landingAboutBullet5,
-                        l10n.landingAboutBullet6,
-                      ].map(
-                        (final bullet) => Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: AppDimensions.space12,
+                        // Bullet list — 6 items, color primary
+                        ...[
+                          l10n.landingAboutBullet1,
+                          l10n.landingAboutBullet2,
+                          l10n.landingAboutBullet3,
+                          l10n.landingAboutBullet4,
+                          l10n.landingAboutBullet5,
+                          l10n.landingAboutBullet6,
+                        ].map(
+                          (final bullet) => Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: AppDimensions.space12,
+                            ),
+                            child: AppBulletItem(text: bullet),
                           ),
-                          child: AppBulletItem(text: bullet),
                         ),
-                      ),
-                      const SizedBox(height: AppDimensions.space32),
-                    ],
-                  ),
-                ],
+                        const SizedBox(height: AppDimensions.space32),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // ── Sticky CTA bar ─────────────────────────────────────────────
-          AppStickybar(
-            children: [
-              AppButton(
-                label: l10n.landingAboutAccessButton,
-                icon: const Icon(Icons.check, size: AppDimensions.iconMedium),
-                isLoading: landingState.isLoggingIn,
-                onPressed: landingState.isLoggingIn ? null : () => ref.read(landingProvider.notifier).login(),
-              ),
-            ],
-          ),
-        ],
+            // ── Sticky CTA bar ─────────────────────────────────────────────
+            AppStickybar(
+              children: [
+                AppButton(
+                  label: l10n.landingAboutAccessButton,
+                  icon: const Icon(Icons.check, size: AppDimensions.iconMedium),
+                  isLoading: landingState.isLoggingIn,
+                  onPressed: landingState.isLoggingIn ? null : () => ref.read(landingProvider.notifier).login(),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

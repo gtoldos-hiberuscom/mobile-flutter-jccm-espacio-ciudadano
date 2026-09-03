@@ -1217,6 +1217,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saludSurfaceCta => 'View agenda';
 
   @override
+  String get homeNoNewsMessage => 'You have no pending notifications or upcoming appointments.';
+
+  @override
   String get homeUpcomingEventsTitle => 'Upcoming events';
 
   @override
