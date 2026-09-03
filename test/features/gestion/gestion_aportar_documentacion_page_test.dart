@@ -320,6 +320,33 @@ void main() {
     expect(archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.noEnviado));
     expect(archivos.map((final a) => a.hash), everyElement(isNull));
   });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'quitar todos los ficheros durante el lote no cierra la transacción vacía', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    late final ProviderContainer container;
+    final repository = _FakeDocumentoRepository(
+      onUpload: (final nombre) async {
+        if (nombre == 'primero.pdf') {
+          container.read(gestionAportarDocumentacionProvider.notifier)
+            ..removeArchivo(primero.path)
+            ..removeArchivo(segundo.path);
+        }
+      },
+    );
+    container = await pumpPage(tester, repository);
+
+    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo]);
+    await tester.pump();
+
+    await tapRegistrar(tester);
+
+    // `_documentosParaRegistro` devolvía `[]` —no `null`— con la lista vacía,
+    // así que se llamaba a `registrarfichero` sin ni un documento.
+    expect(repository.registrarCalls, 0);
+    expect(container.read(gestionAportarDocumentacionProvider), isEmpty);
+    expect(find.text('Selecciona al menos un fichero antes de registrar.'), findsOneWidget);
+  });
 }
 
 final class _FakeDocumentoRepository implements GestionDocumentoRepository {

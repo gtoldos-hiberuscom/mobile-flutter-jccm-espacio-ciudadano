@@ -348,11 +348,10 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
       // Este intento muere aquí, así que los hashes que sí se obtuvieron dejan
       // de servir (pertenecen a este `idunico`): se descartan y el siguiente
       // registro vuelve a subir todos los ficheros.
-      final huboError = actuales.any((final a) => a.estado == AportacionArchivoEstado.error);
       notifier.reiniciarSubidas();
       AppAlertSnackbar.show(
         context,
-        message: huboError ? l10n.gestionAportarDocumentacionUploadErrorParcial : l10n.gestionAportarDocumentacionUploadIncompleto,
+        message: _mensajeIntentoIncompleto(l10n, actuales),
         severity: AppAlertSeverity.error,
       );
       return null;
@@ -521,10 +520,15 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     }
   }
 
-  /// Documentos listos para `registrarfichero`, o `null` si alguno no está
-  /// subido: cada entrada necesita el hash que devolvió su subida y solo un
-  /// fichero `completado` lo tiene.
+  /// Documentos listos para `registrarfichero`, o `null` si la lista está vacía
+  /// o alguno no está subido: cada entrada necesita el hash que devolvió su
+  /// subida y solo un fichero `completado` lo tiene.
   List<({String nombre, String hash, int tamanioBytes})>? _documentosParaRegistro(final List<AportacionArchivo> archivos) {
+    if (archivos.isEmpty) {
+      // Cerrar la transacción con `documentos: []` no es un registro: se llega
+      // aquí retirando todos los ficheros durante el lote.
+      return null;
+    }
     final documentos = <({String nombre, String hash, int tamanioBytes})>[];
     for (final archivo in archivos) {
       final hash = archivo.hash;
@@ -534,6 +538,17 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
       documentos.add((nombre: archivo.nombre, hash: hash, tamanioBytes: archivo.tamanioBytes));
     }
     return documentos;
+  }
+
+  /// Por qué murió el intento, para el aviso al ciudadano.
+  String _mensajeIntentoIncompleto(final AppLocalizations l10n, final List<AportacionArchivo> actuales) {
+    if (actuales.isEmpty) {
+      return l10n.gestionAportarDocumentacionNoFilesError;
+    }
+    if (actuales.any((final a) => a.estado == AportacionArchivoEstado.error)) {
+      return l10n.gestionAportarDocumentacionUploadErrorParcial;
+    }
+    return l10n.gestionAportarDocumentacionUploadIncompleto;
   }
 
   /// `numexp` contiene `/` (ej. `WMEQ/2026/000002`), inválido en un nombre de
