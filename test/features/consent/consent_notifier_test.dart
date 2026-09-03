@@ -73,6 +73,9 @@ final class _FakeConsentRepository implements ConsentRepository {
   final List<List<Clause>> markCalls = [];
 
   @override
+  Future<List<Clause>> refreshClauses({required final String idAgente}) => fetchClauses(idAgente: idAgente);
+
+  @override
   Future<List<Clause>> fetchClauses({final String? idAgente}) async {
     final pendingError = fetchError;
     if (pendingError != null) {

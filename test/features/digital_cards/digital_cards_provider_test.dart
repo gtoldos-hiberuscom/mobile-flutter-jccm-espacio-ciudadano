@@ -101,6 +101,9 @@ final class _RecordingConsentRepository implements ConsentRepository {
 
   @override
   Future<List<Clause>> fetchClauses({final String? idAgente}) => throw UnimplementedError();
+
+  @override
+  Future<List<Clause>> refreshClauses({required final String idAgente}) => throw UnimplementedError();
 }
 
 final class _RecordingDigitalCardsRepository implements DigitalCardsRepository {

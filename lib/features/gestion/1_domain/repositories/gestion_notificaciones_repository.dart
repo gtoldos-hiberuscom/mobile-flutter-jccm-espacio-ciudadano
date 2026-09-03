@@ -3,8 +3,10 @@ import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_de
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 
 abstract interface class GestionNotificacionesRepository {
-  /// Listado de notificaciones. `estado` null = sin filtro ("Todo"), y en ese
-  /// caso el estado de cada elemento puede quedar desconocido.
+  /// Listado de notificaciones. `estado` null = "Todo": como el listado
+  /// indexado del backend no informa el estado de cada elemento, "Todo" se
+  /// construye consultando todos los estados y fusionando, de modo que cada
+  /// elemento llega etiquetado con el suyo.
   Future<List<Notificacion>> loadNotificaciones({
     required final String citizenId,
     final NotificacionEstado? estado,

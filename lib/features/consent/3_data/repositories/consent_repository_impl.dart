@@ -186,6 +186,20 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     return remote.clauses;
   }
 
+  @override
+  Future<List<Clause>> refreshClauses({required final String idAgente}) async {
+    final normalizedId = idAgente.trim();
+    if (normalizedId.isEmpty) {
+      throw StateError('An agent id is required to refresh consent clauses');
+    }
+    // Tirar la copia en memoria es lo único que hace falta: si ya hay una
+    // petición en vuelo, `_fetchRemoteClauses` la comparte, así que N
+    // refrescos simultáneos (los cuatro barridos de "Todo", los tres carnets)
+    // siguen siendo una sola llamada.
+    final _ = _remoteClausesCache.remove(normalizedId);
+    return fetchClauses(idAgente: normalizedId);
+  }
+
   // ── Private ───────────────────────────────────────────────────────────────
 
   String _key(final String idAgente) => '${StorageKeys.consentAcceptedPrefix}$idAgente';

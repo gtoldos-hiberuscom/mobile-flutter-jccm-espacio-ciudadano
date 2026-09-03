@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empt
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
@@ -101,10 +102,20 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
               Expanded(
                 child: notifAsync.when(
                   loading: () => const LoadingStateWidget(),
-                  error: (final _, final _) => ErrorStateWidget(
-                    message: l10n.gestionNotificacionesLoadError,
-                    onRetry: () => ref.invalidate(gestionNotificacionesProvider(_currentEstado)),
-                  ),
+                  // La retirada de la cláusula obligatoria ya está cerrando la
+                  // sesión: decir "no se han podido cargar" sería mentir en el
+                  // parpadeo previo a volver al landing. Cualquier otro fallo,
+                  // incluida una autorización que no se pudo comprobar, es
+                  // error reintentable.
+                  error: (final error, final _) => error is ConsentRevoked
+                      ? EmptyStateWidget(
+                          message: l10n.authorizationRevokedMessage,
+                          icon: AppIcons.info,
+                        )
+                      : ErrorStateWidget(
+                          message: l10n.gestionNotificacionesLoadError,
+                          onRetry: () => ref.invalidate(gestionNotificacionesProvider(_currentEstado)),
+                        ),
                   data: (final notifs) {
                     final filtered = notifs
                         .where((final notification) {

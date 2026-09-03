@@ -236,14 +236,6 @@ class EmojiDioLogger extends Interceptor {
 
   @override
   void onError(final DioException err, final ErrorInterceptorHandler handler) {
-    if (_isHandledBusinessResponse(
-      path: err.requestOptions.path,
-      data: err.response?.data,
-    )) {
-      handler.next(err);
-      return;
-    }
-
     final request = err.requestOptions;
     logger
       ..e('$dioNote 💥 Error: ${err.type} ${err.message}')
@@ -252,20 +244,5 @@ class EmojiDioLogger extends Interceptor {
       logger.e('$dioNote 💥 Error Response: ${redactForLog(err.response?.data)}');
     }
     handler.next(err);
-  }
-
-  bool _isHandledBusinessResponse({
-    required final String path,
-    required final Object? data,
-  }) {
-    if (path == '/api/v1/soporte') {
-      return false;
-    }
-    if (data is! Map) {
-      return false;
-    }
-    final responseCode = data['codigo-respuesta']?.toString();
-    final message = data['mensaje-respuesta']?.toString().toLowerCase() ?? '';
-    return responseCode == '412.00' && message.contains('no se pudo dar de alta el soporte');
   }
 }
