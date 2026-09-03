@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -29,10 +31,34 @@ void main() {
     expect(find.text(_expiredTag), findsOneWidget);
   });
 
-  testWidgets('conserva la acción cuando el detalle no informa estado y el resumen sí', (final tester) async {
+  testWidgets('el respaldo del resumen lo aplica el repositorio, no la página', (final tester) async {
+    // El repositorio recibe `fallbackEstado` y es quien distingue "el detalle
+    // no informa estado" de "informa uno que no sabemos leer". La página
+    // repetía el respaldo con `?? widget.estado`, y eso resucitaba la acción
+    // en el segundo caso — el estado que llega aquí ya es la decisión tomada.
     await _pumpDetail(tester, resumenEstado: NotificacionEstado.pendiente, detalleEstado: null);
 
-    expect(find.text(_acceptLabel), findsOneWidget);
+    expect(find.text(_acceptLabel), findsNothing);
+  });
+
+  testWidgets('no ofrece comparecer mientras el detalle carga', (final tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          // Nunca resuelve: es la ventana en la que la acción con efectos
+          // jurídicos se ofrecía sin saber todavía el estado.
+          gestionNotificacionDetalleProvider.overrideWith((final ref, final args) => Completer<NotificacionDetalle>().future),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: GestionNotificacionDetallePage(notificacionId: 7924, estado: NotificacionEstado.pendiente),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text(_acceptLabel), findsNothing);
   });
 
   testWidgets('sin estado por ninguna vía no etiqueta la notificación como expirada', (final tester) async {

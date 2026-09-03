@@ -62,7 +62,13 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
       // La comparecencia se decide con el estado del detalle cargado, no con el
       // del resumen: en "Todo" el resumen no trae estado y la acción con
       // efectos jurídicos desaparecía de la pantalla.
-      bottomNavigationBar: (detail.asData?.value.estado ?? widget.estado) == NotificacionEstado.pendiente
+      //
+      // El respaldo del resumen lo aplica el repositorio (`fallbackEstado`),
+      // que es quien distingue "el detalle no informa estado" de "informa uno
+      // que no sabemos leer". Repetirlo aquí con `?? widget.estado` resucitaba
+      // la acción en el segundo caso, y la ofrecía con el detalle en carga o en
+      // error.
+      bottomNavigationBar: detail.asData?.value.estado == NotificacionEstado.pendiente
           ? _PendingActionBar(
               accepting: _accepting,
               onAccept: _accept,

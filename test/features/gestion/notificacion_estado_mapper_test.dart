@@ -24,6 +24,34 @@ void main() {
     });
   });
 
+  group('notificacionEstadoLecturaFromBackend', () {
+    test('un campo ausente o vacío es ausencia, no valor desconocido', () {
+      expect(notificacionEstadoLecturaFromBackend(null), isA<NotificacionEstadoAusente>());
+      expect(notificacionEstadoLecturaFromBackend(''), isA<NotificacionEstadoAusente>());
+      expect(notificacionEstadoLecturaFromBackend('   '), isA<NotificacionEstadoAusente>());
+    });
+
+    test('un valor fuera del vocabulario se marca como no reconocido y conserva el crudo', () {
+      // Notifica tiene más vocabulario del que recoge el contrato: el crudo es
+      // lo único que permite descubrir cuál falta.
+      final lectura = notificacionEstadoLecturaFromBackend(' LEIDA_POR_TERCERO ');
+
+      expect(lectura, isA<NotificacionEstadoNoReconocido>());
+      expect((lectura as NotificacionEstadoNoReconocido).raw, 'LEIDA_POR_TERCERO');
+    });
+
+    test('acepta los dos vocabularios del contrato', () {
+      expect(
+        notificacionEstadoLecturaFromBackend(' EXPIRADA '),
+        isA<NotificacionEstadoConocido>().having((final lectura) => lectura.estado, 'estado', NotificacionEstado.expirada),
+      );
+      expect(
+        notificacionEstadoLecturaFromBackend('puesta-a-disposicion'),
+        isA<NotificacionEstadoConocido>().having((final lectura) => lectura.estado, 'estado', NotificacionEstado.pendiente),
+      );
+    });
+  });
+
   test('notificacionEstadoQueryValue usa los valores del enum del endpoint', () {
     expect(notificacionEstadoQueryValue(NotificacionEstado.pendiente), 'pendiente');
     expect(notificacionEstadoQueryValue(NotificacionEstado.aceptada), 'aceptada');
