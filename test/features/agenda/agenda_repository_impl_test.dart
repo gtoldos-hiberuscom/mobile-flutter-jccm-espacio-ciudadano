@@ -23,11 +23,11 @@ void main() {
         adapter.paths,
         isNot(contains('/api/v1/sescam/citas-pasadas/12345678A')),
       );
-      // Los eventos van por el path gateway /ciudadanos/{sid}/eventos/{periodo}
-      // (el legacy /api/v1/agenda/... no existe en el gateway) y el periodo en
-      // mayúsculas.
+      // Ambas fuentes van por paths del gateway: los legacy /api/v1/sescam/...
+      // y /api/v1/agenda/... no existen ahí y responden 404. El periodo de los
+      // eventos va en mayúsculas.
       expect(adapter.paths, [
-        '/api/v1/sescam/citas/12345678A',
+        '/api/v1/ciudadanos/12345678A/salud/primaria-citas-pendientes',
         '/api/v1/ciudadanos/agent-1/eventos/TODOS',
       ]);
       expect(appointments, hasLength(5));
@@ -50,6 +50,35 @@ void main() {
         'El carnet joven caduca el próximo 30/01/2030',
       );
       expect(appointments[4].kind, AgendaAppointmentKind.credential);
+    });
+
+    test('a primary care appointment published by both sources is listed once', () async {
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: [
+          {
+            'fecha': '15/06/2026',
+            'hora': '09:00',
+            'nomTvisita': 'DEMANDA',
+            'nomProfesionalRealizador': 'LAGUNA RUIDERA MONTESINOS',
+            'nomModoVisita': 'Presencial',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      final duplicated = appointments.where((final appointment) => appointment.dateTime == DateTime(2026, 6, 15, 9));
+      expect(duplicated, hasLength(1));
+      // Gana la de SESCAM: trae profesional y modo en campos propios en vez de
+      // dentro del mensaje del evento.
+      expect(duplicated.single.title, 'LAGUNA RUIDERA MONTESINOS');
+      expect(duplicated.single.description, 'DEMANDA');
+      expect(appointments, hasLength(4));
     });
 
     test('refreshes events through the gateway refrescar endpoint', () async {
@@ -101,6 +130,18 @@ final class _StaticAdapter implements HttpClientAdapter {
 }
 
 final class _AgendaAdapter implements HttpClientAdapter {
+  _AgendaAdapter({final List<Map<String, dynamic>>? primaryCareAppointments}) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
+
+  static const List<Map<String, dynamic>> _defaultPrimaryCareAppointments = [
+    {
+      'fecha': '01/07/2026',
+      'hora': '10:30',
+      'nomTvisita': 'Consulta Medicina de Familia',
+      'centro': 'Centro de salud',
+    },
+  ];
+
+  final List<Map<String, dynamic>> _primaryCareAppointments;
   final List<String> paths = [];
 
   @override
@@ -165,16 +206,7 @@ final class _AgendaAdapter implements HttpClientAdapter {
     return ResponseBody.fromString(
       jsonEncode(
         {
-          'body': {
-            'listaCitas': [
-              {
-                'fecha': '01/07/2026',
-                'hora': '10:30',
-                'nomTvisita': 'Consulta Medicina de Familia',
-                'centro': 'Centro de salud',
-              },
-            ],
-          },
+          'body': {'listaCitas': _primaryCareAppointments},
         },
       ),
       200,
