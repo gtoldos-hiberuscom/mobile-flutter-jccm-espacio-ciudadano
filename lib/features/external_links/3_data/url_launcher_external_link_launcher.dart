@@ -1,3 +1,4 @@
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_catalog.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
@@ -61,8 +62,10 @@ final class UrlLauncherExternalLinkLauncher implements ExternalLinkLauncher {
         );
       }
     } on Object catch (error, stackTrace) {
-      // ignore: avoid_print
-      print('[external_links] platform launch threw: $error\n$stackTrace');
+      // Por el logger de la app, no por `print`: era el único `print` de lib/
+      // y emitía en release, fuera del DevelopmentFilter y de la redacción
+      // (el error de plataforma puede transportar la URL completa).
+      logger.e('[external_links] platform launch threw', error: error, stackTrace: stackTrace);
       return _failure(link, ExternalLinkLaunchFailureReason.unknown);
     }
 
