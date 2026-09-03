@@ -37,21 +37,9 @@ const faqEntries = <FaqEntry>[
     question: '¿Qué eventos se muestran en Mi Agenda?',
     answer: 'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.',
   ),
-  FaqEntry(
-    id: 'pendiente-1',
-    question: 'Preguntas a trabajar para app',
-    answer: 'El contenido de esta respuesta está pendiente de definición.',
-  ),
-  FaqEntry(
-    id: 'pendiente-2',
-    question: 'Preguntas a trabajar para app',
-    answer: 'El contenido de esta respuesta está pendiente de definición.',
-  ),
-  FaqEntry(
-    id: 'pendiente-3',
-    question: 'Preguntas a trabajar para app',
-    answer: 'El contenido de esta respuesta está pendiente de definición.',
-  ),
+  // Las preguntas nuevas se añaden aquí cuando el cliente entregue su
+  // contenido definitivo — nunca como entradas placeholder: tres «Preguntas a
+  // trabajar para app» llegaron a verse en producción (N-08).
 ];
 
 FaqEntry? faqEntryById(final String id) {
