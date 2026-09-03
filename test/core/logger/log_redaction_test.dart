@@ -76,6 +76,55 @@ void main() {
       expect(redactForLog(true), isTrue);
       expect(redactForLog(null), isNull);
     });
+
+    test('enmascara los escalares de una lista bajo clave no blanca', () {
+      // Antes de LG-1 un String de una lista salía en claro: no era raíz, así
+      // que ni se decodificaba ni se consultaba la lista blanca.
+      expect(
+        redactForLog({
+          'telefonos': ['600111222', '925000000'],
+          'codigo-respuesta': '200.00',
+        }),
+        {
+          'telefonos': [redactedPlaceholder, redactedPlaceholder],
+          'codigo-respuesta': '200.00',
+        },
+      );
+    });
+
+    test('conserva los escalares de una lista bajo clave blanca', () {
+      // El contexto de la clave baja con la recursión: `info-error` es
+      // diagnóstico, no dato personal, y sus elementos siguen siendo útiles.
+      expect(
+        redactForLog({
+          'info-error': ['3034', 'cláusula no aceptada'],
+        }),
+        {
+          'info-error': ['3034', 'cláusula no aceptada'],
+        },
+      );
+    });
+
+    test('conserva los números de una lista', () {
+      expect(
+        redactForLog({
+          'paginas': [1, 2, 3],
+        }),
+        {
+          'paginas': [1, 2, 3],
+        },
+      );
+    });
+
+    test('imprime codigo-error, que es el discriminador del sobre de autorización', () {
+      // Con `codigo-respuesta: 200.00` y el 3034 dentro de `info-error`, este
+      // código era el único rastro de por qué se decidió que falta
+      // autorización — y salía enmascarado (LG-2).
+      expect(
+        redactForLog({'codigo-respuesta': '200.00', 'codigo-error': 3034, 'mensaje-respuesta': 'OK'}),
+        {'codigo-respuesta': '200.00', 'codigo-error': 3034, 'mensaje-respuesta': 'OK'},
+      );
+    });
   });
 
   group('maskedDocument', () {
