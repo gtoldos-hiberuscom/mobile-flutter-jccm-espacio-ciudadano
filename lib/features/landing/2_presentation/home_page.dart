@@ -357,6 +357,7 @@ class _HomeNewsSection extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final notifications = ref.watch(gestionNotificacionesProvider(_pendingNotificationStatus));
     final agenda = ref.watch(agendaAppointmentsProvider);
     final notificationsCount = notifications.maybeWhen(
@@ -375,12 +376,22 @@ class _HomeNewsSection extends ConsumerWidget {
       orElse: () => null,
     );
 
+    final muestraNotificaciones = notificationsCount == null || notificationsCount > 0;
+    final muestraCitas = upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _SectionTitle(text: 'Mis novedades'),
         const SizedBox(height: AppDimensions.space8),
-        if (notificationsCount == null || notificationsCount > 0)
+        // Sin novedades quedaba solo el título y, justo debajo, la sección
+        // siguiente: parecía que faltaba algo por cargar.
+        if (!muestraNotificaciones && !muestraCitas)
+          AppAlertContextual(
+            message: l10n.homeNoNewsMessage,
+            size: AppAlertContextualSize.small,
+          ),
+        if (muestraNotificaciones)
           AppSimpleNavCard(
             label: _labelWithCount('Notificaciones', notificationsCount),
             description: 'Consulta tus notificaciones pendientes',
@@ -391,8 +402,8 @@ class _HomeNewsSection extends ConsumerWidget {
               ).toString(),
             ),
           ),
-        if (upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0) ...[
-          if (notificationsCount == null || notificationsCount > 0) const SizedBox(height: AppDimensions.space8),
+        if (muestraCitas) ...[
+          if (muestraNotificaciones) const SizedBox(height: AppDimensions.space8),
           AppSimpleNavCard(
             label: _labelWithCount('Próximas citas', upcomingAppointmentsCount),
             description: 'Revisa tus citas que tienes agendadas próximamente',

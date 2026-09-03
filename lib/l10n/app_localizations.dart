@@ -2432,6 +2432,12 @@ abstract class AppLocalizations {
   /// **'Ver agenda'**
   String get saludSurfaceCta;
 
+  /// Home — mensaje de la sección Mis novedades cuando no hay ninguna.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes notificaciones pendientes ni citas próximas.'**
+  String get homeNoNewsMessage;
+
   /// Resumen de próximos eventos — título compartido entre home y agenda.
   ///
   /// In es, this message translates to:

@@ -1636,6 +1636,10 @@
   "@saludSurfaceCta": {
     "description": "Home — health surface CTA that opens the agenda."
   },
+  "homeNoNewsMessage": "You have no pending notifications or upcoming appointments.",
+  "@homeNoNewsMessage": {
+    "description": "Home — message for the My updates section when there is nothing."
+  },
   "homeUpcomingEventsTitle": "Upcoming events",
   "@homeUpcomingEventsTitle": {
     "description": "Upcoming events summary — shared title between home and agenda."

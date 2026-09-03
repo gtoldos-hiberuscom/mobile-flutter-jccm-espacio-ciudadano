@@ -9,11 +9,11 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/clave_login_veil.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Public anonymous landing screen — 00_Splash/Inicio from Figma.
@@ -234,24 +234,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       ),
     );
 
-    // El guard de sesión hace comprobaciones asíncronas antes de que el router
-    // pinte la home privada, así que sin este velo la home pública se queda a la
-    // vista durante ese hueco y se percibe como una redirección extraña.
-    if (!_isAuthenticating) {
-      return scaffold;
-    }
-
-    return Stack(
-      children: [
-        scaffold,
-        Positioned.fill(
-          child: AppLoadingScreen(
-            title: l10n.loginPageTitle,
-            description: l10n.loginPageLoadingDescription,
-          ),
-        ),
-      ],
-    );
+    return ClaveLoginVeil(isAuthenticating: _isAuthenticating, child: scaffold);
   }
 }
 

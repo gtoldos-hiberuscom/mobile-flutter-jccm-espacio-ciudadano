@@ -1632,6 +1632,10 @@
   "@saludSurfaceCta": {
     "description": "Home — CTA de la superficie de salud que lleva a la agenda."
   },
+  "homeNoNewsMessage": "No tienes notificaciones pendientes ni citas próximas.",
+  "@homeNoNewsMessage": {
+    "description": "Home — mensaje de la sección Mis novedades cuando no hay ninguna."
+  },
   "homeUpcomingEventsTitle": "Próximos eventos",
   "@homeUpcomingEventsTitle": {
     "description": "Resumen de próximos eventos — título compartido entre home y agenda."
