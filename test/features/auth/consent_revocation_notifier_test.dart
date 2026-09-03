@@ -57,6 +57,29 @@ void main() {
     expect(container.read(consentRevocationProvider), isTrue);
   });
 
+  test('una sesión nueva rearma la detección: la segunda revocación también cierra', () async {
+    final container = buildContainer();
+    // El provider observa el estado, así que hay que tenerlo vivo desde el
+    // principio para que su `listen` esté montado.
+    expect(container.read(consentRevocationProvider), isFalse);
+    startSession(container);
+
+    await container.read(consentRevocationProvider.notifier).signalRevoked();
+    expect(container.read(consentRevocationProvider), isTrue);
+    expect(authRepository.logoutIdTokens, hasLength(1));
+
+    // Vuelve a entrar en el mismo proceso: sin rearmar, el early-return daba
+    // la segunda revocación por atendida y el ciudadano se quedaba dentro.
+    startSession(container);
+    await container.pump();
+    expect(container.read(consentRevocationProvider), isFalse);
+
+    await container.read(consentRevocationProvider.notifier).signalRevoked();
+
+    expect(container.read(consentRevocationProvider), isTrue);
+    expect(authRepository.logoutIdTokens, hasLength(2));
+  });
+
   test('es idempotente: cuatro barridos en paralelo cierran la sesión una vez', () async {
     final container = buildContainer();
     startSession(container);
