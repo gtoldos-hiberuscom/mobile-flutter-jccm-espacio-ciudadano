@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 
 // ─── Auth interceptor ────────────────────────────────────────────────────────
 
@@ -80,19 +81,22 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
       return;
     }
 
-    // Retry on a bare secondary Dio that shares the transport (options +
-    // adapter) but carries no interceptors — crucially not this
-    // QueuedInterceptor. Retrying on the primary Dio would route the retry's
-    // error back into this interceptor's error queue, which is still blocked on
-    // the current onError, deadlocking it permanently and poisoning the queue
-    // for every later failure. The retry error surfaces via handler.next to the
-    // primary chain's ErrorInterceptor, which maps it to an AppError.
-    // Shares the transport (options + adapter) but carries only the logger, so
-    // the retry is still visible in the `[DIO]` logs — never the
-    // AuthRefreshInterceptor (a QueuedInterceptor) nor the ErrorInterceptor
-    // (the primary chain maps the error when we forward via handler.next).
+    // Retry on a secondary Dio that shares the transport (options + adapter)
+    // but NOT this QueuedInterceptor: retrying on the primary Dio would route
+    // the retry's error back into this interceptor's error queue, which is
+    // still blocked on the current onError, deadlocking it permanently and
+    // poisoning the queue for every later failure. The retry error surfaces
+    // via handler.next to the primary chain's ErrorInterceptor, which maps it
+    // to an AppError.
+    // The secondary Dio carries only GeneratedApiCompatInterceptor — the
+    // retried response must be normalized (decode/unwrap/singletons) exactly
+    // like a first-attempt one, because handler.resolve() skips the primary
+    // chain's response interceptors — and the logger, so the retry is still
+    // visible in the `[DIO]` logs. Both are plain Interceptors, so neither
+    // touches the queue.
     final retryDio = Dio(_dio.options)
       ..httpClientAdapter = _dio.httpClientAdapter
+      ..interceptors.add(const GeneratedApiCompatInterceptor())
       ..interceptors.add(EmojiDioLogger());
     try {
       final requestOptions = err.requestOptions;

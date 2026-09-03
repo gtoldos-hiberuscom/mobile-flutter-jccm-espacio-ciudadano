@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 
 import '../../test_support/sequence_http_client_adapter.dart';
@@ -11,7 +14,11 @@ import '../../test_support/sequence_http_client_adapter.dart';
 /// still blocked on the in-flight `onError` — deadlocking it permanently
 /// (F-04). The retry now runs on a bare secondary Dio, so a failed retry
 /// surfaces to the caller instead of hanging. F-05 covers the case where the
-/// refresh returns the same token the server just rejected.
+/// refresh returns the same token the server just rejected. N-01 covers the
+/// retry response going through [GeneratedApiCompatInterceptor]: the secondary
+/// Dio must normalize the gateway envelope exactly like the primary one, or
+/// the first request that survives a 401+refresh hands the raw envelope to the
+/// generated deserializers.
 void main() {
   Dio buildDio(
     final SequenceHttpClientAdapter adapter, {
@@ -146,5 +153,90 @@ void main() {
       // Only the original request hit the transport — no retry was attempted.
       expect(adapter.requests.length, 1);
     });
+  });
+
+  group('AuthRefreshInterceptor N-01 (retry response passes generated-api compat)', () {
+    test('the retried response is normalized like a first-attempt response', () async {
+      // The gateway double-encodes: a JSON string literal whose content is the
+      // `{body: …}` envelope. On the primary Dio, GeneratedApiCompatInterceptor
+      // (installed at index 0 by `withGeneratedApiCompat`) decodes and unwraps
+      // it before any repository sees the data; the retry after a 401+refresh
+      // must behave identically.
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 401, body: <String, dynamic>{}),
+        AdapterResponse(statusCode: 200, body: jsonEncode('{"body": {"resultado": "ok"}}')),
+      ]);
+      final dio = withGeneratedApiCompat(
+        buildDio(
+          adapter,
+          tokenGetter: () => 'fresh',
+          refreshSession: ({final bool force = false}) async => true,
+        ),
+      );
+
+      final response = await dio
+          .get<dynamic>(
+            '/x',
+            options: Options(
+              extra: {
+                generatedApiDecodeStringResponseExtraKey: true,
+                generatedApiUnwrapBodyExtraKey: true,
+              },
+            ),
+          )
+          .timeout(const Duration(seconds: 2));
+
+      expect(response.statusCode, 200);
+      expect(adapter.requests.length, 2, reason: 'original request + retry');
+      expect(
+        response.data,
+        {'resultado': 'ok'},
+        reason: 'the retry response must arrive decoded and unwrapped, not as the raw envelope',
+      );
+    });
+
+    test('a retry that fails with an enveloped error body is normalized before surfacing', () async {
+      // A 500 whose body is the double-encoded envelope: the compat interceptor
+      // on the retry Dio must normalize `err.response` so the primary chain's
+      // ErrorInterceptor (and any salvage logic upstream) sees the same shape
+      // as on a first attempt.
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 401, body: <String, dynamic>{}),
+        AdapterResponse(statusCode: 500, body: jsonEncode('{"body": {"codigo-respuesta": "500.00"}}')),
+      ]);
+      final dio = withGeneratedApiCompat(
+        buildDio(
+          adapter,
+          tokenGetter: () => 'fresh',
+          refreshSession: ({final bool force = false}) async => true,
+        ),
+      );
+
+      Object? surfacedData;
+      try {
+        await dio
+            .get<dynamic>(
+              '/x',
+              options: Options(
+                extra: {
+                  generatedApiDecodeStringResponseExtraKey: true,
+                  generatedApiUnwrapBodyExtraKey: true,
+                },
+              ),
+            )
+            .timeout(const Duration(seconds: 2));
+        fail('expected the retried 500 to surface as a DioException');
+      } on DioException catch (error) {
+        surfacedData = error.response?.data;
+      }
+
+      expect(adapter.requests.length, 2, reason: 'original request + retry');
+      expect(
+        surfacedData,
+        {'codigo-respuesta': '500.00'},
+        reason: 'the retry error body must arrive decoded and unwrapped, not as the raw envelope',
+      );
+    });
+
   });
 }
