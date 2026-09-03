@@ -379,11 +379,17 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
         inicio: inicio,
         documentos: documentos,
         representante: representante,
+        cancelToken: notifier.beginRegistro(),
       );
     } on Object catch (error, stackTrace) {
+      if (error is DioException && error.type == DioExceptionType.cancel) {
+        // Se abandonó la pantalla mientras se cerraba la transacción: el
+        // provider ya no existe y no hay a quién avisar.
+        return null;
+      }
       logger.e('Error al finalizar el registro de la aportación', error: error, stackTrace: stackTrace);
-      notifier.marcarErrorTodos();
       if (mounted) {
+        notifier.marcarErrorTodos();
         AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionFinalizacionError, error), severity: AppAlertSeverity.error);
       }
       return null;

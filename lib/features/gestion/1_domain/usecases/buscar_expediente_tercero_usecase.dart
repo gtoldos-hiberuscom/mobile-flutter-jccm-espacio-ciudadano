@@ -41,9 +41,7 @@ final class BuscarExpedienteTerceroUsecase {
     final String? numExpediente,
   }) async {
     try {
-      final expediente = numRegistro != null
-          ? await _repository.loadExpedienteByRegistro(citizenId: citizenId, documentNumber: documentNumber, numRegistro: numRegistro, tipodoc: tipodoc)
-          : await _repository.loadExpedienteDetail(citizenId: citizenId, documentNumber: documentNumber, numexp: numExpediente!, tipodoc: tipodoc);
+      final expediente = numRegistro != null ? await _repository.loadExpedienteByRegistro(citizenId: citizenId, documentNumber: documentNumber, numRegistro: numRegistro, tipodoc: tipodoc) : await _repository.loadExpedienteDetail(citizenId: citizenId, documentNumber: documentNumber, numexp: numExpediente!, tipodoc: tipodoc);
       return BuscarExpedienteTerceroSuccess(expediente: expediente);
     } on DioException catch (error) {
       return BuscarExpedienteTerceroFailed(message: _messageFor(error), cause: error);

@@ -23,6 +23,16 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
   /// suma aparte.
   Duration get _baseTimeout => _dio.options.sendTimeout ?? _dio.options.connectTimeout ?? const Duration(seconds: 20);
 
+  /// Plazo para que el backend procese el buzón y devuelva el justificante.
+  ///
+  /// Se dimensiona con el volumen del lote —lo que el backend tiene que
+  /// mover— con el mismo criterio que las subidas: el plazo del entorno más el
+  /// tiempo del transporte al suelo de rendimiento asumido.
+  Duration _registrarTimeout(final List<({String nombre, String hash, int tamanioBytes})> documentos) {
+    final totalBytes = documentos.fold<int>(0, (final total, final documento) => total + documento.tamanioBytes);
+    return payloadTransferTimeout(payloadBytes: totalBytes, baseTimeout: _baseTimeout);
+  }
+
   @override
   Future<String> subirDocumentoSinFirma({
     required final String citizenId,
@@ -238,6 +248,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async {
     // Mismo bypass que en iniciarProcedimiento: `DTProcedimiento.datosprocedimiento`
     // exige un `JsonObject` no nulo en el cliente generado, pero enviar `{}`
@@ -261,7 +272,16 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       final response = await _dio.post<Uint8List>(
         '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/expedientes/${Uri.encodeComponent(inicio.idunico)}/ficheros/registrar',
         data: body,
-        options: Options(contentType: Headers.jsonContentType, responseType: ResponseType.bytes),
+        options: Options(
+          contentType: Headers.jsonContentType,
+          responseType: ResponseType.bytes,
+          // El plazo general (10 s en producción) es el tiempo que tiene el
+          // backend para procesar el buzón entero y devolver el justificante.
+          // Tras subir 100 MB en ~19 minutos, un procesado algo lento tiraba el
+          // lote completo, así que el plazo crece con lo que hay que procesar.
+          receiveTimeout: _registrarTimeout(documentos),
+        ),
+        cancelToken: cancelToken,
       );
       bytes = response.data;
       logger.d('[registrarfichero] ok (200 directo) ${bytes?.length ?? 0} bytes');

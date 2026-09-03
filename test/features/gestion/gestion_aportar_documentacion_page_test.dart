@@ -497,6 +497,7 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async {
     registrarCalls++;
     registrados = documentos;

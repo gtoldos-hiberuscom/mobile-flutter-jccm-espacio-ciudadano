@@ -57,6 +57,10 @@ abstract interface class GestionDocumentoRepository {
   /// terceros. Si es nulo, se aporta como interesado (comportamiento
   /// existente, sin cambios).
   ///
+  /// [cancelToken] aborta el cierre: puede tardar minutos con un lote grande
+  /// (el backend procesa el buzón entero), y salir de la pantalla no debe
+  /// dejar la petición colgada.
+  ///
   /// **No verificado contra backend real.**
   Future<Uint8List> registrarFicheros({
     required final String citizenId,
@@ -65,5 +69,6 @@ abstract interface class GestionDocumentoRepository {
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
     final Representante? representante,
+    final CancelToken? cancelToken,
   });
 }

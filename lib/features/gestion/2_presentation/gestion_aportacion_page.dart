@@ -274,8 +274,7 @@ enum _DocType {
   nie,
   cif,
   pasaporte,
-  cee
-  ;
+  cee;
 
   String label(final AppLocalizations l10n) => switch (this) {
     _DocType.dni => l10n.gestionAportacionDni,

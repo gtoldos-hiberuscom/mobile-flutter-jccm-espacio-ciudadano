@@ -353,5 +353,77 @@ void main() {
         expect(request.receiveTimeout, request.sendTimeout);
       });
     });
+
+    group('plazo del cierre de la transacción', () {
+      Future<CapturedRequest> registroDe(
+        final List<({String nombre, String hash, int tamanioBytes})> documentos, {
+        required final Duration configuredTimeout,
+      }) async {
+        final adapter = SequenceHttpClientAdapter([
+          const AdapterResponse(statusCode: 200, body: '%PDF-1.4 justificante', contentType: 'application/pdf'),
+        ]);
+        final dio = Dio(
+          BaseOptions(
+            baseUrl: 'https://example.test',
+            connectTimeout: configuredTimeout,
+            sendTimeout: configuredTimeout,
+            receiveTimeout: configuredTimeout,
+          ),
+        )..httpClientAdapter = adapter;
+        final repository = GestionDocumentoRepositoryImpl(dio: dio);
+
+        await repository.registrarFicheros(
+          citizenId: 'sid-1',
+          documentNumber: '03874761C',
+          expediente: const Expediente(numexp: 'EXP-1', titulo: 't', consejeria: 'c', tipoproc: '020'),
+          inicio: const InicioProcedimientoResultado(
+            idunico: '03874761C_171447919011026',
+            estado: 'OK',
+            asuid: 'SIM2',
+            descrip: 'desc',
+            uniorg: '012848',
+            numdoc: '03874761C',
+            nombre: 'Juan',
+            apellido1: 'García',
+            apellido2: 'López',
+          ),
+          documentos: documentos,
+        );
+        return adapter.requests.single;
+      }
+
+      test('un lote grande no caduca por el plazo del entorno', () async {
+        // `TIMEOUT` de producción: tras ~19 minutos subiendo 100 MB, el
+        // backend tenía 10 segundos para procesar el buzón entero y devolver
+        // el justificante, o se perdía el lote completo.
+        const productionTimeout = Duration(seconds: 10);
+        const cincoDe20MB = 5 * 20 * 1024 * 1024;
+        final request = await registroDe(
+          const [
+            (nombre: 'a.pdf', hash: 'h1', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'b.pdf', hash: 'h2', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'c.pdf', hash: 'h3', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'd.pdf', hash: 'h4', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'e.pdf', hash: 'h5', tamanioBytes: 20 * 1024 * 1024),
+          ],
+          configuredTimeout: productionTimeout,
+        );
+
+        expect(
+          request.receiveTimeout,
+          payloadTransferTimeout(payloadBytes: cincoDe20MB, baseTimeout: productionTimeout),
+        );
+        expect(request.receiveTimeout, greaterThan(const Duration(minutes: 13)));
+      });
+
+      test('un lote pequeño no alarga el plazo de forma apreciable', () async {
+        final request = await registroDe(
+          const [(nombre: 'a.pdf', hash: 'h1', tamanioBytes: 64 * 1024)],
+          configuredTimeout: const Duration(seconds: 10),
+        );
+
+        expect(request.receiveTimeout, const Duration(seconds: 11));
+      });
+    });
   });
 }
