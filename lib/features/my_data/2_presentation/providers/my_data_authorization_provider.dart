@@ -30,6 +30,9 @@ Future<bool> _hasAcceptedClause(final Ref ref, final int clauseId) async {
 
   return switch (result) {
     AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
-    CheckAcceptedConsentClauseFailed() => false,
+    // AsyncError, nunca false: con el backend caído no sabemos si la cláusula
+    // está aceptada, y afirmar "no autorizado" miente sobre un consentimiento
+    // RGPD que el ciudadano sí otorgó (mismo patrón que digital_cards).
+    CheckAcceptedConsentClauseFailed(:final message) => throw StateError(message),
   };
 }

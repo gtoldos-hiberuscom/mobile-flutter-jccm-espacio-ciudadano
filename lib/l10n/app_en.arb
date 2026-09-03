@@ -1172,6 +1172,10 @@
   "@socialWelfareInfoSheetDescription": {
     "description": "Social welfare data — info sheet description."
   },
+  "authorizationCheckFailedMessage": "We could not check your authorisations. Please try again.",
+  "@authorizationCheckFailedMessage": {
+    "description": "Error message when the authorisation check is unavailable (backend failure), as opposed to an authorisation not granted."
+  },
   "myDataJccmAuthorizationRequiredMessage": "You must authorise the consultation of administrative facts held by the JCCM from your preferences.",
   "@myDataJccmAuthorizationRequiredMessage": {
     "description": "Message shown when JCCM data consultation is not authorised."

@@ -5,12 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_vehicles_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -83,7 +86,12 @@ class _VehiclesDataTab extends ConsumerWidget {
     return authorizationAsync.when(
       data: (final hasAgeAuthorization) => hasAgeAuthorization ? const _AuthorizedVehiclesData() : _buildAuthorizationRequired(context, l10n),
       loading: () => const Center(child: AppLoadingIndicator()),
-      error: (final error, final stack) => _buildAuthorizationRequired(context, l10n),
+      // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
+      // cabe error + reintentar, nunca afirmar que falta el consentimiento.
+      error: (final error, final stack) => ErrorStateWidget(
+        message: l10n.authorizationCheckFailedMessage,
+        onRetry: () => ref.invalidate(ageDataAuthorizationProvider),
+      ),
     );
   }
 
@@ -123,7 +131,7 @@ class _AuthorizedVehiclesData extends ConsumerWidget {
     return vehiclesAsync.when(
       data: (final vehicles) => _buildVehiclesList(context, l10n, vehicles),
       loading: () => const Center(child: AppLoadingIndicator()),
-      error: (final error, final stack) => _buildErrorState(l10n, ref),
+      error: (final error, final stack) => error is MyDataAuthorizationRequired ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataVehicles, onAuthorized: () => ref.invalidate(vehiclesProvider)) : _buildErrorState(l10n, ref),
     );
   }
 

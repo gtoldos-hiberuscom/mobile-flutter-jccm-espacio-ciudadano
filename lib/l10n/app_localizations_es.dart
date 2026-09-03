@@ -877,6 +877,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataJccmAuthorizationRequiredMessage => 'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.';
 
   @override
+  String get authorizationCheckFailedMessage => 'No hemos podido comprobar tus autorizaciones. Inténtalo de nuevo.';
+
+  @override
   String get myDataJccmAuthorizationRequiredCta => 'Ir a Condiciones de uso y autorizaciones';
 
   @override

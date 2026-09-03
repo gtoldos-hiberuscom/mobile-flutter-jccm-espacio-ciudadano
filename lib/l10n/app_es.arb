@@ -1172,6 +1172,10 @@
   "@myDataJccmAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando la consulta de datos JCCM no está autorizada."
   },
+  "authorizationCheckFailedMessage": "No hemos podido comprobar tus autorizaciones. Inténtalo de nuevo.",
+  "@authorizationCheckFailedMessage": {
+    "description": "Mensaje de error cuando la comprobación de autorizaciones no está disponible (fallo de backend), distinto de una autorización no concedida."
+  },
   "myDataJccmAuthorizationRequiredCta": "Ir a Condiciones de uso y autorizaciones",
   "@myDataJccmAuthorizationRequiredCta": {
     "description": "Texto accesible del botón para abrir condiciones de uso y autorizaciones."

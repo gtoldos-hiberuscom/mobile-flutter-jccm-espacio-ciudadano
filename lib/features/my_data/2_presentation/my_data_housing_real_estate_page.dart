@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -38,9 +40,11 @@ class _MyDataHousingRealEstatePageState extends ConsumerState<MyDataHousingRealE
           onFilterChanged: (final filter) => setState(() => _selectedFilter = filter),
         ),
         loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stackTrace) => _PropertiesError(
-          onRetry: () => ref.invalidate(housingRealEstatePropertiesProvider),
-        ),
+        error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
+            ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataHousingRealEstate, onAuthorized: () => ref.invalidate(housingRealEstatePropertiesProvider))
+            : _PropertiesError(
+                onRetry: () => ref.invalidate(housingRealEstatePropertiesProvider),
+              ),
       ),
     );
   }
