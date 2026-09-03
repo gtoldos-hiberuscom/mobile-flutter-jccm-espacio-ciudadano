@@ -54,12 +54,23 @@ void main() {
       expect(adapter.jsonBody, {'tipodoc': 'NIE', 'docu': 'X1234567L'});
     });
 
-    test('HTTP 403 surfaces as MyDataAuthorizationRequired', () async {
-      final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(403, {'codigo-respuesta': '403.00'})));
+    test('un 403 con el sobre de autorización pide autorizar', () async {
+      final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(403, {'codigo-respuesta': '412.00'})));
 
       await expectLater(
         repository.loadUniversityTitles(citizenId: 'id', documentNumber: '99999999R'),
         throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('un 403 sin sobre es un fallo de servicio, no falta de autorización', () async {
+      // "403 Forbidden: [no body]" es la fachada fallando contra su
+      // microservicio: ofrecer "autorizar" ahí no lleva a ninguna parte.
+      final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(403, {'codigo-respuesta': '403.00'})));
+
+      await expectLater(
+        repository.loadUniversityTitles(citizenId: 'id', documentNumber: '99999999R'),
+        throwsA(isA<DioException>()),
       );
     });
 
