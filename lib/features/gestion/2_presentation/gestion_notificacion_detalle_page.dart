@@ -82,6 +82,14 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
       return;
     }
     setState(() => _accepting = true);
+    // La CTA solo se ofrece con el detalle cargado y pendiente, así que su
+    // valor está disponible ya: se captura ANTES de la transición. Releer el
+    // provider después (`.future`) convertía un fallo de esa relectura —el
+    // detalle invalidado y caído por un microcorte justo tras comparecer— en
+    // «no hemos podido aceptar» sobre una comparecencia YA registrada, y el
+    // «inténtalo de nuevo» habría repetido la transición.
+    final args = (id: widget.notificacionId, estado: widget.estado, sistemaOrigen: widget.sistemaOrigen);
+    final detail = ref.read(gestionNotificacionDetalleProvider(args)).asData?.value;
     try {
       final citizenId = ref.read(gestionNotificacionesTransitionCitizenIdProvider);
       if (citizenId.isEmpty) {
@@ -96,30 +104,33 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
             sistemaOrigen: widget.sistemaOrigen,
           );
 
-      final args = (id: widget.notificacionId, estado: widget.estado, sistemaOrigen: widget.sistemaOrigen);
-      final detail = await ref.read(gestionNotificacionDetalleProvider(args).future);
-      ref
-          .read(gestionNotificacionesOptimisticAcceptedProvider.notifier)
-          .add(
-            citizenId: citizenId,
-            notification: Notificacion(
-              id: widget.notificacionId,
-              concepto: detail.titulo,
-              procedimientoDenominacion: detail.procedimiento ?? '',
-              fechaCaducidad: detail.fechaExpiracion,
-              unidadOrganicaNombre: detail.organismo,
-              sistemaOrigen: detail.sistemaOrigen ?? widget.sistemaOrigen,
-              estado: NotificacionEstado.aceptada,
-            ),
-          );
+      // A partir de aquí la comparecencia está registrada: nada de lo que
+      // sigue puede presentarse como fallo de la aceptación. Con la pantalla
+      // desmontada tampoco se toca `ref` (lanzaría sobre un State difunto).
+      if (!mounted) {
+        return;
+      }
+      if (detail != null) {
+        ref
+            .read(gestionNotificacionesOptimisticAcceptedProvider.notifier)
+            .add(
+              citizenId: citizenId,
+              notification: Notificacion(
+                id: widget.notificacionId,
+                concepto: detail.titulo,
+                procedimientoDenominacion: detail.procedimiento ?? '',
+                fechaCaducidad: detail.fechaExpiracion,
+                unidadOrganicaNombre: detail.organismo,
+                sistemaOrigen: detail.sistemaOrigen ?? widget.sistemaOrigen,
+                estado: NotificacionEstado.aceptada,
+              ),
+            );
+      }
 
       ref
         ..invalidate(gestionNotificacionesProvider(null))
         ..invalidate(gestionNotificacionesProvider(NotificacionEstado.pendiente))
         ..invalidate(gestionNotificacionesProvider(NotificacionEstado.aceptada));
-      if (!mounted) {
-        return;
-      }
       AppAlertSnackbar.show(
         context,
         message: 'Has aceptado la notificación.',

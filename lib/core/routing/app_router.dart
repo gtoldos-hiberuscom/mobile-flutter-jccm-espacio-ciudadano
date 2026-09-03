@@ -82,6 +82,25 @@ Widget buildGestionRegistroDetail(final Object? extra) => switch (extra) {
   _ => const NotFoundScreen(),
 };
 
+/// Detalle de notificación. El id viaja en la ruta y debe ser numérico: un
+/// deep link malformado caía antes en `?? 0` y consultaba al backend por la
+/// notificación 0 (NC-3) — ahora cae en [NotFoundScreen], como el detalle de
+/// registro (H-04).
+Widget buildGestionNotificacionDetalle(final String? idParameter, final Object? extra) {
+  final id = int.tryParse(idParameter ?? '');
+  if (id == null) {
+    return const NotFoundScreen();
+  }
+  // El estado del resumen solo se pasa si se conoce: la página lo usa como
+  // respaldo del que informa el detalle. Sin resumen (deep link, restauración)
+  // viaja `null`, nunca un estado inventado.
+  return GestionNotificacionDetallePage(
+    notificacionId: id,
+    estado: extra is Notificacion ? extra.estado : null,
+    sistemaOrigen: extra is Notificacion ? extra.sistemaOrigen : null,
+  );
+}
+
 /// Riverpod provider that owns the application [GoRouter].
 ///
 /// Kept alive for the entire app lifetime so the router is never recreated
@@ -241,18 +260,7 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.gestionNotificacionDetalle,
-              builder: (final BuildContext context, final GoRouterState state) {
-                final summary = state.extra;
-                // El estado del resumen solo se pasa si se conoce: la página lo
-                // usa como respaldo del que informa el detalle. Sin resumen
-                // (deep link, restauración) viaja `null`, nunca un estado
-                // inventado.
-                return GestionNotificacionDetallePage(
-                  notificacionId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-                  estado: summary is Notificacion ? summary.estado : null,
-                  sistemaOrigen: summary is Notificacion ? summary.sistemaOrigen : null,
-                );
-              },
+              builder: (final BuildContext context, final GoRouterState state) => buildGestionNotificacionDetalle(state.pathParameters['id'], state.extra),
             ),
 
             GoRoute(

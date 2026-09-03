@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificacion_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -68,6 +70,80 @@ void main() {
     expect(find.text(_expiredTag), findsNothing);
     expect(find.text(_pendingTag), findsNothing);
   });
+
+  testWidgets('un fallo posterior a la transición no se presenta como fallo de la aceptación', (final tester) async {
+    // NC-2: la comparecencia se registra en el backend y ACTO SEGUIDO el
+    // detalle se invalida y su relectura falla (microcorte, sesión renovándose).
+    // Releer el provider dentro de `_accept` convertía ese fallo en «No hemos
+    // podido aceptar» sobre una transición YA registrada — y el «inténtalo de
+    // nuevo» habría repetido la comparecencia.
+    final transition = Completer<void>();
+    var detailFails = false;
+
+    final router = GoRouter(
+      initialLocation: '/',
+      routes: [
+        GoRoute(path: '/', builder: (final _, final _) => const Scaffold(body: SizedBox.shrink())),
+        GoRoute(path: '/detalle', builder: (final _, final _) => const GestionNotificacionDetallePage(notificacionId: 7924, estado: null)),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          gestionNotificacionDetalleProvider.overrideWith((final ref, final args) async {
+            if (detailFails) {
+              throw StateError('detalle caído tras la transición');
+            }
+            return NotificacionDetalle(id: args.id, titulo: 'Requerimiento de subsanación', estado: NotificacionEstado.pendiente, documentos: const []);
+          }),
+          gestionNotificacionesTransitionCitizenIdProvider.overrideWithValue('cit-1'),
+          gestionNotificacionesRepositoryProvider.overrideWithValue(_FakeNotificacionesRepository(onTransition: () => transition.future)),
+        ],
+        child: MaterialApp.router(
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      ),
+    );
+    unawaited(router.push('/detalle'));
+    await tester.pumpAndSettle();
+
+    final container = ProviderScope.containerOf(tester.element(find.byType(GestionNotificacionDetallePage)));
+    await tester.tap(find.text(_acceptLabel));
+    await tester.pump();
+
+    // Con la transición en vuelo, el detalle cae y se invalida.
+    detailFails = true;
+    container.invalidate(gestionNotificacionDetalleProvider);
+    transition.complete();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Has aceptado la notificación.'), findsOneWidget);
+    expect(find.text('No hemos podido aceptar la notificación. Inténtalo de nuevo.'), findsNothing);
+
+    // Deja expirar el snackbar para no terminar con timers pendientes.
+    await tester.pumpAndSettle(const Duration(seconds: 5));
+  });
+}
+
+final class _FakeNotificacionesRepository implements GestionNotificacionesRepository {
+  _FakeNotificacionesRepository({required this.onTransition});
+
+  final Future<void> Function() onTransition;
+
+  @override
+  Future<void> transitionNotificacion({
+    required final String citizenId,
+    required final int notificacionId,
+    required final String accion,
+    final String? sistemaOrigen,
+    final String? justificacion,
+  }) => onTransition();
+
+  @override
+  dynamic noSuchMethod(final Invocation invocation) => throw UnimplementedError('$invocation');
 }
 
 Future<void> _pumpDetail(
