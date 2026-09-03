@@ -3118,6 +3118,14 @@
   "@familiaNumerosaTitleNumberLabel": {
     "description": "Familia numerosa detail — etiqueta de número de título."
   },
+  "familiaNumerosaCategoryGeneral": "General",
+  "@familiaNumerosaCategoryGeneral": {
+    "description": "Bienestar social — descripción de la categoría General del título de familia numerosa."
+  },
+  "familiaNumerosaCategoryEspecial": "Especial",
+  "@familiaNumerosaCategoryEspecial": {
+    "description": "Bienestar social — descripción de la categoría Especial del título de familia numerosa."
+  },
   "familiaNumerosaCategoryLabel": "Categoría",
   "@familiaNumerosaCategoryLabel": {
     "description": "Familia numerosa detail — etiqueta de categoría."

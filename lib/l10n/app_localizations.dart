@@ -4544,6 +4544,18 @@ abstract class AppLocalizations {
   /// **'Número de título'**
   String get familiaNumerosaTitleNumberLabel;
 
+  /// Bienestar social — descripción de la categoría General del título de familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'General'**
+  String get familiaNumerosaCategoryGeneral;
+
+  /// Bienestar social — descripción de la categoría Especial del título de familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Especial'**
+  String get familiaNumerosaCategoryEspecial;
+
   /// Familia numerosa detail — etiqueta de categoría.
   ///
   /// In es, this message translates to:

@@ -3122,6 +3122,14 @@
   "@familiaNumerosaTitleNumberLabel": {
     "description": "Familia numerosa detail — title number label."
   },
+  "familiaNumerosaCategoryGeneral": "General",
+  "@familiaNumerosaCategoryGeneral": {
+    "description": "Social welfare — General category description of the large-family certificate."
+  },
+  "familiaNumerosaCategoryEspecial": "Special",
+  "@familiaNumerosaCategoryEspecial": {
+    "description": "Social welfare — Special category description of the large-family certificate."
+  },
   "familiaNumerosaCategoryLabel": "Category",
   "@familiaNumerosaCategoryLabel": {
     "description": "Familia numerosa detail — category label."

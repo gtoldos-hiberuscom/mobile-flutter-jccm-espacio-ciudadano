@@ -175,8 +175,9 @@ class _PropertyCard extends StatelessWidget {
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateCadastralValueLabel, value: _display(property.cadastralValue)),
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateLandValueLabel, value: _display(property.landValue)),
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateConstructionValueLabel, value: _display(property.constructionValue)),
-      ],
-      footerItems: [
+        // Un dato más del inmueble, dentro del recuadro con el resto: en
+        // `footerItems` se pintaba por fuera, que es lo único que lo separaba
+        // de los demás.
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateUseLabel, value: _displayUse(property.use)),
       ],
     );
