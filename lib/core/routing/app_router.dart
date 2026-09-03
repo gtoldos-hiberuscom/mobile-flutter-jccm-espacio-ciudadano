@@ -66,6 +66,17 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/r
 /// (`state.extra! as (Registro, bool)` lanzaba dentro del builder, es decir,
 /// pantalla de error de GoRouter). Es el mismo criterio que el resto de rutas
 /// con `extra`.
+/// Construye la página legal de protección de datos según cómo se llegue a
+/// ella.
+///
+/// `from=home` ([Routes.legalPrivacyInfo]) la abre como información: flecha de
+/// volver y sin la barra dicotómica del consentimiento. Sin ese marcador es un
+/// paso del flujo legal, con "Salir" y "Continuar".
+Widget buildLegalPrivacy(final Uri uri) => PrivacyPage(
+  fromHome: uri.queryParameters['from'] == 'home',
+  isOnboarding: uri.queryParameters['mode'] == 'onboarding',
+);
+
 Widget buildGestionRegistroDetail(final Object? extra) => switch (extra) {
   (final Registro registro, final bool isEntrada) => GestionRegistroDetailPage(registro: registro, isEntrada: isEntrada),
   _ => const NotFoundScreen(),
@@ -155,10 +166,7 @@ final goRouterProvider = Provider<GoRouter>(
           path: Routes.legalPrivacy,
           pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
             state,
-            PrivacyPage(
-              fromHome: state.uri.queryParameters['from'] == 'home',
-              isOnboarding: state.uri.queryParameters['mode'] == 'onboarding',
-            ),
+            buildLegalPrivacy(state.uri),
           ),
         ),
         GoRoute(

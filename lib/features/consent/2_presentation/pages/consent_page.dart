@@ -135,7 +135,10 @@ class ConsentPage extends ConsumerWidget {
       isOnboarding: isOnboarding,
       isPreferencesEditing: isPreferencesEditing,
       returnTo: returnTo,
-      onShowLegalInfo: () => context.push(Routes.legalPrivacy),
+      // La (i) abre la página legal para LEERLA: sin este marcador se pintaba
+      // como paso del consentimiento y arrastraba aquí sus botones de "Salir" y
+      // "Continuar", que en una página de información no tienen sentido.
+      onShowLegalInfo: () => context.push(Routes.legalPrivacyInfo),
     );
   }
 }

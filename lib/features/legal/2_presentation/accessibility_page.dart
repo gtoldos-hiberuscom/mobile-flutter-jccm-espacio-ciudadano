@@ -83,17 +83,25 @@ class _AccessibilityPageState extends ConsumerState<AccessibilityPage> {
         onSearch: _startSearch,
         onCloseSearch: _closeSearch,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space24,
-        ),
-        child: _AccessibilityBody(
-          highlightQuery: _highlightQuery,
-          onRoyalDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),
-          onSiteTap: () => _openExternalLink('espacio_ciudadano'),
-          onContactFormTap: () => _openExternalLink('accessibility_contact_form'),
-          onOfficesTap: () => _openExternalLink('jccm_offices_oir'),
+      // `SafeArea` inferior y no un padding fijo: el último bloque quedaba
+      // debajo del gesto de navegación del dispositivo y el texto parecía
+      // cortado.
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(
+            left: AppDimensions.space16,
+            right: AppDimensions.space16,
+            top: AppDimensions.space24,
+            bottom: AppDimensions.space48,
+          ),
+          child: _AccessibilityBody(
+            highlightQuery: _highlightQuery,
+            onRoyalDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),
+            onSiteTap: () => _openExternalLink('espacio_ciudadano'),
+            onContactFormTap: () => _openExternalLink('accessibility_contact_form'),
+            onOfficesTap: () => _openExternalLink('jccm_offices_oir'),
+          ),
         ),
       ),
     );
@@ -297,7 +305,8 @@ class _AccessibilityBodyState extends State<_AccessibilityBody> {
         _A11yHeading2('Preparación de la presente declaración de accesibilidad', highlightQuery: q),
         _A11yBlock(
           child: _HighlightedText(
-            text: 'La presente declaración ha sido preparada el 8 de Octubre de 2025.\n'
+            text:
+                'La presente declaración ha sido preparada el 8 de Octubre de 2025.\n'
                 'El método empleado para preparar la declaración ha sido una autoevaluación llevada a cabo por el propio organismo.',
             style: style,
             query: q,
@@ -350,7 +359,8 @@ class _AccessibilityBodyState extends State<_AccessibilityBody> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _HighlightedText(
-                text: 'Además de las ayudas de accesibilidad propias de los navegadores se incorporan una serie de atajos de teclado para facilitar la navegación a través del portal:\n'
+                text:
+                    'Además de las ayudas de accesibilidad propias de los navegadores se incorporan una serie de atajos de teclado para facilitar la navegación a través del portal:\n'
                     'Una clave de acceso o Accesskey permite al usuario saltar de inmediato a una parte específica de una página web a través del teclado.',
                 style: style,
                 query: q,

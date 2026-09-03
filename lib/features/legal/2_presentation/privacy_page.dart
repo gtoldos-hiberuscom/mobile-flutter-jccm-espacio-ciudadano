@@ -115,57 +115,69 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
               title: l10n.legalPrivacyTitle,
               showLeading: false,
             ),
-      body: Column(
-        children: [
-          Expanded(
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (final notification) {
-                if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - AppDimensions.space64) {
-                  _onScroll();
-                }
-                return false;
-              },
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space16,
-                  vertical: fromHome ? AppDimensions.space24 : AppDimensions.space8,
-                ),
-                child: _ContentColumn(
-                  gap: fromHome ? AppDimensions.space16 : AppDimensions.space8,
-                  children: [
-                    for (final entry in entries)
-                      KeyedSubtree(
-                        key: _entryKey(entry.id),
-                        child: entry.child,
-                      ),
-                  ],
+      body: SafeArea(
+        top: false,
+        // La barra del consentimiento ya trae su propio `SafeArea`: aplicarlo
+        // dos veces duplicaría el hueco, así que aquí solo cuando no está.
+        bottom: fromHome,
+        child: Column(
+          children: [
+            Expanded(
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (final notification) {
+                  if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - AppDimensions.space64) {
+                    _onScroll();
+                  }
+                  return false;
+                },
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  // En la vista informativa no hay barra inferior que reserve
+                  // espacio, así que el último bloque —el contacto del delegado
+                  // de protección de datos, con su correo— quedaba debajo del
+                  // gesto de navegación y no se llegaba a ver.
+                  padding: EdgeInsets.only(
+                    left: AppDimensions.space16,
+                    right: AppDimensions.space16,
+                    top: fromHome ? AppDimensions.space24 : AppDimensions.space8,
+                    bottom: fromHome ? AppDimensions.space48 : AppDimensions.space8,
+                  ),
+                  child: _ContentColumn(
+                    gap: fromHome ? AppDimensions.space16 : AppDimensions.space8,
+                    children: [
+                      for (final entry in entries)
+                        KeyedSubtree(
+                          key: _entryKey(entry.id),
+                          child: entry.child,
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          if (!fromHome)
-            AppStickyBar(
-              type: AppStickyBarType.dicotomy,
-              secondaryLabel: l10n.consentRejectButton,
-              secondaryHierarchy: AppButtonHierarchy.tertiary,
-              secondaryLeadingIcon: AppIcons.cancel,
-              onSecondary: () async {
-                await consentNotifier.reject();
-                if (context.mounted) {
-                  context.go(Routes.landing);
-                }
-              },
-              primaryLabel: l10n.consentFinalAcceptButton,
-              primaryLeadingIcon: AppIcons.check,
-              onPrimary: canAccept
-                  ? () {
-                      consentNotifier.proceedToStep2();
-                      context.go(Routes.consentOnboarding);
-                    }
-                  : null,
-            ),
-        ],
+            if (!fromHome)
+              AppStickyBar(
+                type: AppStickyBarType.dicotomy,
+                secondaryLabel: l10n.consentRejectButton,
+                secondaryHierarchy: AppButtonHierarchy.tertiary,
+                secondaryLeadingIcon: AppIcons.cancel,
+                onSecondary: () async {
+                  await consentNotifier.reject();
+                  if (context.mounted) {
+                    context.go(Routes.landing);
+                  }
+                },
+                primaryLabel: l10n.consentFinalAcceptButton,
+                primaryLeadingIcon: AppIcons.check,
+                onPrimary: canAccept
+                    ? () {
+                        consentNotifier.proceedToStep2();
+                        context.go(Routes.consentOnboarding);
+                      }
+                    : null,
+              ),
+          ],
+        ),
       ),
     );
   }
