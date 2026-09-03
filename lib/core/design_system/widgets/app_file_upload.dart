@@ -120,6 +120,8 @@ class AppFileUpload extends StatelessWidget {
         fileInfo: fileInfo,
         onRetry: onRetry,
         retryLabel: retryLabel ?? l10n.fileUploadRetry,
+        onDelete: onDelete,
+        deleteLabel: deleteLabel ?? l10n.fileUploadDelete,
       ),
     };
 
@@ -382,13 +384,20 @@ class _ErrorRow extends StatelessWidget {
     required this.fileName,
     required this.fileInfo,
     required this.retryLabel,
+    required this.deleteLabel,
     this.onRetry,
+    this.onDelete,
   });
 
   final String fileName;
   final String fileInfo;
   final VoidCallback? onRetry;
   final String retryLabel;
+
+  /// Opcional: sin él la tarjeta en error solo ofrece reintentar y el fichero
+  /// que falla no se puede quitar del lote.
+  final VoidCallback? onDelete;
+  final String deleteLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -402,30 +411,51 @@ class _ErrorRow extends StatelessWidget {
         const SizedBox(height: AppDimensions.space8),
         _FileMetaRow(
           fileInfo: fileInfo,
-          action: TextButton.icon(
-            onPressed: onRetry,
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-              minimumSize: const Size(
-                AppDimensions.minTouchTarget,
-                AppDimensions.minTouchTarget,
+          // `Wrap` y no `Row`: con dos acciones a 320 dp y el texto al 200 % no
+          // caben en una línea, y la fila de meta ya está en columna a esa
+          // escala, así que la segunda acción baja en vez de desbordar.
+          action: Wrap(
+            alignment: WrapAlignment.end,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              TextButton.icon(
+                onPressed: onRetry,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+                  minimumSize: const Size(
+                    AppDimensions.minTouchTarget,
+                    AppDimensions.minTouchTarget,
+                  ),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                icon: const Icon(
+                  Icons.refresh_rounded,
+                  size: AppDimensions.iconSmall,
+                  color: AppColors.errorDark,
+                ),
+                iconAlignment: IconAlignment.end,
+                label: Text(
+                  retryLabel,
+                  style: AppTypography.smallRegular.copyWith(
+                    color: AppColors.primary,
+                    decoration: TextDecoration.underline,
+                    decorationColor: AppColors.primary,
+                  ),
+                ),
               ),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: const Icon(
-              Icons.refresh_rounded,
-              size: AppDimensions.iconSmall,
-              color: AppColors.errorDark,
-            ),
-            iconAlignment: IconAlignment.end,
-            label: Text(
-              retryLabel,
-              style: AppTypography.smallRegular.copyWith(
-                color: AppColors.primary,
-                decoration: TextDecoration.underline,
-                decorationColor: AppColors.primary,
-              ),
-            ),
+              if (onDelete != null)
+                IconButton(
+                  onPressed: onDelete,
+                  constraints: const BoxConstraints(
+                    minWidth: AppDimensions.minTouchTarget,
+                    minHeight: AppDimensions.minTouchTarget,
+                  ),
+                  icon: const Icon(Icons.delete_outline_rounded),
+                  color: AppColors.primary,
+                  iconSize: AppDimensions.iconMedium,
+                  tooltip: deleteLabel,
+                ),
+            ],
           ),
         ),
       ],

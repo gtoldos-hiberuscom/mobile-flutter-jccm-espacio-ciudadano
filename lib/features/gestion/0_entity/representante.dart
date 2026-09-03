@@ -20,9 +20,7 @@ final class Representante {
   final String tipodoc;
 
   @override
-  bool operator ==(final Object other) =>
-      identical(this, other) ||
-      other is Representante && runtimeType == other.runtimeType && nombre == other.nombre && apellido1 == other.apellido1 && apellido2 == other.apellido2 && nifcif == other.nifcif && tipodoc == other.tipodoc;
+  bool operator ==(final Object other) => identical(this, other) || other is Representante && runtimeType == other.runtimeType && nombre == other.nombre && apellido1 == other.apellido1 && apellido2 == other.apellido2 && nifcif == other.nifcif && tipodoc == other.tipodoc;
 
   @override
   int get hashCode => Object.hash(nombre, apellido1, apellido2, nifcif, tipodoc);

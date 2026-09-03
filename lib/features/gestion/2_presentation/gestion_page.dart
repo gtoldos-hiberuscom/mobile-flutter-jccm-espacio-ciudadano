@@ -151,8 +151,7 @@ enum _GestionText {
   aportacionTitle,
   aportacionDescription,
   notificacionesTitle,
-  notificacionesDescription
-  ;
+  notificacionesDescription;
 
   String resolve(final AppLocalizations l10n) {
     return switch (this) {

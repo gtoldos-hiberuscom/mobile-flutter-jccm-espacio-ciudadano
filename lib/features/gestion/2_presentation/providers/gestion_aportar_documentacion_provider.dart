@@ -40,6 +40,7 @@ final class AddArchivosRejectedDuplicate extends AddArchivosResult {
 
 class GestionAportarDocumentacionNotifier extends Notifier<List<AportacionArchivo>> {
   final Map<String, CancelToken> _cancelTokens = {};
+  CancelToken? _registroToken;
 
   @override
   List<AportacionArchivo> build() {
@@ -130,14 +131,29 @@ class GestionAportarDocumentacionNotifier extends Notifier<List<AportacionArchiv
     _updateArchivo(path, (final a) => a.copyWith(estado: AportacionArchivoEstado.noEnviado, clearProgreso: true));
   }
 
-  /// Cancela todas las subidas en curso — usado al pulsar "Cancelar" y al
-  /// liberarse el provider (`ref.onDispose`) para no dejar peticiones
-  /// colgadas si se abandona la pantalla en mitad de una subida.
+  /// Registra el [CancelToken] del cierre de la transacción
+  /// (`registrarfichero`).
+  ///
+  /// Vive aparte de los de las subidas porque no pertenece a ningún fichero,
+  /// pero lo cancela el mismo [cancelarTodas]: con un lote grande el backend
+  /// puede tardar minutos en procesar el buzón, y abandonar la pantalla no
+  /// debe dejar la petición viva.
+  CancelToken beginRegistro() {
+    final token = CancelToken();
+    _registroToken = token;
+    return token;
+  }
+
+  /// Cancela todas las peticiones en curso —subidas y cierre— usado al pulsar
+  /// "Cancelar" y al liberarse el provider (`ref.onDispose`) para no dejar
+  /// peticiones colgadas si se abandona la pantalla.
   void cancelarTodas() {
     for (final token in _cancelTokens.values) {
       token.cancel();
     }
     _cancelTokens.clear();
+    _registroToken?.cancel();
+    _registroToken = null;
   }
 
   void _updateArchivo(final String path, final AportacionArchivo Function(AportacionArchivo) update) {

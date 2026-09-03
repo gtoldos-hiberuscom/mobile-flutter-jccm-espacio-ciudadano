@@ -134,6 +134,7 @@ final class _RecordingDocumentoRepository implements GestionDocumentoRepository 
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async => Uint8List.fromList('%PDF-1.4'.codeUnits);
 
   @override
