@@ -841,6 +841,52 @@ void main() {
       expect(detail.estado, isNull);
     });
 
+    test('un estado del detalle presente pero no reconocido no hereda el del resumen', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {'id': 7924, 'concepto': 'Requerimiento', 'estado': 'LEIDA_POR_TERCERO'},
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: 'PER9998003',
+        notificacionId: 7924,
+        fallbackEstado: NotificacionEstado.pendiente,
+      );
+
+      // El backend declara un estado y no sabemos leerlo: respaldarlo con el
+      // del resumen resucitaba la acción de comparecer sobre algo que ya no
+      // estaba pendiente.
+      expect(detail.estado, isNull);
+    });
+
+    test('un estado no reconocido en el listado conserva el estado consultado', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'content': [
+              {'idNotificacion': 7924, 'concepto': 'Requerimiento', 'estado': 'LEIDA_POR_TERCERO'},
+            ],
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.pendiente);
+
+      // Asimetría deliberada con el detalle: el elemento llegó filtrando por
+      // `pendiente`, así que el backend lo clasifica ahí; dejarlo en `null`
+      // devolvería la tarjeta sin etiqueta ni fecha.
+      expect(result.single.estado, NotificacionEstado.pendiente);
+    });
+
     test('el estado del resumen solo se usa si el detalle no informa el suyo', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(

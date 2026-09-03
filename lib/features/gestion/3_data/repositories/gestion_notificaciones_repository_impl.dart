@@ -340,6 +340,10 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
     final procMap = _map(data['procedimientoAdministrativo']);
     final unidadMap = _map(data['unidadOrganica']);
+    final lecturaEstado = notificacionEstadoLecturaFromBackend(_string(data, 'estado'));
+    if (lecturaEstado case NotificacionEstadoNoReconocido(:final raw)) {
+      logger.w('[notificaciones] estado no reconocido en el listado: "$raw" — se conserva el consultado (${notificacionEstadoQueryValue(estado)})');
+    }
     final fechaStr = _string(data, 'fechaCaducidad') ?? _string(data, 'fecCaducidad') ?? _string(data, 'fechaExpiracion');
 
     return Notificacion(
@@ -354,7 +358,15 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       // el estado conocido es el que se consultó. Todo listado se pide filtrando
       // por un estado (también "Todo", que pide los cuatro), así que aquí nunca
       // queda `null` — y desde luego nunca `''`, que la UI leía como expirada.
-      estado: notificacionEstadoFromBackend(_string(data, 'estado')) ?? estado,
+      //
+      // Asimetría deliberada con el detalle: aquí un valor no reconocido
+      // conserva el estado consultado, porque el elemento llegó filtrando por
+      // él y el backend lo clasifica ahí. Dejarlo en `null` devolvería la
+      // tarjeta sin etiqueta ni fecha que este listado vino a arreglar.
+      estado: switch (lecturaEstado) {
+        NotificacionEstadoConocido(estado: final declarado) => declarado,
+        NotificacionEstadoAusente() || NotificacionEstadoNoReconocido() => estado,
+      },
     );
   }
 
@@ -452,12 +464,26 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
         })
         .nonNulls
         .toList(growable: false);
+    final lecturaEstado = notificacionEstadoLecturaFromBackend(_string(data, 'estado'));
+    if (lecturaEstado case NotificacionEstadoNoReconocido(:final raw)) {
+      // Vocabulario de backend sin documentar: esta traza es la única forma de
+      // descubrirlo. Solo el token del estado y el id consultado.
+      logger.w('[notificaciones] estado no reconocido en el detalle $requestedId: "$raw" — sin respaldo del resumen');
+    }
     return NotificacionDetalle(
       // El detalle se pide POR id, así que si el sobre no lo repite se conoce
       // igualmente: el respaldo es el id consultado, no un 0 fabricado.
       id: _int(data, 'id') ?? _int(data, 'idNotificacion') ?? requestedId,
       titulo: _string(data, 'concepto') ?? _string(data, 'descripcion') ?? 'Notificación',
-      estado: notificacionEstadoFromBackend(_string(data, 'estado')) ?? fallbackEstado,
+      estado: switch (lecturaEstado) {
+        NotificacionEstadoConocido(:final estado) => estado,
+        // El detalle no informa estado: el del resumen es lo único que se sabe.
+        NotificacionEstadoAusente() => fallbackEstado,
+        // El backend SÍ declara un estado y no sabemos leerlo: eso no es "no lo
+        // sé", así que el resumen no puede sustituirlo. Sin estado no hay
+        // acción de comparecer ni etiqueta.
+        NotificacionEstadoNoReconocido() => null,
+      },
       organismo: _string(data, 'organismo') ?? _string(unidad, 'nombre') ?? _additional(unidad, 'nombre'),
       procedimiento: _string(data, 'procedimiento') ?? _string(procedimiento, 'idFicha') ?? _string(procedimiento, 'denominacion') ?? _additional(procedimiento, 'denominacion'),
       expediente: _string(data, 'numeroExpediente') ?? _string(expediente, 'identificador'),
