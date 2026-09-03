@@ -1548,6 +1548,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lifeEventsErrorFeedback => 'We couldn\'t save your preferences. Please try again.';
 
   @override
+  String get lifeEventsResetSuccessFeedback => 'Your preferences have been cleared.';
+
+  @override
+  String get lifeEventsResetErrorFeedback => 'We couldn\'t clear your preferences. Please try again.';
+
+  @override
   String get lifeEventsLoadError => 'We couldn\'t load the life events.';
 
   @override

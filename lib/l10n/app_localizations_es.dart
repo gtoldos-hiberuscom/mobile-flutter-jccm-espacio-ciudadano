@@ -1549,6 +1549,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lifeEventsErrorFeedback => 'No hemos podido guardar tus preferencias. Inténtalo de nuevo.';
 
   @override
+  String get lifeEventsResetSuccessFeedback => 'Tus preferencias se han borrado.';
+
+  @override
+  String get lifeEventsResetErrorFeedback => 'No hemos podido borrar tus preferencias. Inténtalo de nuevo.';
+
+  @override
   String get lifeEventsLoadError => 'No hemos podido cargar los hechos vitales.';
 
   @override

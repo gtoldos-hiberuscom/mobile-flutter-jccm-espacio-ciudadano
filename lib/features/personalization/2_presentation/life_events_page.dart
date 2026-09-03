@@ -203,6 +203,27 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         severity: AppAlertSeverity.error,
       );
     }
+    // El reset es el flujo destructivo de la pantalla y era el único sin
+    // feedback: confirmar el diálogo y fallar el guardado dejaba al usuario
+    // creyendo que había borrado sus hechos vitales (N-06).
+    if (next.status == LifeEventsStatus.resetSuccess) {
+      _showFeedback(
+        context,
+        l10n.lifeEventsResetSuccessFeedback,
+        severity: AppAlertSeverity.success,
+      );
+      ref.invalidate(recommendationsProvider);
+    }
+    if (next.status == LifeEventsStatus.resetError) {
+      if (next.errorMessage != null) {
+        logger.w('LifeEvents resetError: ${next.errorMessage}');
+      }
+      _showFeedback(
+        context,
+        l10n.lifeEventsResetErrorFeedback,
+        severity: AppAlertSeverity.error,
+      );
+    }
     // Show reset-confirm dialog when the flag flips to true.
     if (next.showResetConfirm && !(prev?.showResetConfirm ?? false)) {
       unawaited(

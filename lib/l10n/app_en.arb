@@ -2053,6 +2053,14 @@
   "@lifeEventsErrorFeedback": {
     "description": "Personalization — snackbar after a save / reset failure."
   },
+  "lifeEventsResetSuccessFeedback": "Your preferences have been cleared.",
+  "@lifeEventsResetSuccessFeedback": {
+    "description": "Personalization — snackbar after a successful preference reset."
+  },
+  "lifeEventsResetErrorFeedback": "We couldn't clear your preferences. Please try again.",
+  "@lifeEventsResetErrorFeedback": {
+    "description": "Personalization — snackbar after a failed preference reset."
+  },
   "lifeEventsLoadError": "We couldn't load the life events.",
   "@lifeEventsLoadError": {
     "description": "Personalization — error state when the catalog fails to load."
