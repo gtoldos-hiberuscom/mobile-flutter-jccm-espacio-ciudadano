@@ -2276,12 +2276,6 @@ abstract class AppLocalizations {
   /// **'No soy un robot'**
   String get supportCaptchaLabel;
 
-  /// Insignia que indica que el captcha es un mock.
-  ///
-  /// In es, this message translates to:
-  /// **'MOCK'**
-  String get supportCaptchaMockBadge;
-
   /// Botón de envío del formulario.
   ///
   /// In es, this message translates to:
@@ -6440,12 +6434,6 @@ abstract class AppLocalizations {
   /// **'Enlaces de interés'**
   String get myDataEducationInterestLinksTitle;
 
-  /// Placeholder de enlace de interés de Educación según el diseño de Figma.
-  ///
-  /// In es, this message translates to:
-  /// **'Lorem ipsum dolor sit amet'**
-  String get myDataEducationInterestLinkPlaceholder;
-
   /// Enlace al Portal de Educación de Castilla-La Mancha.
   ///
   /// In es, this message translates to:
@@ -6560,12 +6548,6 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar tus citas sanitarias.'**
   String get myDataHealthAppointmentsError;
 
-  /// Código CIP mostrado bajo el título del detalle de Salud.
-  ///
-  /// In es, this message translates to:
-  /// **'CIP: FCCT590551910012'**
-  String get myDataHealthCip;
-
   /// Pestaña de citas pendientes en Salud.
   ///
   /// In es, this message translates to:
@@ -6643,12 +6625,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'TELÉFONICA'**
   String get myDataHealthAppointmentType;
-
-  /// Profesional sanitario de la cita de ejemplo.
-  ///
-  /// In es, this message translates to:
-  /// **'Dr. José Manuel Fernández García'**
-  String get myDataHealthAppointmentProfessional;
 
   /// Descripción de la cita sanitaria de ejemplo.
   ///

@@ -218,9 +218,9 @@ class _ContactTab extends StatelessWidget {
       ),
       const SizedBox(height: AppDimensions.space16),
       AppPhoneActionCard(
-        number: '952 274 552',
+        number: '925 274 552',
         subtitle: 'Llamar a Atención a la Ciudadanía',
-        onTap: () => onCallPhone('952 274 552'),
+        onTap: () => onCallPhone('925 274 552'),
       ),
       const SizedBox(height: AppDimensions.space24),
       const AppIconTextBlock(

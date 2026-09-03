@@ -1528,10 +1528,6 @@
   "@supportCaptchaLabel": {
     "description": "Etiqueta del checkbox antibot."
   },
-  "supportCaptchaMockBadge": "MOCK",
-  "@supportCaptchaMockBadge": {
-    "description": "Insignia que indica que el captcha es un mock."
-  },
   "supportSubmitButton": "Enviar solicitud",
   "@supportSubmitButton": {
     "description": "Botón de envío del formulario."
@@ -4339,10 +4335,6 @@
   "@myDataEducationInterestLinksTitle": {
     "description": "Título de la sección de enlaces de interés en la pestaña de información y servicios de Educación."
   },
-  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
-  "@myDataEducationInterestLinkPlaceholder": {
-    "description": "Placeholder de enlace de interés de Educación según el diseño de Figma."
-  },
   "myDataEducationLinkEducationPortal": "Portal de Educación de Castilla-La Mancha",
   "@myDataEducationLinkEducationPortal": {
     "description": "Enlace al Portal de Educación de Castilla-La Mancha."
@@ -4419,10 +4411,6 @@
   "@myDataHealthAppointmentsError": {
     "description": "Mensaje de error del listado de citas sanitarias."
   },
-  "myDataHealthCip": "CIP: FCCT590551910012",
-  "@myDataHealthCip": {
-    "description": "Código CIP mostrado bajo el título del detalle de Salud."
-  },
   "myDataHealthPendingTab": "Pendientes",
   "@myDataHealthPendingTab": {
     "description": "Pestaña de citas pendientes en Salud."
@@ -4474,10 +4462,6 @@
   "myDataHealthAppointmentType": "TELÉFONICA",
   "@myDataHealthAppointmentType": {
     "description": "Tipo de cita sanitaria de ejemplo."
-  },
-  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
-  "@myDataHealthAppointmentProfessional": {
-    "description": "Profesional sanitario de la cita de ejemplo."
   },
   "myDataHealthAppointmentDescription": "Cita de Atención Primaria",
   "@myDataHealthAppointmentDescription": {

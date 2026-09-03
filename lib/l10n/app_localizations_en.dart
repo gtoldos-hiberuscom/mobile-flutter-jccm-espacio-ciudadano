@@ -1139,9 +1139,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportCaptchaLabel => 'I am not a robot';
 
   @override
-  String get supportCaptchaMockBadge => 'MOCK';
-
-  @override
   String get supportSubmitButton => 'Send request';
 
   @override
@@ -3344,9 +3341,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEducationInterestLinksTitle => 'Links of interest';
 
   @override
-  String get myDataEducationInterestLinkPlaceholder => 'Lorem ipsum dolor sit amet';
-
-  @override
   String get myDataEducationLinkEducationPortal => 'Portal de Educación de Castilla-La Mancha';
 
   @override
@@ -3404,9 +3398,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthAppointmentsError => 'We couldn\'t load your health appointments.';
 
   @override
-  String get myDataHealthCip => 'CIP: FCCT590551910012';
-
-  @override
   String get myDataHealthPendingTab => 'Pending';
 
   @override
@@ -3444,9 +3435,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myDataHealthAppointmentType => 'PHONE';
-
-  @override
-  String get myDataHealthAppointmentProfessional => 'Dr. José Manuel Fernández García';
 
   @override
   String get myDataHealthAppointmentDescription => 'Primary Care appointment';
