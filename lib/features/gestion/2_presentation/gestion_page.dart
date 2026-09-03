@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_divider.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
@@ -36,7 +37,17 @@ class GestionPage extends ConsumerWidget {
 
     final citizenId = ref.watch(ciudadanosEndpointIdProvider);
     final contactState = ref.watch(notificationContactProvider(citizenId));
+    // Tres estados, no un bool sobre asData: solo un null GENUINO (respuesta
+    // del backend sin contacto) debe deshabilitar la tarjeta e invitar al alta.
+    // Con error se abre igualmente (fail-open: la página destino muestra su
+    // propio estado de error) y en carga se deshabilita sin afirmar carencia.
+    final contactError = contactState.hasError;
+    if (contactError) {
+      logger.e('Notification contact check unavailable — failing open: ${contactState.error}');
+    }
     final hasContact = contactState.asData?.value != null;
+    final notificacionesEnabled = hasContact || contactError;
+    final showActivationHelper = contactState.hasValue && !hasContact;
 
     return Scaffold(
       appBar: AppNavBar(
@@ -79,14 +90,14 @@ class GestionPage extends ConsumerWidget {
                 const SizedBox(height: AppDimensions.space8),
                 AppNavigationCard(
                   title: l10n.gestionNotificacionesTitle,
-                  isDisabled: !hasContact,
+                  isDisabled: !notificacionesEnabled,
                   onTap: () {
-                    if (hasContact) {
+                    if (notificacionesEnabled) {
                       context.go(Routes.gestionNotificaciones);
                     }
                   },
                 ),
-                if (!hasContact)
+                if (showActivationHelper)
                   _NotificacionesContextualHelper(
                     onActivar: () => context.go(Routes.gestionNotificacionesAlta),
                   ),

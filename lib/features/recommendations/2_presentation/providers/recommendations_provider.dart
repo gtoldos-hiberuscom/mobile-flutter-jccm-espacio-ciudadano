@@ -52,7 +52,10 @@ final recommendationsProvider = FutureProvider.autoDispose.family<Recommendation
       );
   final hasLifeEventsConsent = switch (consentResult) {
     AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
-    CheckAcceptedConsentClauseFailed() => false,
+    // AsyncError, nunca "sin consentimiento": el estado de autorización solo
+    // puede afirmarse con respuesta del backend (mismo patrón que la rama
+    // LoadLifeEventsFailed de más abajo).
+    CheckAcceptedConsentClauseFailed(:final message) => throw StateError(message),
   };
   if (!hasLifeEventsConsent) {
     return RecommendationsState(

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
@@ -60,8 +61,11 @@ class _HousingDataTab extends ConsumerWidget {
         hasAgeAuthorization: hasAgeAuthorization,
       ),
       loading: () => const Center(child: AppLoadingIndicator()),
-      error: (final error, final stackTrace) => const _HousingDataContent(
-        hasAgeAuthorization: false,
+      // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
+      // cabe error + reintentar, nunca afirmar que falta el consentimiento.
+      error: (final error, final stackTrace) => ErrorStateWidget(
+        message: AppLocalizations.of(context).authorizationCheckFailedMessage,
+        onRetry: () => ref.invalidate(ageDataAuthorizationProvider),
       ),
     );
   }

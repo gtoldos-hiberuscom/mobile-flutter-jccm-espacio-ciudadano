@@ -1754,6 +1754,12 @@ abstract class AppLocalizations {
   /// **'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.'**
   String get myDataJccmAuthorizationRequiredMessage;
 
+  /// Mensaje de error cuando la comprobación de autorizaciones no está disponible (fallo de backend), distinto de una autorización no concedida.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido comprobar tus autorizaciones. Inténtalo de nuevo.'**
+  String get authorizationCheckFailedMessage;
+
   /// Texto accesible del botón para abrir condiciones de uso y autorizaciones.
   ///
   /// In es, this message translates to:

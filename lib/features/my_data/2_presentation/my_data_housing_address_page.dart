@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -26,9 +28,11 @@ class MyDataHousingAddressPage extends ConsumerWidget {
       body: addressAsync.when(
         data: (final address) => address == null ? const _AddressEmpty() : _AddressContent(address: address),
         loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stackTrace) => _AddressError(
-          onRetry: () => ref.invalidate(housingAddressProvider),
-        ),
+        error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
+            ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataHousingAddress, onAuthorized: () => ref.invalidate(housingAddressProvider))
+            : _AddressError(
+                onRetry: () => ref.invalidate(housingAddressProvider),
+              ),
       ),
     );
   }

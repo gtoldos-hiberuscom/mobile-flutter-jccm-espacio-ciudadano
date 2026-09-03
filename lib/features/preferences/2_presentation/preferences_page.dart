@@ -43,7 +43,10 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
 
     final lifeEventsEnabled = switch (result) {
       AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
-      CheckAcceptedConsentClauseFailed() => false,
+      // AsyncError, nunca "disabled": afirmar que la autorización está apagada
+      // en la propia pantalla de autorizaciones miente sobre el consentimiento;
+      // el ErrorStateWidget con retry de la página pasa a ser alcanzable.
+      CheckAcceptedConsentClauseFailed(:final message) => throw StateError(message),
     };
     final selectedLifeEvents = lifeEventsEnabled ? await _selectedLifeEvents(ref, args.idAgente) : const <LifeEvent>[];
     final lifeEventsUpdatedAt = _readLifeEventsUpdatedAt(appStorage, args.idAgente);
@@ -73,7 +76,9 @@ Future<List<LifeEvent>> _selectedLifeEvents(
   final result = await ref.watch(loadLifeEventsUsecaseProvider).execute(idAgente: idAgente);
   return switch (result) {
     LoadLifeEventsSuccess(:final events) => events.where((final event) => event.selected).toList(growable: false),
-    LoadLifeEventsFailed() => const [],
+    // AsyncError, nunca lista vacía: "no has seleccionado temáticas" es una
+    // afirmación sobre datos del usuario que un fallo de carga no autoriza.
+    LoadLifeEventsFailed(:final message) => throw StateError(message),
   };
 }
 

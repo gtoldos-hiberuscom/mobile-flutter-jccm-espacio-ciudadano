@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_education_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// University titles list page — Figma node 43973:1882.
@@ -26,7 +28,7 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
       body: titlesAsync.when(
         data: (final titles) => _buildTitlesList(context, l10n, titles),
         loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stack) => _buildErrorState(context, l10n, ref),
+        error: (final error, final stack) => error is MyDataAuthorizationRequired ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataEducationUniversityTitles, onAuthorized: () => ref.invalidate(universityTitlesProvider)) : _buildErrorState(context, l10n, ref),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
@@ -220,8 +221,12 @@ class _HealthAppointmentsTab extends ConsumerWidget {
                 padding: EdgeInsets.only(top: AppDimensions.space24),
                 child: Center(child: AppLoadingIndicator()),
               ),
-              error: (final error, final stackTrace) => MyDataAuthorizationContextualHelper(
-                onOpenSettings: () => _openConsentSettings(context),
+              // Fallo del check ≠ "no autorizado": sin respuesta del backend
+              // solo cabe error + reintentar, nunca pedir re-autorizar un
+              // consentimiento que puede estar concedido.
+              error: (final error, final stackTrace) => ErrorStateWidget(
+                message: l10n.authorizationCheckFailedMessage,
+                onRetry: () => ref.invalidate(jccmDataAuthorizationProvider),
               ),
             ),
           ],
@@ -229,7 +234,6 @@ class _HealthAppointmentsTab extends ConsumerWidget {
       ),
     );
   }
-
 }
 
 /// Abre las autorizaciones en modo preferencias y vuelve a Salud al terminar.
@@ -369,11 +373,21 @@ List<_AppointmentEntry> _appointmentEntries(final List<Object> appointments, fin
     switch (appointment) {
       case final HealthAppointment primaryCare:
         if (appFilterDateInRange(primaryCare.dateTime, range)) {
-          entries.add(_AppointmentEntry(dateTime: primaryCare.dateTime, card: _AppointmentCard(appointment: primaryCare)));
+          entries.add(
+            _AppointmentEntry(
+              dateTime: primaryCare.dateTime,
+              card: _AppointmentCard(appointment: primaryCare),
+            ),
+          );
         }
       case final HospitalAppointment hospital:
         if (appFilterDateInRange(hospital.dateTime, range)) {
-          entries.add(_AppointmentEntry(dateTime: hospital.dateTime, card: _HospitalAppointmentCard(appointment: hospital)));
+          entries.add(
+            _AppointmentEntry(
+              dateTime: hospital.dateTime,
+              card: _HospitalAppointmentCard(appointment: hospital),
+            ),
+          );
         }
     }
   }
