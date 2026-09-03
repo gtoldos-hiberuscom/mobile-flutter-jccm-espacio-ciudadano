@@ -81,6 +81,71 @@ void main() {
       expect(appointments, hasLength(4));
     });
 
+    test('deduplica también cuando la agenda publica la cita en UTC', () async {
+      // El evento llega como instante UTC y SESCAM como fecha y hora locales:
+      // la igualdad exacta de DateTime (que compara también isUtc y segundos)
+      // nunca casaba y la misma cita se pintaba dos veces. El caso se
+      // construye desde el mismo instante para no depender del huso del runner.
+      final utcInstant = DateTime.parse('2026-06-15T07:00:00Z');
+      final local = utcInstant.toLocal();
+      String two(final int v) => v.toString().padLeft(2, '0');
+
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: [
+          {
+            'fecha': '${two(local.day)}/${two(local.month)}/${local.year}',
+            'hora': '${two(local.hour)}:${two(local.minute)}',
+            'nomTvisita': 'DEMANDA',
+            'nomProfesionalRealizador': 'LAGUNA RUIDERA MONTESINOS',
+            'nomModoVisita': 'Presencial',
+          },
+        ],
+        eventos: [
+          {
+            'fechaVencimiento': '2026-06-15T07:00:00Z',
+            'titulo': 'Cita de Atención Primaria',
+            'tipoEvento': 'CITA',
+            'mensaje': '<p>Tiene una cita de atención primaria</p>',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      expect(appointments, hasLength(1), reason: 'la misma cita publicada por las dos fuentes debe listarse una vez');
+      expect(appointments.single.title, 'LAGUNA RUIDERA MONTESINOS');
+    });
+
+    test('un evento con instante UTC se guarda en hora local', () async {
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: const [],
+        eventos: [
+          {
+            'fechaVencimiento': '2026-06-15T07:00:00Z',
+            'titulo': 'Registro',
+            'tipoEvento': 'Trámite administrativo',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      // La página pinta `.hour` crudo: un DateTime en UTC mostraba la cita a
+      // la hora del meridiano, no a la del ciudadano.
+      expect(appointments.single.dateTime, DateTime.parse('2026-06-15T07:00:00Z').toLocal());
+      expect(appointments.single.dateTime.isUtc, isFalse);
+    });
+
     test('refreshes events through the gateway refrescar endpoint', () async {
       final adapter = _AgendaAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
@@ -130,7 +195,13 @@ final class _StaticAdapter implements HttpClientAdapter {
 }
 
 final class _AgendaAdapter implements HttpClientAdapter {
-  _AgendaAdapter({final List<Map<String, dynamic>>? primaryCareAppointments}) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
+  _AgendaAdapter({
+    final List<Map<String, dynamic>>? primaryCareAppointments,
+    this.eventos,
+  }) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
+
+  /// Eventos de la agenda general; `null` usa la lista de ejemplo del test base.
+  final List<Map<String, dynamic>>? eventos;
 
   static const List<Map<String, dynamic>> _defaultPrimaryCareAppointments = [
     {
@@ -167,7 +238,8 @@ final class _AgendaAdapter implements HttpClientAdapter {
         jsonEncode(
           {
             'body': {
-              'eventos': [
+              'eventos': eventos ??
+                  [
                 {
                   'fechaVencimiento': '2026-06-01T09:15:00',
                   'titulo': 'Registro',
