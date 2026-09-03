@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empt
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_registros_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -116,10 +117,15 @@ class _EntradasTab extends ConsumerWidget {
         .watch(entradasProvider)
         .when(
           loading: () => const LoadingStateWidget(),
-          error: (final error, final _) => ErrorStateWidget(
-            message: l10n.gestionRegistrosEntradasLoadError,
-            onRetry: () => ref.invalidate(entradasProvider),
-          ),
+          // Igual que en notificaciones: la revocación de la cláusula
+          // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
+          // una autorización que no se pudo comprobar— es error reintentable.
+          error: (final error, final _) => error is ConsentRevoked
+              ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
+              : ErrorStateWidget(
+                  message: l10n.gestionRegistrosEntradasLoadError,
+                  onRetry: () => ref.invalidate(entradasProvider),
+                ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: true),
         );
   }
@@ -136,10 +142,15 @@ class _SalidasTab extends ConsumerWidget {
         .watch(salidasProvider)
         .when(
           loading: () => const LoadingStateWidget(),
-          error: (final error, final _) => ErrorStateWidget(
-            message: l10n.gestionRegistrosSalidasLoadError,
-            onRetry: () => ref.invalidate(salidasProvider),
-          ),
+          // Igual que en notificaciones: la revocación de la cláusula
+          // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
+          // una autorización que no se pudo comprobar— es error reintentable.
+          error: (final error, final _) => error is ConsentRevoked
+              ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
+              : ErrorStateWidget(
+                  message: l10n.gestionRegistrosSalidasLoadError,
+                  onRetry: () => ref.invalidate(salidasProvider),
+                ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: false),
         );
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
@@ -40,6 +41,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
       final raw = response.extra[generatedApiRawResponseDataExtraKey];
       _logEnvelope('selectbynifexp', raw);
+      _throwIfAuthorizationRequired(raw, path: 'selectbynifexp');
       final expedientes = _rawExpedientesByNif(raw);
       logger.d('[selectbynifexp] ok ${expedientes.length} expediente(s)');
       return expedientes;
@@ -50,6 +52,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
       _logEnvelope('selectbynifexp(error)', rawData);
+      _throwIfAuthorizationRequired(rawData, path: 'selectbynifexp', statusCode: error.response?.statusCode);
       final parsed = _rawExpedientesByNif(rawData);
       if (parsed.isNotEmpty) {
         logger.w('[selectbynifexp] error HTTP pero cuerpo con ${parsed.length} expediente(s) → se usa el cuerpo');
@@ -96,6 +99,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     _logEnvelope('selectbynumexp', raw);
+    _throwIfAuthorizationRequired(raw, path: 'selectbynumexp');
     final expediente = _rawExpedienteDetail(raw);
     if (expediente == null) {
       logger.w('[selectbynumexp] sin datos para pnumexp=$numexp (200 pero publicacionportal vacío/nulo)');
@@ -140,6 +144,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     _logEnvelope('selectbynumreg', raw);
+    _throwIfAuthorizationRequired(raw, path: 'selectbynumreg');
     final expediente = _rawExpedienteByRegistro(raw);
     if (expediente == null) {
       logger.w('[selectbynumreg] sin datos para pregistro=$numRegistro (200 pero publicacionportal.item vacío/nulo)');
@@ -242,6 +247,20 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   bool _canAttachDocuments(final Map<String, Object?>? responseBody) => responseBody != null && _string(responseBody, 'adjuntar') == 'X';
 
   String? _nonSentinelDate(final String? value) => (value == null || value == '0000-00-00') ? null : value;
+
+  /// Traduce el sobre de autorización de la fachada a una señal tipada.
+  ///
+  /// Llega con 403, pero también dentro de un 2xx (el gateway falla cerrado),
+  /// así que se comprueba en los dos caminos y **antes** de intentar sacar
+  /// datos del cuerpo. Quien decide qué falta es `withAuthorizationGuard`: aquí
+  /// no se sabe, y el sobre tampoco distingue una revocación de un fallo de
+  /// preferencias.
+  void _throwIfAuthorizationRequired(final Object? data, {required final String path, final int? statusCode}) {
+    if (isAuthorizationRequiredEnvelope(data)) {
+      logger.w('[$path] sobre de autorización (HTTP ${statusCode ?? 200})');
+      throw AuthorizationRequiredException(statusCode: statusCode, path: path);
+    }
+  }
 
   List<Expediente> _rawExpedientesByNif(final Object? data) {
     final payload = _decode(data);
