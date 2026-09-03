@@ -33,8 +33,10 @@ final class AuthSessionController {
   final SecureStorage _storage;
 
   /// Small skew applied to the synchronous validity short-circuit in [refresh]
-  /// so a token on the edge of expiry is renewed rather than reused (aligned
-  /// with the proactive threshold of [refreshIfNeeded]).
+  /// so a token on the edge of expiry is renewed rather than reused.
+  /// Deliberately smaller than the 60s proactive threshold of
+  /// [refreshIfNeeded]: the guard renews early on navigation, while this
+  /// last-resort check only blocks reuse of a token about to expire mid-request.
   static const Duration _refreshSkew = Duration(seconds: 30);
 
   /// Monotonic session generation. Every [clear] (logout) bumps it; an in-flight
@@ -166,7 +168,12 @@ final class AuthSessionController {
         _storage.write(
           StorageKeys.sessionExpiresAt,
           session.accessTokenExpirationDateTime!.toIso8601String(),
-        ),
+        )
+      else
+        // A session without an expiry must not inherit the previous one from
+        // storage: hydrateFromStorage would treat the stale instant as
+        // authoritative after a restart.
+        _storage.delete(StorageKeys.sessionExpiresAt),
     ]);
     _updateMemory(session, claims: claims);
   }
