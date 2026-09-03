@@ -2333,6 +2333,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get familiaNumerosaTitleNumberLabel => 'Número de título';
 
   @override
+  String get familiaNumerosaCategoryGeneral => 'General';
+
+  @override
+  String get familiaNumerosaCategoryEspecial => 'Especial';
+
+  @override
   String get familiaNumerosaCategoryLabel => 'Categoría';
 
   @override

@@ -2332,6 +2332,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familiaNumerosaTitleNumberLabel => 'Title number';
 
   @override
+  String get familiaNumerosaCategoryGeneral => 'General';
+
+  @override
+  String get familiaNumerosaCategoryEspecial => 'Special';
+
+  @override
   String get familiaNumerosaCategoryLabel => 'Category';
 
   @override
