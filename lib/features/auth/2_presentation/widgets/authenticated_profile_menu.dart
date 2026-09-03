@@ -127,7 +127,7 @@ void showAuthenticatedProfileMenu({
       ),
       AppDrawerLinkItem(
         label: l10n.legalPrivacyTitle,
-        onTap: () => closeMenuAndPush('${Routes.legalPrivacy}?from=home'),
+        onTap: () => closeMenuAndPush(Routes.legalPrivacyInfo),
       ),
     ],
     onLogout: logout,
