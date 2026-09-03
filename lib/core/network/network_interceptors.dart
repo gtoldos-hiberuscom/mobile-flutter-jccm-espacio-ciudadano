@@ -198,7 +198,11 @@ class EmojiDioLogger extends Interceptor {
   void onRequest(final RequestOptions options, final RequestInterceptorHandler handler) {
     logger.d('$dioNote 📑 Request: ${options.method} ${options.uri}');
     final requestData = options.data;
-    if (options.path == '/api/v1/soporte' && requestData is FormData) {
+    // Bajo el mismo gate que el resto de cuerpos: el nombre del fichero que
+    // adjunta el ciudadano es dato suyo, y esta traza no lo pasa por el
+    // redactor. Sigue disponible en desarrollo, que es donde hace falta para
+    // diagnosticar el envío de incidencias.
+    if (verboseBodies && options.path == '/api/v1/soporte' && requestData is FormData) {
       final formData = requestData;
       final attachments = formData.files
           .where((final entry) => entry.key == 'adjunto')
@@ -226,9 +230,13 @@ class EmojiDioLogger extends Interceptor {
   @override
   void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
     logger.d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}');
-    final path = response.requestOptions.path;
-    final logResponseBody = verboseBodies || path == '/api/v1/intermediacion/termalismo/datos' || path == '/api/v1/intermediacion/atencion-dependencia/datos' || path.startsWith('/api/v1/ccaa/familia-numerosa/') || (path.startsWith('/api/v1/agenda/') && path.contains('/eventos/'));
-    if (logResponseBody) {
+    // Sin excepciones por ruta: la lista de cuatro endpoints que había aquí
+    // (termalismo, dependencia, familia numerosa, eventos de agenda) volcaba su
+    // cuerpo aunque `verboseBodies` fuese falso, es decir también en un debug
+    // con la configuración de producción — justo lo que el gate
+    // `kDebugMode && config.debugMode` decide. Con la config de desarrollo ya
+    // se volcaban por `verboseBodies`, así que no se pierde nada.
+    if (verboseBodies) {
       logger.d('$dioNote 📦 Response Data: ${redactForLog(response.data)}');
     }
     handler.next(response);
