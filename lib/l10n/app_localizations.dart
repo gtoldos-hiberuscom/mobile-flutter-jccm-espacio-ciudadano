@@ -3074,6 +3074,18 @@ abstract class AppLocalizations {
   /// **'No hemos podido guardar tus preferencias. Inténtalo de nuevo.'**
   String get lifeEventsErrorFeedback;
 
+  /// Personalization — snackbar after a successful preference reset.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus preferencias se han borrado.'**
+  String get lifeEventsResetSuccessFeedback;
+
+  /// Personalization — snackbar after a failed preference reset.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido borrar tus preferencias. Inténtalo de nuevo.'**
+  String get lifeEventsResetErrorFeedback;
+
   /// Personalization — error state when the catalog fails to load.
   ///
   /// In es, this message translates to:

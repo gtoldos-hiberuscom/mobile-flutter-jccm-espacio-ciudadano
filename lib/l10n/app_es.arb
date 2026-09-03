@@ -2049,6 +2049,14 @@
   "@lifeEventsErrorFeedback": {
     "description": "Personalization — snackbar after a save / reset failure."
   },
+  "lifeEventsResetSuccessFeedback": "Tus preferencias se han borrado.",
+  "@lifeEventsResetSuccessFeedback": {
+    "description": "Personalization — snackbar after a successful preference reset."
+  },
+  "lifeEventsResetErrorFeedback": "No hemos podido borrar tus preferencias. Inténtalo de nuevo.",
+  "@lifeEventsResetErrorFeedback": {
+    "description": "Personalization — snackbar after a failed preference reset."
+  },
   "lifeEventsLoadError": "No hemos podido cargar los hechos vitales.",
   "@lifeEventsLoadError": {
     "description": "Personalization — error state when the catalog fails to load."
