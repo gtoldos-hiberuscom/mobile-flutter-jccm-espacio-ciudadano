@@ -53,12 +53,12 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     // fecha y hora se conserva la de SESCAM, que trae centro y profesional en
     // campos propios, para no pintar la misma cita dos veces.
     final healthAppointments = responses.first;
-    final healthSlots = healthAppointments.map((final appointment) => appointment.dateTime).toSet();
+    final healthSlots = healthAppointments.map((final appointment) => _appointmentSlot(appointment.dateTime)).toSet();
     final appointments = <AgendaAppointment>[
       ...healthAppointments,
       for (final source in responses.skip(1))
         for (final appointment in source)
-          if (appointment.kind != AgendaAppointmentKind.health || !healthSlots.contains(appointment.dateTime)) appointment,
+          if (appointment.kind != AgendaAppointmentKind.health || !healthSlots.contains(_appointmentSlot(appointment.dateTime))) appointment,
     ]..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
 
     return List<AgendaAppointment>.unmodifiable(appointments);
@@ -431,6 +431,16 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     return _parseDateTime('${date.trim()} $normalizedTime') ?? _parseDateTime(date);
   }
 
+  /// Clave de coincidencia entre fuentes: fecha y hora local a precisión de
+  /// minuto. Las dos fuentes expresan la misma cita con granularidades
+  /// distintas (los eventos añaden segundos; SESCAM publica `HH:mm`) y, si el
+  /// backend emitiera ISO con zona, con husos distintos — la igualdad exacta
+  /// de [DateTime] (que compara también `isUtc`) duplicaba la cita.
+  DateTime _appointmentSlot(final DateTime value) {
+    final local = value.toLocal();
+    return DateTime(local.year, local.month, local.day, local.hour, local.minute);
+  }
+
   DateTime? _parseDateTime(final String? value) {
     if (value == null) {
       return null;
@@ -442,7 +452,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
     final iso = DateTime.tryParse(trimmed);
     if (iso != null) {
-      return iso;
+      // Siempre en hora local: un ISO con `Z` u offset quedaba en UTC, se
+      // pintaba con la hora desplazada y nunca casaba en la deduplicación con
+      // la misma cita expresada en local por la otra fuente.
+      return iso.toLocal();
     }
 
     final dateTimeMatch = RegExp(r'^(\d{1,2})[/-](\d{1,2})[/-](\d{4})(?:\s+(\d{1,2}):(\d{2}))?').firstMatch(trimmed);
