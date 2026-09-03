@@ -229,10 +229,101 @@ void main() {
 
     expect(repository.iniciarCalls, 2);
   });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'borrar un fichero de la cola mientras sube otro no lo sube al buzón', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final tercero = file('tercero.pdf');
+    late final ProviderContainer container;
+    final repository = _FakeDocumentoRepository(
+      onUpload: (final nombre) async {
+        if (nombre == 'primero.pdf') {
+          container.read(gestionAportarDocumentacionProvider.notifier).removeArchivo(tercero.path);
+        }
+      },
+    );
+    container = await pumpPage(tester, repository);
+
+    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo, tercero]);
+    await tester.pump();
+
+    await tapRegistrar(tester);
+
+    // El bucle iteraba la foto de la lista, así que el fichero retirado se
+    // subía igualmente al buzón — y podía acabar registrado.
+    expect(repository.subidas, ['primero.pdf', 'segundo.pdf']);
+    expect(repository.registrarCalls, 1);
+    expect(repository.registrados.map((final d) => d.nombre), ['primero.pdf', 'segundo.pdf']);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'salir de la pantalla en mitad del lote detiene la cola sin reventar', (final tester) async {
+    final gate = Completer<void>();
+    final repository = _FakeDocumentoRepository(
+      // Ignora el CancelToken a propósito: es el peor caso, con la petición
+      // resolviendo después de que la pantalla se haya ido.
+      onUpload: (final nombre) async {
+        if (nombre == 'primero.pdf') {
+          await gate.future;
+        }
+      },
+    );
+    final container = await pumpPage(tester, repository);
+
+    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf'), file('segundo.pdf'), file('tercero.pdf')]);
+    await tester.pump();
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text(_registrarLabel));
+      await pumpHasta(tester, () => repository.subidas.isNotEmpty);
+
+      // Desmonta la página, como al volver al expediente.
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(home: SizedBox.shrink()),
+        ),
+      );
+      gate.complete();
+      await pumpHasta(tester, () => repository.subidas.length > 1);
+    });
+    // Un frame con reloj falso para que corra el dispose que Riverpod agenda
+    // al liberar el provider `autoDispose` de la página desmontada.
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(repository.subidas, ['primero.pdf']);
+    expect(repository.registrarCalls, 0);
+    // La cola seguía viva y reventaba con el provider `autoDispose` ya liberado.
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'el lote se corta en el primer fallo y no sube los condenados', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final tercero = file('tercero.pdf');
+    // El fichero que falla va en medio: el test que ya existía solo cubre el
+    // caso de que sea el último, donde no hay nada después que cortar.
+    final repository = _FakeDocumentoRepository(failPath: segundo.path);
+    final container = await pumpPage(tester, repository);
+
+    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo, tercero]);
+    await tester.pump();
+
+    await tapRegistrar(tester);
+
+    // Los hashes de este intento mueren con su `idunico`, así que seguir
+    // subiendo `tercero.pdf` era gastar minutos y datos para tirarlos.
+    expect(repository.subidas, ['primero.pdf', 'segundo.pdf']);
+    expect(repository.registrarCalls, 0);
+    expect(find.text('Algunos ficheros no se han podido enviar. Puedes reintentarlo.'), findsOneWidget);
+
+    final archivos = container.read(gestionAportarDocumentacionProvider);
+    expect(archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.noEnviado));
+    expect(archivos.map((final a) => a.hash), everyElement(isNull));
+  });
 }
 
 final class _FakeDocumentoRepository implements GestionDocumentoRepository {
-  _FakeDocumentoRepository({this.cancelPath, this.failPath, this.registrarFalla = false});
+  _FakeDocumentoRepository({this.cancelPath, this.failPath, this.registrarFalla = false, this.onUpload});
 
   /// Fichero cuya subida cancela el ciudadano con la X mientras está en curso.
   final String? cancelPath;
@@ -247,6 +338,13 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
   /// Retiene `inicproc` para poder pulsar durante la ventana en la que todavía
   /// no hay ningún fichero `enviando` — la ventana real de AP-1.
   Completer<void>? inicioGate;
+
+  /// Se invoca al empezar cada subida, con el nombre del fichero: permite
+  /// retirar otro fichero del lote o retener la subida en curso.
+  final Future<void> Function(String nombre)? onUpload;
+
+  /// Ficheros que llegaron a subirse al buzón, en orden.
+  List<String> subidas = [];
 
   late GestionAportarDocumentacionNotifier notifier;
   int iniciarCalls = 0;
@@ -288,6 +386,8 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
     final void Function(double progreso)? onProgress,
   }) async {
     final path = '$idUnico/$nombreFichero';
+    subidas.add(nombreFichero);
+    await onUpload?.call(nombreFichero);
     if (failPath != null && failPath!.endsWith(nombreFichero)) {
       throw DioException(
         requestOptions: RequestOptions(path: path),

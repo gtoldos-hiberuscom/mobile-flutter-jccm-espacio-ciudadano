@@ -65,6 +65,10 @@ class GestionAportarDocumentacionPage extends ConsumerStatefulWidget {
 /// suyo.
 enum _FaseRegistro { inactiva, subiendo, registrando }
 
+/// Desenlace de una subida individual, para que la cola serial decida si
+/// continúa con el siguiente fichero o abandona el intento.
+enum _ResultadoSubida { completado, error, cancelado }
+
 class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportarDocumentacionPage> {
   _FaseRegistro _fase = _FaseRegistro.inactiva;
 
@@ -291,14 +295,42 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     // total es el mismo — lo limita el ancho de banda, no la concurrencia —,
     // cada plazo es el que corresponde y solo hay un fichero codificado en
     // memoria a la vez.
-    for (final archivo in pendientes) {
-      await _subirArchivo(
-        archivo: archivo,
+    for (final pendiente in pendientes) {
+      if (!mounted) {
+        // La pantalla se fue: seguir subiendo alimenta el buzón de una
+        // transacción que nadie va a cerrar, y tocar el provider `autoDispose`
+        // ya liberado lanza.
+        return null;
+      }
+      // El estado se relee en cada vuelta: `pendientes` es la foto de antes de
+      // abrir la transacción, y el ciudadano puede retirar ficheros mientras
+      // sube otro.
+      final actual = ref.read(gestionAportarDocumentacionProvider).where((final a) => a.path == pendiente.path).firstOrNull;
+      if (actual == null || actual.estado == AportacionArchivoEstado.completado) {
+        continue;
+      }
+      final resultado = await _subirArchivo(
+        archivo: actual,
         citizenId: citizenId,
         documentNumber: documentNumber,
         idUnico: inicio.idunico,
         tipoProcedimiento: expediente.tipoproc ?? '',
       );
+      if (!mounted) {
+        return null;
+      }
+      if (resultado == _ResultadoSubida.completado) {
+        continue;
+      }
+      // Cancelar y borrar llegan igual (el token cancelado), y se distinguen
+      // por si el fichero sigue en la lista: si lo borró el ciudadano, el resto
+      // del lote sigue siendo válido en este `idunico`; si canceló la subida,
+      // el intento está condenado y sigue el camino de descarte.
+      final sigueEnLista = ref.read(gestionAportarDocumentacionProvider).any((final a) => a.path == pendiente.path);
+      if (resultado == _ResultadoSubida.cancelado && !sigueEnLista) {
+        continue;
+      }
+      break;
     }
 
     if (!mounted) {
@@ -390,7 +422,7 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     }
   }
 
-  Future<void> _subirArchivo({
+  Future<_ResultadoSubida> _subirArchivo({
     required final AportacionArchivo archivo,
     required final String citizenId,
     required final String documentNumber,
@@ -403,6 +435,9 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
 
     try {
       final bytes = await XFile(archivo.path).readAsBytes();
+      if (!mounted) {
+        return _ResultadoSubida.cancelado;
+      }
       final hash = await repository.subirDocumentoSinFirma(
         citizenId: citizenId,
         documentNumber: documentNumber,
@@ -411,20 +446,35 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
         nombreFichero: archivo.nombre,
         bytes: bytes,
         cancelToken: token,
-        onProgress: (final progreso) => notifier.updateProgreso(archivo.path, progreso),
+        // El provider es `autoDispose`: tocar el notifier liberado lanza.
+        onProgress: (final progreso) {
+          if (mounted) {
+            notifier.updateProgreso(archivo.path, progreso);
+          }
+        },
       );
+      if (!mounted) {
+        return _ResultadoSubida.cancelado;
+      }
       notifier.marcarCompletado(archivo.path, hash);
+      return _ResultadoSubida.completado;
     } on DioException catch (error, stackTrace) {
       if (error.type == DioExceptionType.cancel) {
-        // Cancelación manual del usuario — `cancelarSubida` ya revirtió el
-        // estado a `noEnviado`; no se trata como error.
-        return;
+        // Cancelación manual del usuario, o fichero retirado de la lista: en
+        // ambos casos el estado ya lo revirtió quien canceló el token.
+        return _ResultadoSubida.cancelado;
       }
       logger.e('Error al subir ${archivo.nombre}', error: error, stackTrace: stackTrace);
-      notifier.marcarError(archivo.path);
+      if (mounted) {
+        notifier.marcarError(archivo.path);
+      }
+      return _ResultadoSubida.error;
     } on Object catch (error, stackTrace) {
       logger.e('Error al subir ${archivo.nombre}', error: error, stackTrace: stackTrace);
-      notifier.marcarError(archivo.path);
+      if (mounted) {
+        notifier.marcarError(archivo.path);
+      }
+      return _ResultadoSubida.error;
     }
   }
 
