@@ -14,7 +14,19 @@ library;
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 const String redactedPlaceholder = '***';
+
+const bool _redactionDisabledByEnv = bool.fromEnvironment('LOG_REDACTION_OFF');
+
+/// Desactiva la redacción para depurar en local: `flutter run … --dart-define=LOG_REDACTION_OFF=true`.
+///
+/// No sale de `AppConfig` a propósito: una clave de los `config_*.json` va
+/// commiteada y podría acabar activa en un build de tiendas. Y va conjugada con
+/// [kDebugMode], que es `const false` en release y profile, así que allí la
+/// constante es falsa y la rama desaparece en compilación.
+const bool logRedactionDisabled = kDebugMode && _redactionDisabledByEnv;
 
 /// Claves cuyo valor puede imprimirse: códigos de respuesta, estados,
 /// metadatos de paginación y campos estructurales del sobre de la fachada.
@@ -22,6 +34,9 @@ const String redactedPlaceholder = '***';
 const Set<String> loggableKeys = {
   // Sobre genérico de la fachada
   'codigo-respuesta',
+  // El discriminador del sobre de autorización (p. ej. `3034`). Es numérico y
+  // sin él la traza dice que falta autorización sin decir por qué (LG-2).
+  'codigo-error',
   'mensaje-respuesta',
   'timestamp',
   'info-error',
@@ -76,24 +91,35 @@ const Set<String> loggableKeys = {
 /// responden el sobre como texto plano) para poder redactarla por dentro; si no
 /// es JSON se enmascara indicando su longitud, que es lo único útil de un
 /// cuerpo opaco (por ejemplo el base64 de un PDF).
+/// Con [logRedactionDisabled] puesto no enmascara nada — solo para depurar en
+/// local.
 Object? redactForLog(final Object? value) => _redact(value, isRoot: true);
 
-Object? _redact(final Object? value, {final bool isRoot = false}) {
+Object? _redact(final Object? value, {final bool isRoot = false, final bool loggableContext = false}) {
+  if (logRedactionDisabled) {
+    return value;
+  }
   if (value is Map) {
     return value.map((final key, final nested) {
       final keyText = key.toString().toLowerCase();
+      final loggable = loggableKeys.contains(keyText);
       if (nested is Map || nested is Iterable) {
-        // La estructura no es dato personal: se sigue recorriendo.
-        return MapEntry(key, _redact(nested));
+        // La estructura no es dato personal: se sigue recorriendo. El contexto
+        // de la clave baja con la recursión para que una lista de escalares
+        // bajo una clave blanca (`info-error`…) siga imprimiéndose.
+        return MapEntry(key, _redact(nested, loggableContext: loggable));
       }
-      if (loggableKeys.contains(keyText)) {
+      if (loggable) {
         return MapEntry(key, nested);
       }
       return MapEntry(key, redactedPlaceholder);
     });
   }
   if (value is Iterable) {
-    return value.map(_redact).toList(growable: false);
+    // Un escalar dentro de una lista no tiene clave propia: hereda la de la
+    // lista. Sin esto, los String de una lista salían en claro por no ser raíz
+    // y no consultar la lista blanca (LG-1).
+    return value.map((final element) => element is Map || element is Iterable ? _redact(element, loggableContext: loggableContext) : _redactScalar(element, loggableContext: loggableContext)).toList(growable: false);
   }
   if (value is String && isRoot) {
     final decoded = _tryDecodeJson(value);
@@ -106,6 +132,16 @@ Object? _redact(final Object? value, {final bool isRoot = false}) {
     return redactedPlaceholder;
   }
   return value;
+}
+
+/// Escalar sin clave propia (elemento de lista): se imprime si el contexto es
+/// una clave de [loggableKeys], y si no se enmascara. Los números y booleanos
+/// se conservan, igual que en la raíz: no identifican a nadie por sí mismos.
+Object? _redactScalar(final Object? value, {required final bool loggableContext}) {
+  if (value == null || value is num || value is bool || loggableContext) {
+    return value;
+  }
+  return redactedPlaceholder;
 }
 
 Object? _tryDecodeJson(final String value) {
