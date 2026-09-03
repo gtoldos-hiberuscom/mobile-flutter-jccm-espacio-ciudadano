@@ -50,7 +50,11 @@ class App extends ConsumerWidget {
     return MaterialApp.router(
       title: appName,
       theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
+      // Sin `darkTheme` a propósito: el design system pinta con tokens light
+      // fijos (`AppColors.*` en cientos de sitios), así que declarar el tema
+      // oscuro producía, con el móvil en modo oscuro, scaffold/appbar oscuros
+      // bajo tarjetas blancas fijas y textos del tema oscuro sobre ellas.
+      // Cuando el DS tenga tokens por brillo, restaurarlo junto a `themeMode`.
       routerConfig: router,
       localizationsDelegates: const [
         AppLocalizations.delegate,
