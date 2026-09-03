@@ -20,7 +20,12 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final trimmedAgentId = agentId?.trim();
     final responses = await Future.wait([
       _loadAppointmentsFrom(
-        () => _sescamApi.citasFuturas(
+        // La variante `1` apunta al path gateway
+        // /api/v1/ciudadanos/{numDocumento}/salud/primaria-citas-pendientes
+        // (el legacy /api/v1/sescam/citas/... no existe en el gateway y
+        // responde 404, igual que pasaba con /api/v1/agenda/...). Es el mismo
+        // endpoint que usa Mis Datos → Salud, que sí devuelve las citas.
+        () => _sescamApi.citasFuturas1(
           numDocumento: documentNumber,
           extra: _generatedExtra,
         ),
@@ -42,9 +47,21 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         ),
     ]);
 
-    final appointments = responses.expand((final appointments) => appointments).toList(growable: false)..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
+    // Las dos fuentes se solapan: la agenda general publica las citas de
+    // Atención Primaria como eventos con el detalle dentro del mensaje, y
+    // primaria-citas-pendientes las devuelve estructuradas. Cuando coinciden en
+    // fecha y hora se conserva la de SESCAM, que trae centro y profesional en
+    // campos propios, para no pintar la misma cita dos veces.
+    final healthAppointments = responses.first;
+    final healthSlots = healthAppointments.map((final appointment) => appointment.dateTime).toSet();
+    final appointments = <AgendaAppointment>[
+      ...healthAppointments,
+      for (final source in responses.skip(1))
+        for (final appointment in source)
+          if (appointment.kind != AgendaAppointmentKind.health || !healthSlots.contains(appointment.dateTime)) appointment,
+    ]..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
 
-    return appointments;
+    return List<AgendaAppointment>.unmodifiable(appointments);
   }
 
   @override
