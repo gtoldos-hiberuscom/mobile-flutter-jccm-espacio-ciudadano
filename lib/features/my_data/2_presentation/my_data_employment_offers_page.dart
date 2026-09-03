@@ -37,6 +37,9 @@ class MyDataEmploymentOffersPage extends ConsumerWidget {
       context: context,
       title: l10n.myDataEmploymentOffersPageTitle,
       bodyText: l10n.myDataEmploymentOffersInfoSheetDescription,
+      // El ciudadano no puede corregir sus inscripciones desde aquí: el sitio
+      // donde se gestionan es el Portal de empleabilidad.
+      footerText: l10n.myDataEmploymentOffersInfoSheetFooter,
     );
   }
 }

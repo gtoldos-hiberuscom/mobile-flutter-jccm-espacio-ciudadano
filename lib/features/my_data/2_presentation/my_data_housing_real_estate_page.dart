@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
@@ -52,9 +53,19 @@ class _MyDataHousingRealEstatePageState extends ConsumerState<MyDataHousingRealE
       title: l10n.myDataHousingRealEstateInfoSheetTitle,
       bodyText: l10n.myDataHousingRealEstateInfoSheetDescription,
       footerText: l10n.myDataHousingRealEstateInfoSheetFooter,
+      // El contacto de estos datos es el Catastro, que es de quien vienen.
+      // Estaba solo en el estado vacío, así que quien sí tiene inmuebles no
+      // tenía a dónde acudir.
+      actionLabel: l10n.myDataNoDataContact,
+      onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(_catastroUrl)),
+      actionIcon: AppIcons.openInNew,
     );
   }
 }
+
+/// Sede del Catastro: es la fuente de estos datos y el sitio donde se
+/// corrigen.
+const String _catastroUrl = 'https://www.sedecatastro.gob.es/';
 
 enum _PropertyFilter { all, urban, rustic }
 
@@ -98,7 +109,7 @@ class _PropertiesContent extends StatelessWidget {
                 ? MyDataNoData(
                     message: l10n.myDataHousingRealEstateNoDataMessage,
                     actionLabel: l10n.myDataNoDataContact,
-                    contactUrl: 'https://www.sedecatastro.gob.es/',
+                    contactUrl: _catastroUrl,
                     scrollable: false,
                   )
                 : _PropertiesEmpty(message: l10n.myDataHousingRealEstateFilteredEmpty)

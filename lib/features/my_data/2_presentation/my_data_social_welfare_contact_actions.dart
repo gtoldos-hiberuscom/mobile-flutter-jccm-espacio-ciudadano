@@ -12,7 +12,10 @@ Future<void> launchSocialWelfareOfficeContacts(
   final WidgetRef ref,
 ) async {
   final l10n = AppLocalizations.of(context);
-  final ExternalLink? link = ref.read(externalLinkCatalogProvider).findById('jccm_offices_oir');
+  // Las oficinas de la Consejería de Bienestar Social, no el listado completo:
+  // desde estas cinco pantallas el ciudadano viene con un trámite de bienestar
+  // social en la mano.
+  final ExternalLink? link = ref.read(externalLinkCatalogProvider).findById('jccm_offices_oir_bienestar_social');
   if (link == null) {
     AppAlertSnackbar.show(
       context,

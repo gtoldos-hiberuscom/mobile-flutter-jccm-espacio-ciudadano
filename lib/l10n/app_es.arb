@@ -1011,13 +1011,25 @@
   "@educationUniversityTitlesInfoBody": {
     "description": "Educación — cuerpo principal del modal de ayuda de títulos universitarios."
   },
-  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.",
+  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Sede Electrónica de Universidades.",
   "@educationUniversityTitlesInfoFooter": {
     "description": "Educación — texto de pie del modal de ayuda de títulos universitarios."
   },
   "educationUniversityTitlesInfoContactButton": "Contacto",
   "@educationUniversityTitlesInfoContactButton": {
     "description": "Educación — botón de contacto en el modal de ayuda de títulos universitarios."
+  },
+  "educationNonUniversityTitlesInfoTitle": "Sobre tus títulos no universitarios",
+  "@educationNonUniversityTitlesInfoTitle": {
+    "description": "Educación — título del modal de ayuda de títulos no universitarios."
+  },
+  "educationNonUniversityTitlesInfoBody": "Consulta los datos de los títulos no universitarios que figuren en el registro.",
+  "@educationNonUniversityTitlesInfoBody": {
+    "description": "Educación — cuerpo principal del modal de ayuda de títulos no universitarios."
+  },
+  "educationNonUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación, Formación Profesional y Deportes.",
+  "@educationNonUniversityTitlesInfoFooter": {
+    "description": "Educación — texto de pie del modal de ayuda de títulos no universitarios."
   },
   "educationNonUniversityTitlesTitle": "Títulos no universitarios",
   "@educationNonUniversityTitlesTitle": {
@@ -3859,6 +3871,10 @@
   "myDataEmploymentOffersPageTitle": "Inscripción en ofertas de empleo",
   "@myDataEmploymentOffersPageTitle": {
     "description": "Título de la pantalla de inscripciones en ofertas de empleo."
+  },
+  "myDataEmploymentOffersInfoSheetFooter": "Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.",
+  "@myDataEmploymentOffersInfoSheetFooter": {
+    "description": "Texto de pie del modal informativo de la pantalla de inscripciones en ofertas."
   },
   "myDataEmploymentOffersInfoSheetDescription": "Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.",
   "@myDataEmploymentOffersInfoSheetDescription": {
