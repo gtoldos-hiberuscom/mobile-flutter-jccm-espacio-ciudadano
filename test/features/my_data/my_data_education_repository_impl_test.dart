@@ -83,6 +83,18 @@ void main() {
       );
     });
 
+    test('un 200 con el sobre de autorización no se pinta como datos', () async {
+      // El fallo cerrado del gateway: responde 200 y mete el 412.00 en el
+      // sobre. Leerlo como datos pintaba "sin títulos" en vez del aviso de
+      // autorización (MD-1, misma familia que salud).
+      final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(200, {'codigo-respuesta': '412.00', 'body': null})));
+
+      await expectLater(
+        repository.loadUniversityTitles(citizenId: 'id', documentNumber: '99999999R'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
     test('a genuine 404 still means no degrees on record', () async {
       final repository = MyDataEducationRepositoryImpl(dio: _dio(_StaticAdapter(404, null)));
 
