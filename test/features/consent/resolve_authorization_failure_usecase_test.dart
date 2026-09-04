@@ -91,6 +91,40 @@ void main() {
       expect((result as ClauseMissing).clauseId, jccmDataConsentClauseId);
     });
 
+    test('un registro sintético con todo pendiente NUNCA es revocación', () async {
+      // Es la respuesta que fabrica el gateway cuando el soporte del ciudadano
+      // se ha purgado (DELETE /preferencias): un 200 con todas las cláusulas
+      // sin contestar, incluso segundos después de un PATCH correcto. Darlo
+      // por revocación cerraba la sesión y dejaba al ciudadano fuera.
+      final repository = _FakeConsentRepository(
+        clauses: const [
+          Clause(id: requiredConsentClauseId, label: 'Cláusula 0', isSelected: false, isPending: true),
+          Clause(id: jccmDataConsentClauseId, label: 'Cláusula 1', isSelected: false, isPending: true),
+          Clause(id: ageDataConsentClauseId, label: 'Cláusula 2', isSelected: false, isPending: true),
+        ],
+      );
+
+      final result = await ResolveAuthorizationFailureUsecase(repository).execute(
+        idAgente: 'PER9998003',
+        requiredClauseIds: const {requiredConsentClauseId},
+      );
+
+      expect(result, isA<AuthorizationUnknown>());
+    });
+
+    test('la obligatoria ausente del listado tampoco es revocación', () async {
+      final repository = _FakeConsentRepository(
+        clauses: _clauses({jccmDataConsentClauseId: true}),
+      );
+
+      final result = await ResolveAuthorizationFailureUsecase(repository).execute(
+        idAgente: 'PER9998003',
+        requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+      );
+
+      expect(result, isA<AuthorizationUnknown>());
+    });
+
     test('relee siempre saltándose la caché', () async {
       final repository = _FakeConsentRepository(
         clauses: _clauses({requiredConsentClauseId: true, jccmDataConsentClauseId: false}),

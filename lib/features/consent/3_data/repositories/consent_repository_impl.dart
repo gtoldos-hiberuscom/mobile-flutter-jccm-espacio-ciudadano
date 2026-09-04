@@ -330,6 +330,7 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       id: id,
       label: _htmlToText(map['textoCheck']?.toString() ?? ''),
       isSelected: _asBool(map['seleccionado']) ?? false,
+      isPending: _asBool(map['pendiente']) ?? false,
       version: map['version']?.toString() ?? '1',
     );
   }
