@@ -32,6 +32,9 @@ Future<void> bootstrap(final AppConfig config) async {
 
   runApp(
     ProviderScope(
+      // Sin reintentos automáticos en TODA la app: el fallo llega a la pantalla
+      // y el usuario reintenta a mano. Ningún provider debe declarar su propio
+      // `retry:` — puentearía esta política.
       retry: (final retryCount, final error) => null,
       overrides: [
         appConfigProvider.overrideWithValue(config),

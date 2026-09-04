@@ -6,7 +6,6 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ci
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
@@ -35,7 +34,7 @@ final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((fina
   };
 });
 
-final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>(retry: _noRetryOnAuthorization, (final ref) async {
+final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>((final ref) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider).trim();
   if (citizenId.isEmpty) {
     throw StateError('No se ha encontrado el identificador de la persona usuaria.');
@@ -109,14 +108,4 @@ Future<DigitalCardArtifact> downloadDigitalCardsPkPass(final WidgetRef ref, fina
   }
 
   return ref.read(digitalCardsRepositoryProvider).downloadPkPass(citizenId: citizenId, card: card);
-}
-
-/// Un desenlace de autorización no es un fallo transitorio: reintentarlo repite
-/// el rechazo del backend y la relectura de cláusulas mientras la pantalla ya
-/// dice qué hacer. El resto de errores mantiene el reintento por defecto.
-Duration? _noRetryOnAuthorization(final int retryCount, final Object error) {
-  if (error is AuthorizationFailure) {
-    return null;
-  }
-  return ProviderContainer.defaultRetry(retryCount, error);
 }
