@@ -16,7 +16,11 @@ sealed class AuthorizationFailure implements Exception {
 /// sesión debe cerrarse.
 ///
 /// Solo se emite con una respuesta **fresca y correcta** del servicio de
-/// cláusulas.
+/// cláusulas en la que la obligatoria aparece **contestada en falso**
+/// (`seleccionado: false` y `pendiente: false`). Un registro donde figura sin
+/// contestar no cuenta: es indistinguible del registro sintético que el
+/// gateway fabrica cuando el soporte del ciudadano se ha purgado (todo
+/// `pendiente: true`, incluso segundos después de un PATCH correcto).
 final class ConsentRevoked extends AuthorizationFailure {
   const ConsentRevoked();
 
@@ -78,7 +82,17 @@ final class ResolveAuthorizationFailureUsecase {
     bool isAccepted(final int clauseId) => clauses.any((final clause) => clause.id == clauseId && clause.isSelected);
 
     if (!isAccepted(requiredConsentClauseId)) {
-      return const ConsentRevoked();
+      // Cerrar sesión exige la prueba fuerte: la obligatoria presente y
+      // contestada en falso. Si falta del listado o figura `pendiente`, eso es
+      // un registro nuevo o purgado (el gateway responde uno sintético con todo
+      // pendiente tras borrarse el soporte), no una revocación confirmada.
+      final answeredAsRevoked = clauses.any(
+        (final clause) => clause.id == requiredConsentClauseId && !clause.isSelected && !clause.isPending,
+      );
+      if (answeredAsRevoked) {
+        return const ConsentRevoked();
+      }
+      return const AuthorizationUnknown('La cláusula obligatoria aparece sin contestar: registro pendiente o sintético, no una revocación');
     }
 
     // Orden estable: con varias cláusulas exigidas el resultado no puede
