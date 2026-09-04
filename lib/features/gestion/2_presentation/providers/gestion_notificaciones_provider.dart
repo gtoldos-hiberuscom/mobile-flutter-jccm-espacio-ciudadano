@@ -5,12 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
-import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
-import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/notificaciones_paginacion_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
 
@@ -65,7 +63,7 @@ final gestionNotificacionesOptimisticAcceptedProvider = NotifierProvider<Gestion
 );
 
 /// Family param: filtro de estado — null = "Todo" (unión de todos los estados).
-final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>(retry: _noRetryOnDeterministicFailures, (final ref, final estado) async {
+final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>((final ref, final estado) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
@@ -126,7 +124,7 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
 /// conocía: solo sirve de respaldo si el detalle no lo informa.
 typedef NotificacionDetalleArgs = ({int id, NotificacionEstado? estado, String? sistemaOrigen});
 
-final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>(retry: _noRetryOnDeterministicFailures, (final ref, final args) async {
+final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>((final ref, final args) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
@@ -149,12 +147,3 @@ final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<Not
 /// rechazo del backend y la relectura de cláusulas mientras el usuario mira una
 /// pantalla que ya le dice qué hacer (o mientras se cierra la sesión). El resto
 /// de errores mantienen el comportamiento por defecto.
-/// Los fallos deterministas no se reintentan con espera creciente: el rechazo
-/// por autorización lo resuelve el guard, y un barrido que no cabe en el tope
-/// de páginas volverá a no caber. El usuario ya tiene "Reintentar".
-Duration? _noRetryOnDeterministicFailures(final int retryCount, final Object error) {
-  if (error is AuthorizationFailure || error is NotificacionesPaginacionIncompletaException) {
-    return null;
-  }
-  return ProviderContainer.defaultRetry(retryCount, error);
-}
