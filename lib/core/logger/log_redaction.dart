@@ -20,12 +20,17 @@ const String redactedPlaceholder = '***';
 
 const bool _redactionDisabledByEnv = bool.fromEnvironment('LOG_REDACTION_OFF');
 
-/// Desactiva la redacción para depurar en local: `flutter run … --dart-define=LOG_REDACTION_OFF=true`.
+/// Desactiva la redacción para poder depurar contra los entornos de prueba.
 ///
-/// No sale de `AppConfig` a propósito: una clave de los `config_*.json` va
-/// commiteada y podría acabar activa en un build de tiendas. Y va conjugada con
-/// [kDebugMode], que es `const false` en release y profile, así que allí la
-/// constante es falsa y la rama desaparece en compilación.
+/// Lo declaran los `config_*.json`, que `--dart-define-from-file` inyecta como
+/// dart-defines: `true` en development y preproduction (apuntan a UAT y pre,
+/// con usuarios de prueba) y `false` en production. Se puede forzar en una
+/// ejecución suelta con `--dart-define=LOG_REDACTION_OFF=true`.
+///
+/// **No pasa por `AppConfig`** a propósito, y va conjugada con [kDebugMode],
+/// que es `const false` en release y profile: allí la constante es falsa y la
+/// rama desaparece en compilación, así que ningún build de tiendas puede
+/// quedarse sin redactar por lo que diga un fichero de configuración.
 const bool logRedactionDisabled = kDebugMode && _redactionDisabledByEnv;
 
 /// Claves cuyo valor puede imprimirse: códigos de respuesta, estados,

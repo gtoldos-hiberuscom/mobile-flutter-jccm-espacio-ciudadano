@@ -2,7 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 
 void main() {
-  group('redactForLog', () {
+  // `config_development.json` y `config_preproduction.json` llevan
+  // LOG_REDACTION_OFF=true, así que `flutter test --dart-define-from-file=…`
+  // desactiva la redacción y estos casos dejarían de tener sentido. Se saltan
+  // en vez de fallar: un rojo ahí se lee como una regresión del redactor y no
+  // lo es. La suite normal (`flutter test`, y CI) no pasa ningún config y los
+  // ejecuta siempre.
+  group('redactForLog', skip: logRedactionDisabled ? 'LOG_REDACTION_OFF activo: la redacción está desactivada a propósito' : null, () {
     test('enmascara los valores que no están en la lista blanca', () {
       final redacted = redactForLog({
         'nombre': 'Gonzalo',
