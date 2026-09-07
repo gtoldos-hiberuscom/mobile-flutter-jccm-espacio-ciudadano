@@ -159,20 +159,6 @@ class _HousingServicesTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppExternalLinkSection(
-            title: l10n.myDataHousingLinksTitle,
-            links: [
-              AppExternalLinkItem(
-                label: l10n.myDataHousingLinkClmHousing,
-                onTap: () => _launchExternalUrl(context, config.housingUrl),
-              ),
-              AppExternalLinkItem(
-                label: l10n.myDataHousingLinkCadastre,
-                onTap: () => _launchExternalUrl(context, config.cadastreUrl),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.space24),
-          AppExternalLinkSection(
             title: l10n.myDataHousingProceduresTitle,
             links: [
               AppExternalLinkItem(
@@ -186,6 +172,20 @@ class _HousingServicesTab extends ConsumerWidget {
               AppExternalLinkItem(
                 label: l10n.myDataHousingProcedureRentalHousingAid,
                 onTap: () => _launchExternalUrl(context, config.housingProcedure(0)),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.space24),
+          AppExternalLinkSection(
+            title: l10n.myDataHousingLinksTitle,
+            links: [
+              AppExternalLinkItem(
+                label: l10n.myDataHousingLinkClmHousing,
+                onTap: () => _launchExternalUrl(context, config.housingUrl),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataHousingLinkCadastre,
+                onTap: () => _launchExternalUrl(context, config.cadastreUrl),
               ),
             ],
           ),

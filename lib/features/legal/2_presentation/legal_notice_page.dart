@@ -55,34 +55,42 @@ class _LegalNoticePageState extends ConsumerState<LegalNoticePage> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space24,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Semantics(
-              header: true,
-              headingLevel: 1,
-              child: Text.rich(
-                TextSpan(
-                  text: 'Aviso legal (...)',
-                  style: AppTypography.h1.copyWith(color: AppColors.primary),
+      // `SafeArea` inferior y no un padding fijo: el último bloque quedaba
+      // debajo del gesto de navegación del dispositivo y el texto parecía
+      // cortado. Igual que en Accesibilidad y Protección de datos.
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          padding: const EdgeInsets.only(
+            left: AppDimensions.space16,
+            right: AppDimensions.space16,
+            top: AppDimensions.space24,
+            bottom: AppDimensions.space48,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Semantics(
+                header: true,
+                headingLevel: 1,
+                child: Text.rich(
+                  TextSpan(
+                    text: 'Aviso legal (...)',
+                    style: AppTypography.h1.copyWith(color: AppColors.primary),
+                  ),
+                  semanticsLabel: 'Aviso legal (...)',
+                  textScaler: MediaQuery.textScalerOf(context),
+                  strutStyle: StrutStyle.fromTextStyle(AppTypography.h1),
                 ),
-                semanticsLabel: 'Aviso legal (...)',
-                textScaler: MediaQuery.textScalerOf(context),
-                strutStyle: StrutStyle.fromTextStyle(AppTypography.h1),
               ),
-            ),
-            const SizedBox(height: AppDimensions.space32),
-            _LegalNoticeBody(
-              onRoyalDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),
-              onSiteTap: () => _openExternalLink('espacio_ciudadano'),
-            ),
-          ],
+              const SizedBox(height: AppDimensions.space32),
+              _LegalNoticeBody(
+                onRoyalDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),
+                onSiteTap: () => _openExternalLink('espacio_ciudadano'),
+              ),
+            ],
+          ),
         ),
       ),
     );
