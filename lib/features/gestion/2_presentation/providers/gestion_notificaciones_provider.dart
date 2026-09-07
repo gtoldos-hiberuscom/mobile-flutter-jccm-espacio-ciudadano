@@ -38,16 +38,7 @@ final class GestionNotificacionesOptimisticAcceptedNotifier extends Notifier<Map
   }
 
   void add({required final String citizenId, required final Notificacion notification}) {
-    final accepted = Notificacion(
-      id: notification.id,
-      concepto: notification.concepto,
-      procedimientoDenominacion: notification.procedimientoDenominacion,
-      fechaCaducidad: notification.fechaCaducidad,
-      procedimientoIdFicha: notification.procedimientoIdFicha,
-      unidadOrganicaNombre: notification.unidadOrganicaNombre,
-      sistemaOrigen: notification.sistemaOrigen,
-      estado: NotificacionEstado.aceptada,
-    );
+    final accepted = notification.withEstado(NotificacionEstado.aceptada);
     final key = (citizenId: citizenId, notificationId: accepted.id);
     state = {...state, key: accepted};
     _expirationTimers[key]?.cancel();
@@ -120,9 +111,15 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
   return result;
 });
 
-/// `estado` es el estado que traía el resumen del listado, o `null` si no se
-/// conocía: solo sirve de respaldo si el detalle no lo informa.
-typedef NotificacionDetalleArgs = ({int id, NotificacionEstado? estado, String? sistemaOrigen});
+/// `resumen` es el elemento del listado desde el que se abrió el detalle, o
+/// `null` si no se conocía (deep link). Solo sirve de respaldo de lo que el
+/// detalle no informe; el reparto de responsabilidades vive en
+/// [GestionNotificacionesRepository.loadNotificacion].
+///
+/// `Notificacion` implementa `==`/`hashCode`, así que vale como clave de la
+/// `family`: la instancia llega fija desde el `extra` de la ruta y no
+/// reconstruye el provider en cada rebuild.
+typedef NotificacionDetalleArgs = ({int id, Notificacion? resumen});
 
 final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>((final ref, final args) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
@@ -136,8 +133,7 @@ final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<Not
     request: () => repo.loadNotificacion(
       citizenId: citizenId,
       notificacionId: args.id,
-      fallbackEstado: args.estado,
-      sistemaOrigen: args.sistemaOrigen,
+      resumen: args.resumen,
     ),
   );
 });

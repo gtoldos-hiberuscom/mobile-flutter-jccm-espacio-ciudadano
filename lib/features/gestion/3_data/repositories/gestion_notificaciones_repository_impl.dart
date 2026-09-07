@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
@@ -44,15 +46,14 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   Future<NotificacionDetalle> loadNotificacion({
     required final String citizenId,
     required final int notificacionId,
-    final NotificacionEstado? fallbackEstado,
-    final String? sistemaOrigen,
+    final Notificacion? resumen,
   }) async {
     final Response<Object?> response;
     try {
       response = await _api.obtenerNotificacion(
         id: citizenId,
         notificacionId: notificacionId,
-        sisOrigen: sistemaOrigen,
+        sisOrigen: resumen?.sistemaOrigen,
         extra: {generatedApiDecodeStringResponseExtraKey: true},
       );
     } on DioException catch (error) {
@@ -65,7 +66,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     }
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     final body = _bodyMap(raw, notificacionId);
-    return _toDetalle(body, requestedId: notificacionId, fallbackEstado: fallbackEstado, fallbackSistema: sistemaOrigen);
+    return _toDetalle(body, requestedId: notificacionId, resumen: resumen);
   }
 
   @override
@@ -97,7 +98,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   }
 
   @override
-  Future<List<int>> downloadDocumento({
+  Future<Uint8List> downloadDocumento({
     required final String citizenId,
     required final int notificacionId,
     required final int orden,
@@ -109,7 +110,13 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       orden: orden,
       sisOrigen: sistemaOrigen,
     );
-    return response.data?.toList(growable: false) ?? const [];
+    final bytes = response.data;
+    // Un 200 sin cuerpo no es un documento vacío que merezca guardarse: es un
+    // fallo del que la pantalla tiene que avisar.
+    if (bytes == null || bytes.isEmpty) {
+      throw const FormatException('El documento llegó vacío.');
+    }
+    return bytes;
   }
 
   @override
@@ -429,8 +436,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   NotificacionDetalle _toDetalle(
     final Map<String, Object?> data, {
     required final int requestedId,
-    final NotificacionEstado? fallbackEstado,
-    final String? fallbackSistema,
+    final Notificacion? resumen,
   }) {
     final unidad = _map(data['unidadOrganica']);
     final procedimiento = _map(data['procedimientoAdministrativo']);
@@ -450,16 +456,37 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
         .map((final entry) {
           final (index, item) = entry;
           final map = _map(item);
-          final nested = _map(map?['documento']);
-          final name = _documentName(map) ?? _documentName(nested);
-          if (name == null) {
+          if (map == null) {
             return null;
           }
+          final nested = _map(map['documento']);
           final order = _int(map, 'orden') ?? index + 1;
+          final name = _documentName(map) ?? _documentName(nested);
+          if (name != null) {
+            return NotificacionDocumento(
+              orden: order,
+              nombre: name,
+              tamanoBytes: _documentSize(map, nested),
+            );
+          }
+          // Antes se descartaba todo documento sin nombre, "para no inventar
+          // nombres visibles". El payload oficial del detalle (swagger
+          // `.../notificaciones/{id}/comparecer`, ejemplo "Respuesta transición
+          // realizada") NO trae nombre, ni tamaño, ni URL: solo `orden`,
+          // `identificadorReferencia` y un `documento` con referencias
+          // internas. Con la regla vieja la sección "Documentos" salía vacía en
+          // TODAS las notificaciones aceptadas (C-30) pese a que la descarga
+          // (`GET .../documentos/{orden}`) solo necesita el orden, que sí
+          // viene. Así que se conserva con una etiqueta derivada del orden;
+          // lo que se descarta es únicamente lo que no permite descargar nada.
+          if (_int(map, 'orden') == null && nested == null && !map.containsKey('identificadorReferencia')) {
+            logger.w('[notificaciones] documento sin nombre ni referencia descartado en el detalle $requestedId (claves: ${map.keys.join(', ')})');
+            return null;
+          }
           return NotificacionDocumento(
             orden: order,
-            nombre: name,
-            tamanoBytes: _int(map, 'tamano') ?? _int(map, 'tamanoBytes') ?? _int(nested, 'tamano') ?? _int(nested, 'tamanoBytes'),
+            nombre: 'Documento $order',
+            tamanoBytes: _documentSize(map, nested),
           );
         })
         .nonNulls
@@ -474,26 +501,89 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       // El detalle se pide POR id, así que si el sobre no lo repite se conoce
       // igualmente: el respaldo es el id consultado, no un 0 fabricado.
       id: _int(data, 'id') ?? _int(data, 'idNotificacion') ?? requestedId,
-      titulo: _string(data, 'concepto') ?? _string(data, 'descripcion') ?? 'Notificación',
+      // El resumen antes del literal: si el detalle no trae concepto, la
+      // pantalla debe titularse como la tarjeta desde la que se abrió, no
+      // "Notificación".
+      titulo: _string(data, 'concepto') ?? _string(data, 'descripcion') ?? _blankToNull(resumen?.concepto) ?? 'Notificación',
       estado: switch (lecturaEstado) {
         NotificacionEstadoConocido(:final estado) => estado,
         // El detalle no informa estado: el del resumen es lo único que se sabe.
-        NotificacionEstadoAusente() => fallbackEstado,
+        NotificacionEstadoAusente() => resumen?.estado,
         // El backend SÍ declara un estado y no sabemos leerlo: eso no es "no lo
         // sé", así que el resumen no puede sustituirlo. Sin estado no hay
         // acción de comparecer ni etiqueta.
         NotificacionEstadoNoReconocido() => null,
       },
-      organismo: _string(data, 'organismo') ?? _string(unidad, 'nombre') ?? _additional(unidad, 'nombre'),
-      procedimiento: _string(data, 'procedimiento') ?? _string(procedimiento, 'idFicha') ?? _string(procedimiento, 'denominacion') ?? _additional(procedimiento, 'denominacion'),
+      organismo: _string(data, 'organismo') ?? _string(unidad, 'nombre') ?? _additional(unidad, 'nombre') ?? resumen?.unidadOrganicaNombre,
+      procedimiento: _procedimiento(data, procedimiento, requestedId: requestedId, resumen: resumen),
       expediente: _string(data, 'numeroExpediente') ?? _string(expediente, 'identificador'),
       fechaPuestaDisposicion: _date(data['fechaPuestaDisposicion'] ?? data['fecAlta']) ?? dateFor('PUESTO_A_DISPOSICION'),
-      fechaExpiracion: _date(data['fechaExpiracion'] ?? data['fechaCaducidad'] ?? data['fecCaducidad']),
+      // El listado sí informa siempre la caducidad (`NotificacionIndexaDto`);
+      // el detalle no está tipado y puede no traerla. Sin este respaldo la
+      // fila "Fecha de expiración" desaparecía del detalle (C-28).
+      fechaExpiracion: _date(data['fechaExpiracion'] ?? data['fechaCaducidad'] ?? data['fecCaducidad']) ?? resumen?.fechaCaducidad,
       fechaLectura: _date(data['fechaLectura']) ?? dateFor('ACEPTADA') ?? dateFor('RECHAZADA'),
-      sistemaOrigen: _string(data, 'sistemaOrigen') ?? _string(unidad, 'sistema') ?? fallbackSistema,
+      sistemaOrigen: _string(data, 'sistemaOrigen') ?? _string(unidad, 'sistema') ?? resumen?.sistemaOrigen,
       documentos: docs,
     );
   }
+
+  /// Resuelve el dato que la pantalla pinta como "Procedimiento".
+  ///
+  /// Orden deliberado: **primero la denominación y después el `idFicha`**. En
+  /// UAT el gateway devuelve `{denominacion: "SKA4"|"Procedimiento 7",
+  /// idFicha: null}` en todos los elementos, así que la precedencia anterior
+  /// (`idFicha` antes que `denominacion`) resolvía siempre a `null` cuando el
+  /// detalle traía el bloque en su forma plana, y con él desaparecía la fila
+  /// entera (C-31). La denominación es además lo que el diseño muestra —
+  /// notifica2 guarda ahí tanto códigos como nombres.
+  ///
+  /// Se cubren las tres formas que el contrato admite (plana, `informacionAdicional`
+  /// y clave suelta `procedimiento`, esta última tanto como cadena como como
+  /// objeto) y, si ninguna resuelve, el resumen del listado, que sí está tipado.
+  String? _procedimiento(
+    final Map<String, Object?> data,
+    final Map<String, Object?>? procedimiento, {
+    required final int requestedId,
+    final Notificacion? resumen,
+  }) {
+    final suelto = _map(data['procedimiento']);
+    final resuelto =
+        _string(procedimiento, 'denominacion') ??
+        _additional(procedimiento, 'denominacion') ??
+        _string(procedimiento, 'idFicha') ??
+        _additional(procedimiento, 'idFicha') ??
+        _string(data, 'procedimiento') ??
+        _string(suelto, 'denominacion') ??
+        _additional(suelto, 'denominacion') ??
+        _string(suelto, 'idFicha');
+    if (resuelto != null) {
+      return resuelto;
+    }
+    final delResumen = _blankToNull(resumen?.procedimientoDenominacion) ?? _blankToNull(resumen?.procedimientoIdFicha);
+    // Traza de contrato: el swagger no tipa este cuerpo y sus dos ejemplos se
+    // contradicen, así que esta línea es la única forma de saber qué envía el
+    // backend de verdad. `redactForLog` deja la estructura a la vista y
+    // enmascara los valores no listados como registrables (`idFicha` sí lo
+    // está, `denominacion` no).
+    logger.w(
+      '[notificaciones] procedimiento sin resolver en el detalle $requestedId '
+      '(bloque: ${redactForLog(procedimiento ?? suelto)}) — '
+      '${delResumen != null ? 'se usa el del resumen' : 'sin respaldo del resumen'}',
+    );
+    return delResumen;
+  }
+
+  String? _blankToNull(final String? value) {
+    if (value == null) {
+      return null;
+    }
+    final trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
+  }
+
+  int? _documentSize(final Map<String, Object?>? map, final Map<String, Object?>? nested) =>
+      _int(map, 'tamano') ?? _int(map, 'tamanoBytes') ?? _int(nested, 'tamano') ?? _int(nested, 'tamanoBytes');
 
   Map<String, Object?>? _map(final Object? value) => value is Map ? _stringKeyMap(value) : null;
   List<Object?> _list(final Object? value) => value is List ? value.cast<Object?>() : const [];

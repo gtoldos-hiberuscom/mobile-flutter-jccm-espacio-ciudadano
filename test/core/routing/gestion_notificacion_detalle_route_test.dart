@@ -15,24 +15,29 @@ void main() {
       estado: NotificacionEstado.pendiente,
     );
 
-    test('monta el detalle con el estado del resumen cuando el extra lo trae', () {
+    test('monta el detalle con el resumen completo cuando el extra lo trae', () {
       final page = buildGestionNotificacionDetalle('7924', resumen);
 
       expect(
         page,
         isA<GestionNotificacionDetallePage>()
             .having((final p) => p.notificacionId, 'notificacionId', 7924)
-            .having((final p) => p.estado, 'estado', NotificacionEstado.pendiente)
-            .having((final p) => p.sistemaOrigen, 'sistemaOrigen', 'NOTIFICA'),
+            // El resumen entero, no dos campos sueltos: el repositorio también
+            // respalda procedimiento y fecha de expiración con él.
+            .having((final p) => p.resumen, 'resumen', resumen),
       );
     });
 
-    test('sin resumen (deep link, restauración) el estado viaja null, nunca inventado', () {
+    test('sin resumen (deep link, restauración) no se fabrica ningún respaldo', () {
       final page = buildGestionNotificacionDetalle('7924', null);
 
+      expect(page, isA<GestionNotificacionDetallePage>().having((final p) => p.resumen, 'resumen', isNull));
+    });
+
+    test('un extra que no es un resumen se ignora en vez de romper la pantalla', () {
       expect(
-        page,
-        isA<GestionNotificacionDetallePage>().having((final p) => p.estado, 'estado', isNull).having((final p) => p.sistemaOrigen, 'sistemaOrigen', isNull),
+        buildGestionNotificacionDetalle('7924', 'basura'),
+        isA<GestionNotificacionDetallePage>().having((final p) => p.resumen, 'resumen', isNull),
       );
     });
 

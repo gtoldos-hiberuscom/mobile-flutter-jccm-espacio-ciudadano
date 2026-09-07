@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/files/file_save.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
@@ -15,18 +17,20 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers
 class GestionNotificacionDetallePage extends ConsumerStatefulWidget {
   const GestionNotificacionDetallePage({
     required this.notificacionId,
-    required this.estado,
-    this.sistemaOrigen,
+    required this.resumen,
     super.key,
   });
 
   final int notificacionId;
 
-  /// Estado que traía el resumen del listado, o `null` si no se conocía
-  /// (pestaña "Todo", deep link). Solo se usa como respaldo mientras el detalle
-  /// carga o si el backend no informa el estado.
-  final NotificacionEstado? estado;
-  final String? sistemaOrigen;
+  /// Elemento del listado desde el que se abrió el detalle, o `null` si no se
+  /// conocía (deep link, restauración de estado).
+  ///
+  /// Lo consume el repositorio como respaldo de lo que el detalle no informe
+  /// —estado, procedimiento, fecha de expiración, organismo, sistema de
+  /// origen—, porque el listado está tipado por contrato
+  /// (`NotificacionIndexaDto`) y la respuesta del detalle no.
+  final Notificacion? resumen;
 
   @override
   ConsumerState<GestionNotificacionDetallePage> createState() => _GestionNotificacionDetallePageState();
@@ -35,9 +39,29 @@ class GestionNotificacionDetallePage extends ConsumerStatefulWidget {
 class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotificacionDetallePage> {
   bool _accepting = false;
 
+  /// Orden del documento que se está descargando, o `null` si ninguno: una
+  /// descarga a la vez, para no encadenar dos selectores nativos.
+  int? _downloadingOrden;
+
+  /// Si ya se ha comparecido en esta pantalla. Manda sobre el respaldo del
+  /// resumen y sobre el mensaje de error de la relectura.
+  bool _accepted = false;
+
+  /// Argumentos del detalle. Tras comparecer, el respaldo del resumen no puede
+  /// seguir diciendo "pendiente": si el detalle recargado no informa estado, el
+  /// repositorio aplicaría ese respaldo y la CTA resucitaría sobre una
+  /// notificación ya aceptada.
+  NotificacionDetalleArgs get _args {
+    final resumen = widget.resumen;
+    return (
+      id: widget.notificacionId,
+      resumen: _accepted ? resumen?.withEstado(NotificacionEstado.aceptada) : resumen,
+    );
+  }
+
   @override
   Widget build(final BuildContext context) {
-    final args = (id: widget.notificacionId, estado: widget.estado, sistemaOrigen: widget.sistemaOrigen);
+    final args = _args;
     final detail = ref.watch(gestionNotificacionDetalleProvider(args));
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
@@ -53,17 +77,26 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
         child: detail.when(
           loading: () => const LoadingStateWidget(),
           error: (final _, final _) => ErrorStateWidget(
-            message: 'No hemos podido cargar el detalle de la notificación.',
+            // La comparecencia ya está registrada: si lo que falla es la
+            // relectura del detalle, el mensaje no puede sugerir que la
+            // aceptación no llegó a producirse.
+            message: _accepted
+                ? 'Has aceptado la notificación, pero no hemos podido cargar el detalle actualizado.'
+                : 'No hemos podido cargar el detalle de la notificación.',
             onRetry: () => ref.invalidate(gestionNotificacionDetalleProvider(args)),
           ),
-          data: (final value) => _DetalleContent(value: value),
+          data: (final value) => _DetalleContent(
+            value: value,
+            downloadingOrden: _downloadingOrden,
+            onDownload: (final document) => _download(document, value.sistemaOrigen),
+          ),
         ),
       ),
       // La comparecencia se decide con el estado del detalle cargado, no con el
       // del resumen: en "Todo" el resumen no trae estado y la acción con
       // efectos jurídicos desaparecía de la pantalla.
       //
-      // El respaldo del resumen lo aplica el repositorio (`fallbackEstado`),
+      // El respaldo del resumen lo aplica el repositorio (ver `loadNotificacion`),
       // que es quien distingue "el detalle no informa estado" de "informa uno
       // que no sabemos leer". Repetirlo aquí con `?? widget.estado` resucitaba
       // la acción en el segundo caso, y la ofrecía con el detalle en carga o en
@@ -81,6 +114,19 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
     if (_accepting) {
       return;
     }
+    // Comparecer es irreversible y con efectos jurídicos, así que se confirma
+    // antes, igual que en la web. El diálogo es modal y no se descarta tocando
+    // fuera, de modo que no puede encadenarse con otro.
+    final confirmed = await AppAlertDialog.show(
+      context,
+      title: 'Confirmación de aceptación de notificación',
+      description: '¿Estás seguro que quieres aceptar la notificación?',
+      cancelLabel: 'No',
+      confirmLabel: 'Sí, estoy seguro',
+    );
+    if (confirmed != true || !mounted) {
+      return;
+    }
     setState(() => _accepting = true);
     // La CTA solo se ofrece con el detalle cargado y pendiente, así que su
     // valor está disponible ya: se captura ANTES de la transición. Releer el
@@ -88,8 +134,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
     // detalle invalidado y caído por un microcorte justo tras comparecer— en
     // «no hemos podido aceptar» sobre una comparecencia YA registrada, y el
     // «inténtalo de nuevo» habría repetido la transición.
-    final args = (id: widget.notificacionId, estado: widget.estado, sistemaOrigen: widget.sistemaOrigen);
-    final detail = ref.read(gestionNotificacionDetalleProvider(args)).asData?.value;
+    final detail = ref.read(gestionNotificacionDetalleProvider(_args)).asData?.value;
     try {
       final citizenId = ref.read(gestionNotificacionesTransitionCitizenIdProvider);
       if (citizenId.isEmpty) {
@@ -101,7 +146,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
             citizenId: citizenId,
             notificacionId: widget.notificacionId,
             accion: 'ACEPTAR',
-            sistemaOrigen: widget.sistemaOrigen,
+            sistemaOrigen: widget.resumen?.sistemaOrigen,
           );
 
       // A partir de aquí la comparecencia está registrada: nada de lo que
@@ -120,8 +165,9 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
                 concepto: detail.titulo,
                 procedimientoDenominacion: detail.procedimiento ?? '',
                 fechaCaducidad: detail.fechaExpiracion,
+                procedimientoIdFicha: widget.resumen?.procedimientoIdFicha,
                 unidadOrganicaNombre: detail.organismo,
-                sistemaOrigen: detail.sistemaOrigen ?? widget.sistemaOrigen,
+                sistemaOrigen: detail.sistemaOrigen ?? widget.resumen?.sistemaOrigen,
                 estado: NotificacionEstado.aceptada,
               ),
             );
@@ -136,7 +182,14 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
         message: 'Has aceptado la notificación.',
         severity: AppAlertSeverity.success,
       );
-      context.pop();
+      // Como en la web, no se vuelve al listado: la pantalla se queda y
+      // repinta el detalle ya aceptado, con su etiqueta y sus documentos —que
+      // es lo que la comparecencia desbloquea—. El respaldo del resumen pasa a
+      // "aceptada" (ver `_args`) y el invalidate fuerza la relectura aunque los
+      // args no hubieran cambiado (resumen ya desactualizado a "aceptada" con
+      // el detalle todavía en pendiente).
+      setState(() => _accepted = true);
+      ref.invalidate(gestionNotificacionDetalleProvider(_args));
     } on Object {
       if (!mounted) {
         return;
@@ -152,11 +205,77 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
       }
     }
   }
+
+  /// Descarga un documento de la notificación y lo guarda donde elija la
+  /// persona. El backend solo identifica el documento por su `orden`
+  /// (`GET .../notificaciones/{id}/documentos/{orden}`).
+  Future<void> _download(final NotificacionDocumento document, final String? sistemaOrigen) async {
+    if (_downloadingOrden != null) {
+      return;
+    }
+    setState(() => _downloadingOrden = document.orden);
+    try {
+      final citizenId = ref.read(gestionNotificacionesTransitionCitizenIdProvider);
+      if (citizenId.isEmpty) {
+        throw StateError('No hay ciudadano identificado.');
+      }
+      final bytes = await ref
+          .read(gestionNotificacionesRepositoryProvider)
+          .downloadDocumento(
+            citizenId: citizenId,
+            notificacionId: widget.notificacionId,
+            orden: document.orden,
+            sistemaOrigen: sistemaOrigen ?? widget.resumen?.sistemaOrigen,
+          );
+      if (!mounted) {
+        return;
+      }
+      final ruta = await saveBytesWithPicker(
+        bytes: bytes,
+        fileName: _documentFileName(document),
+        dialogTitle: 'Descargar documento',
+      );
+      if (!mounted || ruta == null) {
+        // `null` = selector cancelado: la persona ya sabe lo que ha hecho.
+        return;
+      }
+      AppAlertSnackbar.show(context, message: 'Documento descargado.', severity: AppAlertSeverity.success);
+    } on Object catch (error, stackTrace) {
+      // El nombre del documento es dato personal: a la traza solo van el id de
+      // la notificación y el orden.
+      logger.e('Error al descargar el documento ${document.orden} de la notificación ${widget.notificacionId}', error: error, stackTrace: stackTrace);
+      if (!mounted) {
+        return;
+      }
+      AppAlertSnackbar.show(context, message: 'No hemos podido descargar el documento. Inténtalo de nuevo.', severity: AppAlertSeverity.error);
+    } finally {
+      if (mounted) {
+        setState(() => _downloadingOrden = null);
+      }
+    }
+  }
+}
+
+/// Nombre con el que se propone guardar el documento.
+///
+/// El contrato no informa ni tipo MIME ni extensión, y los documentos de
+/// Notifica son PDF: si el nombre no trae una extensión reconocible se le
+/// añade `.pdf`. Se limpian los separadores de ruta, que romperían el guardado.
+String _documentFileName(final NotificacionDocumento document) {
+  final limpio = document.nombre.trim().replaceAll(RegExp(r'[/\\]'), '-');
+  if (limpio.isEmpty) {
+    return 'Documento_${document.orden}.pdf';
+  }
+  final punto = limpio.lastIndexOf('.');
+  final tieneExtension = punto > 0 && punto < limpio.length - 1 && RegExp(r'^[A-Za-z0-9]{1,5}$').hasMatch(limpio.substring(punto + 1));
+  return tieneExtension ? limpio : '$limpio.pdf';
 }
 
 class _DetalleContent extends StatelessWidget {
-  const _DetalleContent({required this.value});
+  const _DetalleContent({required this.value, required this.onDownload, this.downloadingOrden});
   final NotificacionDetalle value;
+  final ValueChanged<NotificacionDocumento> onDownload;
+  final int? downloadingOrden;
 
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
@@ -203,7 +322,13 @@ class _DetalleContent extends StatelessWidget {
           ),
         if (!_isPending(value.estado) && value.documentos.isNotEmpty) ...[
           const _SectionTitle('Documentos'),
-          ...value.documentos.map((final document) => _DocumentCard(document: document)),
+          ...value.documentos.map(
+            (final document) => _DocumentCard(
+              document: document,
+              downloading: downloadingOrden == document.orden,
+              onTap: downloadingOrden == null ? () => onDownload(document) : null,
+            ),
+          ),
         ],
       ],
     ),
@@ -294,53 +419,76 @@ class _DetailField extends StatelessWidget {
 }
 
 class _DocumentCard extends StatelessWidget {
-  const _DocumentCard({required this.document});
+  const _DocumentCard({required this.document, required this.downloading, this.onTap});
   final NotificacionDocumento document;
+  final bool downloading;
+
+  /// `null` mientras otra descarga está en curso: la tarjeta se sigue viendo
+  /// igual, pero no admite pulsación.
+  final VoidCallback? onTap;
+
   @override
-  Widget build(final BuildContext context) => Container(
-    width: double.infinity,
-    margin: const EdgeInsets.only(bottom: AppDimensions.space8),
-    padding: const EdgeInsets.all(AppDimensions.space16),
-    decoration: const BoxDecoration(
-      color: AppColors.surface,
-      border: Border(
-        left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
-        top: BorderSide(color: AppColors.borderBlueMutedLight),
-        right: BorderSide(color: AppColors.borderBlueMutedLight),
-        bottom: BorderSide(color: AppColors.borderBlueMutedLight),
-      ),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+  Widget build(final BuildContext context) => Semantics(
+    button: true,
+    child: InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: AppDimensions.space8),
+        padding: const EdgeInsets.all(AppDimensions.space16),
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          border: Border(
+            left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
+            top: BorderSide(color: AppColors.borderBlueMutedLight),
+            right: BorderSide(color: AppColors.borderBlueMutedLight),
+            bottom: BorderSide(color: AppColors.borderBlueMutedLight),
+          ),
+        ),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: AppDimensions.space4),
-              child: AppIcon(AppIcons.draft, color: AppColors.primary),
-            ),
-            const SizedBox(width: AppDimensions.space8),
-            Expanded(
-              child: Text(
-                document.nombre,
-                style: AppTypography.bodyBold.copyWith(
-                  color: AppColors.primary,
-                  decoration: TextDecoration.underline,
-                  decorationColor: AppColors.primary,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: AppDimensions.space4),
+                  child: AppIcon(AppIcons.draft, color: AppColors.primary),
                 ),
-              ),
+                const SizedBox(width: AppDimensions.space8),
+                Expanded(
+                  child: Text(
+                    document.nombre,
+                    style: AppTypography.bodyBold.copyWith(
+                      color: AppColors.primary,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.space8),
+                Padding(
+                  padding: const EdgeInsets.only(top: AppDimensions.space4),
+                  child: downloading
+                      ? const SizedBox(
+                          width: AppDimensions.iconMedium,
+                          height: AppDimensions.iconMedium,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                        )
+                      : const AppIcon(AppIcons.download, color: AppColors.primary),
+                ),
+              ],
             ),
+            if (document.tamanoBytes != null) ...[
+              const SizedBox(height: AppDimensions.space12),
+              Text(
+                _formatSize(document.tamanoBytes!),
+                style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
+              ),
+            ],
           ],
         ),
-        if (document.tamanoBytes != null) ...[
-          const SizedBox(height: AppDimensions.space12),
-          Text(
-            _formatSize(document.tamanoBytes!),
-            style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
-          ),
-        ],
-      ],
+      ),
     ),
   );
 }

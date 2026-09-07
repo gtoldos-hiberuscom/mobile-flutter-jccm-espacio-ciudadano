@@ -95,7 +95,7 @@ void main() {
     final container = buildContainer();
 
     await expectLater(
-      readAlive(container, gestionNotificacionDetalleProvider((id: 7924, estado: null, sistemaOrigen: null))),
+      readAlive(container, gestionNotificacionDetalleProvider((id: 7924, resumen: null))),
       throwsA(isA<ConsentRevoked>()),
     );
     expect(_revocationSignals, 1);
@@ -125,8 +125,7 @@ final class _RejectingNotificacionesRepository implements GestionNotificacionesR
   Future<NotificacionDetalle> loadNotificacion({
     required final String citizenId,
     required final int notificacionId,
-    final NotificacionEstado? fallbackEstado,
-    final String? sistemaOrigen,
+    final Notificacion? resumen,
   }) async {
     throw const AuthorizationRequiredException(statusCode: 403, path: 'notificaciones/7924');
   }

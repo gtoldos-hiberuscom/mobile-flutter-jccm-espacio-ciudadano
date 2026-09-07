@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/notificaciones_paginacion_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificacion_estado_mapper.dart';
@@ -373,8 +374,7 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: '99999999R',
         notificacionId: 7924,
-        fallbackEstado: NotificacionEstado.expirada,
-        sistemaOrigen: 'notifica2',
+        resumen: _resumen(estado: NotificacionEstado.expirada, sistemaOrigen: 'notifica2'),
       );
 
       expect(detail.id, 7924);
@@ -387,7 +387,148 @@ void main() {
       expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/notificaciones/7924');
     });
 
-    test('ignores a document that only contains technical references', () async {
+    test('el procedimiento se resuelve por denominación antes que por idFicha', () async {
+      // C-31: en UAT el gateway devuelve `idFicha: null` en todos los
+      // elementos y mete el dato en `denominacion`. Con la precedencia
+      // anterior (idFicha primero) la fila "Procedimiento" no se pintaba.
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 346307,
+              'concepto': 'Prueba 7',
+              'procedimientoAdministrativo': {'denominacion': 'CANNON/AGUA/FAMILIA_NUMEROSA-26', 'idFicha': 'JT34'},
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 346307, resumen: _resumen(id: 346307));
+
+      expect(detail.procedimiento, 'CANNON/AGUA/FAMILIA_NUMEROSA-26');
+    });
+
+    test('un procedimiento en clave suelta se lee tanto como cadena como como objeto', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {'id': 1, 'procedimiento': 'SKA4'},
+          },
+        ),
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 2,
+              // Antes se leía solo con `_string`, así que un objeto aquí se
+              // descartaba en silencio.
+              'procedimiento': {'denominacion': 'Ayudas al alquiler'},
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      expect((await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 1)).procedimiento, 'SKA4');
+      expect((await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 2)).procedimiento, 'Ayudas al alquiler');
+    });
+
+    test('sin procedimiento en el detalle se usa el del resumen, que sí está tipado', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {'id': 346307, 'concepto': 'Prueba 7', 'estado': 'PENDIENTE'},
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 346307,
+        resumen: _resumen(
+          id: 346307,
+          procedimientoDenominacion: 'Procedimiento 7',
+          fechaCaducidad: DateTime.utc(2026, 9, 6, 13, 26, 49),
+          unidadOrganicaNombre: 'UnidadOrganica 7',
+          estado: NotificacionEstado.pendiente,
+        ),
+      );
+
+      // C-31 y C-28: el detalle no está tipado por contrato y puede no traer
+      // estos campos; el listado sí los trae garantizados.
+      expect(detail.procedimiento, 'Procedimiento 7');
+      expect(detail.fechaExpiracion, DateTime.utc(2026, 9, 6, 13, 26, 49));
+      expect(detail.organismo, 'UnidadOrganica 7');
+    });
+
+    test('el respaldo del resumen no tapa lo que el detalle sí informa', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 346307,
+              'concepto': 'Concepto del detalle',
+              'fechaCaducidad': '2026-12-24T23:59:59Z',
+              'procedimientoAdministrativo': {'denominacion': 'Del detalle'},
+              'unidadOrganica': {'nombre': 'Unidad del detalle'},
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 346307,
+        resumen: _resumen(
+          id: 346307,
+          concepto: 'Concepto del resumen',
+          procedimientoDenominacion: 'Del resumen',
+          fechaCaducidad: DateTime.utc(2020),
+          unidadOrganicaNombre: 'Unidad del resumen',
+        ),
+      );
+
+      expect(detail.titulo, 'Concepto del detalle');
+      expect(detail.procedimiento, 'Del detalle');
+      expect(detail.organismo, 'Unidad del detalle');
+      expect(detail.fechaExpiracion, DateTime.parse('2026-12-24T23:59:59Z'));
+    });
+
+    test('un procedimiento en blanco no cuenta como informado, ni en el detalle ni en el resumen', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 1,
+              'procedimientoAdministrativo': {'denominacion': '   ', 'idFicha': null},
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      // `procedimientoDenominacion` es requerido en la entidad y el mapeo del
+      // listado lo deja a '' cuando el backend no lo informa: eso no puede
+      // pintarse como un procedimiento vacío en la pantalla.
+      final detail = await repository.loadNotificacion(citizenId: '99999999R', notificacionId: 1, resumen: _resumen(id: 1));
+
+      expect(detail.procedimiento, isNull);
+    });
+
+    test('conserva el documento que solo trae referencias técnicas: el orden basta para descargarlo', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
@@ -418,13 +559,19 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: '99999999R',
         notificacionId: 152,
-        fallbackEstado: NotificacionEstado.expirada,
+        resumen: _resumen(id: 152, estado: NotificacionEstado.expirada),
       );
 
-      expect(detail.documentos, isEmpty);
+      // Decisión invertida a propósito (C-30): el payload oficial del detalle
+      // no trae nombre ni tamaño, así que descartar lo que no tiene nombre
+      // dejaba la sección "Documentos" vacía en todas las aceptadas. La
+      // descarga solo necesita el `orden`, que sí viene.
+      expect(detail.documentos.single.orden, 1);
+      expect(detail.documentos.single.nombre, 'Documento 1');
+      expect(detail.documentos.single.tamanoBytes, isNull);
     });
 
-    test('ignores unnamed documents instead of inventing visible names', () async {
+    test('descarta solo el documento que no permite descargar nada', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(
           statusCode: 200,
@@ -445,10 +592,13 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: '99999999R',
         notificacionId: 152,
-        fallbackEstado: NotificacionEstado.expirada,
+        resumen: _resumen(id: 152, estado: NotificacionEstado.expirada),
       );
 
-      expect(detail.documentos, isEmpty);
+      // `{orden: 0}` es descargable (el orden es el único identificador que
+      // pide el endpoint); el mapa vacío no lo es y se descarta.
+      expect(detail.documentos.single.orden, 0);
+      expect(detail.documentos.single.nombre, 'Documento 0');
     });
 
     test('accepts a pending notification through the comparecer endpoint', () async {
@@ -856,7 +1006,7 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: 'PER9998003',
         notificacionId: 7924,
-        fallbackEstado: NotificacionEstado.pendiente,
+        resumen: _resumen(estado: NotificacionEstado.pendiente),
       );
 
       // El backend declara un estado y no sabemos leerlo: respaldarlo con el
@@ -902,13 +1052,35 @@ void main() {
       final detail = await repository.loadNotificacion(
         citizenId: '99999999R',
         notificacionId: 7924,
-        fallbackEstado: NotificacionEstado.pendiente,
+        resumen: _resumen(estado: NotificacionEstado.pendiente),
       );
 
       expect(detail.estado, NotificacionEstado.pendiente);
     });
   });
 }
+
+/// Resumen del listado tal y como llega al detalle a través del `extra` de la
+/// ruta. Solo respalda lo que el detalle no informe.
+Notificacion _resumen({
+  final int id = 7924,
+  final String concepto = '',
+  final String procedimientoDenominacion = '',
+  final String? procedimientoIdFicha,
+  final DateTime? fechaCaducidad,
+  final String? unidadOrganicaNombre,
+  final String? sistemaOrigen,
+  final NotificacionEstado? estado,
+}) => Notificacion(
+  id: id,
+  concepto: concepto,
+  procedimientoDenominacion: procedimientoDenominacion,
+  fechaCaducidad: fechaCaducidad,
+  procedimientoIdFicha: procedimientoIdFicha,
+  unidadOrganicaNombre: unidadOrganicaNombre,
+  sistemaOrigen: sistemaOrigen,
+  estado: estado,
+);
 
 /// Adaptador con una respuesta por estado del contrato: la pestaña "Todo" pide
 /// los cuatro en paralelo, así que hay que emparejar por `estado` y no por

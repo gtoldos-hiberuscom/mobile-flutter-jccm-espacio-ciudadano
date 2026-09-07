@@ -91,13 +91,13 @@ Widget buildGestionNotificacionDetalle(final String? idParameter, final Object? 
   if (id == null) {
     return const NotFoundScreen();
   }
-  // El estado del resumen solo se pasa si se conoce: la página lo usa como
-  // respaldo del que informa el detalle. Sin resumen (deep link, restauración)
-  // viaja `null`, nunca un estado inventado.
+  // El resumen del listado solo se pasa si se conoce: el repositorio lo usa
+  // como respaldo de lo que el detalle no informe (estado, procedimiento,
+  // fecha de expiración, sistema de origen). Sin resumen (deep link,
+  // restauración) viaja `null`, nunca un dato inventado.
   return GestionNotificacionDetallePage(
     notificacionId: id,
-    estado: extra is Notificacion ? extra.estado : null,
-    sistemaOrigen: extra is Notificacion ? extra.sistemaOrigen : null,
+    resumen: extra is Notificacion ? extra : null,
   );
 }
 
