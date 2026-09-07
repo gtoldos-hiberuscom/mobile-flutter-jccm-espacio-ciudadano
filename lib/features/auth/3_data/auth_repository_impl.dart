@@ -15,6 +15,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<AuthorizationTokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final bool ephemeralSession = true,
   }) async {
     try {
       // `prompt=login` and `max_age=0` are sent on every attempt so the
@@ -31,10 +32,14 @@ final class AuthRepositoryImpl implements AuthRepository {
           scopes: scopes,
           promptValues: const [Prompt.login, Prompt.selectAccount],
           additionalParameters: const {'max_age': '0'},
-          // iOS/macOS only: ephemeral ASWebAuthenticationSession so no SSO
-          // cookies are shared with (or persisted between) login attempts.
-          // Android (Custom Tabs) ignores this value.
-          externalUserAgent: ExternalUserAgent.ephemeralAsWebAuthenticationSession,
+          // Ephemeral: isolated ASWebAuthenticationSession on iOS/macOS and
+          // Ephemeral Custom Tab on Android (vendored fork). On Android the
+          // fork aborts with ephemeral_browsing_unavailable rather than
+          // silently sharing the Chrome cookie jar; the caller may then retry
+          // with ephemeralSession=false (degraded, user-visible warning).
+          externalUserAgent: ephemeralSession
+              ? ExternalUserAgent.ephemeralAsWebAuthenticationSession
+              : ExternalUserAgent.asWebAuthenticationSession,
         ),
       );
     } on FlutterAppAuthUserCancelledException catch (error, stackTrace) {
@@ -93,6 +98,7 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,
+    final bool ephemeralSession = true,
   }) async {
     _requireNotBlank(idToken, 'idToken');
 
@@ -105,8 +111,11 @@ final class AuthRepositoryImpl implements AuthRepository {
           additionalParameters: {
             'client_id': _config.ssoClientId,
           },
-          // Match the login flow: ephemeral session on iOS/macOS.
-          externalUserAgent: ExternalUserAgent.ephemeralAsWebAuthenticationSession,
+          // Match the login flow: ephemeral session unless the caller already
+          // degraded because the device browser cannot provide one.
+          externalUserAgent: ephemeralSession
+              ? ExternalUserAgent.ephemeralAsWebAuthenticationSession
+              : ExternalUserAgent.asWebAuthenticationSession,
         ),
       );
     } on FlutterAppAuthUserCancelledException {
@@ -156,6 +165,13 @@ final class AuthRepositoryImpl implements AuthRepository {
   static AuthException _mapPlatformException(
     final FlutterAppAuthPlatformException error,
   ) {
+    // Raised by the vendored Android fork BEFORE opening any browser when an
+    // ephemeral session was requested but the selected browser cannot provide
+    // one. Typed so the use case can retry with a shared session + warning.
+    if (error.code == 'ephemeral_browsing_unavailable') {
+      return AuthException.ephemeralUnavailable(cause: error);
+    }
+
     final details = error.platformErrorDetails;
     final oauthError = details.error?.trim();
     final description = details.errorDescription?.trim();

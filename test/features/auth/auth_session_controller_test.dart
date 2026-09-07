@@ -66,12 +66,14 @@ final class FakeAuthRepository implements AuthRepository {
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final bool ephemeralSession = true,
   }) => throw UnimplementedError();
 
   @override
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,
+    final bool ephemeralSession = true,
   }) => throw UnimplementedError();
 }
 
