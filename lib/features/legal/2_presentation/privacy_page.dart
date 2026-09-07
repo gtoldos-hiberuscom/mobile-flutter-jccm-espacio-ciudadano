@@ -157,7 +157,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
             ),
             if (!fromHome)
               AppStickyBar(
-                type: AppStickyBarType.dicotomy,
+                type: AppStickyBarType.vertical,
                 secondaryLabel: l10n.consentRejectButton,
                 secondaryHierarchy: AppButtonHierarchy.tertiary,
                 secondaryLeadingIcon: AppIcons.cancel,

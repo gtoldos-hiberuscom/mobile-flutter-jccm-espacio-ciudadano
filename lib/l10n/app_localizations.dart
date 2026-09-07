@@ -8129,7 +8129,7 @@ abstract class AppLocalizations {
   /// Home — descripción de la tarjeta de próximas citas en Mis novedades.
   ///
   /// In es, this message translates to:
-  /// **'Revisa tus citas que tienes agendadas próximamente'**
+  /// **'Consulta tus próximas citas y eventos'**
   String get homeNewsAppointmentsDescription;
 
   /// Home — etiqueta de tarjeta de Mis novedades con contador de elementos.
@@ -8609,7 +8609,7 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo introductorio del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
+  /// **'La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
   String get privacyResponsibleIntro;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
@@ -8657,7 +8657,7 @@ abstract class AppLocalizations {
   /// Protección de datos — bloque con la dirección postal y el correo del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\nDirección de correo electrónico:\nvicealyca@jccm.es'**
+  /// **'Agencia de Transformación Digital\nEdificio CEMAR, Plaza de Grecia, 1, 45071 Toledo\nDirección de correo electrónico:\ndirecciongerenciaatd@jccm.es'**
   String get privacyResponsibleContactAddressValue;
 
   /// Protección de datos — título de la sección de finalidad del tratamiento.

@@ -5555,7 +5555,7 @@
   "@homeNewsAppointmentsTitle": {
     "description": "Home — etiqueta de la tarjeta de próximas citas en Mis novedades."
   },
-  "homeNewsAppointmentsDescription": "Revisa tus citas que tienes agendadas próximamente",
+  "homeNewsAppointmentsDescription": "Consulta tus próximas citas y eventos",
   "@homeNewsAppointmentsDescription": {
     "description": "Home — descripción de la tarjeta de próximas citas en Mis novedades."
   },
@@ -5893,7 +5893,7 @@
   "@privacyResponsibleTitle": {
     "description": "Protección de datos — título de la sección del responsable del tratamiento."
   },
-  "privacyResponsibleIntro": "La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:",
+  "privacyResponsibleIntro": "La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:",
   "@privacyResponsibleIntro": {
     "description": "Protección de datos — párrafo introductorio del responsable del tratamiento."
   },
@@ -5925,7 +5925,7 @@
   "@privacyResponsibleContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea)."
   },
-  "privacyResponsibleContactAddressValue": "Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\nDirección de correo electrónico:\nvicealyca@jccm.es",
+  "privacyResponsibleContactAddressValue": "Agencia de Transformación Digital\nEdificio CEMAR, Plaza de Grecia, 1, 45071 Toledo\nDirección de correo electrónico:\ndirecciongerenciaatd@jccm.es",
   "@privacyResponsibleContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal y el correo del responsable."
   },

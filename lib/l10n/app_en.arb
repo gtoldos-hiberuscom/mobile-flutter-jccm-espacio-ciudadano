@@ -5549,7 +5549,7 @@
   "@homeNewsAppointmentsTitle": {
     "description": "Home — label of the upcoming appointments card in My updates."
   },
-  "homeNewsAppointmentsDescription": "Review the appointments you have scheduled soon",
+  "homeNewsAppointmentsDescription": "Check your upcoming appointments and events",
   "@homeNewsAppointmentsDescription": {
     "description": "Home — description of the upcoming appointments card in My updates."
   },
@@ -5887,7 +5887,7 @@
   "@privacyResponsibleTitle": {
     "description": "Privacy page — heading of the data controller section."
   },
-  "privacyResponsibleIntro": "The Viceconsejería de Administración Local y Coordinación Administrativa (Vice-Ministry of Local Administration and Administrative Coordination) is the controller of the data processed for the services provided directly through Espacio Ciudadano, which are the following:",
+  "privacyResponsibleIntro": "The Digital Transformation Agency is the controller of the data processed for the services provided directly through Espacio Ciudadano, which are the following:",
   "@privacyResponsibleIntro": {
     "description": "Privacy page — introductory paragraph of the data controller section."
   },
@@ -5919,7 +5919,7 @@
   "@privacyResponsibleContactAddressLabel": {
     "description": "Privacy page — bold label for the controller's postal address (ends with a line break)."
   },
-  "privacyResponsibleContactAddressValue": "Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\nEmail address:\nvicealyca@jccm.es",
+  "privacyResponsibleContactAddressValue": "Digital Transformation Agency\nCEMAR Building, Plaza de Grecia, 1, 45071 Toledo\nEmail address:\ndirecciongerenciaatd@jccm.es",
   "@privacyResponsibleContactAddressValue": {
     "description": "Privacy page — block with the controller's postal address and email."
   },

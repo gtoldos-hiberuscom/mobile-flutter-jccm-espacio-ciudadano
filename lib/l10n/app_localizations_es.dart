@@ -4273,7 +4273,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNewsAppointmentsTitle => 'Próximas citas';
 
   @override
-  String get homeNewsAppointmentsDescription => 'Revisa tus citas que tienes agendadas próximamente';
+  String get homeNewsAppointmentsDescription => 'Consulta tus próximas citas y eventos';
 
   @override
   String homeNewsLabelWithCount(String label, int count) {
@@ -4519,7 +4519,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyResponsibleTitle => '¿Quién es el responsable del tratamiento?';
 
   @override
-  String get privacyResponsibleIntro => 'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
+  String get privacyResponsibleIntro => 'La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
 
   @override
   String get privacyResponsibleItemProfile => 'Sección de perfil usuario';
@@ -4543,7 +4543,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyResponsibleContactAddressLabel => 'Dirección Postal:\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\nDirección de correo electrónico:\nvicealyca@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Agencia de Transformación Digital\nEdificio CEMAR, Plaza de Grecia, 1, 45071 Toledo\nDirección de correo electrónico:\ndirecciongerenciaatd@jccm.es';
 
   @override
   String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad del tratamiento?';

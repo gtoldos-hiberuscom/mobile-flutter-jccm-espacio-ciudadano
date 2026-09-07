@@ -4272,7 +4272,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNewsAppointmentsTitle => 'Upcoming appointments';
 
   @override
-  String get homeNewsAppointmentsDescription => 'Review the appointments you have scheduled soon';
+  String get homeNewsAppointmentsDescription => 'Check your upcoming appointments and events';
 
   @override
   String homeNewsLabelWithCount(String label, int count) {
@@ -4518,7 +4518,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyResponsibleTitle => 'Who is the data controller?';
 
   @override
-  String get privacyResponsibleIntro => 'The Viceconsejería de Administración Local y Coordinación Administrativa (Vice-Ministry of Local Administration and Administrative Coordination) is the controller of the data processed for the services provided directly through Espacio Ciudadano, which are the following:';
+  String get privacyResponsibleIntro => 'The Digital Transformation Agency is the controller of the data processed for the services provided directly through Espacio Ciudadano, which are the following:';
 
   @override
   String get privacyResponsibleItemProfile => 'User profile section';
@@ -4542,7 +4542,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyResponsibleContactAddressLabel => 'Postal Address:\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\nEmail address:\nvicealyca@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Digital Transformation Agency\nCEMAR Building, Plaza de Grecia, 1, 45071 Toledo\nEmail address:\ndirecciongerenciaatd@jccm.es';
 
   @override
   String get privacyPurposeTitle => 'What is the name and purpose of the processing?';

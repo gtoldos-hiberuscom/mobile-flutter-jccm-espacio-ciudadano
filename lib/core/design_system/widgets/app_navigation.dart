@@ -854,15 +854,21 @@ class AppSimpleNavCard extends StatelessWidget {
 class AppQuickAccessCard extends StatelessWidget {
   const AppQuickAccessCard({
     required this.label,
-    required this.icon,
     required this.onTap,
     super.key,
+    this.icon,
+    this.iconAsset,
     this.semanticLabel,
   }) : assert(label != '', 'label must not be empty'),
+       assert(
+         (icon == null) != (iconAsset == null),
+         'Provide exactly one of icon or iconAsset',
+       ),
        assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final String? iconAsset;
   final VoidCallback? onTap;
   final String? semanticLabel;
 
@@ -895,11 +901,17 @@ class AppQuickAccessCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
                     ),
                     child: Center(
-                      child: AppIcon(
-                        icon,
-                        size: 40,
-                        color: AppColors.primary,
-                      ),
+                      child: iconAsset == null
+                          ? AppIcon(
+                              icon!,
+                              size: 40,
+                              color: AppColors.primary,
+                            )
+                          : AppSvgIcon(
+                              iconAsset!,
+                              size: 32,
+                              color: AppColors.primary,
+                            ),
                     ),
                   ),
                 ),

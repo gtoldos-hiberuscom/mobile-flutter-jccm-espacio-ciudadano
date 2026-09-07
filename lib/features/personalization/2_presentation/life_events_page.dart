@@ -10,7 +10,6 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_info_sheet.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
@@ -107,20 +106,6 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
               context.go(widget.returnTo);
             }
           },
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.info_outline),
-              // Estaba con `onPressed: () {}`: el botón se pintaba y no hacía
-              // nada. Muestra la explicación de para qué sirven los hechos
-              // vitales, que ya existía como copy sin usar.
-              onPressed: () => AppInfoSheet.show(
-                context: context,
-                title: l10n.lifeEventsTitle,
-                bodyText: l10n.lifeEventsHeaderDescription,
-              ),
-              tooltip: l10n.a11yInformation,
-            ),
-          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

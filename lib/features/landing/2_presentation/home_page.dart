@@ -432,12 +432,12 @@ class _QuickAccessGrid extends StatelessWidget {
     final items = [
       _QuickAccessItem(
         label: l10n.myDataHealthTitle,
-        icon: AppIcons.favorite,
+        iconAsset: AppIconAssets.heartCheck,
         route: Routes.myDataHealth,
       ),
       _QuickAccessItem(
         label: l10n.myDataSocialWelfareTitle,
-        icon: AppIcons.diversity,
+        iconAsset: AppIconAssets.personCelebrate,
         route: Routes.myDataSocialWelfare,
       ),
       _QuickAccessItem(
@@ -476,17 +476,20 @@ class _QuickAccessGrid extends StatelessWidget {
         return AppQuickAccessCard(
           label: item.label,
           icon: item.icon,
+          iconAsset: item.iconAsset,
           onTap: () {
             final route = item.route;
             if (route == null) {
               onComingSoon();
               return;
             }
-            context.go(
-              Uri(
-                path: route,
-                queryParameters: const {'from': 'home'},
-              ).toString(),
+            unawaited(
+              context.push(
+                Uri(
+                  path: route,
+                  queryParameters: const {'from': 'home'},
+                ).toString(),
+              ),
             );
           },
         );
@@ -624,11 +627,16 @@ String _formatShortDate(final DateTime date) {
 class _QuickAccessItem {
   const _QuickAccessItem({
     required this.label,
-    required this.icon,
+    this.icon,
+    this.iconAsset,
     this.route,
-  });
+  }) : assert(
+         (icon == null) != (iconAsset == null),
+         'Provide exactly one of icon or iconAsset',
+       );
 
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final String? iconAsset;
   final String? route;
 }
