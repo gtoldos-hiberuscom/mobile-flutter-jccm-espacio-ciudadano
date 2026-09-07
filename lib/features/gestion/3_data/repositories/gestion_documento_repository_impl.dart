@@ -126,6 +126,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final String documentNumber,
     required final Expediente expediente,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async {
     // Bypass deliberado del cliente generado para este campo: el modelo
     // generado declara `datosprocedimiento` como JsonObject no-nulo (no
@@ -155,6 +156,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/expedientes/${Uri.encodeComponent(idUnico)}/ficheros/iniciar',
         data: body,
         options: Options(contentType: Headers.jsonContentType),
+        cancelToken: cancelToken,
       );
       _logEnvelope('inicproc', response.statusCode, response.data);
       responseBody = _asMap(_decode(response.data));

@@ -39,6 +39,10 @@ abstract interface class GestionDocumentoRepository {
   /// aporta como interesado y `identificacionrep` toma el propio
   /// [documentNumber] (comportamiento existente).
   ///
+  /// [cancelToken] aborta la apertura: la dispara la selección del primer
+  /// fichero, así que abandonar la pantalla acto seguido no debe dejar la
+  /// petición colgada abriendo una transacción que nadie va a cerrar.
+  ///
   /// **No verificado contra backend real.**
   Future<InicioProcedimientoResultado> iniciarProcedimiento({
     required final String citizenId,
@@ -46,6 +50,7 @@ abstract interface class GestionDocumentoRepository {
     required final String documentNumber,
     required final Expediente expediente,
     final Representante? representante,
+    final CancelToken? cancelToken,
   });
 
   /// Cierra la transacción abierta por [iniciarProcedimiento] una vez

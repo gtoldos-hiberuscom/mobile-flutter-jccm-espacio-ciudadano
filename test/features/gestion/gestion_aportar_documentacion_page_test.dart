@@ -21,45 +21,30 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_i
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _registrarLabel = 'Registrar documentos aportados';
+const _tercero = TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R');
 
-/// El botón "Registrar" de la barra inferior, localizado por tipo: mientras la
-/// operación está en curso `AppButton` sustituye el label por el spinner, así
-/// que `find.text` no sirve para un segundo tap.
-final Finder _registrarButton = find.byType(AppButton).last;
+/// Clave de la familia: la misma con la que la página consulta el detalle.
+const ExpedienteDetailKey _key = (numexp: 'EXP-1', tercero: _tercero);
 
-/// Bombea con espera real (dentro de `runAsync` los timers son de verdad)
-/// hasta que se cumple [condicion].
-///
-/// Siempre da al menos una vuelta: la condición puede cumplirse ya durante el
-/// `tap` (que bombea por dentro) y hace falta el frame para ver el árbol
-/// repintado.
-Future<void> pumpHasta(final WidgetTester tester, final bool Function() condicion, {final int vueltas = 60}) async {
-  for (var i = 0; i < vueltas; i++) {
-    await Future<void>.delayed(const Duration(milliseconds: 10));
-    await tester.pump();
-    if (condicion()) {
-      return;
-    }
-  }
-}
+final _provider = gestionAportarDocumentacionProvider(_key);
 
-/// Pulsa "Registrar" y deja correr el flujo completo.
+/// Deja correr el flujo real hasta que se cumple [condicion].
 ///
 /// Va dentro de `runAsync` porque la subida lee el fichero de disco: con el
-/// reloj falso de `testWidgets` esa E/S real no completa nunca. Y los pumps
-/// son acotados en vez de `pumpAndSettle` porque mientras se sube hay
-/// indicadores de progreso animados, que no dejan quieto el árbol.
-Future<void> tapRegistrar(final WidgetTester tester) async {
+/// reloj falso de `testWidgets` esa E/S real no completa nunca. Los pumps son
+/// acotados en vez de `pumpAndSettle` porque mientras se sube hay indicadores
+/// de progreso animados, que no dejan quieto el árbol. El pump final, ya con
+/// reloj falso, es el que deja entrar el snackbar.
+Future<void> esperar(final WidgetTester tester, final bool Function() condicion, {final int vueltas = 80}) async {
   await tester.runAsync(() async {
-    await tester.tap(find.text(_registrarLabel));
-    for (var i = 0; i < 30; i++) {
-      // Espera real (dentro de `runAsync` los timers son de verdad) para que
-      // la lectura del fichero y el resto de la cadena async progresen.
+    for (var i = 0; i < vueltas; i++) {
       await Future<void>.delayed(const Duration(milliseconds: 10));
       await tester.pump();
+      if (condicion()) {
+        return;
+      }
     }
   });
-  // Un frame más ya con reloj falso para que entre el snackbar.
   await tester.pump(const Duration(milliseconds: 300));
 }
 
@@ -94,7 +79,7 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    repository.notifier = container.read(gestionAportarDocumentacionProvider.notifier);
+    repository.notifier = container.read(_provider.notifier);
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -106,7 +91,7 @@ void main() {
           home: GestionAportarDocumentacionPage(
             numexp: 'EXP-1',
             // Evita depender del JWT: el documento del titular sale de aquí.
-            tercero: TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R'),
+            tercero: _tercero,
           ),
         ),
       ),
@@ -114,120 +99,222 @@ void main() {
     return container;
   }
 
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'cancelar un fichero a mitad de subida no registra la aportación ni tira los ya subidos', (final tester) async {
-    final primero = file('primero.pdf');
-    final segundo = file('segundo.pdf');
-    final repository = _FakeDocumentoRepository(cancelPath: segundo.path);
-    final container = await pumpPage(tester, repository);
+  /// El botón "Registrar" está pintado y pulsable.
+  bool registrarHabilitado(final WidgetTester tester) => tester.widget<AppButton>(find.widgetWithText(AppButton, _registrarLabel)).onPressed != null;
 
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo]);
-    await tester.pump();
-
-    await tapRegistrar(tester);
-
-    // El fichero cancelado se queda sin hash: registrar en ese estado
-    // reventaba con un TypeError sobre `hash!`, que el catch convertía en
-    // "no hemos podido finalizar" y marcaba como erróneos incluso los
-    // ficheros ya subidos.
-    expect(repository.registrarCalls, 0);
-    expect(find.text('Falta algún fichero por enviar. Al registrar de nuevo se enviarán todos otra vez.'), findsOneWidget);
-
-    final archivos = container.read(gestionAportarDocumentacionProvider);
-    expect(archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.noEnviado));
-    expect(archivos.map((final a) => a.hash), everyElement(isNull));
-  });
-
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'registra la aportación cuando todos los ficheros se suben', (final tester) async {
-    final primero = file('primero.pdf');
-    final segundo = file('segundo.pdf');
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'seleccionar arranca la subida sin pulsar Registrar', (final tester) async {
     final repository = _FakeDocumentoRepository();
     final container = await pumpPage(tester, repository);
 
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo]);
-    await tester.pump();
+    container.read(_provider.notifier).addArchivos([file('primero.pdf'), file('segundo.pdf')]);
+    await esperar(tester, () => repository.subidas.length == 2);
 
-    await tapRegistrar(tester);
+    // C-37: en la web la carga empieza al seleccionar, no al registrar.
+    expect(repository.iniciarCalls, 1);
+    expect(repository.subidas, ['primero.pdf', 'segundo.pdf']);
+    expect(repository.registrarCalls, 0);
+
+    final lote = container.read(_provider);
+    expect(lote.archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.completado));
+    expect(lote.todosSubidos, isTrue);
+    expect(registrarHabilitado(tester), isTrue);
+  });
+
+  testWidgets('el botón de registrar no aparece hasta que hay documentos', (final tester) async {
+    final container = await pumpPage(tester, _FakeDocumentoRepository());
+
+    // C-36. Como en la web: sin documentos solo se ofrece seleccionarlos.
+    expect(find.text(_registrarLabel), findsNothing);
+    expect(find.text('Seleccionar documentos'), findsOneWidget);
+
+    container.read(_provider.notifier).addArchivos([file('primero.pdf')]);
+    // Con duración: deja correr también lo que Riverpod agenda al leer el
+    // provider `autoDispose`, que si no queda como timer pendiente.
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text(_registrarLabel), findsOneWidget);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'registra la aportación con los ficheros subidos', (final tester) async {
+    final repository = _FakeDocumentoRepository();
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([file('primero.pdf'), file('segundo.pdf')]);
+    await esperar(tester, () => container.read(_provider).todosSubidos);
+
+    await tester.tap(find.text(_registrarLabel));
+    await esperar(tester, () => repository.registrarCalls == 1);
 
     expect(repository.registrarCalls, 1);
     expect(repository.registrados.map((final d) => d.hash), ['hash-primero.pdf', 'hash-segundo.pdf']);
   });
 
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fichero que falla al subir tampoco registra y deja todo listo para reintentar', (final tester) async {
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'cancelar la subida de un fichero solo retira ese fichero', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final tercero = file('tercero.pdf');
+    // Reproduce la X de la tarjeta sobre el fichero que está subiendo.
+    final repository = _FakeDocumentoRepository(cancelPath: segundo.path);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero, segundo, tercero]);
+    await esperar(tester, () => container.read(_provider).archivos.length == 2 && container.read(_provider).todosSubidos);
+
+    // C-38: cancelaba TODO el lote y remataba con un mensaje de error.
+    final lote = container.read(_provider);
+    expect(lote.archivos.map((final a) => a.path), [primero.path, tercero.path]);
+    expect(lote.archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.completado));
+    expect(find.text('Algunos ficheros no se han podido enviar. Puedes reintentarlo.'), findsNothing);
+    expect(find.text('Falta algún fichero por enviar. Al registrar de nuevo se enviarán todos otra vez.'), findsNothing);
+    expect(registrarHabilitado(tester), isTrue);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fichero que falla no corta la cola y bloquea el registro', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final tercero = file('tercero.pdf');
+    // El que falla va en medio: antes cortaba el lote y los siguientes no se
+    // subían nunca.
+    final repository = _FakeDocumentoRepository(failPath: segundo.path);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero, segundo, tercero]);
+    await esperar(tester, () => repository.subidas.length == 3);
+
+    expect(repository.subidas, ['primero.pdf', 'segundo.pdf', 'tercero.pdf']);
+    final estados = container.read(_provider).archivos.map((final a) => a.estado).toList();
+    expect(estados, [AportacionArchivoEstado.completado, AportacionArchivoEstado.error, AportacionArchivoEstado.completado]);
+    // La tarjeta en rojo es el aviso: no se añade snackbar por fichero.
+    expect(find.text('Reintentar'), findsOneWidget);
+    expect(registrarHabilitado(tester), isFalse);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'Reintentar vuelve a subir solo ese fichero', (final tester) async {
     final primero = file('primero.pdf');
     final segundo = file('segundo.pdf');
     final repository = _FakeDocumentoRepository(failPath: segundo.path);
     final container = await pumpPage(tester, repository);
 
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo]);
-    await tester.pump();
+    container.read(_provider.notifier).addArchivos([primero, segundo]);
+    await esperar(tester, () => repository.subidas.length == 2);
+    expect(container.read(_provider).archivos.last.estado, AportacionArchivoEstado.error);
 
-    await tapRegistrar(tester);
+    repository.failPath = null;
+    await tester.tap(find.text('Reintentar'));
+    await esperar(tester, () => container.read(_provider).todosSubidos);
 
-    expect(repository.registrarCalls, 0);
-    expect(find.text('Algunos ficheros no se han podido enviar. Puedes reintentarlo.'), findsOneWidget);
-
-    final archivos = container.read(gestionAportarDocumentacionProvider);
-    expect(archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.noEnviado));
-    expect(archivos.map((final a) => a.hash), everyElement(isNull));
+    // C-40: reintentar rearrancaba la carga de TODOS los ficheros. Ahora la
+    // transacción sigue abierta, así que el hash del hermano sigue valiendo.
+    expect(repository.subidas, ['primero.pdf', 'segundo.pdf', 'segundo.pdf']);
+    expect(repository.iniciarCalls, 1);
+    expect(container.read(_provider).archivos.first.hash, 'hash-primero.pdf');
   });
 
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un segundo tap en Registrar durante inicproc no abre una segunda transacción', (final tester) async {
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fichero en error se puede quitar del lote', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final repository = _FakeDocumentoRepository(failPath: segundo.path);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero, segundo]);
+    await esperar(tester, () => repository.subidas.length == 2);
+
+    // C-39: antes solo se ofrecía "Reintentar" y el fichero que falla se
+    // quedaba clavado en el lote.
+    await tester.tap(find.byTooltip('Eliminar archivo'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(container.read(_provider).archivos.map((final a) => a.path), [primero.path]);
+    expect(registrarHabilitado(tester), isTrue);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'quitar un fichero ya subido no toca a los demás', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final repository = _FakeDocumentoRepository();
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero, segundo]);
+    await esperar(tester, () => container.read(_provider).todosSubidos);
+
+    await tester.tap(find.widgetWithText(TextButton, 'Eliminar').first);
+    await tester.pump(const Duration(milliseconds: 300));
+
+    // C-41: antes no hacía nada; luego abandonaba el intento entero. Ahora el
+    // adjunto solo desaparece de `documentos` y el hermano conserva su hash.
+    final lote = container.read(_provider);
+    expect(lote.archivos.map((final a) => a.path), [segundo.path]);
+    expect(lote.archivos.single.hash, 'hash-segundo.pdf');
+    expect(lote.archivos.single.estado, AportacionArchivoEstado.completado);
+    expect(registrarHabilitado(tester), isTrue);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'dos selecciones seguidas abren una sola transacción', (final tester) async {
     final gate = Completer<void>();
     final repository = _FakeDocumentoRepository()..inicioGate = gate;
     final container = await pumpPage(tester, repository);
 
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf')]);
-    await tester.pump();
+    container.read(_provider.notifier).addArchivos([file('primero.pdf')]);
+    await esperar(tester, () => repository.iniciarCalls == 1, vueltas: 20);
 
-    await tester.runAsync(() async {
-      await tester.tap(find.text(_registrarLabel));
-      await pumpHasta(tester, () => repository.iniciarCalls == 1);
+    // Segunda selección con la apertura todavía en vuelo: dos `idunico`
+    // entrelazados corromperían los hashes, porque cada uno solo vale dentro
+    // del suyo (AP-1).
+    container.read(_provider.notifier).addArchivos([file('segundo.pdf')]);
+    gate.complete();
+    await esperar(tester, () => container.read(_provider).todosSubidos);
 
-      // La ventana de AP-1: la transacción ya está abierta y todavía no hay
-      // ningún fichero `enviando`, que era lo único que apagaba el botón.
-      expect(repository.iniciarCalls, 1);
-      expect(find.text(_registrarLabel), findsNothing);
-
-      await tester.tap(_registrarButton, warnIfMissed: false);
-      await tester.pump();
-      gate.complete();
-      await pumpHasta(tester, () => repository.registrarCalls == 1);
-    });
-    await tester.pump(const Duration(milliseconds: 300));
-
-    // Dos `idunico` entrelazados corrompen los hashes: cada uno solo vale
-    // dentro del suyo.
     expect(repository.iniciarCalls, 1);
-    expect(repository.registrarCalls, 1);
-    expect(repository.registrados, hasLength(1));
+    expect(repository.subidas, ['primero.pdf', 'segundo.pdf']);
   });
 
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'Reintentar durante un intento en curso tampoco abre otra transacción', (final tester) async {
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un cierre fallido conserva los hashes y reintenta solo el cierre', (final tester) async {
     final repository = _FakeDocumentoRepository(registrarFalla: true);
     final container = await pumpPage(tester, repository);
 
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf')]);
-    await tester.pump();
+    container.read(_provider.notifier).addArchivos([file('primero.pdf')]);
+    await esperar(tester, () => container.read(_provider).todosSubidos);
 
-    await tapRegistrar(tester);
-    expect(repository.iniciarCalls, 1);
-    expect(container.read(gestionAportarDocumentacionProvider).single.estado, AportacionArchivoEstado.error);
+    await tester.tap(find.text(_registrarLabel));
+    await esperar(tester, () => repository.registrarCalls == 1);
 
-    // Segundo intento, esta vez retenido en `inicproc` para pulsar Reintentar
-    // mientras corre.
-    final gate = Completer<void>();
-    repository.inicioGate = gate;
-    await tester.runAsync(() async {
-      await tester.tap(find.text('Reintentar'));
-      await pumpHasta(tester, () => repository.iniciarCalls == 2);
-      await tester.tap(find.text('Reintentar'), warnIfMissed: false);
-      await tester.pump();
-      gate.complete();
-      await pumpHasta(tester, () => repository.registrarCalls == 2);
-    });
+    expect(find.text('Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.'), findsOneWidget);
+    // La transacción sigue abierta: el hash no ha muerto.
+    expect(container.read(_provider).archivos.single.hash, 'hash-primero.pdf');
+    expect(registrarHabilitado(tester), isTrue);
+
+    // El reintento se dispara por el mismo camino que el botón —que ya se ha
+    // comprobado habilitado— en vez de con un segundo tap: el snackbar tapa la
+    // barra inferior y su plazo de 5 s nació dentro de `runAsync`, así que es
+    // un timer real que el reloj falso no vence y el tap no llegaría al botón.
+    repository.registrarFalla = false;
+    await container.read(_provider.notifier).registrar();
     await tester.pump(const Duration(milliseconds: 300));
 
+    // Se reintenta solo el cierre: no se vuelve a subir nada.
+    expect(repository.registrarCalls, 2);
+    expect(repository.subidas, ['primero.pdf']);
+    expect(repository.iniciarCalls, 1);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fallo al abrir la transacción avisa y deja los ficheros pendientes', (final tester) async {
+    final repository = _FakeDocumentoRepository(iniciarFalla: true);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([file('primero.pdf')]);
+    await esperar(tester, () => repository.iniciarCalls == 1);
+
+    // Ninguna tarjeta explica este fallo por sí sola, así que sí lleva aviso.
+    expect(find.text('No hemos podido registrar la documentación. Inténtalo de nuevo.'), findsOneWidget);
+    expect(container.read(_provider).archivos.single.estado, AportacionArchivoEstado.noEnviado);
+    expect(repository.subidas, isEmpty);
+
+    repository.iniciarFalla = false;
+    container.read(_provider.notifier).reintentarArchivo(container.read(_provider).archivos.single.path);
+    await esperar(tester, () => container.read(_provider).todosSubidos);
+
     expect(repository.iniciarCalls, 2);
+    expect(repository.subidas, ['primero.pdf']);
   });
 
   testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'borrar un fichero de la cola mientras sube otro no lo sube al buzón', (final tester) async {
@@ -238,22 +325,19 @@ void main() {
     final repository = _FakeDocumentoRepository(
       onUpload: (final nombre) async {
         if (nombre == 'primero.pdf') {
-          container.read(gestionAportarDocumentacionProvider.notifier).removeArchivo(tercero.path);
+          container.read(_provider.notifier).removeArchivo(tercero.path);
         }
       },
     );
     container = await pumpPage(tester, repository);
 
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo, tercero]);
-    await tester.pump();
+    container.read(_provider.notifier).addArchivos([primero, segundo, tercero]);
+    await esperar(tester, () => container.read(_provider).todosSubidos);
 
-    await tapRegistrar(tester);
-
-    // El bucle iteraba la foto de la lista, así que el fichero retirado se
-    // subía igualmente al buzón — y podía acabar registrado.
+    // La cola relee el estado en cada vuelta: el fichero retirado no llega al
+    // buzón aunque estuviera en la foto inicial del lote.
     expect(repository.subidas, ['primero.pdf', 'segundo.pdf']);
-    expect(repository.registrarCalls, 1);
-    expect(repository.registrados.map((final d) => d.nombre), ['primero.pdf', 'segundo.pdf']);
+    expect(container.read(_provider).archivos.map((final a) => a.path), [primero.path, segundo.path]);
   });
 
   testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'salir de la pantalla en mitad del lote detiene la cola sin reventar', (final tester) async {
@@ -269,12 +353,13 @@ void main() {
     );
     final container = await pumpPage(tester, repository);
 
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf'), file('segundo.pdf'), file('tercero.pdf')]);
-    await tester.pump();
+    container.read(_provider.notifier).addArchivos([file('primero.pdf'), file('segundo.pdf'), file('tercero.pdf')]);
 
     await tester.runAsync(() async {
-      await tester.tap(find.text(_registrarLabel));
-      await pumpHasta(tester, () => repository.subidas.isNotEmpty);
+      for (var i = 0; i < 40 && repository.subidas.isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        await tester.pump();
+      }
 
       // Desmonta la página, como al volver al expediente.
       await tester.pumpWidget(
@@ -284,7 +369,10 @@ void main() {
         ),
       );
       gate.complete();
-      await pumpHasta(tester, () => repository.subidas.length > 1);
+      for (var i = 0; i < 40 && repository.subidas.length < 2; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        await tester.pump();
+      }
     });
     // Un frame con reloj falso para que corra el dispose que Riverpod agenda
     // al liberar el provider `autoDispose` de la página desmontada.
@@ -295,127 +383,26 @@ void main() {
     // La cola seguía viva y reventaba con el provider `autoDispose` ya liberado.
     expect(tester.takeException(), isNull);
   });
-
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'el lote se corta en el primer fallo y no sube los condenados', (final tester) async {
-    final primero = file('primero.pdf');
-    final segundo = file('segundo.pdf');
-    final tercero = file('tercero.pdf');
-    // El fichero que falla va en medio: el test que ya existía solo cubre el
-    // caso de que sea el último, donde no hay nada después que cortar.
-    final repository = _FakeDocumentoRepository(failPath: segundo.path);
-    final container = await pumpPage(tester, repository);
-
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo, tercero]);
-    await tester.pump();
-
-    await tapRegistrar(tester);
-
-    // Los hashes de este intento mueren con su `idunico`, así que seguir
-    // subiendo `tercero.pdf` era gastar minutos y datos para tirarlos.
-    expect(repository.subidas, ['primero.pdf', 'segundo.pdf']);
-    expect(repository.registrarCalls, 0);
-    expect(find.text('Algunos ficheros no se han podido enviar. Puedes reintentarlo.'), findsOneWidget);
-
-    final archivos = container.read(gestionAportarDocumentacionProvider);
-    expect(archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.noEnviado));
-    expect(archivos.map((final a) => a.hash), everyElement(isNull));
-  });
-
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'quitar todos los ficheros durante el lote no cierra la transacción vacía', (final tester) async {
-    final primero = file('primero.pdf');
-    final segundo = file('segundo.pdf');
-    late final ProviderContainer container;
-    final repository = _FakeDocumentoRepository(
-      onUpload: (final nombre) async {
-        if (nombre == 'primero.pdf') {
-          container.read(gestionAportarDocumentacionProvider.notifier)
-            ..removeArchivo(primero.path)
-            ..removeArchivo(segundo.path);
-        }
-      },
-    );
-    container = await pumpPage(tester, repository);
-
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([primero, segundo]);
-    await tester.pump();
-
-    await tapRegistrar(tester);
-
-    // `_documentosParaRegistro` devolvía `[]` —no `null`— con la lista vacía,
-    // así que se llamaba a `registrarfichero` sin ni un documento.
-    expect(repository.registrarCalls, 0);
-    expect(container.read(gestionAportarDocumentacionProvider), isEmpty);
-    expect(find.text('Selecciona al menos un fichero antes de registrar.'), findsOneWidget);
-  });
-
-  testWidgets('el botón de registrar no aparece hasta que hay documentos', (final tester) async {
-    final container = await pumpPage(tester, _FakeDocumentoRepository());
-
-    // Como en la web: sin documentos solo se ofrece seleccionarlos.
-    expect(find.text(_registrarLabel), findsNothing);
-    expect(find.text('Seleccionar documentos'), findsOneWidget);
-
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos([file('primero.pdf')]);
-    await tester.pump(const Duration(milliseconds: 300));
-
-    expect(find.text(_registrarLabel), findsOneWidget);
-  });
-
-  testWidgets('un fichero en error se puede quitar del lote', (final tester) async {
-    final primero = file('primero.pdf');
-    final container = await pumpPage(tester, _FakeDocumentoRepository());
-    container.read(gestionAportarDocumentacionProvider.notifier)
-      ..addArchivos([primero])
-      ..beginUpload(primero.path)
-      ..marcarError(primero.path);
-    await tester.pump();
-
-    // Antes solo se ofrecía "Reintentar": el fichero que falla se quedaba
-    // clavado en el lote y solo se podía salir cancelando todo.
-    await tester.tap(find.byTooltip('Eliminar archivo'));
-    await tester.pump(const Duration(milliseconds: 300));
-
-    expect(container.read(gestionAportarDocumentacionProvider), isEmpty);
-  });
-
-  testWidgets('quitar un fichero ya subido abandona el intento en curso', (final tester) async {
-    final primero = file('primero.pdf');
-    final segundo = file('segundo.pdf');
-    final container = await pumpPage(tester, _FakeDocumentoRepository());
-    container.read(gestionAportarDocumentacionProvider.notifier)
-      ..addArchivos([primero, segundo])
-      ..beginUpload(primero.path)
-      ..marcarCompletado(primero.path, 'hash-primero.pdf');
-    await tester.pump();
-
-    // El botón de la tarjeta ya subida colgaba de `onRemove`, que la página no
-    // cableaba nunca: no hacía nada.
-    await tester.tap(find.widgetWithText(TextButton, 'Eliminar'));
-    await tester.pump(const Duration(milliseconds: 300));
-
-    final archivos = container.read(gestionAportarDocumentacionProvider);
-    expect(archivos.map((final a) => a.path), [segundo.path]);
-    // El hash del que quedaba muere con el `idunico` abandonado.
-    expect(archivos.single.hash, isNull);
-    expect(archivos.single.estado, AportacionArchivoEstado.noEnviado);
-  });
 }
 
 final class _FakeDocumentoRepository implements GestionDocumentoRepository {
-  _FakeDocumentoRepository({this.cancelPath, this.failPath, this.registrarFalla = false, this.onUpload});
+  _FakeDocumentoRepository({this.cancelPath, this.failPath, this.registrarFalla = false, this.iniciarFalla = false, this.onUpload});
 
   /// Fichero cuya subida cancela el ciudadano con la X mientras está en curso.
   final String? cancelPath;
 
-  /// Fichero cuya subida falla por un error de red.
-  final String? failPath;
+  /// Fichero cuya subida falla por un error de red. Mutable para poder
+  /// reintentarlo con éxito en el mismo test.
+  String? failPath;
 
-  /// `registrarfichero` falla y deja las tarjetas en error, que es como se
-  /// llega al "Reintentar" de una tarjeta.
-  final bool registrarFalla;
+  /// `registrarfichero` falla, que es como se llega al reintento del cierre.
+  bool registrarFalla;
 
-  /// Retiene `inicproc` para poder pulsar durante la ventana en la que todavía
-  /// no hay ningún fichero `enviando` — la ventana real de AP-1.
+  /// `inicproc` falla: no hay transacción en la que subir nada.
+  bool iniciarFalla;
+
+  /// Retiene `inicproc` para poder seleccionar otro fichero mientras la
+  /// apertura está en vuelo — la ventana real de AP-1.
   Completer<void>? inicioGate;
 
   /// Se invoca al empezar cada subida, con el nombre del fichero: permite
@@ -437,9 +424,16 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
     required final String documentNumber,
     required final Expediente expediente,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async {
     iniciarCalls++;
     await inicioGate?.future;
+    if (iniciarFalla) {
+      throw DioException(
+        requestOptions: RequestOptions(path: 'inicproc'),
+        type: DioExceptionType.connectionError,
+      );
+    }
     return InicioProcedimientoResultado(
       idunico: idUnico,
       estado: 'OK',
@@ -474,9 +468,9 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
       );
     }
     if (cancelPath != null && cancelPath!.endsWith(nombreFichero)) {
-      // Lo que hace la X de la tarjeta: cancela el token, lo que aborta la
-      // petición y devuelve el fichero a `noEnviado`.
-      notifier.cancelarSubida(cancelPath!);
+      // Lo que hace la X de la tarjeta: retira el fichero del lote, lo que
+      // cancela su token y aborta esta petición.
+      notifier.removeArchivo(cancelPath!);
       throw DioException(
         requestOptions: RequestOptions(path: path),
         type: DioExceptionType.cancel,

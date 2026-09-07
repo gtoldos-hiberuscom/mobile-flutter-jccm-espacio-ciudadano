@@ -1,25 +1,16 @@
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
-import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
+import 'package:jccm_espacio_ciudadano/core/files/file_save.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
-import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
-import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
-import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/representante.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_lote.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_aportar_documentacion_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_documento_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -36,15 +27,23 @@ const List<String> _iosUniformTypeIdentifiersAportacion = [
   'public.zip-archive',
 ];
 
-/// Aportar documentación — Figma node 44242:24884, subida en paralelo con
-/// progreso (44198:64251) y diálogo de éxito (44242:24055).
+/// Aportar documentación — Figma node 44242:24884, subida con progreso
+/// (44198:64251) y diálogo de éxito (44242:24055).
+///
+/// Sigue el modelo de la web: **la subida arranca al seleccionar**, no al
+/// registrar, y cancelar, reintentar o eliminar actúan solo sobre su fichero.
+/// La orquestación entera —abrir la transacción, la cola de subidas y el
+/// cierre— vive en `GestionAportarDocumentacionNotifier`, porque la cola
+/// avanza sin que nadie pulse nada. Aquí quedan el selector de ficheros, los
+/// avisos curados y el justificante.
 ///
 /// **Integración de backend no verificada**: el flujo completo
 /// (`procedimiento/inicproc` → `procedimiento/subiradjuntosinfirma` por
 /// fichero → `documentacion/registrarfichero`) se ha inferido cruzando el
 /// swagger del proyecto con el manual de integración público — ningún paso
-/// se ha podido probar contra un backend real. `idunico` se autogenera como
-/// `{NIF}_{timestamp}` y se sustituye por el que confirme `inicproc`.
+/// se ha podido probar contra un backend real. Se asume además que
+/// `registrarfichero` registra lo que se le lista en `documentos` y no el
+/// buzón entero (ver los riesgos del plan de la iteración).
 class GestionAportarDocumentacionPage extends ConsumerStatefulWidget {
   const GestionAportarDocumentacionPage({required this.numexp, this.tercero, super.key});
 
@@ -59,37 +58,53 @@ class GestionAportarDocumentacionPage extends ConsumerStatefulWidget {
   ConsumerState<GestionAportarDocumentacionPage> createState() => _GestionAportarDocumentacionPageState();
 }
 
-/// Fase de la operación de registro. Cubre TODA la transacción — de
-/// `inicproc` a `registrarfichero` —, no solo la subida: dos `idunico`
-/// entrelazados corrompen los hashes, porque cada hash solo vale dentro del
-/// suyo.
-enum _FaseRegistro { inactiva, subiendo, registrando }
-
-/// Desenlace de una subida individual, para que la cola serial decida si
-/// continúa con el siguiente fichero o abandona el intento.
-enum _ResultadoSubida { completado, error, cancelado }
-
 class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportarDocumentacionPage> {
-  _FaseRegistro _fase = _FaseRegistro.inactiva;
-
   String get _decodedNumexp => Uri.decodeComponent(widget.numexp);
+
+  /// Misma clave con la que se consulta el detalle: no mezcla en caché la
+  /// aportación a un expediente propio con la de un tercero.
+  ExpedienteDetailKey get _key => (numexp: _decodedNumexp, tercero: widget.tercero);
 
   String get _expedienteRoute => '${Routes.gestionExpedientes}/${Uri.encodeComponent(_decodedNumexp)}';
 
-  bool get _operacionEnCurso => _fase != _FaseRegistro.inactiva;
+  /// Se captura al montar para poder detener la cola en [dispose]: ahí `ref` ya
+  /// no es utilizable, y esperar a que Riverpod libere el provider
+  /// `autoDispose` llega tarde —esa liberación se agenda para más tarde y en
+  /// esa ventana la cola alcanza a subir otro fichero al buzón de una
+  /// transacción que nadie va a cerrar.
+  late final GestionAportarDocumentacionNotifier _notifier;
 
-  /// Mientras se cierra la transacción no se puede retirar nada: la petición de
-  /// `registrarfichero` ya viajó con la lista de documentos construida.
-  bool get _puedeEditarLista => _fase != _FaseRegistro.registrando;
+  @override
+  void initState() {
+    super.initState();
+    _notifier = ref.read(gestionAportarDocumentacionProvider(_key).notifier);
+  }
+
+  @override
+  void dispose() {
+    _notifier.cancelarTodas();
+    super.dispose();
+  }
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final archivos = ref.watch(gestionAportarDocumentacionProvider);
-    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
+    final lote = ref.watch(gestionAportarDocumentacionProvider(_key));
+
+    // Solo se anuncian los fallos que ninguna tarjeta explica por sí sola
+    // —abrir o cerrar la transacción—: el de una subida ya se ve en su propia
+    // tarjeta. `secuencia` cambia en cada fallo, así que reintentar el cierre
+    // y que vuelva a fallar avisa otra vez en vez de callarse porque el error
+    // «no ha cambiado».
+    ref.listen(gestionAportarDocumentacionProvider(_key).select((final estado) => estado.error), (final previo, final actual) {
+      if (actual == null || !mounted) {
+        return;
+      }
+      AppAlertSnackbar.show(context, message: _mensajeError(l10n, actual), severity: AppAlertSeverity.error);
+    });
 
     void volverAlExpediente() {
-      notifier.cancelarTodas();
+      _notifier.cancelarTodas();
       context.go(_expedienteRoute, extra: widget.tercero);
     }
 
@@ -115,17 +130,22 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                     message: l10n.gestionAportarDocumentacionHelperText,
                     size: AppAlertContextualSize.small,
                   ),
-                  for (final archivo in archivos)
+                  for (final archivo in lote.archivos)
                     Padding(
                       padding: const EdgeInsets.only(bottom: AppDimensions.space16),
                       child: _AportacionArchivoCard(
                         archivo: archivo,
-                        onDelete: _puedeEditarLista ? () => notifier.removeArchivo(archivo.path) : null,
-                        onCancel: _puedeEditarLista ? () => notifier.cancelarSubida(archivo.path) : null,
-                        onRemove: _puedeEditarLista ? () => _descartarSubido(archivo.path) : null,
-                        // AP-1: reintentar con un intento en marcha abriría una
-                        // segunda transacción.
-                        onRetry: _operacionEnCurso ? null : _registrar,
+                        // Las tres acciones de retirada son la misma: sacarlo
+                        // del lote. Cancelar una subida en curso lo retira
+                        // igual —dejar la fila en el limbo, seleccionada pero
+                        // sin que la cola la vaya a reintentar, bloquearía
+                        // Registrar—, y el que ya está subido solo desaparece
+                        // de `documentos`, dejando su adjunto huérfano en el
+                        // buzón.
+                        onDelete: lote.puedeEditarLista ? () => _notifier.removeArchivo(archivo.path) : null,
+                        onCancel: lote.puedeEditarLista ? () => _notifier.removeArchivo(archivo.path) : null,
+                        onRemove: lote.puedeEditarLista ? () => _notifier.removeArchivo(archivo.path) : null,
+                        onRetry: lote.puedeEditarLista ? () => _notifier.reintentarArchivo(archivo.path) : null,
                       ),
                     ),
                 ],
@@ -148,16 +168,16 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                 leadingIcon: AppIcons.upload,
                 onPressed: _pickFiles,
               ),
-              // Como en la web, no se ofrece registrar sin documentos. Se
-              // mantiene visible mientras la operación está en curso para que
-              // la acción no se esfume si se retira el último fichero del lote.
-              if (archivos.isNotEmpty || _operacionEnCurso)
+              // Como en la web, no se ofrece registrar sin documentos; y hasta
+              // que todos estén subidos se muestra deshabilitado, porque cada
+              // entrada de `documentos` necesita el hash de su subida.
+              if (lote.archivos.isNotEmpty)
                 AppButton(
                   label: l10n.gestionAportarDocumentacionRegistrarButton,
                   isExpanded: true,
                   leadingIcon: AppIcons.check,
-                  isLoading: _operacionEnCurso,
-                  onPressed: _operacionEnCurso ? null : _registrar,
+                  isLoading: lote.cerrando,
+                  onPressed: lote.puedeRegistrar ? _registrar : null,
                 ),
             ],
           ),
@@ -194,7 +214,9 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
       return;
     }
 
-    final result = ref.read(gestionAportarDocumentacionProvider.notifier).addArchivos(archivos);
+    // `addArchivos` arranca la subida por su cuenta: el ciudadano no tiene que
+    // pulsar nada más para que empiece.
+    final result = _notifier.addArchivos(archivos);
     final message = switch (result) {
       AddArchivosAdded() => null,
       AddArchivosRejectedTooMany() => l10n.gestionAportarDocumentacionMaxFilesError,
@@ -207,195 +229,17 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     }
   }
 
-  /// Punto de entrada único del registro — el botón "Registrar" y el
-  /// "Reintentar" de una tarjeta —, con la guarda de reentrancia (AP-1) y la
-  /// fase que apaga ambos mientras la transacción está abierta.
+  /// Cierra la transacción y, si quedó registrada, ofrece el justificante.
+  ///
+  /// Un cierre fallido lo publica el notifier —conservando los hashes, así que
+  /// volver a pulsar reintenta solo el cierre— y lo pinta el `ref.listen` de
+  /// [build]: aquí solo queda el camino de éxito.
   Future<void> _registrar() async {
-    if (_operacionEnCurso) {
-      return;
-    }
-    setState(() => _fase = _FaseRegistro.subiendo);
-    ({Uint8List justificante, String numexp})? resultado;
-    try {
-      resultado = await _ejecutarRegistro();
-    } finally {
-      // Se libera antes del diálogo de éxito: es modal, y con todos los
-      // ficheros `completado` la guarda de `pendientes.isEmpty` ya impide un
-      // segundo registro.
-      if (mounted) {
-        setState(() => _fase = _FaseRegistro.inactiva);
-      }
-    }
+    final resultado = await _notifier.registrar();
     if (resultado == null || !mounted) {
       return;
     }
     await _mostrarExitoYDescargar(resultado.justificante, resultado.numexp);
-  }
-
-  /// Orquesta el flujo completo: `iniciarProcedimiento` → subir en paralelo
-  /// todos los ficheros que no estén ya `completado` (`noEnviado` o `error`
-  /// — así "Reintentar" en una tarjeta y "Registrar" comparten el mismo
-  /// flujo) → `registrarFicheros` para cerrar la transacción y obtener el
-  /// justificante. Si `registrarFicheros` falla tras subir todo, se
-  /// revierten todos los ficheros a `error` para reintentar la secuencia
-  /// completa desde cero (ver riesgos conocidos en el plan de la
-  /// iteración).
-  Future<({Uint8List justificante, String numexp})?> _ejecutarRegistro() async {
-    final l10n = AppLocalizations.of(context);
-    // Se lee el estado al invocar y no el capturado en `build`: entre el último
-    // repintado y el tap puede haber cambiado la lista.
-    final pendientes = ref.read(gestionAportarDocumentacionProvider).where((final a) => a.estado != AportacionArchivoEstado.completado).toList(growable: false);
-    if (pendientes.isEmpty) {
-      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionNoFilesError, severity: AppAlertSeverity.error);
-      return null;
-    }
-
-    final claims = ref.read(jwtClaimsProvider);
-    final documentNumber = widget.tercero?.documentNumber ?? _documentNumber(claims);
-    // `citizenId` va en el path /ciudadanos/{sid} (sub_alt contra el gateway);
-    // `documentNumber` es el titular del expediente y viaja en el cuerpo.
-    final citizenId = ref.read(citizenEndpointIdsProvider).idAgente;
-    if (documentNumber == null || citizenId == null || citizenId.isEmpty) {
-      AppAlertSnackbar.show(context, message: l10n.gestionAportarDocumentacionRegistroError, severity: AppAlertSeverity.error);
-      return null;
-    }
-    // No nulo solo al aportar a un expediente de terceros: identifica ante
-    // el backend a quien presenta realmente la documentación (el usuario
-    // autenticado), distinto del titular del expediente que va en
-    // `documentNumber`.
-    final representante = widget.tercero == null
-        ? null
-        : Representante(
-            nombre: claims?.givenName ?? '',
-            apellido1: claims?.firstSurname ?? '',
-            apellido2: claims?.secondSurname ?? '',
-            nifcif: _documentNumber(claims) ?? '',
-            tipodoc: 'NIF',
-          );
-
-    final Expediente expediente;
-    try {
-      expediente = await ref.read(expedienteDetailProvider((numexp: _decodedNumexp, tercero: widget.tercero)).future);
-    } on Object catch (error, stackTrace) {
-      logger.e('Error al obtener el expediente para aportar documentación', error: error, stackTrace: stackTrace);
-      if (mounted) {
-        AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionRegistroError, error), severity: AppAlertSeverity.error);
-      }
-      return null;
-    }
-
-    final repository = ref.read(gestionDocumentoRepositoryProvider);
-    final InicioProcedimientoResultado inicio;
-    try {
-      final idUnicoLocal = '${documentNumber}_${DateTime.now().millisecondsSinceEpoch}';
-      inicio = await repository.iniciarProcedimiento(citizenId: citizenId, idUnico: idUnicoLocal, documentNumber: documentNumber, expediente: expediente, representante: representante);
-    } on Object catch (error, stackTrace) {
-      logger.e('Error al iniciar el procedimiento de aportación', error: error, stackTrace: stackTrace);
-      if (mounted) {
-        AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionRegistroError, error), severity: AppAlertSeverity.error);
-      }
-      return null;
-    }
-
-    // De una en una, no en paralelo: el plazo de cada subida está dimensionado
-    // por el tamaño de ESE fichero, y cinco subidas simultáneas comparten el
-    // mismo enlace, así que con ficheros grandes ninguna llegaría a tiempo
-    // (5 × 20 MB son ~133 MB en base64 por el mismo tubo). En serie el tiempo
-    // total es el mismo — lo limita el ancho de banda, no la concurrencia —,
-    // cada plazo es el que corresponde y solo hay un fichero codificado en
-    // memoria a la vez.
-    for (final pendiente in pendientes) {
-      if (!mounted) {
-        // La pantalla se fue: seguir subiendo alimenta el buzón de una
-        // transacción que nadie va a cerrar, y tocar el provider `autoDispose`
-        // ya liberado lanza.
-        return null;
-      }
-      // El estado se relee en cada vuelta: `pendientes` es la foto de antes de
-      // abrir la transacción, y el ciudadano puede retirar ficheros mientras
-      // sube otro.
-      final actual = ref.read(gestionAportarDocumentacionProvider).where((final a) => a.path == pendiente.path).firstOrNull;
-      if (actual == null || actual.estado == AportacionArchivoEstado.completado) {
-        continue;
-      }
-      final resultado = await _subirArchivo(
-        archivo: actual,
-        citizenId: citizenId,
-        documentNumber: documentNumber,
-        idUnico: inicio.idunico,
-        tipoProcedimiento: expediente.tipoproc ?? '',
-      );
-      if (!mounted) {
-        return null;
-      }
-      if (resultado == _ResultadoSubida.completado) {
-        continue;
-      }
-      // Cancelar y borrar llegan igual (el token cancelado), y se distinguen
-      // por si el fichero sigue en la lista: si lo borró el ciudadano, el resto
-      // del lote sigue siendo válido en este `idunico`; si canceló la subida,
-      // el intento está condenado y sigue el camino de descarte.
-      final sigueEnLista = ref.read(gestionAportarDocumentacionProvider).any((final a) => a.path == pendiente.path);
-      if (resultado == _ResultadoSubida.cancelado && !sigueEnLista) {
-        continue;
-      }
-      break;
-    }
-
-    if (!mounted) {
-      return null;
-    }
-
-    final actuales = ref.read(gestionAportarDocumentacionProvider);
-    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
-    // Registrar exige que TODOS los ficheros estén subidos, no solo que
-    // ninguno haya fallado: un fichero cancelado a mitad de la subida se queda
-    // en `noEnviado` y sin hash, y pasaba esta comprobación cuando solo miraba
-    // `error`, para reventar después al construir el cuerpo.
-    final documentos = _documentosParaRegistro(actuales);
-    if (documentos == null) {
-      // Este intento muere aquí, así que los hashes que sí se obtuvieron dejan
-      // de servir (pertenecen a este `idunico`): se descartan y el siguiente
-      // registro vuelve a subir todos los ficheros.
-      notifier.reiniciarSubidas();
-      AppAlertSnackbar.show(
-        context,
-        message: _mensajeIntentoIncompleto(l10n, actuales),
-        severity: AppAlertSeverity.error,
-      );
-      return null;
-    }
-
-    // Desde aquí la petición viaja con la lista de documentos ya construida:
-    // retirar algo no se podría honrar, así que las acciones por fichero se
-    // apagan mientras dure.
-    setState(() => _fase = _FaseRegistro.registrando);
-    final Uint8List justificante;
-    try {
-      justificante = await repository.registrarFicheros(
-        citizenId: citizenId,
-        documentNumber: documentNumber,
-        expediente: expediente,
-        inicio: inicio,
-        documentos: documentos,
-        representante: representante,
-        cancelToken: notifier.beginRegistro(),
-      );
-    } on Object catch (error, stackTrace) {
-      if (error is DioException && error.type == DioExceptionType.cancel) {
-        // Se abandonó la pantalla mientras se cerraba la transacción: el
-        // provider ya no existe y no hay a quién avisar.
-        return null;
-      }
-      logger.e('Error al finalizar el registro de la aportación', error: error, stackTrace: stackTrace);
-      if (mounted) {
-        notifier.marcarErrorTodos();
-        AppAlertSnackbar.show(context, message: _mensajeUsuarioError(l10n, l10n.gestionAportarDocumentacionFinalizacionError, error), severity: AppAlertSeverity.error);
-      }
-      return null;
-    }
-
-    return (justificante: justificante, numexp: expediente.numexp);
   }
 
   /// Diálogo de éxito y descarga del justificante, ya obtenido: aquí no hay
@@ -436,91 +280,22 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     }
   }
 
-  Future<_ResultadoSubida> _subirArchivo({
-    required final AportacionArchivo archivo,
-    required final String citizenId,
-    required final String documentNumber,
-    required final String idUnico,
-    required final String tipoProcedimiento,
-  }) async {
-    final notifier = ref.read(gestionAportarDocumentacionProvider.notifier);
-    final repository = ref.read(gestionDocumentoRepositoryProvider);
-    final token = notifier.beginUpload(archivo.path);
-
-    try {
-      final bytes = await XFile(archivo.path).readAsBytes();
-      if (!mounted) {
-        return _ResultadoSubida.cancelado;
-      }
-      final hash = await repository.subirDocumentoSinFirma(
-        citizenId: citizenId,
-        documentNumber: documentNumber,
-        idUnico: idUnico,
-        tipoProcedimiento: tipoProcedimiento,
-        nombreFichero: archivo.nombre,
-        bytes: bytes,
-        cancelToken: token,
-        // El provider es `autoDispose`: tocar el notifier liberado lanza.
-        onProgress: (final progreso) {
-          if (mounted) {
-            notifier.updateProgreso(archivo.path, progreso);
-          }
-        },
-      );
-      if (!mounted) {
-        return _ResultadoSubida.cancelado;
-      }
-      notifier.marcarCompletado(archivo.path, hash);
-      return _ResultadoSubida.completado;
-    } on DioException catch (error, stackTrace) {
-      if (error.type == DioExceptionType.cancel) {
-        // Cancelación manual del usuario, o fichero retirado de la lista: en
-        // ambos casos el estado ya lo revirtió quien canceló el token.
-        return _ResultadoSubida.cancelado;
-      }
-      logger.e('Error al subir ${archivo.nombre}', error: error, stackTrace: stackTrace);
-      if (mounted) {
-        notifier.marcarError(archivo.path);
-      }
-      return _ResultadoSubida.error;
-    } on Object catch (error, stackTrace) {
-      logger.e('Error al subir ${archivo.nombre}', error: error, stackTrace: stackTrace);
-      if (mounted) {
-        notifier.marcarError(archivo.path);
-      }
-      return _ResultadoSubida.error;
-    }
-  }
-
   /// Guarda el justificante ya obtenido (por `registrarFicheros`) mediante el
   /// selector nativo de destino — no hace ninguna llamada de red nueva.
-  ///
-  /// Se usa `FilePicker.saveFile` (y no `getSaveLocation` de `file_selector`)
-  /// porque este último no está implementado en Android/iOS: en móvil lanza
-  /// `UnimplementedError` sin mostrar selector alguno. `FilePicker.saveFile`
-  /// abre el selector SAF en Android y el export picker de Archivos en iOS,
-  /// y en ambos casos escribe los bytes por sí mismo.
   ///
   /// Devuelve `true` si el fichero quedó guardado; `false` si el usuario
   /// canceló el selector o falló la escritura (el llamador reabre el diálogo).
   Future<bool> _descargarJustificante(final Uint8List bytes, final String numexp) async {
     final l10n = AppLocalizations.of(context);
     try {
-      final ruta = await FilePicker.saveFile(
-        dialogTitle: l10n.gestionAportarDocumentacionDescargarJustificanteButton,
-        fileName: _nombreFicheroJustificante(numexp),
-        type: FileType.custom,
-        allowedExtensions: const ['pdf'],
+      final ruta = await saveBytesWithPicker(
         bytes: bytes,
+        fileName: _nombreFicheroJustificante(numexp),
+        dialogTitle: l10n.gestionAportarDocumentacionDescargarJustificanteButton,
       );
       if (ruta == null) {
         // El usuario canceló el selector nativo.
         return false;
-      }
-      // En Android/iOS el plugin ya escribió los bytes; en escritorio (solo
-      // entorno de desarrollo) devuelve la ruta sin escribir el fichero.
-      if (!Platform.isAndroid && !Platform.isIOS) {
-        await File(ruta).writeAsBytes(bytes);
       }
       if (mounted) {
         AppAlertToast.show(context, message: l10n.gestionAportarDocumentacionJustificanteDescargado, severity: AppAlertSeverity.success);
@@ -535,73 +310,26 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     }
   }
 
-  /// Documentos listos para `registrarfichero`, o `null` si la lista está vacía
-  /// o alguno no está subido: cada entrada necesita el hash que devolvió su
-  /// subida y solo un fichero `completado` lo tiene.
-  List<({String nombre, String hash, int tamanioBytes})>? _documentosParaRegistro(final List<AportacionArchivo> archivos) {
-    if (archivos.isEmpty) {
-      // Cerrar la transacción con `documentos: []` no es un registro: se llega
-      // aquí retirando todos los ficheros durante el lote.
-      return null;
-    }
-    final documentos = <({String nombre, String hash, int tamanioBytes})>[];
-    for (final archivo in archivos) {
-      final hash = archivo.hash;
-      if (archivo.estado != AportacionArchivoEstado.completado || hash == null) {
-        return null;
-      }
-      documentos.add((nombre: archivo.nombre, hash: hash, tamanioBytes: archivo.tamanioBytes));
-    }
-    return documentos;
-  }
-
-  /// "Eliminar" sobre un fichero ya subido.
+  /// Mensaje curado para un fallo del lote.
   ///
-  /// Quitarlo de la lista NO lo saca del buzón de la transacción, y sigue sin
-  /// confirmar si `registrarfichero` registra lo que se le lista en
-  /// `documentos` o el buzón entero. Bajo ese desconocimiento la única lectura
-  /// segura es abandonar el intento: se cancela lo que haya en vuelo, todos los
-  /// ficheros pierden su hash y el siguiente registro abre un `idunico` nuevo
-  /// sin el fichero retirado. El adjunto queda huérfano en un buzón que nunca
-  /// se va a registrar.
-  void _descartarSubido(final String path) {
-    ref.read(gestionAportarDocumentacionProvider.notifier)
-      ..removeArchivo(path)
-      ..reiniciarSubidas();
-  }
-
-  /// Por qué murió el intento, para el aviso al ciudadano.
-  String _mensajeIntentoIncompleto(final AppLocalizations l10n, final List<AportacionArchivo> actuales) {
-    if (actuales.isEmpty) {
-      return l10n.gestionAportarDocumentacionNoFilesError;
+  /// SOLO se exponen mensajes orientados al ciudadano (p. ej. sesión
+  /// caducada); NUNCA el detalle interno —`StateError` de la aplicación, el
+  /// cuerpo técnico del backend (BAC) o las excepciones de transporte de
+  /// Dio—, que revelaría información interna del sistema. Ese detalle se
+  /// queda en los logs del notifier (`logger.e`), no en la UI.
+  String _mensajeError(final AppLocalizations l10n, final AportacionLoteError error) {
+    if (error.sesionCaducada) {
+      return l10n.sessionExpired;
     }
-    if (actuales.any((final a) => a.estado == AportacionArchivoEstado.error)) {
-      return l10n.gestionAportarDocumentacionUploadErrorParcial;
-    }
-    return l10n.gestionAportarDocumentacionUploadIncompleto;
+    return switch (error.tipo) {
+      AportacionLoteErrorTipo.aperturaTransaccion => l10n.gestionAportarDocumentacionRegistroError,
+      AportacionLoteErrorTipo.cierre => l10n.gestionAportarDocumentacionFinalizacionError,
+    };
   }
 
   /// `numexp` contiene `/` (ej. `WMEQ/2026/000002`), inválido en un nombre de
   /// fichero — se sustituye todo carácter fuera de `[A-Za-z0-9._-]`.
   String _nombreFicheroJustificante(final String numexp) => 'justificante_${numexp.replaceAll(RegExp('[^A-Za-z0-9._-]'), '_')}.pdf';
-}
-
-/// Duplicado deliberadamente pequeño del helper de
-/// `gestion_expedientes_provider.dart` — no amerita una abstracción
-/// compartida para 10 líneas usadas en dos sitios.
-String? _documentNumber(final JwtClaims? claims) {
-  final candidates = [
-    claims?.personIdentifier,
-    claims?.preferredUsername,
-    claims?.sub,
-  ];
-  for (final candidate in candidates) {
-    final normalized = candidate?.trim();
-    if (normalized != null && normalized.isNotEmpty) {
-      return normalized;
-    }
-  }
-  return null;
 }
 
 class _AportacionArchivoCard extends StatelessWidget {
@@ -666,17 +394,4 @@ class _AportacionArchivoCard extends StatelessWidget {
     final mb = kb / 1024;
     return '${mb.toStringAsFixed(mb >= 100 ? 0 : 1)} MB';
   }
-}
-
-/// Devuelve un mensaje orientado al usuario final, segmentando por tipo de
-/// error. SOLO se exponen mensajes curados y seguros (p.ej. sesión caducada);
-/// NUNCA el detalle interno del error —`StateError` de la aplicación, el
-/// `mensaje`/cuerpo técnico del backend (BAC) o las excepciones de transporte
-/// de Dio—, que revelaría información interna del sistema. Ese detalle sigue
-/// registrándose en los logs (`logger.e`) para depuración, no en la UI.
-String _mensajeUsuarioError(final AppLocalizations l10n, final String base, final Object error) {
-  if (error is DioException && error.error is UnauthorizedError) {
-    return l10n.sessionExpired;
-  }
-  return base;
 }
