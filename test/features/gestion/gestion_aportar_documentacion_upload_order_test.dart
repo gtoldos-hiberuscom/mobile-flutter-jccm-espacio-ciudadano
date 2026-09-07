@@ -18,6 +18,9 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
+const _tercero = TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R');
+const ExpedienteDetailKey _key = (numexp: 'EXP-1', tercero: _tercero);
+
 void main() {
   late Directory tempDir;
 
@@ -60,21 +63,24 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           home: GestionAportarDocumentacionPage(
             numexp: 'EXP-1',
-            tercero: TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R'),
+            tercero: _tercero,
           ),
         ),
       ),
     );
-    container.read(gestionAportarDocumentacionProvider.notifier).addArchivos(archivos);
-    await tester.pump();
-
+    // Se hace entero dentro de `runAsync`: añadir ya arranca la cola —sin
+    // pulsar "Registrar"— y los plazos del fake tienen que ser timers de
+    // verdad. Lanzada desde el reloj falso, la espera de cada subida no
+    // vencería nunca aquí dentro y la cola se quedaría en el primer fichero.
     await tester.runAsync(() async {
-      await tester.tap(find.text('Registrar documentos aportados'));
-      for (var i = 0; i < 30; i++) {
+      container.read(gestionAportarDocumentacionProvider(_key).notifier).addArchivos(archivos);
+      for (var i = 0; i < 60 && repository.subidas.length < 3; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
         await tester.pump();
       }
     });
+    // Un frame con reloj falso para que corra lo que Riverpod agenda.
+    await tester.pump(const Duration(milliseconds: 300));
 
     // El plazo de cada subida se dimensiona con el tamaño de ese fichero, así
     // que dos subidas simultáneas compartiendo el enlace lo invalidarían.
@@ -95,6 +101,7 @@ final class _RecordingDocumentoRepository implements GestionDocumentoRepository 
     required final String documentNumber,
     required final Expediente expediente,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async => InicioProcedimientoResultado(
     idunico: idUnico,
     estado: 'OK',

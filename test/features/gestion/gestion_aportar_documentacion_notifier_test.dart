@@ -2,202 +2,102 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_aportar_documentacion_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
+
+/// Sin `tercero` y sin claims en el contenedor, la apertura de la transacción
+/// que dispara `addArchivos` muere antes de tocar la red (no hay documento del
+/// ciudadano): estos tests solo ejercitan la validación de la lista, que es
+/// síncrona, y las aserciones corren antes de que la cola avance.
+const ExpedienteDetailKey _key = (numexp: 'EXP-1', tercero: null);
+
+final _provider = gestionAportarDocumentacionProvider(_key);
 
 void main() {
   group('GestionAportarDocumentacionNotifier', () {
-    AportacionArchivo archivo(final String name, {final int bytes = 1024}) => AportacionArchivo(
-      path: '/tmp/$name',
-      nombre: name,
-      tamanioBytes: bytes,
-    );
+    late ProviderContainer container;
+    late GestionAportarDocumentacionNotifier notifier;
+
+    setUp(() {
+      container = ProviderContainer();
+      notifier = container.read(_provider.notifier);
+    });
+
+    tearDown(() => container.dispose());
+
+    AportacionArchivo archivo(final String nombre, {final int bytes = 1024}) => AportacionArchivo(path: '/tmp/$nombre', nombre: nombre, tamanioBytes: bytes);
+
+    List<AportacionArchivo> archivos() => container.read(_provider).archivos;
 
     test('adds up to 5 files successfully', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier);
-
       final result = notifier.addArchivos([
-        archivo('a.pdf'),
-        archivo('b.docx'),
-        archivo('c.zip'),
-        archivo('d.xls'),
-        archivo('e.xlsx'),
+        archivo('uno.pdf'),
+        archivo('dos.doc'),
+        archivo('tres.docx'),
+        archivo('cuatro.zip'),
+        archivo('cinco.xlsx'),
       ]);
 
       expect(result, isA<AddArchivosAdded>());
-      expect(container.read(gestionAportarDocumentacionProvider), hasLength(5));
+      expect((result as AddArchivosAdded).count, 5);
+      expect(archivos(), hasLength(5));
     });
 
     test('rejects a 6th file beyond the max of 5', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf'), archivo('b.pdf'), archivo('c.pdf'), archivo('d.pdf'), archivo('e.pdf')]);
-      final result = notifier.addArchivos([archivo('f.pdf')]);
+      notifier.addArchivos([archivo('uno.pdf'), archivo('dos.pdf'), archivo('tres.pdf'), archivo('cuatro.pdf'), archivo('cinco.pdf')]);
+
+      final result = notifier.addArchivos([archivo('seis.pdf')]);
 
       expect(result, isA<AddArchivosRejectedTooMany>());
-      expect(container.read(gestionAportarDocumentacionProvider), hasLength(5));
+      expect(archivos(), hasLength(5));
     });
 
     test('rejects a file larger than 20MB', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier);
-
-      final result = notifier.addArchivos([archivo('big.pdf', bytes: maxTamanioBytesAportacion + 1)]);
+      final result = notifier.addArchivos([archivo('grande.pdf', bytes: maxTamanioBytesAportacion + 1)]);
 
       expect(result, isA<AddArchivosRejectedTooLarge>());
-      expect(container.read(gestionAportarDocumentacionProvider), isEmpty);
+      expect((result as AddArchivosRejectedTooLarge).nombres, ['grande.pdf']);
+      expect(archivos(), isEmpty);
     });
 
     test('rejects a file with a disallowed extension', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier);
-
-      final result = notifier.addArchivos([archivo('script.exe')]);
+      final result = notifier.addArchivos([archivo('imagen.png')]);
 
       expect(result, isA<AddArchivosRejectedInvalidType>());
-      expect(container.read(gestionAportarDocumentacionProvider), isEmpty);
+      expect((result as AddArchivosRejectedInvalidType).nombres, ['imagen.png']);
+      expect(archivos(), isEmpty);
     });
 
     test('rejects a duplicate path', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
-      final result = notifier.addArchivos([archivo('a.pdf')]);
+      notifier.addArchivos([archivo('uno.pdf')]);
+
+      final result = notifier.addArchivos([archivo('uno.pdf')]);
 
       expect(result, isA<AddArchivosRejectedDuplicate>());
-      expect(container.read(gestionAportarDocumentacionProvider), hasLength(1));
+      expect((result as AddArchivosRejectedDuplicate).nombres, ['uno.pdf']);
+      expect(archivos(), hasLength(1));
     });
 
     test('removeArchivo removes the matching file by path', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      container.read(gestionAportarDocumentacionProvider.notifier)
-        ..addArchivos([archivo('a.pdf'), archivo('b.pdf')])
-        ..removeArchivo('/tmp/a.pdf');
+      notifier
+        ..addArchivos([archivo('uno.pdf'), archivo('dos.pdf')])
+        ..removeArchivo('/tmp/uno.pdf');
 
-      final remaining = container.read(gestionAportarDocumentacionProvider);
-      expect(remaining, hasLength(1));
-      expect(remaining.single.nombre, 'b.pdf');
+      expect(archivos().map((final a) => a.nombre), ['dos.pdf']);
     });
 
-    test('beginUpload marks the file as enviando with progreso 0', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
+    test('un hueco liberado permite volver a añadir hasta el tope de 5', () {
+      notifier
+        ..addArchivos([archivo('uno.pdf'), archivo('dos.pdf'), archivo('tres.pdf'), archivo('cuatro.pdf'), archivo('cinco.pdf')])
+        ..removeArchivo('/tmp/uno.pdf');
 
-      final token = notifier.beginUpload('/tmp/a.pdf');
-
-      final result = container.read(gestionAportarDocumentacionProvider).single;
-      expect(result.estado, AportacionArchivoEstado.enviando);
-      expect(result.progreso, 0);
-      expect(token.isCancelled, isFalse);
+      expect(notifier.addArchivos([archivo('seis.pdf')]), isA<AddArchivosAdded>());
+      expect(archivos(), hasLength(5));
     });
 
-    test('updateProgreso only affects the matching file', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      container.read(gestionAportarDocumentacionProvider.notifier)
-        ..addArchivos([archivo('a.pdf'), archivo('b.pdf')])
-        ..beginUpload('/tmp/a.pdf')
-        ..beginUpload('/tmp/b.pdf')
-        ..updateProgreso('/tmp/a.pdf', 0.5);
+    test('cancelarTodas no lanza sin peticiones en vuelo', () {
+      notifier.addArchivos([archivo('uno.pdf')]);
 
-      final result = container.read(gestionAportarDocumentacionProvider);
-      expect(result.firstWhere((final a) => a.nombre == 'a.pdf').progreso, 0.5);
-      expect(result.firstWhere((final a) => a.nombre == 'b.pdf').progreso, 0);
-    });
-
-    test('marcarCompletado sets estado completado, clears progreso and stores the hash', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      container.read(gestionAportarDocumentacionProvider.notifier)
-        ..addArchivos([archivo('a.pdf')])
-        ..beginUpload('/tmp/a.pdf')
-        ..updateProgreso('/tmp/a.pdf', 0.7)
-        ..marcarCompletado('/tmp/a.pdf', 'abc123');
-
-      final result = container.read(gestionAportarDocumentacionProvider).single;
-      expect(result.estado, AportacionArchivoEstado.completado);
-      expect(result.progreso, isNull);
-      expect(result.hash, 'abc123');
-    });
-
-    test('marcarError sets estado error and clears progreso', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      container.read(gestionAportarDocumentacionProvider.notifier)
-        ..addArchivos([archivo('a.pdf')])
-        ..beginUpload('/tmp/a.pdf')
-        ..marcarError('/tmp/a.pdf');
-
-      final result = container.read(gestionAportarDocumentacionProvider).single;
-      expect(result.estado, AportacionArchivoEstado.error);
-      expect(result.progreso, isNull);
-    });
-
-    test('cancelarSubida cancels the token and reverts to noEnviado', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf')]);
-      final token = notifier.beginUpload('/tmp/a.pdf');
-
-      notifier.cancelarSubida('/tmp/a.pdf');
-
-      expect(token.isCancelled, isTrue);
-      final result = container.read(gestionAportarDocumentacionProvider).single;
-      expect(result.estado, AportacionArchivoEstado.noEnviado);
-      expect(result.progreso, isNull);
-    });
-
-    test('cancelarTodas cancels every active token', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)..addArchivos([archivo('a.pdf'), archivo('b.pdf')]);
-      final tokenA = notifier.beginUpload('/tmp/a.pdf');
-      final tokenB = notifier.beginUpload('/tmp/b.pdf');
-
-      notifier.cancelarTodas();
-
-      expect(tokenA.isCancelled, isTrue);
-      expect(tokenB.isCancelled, isTrue);
-    });
-
-    test('marcarErrorTodos reverts every file to error and clears hash/progreso', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      container.read(gestionAportarDocumentacionProvider.notifier)
-        ..addArchivos([archivo('a.pdf'), archivo('b.pdf')])
-        ..beginUpload('/tmp/a.pdf')
-        ..marcarCompletado('/tmp/a.pdf', 'hash-a')
-        ..beginUpload('/tmp/b.pdf')
-        ..marcarCompletado('/tmp/b.pdf', 'hash-b')
-        ..marcarErrorTodos();
-
-      final result = container.read(gestionAportarDocumentacionProvider);
-      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.estado, 'estado', AportacionArchivoEstado.error)));
-      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.hash, 'hash', isNull)));
-    });
-
-    test('reiniciarSubidas devuelve todo a noEnviado, sin hash y cancelando lo que hubiera en vuelo', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final notifier = container.read(gestionAportarDocumentacionProvider.notifier)
-        ..addArchivos([archivo('a.pdf'), archivo('b.pdf')])
-        ..beginUpload('/tmp/a.pdf')
-        ..marcarCompletado('/tmp/a.pdf', 'hash-a');
-      final tokenB = notifier.beginUpload('/tmp/b.pdf');
-
-      notifier.reiniciarSubidas();
-
-      final result = container.read(gestionAportarDocumentacionProvider);
-      // El hash de a.pdf pertenece al idunico del intento que acaba de morir,
-      // así que se descarta: el siguiente registro sube los dos otra vez.
-      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.estado, 'estado', AportacionArchivoEstado.noEnviado)));
-      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.hash, 'hash', isNull)));
-      expect(result, everyElement(isA<AportacionArchivo>().having((final a) => a.progreso, 'progreso', isNull)));
-      expect(tokenB.isCancelled, isTrue);
+      expect(notifier.cancelarTodas, returnsNormally);
     });
   });
 }

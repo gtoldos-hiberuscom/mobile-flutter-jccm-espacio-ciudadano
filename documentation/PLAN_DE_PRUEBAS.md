@@ -170,21 +170,25 @@
 
 | ID | Acción | Resultado esperado |
 |---|---|---|
-| TC-078 | Pulsar "Aportar documentación" | Se abre la pantalla con el aviso: "Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX." Botones: **Cancelar**, **Seleccionar documentos**, **Registrar documentos aportados**. |
+| TC-078 | Pulsar "Aportar documentación" | Se abre la pantalla con el aviso: "Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX." Botones: **Cancelar** y **Seleccionar documentos**. Como en la web, **"Registrar documentos aportados" no aparece hasta que hay documentos**. |
 | TC-079 | Pulsar "Cancelar" | Se vuelve a la pantalla del expediente. |
-| TC-080 | Seleccionar documentos válidos (formato y tamaño permitidos) | Los documentos se añaden a la lista como tarjetas, listos para registrar. Cada tarjeta permite eliminarla. |
+| TC-080 | Seleccionar documentos válidos (formato y tamaño permitidos) | Los documentos se añaden como tarjetas y **su carga arranca en ese momento, sin pulsar nada más** (como en la web): barra de progreso y, al terminar cada uno, estado "Subido". Aparece "Registrar documentos aportados", deshabilitado mientras quede algún fichero sin subir. Cada tarjeta permite eliminarla. |
 | TC-081 | Seleccionar un fichero de formato no permitido | Se muestra error de formato no permitido y el fichero no se añade. |
 | TC-082 | Seleccionar un fichero mayor de 20 MB | Se muestra error de tamaño máximo y el fichero no se añade. |
 | TC-083 | Intentar añadir más de 5 ficheros | Se muestra error de máximo de ficheros y no se añaden los sobrantes. |
 | TC-084 | Seleccionar dos veces el mismo fichero | Se muestra error de fichero duplicado. |
-| TC-085 | Pulsar "Registrar documentos aportados" sin ficheros | "Selecciona al menos un fichero antes de registrar." |
-| TC-086 | Registrar documentos válidos | Cada tarjeta muestra barra de progreso durante la subida; al completar, diálogo de éxito "Los documentos han sido enviados correctamente" con botones **"Cerrar sin descargar"** y **"Descargar justificante"**. |
-| TC-087 | Cancelar una subida en curso desde su tarjeta | La subida se cancela y el fichero queda en estado no enviado, con opción de reintentar. |
-| TC-088 | Fallo parcial de subida | "Algunos ficheros no se han podido enviar. Puedes reintentarlo." — las tarjetas fallidas muestran acción de reintento. |
+| TC-085 | Quitar todos los ficheros de la lista | El botón "Registrar documentos aportados" desaparece: no se ofrece registrar sin documentos. |
+| TC-086 | Pulsar "Registrar documentos aportados" con todos los ficheros subidos | Se cierra la aportación con los documentos que quedan en la lista y aparece el diálogo de éxito "Los documentos han sido enviados correctamente" con botones **"Cerrar sin descargar"** y **"Descargar justificante"**. |
+| TC-087 | Cancelar una subida en curso desde su tarjeta | Se cancela **solo ese fichero**, que sale de la lista; los demás siguen subiendo y **no aparece ningún mensaje de error**. Se puede volver a seleccionarlo. |
+| TC-088 | Fallo de subida de un fichero (p. ej. cortando la red durante su carga) | **Solo esa tarjeta** queda en rojo con "Reintentar" y el icono de eliminar; el resto del lote termina de subirse. "Registrar documentos aportados" queda deshabilitado mientras siga ahí. No hay mensaje aparte: la tarjeta es el aviso. |
 | TC-089 | Pulsar "Cerrar sin descargar" | Se vuelve a la pantalla del expediente sin descargar nada. |
 | TC-090 | Pulsar "Descargar justificante" y confirmar el guardado | Se guarda el PDF `justificante_<nºexpediente>.pdf` en el dispositivo, toast "Justificante de aportación descargado" y se vuelve al expediente. |
 | TC-091 | Pulsar "Descargar justificante" y **cancelar** el guardado del sistema | El diálogo de éxito se vuelve a mostrar (el justificante solo existe en memoria); se puede reintentar la descarga o cerrar sin descargar. |
 | TC-092 | Registrar con la sesión caducada (401) | Se muestra "Tu sesión ha caducado" y no se registra la aportación. |
+| TC-092a | Pulsar "Reintentar" en la tarjeta de un fichero que falló | Se vuelve a subir **solo ese fichero**; los demás conservan su estado "Subido" y no se vuelven a enviar. Al completarse, "Registrar documentos aportados" se habilita. |
+| TC-092b | Pulsar "Eliminar" en un fichero ya subido | La tarjeta desaparece de la lista y **los demás conservan su estado "Subido"**; se puede registrar el resto sin volver a subir nada. |
+| TC-092c | Fallo al cerrar el registro (p. ej. cortando la red al pulsar "Registrar") | "Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo." Las tarjetas **siguen en "Subido"** y volver a pulsar "Registrar" reintenta solo el cierre, sin re-subir los ficheros. |
+| TC-092d | Fallo al preparar la aportación (p. ej. sin red al seleccionar el primer fichero) | "No hemos podido registrar la documentación. Inténtalo de nuevo." y los ficheros quedan como "Seleccionado"; "Reintentar" en una tarjeta vuelve a intentarlo. |
 
 ## 9. Gestión — Expedientes de terceros
 
