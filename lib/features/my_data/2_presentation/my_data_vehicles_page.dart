@@ -246,20 +246,6 @@ class _VehiclesServicesTab extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppExternalLinkSection(
-            title: l10n.myDataVehiclesLinksTitle,
-            links: [
-              AppExternalLinkItem(
-                label: l10n.myDataVehiclesLinkDgt,
-                onTap: () => _launchUrl(context, config.dgtUrl),
-              ),
-              AppExternalLinkItem(
-                label: l10n.myDataVehiclesLinkAge,
-                onTap: () => _launchUrl(context, config.ageCitizenFolderUrl),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.space24),
-          AppExternalLinkSection(
             title: l10n.myDataVehiclesProceduresTitle,
             links: [
               AppExternalLinkItem(
@@ -273,6 +259,20 @@ class _VehiclesServicesTab extends ConsumerWidget {
               AppExternalLinkItem(
                 label: l10n.myDataVehiclesProcedureCap,
                 onTap: () => _launchUrl(context, config.vehiclesProcedure(2)),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.space24),
+          AppExternalLinkSection(
+            title: l10n.myDataVehiclesLinksTitle,
+            links: [
+              AppExternalLinkItem(
+                label: l10n.myDataVehiclesLinkDgt,
+                onTap: () => _launchUrl(context, config.dgtUrl),
+              ),
+              AppExternalLinkItem(
+                label: l10n.myDataVehiclesLinkAge,
+                onTap: () => _launchUrl(context, config.ageCitizenFolderUrl),
               ),
             ],
           ),

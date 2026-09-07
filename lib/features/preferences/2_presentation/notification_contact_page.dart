@@ -57,10 +57,7 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
         title: 'Editar datos de contacto',
         backgroundColor: AppColors.backgroundBlueLighter,
         onBack: _leave,
-        onInfo: () => AppAlertSnackbar.show(
-          context,
-          message: 'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.',
-        ),
+        onInfo: () => _showInfoSheet(context),
       ),
       body: SafeArea(
         child: contactState.when(
@@ -87,6 +84,19 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
             );
           },
         ),
+      ),
+    );
+  }
+
+  void _showInfoSheet(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    // ignore: discarded_futures
+    AppBottomSheet.show<void>(
+      context: context,
+      title: l10n.gestionNotificacionesAltaInfoTitle,
+      body: Text(
+        l10n.gestionNotificacionesAltaInfoBody,
+        style: AppTypography.bodyRegular.copyWith(color: AppColors.textBase),
       ),
     );
   }

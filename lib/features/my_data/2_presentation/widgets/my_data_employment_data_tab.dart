@@ -14,6 +14,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/m
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_authorization_dialog.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_demand_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_disabled_demand_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_disabled_offers_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_offers_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_server_error.dart';
@@ -48,10 +49,16 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
           ageAuthorizationAsync.when(
             data: (final hasAgeAuthorization) {
               if (!hasAgeAuthorization) {
-                return MyDataAuthorizationContextualHelper(
-                  message: l10n.myDataAgeAuthorizationRequiredMessage,
-                  semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-                  onOpenSettings: _openSettings,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const MyDataEmploymentDisabledDemandCard(),
+                    MyDataAuthorizationContextualHelper(
+                      message: l10n.myDataAgeAuthorizationRequiredMessage,
+                      semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+                      onOpenSettings: _openSettings,
+                    ),
+                  ],
                 );
               }
 
