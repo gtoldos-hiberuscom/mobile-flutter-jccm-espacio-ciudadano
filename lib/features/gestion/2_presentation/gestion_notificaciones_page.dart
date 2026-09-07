@@ -346,8 +346,28 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
+  /// Lo que la tarjeta muestra como título: el concepto y, si viene vacío, la
+  /// denominación del procedimiento (mejor eso que una tarjeta sin título).
+  String get _titulo => notificacion.concepto.isNotEmpty ? notificacion.concepto : notificacion.procedimientoDenominacion;
+
+  /// Lo que la tarjeta muestra como "Procedimiento".
+  ///
+  /// La denominación primero y el `idFicha` después: en UAT el gateway
+  /// devuelve `idFicha: null` en todos los elementos, así que leer solo ese
+  /// campo dejaba la fila apagada en toda la bandeja. Es además el mismo orden
+  /// que resuelve el detalle, para que las dos pantallas no muestren valores
+  /// distintos bajo la misma etiqueta.
+  String? get _procedimiento {
+    final denominacion = notificacion.procedimientoDenominacion.trim();
+    if (denominacion.isNotEmpty) {
+      return denominacion;
+    }
+    final idFicha = notificacion.procedimientoIdFicha?.trim();
+    return idFicha == null || idFicha.isEmpty ? null : idFicha;
+  }
+
   Widget _titleRow(final AppLocalizations l10n) {
-    final title = notificacion.concepto.isNotEmpty ? notificacion.concepto : notificacion.procedimientoDenominacion;
+    final title = _titulo;
     return Padding(
       padding: const EdgeInsets.only(
         top: AppDimensions.space4,
@@ -370,10 +390,12 @@ class _NotificacionCard extends StatelessWidget {
   }
 
   Widget _refBlock(final AppLocalizations l10n) {
-    final idFicha = notificacion.procedimientoIdFicha;
+    // Sin concepto el título ya es la denominación: repetirla debajo con la
+    // etiqueta "Procedimiento" sería pintar el mismo texto dos veces.
+    final procedimiento = _procedimiento == _titulo ? null : _procedimiento;
     final fecha = notificacion.fechaCaducidad;
     final showsExpiration = notificacion.estado == NotificacionEstado.pendiente || notificacion.estado == NotificacionEstado.expirada;
-    if (idFicha == null && (!showsExpiration || fecha == null)) {
+    if (procedimiento == null && (!showsExpiration || fecha == null)) {
       return const SizedBox.shrink();
     }
     final isWarning = notificacion.estado == NotificacionEstado.pendiente;
@@ -389,10 +411,10 @@ class _NotificacionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (idFicha != null)
+          if (procedimiento != null)
             _RefRow(
               label: l10n.gestionNotificacionesProcedimientoLabel,
-              value: idFicha,
+              value: procedimiento,
             ),
           if (showsExpiration && fecha != null)
             _RefRow(

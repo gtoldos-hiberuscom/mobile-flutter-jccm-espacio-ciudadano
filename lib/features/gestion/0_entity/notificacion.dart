@@ -32,6 +32,23 @@ final class Notificacion {
   /// aporta el detalle (`NotificacionDetalle.estado`).
   final NotificacionEstado? estado;
 
+  /// Copia con otro [estado], conservando el resto.
+  ///
+  /// El estado es el único campo que la app recalcula sobre un resumen ya
+  /// recibido (aceptación optimista, y el respaldo del detalle tras
+  /// comparecer), así que no hace falta un `copyWith` completo con centinelas
+  /// para distinguir "no lo cambies" de "ponlo a null".
+  Notificacion withEstado(final NotificacionEstado? estado) => Notificacion(
+    id: id,
+    concepto: concepto,
+    procedimientoDenominacion: procedimientoDenominacion,
+    fechaCaducidad: fechaCaducidad,
+    procedimientoIdFicha: procedimientoIdFicha,
+    unidadOrganicaNombre: unidadOrganicaNombre,
+    sistemaOrigen: sistemaOrigen,
+    estado: estado,
+  );
+
   @override
   bool operator ==(final Object other) => identical(this, other) || other is Notificacion && runtimeType == other.runtimeType && id == other.id && concepto == other.concepto && procedimientoDenominacion == other.procedimientoDenominacion && fechaCaducidad == other.fechaCaducidad && procedimientoIdFicha == other.procedimientoIdFicha && unidadOrganicaNombre == other.unidadOrganicaNombre && sistemaOrigen == other.sistemaOrigen && estado == other.estado;
 
