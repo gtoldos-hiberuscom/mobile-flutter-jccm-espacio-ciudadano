@@ -85,10 +85,18 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
           '${Routes.gestionExpedientes}/${Uri.encodeComponent(expediente.numexp)}',
           extra: TerceroIdentificacion(tipodoc: _selectedDocType.tipodoc, documentNumber: documentNumber),
         );
-      case BuscarExpedienteTerceroFailed(:final message, :final cause):
-        logger.e('Error al buscar expediente de terceros', error: cause);
+      case BuscarExpedienteTerceroFailed(:final reason, :final cause):
+        logger.e('Error al buscar expediente de terceros (${reason.name})', error: cause);
         if (context.mounted) {
-          AppAlertSnackbar.show(context, message: message, severity: AppAlertSeverity.error);
+          AppAlertSnackbar.show(
+            context,
+            message: switch (reason) {
+              BuscarExpedienteTerceroFailureReason.notFound => l10n.gestionAportacionExpedienteNotFoundError,
+              BuscarExpedienteTerceroFailureReason.unauthorized => l10n.gestionAportacionExpedienteUnauthorizedError,
+              BuscarExpedienteTerceroFailureReason.unavailable => l10n.gestionAportacionExpedienteUnavailableError,
+            },
+            severity: AppAlertSeverity.error,
+          );
         }
     }
   }
@@ -178,7 +186,7 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
         actions: [
           IconButton(
             icon: const Icon(AppIcons.info),
-            tooltip: 'Más información',
+            tooltip: l10n.gestionMasInformacionTooltip,
             onPressed: () => _showInfoSheet(context, l10n),
           ),
         ],
@@ -288,8 +296,8 @@ enum _DocType {
     _DocType.dni => '00000000A',
     _DocType.nie => 'X0000000A',
     _DocType.cif => 'A00000000',
-    _DocType.pasaporte => 'N.º de ${l10n.gestionAportacionPasaporte.toLowerCase()}',
-    _DocType.cee => 'N.º de ${l10n.gestionAportacionCee}',
+    _DocType.pasaporte => l10n.gestionAportacionPasaporteHint,
+    _DocType.cee => l10n.gestionAportacionCeeHint,
   };
 
   /// Valor enviado al backend en `ptipodoc`/`identificacion.category`. Sin

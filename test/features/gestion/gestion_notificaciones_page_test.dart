@@ -79,7 +79,8 @@ Future<void> _pumpList(final WidgetTester tester, final List<Notificacion> notif
         gestionNotificacionesProvider.overrideWith((final ref, final estado) async => notificaciones),
       ],
       child: const MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        locale: Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionNotificacionesPage(),
       ),

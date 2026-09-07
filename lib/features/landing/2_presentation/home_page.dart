@@ -54,7 +54,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   void _showComingSoon() {
     AppAlertSnackbar.show(
       context,
-      message: 'Función disponible próximamente',
+      message: AppLocalizations.of(context).gestionSectionComingSoon,
     );
   }
 
@@ -124,7 +124,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_isLoadingDigitalCards) {
       AppAlertSnackbar.show(
         context,
-        message: 'Estamos consultando tus carnets digitales.',
+        message: AppLocalizations.of(context).homeCardsFabLoadingMessage,
       );
       return;
     }
@@ -135,7 +135,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_digitalCardsLoadFailed) {
       AppAlertSnackbar.show(
         context,
-        message: 'No hemos podido consultar tus carnets digitales.',
+        message: AppLocalizations.of(context).homeCardsFabLoadFailedMessage,
         severity: AppAlertSeverity.error,
       );
       return;
@@ -143,7 +143,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_availableDigitalCards.isEmpty) {
       AppAlertSnackbar.show(
         context,
-        message: 'No tienes carnés digitales disponibles.',
+        message: AppLocalizations.of(context).homeCardsFabEmptyMessage,
       );
       return;
     }
@@ -193,15 +193,16 @@ class _HomeDigitalCardsFab extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         if (isExpanded) ...[
-          ..._cardButtons(),
+          ..._cardButtons(l10n),
           _rightAlignedAction(
             _DigitalCardFabAction(
-              label: 'Mostrar todos',
+              label: l10n.homeCardsFabShowAll,
               onPressed: onShowAll,
             ),
           ),
@@ -209,20 +210,20 @@ class _HomeDigitalCardsFab extends StatelessWidget {
         ],
         AppFab(
           iconAsset: AppIconAssets.idCard,
-          label: 'Carnets',
+          label: isExpanded ? null : l10n.homeCardsFabLabel,
           onPressed: onToggle,
-          semanticsLabel: isExpanded ? 'Cerrar accesos a carnés digitales' : 'Mostrar carnés digitales',
+          semanticsLabel: isExpanded ? l10n.homeCardsFabCollapseSemantics : l10n.homeCardsFabExpandSemantics,
         ),
       ],
     );
   }
 
-  List<Widget> _cardButtons() {
+  List<Widget> _cardButtons(final AppLocalizations l10n) {
     return [
       for (final card in cards) ...[
         _rightAlignedAction(
           _DigitalCardFabAction(
-            label: _cardLabel(card.type),
+            label: _cardLabel(l10n, card.type),
             onPressed: () => onCardSelected(card),
           ),
         ),
@@ -238,10 +239,10 @@ class _HomeDigitalCardsFab extends StatelessWidget {
     );
   }
 
-  String _cardLabel(final DigitalCardType type) => switch (type) {
-    DigitalCardType.youth => 'Joven',
-    DigitalCardType.largeFamily => 'Familia numerosa',
-    DigitalCardType.disability => 'Discapacidad',
+  String _cardLabel(final AppLocalizations l10n, final DigitalCardType type) => switch (type) {
+    DigitalCardType.youth => l10n.digitalCardsTypeJoven,
+    DigitalCardType.largeFamily => l10n.digitalCardsTypeFamiliaNumerosa,
+    DigitalCardType.disability => l10n.digitalCardsTypeDiscapacidad,
   };
 }
 
@@ -305,6 +306,7 @@ class _HomeDashboard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -323,7 +325,7 @@ class _HomeDashboard extends StatelessWidget {
             children: [
               const _HomeNewsSection(),
               const SizedBox(height: AppDimensions.space24),
-              const _SectionTitle(text: 'Accesos “Mis datos”'),
+              _SectionTitle(text: l10n.homeMyDataAccessesTitle),
               const SizedBox(height: AppDimensions.space8),
               _QuickAccessGrid(onComingSoon: onComingSoon),
               const SizedBox(height: AppDimensions.space24),
@@ -382,7 +384,7 @@ class _HomeNewsSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionTitle(text: 'Mis novedades'),
+        _SectionTitle(text: l10n.homeNewsSectionTitle),
         const SizedBox(height: AppDimensions.space8),
         // Sin novedades quedaba solo el título y, justo debajo, la sección
         // siguiente: parecía que faltaba algo por cargar.
@@ -393,8 +395,8 @@ class _HomeNewsSection extends ConsumerWidget {
           ),
         if (muestraNotificaciones)
           AppSimpleNavCard(
-            label: _labelWithCount('Notificaciones', notificationsCount),
-            description: 'Consulta tus notificaciones pendientes',
+            label: _labelWithCount(l10n, l10n.homeNewsNotificationsTitle, notificationsCount),
+            description: l10n.homeNewsNotificationsDescription,
             onTap: () => context.go(
               Uri(
                 path: Routes.gestionNotificaciones,
@@ -405,8 +407,8 @@ class _HomeNewsSection extends ConsumerWidget {
         if (muestraCitas) ...[
           if (muestraNotificaciones) const SizedBox(height: AppDimensions.space8),
           AppSimpleNavCard(
-            label: _labelWithCount('Próximas citas', upcomingAppointmentsCount),
-            description: 'Revisa tus citas que tienes agendadas próximamente',
+            label: _labelWithCount(l10n, l10n.homeNewsAppointmentsTitle, upcomingAppointmentsCount),
+            description: l10n.homeNewsAppointmentsDescription,
             onTap: () => context.go(Routes.agenda),
           ),
         ],
@@ -414,8 +416,8 @@ class _HomeNewsSection extends ConsumerWidget {
     );
   }
 
-  String _labelWithCount(final String label, final int? count) {
-    return count == null ? label : '$label ($count)';
+  String _labelWithCount(final AppLocalizations l10n, final String label, final int? count) {
+    return count == null ? label : l10n.homeNewsLabelWithCount(label, count);
   }
 }
 
@@ -424,45 +426,45 @@ class _QuickAccessGrid extends StatelessWidget {
 
   final VoidCallback onComingSoon;
 
-  static const _items = [
-    _QuickAccessItem(
-      label: 'Salud',
-      icon: AppIcons.favorite,
-      route: Routes.myDataHealth,
-    ),
-    _QuickAccessItem(
-      label: 'Bienestar Social',
-      icon: AppIcons.diversity,
-      route: Routes.myDataSocialWelfare,
-    ),
-    _QuickAccessItem(
-      label: 'Empleo',
-      icon: AppIcons.work,
-      route: Routes.myDataEmployment,
-    ),
-    _QuickAccessItem(
-      label: 'Educación',
-      icon: AppIcons.school,
-      route: Routes.myDataEducation,
-    ),
-    _QuickAccessItem(
-      label: 'Vivienda',
-      icon: AppIcons.cottage,
-      route: Routes.myDataHousing,
-    ),
-    _QuickAccessItem(
-      label: 'Vehículos',
-      icon: AppIcons.directionsCar,
-      route: Routes.myDataVehicles,
-    ),
-  ];
-
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final items = [
+      _QuickAccessItem(
+        label: l10n.myDataHealthTitle,
+        icon: AppIcons.favorite,
+        route: Routes.myDataHealth,
+      ),
+      _QuickAccessItem(
+        label: l10n.myDataSocialWelfareTitle,
+        icon: AppIcons.diversity,
+        route: Routes.myDataSocialWelfare,
+      ),
+      _QuickAccessItem(
+        label: l10n.myDataEmploymentTitle,
+        icon: AppIcons.work,
+        route: Routes.myDataEmployment,
+      ),
+      _QuickAccessItem(
+        label: l10n.myDataEducationTitle,
+        icon: AppIcons.school,
+        route: Routes.myDataEducation,
+      ),
+      _QuickAccessItem(
+        label: l10n.myDataHousingTitle,
+        icon: AppIcons.cottage,
+        route: Routes.myDataHousing,
+      ),
+      _QuickAccessItem(
+        label: l10n.myDataVehiclesTitle,
+        icon: AppIcons.directionsCar,
+        route: Routes.myDataVehicles,
+      ),
+    ];
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: _items.length,
+      itemCount: items.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         mainAxisSpacing: AppDimensions.space8,
@@ -470,7 +472,7 @@ class _QuickAccessGrid extends StatelessWidget {
         childAspectRatio: 0.73,
       ),
       itemBuilder: (final context, final index) {
-        final item = _items[index];
+        final item = items[index];
         return AppQuickAccessCard(
           label: item.label,
           icon: item.icon,
@@ -498,6 +500,7 @@ class _HomeRecommendationsSection extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final state = ref.watch(
       recommendationsProvider(RecommendationsSegment.all),
     );
@@ -511,7 +514,7 @@ class _HomeRecommendationsSection extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _SectionTitle(text: 'Trámites recomendados'),
+            _SectionTitle(text: l10n.homeRecommendedProceduresTitle),
             const SizedBox(height: AppDimensions.space8),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -536,7 +539,7 @@ class _HomeRecommendationsSection extends ConsumerWidget {
                 boxShadow: AppShadows.low,
               ),
               child: AppButton(
-                label: 'Ir a recomendaciones',
+                label: l10n.homeGoToRecommendationsButton,
                 hierarchy: AppButtonHierarchy.secondary,
                 isExpanded: true,
                 onPressed: () => context.go(Routes.recommendations),
@@ -558,7 +561,7 @@ class _RecommendedProcedureCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final deadline = _deadlineText(recommendation);
+    final deadline = _deadlineText(l10n, recommendation);
     final lifeEventName = recommendation.lifeEventName.trim();
     return AppRecommendationCard(
       onTap: () => unawaited(_openRecommendationDetail(context, recommendation)),
@@ -597,7 +600,7 @@ Future<void> _openRecommendationDetail(
   await launchExternalUrlWithConfirmation(context, url);
 }
 
-String? _deadlineText(final Recommendation recommendation) {
+String? _deadlineText(final AppLocalizations l10n, final Recommendation recommendation) {
   final start = recommendation.submissionStartDate;
   final end = recommendation.submissionEndDate;
   if (start == null && end == null) {
@@ -607,9 +610,9 @@ String? _deadlineText(final Recommendation recommendation) {
     return '${_formatShortDate(start)} - ${_formatShortDate(end)}';
   }
   if (start != null) {
-    return 'desde ${_formatShortDate(start)}';
+    return l10n.homeRecommendationDeadlineFrom(_formatShortDate(start));
   }
-  return 'hasta ${_formatShortDate(end!)}';
+  return l10n.homeRecommendationDeadlineUntil(_formatShortDate(end!));
 }
 
 String _formatShortDate(final DateTime date) {

@@ -38,7 +38,7 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
         onBack: () => context.go(Routes.gestion),
         actions: [
           IconButton(
-            tooltip: _selectedTab == _RegistrosTab.entradas ? 'Buscar entradas de registro' : 'Buscar salidas de registro',
+            tooltip: _selectedTab == _RegistrosTab.entradas ? l10n.gestionRegistrosBuscarEntradasTooltip : l10n.gestionRegistrosBuscarSalidasTooltip,
             icon: Badge.count(
               count: _filters.activeCount,
               isLabelVisible: _filters.activeCount > 0,
@@ -74,20 +74,21 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
   }
 
   Future<void> _showFilters() async {
+    final l10n = AppLocalizations.of(context);
     final isEntry = _selectedTab == _RegistrosTab.entradas;
     final result = await AppBottomSheet.show<AppListFilters>(
       context: context,
-      title: isEntry ? 'Filtrar entradas de registro' : 'Filtrar salidas de registro',
+      title: isEntry ? l10n.gestionRegistrosFiltrarEntradasTitle : l10n.gestionRegistrosFiltrarSalidasTitle,
       body: AppListFilterSheet(
         initialFilters: _filters,
         fields: [
-          const AppListTextFilterField(id: 'number', label: 'Número de registro', hint: 'Introduce el número'),
+          AppListTextFilterField(id: 'number', label: l10n.caseworkSearchFieldRegistroLabel, hint: l10n.gestionFiltroNumeroHint),
           AppListTextFilterField(
             id: 'description',
-            label: isEntry ? 'Descripción de la entrada' : 'Descripción de la salida',
-            hint: 'Introduce palabras de la descripción',
+            label: isEntry ? l10n.gestionRegistrosFiltroDescripcionEntradaLabel : l10n.gestionRegistrosFiltroDescripcionSalidaLabel,
+            hint: l10n.gestionFiltroDescripcionHint,
           ),
-          AppListDateRangeFilterField(id: 'date', label: isEntry ? 'Fecha de entrada' : 'Fecha de salida'),
+          AppListDateRangeFilterField(id: 'date', label: isEntry ? l10n.gestionRegistrosFiltroFechaEntradaLabel : l10n.gestionRegistrosFiltroFechaSalidaLabel),
         ],
       ),
     );

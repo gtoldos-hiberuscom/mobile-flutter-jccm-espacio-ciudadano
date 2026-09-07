@@ -109,8 +109,14 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
           severity: AppAlertSeverity.success,
         );
         context.go(Routes.gestion);
-      case SaveNotificationContactFailed(:final message):
-        setState(() => _formError = message);
+      case SaveNotificationContactFailed(:final reason):
+        setState(
+          () => _formError = switch (reason) {
+            SaveNotificationContactFailureReason.unauthorized => l10n.notificationContactSaveUnauthorizedError,
+            SaveNotificationContactFailureReason.invalidData => l10n.notificationContactSaveInvalidDataError,
+            SaveNotificationContactFailureReason.unavailable => l10n.notificationContactSaveUnavailableError,
+          },
+        );
     }
   }
 
@@ -154,7 +160,7 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
         actions: [
           IconButton(
             icon: const Icon(AppIcons.info),
-            tooltip: 'Más información',
+            tooltip: l10n.gestionMasInformacionTooltip,
             onPressed: () => _showInfoSheet(context, l10n),
           ),
         ],
@@ -182,7 +188,7 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
                 const SizedBox(height: AppDimensions.space16),
                 AppAlertBanner(
                   message: _formError!,
-                  title: 'Error',
+                  title: l10n.a11yAlertError,
                   severity: AppAlertSeverity.error,
                   onDismiss: _clearError,
                 ),

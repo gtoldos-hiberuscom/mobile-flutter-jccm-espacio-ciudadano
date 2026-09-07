@@ -95,9 +95,9 @@ void showAuthenticatedProfileMenu({
 
   showAppDrawerMenu(
     context: context,
-    userName: _userName(claims),
+    userName: _userName(l10n, claims),
     nif: claims?.normalizedPersonIdentifier ?? claims?.idAgente ?? '-',
-    identifierLabel: _identifierLabel(claims),
+    identifierLabel: _identifierLabel(l10n, claims),
     primaryItems: [
       AppDrawerMenuItem(
         label: l10n.drawerPreferences,
@@ -131,12 +131,12 @@ void showAuthenticatedProfileMenu({
       ),
     ],
     onLogout: logout,
-    actionButtonLabel: 'Ir a Sede Electrónica',
+    actionButtonLabel: l10n.drawerGoToSedeElectronica,
     onActionButton: openElectronicOffice,
   );
 }
 
-String _userName(final JwtClaims? claims) {
+String _userName(final AppLocalizations l10n, final JwtClaims? claims) {
   final givenName = claims?.givenName?.trim();
   final firstSurname = claims?.firstSurname?.trim();
   final nameParts = [
@@ -148,7 +148,7 @@ String _userName(final JwtClaims? claims) {
     return nameParts.join(' ');
   }
 
-  return claims?.preferredUsername?.trim().isNotEmpty ?? false ? claims!.preferredUsername!.trim() : 'Ciudadano/a';
+  return claims?.preferredUsername?.trim().isNotEmpty ?? false ? claims!.preferredUsername!.trim() : l10n.drawerDefaultUserName;
 }
 
 String? _initial(final String? value) {
@@ -159,9 +159,9 @@ String? _initial(final String? value) {
   return normalized[0].toUpperCase();
 }
 
-String _identifierLabel(final JwtClaims? claims) => switch (claims?.identificationDocumentType) {
+String _identifierLabel(final AppLocalizations l10n, final JwtClaims? claims) => switch (claims?.identificationDocumentType) {
   IdentificationDocumentType.dni => 'DNI',
   IdentificationDocumentType.nie => 'NIE',
   IdentificationDocumentType.legalEntityNif => 'NIF',
-  IdentificationDocumentType.other || null => 'Identificador',
+  IdentificationDocumentType.other || null => l10n.drawerIdentifierFallbackLabel,
 };

@@ -598,6 +598,7 @@ class _CalendarMonthYearPickerState extends State<_CalendarMonthYearPicker> {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.space16),
@@ -609,7 +610,7 @@ class _CalendarMonthYearPickerState extends State<_CalendarMonthYearPicker> {
                 IconButton(
                   icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
                   onPressed: () => setState(() => _year--),
-                  tooltip: 'Año anterior',
+                  tooltip: l10n.appCalendarPreviousYearTooltip,
                 ),
                 Expanded(
                   child: Text(
@@ -621,7 +622,7 @@ class _CalendarMonthYearPickerState extends State<_CalendarMonthYearPicker> {
                 IconButton(
                   icon: const Icon(Icons.chevron_right, color: AppColors.textPrimary),
                   onPressed: () => setState(() => _year++),
-                  tooltip: 'Año siguiente',
+                  tooltip: l10n.appCalendarNextYearTooltip,
                 ),
               ],
             ),

@@ -74,22 +74,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingAboutWhatYouFindIntro => 'You will have access to various information such as:';
 
   @override
-  String get landingAboutBullet1 => 'Your personal and contact information.';
+  String get landingAboutBullet1 => 'Your personal information.';
 
   @override
-  String get landingAboutBullet2 => 'Your information from other Public Administrations.';
+  String get landingAboutBullet2 => 'Your cases and their processing status.';
 
   @override
-  String get landingAboutBullet3 => 'Your ongoing cases and their processing status.';
+  String get landingAboutBullet3 => 'Your notifications.';
 
   @override
-  String get landingAboutBullet4 => 'Your pending notifications.';
+  String get landingAboutBullet4 => 'Your digital cards.';
 
   @override
-  String get landingAboutBullet5 => 'Your digital cards.';
+  String get landingAboutBullet5 => 'Your appointments and events.';
 
   @override
-  String get landingAboutBullet6 => 'Your information from the Regional Government of Castilla-La Mancha.';
+  String get landingAboutBullet6 => 'Personalized recommendations based on your interests.';
 
   @override
   String get landingAboutAccessButton => 'Access my Citizen Space';
@@ -3341,13 +3341,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEducationInterestLinksTitle => 'Links of interest';
 
   @override
-  String get myDataEducationLinkEducationPortal => 'Portal de Educación de Castilla-La Mancha';
+  String get myDataEducationLinkEducationPortal => 'Castilla-La Mancha Education Portal';
 
   @override
   String get myDataEducationLinkTeachingStaff => 'Teaching staff';
 
   @override
-  String get myDataEducationLinkScholarships => 'Becas y ayudas para estudiantes';
+  String get myDataEducationLinkScholarships => 'Grants and scholarships for students';
 
   @override
   String get myDataHealthInfoSheetTitle => 'About My Health data';
@@ -3443,238 +3443,238 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthAppointmentModality => 'On-demand teleconsultation';
 
   @override
-  String get gestionTitle => 'Gestión';
+  String get gestionTitle => 'Procedures';
 
   @override
-  String get gestionExpedientesTitle => 'Mis expedientes';
+  String get gestionExpedientesTitle => 'My cases';
 
   @override
-  String get gestionExpedientesDescription => 'Consulta y gestiona tus expedientes administrativos';
+  String get gestionExpedientesDescription => 'View and manage your administrative cases';
 
   @override
-  String get gestionRegistrosTitle => 'Mis registros';
+  String get gestionRegistrosTitle => 'My registry entries';
 
   @override
-  String get gestionRegistrosDescription => 'Accede a tus entradas y salidas de registro';
+  String get gestionRegistrosDescription => 'Access your incoming and outgoing registry entries';
 
   @override
-  String get gestionAportacionTitle => 'Aportar documentos a un expediente de terceros';
+  String get gestionAportacionTitle => 'Submit documents to a third party\'s case';
 
   @override
-  String get gestionAportacionDescription => 'Adjunta documentación a expedientes de otras personas';
+  String get gestionAportacionDescription => 'Attach documents to other people\'s cases';
 
   @override
-  String get gestionNotificacionesTitle => 'Mis notificaciones';
+  String get gestionNotificacionesTitle => 'My notifications';
 
   @override
-  String get gestionNotificacionesDescription => 'Gestiona tus notificaciones electrónicas';
+  String get gestionNotificacionesDescription => 'Manage your electronic notifications';
 
   @override
-  String get gestionSectionComingSoon => 'Función disponible próximamente';
+  String get gestionSectionComingSoon => 'Feature coming soon';
 
   @override
-  String get gestionExpedientesPageTitle => 'Mis expedientes';
+  String get gestionExpedientesPageTitle => 'My cases';
 
   @override
-  String get gestionExpedientesNumExpedienteLabel => 'Nº EXPEDIENTE.';
+  String get gestionExpedientesNumExpedienteLabel => 'CASE NO.';
 
   @override
-  String get gestionExpedientesFechaInicioLabel => 'FECHA DE INICIO';
+  String get gestionExpedientesFechaInicioLabel => 'START DATE';
 
   @override
-  String get gestionExpedientesEstadoLabel => 'ESTADO';
+  String get gestionExpedientesEstadoLabel => 'STATUS';
 
   @override
-  String get gestionExpedientesLoadError => 'No hemos podido cargar tus expedientes';
+  String get gestionExpedientesLoadError => 'We could not load your cases';
 
   @override
-  String get gestionExpedientesEmpty => 'No tienes expedientes activos';
+  String get gestionExpedientesEmpty => 'You have no active cases';
 
   @override
-  String get gestionExpedientesDetalleTitle => 'Detalle de expediente';
+  String get gestionExpedientesDetalleTitle => 'Case details';
 
   @override
-  String get gestionExpedientesDatosExpedienteTitle => 'Datos del Expediente';
+  String get gestionExpedientesDatosExpedienteTitle => 'Case information';
 
   @override
-  String get gestionExpedientesEstadoTramitacionTitle => 'Estado de tramitación';
+  String get gestionExpedientesEstadoTramitacionTitle => 'Processing status';
 
   @override
-  String get gestionExpedientesConsejeriaLabel => 'CONSEJERÍA';
+  String get gestionExpedientesConsejeriaLabel => 'REGIONAL MINISTRY';
 
   @override
-  String get gestionExpedientesOficinaTramitadoraLabel => 'OFICINA TRAMITADORA';
+  String get gestionExpedientesOficinaTramitadoraLabel => 'PROCESSING OFFICE';
 
   @override
-  String get gestionExpedientesFechaCierreLabel => 'FECHA DE CIERRE';
+  String get gestionExpedientesFechaCierreLabel => 'CLOSING DATE';
 
   @override
-  String get gestionExpedientesAportarDocumentacionButton => 'Aportar documentación';
+  String get gestionExpedientesAportarDocumentacionButton => 'Submit documents';
 
   @override
-  String get gestionExpedientesDetalleLoadError => 'No hemos podido cargar el detalle del expediente';
+  String get gestionExpedientesDetalleLoadError => 'We could not load the case details';
 
   @override
-  String get gestionAportarDocumentacionTitle => 'Aportar documentación';
+  String get gestionAportarDocumentacionTitle => 'Submit documents';
 
   @override
-  String get gestionAportarDocumentacionHelperText => 'Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.';
+  String get gestionAportarDocumentacionHelperText => 'You can attach up to 5 files of max. 20MB each, in PDF, DOC, DOCX, ZIP, XLS or XLSX format.';
 
   @override
-  String get gestionAportarDocumentacionCancelarButton => 'Cancelar';
+  String get gestionAportarDocumentacionCancelarButton => 'Cancel';
 
   @override
-  String get gestionAportarDocumentacionSeleccionarButton => 'Seleccionar documentos';
+  String get gestionAportarDocumentacionSeleccionarButton => 'Select documents';
 
   @override
-  String get gestionAportarDocumentacionRegistrarButton => 'Registrar documentos aportados';
+  String get gestionAportarDocumentacionRegistrarButton => 'Register submitted documents';
 
   @override
-  String get gestionAportarDocumentacionMaxFilesError => 'No puedes aportar más de 5 ficheros.';
+  String get gestionAportarDocumentacionMaxFilesError => 'You cannot attach more than 5 files.';
 
   @override
-  String get gestionAportarDocumentacionMaxSizeError => 'Cada fichero debe pesar como máximo 20MB.';
+  String get gestionAportarDocumentacionMaxSizeError => 'Each file must be 20MB at most.';
 
   @override
-  String get gestionAportarDocumentacionInvalidTypeError => 'Formato de fichero no permitido.';
+  String get gestionAportarDocumentacionInvalidTypeError => 'File format not allowed.';
 
   @override
-  String get gestionAportarDocumentacionDuplicateError => 'Ese fichero ya se ha añadido.';
+  String get gestionAportarDocumentacionDuplicateError => 'That file has already been added.';
 
   @override
-  String get gestionAportarDocumentacionNoFilesError => 'Selecciona al menos un fichero antes de registrar.';
+  String get gestionAportarDocumentacionNoFilesError => 'Select at least one file before registering.';
 
   @override
-  String get gestionAportarDocumentacionRegistroSuccess => 'Documentación registrada correctamente.';
+  String get gestionAportarDocumentacionRegistroSuccess => 'Documents registered successfully.';
 
   @override
-  String get gestionAportarDocumentacionRegistroError => 'No hemos podido registrar la documentación. Inténtalo de nuevo.';
+  String get gestionAportarDocumentacionRegistroError => 'We could not register the documents. Please try again.';
 
   @override
-  String get gestionAportarDocumentacionUploadIncompleto => 'Falta algún fichero por enviar. Al registrar de nuevo se enviarán todos otra vez.';
+  String get gestionAportarDocumentacionUploadIncompleto => 'Some files have not been sent yet. Registering again will send all of them once more.';
 
   @override
-  String get gestionAportarDocumentacionUploadErrorParcial => 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
+  String get gestionAportarDocumentacionUploadErrorParcial => 'Some files could not be sent. You can try again.';
 
   @override
-  String get gestionAportarDocumentacionExitoTitulo => 'Los documentos han sido enviados correctamente';
+  String get gestionAportarDocumentacionExitoTitulo => 'The documents have been sent successfully';
 
   @override
-  String get gestionAportarDocumentacionExitoDescripcion => 'La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante';
+  String get gestionAportarDocumentacionExitoDescripcion => 'The document submission has been registered, although the documents will not be visible from the case.\n\nWe recommend downloading the submission receipt before continuing: it will not be available later';
 
   @override
-  String get gestionAportarDocumentacionCerrarSinDescargarButton => 'Cerrar sin descargar';
+  String get gestionAportarDocumentacionCerrarSinDescargarButton => 'Close without downloading';
 
   @override
-  String get gestionAportarDocumentacionDescargarJustificanteButton => 'Descargar justificante';
+  String get gestionAportarDocumentacionDescargarJustificanteButton => 'Download receipt';
 
   @override
-  String get gestionAportarDocumentacionJustificanteDescargado => 'Justificante de aportación descargado';
+  String get gestionAportarDocumentacionJustificanteDescargado => 'Submission receipt downloaded';
 
   @override
-  String get gestionAportarDocumentacionJustificanteError => 'No se pudo guardar el justificante. Inténtalo de nuevo.';
+  String get gestionAportarDocumentacionJustificanteError => 'The receipt could not be saved. Please try again.';
 
   @override
-  String get gestionAportarDocumentacionFinalizacionError => 'Los documentos se han subido pero no se ha podido finalizar el registro. Puedes reintentarlo.';
+  String get gestionAportarDocumentacionFinalizacionError => 'The documents were uploaded but the registration could not be completed. You can try again.';
 
   @override
-  String get gestionRegistrosPageTitle => 'Mis registros';
+  String get gestionRegistrosPageTitle => 'My registry entries';
 
   @override
-  String get gestionRegistrosEntradasTab => 'Entradas de registro';
+  String get gestionRegistrosEntradasTab => 'Incoming entries';
 
   @override
-  String get gestionRegistrosSalidasTab => 'Salidas de registro';
+  String get gestionRegistrosSalidasTab => 'Outgoing entries';
 
   @override
-  String get gestionRegistrosNumRegistroLabel => 'Nº REGISTRO';
+  String get gestionRegistrosNumRegistroLabel => 'REGISTRY NO.';
 
   @override
-  String get gestionRegistrosFechaLabel => 'FECHA';
+  String get gestionRegistrosFechaLabel => 'DATE';
 
   @override
-  String get gestionRegistrosConsejeriaOrigenLabel => 'CONSERJERÍA DE ORIGEN';
+  String get gestionRegistrosConsejeriaOrigenLabel => 'ORIGIN REGIONAL MINISTRY';
 
   @override
-  String get gestionRegistrosConsejeriaDestinoLabel => 'CONSERJERÍA DE DESTINO';
+  String get gestionRegistrosConsejeriaDestinoLabel => 'DESTINATION REGIONAL MINISTRY';
 
   @override
-  String get gestionRegistrosDatosRegistroTitle => 'Datos del Registro';
+  String get gestionRegistrosDatosRegistroTitle => 'Registry entry information';
 
   @override
-  String get gestionRegistrosEntradasLoadError => 'No hemos podido cargar tus entradas de registro';
+  String get gestionRegistrosEntradasLoadError => 'We could not load your incoming registry entries';
 
   @override
-  String get gestionRegistrosSalidasLoadError => 'No hemos podido cargar tus salidas de registro';
+  String get gestionRegistrosSalidasLoadError => 'We could not load your outgoing registry entries';
 
   @override
-  String get gestionRegistrosEntradasEmpty => 'No tienes entradas de registro';
+  String get gestionRegistrosEntradasEmpty => 'You have no incoming registry entries';
 
   @override
-  String get gestionRegistrosSalidasEmpty => 'No tienes salidas de registro';
+  String get gestionRegistrosSalidasEmpty => 'You have no outgoing registry entries';
 
   @override
-  String get gestionRegistrosDetalleEntradaTitle => 'Detalle de entrada de registro';
+  String get gestionRegistrosDetalleEntradaTitle => 'Incoming registry entry details';
 
   @override
-  String get gestionRegistrosDetalleSalidaTitle => 'Detalle salida de registro';
+  String get gestionRegistrosDetalleSalidaTitle => 'Outgoing registry entry details';
 
   @override
-  String get gestionAportacionTipoIdLabel => 'Tipo de identificación y número';
+  String get gestionAportacionTipoIdLabel => 'Identification type and number';
 
   @override
   String get gestionAportacionTipoIdHint => '000000000A';
 
   @override
-  String get gestionAportacionTipoIdHelper => 'El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos';
+  String get gestionAportacionTipoIdHelper => 'The number must be a valid NIF, CIF, Passport, NIE or CEE';
 
   @override
-  String get gestionAportacionIntroText => 'Consulta el expediente sobre el que quieres aportar documentación';
+  String get gestionAportacionIntroText => 'Look up the case you want to submit documents to';
 
   @override
-  String get gestionAportacionPersonaLabel => 'IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE';
+  String get gestionAportacionPersonaLabel => 'IDENTIFY THE INTERESTED PERSON NAMED IN THE CASE';
 
   @override
-  String get gestionAportacionExpedienteLabel => 'INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN';
+  String get gestionAportacionExpedienteLabel => 'SPECIFY THE CASE THE DOCUMENTS ARE SUBMITTED TO';
 
   @override
-  String get gestionAportacionExpedienteNote => '*Rellenar solo uno de los dos campos';
+  String get gestionAportacionExpedienteNote => '*Fill in only one of the two fields';
 
   @override
-  String get gestionAportacionNumRegistroLabel => 'NÚMERO DE REGISTRO DEL EXPEDIENTE';
+  String get gestionAportacionNumRegistroLabel => 'CASE REGISTRATION NUMBER';
 
   @override
-  String get gestionAportacionNumRegistroHint => 'Introduce el número de registro';
+  String get gestionAportacionNumRegistroHint => 'Enter the registration number';
 
   @override
-  String get gestionAportacionNumRegistroHelper => 'Este número se obtiene en el momento de la presentación del expediente';
+  String get gestionAportacionNumRegistroHelper => 'This number is provided when the case is filed';
 
   @override
-  String get gestionAportacionCodIdentificadorLabel => 'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE';
+  String get gestionAportacionCodIdentificadorLabel => 'CASE IDENTIFIER CODE';
 
   @override
-  String get gestionAportacionCodIdentificadorHint => 'Introduce el código identificador';
+  String get gestionAportacionCodIdentificadorHint => 'Enter the identifier code';
 
   @override
-  String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';
+  String get gestionAportacionCodIdentificadorHelper => 'You can find this number in the case documentation';
 
   @override
-  String get gestionAportacionInfoHeading => 'Aportar documentos a un expediente';
+  String get gestionAportacionInfoHeading => 'Submit documents to a case';
 
   @override
-  String get gestionAportacionInfoBody => 'Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:';
+  String get gestionAportacionInfoBody => 'You can submit documents to a case while the procedure is in progress and before the final decision is issued, only if you are:';
 
   @override
-  String get gestionAportacionInfoBullet1 => 'La persona interesada';
+  String get gestionAportacionInfoBullet1 => 'The interested person';
 
   @override
-  String get gestionAportacionInfoBullet2 => 'Su representante legal';
+  String get gestionAportacionInfoBullet2 => 'Their legal representative';
 
   @override
-  String get gestionAportacionInfoBullet3 => 'Una persona autorizada';
+  String get gestionAportacionInfoBullet3 => 'An authorized person';
 
   @override
-  String get gestionAportacionSeleccionarTipo => 'Seleccionar tipo de documento';
+  String get gestionAportacionSeleccionarTipo => 'Select document type';
 
   @override
   String get gestionAportacionDni => 'DNI';
@@ -3686,119 +3686,1032 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionCif => 'CIF';
 
   @override
-  String get gestionAportacionPasaporte => 'Pasaporte';
+  String get gestionAportacionPasaporte => 'Passport';
 
   @override
   String get gestionAportacionCee => 'CEE';
 
   @override
-  String get gestionAportacionFindButton => 'Encontrar expediente';
+  String get gestionAportacionFindButton => 'Find case';
 
   @override
-  String get gestionAportacionDocNumberRequiredError => 'Introduce el número de documento de la persona interesada.';
+  String get gestionAportacionDocNumberRequiredError => 'Enter the interested person\'s document number.';
 
   @override
-  String get gestionAportacionCamposExpedienteError => 'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).';
+  String get gestionAportacionCamposExpedienteError => 'Fill in either the case registration number or the case identifier code (only one of the two).';
 
   @override
-  String get gestionNotificacionesContextualMessage => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
+  String get gestionNotificacionesContextualMessage => 'Register your contact details to start receiving notifications from the Regional Government of Castilla-La Mancha.';
 
   @override
-  String get gestionNotificacionesContextualAction => 'Activar';
+  String get gestionNotificacionesContextualAction => 'Activate';
 
   @override
-  String get gestionNotificacionesAltaTitle => 'Activar notificaciones';
+  String get gestionNotificacionesAltaTitle => 'Activate notifications';
 
   @override
-  String get gestionNotificacionesAltaIntro => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
+  String get gestionNotificacionesAltaIntro => 'Register your contact details to start receiving notifications from the Regional Government of Castilla-La Mancha.';
 
   @override
-  String get gestionNotificacionesAltaRequiredNote => '*Obligatorio rellenar al menos uno de los medios de contacto';
+  String get gestionNotificacionesAltaRequiredNote => '*You must fill in at least one of the contact methods';
 
   @override
-  String get gestionNotificacionesAltaPhoneLabel => 'Teléfono móvil';
+  String get gestionNotificacionesAltaPhoneLabel => 'Mobile phone';
 
   @override
   String get gestionNotificacionesAltaPhoneHint => '600 000 000';
 
   @override
-  String get gestionNotificacionesAltaPhoneHelper => 'Para recibir las notificaciones en mensaje SMS';
+  String get gestionNotificacionesAltaPhoneHelper => 'To receive the notifications by SMS';
 
   @override
-  String get gestionNotificacionesAltaEmailLabel => 'Correo electrónico';
+  String get gestionNotificacionesAltaEmailLabel => 'Email address';
 
   @override
-  String get gestionNotificacionesAltaEmailHint => 'Ejemplo: mperez@correo.es';
+  String get gestionNotificacionesAltaEmailHint => 'Example: mperez@mail.com';
 
   @override
-  String get gestionNotificacionesAltaEmailHelper => 'Para recibir las notificaciones en tu correo electrónico';
+  String get gestionNotificacionesAltaEmailHelper => 'To receive the notifications in your email inbox';
 
   @override
-  String get gestionNotificacionesAltaSaveButton => 'Dar de alta notificaciones';
+  String get gestionNotificacionesAltaSaveButton => 'Sign up for notifications';
 
   @override
-  String get gestionNotificacionesAltaInfoTitle => 'Datos de contacto';
+  String get gestionNotificacionesAltaInfoTitle => 'Contact details';
 
   @override
-  String get gestionNotificacionesAltaInfoBody => 'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.';
+  String get gestionNotificacionesAltaInfoBody => 'Provide a mobile phone number or an email address to receive notification alerts.';
 
   @override
-  String get gestionNotificacionesAltaErrorAtLeastOne => 'Debes indicar al menos un teléfono móvil o un correo electrónico.';
+  String get gestionNotificacionesAltaErrorAtLeastOne => 'You must provide at least a mobile phone number or an email address.';
 
   @override
-  String get gestionNotificacionesAltaErrorPhone => 'Introduce un teléfono móvil válido.';
+  String get gestionNotificacionesAltaErrorPhone => 'Enter a valid mobile phone number.';
 
   @override
-  String get gestionNotificacionesAltaErrorEmail => 'Introduce un correo electrónico válido.';
+  String get gestionNotificacionesAltaErrorEmail => 'Enter a valid email address.';
 
   @override
-  String get gestionNotificacionesAltaErrorNoCitizenId => 'No hemos podido identificar al ciudadano.';
+  String get gestionNotificacionesAltaErrorNoCitizenId => 'We could not identify the citizen.';
 
   @override
-  String get gestionNotificacionesAltaSuccessMessage => 'Datos de contacto guardados';
+  String get gestionNotificacionesAltaSuccessMessage => 'Contact details saved';
 
   @override
-  String get gestionNotificacionesPageTitle => 'Mis notificaciones';
+  String get gestionNotificacionesPageTitle => 'My notifications';
 
   @override
-  String get gestionNotificacionesTabTodo => 'Todo';
+  String get gestionNotificacionesTabTodo => 'All';
 
   @override
-  String get gestionNotificacionesTabPendientes => 'Pendientes';
+  String get gestionNotificacionesTabPendientes => 'Pending';
 
   @override
-  String get gestionNotificacionesTabAceptadas => 'Aceptadas';
+  String get gestionNotificacionesTabAceptadas => 'Accepted';
 
   @override
-  String get gestionNotificacionesTabExpiradas => 'Expiradas';
+  String get gestionNotificacionesTabExpiradas => 'Expired';
 
   @override
-  String get gestionNotificacionesProcedimientoLabel => 'Procedimiento';
+  String get gestionNotificacionesProcedimientoLabel => 'Procedure';
 
   @override
-  String get gestionNotificacionesFechaCaducidadLabel => 'Fecha expiración';
+  String get gestionNotificacionesFechaCaducidadLabel => 'Expiry date';
 
   @override
-  String get gestionNotificacionesTagPendiente => 'Pendiente';
+  String get gestionNotificacionesTagPendiente => 'Pending';
 
   @override
-  String get gestionNotificacionesTagAceptada => 'Aceptada';
+  String get gestionNotificacionesTagAceptada => 'Accepted';
 
   @override
-  String get gestionNotificacionesTagRechazada => 'Rechazada';
+  String get gestionNotificacionesTagRechazada => 'Rejected';
 
   @override
-  String get gestionNotificacionesTagExpirada => 'Expirada';
+  String get gestionNotificacionesTagExpirada => 'Expired';
 
   @override
-  String get gestionNotificacionesEmpty => 'No tienes notificaciones en este momento';
+  String get gestionNotificacionesEmpty => 'You have no notifications at the moment';
 
   @override
-  String get gestionNotificacionesLoadError => 'No se han podido cargar las notificaciones';
+  String get gestionNotificacionesLoadError => 'The notifications could not be loaded';
 
   @override
-  String get consentRevokedSessionClosed => 'Has retirado la autorización para consultar tus datos, así que hemos cerrado la sesión. Vuelve a iniciarla para concederla de nuevo.';
+  String get consentRevokedSessionClosed => 'You have withdrawn the authorization to access your data, so we have closed your session. Sign in again to grant it once more.';
 
   @override
-  String get authorizationRevokedMessage => 'Ya no tienes autorizada esta consulta. Cerramos la sesión para que puedas volver a concederla al entrar.';
+  String get authorizationRevokedMessage => 'You no longer have authorization for this query. We are closing your session so you can grant it again when you sign back in.';
+
+  @override
+  String get mainTabHome => 'Home';
+
+  @override
+  String get mainTabGestion => 'Procedures';
+
+  @override
+  String get mainTabMyData => 'My data';
+
+  @override
+  String get mainTabAgenda => 'Calendar';
+
+  @override
+  String get mainTabRecommendations => 'Recommended';
+
+  @override
+  String get notFoundPageTitle => 'Page not found';
+
+  @override
+  String get notFoundPageMessage => '404 — The requested page does not exist.';
+
+  @override
+  String get appNotificationContactFormTitle => 'Contact details for electronic notifications';
+
+  @override
+  String get appNotificationContactFormRequiredNoteSemantic => 'Required: fill in at least one of the contact methods';
+
+  @override
+  String get appNotificationContactFormRequiredNote => '* At least one of the contact methods is required';
+
+  @override
+  String get appNotificationContactFormSaveButton => 'Save changes';
+
+  @override
+  String get appPreferenceEditAction => 'Edit';
+
+  @override
+  String get appPreferenceStatusDisabled => 'Disabled';
+
+  @override
+  String get appPreferenceStatusPending => 'Pending';
+
+  @override
+  String get appPreferenceStatusEnabled => 'Enabled';
+
+  @override
+  String get appPreferenceStatusActive => 'Active';
+
+  @override
+  String get appNotificationContactCardTitle => 'Notification contact details';
+
+  @override
+  String get appNotificationContactCardEditAction => 'Edit details';
+
+  @override
+  String get appQrCodeLabel => 'QR code';
+
+  @override
+  String get appQrDownloadFormatTitle => 'Download format';
+
+  @override
+  String appQrDownloadFormatLabel(String format) {
+    return 'Download $format';
+  }
+
+  @override
+  String appQrDownloadingFormatLabel(String format) {
+    return 'Downloading $format';
+  }
+
+  @override
+  String get appCalendarPreviousYearTooltip => 'Previous year';
+
+  @override
+  String get appCalendarNextYearTooltip => 'Next year';
+
+  @override
+  String get appSearchFieldHint => 'Search';
+
+  @override
+  String commonWeekdayName(String weekday) {
+    String _temp0 = intl.Intl.selectLogic(
+      weekday,
+      {
+        'monday': 'Monday',
+        'tuesday': 'Tuesday',
+        'wednesday': 'Wednesday',
+        'thursday': 'Thursday',
+        'friday': 'Friday',
+        'saturday': 'Saturday',
+        'sunday': 'Sunday',
+        'other': '',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String commonMonthName(String month) {
+    String _temp0 = intl.Intl.selectLogic(
+      month,
+      {
+        'january': 'January',
+        'february': 'February',
+        'march': 'March',
+        'april': 'April',
+        'may': 'May',
+        'june': 'June',
+        'july': 'July',
+        'august': 'August',
+        'september': 'September',
+        'october': 'October',
+        'november': 'November',
+        'december': 'December',
+        'other': '',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String commonMonthShortName(String month) {
+    String _temp0 = intl.Intl.selectLogic(
+      month,
+      {
+        'january': 'Jan',
+        'february': 'Feb',
+        'march': 'Mar',
+        'april': 'Apr',
+        'may': 'May',
+        'june': 'Jun',
+        'july': 'Jul',
+        'august': 'Aug',
+        'september': 'Sep',
+        'october': 'Oct',
+        'november': 'Nov',
+        'december': 'Dec',
+        'other': '',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String commonUpdatedAt(Object day, Object month, Object time, Object year) {
+    return 'Updated on $day $month $year at $time';
+  }
+
+  @override
+  String agendaFilterDays(Object days) {
+    return '$days days';
+  }
+
+  @override
+  String get agendaRefreshTooltip => 'Refresh agenda';
+
+  @override
+  String get agendaEmptyAppointments => 'There are no appointments for the selected period.';
+
+  @override
+  String get agendaChannelPhone => 'phone';
+
+  @override
+  String get agendaChannelInPerson => 'in person';
+
+  @override
+  String get preferencesInfoSheetBody => 'Manage your authorizations and alerts.';
+
+  @override
+  String get preferencesLifeEventsInactiveDescription => 'To select your life events and receive recommendations, you must first accept the use of this data in Terms of use and authorizations.';
+
+  @override
+  String get preferencesLifeEventsPendingDescription => 'You have not yet selected the topics you want to receive updates about in your recommendations section';
+
+  @override
+  String get preferencesLifeEventsActiveDescription => 'You have life events selected to receive personalized recommendations.';
+
+  @override
+  String get preferencesSelectAction => 'Select';
+
+  @override
+  String get preferencesNotificationContactTitle => 'Contact details for notifications';
+
+  @override
+  String get preferencesNotificationContactInactiveDescription => 'To receive electronic notifications you must provide at least one contact method for alerts.';
+
+  @override
+  String get preferencesNotificationContactPendingDescription => 'Manage the contact method for receiving electronic notification alerts.';
+
+  @override
+  String get preferencesNotificationContactActiveDescription => 'You have at least one alert contact method set up for receiving electronic notifications.';
+
+  @override
+  String get preferencesManageAction => 'Manage';
+
+  @override
+  String get preferencesRevokeDialogTitle => 'Permission revocation';
+
+  @override
+  String get preferencesRevokeDialogDescription => 'Do you want to delete your selection of terms of use, authorizations, and life events?\nDoing so will end your current session, and if you sign in again you will have to complete the process from the beginning.';
+
+  @override
+  String get preferencesRevokeDialogConfirm => 'Delete';
+
+  @override
+  String get preferencesMissingUserIdError => 'The user identifier could not be found.';
+
+  @override
+  String get preferencesResetAuthorizationsError => 'We could not delete your authorizations. Please try again.';
+
+  @override
+  String get preferencesNotificationContactEditTitle => 'Edit contact details';
+
+  @override
+  String get gestionNotificacionesAltaErrorNoDni => 'We could not retrieve the citizen\'s ID number (DNI).';
+
+  @override
+  String myDataEducationTitleNumberLabel(Object number) {
+    return 'DEGREE NO.: $number';
+  }
+
+  @override
+  String get myDataEducationExpeditionDateLabel => 'DATE OF ISSUE';
+
+  @override
+  String get myDataEducationCompletionDateLabel => 'COMPLETION DATE';
+
+  @override
+  String get myDataEducationProvinceLabel => 'PROVINCE';
+
+  @override
+  String myDataEducationBookLabel(Object value) {
+    return 'BOOK: $value';
+  }
+
+  @override
+  String myDataEducationOrderLabel(Object value) {
+    return 'ORDER: $value';
+  }
+
+  @override
+  String myDataEducationFolioLabel(Object value) {
+    return 'FOLIO: $value';
+  }
+
+  @override
+  String myDataHealthActiveFiltersTooltip(Object count) {
+    return 'Active search criteria: $count';
+  }
+
+  @override
+  String get myDataHealthSearchAppointmentsTooltip => 'Search appointments';
+
+  @override
+  String get myDataHealthFilterPrimaryCareTitle => 'Filter primary care appointments';
+
+  @override
+  String get myDataHealthFilterHospitalTitle => 'Filter hospital appointments';
+
+  @override
+  String get myDataHealthFilterDateLabel => 'Appointment date';
+
+  @override
+  String get recommendationsFilterPageTitle => 'Filter recommendations by life event';
+
+  @override
+  String get recommendationsFilterInfoMessage => 'Select the life events you want to use to filter your recommendations.';
+
+  @override
+  String get recommendationsFilterIntro => 'You can filter recommendations by the life events you have set up in your preferences to receive information personalized and tailored to your situation.';
+
+  @override
+  String get recommendationsFilterByLifeEvents => 'Filter by life events';
+
+  @override
+  String get recommendationsPreferencesHint => 'Personalize your recommendations by editing your life events in Preferences whenever you want.';
+
+  @override
+  String get recommendationsEmptyNoMatches => 'There are currently no recommendations available that match your preferences. Adjust your life events to explore more options, or wait for new updates.';
+
+  @override
+  String get recommendationsEditLifeEventsCta => 'Edit preferences - life events';
+
+  @override
+  String get recommendationsEmptyFiltered => 'There are no recommendations for the applied filter.';
+
+  @override
+  String get recommendationsResetFilterCta => 'Reset filter';
+
+  @override
+  String recommendationsDeadlineFrom(Object date) {
+    return 'from $date';
+  }
+
+  @override
+  String recommendationsDeadlineUntil(Object date) {
+    return 'until $date';
+  }
+
+  @override
+  String get digitalCardsAuthorizationCheckErrorMessage => 'We could not verify the authorization required to display your digital cards.';
+
+  @override
+  String get digitalCardsInfoSheetTitle => 'About My Digital Cards';
+
+  @override
+  String get digitalCardsInfoSheetBody => 'Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.';
+
+  @override
+  String get digitalCardsAuthorizationRequiredMessage => 'You must authorize the consultation of the administrative records held by the JCCM in Terms of use and authorizations.';
+
+  @override
+  String digitalCardsSaveDialogTitle(Object format) {
+    return 'Save $format';
+  }
+
+  @override
+  String digitalCardsDownloadSuccess(Object format) {
+    return '$format saved successfully.';
+  }
+
+  @override
+  String digitalCardsDownloadError(Object format) {
+    return 'We could not download $format.';
+  }
+
+  @override
+  String get drawerDefaultUserName => 'Citizen';
+
+  @override
+  String get drawerIdentifierFallbackLabel => 'Identifier';
+
+  @override
+  String get gestionNotificacionDetalleAcceptedReloadError => 'You have accepted the notification, but we could not load the updated details.';
+
+  @override
+  String get gestionNotificacionDetalleConfirmTitle => 'Confirm notification acceptance';
+
+  @override
+  String get gestionNotificacionDetalleConfirmDescription => 'Are you sure you want to accept the notification?';
+
+  @override
+  String get gestionNotificacionDetalleConfirmCancel => 'No';
+
+  @override
+  String get gestionNotificacionDetalleConfirmAccept => 'Yes, I am sure';
+
+  @override
+  String get gestionNotificacionDetalleAcceptError => 'We could not accept the notification. Please try again.';
+
+  @override
+  String get gestionNotificacionDetalleDocumentoDescargado => 'Document downloaded.';
+
+  @override
+  String get gestionNotificacionDetalleDocumentoDescargaError => 'We could not download the document. Please try again.';
+
+  @override
+  String get gestionNotificacionDetalleDatosExpedienteTitle => 'Case information';
+
+  @override
+  String get gestionNotificacionDetalleOrganismoEmisorLabel => 'Issuing body';
+
+  @override
+  String get gestionNotificacionDetalleNumExpedienteLabel => 'Case No.';
+
+  @override
+  String get gestionNotificacionDetalleEstadoTitle => 'Notification status';
+
+  @override
+  String get gestionNotificacionDetalleFechaPuestaDisposicionLabel => 'Date made available';
+
+  @override
+  String get gestionNotificacionesFechaExpiracionLabel => 'Expiration date';
+
+  @override
+  String get gestionNotificacionDetalleFechaLecturaLabel => 'Read date';
+
+  @override
+  String get gestionNotificacionDetalleDocumentosTitle => 'Documents';
+
+  @override
+  String get gestionNotificacionDetalleAceptarButton => 'Accept notification';
+
+  @override
+  String get gestionNotificacionesBuscarTooltip => 'Search notifications';
+
+  @override
+  String get gestionNotificacionesConfigurarTooltip => 'Configure notifications';
+
+  @override
+  String get gestionNotificacionesFiltrarTitle => 'Filter notifications';
+
+  @override
+  String get gestionNotificacionesFiltroDescripcionLabel => 'Notification description';
+
+  @override
+  String get gestionNotificacionesFiltrosAnterioresTooltip => 'Show previous filters';
+
+  @override
+  String get gestionRegistrosBuscarEntradasTooltip => 'Search incoming registry entries';
+
+  @override
+  String get gestionRegistrosBuscarSalidasTooltip => 'Search outgoing registry entries';
+
+  @override
+  String get gestionRegistrosFiltrarEntradasTitle => 'Filter incoming registry entries';
+
+  @override
+  String get gestionRegistrosFiltrarSalidasTitle => 'Filter outgoing registry entries';
+
+  @override
+  String get gestionRegistrosFiltroDescripcionEntradaLabel => 'Entry description';
+
+  @override
+  String get gestionRegistrosFiltroDescripcionSalidaLabel => 'Outgoing entry description';
+
+  @override
+  String get gestionRegistrosFiltroFechaEntradaLabel => 'Entry date';
+
+  @override
+  String get gestionRegistrosFiltroFechaSalidaLabel => 'Outgoing date';
+
+  @override
+  String gestionExpedientesFiltrosActivosTooltip(Object count) {
+    return 'Active search criteria: $count';
+  }
+
+  @override
+  String get gestionExpedientesBuscarTooltip => 'Search cases';
+
+  @override
+  String get gestionExpedientesFiltrarTitle => 'Filter cases';
+
+  @override
+  String get gestionExpedientesFiltroDescripcionLabel => 'Case description';
+
+  @override
+  String get gestionExpedientesFiltroFechaCierreLabel => 'Closing date';
+
+  @override
+  String get gestionFiltroNumeroHint => 'Enter the number';
+
+  @override
+  String get gestionFiltroDescripcionHint => 'Enter words from the description';
+
+  @override
+  String get gestionMasInformacionTooltip => 'More information';
+
+  @override
+  String get gestionAportacionPasaporteHint => 'Passport number';
+
+  @override
+  String get gestionAportacionCeeHint => 'CEE number';
+
+  @override
+  String get homeNewsSectionTitle => 'My updates';
+
+  @override
+  String get homeMyDataAccessesTitle => '“My data” shortcuts';
+
+  @override
+  String get homeNewsNotificationsTitle => 'Notifications';
+
+  @override
+  String get homeNewsNotificationsDescription => 'Check your pending notifications';
+
+  @override
+  String get homeNewsAppointmentsTitle => 'Upcoming appointments';
+
+  @override
+  String get homeNewsAppointmentsDescription => 'Review the appointments you have scheduled soon';
+
+  @override
+  String homeNewsLabelWithCount(String label, int count) {
+    return '$label ($count)';
+  }
+
+  @override
+  String get homeRecommendedProceduresTitle => 'Recommended procedures';
+
+  @override
+  String get homeGoToRecommendationsButton => 'Go to recommendations';
+
+  @override
+  String get homeCardsFabLabel => 'Cards';
+
+  @override
+  String get homeCardsFabShowAll => 'Show all';
+
+  @override
+  String get homeCardsFabExpandSemantics => 'Show digital cards';
+
+  @override
+  String get homeCardsFabCollapseSemantics => 'Close digital card shortcuts';
+
+  @override
+  String get homeCardsFabLoadingMessage => 'We are checking your digital cards.';
+
+  @override
+  String get homeCardsFabLoadFailedMessage => 'We could not check your digital cards.';
+
+  @override
+  String get homeCardsFabEmptyMessage => 'You have no digital cards available.';
+
+  @override
+  String homeRecommendationDeadlineFrom(String date) {
+    return 'from $date';
+  }
+
+  @override
+  String homeRecommendationDeadlineUntil(String date) {
+    return 'until $date';
+  }
+
+  @override
+  String get helpContactPageTitle => 'Help and contact';
+
+  @override
+  String get helpContactGuidesTitle => 'Help guides';
+
+  @override
+  String get helpContactGuidesIntro => 'If you need additional help, these Help Guides are available to you';
+
+  @override
+  String get helpContactGoToJccmPortal => 'Go to the JCCM web portal';
+
+  @override
+  String get helpContactInfoHeading => 'Contact information';
+
+  @override
+  String get helpContactPhonesIntro => 'For general inquiries and administrative information you can get in touch through the citizen service phone lines.';
+
+  @override
+  String get helpContactPhonesIntroBold1 => 'general inquiries and administrative information';
+
+  @override
+  String get helpContactPhonesIntroBold2 => 'citizen service phone lines';
+
+  @override
+  String get helpContactCallCitizenService => 'Call the Citizen Service line';
+
+  @override
+  String get helpContactExpedienteIntro => 'If you need to know more details about a case file, contact the processing office or the competent regional ministry.';
+
+  @override
+  String get helpContactExpedienteIntroBold => 'know more details about a case file';
+
+  @override
+  String get helpContactOfficesListTitle => 'List of Information and Registry Offices';
+
+  @override
+  String get helpContactSupportIntro => 'If you need technical assistance, contact us through the Technical Support form.';
+
+  @override
+  String get helpContactSupportIntroBold => 'technical assistance';
+
+  @override
+  String get helpContactSupportFormButton => 'Support Form';
+
+  @override
+  String get faqQuestion1 => 'What is Citizen Space and what can I find in it?';
+
+  @override
+  String get faqAnswer1 => 'Citizen Space brings together information and services of the Government of Castilla-La Mancha in a single place. You can check your data, case files, notifications, appointments, and other available services.';
+
+  @override
+  String get faqQuestion2 => 'What do I need to sign in?';
+
+  @override
+  String get faqAnswer2 => 'You need to identify yourself with Cl@ve, an electronic certificate, or the enabled access system. You can use Cl@ve Móvil, Cl@ve Permanente, electronic ID, or an electronic certificate.';
+
+  @override
+  String get faqQuestion3 => 'What personal data is stored in Citizen Space?';
+
+  @override
+  String get faqAnswer3 => 'The data needed to provide the services available in the app is displayed.';
+
+  @override
+  String get faqQuestion4 => 'The data shown contains an error. Can I correct it?';
+
+  @override
+  String get faqAnswer4 => 'Contact the body responsible for the procedure or case file to request the correction.';
+
+  @override
+  String get faqQuestion5 => 'What events are shown in My Agenda?';
+
+  @override
+  String get faqAnswer5 => 'Appointments, notices, and administrative events related to your services are shown.';
+
+  @override
+  String get supportFormPageTitle => 'Support form';
+
+  @override
+  String get supportCancelButton => 'Cancel';
+
+  @override
+  String get supportAcceptButton => 'Accept';
+
+  @override
+  String get supportRequiredFieldsNote => 'Fields marked with (*) are required';
+
+  @override
+  String get supportFieldFullName => 'First and last name';
+
+  @override
+  String get supportFieldFullNameHint => 'Example: María Pérez';
+
+  @override
+  String get supportFieldEmailHint => 'Example: mariaperez@email.com';
+
+  @override
+  String get supportFieldConfirmEmail => 'Confirm your email address';
+
+  @override
+  String get supportFieldSubjectHint => 'Example: Question about a notification';
+
+  @override
+  String get supportFieldSubjectHelper => 'Reason for your inquiry. 1000-character limit';
+
+  @override
+  String get supportFieldMessage => 'Message';
+
+  @override
+  String get supportAttachmentSectionLabel => 'ATTACH SUPPORTING DOCUMENTS';
+
+  @override
+  String get supportAttachmentUploadHint => 'You can upload a single file or image of up to 20 MB in GIF, JPEG, JPG, PNG, TXT, PDF, DOC, or DOCX format to help identify the problem.';
+
+  @override
+  String get supportAttachmentPickDocuments => 'Select documents';
+
+  @override
+  String get supportAttachmentChangeDocument => 'Change document';
+
+  @override
+  String get supportConsentDataUseLabel => 'I authorize the use and management of my data';
+
+  @override
+  String get supportPrivacyInfoDescription => 'The data protection information applicable to this form is published at';
+
+  @override
+  String get supportErrorSubjectOverLimit => 'The subject cannot exceed 1000 characters.';
+
+  @override
+  String get supportErrorAttachmentTooLarge => 'The file exceeds the maximum allowed size.';
+
+  @override
+  String get supportErrorAttachmentUnreadable => 'We could not read the selected file.';
+
+  @override
+  String get landingContentTagline => 'Your public information in one place';
+
+  @override
+  String get landingFeatureNotificationsTitle => 'Notifications';
+
+  @override
+  String get landingFeatureNotificationsDescription => 'Receive alerts and notices from the administration directly on your device.';
+
+  @override
+  String get landingFeatureHealthTitle => 'Health';
+
+  @override
+  String get landingFeatureHealthDescription => 'Check your medical history, appointments, and health card.';
+
+  @override
+  String get landingFeatureEmploymentTitle => 'Employment';
+
+  @override
+  String get landingFeatureEmploymentDescription => 'Manage your employment status and access public employment offers.';
+
+  @override
+  String get landingFeatureProceduresTitle => 'Procedures';
+
+  @override
+  String get landingFeatureProceduresDescription => 'Complete administrative procedures without traveling.';
+
+  @override
+  String get landingFeatureDigitalCardsTitle => 'Digital Cards';
+
+  @override
+  String get landingFeatureDigitalCardsDescription => 'Access your official cards and documents in digital format.';
+
+  @override
+  String get landingFeatureCadastreTitle => 'Cadastre';
+
+  @override
+  String get landingFeatureCadastreDescription => 'Check cadastral data for your properties.';
+
+  @override
+  String get landingAccessStep1Title => 'Tap \"Sign in\"';
+
+  @override
+  String get landingAccessStep1Description => 'Tap the button to start the secure authentication process.';
+
+  @override
+  String get landingAccessStep2Title => 'Authenticate with Cl@ve';
+
+  @override
+  String get landingAccessStep2Description => 'Use Cl@ve PIN or Cl@ve Permanente to identify yourself securely.';
+
+  @override
+  String get landingAccessStep3Title => 'Access all your information';
+
+  @override
+  String get landingAccessStep3Description => 'Check and manage your public information from a single place.';
+
+  @override
+  String get legalSearchTooltip => 'Search';
+
+  @override
+  String get legalSearchCloseTooltip => 'Close search';
+
+  @override
+  String get privacyResponsibleTitle => 'Who is the data controller?';
+
+  @override
+  String get privacyResponsibleIntro => 'The Viceconsejería de Administración Local y Coordinación Administrativa (Vice-Ministry of Local Administration and Administrative Coordination) is the controller of the data processed for the services provided directly through Espacio Ciudadano, which are the following:';
+
+  @override
+  String get privacyResponsibleItemProfile => 'User profile section';
+
+  @override
+  String get privacyResponsibleItemVisualizations => 'Display of the selected data from the Regional Administration and from Other topics of interest';
+
+  @override
+  String get privacyResponsibleItemRecommendations => 'Recommendations made on the basis of the life events selected.';
+
+  @override
+  String get privacyResponsibleItemDownloads => 'Downloads of the selected cards';
+
+  @override
+  String get privacyResponsibleOrgParagraph => 'Once each of the options provided by Espacio Ciudadano is selected, the data controller will be each of the bodies and organizations with competence over that administrative procedure or event.';
+
+  @override
+  String get privacyResponsibleContactIntro => 'The contact details of this controller are the following:';
+
+  @override
+  String get privacyResponsibleContactAddressLabel => 'Postal Address:\n';
+
+  @override
+  String get privacyResponsibleContactAddressValue => 'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\nEmail address:\nvicealyca@jccm.es';
+
+  @override
+  String get privacyPurposeTitle => 'What is the name and purpose of the processing?';
+
+  @override
+  String get privacyPurposeIntro => 'The purposes of the processing of personal data carried out directly within the Espacio Ciudadano processing activity are the following:';
+
+  @override
+  String get privacyPurposeItemIdentity => 'Managing the citizen\'s identification data';
+
+  @override
+  String get privacyPurposeItemVisualizations => 'Displaying the selected data from the Regional Administration and from Other topics of interest';
+
+  @override
+  String get privacyAepdTitle => 'Can I lodge a complaint with the Spanish Data Protection Agency?';
+
+  @override
+  String get privacyAepdTextBeforeLink => 'If you have evidence or indications proving that your right to data protection has been infringed in Espacio Ciudadano, you may lodge a complaint with the Agencia Española de Protección de Datos (Spanish Data Protection Agency), ';
+
+  @override
+  String get privacyAepdTextAfterLink => '. You may also lodge a complaint with the data protection officer, whose contact details are included in this information.';
+
+  @override
+  String get privacySecurityTitle => 'What security measures are in place?';
+
+  @override
+  String get privacySecurityText => 'The security measures implemented to guarantee the security of personal data correspond to those set out in Annex II (Security measures) of Real Decreto 311/2022, de 3 de mayo (Royal Decree 311/2022, of May 3), which regulates the National Security Framework (Esquema Nacional de Seguridad).';
+
+  @override
+  String get privacyProfilingTitle => 'Automated decisions, including profiling';
+
+  @override
+  String get privacyProfilingText => 'In the case of recommendations of procedures based on the life events selected by a data subject, profiling does take place.';
+
+  @override
+  String get privacyDpoTitle => 'Contact details of the data protection officer';
+
+  @override
+  String get privacyDpoIntro => 'For any matter related to data protection, you may contact the data protection officer of the Administration of the Junta de Comunidades de Castilla-La Mancha (Regional Government of Castilla-La Mancha), whose contact details are the following:';
+
+  @override
+  String get privacyDpoContactAddressLabel => 'Postal address:\n';
+
+  @override
+  String get privacyDpoContactAddressValue => 'Data Protection Officer\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071 - Toledo\n\n';
+
+  @override
+  String get privacyDpoContactEmailLabel => 'Email address:\n';
+
+  @override
+  String get accessibilityStatementHeading => 'Accessibility statement';
+
+  @override
+  String get accessibilityIntroCommitment => 'The Junta de Comunidades de Castilla-La Mancha (Regional Government of Castilla-La Mancha) is committed to making its website accessible, in accordance with ';
+
+  @override
+  String get accessibilityIntroDecreeLink => 'Royal Decree 1112/2018, of September 7';
+
+  @override
+  String get accessibilityIntroDecreeSuffix => ', on the accessibility of public sector websites and applications for mobile devices (hereinafter, Royal Decree 1112/2018, of September 7).\n\n';
+
+  @override
+  String get accessibilityDeclarationScope => 'This accessibility statement applies to the website ';
+
+  @override
+  String get accessibilityComplianceTitle => 'Compliance status';
+
+  @override
+  String get accessibilityComplianceText => 'b) This website is partially compliant with RD 1112/2018, of September 7, due to the lack of conformity of the aspects indicated below.';
+
+  @override
+  String get accessibilityNonAccessibleTitle => 'Non-accessible content';
+
+  @override
+  String get accessibilityNonAccessibleIntro => 'The content listed below is not accessible for the following reasons:';
+
+  @override
+  String get accessibilityNonAccessibleItemNonConformity => 'lack of conformity with RD 1112/2018, of September 7: There could be occasional editing errors on some web pages, both in HTML content and in final documents, published after September 20, 2018.';
+
+  @override
+  String get accessibilityNonAccessibleItemBurden => 'disproportionate burden: Not applicable.';
+
+  @override
+  String get accessibilityNonAccessibleItemOutOfScope => 'the content does not fall within the scope of the applicable legislation: There could be office files in PDF or other formats published before September 20, 2018 that do not fully meet all accessibility requirements.';
+
+  @override
+  String get accessibilityPreparationTitle => 'Preparation of this accessibility statement';
+
+  @override
+  String get accessibilityPreparationText => 'This statement was prepared on October 8, 2025.\nThe method used to prepare the statement was a self-assessment carried out by the body itself.';
+
+  @override
+  String get accessibilityContactTitle => 'Observations and contact information';
+
+  @override
+  String get accessibilityContactIntro => 'You may submit communications on accessibility requirements (Article 10.2.a) of Royal Decree 1112/2018, of September 7) such as, for example:';
+
+  @override
+  String get accessibilityContactItemReport => 'reporting any possible non-compliance by this website,';
+
+  @override
+  String get accessibilityContactItemDifficulties => 'conveying other difficulties in accessing the content,';
+
+  @override
+  String get accessibilityContactItemSuggestions => 'raising any other query or suggestion for improvement regarding the accessibility of the website,';
+
+  @override
+  String get accessibilityContactChannelsIntro => 'through the following channels:';
+
+  @override
+  String get accessibilityContactFormLink => 'contact form';
+
+  @override
+  String get accessibilityOfficesPrefix => 'in person at ';
+
+  @override
+  String get accessibilityOfficesLink => 'the 012 and OIRES offices';
+
+  @override
+  String get accessibilityOfficesSuffix => ' information and registration offices).';
+
+  @override
+  String get accessibilityContactProcessing => 'Communications will be received and handled by the Viceconsejería de Administración Local y Coordinación Administrativa (Vice-Ministry of Local Administration and Administrative Coordination).';
+
+  @override
+  String get accessibilityEnforcementTitle => 'Enforcement procedure';
+
+  @override
+  String get accessibilityEnforcementText => 'The complaint procedure set out in Article 13 of RD 1112/2018 will enter into force on September 20, 2020.';
+
+  @override
+  String get accessibilityOptionalTitle => 'Optional content';
+
+  @override
+  String get accessibilityOptionalText => 'In addition to the accessibility aids built into browsers, a series of keyboard shortcuts are provided to make it easier to navigate the portal:\nAn access key or Accesskey allows the user to jump immediately to a specific part of a web page using the keyboard.';
+
+  @override
+  String get accessibilityOptionalItemIncreaseText => 'Increase Text Size: CTRL +';
+
+  @override
+  String get accessibilityOptionalItemDecreaseText => 'Decrease Text Size: CTRL -';
+
+  @override
+  String get legalNoticeHeading => 'Legal notice (...)';
+
+  @override
+  String get supportErrorSubmitUnauthorized => 'You do not have permission to submit the support form.';
+
+  @override
+  String get supportErrorSubmitInvalidData => 'We could not validate the information provided.';
+
+  @override
+  String get supportErrorSubmitUnavailable => 'We could not send your request. Please try again later.';
+
+  @override
+  String get notificationContactSaveUnauthorizedError => 'You do not have permission to save these contact details.';
+
+  @override
+  String get notificationContactSaveInvalidDataError => 'We could not validate the information provided.';
+
+  @override
+  String get notificationContactSaveUnavailableError => 'We could not save the contact details. Please try again later.';
+
+  @override
+  String get gestionAportacionExpedienteNotFoundError => 'We could not find any case matching those details. Please check they are correct.';
+
+  @override
+  String get gestionAportacionExpedienteUnauthorizedError => 'You do not have permission to view this case.';
+
+  @override
+  String get gestionAportacionExpedienteUnavailableError => 'We could not locate the case. Please try again later.';
 }

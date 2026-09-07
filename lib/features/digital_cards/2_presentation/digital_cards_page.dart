@@ -26,13 +26,13 @@ class DigitalCardsPage extends ConsumerWidget {
         onBack: () => context.go(Routes.home),
         leading: IconButton(
           onPressed: () => context.go(Routes.home),
-          tooltip: 'Volver',
+          tooltip: l10n.a11yBack,
           icon: const AppIcon(AppIcons.arrowBack, color: AppColors.textPrimary),
         ),
         actions: [
           IconButton(
             onPressed: () => _showInfo(context),
-            tooltip: 'Informacion',
+            tooltip: l10n.a11yInformation,
             icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
           ),
         ],
@@ -40,8 +40,8 @@ class DigitalCardsPage extends ConsumerWidget {
       body: authorizationAsync.when(
         loading: () => const AppLoadingIndicator(),
         error: (final error, final stackTrace) => _DigitalCardsMessage(
-          message: 'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.',
-          actionLabel: 'Reintentar',
+          message: l10n.digitalCardsAuthorizationCheckErrorMessage,
+          actionLabel: l10n.errorStateRetry,
           onAction: () => ref.invalidate(digitalCardsAuthorizationProvider),
         ),
         data: (final isAuthorized) {
@@ -65,7 +65,7 @@ class DigitalCardsPage extends ConsumerWidget {
               ConsentRevoked() => _DigitalCardsMessage(message: l10n.authorizationRevokedMessage),
               _ => _DigitalCardsMessage(
                 message: l10n.digitalCardsErrorMessage,
-                actionLabel: 'Reintentar',
+                actionLabel: l10n.errorStateRetry,
                 onAction: () => ref.invalidate(digitalCardsProvider),
               ),
             },
@@ -129,10 +129,11 @@ class DigitalCardsPage extends ConsumerWidget {
   }
 
   Future<void> _showInfo(final BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     await AppInfoSheet.show(
       context: context,
-      title: 'Sobre Mis Carnets Digitales',
-      bodyText: 'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.',
+      title: l10n.digitalCardsInfoSheetTitle,
+      bodyText: l10n.digitalCardsInfoSheetBody,
     );
   }
 
@@ -176,7 +177,7 @@ class _UnauthorizedCardsContent extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: AppDimensions.space4),
                 child: Text(
-                  'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.',
+                  l10n.digitalCardsAuthorizationRequiredMessage,
                   style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
                 ),
               ),

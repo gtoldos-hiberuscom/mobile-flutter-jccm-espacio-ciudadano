@@ -276,6 +276,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -299,7 +300,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
               bottom: AppDimensions.space8,
             ),
             child: Text(
-              'Formato de descarga',
+              l10n.appQrDownloadFormatTitle,
               style: AppTypography.leadingBold.copyWith(
                 color: AppColors.primary,
               ),
@@ -358,7 +359,7 @@ class _QrPreview extends StatelessWidget {
 
         return Center(
           child: Semantics(
-            label: 'Código QR',
+            label: AppLocalizations.of(context).appQrCodeLabel,
             image: true,
             child: ExcludeSemantics(
               child: SizedBox(
@@ -411,10 +412,11 @@ class _DownloadFormatButton extends StatelessWidget {
     final foreground = primary ? AppColors.textOnPrimary : AppColors.textBlack;
     final border = primary ? AppColors.primary : AppColors.secondaryLight400;
 
+    final l10n = AppLocalizations.of(context);
     return Semantics(
       button: true,
       enabled: onPressed != null,
-      label: isLoading ? 'Descargando $label' : 'Descargar $label',
+      label: isLoading ? l10n.appQrDownloadingFormatLabel(label) : l10n.appQrDownloadFormatLabel(label),
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: const BoxDecoration(

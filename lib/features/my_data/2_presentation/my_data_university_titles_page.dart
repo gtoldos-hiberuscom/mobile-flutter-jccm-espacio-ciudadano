@@ -114,6 +114,7 @@ class _UniversityTitleCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppInfoCard(
       leadingBorderWidth: AppDimensions.space4,
       child: Padding(
@@ -126,7 +127,7 @@ class _UniversityTitleCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
                 child: Text(
-                  'Nº TÍTULO: ${title.titleNumber}',
+                  l10n.myDataEducationTitleNumberLabel(title.titleNumber),
                   style: AppTypography.captionUppercase.copyWith(
                     color: AppColors.borderBlueMutedBase,
                   ),
@@ -166,13 +167,13 @@ class _UniversityTitleCard extends StatelessWidget {
             const SizedBox(height: AppDimensions.space4),
             if (title.completionDate != null) ...[
               _DateRow(
-                label: 'FECHA FINALIZACIÓN',
+                label: l10n.myDataEducationCompletionDateLabel,
                 date: title.completionDate!,
               ),
             ],
             if (title.expeditionDate != null) ...[
               _DateRow(
-                label: 'FECHA EXPEDICIÓN',
+                label: l10n.myDataEducationExpeditionDateLabel,
                 date: title.expeditionDate!,
               ),
             ],
@@ -208,7 +209,7 @@ class _DateRow extends StatelessWidget {
           ),
           const SizedBox(width: AppDimensions.space16),
           Text(
-            _formatDate(date),
+            _formatDate(AppLocalizations.of(context), date),
             style: AppTypography.bodyRegular.copyWith(
               color: AppColors.primary,
             ),
@@ -218,26 +219,26 @@ class _DateRow extends StatelessWidget {
     );
   }
 
-  String _formatDate(final DateTime date) {
+  String _formatDate(final AppLocalizations l10n, final DateTime date) {
     final day = date.day;
-    final month = _monthName(date.month);
+    final month = l10n.commonMonthShortName(_monthKey(date.month));
     final year = date.year;
     return '$day $month $year';
   }
 
-  String _monthName(final int month) => switch (month) {
-    1 => 'ene',
-    2 => 'feb',
-    3 => 'mar',
-    4 => 'abr',
+  String _monthKey(final int month) => switch (month) {
+    1 => 'january',
+    2 => 'february',
+    3 => 'march',
+    4 => 'april',
     5 => 'may',
-    6 => 'jun',
-    7 => 'jul',
-    8 => 'ago',
-    9 => 'sep',
-    10 => 'oct',
-    11 => 'nov',
-    12 => 'dic',
-    _ => '',
+    6 => 'june',
+    7 => 'july',
+    8 => 'august',
+    9 => 'september',
+    10 => 'october',
+    11 => 'november',
+    12 => 'december',
+    _ => 'other',
   };
 }

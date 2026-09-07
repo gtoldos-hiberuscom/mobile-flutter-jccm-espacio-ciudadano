@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
@@ -57,7 +58,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
         onBack: () => context.go(widget.backRoute),
         actions: [
           IconButton(
-            tooltip: 'Buscar notificaciones',
+            tooltip: l10n.gestionNotificacionesBuscarTooltip,
             icon: Badge.count(
               count: _filters.activeCount,
               isLabelVisible: _filters.activeCount > 0,
@@ -67,7 +68,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
           ),
           IconButton(
             icon: const Icon(AppIcons.settings),
-            tooltip: 'Configurar notificaciones',
+            tooltip: l10n.gestionNotificacionesConfigurarTooltip,
             onPressed: () => context.go(
               Uri(
                 path: Routes.notificationContact,
@@ -155,14 +156,15 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
   }
 
   Future<void> _showFilters() async {
+    final l10n = AppLocalizations.of(context);
     final result = await AppBottomSheet.show<AppListFilters>(
       context: context,
-      title: 'Filtrar notificaciones',
+      title: l10n.gestionNotificacionesFiltrarTitle,
       body: AppListFilterSheet(
         initialFilters: _filters,
-        fields: const [
-          AppListTextFilterField(id: 'description', label: 'Descripción de la notificación', hint: 'Introduce palabras de la descripción'),
-          AppListDateRangeFilterField(id: 'date', label: 'Fecha de expiración'),
+        fields: [
+          AppListTextFilterField(id: 'description', label: l10n.gestionNotificacionesFiltroDescripcionLabel, hint: l10n.gestionFiltroDescripcionHint),
+          AppListDateRangeFilterField(id: 'date', label: l10n.gestionNotificacionesFechaExpiracionLabel),
         ],
       ),
     );
@@ -216,7 +218,7 @@ class _FilterBarState extends State<_FilterBar> {
       leading: _showExpired
           ? _FloatingNavigationArrow(
               icon: AppIcons.arrowBack,
-              tooltip: 'Mostrar filtros anteriores',
+              tooltip: AppLocalizations.of(context).gestionNotificacionesFiltrosAnterioresTooltip,
               onPressed: () => setState(() => _showExpired = false),
             )
           : null,
@@ -300,9 +302,9 @@ class _NotificacionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _headerRow(),
+                  _headerRow(l10n),
                   _titleRow(l10n),
-                  _refBlock(l10n),
+                  _refBlock(context, l10n),
                 ],
               ),
             ),
@@ -312,8 +314,8 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
-  Widget _headerRow() {
-    final tag = _statusTag();
+  Widget _headerRow(final AppLocalizations l10n) {
+    final tag = _statusTag(l10n);
     final orgName = notificacion.unidadOrganicaNombre;
     if (orgName == null && tag == null) {
       return const SizedBox.shrink();
@@ -389,7 +391,7 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
-  Widget _refBlock(final AppLocalizations l10n) {
+  Widget _refBlock(final BuildContext context, final AppLocalizations l10n) {
     // Sin concepto el título ya es la denominación: repetirla debajo con la
     // etiqueta "Procedimiento" sería pintar el mismo texto dos veces.
     final procedimiento = _procedimiento == _titulo ? null : _procedimiento;
@@ -418,8 +420,8 @@ class _NotificacionCard extends StatelessWidget {
             ),
           if (showsExpiration && fecha != null)
             _RefRow(
-              label: 'Fecha expiración',
-              value: _formatFecha(fecha),
+              label: l10n.gestionNotificacionesFechaCaducidadLabel,
+              value: _formatFecha(context, fecha),
               valueColor: isWarning ? AppColors.warningDark : AppColors.textPrimary,
               valueFontWeight: isWarning ? FontWeight.w700 : FontWeight.w400,
               trailingIcon: isWarning
@@ -437,12 +439,12 @@ class _NotificacionCard extends StatelessWidget {
 
   /// Sin estado conocido no se pinta etiqueta: el listado indexado no informa
   /// el estado y en "Todo" no hay filtro del que deducirlo.
-  Widget? _statusTag() {
+  Widget? _statusTag(final AppLocalizations l10n) {
     return switch (notificacion.estado) {
-      NotificacionEstado.pendiente => const AppTag(status: AppTagStatus.warning, label: 'Pendiente', showIcon: false),
-      NotificacionEstado.aceptada => const AppTag(status: AppTagStatus.success, label: 'Aceptada', showIcon: false),
-      NotificacionEstado.rechazada => const AppTag(status: AppTagStatus.error, label: 'Rechazada', showIcon: false),
-      NotificacionEstado.expirada => const AppTag(status: AppTagStatus.infoInactive, label: 'Expirada', showIcon: false),
+      NotificacionEstado.pendiente => AppTag(status: AppTagStatus.warning, label: l10n.gestionNotificacionesTagPendiente, showIcon: false),
+      NotificacionEstado.aceptada => AppTag(status: AppTagStatus.success, label: l10n.gestionNotificacionesTagAceptada, showIcon: false),
+      NotificacionEstado.rechazada => AppTag(status: AppTagStatus.error, label: l10n.gestionNotificacionesTagRechazada, showIcon: false),
+      NotificacionEstado.expirada => AppTag(status: AppTagStatus.infoInactive, label: l10n.gestionNotificacionesTagExpirada, showIcon: false),
       null => null,
     };
   }
@@ -500,7 +502,10 @@ class _RefRow extends StatelessWidget {
   }
 }
 
-String _formatFecha(final DateTime date) {
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  return '${date.day} ${months[date.month - 1]} ${date.year}';
+String _formatFecha(final BuildContext context, final DateTime date) {
+  final parts = DateFormat('d MMM yyyy', Localizations.localeOf(context).languageCode).format(date).split(' ');
+  if (parts.length >= 3 && parts[1].isNotEmpty) {
+    parts[1] = '${parts[1][0].toUpperCase()}${parts[1].substring(1)}';
+  }
+  return parts.join(' ');
 }

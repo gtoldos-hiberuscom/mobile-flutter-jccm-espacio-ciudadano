@@ -11,10 +11,12 @@ final class SubmitSupportRequestSuccess extends SubmitSupportRequestResult {
   const SubmitSupportRequestSuccess();
 }
 
-final class SubmitSupportRequestFailed extends SubmitSupportRequestResult {
-  const SubmitSupportRequestFailed(this.message, {this.cause});
+enum SubmitSupportRequestFailureReason { unauthorized, invalidData, unavailable }
 
-  final String message;
+final class SubmitSupportRequestFailed extends SubmitSupportRequestResult {
+  const SubmitSupportRequestFailed(this.reason, {this.cause});
+
+  final SubmitSupportRequestFailureReason reason;
   final Object? cause;
 }
 
@@ -28,18 +30,17 @@ final class SubmitSupportRequestUsecase {
       await _repository.submitSupportRequest(request);
       return const SubmitSupportRequestSuccess();
     } on Object catch (error) {
-      return SubmitSupportRequestFailed(_messageFor(error), cause: error);
+      return SubmitSupportRequestFailed(_reasonFor(error), cause: error);
     }
   }
 
-  String _messageFor(final Object error) {
+  SubmitSupportRequestFailureReason _reasonFor(final Object error) {
     final appError = error is DioException ? error.error : error;
     return switch (appError) {
-      UnauthorizedError() => 'No tienes permisos para enviar el formulario de soporte.',
-      NetworkError(:final statusCode) when statusCode == 400 => 'No hemos podido validar los datos introducidos.',
-      NetworkError(:final statusCode) when statusCode == 403 => 'No tienes permisos para enviar el formulario de soporte.',
-      NetworkError() => 'No hemos podido enviar tu solicitud. Inténtalo de nuevo más tarde.',
-      _ => 'No hemos podido enviar tu solicitud. Inténtalo de nuevo más tarde.',
+      UnauthorizedError() => SubmitSupportRequestFailureReason.unauthorized,
+      NetworkError(:final statusCode) when statusCode == 400 => SubmitSupportRequestFailureReason.invalidData,
+      NetworkError(:final statusCode) when statusCode == 403 => SubmitSupportRequestFailureReason.unauthorized,
+      _ => SubmitSupportRequestFailureReason.unavailable,
     };
   }
 }

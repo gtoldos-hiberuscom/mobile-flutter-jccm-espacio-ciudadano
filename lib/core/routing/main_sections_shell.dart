@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class MainSectionsShell extends StatelessWidget {
   const MainSectionsShell({
@@ -12,14 +13,6 @@ class MainSectionsShell extends StatelessWidget {
 
   final Widget child;
   final String location;
-
-  static const List<AppBottomTabBarItem> _tabs = [
-    AppBottomTabBarItem(label: 'Inicio', iconAsset: AppIconAssets.accountBalance),
-    AppBottomTabBarItem(label: 'Gestión', iconAsset: AppIconAssets.docs),
-    AppBottomTabBarItem(label: 'Mis datos', iconAsset: AppIconAssets.apps),
-    AppBottomTabBarItem(label: 'Agenda', iconAsset: AppIconAssets.calendarToday),
-    AppBottomTabBarItem(label: 'Recomendados', iconAsset: AppIconAssets.license),
-  ];
 
   int get _currentIndex {
     if (location.startsWith(Routes.gestion)) {
@@ -39,10 +32,18 @@ class MainSectionsShell extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tabs = [
+      AppBottomTabBarItem(label: l10n.mainTabHome, iconAsset: AppIconAssets.accountBalance),
+      AppBottomTabBarItem(label: l10n.mainTabGestion, iconAsset: AppIconAssets.docs),
+      AppBottomTabBarItem(label: l10n.mainTabMyData, iconAsset: AppIconAssets.apps),
+      AppBottomTabBarItem(label: l10n.mainTabAgenda, iconAsset: AppIconAssets.calendarToday),
+      AppBottomTabBarItem(label: l10n.mainTabRecommendations, iconAsset: AppIconAssets.license),
+    ];
     return Scaffold(
       body: child,
       bottomNavigationBar: AppBottomTabBar(
-        items: _tabs,
+        items: tabs,
         currentIndex: _currentIndex,
         onTap: (final index) => _handleTabTap(context, index),
       ),

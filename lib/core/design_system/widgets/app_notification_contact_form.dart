@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_descriptio
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_input_case.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_phone_input_case.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class AppNotificationContactForm extends StatelessWidget {
   const AppNotificationContactForm({
@@ -36,6 +37,7 @@ class AppNotificationContactForm extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         Expanded(
@@ -52,16 +54,16 @@ class AppNotificationContactForm extends StatelessWidget {
                 Semantics(
                   header: true,
                   child: Text(
-                    'Datos de contacto para notificaciones electrónicas',
+                    l10n.appNotificationContactFormTitle,
                     style: AppTypography.h2.copyWith(color: AppColors.textBase),
                   ),
                 ),
                 const SizedBox(height: AppDimensions.space24),
                 Semantics(
-                  label: 'Obligatorio: rellena al menos uno de los medios de contacto',
+                  label: l10n.appNotificationContactFormRequiredNoteSemantic,
                   child: ExcludeSemantics(
                     child: Text(
-                      '* Obligatorio rellenar al menos uno de los medios de contacto',
+                      l10n.appNotificationContactFormRequiredNote,
                       style: AppTypography.smallRegular.copyWith(color: AppColors.textBase),
                     ),
                   ),
@@ -70,7 +72,7 @@ class AppNotificationContactForm extends StatelessWidget {
                   const SizedBox(height: AppDimensions.space12),
                   AppAlertBanner(
                     message: formError!,
-                    title: 'Error',
+                    title: l10n.a11yAlertError,
                     severity: AppAlertSeverity.error,
                     onDismiss: onClearError,
                   ),
@@ -81,21 +83,21 @@ class AppNotificationContactForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppPhoneInputCase(
-                        label: 'Teléfono móvil',
+                        label: l10n.gestionNotificacionesAltaPhoneLabel,
                         controller: phoneController,
                         errorText: phoneError,
                         onChanged: (_) => onClearError(),
                       ),
                       if (phoneError == null) ...[
                         const SizedBox(height: AppDimensions.space8),
-                        const AppDescriptionText(
-                          text: 'Para recibir las notificaciones en mensaje SMS',
+                        AppDescriptionText(
+                          text: l10n.gestionNotificacionesAltaPhoneHelper,
                         ),
                       ],
                       const SizedBox(height: AppDimensions.space24),
                       AppInputCase(
-                        label: 'Correo electrónico',
-                        hint: 'Ejemplo: mperez@correo.es',
+                        label: l10n.gestionNotificacionesAltaEmailLabel,
+                        hint: l10n.gestionNotificacionesAltaEmailHint,
                         controller: emailController,
                         state: emailError == null ? AppInputState.defaultState : AppInputState.error,
                         errorText: emailError,
@@ -112,8 +114,8 @@ class AppNotificationContactForm extends StatelessWidget {
                       ),
                       if (emailError == null) ...[
                         const SizedBox(height: AppDimensions.space8),
-                        const AppDescriptionText(
-                          text: 'Para recibir las notificaciones en tu correo electrónico',
+                        AppDescriptionText(
+                          text: l10n.gestionNotificacionesAltaEmailHelper,
                         ),
                       ],
                     ],
@@ -125,11 +127,11 @@ class AppNotificationContactForm extends StatelessWidget {
         ),
         AppStickyBar(
           type: AppStickyBarType.dicotomy,
-          secondaryLabel: 'Cancelar',
+          secondaryLabel: l10n.a11yCancel,
           secondaryLeadingIcon: AppIcons.cancel,
           secondaryHierarchy: AppButtonHierarchy.tertiary,
           onSecondary: saving ? null : onLeave,
-          primaryLabel: 'Guarda cambios',
+          primaryLabel: l10n.appNotificationContactFormSaveButton,
           primaryLeadingIcon: AppIcons.check,
           isPrimaryLoading: saving,
           onPrimary: saving ? null : onSave,

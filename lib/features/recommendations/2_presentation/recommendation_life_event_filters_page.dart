@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 final class RecommendationLifeEventFiltersArgs {
   const RecommendationLifeEventFiltersArgs({
@@ -44,6 +45,7 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
       appBar: AppBar(
@@ -62,12 +64,12 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
             IconButton(
               icon: const AppIcon(AppIcons.close, size: AppDimensions.iconLarge, color: AppColors.textPrimary),
               onPressed: context.pop,
-              tooltip: 'Cerrar',
+              tooltip: l10n.a11yClose,
             ),
             const SizedBox(width: AppDimensions.space8),
             Expanded(
               child: Text(
-                'Filtrar recomendaciones por hecho',
+                l10n.recommendationsFilterPageTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
@@ -77,9 +79,9 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
               icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
               onPressed: () => AppAlertSnackbar.show(
                 context,
-                message: 'Selecciona los hechos vitales que quieras usar para filtrar tus recomendaciones.',
+                message: l10n.recommendationsFilterInfoMessage,
               ),
-              tooltip: 'Información',
+              tooltip: l10n.a11yInformation,
             ),
           ],
         ),
@@ -93,7 +95,7 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
         ),
         children: [
           Text(
-            'Puede filtrar las recomendaciones según los hechos vitales que haya configurado en sus preferencias, para recibir información personalizada y ajustada a su situación.',
+            l10n.recommendationsFilterIntro,
             style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: AppDimensions.space24),

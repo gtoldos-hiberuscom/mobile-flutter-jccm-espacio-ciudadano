@@ -50,7 +50,7 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
       actions: _selectedTab == _HealthTab.data
           ? [
               IconButton(
-                tooltip: _appointmentFilters.activeCount > 0 ? 'Criterios de búsqueda activos: ${_appointmentFilters.activeCount}' : 'Buscar citas',
+                tooltip: _appointmentFilters.activeCount > 0 ? l10n.myDataHealthActiveFiltersTooltip(_appointmentFilters.activeCount) : l10n.myDataHealthSearchAppointmentsTooltip,
                 icon: Badge.count(
                   count: _appointmentFilters.activeCount,
                   isLabelVisible: _appointmentFilters.activeCount > 0,
@@ -77,16 +77,17 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
   }
 
   Future<void> _showAppointmentFilters() async {
+    final l10n = AppLocalizations.of(context);
     final result = await AppBottomSheet.show<AppListFilters>(
       context: context,
       title: switch (_selectedScope) {
-        HealthAppointmentScope.primaryCare => 'Filtrar citas de primaria',
-        HealthAppointmentScope.hospital => 'Filtrar citas hospitalarias',
+        HealthAppointmentScope.primaryCare => l10n.myDataHealthFilterPrimaryCareTitle,
+        HealthAppointmentScope.hospital => l10n.myDataHealthFilterHospitalTitle,
       },
       body: AppListFilterSheet(
         initialFilters: _appointmentFilters,
-        fields: const [
-          AppListDateRangeFilterField(id: 'date', label: 'Fecha de la cita'),
+        fields: [
+          AppListDateRangeFilterField(id: 'date', label: l10n.myDataHealthFilterDateLabel),
         ],
       ),
     );
@@ -515,7 +516,7 @@ class _AppointmentsContent extends StatelessWidget {
           const SizedBox(height: AppDimensions.space8),
           for (final monthSection in yearSection.months) ...[
             Text(
-              _monthName(monthSection.month, l10n.localeName),
+              l10n.commonMonthName(_monthKey(monthSection.month)),
               style: AppTypography.h3.copyWith(
                 color: AppColors.textBase,
               ),
@@ -670,7 +671,7 @@ class _AppointmentCardShell extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    _weekdayName(dateTime.weekday, AppLocalizations.of(context).localeName),
+                    AppLocalizations.of(context).commonWeekdayName(_weekdayKey(dateTime.weekday)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.captionRegular.copyWith(
@@ -785,35 +786,29 @@ String _appointmentType(final HealthAppointment appointment) {
   return raw.toUpperCase();
 }
 
-String _weekdayName(final int weekday, final String localeName) {
-  final isEnglish = localeName.toLowerCase().startsWith('en');
-  return switch (weekday) {
-    DateTime.monday => isEnglish ? 'Monday' : 'Lunes',
-    DateTime.tuesday => isEnglish ? 'Tuesday' : 'Martes',
-    DateTime.wednesday => isEnglish ? 'Wednesday' : 'Miércoles',
-    DateTime.thursday => isEnglish ? 'Thursday' : 'Jueves',
-    DateTime.friday => isEnglish ? 'Friday' : 'Viernes',
-    DateTime.saturday => isEnglish ? 'Saturday' : 'Sábado',
-    DateTime.sunday => isEnglish ? 'Sunday' : 'Domingo',
-    _ => '',
-  };
-}
+String _weekdayKey(final int weekday) => switch (weekday) {
+  DateTime.monday => 'monday',
+  DateTime.tuesday => 'tuesday',
+  DateTime.wednesday => 'wednesday',
+  DateTime.thursday => 'thursday',
+  DateTime.friday => 'friday',
+  DateTime.saturday => 'saturday',
+  DateTime.sunday => 'sunday',
+  _ => 'other',
+};
 
-String _monthName(final int month, final String localeName) {
-  final isEnglish = localeName.toLowerCase().startsWith('en');
-  return switch (month) {
-    1 => isEnglish ? 'January' : 'enero',
-    2 => isEnglish ? 'February' : 'febrero',
-    3 => isEnglish ? 'March' : 'marzo',
-    4 => isEnglish ? 'April' : 'abril',
-    5 => isEnglish ? 'May' : 'mayo',
-    6 => isEnglish ? 'June' : 'junio',
-    7 => isEnglish ? 'July' : 'julio',
-    8 => isEnglish ? 'August' : 'agosto',
-    9 => isEnglish ? 'September' : 'septiembre',
-    10 => isEnglish ? 'October' : 'octubre',
-    11 => isEnglish ? 'November' : 'noviembre',
-    12 => isEnglish ? 'December' : 'diciembre',
-    _ => '',
-  };
-}
+String _monthKey(final int month) => switch (month) {
+  1 => 'january',
+  2 => 'february',
+  3 => 'march',
+  4 => 'april',
+  5 => 'may',
+  6 => 'june',
+  7 => 'july',
+  8 => 'august',
+  9 => 'september',
+  10 => 'october',
+  11 => 'november',
+  12 => 'december',
+  _ => 'other',
+};

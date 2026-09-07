@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.da
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Detalle de notificación — Figma node 44641:24980 (expirada).
 class GestionNotificacionDetallePage extends ConsumerStatefulWidget {
@@ -61,13 +62,14 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final args = _args;
     final detail = ref.watch(gestionNotificacionDetalleProvider(args));
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
       appBar: AppNavBar(
         type: AppNavBarType.detail,
-        title: 'Detalle de notificación',
+        title: l10n.notificationDetailTitle,
         leading: IconButton(
           icon: const AppIcon(AppIcons.arrowBack, size: AppDimensions.iconLarge, color: AppColors.textPrimary),
           onPressed: () => context.canPop() ? context.pop() : context.go(Routes.gestionNotificaciones),
@@ -81,8 +83,8 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
             // relectura del detalle, el mensaje no puede sugerir que la
             // aceptación no llegó a producirse.
             message: _accepted
-                ? 'Has aceptado la notificación, pero no hemos podido cargar el detalle actualizado.'
-                : 'No hemos podido cargar el detalle de la notificación.',
+                ? l10n.gestionNotificacionDetalleAcceptedReloadError
+                : l10n.notificationDetailErrorMessage,
             onRetry: () => ref.invalidate(gestionNotificacionDetalleProvider(args)),
           ),
           data: (final value) => _DetalleContent(
@@ -114,15 +116,16 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
     if (_accepting) {
       return;
     }
+    final l10n = AppLocalizations.of(context);
     // Comparecer es irreversible y con efectos jurídicos, así que se confirma
     // antes, igual que en la web. El diálogo es modal y no se descarta tocando
     // fuera, de modo que no puede encadenarse con otro.
     final confirmed = await AppAlertDialog.show(
       context,
-      title: 'Confirmación de aceptación de notificación',
-      description: '¿Estás seguro que quieres aceptar la notificación?',
-      cancelLabel: 'No',
-      confirmLabel: 'Sí, estoy seguro',
+      title: l10n.gestionNotificacionDetalleConfirmTitle,
+      description: l10n.gestionNotificacionDetalleConfirmDescription,
+      cancelLabel: l10n.gestionNotificacionDetalleConfirmCancel,
+      confirmLabel: l10n.gestionNotificacionDetalleConfirmAccept,
     );
     if (confirmed != true || !mounted) {
       return;
@@ -179,7 +182,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
         ..invalidate(gestionNotificacionesProvider(NotificacionEstado.aceptada));
       AppAlertSnackbar.show(
         context,
-        message: 'Has aceptado la notificación.',
+        message: l10n.notificationDetailDecisionAcceptedToast,
         severity: AppAlertSeverity.success,
       );
       // Como en la web, no se vuelve al listado: la pantalla se queda y
@@ -196,7 +199,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
       }
       AppAlertSnackbar.show(
         context,
-        message: 'No hemos podido aceptar la notificación. Inténtalo de nuevo.',
+        message: l10n.gestionNotificacionDetalleAcceptError,
         severity: AppAlertSeverity.error,
       );
     } finally {
@@ -213,6 +216,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
     if (_downloadingOrden != null) {
       return;
     }
+    final l10n = AppLocalizations.of(context);
     setState(() => _downloadingOrden = document.orden);
     try {
       final citizenId = ref.read(gestionNotificacionesTransitionCitizenIdProvider);
@@ -233,13 +237,13 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
       final ruta = await saveBytesWithPicker(
         bytes: bytes,
         fileName: _documentFileName(document),
-        dialogTitle: 'Descargar documento',
+        dialogTitle: l10n.documentDownload,
       );
       if (!mounted || ruta == null) {
         // `null` = selector cancelado: la persona ya sabe lo que ha hecho.
         return;
       }
-      AppAlertSnackbar.show(context, message: 'Documento descargado.', severity: AppAlertSeverity.success);
+      AppAlertSnackbar.show(context, message: l10n.gestionNotificacionDetalleDocumentoDescargado, severity: AppAlertSeverity.success);
     } on Object catch (error, stackTrace) {
       // El nombre del documento es dato personal: a la traza solo van el id de
       // la notificación y el orden.
@@ -247,7 +251,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
       if (!mounted) {
         return;
       }
-      AppAlertSnackbar.show(context, message: 'No hemos podido descargar el documento. Inténtalo de nuevo.', severity: AppAlertSeverity.error);
+      AppAlertSnackbar.show(context, message: l10n.gestionNotificacionDetalleDocumentoDescargaError, severity: AppAlertSeverity.error);
     } finally {
       if (mounted) {
         setState(() => _downloadingOrden = null);
@@ -278,61 +282,64 @@ class _DetalleContent extends StatelessWidget {
   final int? downloadingOrden;
 
   @override
-  Widget build(final BuildContext context) => SingleChildScrollView(
-    padding: const EdgeInsets.fromLTRB(AppDimensions.space16, AppDimensions.space8, AppDimensions.space16, AppDimensions.space24),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Sin estado conocido no se etiqueta la notificación: antes se pintaba
-        // "Expirada" por defecto, justo lo contrario de lo que le pasa a una
-        // notificación pendiente.
-        if (value.estado case final estado?) ...[
-          AppTag(status: _tagStatus(estado), label: _statusLabel(estado)),
-          const SizedBox(height: AppDimensions.space8),
-        ],
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space4, vertical: AppDimensions.space8),
-          child: Text(value.titulo, style: AppTypography.h2.copyWith(color: AppColors.textBase)),
-        ),
-        _SectionTitle(_isPending(value.estado) ? 'Datos del expediente' : 'Datos del Registro'),
-        if (value.organismo != null)
-          _DetailField(
-            label: 'Organismo emisor',
-            value: value.organismo!,
-            stacked: true,
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(AppDimensions.space16, AppDimensions.space8, AppDimensions.space16, AppDimensions.space24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Sin estado conocido no se etiqueta la notificación: antes se pintaba
+          // "Expirada" por defecto, justo lo contrario de lo que le pasa a una
+          // notificación pendiente.
+          if (value.estado case final estado?) ...[
+            AppTag(status: _tagStatus(estado), label: _statusLabel(l10n, estado)),
+            const SizedBox(height: AppDimensions.space8),
+          ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space4, vertical: AppDimensions.space8),
+            child: Text(value.titulo, style: AppTypography.h2.copyWith(color: AppColors.textBase)),
           ),
-        if (value.procedimiento != null)
-          _DetailField(
-            label: 'Procedimiento',
-            value: value.procedimiento!,
-            stacked: value.procedimiento!.length > 18,
-          ),
-        if (value.expediente != null) _DetailField(label: 'Nº Expediente', value: value.expediente!),
-        const _SectionTitle('Estado notificación'),
-        if (value.fechaPuestaDisposicion != null) _DetailField(label: 'Fecha de puesta a disposición', value: _formatDate(context, value.fechaPuestaDisposicion!)),
-        if (_showsExpiration(value.estado) && value.fechaExpiracion != null)
-          _DetailField(
-            label: 'Fecha de expiración',
-            value: _formatDate(context, value.fechaExpiracion!),
-          )
-        else if (!_showsExpiration(value.estado) && value.fechaLectura != null)
-          _DetailField(
-            label: 'Fecha de lectura',
-            value: _formatDate(context, value.fechaLectura!),
-          ),
-        if (!_isPending(value.estado) && value.documentos.isNotEmpty) ...[
-          const _SectionTitle('Documentos'),
-          ...value.documentos.map(
-            (final document) => _DocumentCard(
-              document: document,
-              downloading: downloadingOrden == document.orden,
-              onTap: downloadingOrden == null ? () => onDownload(document) : null,
+          _SectionTitle(_isPending(value.estado) ? l10n.gestionNotificacionDetalleDatosExpedienteTitle : l10n.gestionRegistrosDatosRegistroTitle),
+          if (value.organismo != null)
+            _DetailField(
+              label: l10n.gestionNotificacionDetalleOrganismoEmisorLabel,
+              value: value.organismo!,
+              stacked: true,
             ),
-          ),
+          if (value.procedimiento != null)
+            _DetailField(
+              label: l10n.gestionNotificacionesProcedimientoLabel,
+              value: value.procedimiento!,
+              stacked: value.procedimiento!.length > 18,
+            ),
+          if (value.expediente != null) _DetailField(label: l10n.gestionNotificacionDetalleNumExpedienteLabel, value: value.expediente!),
+          _SectionTitle(l10n.gestionNotificacionDetalleEstadoTitle),
+          if (value.fechaPuestaDisposicion != null) _DetailField(label: l10n.gestionNotificacionDetalleFechaPuestaDisposicionLabel, value: _formatDate(context, value.fechaPuestaDisposicion!)),
+          if (_showsExpiration(value.estado) && value.fechaExpiracion != null)
+            _DetailField(
+              label: l10n.gestionNotificacionesFechaExpiracionLabel,
+              value: _formatDate(context, value.fechaExpiracion!),
+            )
+          else if (!_showsExpiration(value.estado) && value.fechaLectura != null)
+            _DetailField(
+              label: l10n.gestionNotificacionDetalleFechaLecturaLabel,
+              value: _formatDate(context, value.fechaLectura!),
+            ),
+          if (!_isPending(value.estado) && value.documentos.isNotEmpty) ...[
+            _SectionTitle(l10n.gestionNotificacionDetalleDocumentosTitle),
+            ...value.documentos.map(
+              (final document) => _DocumentCard(
+                document: document,
+                downloading: downloadingOrden == document.orden,
+                onTap: downloadingOrden == null ? () => onDownload(document) : null,
+              ),
+            ),
+          ],
         ],
-      ],
-    ),
-  );
+      ),
+    );
+  }
 }
 
 class _PendingActionBar extends StatelessWidget {
@@ -357,7 +364,7 @@ class _PendingActionBar extends StatelessWidget {
         boxShadow: AppShadows.low,
       ),
       child: AppButton(
-        label: 'Aceptar notificación',
+        label: AppLocalizations.of(context).gestionNotificacionDetalleAceptarButton,
         onPressed: accepting ? null : onAccept,
         isLoading: accepting,
         isExpanded: true,
@@ -499,11 +506,11 @@ AppTagStatus _tagStatus(final NotificacionEstado estado) => switch (estado) {
   NotificacionEstado.rechazada => AppTagStatus.error,
   NotificacionEstado.expirada => AppTagStatus.infoInactive,
 };
-String _statusLabel(final NotificacionEstado estado) => switch (estado) {
-  NotificacionEstado.pendiente => 'Pendiente',
-  NotificacionEstado.aceptada => 'Aceptada',
-  NotificacionEstado.rechazada => 'Rechazada',
-  NotificacionEstado.expirada => 'Expirada',
+String _statusLabel(final AppLocalizations l10n, final NotificacionEstado estado) => switch (estado) {
+  NotificacionEstado.pendiente => l10n.gestionNotificacionesTagPendiente,
+  NotificacionEstado.aceptada => l10n.gestionNotificacionesTagAceptada,
+  NotificacionEstado.rechazada => l10n.gestionNotificacionesTagRechazada,
+  NotificacionEstado.expirada => l10n.gestionNotificacionesTagExpirada,
 };
 bool _showsExpiration(final NotificacionEstado? estado) => estado == NotificacionEstado.pendiente || estado == NotificacionEstado.expirada;
 bool _isPending(final NotificacionEstado? estado) => estado == NotificacionEstado.pendiente;

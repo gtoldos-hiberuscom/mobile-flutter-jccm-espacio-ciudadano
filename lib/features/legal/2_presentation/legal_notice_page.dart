@@ -76,10 +76,10 @@ class _LegalNoticePageState extends ConsumerState<LegalNoticePage> {
                 headingLevel: 1,
                 child: Text.rich(
                   TextSpan(
-                    text: 'Aviso legal (...)',
+                    text: l10n.legalNoticeHeading,
                     style: AppTypography.h1.copyWith(color: AppColors.primary),
                   ),
-                  semanticsLabel: 'Aviso legal (...)',
+                  semanticsLabel: l10n.legalNoticeHeading,
                   textScaler: MediaQuery.textScalerOf(context),
                   strutStyle: StrutStyle.fromTextStyle(AppTypography.h1),
                 ),
@@ -129,6 +129,7 @@ class _LegalNoticeBody extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final style = AppTypography.leadingMedium.copyWith(color: AppColors.primary);
     final linkStyle = style.copyWith(
       color: AppColors.secondary,
@@ -141,7 +142,7 @@ class _LegalNoticeBody extends StatelessWidget {
         style: style,
         children: [
           TextSpan(
-            text: 'La Junta de Comunidades de Castilla-La Mancha se ha comprometido a hacer accesible su sitio web, de conformidad con el ',
+            text: l10n.accessibilityIntroCommitment,
             style: style,
           ),
           WidgetSpan(
@@ -151,18 +152,18 @@ class _LegalNoticeBody extends StatelessWidget {
               onTap: onRoyalDecreeTap,
               child: Text.rich(
                 TextSpan(
-                  text: 'Real Decreto 1112/2018, de 7 de septiembre ⇲',
+                  text: '${l10n.accessibilityIntroDecreeLink} ⇲',
                   style: linkStyle,
                 ),
               ),
             ),
           ),
           TextSpan(
-            text: ', sobre accesibilidad de los sitios web y aplicaciones para dispositivos móviles del sector público (en adelante, Real Decreto 1112/2018, de 7 de septiembre).\n\n',
+            text: l10n.accessibilityIntroDecreeSuffix,
             style: style,
           ),
           TextSpan(
-            text: 'La presente declaración de accesibilidad se aplica al sitio web ',
+            text: l10n.accessibilityDeclarationScope,
             style: style,
           ),
           WidgetSpan(

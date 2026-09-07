@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 enum AppPreferenceStatus {
   disabled,
@@ -64,6 +65,7 @@ class AppConsentPreferenceCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Semantics(
       container: true,
       explicitChildNodes: true,
@@ -94,7 +96,7 @@ class AppConsentPreferenceCard extends StatelessWidget {
                   const SizedBox(width: AppDimensions.space4),
                   Expanded(
                     child: Text(
-                      'Condiciones de uso y autorizaciones',
+                      l10n.consentStep1FullTitle,
                       style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
                     ),
                   ),
@@ -103,7 +105,7 @@ class AppConsentPreferenceCard extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.space8),
             AppPreferenceActionButton(
-              label: 'Editar',
+              label: l10n.appPreferenceEditAction,
               icon: AppIcons.edit,
               onPressed: onEdit,
               semanticSortKey: const OrdinalSortKey(1),
@@ -158,6 +160,7 @@ class AppPreferenceCard extends StatelessWidget {
       summaryItems.every((final item) => item.isNotEmpty),
       'summary items must not be empty',
     );
+    final l10n = AppLocalizations.of(context);
     final contentColor = status == AppPreferenceStatus.enabled ? AppColors.textPrimary : AppColors.borderBlueMutedBase;
     final hasActiveSummary = status == AppPreferenceStatus.enabled && summaryItems.isNotEmpty;
     final description = switch (status) {
@@ -166,9 +169,9 @@ class AppPreferenceCard extends StatelessWidget {
       AppPreferenceStatus.enabled => activeDescription,
     };
     final statusLabel = switch (status) {
-      AppPreferenceStatus.disabled => 'Desactivado',
-      AppPreferenceStatus.pending => 'Pendiente',
-      AppPreferenceStatus.enabled => 'Activado',
+      AppPreferenceStatus.disabled => l10n.appPreferenceStatusDisabled,
+      AppPreferenceStatus.pending => l10n.appPreferenceStatusPending,
+      AppPreferenceStatus.enabled => l10n.appPreferenceStatusEnabled,
     };
 
     return Semantics(
@@ -288,6 +291,7 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final phoneValue = phone?.trim();
     final emailValue = email?.trim();
 
@@ -307,7 +311,7 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
           children: [
             Semantics(
               sortKey: const OrdinalSortKey(0),
-              label: 'Activo',
+              label: l10n.appPreferenceStatusActive,
               child: const ExcludeSemantics(child: AppActiveStatusTag()),
             ),
             const SizedBox(height: AppDimensions.space8),
@@ -332,7 +336,7 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(top: AppDimensions.space4),
                       child: Text(
-                        'Datos de contacto para notificaciones',
+                        l10n.appNotificationContactCardTitle,
                         style: AppTypography.leadingBold.copyWith(
                           color: AppColors.textPrimary,
                         ),
@@ -360,10 +364,10 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
                     if (phoneValue != null && phoneValue.isNotEmpty) ...[
                       Semantics(
                         sortKey: const OrdinalSortKey(0),
-                        label: 'Teléfono móvil. ${_formatPhoneForDisplay(phoneValue)}',
+                        label: '${l10n.gestionNotificacionesAltaPhoneLabel}. ${_formatPhoneForDisplay(phoneValue)}',
                         child: ExcludeSemantics(
                           child: AppPreferenceDataRow(
-                            label: 'TELÉFONO MÓVIL',
+                            label: l10n.gestionNotificacionesAltaPhoneLabel.toUpperCase(),
                             value: _formatPhoneForDisplay(phoneValue),
                           ),
                         ),
@@ -373,13 +377,13 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
                     if (emailValue != null && emailValue.isNotEmpty)
                       Semantics(
                         sortKey: const OrdinalSortKey(1),
-                        label: 'Correo electrónico. $emailValue',
+                        label: '${l10n.gestionNotificacionesAltaEmailLabel}. $emailValue',
                         child: ExcludeSemantics(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'CORREO ELECTRÓNICO',
+                                l10n.gestionNotificacionesAltaEmailLabel.toUpperCase(),
                                 style: AppTypography.captionUppercase.copyWith(
                                   color: AppColors.primary,
                                 ),
@@ -401,7 +405,7 @@ class AppNotificationContactPreferenceCard extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.space12),
             AppPreferenceActionButton(
-              label: 'Editar datos',
+              label: l10n.appNotificationContactCardEditAction,
               icon: AppIcons.edit,
               onPressed: onEdit,
               semanticSortKey: const OrdinalSortKey(3),
@@ -476,9 +480,10 @@ class AppActiveStatusTag extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Semantics(
       container: true,
-      label: semanticLabel ?? 'Activo',
+      label: semanticLabel ?? l10n.appPreferenceStatusActive,
       child: ExcludeSemantics(
         child: Container(
           padding: const EdgeInsets.symmetric(
@@ -491,7 +496,7 @@ class AppActiveStatusTag extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
           ),
           child: Text(
-            'ACTIVO',
+            l10n.appPreferenceStatusActive.toUpperCase(),
             style: AppTypography.captionUppercase.copyWith(color: AppColors.successDark),
           ),
         ),
@@ -652,10 +657,11 @@ class AppPreferenceStatusTag extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final label = switch (status) {
-      AppPreferenceStatus.disabled => 'Desactivado',
-      AppPreferenceStatus.pending => 'Pendiente',
-      AppPreferenceStatus.enabled => 'Activado',
+      AppPreferenceStatus.disabled => l10n.appPreferenceStatusDisabled,
+      AppPreferenceStatus.pending => l10n.appPreferenceStatusPending,
+      AppPreferenceStatus.enabled => l10n.appPreferenceStatusEnabled,
     };
     final background = switch (status) {
       AppPreferenceStatus.disabled => AppColors.background,

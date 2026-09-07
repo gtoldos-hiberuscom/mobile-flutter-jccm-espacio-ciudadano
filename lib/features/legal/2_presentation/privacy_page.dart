@@ -237,46 +237,32 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     required final Color textColor,
     required final bool fromHome,
   }) {
-    const responsibleTitle = '¿Quién es el responsable del tratamiento?';
-    const responsibleIntro = 'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
-    const responsibleItems = [
-      'Sección de perfil usuario',
-      'Visualizaciones de los datos seleccionados de la Administración regional y de la Otras temas de interés',
-      'Recomendaciones realizadas en base a los hechos vitales marcados.',
-      'Descargas de los carnés seleccionados',
+    final responsibleTitle = l10n.privacyResponsibleTitle;
+    final responsibleIntro = l10n.privacyResponsibleIntro;
+    final responsibleItems = [
+      l10n.privacyResponsibleItemProfile,
+      l10n.privacyResponsibleItemVisualizations,
+      l10n.privacyResponsibleItemRecommendations,
+      l10n.privacyResponsibleItemDownloads,
     ];
-    const responsibleOrg = 'Una vez se seleccione cada una de las opciones proporcionadas por espacio ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.';
-    const responsibleContactIntro = 'Los datos de contacto de este responsable son los siguientes:';
-    const responsibleContact =
-        'Dirección Postal:\n'
-        'Viceconsejería de Administración Local y Coordinación Administrativa\n'
-        'Avda. de Portugal s/n\n'
-        '45071 Toledo\n'
-        'Dirección de correo electrónico:\n'
-        'vicealyca@jccm.es';
-    const purposeTitle = '¿Cuál es la denominación y finalidad del tratamiento?';
-    const purposeIntro = 'Las finalidades de los tratamientos con los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:';
-    const purposeItems = [
-      'Gestionar los datos identificativos del ciudadano',
-      'Visualizar los datos seleccionados de la Administración regional y de la Otras temas de interés',
+    final responsibleOrg = l10n.privacyResponsibleOrgParagraph;
+    final responsibleContactIntro = l10n.privacyResponsibleContactIntro;
+    final responsibleContact = '${l10n.privacyResponsibleContactAddressLabel}${l10n.privacyResponsibleContactAddressValue}';
+    final purposeTitle = l10n.privacyPurposeTitle;
+    final purposeIntro = l10n.privacyPurposeIntro;
+    final purposeItems = [
+      l10n.privacyPurposeItemIdentity,
+      l10n.privacyPurposeItemVisualizations,
     ];
-    const aepdTitle = '¿Puedo reclamar ante la Agencia Española de Protección de Datos?';
-    const aepdText = 'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano, puede presentar una reclamación ante la Agencia Española de Protección de Datos, https://www.aepd.es/. También puede reclamar ante la delegada de protección de datos cuyos datos de contacto están en esta información.';
-    const securityTitle = '¿Qué medidas de seguridad se encuentran implantadas?';
-    const securityText = 'Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.';
-    const profilingTitle = 'Decisiones automatizadas incluida la elaboración de perfiles';
-    const profilingText = 'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por una persona interesada, existe la elaboración de perfiles.';
-    const dpoTitle = 'Datos de contacto con la delegada de protección de datos';
-    const dpoIntro = 'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la delegada de protección de datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:';
-    const dpoContact =
-        'Dirección postal:\n'
-        'Delegada de protección de datos\n'
-        'Oficina del Dato\n'
-        'Vicepresidencia Primera\n'
-        'C/ Río Cabriel, 12 – Edificio CIE III\n'
-        '45071 - Toledo\n\n'
-        'Dirección de correo electrónico:\n'
-        'protecciondatos@jccm.es';
+    final aepdTitle = l10n.privacyAepdTitle;
+    final aepdText = '${l10n.privacyAepdTextBeforeLink}https://www.aepd.es/${l10n.privacyAepdTextAfterLink}';
+    final securityTitle = l10n.privacySecurityTitle;
+    final securityText = l10n.privacySecurityText;
+    final profilingTitle = l10n.privacyProfilingTitle;
+    final profilingText = l10n.privacyProfilingText;
+    final dpoTitle = l10n.privacyDpoTitle;
+    final dpoIntro = l10n.privacyDpoIntro;
+    final dpoContact = '${l10n.privacyDpoContactAddressLabel}${l10n.privacyDpoContactAddressValue}${l10n.privacyDpoContactEmailLabel}protecciondatos@jccm.es';
 
     return [
       if (fromHome)
@@ -320,19 +306,12 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
         child: _ContactBlock(
           color: textColor,
           highlightQuery: _searchQuery,
-          children: const [
+          children: [
             TextSpan(
-              text: 'Dirección Postal:\n',
+              text: l10n.privacyResponsibleContactAddressLabel,
               style: AppTypography.bodyBold,
             ),
-            TextSpan(
-              text:
-                  'Viceconsejería de Administración Local y Coordinación Administrativa\n'
-                  'Avda. de Portugal s/n\n'
-                  '45071 Toledo\n'
-                  'Dirección de correo electrónico:\n'
-                  'vicealyca@jccm.es',
-            ),
+            TextSpan(text: l10n.privacyResponsibleContactAddressValue),
           ],
         ),
       ),
@@ -401,24 +380,17 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
         child: _ContactBlock(
           color: textColor,
           highlightQuery: _searchQuery,
-          children: const [
+          children: [
             TextSpan(
-              text: 'Dirección postal:\n',
+              text: l10n.privacyDpoContactAddressLabel,
               style: AppTypography.bodyBold,
             ),
+            TextSpan(text: l10n.privacyDpoContactAddressValue),
             TextSpan(
-              text:
-                  'Delegada de protección de datos\n'
-                  'Oficina del Dato\n'
-                  'Vicepresidencia Primera\n'
-                  'C/ Río Cabriel, 12 – Edificio CIE III\n'
-                  '45071 - Toledo\n\n',
-            ),
-            TextSpan(
-              text: 'Dirección de correo electrónico:\n',
+              text: l10n.privacyDpoContactEmailLabel,
               style: AppTypography.bodyBold,
             ),
-            TextSpan(text: 'protecciondatos@jccm.es'),
+            const TextSpan(text: 'protecciondatos@jccm.es'),
           ],
         ),
       ),
@@ -517,7 +489,7 @@ class _HomePrivacyAppBar extends StatelessWidget implements PreferredSizeWidget 
           isSearching ? AppIcons.close : AppIcons.search,
           color: AppColors.textPrimary,
         ),
-        tooltip: isSearching ? 'Cerrar búsqueda' : 'Buscar',
+        tooltip: isSearching ? AppLocalizations.of(context).legalSearchCloseTooltip : AppLocalizations.of(context).legalSearchTooltip,
         onPressed: isSearching ? onCloseSearch : onSearch,
       ),
     ],
@@ -705,7 +677,7 @@ class _AepdBlock extends StatelessWidget {
         style: AppTypography.bodyRegular.copyWith(color: color),
         children: [
           ..._highlightTextSpans(
-            'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ',
+            AppLocalizations.of(context).privacyAepdTextBeforeLink,
             AppTypography.bodyRegular.copyWith(color: color),
             highlightQuery,
           ),
@@ -728,7 +700,7 @@ class _AepdBlock extends StatelessWidget {
             ),
           ),
           ..._highlightTextSpans(
-            '. También puede reclamar ante la delegada de protección de datos cuyos datos de contacto están en esta información.',
+            AppLocalizations.of(context).privacyAepdTextAfterLink,
             AppTypography.bodyRegular.copyWith(color: color),
             highlightQuery,
           ),

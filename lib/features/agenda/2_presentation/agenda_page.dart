@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ci
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Agency agenda screen — Figma node 43716:12909.
 class AgendaPage extends ConsumerStatefulWidget {
@@ -69,7 +70,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
 
     return Scaffold(
       appBar: AppNavBar(
-        title: 'Agenda',
+        title: AppLocalizations.of(context).agendaPageTitle,
         isLoggedIn: true,
         showNotifications: false,
         profileInitials: authenticatedProfileInitials(ref),
@@ -185,6 +186,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
   }
 
   List<_AgendaMonthSection> _buildSections(final List<AgendaAppointment> appointments) {
+    final l10n = AppLocalizations.of(context);
     final sections = <String, _AgendaMonthSection>{};
     for (final appointment in appointments) {
       final date = appointment.dateTime;
@@ -193,7 +195,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         key,
         () => _AgendaMonthSection(
           year: date.year.toString(),
-          month: _monthName(date.month),
+          month: l10n.commonMonthName(_monthKey(date.month)),
           appointments: [],
         ),
       );
@@ -214,10 +216,11 @@ class _FilterNavigation extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SizedBox(
       width: double.infinity,
       child: AppFloatingNavigation(
-        tabs: _AgendaFilter.values.map((final filter) => filter.label).toList(growable: false),
+        tabs: _AgendaFilter.values.map((final filter) => filter.label(l10n)).toList(growable: false),
         selectedIndex: selectedFilter.index,
         onTabSelected: (final index) => onSelected?.call(_AgendaFilter.values[index]),
       ),
@@ -236,6 +239,7 @@ class _LastUpdateRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Row(
       children: [
         Expanded(
@@ -248,7 +252,7 @@ class _LastUpdateRow extends StatelessWidget {
               const SizedBox(width: AppDimensions.space8),
               Expanded(
                 child: Text(
-                  'Actualizado el ${_formatUpdateDate(updatedAt)}',
+                  _formatUpdateDate(l10n, updatedAt),
                   style: AppTypography.smallRegular.copyWith(
                     color: AppColors.borderBlueMutedBase,
                   ),
@@ -268,7 +272,7 @@ class _LastUpdateRow extends StatelessWidget {
           child: IconButton(
             icon: const AppIcon(AppIcons.autorenew, color: AppColors.textPrimary),
             onPressed: onRefresh,
-            tooltip: 'Actualizar agenda',
+            tooltip: l10n.agendaRefreshTooltip,
           ),
         ),
       ],
@@ -319,6 +323,7 @@ class _AgendaAppointmentCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final date = appointment.dateTime;
     final detail = appointment.detail ?? appointment.center ?? '';
 
@@ -329,10 +334,10 @@ class _AgendaAppointmentCard extends StatelessWidget {
         AgendaAppointmentKind.credential => AppAgendaInfoCardType.credential,
       },
       day: date.day.toString(),
-      weekday: _weekdayName(date.weekday),
+      weekday: l10n.commonWeekdayName(_weekdayKey(date.weekday)),
       time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatAppointmentTime(date),
       title: appointment.kind == AgendaAppointmentKind.health ? appointment.description : appointment.title,
-      channel: appointment.kind == AgendaAppointmentKind.health ? _appointmentChannel(appointment.channel, detail) : null,
+      channel: appointment.kind == AgendaAppointmentKind.health ? _appointmentChannel(l10n, appointment.channel, detail) : null,
       primaryText: appointment.kind == AgendaAppointmentKind.health ? appointment.title : appointment.description,
       secondaryText: appointment.kind == AgendaAppointmentKind.credential ? null : detail,
     );
@@ -347,7 +352,7 @@ class _AgendaEmptyState extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space24),
       child: Text(
-        'No hay citas para el periodo seleccionado.',
+        AppLocalizations.of(context).agendaEmptyAppointments,
         style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
       ),
     );
@@ -361,11 +366,12 @@ class _AgendaErrorState extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     // Mismo tratamiento visual que el resto de errores de servicio de la app.
     return AppAlertContextual(
-      message: 'No hemos podido cargar tu agenda.',
+      message: l10n.agendaError,
       action: AppButton(
-        label: 'Intentar de nuevo',
+        label: l10n.agendaParseErrorRetry,
         hierarchy: AppButtonHierarchy.tertiary,
         trailingIcon: AppIcons.autorenew,
         onPressed: onRetry,
@@ -387,19 +393,22 @@ class _AgendaMonthSection {
 }
 
 enum _AgendaFilter {
-  all(label: 'Todos'),
-  next7Days(label: '7 días', days: 7),
-  next30Days(label: '30 días', days: 30),
-  next365Days(label: '365 días', days: 365)
+  all,
+  next7Days(days: 7),
+  next30Days(days: 30),
+  next365Days(days: 365)
   ;
 
   const _AgendaFilter({
-    required this.label,
     this.days,
   });
 
-  final String label;
   final int? days;
+
+  String label(final AppLocalizations l10n) => switch (this) {
+    _AgendaFilter.all => l10n.agendaFilterAll,
+    _AgendaFilter.next7Days || _AgendaFilter.next30Days || _AgendaFilter.next365Days => l10n.agendaFilterDays(days!),
+  };
 
   List<AgendaAppointment> apply(final List<AgendaAppointment> appointments) {
     final rangeDays = days;
@@ -419,12 +428,13 @@ enum _AgendaFilter {
   }
 }
 
-String _formatUpdateDate(final DateTime dateTime) {
-  return '${dateTime.day} ${_shortMonthName(dateTime.month)} ${dateTime.year} a las ${_formatTime(dateTime)}';
-}
-
-String _formatTime(final DateTime dateTime) {
-  return '${_formatAppointmentTime(dateTime)}h';
+String _formatUpdateDate(final AppLocalizations l10n, final DateTime dateTime) {
+  return l10n.commonUpdatedAt(
+    dateTime.day,
+    l10n.commonMonthShortName(_monthKey(dateTime.month)),
+    dateTime.year,
+    _formatAppointmentTime(dateTime),
+  );
 }
 
 String _formatAppointmentTime(final DateTime dateTime) {
@@ -433,7 +443,7 @@ String _formatAppointmentTime(final DateTime dateTime) {
   return '$hour:$minute';
 }
 
-String _appointmentChannel(final String? channel, final String detail) {
+String _appointmentChannel(final AppLocalizations l10n, final String? channel, final String detail) {
   final trimmedChannel = channel?.trim();
   if (trimmedChannel != null && trimmedChannel.isNotEmpty) {
     return trimmedChannel;
@@ -441,51 +451,35 @@ String _appointmentChannel(final String? channel, final String detail) {
 
   final normalizedDetail = detail.toLowerCase();
   if (normalizedDetail.contains('teleconsulta') || normalizedDetail.contains('telef')) {
-    return 'telefónica';
+    return l10n.agendaChannelPhone;
   }
 
-  return 'presencial';
+  return l10n.agendaChannelInPerson;
 }
 
-String _weekdayName(final int weekday) => switch (weekday) {
-  DateTime.monday => 'Lunes',
-  DateTime.tuesday => 'Martes',
-  DateTime.wednesday => 'Miércoles',
-  DateTime.thursday => 'Jueves',
-  DateTime.friday => 'Viernes',
-  DateTime.saturday => 'Sábado',
-  DateTime.sunday => 'Domingo',
-  _ => '',
+String _weekdayKey(final int weekday) => switch (weekday) {
+  DateTime.monday => 'monday',
+  DateTime.tuesday => 'tuesday',
+  DateTime.wednesday => 'wednesday',
+  DateTime.thursday => 'thursday',
+  DateTime.friday => 'friday',
+  DateTime.saturday => 'saturday',
+  DateTime.sunday => 'sunday',
+  _ => 'other',
 };
 
-String _monthName(final int month) => switch (month) {
-  1 => 'enero',
-  2 => 'febrero',
-  3 => 'marzo',
-  4 => 'abril',
-  5 => 'mayo',
-  6 => 'junio',
-  7 => 'julio',
-  8 => 'agosto',
-  9 => 'septiembre',
-  10 => 'octubre',
-  11 => 'noviembre',
-  12 => 'diciembre',
-  _ => '',
-};
-
-String _shortMonthName(final int month) => switch (month) {
-  1 => 'ene',
-  2 => 'feb',
-  3 => 'mar',
-  4 => 'abr',
+String _monthKey(final int month) => switch (month) {
+  1 => 'january',
+  2 => 'february',
+  3 => 'march',
+  4 => 'april',
   5 => 'may',
-  6 => 'jun',
-  7 => 'jul',
-  8 => 'ago',
-  9 => 'sep',
-  10 => 'oct',
-  11 => 'nov',
-  12 => 'dic',
-  _ => '',
+  6 => 'june',
+  7 => 'july',
+  8 => 'august',
+  9 => 'september',
+  10 => 'october',
+  11 => 'november',
+  12 => 'december',
+  _ => 'other',
 };

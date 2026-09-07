@@ -43,7 +43,7 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
                 color: AppColors.textPrimary,
               ),
             ),
-            tooltip: _filters.activeCount > 0 ? 'Criterios de búsqueda activos: ${_filters.activeCount}' : 'Buscar expedientes',
+            tooltip: _filters.activeCount > 0 ? l10n.gestionExpedientesFiltrosActivosTooltip(_filters.activeCount) : l10n.gestionExpedientesBuscarTooltip,
             onPressed: _showFilters,
           ),
         ],
@@ -96,16 +96,17 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
   }
 
   Future<void> _showFilters() async {
+    final l10n = AppLocalizations.of(context);
     final result = await AppBottomSheet.show<AppListFilters>(
       context: context,
-      title: 'Filtrar expedientes',
+      title: l10n.gestionExpedientesFiltrarTitle,
       body: AppListFilterSheet(
         initialFilters: _filters,
-        fields: const [
-          AppListTextFilterField(id: 'number', label: 'Número de expediente', hint: 'Introduce el número'),
-          AppListTextFilterField(id: 'description', label: 'Descripción del expediente', hint: 'Introduce palabras de la descripción'),
-          AppListDateRangeFilterField(id: 'startDate', label: 'Fecha de inicio'),
-          AppListDateRangeFilterField(id: 'endDate', label: 'Fecha de cierre'),
+        fields: [
+          AppListTextFilterField(id: 'number', label: l10n.caseworkSearchFieldExpedienteLabel, hint: l10n.gestionFiltroNumeroHint),
+          AppListTextFilterField(id: 'description', label: l10n.gestionExpedientesFiltroDescripcionLabel, hint: l10n.gestionFiltroDescripcionHint),
+          AppListDateRangeFilterField(id: 'startDate', label: l10n.caseworkExpedienteDetailFechaInicio),
+          AppListDateRangeFilterField(id: 'endDate', label: l10n.gestionExpedientesFiltroFechaCierreLabel),
         ],
       ),
     );
