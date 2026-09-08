@@ -583,14 +583,21 @@ class _AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return _AppointmentCardShell(
-      dateTime: appointment.dateTime,
-      heading: _appointmentType(appointment),
-      title: appointment.professional,
-      lines: [
-        appointment.description,
-        appointment.modality ?? appointment.center ?? '',
-      ],
+    final l10n = AppLocalizations.of(context);
+    final date = appointment.dateTime;
+    final detail = appointment.modality ?? appointment.center ?? '';
+    final channel = appointment.channel?.trim();
+    final isPhone = detail.toLowerCase().contains('teleconsulta') || detail.toLowerCase().contains('telef');
+
+    return AppAgendaInfoCard(
+      type: AppAgendaInfoCardType.health,
+      day: date.day.toString(),
+      weekday: l10n.commonWeekdayName(_weekdayKey(date.weekday)),
+      time: '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
+      title: appointment.description,
+      channel: channel != null && channel.isNotEmpty ? channel : (isPhone ? l10n.agendaChannelPhone : l10n.agendaChannelInPerson),
+      primaryText: appointment.professional,
+      secondaryText: detail,
     );
   }
 }
@@ -618,7 +625,7 @@ class _HospitalAppointmentCard extends StatelessWidget {
 
 /// Tarjeta de cita: raíl de fecha a la izquierda y detalle a la derecha.
 ///
-/// La comparten primaria y hospitalaria; sólo cambian los textos.
+/// Presenta el detalle de las citas hospitalarias.
 class _AppointmentCardShell extends StatelessWidget {
   const _AppointmentCardShell({
     required this.dateTime,
@@ -629,8 +636,7 @@ class _AppointmentCardShell extends StatelessWidget {
 
   final DateTime dateTime;
 
-  /// Texto en mayúsculas junto a la hora: modalidad en primaria, servicio en
-  /// hospitalaria.
+  /// Servicio hospitalario en mayúsculas junto a la hora.
   final String heading;
   final String title;
   final List<String> lines;
@@ -776,14 +782,6 @@ String _formatTime(final DateTime dateTime) {
   final hour = dateTime.hour.toString().padLeft(2, '0');
   final minute = dateTime.minute.toString().padLeft(2, '0');
   return '$hour:${minute}h';
-}
-
-String _appointmentType(final HealthAppointment appointment) {
-  final raw = appointment.channel ?? appointment.modality ?? '';
-  if (raw.trim().isEmpty) {
-    return '';
-  }
-  return raw.toUpperCase();
 }
 
 String _weekdayKey(final int weekday) => switch (weekday) {

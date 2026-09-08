@@ -5786,6 +5786,12 @@ abstract class AppLocalizations {
   /// **'Inscripción en ofertas de empleo'**
   String get myDataEmploymentOffersPageTitle;
 
+  /// No description provided for @myDataEmploymentOffersPortalLink.
+  ///
+  /// In es, this message translates to:
+  /// **'Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha'**
+  String get myDataEmploymentOffersPortalLink;
+
   /// Texto de pie del modal informativo de la pantalla de inscripciones en ofertas.
   ///
   /// In es, this message translates to:

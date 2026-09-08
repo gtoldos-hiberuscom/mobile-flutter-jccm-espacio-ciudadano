@@ -3013,6 +3013,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentOffersPageTitle => 'Employment offer registration';
 
   @override
+  String get myDataEmploymentOffersPortalLink => 'Employability Portal of the Regional Government of Castilla-La Mancha';
+
+  @override
   String get myDataEmploymentOffersInfoSheetFooter => 'If your job offer applications are not correct, check your Employability Portal of the Regional Government of Castilla-La Mancha.';
 
   @override

@@ -3968,6 +3968,7 @@
   "@myDataEmploymentOffersPageTitle": {
     "description": "Title of the employment offer registrations screen."
   },
+  "myDataEmploymentOffersPortalLink": "Employability Portal of the Regional Government of Castilla-La Mancha",
   "myDataEmploymentOffersInfoSheetFooter": "If your job offer applications are not correct, check your Employability Portal of the Regional Government of Castilla-La Mancha.",
   "@myDataEmploymentOffersInfoSheetFooter": {
     "description": "Footer text of the job offer applications screen help modal."

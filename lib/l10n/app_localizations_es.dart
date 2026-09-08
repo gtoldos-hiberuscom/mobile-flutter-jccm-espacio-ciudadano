@@ -3014,6 +3014,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentOffersPageTitle => 'Inscripción en ofertas de empleo';
 
   @override
+  String get myDataEmploymentOffersPortalLink => 'Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha';
+
+  @override
   String get myDataEmploymentOffersInfoSheetFooter => 'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.';
 
   @override

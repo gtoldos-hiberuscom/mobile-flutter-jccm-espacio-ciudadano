@@ -27,6 +27,14 @@ class MyDataEmploymentOfferRegistrationCard extends StatelessWidget {
               style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
             ),
             const SizedBox(height: AppDimensions.space8),
+            Text(
+              _display(offer.applicationStatus).toUpperCase(),
+              style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
+              child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
+            ),
             MyDataEmploymentOfferFieldRow(
               label: l10n.myDataEmploymentOfferPublicationDateLabel,
               value: _formatDate(context, offer.publicationDate),
@@ -35,14 +43,9 @@ class MyDataEmploymentOfferRegistrationCard extends StatelessWidget {
               label: l10n.myDataEmploymentOfferRegistrationDateLabel,
               value: _formatDate(context, offer.registrationDate),
             ),
-            if (offer.selectionEndDate != null)
-              MyDataEmploymentOfferFieldRow(
-                label: l10n.myDataEmploymentOfferSelectionEndDateLabel,
-                value: _formatDate(context, offer.selectionEndDate),
-              ),
             MyDataEmploymentOfferFieldRow(
-              label: l10n.myDataEmploymentOfferApplicationStatusLabel,
-              value: _display(offer.applicationStatus),
+              label: l10n.myDataEmploymentOfferSelectionEndDateLabel,
+              value: _formatDate(context, offer.selectionEndDate),
             ),
           ],
         ),

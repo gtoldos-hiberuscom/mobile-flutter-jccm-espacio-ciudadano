@@ -65,7 +65,13 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
               final demandAsync = ref.watch(employmentDemandProvider);
               // Rechazo de autorización (respuesta de negocio) ≠ error de servicio.
               if (demandAsync.error is MyDataAuthorizationRequired) {
-                return MyDataAuthorizationRequiredState(returnTo: Routes.myDataEmployment, onAuthorized: () => ref.invalidate(employmentDemandProvider));
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const MyDataEmploymentDisabledDemandCard(),
+                    MyDataAuthorizationRequiredState(returnTo: Routes.myDataEmployment, onAuthorized: () => ref.invalidate(employmentDemandProvider)),
+                  ],
+                );
               }
               if (demandAsync.hasError) {
                 return MyDataEmploymentServerError(
@@ -98,9 +104,15 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
             ),
             // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
             // cabe error + reintentar, nunca afirmar que falta el consentimiento.
-            error: (final error, final stackTrace) => ErrorStateWidget(
-              message: l10n.authorizationCheckFailedMessage,
-              onRetry: () => ref.invalidate(ageDataAuthorizationProvider),
+            error: (final error, final stackTrace) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const MyDataEmploymentDisabledDemandCard(),
+                ErrorStateWidget(
+                  message: l10n.authorizationCheckFailedMessage,
+                  onRetry: () => ref.invalidate(ageDataAuthorizationProvider),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: AppDimensions.space16),
