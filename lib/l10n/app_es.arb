@@ -598,7 +598,7 @@
   "@legalAccessibilityTitle": {
     "description": "Título de la pantalla de accesibilidad."
   },
-  "legalNoticeTitle": "Aviso legal",
+  "legalNoticeTitle": "Aviso Legal",
   "@legalNoticeTitle": {
     "description": "Título de la pantalla de aviso legal."
   },

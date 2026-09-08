@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -216,7 +217,9 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       '[SUPPORT] Sending support request '
       '(attachment: ${request.attachment != null})',
     );
-    final result = await ref.read(submitSupportRequestUsecaseProvider).execute(request);
+    // Con sesión, el gateway sólo acepta la ruta /ciudadanos/{idAgente}/soporte.
+    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
+    final result = await ref.read(submitSupportRequestUsecaseProvider).execute(request, idAgente: idAgente);
     if (!mounted) {
       return;
     }
@@ -245,9 +248,12 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
   Future<SupportRequest> _buildSupportRequest() async {
     final attachment = _attachment;
-    final isAuthenticated = ref.read(jwtClaimsProvider) != null;
+    final claims = ref.read(jwtClaimsProvider);
+    // Con sesión el formulario no pide el nombre: la incidencia lo toma del
+    // token para que SIGUE reciba siempre `nombreApellidos`.
+    final name = claims == null ? _nameController.text.trim() : (claims.fullName ?? '');
     return SupportRequest(
-      name: isAuthenticated ? '' : _nameController.text.trim(),
+      name: name,
       email: _emailController.text.trim(),
       subject: _subjectController.text.trim(),
       message: _descriptionController.text.trim(),

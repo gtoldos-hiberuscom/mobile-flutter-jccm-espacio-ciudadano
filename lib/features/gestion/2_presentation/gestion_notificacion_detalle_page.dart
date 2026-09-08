@@ -82,9 +82,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
             // La comparecencia ya está registrada: si lo que falla es la
             // relectura del detalle, el mensaje no puede sugerir que la
             // aceptación no llegó a producirse.
-            message: _accepted
-                ? l10n.gestionNotificacionDetalleAcceptedReloadError
-                : l10n.notificationDetailErrorMessage,
+            message: _accepted ? l10n.gestionNotificacionDetalleAcceptedReloadError : l10n.notificationDetailErrorMessage,
             onRetry: () => ref.invalidate(gestionNotificacionDetalleProvider(args)),
           ),
           data: (final value) => _DetalleContent(
@@ -456,43 +454,36 @@ class _DocumentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: AppDimensions.space4),
-                  child: AppIcon(AppIcons.draft, color: AppColors.primary),
-                ),
+                downloading
+                    ? const SizedBox(
+                        width: AppDimensions.iconMedium,
+                        height: AppDimensions.iconMedium,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                      )
+                    : const AppIcon(AppIcons.draft, color: AppColors.textPrimary),
                 const SizedBox(width: AppDimensions.space8),
                 Expanded(
                   child: Text(
-                    document.nombre,
-                    style: AppTypography.bodyBold.copyWith(
+                    _documentFileName(document),
+                    style: AppTypography.leadingBold.copyWith(
                       color: AppColors.primary,
                       decoration: TextDecoration.underline,
                       decorationColor: AppColors.primary,
                     ),
                   ),
                 ),
-                const SizedBox(width: AppDimensions.space8),
-                Padding(
-                  padding: const EdgeInsets.only(top: AppDimensions.space4),
-                  child: downloading
-                      ? const SizedBox(
-                          width: AppDimensions.iconMedium,
-                          height: AppDimensions.iconMedium,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
-                        )
-                      : const AppIcon(AppIcons.download, color: AppColors.primary),
-                ),
               ],
             ),
-            if (document.tamanoBytes != null) ...[
-              const SizedBox(height: AppDimensions.space12),
-              Text(
-                _formatSize(document.tamanoBytes!),
-                style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
-              ),
-            ],
+            const SizedBox(height: AppDimensions.space16),
+            Text(
+              [
+                _documentFileName(document).split('.').last.toUpperCase(),
+                if (document.tamanoBytes != null) _formatSize(document.tamanoBytes!),
+              ].join(', '),
+              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+            ),
           ],
         ),
       ),

@@ -19,7 +19,7 @@ let package = Package(
         .package(name: "shared_preferences_foundation", path: "../.packages/shared_preferences_foundation-2.5.6"),
         .package(name: "path_provider_foundation", path: "../.packages/path_provider_foundation-2.5.1"),
         .package(name: "flutter_secure_storage_darwin", path: "../.packages/flutter_secure_storage_darwin-0.2.0"),
-        .package(name: "flutter_appauth", path: "../.packages/flutter_appauth-12.0.0"),
+        .package(name: "flutter_appauth", path: "../.packages/flutter_appauth"),
         .package(name: "file_selector_macos", path: "../.packages/file_selector_macos-0.9.5"),
         .package(name: "file_picker", path: "../.packages/file_picker-11.0.2"),
         .package(name: "connectivity_plus", path: "../.packages/connectivity_plus-6.1.5"),

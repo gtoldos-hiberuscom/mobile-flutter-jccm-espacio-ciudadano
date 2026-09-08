@@ -42,7 +42,9 @@ import 'package:espacio_ciudadano_api/src/model/datos_representante.dart';
 import 'package:espacio_ciudadano_api/src/model/documento_registro.dart';
 import 'package:espacio_ciudadano_api/src/model/hecho.dart';
 import 'package:espacio_ciudadano_api/src/model/info_error.dart';
+import 'package:espacio_ciudadano_api/src/model/link.dart';
 import 'package:espacio_ciudadano_api/src/model/lista_hechos_agente.dart';
+import 'package:espacio_ciudadano_api/src/model/my_publi_selec_by_nif_tipo_proc_registros_entrada_operation1200_response.dart';
 import 'package:espacio_ciudadano_api/src/model/notificacion_indexa_dto.dart';
 import 'package:espacio_ciudadano_api/src/model/pdatos.dart';
 import 'package:espacio_ciudadano_api/src/model/pregistro.dart';
@@ -96,7 +98,9 @@ part 'serializers.g.dart';
   DocumentoRegistro,
   Hecho,
   InfoError,
+  Link,
   ListaHechosAgente,
+  MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response,
   NotificacionIndexaDto,
   PDATOS,
   PREGISTRO,
@@ -127,6 +131,10 @@ Serializers serializers = (_$serializers.toBuilder()
       ..addBuilderFactory(
         const FullType(BuiltList, [FullType(int)]),
         () => ListBuilder<int>(),
+      )
+      ..addBuilderFactory(
+        const FullType(BuiltMap, [FullType(String), FullType(BuiltMap)]),
+        () => MapBuilder<String, BuiltMap<String, Link>>(),
       )
       ..add(const OneOfSerializer())
       ..add(const AnyOfSerializer())

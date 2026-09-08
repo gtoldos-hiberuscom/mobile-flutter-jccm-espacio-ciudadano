@@ -129,7 +129,7 @@ Consulta el servicio de intermediación para recuperar los datos del certificado
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIntermediacionApi();
-final String id = id_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{id}/...
+final String id = 12345678Z; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{id}/...
 final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO TEST"}; // BaseRequestIntermediacion | Cuerpo de petición para consultar datos de discapacidad por intermediación.
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
 

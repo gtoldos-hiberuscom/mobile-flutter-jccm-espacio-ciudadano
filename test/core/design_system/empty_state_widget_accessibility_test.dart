@@ -14,6 +14,48 @@ void main() {
     home: Scaffold(body: child),
   );
 
+  testWidgets('centra el contenido entre la cabecera y la barra inferior', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        const Column(
+          children: [
+            SizedBox(height: 80),
+            Expanded(child: EmptyStateWidget(message: 'No hay resultados')),
+            SizedBox(height: 60),
+          ],
+        ),
+      ),
+    );
+    final stateRect = tester.getRect(find.byType(EmptyStateWidget));
+    final contentRect = tester.getRect(
+      find.descendant(
+        of: find.byType(EmptyStateWidget),
+        matching: find.byType(Column),
+      ),
+    );
+    expect(contentRect.center.dy, closeTo(stateRect.center.dy, 1));
+    expect(contentRect.center.dx, closeTo(stateRect.center.dx, 1));
+  });
+
+  testWidgets('permite alcanzar la acción cuando el contenido supera la altura', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        SizedBox(
+          height: 140,
+          child: EmptyStateWidget(
+            message: 'No hay resultados',
+            subtitle: 'Prueba a cambiar los filtros de búsqueda',
+            action: TextButton(onPressed: () {}, child: const Text('Limpiar filtros')),
+          ),
+        ),
+      ),
+    );
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -300));
+    await tester.pumpAndSettle();
+    expect(find.text('Limpiar filtros').hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('anuncia mensaje y subtítulo como estado vacío', (final tester) async {
     await tester.pumpWidget(
       buildApp(

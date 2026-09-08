@@ -11,8 +11,8 @@ import 'package:espacio_ciudadano_api/src/api_util.dart';
 import 'package:espacio_ciudadano_api/src/model/dtquery.dart';
 import 'package:espacio_ciudadano_api/src/model/dtselectbynifreq.dart';
 import 'package:espacio_ciudadano_api/src/model/dtselectbynifv2_req.dart';
+import 'package:espacio_ciudadano_api/src/model/my_publi_selec_by_nif_tipo_proc_registros_entrada_operation1200_response.dart';
 import 'package:espacio_ciudadano_api/src/model/respuesta.dart';
-import 'package:espacio_ciudadano_api/src/model/respuesta_zcsrfcpubliselectbynifv2_response.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynif_response.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynumexp.dart';
 import 'package:espacio_ciudadano_api/src/model/zcsrfcpubliselectbynumreg.dart';
@@ -801,6 +801,111 @@ class PublicacionApi {
     );
   }
 
+  /// Busqueda de registros por tipo
+  /// Devuelve los registros de tipo entrada para el NIF proporcionado. Se invoca mediante el mismo path con el parámetro query &#39;tipo&#x3D;entrada&#39;. Ejemplo: /ciudadanos/{idAgente}/registros?tipo&#x3D;entrada.
+  ///
+  /// Parameters:
+  /// * [tipo] - Tipo de registros: entrada | salida
+  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
+  /// * [DTSELECTBYNIFV2REQ] - Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como SALIDA.
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response>> myPubliSelecByNifTipoProcRegistrosEntradaOperation1({ 
+    required String tipo,
+    required String idAgente,
+    required DTSELECTBYNIFV2REQ dtselectbynifv2reqBody,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/v1/ciudadanos/{idAgente}/registros'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _options = Options(
+      method: r'POST',
+      headers: <String, dynamic>{
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      contentType: 'application/json',
+      validateStatus: validateStatus,
+    );
+
+    final _queryParameters = <String, dynamic>{
+      r'tipo': encodeQueryParameter(_serializers, tipo, const FullType(String)),
+    };
+
+    dynamic _bodyData;
+
+    try {
+      const _type = FullType(DTSELECTBYNIFV2REQ);
+      _bodyData = _serializers.serialize(dtselectbynifv2reqBody, specifiedType: _type);
+
+    } catch(error, stackTrace) {
+      throw DioException(
+         requestOptions: _options.compose(
+          _dio.options,
+          _path,
+          queryParameters: _queryParameters,
+        ),
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    final _response = await _dio.request<Object>(
+      _path,
+      data: _bodyData,
+      options: _options,
+      queryParameters: _queryParameters,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null ? null : _serializers.deserialize(
+        rawResponse,
+        specifiedType: const FullType(MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response),
+      ) as MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response;
+
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
   /// Consultar registros de salida por documento del ciudadano
   /// Consulta la lista de registros de salida asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento SALIDA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
   ///
@@ -1182,103 +1287,6 @@ class PublicacionApi {
     }
 
     return Response<Respuesta>(
-      data: _responseData,
-      headers: _response.headers,
-      isRedirect: _response.isRedirect,
-      requestOptions: _response.requestOptions,
-      redirects: _response.redirects,
-      statusCode: _response.statusCode,
-      statusMessage: _response.statusMessage,
-      extra: _response.extra,
-    );
-  }
-
-  /// registrosTipoSalida1
-  /// 
-  ///
-  /// Parameters:
-  /// * [idAgente] 
-  /// * [DTSELECTBYNIFV2REQ] 
-  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
-  /// * [headers] - Can be used to add additional headers to the request
-  /// * [extras] - Can be used to add flags to the request
-  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
-  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
-  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
-  ///
-  /// Returns a [Future] containing a [Response] with a [RespuestaZCSRFCPUBLISELECTBYNIFV2Response] as data
-  /// Throws [DioException] if API call or serialization fails
-  Future<Response<RespuestaZCSRFCPUBLISELECTBYNIFV2Response>> registrosTipoSalida1({ 
-    required String idAgente,
-    required DTSELECTBYNIFV2REQ dtselectbynifv2reqBody,
-    CancelToken? cancelToken,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? extra,
-    ValidateStatus? validateStatus,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) async {
-    final _path = r'/api/v1/ciudadanos/{idAgente}/registros'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
-    final _options = Options(
-      method: r'POST',
-      headers: <String, dynamic>{
-        ...?headers,
-      },
-      extra: <String, dynamic>{
-        'secure': <Map<String, String>>[],
-        ...?extra,
-      },
-      contentType: 'application/json',
-      validateStatus: validateStatus,
-    );
-
-    dynamic _bodyData;
-
-    try {
-      const _type = FullType(DTSELECTBYNIFV2REQ);
-      _bodyData = _serializers.serialize(dtselectbynifv2reqBody, specifiedType: _type);
-
-    } catch(error, stackTrace) {
-      throw DioException(
-         requestOptions: _options.compose(
-          _dio.options,
-          _path,
-        ),
-        type: DioExceptionType.unknown,
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }
-
-    final _response = await _dio.request<Object>(
-      _path,
-      data: _bodyData,
-      options: _options,
-      cancelToken: cancelToken,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-
-    RespuestaZCSRFCPUBLISELECTBYNIFV2Response? _responseData;
-
-    try {
-      final rawResponse = _response.data;
-      _responseData = rawResponse == null ? null : _serializers.deserialize(
-        rawResponse,
-        specifiedType: const FullType(RespuestaZCSRFCPUBLISELECTBYNIFV2Response),
-      ) as RespuestaZCSRFCPUBLISELECTBYNIFV2Response;
-
-    } catch (error, stackTrace) {
-      throw DioException(
-        requestOptions: _response.requestOptions,
-        response: _response,
-        type: DioExceptionType.unknown,
-        error: error,
-        stackTrace: stackTrace,
-      );
-    }
-
-    return Response<RespuestaZCSRFCPUBLISELECTBYNIFV2Response>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

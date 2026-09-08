@@ -83,11 +83,12 @@ class _AccessibilityPageState extends ConsumerState<AccessibilityPage> {
         onSearch: _startSearch,
         onCloseSearch: _closeSearch,
       ),
-      // `SafeArea` inferior y no un padding fijo: el último bloque quedaba
-      // debajo del gesto de navegación del dispositivo y el texto parecía
-      // cortado.
+      // Reserva también espacio cuando el dispositivo comunica un inset nulo
+      // o menor que su barra de navegación.
       body: SafeArea(
         top: false,
+        maintainBottomViewPadding: true,
+        minimum: const EdgeInsets.only(bottom: AppDimensions.space48),
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(
             left: AppDimensions.space16,

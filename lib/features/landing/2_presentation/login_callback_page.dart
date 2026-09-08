@@ -1,6 +1,7 @@
 import 'dart:async' show Timer;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
@@ -98,10 +99,15 @@ class _LoginCallbackPageState extends ConsumerState<LoginCallbackPage> {
 
     // Mismo velo que la landing, para que el regreso de Cl@ve se vea igual
     // llegue por donde llegue el deep link.
-    return Scaffold(
-      body: AppLoadingScreen(
-        title: l10n.loginPageTitle,
-        description: l10n.loginPageLoadingDescription,
+    // Sin AppBar, esta página hereda el estilo que dejó la home pública
+    // (iconos oscuros), que sobre el velo azul oscuro se veían tapados.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: AppLoadingScreen(
+          title: l10n.loginPageTitle,
+          description: l10n.loginPageLoadingDescription,
+        ),
       ),
     );
   }

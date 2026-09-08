@@ -6,7 +6,9 @@ según la documentación funcional facilitada por el cliente.
 
 Estado: migradas **cláusulas, hechos vitales y preferencias, recomendaciones,
 educación, salud, bienestar social, empleo, vivienda y vehículos**. Quedan
-agenda, carnets digitales, gestión, soporte y contacto de notificaciones.
+agenda, carnets digitales, gestión y contacto de notificaciones. Soporte con
+sesión ya va por `/ciudadanos/{idAgente}/soporte`; sin sesión sigue en
+`/api/v1/soporte`, que el gateway no sirve (404).
 Las citas hospitalarias están ocultas tras un flag, pendientes de validar diseño.
 
 > **Corrección importante (revisada con el OpenAPI de UAT).** Las rutas nuevas

@@ -15,8 +15,6 @@ Method | HTTP request | Description
 [**obtenerDatosDiscapacidad1**](CarnetDigitalApi.md#obtenerdatosdiscapacidad1) | **GET** /api/v1/ciudadanos/{dni}/carnet-digital/discapacidad | Obtener datos del carné de discapacidad
 [**obtenerDatosFamiliaNumerosa**](CarnetDigitalApi.md#obtenerdatosfamilianumerosa) | **GET** /api/v1/ciudadanos/{dni}/carnet-digital/familia-numerosa | Obtener datos del carné de familia numerosa
 [**obtenerDatosFamiliaNumerosa1**](CarnetDigitalApi.md#obtenerdatosfamilianumerosa1) | **GET** /api/v1/carnet-digital/familia-numerosa/{dni} | Obtener datos del carné de familia numerosa
-[**obtenerDatosFamiliaNumerosaIntermediacion**](CarnetDigitalApi.md#obtenerdatosfamilianumerosaintermediacion) | **POST** /api/v1/ciudadanos/{numDocumento}/bienestar-social/familia-numerosa | Obtener datos de familia numerosa por intermediación
-[**obtenerDatosFamiliaNumerosaIntermediacion1**](CarnetDigitalApi.md#obtenerdatosfamilianumerosaintermediacion1) | **POST** /api/v1/intermediacion/familia-numerosa/datos | Obtener datos de familia numerosa por intermediación
 [**obtenerPdf**](CarnetDigitalApi.md#obtenerpdf) | **POST** /api/v1/ciudadanos/{dni}/carnet-digital/joven/pdf | Obtener PDF del carné joven digital
 [**obtenerPdf1**](CarnetDigitalApi.md#obtenerpdf1) | **POST** /api/v1/carnet-digital/pdf/{dni} | Obtener PDF del carné joven digital
 [**obtenerPkPass**](CarnetDigitalApi.md#obtenerpkpass) | **POST** /api/v1/ciudadanos/{dni}/carnet-digital/joven/pkpass | Obtener PKPass del carné joven digital
@@ -295,100 +293,6 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **obtenerDatosFamiliaNumerosaIntermediacion**
-> Respuesta obtenerDatosFamiliaNumerosaIntermediacion(numDocumento, baseRequestIntermediacion, authorization)
-
-Obtener datos de familia numerosa por intermediación
-
-Consulta el servicio de intermediación para recuperar los datos del título de familia numerosa del ciudadano. Devuelve información detallada del título incluyendo categoría, vigencia, fecha de caducidad, número de hijos y datos de todos los beneficiarios (titular e hijos) con sus documentos de identidad y fecha de nacimiento.
-
-### Example
-```dart
-import 'package:espacio_ciudadano_api/api.dart';
-
-final api = EspacioCiudadanoApi().getCarnetDigitalApi();
-final String numDocumento = numDocumento_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{numDocumento}/...
-final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO"}; // BaseRequestIntermediacion | Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
-final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
-
-try {
-    final response = api.obtenerDatosFamiliaNumerosaIntermediacion(numDocumento, baseRequestIntermediacion, authorization);
-    print(response);
-} on DioException catch (e) {
-    print('Exception when calling CarnetDigitalApi->obtenerDatosFamiliaNumerosaIntermediacion: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **numDocumento** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{numDocumento}/... | 
- **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre. | 
- **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud. | [optional] 
-
-### Return type
-
-[**Respuesta**](Respuesta.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **obtenerDatosFamiliaNumerosaIntermediacion1**
-> Respuesta obtenerDatosFamiliaNumerosaIntermediacion1(numDocumento, baseRequestIntermediacion, authorization)
-
-Obtener datos de familia numerosa por intermediación
-
-Consulta el servicio de intermediación para recuperar los datos del título de familia numerosa del ciudadano. Devuelve información detallada del título incluyendo categoría, vigencia, fecha de caducidad, número de hijos y datos de todos los beneficiarios (titular e hijos) con sus documentos de identidad y fecha de nacimiento.
-
-### Example
-```dart
-import 'package:espacio_ciudadano_api/api.dart';
-
-final api = EspacioCiudadanoApi().getCarnetDigitalApi();
-final String numDocumento = numDocumento_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{numDocumento}/...
-final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO"}; // BaseRequestIntermediacion | Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
-final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
-
-try {
-    final response = api.obtenerDatosFamiliaNumerosaIntermediacion1(numDocumento, baseRequestIntermediacion, authorization);
-    print(response);
-} on DioException catch (e) {
-    print('Exception when calling CarnetDigitalApi->obtenerDatosFamiliaNumerosaIntermediacion1: $e\n');
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **numDocumento** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{numDocumento}/... | 
- **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre. | 
- **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud. | [optional] 
-
-### Return type
-
-[**Respuesta**](Respuesta.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

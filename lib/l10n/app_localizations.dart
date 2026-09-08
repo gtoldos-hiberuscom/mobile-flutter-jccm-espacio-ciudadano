@@ -953,7 +953,7 @@ abstract class AppLocalizations {
   /// Título de la pantalla de aviso legal.
   ///
   /// In es, this message translates to:
-  /// **'Aviso legal'**
+  /// **'Aviso Legal'**
   String get legalNoticeTitle;
 
   /// Título cuando el documento legal solicitado no existe.

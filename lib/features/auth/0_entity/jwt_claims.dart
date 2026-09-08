@@ -64,6 +64,18 @@ final class JwtClaims {
   final String? givenName;
   final String? familyName;
 
+  /// Nombre y apellidos del ciudadano tal y como los informa Cerbero
+  /// (`given_name` + `first_surname` + `second_surname`), con `name` como
+  /// alternativa. Null cuando el token no trae ninguno.
+  String? get fullName {
+    final parts = [givenName, firstSurname, secondSurname].map((final part) => part?.trim() ?? '').where((final part) => part.isNotEmpty).toList(growable: false);
+    if (parts.isNotEmpty) {
+      return parts.join(' ');
+    }
+    final fallback = name?.trim();
+    return fallback == null || fallback.isEmpty ? null : fallback;
+  }
+
   /// Document identifier expected by `/api/v1/ciudadanos/{id}` endpoints.
   String? get normalizedPersonIdentifier {
     final value = personIdentifier?.trim().toUpperCase();

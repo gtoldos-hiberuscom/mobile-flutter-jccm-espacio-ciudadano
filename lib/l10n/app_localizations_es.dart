@@ -459,7 +459,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get legalAccessibilityTitle => 'Accesibilidad';
 
   @override
-  String get legalNoticeTitle => 'Aviso legal';
+  String get legalNoticeTitle => 'Aviso Legal';
 
   @override
   String get legalNotFoundTitle => 'Documento no encontrado';

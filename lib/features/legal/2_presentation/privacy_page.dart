@@ -117,9 +117,10 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
             ),
       body: SafeArea(
         top: false,
-        // La barra del consentimiento ya trae su propio `SafeArea`: aplicarlo
-        // dos veces duplicaría el hueco, así que aquí solo cuando no está.
-        bottom: fromHome,
+        // Protege tanto el texto como los botones. SafeArea consume el inset
+        // para que la barra de consentimiento no vuelva a sumarlo.
+        maintainBottomViewPadding: true,
+        minimum: const EdgeInsets.only(bottom: AppDimensions.space48),
         child: Column(
           children: [
             Expanded(

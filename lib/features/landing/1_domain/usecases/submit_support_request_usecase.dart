@@ -25,9 +25,9 @@ final class SubmitSupportRequestUsecase {
 
   final SupportRepository _repository;
 
-  Future<SubmitSupportRequestResult> execute(final SupportRequest request) async {
+  Future<SubmitSupportRequestResult> execute(final SupportRequest request, {final String? idAgente}) async {
     try {
-      await _repository.submitSupportRequest(request);
+      await _repository.submitSupportRequest(request, idAgente: idAgente);
       return const SubmitSupportRequestSuccess();
     } on Object catch (error) {
       return SubmitSupportRequestFailed(_reasonFor(error), cause: error);

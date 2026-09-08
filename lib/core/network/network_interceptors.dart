@@ -114,8 +114,9 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
       handler.next(retryError);
     } on Object {
       // e.g. a StateError from re-sending an already-finalized FormData
-      // (/api/v1/soporte). Surface the original 401 rather than letting it
-      // escape the handler and hang the request.
+      // (/api/v1/soporte, /api/v1/ciudadanos/{idAgente}/soporte). Surface the
+      // original 401 rather than letting it escape the handler and hang the
+      // request.
       handler.next(err);
     }
   }
@@ -206,7 +207,7 @@ class EmojiDioLogger extends Interceptor {
     // adjunta el ciudadano es dato suyo, y esta traza no lo pasa por el
     // redactor. Sigue disponible en desarrollo, que es donde hace falta para
     // diagnosticar el envío de incidencias.
-    if (verboseBodies && options.path == '/api/v1/soporte' && requestData is FormData) {
+    if (verboseBodies && options.path.endsWith('/soporte') && requestData is FormData) {
       final formData = requestData;
       final attachments = formData.files
           .where((final entry) => entry.key == 'adjunto')

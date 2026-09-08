@@ -1023,33 +1023,40 @@ class AppListItem extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final effectiveOnTap = isDisabled ? null : onTap;
-    final tile = ListTile(
-      minTileHeight: AppDimensions.minTouchTarget,
-      onTap: effectiveOnTap,
-      leading: leading,
-      trailing:
-          trailing ??
-          (onTap != null && !isDisabled
-              ? const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppColors.textSecondary,
-                  size: AppDimensions.iconMedium,
-                )
-              : null),
-      title: Text(
-        title,
-        style: AppTypography.bodyBase.copyWith(
-          color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+    // ListTile pinta su fondo y el ripple en el Material más cercano. Dentro
+    // de AppList (DecoratedBox con color) ese Material queda por debajo del
+    // fondo y el ripple no se ve, y Flutter lo avisa en debug. Un Material
+    // transparente propio lo pinta encima del contenedor.
+    final tile = Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+        minTileHeight: AppDimensions.minTouchTarget,
+        onTap: effectiveOnTap,
+        leading: leading,
+        trailing:
+            trailing ??
+            (onTap != null && !isDisabled
+                ? const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.textSecondary,
+                    size: AppDimensions.iconMedium,
+                  )
+                : null),
+        title: Text(
+          title,
+          style: AppTypography.bodyBase.copyWith(
+            color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+          ),
         ),
+        subtitle: subtitle != null
+            ? Text(
+                subtitle!,
+                style: AppTypography.bodyS.copyWith(
+                  color: isDisabled ? AppColors.textDisabled : AppColors.textSecondary,
+                ),
+              )
+            : null,
       ),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle!,
-              style: AppTypography.bodyS.copyWith(
-                color: isDisabled ? AppColors.textDisabled : AppColors.textSecondary,
-              ),
-            )
-          : null,
     );
 
     if (onTap == null) {
