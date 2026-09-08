@@ -324,7 +324,6 @@ class _HomeDashboard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _HomeNewsSection(),
-              const SizedBox(height: AppDimensions.space24),
               _SectionTitle(text: l10n.homeMyDataAccessesTitle),
               const SizedBox(height: AppDimensions.space8),
               _QuickAccessGrid(onComingSoon: onComingSoon),
@@ -381,18 +380,15 @@ class _HomeNewsSection extends ConsumerWidget {
     final muestraNotificaciones = notificationsCount == null || notificationsCount > 0;
     final muestraCitas = upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0;
 
+    if (!muestraNotificaciones && !muestraCitas) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionTitle(text: l10n.homeNewsSectionTitle),
         const SizedBox(height: AppDimensions.space8),
-        // Sin novedades quedaba solo el título y, justo debajo, la sección
-        // siguiente: parecía que faltaba algo por cargar.
-        if (!muestraNotificaciones && !muestraCitas)
-          AppAlertContextual(
-            message: l10n.homeNoNewsMessage,
-            size: AppAlertContextualSize.small,
-          ),
         if (muestraNotificaciones)
           AppSimpleNavCard(
             label: _labelWithCount(l10n, l10n.homeNewsNotificationsTitle, notificationsCount),
@@ -412,6 +408,7 @@ class _HomeNewsSection extends ConsumerWidget {
             onTap: () => context.go(Routes.agenda),
           ),
         ],
+        const SizedBox(height: AppDimensions.space24),
       ],
     );
   }
@@ -498,11 +495,32 @@ class _QuickAccessGrid extends StatelessWidget {
   }
 }
 
-class _HomeRecommendationsSection extends ConsumerWidget {
+class _HomeRecommendationsSection extends ConsumerStatefulWidget {
   const _HomeRecommendationsSection();
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  ConsumerState<_HomeRecommendationsSection> createState() => _HomeRecommendationsSectionState();
+}
+
+class _HomeRecommendationsSectionState extends ConsumerState<_HomeRecommendationsSection> {
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollBy(final double direction) {
+    if (!_scrollController.hasClients) {
+      return;
+    }
+    final target = (_scrollController.offset + direction * 304).clamp(0.0, _scrollController.position.maxScrollExtent);
+    unawaited(_scrollController.animateTo(target, duration: const Duration(milliseconds: 250), curve: Curves.easeOut));
+  }
+
+  @override
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final state = ref.watch(
       recommendationsProvider(RecommendationsSegment.all),
@@ -520,6 +538,7 @@ class _HomeRecommendationsSection extends ConsumerWidget {
             _SectionTitle(text: l10n.homeRecommendedProceduresTitle),
             const SizedBox(height: AppDimensions.space8),
             SingleChildScrollView(
+              controller: _scrollController,
               scrollDirection: Axis.horizontal,
               clipBehavior: Clip.none,
               child: Row(
@@ -535,18 +554,28 @@ class _HomeRecommendationsSection extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: AppDimensions.space16),
-            DecoratedBox(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
-                boxShadow: AppShadows.low,
-              ),
-              child: AppButton(
-                label: l10n.homeGoToRecommendationsButton,
-                hierarchy: AppButtonHierarchy.secondary,
-                isExpanded: true,
-                onPressed: () => context.go(Routes.recommendations),
-              ),
+            const SizedBox(height: AppDimensions.space8),
+            Row(
+              children: [
+                Expanded(
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
+                      boxShadow: AppShadows.low,
+                    ),
+                    child: AppButton(
+                      label: l10n.homeGoToRecommendationsButton,
+                      hierarchy: AppButtonHierarchy.secondary,
+                      isExpanded: true,
+                      onPressed: () => context.go(Routes.recommendations),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.space8),
+                _carouselArrow(context, forward: false),
+                const SizedBox(width: AppDimensions.space8),
+                _carouselArrow(context, forward: true),
+              ],
             ),
           ],
         );
@@ -554,6 +583,23 @@ class _HomeRecommendationsSection extends ConsumerWidget {
       orElse: () => const SizedBox.shrink(),
     );
   }
+
+  Widget _carouselArrow(final BuildContext context, {required final bool forward}) => DecoratedBox(
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
+      boxShadow: AppShadows.low,
+    ),
+    child: Material(
+      color: AppColors.backgroundLightBlue,
+      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+      child: IconButton(
+        tooltip: forward ? MaterialLocalizations.of(context).nextPageTooltip : MaterialLocalizations.of(context).previousPageTooltip,
+        onPressed: () => _scrollBy(forward ? 1 : -1),
+        constraints: const BoxConstraints.tightFor(width: 48, height: 48),
+        icon: AppIcon(forward ? AppIcons.arrowForward : AppIcons.arrowBack, color: AppColors.textPrimary),
+      ),
+    ),
+  );
 }
 
 class _RecommendedProcedureCard extends StatelessWidget {
@@ -564,7 +610,6 @@ class _RecommendedProcedureCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final deadline = _deadlineText(l10n, recommendation);
     final lifeEventName = recommendation.lifeEventName.trim();
     return AppRecommendationCard(
       onTap: () => unawaited(_openRecommendationDetail(context, recommendation)),
@@ -572,7 +617,6 @@ class _RecommendedProcedureCard extends StatelessWidget {
       categoryLabels: _categoryLabels(context, recommendation.badges),
       detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
       detailText: lifeEventName.isEmpty ? l10n.homeBlockLastUpdatedUnknown : lifeEventName,
-      statusText: recommendation.submissionStatusText ?? deadline,
     );
   }
 }
@@ -601,27 +645,6 @@ Future<void> _openRecommendationDetail(
   }
 
   await launchExternalUrlWithConfirmation(context, url);
-}
-
-String? _deadlineText(final AppLocalizations l10n, final Recommendation recommendation) {
-  final start = recommendation.submissionStartDate;
-  final end = recommendation.submissionEndDate;
-  if (start == null && end == null) {
-    return null;
-  }
-  if (start != null && end != null) {
-    return '${_formatShortDate(start)} - ${_formatShortDate(end)}';
-  }
-  if (start != null) {
-    return l10n.homeRecommendationDeadlineFrom(_formatShortDate(start));
-  }
-  return l10n.homeRecommendationDeadlineUntil(_formatShortDate(end!));
-}
-
-String _formatShortDate(final DateTime date) {
-  final day = date.day.toString().padLeft(2, '0');
-  final month = date.month.toString().padLeft(2, '0');
-  return '$day/$month/${date.year}';
 }
 
 class _QuickAccessItem {

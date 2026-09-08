@@ -84,7 +84,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     final consentNotifier = ref.read(consentProvider(idAgente).notifier);
     final canAccept = consentState.status == ConsentStatus.step1Unlocked;
     final fromHome = widget.fromHome;
-    final textColor = fromHome ? AppColors.primaryDark : AppColors.textBase;
+    final textColor = fromHome ? AppColors.textPrimary : AppColors.textBase;
     final entries = _contentEntries(
       context: context,
       l10n: l10n,
@@ -208,7 +208,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     for (final entry in _contentEntries(
       context: context,
       l10n: AppLocalizations.of(context),
-      textColor: widget.fromHome ? AppColors.primaryDark : AppColors.textBase,
+      textColor: widget.fromHome ? AppColors.textPrimary : AppColors.textBase,
       fromHome: widget.fromHome,
     )) {
       if (_normalize(entry.searchText).contains(normalizedQuery)) {
@@ -238,6 +238,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     required final Color textColor,
     required final bool fromHome,
   }) {
+    final bodyStyle = fromHome ? AppTypography.leadingMedium : AppTypography.bodyRegular;
     final responsibleTitle = l10n.privacyResponsibleTitle;
     final responsibleIntro = l10n.privacyResponsibleIntro;
     final responsibleItems = [
@@ -272,7 +273,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
           searchText: l10n.legalPrivacyTitle,
           child: _PageTitle(
             l10n.legalPrivacyTitle,
-            color: AppColors.primary,
+            color: AppColors.textPrimary,
             highlightQuery: _searchQuery,
           ),
         ),
@@ -284,33 +285,34 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'responsible-intro',
         searchText: responsibleIntro,
-        child: _BodyBlock(responsibleIntro, color: textColor, highlightQuery: _searchQuery),
+        child: _BodyBlock(responsibleIntro, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'responsible-items',
         searchText: responsibleItems.join(' '),
-        child: _BulletList(color: textColor, items: responsibleItems, highlightQuery: _searchQuery),
+        child: _BulletList(style: bodyStyle, color: textColor, items: responsibleItems, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'responsible-org',
         searchText: responsibleOrg,
-        child: _BodyBlock(responsibleOrg, color: textColor, highlightQuery: _searchQuery),
+        child: _BodyBlock(responsibleOrg, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'responsible-contact-intro',
         searchText: responsibleContactIntro,
-        child: _BodyBlock(responsibleContactIntro, color: textColor, highlightQuery: _searchQuery),
+        child: _BodyBlock(responsibleContactIntro, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'responsible-contact',
         searchText: responsibleContact,
         child: _ContactBlock(
+          style: bodyStyle,
           color: textColor,
           highlightQuery: _searchQuery,
           children: [
             TextSpan(
               text: l10n.privacyResponsibleContactAddressLabel,
-              style: AppTypography.bodyBold,
+              style: fromHome ? bodyStyle : AppTypography.bodyBold,
             ),
             TextSpan(text: l10n.privacyResponsibleContactAddressValue),
           ],
@@ -324,12 +326,12 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'purpose-intro',
         searchText: purposeIntro,
-        child: _BodyBlock(purposeIntro, color: textColor, highlightQuery: _searchQuery),
+        child: _BodyBlock(purposeIntro, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'purpose-items',
         searchText: purposeItems.join(' '),
-        child: _BulletList(color: textColor, items: purposeItems, highlightQuery: _searchQuery),
+        child: _BulletList(style: bodyStyle, color: textColor, items: purposeItems, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'aepd-title',
@@ -340,6 +342,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
         id: 'aepd-text',
         searchText: aepdText,
         child: _AepdBlock(
+          style: bodyStyle,
           color: textColor,
           highlightQuery: _searchQuery,
           onTap: () => _openAepd(context),
@@ -353,7 +356,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'security-text',
         searchText: securityText,
-        child: _BodyBlock(securityText, color: textColor, highlightQuery: _searchQuery),
+        child: _BodyBlock(securityText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'profiling-title',
@@ -363,7 +366,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'profiling-text',
         searchText: profilingText,
-        child: _BodyBlock(profilingText, color: textColor, highlightQuery: _searchQuery),
+        child: _BodyBlock(profilingText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'dpo-title',
@@ -373,23 +376,24 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'dpo-intro',
         searchText: dpoIntro,
-        child: _BodyBlock(dpoIntro, color: textColor, highlightQuery: _searchQuery),
+        child: _BodyBlock(dpoIntro, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'dpo-contact',
         searchText: dpoContact,
         child: _ContactBlock(
+          style: bodyStyle,
           color: textColor,
           highlightQuery: _searchQuery,
           children: [
             TextSpan(
               text: l10n.privacyDpoContactAddressLabel,
-              style: AppTypography.bodyBold,
+              style: fromHome ? bodyStyle : AppTypography.bodyBold,
             ),
             TextSpan(text: l10n.privacyDpoContactAddressValue),
             TextSpan(
               text: l10n.privacyDpoContactEmailLabel,
-              style: AppTypography.bodyBold,
+              style: fromHome ? bodyStyle : AppTypography.bodyBold,
             ),
             const TextSpan(text: 'protecciondatos@jccm.es'),
           ],
@@ -568,11 +572,13 @@ class _BodyBlock extends StatelessWidget {
   const _BodyBlock(
     this.text, {
     this.color = AppColors.textBase,
+    this.style = AppTypography.bodyRegular,
     this.highlightQuery = '',
   });
 
   final String text;
   final Color color;
+  final TextStyle style;
   final String highlightQuery;
 
   @override
@@ -580,7 +586,7 @@ class _BodyBlock extends StatelessWidget {
     padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
     child: _HighlightedText(
       text: text,
-      style: AppTypography.bodyRegular.copyWith(color: color),
+      style: style.copyWith(color: color),
       query: highlightQuery,
     ),
   );
@@ -590,11 +596,13 @@ class _ContactBlock extends StatelessWidget {
   const _ContactBlock({
     required this.children,
     this.color = AppColors.textBase,
+    this.style = AppTypography.bodyRegular,
     this.highlightQuery = '',
   });
 
   final List<InlineSpan> children;
   final Color color;
+  final TextStyle style;
   final String highlightQuery;
 
   @override
@@ -604,7 +612,7 @@ class _ContactBlock extends StatelessWidget {
       text: TextSpan(
         children: _highlightInlineSpans(
           children,
-          AppTypography.bodyRegular.copyWith(color: color),
+          style.copyWith(color: color),
           highlightQuery,
         ),
       ),
@@ -616,11 +624,13 @@ class _BulletList extends StatelessWidget {
   const _BulletList({
     required this.items,
     this.color = AppColors.textBase,
+    this.style = AppTypography.bodyRegular,
     this.highlightQuery = '',
   });
 
   final List<String> items;
   final Color color;
+  final TextStyle style;
   final String highlightQuery;
 
   @override
@@ -640,12 +650,12 @@ class _BulletList extends StatelessWidget {
                   children: [
                     Text(
                       '• ',
-                      style: AppTypography.bodyRegular.copyWith(color: color),
+                      style: style.copyWith(color: color),
                     ),
                     Expanded(
                       child: _HighlightedText(
                         text: item,
-                        style: AppTypography.bodyRegular.copyWith(color: color),
+                        style: style.copyWith(color: color),
                         query: highlightQuery,
                       ),
                     ),
@@ -663,11 +673,13 @@ class _AepdBlock extends StatelessWidget {
   const _AepdBlock({
     required this.onTap,
     this.color = AppColors.textBase,
+    this.style = AppTypography.bodyRegular,
     this.highlightQuery = '',
   });
 
   final VoidCallback onTap;
   final Color color;
+  final TextStyle style;
   final String highlightQuery;
 
   @override
@@ -675,11 +687,11 @@ class _AepdBlock extends StatelessWidget {
     padding: const EdgeInsets.all(AppDimensions.space4),
     child: Text.rich(
       TextSpan(
-        style: AppTypography.bodyRegular.copyWith(color: color),
+        style: style.copyWith(color: color),
         children: [
           ..._highlightTextSpans(
             AppLocalizations.of(context).privacyAepdTextBeforeLink,
-            AppTypography.bodyRegular.copyWith(color: color),
+            style.copyWith(color: color),
             highlightQuery,
           ),
           WidgetSpan(
@@ -693,8 +705,9 @@ class _AepdBlock extends StatelessWidget {
                 onTap: onTap,
                 child: Text(
                   'https://www.aepd.es/ ⇲',
-                  style: AppTypography.bodyLink.copyWith(
-                    color: AppColors.textLinkOnLight,
+                  style: style.copyWith(
+                    decoration: TextDecoration.underline,
+                    color: color,
                   ),
                 ),
               ),
@@ -702,7 +715,7 @@ class _AepdBlock extends StatelessWidget {
           ),
           ..._highlightTextSpans(
             AppLocalizations.of(context).privacyAepdTextAfterLink,
-            AppTypography.bodyRegular.copyWith(color: color),
+            style.copyWith(color: color),
             highlightQuery,
           ),
         ],
