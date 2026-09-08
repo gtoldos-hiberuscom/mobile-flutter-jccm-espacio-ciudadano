@@ -332,6 +332,12 @@ abstract class AppLocalizations {
   /// **'Error al iniciar sesión'**
   String get loginPageError;
 
+  /// Aviso (no bloqueante) tras un login correcto cuando el navegador del dispositivo no soporta pestañas efímeras y la autenticación se hizo en el navegador compartido.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu navegador no permite abrir una sesión aislada. Has accedido correctamente, pero este dispositivo podría recordar tu sesión de Cl@ve en próximos accesos.'**
+  String get loginIsolationDegradedWarning;
+
   /// Texto del botón para reintentar el proceso de login.
   ///
   /// In es, this message translates to:

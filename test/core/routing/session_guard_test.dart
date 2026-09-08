@@ -162,13 +162,13 @@ final class _FakeSecureStorage implements SecureStorage {
 /// The guard under test never refreshes (the in-memory token is fresh).
 final class _UnusedAuthRepository implements AuthRepository {
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => throw UnimplementedError();
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) => throw UnimplementedError();
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();
 }
 
 final class _FakeConsentRepository implements ConsentRepository {

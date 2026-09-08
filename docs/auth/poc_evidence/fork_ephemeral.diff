@@ -1,0 +1,248 @@
+diff --git a/flutter_appauth/android/build.gradle b/flutter_appauth/android/build.gradle
+index 46d19c3..257fdbf 100644
+--- a/flutter_appauth/android/build.gradle
++++ b/flutter_appauth/android/build.gradle
+@@ -22,7 +22,8 @@ rootProject.allprojects {
+ apply plugin: 'com.android.library'
+ 
+ android {
+-    compileSdkVersion 35
++    // androidx.browser 1.9.0+ (ephemeral browsing APIs) requires compileSdk 36.
++    compileSdkVersion 36
+ 
+     if (project.android.hasProperty("namespace")) {
+         namespace 'io.crossingthestreams.flutterappauth'
+@@ -40,4 +41,8 @@ android {
+ 
+ dependencies {
+     implementation 'net.openid:appauth:0.11.1'
++    // Ephemeral Custom Tabs support (setEphemeralBrowsingEnabled /
++    // CustomTabsClient.isEphemeralBrowsingSupported). AppAuth 0.11.1 declares
++    // androidx.browser:browser:1.3.0; Gradle resolves to the highest (1.10.0).
++    implementation 'androidx.browser:browser:1.10.0'
+ }
+\ No newline at end of file
+diff --git a/flutter_appauth/android/src/main/java/io/crossingthestreams/flutterappauth/FlutterAppauthPlugin.java b/flutter_appauth/android/src/main/java/io/crossingthestreams/flutterappauth/FlutterAppauthPlugin.java
+index a24b489..1786848 100644
+--- a/flutter_appauth/android/src/main/java/io/crossingthestreams/flutterappauth/FlutterAppauthPlugin.java
++++ b/flutter_appauth/android/src/main/java/io/crossingthestreams/flutterappauth/FlutterAppauthPlugin.java
+@@ -6,8 +6,12 @@ import android.content.Context;
+ import android.content.Intent;
+ import android.net.Uri;
+ 
++import android.util.Log;
++
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
++import androidx.browser.customtabs.CustomTabsClient;
++import androidx.browser.customtabs.CustomTabsIntent;
+ 
+ import net.openid.appauth.AppAuthConfiguration;
+ import net.openid.appauth.AuthorizationException;
+@@ -21,6 +25,7 @@ import net.openid.appauth.EndSessionResponse;
+ import net.openid.appauth.ResponseTypeValues;
+ import net.openid.appauth.TokenRequest;
+ import net.openid.appauth.TokenResponse;
++import net.openid.appauth.browser.BrowserDescriptor;
+ import net.openid.appauth.connectivity.ConnectionBuilder;
+ import net.openid.appauth.connectivity.DefaultConnectionBuilder;
+ 
+@@ -52,6 +57,16 @@ public class FlutterAppauthPlugin
+   private static final String AUTHORIZE_METHOD = "authorize";
+   private static final String TOKEN_METHOD = "token";
+   private static final String END_SESSION_METHOD = "endSession";
++  private static final String IS_EPHEMERAL_BROWSING_AVAILABLE_METHOD =
++      "isEphemeralBrowsingAvailable";
++
++  private static final String POC_LOG_TAG = "FlutterAppauthEphemeral";
++
++  // Index of ExternalUserAgent.ephemeralAsWebAuthenticationSession in the Dart
++  // enum (flutter_appauth_platform_interface/lib/src/external_user_agent.dart).
++  // The platform interface already serialises `externalUserAgent` as its enum
++  // index for every platform; stock Android simply ignores it.
++  private static final int EPHEMERAL_EXTERNAL_USER_AGENT = 1;
+ 
+   private static final String DISCOVERY_ERROR_CODE = "discovery_failed";
+   private static final String AUTHORIZE_AND_EXCHANGE_CODE_ERROR_CODE =
+@@ -63,6 +78,8 @@ public class FlutterAppauthPlugin
+   private static final String NULL_ACTIVITY_ERROR_CODE = "null_activity";
+   private static final String INVALID_CLAIMS_ERROR_CODE = "invalid_claims";
+   private static final String NO_BROWSER_AVAILABLE_ERROR_CODE = "no_browser_available";
++  private static final String EPHEMERAL_BROWSING_UNAVAILABLE_ERROR_CODE =
++      "ephemeral_browsing_unavailable";
+ 
+   private static final String DISCOVERY_ERROR_MESSAGE_FORMAT =
+       "Error retrieving discovery document: [error: %s, description: %s]";
+@@ -75,6 +92,9 @@ public class FlutterAppauthPlugin
+ 
+   private static final String NULL_INTENT_ERROR_FORMAT =
+       "Failed to authorize: Null intent received";
++  private static final String EPHEMERAL_BROWSING_UNAVAILABLE_ERROR_FORMAT =
++      "An ephemeral browsing session was requested but the browser selected for the "
++          + "authorization flow (%s) does not support ephemeral Custom Tabs";
+ 
+   private static final String NULL_ACTIVITY_ERROR_FORMAT =
+       "Failed to authorize: Null activity received";
+@@ -90,6 +110,9 @@ public class FlutterAppauthPlugin
+   private PendingOperation pendingOperation;
+   private String clientSecret;
+   private boolean allowInsecureConnections;
++  // Value of the `externalUserAgent` enum index sent by the platform interface
++  // for the current authorize/endSession call; null when absent.
++  private Integer externalUserAgent;
+   private AuthorizationService defaultAuthorizationService;
+   private AuthorizationService insecureAuthorizationService;
+ 
+@@ -198,11 +221,95 @@ public class FlutterAppauthPlugin
+           finishWithError(END_SESSION_ERROR_CODE, ex.getLocalizedMessage(), ex);
+         }
+         break;
++      case IS_EPHEMERAL_BROWSING_AVAILABLE_METHOD:
++        // Synchronous capability probe; does not use pendingOperation.
++        result.success(getEphemeralBrowsingAvailability());
++        break;
+       default:
+         result.notImplemented();
+     }
+   }
+ 
++  /**
++   * Reports whether the browser AppAuth would select for the next authorization
++   * flow supports ephemeral Custom Tabs, plus diagnostic details. Never includes
++   * secrets or request data.
++   */
++  private Map<String, Object> getEphemeralBrowsingAvailability() {
++    createAuthorizationServices();
++    BrowserDescriptor browser = defaultAuthorizationService.getBrowserDescriptor();
++    Map<String, Object> availability = new HashMap<>();
++    if (browser == null) {
++      availability.put("browserPackage", null);
++      availability.put("browserVersion", null);
++      availability.put("usesCustomTab", false);
++      availability.put("ephemeralBrowsingSupported", false);
++      return availability;
++    }
++    boolean supported =
++        browser.useCustomTab
++            && CustomTabsClient.isEphemeralBrowsingSupported(
++                applicationContext, browser.packageName);
++    availability.put("browserPackage", browser.packageName);
++    availability.put("browserVersion", browser.version);
++    availability.put("usesCustomTab", browser.useCustomTab);
++    availability.put("ephemeralBrowsingSupported", supported);
++    return availability;
++  }
++
++  /**
++   * Builds a CustomTabsIntent with ephemeral browsing enabled when the Dart side
++   * requested an ephemeral external user agent. Returns null when no ephemeral
++   * session was requested (callers then use AppAuth's default intent). When
++   * ephemeral was requested but the selected browser cannot guarantee it, this
++   * finishes the pending operation with an error and throws to abort the launch:
++   * silently falling back would reintroduce shared browser cookies, which is
++   * exactly what the caller asked to avoid.
++   */
++  @Nullable
++  private CustomTabsIntent createEphemeralCustomTabsIntentIfRequested(
++      AuthorizationService authorizationService, Uri requestUri)
++      throws EphemeralBrowsingUnavailableException {
++    if (externalUserAgent == null || externalUserAgent != EPHEMERAL_EXTERNAL_USER_AGENT) {
++      return null;
++    }
++
++    BrowserDescriptor browser = authorizationService.getBrowserDescriptor();
++    boolean usesCustomTab = browser != null && browser.useCustomTab;
++    boolean supported =
++        usesCustomTab
++            && CustomTabsClient.isEphemeralBrowsingSupported(
++                applicationContext, browser.packageName);
++
++    Log.d(
++        POC_LOG_TAG,
++        String.format(
++            "ephemeralRequested=true browserPackage=%s browserVersion=%s usesCustomTab=%s"
++                + " ephemeralSupported=%s",
++            browser == null ? "none" : browser.packageName,
++            browser == null ? "none" : browser.version,
++            usesCustomTab,
++            supported));
++
++    if (!supported) {
++      finishWithError(
++          EPHEMERAL_BROWSING_UNAVAILABLE_ERROR_CODE,
++          String.format(
++              EPHEMERAL_BROWSING_UNAVAILABLE_ERROR_FORMAT,
++              browser == null ? "none" : browser.packageName),
++          null);
++      throw new EphemeralBrowsingUnavailableException();
++    }
++
++    return authorizationService
++        .createCustomTabsIntentBuilder(requestUri)
++        .setEphemeralBrowsingEnabled(true)
++        .build();
++  }
++
++  /** Signals that an ephemeral session was required but cannot be provided. */
++  private static class EphemeralBrowsingUnavailableException extends Exception {}
++
+   @SuppressWarnings("unchecked")
+   private AuthorizationTokenRequestParameters processAuthorizationTokenRequestArguments(
+       Map<String, Object> arguments) {
+@@ -220,6 +327,7 @@ public class FlutterAppauthPlugin
+     Map<String, String> additionalParameters =
+         (Map<String, String>) arguments.get("additionalParameters");
+     allowInsecureConnections = (boolean) arguments.get("allowInsecureConnections");
++    externalUserAgent = (Integer) arguments.get("externalUserAgent");
+     final String responseMode = (String) arguments.get("responseMode");
+ 
+     return new AuthorizationTokenRequestParameters(
+@@ -287,6 +395,7 @@ public class FlutterAppauthPlugin
+     final String idTokenHint = (String) arguments.get("idTokenHint");
+     final String postLogoutRedirectUrl = (String) arguments.get("postLogoutRedirectUrl");
+     final String state = (String) arguments.get("state");
++    externalUserAgent = (Integer) arguments.get("externalUserAgent");
+     final boolean allowInsecureConnections = (boolean) arguments.get("allowInsecureConnections");
+     final String issuer = (String) arguments.get("issuer");
+     final String discoveryUrl = (String) arguments.get("discoveryUrl");
+@@ -464,10 +573,18 @@ public class FlutterAppauthPlugin
+     AuthorizationService authorizationService = getAuthorizationService();
+ 
+     try {
++      AuthorizationRequest authRequest = authRequestBuilder.build();
++      CustomTabsIntent ephemeralCustomTabsIntent =
++          createEphemeralCustomTabsIntentIfRequested(authorizationService, authRequest.toUri());
+       Intent authIntent =
+-          authorizationService.getAuthorizationRequestIntent(authRequestBuilder.build());
++          ephemeralCustomTabsIntent != null
++              ? authorizationService.getAuthorizationRequestIntent(
++                  authRequest, ephemeralCustomTabsIntent)
++              : authorizationService.getAuthorizationRequestIntent(authRequest);
+       mainActivity.startActivityForResult(
+           authIntent, exchangeCode ? RC_AUTH_EXCHANGE_CODE : RC_AUTH);
++    } catch (EphemeralBrowsingUnavailableException ex) {
++      // finishWithError was already invoked with ephemeral_browsing_unavailable.
+     } catch (ActivityNotFoundException ex) {
+       finishWithError(NO_BROWSER_AVAILABLE_ERROR_CODE, NO_BROWSER_AVAILABLE_ERROR_FORMAT, ex);
+     } catch (NullPointerException ex) {
+@@ -581,10 +698,19 @@ public class FlutterAppauthPlugin
+ 
+     final EndSessionRequest endSessionRequest = endSessionRequestBuilder.build();
+     AuthorizationService authorizationService = getAuthorizationService();
+-    Intent endSessionIntent = authorizationService.getEndSessionRequestIntent(endSessionRequest);
+ 
+     try {
++      CustomTabsIntent ephemeralCustomTabsIntent =
++          createEphemeralCustomTabsIntentIfRequested(
++              authorizationService, endSessionRequest.toUri());
++      Intent endSessionIntent =
++          ephemeralCustomTabsIntent != null
++              ? authorizationService.getEndSessionRequestIntent(
++                  endSessionRequest, ephemeralCustomTabsIntent)
++              : authorizationService.getEndSessionRequestIntent(endSessionRequest);
+       mainActivity.startActivityForResult(endSessionIntent, RC_END_SESSION);
++    } catch (EphemeralBrowsingUnavailableException ex) {
++      // finishWithError was already invoked with ephemeral_browsing_unavailable.
+     } catch (NullPointerException ex) {
+       finishWithError(NULL_ACTIVITY_ERROR_CODE, NULL_ACTIVITY_ERROR_FORMAT, ex);
+     }

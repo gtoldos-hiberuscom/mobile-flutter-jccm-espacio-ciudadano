@@ -131,6 +131,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginPageError => 'Sign-in error';
 
   @override
+  String get loginIsolationDegradedWarning => 'Your browser cannot open an isolated session. You signed in successfully, but this device may remember your Cl@ve session on future sign-ins.';
+
+  @override
   String get loginRetryButton => 'Try again';
 
   @override
