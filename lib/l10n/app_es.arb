@@ -744,6 +744,14 @@
   "@agendaError": {
     "description": "Agenda — mensaje de error al cargar."
   },
+  "agendaHealthAppointmentsUnavailable": "No hemos podido cargar tus citas sanitarias.",
+  "@agendaHealthAppointmentsUnavailable": {
+    "description": "Agenda — aviso de carga parcial cuando la fuente de citas de Atención Primaria (SESCAM) no responde y el resto de la agenda sí se ha cargado."
+  },
+  "agendaEventsUnavailable": "No hemos podido cargar los eventos de tu agenda.",
+  "@agendaEventsUnavailable": {
+    "description": "Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado."
+  },
   "agendaLastUpdated": "Última actualización: {timestamp}",
   "@agendaLastUpdated": {
     "description": "Agenda — etiqueta del timestamp de última actualización.",

@@ -1,7 +1,12 @@
-import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 
 abstract interface class AgendaRepository {
-  Future<List<AgendaAppointment>> loadAppointments({
+  /// Devuelve lo que se haya podido cargar de cada fuente.
+  ///
+  /// Si una fuente falla pero otra responde, la carga es parcial y las caídas
+  /// se listan en `failedSources`. Solo cuando fallan **todas** las fuentes
+  /// intentadas se lanza el error original.
+  Future<AgendaAppointmentsSnapshot> loadAppointments({
     required final String documentNumber,
     final String? agentId,
   });
