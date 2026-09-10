@@ -408,7 +408,7 @@
 |---|---|---|
 | TC-213 | Dispositivo en español | Toda la interfaz se muestra en español. |
 | TC-214 | Dispositivo en inglés | La interfaz se muestra en inglés (la app sigue el idioma del sistema; no hay selector interno). Con cualquier otro idioma del sistema, la app cae al idioma por defecto. |
-| TC-215 | Girar el dispositivo | La app permanece bloqueada en vertical (portrait) en todas las pantallas. |
+| TC-215 | Girar el dispositivo | La interfaz rota y se adapta correctamente a las orientaciones vertical y horizontal. |
 | TC-216 | Ejecutar los flujos críticos (login, aportación, descargas) en Android y en iOS | Comportamiento equivalente; en Android el guardado de PKPASS usa el canal nativo; en iOS la selección de ficheros respeta los tipos permitidos. |
 
 ### 26.3 Conectividad y estados de red

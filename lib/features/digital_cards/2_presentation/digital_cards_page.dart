@@ -130,6 +130,7 @@ class DigitalCardsPage extends ConsumerWidget {
                                 ],
                               )
                             : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   for (var index = 0; index < orderedCards.length; index++) ...[
                                     if (index > 0) const SizedBox(height: AppDimensions.space16),

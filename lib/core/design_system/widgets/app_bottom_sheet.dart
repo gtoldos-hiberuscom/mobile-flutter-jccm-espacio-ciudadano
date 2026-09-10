@@ -1,5 +1,5 @@
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
@@ -318,7 +318,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
           ],
           if (onPkPassPressed != null) ...[
             _DownloadFormatButton(
-              label: 'PKPASS',
+              label: _walletLabel(l10n),
               onPressed: downloadingFormat == null ? onPkPassPressed : null,
               isLoading: downloadingFormat == 'PKPASS',
               primary: onPdfPressed == null,
@@ -337,6 +337,12 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
     );
   }
 }
+
+/// Label of the wallet-pass (PKPASS) download button.
+///
+/// Uses the name of the platform wallet app: "Wallet" on Android and
+/// "Cartera" (Apple Wallet's Spanish name) on iOS.
+String _walletLabel(final AppLocalizations l10n) => defaultTargetPlatform == TargetPlatform.iOS ? l10n.appQrDownloadWalletLabelIos : l10n.appQrDownloadWalletLabelAndroid;
 
 class _QrPreview extends StatelessWidget {
   const _QrPreview({

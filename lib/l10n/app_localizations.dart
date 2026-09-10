@@ -7496,6 +7496,18 @@ abstract class AppLocalizations {
   /// **'Formato de descarga'**
   String get appQrDownloadFormatTitle;
 
+  /// Etiqueta del botón de descarga del pase (PKPASS) en Android.
+  ///
+  /// In es, this message translates to:
+  /// **'Wallet'**
+  String get appQrDownloadWalletLabelAndroid;
+
+  /// Etiqueta del botón de descarga del pase (PKPASS) en iOS.
+  ///
+  /// In es, this message translates to:
+  /// **'Cartera'**
+  String get appQrDownloadWalletLabelIos;
+
   /// Etiqueta de accesibilidad del botón de descarga de un formato (QR, PKPASS, PDF).
   ///
   /// In es, this message translates to:

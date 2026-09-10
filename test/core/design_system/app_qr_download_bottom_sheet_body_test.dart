@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
@@ -26,13 +27,36 @@ void main() {
     );
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    expect(find.bySemanticsLabel('Descargando PKPASS'), findsOneWidget);
+    expect(find.bySemanticsLabel('Descargando Wallet'), findsOneWidget);
 
-    await tester.tap(find.bySemanticsLabel('Descargando PKPASS'));
+    await tester.tap(find.bySemanticsLabel('Descargando Wallet'));
     await tester.tap(find.bySemanticsLabel('Descargar PDF'));
     await tester.pump();
 
     expect(pkPassPresses, 0);
     expect(pdfPresses, 0);
   });
+
+  Widget buildSheet() => MaterialApp(
+    locale: const Locale('es'),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: Scaffold(
+      body: AppQrDownloadBottomSheetBody(
+        onPkPassPressed: () {},
+      ),
+    ),
+  );
+
+  testWidgets('labels the pass button after the platform wallet app', (final tester) async {
+    await tester.pumpWidget(buildSheet());
+
+    final expectedLabel = switch (debugDefaultTargetPlatformOverride) {
+      TargetPlatform.iOS => 'Cartera',
+      _ => 'Wallet',
+    };
+    expect(find.text(expectedLabel), findsOneWidget);
+    expect(find.bySemanticsLabel('Descargar $expectedLabel'), findsOneWidget);
+    expect(find.text('PKPASS'), findsNothing);
+  }, variant: const TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS}));
 }

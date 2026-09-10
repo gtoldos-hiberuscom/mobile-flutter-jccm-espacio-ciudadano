@@ -5113,6 +5113,14 @@
   "@appQrDownloadFormatTitle": {
     "description": "Heading of the format section in the card download bottom sheet."
   },
+  "appQrDownloadWalletLabelAndroid": "Wallet",
+  "@appQrDownloadWalletLabelAndroid": {
+    "description": "Label of the pass (PKPASS) download button on Android."
+  },
+  "appQrDownloadWalletLabelIos": "Wallet",
+  "@appQrDownloadWalletLabelIos": {
+    "description": "Label of the pass (PKPASS) download button on iOS."
+  },
   "appQrDownloadFormatLabel": "Download {format}",
   "@appQrDownloadFormatLabel": {
     "description": "Accessibility label for the download button of a format (QR, PKPASS, PDF).",

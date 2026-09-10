@@ -22,6 +22,8 @@ Future<void> bootstrap(final AppConfig config) async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
   ]);
   final sharedPreferences = await SharedPreferences.getInstance();
   final appStorage = SharedPreferencesAppStorage(sharedPreferences);
