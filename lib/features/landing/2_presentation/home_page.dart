@@ -341,9 +341,13 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Text(
-      text,
-      style: AppTypography.h3.copyWith(color: AppColors.textBlack),
+    return Semantics(
+      header: true,
+      headingLevel: 2,
+      child: Text(
+        text,
+        style: AppTypography.h3.copyWith(color: AppColors.textBlack),
+      ),
     );
   }
 }

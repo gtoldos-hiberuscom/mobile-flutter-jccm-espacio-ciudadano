@@ -572,6 +572,8 @@ class AppStickyBar extends StatelessWidget {
     return Semantics(
       container: true,
       explicitChildNodes: true,
+      header: true,
+      headingLevel: 2,
       label: l10n.a11yStickybarLabel,
       child: Container(
         padding: appPagePadding(
@@ -1000,6 +1002,8 @@ class AppFloatingNavigation extends StatelessWidget {
       final bool isEnabled = enabledTabs?[index] ?? true;
       return _FloatingNavTab(
         label: tabs[index],
+        position: index + 1,
+        tabCount: tabs.length,
         isSelected: isSelected,
         isEnabled: isEnabled,
         minWidth: minTabWidths?[index] ?? AppDimensions.minTouchTarget,
@@ -1010,6 +1014,16 @@ class AppFloatingNavigation extends StatelessWidget {
       );
     });
     final usesScrollableLayout = scrollable || MediaQuery.textScalerOf(context).scale(1) > 1.5;
+
+    Widget tabGroup(final List<Widget> children) => Semantics(
+      role: SemanticsRole.tabBar,
+      container: true,
+      explicitChildNodes: true,
+      child: Row(
+        spacing: spacing,
+        children: children,
+      ),
+    );
 
     return Container(
       padding: padding,
@@ -1023,15 +1037,25 @@ class AppFloatingNavigation extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 spacing: spacing,
-                children: [?leading, ...tabsContent, ?trailing],
+                children: [
+                  ?leading,
+                  tabGroup(tabsContent),
+                  ?trailing,
+                ],
               ),
             )
           : Row(
               spacing: spacing,
               children: [
                 ?leading,
-                ...tabsContent.indexed.map(
-                  (final entry) => entry.$1 == selectedIndex ? entry.$2 : Expanded(child: entry.$2),
+                Expanded(
+                  child: tabGroup(
+                    tabsContent.indexed
+                        .map(
+                          (final entry) => entry.$1 == selectedIndex ? entry.$2 : Expanded(child: entry.$2),
+                        )
+                        .toList(growable: false),
+                  ),
                 ),
                 ?trailing,
               ],
@@ -1100,11 +1124,16 @@ class AppBottomTabBar extends StatelessWidget {
       final isSelected = index == currentIndex;
       final icon = item.iconAsset == null ? AppIcon(item.icon!, color: AppColors.textWhite) : AppSvgIcon(item.iconAsset!, color: AppColors.textWhite);
       final tab = Semantics(
+        role: SemanticsRole.tab,
         container: true,
         sortKey: OrdinalSortKey(index.toDouble()),
-        button: true,
         label: item.semanticLabel ?? item.label,
+        value: MaterialLocalizations.of(context).tabLabel(
+          tabIndex: index + 1,
+          tabCount: items.length,
+        ),
         selected: isSelected,
+        inMutuallyExclusiveGroup: true,
         onTap: () => onTap(index),
         child: ExcludeSemantics(
           child: Material(
@@ -1178,6 +1207,13 @@ class AppBottomTabBar extends StatelessWidget {
       return usesScrollableLayout ? SizedBox(width: 160, child: tab) : tab;
     });
 
+    Widget tabBar(final Widget child) => Semantics(
+      role: SemanticsRole.tabBar,
+      container: true,
+      explicitChildNodes: true,
+      child: child,
+    );
+
     return Container(
       padding: EdgeInsets.only(
         left: AppDimensions.space4,
@@ -1189,9 +1225,9 @@ class AppBottomTabBar extends StatelessWidget {
       child: usesScrollableLayout
           ? SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(children: tabs),
+              child: tabBar(Row(children: tabs)),
             )
-          : Row(children: tabs.map((final tab) => Expanded(child: tab)).toList()),
+          : tabBar(Row(children: tabs.map((final tab) => Expanded(child: tab)).toList())),
     );
   }
 }
@@ -1348,6 +1384,8 @@ class _AppFabIcon extends StatelessWidget {
 class _FloatingNavTab extends StatelessWidget {
   const _FloatingNavTab({
     required this.label,
+    required this.position,
+    required this.tabCount,
     required this.isSelected,
     required this.isEnabled,
     required this.minWidth,
@@ -1358,6 +1396,8 @@ class _FloatingNavTab extends StatelessWidget {
   });
 
   final String label;
+  final int position;
+  final int tabCount;
   final bool isSelected;
   final bool isEnabled;
   final double minWidth;
@@ -1385,10 +1425,15 @@ class _FloatingNavTab extends StatelessWidget {
         : (compact ? AppTypography.smallRegular : AppTypography.bodyRegular).copyWith(color: AppColors.textDisabled);
 
     return Semantics(
+      role: SemanticsRole.tab,
       container: true,
-      button: true,
       label: label,
+      value: MaterialLocalizations.of(context).tabLabel(
+        tabIndex: position,
+        tabCount: tabCount,
+      ),
       selected: isSelected,
+      inMutuallyExclusiveGroup: true,
       enabled: isEnabled,
       onTap: isEnabled ? onTap : null,
       child: ExcludeSemantics(

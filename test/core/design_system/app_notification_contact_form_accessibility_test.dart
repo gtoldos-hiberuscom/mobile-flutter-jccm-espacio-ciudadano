@@ -53,6 +53,10 @@ void main() {
 
     final data = tester.getSemantics(find.text('Datos de contacto para notificaciones electrónicas')).getSemanticsData();
     expect(data.flagsCollection.isHeader, isTrue);
+
+    final actions = find.semantics.byLabel('Acciones principales').evaluate().single.getSemanticsData();
+    expect(actions.flagsCollection.isHeader, isTrue);
+    expect(actions.headingLevel, 2);
   });
 
   testWidgets('anuncia claramente que basta con un medio de contacto', (

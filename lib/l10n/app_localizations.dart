@@ -1118,6 +1118,12 @@ abstract class AppLocalizations {
   /// **'Agenda'**
   String get agendaPageTitle;
 
+  /// Agenda — encabezado del listado de citas pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pendientes'**
+  String get agendaPendingAppointmentsTitle;
+
   /// Agenda — filtro temporal: todos los eventos.
   ///
   /// In es, this message translates to:
@@ -5195,7 +5201,7 @@ abstract class AppLocalizations {
   /// Accessibility — generic label and tooltip for navigating back.
   ///
   /// In es, this message translates to:
-  /// **'Volver'**
+  /// **'Atrás'**
   String get a11yBack;
 
   /// No description provided for @a11yClose.
@@ -5339,7 +5345,7 @@ abstract class AppLocalizations {
   /// Accessibility — semantic label for the institutional Castilla-La Mancha logo.
   ///
   /// In es, this message translates to:
-  /// **'Logotipo de la Junta de Comunidades de Castilla-La Mancha'**
+  /// **'Gobierno de Castilla-La Mancha'**
   String get a11yCastillaLogoLabel;
 
   /// Accessibility — announced by screen reader when a loading state starts.

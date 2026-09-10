@@ -707,6 +707,10 @@
     "description": "Footer — Legal notice."
   },
   "agendaPageTitle": "Agenda",
+  "agendaPendingAppointmentsTitle": "Pending appointments",
+  "@agendaPendingAppointmentsTitle": {
+    "description": "Agenda — heading for the pending appointments list."
+  },
   "@agendaPageTitle": {
     "description": "Agenda — page title."
   },
@@ -3616,7 +3620,7 @@
   "@a11yLandingH1Label": {
     "description": "Accessibility — semantic H1 label for the landing splash screen."
   },
-  "a11yCastillaLogoLabel": "Logo of the Regional Government of Castilla-La Mancha",
+  "a11yCastillaLogoLabel": "Regional Government of Castilla-La Mancha",
   "@a11yCastillaLogoLabel": {
     "description": "Accessibility — semantic label for the institutional Castilla-La Mancha logo."
   },

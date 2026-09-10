@@ -40,11 +40,11 @@ void main() {
     expect(data.hasAction(SemanticsAction.tap), isFalse);
   });
 
-  testWidgets('mantiene descargar como único botón independiente', (final tester) async {
+  testWidgets('identifica el carnet en el nombre del botón de descarga', (final tester) async {
     var taps = 0;
     await tester.pumpWidget(buildApp(card(onDownload: () => taps++)));
 
-    final action = find.semantics.byLabel('Descargar').evaluate().single.getSemanticsData();
+    final action = find.semantics.byLabel('Descargar Familia numerosa').evaluate().single.getSemanticsData();
     expect(action.flagsCollection.isButton, isTrue);
     expect(action.flagsCollection.isEnabled, Tristate.isTrue);
     expect(action.hasAction(SemanticsAction.tap), isTrue);
@@ -56,11 +56,32 @@ void main() {
   testWidgets('anuncia la descarga en curso y deshabilita la acción', (final tester) async {
     await tester.pumpWidget(buildApp(card(onDownload: () {}, isDownloading: true)));
 
-    final action = find.semantics.byLabel('Descargar').evaluate().single;
+    final action = find.semantics.byLabel('Descargar Familia numerosa').evaluate().single;
     expect(action.flagsCollection.isEnabled, Tristate.isFalse);
     expect(action.flagsCollection.isLiveRegion, isTrue);
     expect(action.value, 'Cargando');
     expect(action.getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
+  });
+
+  testWidgets('distingue los botones cuando se muestran varios carnets', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        Column(
+          children: [
+            card(onDownload: () {}),
+            const AppDigitalCard(
+              title: 'Carnet de discapacidad',
+              downloadLabel: 'Descargar',
+              onDownload: _noop,
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(find.semantics.byLabel('Descargar Familia numerosa'), findsOneWidget);
+    expect(find.semantics.byLabel('Descargar Carnet de discapacidad'), findsOneWidget);
+    expect(find.semantics.byLabel('Descargar'), findsNothing);
   });
 
   testWidgets('localiza las etiquetas visuales en inglés', (final tester) async {
@@ -93,3 +114,5 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 }
+
+void _noop() {}

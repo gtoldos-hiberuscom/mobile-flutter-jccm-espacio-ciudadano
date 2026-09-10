@@ -1,6 +1,8 @@
 import 'dart:async' show unawaited;
+import 'dart:ui' show SemanticsRole;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show OrdinalSortKey;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
@@ -144,11 +146,21 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           const SizedBox.shrink()
         else if (appointments.isEmpty)
           const _AgendaEmptyState()
-        else
+        else ...[
+          Semantics(
+            header: true,
+            headingLevel: 2,
+            child: Text(
+              AppLocalizations.of(context).agendaPendingAppointmentsTitle,
+              style: AppTypography.h2.copyWith(color: AppColors.textBase),
+            ),
+          ),
+          const SizedBox(height: AppDimensions.space8),
           for (final section in sections) ...[
             _AgendaSection(section: section),
             const SizedBox(height: AppDimensions.space16),
           ],
+        ],
       ],
     );
   }
@@ -282,30 +294,56 @@ class _AgendaSection extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final monthYear = '${section.month} de ${section.year}';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-          child: Text(
-            section.year,
-            style: AppTypography.h2.copyWith(color: AppColors.textBase),
+        Semantics(
+          header: true,
+          headingLevel: 3,
+          label: monthYear,
+          child: ExcludeSemantics(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
+                  child: Text(
+                    section.year,
+                    style: AppTypography.h2.copyWith(color: AppColors.textBase),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: AppDimensions.space4,
+                    bottom: AppDimensions.space8,
+                  ),
+                  child: Text(
+                    section.month,
+                    style: AppTypography.h3.copyWith(color: AppColors.textBase),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-            top: AppDimensions.space4,
-            bottom: AppDimensions.space8,
-          ),
-          child: Text(
-            section.month,
-            style: AppTypography.h3.copyWith(color: AppColors.textBase),
+        Semantics(
+          role: SemanticsRole.list,
+          container: true,
+          explicitChildNodes: true,
+          child: Column(
+            children: [
+              for (final (index, appointment) in section.appointments.indexed) ...[
+                Semantics(
+                  role: SemanticsRole.listItem,
+                  sortKey: OrdinalSortKey(index.toDouble()),
+                  child: _AgendaAppointmentCard(appointment: appointment),
+                ),
+                if (index < section.appointments.length - 1) const SizedBox(height: AppDimensions.space8),
+              ],
+            ],
           ),
         ),
-        for (final appointment in section.appointments) ...[
-          _AgendaAppointmentCard(appointment: appointment),
-          const SizedBox(height: AppDimensions.space8),
-        ],
       ],
     );
   }

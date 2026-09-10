@@ -543,6 +543,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaPageTitle => 'Agenda';
 
   @override
+  String get agendaPendingAppointmentsTitle => 'Citas pendientes';
+
+  @override
   String get agendaFilterAll => 'Todos';
 
   @override
@@ -2675,7 +2678,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPhoneCallHint => 'Inicia una llamada telefónica';
 
   @override
-  String get a11yBack => 'Volver';
+  String get a11yBack => 'Atrás';
 
   @override
   String get a11yClose => 'Cerrar';
@@ -2747,7 +2750,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get a11yLandingH1Label => 'Espacio Ciudadano de Castilla-La Mancha';
 
   @override
-  String get a11yCastillaLogoLabel => 'Logotipo de la Junta de Comunidades de Castilla-La Mancha';
+  String get a11yCastillaLogoLabel => 'Gobierno de Castilla-La Mancha';
 
   @override
   String get a11yLoading => 'Cargando';

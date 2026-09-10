@@ -707,6 +707,10 @@
     "description": "Footer — Aviso legal."
   },
   "agendaPageTitle": "Agenda",
+  "agendaPendingAppointmentsTitle": "Citas pendientes",
+  "@agendaPendingAppointmentsTitle": {
+    "description": "Agenda — encabezado del listado de citas pendientes."
+  },
   "@agendaPageTitle": {
     "description": "Agenda — título de la pantalla."
   },
@@ -3538,7 +3542,7 @@
   "@appPhoneCallHint": {
     "description": "Design system — accessible hint for an action that starts a phone call."
   },
-  "a11yBack": "Volver",
+  "a11yBack": "Atrás",
   "a11yClose": "Cerrar",
   "a11yHelp": "Ayuda",
   "a11yAppName": "Espacio Ciudadano",
@@ -3622,7 +3626,7 @@
   "@a11yLandingH1Label": {
     "description": "Accessibility — semantic H1 label for the landing splash screen."
   },
-  "a11yCastillaLogoLabel": "Logotipo de la Junta de Comunidades de Castilla-La Mancha",
+  "a11yCastillaLogoLabel": "Gobierno de Castilla-La Mancha",
   "@a11yCastillaLogoLabel": {
     "description": "Accessibility — semantic label for the institutional Castilla-La Mancha logo."
   },

@@ -21,7 +21,11 @@ void main() {
     home: Scaffold(body: child),
   );
 
-  AppDrawerMenu menu({final VoidCallback? onPrimary, final VoidCallback? onLogout}) => AppDrawerMenu(
+  AppDrawerMenu menu({
+    final VoidCallback? onPrimary,
+    final VoidCallback? onSecondary,
+    final VoidCallback? onLogout,
+  }) => AppDrawerMenu(
     userName: 'María López',
     nif: '12345678Z',
     primaryItems: [
@@ -31,7 +35,9 @@ void main() {
         onTap: onPrimary,
       ),
     ],
-    secondaryLinks: const [AppDrawerLinkItem(label: 'Ayuda y contacto')],
+    secondaryLinks: [
+      AppDrawerLinkItem(label: 'Ayuda y contacto', onTap: onSecondary),
+    ],
     onLogout: onLogout,
     actionButtonLabel: 'Ir a la Sede Electrónica',
   );
@@ -84,6 +90,22 @@ void main() {
     expect(disabled.flagsCollection.isButton, isTrue);
     expect(disabled.flagsCollection.isEnabled, Tristate.isFalse);
     expect(disabled.getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
+  });
+
+  testWidgets('cada enlace secundario produce una sola parada de foco con nombre', (final tester) async {
+    var taps = 0;
+    await tester.pumpWidget(
+      buildApp(menu(onSecondary: () => taps++)),
+    );
+
+    final matches = find.semantics.byLabel('Ayuda y contacto').evaluate();
+    expect(matches, hasLength(1));
+    final data = matches.single.getSemanticsData();
+    expect(data.flagsCollection.isButton, isTrue);
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
+
+    await tester.tap(find.text('Ayuda y contacto'));
+    expect(taps, 1);
   });
 
   testWidgets('localiza el saludo y el cierre de sesión en inglés', (final tester) async {

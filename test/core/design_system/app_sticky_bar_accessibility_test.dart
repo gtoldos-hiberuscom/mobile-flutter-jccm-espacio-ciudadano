@@ -39,7 +39,9 @@ void main() {
       ),
     );
 
-    expect(find.semantics.byLabel('Main actions'), findsOneWidget);
+    final heading = find.semantics.byLabel('Main actions').evaluate().single.getSemanticsData();
+    expect(heading.flagsCollection.isHeader, isTrue);
+    expect(heading.headingLevel, 2);
     expect(find.text('Cancel'), findsOneWidget);
   });
 

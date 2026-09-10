@@ -364,9 +364,9 @@ class _DrawerSecondaryTile extends StatelessWidget {
       button: true,
       enabled: link.onTap != null,
       onTap: link.onTap,
-      child: InkWell(
-        onTap: link.onTap,
-        child: ExcludeSemantics(
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: link.onTap,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
             child: Padding(

@@ -55,11 +55,11 @@ void main() {
       ),
     );
 
-    final back = tester.getSemantics(find.byTooltip('Volver')).getSemanticsData();
+    final back = tester.getSemantics(find.byTooltip('Atrás')).getSemanticsData();
     expect(back.flagsCollection.isButton, isTrue);
     expect(back.hasAction(SemanticsAction.tap), isTrue);
 
-    await tester.tap(find.byTooltip('Volver'));
+    await tester.tap(find.byTooltip('Atrás'));
     expect(taps, 1);
   });
 

@@ -1,3 +1,5 @@
+import 'dart:ui' show SemanticsRole, Tristate;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,8 +26,13 @@ void main() {
       l10n.gestionNotificacionesTabAceptadas,
       l10n.gestionNotificacionesTabExpiradas,
     ];
-    for (final label in labels) {
+    for (final (index, label) in labels.indexed) {
       expect(find.text(label).hitTestable(), findsOneWidget);
+      final semantics = find.semantics.byLabel(label).evaluate().single.getSemanticsData();
+      expect(semantics.role, SemanticsRole.tab);
+      expect(semantics.flagsCollection.isInMutuallyExclusiveGroup, isTrue);
+      expect(semantics.flagsCollection.isSelected, index == 0 ? Tristate.isTrue : Tristate.isFalse);
+      expect(semantics.value, 'Pestaña ${index + 1} de 4');
     }
     expect(find.byTooltip(l10n.gestionNotificacionesTabExpiradas), findsNothing);
     await tester.tap(find.text(l10n.gestionNotificacionesTabExpiradas));

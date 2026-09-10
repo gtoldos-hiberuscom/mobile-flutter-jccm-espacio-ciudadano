@@ -45,6 +45,8 @@ class AppStickybar extends StatelessWidget {
     return Semantics(
       container: true,
       explicitChildNodes: true,
+      header: true,
+      headingLevel: 2,
       label: semanticLabel ?? l10n.a11yStickybarLabel,
       child: ClipRRect(
         child: BackdropFilter(

@@ -542,6 +542,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaPageTitle => 'Agenda';
 
   @override
+  String get agendaPendingAppointmentsTitle => 'Pending appointments';
+
+  @override
   String get agendaFilterAll => 'All';
 
   @override
@@ -2746,7 +2749,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get a11yLandingH1Label => 'Citizen Space of Castilla-La Mancha';
 
   @override
-  String get a11yCastillaLogoLabel => 'Logo of the Regional Government of Castilla-La Mancha';
+  String get a11yCastillaLogoLabel => 'Regional Government of Castilla-La Mancha';
 
   @override
   String get a11yLoading => 'Loading';
