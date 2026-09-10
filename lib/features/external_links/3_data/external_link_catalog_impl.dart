@@ -112,6 +112,18 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
       category: ExternalLinkCategory.legalInformation,
     ),
     ExternalLink(
+      // Las oficinas OIR filtradas por la Consejería de Bienestar Social. Va
+      // aparte de `jccm_offices_oir` a propósito: esa entrada genérica la
+      // comparten Ayuda y contacto, Accesibilidad y la dirección de Vivienda,
+      // donde el filtro no tiene sentido.
+      id: 'jccm_offices_oir_bienestar_social',
+      displayKey: 'legalAccessibilityTitle',
+      url: Uri.parse(
+        'https://www.jccm.es/atencion-a-la-ciudadania/oficinas-de-registro/oficinas-oir?search=Consejer%C3%ADa+Bienestar+Social',
+      ),
+      category: ExternalLinkCategory.legalInformation,
+    ),
+    ExternalLink(
       id: 'help_guides',
       displayKey: 'helpPageTitle',
       url: Uri.parse('https://www.jccm.es/ayuda/guias-ayuda'),
@@ -126,7 +138,7 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
     ExternalLink(
       id: 'support_form_privacy_info',
       displayKey: 'legalNoticeTitle',
-      url: Uri.parse('https://rat.castillalamancha.es/info/2309'),
+      url: Uri.parse('https://rat.castillalamancha.es/detalle/2309'),
       category: ExternalLinkCategory.dataProtection,
     ),
   ];

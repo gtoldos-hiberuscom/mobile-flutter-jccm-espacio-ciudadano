@@ -57,6 +57,27 @@ void main() {
       );
     });
   });
+
+  group('JwtClaims.fullName', () {
+    test('joins given name and both surnames', () {
+      expect(
+        JwtClaims.fromMap(const {'given_name': ' Juan ', 'first_surname': 'García', 'second_surname': 'López'}).fullName,
+        'Juan García López',
+      );
+    });
+
+    test('skips missing surname parts', () {
+      expect(JwtClaims.fromMap(const {'given_name': 'Juan', 'first_surname': 'García'}).fullName, 'Juan García');
+    });
+
+    test('falls back to the name claim', () {
+      expect(JwtClaims.fromMap(const {'name': 'Juan García López'}).fullName, 'Juan García López');
+    });
+
+    test('returns null when the token carries no name', () {
+      expect(JwtClaims.fromMap(const {}).fullName, isNull);
+    });
+  });
 }
 
 JwtClaims _claims({final String? personIdentifier}) {

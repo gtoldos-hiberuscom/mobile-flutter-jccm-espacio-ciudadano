@@ -52,17 +52,46 @@ cleanup_generated_api_imports() {
   find "$api_dir" -name '*.dart' -print0 | while IFS= read -r -d '' file; do
     perl -0pi -e 'my %seen; s{^(import .+\n)}{$seen{$1}++ ? q{} : $1}gme;' "$file"
 
-    if ! rg -q '\bJsonObject\b' "$file"; then
+    if ! grep -qw 'JsonObject' "$file"; then
       perl -0pi -e "s@^import 'package:built_value/json_object\\.dart';\\n@@m" "$file"
     fi
 
-    if ! rg -q '\bRespuesta\b' "$file"; then
+    if ! grep -qw 'Respuesta' "$file"; then
       perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/respuesta\\.dart';\\n@@m" "$file"
     fi
 
-    if ! rg -q '\bRespuestaRESULTADOPROCEDIMIENTO\b' "$file"; then
+    if ! grep -qw 'RespuestaRESULTADOPROCEDIMIENTO' "$file"; then
       perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/respuesta_resultadoprocedimiento\\.dart';\\n@@m" "$file"
     fi
+  done
+}
+
+cleanup_generated_model_files() {
+  local model_dir="$1/lib/src/model"
+
+  if [[ ! -d "$model_dir" ]]; then
+    echo "Skipping generated model cleanup: $model_dir does not exist"
+    return
+  fi
+
+  echo "Cleaning unused imports and parameters in generated oneOf models..."
+
+  find "$model_dir" -name '*.dart' -not -name '*.g.dart' -print0 | while IFS= read -r -d '' file; do
+    # oneOf wrappers only import the union members and never use the shared helpers.
+    if ! grep -q "package:one_of/one_of.dart" "$file"; then
+      continue
+    fi
+
+    if ! grep -qw 'JsonObject' "$file"; then
+      perl -0pi -e "s@^import 'package:built_value/json_object\\.dart';\\n@@m" "$file"
+    fi
+
+    if ! grep -qw 'InfoError' "$file"; then
+      perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/info_error\\.dart';\\n@@m" "$file"
+    fi
+
+    # The generated _serializeProperties helper of oneOf wrappers is empty and never called.
+    perl -0pi -e 's@^// ignore_for_file: unused_element\n@// ignore_for_file: unused_element, unused_element_parameter\n@m' "$file"
   done
 }
 
@@ -91,6 +120,7 @@ openapi-generator generate \
 
 fix_body_param_collisions "$OUT"
 cleanup_generated_api_imports "$OUT"
+cleanup_generated_model_files "$OUT"
 fix_serializer_generics "$OUT"
 
 echo "Done. Files written to $OUT"

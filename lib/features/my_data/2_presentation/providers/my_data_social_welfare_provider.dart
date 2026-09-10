@@ -1,13 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/dependency_care_status.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/disability_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/large_family_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/parking_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/thermal_spa_award.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_social_welfare_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_social_welfare_repository_impl.dart';
 
 final myDataSocialWelfareRepositoryProvider = Provider<MyDataSocialWelfareRepository>((final ref) {
@@ -20,11 +23,16 @@ final largeFamilyTitleProvider = FutureProvider.autoDispose<LargeFamilyTitle?>((
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  return ref
-      .watch(myDataSocialWelfareRepositoryProvider)
-      .loadLargeFamilyTitle(
-        documentNumber: documentNumber,
-      );
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref
+        .watch(myDataSocialWelfareRepositoryProvider)
+        .loadLargeFamilyTitle(
+          citizenId: ref.watch(citizenEndpointIdsProvider).requireNumDocumento(),
+          documentNumber: documentNumber,
+        ),
+  );
 });
 
 final disabilityTitleProvider = FutureProvider.autoDispose<DisabilityTitle?>((final ref) async {
@@ -33,11 +41,16 @@ final disabilityTitleProvider = FutureProvider.autoDispose<DisabilityTitle?>((fi
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  return ref
-      .watch(myDataSocialWelfareRepositoryProvider)
-      .loadDisabilityTitle(
-        documentNumber: documentNumber,
-      );
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref
+        .watch(myDataSocialWelfareRepositoryProvider)
+        .loadDisabilityTitle(
+          citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
+          documentNumber: documentNumber,
+        ),
+  );
 });
 
 final thermalSpaAwardProvider = FutureProvider.autoDispose<ThermalSpaAward?>((final ref) async {
@@ -46,11 +59,16 @@ final thermalSpaAwardProvider = FutureProvider.autoDispose<ThermalSpaAward?>((fi
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  return ref
-      .watch(myDataSocialWelfareRepositoryProvider)
-      .loadThermalSpaAward(
-        documentNumber: documentNumber,
-      );
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref
+        .watch(myDataSocialWelfareRepositoryProvider)
+        .loadThermalSpaAward(
+          citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
+          documentNumber: documentNumber,
+        ),
+  );
 });
 
 final dependencyCareStatusProvider = FutureProvider.autoDispose<DependencyCareStatus?>((final ref) async {
@@ -59,11 +77,16 @@ final dependencyCareStatusProvider = FutureProvider.autoDispose<DependencyCareSt
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  return ref
-      .watch(myDataSocialWelfareRepositoryProvider)
-      .loadDependencyCareStatus(
-        documentNumber: documentNumber,
-      );
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref
+        .watch(myDataSocialWelfareRepositoryProvider)
+        .loadDependencyCareStatus(
+          citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
+          documentNumber: documentNumber,
+        ),
+  );
 });
 
 final parkingCardProvider = FutureProvider.autoDispose<ParkingCard?>((final ref) async {
@@ -72,11 +95,16 @@ final parkingCardProvider = FutureProvider.autoDispose<ParkingCard?>((final ref)
     throw StateError('No se ha encontrado el documento de la persona usuaria.');
   }
 
-  return ref
-      .watch(myDataSocialWelfareRepositoryProvider)
-      .loadParkingCard(
-        documentNumber: documentNumber,
-      );
+  return withMyDataAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => ref
+        .watch(myDataSocialWelfareRepositoryProvider)
+        .loadParkingCard(
+          citizenId: ref.watch(citizenEndpointIdsProvider).requireIdAgente(),
+          documentNumber: documentNumber,
+        ),
+  );
 });
 
 String? _documentNumber(final JwtClaims? claims) {

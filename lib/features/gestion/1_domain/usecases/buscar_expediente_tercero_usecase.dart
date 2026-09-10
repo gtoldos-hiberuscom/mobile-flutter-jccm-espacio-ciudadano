@@ -13,10 +13,12 @@ final class BuscarExpedienteTerceroSuccess extends BuscarExpedienteTerceroResult
   final Expediente expediente;
 }
 
-final class BuscarExpedienteTerceroFailed extends BuscarExpedienteTerceroResult {
-  BuscarExpedienteTerceroFailed({required this.message, this.cause});
+enum BuscarExpedienteTerceroFailureReason { notFound, unauthorized, unavailable }
 
-  final String message;
+final class BuscarExpedienteTerceroFailed extends BuscarExpedienteTerceroResult {
+  BuscarExpedienteTerceroFailed({required this.reason, this.cause});
+
+  final BuscarExpedienteTerceroFailureReason reason;
   final Object? cause;
 }
 
@@ -30,31 +32,38 @@ final class BuscarExpedienteTerceroUsecase {
 
   final GestionExpedienteRepository _repository;
 
+  /// [citizenId] identifica al ciudadano autenticado (path `/ciudadanos/{sid}`);
+  /// [documentNumber] es el documento del titular del expediente, que puede ser
+  /// un tercero.
   Future<BuscarExpedienteTerceroResult> execute({
+    required final String citizenId,
     required final String documentNumber,
     required final String tipodoc,
     final String? numRegistro,
     final String? numExpediente,
   }) async {
     try {
-      final expediente = numRegistro != null
-          ? await _repository.loadExpedienteByRegistro(documentNumber: documentNumber, numRegistro: numRegistro, tipodoc: tipodoc)
-          : await _repository.loadExpedienteDetail(documentNumber: documentNumber, numexp: numExpediente!, tipodoc: tipodoc);
+      final expediente = numRegistro != null ? await _repository.loadExpedienteByRegistro(citizenId: citizenId, documentNumber: documentNumber, numRegistro: numRegistro, tipodoc: tipodoc) : await _repository.loadExpedienteDetail(citizenId: citizenId, documentNumber: documentNumber, numexp: numExpediente!, tipodoc: tipodoc);
       return BuscarExpedienteTerceroSuccess(expediente: expediente);
     } on DioException catch (error) {
-      return BuscarExpedienteTerceroFailed(message: _messageFor(error), cause: error);
+      return BuscarExpedienteTerceroFailed(reason: _reasonFor(error), cause: error);
+    } on StateError catch (error) {
+      // El repositorio lanza StateError cuando el backend responde 200 con
+      // "No hay publicaciones para los parametros introducidos" (isubrc: 1):
+      // es un "no encontrado" de negocio, no un fallo técnico.
+      return BuscarExpedienteTerceroFailed(reason: BuscarExpedienteTerceroFailureReason.notFound, cause: error);
     } on Object catch (error) {
-      return BuscarExpedienteTerceroFailed(message: 'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.', cause: error);
+      return BuscarExpedienteTerceroFailed(reason: BuscarExpedienteTerceroFailureReason.unavailable, cause: error);
     }
   }
 
-  String _messageFor(final DioException error) {
+  BuscarExpedienteTerceroFailureReason _reasonFor(final DioException error) {
     final appError = error.error;
     return switch (appError) {
-      NotFoundError() => 'No hemos encontrado ningún expediente con esos datos. Revisa que sean correctos.',
-      UnauthorizedError() => 'No tienes permisos para consultar este expediente.',
-      NetworkError(:final statusCode) when statusCode == 404 => 'No hemos encontrado ningún expediente con esos datos. Revisa que sean correctos.',
-      _ => 'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.',
+      NotFoundError() => BuscarExpedienteTerceroFailureReason.notFound,
+      UnauthorizedError() => BuscarExpedienteTerceroFailureReason.unauthorized,
+      NetworkError(:final statusCode) when statusCode == 404 => BuscarExpedienteTerceroFailureReason.notFound,
+      _ => BuscarExpedienteTerceroFailureReason.unavailable,
     };
   }
 }

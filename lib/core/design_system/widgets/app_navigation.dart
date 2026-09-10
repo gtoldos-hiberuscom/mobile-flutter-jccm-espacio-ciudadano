@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -444,11 +445,13 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.level = AppTabBarLevel.nivel1,
     this.controller,
+    this.isScrollable = false,
   });
 
   final List<AppTabItem> tabs;
   final AppTabBarLevel level;
   final TabController? controller;
+  final bool isScrollable;
 
   @override
   Size get preferredSize => Size.fromHeight(
@@ -459,29 +462,57 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(final BuildContext context) {
     assert(tabs.length >= 2, 'tabs must contain at least two items');
     final isNivel1 = level == AppTabBarLevel.nivel1;
-    final isScrollable = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final scrollable = isScrollable || MediaQuery.textScalerOf(context).scale(1) > 1.5;
 
-    return TabBar(
-      controller: controller,
-      isScrollable: isScrollable,
-      tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
-      indicatorColor: AppColors.primary,
-      labelColor: AppColors.primary,
-      unselectedLabelColor: AppColors.textSecondary,
-      labelStyle: isNivel1 ? AppTypography.bodyBold : AppTypography.bodyRegular.copyWith(fontWeight: FontWeight.w600),
-      unselectedLabelStyle: isNivel1 ? AppTypography.bodyRegular : AppTypography.smallRegular,
-      tabs: tabs.map((final AppTabItem tab) {
-        final text = Text(tab.label, textAlign: TextAlign.center);
-        return Tab(
-          icon: tab.icon != null ? ExcludeSemantics(child: Icon(tab.icon, size: 20)) : null,
-          child: tab.semanticsLabel == null
-              ? text
-              : Semantics(
-                  label: tab.semanticsLabel,
-                  child: ExcludeSemantics(child: text),
-                ),
+    final labelStyle = isNivel1 ? AppTypography.bodyBold : AppTypography.bodyRegular.copyWith(fontWeight: FontWeight.w600);
+    final unselectedLabelStyle = isNivel1 ? AppTypography.bodyRegular : AppTypography.smallRegular;
+
+    return LayoutBuilder(
+      builder: (final context, final constraints) {
+        final widths = tabs.map((final tab) {
+          var width = 48.0;
+          for (final style in [labelStyle, unselectedLabelStyle]) {
+            final painter = TextPainter(
+              text: TextSpan(text: tab.label, style: style),
+              textDirection: Directionality.of(context),
+              textScaler: MediaQuery.textScalerOf(context),
+              maxLines: 1,
+            )..layout();
+            final paddedWidth = painter.width.ceilToDouble() + 32;
+            if (paddedWidth > width) width = paddedWidth;
+            painter.dispose();
+          }
+          return width;
+        }).toList();
+        final totalWidth = widths.fold(0.0, (final sum, final width) => sum + width);
+        final extraWidth = constraints.hasBoundedWidth && constraints.maxWidth > totalWidth ? (constraints.maxWidth - totalWidth) / tabs.length : 0.0;
+
+        return TabBar(
+          controller: controller,
+          isScrollable: scrollable,
+          tabAlignment: scrollable ? TabAlignment.start : TabAlignment.fill,
+          labelPadding: isScrollable ? EdgeInsets.zero : null,
+          indicatorColor: AppColors.primary,
+          labelColor: AppColors.primary,
+          unselectedLabelColor: AppColors.textSecondary,
+          labelStyle: labelStyle,
+          unselectedLabelStyle: unselectedLabelStyle,
+          tabs: tabs.asMap().entries.map((final entry) {
+            final tab = entry.value;
+            final text = Text(tab.label, textAlign: TextAlign.center);
+            final child = Tab(
+              icon: tab.icon != null ? ExcludeSemantics(child: Icon(tab.icon, size: 20)) : null,
+              child: tab.semanticsLabel == null
+                  ? text
+                  : Semantics(
+                      label: tab.semanticsLabel,
+                      child: ExcludeSemantics(child: text),
+                    ),
+            );
+            return isScrollable ? SizedBox(width: widths[entry.key] + extraWidth, child: child) : child;
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 }
@@ -543,11 +574,10 @@ class AppStickyBar extends StatelessWidget {
       explicitChildNodes: true,
       label: l10n.a11yStickybarLabel,
       child: Container(
-        padding: EdgeInsets.fromLTRB(
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space16 + MediaQuery.paddingOf(context).bottom,
+        padding: appPagePadding(
+          context,
+          top: AppDimensions.space16,
+          bottom: AppDimensions.space16 + MediaQuery.paddingOf(context).bottom,
         ),
         decoration: const BoxDecoration(
           color: AppColors.surface,
@@ -824,15 +854,21 @@ class AppSimpleNavCard extends StatelessWidget {
 class AppQuickAccessCard extends StatelessWidget {
   const AppQuickAccessCard({
     required this.label,
-    required this.icon,
     required this.onTap,
     super.key,
+    this.icon,
+    this.iconAsset,
     this.semanticLabel,
   }) : assert(label != '', 'label must not be empty'),
+       assert(
+         (icon == null) != (iconAsset == null),
+         'Provide exactly one of icon or iconAsset',
+       ),
        assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
 
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final String? iconAsset;
   final VoidCallback? onTap;
   final String? semanticLabel;
 
@@ -865,11 +901,17 @@ class AppQuickAccessCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
                     ),
                     child: Center(
-                      child: AppIcon(
-                        icon,
-                        size: 40,
-                        color: AppColors.primary,
-                      ),
+                      child: iconAsset == null
+                          ? AppIcon(
+                              icon!,
+                              size: 40,
+                              color: AppColors.primary,
+                            )
+                          : AppSvgIcon(
+                              iconAsset!,
+                              size: 32,
+                              color: AppColors.primary,
+                            ),
                     ),
                   ),
                 ),

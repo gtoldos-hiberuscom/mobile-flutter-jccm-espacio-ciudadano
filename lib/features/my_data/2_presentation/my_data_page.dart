@@ -70,12 +70,7 @@ class MyDataPage extends ConsumerWidget {
         child: SafeArea(
           top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space16,
-              AppDimensions.space24,
-              AppDimensions.space16,
-              AppDimensions.space24,
-            ),
+            padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -149,8 +144,7 @@ enum _MyDataText {
   housingTitle,
   housingDescription,
   vehiclesTitle,
-  vehiclesDescription
-  ;
+  vehiclesDescription;
 
   String resolve(final AppLocalizations l10n) {
     return switch (this) {

@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_notificaciones_repository_impl.dart';
 
@@ -13,8 +17,7 @@ final gestionNotificacionesRepositoryProvider = Provider<GestionNotificacionesRe
 });
 
 /// Citizen identifier used by the notification-transition endpoint.
-/// Uses the same per-environment strategy as listing and detail: UAT requires
-/// `idAgente`, while PRE currently requires the document number.
+/// Uses the identifier configured for the current backend environment.
 final gestionNotificacionesTransitionCitizenIdProvider = Provider<String>((final ref) {
   return ref.watch(ciudadanosEndpointIdProvider);
 });
@@ -35,16 +38,7 @@ final class GestionNotificacionesOptimisticAcceptedNotifier extends Notifier<Map
   }
 
   void add({required final String citizenId, required final Notificacion notification}) {
-    final accepted = Notificacion(
-      id: notification.id,
-      concepto: notification.concepto,
-      procedimientoDenominacion: notification.procedimientoDenominacion,
-      fechaCaducidad: notification.fechaCaducidad,
-      procedimientoIdFicha: notification.procedimientoIdFicha,
-      unidadOrganicaNombre: notification.unidadOrganicaNombre,
-      sistemaOrigen: notification.sistemaOrigen,
-      estado: 'aceptada',
-    );
+    final accepted = notification.withEstado(NotificacionEstado.aceptada);
     final key = (citizenId: citizenId, notificationId: accepted.id);
     state = {...state, key: accepted};
     _expirationTimers[key]?.cancel();
@@ -59,15 +53,28 @@ final gestionNotificacionesOptimisticAcceptedProvider = NotifierProvider<Gestion
   GestionNotificacionesOptimisticAcceptedNotifier.new,
 );
 
-/// Family param: estado filter — null = all, 'pendiente', 'aceptada', etc.
-final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, String?>((final ref, final estado) async {
+/// Family param: filtro de estado — null = "Todo" (unión de todos los estados).
+final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Notificacion>, NotificacionEstado?>((final ref, final estado) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
   }
   final repo = ref.watch(gestionNotificacionesRepositoryProvider);
-  final notifications = await repo.loadNotificaciones(citizenId: citizenId, estado: estado);
-  if (estado != null && estado != 'aceptada') {
+  // "Todo" lanza cuatro barridos y cada uno puede pedir varias páginas: al
+  // salir de la pantalla (o al invalidar el provider) seguían pidiendo hasta
+  // agotarse.
+  final cancelToken = CancelToken();
+  ref.onDispose(() => cancelToken.cancel('gestionNotificacionesProvider($estado) liberado'));
+  // Notificaciones solo exige la cláusula obligatoria (ver
+  // `documentation/consent_clause_access_matrix.md`): no hay cláusula
+  // intermedia que ofrecer, así que el rechazo por autorización solo puede ser
+  // revocación (cierra sesión) o fallo transitorio (error con reintento).
+  final notifications = await withAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId},
+    request: () => repo.loadNotificaciones(citizenId: citizenId, estado: estado, cancelToken: cancelToken),
+  );
+  if (estado != null && estado != NotificacionEstado.aceptada) {
     return notifications;
   }
 
@@ -75,29 +82,64 @@ final gestionNotificacionesProvider = FutureProvider.autoDispose.family<List<Not
   if (optimistic.isEmpty) {
     return notifications;
   }
-  final merged = {
-    for (final entry in optimistic.entries)
-      if (entry.key.citizenId == citizenId) entry.value.id: entry.value,
-  };
-  for (final notification in notifications) {
-    merged[notification.id] = notification;
+  // Primero el servidor y después lo optimista, resolviendo con la misma
+  // precedencia de estados que usa la fusión de "Todo": la aceptación que acaba
+  // de hacer el usuario gana a la copia que el servidor sigue devolviendo como
+  // pendiente, y en empate se conserva la del servidor, con los campos frescos.
+  final merged = {for (final notification in notifications) notification.id: notification};
+  // Lo que el índice del servidor todavía no devuelve se añade delante: acabas
+  // de aceptar esa notificación, no tiene sentido enterrarla al final.
+  final additions = <Notificacion>[];
+  for (final entry in optimistic.entries) {
+    if (entry.key.citizenId != citizenId) {
+      continue;
+    }
+    final accepted = entry.value;
+    final current = merged[accepted.id];
+    if (current == null) {
+      additions.add(accepted);
+    } else {
+      merged[accepted.id] = pickByNotificacionEstadoPrecedence(current, accepted);
+    }
   }
-  return merged.values.toList(growable: false);
+  final result = [...additions, ...merged.values];
+  if (estado == null) {
+    // "Todo" tiene orden propio (ver `compareNotificacionesForInbox`); las
+    // pestañas filtradas conservan el orden del backend.
+    result.sort(compareNotificacionesForInbox);
+  }
+  return result;
 });
 
-typedef NotificacionDetalleArgs = ({int id, String estado, String? sistemaOrigen});
+/// `resumen` es el elemento del listado desde el que se abrió el detalle, o
+/// `null` si no se conocía (deep link). Solo sirve de respaldo de lo que el
+/// detalle no informe; el reparto de responsabilidades vive en
+/// [GestionNotificacionesRepository.loadNotificacion].
+///
+/// `Notificacion` implementa `==`/`hashCode`, así que vale como clave de la
+/// `family`: la instancia llega fija desde el `extra` de la ruta y no
+/// reconstruye el provider en cada rebuild.
+typedef NotificacionDetalleArgs = ({int id, Notificacion? resumen});
 
 final gestionNotificacionDetalleProvider = FutureProvider.autoDispose.family<NotificacionDetalle, NotificacionDetalleArgs>((final ref, final args) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider);
   if (citizenId.isEmpty) {
     throw StateError('No hay ciudadano identificado.');
   }
-  return ref
-      .watch(gestionNotificacionesRepositoryProvider)
-      .loadNotificacion(
-        citizenId: citizenId,
-        notificacionId: args.id,
-        estado: args.estado,
-        sistemaOrigen: args.sistemaOrigen,
-      );
+  final repo = ref.watch(gestionNotificacionesRepositoryProvider);
+  return withAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId},
+    request: () => repo.loadNotificacion(
+      citizenId: citizenId,
+      notificacionId: args.id,
+      resumen: args.resumen,
+    ),
+  );
 });
+
+/// Riverpod reintenta con espera creciente cualquier provider que falle. Un
+/// desenlace de autorización no es un fallo transitorio: reintentarlo repite el
+/// rechazo del backend y la relectura de cláusulas mientras el usuario mira una
+/// pantalla que ya le dice qué hacer (o mientras se cierra la sesión). El resto
+/// de errores mantienen el comportamiento por defecto.

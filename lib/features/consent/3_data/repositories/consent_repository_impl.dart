@@ -1,27 +1,30 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
+import 'package:jccm_espacio_ciudadano/core/network/api_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_status_unknown_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/consent_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/3_data/api/clausulas_api.dart';
 
 /// Hybrid implementation of [ConsentRepository] using both API and local storage.
 ///
-/// Consent acceptance is persisted per citizen via the Hechos Vitales API using
-/// the generated client with compatibility extras for backend envelope quirks.
-/// Local storage (SharedPreferences) is used as cache and fallback.
+/// Consent acceptance is persisted per citizen through the citizen-resource
+/// clausulas endpoints. Local storage (SharedPreferences) is used as cache and
+/// fallback.
 final class ConsentRepositoryImpl implements ConsentRepository {
   ConsentRepositoryImpl({
     required final AppStorage storage,
     required final Dio dio,
+    final String? agentId,
   }) : _storage = storage,
-       _api = HechosVitalesApi(withGeneratedApiCompat(dio), standardSerializers);
+       _agentId = agentId?.trim(),
+       _api = ClausulasApi(dio);
 
   final AppStorage _storage;
-  final HechosVitalesApi _api;
+  final String? _agentId;
+  final ClausulasApi _api;
   final Map<String, _RemoteClauses> _remoteClausesCache = {};
   final Map<String, Future<_RemoteClauses?>> _remoteClausesRequests = {};
 
@@ -36,15 +39,28 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       return false;
     }
 
-    final remote = await _fetchRemoteClauses(normalizedId);
-    if (remote != null) {
-      final hasCompletedConsent = _hasCompletedConsent(remote);
-      await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
-      await _storage.write(_key(normalizedId), hasCompletedConsent);
-      return hasCompletedConsent;
+    final _RemoteClauses? remote;
+    try {
+      remote = await _fetchRemoteClauses(normalizedId);
+    } on ConsentStatusUnknownException {
+      // Positive-only local fallback: the cached flag is written `true` solely
+      // after a confirmed remote answer or a successful accept, so it is
+      // trustworthy evidence. A cached `false` (or nothing) proves nothing —
+      // propagate UNKNOWN instead of reporting "not accepted".
+      if (_storage.read<bool>(_key(normalizedId)) ?? false) {
+        return true;
+      }
+      rethrow;
+    }
+    if (remote == null) {
+      // Genuine 404 — consent really is not registered for this citizen.
+      return false;
     }
 
-    return _storage.read<bool>(_key(normalizedId)) ?? false;
+    final hasCompletedConsent = _hasCompletedConsent(remote);
+    await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
+    await _storage.write(_key(normalizedId), hasCompletedConsent);
+    return hasCompletedConsent;
   }
 
   @override
@@ -57,11 +73,25 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       throw ArgumentError.value(idAgente, 'idAgente', 'No puede estar vacío.');
     }
 
-    final hasExistingRemoteClauses = _remoteClausesCache.containsKey(normalizedId) || await _fetchRemoteClauses(normalizedId) != null;
-    final requestBody = _requestBody(normalizedId, clauses);
+    bool hasExistingRemoteClauses = _remoteClausesCache.containsKey(normalizedId);
+    if (!hasExistingRemoteClauses) {
+      try {
+        hasExistingRemoteClauses = await _fetchRemoteClauses(normalizedId) != null;
+      } on ConsentStatusUnknownException {
+        // The probe only chooses the initial verb; _syncClauses self-heals a
+        // wrong guess (404 → POST, 400/409 → PATCH), so an unavailable GET
+        // must not abort the write.
+        hasExistingRemoteClauses = false;
+      }
+    }
+    final requestBody = _requestBody(_requestAgentId(normalizedId), clauses);
 
     try {
-      await _syncClauses(requestBody, updateExisting: hasExistingRemoteClauses);
+      await _syncClauses(
+        citizenId: normalizedId,
+        requestBody: requestBody,
+        updateExisting: hasExistingRemoteClauses,
+      );
     } catch (e, stackTrace) {
       logger.e('Failed to sync clausulas with API: $e', stackTrace: stackTrace);
       rethrow;
@@ -93,10 +123,9 @@ final class ConsentRepositoryImpl implements ConsentRepository {
 
     final resetClauses = remote.clauses.map((final clause) => clause.copyWith(isSelected: false)).toList(growable: false);
     try {
-      final requestBody = _requestBody(normalizedId, resetClauses);
-      await _api.actualizarClausulas(
-        clausulasAgente: _clausulasAgente(normalizedId, resetClauses),
-        extra: _generatedExtra(requestBody),
+      await _api.actualizar(
+        citizenId: normalizedId,
+        body: _requestBody(_requestAgentId(normalizedId), resetClauses),
       );
     } on DioException catch (error, stackTrace) {
       if (error.response?.statusCode != 404) {
@@ -119,14 +148,25 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       return false;
     }
 
-    final remote = await _fetchRemoteClauses(normalizedId);
-    if (remote != null) {
-      await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
-      return remote.clauses.any((final clause) => clause.id == clauseId && clause.isSelected);
+    final _RemoteClauses? remote;
+    try {
+      remote = await _fetchRemoteClauses(normalizedId);
+    } on ConsentStatusUnknownException {
+      // Positive-only fallback, mirroring [hasAcceptedConsent]: an id present
+      // in the cached accepted list was confirmed remotely at some point; its
+      // absence proves nothing while the backend cannot answer.
+      final acceptedClauseIds = _storage.read<List<String>>(_acceptedClausesKey(normalizedId)) ?? const [];
+      if (acceptedClauseIds.contains(clauseId.toString())) {
+        return true;
+      }
+      rethrow;
+    }
+    if (remote == null) {
+      return false;
     }
 
-    final acceptedClauseIds = _storage.read<List<String>>(_acceptedClausesKey(normalizedId)) ?? const [];
-    return acceptedClauseIds.contains(clauseId.toString());
+    await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
+    return remote.clauses.any((final clause) => clause.id == clauseId && clause.isSelected);
   }
 
   @override
@@ -144,6 +184,20 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     await _cacheClauses(idAgente: normalizedId, clauses: remote.clauses);
     await _storage.write(_key(normalizedId), _hasCompletedConsent(remote));
     return remote.clauses;
+  }
+
+  @override
+  Future<List<Clause>> refreshClauses({required final String idAgente}) async {
+    final normalizedId = idAgente.trim();
+    if (normalizedId.isEmpty) {
+      throw StateError('An agent id is required to refresh consent clauses');
+    }
+    // Tirar la copia en memoria es lo único que hace falta: si ya hay una
+    // petición en vuelo, `_fetchRemoteClauses` la comparte, así que N
+    // refrescos simultáneos (los cuatro barridos de "Todo", los tres carnets)
+    // siguen siendo una sola llamada.
+    final _ = _remoteClausesCache.remove(normalizedId);
+    return fetchClauses(idAgente: normalizedId);
   }
 
   // ── Private ───────────────────────────────────────────────────────────────
@@ -165,6 +219,11 @@ final class ConsentRepositoryImpl implements ConsentRepository {
           )
           .toList(),
     };
+  }
+
+  String _requestAgentId(final String citizenId) {
+    final agentId = _agentId;
+    return agentId == null || agentId.isEmpty ? citizenId : agentId;
   }
 
   Future<void> _cacheClauses({
@@ -215,25 +274,24 @@ final class ConsentRepositoryImpl implements ConsentRepository {
 
   Future<_RemoteClauses?> _fetchRemoteClausesUncached(final String idAgente) async {
     try {
-      final response = await _api.obtenerClausulasPorAgente(
-        idAgente: idAgente,
-        extra: const {
-          generatedApiDecodeStringResponseExtraKey: true,
-        },
-      );
-      final data = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
-      return _remoteClausesFromData(data);
+      return _remoteClausesFromData(await _api.obtener(citizenId: idAgente));
     } on DioException catch (error, stackTrace) {
-      if (error.response?.statusCode == 404) {
+      final statusCode = error.response?.statusCode;
+      // 404 is the only failure that carries meaning: the citizen genuinely
+      // has no clauses registered yet. Anything else leaves the status UNKNOWN.
+      if (statusCode == 404) {
         return null;
       }
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      final remote = _remoteClausesFromData(rawData);
+      final remote = _remoteClausesFromData(decodeApiEnvelope(error.response?.data));
       if (remote != null) {
         return remote;
       }
-      logger.e('Failed to fetch remote clausulas: $error', stackTrace: stackTrace);
-      return null;
+      logger.e('GET clausulas failed (status: $statusCode, type: ${error.type}): $error', stackTrace: stackTrace);
+      throw ConsentStatusUnknownException(
+        message: 'Clausulas endpoint unavailable',
+        statusCode: statusCode,
+        cause: error,
+      );
     }
   }
 
@@ -272,6 +330,7 @@ final class ConsentRepositoryImpl implements ConsentRepository {
       id: id,
       label: _htmlToText(map['textoCheck']?.toString() ?? ''),
       isSelected: _asBool(map['seleccionado']) ?? false,
+      isPending: _asBool(map['pendiente']) ?? false,
       version: map['version']?.toString() ?? '1',
     );
   }
@@ -311,92 +370,32 @@ final class ConsentRepositoryImpl implements ConsentRepository {
     return value.replaceAll(RegExp('<[^>]+>'), ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
   }
 
-  Future<void> _syncClauses(
-    final Map<String, dynamic> requestBody, {
+  Future<void> _syncClauses({
+    required final String citizenId,
+    required final Map<String, dynamic> requestBody,
     required final bool updateExisting,
   }) async {
-    final clausulasAgente = _clausulasAgenteFromRequest(requestBody);
     if (updateExisting) {
       try {
-        await _api.actualizarClausulas(
-          clausulasAgente: clausulasAgente,
-          extra: _generatedExtra(requestBody),
-        );
+        await _api.actualizar(citizenId: citizenId, body: requestBody);
       } on DioException catch (error) {
         if (error.response?.statusCode != 404) {
           rethrow;
         }
-        await _api.enviarClausulas(
-          clausulasAgente: clausulasAgente,
-          extra: _generatedExtra(requestBody),
-        );
+        await _api.enviar(citizenId: citizenId, body: requestBody);
       }
       return;
     }
 
     try {
-      await _api.enviarClausulas(
-        clausulasAgente: clausulasAgente,
-        extra: _generatedExtra(requestBody),
-      );
+      await _api.enviar(citizenId: citizenId, body: requestBody);
     } on DioException catch (error) {
       if (!_shouldRetryAsUpdate(error.response?.statusCode)) {
         rethrow;
       }
 
-      await _api.actualizarClausulas(
-        clausulasAgente: clausulasAgente,
-        extra: _generatedExtra(requestBody),
-      );
+      await _api.actualizar(citizenId: citizenId, body: requestBody);
     }
-  }
-
-  Map<String, dynamic> _generatedExtra(final Map<String, dynamic> requestBody) => {
-    generatedApiRequestDataExtraKey: requestBody,
-    generatedApiDecodeStringResponseExtraKey: true,
-  };
-
-  ClausulasAgente _clausulasAgenteFromRequest(final Map<String, dynamic> requestBody) {
-    final idAgente = requestBody['idAgente']?.toString() ?? '';
-    final rawClauses = requestBody['clausulas'];
-    final clauses = rawClauses is List ? rawClauses.whereType<Map<String, dynamic>>().map(_generatedClauseFromMap).nonNulls.toList(growable: false) : const <Clausulas>[];
-    return ClausulasAgente(
-      (final builder) => builder
-        ..idAgente = idAgente
-        ..clausulas.replace(clauses.toBuiltList()),
-    );
-  }
-
-  ClausulasAgente _clausulasAgente(final String idAgente, final List<Clause> clauses) {
-    return ClausulasAgente(
-      (final builder) => builder
-        ..idAgente = idAgente
-        ..clausulas.replace(
-          clauses
-              .map(
-                (final clause) => Clausulas(
-                  (final generated) => generated
-                    ..idClausula = clause.id
-                    ..seleccionado = clause.isSelected
-                    ..version = clause.version,
-                ),
-              )
-              .toBuiltList(),
-        ),
-    );
-  }
-
-  Clausulas? _generatedClauseFromMap(final Map<String, dynamic> map) {
-    final id = _asInt(map['idClausula']);
-    if (id == null) {
-      return null;
-    }
-    return Clausulas(
-      (final builder) => builder
-        ..idClausula = id
-        ..seleccionado = _asBool(map['seleccionado'])
-        ..version = map['version']?.toString(),
-    );
   }
 
   bool _shouldRetryAsUpdate(final int? statusCode) => statusCode == 400 || statusCode == 409;

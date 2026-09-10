@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
-
-// API estado values aligned with GET /api/v1/ciudadanos/{id}/notificaciones?estado=
-const _kEstadoPendiente = 'pendiente';
-const _kEstadoAceptada = 'aceptada';
-const _kEstadoExpirada = 'expirada';
 
 /// Pantalla de listado de notificaciones — Figma node 41972:6649.
 class GestionNotificacionesPage extends ConsumerStatefulWidget {
@@ -32,10 +30,15 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
   int _selectedTab = 0;
   AppListFilters _filters = const AppListFilters();
 
-  // null → no filter (Todo), 'pendiente', 'aceptada', 'expirada'
-  static const List<String?> _tabEstados = [null, _kEstadoPendiente, _kEstadoAceptada, _kEstadoExpirada];
+  // null → sin filtro (Todo)
+  static const List<NotificacionEstado?> _tabEstados = [
+    null,
+    NotificacionEstado.pendiente,
+    NotificacionEstado.aceptada,
+    NotificacionEstado.expirada,
+  ];
 
-  String? get _currentEstado => _tabEstados[_selectedTab];
+  NotificacionEstado? get _currentEstado => _tabEstados[_selectedTab];
 
   @override
   Widget build(final BuildContext context) {
@@ -55,7 +58,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
         onBack: () => context.go(widget.backRoute),
         actions: [
           IconButton(
-            tooltip: 'Buscar notificaciones',
+            tooltip: l10n.gestionNotificacionesBuscarTooltip,
             icon: Badge.count(
               count: _filters.activeCount,
               isLabelVisible: _filters.activeCount > 0,
@@ -65,7 +68,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
           ),
           IconButton(
             icon: const Icon(AppIcons.settings),
-            tooltip: 'Configurar notificaciones',
+            tooltip: l10n.gestionNotificacionesConfigurarTooltip,
             onPressed: () => context.go(
               Uri(
                 path: Routes.notificationContact,
@@ -85,12 +88,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppDimensions.space16,
-                  AppDimensions.space24,
-                  AppDimensions.space16,
-                  AppDimensions.space16,
-                ),
+                padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space16),
                 child: _FilterBar(
                   labels: tabLabels,
                   selectedIndex: _selectedTab,
@@ -100,10 +98,20 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
               Expanded(
                 child: notifAsync.when(
                   loading: () => const LoadingStateWidget(),
-                  error: (final _, final _) => ErrorStateWidget(
-                    message: l10n.gestionNotificacionesLoadError,
-                    onRetry: () => ref.invalidate(gestionNotificacionesProvider(_currentEstado)),
-                  ),
+                  // La retirada de la cláusula obligatoria ya está cerrando la
+                  // sesión: decir "no se han podido cargar" sería mentir en el
+                  // parpadeo previo a volver al landing. Cualquier otro fallo,
+                  // incluida una autorización que no se pudo comprobar, es
+                  // error reintentable.
+                  error: (final error, final _) => error is ConsentRevoked
+                      ? EmptyStateWidget(
+                          message: l10n.authorizationRevokedMessage,
+                          icon: AppIcons.info,
+                        )
+                      : ErrorStateWidget(
+                          message: l10n.gestionNotificacionesLoadError,
+                          onRetry: () => ref.invalidate(gestionNotificacionesProvider(_currentEstado)),
+                        ),
                   data: (final notifs) {
                     final filtered = notifs
                         .where((final notification) {
@@ -116,12 +124,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                         : filtered.isEmpty
                         ? EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search)
                         : ListView.separated(
-                            padding: const EdgeInsets.fromLTRB(
-                              AppDimensions.space16,
-                              0,
-                              AppDimensions.space16,
-                              AppDimensions.space24,
-                            ),
+                            padding: appPagePadding(context, bottom: AppDimensions.space24),
                             itemCount: filtered.length,
                             separatorBuilder: (final _, final _) => const SizedBox(height: AppDimensions.space16),
                             itemBuilder: (final context, final index) => _NotificacionCard(
@@ -143,14 +146,15 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
   }
 
   Future<void> _showFilters() async {
+    final l10n = AppLocalizations.of(context);
     final result = await AppBottomSheet.show<AppListFilters>(
       context: context,
-      title: 'Filtrar notificaciones',
+      title: l10n.gestionNotificacionesFiltrarTitle,
       body: AppListFilterSheet(
         initialFilters: _filters,
-        fields: const [
-          AppListTextFilterField(id: 'description', label: 'Descripción de la notificación', hint: 'Introduce palabras de la descripción'),
-          AppListDateRangeFilterField(id: 'date', label: 'Fecha de expiración'),
+        fields: [
+          AppListTextFilterField(id: 'description', label: l10n.gestionNotificacionesFiltroDescripcionLabel, hint: l10n.gestionFiltroDescripcionHint),
+          AppListDateRangeFilterField(id: 'date', label: l10n.gestionNotificacionesFechaExpiracionLabel),
         ],
       ),
     );
@@ -193,6 +197,15 @@ class _FilterBarState extends State<_FilterBar> {
 
   @override
   Widget build(final BuildContext context) {
+    if (isTabletLayout(context)) {
+      return AppFloatingNavigation(
+        tabs: widget.labels,
+        selectedIndex: widget.selectedIndex,
+        onTabSelected: widget.onSelected,
+        tabHorizontalPadding: AppDimensions.space16,
+      );
+    }
+
     final indexes = _showExpired ? _expiredFilterIndexes : _primaryFilterIndexes;
     final selectedIndex = indexes.contains(widget.selectedIndex) ? indexes.indexOf(widget.selectedIndex) : indexes.indexOf(2);
 
@@ -204,7 +217,7 @@ class _FilterBarState extends State<_FilterBar> {
       leading: _showExpired
           ? _FloatingNavigationArrow(
               icon: AppIcons.arrowBack,
-              tooltip: 'Mostrar filtros anteriores',
+              tooltip: AppLocalizations.of(context).gestionNotificacionesFiltrosAnterioresTooltip,
               onPressed: () => setState(() => _showExpired = false),
             )
           : null,
@@ -288,9 +301,9 @@ class _NotificacionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _headerRow(),
+                  _headerRow(l10n),
                   _titleRow(l10n),
-                  _refBlock(l10n),
+                  _refBlock(context, l10n),
                 ],
               ),
             ),
@@ -300,8 +313,8 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
-  Widget _headerRow() {
-    final tag = _statusTag();
+  Widget _headerRow(final AppLocalizations l10n) {
+    final tag = _statusTag(l10n);
     final orgName = notificacion.unidadOrganicaNombre;
     if (orgName == null && tag == null) {
       return const SizedBox.shrink();
@@ -334,8 +347,28 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
+  /// Lo que la tarjeta muestra como título: el concepto y, si viene vacío, la
+  /// denominación del procedimiento (mejor eso que una tarjeta sin título).
+  String get _titulo => notificacion.concepto.isNotEmpty ? notificacion.concepto : notificacion.procedimientoDenominacion;
+
+  /// Lo que la tarjeta muestra como "Procedimiento".
+  ///
+  /// La denominación primero y el `idFicha` después: en UAT el gateway
+  /// devuelve `idFicha: null` en todos los elementos, así que leer solo ese
+  /// campo dejaba la fila apagada en toda la bandeja. Es además el mismo orden
+  /// que resuelve el detalle, para que las dos pantallas no muestren valores
+  /// distintos bajo la misma etiqueta.
+  String? get _procedimiento {
+    final denominacion = notificacion.procedimientoDenominacion.trim();
+    if (denominacion.isNotEmpty) {
+      return denominacion;
+    }
+    final idFicha = notificacion.procedimientoIdFicha?.trim();
+    return idFicha == null || idFicha.isEmpty ? null : idFicha;
+  }
+
   Widget _titleRow(final AppLocalizations l10n) {
-    final title = notificacion.concepto.isNotEmpty ? notificacion.concepto : notificacion.procedimientoDenominacion;
+    final title = _titulo;
     return Padding(
       padding: const EdgeInsets.only(
         top: AppDimensions.space4,
@@ -357,14 +390,16 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
-  Widget _refBlock(final AppLocalizations l10n) {
-    final idFicha = notificacion.procedimientoIdFicha;
+  Widget _refBlock(final BuildContext context, final AppLocalizations l10n) {
+    // Sin concepto el título ya es la denominación: repetirla debajo con la
+    // etiqueta "Procedimiento" sería pintar el mismo texto dos veces.
+    final procedimiento = _procedimiento == _titulo ? null : _procedimiento;
     final fecha = notificacion.fechaCaducidad;
-    final showsExpiration = notificacion.estado == _kEstadoPendiente || notificacion.estado == _kEstadoExpirada;
-    if (idFicha == null && (!showsExpiration || fecha == null)) {
+    final showsExpiration = notificacion.estado == NotificacionEstado.pendiente || notificacion.estado == NotificacionEstado.expirada;
+    if (procedimiento == null && (!showsExpiration || fecha == null)) {
       return const SizedBox.shrink();
     }
-    final isWarning = notificacion.estado == _kEstadoPendiente;
+    final isWarning = notificacion.estado == NotificacionEstado.pendiente;
 
     return Container(
       width: double.infinity,
@@ -377,15 +412,15 @@ class _NotificacionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (idFicha != null)
+          if (procedimiento != null)
             _RefRow(
               label: l10n.gestionNotificacionesProcedimientoLabel,
-              value: idFicha,
+              value: procedimiento,
             ),
           if (showsExpiration && fecha != null)
             _RefRow(
-              label: 'Fecha expiración',
-              value: _formatFecha(fecha),
+              label: l10n.gestionNotificacionesFechaCaducidadLabel,
+              value: _formatFecha(context, fecha),
               valueColor: isWarning ? AppColors.warningDark : AppColors.textPrimary,
               valueFontWeight: isWarning ? FontWeight.w700 : FontWeight.w400,
               trailingIcon: isWarning
@@ -401,13 +436,15 @@ class _NotificacionCard extends StatelessWidget {
     );
   }
 
-  Widget? _statusTag() {
+  /// Sin estado conocido no se pinta etiqueta: el listado indexado no informa
+  /// el estado y en "Todo" no hay filtro del que deducirlo.
+  Widget? _statusTag(final AppLocalizations l10n) {
     return switch (notificacion.estado) {
-      _kEstadoPendiente => const AppTag(status: AppTagStatus.warning, label: 'Pendiente', showIcon: false),
-      _kEstadoAceptada => const AppTag(status: AppTagStatus.success, label: 'Aceptada', showIcon: false),
-      'rechazada' => const AppTag(status: AppTagStatus.error, label: 'Rechazada', showIcon: false),
-      'expirada' => const AppTag(status: AppTagStatus.infoInactive, label: 'Expirada', showIcon: false),
-      _ => null,
+      NotificacionEstado.pendiente => AppTag(status: AppTagStatus.warning, label: l10n.gestionNotificacionesTagPendiente, showIcon: false),
+      NotificacionEstado.aceptada => AppTag(status: AppTagStatus.success, label: l10n.gestionNotificacionesTagAceptada, showIcon: false),
+      NotificacionEstado.rechazada => AppTag(status: AppTagStatus.error, label: l10n.gestionNotificacionesTagRechazada, showIcon: false),
+      NotificacionEstado.expirada => AppTag(status: AppTagStatus.infoInactive, label: l10n.gestionNotificacionesTagExpirada, showIcon: false),
+      null => null,
     };
   }
 }
@@ -464,7 +501,10 @@ class _RefRow extends StatelessWidget {
   }
 }
 
-String _formatFecha(final DateTime date) {
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  return '${date.day} ${months[date.month - 1]} ${date.year}';
+String _formatFecha(final BuildContext context, final DateTime date) {
+  final parts = DateFormat('d MMM yyyy', Localizations.localeOf(context).languageCode).format(date).split(' ');
+  if (parts.length >= 3 && parts[1].isNotEmpty) {
+    parts[1] = '${parts[1][0].toUpperCase()}${parts[1].substring(1)}';
+  }
+  return parts.join(' ');
 }

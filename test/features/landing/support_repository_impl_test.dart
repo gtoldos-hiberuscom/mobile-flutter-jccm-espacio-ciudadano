@@ -41,6 +41,53 @@ void main() {
       expect(adapter.request?.files.single.filename, 'captura.png');
       expect(adapter.request?.files.single.length, 3);
     });
+
+    test('submits to the citizen support route when a session idAgente is given', () async {
+      final adapter = _RecordingAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = SupportRepositoryImpl(dio: dio);
+
+      await repository.submitSupportRequest(
+        const SupportRequest(
+          name: '',
+          email: 'maria@example.es',
+          subject: 'No puedo acceder',
+          message: 'La app no carga mis expedientes.',
+          privacyConsentAccepted: false,
+        ),
+        idAgente: 'PER9999927',
+      );
+
+      expect(adapter.request?.method, 'POST');
+      expect(adapter.request?.path, '/api/v1/ciudadanos/PER9999927/soporte');
+      expect(adapter.request?.path, SupportRepositoryImpl.citizenEndpoint('PER9999927'));
+      expect(adapter.request?.contentType, startsWith('multipart/form-data'));
+      expect(jsonDecode(adapter.request!.fields['datos']!) as Map<String, dynamic>, <String, dynamic>{
+        'asunto': 'No puedo acceder',
+        'descripcion': 'La app no carga mis expedientes.',
+        'email': 'maria@example.es',
+      });
+      expect(adapter.request?.files, isEmpty);
+    });
+
+    test('falls back to the public support route when idAgente is empty', () async {
+      final adapter = _RecordingAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = SupportRepositoryImpl(dio: dio);
+
+      await repository.submitSupportRequest(
+        const SupportRequest(
+          name: 'María Pérez',
+          email: 'maria@example.es',
+          subject: 'Asunto',
+          message: 'Mensaje',
+          privacyConsentAccepted: true,
+        ),
+        idAgente: '',
+      );
+
+      expect(adapter.request?.path, SupportRepositoryImpl.endpoint);
+    });
   });
 }
 

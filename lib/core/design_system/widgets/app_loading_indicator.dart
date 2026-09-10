@@ -25,10 +25,12 @@ class AppLoadingIndicator extends StatefulWidget {
     this.semanticsLabel,
     this.color,
     this.strokeWidth = 4.0,
+    this.size,
     this.decorative = false,
     this.announceCompletion = true,
   }) : assert(decorative || semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
-       assert(strokeWidth > 0, 'strokeWidth must be greater than zero');
+       assert(strokeWidth > 0, 'strokeWidth must be greater than zero'),
+       assert(size == null || size > 0, 'size must be greater than zero');
 
   /// Screen-reader label. Override with a localised string when possible.
   final String? semanticsLabel;
@@ -38,6 +40,12 @@ class AppLoadingIndicator extends StatefulWidget {
 
   /// Stroke width passed to [CircularProgressIndicator]. Defaults to `4.0`.
   final double strokeWidth;
+
+  /// Diameter of the indicator.
+  ///
+  /// Without it the indicator is laid out with loose constraints and falls back
+  /// to Material's intrinsic 36 dp, however large the surrounding box is.
+  final double? size;
 
   /// When true, the indicator is hidden from assistive technologies.
   final bool decorative;
@@ -76,13 +84,15 @@ class _AppLoadingIndicatorState extends State<AppLoadingIndicator> {
 
   @override
   Widget build(final BuildContext context) {
-    final indicator = Center(
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(
-          widget.color ?? AppColors.primary,
-        ),
-        strokeWidth: widget.strokeWidth,
+    final progressIndicator = CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(
+        widget.color ?? AppColors.primary,
       ),
+      strokeWidth: widget.strokeWidth,
+    );
+    final size = widget.size;
+    final indicator = Center(
+      child: size == null ? progressIndicator : SizedBox.square(dimension: size, child: progressIndicator),
     );
 
     if (widget.decorative) {

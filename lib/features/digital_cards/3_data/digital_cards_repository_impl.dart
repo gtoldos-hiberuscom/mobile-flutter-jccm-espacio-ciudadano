@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
@@ -10,14 +11,17 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositor
 final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   DigitalCardsRepositoryImpl({required final Dio dio}) : _api = CarnetDigitalApi(withGeneratedApiCompat(dio), standardSerializers);
 
+  // El gateway publica estas operaciones bajo /api/v1/ciudadanos/{sid}/...
+  // y espera el claim sub_alt como {sid}; el provider resuelve el identificador
+  // adecuado para cada entorno antes de entrar en el repositorio.
   final CarnetDigitalApi _api;
 
   @override
-  Future<List<DigitalCard>> loadCards({required final String documentNumber}) async {
+  Future<List<DigitalCard>> loadCards({required final String citizenId}) async {
     final results = await Future.wait([
-      _captureCard(() => _loadLargeFamilyCard(documentNumber)),
-      _captureCard(() => _loadYouthCard(documentNumber)),
-      _captureCard(() => _loadDisabilityCard(documentNumber)),
+      _captureCard(() => _loadLargeFamilyCard(citizenId)),
+      _captureCard(() => _loadYouthCard(citizenId)),
+      _captureCard(() => _loadDisabilityCard(citizenId)),
     ]);
     final cards = results.map((final result) => result.card).whereType<DigitalCard>().toList(growable: false);
     if (cards.isNotEmpty) {
@@ -45,15 +49,15 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   }
 
   @override
-  Future<DigitalCardArtifact> downloadPdf({required final String documentNumber, required final DigitalCard card}) async {
+  Future<DigitalCardArtifact> downloadPdf({required final String citizenId, required final DigitalCard card}) async {
     if (card.type != DigitalCardType.youth) {
       throw UnsupportedError('El PDF solo está disponible para el Carnet Joven.');
     }
     final bytes = await _fetchRequiredArtifact(
       () => _api.obtenerPdf(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
       keys: const ['pdf', 'documento', 'datos', 'body'],
     );
@@ -61,22 +65,22 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   }
 
   @override
-  Future<DigitalCardArtifact> downloadPkPass({required final String documentNumber, required final DigitalCard card}) async {
+  Future<DigitalCardArtifact> downloadPkPass({required final String citizenId, required final DigitalCard card}) async {
     final fetch = switch (card.type) {
       DigitalCardType.youth => () => _api.obtenerPkPass(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
       DigitalCardType.largeFamily => () => _api.obtenerPkPassFamiliaNumerosa(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
       DigitalCardType.disability => () => _api.obtenerPkPassDiscapacidad(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
     };
     final bytes = await _fetchRequiredArtifact(
@@ -87,15 +91,15 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   }
 
   @override
-  Future<DigitalCardArtifact> downloadQr({required final String documentNumber, required final DigitalCard card}) async {
+  Future<DigitalCardArtifact> downloadQr({required final String citizenId, required final DigitalCard card}) async {
     if (card.type != DigitalCardType.youth) {
       throw UnsupportedError('El QR solo está disponible para el Carnet Joven.');
     }
     final bytes = await _fetchRequiredArtifact(
       () => _api.obtenerQr(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
       keys: const ['qr', 'datos', 'body'],
     );
@@ -103,15 +107,15 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   }
 
   @override
-  Future<Uint8List?> loadQrImage({required final String documentNumber, required final DigitalCard card}) async {
+  Future<Uint8List?> loadQrImage({required final String citizenId, required final DigitalCard card}) async {
     if (card.type != DigitalCardType.youth) {
       return null;
     }
     final payload = await _fetchOptionalArtifact(
       () => _api.obtenerQr(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
       keys: const ['qr', 'datos', 'body'],
     );
@@ -125,12 +129,12 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
     return bytes;
   }
 
-  Future<DigitalCard?> _loadLargeFamilyCard(final String documentNumber) async {
+  Future<DigitalCard?> _loadLargeFamilyCard(final String citizenId) async {
     final response = await _getOptional(
       () => _api.obtenerDatosFamiliaNumerosa(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
     );
     if (response == null) {
@@ -158,12 +162,12 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
     );
   }
 
-  Future<DigitalCard?> _loadYouthCard(final String documentNumber) async {
+  Future<DigitalCard?> _loadYouthCard(final String citizenId) async {
     final response = await _getOptional(
       () => _api.obtenerCarnetJoven(
-        dni: documentNumber,
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
     );
     if (response == null) {
@@ -191,12 +195,12 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
     );
   }
 
-  Future<DigitalCard?> _loadDisabilityCard(final String documentNumber) async {
+  Future<DigitalCard?> _loadDisabilityCard(final String citizenId) async {
     final response = await _getOptional(
-      () => _api.obtenerDatosDiscapacidad(
-        dni: documentNumber,
+      () => _api.obtenerDatosDiscapacidad1(
+        dni: citizenId,
         extra: _generatedExtra,
-        validateStatus: (final status) => status != null && status < 500,
+        validateStatus: (final status) => status != null && status < 500 && status != 401,
       ),
     );
     if (response == null) {
@@ -317,16 +321,29 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   Future<({Object? data, int? statusCode})> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
     try {
       final response = await fetch();
-      return (
-        data: response.extra[generatedApiRawResponseDataExtraKey] ?? response.data,
-        statusCode: response.statusCode,
-      );
+      final data = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+      _throwIfAuthorizationRequired(data, statusCode: response.statusCode);
+      return (data: data, statusCode: response.statusCode);
     } on DioException catch (error) {
       final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
       if (error.response != null || rawData != null) {
+        _throwIfAuthorizationRequired(rawData, statusCode: error.response?.statusCode);
         return (data: rawData, statusCode: error.response?.statusCode);
       }
       rethrow;
+    }
+  }
+
+  /// El sobre de autorización no es "no tienes carnet".
+  ///
+  /// Sin esto, el `412.00` entraba por [_hasBusinessError] y el carnet salía
+  /// como `null`: los tres endpoints rechazados dejaban la lista vacía y la
+  /// pantalla decía "no tienes carnets digitales" a quien en realidad no tenía
+  /// la cláusula aceptada. Ahora sale como señal tipada y la resuelve
+  /// `withAuthorizationGuard`.
+  void _throwIfAuthorizationRequired(final Object? data, {final int? statusCode}) {
+    if (isAuthorizationRequiredEnvelope(data)) {
+      throw AuthorizationRequiredException(statusCode: statusCode, path: 'carnet-digital');
     }
   }
 

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/3_data/digital_cards_repository_impl.dart';
 
@@ -18,7 +19,7 @@ void main() {
   });
 
   test('loads every card using the generated client endpoints', () async {
-    final cards = await repository.loadCards(documentNumber: '12345678Z');
+    final cards = await repository.loadCards(citizenId: 'sid-123');
 
     expect(cards.map((final card) => card.type), [
       DigitalCardType.largeFamily,
@@ -28,49 +29,76 @@ void main() {
     expect(
       adapter.paths,
       containsAll(<String>[
-        '/api/v1/carnet-digital/familia-numerosa/12345678Z',
-        '/api/v1/carnet-digital/joven/12345678Z',
-        '/api/v1/carnet-digital/grado-discapacidad/12345678Z',
+        '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa',
+        '/api/v1/ciudadanos/sid-123/carnet-digital/joven',
+        '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
       ]),
     );
+  });
+
+  test('los tres carnets rechazados por autorización no son "no tienes carnets"', () async {
+    adapter.unauthorizedPaths.addAll([
+      '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/joven',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
+    ]);
+
+    // Antes el sobre 412.00 entraba por la rama de error de negocio, cada
+    // carnet salía `null` y la pantalla decía "no tienes carnets digitales" a
+    // quien en realidad no tenía la cláusula aceptada.
+    await expectLater(
+      repository.loadCards(citizenId: 'sid-123'),
+      throwsA(isA<AuthorizationRequiredException>()),
+    );
+  });
+
+  test('un carnet válido sobrevive al rechazo por autorización de los otros', () async {
+    adapter.unauthorizedPaths.addAll([
+      '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
+    ]);
+
+    final cards = await repository.loadCards(citizenId: 'sid-123');
+
+    expect(cards.map((final card) => card.type), [DigitalCardType.youth]);
   });
 
   test('uses the card-specific PKPASS endpoint', () async {
     for (final type in DigitalCardType.values) {
       adapter.paths.clear();
       final artifact = await repository.downloadPkPass(
-        documentNumber: '12345678Z',
+        citizenId: 'sid-123',
         card: _card(type),
       );
       expect(artifact.bytes, Uint8List.fromList([1, 2, 3]));
       expect(artifact.extension, 'pkpass');
       expect(adapter.paths.single, switch (type) {
-        DigitalCardType.youth => '/api/v1/carnet-digital/pkpass/12345678Z',
-        DigitalCardType.largeFamily => '/api/v1/carnet-digital/familia-numerosa-pkpass/12345678Z',
-        DigitalCardType.disability => '/api/v1/carnet-digital/discapacidad-pkpass/12345678Z',
+        DigitalCardType.youth => '/api/v1/ciudadanos/sid-123/carnet-digital/joven/pkpass',
+        DigitalCardType.largeFamily => '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa/pkpass',
+        DigitalCardType.disability => '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad/pkpass',
       });
     }
   });
 
   test('only youth card supports QR and PDF', () async {
     final youth = _card(DigitalCardType.youth);
-    expect((await repository.downloadQr(documentNumber: '12345678Z', card: youth)).extension, 'png');
-    expect((await repository.downloadPdf(documentNumber: '12345678Z', card: youth)).extension, 'pdf');
+    expect((await repository.downloadQr(citizenId: 'sid-123', card: youth)).extension, 'png');
+    expect((await repository.downloadPdf(citizenId: 'sid-123', card: youth)).extension, 'pdf');
 
     expect(
-      () => repository.downloadQr(documentNumber: '12345678Z', card: _card(DigitalCardType.largeFamily)),
+      () => repository.downloadQr(citizenId: 'sid-123', card: _card(DigitalCardType.largeFamily)),
       throwsUnsupportedError,
     );
     expect(
-      () => repository.downloadPdf(documentNumber: '12345678Z', card: _card(DigitalCardType.disability)),
+      () => repository.downloadPdf(citizenId: 'sid-123', card: _card(DigitalCardType.disability)),
       throwsUnsupportedError,
     );
   });
 
   test('keeps a valid youth card when another card endpoint fails', () async {
-    adapter.failingPaths.add('/api/v1/carnet-digital/familia-numerosa/12345678Z');
+    adapter.failingPaths.add('/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa');
 
-    final cards = await repository.loadCards(documentNumber: '12345678Z');
+    final cards = await repository.loadCards(citizenId: 'sid-123');
 
     final youthCard = cards.singleWhere((final card) => card.type == DigitalCardType.youth);
     expect(youthCard.number, '99999999R-R955-C233-J452-Z864');
@@ -79,11 +107,11 @@ void main() {
 
   test('keeps a valid youth card when the other cards return business code 3033', () async {
     adapter.noDataPaths.addAll({
-      '/api/v1/carnet-digital/familia-numerosa/12345678Z',
-      '/api/v1/carnet-digital/grado-discapacidad/12345678Z',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
     });
 
-    final cards = await repository.loadCards(documentNumber: '12345678Z');
+    final cards = await repository.loadCards(citizenId: 'sid-123');
 
     expect(cards, hasLength(1));
     expect(cards.single.type, DigitalCardType.youth);
@@ -103,6 +131,7 @@ final class _DigitalCardsAdapter implements HttpClientAdapter {
   final List<String> paths = [];
   final Set<String> failingPaths = {};
   final Set<String> noDataPaths = {};
+  final Set<String> unauthorizedPaths = {};
 
   @override
   Future<ResponseBody> fetch(
@@ -113,6 +142,24 @@ final class _DigitalCardsAdapter implements HttpClientAdapter {
     paths.add(options.path);
     if (failingPaths.contains(options.path)) {
       return ResponseBody.fromString('Service unavailable', 500);
+    }
+    if (unauthorizedPaths.contains(options.path)) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': null,
+          'mensaje-respuesta': 'No se pudo dar de alta el soporte.',
+          'codigo-respuesta': '412.00',
+          'info-error': {
+            'errores': [
+              {'codigo-error': '3034', 'mensaje-error': 'Cuando autorizas a que Espacio Ciudadano…'},
+            ],
+          },
+        }),
+        403,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
     }
     if (noDataPaths.contains(options.path)) {
       return ResponseBody.fromString(
@@ -136,24 +183,27 @@ final class _DigitalCardsAdapter implements HttpClientAdapter {
       );
     }
     final body = switch (options.path) {
-      final path when path.contains('/familia-numerosa/') => {
+      final path when path.endsWith('/qr') => base64Encode([1, 2, 3]),
+      final path when path.endsWith('/pdf') => {
+        'pdf': base64Encode([1, 2, 3]),
+      },
+      final path when path.endsWith('/pkpass') => {
+        'pkpass': base64Encode([1, 2, 3]),
+      },
+      final path when path.endsWith('/familia-numerosa') => {
         'numeroTitulo': 'FN-1',
         'fechaValidezHasta': '30/11/2026',
       },
-      final path when path.contains('/joven/') => {
+      final path when path.endsWith('/joven') => {
         'enTramitacion': 'E',
         'FechaFinValidez': '30/01/2030',
         'FechaNacimiento': '26/06/2006',
         'Numero': '99999999R-R955-C233-J452-Z864',
         'Titular': 'USUARIO CMD PRUEBAS',
       },
-      final path when path.contains('/grado-discapacidad/') => {
+      final path when path.endsWith('/discapacidad') => {
         'validezDefinitiva': 'S',
         'fechaEfectos': '26/07/2011',
-      },
-      final path when path.contains('/qr/') => base64Encode([1, 2, 3]),
-      final path when path.contains('/pdf/') => {
-        'pdf': base64Encode([1, 2, 3]),
       },
       _ => {
         'pkpass': base64Encode([1, 2, 3]),

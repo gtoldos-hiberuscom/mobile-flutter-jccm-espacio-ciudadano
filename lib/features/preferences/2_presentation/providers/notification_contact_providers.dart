@@ -26,6 +26,9 @@ final notificationContactProvider = FutureProvider.autoDispose.family<Notificati
   final result = await ref.watch(loadNotificationContactUsecaseProvider).execute(citizenId: citizenId);
   return switch (result) {
     LoadNotificationContactSuccess(:final contact) => contact,
-    LoadNotificationContactFailed() => null,
+    // AsyncError, nunca null: "no se pudo cargar" ≠ "no hay contacto". Aplanar
+    // el fallo renderizaba un formulario en blanco cuyo guardado sobrescribía
+    // el contacto real registrado (canal legal de notificaciones).
+    LoadNotificationContactFailed(:final message) => throw StateError(message),
   };
 });

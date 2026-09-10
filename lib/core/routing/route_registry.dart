@@ -21,6 +21,15 @@ abstract final class Routes {
   static String faqDetailPath(final String id) => '/help-contact/faq/$id';
   static const String supportForm = '/support-form';
   static const String legalPrivacy = '/legal/privacy';
+
+  /// [legalPrivacy] en su **vista informativa**: con flecha de volver y sin la
+  /// barra de "Salir"/"Continuar" del consentimiento.
+  ///
+  /// La usan el menú de perfil y la (i) de "Condiciones de uso y
+  /// autorizaciones", que abren la página para leerla y no para aceptar nada.
+  /// Sin este marcador la página se pinta como paso del consentimiento y
+  /// arrastra sus botones.
+  static const String legalPrivacyInfo = '$legalPrivacy?from=home';
   static const String legalNotice = '/legal/notice';
   static const String legalAccessibility = '/legal/accessibility';
   static const String login = '/login';

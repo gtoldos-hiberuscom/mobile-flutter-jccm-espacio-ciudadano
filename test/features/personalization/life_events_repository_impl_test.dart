@@ -9,6 +9,35 @@ import 'package:jccm_espacio_ciudadano/features/personalization/3_data/life_even
 
 void main() {
   group('LifeEventsRepositoryImpl', () {
+    test('uses sub_alt in the gateway path and idAgente in the write body', () async {
+      final adapter = _CapturingAdapter();
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: 'https://example.test',
+          headers: const {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+        ),
+      )..httpClientAdapter = adapter;
+      final repository = LifeEventsRepositoryImpl(
+        dio: dio,
+        agentId: 'PER9998003',
+      );
+
+      await repository.saveLifeEvents(
+        idAgente: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6',
+        events: const [
+          LifeEvent(id: 1, label: 'Familia', selected: true),
+        ],
+      );
+
+      expect(
+        adapter.path,
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/hechos',
+      );
+      expect(adapter.jsonBody?['idAgente'], 'PER9998003');
+    });
+
     test('saveLifeEvents persists user preferences in backend', () async {
       final adapter = _CapturingAdapter();
       final dio = Dio(
@@ -30,7 +59,7 @@ void main() {
       );
 
       expect(adapter.method, 'PATCH');
-      expect(adapter.path, '/api/v1/hechos-vitales/hechos');
+      expect(adapter.path, '/api/v1/ciudadanos/agent-123/hechos');
       expect(
         adapter.jsonBody,
         <String, dynamic>{
@@ -74,6 +103,34 @@ void main() {
       );
     });
 
+    test('loadLifeEvents propagates an error whose envelope carries no listaHechos', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(500, {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error', 'body': null});
+      final repository = LifeEventsRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLifeEvents(idAgente: 'PER9998003'),
+        throwsA(isA<DioException>()),
+        reason: 'an error envelope used to be read as "no life events configured"',
+      );
+    });
+
+    test('loadLifeEvents still accepts a 4xx whose envelope genuinely carries the list', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(400, {
+        'codigo-respuesta': '400.00',
+        'body': {
+          'listaHechos': [
+            {'idHecho': 1, 'nombreHecho': 'Familia', 'seleccionado': true},
+          ],
+        },
+      });
+      final repository = LifeEventsRepositoryImpl(dio: dio);
+
+      final events = await repository.loadLifeEvents(idAgente: 'PER9998003');
+
+      expect(events, hasLength(1));
+      expect(events.single.id, 1);
+    });
+
     test('resetPreferences deletes all life events for the agent', () async {
       final adapter = _CapturingAdapter();
       final dio = Dio(
@@ -91,7 +148,7 @@ void main() {
       expect(adapter.method, 'DELETE');
       expect(
         adapter.path,
-        '/api/v1/hechos-vitales/preferencias/agent-123',
+        '/api/v1/ciudadanos/agent-123/preferencias',
       );
     });
   });
@@ -100,6 +157,32 @@ void main() {
 enum _LifeEventsResponseKind {
   success,
   supportUnavailable,
+}
+
+final class _StaticAdapter implements HttpClientAdapter {
+  _StaticAdapter(this.statusCode, this.body);
+
+  final int statusCode;
+  final Object? body;
+
+  @override
+  Future<ResponseBody> fetch(
+    final RequestOptions options,
+    final Stream<Uint8List>? requestStream,
+    final Future<void>? cancelFuture,
+  ) async {
+    await (requestStream ?? const Stream<Uint8List>.empty()).drain<void>();
+    return ResponseBody.fromString(
+      jsonEncode(body),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({final bool force = false}) {}
 }
 
 final class _CapturingAdapter implements HttpClientAdapter {

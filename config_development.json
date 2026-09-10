@@ -1,10 +1,10 @@
 {
   "APP_FLAVOR": "development",
   "APP_NAME": "Espacio Ciudadano (Dev)",
-  "BASE_URL": "https://fachada-sede-api-uat.cm-pre.jccm.es",
-  "CIUDADANOS_ID_STRATEGY": "idAgente",
+  "BASE_URL": "https://gateway-espacio-ciudadano-uat.cm-pre.jccm.es",
   "TIMEOUT": "20",
   "DEBUG_MODE": "true",
+  "LOG_REDACTION_OFF": "true",
   "SSO_BASE_URL": "https://sso-cerbero-uat.cm-pre.jccm.es/auth",
   "SSO_REALM": "usuarios",
   "SSO_CLIENT_ID": "add-espacio_ciudadano_mobile-fo",

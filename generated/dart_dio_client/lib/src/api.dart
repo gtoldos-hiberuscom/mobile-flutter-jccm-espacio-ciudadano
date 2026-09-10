@@ -9,11 +9,11 @@ import 'package:espacio_ciudadano_api/src/auth/api_key_auth.dart';
 import 'package:espacio_ciudadano_api/src/auth/basic_auth.dart';
 import 'package:espacio_ciudadano_api/src/auth/bearer_auth.dart';
 import 'package:espacio_ciudadano_api/src/auth/oauth.dart';
+import 'package:espacio_ciudadano_api/src/api/actuator_api.dart';
 import 'package:espacio_ciudadano_api/src/api/agenda_api.dart';
 import 'package:espacio_ciudadano_api/src/api/carnet_digital_api.dart';
 import 'package:espacio_ciudadano_api/src/api/catastro_api.dart';
 import 'package:espacio_ciudadano_api/src/api/ccaa_api.dart';
-import 'package:espacio_ciudadano_api/src/api/ciudadano_api.dart';
 import 'package:espacio_ciudadano_api/src/api/ciudadanos_api.dart';
 import 'package:espacio_ciudadano_api/src/api/dgt_api.dart';
 import 'package:espacio_ciudadano_api/src/api/documentacion_api.dart';
@@ -122,6 +122,12 @@ class EspacioCiudadanoApi {
     }
   }
 
+  /// Get ActuatorApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  ActuatorApi getActuatorApi() {
+    return ActuatorApi(dio, serializers);
+  }
+
   /// Get AgendaApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
   AgendaApi getAgendaApi() {
@@ -144,12 +150,6 @@ class EspacioCiudadanoApi {
   /// by doing that all interceptors will not be executed
   CcaaApi getCcaaApi() {
     return CcaaApi(dio, serializers);
-  }
-
-  /// Get CiudadanoApi instance, base route and serializer can be overridden by a given but be careful,
-  /// by doing that all interceptors will not be executed
-  CiudadanoApi getCiudadanoApi() {
-    return CiudadanoApi(dio, serializers);
   }
 
   /// Get CiudadanosApi instance, base route and serializer can be overridden by a given but be careful,

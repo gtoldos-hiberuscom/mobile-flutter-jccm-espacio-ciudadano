@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -99,6 +101,7 @@ class _AppCalendarState extends State<AppCalendar> {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final selectedMonth = await showModalBottomSheet<DateTime>(
       context: context,
+      constraints: appModalSheetConstraints(context),
       requestFocus: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
@@ -145,19 +148,19 @@ class _AppCalendarState extends State<AppCalendar> {
     );
   }
 
-  List<DateTime> _daysInGrid() {
-    final firstOfMonth = DateTime(_currentMonth.year, _currentMonth.month);
-    // Weekday offset (Monday = 0 ... Sunday = 6)
-    final startWeekday = (firstOfMonth.weekday - widget.firstDayOfWeek + 7) % 7;
-    final startDate = firstOfMonth.subtract(Duration(days: startWeekday));
+  List<DateTime> _daysInGrid() => calendarGridDays(month: _currentMonth, firstDayOfWeek: widget.firstDayOfWeek);
 
-    final days = <DateTime>[];
-    // Always show 5 weeks (35 days) for consistent height
-    for (var i = 0; i < 35; i++) {
-      days.add(startDate.add(Duration(days: i)));
-    }
-    return days;
-  }
+  /// Tablet (non-compact) uses roomier cells so the grid does not look flat
+  /// when stretched across the wide page content.
+  bool get _isTabletGrid => !widget.compact && isTabletLayout(context);
+
+  double get _dayTargetSize => _isTabletGrid ? AppDimensions.space64 : AppDimensions.minTouchTarget;
+
+  TextStyle get _dayTextStyle => _isTabletGrid
+      ? AppTypography.bodyRegular
+      : widget.compact
+      ? AppTypography.captionRegular
+      : AppTypography.smallRegular;
 
   @override
   Widget build(final BuildContext context) {
@@ -375,11 +378,15 @@ class _AppCalendarState extends State<AppCalendar> {
             .map(
               (final label) => Expanded(
                 child: SizedBox(
-                  height: widget.compact ? AppDimensions.space24 : AppDimensions.space32,
+                  height: _isTabletGrid
+                      ? AppDimensions.space40
+                      : widget.compact
+                      ? AppDimensions.space24
+                      : AppDimensions.space32,
                   child: Center(
                     child: Text(
                       label,
-                      style: (widget.compact ? AppTypography.captionRegular : AppTypography.smallRegular).copyWith(
+                      style: _dayTextStyle.copyWith(
                         color: AppColors.textWhite,
                       ),
                     ),
@@ -397,10 +404,12 @@ class _AppCalendarState extends State<AppCalendar> {
     final days = _daysInGrid();
     final rows = <Widget>[];
 
-    for (var row = 0; row < 5; row++) {
+    // Five or six rows depending on the month: a fixed row count leaves the
+    // last days of the month unpainted.
+    for (var row = 0; row < days.length ~/ DateTime.daysPerWeek; row++) {
       final cells = <Widget>[];
-      for (var col = 0; col < 7; col++) {
-        final date = days[row * 7 + col];
+      for (var col = 0; col < DateTime.daysPerWeek; col++) {
+        final date = days[row * DateTime.daysPerWeek + col];
         cells.add(Expanded(child: Center(child: _dayCell(date))));
       }
       rows.add(
@@ -422,7 +431,11 @@ class _AppCalendarState extends State<AppCalendar> {
         ),
       ),
       padding: EdgeInsets.symmetric(
-        vertical: widget.compact ? AppDimensions.space4 : AppDimensions.space8,
+        vertical: _isTabletGrid
+            ? AppDimensions.space16
+            : widget.compact
+            ? AppDimensions.space4
+            : AppDimensions.space8,
       ),
       child: Column(children: rows),
     );
@@ -438,6 +451,13 @@ class _AppCalendarState extends State<AppCalendar> {
     final materialL10n = MaterialLocalizations.of(context);
     final l10n = AppLocalizations.of(context);
     final hasLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final dayBoxSize = _isTabletGrid
+        ? 52.0
+        : hasLargeText
+        ? AppDimensions.space40
+        : widget.compact
+        ? AppDimensions.space32
+        : 36.0;
     final semanticParts = [
       materialL10n.formatFullDate(date),
       if (today) materialL10n.currentDateLabel,
@@ -483,19 +503,11 @@ class _AppCalendarState extends State<AppCalendar> {
             onTap: canSelect ? () => widget.onDateSelected?.call(date) : null,
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
             child: SizedBox.square(
-              dimension: AppDimensions.minTouchTarget,
+              dimension: _dayTargetSize,
               child: Center(
                 child: Container(
-                  width: hasLargeText
-                      ? AppDimensions.space40
-                      : widget.compact
-                      ? AppDimensions.space32
-                      : 36,
-                  height: hasLargeText
-                      ? AppDimensions.space40
-                      : widget.compact
-                      ? AppDimensions.space32
-                      : 36,
+                  width: dayBoxSize,
+                  height: dayBoxSize,
                   decoration: BoxDecoration(
                     color: backgroundColor,
                     borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
@@ -511,7 +523,7 @@ class _AppCalendarState extends State<AppCalendar> {
                       Center(
                         child: Text(
                           '${date.day}',
-                          style: (widget.compact ? AppTypography.captionRegular : AppTypography.smallRegular).copyWith(
+                          style: _dayTextStyle.copyWith(
                             color: textColor,
                             fontWeight: fontWeight,
                           ),
@@ -520,10 +532,10 @@ class _AppCalendarState extends State<AppCalendar> {
                       ),
                       if (hasEvent)
                         Positioned(
-                          bottom: 1,
+                          bottom: _isTabletGrid ? 3 : 1,
                           child: Container(
-                            width: 6,
-                            height: 6,
+                            width: _isTabletGrid ? AppDimensions.space8 : 6,
+                            height: _isTabletGrid ? AppDimensions.space8 : 6,
                             decoration: const BoxDecoration(
                               color: AppColors.primaryDark,
                               shape: BoxShape.circle,
@@ -551,6 +563,30 @@ class _AppCalendarState extends State<AppCalendar> {
       ),
     );
   }
+}
+
+/// Dates rendered by the month grid of [AppCalendar]: whole weeks covering
+/// every day of [month], starting on [firstDayOfWeek] (1 = Monday … 7 =
+/// Sunday, as in [DateTime.weekday]).
+///
+/// Returns 35 or 42 dates. Six rows are needed whenever the month starts late
+/// enough in the week; a grid fixed at 35 cells simply dropped the last days
+/// of those months, which could not be seen, selected, nor show their event
+/// dot (March, August and November 2026, for instance).
+///
+/// The arithmetic is civil — `DateTime(y, m, d + n)` — and never
+/// `Duration(days: n)`: a duration is exactly 24 h, so on the 25-hour day of
+/// the autumn DST change it does not reach the next day and the grid repeats
+/// that date while dragging a 23:00 time into every cell after it.
+List<DateTime> calendarGridDays({required final DateTime month, final int firstDayOfWeek = DateTime.monday}) {
+  final firstOfMonth = DateTime(month.year, month.month);
+  // Weekday offset (first day of week = 0 ... last = 6).
+  final leadingDays = (firstOfMonth.weekday - firstDayOfWeek + DateTime.daysPerWeek) % DateTime.daysPerWeek;
+  final daysInMonth = DateUtils.getDaysInMonth(month.year, month.month);
+  final weeks = (leadingDays + daysInMonth + DateTime.daysPerWeek - 1) ~/ DateTime.daysPerWeek;
+  return [
+    for (var cell = 0; cell < weeks * DateTime.daysPerWeek; cell++) DateTime(firstOfMonth.year, firstOfMonth.month, cell + 1 - leadingDays),
+  ];
 }
 
 String _capitalize(final String value) {
@@ -584,6 +620,7 @@ class _CalendarMonthYearPickerState extends State<_CalendarMonthYearPicker> {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.space16),
@@ -595,7 +632,7 @@ class _CalendarMonthYearPickerState extends State<_CalendarMonthYearPicker> {
                 IconButton(
                   icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
                   onPressed: () => setState(() => _year--),
-                  tooltip: 'Año anterior',
+                  tooltip: l10n.appCalendarPreviousYearTooltip,
                 ),
                 Expanded(
                   child: Text(
@@ -607,7 +644,7 @@ class _CalendarMonthYearPickerState extends State<_CalendarMonthYearPicker> {
                 IconButton(
                   icon: const Icon(Icons.chevron_right, color: AppColors.textPrimary),
                   onPressed: () => setState(() => _year++),
-                  tooltip: 'Año siguiente',
+                  tooltip: l10n.appCalendarNextYearTooltip,
                 ),
               ],
             ),

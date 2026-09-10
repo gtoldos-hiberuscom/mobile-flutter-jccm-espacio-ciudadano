@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
@@ -16,7 +16,7 @@ final ageDataAuthorizationProvider = FutureProvider.autoDispose<bool>((final ref
 });
 
 Future<bool> _hasAcceptedClause(final Ref ref, final int clauseId) async {
-  final idAgente = ref.watch(jwtClaimsProvider)?.idAgente?.trim();
+  final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente;
   if (idAgente == null || idAgente.isEmpty) {
     return false;
   }
@@ -30,6 +30,9 @@ Future<bool> _hasAcceptedClause(final Ref ref, final int clauseId) async {
 
   return switch (result) {
     AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
-    CheckAcceptedConsentClauseFailed() => false,
+    // AsyncError, nunca false: con el backend caído no sabemos si la cláusula
+    // está aceptada, y afirmar "no autorizado" miente sobre un consentimiento
+    // RGPD que el ciudadano sí otorgó (mismo patrón que digital_cards).
+    CheckAcceptedConsentClauseFailed(:final message) => throw StateError(message),
   };
 }

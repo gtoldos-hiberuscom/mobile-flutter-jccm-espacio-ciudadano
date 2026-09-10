@@ -7,10 +7,34 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_status_unknown_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/3_data/repositories/consent_repository_impl.dart';
 
 void main() {
   group('ConsentRepositoryImpl', () {
+    test('uses sub_alt in the gateway path and idAgente in the write body', () async {
+      final adapter = _CapturingAdapter();
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(adapter),
+        agentId: 'PER9998003',
+      );
+
+      await repository.markConsentAccepted(
+        idAgente: 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6',
+        clauses: const [
+          Clause(id: 1, label: 'A', isSelected: true),
+        ],
+      );
+
+      expect(adapter.methods, ['GET', 'PATCH']);
+      expect(adapter.paths, [
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/clausulas',
+        '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/clausulas',
+      ]);
+      expect(adapter.jsonBodies.single['idAgente'], 'PER9998003');
+    });
+
     test('markConsentAccepted creates clauses when agent has no remote preference', () async {
       final adapter = _CapturingAdapter(getStatusCode: 404);
       final repository = ConsentRepositoryImpl(
@@ -28,8 +52,8 @@ void main() {
 
       expect(adapter.methods, ['GET', 'POST']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(
         adapter.jsonBodies.single,
@@ -68,8 +92,8 @@ void main() {
 
       expect(adapter.methods, ['GET', 'PATCH']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.single['clausulas'], [
         {
@@ -101,9 +125,9 @@ void main() {
 
       expect(adapter.methods, ['GET', 'POST', 'PATCH']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.first, adapter.jsonBodies.last);
     });
@@ -126,9 +150,9 @@ void main() {
 
       expect(adapter.methods, ['GET', 'PATCH', 'POST']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.first, adapter.jsonBodies.last);
     });
@@ -143,7 +167,7 @@ void main() {
       final clauses = await repository.fetchClauses(idAgente: 'PER9998001');
 
       expect(adapter.methods, ['GET']);
-      expect(adapter.paths, ['/api/v1/hechos-vitales/clausulas/PER9998001']);
+      expect(adapter.paths, ['/api/v1/ciudadanos/PER9998001/clausulas']);
       expect(
         clauses,
         [
@@ -242,8 +266,8 @@ void main() {
 
       expect(adapter.methods, ['GET', 'PATCH']);
       expect(adapter.paths, [
-        '/api/v1/hechos-vitales/clausulas/PER9998003',
-        '/api/v1/hechos-vitales/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
+        '/api/v1/ciudadanos/PER9998003/clausulas',
       ]);
       expect(adapter.jsonBodies.single['clausulas'], [
         {
@@ -284,10 +308,130 @@ void main() {
       await repository.resetConsentClauses(idAgente: 'PER9998003');
 
       expect(adapter.methods, ['GET']);
-      expect(adapter.paths, ['/api/v1/hechos-vitales/clausulas/PER9998003']);
+      expect(adapter.paths, ['/api/v1/ciudadanos/PER9998003/clausulas']);
       expect(adapter.jsonBodies, isEmpty);
       expect(storage.read<bool>('${StorageKeys.consentAcceptedPrefix}PER9998003'), isNull);
       expect(storage.read<List<String>>('${StorageKeys.consentAcceptedClausesPrefix}PER9998003'), isNull);
+    });
+  });
+
+  group('ConsentRepositoryImpl three-state contract (backend unavailable)', () {
+    test('hasAcceptedConsent throws ConsentStatusUnknownException on 500 with no local evidence', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      await expectLater(
+        repository.hasAcceptedConsent(idAgente: 'PER9998001'),
+        throwsA(isA<ConsentStatusUnknownException>().having((final e) => e.statusCode, 'statusCode', 500)),
+      );
+    });
+
+    test('hasAcceptedConsent still throws when the cached flag is false — only a positive is evidence', () async {
+      final storage = _MemoryAppStorage();
+      await storage.write('${StorageKeys.consentAcceptedPrefix}PER9998001', false);
+      final repository = ConsentRepositoryImpl(
+        storage: storage,
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 403)),
+      );
+
+      await expectLater(
+        repository.hasAcceptedConsent(idAgente: 'PER9998001'),
+        throwsA(isA<ConsentStatusUnknownException>()),
+      );
+    });
+
+    test('hasAcceptedConsent returns true on failure when a confirmed acceptance is cached', () async {
+      final storage = _MemoryAppStorage();
+      await storage.write('${StorageKeys.consentAcceptedPrefix}PER9998001', true);
+      final repository = ConsentRepositoryImpl(
+        storage: storage,
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      expect(await repository.hasAcceptedConsent(idAgente: 'PER9998001'), isTrue);
+    });
+
+    test('hasAcceptedConsent returns false on a genuine 404', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 404)),
+      );
+
+      expect(await repository.hasAcceptedConsent(idAgente: 'PER9998001'), isFalse);
+    });
+
+    test('hasAcceptedClause on failure: true when cached as accepted, throws otherwise', () async {
+      final storage = _MemoryAppStorage();
+      await storage.write('${StorageKeys.consentAcceptedClausesPrefix}PER9998001', const ['2']);
+      final repository = ConsentRepositoryImpl(
+        storage: storage,
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      expect(await repository.hasAcceptedClause(idAgente: 'PER9998001', clauseId: 2), isTrue);
+      await expectLater(
+        repository.hasAcceptedClause(idAgente: 'PER9998001', clauseId: 3),
+        throwsA(isA<ConsentStatusUnknownException>()),
+      );
+    });
+
+    test('markConsentAccepted still writes when the verb-probe GET is unavailable', () async {
+      final adapter = _CapturingAdapter(getStatusCode: 500);
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(adapter),
+      );
+
+      await repository.markConsentAccepted(
+        idAgente: 'PER9998003',
+        clauses: const [
+          Clause(id: 0, label: 'A', isSelected: true),
+        ],
+      );
+
+      expect(adapter.methods, ['GET', 'POST']);
+    });
+
+    test('fetchClauses propagates ConsentStatusUnknownException on backend failure', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter(getStatusCode: 500)),
+      );
+
+      await expectLater(
+        repository.fetchClauses(idAgente: 'PER9998001'),
+        throwsA(isA<ConsentStatusUnknownException>()),
+      );
+    });
+    test('refreshClauses relee del backend; fetchClauses reutiliza la copia en memoria', () async {
+      final adapter = _CapturingAdapter();
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(adapter),
+        agentId: 'PER9998003',
+      );
+
+      await repository.fetchClauses(idAgente: 'PER9998003');
+      await repository.fetchClauses(idAgente: 'PER9998003');
+      expect(adapter.paths.where((final path) => path.endsWith('/clausulas')), hasLength(1));
+
+      await repository.refreshClauses(idAgente: 'PER9998003');
+
+      // La caché en memoria es deliberada (una revocación no debe expulsar a
+      // nadie por un bache), pero por eso mismo oculta las revocaciones: la
+      // relectura es la única fuente admisible para decidir un cierre de sesión.
+      expect(adapter.paths.where((final path) => path.endsWith('/clausulas')), hasLength(2));
+    });
+
+    test('refreshClauses exige idAgente', () async {
+      final repository = ConsentRepositoryImpl(
+        storage: _MemoryAppStorage(),
+        dio: _dioWith(_CapturingAdapter()),
+      );
+
+      await expectLater(repository.refreshClauses(idAgente: '  '), throwsA(isA<StateError>()));
     });
   });
 }

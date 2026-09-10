@@ -59,13 +59,18 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
-      final title = await repository.loadLargeFamilyTitle(documentNumber: '99999999R');
+      final title = await repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R');
 
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/intermediacion/familia-numerosa/datos');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/bienestar-social/familia-numerosa');
+      // El contrato de intermediación exige tipo, idaut y proc además del
+      // documento; la fachada los resolvía internamente y por eso no se enviaban.
       expect(adapter.requests.single.data, {
-        'docu': '99999999R',
+        'tipo': 'A',
+        'idaut': 'ESP-CIUDADANO',
+        'proc': 'JCCMEC',
         'tipodoc': 'NIF',
+        'docu': '99999999R',
       });
       expect(title, isNotNull);
       expect(title!.region, 'Castilla-La Mancha');
@@ -101,12 +106,17 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
-      final award = await repository.loadThermalSpaAward(documentNumber: '24540447E');
+      final award = await repository.loadThermalSpaAward(citizenId: 'PER9998003', documentNumber: '24540447E');
 
-      expect(adapter.requests.single.path, '/api/v1/intermediacion/termalismo/datos');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/PER9998003/bienestar-social/termalismo');
+      // El contrato de intermediación exige tipo, idaut y proc además del
+      // documento; la fachada los resolvía internamente y por eso no se enviaban.
       expect(adapter.requests.single.data, {
-        'docu': '24540447E',
+        'tipo': 'A',
+        'idaut': 'ESP-CIUDADANO',
+        'proc': 'JCCMEC',
         'tipodoc': 'NIF',
+        'docu': '24540447E',
       });
       expect(award, isNotNull);
       expect(award!.name, 'LA CONCEPCION');
@@ -130,8 +140,77 @@ void main() {
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
       expect(
-        () => repository.loadLargeFamilyTitle(documentNumber: '99999999R'),
+        () => repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
         throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('un 403 con el sobre de autorización pide autorizar en vez de afirmar que no hay título', () async {
+      // Antes: `validateStatus` aceptaba cualquier código < 500, así que el
+      // sobre del 403 se parseaba como datos y la pantalla afirmaba que el
+      // ciudadano no tiene título de familia numerosa (R-02).
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 403,
+        responseData: {'body': null, 'codigo-respuesta': '412.00', 'mensaje-respuesta': 'Forbidden'},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<MyDataAuthorizationRequired>()),
+      );
+    });
+
+    test('un 403 sin sobre es un fallo de servicio, no falta de autorización', () async {
+      // "403 Forbidden: [no body]" es la fachada fallando contra su
+      // microservicio: ofrecer "autorizar" ahí no lleva a ninguna parte.
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 403,
+        responseData: {'body': null, 'codigo-respuesta': '403.00', 'mensaje-respuesta': 'Forbidden'},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<DioException>()),
+      );
+    });
+
+    test('un 404 es «el organismo no tiene datos», no un error', () async {
+      final adapter = _MyDataSocialWelfareAdapter(statusCode: 404, responseData: {'body': null});
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      expect(await repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'), isNull);
+    });
+
+    test('un 500 se propaga en vez de convertirse en «sin título»', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 500,
+        responseData: {'body': null, 'codigo-respuesta': '500.00', 'info-error': null},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<DioException>()),
+      );
+    });
+
+    test('un 400 con sobre de error tampoco pasa por datos', () async {
+      final adapter = _MyDataSocialWelfareAdapter(
+        statusCode: 400,
+        responseData: {'body': null, 'codigo-respuesta': '400.00', 'mensaje-respuesta': 'Petición inválida'},
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadDisabilityTitle(citizenId: '99999999R', documentNumber: '99999999R'),
+        throwsA(isA<DioException>()),
       );
     });
 
@@ -152,7 +231,7 @@ void main() {
       final repository = MyDataSocialWelfareRepositoryImpl(dio: dio);
 
       expect(
-        () => repository.loadLargeFamilyTitle(documentNumber: '99999999R'),
+        () => repository.loadLargeFamilyTitle(citizenId: '99999999R', documentNumber: '99999999R'),
         throwsA(
           isA<StateError>().having(
             (final error) => error.message,
@@ -166,9 +245,10 @@ void main() {
 }
 
 final class _MyDataSocialWelfareAdapter implements HttpClientAdapter {
-  _MyDataSocialWelfareAdapter({this.responseData});
+  _MyDataSocialWelfareAdapter({this.responseData, this.statusCode = 200});
 
   final Object? responseData;
+  final int statusCode;
   final List<_RecordedRequest> requests = [];
 
   @override
@@ -227,7 +307,7 @@ final class _MyDataSocialWelfareAdapter implements HttpClientAdapter {
               'info-error': null,
             },
       ),
-      200,
+      statusCode,
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],
       },

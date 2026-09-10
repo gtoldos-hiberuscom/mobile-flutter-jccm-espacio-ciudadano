@@ -23,9 +23,12 @@ void main() {
         adapter.paths,
         isNot(contains('/api/v1/sescam/citas-pasadas/12345678A')),
       );
+      // Ambas fuentes van por paths del gateway: los legacy /api/v1/sescam/...
+      // y /api/v1/agenda/... no existen ahí y responden 404. El periodo de los
+      // eventos va en mayúsculas.
       expect(adapter.paths, [
-        '/api/v1/sescam/citas/12345678A',
-        '/api/v1/agenda/agent-1/eventos/todos',
+        '/api/v1/ciudadanos/12345678A/salud/primaria-citas-pendientes',
+        '/api/v1/ciudadanos/agent-1/eventos/TODOS',
       ]);
       expect(appointments, hasLength(5));
       expect(appointments[0].description, 'Trámite administrativo');
@@ -48,10 +51,168 @@ void main() {
       );
       expect(appointments[4].kind, AgendaAppointmentKind.credential);
     });
+
+    test('a primary care appointment published by both sources is listed once', () async {
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: [
+          {
+            'fecha': '15/06/2026',
+            'hora': '09:00',
+            'nomTvisita': 'DEMANDA',
+            'nomProfesionalRealizador': 'LAGUNA RUIDERA MONTESINOS',
+            'nomModoVisita': 'Presencial',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      final duplicated = appointments.where((final appointment) => appointment.dateTime == DateTime(2026, 6, 15, 9));
+      expect(duplicated, hasLength(1));
+      // Gana la de SESCAM: trae profesional y modo en campos propios en vez de
+      // dentro del mensaje del evento.
+      expect(duplicated.single.title, 'LAGUNA RUIDERA MONTESINOS');
+      expect(duplicated.single.description, 'DEMANDA');
+      expect(appointments, hasLength(4));
+    });
+
+    test('deduplica también cuando la agenda publica la cita en UTC', () async {
+      // El evento llega como instante UTC y SESCAM como fecha y hora locales:
+      // la igualdad exacta de DateTime (que compara también isUtc y segundos)
+      // nunca casaba y la misma cita se pintaba dos veces. El caso se
+      // construye desde el mismo instante para no depender del huso del runner.
+      final utcInstant = DateTime.parse('2026-06-15T07:00:00Z');
+      final local = utcInstant.toLocal();
+      String two(final int v) => v.toString().padLeft(2, '0');
+
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: [
+          {
+            'fecha': '${two(local.day)}/${two(local.month)}/${local.year}',
+            'hora': '${two(local.hour)}:${two(local.minute)}',
+            'nomTvisita': 'DEMANDA',
+            'nomProfesionalRealizador': 'LAGUNA RUIDERA MONTESINOS',
+            'nomModoVisita': 'Presencial',
+          },
+        ],
+        eventos: [
+          {
+            'fechaVencimiento': '2026-06-15T07:00:00Z',
+            'titulo': 'Cita de Atención Primaria',
+            'tipoEvento': 'CITA',
+            'mensaje': '<p>Tiene una cita de atención primaria</p>',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      expect(appointments, hasLength(1), reason: 'la misma cita publicada por las dos fuentes debe listarse una vez');
+      expect(appointments.single.title, 'LAGUNA RUIDERA MONTESINOS');
+    });
+
+    test('un evento con instante UTC se guarda en hora local', () async {
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: const [],
+        eventos: [
+          {
+            'fechaVencimiento': '2026-06-15T07:00:00Z',
+            'titulo': 'Registro',
+            'tipoEvento': 'Trámite administrativo',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      // La página pinta `.hour` crudo: un DateTime en UTC mostraba la cita a
+      // la hora del meridiano, no a la del ciudadano.
+      expect(appointments.single.dateTime, DateTime.parse('2026-06-15T07:00:00Z').toLocal());
+      expect(appointments.single.dateTime.isUtc, isFalse);
+    });
+
+    test('refreshes events through the gateway refrescar endpoint', () async {
+      final adapter = _AgendaAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      await repository.refreshEvents(agentId: 'agent-1');
+
+      expect(adapter.paths, ['/api/v1/ciudadanos/agent-1/eventos/refrescar']);
+    });
+
+    test('a 500 whose body carries no parseable appointments propagates instead of becoming "no appointments"', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(500, {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error'});
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadAppointments(documentNumber: '12345678A', agentId: 'agent-1'),
+        throwsA(isA<DioException>()),
+      );
+    });
   });
 }
 
+final class _StaticAdapter implements HttpClientAdapter {
+  _StaticAdapter(this.statusCode, this.body);
+
+  final int statusCode;
+  final Object? body;
+
+  @override
+  Future<ResponseBody> fetch(
+    final RequestOptions options,
+    final Stream<Uint8List>? requestStream,
+    final Future<void>? cancelFuture,
+  ) async {
+    await (requestStream ?? const Stream<Uint8List>.empty()).drain<void>();
+    return ResponseBody.fromString(
+      jsonEncode(body),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({final bool force = false}) {}
+}
+
 final class _AgendaAdapter implements HttpClientAdapter {
+  _AgendaAdapter({
+    final List<Map<String, dynamic>>? primaryCareAppointments,
+    this.eventos,
+  }) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
+
+  /// Eventos de la agenda general; `null` usa la lista de ejemplo del test base.
+  final List<Map<String, dynamic>>? eventos;
+
+  static const List<Map<String, dynamic>> _defaultPrimaryCareAppointments = [
+    {
+      'fecha': '01/07/2026',
+      'hora': '10:30',
+      'nomTvisita': 'Consulta Medicina de Familia',
+      'centro': 'Centro de salud',
+    },
+  ];
+
+  final List<Map<String, dynamic>> _primaryCareAppointments;
   final List<String> paths = [];
 
   @override
@@ -61,12 +222,24 @@ final class _AgendaAdapter implements HttpClientAdapter {
     final Future<void>? cancelFuture,
   ) async {
     paths.add(options.path);
-    if (options.path.startsWith('/api/v1/agenda/')) {
+    if (options.path.contains('/eventos/refrescar')) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': {'notificacionesOk': 1, 'notificacionesError': 0},
+        }),
+        200,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
+    }
+    if (options.path.contains('/eventos/')) {
       return ResponseBody.fromString(
         jsonEncode(
           {
             'body': {
-              'eventos': [
+              'eventos': eventos ??
+                  [
                 {
                   'fechaVencimiento': '2026-06-01T09:15:00',
                   'titulo': 'Registro',
@@ -105,16 +278,7 @@ final class _AgendaAdapter implements HttpClientAdapter {
     return ResponseBody.fromString(
       jsonEncode(
         {
-          'body': {
-            'listaCitas': [
-              {
-                'fecha': '01/07/2026',
-                'hora': '10:30',
-                'nomTvisita': 'Consulta Medicina de Familia',
-                'centro': 'Centro de salud',
-              },
-            ],
-          },
+          'body': {'listaCitas': _primaryCareAppointments},
         },
       ),
       200,

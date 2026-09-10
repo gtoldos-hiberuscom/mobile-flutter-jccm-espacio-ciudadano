@@ -1,3 +1,4 @@
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -27,7 +28,11 @@ final class NotificacionDetalle {
 
   final int id;
   final String titulo;
-  final String estado;
+
+  /// Estado que informa el detalle, o `null` si el backend no lo envía y
+  /// tampoco se conocía por el resumen. Es la fuente de verdad para la acción
+  /// de comparecencia y para la etiqueta de estado.
+  final NotificacionEstado? estado;
   final String? organismo;
   final String? procedimiento;
   final String? expediente;

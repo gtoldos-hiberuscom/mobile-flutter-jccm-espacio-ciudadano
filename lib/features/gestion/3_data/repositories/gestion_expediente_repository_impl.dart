@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
@@ -14,10 +16,17 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   final PublicacionApi _api;
 
   @override
-  Future<List<Expediente>> loadExpedientes({required final String documentNumber}) async {
-    logger.d('[selectbynifexp] req numerodocumento=$documentNumber tipodocumento=NIF');
+  Future<List<Expediente>> loadExpedientes({
+    required final String citizenId,
+    required final String documentNumber,
+  }) async {
+    logger.d('[selectbynifexp] req numerodocumento=${maskedDocument(documentNumber)} tipodocumento=NIF');
     try {
-      final response = await _api.myPubliSelecByNifTipoProcExpOperation(
+      // La variante `1` apunta al path gateway POST
+      // /api/v1/ciudadanos/{sid}/expedientes (el sufijo del generador se
+      // reparte de forma arbitraria entre legacy y gateway).
+      final response = await _api.myPubliSelecByNifTipoProcExpOperation1(
+        idAgente: citizenId,
         dtselectbynifv2reqBody: DTSELECTBYNIFV2REQ(
           (final builder) => builder
             ..numerodocumento = documentNumber
@@ -32,6 +41,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
       final raw = response.extra[generatedApiRawResponseDataExtraKey];
       _logEnvelope('selectbynifexp', raw);
+      _throwIfAuthorizationRequired(raw, path: 'selectbynifexp');
       final expedientes = _rawExpedientesByNif(raw);
       logger.d('[selectbynifexp] ok ${expedientes.length} expediente(s)');
       return expedientes;
@@ -42,6 +52,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
       _logEnvelope('selectbynifexp(error)', rawData);
+      _throwIfAuthorizationRequired(rawData, path: 'selectbynifexp', statusCode: error.response?.statusCode);
       final parsed = _rawExpedientesByNif(rawData);
       if (parsed.isNotEmpty) {
         logger.w('[selectbynifexp] error HTTP pero cuerpo con ${parsed.length} expediente(s) → se usa el cuerpo');
@@ -54,12 +65,21 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<Expediente> loadExpedienteDetail({
+    required final String citizenId,
     required final String documentNumber,
     required final String numexp,
     final String tipodoc = 'NIF',
   }) async {
-    logger.d('[selectbynumexp] req pnumdoc=$documentNumber pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    logger.d('[selectbynumexp] req pnumdoc=${maskedDocument(documentNumber)} pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    // Path gateway POST /api/v1/ciudadanos/{sid}/expedientes/{idExpediente}.
+    // El segmento `{idExpediente}` va fijo a `detalle` — como documenta el
+    // gateway — porque los números de expediente llevan barras
+    // (`S020/2024/0001-PR`) y romperían la ruta; el backend identifica el
+    // expediente por el `pnumexp` del cuerpo (los path params de la fachada
+    // son decorativos: los alias legacy los declaran sin tenerlos en la ruta).
     final response = await _api.myPubliSelecByNumExpOperation(
+      idAgente: citizenId,
+      idExpediente: 'detalle',
       zcsrfcpubliselectbynumexpBody: ZCSRFCPUBLISELECTBYNUMEXP(
         (final builder) => builder
           ..pnumdoc = documentNumber
@@ -79,6 +99,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     _logEnvelope('selectbynumexp', raw);
+    _throwIfAuthorizationRequired(raw, path: 'selectbynumexp');
     final expediente = _rawExpedienteDetail(raw);
     if (expediente == null) {
       logger.w('[selectbynumexp] sin datos para pnumexp=$numexp (200 pero publicacionportal vacío/nulo)');
@@ -90,12 +111,18 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
   @override
   Future<Expediente> loadExpedienteByRegistro({
+    required final String citizenId,
     required final String documentNumber,
     required final String numRegistro,
     final String tipodoc = 'NIF',
   }) async {
-    logger.d('[selectbynumreg] req pnumdoc=$documentNumber pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
-    final response = await _api.myPubliNumRegOperation(
+    logger.d('[selectbynumreg] req pnumdoc=${maskedDocument(documentNumber)} pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    // La variante `1` apunta al path gateway POST
+    // /api/v1/ciudadanos/{sid}/registros/{idRegistro}. El backend identifica
+    // el registro por el `pregistro` del cuerpo; el path param es decorativo.
+    final response = await _api.myPubliNumRegOperation1(
+      idAgente: citizenId,
+      idRegistro: numRegistro,
       zcsrfcpubliselectbynumregBody: ZCSRFCPUBLISELECTBYNUMREG(
         (final builder) => builder
           ..pnumdoc = documentNumber
@@ -117,6 +144,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
 
     final raw = response.extra[generatedApiRawResponseDataExtraKey];
     _logEnvelope('selectbynumreg', raw);
+    _throwIfAuthorizationRequired(raw, path: 'selectbynumreg');
     final expediente = _rawExpedienteByRegistro(raw);
     if (expediente == null) {
       logger.w('[selectbynumreg] sin datos para pregistro=$numRegistro (200 pero publicacionportal.item vacío/nulo)');
@@ -219,6 +247,20 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   bool _canAttachDocuments(final Map<String, Object?>? responseBody) => responseBody != null && _string(responseBody, 'adjuntar') == 'X';
 
   String? _nonSentinelDate(final String? value) => (value == null || value == '0000-00-00') ? null : value;
+
+  /// Traduce el sobre de autorización de la fachada a una señal tipada.
+  ///
+  /// Llega con 403, pero también dentro de un 2xx (el gateway falla cerrado),
+  /// así que se comprueba en los dos caminos y **antes** de intentar sacar
+  /// datos del cuerpo. Quien decide qué falta es `withAuthorizationGuard`: aquí
+  /// no se sabe, y el sobre tampoco distingue una revocación de un fallo de
+  /// preferencias.
+  void _throwIfAuthorizationRequired(final Object? data, {required final String path, final int? statusCode}) {
+    if (isAuthorizationRequiredEnvelope(data)) {
+      logger.w('[$path] sobre de autorización (HTTP ${statusCode ?? 200})');
+      throw AuthorizationRequiredException(statusCode: statusCode, path: path);
+    }
+  }
 
   List<Expediente> _rawExpedientesByNif(final Object? data) {
     final payload = _decode(data);

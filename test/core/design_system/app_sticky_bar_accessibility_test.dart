@@ -114,17 +114,22 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('respeta el área segura inferior', (final tester) async {
-    await tester.pumpWidget(
-      buildApp(
-        AppStickyBar(primaryLabel: 'Continuar', onPrimary: () {}),
-        bottomPadding: 24,
-      ),
-    );
+  for (final (size, horizontal) in [(const Size(390, 844), 16.0), (const Size(800, 1100), 40.0)]) {
+    testWidgets('respeta el área segura inferior y el margen de página en $size', (final tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = size;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        buildApp(
+          AppStickyBar(primaryLabel: 'Continuar', onPrimary: () {}),
+          bottomPadding: 24,
+        ),
+      );
 
-    final container = tester.widget<Container>(
-      find.descendant(of: find.byType(AppStickyBar), matching: find.byType(Container)).first,
-    );
-    expect(container.padding, const EdgeInsets.fromLTRB(16, 16, 16, 40));
-  });
+      final container = tester.widget<Container>(
+        find.descendant(of: find.byType(AppStickyBar), matching: find.byType(Container)).first,
+      );
+      expect(container.padding, EdgeInsets.fromLTRB(horizontal, 16, horizontal, 40));
+    });
+  }
 }

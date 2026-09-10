@@ -3,9 +3,11 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/transfer_timeout.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente_aportacion_datos.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_aportar_documentacion_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_documento_repository_impl.dart';
 
 import '../../test_support/sequence_http_client_adapter.dart';
@@ -38,6 +40,7 @@ void main() {
       final bytes = Uint8List.fromList('contenido de prueba'.codeUnits);
 
       final hash = await repository.subirDocumentoSinFirma(
+        citizenId: 'sid-1',
         documentNumber: '03874761C',
         idUnico: '03874761C_1700000000000',
         tipoProcedimiento: '020',
@@ -47,7 +50,7 @@ void main() {
 
       expect(hash, '2AACB86A2DDD8C8A41E9C51C4B0207732B10FDBB231D06D086D5A225D21B61B');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/procedimiento/subiradjuntosinfirma');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/03874761C_1700000000000/ficheros');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -80,6 +83,7 @@ void main() {
 
       await expectLater(
         repository.subirDocumentoSinFirma(
+          citizenId: 'sid-1',
           documentNumber: '03874761C',
           idUnico: '03874761C_1700000000000',
           tipoProcedimiento: '020',
@@ -100,6 +104,7 @@ void main() {
 
       await expectLater(
         repository.subirDocumentoSinFirma(
+          citizenId: 'sid-1',
           documentNumber: '03874761C',
           idUnico: '03874761C_1700000000000',
           tipoProcedimiento: '020',
@@ -158,6 +163,7 @@ void main() {
       );
 
       final resultado = await repository.iniciarProcedimiento(
+        citizenId: 'sid-1',
         idUnico: '03874761C_171447919011019',
         documentNumber: '03874761C',
         expediente: expediente,
@@ -167,7 +173,7 @@ void main() {
       expect(resultado.estado, 'OK');
       expect(resultado.uniorg, '012848');
       expect(resultado.nombre, 'Juan');
-      expect(adapter.requests.single.path, '/api/v1/procedimiento/inicproc');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/03874761C_171447919011019/ficheros/iniciar');
       // Confirmado contra backend real de UAT: enviar `registro` vacío
       // ({fecha: "", noregistro: ""}) para un expediente que ya tiene un
       // registro de entrada real provocó un 500 del servidor — debe
@@ -202,7 +208,7 @@ void main() {
       const expediente = Expediente(numexp: 'EXP-1', titulo: 't', consejeria: 'c');
 
       await expectLater(
-        repository.iniciarProcedimiento(idUnico: 'x', documentNumber: '03874761C', expediente: expediente),
+        repository.iniciarProcedimiento(citizenId: 'sid-1', idUnico: 'x', documentNumber: '03874761C', expediente: expediente),
         throwsA(isA<StateError>()),
       );
     });
@@ -235,6 +241,7 @@ void main() {
       );
 
       final bytes = await repository.registrarFicheros(
+        citizenId: 'sid-1',
         documentNumber: '03874761C',
         expediente: expediente,
         inicio: inicio,
@@ -242,7 +249,7 @@ void main() {
       );
 
       expect(utf8.decode(bytes), pdfContent);
-      expect(adapter.requests.single.path, '/api/v1/documentacion/registrarfichero');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/03874761C_171447919011026/ficheros/registrar');
       final requestBody = adapter.requests.single.jsonBody as Map<String, dynamic>?;
       final confirmarProcedimiento = requestBody?['confirmarProcedimiento'] as Map<String, dynamic>?;
       final procedimiento = confirmarProcedimiento?['procedimiento'] as Map<String, dynamic>?;
@@ -289,6 +296,133 @@ void main() {
         'apellido2': '',
         'nifcif': '',
         'tipodoc': '',
+      });
+    });
+    group('plazo de subida', () {
+      Future<CapturedRequest> uploadOf(final int fileBytes, {required final Duration configuredTimeout}) async {
+        final adapter = SequenceHttpClientAdapter([
+          const AdapterResponse(statusCode: 200, body: '{"body":"HASH","codigo-respuesta":"200.00"}'),
+        ]);
+        final dio = Dio(
+          BaseOptions(
+            baseUrl: 'https://example.test',
+            connectTimeout: configuredTimeout,
+            sendTimeout: configuredTimeout,
+            receiveTimeout: configuredTimeout,
+          ),
+        )..httpClientAdapter = adapter;
+        final repository = GestionDocumentoRepositoryImpl(dio: dio);
+
+        await repository.subirDocumentoSinFirma(
+          citizenId: 'sid-1',
+          documentNumber: '03874761C',
+          idUnico: '03874761C_1700000000000',
+          tipoProcedimiento: '020',
+          nombreFichero: 'documento.pdf',
+          bytes: Uint8List(fileBytes),
+        );
+        return adapter.requests.single;
+      }
+
+      test('el fichero más grande que la app permite cabe en el plazo', () async {
+        // `TIMEOUT` de producción. Con él aplicado tal cual, subir 20 MB
+        // exigiría ~21 Mbps sostenidos: por red móvil no terminaba nunca.
+        const productionTimeout = Duration(seconds: 10);
+        final request = await uploadOf(maxTamanioBytesAportacion, configuredTimeout: productionTimeout);
+
+        // El cuerpo viaja en base64 (~26,7 MB para un fichero de 20 MB).
+        final expected = payloadTransferTimeout(
+          payloadBytes: base64WireSize(maxTamanioBytesAportacion),
+          baseTimeout: productionTimeout,
+        );
+        expect(request.sendTimeout, expected);
+        expect(request.sendTimeout, greaterThan(const Duration(minutes: 3)));
+        // Si alguien sube el límite de tamaño, el plazo lo sigue solo.
+        expect(request.sendTimeout, greaterThan(productionTimeout));
+      });
+
+      test('un fichero pequeño no alarga el plazo de forma apreciable', () async {
+        final request = await uploadOf(64 * 1024, configuredTimeout: const Duration(seconds: 10));
+
+        expect(request.sendTimeout, const Duration(seconds: 11));
+      });
+
+      test('el plazo también cubre la respuesta, pero no la conexión', () async {
+        final request = await uploadOf(4 * 1024 * 1024, configuredTimeout: const Duration(seconds: 10));
+
+        expect(request.receiveTimeout, request.sendTimeout);
+      });
+    });
+
+    group('plazo del cierre de la transacción', () {
+      Future<CapturedRequest> registroDe(
+        final List<({String nombre, String hash, int tamanioBytes})> documentos, {
+        required final Duration configuredTimeout,
+      }) async {
+        final adapter = SequenceHttpClientAdapter([
+          const AdapterResponse(statusCode: 200, body: '%PDF-1.4 justificante', contentType: 'application/pdf'),
+        ]);
+        final dio = Dio(
+          BaseOptions(
+            baseUrl: 'https://example.test',
+            connectTimeout: configuredTimeout,
+            sendTimeout: configuredTimeout,
+            receiveTimeout: configuredTimeout,
+          ),
+        )..httpClientAdapter = adapter;
+        final repository = GestionDocumentoRepositoryImpl(dio: dio);
+
+        await repository.registrarFicheros(
+          citizenId: 'sid-1',
+          documentNumber: '03874761C',
+          expediente: const Expediente(numexp: 'EXP-1', titulo: 't', consejeria: 'c', tipoproc: '020'),
+          inicio: const InicioProcedimientoResultado(
+            idunico: '03874761C_171447919011026',
+            estado: 'OK',
+            asuid: 'SIM2',
+            descrip: 'desc',
+            uniorg: '012848',
+            numdoc: '03874761C',
+            nombre: 'Juan',
+            apellido1: 'García',
+            apellido2: 'López',
+          ),
+          documentos: documentos,
+        );
+        return adapter.requests.single;
+      }
+
+      test('un lote grande no caduca por el plazo del entorno', () async {
+        // `TIMEOUT` de producción: tras ~19 minutos subiendo 100 MB, el
+        // backend tenía 10 segundos para procesar el buzón entero y devolver
+        // el justificante, o se perdía el lote completo.
+        const productionTimeout = Duration(seconds: 10);
+        const cincoDe20MB = 5 * 20 * 1024 * 1024;
+        final request = await registroDe(
+          const [
+            (nombre: 'a.pdf', hash: 'h1', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'b.pdf', hash: 'h2', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'c.pdf', hash: 'h3', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'd.pdf', hash: 'h4', tamanioBytes: 20 * 1024 * 1024),
+            (nombre: 'e.pdf', hash: 'h5', tamanioBytes: 20 * 1024 * 1024),
+          ],
+          configuredTimeout: productionTimeout,
+        );
+
+        expect(
+          request.receiveTimeout,
+          payloadTransferTimeout(payloadBytes: cincoDe20MB, baseTimeout: productionTimeout),
+        );
+        expect(request.receiveTimeout, greaterThan(const Duration(minutes: 13)));
+      });
+
+      test('un lote pequeño no alarga el plazo de forma apreciable', () async {
+        final request = await registroDe(
+          const [(nombre: 'a.pdf', hash: 'h1', tamanioBytes: 64 * 1024)],
+          configuredTimeout: const Duration(seconds: 10),
+        );
+
+        expect(request.receiveTimeout, const Duration(seconds: 11));
       });
     });
   });

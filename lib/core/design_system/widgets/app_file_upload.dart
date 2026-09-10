@@ -8,6 +8,11 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// Upload status for [AppFileUpload].
 ///
 /// Mirrors the three Figma states of the "FileUpload" component (node `102:1689`):
+/// - [pending]   — file selected but not sent yet (same layout as [uploaded]
+///   with a delete action); its status reads "Seleccionado", never "Subido".
+///   Not in the Figma component — added because announcing a never-sent file
+///   as uploaded (AP-7) contradicted the red "some files missing" snackbar
+///   right below it. Visual treatment still pending a design pass.
 /// - [uploading] — file is being transferred; shows an indeterminate/partial
 ///   progress bar and a cancel action.
 /// - [complete]  — transfer finished; shows a full progress bar (success
@@ -17,7 +22,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// - [error]     — the upload failed; shows an error-coloured bar and a
 ///   retry action. Not part of the original Figma component — added to
 ///   surface per-file upload failures without losing progress on siblings.
-enum AppFileUploadStatus { uploading, complete, uploaded, error }
+enum AppFileUploadStatus { pending, uploading, complete, uploaded, error }
 
 /// Displays a file row with upload progress and contextual actions.
 ///
@@ -91,11 +96,18 @@ class AppFileUpload extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final statusLabel = switch (status) {
+      AppFileUploadStatus.pending => l10n.caseworkUploadStatusSelected,
       AppFileUploadStatus.uploading => l10n.caseworkUploadStatusUploading,
       AppFileUploadStatus.complete || AppFileUploadStatus.uploaded => l10n.caseworkUploadStatusUploaded,
       AppFileUploadStatus.error => l10n.caseworkUploadStatusFailed,
     };
     final content = switch (status) {
+      AppFileUploadStatus.pending => _UploadedRow(
+        fileName: fileName,
+        fileInfo: fileInfo,
+        onDelete: onDelete,
+        deleteLabel: deleteLabel ?? l10n.fileUploadDelete,
+      ),
       AppFileUploadStatus.uploading => _UploadingRow(
         fileName: fileName,
         fileInfo: fileInfo,
@@ -120,6 +132,8 @@ class AppFileUpload extends StatelessWidget {
         fileInfo: fileInfo,
         onRetry: onRetry,
         retryLabel: retryLabel ?? l10n.fileUploadRetry,
+        onDelete: onDelete,
+        deleteLabel: deleteLabel ?? l10n.fileUploadDelete,
       ),
     };
 
@@ -382,13 +396,20 @@ class _ErrorRow extends StatelessWidget {
     required this.fileName,
     required this.fileInfo,
     required this.retryLabel,
+    required this.deleteLabel,
     this.onRetry,
+    this.onDelete,
   });
 
   final String fileName;
   final String fileInfo;
   final VoidCallback? onRetry;
   final String retryLabel;
+
+  /// Opcional: sin él la tarjeta en error solo ofrece reintentar y el fichero
+  /// que falla no se puede quitar del lote.
+  final VoidCallback? onDelete;
+  final String deleteLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -402,30 +423,51 @@ class _ErrorRow extends StatelessWidget {
         const SizedBox(height: AppDimensions.space8),
         _FileMetaRow(
           fileInfo: fileInfo,
-          action: TextButton.icon(
-            onPressed: onRetry,
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-              minimumSize: const Size(
-                AppDimensions.minTouchTarget,
-                AppDimensions.minTouchTarget,
+          // `Wrap` y no `Row`: con dos acciones a 320 dp y el texto al 200 % no
+          // caben en una línea, y la fila de meta ya está en columna a esa
+          // escala, así que la segunda acción baja en vez de desbordar.
+          action: Wrap(
+            alignment: WrapAlignment.end,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              TextButton.icon(
+                onPressed: onRetry,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
+                  minimumSize: const Size(
+                    AppDimensions.minTouchTarget,
+                    AppDimensions.minTouchTarget,
+                  ),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                icon: const Icon(
+                  Icons.refresh_rounded,
+                  size: AppDimensions.iconSmall,
+                  color: AppColors.errorDark,
+                ),
+                iconAlignment: IconAlignment.end,
+                label: Text(
+                  retryLabel,
+                  style: AppTypography.smallRegular.copyWith(
+                    color: AppColors.primary,
+                    decoration: TextDecoration.underline,
+                    decorationColor: AppColors.primary,
+                  ),
+                ),
               ),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: const Icon(
-              Icons.refresh_rounded,
-              size: AppDimensions.iconSmall,
-              color: AppColors.errorDark,
-            ),
-            iconAlignment: IconAlignment.end,
-            label: Text(
-              retryLabel,
-              style: AppTypography.smallRegular.copyWith(
-                color: AppColors.primary,
-                decoration: TextDecoration.underline,
-                decorationColor: AppColors.primary,
-              ),
-            ),
+              if (onDelete != null)
+                IconButton(
+                  onPressed: onDelete,
+                  constraints: const BoxConstraints(
+                    minWidth: AppDimensions.minTouchTarget,
+                    minHeight: AppDimensions.minTouchTarget,
+                  ),
+                  icon: const Icon(Icons.delete_outline_rounded),
+                  color: AppColors.primary,
+                  iconSize: AppDimensions.iconMedium,
+                  tooltip: deleteLabel,
+                ),
+            ],
           ),
         ),
       ],

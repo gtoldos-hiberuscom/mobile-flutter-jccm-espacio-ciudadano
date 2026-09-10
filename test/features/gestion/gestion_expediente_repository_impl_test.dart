@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_expediente_repository_impl.dart';
 
 import '../../test_support/sequence_http_client_adapter.dart';
@@ -17,7 +18,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
-      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, hasLength(1));
       expect(result.single.numexp, 'EXP-1');
@@ -26,7 +27,7 @@ void main() {
       expect(result.single.fechaInicio, '2026-06-20');
       expect(result.single.estado, 'ABIERTO');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifexp');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -67,7 +68,7 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
-      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, hasLength(1));
       expect(result.single.numexp, 'WMEQ/2026/000002');
@@ -87,9 +88,47 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
-      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result.single.estado, isNull);
+    });
+
+    test('el sobre de autorización sale como señal tipada, no como lista vacía', () async {
+      // Sin traducirlo, el `catch` indulgente lo daba por "no hay
+      // expedientes" y la pantalla lo afirmaba.
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          contentType: Headers.textPlainContentType,
+          body: '{"codigo-respuesta":"412.00","body":null}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R'),
+        throwsA(isA<AuthorizationRequiredException>()),
+      );
+    });
+
+    test('el detalle también traduce el sobre en vez de reventar por datos vacíos', () async {
+      // Antes salía como `StateError('Respuesta de expediente sin datos.')`,
+      // que la pantalla presentaba como error de servicio.
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          contentType: Headers.textPlainContentType,
+          body: '{"codigo-respuesta":"200.00","info-error":{"errores":[{"codigo-error":"3034"}]}}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadExpedienteDetail(citizenId: 'sid-1', documentNumber: '99999999R', numexp: 'EXP-1'),
+        throwsA(isA<AuthorizationRequiredException>()),
+      );
     });
 
     test('returns an empty list when selectbynifexp returns 404', () async {
@@ -102,11 +141,11 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
-      final result = await repository.loadExpedientes(documentNumber: '99999999R');
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result, isEmpty);
       expect(adapter.requests, hasLength(1));
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynifexp');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes');
     });
 
     test('loads expediente detail from selectbynumexp mapping the flat publicacionportal object', () async {
@@ -158,6 +197,7 @@ void main() {
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
       final result = await repository.loadExpedienteDetail(
+        citizenId: 'sid-1',
         documentNumber: '03874761C',
         numexp: 'S020/2024/0001-PR',
       );
@@ -189,7 +229,7 @@ void main() {
       expect(result.datosAportacion?.tlfno, '600000000');
       expect(result.datosAportacion?.bezei, 'Toledo');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/publicacion/selectbynumexp');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/detalle');
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -218,6 +258,7 @@ void main() {
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
       final result = await repository.loadExpedienteDetail(
+        citizenId: 'sid-1',
         documentNumber: '03874761C',
         numexp: 'EXP-NO-ADJUNTA',
       );
@@ -236,7 +277,7 @@ void main() {
       final repository = GestionExpedienteRepositoryImpl(dio: dio);
 
       await expectLater(
-        repository.loadExpedienteDetail(documentNumber: '99999999R', numexp: 'EXP-1'),
+        repository.loadExpedienteDetail(citizenId: 'sid-1', documentNumber: '99999999R', numexp: 'EXP-1'),
         throwsA(isA<DioException>()),
       );
     });

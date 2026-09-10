@@ -42,7 +42,7 @@ class _LargeFamilyAuthorizationRequired extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16),
       child: MyDataAuthorizationContextualHelper(
         onOpenSettings: () => unawaited(
           context.push(
@@ -87,12 +87,7 @@ class _LargeFamilyContent extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -102,7 +97,7 @@ class _LargeFamilyContent extends StatelessWidget {
             items: [
               AppInfoLabelEntry(label: l10n.familiaNumerosaRegionLabel, value: title.region),
               AppInfoLabelEntry(label: l10n.familiaNumerosaTitleNumberLabel, value: _display(title.titleNumber)),
-              AppInfoLabelEntry(label: l10n.familiaNumerosaCategoryLabel, value: _display(title.category)),
+              AppInfoLabelEntry(label: l10n.familiaNumerosaCategoryLabel, value: _categoryDescription(l10n, title.category)),
               AppInfoLabelEntry(label: l10n.familiaNumerosaValidLabel, value: title.isValid ? l10n.familiaNumerosaYes : l10n.familiaNumerosaNo),
               AppInfoLabelEntry(label: l10n.familiaNumerosaIssueDateLabel, value: _formatDate(title.issueDate)),
               AppInfoLabelEntry(label: l10n.familiaNumerosaExpiryDateLabel, value: _formatDate(title.expiryDate)),
@@ -123,14 +118,9 @@ class _LargeFamilyContent extends StatelessWidget {
               l10n.familiaNumerosaMemberFallbackName,
               style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
             ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
-            child: Divider(color: AppColors.neutral100),
-          ),
-          _FamilyContactHelper(
-            message: l10n.familiaNumerosaContactHint,
-            ref: ref,
-          ),
+          // El aviso de contacto vive en la (i) de la cabecera, como en el
+          // resto de Bienestar Social. Aquí abajo estaba además fijo, con el
+          // mismo texto y el mismo botón: el ciudadano lo leía dos veces.
         ],
       ),
     );
@@ -187,12 +177,7 @@ class _NoLargeFamilyData extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space24,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space64),
       child: _FamilyContactHelper(
         message: l10n.familiaNumerosaNoDataMessage,
         ref: ref,
@@ -249,6 +234,20 @@ Widget _sectionTitle(final String title) => Padding(
 );
 
 String _display(final String value) => value.trim().isEmpty ? '-' : value.trim();
+
+/// Descripción de la categoría del título, que el backend informa con su
+/// código (`G`/`E`).
+///
+/// La clasificación oficial solo tiene esas dos categorías —general y
+/// especial—, pero un código que no reconozcamos se muestra tal cual en vez de
+/// ocultarse: es mejor que el ciudadano vea una letra rara y pueda preguntar
+/// que un hueco.
+String _categoryDescription(final AppLocalizations l10n, final String category) => switch (category.trim().toUpperCase()) {
+  '' => '-',
+  'G' || 'GENERAL' => l10n.familiaNumerosaCategoryGeneral,
+  'E' || 'ESPECIAL' => l10n.familiaNumerosaCategoryEspecial,
+  final String otra => otra,
+};
 
 String _formatDate(final DateTime? date) {
   if (date == null) {

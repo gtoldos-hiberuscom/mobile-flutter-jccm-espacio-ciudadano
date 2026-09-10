@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/consent_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/3_data/repositories/consent_repository_impl.dart';
 
@@ -11,5 +12,9 @@ import 'package:jccm_espacio_ciudadano/features/consent/3_data/repositories/cons
 final consentRepositoryProvider = Provider<ConsentRepository>((final ref) {
   final storage = ref.watch(appStorageProvider);
   final dio = ref.watch(dioProvider);
-  return ConsentRepositoryImpl(storage: storage, dio: dio);
+  // select() keeps the repository instance (and its in-memory clause cache)
+  // stable across token refreshes: JwtClaims has no `==`, so watching the
+  // whole provider would rebuild the repository on every refresh.
+  final agentId = ref.watch(jwtClaimsProvider.select((final claims) => claims?.idAgente));
+  return ConsentRepositoryImpl(storage: storage, dio: dio, agentId: agentId);
 });

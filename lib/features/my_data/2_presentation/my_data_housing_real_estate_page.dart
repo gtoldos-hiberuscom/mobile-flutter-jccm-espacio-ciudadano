@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -37,9 +40,11 @@ class _MyDataHousingRealEstatePageState extends ConsumerState<MyDataHousingRealE
           onFilterChanged: (final filter) => setState(() => _selectedFilter = filter),
         ),
         loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stackTrace) => _PropertiesError(
-          onRetry: () => ref.invalidate(housingRealEstatePropertiesProvider),
-        ),
+        error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
+            ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataHousingRealEstate, onAuthorized: () => ref.invalidate(housingRealEstatePropertiesProvider))
+            : _PropertiesError(
+                onRetry: () => ref.invalidate(housingRealEstatePropertiesProvider),
+              ),
       ),
     );
   }
@@ -52,9 +57,19 @@ class _MyDataHousingRealEstatePageState extends ConsumerState<MyDataHousingRealE
       title: l10n.myDataHousingRealEstateInfoSheetTitle,
       bodyText: l10n.myDataHousingRealEstateInfoSheetDescription,
       footerText: l10n.myDataHousingRealEstateInfoSheetFooter,
+      // El contacto de estos datos es el Catastro, que es de quien vienen.
+      // Estaba solo en el estado vacío, así que quien sí tiene inmuebles no
+      // tenía a dónde acudir.
+      actionLabel: l10n.myDataNoDataContact,
+      onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(_catastroUrl)),
+      actionIcon: AppIcons.openInNew,
     );
   }
 }
+
+/// Sede del Catastro: es la fuente de estos datos y el sitio donde se
+/// corrigen.
+const String _catastroUrl = 'https://www.sedecatastro.gob.es/';
 
 enum _PropertyFilter { all, urban, rustic }
 
@@ -75,12 +90,7 @@ class _PropertiesContent extends StatelessWidget {
     final filteredProperties = _filter(properties);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space24,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space64),
       child: Column(
         children: [
           AppSegmentedControl(
@@ -98,7 +108,7 @@ class _PropertiesContent extends StatelessWidget {
                 ? MyDataNoData(
                     message: l10n.myDataHousingRealEstateNoDataMessage,
                     actionLabel: l10n.myDataNoDataContact,
-                    contactUrl: 'https://www.sedecatastro.gob.es/',
+                    contactUrl: _catastroUrl,
                     scrollable: false,
                   )
                 : _PropertiesEmpty(message: l10n.myDataHousingRealEstateFilteredEmpty)
@@ -164,8 +174,9 @@ class _PropertyCard extends StatelessWidget {
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateCadastralValueLabel, value: _display(property.cadastralValue)),
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateLandValueLabel, value: _display(property.landValue)),
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateConstructionValueLabel, value: _display(property.constructionValue)),
-      ],
-      footerItems: [
+        // Un dato más del inmueble, dentro del recuadro con el resto: en
+        // `footerItems` se pintaba por fuera, que es lo único que lo separaba
+        // de los demás.
         AppDataSummaryEntry(label: l10n.myDataHousingRealEstateUseLabel, value: _displayUse(property.use)),
       ],
     );

@@ -1,21 +1,23 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_vehicles_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/vehiculos_api.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 final class MyDataVehiclesRepositoryImpl implements MyDataVehiclesRepository {
-  MyDataVehiclesRepositoryImpl({required final Dio dio}) : _api = DgtApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataVehiclesRepositoryImpl({required final Dio dio}) : _api = VehiculosApi(dio);
 
-  final DgtApi _api;
+  final VehiculosApi _api;
 
   @override
   Future<List<Vehicle>> loadVehicles({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
-    final payload = await _loadRawVehicles(documentNumber);
+    final payload = await _loadRawVehicles(citizenId, documentNumber);
     if (payload == null) {
       return const [];
     }
@@ -50,39 +52,23 @@ final class MyDataVehiclesRepositoryImpl implements MyDataVehiclesRepository {
     return vehicles;
   }
 
-  Future<Object?> _loadRawVehicles(final String documentNumber) async {
-    final data = {
-      'docu': documentNumber,
-      'tipodoc': 'NIF',
-    };
-    try {
-      final response = await _api.getListaVehiculos(
-        numDocumento: documentNumber,
-        dtdgtlistadovehiculosreqBody: DTDGTLISTADOVEHICULOSREQ(
-          (final builder) => builder
-            ..docu = documentNumber
-            ..tipodoc = 'NIF',
-        ),
-        extra: {
-          generatedApiRequestDataExtraKey: data,
-          generatedApiDecodeStringResponseExtraKey: true,
+  /// Cuerpo `DTDGTLISTADOVEHICULOSREQ`.
+  ///
+  /// El tipo se deduce del documento: estaba fijado a `NIF`, lo que rompía la
+  /// consulta para NIE y CIF. Mismo fallo que había en educación.
+  ///
+  /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
+  /// resto de errores → se propagan. Ver [intermediacionRawResponse].
+  Future<Object?> _loadRawVehicles(final String citizenId, final String documentNumber) {
+    return intermediacionRawResponse(
+      () => _api.listado(
+        citizenId: citizenId,
+        body: {
+          'tipodoc': documentTypeOf(documentNumber),
+          'docu': documentNumber,
         },
-        validateStatus: (final status) => status != null && status < 500,
-      );
-      if (response.statusCode == 404) {
-        return null;
-      }
-      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (rawData != null) {
-        return rawData;
-      }
-      rethrow;
-    }
+      ),
+    );
   }
 
   Vehicle? _extractVehicle(final Map<String, Object?> raw) {

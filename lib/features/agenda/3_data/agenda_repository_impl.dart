@@ -20,7 +20,12 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final trimmedAgentId = agentId?.trim();
     final responses = await Future.wait([
       _loadAppointmentsFrom(
-        () => _sescamApi.citasFuturas(
+        // La variante `1` apunta al path gateway
+        // /api/v1/ciudadanos/{numDocumento}/salud/primaria-citas-pendientes
+        // (el legacy /api/v1/sescam/citas/... no existe en el gateway y
+        // responde 404, igual que pasaba con /api/v1/agenda/...). Es el mismo
+        // endpoint que usa Mis Datos → Salud, que sí devuelve las citas.
+        () => _sescamApi.citasFuturas1(
           numDocumento: documentNumber,
           extra: _generatedExtra,
         ),
@@ -28,9 +33,13 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       ),
       if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
         _loadAppointmentsFrom(
-          () => _agendaApi.obtenerEventosAgenda(
+          // La variante `1` apunta al path gateway
+          // /api/v1/ciudadanos/{sid}/eventos/{periodo} (el legacy
+          // /api/v1/agenda/... no existe en el gateway y responde 404). El
+          // periodo va en mayúsculas: TODOS, SEMANA, MES o ANIO.
+          () => _agendaApi.obtenerEventosAgenda1(
             idAgente: trimmedAgentId,
-            periodo: 'todos',
+            periodo: 'TODOS',
             extra: _generatedExtra,
           ),
           source: _AgendaAppointmentSource.general,
@@ -38,9 +47,31 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         ),
     ]);
 
-    final appointments = responses.expand((final appointments) => appointments).toList(growable: false)..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
+    // Las dos fuentes se solapan: la agenda general publica las citas de
+    // Atención Primaria como eventos con el detalle dentro del mensaje, y
+    // primaria-citas-pendientes las devuelve estructuradas. Cuando coinciden en
+    // fecha y hora se conserva la de SESCAM, que trae centro y profesional en
+    // campos propios, para no pintar la misma cita dos veces.
+    final healthAppointments = responses.first;
+    final healthSlots = healthAppointments.map((final appointment) => _appointmentSlot(appointment.dateTime)).toSet();
+    final appointments = <AgendaAppointment>[
+      ...healthAppointments,
+      for (final source in responses.skip(1))
+        for (final appointment in source)
+          if (appointment.kind != AgendaAppointmentKind.health || !healthSlots.contains(_appointmentSlot(appointment.dateTime))) appointment,
+    ]..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
 
-    return appointments;
+    return List<AgendaAppointment>.unmodifiable(appointments);
+  }
+
+  @override
+  Future<void> refreshEvents({required final String agentId}) async {
+    // El resultado (RefrescarAgendaDTO: contadores ok/error por fuente) no se
+    // muestra; el refresco se refleja recargando los eventos después.
+    await _agendaApi.refrescarAgendaEvents1(
+      idAgente: agentId,
+      extra: _generatedExtra,
+    );
   }
 
   Future<List<AgendaAppointment>> _loadAppointmentsFrom(
@@ -64,7 +95,13 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       if (rawData == null) {
         rethrow;
       }
-      return _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+      // Salvage-or-rethrow: si el cuerpo del error no contiene citas parseables,
+      // el fallo se propaga — un 401/403/5xx nunca debe leerse como "sin citas".
+      final salvaged = _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+      if (salvaged.isNotEmpty) {
+        return salvaged;
+      }
+      rethrow;
     }
     if (payload == null) {
       return const [];
@@ -394,6 +431,16 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     return _parseDateTime('${date.trim()} $normalizedTime') ?? _parseDateTime(date);
   }
 
+  /// Clave de coincidencia entre fuentes: fecha y hora local a precisión de
+  /// minuto. Las dos fuentes expresan la misma cita con granularidades
+  /// distintas (los eventos añaden segundos; SESCAM publica `HH:mm`) y, si el
+  /// backend emitiera ISO con zona, con husos distintos — la igualdad exacta
+  /// de [DateTime] (que compara también `isUtc`) duplicaba la cita.
+  DateTime _appointmentSlot(final DateTime value) {
+    final local = value.toLocal();
+    return DateTime(local.year, local.month, local.day, local.hour, local.minute);
+  }
+
   DateTime? _parseDateTime(final String? value) {
     if (value == null) {
       return null;
@@ -405,7 +452,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
     final iso = DateTime.tryParse(trimmed);
     if (iso != null) {
-      return iso;
+      // Siempre en hora local: un ISO con `Z` u offset quedaba en UTC, se
+      // pintaba con la hora desplazada y nunca casaba en la deduplicación con
+      // la misma cita expresada en local por la otra fuente.
+      return iso.toLocal();
     }
 
     final dateTimeMatch = RegExp(r'^(\d{1,2})[/-](\d{1,2})[/-](\d{4})(?:\s+(\d{1,2}):(\d{2}))?').firstMatch(trimmed);

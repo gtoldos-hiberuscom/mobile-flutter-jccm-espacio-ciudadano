@@ -14,9 +14,8 @@ class MyDataEmploymentOfferFieldRow extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Text(
@@ -29,6 +28,7 @@ class MyDataEmploymentOfferFieldRow extends StatelessWidget {
             width: 98,
             child: Text(
               value,
+              textAlign: TextAlign.end,
               style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
             ),
           ),

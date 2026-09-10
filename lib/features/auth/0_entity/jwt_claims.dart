@@ -24,6 +24,7 @@ final class JwtClaims {
     this.realmAccess,
     this.scope,
     this.sid,
+    this.subAlt,
     this.personIdentifier,
     this.secondSurname,
     this.name,
@@ -48,6 +49,12 @@ final class JwtClaims {
   final JwtRealmAccess? realmAccess;
   final String? scope;
   final String? sid;
+
+  /// Identificador del ciudadano/agente que el gateway de Espacio Ciudadano
+  /// espera como segmento `{sid}` de `/api/v1/ciudadanos/{sid}/...`.
+  ///
+  /// No confundir con [sid], que es el `session_state` de Keycloak.
+  final String? subAlt;
   final String? personIdentifier;
   final String? secondSurname;
   final String? name;
@@ -56,6 +63,18 @@ final class JwtClaims {
   final String? idAgente;
   final String? givenName;
   final String? familyName;
+
+  /// Nombre y apellidos del ciudadano tal y como los informa Cerbero
+  /// (`given_name` + `first_surname` + `second_surname`), con `name` como
+  /// alternativa. Null cuando el token no trae ninguno.
+  String? get fullName {
+    final parts = [givenName, firstSurname, secondSurname].map((final part) => part?.trim() ?? '').where((final part) => part.isNotEmpty).toList(growable: false);
+    if (parts.isNotEmpty) {
+      return parts.join(' ');
+    }
+    final fallback = name?.trim();
+    return fallback == null || fallback.isEmpty ? null : fallback;
+  }
 
   /// Document identifier expected by `/api/v1/ciudadanos/{id}` endpoints.
   String? get normalizedPersonIdentifier {
@@ -123,6 +142,7 @@ final class JwtClaims {
       realmAccess: JwtRealmAccess.tryParse(payload['realm_access']),
       scope: _str(payload['scope']),
       sid: _str(payload['sid']),
+      subAlt: _str(payload['sub_alt']),
       personIdentifier: _str(payload['PersonIdentifier']),
       secondSurname: _str(payload['second_surname']),
       name: _str(payload['name']),

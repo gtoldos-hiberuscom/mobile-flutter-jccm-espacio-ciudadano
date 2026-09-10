@@ -1,39 +1,36 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/employment_demand.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/employment_offer_registration.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_employment_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/empleo_api.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_request.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository {
-  MyDataEmploymentRepositoryImpl({required final Dio dio}) : _sepeApi = SepeApi(withGeneratedApiCompat(dio), standardSerializers), _intermediacionApi = IntermediacionApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataEmploymentRepositoryImpl({required final Dio dio}) : _api = EmpleoApi(dio);
 
-  final SepeApi _sepeApi;
-  final IntermediacionApi _intermediacionApi;
+  final EmpleoApi _api;
 
   @override
   Future<EmploymentDemand?> loadDemand({
+    required final String citizenId,
     required final String documentNumber,
+    final String? givenName,
+    final String? firstSurname,
+    final String? secondSurname,
   }) async {
-    final requestData = {
-      'docu': documentNumber,
-      'tipodoc': _documentType(documentNumber),
-    };
     final payload = await _rawResponse(
-      () => _sepeApi.getDemandanteEmpleoFechaActual(
-        numDocumento: documentNumber,
-        dtsepesvdidefareqBody: DTSEPESVDIDEFAREQ(
-          (final builder) => builder
-            ..docu = documentNumber
-            ..tipodoc = _documentType(documentNumber),
+      () => _api.demandanteEmpleoFechaActual(
+        citizenId: citizenId,
+        body: _jobSeekerRequest(
+          documentNumber: documentNumber,
+          givenName: givenName,
+          firstSurname: firstSurname,
+          secondSurname: secondSurname,
         ),
-        extra: {
-          generatedApiRequestDataExtraKey: requestData,
-          generatedApiDecodeStringResponseExtraKey: true,
-        },
-        validateStatus: (final status) => status != null && status < 500,
       ),
     );
 
@@ -64,24 +61,13 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
 
   @override
   Future<List<EmploymentOfferRegistration>> loadOfferRegistrations({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
-    final requestData = {
-      'docu': documentNumber,
-      'tipodoc': _documentType(documentNumber),
-    };
     final payload = await _rawResponse(
-      () => _intermediacionApi.obtenerOfertasEmpleoInscritas(
-        baseRequestIntermediacion: BaseRequestIntermediacion(
-          (final builder) => builder
-            ..docu = documentNumber
-            ..tipodoc = _documentType(documentNumber),
-        ),
-        extra: {
-          generatedApiRequestDataExtraKey: requestData,
-          generatedApiDecodeStringResponseExtraKey: true,
-        },
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.ofertasEmpleo(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
 
@@ -90,6 +76,46 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
     }
 
     return _parseOfferRegistrations(_decodePayload(payload));
+  }
+
+  /// Cuerpo `DTSEPESVDIDEFAREQ`.
+  ///
+  /// A diferencia de intermediación, aquí el contrato no pide `tipo`, `idaut`
+  /// ni `proc`. Los datos del titular se omiten cuando el token no los informa
+  /// en vez de viajar vacíos: un campo obligatorio en blanco es más difícil de
+  /// diagnosticar que uno ausente.
+  ///
+  /// Los nombres de campo son los del OpenAPI de la fachada
+  /// (`nombretitular`, `apellido1TITULAR`, `apellido2TITULAR`), no los de la
+  /// documentación del gateway (`nombre_titular`, `apellido1_titular`,
+  /// `apellido2_titular`). El gateway sólo reescribe el identificador del path y
+  /// reenvía el resto tal cual, así que quien vincula el cuerpo es la fachada, y
+  /// su contrato está generado desde el código. Ver `EmpleoApi.jobOffersOperation`,
+  /// donde la misma discrepancia se resolvió del mismo lado con una prueba
+  /// directa. Si esto fuera al revés el fallo sería silencioso —los campos se
+  /// ignorarían, que es lo que pasaba antes de migrar—, no un error.
+  Map<String, Object?> _jobSeekerRequest({
+    required final String documentNumber,
+    required final String? givenName,
+    required final String? firstSurname,
+    required final String? secondSurname,
+  }) {
+    final holderName = _trimmedOrNull(givenName);
+    final holderFirstSurname = _trimmedOrNull(firstSurname);
+    final holderSecondSurname = _trimmedOrNull(secondSurname);
+
+    return {
+      'tipodoc': documentTypeOf(documentNumber),
+      'docu': documentNumber,
+      'nombretitular': ?holderName,
+      'apellido1TITULAR': ?holderFirstSurname,
+      'apellido2TITULAR': ?holderSecondSurname,
+    };
+  }
+
+  String? _trimmedOrNull(final String? value) {
+    final trimmed = value?.trim();
+    return trimmed == null || trimmed.isEmpty ? null : trimmed;
   }
 
   List<EmploymentOfferRegistration> _parseOfferRegistrations(final Object? payload) {
@@ -164,24 +190,9 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
     return offers;
   }
 
-  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
-    try {
-      final response = await fetch();
-      if (response.statusCode == 404) {
-        return null;
-      }
-      return response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (rawData != null) {
-        return rawData;
-      }
-      rethrow;
-    }
-  }
+  /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
+  /// resto de errores → se propagan. Ver [intermediacionRawResponse].
+  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) => intermediacionRawResponse(fetch);
 
   Object? _decodePayload(final Object? payload) {
     Object? current = payload;
@@ -302,10 +313,12 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
     return DateTime(year, month, day);
   }
 
-  String _statusLabel(final String? value) {
+  /// `null` cuando el backend no informa el estado: fabricar «Activa» por
+  /// defecto convertía cualquier cuerpo inesperado en una demanda activa falsa.
+  String? _statusLabel(final String? value) {
     final normalized = value?.trim();
     if (normalized == null || normalized.isEmpty) {
-      return 'Activa';
+      return null;
     }
     final upper = normalized.toUpperCase();
     if (upper == 'S' || upper == 'SI' || upper == 'SÍ' || upper == 'TRUE' || upper == '1') {
@@ -315,13 +328,5 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
       return 'No Inscrito';
     }
     return normalized;
-  }
-
-  String _documentType(final String documentNumber) {
-    final normalized = documentNumber.trim().toUpperCase();
-    if (RegExp('^[XYZ]').hasMatch(normalized)) {
-      return 'NIE';
-    }
-    return 'NIF';
   }
 }

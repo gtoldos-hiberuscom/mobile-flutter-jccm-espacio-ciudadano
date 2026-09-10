@@ -16,12 +16,30 @@ void main() {
       // TODO
     });
 
+    // Obtener eventos de la Agenda
+    //
+    // Obtiene los eventos de agenda de un agente para un periodo determinado.
+    //
+    //Future<Respuesta> obtenerEventosAgenda1(String idAgente, String periodo, { String authorization }) async
+    test('test obtenerEventosAgenda1', () async {
+      // TODO
+    });
+
     // Refrescar eventos de la Agenda por idAgente
     //
     // Refresca los eventos de agenda del agente y devuelve el resumen del proceso.
     //
     //Future<Respuesta> refrescarAgendaEvents(String idAgente, { String authorization }) async
     test('test refrescarAgendaEvents', () async {
+      // TODO
+    });
+
+    // Refrescar eventos de la Agenda por idAgente
+    //
+    // Refresca los eventos de agenda del agente y devuelve el resumen del proceso.
+    //
+    //Future<Respuesta> refrescarAgendaEvents1(String idAgente, { String authorization }) async
+    test('test refrescarAgendaEvents1', () async {
       // TODO
     });
 

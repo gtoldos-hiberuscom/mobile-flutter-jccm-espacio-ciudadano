@@ -1,0 +1,4 @@
+# Vendored upstream package: keep upstream's own lint baseline instead of the
+# app's strict root analysis_options, so the fork diff against upstream stays
+# minimal (see CHANGELOG_JCCM.md).
+include: package:flutter_lints/flutter.yaml

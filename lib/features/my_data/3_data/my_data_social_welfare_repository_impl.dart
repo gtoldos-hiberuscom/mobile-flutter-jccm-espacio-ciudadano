@@ -1,30 +1,32 @@
+
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/dependency_care_status.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/disability_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/large_family_title.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/parking_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/thermal_spa_award.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_social_welfare_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/bienestar_social_api.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_request.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepository {
-  MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _intermediacionApi = IntermediacionApi(withGeneratedApiCompat(dio), standardSerializers);
+  MyDataSocialWelfareRepositoryImpl({required final Dio dio}) : _api = BienestarSocialApi(dio);
 
-  final IntermediacionApi _intermediacionApi;
+  final BienestarSocialApi _api;
 
   @override
   Future<LargeFamilyTitle?> loadLargeFamilyTitle({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosFamiliaNumerosaIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.familiaNumerosa(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -38,13 +40,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   @override
   Future<DisabilityTitle?> loadDisabilityTitle({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosDiscapacidadIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.discapacidad(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -56,13 +58,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   @override
   Future<ThermalSpaAward?> loadThermalSpaAward({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosTermalismoIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.termalismo(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -74,13 +76,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   @override
   Future<DependencyCareStatus?> loadDependencyCareStatus({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosAtencionDependenciaIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.atencionDependencia(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -92,13 +94,13 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
 
   @override
   Future<ParkingCard?> loadParkingCard({
+    required final String citizenId,
     required final String documentNumber,
   }) async {
     final response = await _rawResponse(
-      () => _intermediacionApi.obtenerDatosTarjetaEstacionamientoIntermediacion(
-        baseRequestIntermediacion: _intermediacionRequest(documentNumber),
-        extra: _generatedExtra(_intermediacionData(documentNumber)),
-        validateStatus: (final status) => status != null && status < 500,
+      () => _api.tarjetaEstacionamiento(
+        citizenId: citizenId,
+        body: intermediacionRequest(documentNumber),
       ),
     );
     if (response == null) {
@@ -108,65 +110,9 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     return _parseParkingCard(_decodePayload(response));
   }
 
-  BaseRequestIntermediacion _intermediacionRequest(final String documentNumber) {
-    return BaseRequestIntermediacion(
-      (final builder) => builder
-        ..docu = documentNumber
-        ..tipodoc = _documentType(documentNumber),
-    );
-  }
-
-  Map<String, Object?> _intermediacionData(final String documentNumber) => {
-    'docu': documentNumber,
-    'tipodoc': _documentType(documentNumber),
-  };
-
-  Map<String, dynamic> _generatedExtra(final Map<String, Object?> data) => {
-    generatedApiRequestDataExtraKey: data,
-    generatedApiDecodeStringResponseExtraKey: true,
-  };
-
-  Future<Object?> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
-    try {
-      final response = await fetch();
-      if (response.statusCode == 404) {
-        return null;
-      }
-      final data = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
-      if (_isAuthorizationRequired(data)) {
-        throw const MyDataAuthorizationRequired();
-      }
-      return data;
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
-      if (rawData != null) {
-        if (_isAuthorizationRequired(rawData)) {
-          throw const MyDataAuthorizationRequired();
-        }
-        return rawData;
-      }
-      rethrow;
-    }
-  }
-
-  bool _isAuthorizationRequired(final Object? data) {
-    final decoded = _decodePayload(data);
-    if (decoded is! Map) {
-      return false;
-    }
-    if (decoded['codigo-respuesta']?.toString() == '412.00') {
-      return true;
-    }
-    final infoError = decoded['info-error'];
-    if (infoError is! Map) {
-      return false;
-    }
-    final errors = infoError['errores'];
-    return errors is List && errors.whereType<Map<dynamic, dynamic>>().any((final error) => error['codigo-error']?.toString() == '3034');
-  }
+  /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
+  /// resto de errores → se propagan. Ver [intermediacionRawResponse].
+  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) => intermediacionRawResponse(fetch);
 
   void _throwIfLargeFamilyQueryFailed(final Object? payload) {
     for (final map in _collectMaps(payload)) {
@@ -676,11 +622,4 @@ final class MyDataSocialWelfareRepositoryImpl implements MyDataSocialWelfareRepo
     return trimmed;
   }
 
-  String _documentType(final String documentNumber) {
-    final first = documentNumber.trim().toUpperCase();
-    if (first.startsWith('X') || first.startsWith('Y') || first.startsWith('Z')) {
-      return 'NIE';
-    }
-    return 'NIF';
-  }
 }

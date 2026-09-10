@@ -7,7 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
@@ -41,7 +41,7 @@ class ConsentPage extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final idAgente = ref.watch(jwtClaimsProvider)?.idAgente ?? '';
+    final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente ?? '';
     final state = ref.watch(consentProvider(idAgente));
     final notifier = ref.read(consentProvider(idAgente).notifier);
 
@@ -82,7 +82,7 @@ class ConsentPage extends ConsumerWidget {
             }
             AppAlertSnackbar.show(
               context,
-              message: l10n.consentSaveError,
+              message: next.errorMessage == consentClauseCatalogueUnavailable ? l10n.consentClausesUnavailableError : l10n.consentSaveError,
               severity: AppAlertSeverity.error,
             );
           case ConsentStatus.loading:
@@ -135,7 +135,10 @@ class ConsentPage extends ConsumerWidget {
       isOnboarding: isOnboarding,
       isPreferencesEditing: isPreferencesEditing,
       returnTo: returnTo,
-      onShowLegalInfo: () => context.push(Routes.legalPrivacy),
+      // La (i) abre la página legal para LEERLA: sin este marcador se pintaba
+      // como paso del consentimiento y arrastraba aquí sus botones de "Salir" y
+      // "Continuar", que en una página de información no tienen sentido.
+      onShowLegalInfo: () => context.push(Routes.legalPrivacyInfo),
     );
   }
 }
@@ -235,10 +238,7 @@ class _Step2Scaffold extends StatelessWidget {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space8,
-              ),
+              padding: appPagePadding(context, top: AppDimensions.space8, bottom: AppDimensions.space8),
               children: [
                 AppTextBlock(
                   text: l10n.consentStep1FullTitle,

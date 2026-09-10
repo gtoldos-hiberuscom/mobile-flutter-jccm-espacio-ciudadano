@@ -1,11 +1,13 @@
-import 'dart:async';
+import 'dart:async' show TimeoutException, unawaited;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -13,6 +15,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/clave_login_veil.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Public anonymous landing screen — 00_Splash/Inicio from Figma.
@@ -38,29 +41,30 @@ class LandingPage extends ConsumerStatefulWidget {
 }
 
 class _LandingPageState extends ConsumerState<LandingPage> {
-  bool _didTrySessionUnlock = false;
+  /// Si hay un acceso en curso iniciado *mientras esta página está montada*.
+  ///
+  /// No se deriva de `landingProvider` directamente: `loginSuccess` es una señal
+  /// de un solo uso que nadie limpia, y el provider no es `autoDispose`, así que
+  /// al volver a la landing tras cerrar sesión seguiría valiendo `true` y el
+  /// velo se quedaría pegado. Al alimentarlo sólo desde las transiciones que
+  /// observa `ref.listen`, un valor heredado de la sesión anterior no lo activa.
+  bool _isAuthenticating = false;
+
+  /// Cached notifier for safe use in [dispose] (where ref is no longer valid).
+  /// Assigned once in [initState] — assigning a `late final` in [build] would
+  /// throw on the second build (this page rebuilds on every veil toggle).
+  late final LandingNotifier _landingNotifier;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_didTrySessionUnlock) {
-      return;
-    }
-    _didTrySessionUnlock = true;
+  void initState() {
+    super.initState();
+    _landingNotifier = ref.read(landingProvider.notifier);
+  }
 
-    final l10n = AppLocalizations.of(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      unawaited(
-        ref
-            .read(landingProvider.notifier)
-            .tryUnlockStoredSession(
-              localizedReason: l10n.sessionUnlockBiometricReason,
-            ),
-      );
-    });
+  @override
+  void dispose() {
+    unawaited(Future.microtask(_landingNotifier.consumeLoginSuccess));
+    super.dispose();
   }
 
   @override
@@ -69,11 +73,25 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     final l10n = AppLocalizations.of(context);
 
     ref.listen<LandingState>(landingProvider, (final previous, final next) {
+      final isAuthenticating = next.isLoggingIn || next.loginSuccess;
+      if (mounted && isAuthenticating != _isAuthenticating) {
+        setState(() => _isAuthenticating = isAuthenticating);
+      }
       if (next.loginSuccess) {
+        if (next.isolationDegradedWarning) {
+          // Shown via the root ScaffoldMessenger, so it survives the
+          // navigation to home below. Curated copy only (project rule).
+          AppAlertSnackbar.show(
+            context,
+            message: l10n.loginIsolationDegradedWarning,
+            severity: AppAlertSeverity.warning,
+            duration: const Duration(seconds: 8),
+          );
+        }
         ref.read(goRouterProvider).go(Routes.home);
       }
       if (next.error != null) {
-        final errorMsg = l10n.domainGenericLoadError;
+        final errorMsg = next.error!.cause is TimeoutException ? l10n.loginTimeoutError : l10n.domainGenericLoadError;
         AppAlertSnackbar.show(
           context,
           message: errorMsg,
@@ -83,7 +101,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       }
     });
 
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: AppColors.surface,
       body: Column(
         children: [
@@ -92,8 +110,8 @@ class _LandingPageState extends ConsumerState<LandingPage> {
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: appPageHorizontalPadding(context),
                 ),
                 child: LayoutBuilder(
                   builder: (final context, final constraints) => FittedBox(
@@ -226,6 +244,13 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
         ],
       ),
+    );
+
+    // Sin AppBar, la home debe declarar el estilo desde el primer frame.
+    // El velo de Cl@ve declara su propio estilo claro cuando está activo.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: ClaveLoginVeil(isAuthenticating: _isAuthenticating, child: scaffold),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,18 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/ex
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-/// Accessibility statement screen from Figma node `41853:13694`.
+/// Accessibility statement screen from Figma node `44641:24798`.
+///
+/// The screen is a stack of `TextBlocks/TextBlocks` instances separated by a
+/// uniform `M` (16 dp) gap, inside a frame padded `M` horizontally and `L`
+/// (24 dp) vertically. Each block carries the vertical padding of its
+/// [AppTextBlockVariant]: H1 `8/16`, H2 `8/8`, Leading/Medium `4/8`.
+///
+/// The design applies no bold anywhere in the body: every run of text is
+/// `Leading/Medium` in `Color/Text/primary-dark`. External links keep that same
+/// colour and are marked by an underline plus a trailing `⇲` glyph — the
+/// underline is a deliberate accessibility addition over the Figma export,
+/// which left links visually identical to the surrounding text.
 class AccessibilityPage extends ConsumerStatefulWidget {
   const AccessibilityPage({super.key});
 
@@ -17,47 +29,75 @@ class AccessibilityPage extends ConsumerStatefulWidget {
 }
 
 class _AccessibilityPageState extends ConsumerState<AccessibilityPage> {
+  bool _isSearching = false;
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+
+  String get _highlightQuery => _isSearching ? _searchController.text.trim() : '';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _startSearch() {
+    setState(() {
+      _isSearching = true;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _searchFocusNode.requestFocus());
+  }
+
+  void _closeSearch() {
+    setState(() {
+      _isSearching = false;
+      _searchController.clear();
+    });
+  }
+
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.backgroundBlueLighter,
-      appBar: AppNavBar(
+      appBar: _AccessibilityAppBar(
         title: l10n.legalAccessibilityTitle,
-        leading: IconButton(
-          icon: const AppIcon(
-            AppIcons.arrowBack,
-            size: AppDimensions.iconLarge,
-            color: AppColors.textPrimary,
-          ),
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go(Routes.homeFromDrawer);
-            }
-          },
-        ),
+        isSearching: _isSearching,
+        searchController: _searchController,
+        searchFocusNode: _searchFocusNode,
+        onBack: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(Routes.homeFromDrawer);
+          }
+        },
+        onSearch: _startSearch,
+        onCloseSearch: _closeSearch,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.space16,
-          vertical: AppDimensions.space24,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const _A11yHeading1('Declaración de accesibilidad'),
-            const SizedBox(height: AppDimensions.space24),
-            _AccessibilityBody(
-              onRoyalDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),
-              onSiteTap: () => _openExternalLink('espacio_ciudadano'),
-              onContactFormTap: () => _openExternalLink('accessibility_contact_form'),
-              onOfficesTap: () => _openExternalLink('jccm_offices_oir'),
-            ),
-          ],
+      // Reserva también espacio cuando el dispositivo comunica un inset nulo
+      // o menor que su barra de navegación.
+      body: SafeArea(
+        top: false,
+        maintainBottomViewPadding: true,
+        minimum: const EdgeInsets.only(bottom: AppDimensions.space48),
+        child: SingleChildScrollView(
+          padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space48),
+          child: _AccessibilityBody(
+            highlightQuery: _highlightQuery,
+            onRoyalDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),
+            onSiteTap: () => _openExternalLink('espacio_ciudadano'),
+            onContactFormTap: () => _openExternalLink('accessibility_contact_form'),
+            onOfficesTap: () => _openExternalLink('jccm_offices_oir'),
+          ),
         ),
       ),
     );
@@ -85,216 +125,342 @@ class _AccessibilityPageState extends ConsumerState<AccessibilityPage> {
   }
 }
 
-class _AccessibilityBody extends StatelessWidget {
+// ── AppBar con búsqueda ──────────────────────────────────────────────────────
+
+class _AccessibilityAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _AccessibilityAppBar({
+    required this.title,
+    required this.isSearching,
+    required this.searchController,
+    required this.searchFocusNode,
+    required this.onBack,
+    required this.onSearch,
+    required this.onCloseSearch,
+  });
+
+  final String title;
+  final bool isSearching;
+  final TextEditingController searchController;
+  final FocusNode searchFocusNode;
+  final VoidCallback onBack;
+  final VoidCallback onSearch;
+  final VoidCallback onCloseSearch;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(AppDimensions.appBarHeight);
+
+  @override
+  Widget build(final BuildContext context) => AppNavBar(
+    title: isSearching ? null : title,
+    titleWidget: isSearching
+        ? AppSearchField(
+            controller: searchController,
+            focusNode: searchFocusNode,
+            autofocus: true,
+          )
+        : null,
+    leading: IconButton(
+      icon: const AppIcon(
+        AppIcons.arrowBack,
+        size: AppDimensions.iconLarge,
+        color: AppColors.textPrimary,
+      ),
+      tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+      onPressed: onBack,
+    ),
+    actions: [
+      IconButton(
+        icon: AppIcon(
+          isSearching ? AppIcons.close : AppIcons.search,
+          color: AppColors.textPrimary,
+        ),
+        tooltip: isSearching ? AppLocalizations.of(context).legalSearchCloseTooltip : AppLocalizations.of(context).legalSearchTooltip,
+        onPressed: isSearching ? onCloseSearch : onSearch,
+      ),
+    ],
+  );
+}
+
+// ── Contenido ────────────────────────────────────────────────────────────────
+
+class _AccessibilityBody extends StatefulWidget {
   const _AccessibilityBody({
     required this.onRoyalDecreeTap,
     required this.onSiteTap,
     required this.onContactFormTap,
     required this.onOfficesTap,
+    this.highlightQuery = '',
   });
 
   final VoidCallback onRoyalDecreeTap;
   final VoidCallback onSiteTap;
   final VoidCallback onContactFormTap;
   final VoidCallback onOfficesTap;
+  final String highlightQuery;
+
+  @override
+  State<_AccessibilityBody> createState() => _AccessibilityBodyState();
+}
+
+class _AccessibilityBodyState extends State<_AccessibilityBody> {
+  /// Inline links flow with the surrounding text, so they use gesture
+  /// recognizers rather than `WidgetSpan`s, which would not wrap.
+  late final TapGestureRecognizer _royalDecree;
+  late final TapGestureRecognizer _site;
+  late final TapGestureRecognizer _contactForm;
+  late final TapGestureRecognizer _offices;
+
+  @override
+  void initState() {
+    super.initState();
+    _royalDecree = TapGestureRecognizer()..onTap = () => widget.onRoyalDecreeTap();
+    _site = TapGestureRecognizer()..onTap = () => widget.onSiteTap();
+    _contactForm = TapGestureRecognizer()..onTap = () => widget.onContactFormTap();
+    _offices = TapGestureRecognizer()..onTap = () => widget.onOfficesTap();
+  }
+
+  @override
+  void dispose() {
+    _royalDecree.dispose();
+    _site.dispose();
+    _contactForm.dispose();
+    _offices.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(final BuildContext context) {
-    final style = AppTypography.leadingMedium.copyWith(color: AppColors.primary);
+    final l10n = AppLocalizations.of(context);
+    final q = widget.highlightQuery;
+    final style = AppTypography.leadingMedium.copyWith(color: AppColors.textPrimary);
     final linkStyle = style.copyWith(
-      color: AppColors.secondary,
       decoration: TextDecoration.underline,
-      decorationColor: AppColors.secondary,
+      decorationColor: AppColors.textPrimary,
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return _ContentColumn(
       children: [
-        Text.rich(
-          TextSpan(
+        _A11yHeading1(l10n.accessibilityStatementHeading, highlightQuery: q),
+        _A11yBlock(
+          child: Text.rich(
+            TextSpan(
+              style: style,
+              children: [
+                TextSpan(text: l10n.accessibilityIntroCommitment),
+                TextSpan(
+                  text: '${l10n.accessibilityIntroDecreeLink}⇲',
+                  style: linkStyle,
+                  recognizer: _royalDecree,
+                ),
+                TextSpan(text: l10n.accessibilityIntroDecreeSuffix),
+                TextSpan(text: l10n.accessibilityDeclarationScope),
+                TextSpan(
+                  text: 'https://espaciociudadano.jccm.es/⇲',
+                  style: linkStyle,
+                  recognizer: _site,
+                ),
+                const TextSpan(text: '.'),
+              ],
+            ),
+          ),
+        ),
+        _A11yHeading2(l10n.accessibilityComplianceTitle, highlightQuery: q),
+        _A11yBlock(
+          child: _HighlightedText(
+            text: l10n.accessibilityComplianceText,
             style: style,
+            query: q,
+          ),
+        ),
+        _A11yHeading2(l10n.accessibilityNonAccessibleTitle, highlightQuery: q),
+        _A11yBlock(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const TextSpan(
-                text: 'La Junta de Comunidades de Castilla-La Mancha se ha comprometido a hacer accesible su sitio web, de conformidad con el ',
+              _HighlightedText(
+                text: l10n.accessibilityNonAccessibleIntro,
+                style: style,
+                query: q,
               ),
-              _linkSpan(
-                text: 'Real Decreto 1112/2018, de 7 de septiembre⇲',
-                style: linkStyle,
-                onTap: onRoyalDecreeTap,
+              _A11yBulletList(
+                highlightQuery: q,
+                items: [
+                  _A11yBullet(l10n.accessibilityNonAccessibleItemNonConformity),
+                  _A11yBullet(l10n.accessibilityNonAccessibleItemBurden),
+                  _A11yBullet(l10n.accessibilityNonAccessibleItemOutOfScope),
+                ],
               ),
-              const TextSpan(
-                text: ', sobre accesibilidad de los sitios web y aplicaciones para dispositivos móviles del sector público (en adelante, Real Decreto 1112/2018, de 7 de septiembre).\n\n',
-              ),
-              const TextSpan(
-                text: 'La presente declaración de accesibilidad se aplica al sitio web ',
-              ),
-              _linkSpan(
-                text: 'https://espaciociudadano.jccm.es/⇲',
-                style: linkStyle,
-                onTap: onSiteTap,
-              ),
-              const TextSpan(text: '.'),
             ],
           ),
         ),
-        const _A11yHeading2('Situación de cumplimiento'),
-        _richParagraph(
-          style: style,
-          spans: const [
-            TextSpan(text: 'b) Este sitio web es '),
-            TextSpan(
-              text: 'parcialmente conforme ',
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
-            TextSpan(text: 'con el RD 1112/2018, de 7 de septiembre, debido a la falta de conformidad de los aspectos que se indican a continuación.'),
-          ],
+        _A11yHeading2(l10n.accessibilityPreparationTitle, highlightQuery: q),
+        _A11yBlock(
+          child: _HighlightedText(
+            text: l10n.accessibilityPreparationText,
+            style: style,
+            query: q,
+          ),
         ),
-        const _A11yHeading2('Contenido no accesible'),
-        Text(
-          'El contenido que se recoge a continuación no es accesible por los siguientes motivos:',
-          style: style,
+        _A11yHeading2(l10n.accessibilityContactTitle, highlightQuery: q),
+        _A11yBlock(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _HighlightedText(
+                text: l10n.accessibilityContactIntro,
+                style: style,
+                query: q,
+              ),
+              _A11yBulletList(
+                highlightQuery: q,
+                items: [
+                  _A11yBullet(l10n.accessibilityContactItemReport),
+                  _A11yBullet(l10n.accessibilityContactItemDifficulties),
+                  _A11yBullet(l10n.accessibilityContactItemSuggestions),
+                ],
+              ),
+              _HighlightedText(text: l10n.accessibilityContactChannelsIntro, style: style, query: q),
+              _A11yLinkedBulletList(
+                style: style,
+                linkStyle: linkStyle,
+                contactForm: _contactForm,
+                offices: _offices,
+              ),
+              _HighlightedText(
+                text: l10n.accessibilityContactProcessing,
+                style: style,
+                query: q,
+              ),
+            ],
+          ),
         ),
-        const _A11yBulletList(
-          items: [
-            _A11yBullet(
-              text: 'Podrían existir fallos puntuales de edición en alguna página web, tanto en contenidos HMTL como en documentos finales, publicados en fecha posterior al 20 de septiembre de 2018.',
-              boldPrefix: 'falta de conformidad con el RD 1112/2018, de 7 de septiembre: ',
-            ),
-            _A11yBullet(
-              text: ' No resulta aplicable.',
-              boldPrefix: 'carga desproporcionada:',
-            ),
-            _A11yBullet(
-              text: ' Podrían existir archivos ofimáticos en PDF u otros formatos publicados antes del 20 de septiembre de 2018 que no cumplan en su totalidad todos los requisitos de accesibilidad.',
-              boldPrefix: 'el contenido no entra dentro del ámbito de la legislación aplicable:',
-            ),
-          ],
+        _A11yHeading2(l10n.accessibilityEnforcementTitle, highlightQuery: q),
+        _A11yBlock(
+          child: _HighlightedText(
+            text: l10n.accessibilityEnforcementText,
+            style: style,
+            query: q,
+          ),
         ),
-        const _A11yHeading2('Preparación de la presente declaración de accesibilidad'),
-        Text(
-          'La presente declaración ha sido preparada el 8 de Octubre de 2025.\n'
-          'El método empleado para preparar la declaración ha sido una autoevaluación llevada a cabo por el propio organismo.',
-          style: style,
-        ),
-        const _A11yHeading2('Observaciones y datos de contacto'),
-        Text(
-          'Puede realizar comunicaciones sobre requisitos de accesibilidad (artículo 10.2.a) del Real Decreto 1112/2018, de 7 de septiembre como, por ejemplo:',
-          style: style,
-        ),
-        const _A11yBulletList(
-          items: [
-            _A11yBullet(text: 'informar sobre cualquier posible incumplimiento por parte de este sitio web,'),
-            _A11yBullet(text: 'transmitir otras dificultades de acceso al contenido,'),
-            _A11yBullet(text: 'formular cualquier otra consulta o sugerencia de mejora relativa a la accesibilidad del sitio web,'),
-          ],
-        ),
-        Text('a través de las siguientes vías:', style: style),
-        _A11yLinkedBulletList(
-          style: style,
-          linkStyle: linkStyle,
-          contactFormTap: onContactFormTap,
-          officesTap: onOfficesTap,
-        ),
-        Text(
-          'Las comunicaciones serán recibidas y tratadas por la Viceconsejería de Administración Local y Coordinación Administrativa.',
-          style: style,
-        ),
-        const _A11yHeading2('Procedimiento de aplicación'),
-        Text(
-          'El procedimiento de reclamación recogido en el artículo 13 del RD 1112/2018 entrará en vigor el 20 de septiembre de 2020.',
-          style: style,
-        ),
-        const _A11yHeading2('Contenido opcional'),
-        Text(
-          'Además de las ayudas de accesibilidad propias de los navegadores se incorporan una serie de atajos de teclado para facilitar la navegación a través del portal:\n'
-          'Una clave de acceso o Accesskey permite al usuario saltar de inmediato a una parte específica de una página web a través del teclado.',
-          style: style,
-        ),
-        const _A11yBulletList(
-          items: [
-            _A11yBullet(text: 'Aumentar el Tamaño del Texto: CTRL +'),
-            _A11yBullet(text: 'Reducir el Tamaño del Texto: CTRL -'),
-          ],
+        _A11yHeading2(l10n.accessibilityOptionalTitle, highlightQuery: q),
+        _A11yBlock(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _HighlightedText(
+                text: l10n.accessibilityOptionalText,
+                style: style,
+                query: q,
+              ),
+              _A11yBulletList(
+                highlightQuery: q,
+                items: [
+                  _A11yBullet(l10n.accessibilityOptionalItemIncreaseText),
+                  _A11yBullet(l10n.accessibilityOptionalItemDecreaseText),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
+}
 
-  WidgetSpan _linkSpan({
-    required final String text,
-    required final TextStyle style,
-    required final VoidCallback onTap,
-  }) => WidgetSpan(
-    alignment: PlaceholderAlignment.baseline,
-    baseline: TextBaseline.alphabetic,
-    child: InkWell(
-      onTap: onTap,
-      child: Text(text, style: style),
-    ),
+/// Stacks the `TextBlocks` instances with the frame's `M` gap (node `44641:24799`).
+class _ContentColumn extends StatelessWidget {
+  const _ContentColumn({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(final BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      for (final (index, child) in children.indexed) ...[
+        if (index > 0) const SizedBox(height: AppDimensions.space16),
+        child,
+      ],
+    ],
   );
+}
 
-  Widget _richParagraph({
-    required final TextStyle style,
-    required final List<InlineSpan> spans,
-  }) => Text.rich(TextSpan(style: style, children: spans));
+/// A `Leading/Medium` text block — Figma padding `4` top, `8` bottom.
+class _A11yBlock extends StatelessWidget {
+  const _A11yBlock({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+    padding: const EdgeInsets.only(
+      top: AppDimensions.space4,
+      bottom: AppDimensions.space8,
+    ),
+    child: child,
+  );
 }
 
 class _A11yHeading1 extends StatelessWidget {
-  const _A11yHeading1(this.text);
+  const _A11yHeading1(this.text, {this.highlightQuery = ''});
 
   final String text;
+  final String highlightQuery;
 
   @override
   Widget build(final BuildContext context) => Semantics(
     header: true,
     headingLevel: 1,
-    child: Text(
-      text,
-      style: AppTypography.h1.copyWith(color: AppColors.primary),
+    child: Padding(
+      padding: const EdgeInsets.only(
+        top: AppDimensions.space8,
+        bottom: AppDimensions.space16,
+      ),
+      child: _HighlightedText(
+        text: text,
+        style: AppTypography.h1.copyWith(color: AppColors.textPrimary),
+        query: highlightQuery,
+      ),
     ),
   );
 }
 
 class _A11yHeading2 extends StatelessWidget {
-  const _A11yHeading2(this.text);
+  const _A11yHeading2(this.text, {this.highlightQuery = ''});
 
   final String text;
+  final String highlightQuery;
 
   @override
-  Widget build(final BuildContext context) => Padding(
-    padding: const EdgeInsets.only(
-      top: AppDimensions.space32,
-      bottom: AppDimensions.space16,
-    ),
-    child: Semantics(
-      header: true,
-      headingLevel: 2,
-      child: Text(
-        text,
-        style: AppTypography.h2.copyWith(color: AppColors.primary),
+  Widget build(final BuildContext context) => Semantics(
+    header: true,
+    headingLevel: 2,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
+      child: _HighlightedText(
+        text: text,
+        style: AppTypography.h2.copyWith(color: AppColors.textPrimary),
+        query: highlightQuery,
       ),
     ),
   );
 }
 
 class _A11yBullet {
-  const _A11yBullet({
-    required this.text,
-    this.boldPrefix,
-  });
+  const _A11yBullet(this.text);
 
-  final String? boldPrefix;
   final String text;
 }
 
 class _A11yBulletList extends StatelessWidget {
-  const _A11yBulletList({required this.items});
+  const _A11yBulletList({required this.items, this.highlightQuery = ''});
 
   final List<_A11yBullet> items;
+  final String highlightQuery;
 
   @override
   Widget build(final BuildContext context) {
-    final style = AppTypography.leadingMedium.copyWith(color: AppColors.primary);
+    final style = AppTypography.leadingMedium.copyWith(color: AppColors.textPrimary);
 
     return Padding(
       padding: const EdgeInsets.only(top: AppDimensions.space4),
@@ -309,18 +475,10 @@ class _A11yBulletList extends StatelessWidget {
                 children: [
                   Text('• ', style: style),
                   Expanded(
-                    child: Text.rich(
-                      TextSpan(
-                        style: style,
-                        children: [
-                          if (item.boldPrefix != null)
-                            TextSpan(
-                              text: item.boldPrefix,
-                              style: const TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                          TextSpan(text: item.text),
-                        ],
-                      ),
+                    child: _HighlightedText(
+                      text: item.text,
+                      style: style,
+                      query: highlightQuery,
                     ),
                   ),
                 ],
@@ -336,51 +494,49 @@ class _A11yLinkedBulletList extends StatelessWidget {
   const _A11yLinkedBulletList({
     required this.style,
     required this.linkStyle,
-    required this.contactFormTap,
-    required this.officesTap,
+    required this.contactForm,
+    required this.offices,
   });
 
   final TextStyle style;
   final TextStyle linkStyle;
-  final VoidCallback contactFormTap;
-  final VoidCallback officesTap;
+  final GestureRecognizer contactForm;
+  final GestureRecognizer offices;
 
   @override
-  Widget build(final BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: AppDimensions.space4),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _linkedBullet(
-          children: [
-            WidgetSpan(
-              alignment: PlaceholderAlignment.baseline,
-              baseline: TextBaseline.alphabetic,
-              child: InkWell(
-                onTap: contactFormTap,
-                child: Text('formulario de contacto⇲', style: linkStyle),
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: AppDimensions.space4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _linkedBullet(
+            children: [
+              TextSpan(
+                text: '${l10n.accessibilityContactFormLink}⇲',
+                style: linkStyle,
+                recognizer: contactForm,
               ),
-            ),
-            TextSpan(text: ',', style: style),
-          ],
-        ),
-        _linkedBullet(
-          children: [
-            TextSpan(text: 'de manera presencial en ', style: style),
-            WidgetSpan(
-              alignment: PlaceholderAlignment.baseline,
-              baseline: TextBaseline.alphabetic,
-              child: InkWell(
-                onTap: officesTap,
-                child: Text('las oficinas del 012 y OIRES⇲', style: linkStyle),
+              const TextSpan(text: ','),
+            ],
+          ),
+          _linkedBullet(
+            children: [
+              TextSpan(text: l10n.accessibilityOfficesPrefix),
+              TextSpan(
+                text: '${l10n.accessibilityOfficesLink}⇲',
+                style: linkStyle,
+                recognizer: offices,
               ),
-            ),
-            TextSpan(text: ' oficinas de información y registro).', style: style),
-          ],
-        ),
-      ],
-    ),
-  );
+              TextSpan(text: l10n.accessibilityOfficesSuffix),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _linkedBullet({required final List<InlineSpan> children}) => Padding(
     padding: const EdgeInsets.only(left: AppDimensions.space8),
@@ -399,4 +555,54 @@ class _A11yLinkedBulletList extends StatelessWidget {
       ],
     ),
   );
+}
+
+// ── _HighlightedText ─────────────────────────────────────────────────────────
+
+/// Renders [text] with any occurrences of [query] highlighted.
+class _HighlightedText extends StatelessWidget {
+  const _HighlightedText({
+    required this.text,
+    required this.style,
+    this.query = '',
+  });
+
+  final String text;
+  final TextStyle style;
+  final String query;
+
+  @override
+  Widget build(final BuildContext context) {
+    if (query.isEmpty) {
+      return Text(text, style: style);
+    }
+
+    final lowerText = text.toLowerCase();
+    final lowerQuery = query.toLowerCase();
+    final spans = <InlineSpan>[];
+    int start = 0;
+
+    while (true) {
+      final index = lowerText.indexOf(lowerQuery, start);
+      if (index == -1) {
+        spans.add(TextSpan(text: text.substring(start)));
+        break;
+      }
+      if (index > start) {
+        spans.add(TextSpan(text: text.substring(start, index)));
+      }
+      spans.add(
+        TextSpan(
+          text: text.substring(index, index + query.length),
+          style: style.copyWith(
+            backgroundColor: AppColors.secondary.withValues(alpha: 0.3),
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      );
+      start = index + query.length;
+    }
+
+    return Text.rich(TextSpan(style: style, children: spans));
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:async' show unawaited;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
@@ -8,10 +9,17 @@ import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept_consent_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/load_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
+
+/// Marker recorded in [ConsentState.errorMessage] when [ConsentNotifier.accept]
+/// was blocked because the clause catalogue never loaded (P-04 guard). Pages
+/// map it to a curated localized message; it is never shown raw.
+const consentClauseCatalogueUnavailable = 'consent-clause-catalogue-unavailable';
 
 // ── Status ────────────────────────────────────────────────────────────────────
 
@@ -153,26 +161,52 @@ class ConsentNotifier extends Notifier<ConsentState> {
     if (state.status == ConsentStatus.saving) {
       return;
     }
-    final clausesToPersist = _clausesForPersistence(state.clauses);
+    var clausesToPersist = _clausesForPersistence(state.clauses);
+    if (!_isPreferencesEditing && !clausesToPersist.any((final clause) => clause.id == requiredConsentClauseId)) {
+      // P-04 guard: the catalogue never loaded, so accepting would POST a body
+      // without clause 0 — the backend records it and every later read reports
+      // the consent as pending forever. Retry the load once, then block.
+      state = state.copyWith(status: ConsentStatus.saving);
+      final reload = await ref.read(loadClausesUsecaseProvider).execute(idAgente: _idAgente);
+      if (!ref.mounted) {
+        return;
+      }
+      final reloadedClauses = switch (reload) {
+        LoadClausesSuccess(:final clauses) => clauses,
+        LoadClausesFailed() => const <Clause>[],
+      };
+      if (!reloadedClauses.any((final clause) => clause.id == requiredConsentClauseId)) {
+        logger.e('Consent accept blocked: clause catalogue unavailable (P-04 guard)');
+        state = state.copyWith(
+          status: ConsentStatus.saveError,
+          errorMessage: consentClauseCatalogueUnavailable,
+        );
+        return;
+      }
+      clausesToPersist = _clausesForPersistence(reloadedClauses);
+      state = state.copyWith(clauses: reloadedClauses);
+    }
     state = state.copyWith(status: ConsentStatus.saving);
+    // La limpieza de hechos vitales va ANTES de persistir las cláusulas: se
+    // ejecuta con la autorización de recomendaciones todavía viva en el
+    // backend, y si falla no se ha tocado nada — reintentar deja todo íntegro.
+    final clearError = await _clearLifeEventsSelectionIfRecommendationsClauseRevoked(clausesToPersist);
+    if (!ref.mounted) {
+      return;
+    }
+    if (clearError != null) {
+      state = state.copyWith(
+        status: ConsentStatus.saveError,
+        errorMessage: clearError,
+      );
+      return;
+    }
     final result = await ref.read(acceptConsentUsecaseProvider).execute(idAgente: _idAgente, clauses: clausesToPersist);
     if (!ref.mounted) {
       return;
     }
     switch (result) {
       case AcceptConsentSuccess():
-        final resetError = await _resetLifeEventsIfRecommendationsClauseWasRevoked(clausesToPersist);
-        if (!ref.mounted) {
-          return;
-        }
-        if (resetError != null) {
-          state = ConsentState(
-            status: ConsentStatus.saveError,
-            clauses: clausesToPersist,
-            errorMessage: resetError,
-          );
-          return;
-        }
         final onboardingError = await _skipLifeEventsOnboardingIfClauseWasEnabledFromPreferences(clausesToPersist);
         if (!ref.mounted) {
           return;
@@ -230,7 +264,15 @@ class ConsentNotifier extends Notifier<ConsentState> {
     };
   }
 
-  Future<String?> _resetLifeEventsIfRecommendationsClauseWasRevoked(final List<Clause> clauses) async {
+  /// Limpia la selección de hechos vitales cuando la cláusula de
+  /// recomendaciones pasa de aceptada a retirada editando desde Preferencias.
+  ///
+  /// Mismo esquive que `LifeEventsNotifier.confirmReset`: se persiste el
+  /// catálogo deseleccionado (`PATCH /hechos`), nunca `DELETE /preferencias` —
+  /// en el gateway ese DELETE arrasa el soporte completo del ciudadano,
+  /// cláusulas incluidas, y lo deja irrecuperable: todo pasa a responder el
+  /// sobre 412.00/3034 y ni re-aceptar el consentimiento lo repara.
+  Future<String?> _clearLifeEventsSelectionIfRecommendationsClauseRevoked(final List<Clause> clauses) async {
     if (!_isPreferencesEditing || !_initialSelectedClauseIds.contains(recommendationsConsentClauseId)) {
       return null;
     }
@@ -240,10 +282,25 @@ class ConsentNotifier extends Notifier<ConsentState> {
     if (recommendationsClauseSelected) {
       return null;
     }
-    final result = await ref.read(resetLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
-    return switch (result) {
-      ResetLifeEventsSuccess() => null,
-      ResetLifeEventsFailed(:final message) => message,
+    final loadResult = await ref.read(loadLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
+    if (!ref.mounted) {
+      return null;
+    }
+    final List<LifeEvent> events;
+    switch (loadResult) {
+      case LoadLifeEventsSuccess(events: final loadedEvents):
+        events = loadedEvents;
+      case LoadLifeEventsFailed(:final message):
+        return message;
+    }
+    if (events.every((final event) => !event.selected)) {
+      return null;
+    }
+    final clearedEvents = events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
+    final saveResult = await ref.read(saveLifeEventsUsecaseProvider).execute(idAgente: _idAgente, events: clearedEvents);
+    return switch (saveResult) {
+      SaveLifeEventsSuccess() => null,
+      SaveLifeEventsFailed(:final message) => message,
     };
   }
 

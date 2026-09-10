@@ -9,15 +9,33 @@ import 'package:jccm_espacio_ciudadano/features/landing/1_domain/repositories/su
 final class SupportRepositoryImpl implements SupportRepository {
   SupportRepositoryImpl({required final Dio dio}) : _api = SoporteApi(withGeneratedApiCompat(dio), standardSerializers);
 
+  /// Ruta pública (sin sesión). El gateway de Espacio Ciudadano no la sirve
+  /// (404): sólo expone `/api/v1/ciudadanos/**`.
   static const endpoint = '/api/v1/soporte';
+
+  /// Ruta autenticada que sirve el gateway para un ciudadano con sesión.
+  static String citizenEndpoint(final String idAgente) => '/api/v1/ciudadanos/$idAgente/soporte';
 
   final SoporteApi _api;
 
   @override
-  Future<void> submitSupportRequest(final SupportRequest request) async {
+  Future<void> submitSupportRequest(final SupportRequest request, {final String? idAgente}) async {
+    final datos = _requestData(request);
+    final adjunto = _attachment(request);
+    if (idAgente != null && idAgente.isNotEmpty) {
+      await _api.crearTareaSoporte1(
+        idAgente: idAgente,
+        datos: datos,
+        adjunto: adjunto,
+      );
+      return;
+    }
     await _api.crearTareaSoporte(
-      datos: _requestData(request),
-      adjunto: _attachment(request),
+      // El path público /api/v1/soporte no interpola `idAgente` (el OpenAPI lo
+      // declara por error) y sin sesión no hay identificador que aportar.
+      idAgente: '',
+      datos: datos,
+      adjunto: adjunto,
     );
   }
 
