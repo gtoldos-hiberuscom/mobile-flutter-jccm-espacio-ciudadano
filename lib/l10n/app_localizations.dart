@@ -5612,6 +5612,12 @@ abstract class AppLocalizations {
   /// **'Ayuda y contacto'**
   String get drawerHelpAndContact;
 
+  /// No description provided for @drawerCloseMenu.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar menú'**
+  String get drawerCloseMenu;
+
   /// Botón de acción del menú de perfil que enlaza con la Sede Electrónica.
   ///
   /// In es, this message translates to:
@@ -7819,6 +7825,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.'**
   String get digitalCardsAuthorizationCheckErrorMessage;
+
+  /// No description provided for @digitalCardsInfoSheetContactHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.'**
+  String get digitalCardsInfoSheetContactHint;
+
+  /// No description provided for @digitalCardsInfoSheetContactButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Contactar'**
+  String get digitalCardsInfoSheetContactButton;
 
   /// Carnets digitales — título del bottom sheet informativo.
   ///

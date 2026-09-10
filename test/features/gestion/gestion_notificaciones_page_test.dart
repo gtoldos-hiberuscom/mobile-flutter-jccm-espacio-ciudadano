@@ -11,6 +11,30 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 const _procedimientoLabel = 'PROCEDIMIENTO';
 
 void main() {
+  testWidgets('tablet muestra los cuatro filtros compactos y permite seleccionar expiradas', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 1100);
+    addTearDown(tester.view.reset);
+    await _pumpList(tester, const []);
+    final context = tester.element(find.byType(GestionNotificacionesPage));
+    final l10n = AppLocalizations.of(context);
+    final labels = [
+      l10n.gestionNotificacionesTabTodo,
+      l10n.gestionNotificacionesTabPendientes,
+      l10n.gestionNotificacionesTabAceptadas,
+      l10n.gestionNotificacionesTabExpiradas,
+    ];
+    for (final label in labels) {
+      expect(find.text(label).hitTestable(), findsOneWidget);
+    }
+    expect(find.byTooltip(l10n.gestionNotificacionesTabExpiradas), findsNothing);
+    await tester.tap(find.text(l10n.gestionNotificacionesTabExpiradas));
+    await tester.pumpAndSettle();
+    final container = ProviderScope.containerOf(context);
+    expect(container.exists(gestionNotificacionesProvider(NotificacionEstado.expirada)), isTrue);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('la tarjeta muestra el procedimiento con la denominación, que es lo único que informa el gateway', (final tester) async {
     // Payload real de UAT (04/09): `idFicha` llega null en todos los
     // elementos y el dato viaja en `denominacion`. La tarjeta leía solo
@@ -80,7 +104,7 @@ Future<void> _pumpList(final WidgetTester tester, final List<Notificacion> notif
       ],
       child: const MaterialApp(
         locale: Locale('es'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionNotificacionesPage(),
       ),

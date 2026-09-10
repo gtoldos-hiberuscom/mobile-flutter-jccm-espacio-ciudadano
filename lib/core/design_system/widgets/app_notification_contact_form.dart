@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -42,11 +43,10 @@ class AppNotificationContactForm extends StatelessWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space16,
-              AppDimensions.space24,
-              AppDimensions.space16,
-              AppDimensions.space24,
+            padding: appPagePadding(
+              context,
+              top: AppDimensions.space24,
+              bottom: AppDimensions.space24,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

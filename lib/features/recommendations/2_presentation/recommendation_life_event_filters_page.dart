@@ -87,12 +87,7 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          AppDimensions.space16,
-          AppDimensions.space24,
-          AppDimensions.space16,
-          AppDimensions.space24,
-        ),
+        padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space24),
         children: [
           Text(
             l10n.recommendationsFilterIntro,

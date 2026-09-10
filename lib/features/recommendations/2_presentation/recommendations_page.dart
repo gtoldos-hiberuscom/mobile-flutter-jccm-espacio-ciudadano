@@ -152,12 +152,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
           top: false,
           child: LayoutBuilder(
             builder: (final context, final constraints) => SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space16,
-                AppDimensions.space24,
-                AppDimensions.space16,
-                AppDimensions.space24,
-              ),
+              padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space24),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight > AppDimensions.space48 ? constraints.maxHeight - AppDimensions.space48 : 0,
@@ -397,6 +392,19 @@ class _FilterNavigationState extends State<_FilterNavigation> {
 
   @override
   Widget build(final BuildContext context) {
+    if (isTabletLayout(context)) {
+      const filters = [
+        ..._primaryFilters,
+        _RecommendationFilter.immediate,
+      ];
+      return AppFloatingNavigation(
+        tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
+        selectedIndex: filters.indexOf(widget.selectedFilter),
+        tabHorizontalPadding: AppDimensions.space16,
+        onTabSelected: (final index) => widget.onSelected?.call(filters[index]),
+      );
+    }
+
     final filters = _showImmediate ? _immediateFilters : _primaryFilters;
     final selectedIndex = filters.indexOf(widget.selectedFilter);
 
@@ -615,8 +623,7 @@ enum _RecommendationFilter {
   all,
   recent,
   news,
-  immediate
-  ;
+  immediate;
 
   String label(final BuildContext context) {
     final l10n = AppLocalizations.of(context);

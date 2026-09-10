@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_bullet_list.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -44,8 +45,8 @@ class LandingAboutPage extends ConsumerWidget {
             // ── Scrollable body ────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space24,
+                padding: EdgeInsets.symmetric(
+                  horizontal: isTabletLayout(context) ? AppDimensions.space40 : AppDimensions.space24,
                   vertical: AppDimensions.space24,
                 ),
                 child: Stack(

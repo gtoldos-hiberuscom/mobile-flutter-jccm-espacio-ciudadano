@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
@@ -50,8 +51,8 @@ class LandingHelpPage extends ConsumerWidget {
             // ── Scrollable body ────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space24,
+                padding: EdgeInsets.symmetric(
+                  horizontal: isTabletLayout(context) ? AppDimensions.space40 : AppDimensions.space24,
                 ).copyWith(top: AppDimensions.space16),
                 child: Stack(
                   children: [

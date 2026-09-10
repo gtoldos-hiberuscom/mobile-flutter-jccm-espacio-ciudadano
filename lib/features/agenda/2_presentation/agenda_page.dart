@@ -85,12 +85,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           top: false,
           child: LayoutBuilder(
             builder: (final context, final constraints) => SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space16,
-                AppDimensions.space24,
-                AppDimensions.space16,
-                AppDimensions.space24,
-              ),
+              padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space24),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight > AppDimensions.space48 ? constraints.maxHeight - AppDimensions.space48 : 0,
@@ -396,8 +391,7 @@ enum _AgendaFilter {
   all,
   next7Days(days: 7),
   next30Days(days: 30),
-  next365Days(days: 365)
-  ;
+  next365Days(days: 365);
 
   const _AgendaFilter({
     this.days,

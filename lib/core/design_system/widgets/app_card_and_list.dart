@@ -97,6 +97,7 @@ class AppRecommendationCard extends StatelessWidget {
     required this.detailLabel,
     required this.detailText,
     super.key,
+    this.titleMaxLines,
     this.statusLabel,
     this.statusText,
     this.semanticLabel,
@@ -109,6 +110,7 @@ class AppRecommendationCard extends StatelessWidget {
        assert(semanticLabel == null || semanticLabel.length > 0, 'semanticLabel must not be empty');
 
   final String title;
+  final int? titleMaxLines;
   final List<String> categoryLabels;
   final String detailLabel;
   final String detailText;
@@ -172,6 +174,8 @@ class AppRecommendationCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
+                    maxLines: titleMaxLines,
+                    overflow: titleMaxLines == null ? null : TextOverflow.ellipsis,
                     style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
                   ),
                 ),

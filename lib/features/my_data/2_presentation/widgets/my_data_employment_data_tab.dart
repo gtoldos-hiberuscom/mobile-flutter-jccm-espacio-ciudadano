@@ -37,12 +37,7 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
     final jccmAuthorizationAsync = ref.watch(jccmDataAuthorizationProvider);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -69,7 +64,7 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const MyDataEmploymentDisabledDemandCard(),
-                    MyDataAuthorizationRequiredState(returnTo: Routes.myDataEmployment, onAuthorized: () => ref.invalidate(employmentDemandProvider)),
+                    MyDataAuthorizationRequiredState(returnTo: Routes.myDataEmployment, onAuthorized: () => ref.invalidate(employmentDemandProvider), scrollable: false),
                   ],
                 );
               }

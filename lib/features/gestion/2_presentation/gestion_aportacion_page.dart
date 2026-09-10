@@ -165,12 +165,7 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
           ),
           boxShadow: AppShadows.low,
         ),
-        padding: const EdgeInsets.fromLTRB(
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space24,
-        ),
+        padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
         child: AppButton(
           label: l10n.gestionAportacionFindButton,
           onPressed: _isSearching ? null : () => _onFindExpediente(l10n),
@@ -198,8 +193,8 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
         child: SafeArea(
           top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
+            padding: EdgeInsets.symmetric(
+              horizontal: appPageHorizontalPadding(context),
               vertical: AppDimensions.space24,
             ),
             child: Column(

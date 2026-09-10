@@ -5,6 +5,7 @@ import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart' show AppButton;
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart' show AppButton;
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -66,10 +67,9 @@ class AppStickybar extends StatelessWidget {
             child: SafeArea(
               top: false,
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: appPagePadding(
+                  context,
                   top: AppDimensions.space16,
-                  left: AppDimensions.space16,
-                  right: AppDimensions.space16,
                   bottom: isLandscape ? AppDimensions.space16 : AppDimensions.space48,
                 ),
                 child: isLandscape && children.length > 1 && !usesVerticalLayout

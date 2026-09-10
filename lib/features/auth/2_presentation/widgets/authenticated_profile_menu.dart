@@ -97,7 +97,6 @@ void showAuthenticatedProfileMenu({
     context: context,
     userName: _userName(l10n, claims),
     nif: claims?.normalizedPersonIdentifier ?? claims?.idAgente ?? '-',
-    identifierLabel: _identifierLabel(l10n, claims),
     primaryItems: [
       AppDrawerMenuItem(
         label: l10n.drawerPreferences,
@@ -158,10 +157,3 @@ String? _initial(final String? value) {
   }
   return normalized[0].toUpperCase();
 }
-
-String _identifierLabel(final AppLocalizations l10n, final JwtClaims? claims) => switch (claims?.identificationDocumentType) {
-  IdentificationDocumentType.dni => 'DNI',
-  IdentificationDocumentType.nie => 'NIE',
-  IdentificationDocumentType.legalEntityNif => 'NIF',
-  IdentificationDocumentType.other || null => l10n.drawerIdentifierFallbackLabel,
-};

@@ -90,12 +90,7 @@ class _AccessibilityPageState extends ConsumerState<AccessibilityPage> {
         maintainBottomViewPadding: true,
         minimum: const EdgeInsets.only(bottom: AppDimensions.space48),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(
-            left: AppDimensions.space16,
-            right: AppDimensions.space16,
-            top: AppDimensions.space24,
-            bottom: AppDimensions.space48,
-          ),
+          padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space48),
           child: _AccessibilityBody(
             highlightQuery: _highlightQuery,
             onRoyalDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),

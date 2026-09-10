@@ -398,12 +398,7 @@ class _FormView extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space32,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space32),
       children: [
         Text(
           l10n.supportRequiredFieldsNote,

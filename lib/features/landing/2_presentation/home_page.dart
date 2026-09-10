@@ -18,6 +18,8 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recomme
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
+bool _isTablet(final BuildContext context) => isTabletLayout(context);
+
 /// Authenticated home screen — Figma node 43716:13302 "Inicio".
 ///
 /// Composed of:
@@ -314,18 +316,13 @@ class _HomeDashboard extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
-            AppDimensions.space16,
-            AppDimensions.space24,
-            AppDimensions.space16,
-            112,
-          ),
+          padding: appPagePadding(context, top: AppDimensions.space24, bottom: 112),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _HomeNewsSection(),
               _SectionTitle(text: l10n.homeMyDataAccessesTitle),
-              const SizedBox(height: AppDimensions.space8),
+              SizedBox(height: _isTablet(context) ? AppDimensions.space24 : AppDimensions.space8),
               _QuickAccessGrid(onComingSoon: onComingSoon),
               const SizedBox(height: AppDimensions.space24),
               const _HomeRecommendationsSection(),
@@ -377,8 +374,8 @@ class _HomeNewsSection extends ConsumerWidget {
       orElse: () => null,
     );
 
-    final muestraNotificaciones = notificationsCount == null || notificationsCount > 0;
-    final muestraCitas = upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0;
+    final muestraNotificaciones = _isTablet(context) || notificationsCount == null || notificationsCount > 0;
+    final muestraCitas = _isTablet(context) || upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0;
 
     if (!muestraNotificaciones && !muestraCitas) {
       return const SizedBox.shrink();
@@ -388,7 +385,7 @@ class _HomeNewsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionTitle(text: l10n.homeNewsSectionTitle),
-        const SizedBox(height: AppDimensions.space8),
+        SizedBox(height: _isTablet(context) ? AppDimensions.space24 : AppDimensions.space8),
         if (muestraNotificaciones)
           AppSimpleNavCard(
             label: _labelWithCount(l10n, l10n.homeNewsNotificationsTitle, notificationsCount),
@@ -401,7 +398,7 @@ class _HomeNewsSection extends ConsumerWidget {
             ),
           ),
         if (muestraCitas) ...[
-          if (muestraNotificaciones) const SizedBox(height: AppDimensions.space8),
+          if (muestraNotificaciones) SizedBox(height: _isTablet(context) ? AppDimensions.space16 : AppDimensions.space8),
           AppSimpleNavCard(
             label: _labelWithCount(l10n, l10n.homeNewsAppointmentsTitle, upcomingAppointmentsCount),
             description: l10n.homeNewsAppointmentsDescription,
@@ -462,8 +459,9 @@ class _QuickAccessGrid extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: _isTablet(context) ? 6 : 3,
+        mainAxisExtent: _isTablet(context) ? 180 + (MediaQuery.textScalerOf(context).scale(16) - 16) * 4 : null,
         mainAxisSpacing: AppDimensions.space8,
         crossAxisSpacing: AppDimensions.space8,
         childAspectRatio: 0.73,
@@ -511,11 +509,11 @@ class _HomeRecommendationsSectionState extends ConsumerState<_HomeRecommendation
     super.dispose();
   }
 
-  void _scrollBy(final double direction) {
+  void _scrollBy(final double direction, final double step) {
     if (!_scrollController.hasClients) {
       return;
     }
-    final target = (_scrollController.offset + direction * 304).clamp(0.0, _scrollController.position.maxScrollExtent);
+    final target = (_scrollController.offset + direction * step).clamp(0.0, _scrollController.position.maxScrollExtent);
     unawaited(_scrollController.animateTo(target, duration: const Duration(milliseconds: 250), curve: Curves.easeOut));
   }
 
@@ -532,59 +530,66 @@ class _HomeRecommendationsSectionState extends ConsumerState<_HomeRecommendation
         }
 
         final recommendations = data.recommendations.take(5).toList(growable: false);
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _SectionTitle(text: l10n.homeRecommendedProceduresTitle),
-            const SizedBox(height: AppDimensions.space8),
-            SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              clipBehavior: Clip.none,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (var index = 0; index < recommendations.length; index++) ...[
-                    SizedBox(
-                      width: 288,
-                      child: _RecommendedProcedureCard(recommendation: recommendations[index]),
-                    ),
-                    if (index < recommendations.length - 1) const SizedBox(width: AppDimensions.space16),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: AppDimensions.space8),
-            Row(
+        return LayoutBuilder(
+          builder: (final context, final constraints) {
+            final tablet = _isTablet(context);
+            final cardWidth = tablet ? (constraints.maxWidth - AppDimensions.space16) / 2 : 288.0;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
-                      boxShadow: AppShadows.low,
-                    ),
-                    child: AppButton(
-                      label: l10n.homeGoToRecommendationsButton,
-                      hierarchy: AppButtonHierarchy.secondary,
-                      isExpanded: true,
-                      onPressed: () => context.go(Routes.recommendations),
-                    ),
+                _SectionTitle(text: l10n.homeRecommendedProceduresTitle),
+                SizedBox(height: tablet ? AppDimensions.space24 : AppDimensions.space8),
+                SingleChildScrollView(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: tablet ? Clip.hardEdge : Clip.none,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (var index = 0; index < recommendations.length; index++) ...[
+                        SizedBox(
+                          width: cardWidth,
+                          child: _RecommendedProcedureCard(recommendation: recommendations[index]),
+                        ),
+                        if (index < recommendations.length - 1) const SizedBox(width: AppDimensions.space16),
+                      ],
+                    ],
                   ),
                 ),
-                const SizedBox(width: AppDimensions.space8),
-                _carouselArrow(context, forward: false),
-                const SizedBox(width: AppDimensions.space8),
-                _carouselArrow(context, forward: true),
+                const SizedBox(height: AppDimensions.space8),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: tablet ? cardWidth : constraints.maxWidth - 112,
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
+                          boxShadow: AppShadows.low,
+                        ),
+                        child: AppButton(
+                          label: l10n.homeGoToRecommendationsButton,
+                          hierarchy: AppButtonHierarchy.secondary,
+                          isExpanded: true,
+                          onPressed: () => context.go(Routes.recommendations),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: tablet ? AppDimensions.space16 : AppDimensions.space8),
+                    _carouselArrow(context, forward: false, step: cardWidth + AppDimensions.space16),
+                    const SizedBox(width: AppDimensions.space8),
+                    _carouselArrow(context, forward: true, step: cardWidth + AppDimensions.space16),
+                  ],
+                ),
               ],
-            ),
-          ],
+            );
+          },
         );
       },
       orElse: () => const SizedBox.shrink(),
     );
   }
 
-  Widget _carouselArrow(final BuildContext context, {required final bool forward}) => DecoratedBox(
+  Widget _carouselArrow(final BuildContext context, {required final bool forward, required final double step}) => DecoratedBox(
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
       boxShadow: AppShadows.low,
@@ -594,7 +599,7 @@ class _HomeRecommendationsSectionState extends ConsumerState<_HomeRecommendation
       borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
       child: IconButton(
         tooltip: forward ? MaterialLocalizations.of(context).nextPageTooltip : MaterialLocalizations.of(context).previousPageTooltip,
-        onPressed: () => _scrollBy(forward ? 1 : -1),
+        onPressed: () => _scrollBy(forward ? 1 : -1, step),
         constraints: const BoxConstraints.tightFor(width: 48, height: 48),
         icon: AppIcon(forward ? AppIcons.arrowForward : AppIcons.arrowBack, color: AppColors.textPrimary),
       ),
@@ -614,6 +619,7 @@ class _RecommendedProcedureCard extends StatelessWidget {
     return AppRecommendationCard(
       onTap: () => unawaited(_openRecommendationDetail(context, recommendation)),
       title: recommendation.title,
+      titleMaxLines: _isTablet(context) ? 3 : null,
       categoryLabels: _categoryLabels(context, recommendation.badges),
       detailLabel: l10n.recommendationsAssociatedLifeEventsLabel,
       detailText: lifeEventName.isEmpty ? l10n.homeBlockLastUpdatedUnknown : lifeEventName,

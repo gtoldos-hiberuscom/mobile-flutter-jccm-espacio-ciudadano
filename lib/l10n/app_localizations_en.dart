@@ -2926,6 +2926,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get drawerHelpAndContact => 'Help & Contact';
 
   @override
+  String get drawerCloseMenu => 'Close menu';
+
+  @override
   String get drawerGoToSedeElectronica => 'Go to eGovernment Portal';
 
   @override
@@ -4109,6 +4112,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get digitalCardsAuthorizationCheckErrorMessage => 'We could not verify the authorization required to display your digital cards.';
+
+  @override
+  String get digitalCardsInfoSheetContactHint => 'If any data is incorrect or out of date, contact your Health Centre.';
+
+  @override
+  String get digitalCardsInfoSheetContactButton => 'Contact';
 
   @override
   String get digitalCardsInfoSheetTitle => 'About My Digital Cards';

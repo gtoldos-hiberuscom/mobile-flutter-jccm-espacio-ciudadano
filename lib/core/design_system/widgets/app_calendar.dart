@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -99,6 +101,7 @@ class _AppCalendarState extends State<AppCalendar> {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final selectedMonth = await showModalBottomSheet<DateTime>(
       context: context,
+      constraints: appModalSheetConstraints(context),
       requestFocus: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
@@ -146,6 +149,18 @@ class _AppCalendarState extends State<AppCalendar> {
   }
 
   List<DateTime> _daysInGrid() => calendarGridDays(month: _currentMonth, firstDayOfWeek: widget.firstDayOfWeek);
+
+  /// Tablet (non-compact) uses roomier cells so the grid does not look flat
+  /// when stretched across the wide page content.
+  bool get _isTabletGrid => !widget.compact && isTabletLayout(context);
+
+  double get _dayTargetSize => _isTabletGrid ? AppDimensions.space64 : AppDimensions.minTouchTarget;
+
+  TextStyle get _dayTextStyle => _isTabletGrid
+      ? AppTypography.bodyRegular
+      : widget.compact
+      ? AppTypography.captionRegular
+      : AppTypography.smallRegular;
 
   @override
   Widget build(final BuildContext context) {
@@ -363,11 +378,15 @@ class _AppCalendarState extends State<AppCalendar> {
             .map(
               (final label) => Expanded(
                 child: SizedBox(
-                  height: widget.compact ? AppDimensions.space24 : AppDimensions.space32,
+                  height: _isTabletGrid
+                      ? AppDimensions.space40
+                      : widget.compact
+                      ? AppDimensions.space24
+                      : AppDimensions.space32,
                   child: Center(
                     child: Text(
                       label,
-                      style: (widget.compact ? AppTypography.captionRegular : AppTypography.smallRegular).copyWith(
+                      style: _dayTextStyle.copyWith(
                         color: AppColors.textWhite,
                       ),
                     ),
@@ -412,7 +431,11 @@ class _AppCalendarState extends State<AppCalendar> {
         ),
       ),
       padding: EdgeInsets.symmetric(
-        vertical: widget.compact ? AppDimensions.space4 : AppDimensions.space8,
+        vertical: _isTabletGrid
+            ? AppDimensions.space16
+            : widget.compact
+            ? AppDimensions.space4
+            : AppDimensions.space8,
       ),
       child: Column(children: rows),
     );
@@ -428,6 +451,13 @@ class _AppCalendarState extends State<AppCalendar> {
     final materialL10n = MaterialLocalizations.of(context);
     final l10n = AppLocalizations.of(context);
     final hasLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final dayBoxSize = _isTabletGrid
+        ? 52.0
+        : hasLargeText
+        ? AppDimensions.space40
+        : widget.compact
+        ? AppDimensions.space32
+        : 36.0;
     final semanticParts = [
       materialL10n.formatFullDate(date),
       if (today) materialL10n.currentDateLabel,
@@ -473,19 +503,11 @@ class _AppCalendarState extends State<AppCalendar> {
             onTap: canSelect ? () => widget.onDateSelected?.call(date) : null,
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
             child: SizedBox.square(
-              dimension: AppDimensions.minTouchTarget,
+              dimension: _dayTargetSize,
               child: Center(
                 child: Container(
-                  width: hasLargeText
-                      ? AppDimensions.space40
-                      : widget.compact
-                      ? AppDimensions.space32
-                      : 36,
-                  height: hasLargeText
-                      ? AppDimensions.space40
-                      : widget.compact
-                      ? AppDimensions.space32
-                      : 36,
+                  width: dayBoxSize,
+                  height: dayBoxSize,
                   decoration: BoxDecoration(
                     color: backgroundColor,
                     borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
@@ -501,7 +523,7 @@ class _AppCalendarState extends State<AppCalendar> {
                       Center(
                         child: Text(
                           '${date.day}',
-                          style: (widget.compact ? AppTypography.captionRegular : AppTypography.smallRegular).copyWith(
+                          style: _dayTextStyle.copyWith(
                             color: textColor,
                             fontWeight: fontWeight,
                           ),
@@ -510,10 +532,10 @@ class _AppCalendarState extends State<AppCalendar> {
                       ),
                       if (hasEvent)
                         Positioned(
-                          bottom: 1,
+                          bottom: _isTabletGrid ? 3 : 1,
                           child: Container(
-                            width: 6,
-                            height: 6,
+                            width: _isTabletGrid ? AppDimensions.space8 : 6,
+                            height: _isTabletGrid ? AppDimensions.space8 : 6,
                             decoration: const BoxDecoration(
                               color: AppColors.primaryDark,
                               shape: BoxShape.circle,

@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -109,8 +110,8 @@ class _LandingPageState extends ConsumerState<LandingPage> {
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: appPageHorizontalPadding(context),
                 ),
                 child: LayoutBuilder(
                   builder: (final context, final constraints) => FittedBox(

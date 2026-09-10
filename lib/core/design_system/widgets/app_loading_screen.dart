@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 
@@ -51,11 +52,10 @@ class AppLoadingScreen extends StatelessWidget {
         child: SafeArea(
           // Desplazable para que el contenido no se corte al ampliar el texto.
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space16,
-              _topPadding,
-              AppDimensions.space16,
-              AppDimensions.space64,
+            padding: appPagePadding(
+              context,
+              top: _topPadding,
+              bottom: AppDimensions.space64,
             ),
             child: Semantics(
               container: true,

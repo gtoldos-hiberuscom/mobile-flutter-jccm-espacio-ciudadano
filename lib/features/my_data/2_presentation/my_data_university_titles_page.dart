@@ -43,12 +43,7 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       itemCount: titles.length,
       separatorBuilder: (final context, final index) => const SizedBox(
         height: AppDimensions.space16,

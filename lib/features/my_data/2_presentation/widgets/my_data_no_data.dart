@@ -21,11 +21,14 @@ class MyDataNoData extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    // Only the full-page variant carries the page margin; nested inside an
+    // already padded page it keeps its own 16 dp inset.
+    final horizontal = scrollable ? appPageHorizontalPadding(context) : AppDimensions.space16;
     final content = Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
+      padding: EdgeInsets.fromLTRB(
+        horizontal,
         AppDimensions.space24,
-        AppDimensions.space16,
+        horizontal,
         AppDimensions.space64,
       ),
       child: AppAlertContextual(

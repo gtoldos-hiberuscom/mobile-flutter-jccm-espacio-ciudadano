@@ -283,7 +283,7 @@ class _DetalleContent extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(AppDimensions.space16, AppDimensions.space8, AppDimensions.space16, AppDimensions.space24),
+      padding: appPagePadding(context, top: AppDimensions.space8, bottom: AppDimensions.space24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -350,12 +350,7 @@ class _PendingActionBar extends StatelessWidget {
   Widget build(final BuildContext context) => SafeArea(
     top: false,
     child: Container(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
       decoration: const BoxDecoration(
         color: AppColors.surface,
         border: Border(top: BorderSide(color: AppColors.borderNeutralLight)),

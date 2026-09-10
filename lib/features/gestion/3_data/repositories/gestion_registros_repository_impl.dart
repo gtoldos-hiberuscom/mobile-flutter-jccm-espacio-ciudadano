@@ -16,7 +16,7 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   /// TEMPORAL: en UAT el listado de registros tarda más que el timeout general
   /// de 20s (incidencia reportada a backend el 04/09/2026); se amplía a 40s
   /// solo aquí. Retirar cuando backend responda dentro del plazo general.
-  static const _registrosTimeout = Duration(seconds: 40);
+  static const _registrosTimeout = Duration(seconds: 60);
 
   @override
   Future<List<Registro>> loadEntradas({

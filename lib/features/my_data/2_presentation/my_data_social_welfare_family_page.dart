@@ -42,7 +42,7 @@ class _LargeFamilyAuthorizationRequired extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16),
       child: MyDataAuthorizationContextualHelper(
         onOpenSettings: () => unawaited(
           context.push(
@@ -87,12 +87,7 @@ class _LargeFamilyContent extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -182,12 +177,7 @@ class _NoLargeFamilyData extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space24,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space64),
       child: _FamilyContactHelper(
         message: l10n.familiaNumerosaNoDataMessage,
         ref: ref,

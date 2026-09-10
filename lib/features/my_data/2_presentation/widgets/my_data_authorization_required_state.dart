@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 
@@ -15,6 +15,7 @@ class MyDataAuthorizationRequiredState extends StatelessWidget {
     required this.returnTo,
     this.onAuthorized,
     this.message,
+    this.scrollable = true,
     super.key,
   });
 
@@ -30,10 +31,15 @@ class MyDataAuthorizationRequiredState extends StatelessWidget {
 
   final String? message;
 
+  /// `true` cuando es el cuerpo completo de la página (lleva el margen de
+  /// página y su propio scroll); `false` cuando va anidado en una página ya
+  /// acolchada, donde conserva su inset propio de 16 dp.
+  final bool scrollable;
+
   @override
   Widget build(final BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+    final content = Padding(
+      padding: scrollable ? appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16) : const EdgeInsets.all(AppDimensions.space16),
       child: MyDataAuthorizationContextualHelper(
         message: message,
         onOpenSettings: () async {
@@ -54,5 +60,6 @@ class MyDataAuthorizationRequiredState extends StatelessWidget {
         },
       ),
     );
+    return scrollable ? SingleChildScrollView(child: content) : content;
   }
 }

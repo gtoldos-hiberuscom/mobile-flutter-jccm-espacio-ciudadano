@@ -139,12 +139,7 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
           border: Border(top: BorderSide(color: AppColors.borderNeutralLight)),
           boxShadow: AppShadows.low,
         ),
-        padding: const EdgeInsets.fromLTRB(
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space24,
-        ),
+        padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
         child: AppButton(
           label: l10n.gestionNotificacionesAltaSaveButton,
           isExpanded: true,
@@ -168,8 +163,8 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.space16,
+          padding: EdgeInsets.symmetric(
+            horizontal: appPageHorizontalPadding(context),
             vertical: AppDimensions.space24,
           ),
           child: Column(

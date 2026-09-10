@@ -94,12 +94,7 @@ class FaqDetailPage extends StatelessWidget {
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
-            AppDimensions.space16,
-            AppDimensions.space24,
-            AppDimensions.space16,
-            AppDimensions.space48,
-          ),
+          padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space48),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

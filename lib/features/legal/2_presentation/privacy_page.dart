@@ -137,9 +137,8 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
                   // espacio, así que el último bloque —el contacto del delegado
                   // de protección de datos, con su correo— quedaba debajo del
                   // gesto de navegación y no se llegaba a ver.
-                  padding: EdgeInsets.only(
-                    left: AppDimensions.space16,
-                    right: AppDimensions.space16,
+                  padding: appPagePadding(
+                    context,
                     top: fromHome ? AppDimensions.space24 : AppDimensions.space8,
                     bottom: fromHome ? AppDimensions.space48 : AppDimensions.space8,
                   ),

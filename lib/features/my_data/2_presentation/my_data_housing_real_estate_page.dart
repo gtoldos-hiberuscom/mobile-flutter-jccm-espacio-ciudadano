@@ -90,12 +90,7 @@ class _PropertiesContent extends StatelessWidget {
     final filteredProperties = _filter(properties);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space24,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space64),
       child: Column(
         children: [
           AppSegmentedControl(

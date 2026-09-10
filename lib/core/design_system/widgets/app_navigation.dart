@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -573,11 +574,10 @@ class AppStickyBar extends StatelessWidget {
       explicitChildNodes: true,
       label: l10n.a11yStickybarLabel,
       child: Container(
-        padding: EdgeInsets.fromLTRB(
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space16,
-          AppDimensions.space16 + MediaQuery.paddingOf(context).bottom,
+        padding: appPagePadding(
+          context,
+          top: AppDimensions.space16,
+          bottom: AppDimensions.space16 + MediaQuery.paddingOf(context).bottom,
         ),
         decoration: const BoxDecoration(
           color: AppColors.surface,

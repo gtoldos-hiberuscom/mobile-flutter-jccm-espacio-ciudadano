@@ -43,7 +43,7 @@ class MyDataNonUniversityTitlesPage extends ConsumerWidget {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16),
       child: Column(
         children: [
           for (final title in titles) ...[

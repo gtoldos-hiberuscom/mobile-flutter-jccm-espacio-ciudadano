@@ -2927,6 +2927,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get drawerHelpAndContact => 'Ayuda y contacto';
 
   @override
+  String get drawerCloseMenu => 'Cerrar menú';
+
+  @override
   String get drawerGoToSedeElectronica => 'Ir a Sede Electrónica';
 
   @override
@@ -4110,6 +4113,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get digitalCardsAuthorizationCheckErrorMessage => 'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.';
+
+  @override
+  String get digitalCardsInfoSheetContactHint => 'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.';
+
+  @override
+  String get digitalCardsInfoSheetContactButton => 'Contactar';
 
   @override
   String get digitalCardsInfoSheetTitle => 'Sobre Mis Carnets Digitales';

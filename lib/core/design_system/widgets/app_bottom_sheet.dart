@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
@@ -66,6 +66,7 @@ class AppBottomSheet extends StatelessWidget {
   }) {
     return showModalBottomSheet<T>(
       context: context,
+      constraints: appModalSheetConstraints(context),
       requestFocus: true,
       backgroundColor: Colors.transparent,
       barrierColor: const Color(0xCC031B35),
@@ -448,17 +449,7 @@ class _DownloadFormatButton extends StatelessWidget {
                         color: foreground,
                       ),
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AppIcon(AppIcons.add, size: 20, color: foreground),
-                        const SizedBox(width: AppDimensions.space8),
-                        Text(label),
-                        const SizedBox(width: AppDimensions.space8),
-                        AppIcon(AppIcons.add, size: 20, color: foreground),
-                      ],
-                    ),
+                  : Text(label),
             ),
           ),
         ),

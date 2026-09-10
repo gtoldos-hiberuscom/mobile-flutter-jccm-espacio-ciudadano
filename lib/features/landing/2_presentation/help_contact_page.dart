@@ -141,12 +141,7 @@ class _FaqTab extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space48,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space48),
       children: [
         AppSectionHeading(l10n.helpFaqSectionTitle),
         const SizedBox(height: AppDimensions.space16),
@@ -200,12 +195,7 @@ class _ContactTab extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space48,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space48),
       children: [
         AppSectionHeading(l10n.helpContactInfoHeading),
         const SizedBox(height: AppDimensions.space24),

@@ -86,12 +86,7 @@ class _LegalNoticePageState extends ConsumerState<LegalNoticePage> {
         top: false,
         child: SingleChildScrollView(
           controller: _scrollController,
-          padding: const EdgeInsets.only(
-            left: AppDimensions.space16,
-            right: AppDimensions.space16,
-            top: AppDimensions.space32,
-            bottom: AppDimensions.space48,
-          ),
+          padding: appPagePadding(context, top: AppDimensions.space32, bottom: AppDimensions.space48),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

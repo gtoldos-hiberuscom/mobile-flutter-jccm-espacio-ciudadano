@@ -3852,6 +3852,7 @@
   "@drawerHelpAndContact": {
     "description": "Label for the Help and Contact item in the secondary section of the profile menu."
   },
+  "drawerCloseMenu": "Close menu",
   "drawerGoToSedeElectronica": "Go to eGovernment Portal",
   "@drawerGoToSedeElectronica": {
     "description": "Action button label in the profile menu linking to Sede Electrónica."
@@ -5342,6 +5343,8 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Digital cards — error while checking the required authorization."
   },
+  "digitalCardsInfoSheetContactHint": "If any data is incorrect or out of date, contact your Health Centre.",
+  "digitalCardsInfoSheetContactButton": "Contact",
   "digitalCardsInfoSheetTitle": "About My Digital Cards",
   "@digitalCardsInfoSheetTitle": {
     "description": "Digital cards — title of the info bottom sheet."

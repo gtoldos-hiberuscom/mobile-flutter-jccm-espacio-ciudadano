@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
@@ -272,12 +274,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
 
     return SingleChildScrollView(
       // Figma node 41779:22467 — content area px:16 py:24 (top handled by IntroSection)
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        0,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
+      padding: appPagePadding(context, bottom: AppDimensions.space24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -338,12 +335,7 @@ class _OnboardingStickyBar extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16 + MediaQuery.of(context).padding.bottom,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16 + MediaQuery.of(context).padding.bottom),
       decoration: const BoxDecoration(
         color: AppColors.surface,
         border: Border(
@@ -394,10 +386,10 @@ class _IntroSection extends StatelessWidget {
   Widget build(final BuildContext context) {
     // Figma content area: px:16, pt:24 → TextBlocks adds px:4, py:8
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16 + AppDimensions.space4, // 20
+      padding: EdgeInsets.fromLTRB(
+        appPageHorizontalPadding(context) + AppDimensions.space4, // 20 on phone
         AppDimensions.space24 + AppDimensions.space8, // 32
-        AppDimensions.space16 + AppDimensions.space4, // 20
+        appPageHorizontalPadding(context) + AppDimensions.space4, // 20 on phone
         AppDimensions.space8,
       ),
       child: Text(
@@ -514,6 +506,7 @@ class _ResetConfirmDialog extends StatelessWidget {
       explicitChildNodes: true,
       label: l10n.lifeEventsResetConfirmTitle,
       child: AlertDialog(
+        constraints: appModalDialogConstraints(context),
         title: Semantics(
           header: true,
           headingLevel: 1,
@@ -565,6 +558,7 @@ class _DiscardChangesDialog extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return AlertDialog(
+      constraints: appModalDialogConstraints(context),
       title: Text(l10n.lifeEventsDiscardConfirmTitle),
       content: Text(l10n.lifeEventsDiscardConfirmBody),
       actions: [

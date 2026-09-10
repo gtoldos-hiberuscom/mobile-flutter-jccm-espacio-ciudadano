@@ -124,12 +124,7 @@ class _SocialWelfareDataList extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
       itemBuilder: (final context, final index) {
         // Show contextual helper at the top when authorization is missing
         if (!hasJccmAuthorization && index == 0) {
@@ -219,12 +214,7 @@ class _SocialWelfareServicesTab extends ConsumerWidget {
     ];
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
       itemBuilder: (final context, final sectionIndex) => AppExternalLinkSection(
         title: linkSections[sectionIndex].title,
         links: [

@@ -3858,6 +3858,7 @@
   "@drawerHelpAndContact": {
     "description": "Etiqueta del ítem de Ayuda y Contacto en la sección secundaria del menú de perfil."
   },
+  "drawerCloseMenu": "Cerrar menú",
   "drawerGoToSedeElectronica": "Ir a Sede Electrónica",
   "@drawerGoToSedeElectronica": {
     "description": "Botón de acción del menú de perfil que enlaza con la Sede Electrónica."
@@ -5348,6 +5349,8 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Carnets digitales — error al comprobar la autorización necesaria."
   },
+  "digitalCardsInfoSheetContactHint": "Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.",
+  "digitalCardsInfoSheetContactButton": "Contactar",
   "digitalCardsInfoSheetTitle": "Sobre Mis Carnets Digitales",
   "@digitalCardsInfoSheetTitle": {
     "description": "Carnets digitales — título del bottom sheet informativo."

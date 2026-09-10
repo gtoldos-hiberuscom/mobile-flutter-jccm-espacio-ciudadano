@@ -65,8 +65,8 @@ class GestionPage extends ConsumerWidget {
         child: SafeArea(
           top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
+            padding: EdgeInsets.symmetric(
+              horizontal: appPageHorizontalPadding(context),
               vertical: AppDimensions.space24,
             ),
             child: Column(

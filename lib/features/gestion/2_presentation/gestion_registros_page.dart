@@ -178,7 +178,7 @@ class _RegistrosList extends StatelessWidget {
       return EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search);
     }
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16, vertical: AppDimensions.space24),
+      padding: EdgeInsets.symmetric(horizontal: appPageHorizontalPadding(context), vertical: AppDimensions.space24),
       itemCount: filtered.length,
       separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
       itemBuilder: (final context, final index) => _RegistroCard(registro: filtered[index], isEntrada: isEntrada),

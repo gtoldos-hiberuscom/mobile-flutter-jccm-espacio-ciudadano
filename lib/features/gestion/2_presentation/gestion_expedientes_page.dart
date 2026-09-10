@@ -80,8 +80,8 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
                 );
               }
               return ListView.separated(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: appPageHorizontalPadding(context),
                   vertical: AppDimensions.space24,
                 ),
                 itemCount: filteredExpedientes.length,

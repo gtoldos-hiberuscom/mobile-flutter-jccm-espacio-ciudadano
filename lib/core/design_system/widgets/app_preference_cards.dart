@@ -3,6 +3,7 @@ import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -33,11 +34,10 @@ class AppPreferenceList extends StatelessWidget {
       explicitChildNodes: true,
       label: semanticLabel,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(
-          AppDimensions.space16,
-          AppDimensions.space24,
-          AppDimensions.space16,
-          AppDimensions.space64,
+        padding: appPagePadding(
+          context,
+          top: AppDimensions.space24,
+          bottom: AppDimensions.space64,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

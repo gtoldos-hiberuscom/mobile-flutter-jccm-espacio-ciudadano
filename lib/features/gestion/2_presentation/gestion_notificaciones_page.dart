@@ -88,12 +88,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppDimensions.space16,
-                  AppDimensions.space24,
-                  AppDimensions.space16,
-                  AppDimensions.space16,
-                ),
+                padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space16),
                 child: _FilterBar(
                   labels: tabLabels,
                   selectedIndex: _selectedTab,
@@ -129,12 +124,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                         : filtered.isEmpty
                         ? EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search)
                         : ListView.separated(
-                            padding: const EdgeInsets.fromLTRB(
-                              AppDimensions.space16,
-                              0,
-                              AppDimensions.space16,
-                              AppDimensions.space24,
-                            ),
+                            padding: appPagePadding(context, bottom: AppDimensions.space24),
                             itemCount: filtered.length,
                             separatorBuilder: (final _, final _) => const SizedBox(height: AppDimensions.space16),
                             itemBuilder: (final context, final index) => _NotificacionCard(
@@ -207,6 +197,15 @@ class _FilterBarState extends State<_FilterBar> {
 
   @override
   Widget build(final BuildContext context) {
+    if (isTabletLayout(context)) {
+      return AppFloatingNavigation(
+        tabs: widget.labels,
+        selectedIndex: widget.selectedIndex,
+        onTabSelected: widget.onSelected,
+        tabHorizontalPadding: AppDimensions.space16,
+      );
+    }
+
     final indexes = _showExpired ? _expiredFilterIndexes : _primaryFilterIndexes;
     final selectedIndex = indexes.contains(widget.selectedIndex) ? indexes.indexOf(widget.selectedIndex) : indexes.indexOf(2);
 
