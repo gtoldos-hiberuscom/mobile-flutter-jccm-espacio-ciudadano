@@ -1172,6 +1172,18 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar tu agenda.'**
   String get agendaError;
 
+  /// Agenda — aviso de carga parcial cuando la fuente de citas de Atención Primaria (SESCAM) no responde y el resto de la agenda sí se ha cargado.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus citas sanitarias.'**
+  String get agendaHealthAppointmentsUnavailable;
+
+  /// Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar los eventos de tu agenda.'**
+  String get agendaEventsUnavailable;
+
   /// Agenda — etiqueta del timestamp de última actualización.
   ///
   /// In es, this message translates to:

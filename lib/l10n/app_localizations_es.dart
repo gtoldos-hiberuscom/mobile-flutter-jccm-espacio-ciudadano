@@ -570,6 +570,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaError => 'No hemos podido cargar tu agenda.';
 
   @override
+  String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
+
+  @override
+  String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
+
+  @override
   String agendaLastUpdated(String timestamp) {
     return 'Última actualización: $timestamp';
   }

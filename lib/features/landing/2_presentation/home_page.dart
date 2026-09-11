@@ -364,15 +364,11 @@ class _HomeNewsSection extends ConsumerWidget {
       data: (final values) => values.length,
       orElse: () => null,
     );
-    final upcomingAppointmentsCount = agenda.maybeWhen(
-      data: (final state) {
-        final now = DateTime.now();
-        return state.appointments
-            .where(
-              (final appointment) => !appointment.dateTime.isBefore(now),
-            )
-            .length;
-      },
+    // El recuento es `null` cuando la agenda no cargó del todo: con una fuente
+    // caída no es fiable, y la tarjeta se prefiere visible sin número antes que
+    // escondida por un "0 citas" que no sabemos si es cierto.
+    final upcomingAppointmentsCount = agenda.maybeWhen<int?>(
+      data: (final state) => state.upcomingAppointmentsCount(DateTime.now()),
       orElse: () => null,
     );
 

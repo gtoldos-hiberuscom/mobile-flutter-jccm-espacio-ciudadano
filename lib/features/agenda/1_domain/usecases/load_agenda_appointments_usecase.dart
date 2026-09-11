@@ -1,4 +1,5 @@
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/repositories/agenda_repository.dart';
 
 sealed class LoadAgendaAppointmentsResult {
@@ -6,9 +7,17 @@ sealed class LoadAgendaAppointmentsResult {
 }
 
 final class LoadAgendaAppointmentsSuccess extends LoadAgendaAppointmentsResult {
-  const LoadAgendaAppointmentsSuccess({required this.appointments});
+  const LoadAgendaAppointmentsSuccess({
+    required this.appointments,
+    this.failedSources = const {},
+  });
 
   final List<AgendaAppointment> appointments;
+
+  /// Fuentes que no respondieron. Si no está vacío la lista es parcial y la
+  /// pantalla debe avisar de lo que falta sin bloquear lo que sí llegó; el
+  /// fallo total sigue llegando como [LoadAgendaAppointmentsFailed].
+  final Set<AgendaAppointmentSource> failedSources;
 }
 
 final class LoadAgendaAppointmentsFailed extends LoadAgendaAppointmentsResult {
@@ -28,11 +37,14 @@ final class LoadAgendaAppointmentsUsecase {
     final String? agentId,
   }) async {
     try {
-      final appointments = await _repository.loadAppointments(
+      final snapshot = await _repository.loadAppointments(
         documentNumber: documentNumber,
         agentId: agentId,
       );
-      return LoadAgendaAppointmentsSuccess(appointments: appointments);
+      return LoadAgendaAppointmentsSuccess(
+        appointments: snapshot.appointments,
+        failedSources: snapshot.failedSources,
+      );
     } on Object catch (error) {
       return LoadAgendaAppointmentsFailed(
         message: error.toString(),

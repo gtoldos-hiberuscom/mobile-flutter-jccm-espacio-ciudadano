@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/repositories/agenda_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/usecases/load_agenda_appointments_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
@@ -83,6 +84,37 @@ void main() {
 
     expect(state.hasJccmAuthorization, isTrue);
     expect(state.appointments, hasLength(1));
+    expect(state.isPartial, isFalse);
+    // Sin fuentes caídas el recuento sí se publica: la portada lo pinta.
+    expect(state.upcomingAppointmentsCount(DateTime(2026, 8)), 1);
+  });
+
+  test('una fuente caída llega como carga parcial y deja el recuento de portada en null', () async {
+    // La pantalla sigue viva (no es AsyncError) y la portada, que no puede
+    // distinguir "0 citas" de "no las hemos podido contar", recibe null y
+    // mantiene visible la tarjeta de próximas citas sin número.
+    final container = buildContainer(
+      consentRepository: _FakeConsentRepository(accepted: true),
+      agendaRepository: _FakeAgendaRepository(
+        appointments: [
+          AgendaAppointment(
+            dateTime: DateTime(2026, 9),
+            title: 'Cita',
+            description: 'Consulta',
+            kind: AgendaAppointmentKind.health,
+          ),
+        ],
+        failedSources: const {AgendaAppointmentSource.health},
+      ),
+    );
+
+    final state = await container.read(agendaAppointmentsProvider.future);
+
+    expect(state.hasJccmAuthorization, isTrue);
+    expect(state.appointments, hasLength(1));
+    expect(state.isPartial, isTrue);
+    expect(state.failedSources, unorderedEquals(<AgendaAppointmentSource>{AgendaAppointmentSource.health}));
+    expect(state.upcomingAppointmentsCount(DateTime(2026, 8)), isNull);
   });
 }
 
@@ -126,15 +158,16 @@ final class _FakeConsentRepository implements ConsentRepository {
 }
 
 final class _FakeAgendaRepository implements AgendaRepository {
-  _FakeAgendaRepository({this.appointments = const []});
+  _FakeAgendaRepository({this.appointments = const [], this.failedSources = const {}});
 
   final List<AgendaAppointment> appointments;
+  final Set<AgendaAppointmentSource> failedSources;
 
   @override
-  Future<List<AgendaAppointment>> loadAppointments({
+  Future<AgendaAppointmentsSnapshot> loadAppointments({
     required final String documentNumber,
     final String? agentId,
-  }) async => appointments;
+  }) async => AgendaAppointmentsSnapshot(appointments: appointments, failedSources: failedSources);
 
   @override
   Future<void> refreshEvents({required final String agentId}) async {}

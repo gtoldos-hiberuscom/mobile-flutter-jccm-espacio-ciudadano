@@ -6,12 +6,14 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Agency agenda screen — Figma node 43716:12909.
 class AgendaPage extends ConsumerStatefulWidget {
@@ -143,10 +145,21 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             onRefresh: _refreshing ? null : () => unawaited(_refreshAgenda()),
           ),
         ],
+        // Un aviso por fuente caída, en el orden del enum para que no dependa
+        // de la iteración del `Set`. Cuando fallan todas, el repositorio
+        // propaga el error y aquí no se llega: se pinta `_buildErrorContent`.
+        for (final source in AgendaAppointmentSource.values.where(state.failedSources.contains)) ...[
+          const SizedBox(height: AppDimensions.space8),
+          _AgendaPartialLoadNotice(source: source),
+        ],
         const SizedBox(height: AppDimensions.space12),
         if (!state.hasJccmAuthorization)
           const SizedBox.shrink()
-        else if (appointments.isEmpty)
+        // Con la carga a medias y nada cargado, "no hay citas" sería mentira:
+        // el aviso de arriba es el único mensaje. Se mira `state.appointments`
+        // y no la lista filtrada, para que un filtro sin resultados sí siga
+        // diciendo que ese periodo está vacío.
+        else if (appointments.isEmpty && !(state.appointments.isEmpty && state.isPartial))
           const _AgendaEmptyState()
         else
           for (final section in sections) ...[
@@ -350,6 +363,31 @@ class _AgendaEmptyState extends StatelessWidget {
         'No hay citas para el periodo seleccionado.',
         style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
       ),
+    );
+  }
+}
+
+/// Aviso de carga parcial: la agenda se pinta igual, pero nombra la fuente que
+/// no ha respondido. Sin acción propia — la fila "Actualizado el…" justo
+/// encima ya ofrece el refresco.
+class _AgendaPartialLoadNotice extends StatelessWidget {
+  const _AgendaPartialLoadNotice({required this.source});
+
+  final AgendaAppointmentSource source;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return AppAlertContextual(
+      message: switch (source) {
+        AgendaAppointmentSource.health => l10n.agendaHealthAppointmentsUnavailable,
+        AgendaAppointmentSource.general => l10n.agendaEventsUnavailable,
+      },
+      severity: AppAlertSeverity.warning,
+      size: AppAlertContextualSize.small,
+      // Aparece después de cargar, no junto con la pantalla.
+      announce: true,
     );
   }
 }

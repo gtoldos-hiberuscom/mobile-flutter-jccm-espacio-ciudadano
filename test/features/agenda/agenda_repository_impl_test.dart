@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/3_data/agenda_repository_impl.dart';
 
 void main() {
@@ -14,10 +15,10 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = AgendaRepositoryImpl(dio: dio);
 
-      final appointments = await repository.loadAppointments(
+      final appointments = (await repository.loadAppointments(
         documentNumber: '12345678A',
         agentId: 'agent-1',
-      );
+      )).appointments;
 
       expect(
         adapter.paths,
@@ -67,10 +68,10 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = AgendaRepositoryImpl(dio: dio);
 
-      final appointments = await repository.loadAppointments(
+      final appointments = (await repository.loadAppointments(
         documentNumber: '12345678A',
         agentId: 'agent-1',
-      );
+      )).appointments;
 
       final duplicated = appointments.where((final appointment) => appointment.dateTime == DateTime(2026, 6, 15, 9));
       expect(duplicated, hasLength(1));
@@ -112,10 +113,10 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = AgendaRepositoryImpl(dio: dio);
 
-      final appointments = await repository.loadAppointments(
+      final appointments = (await repository.loadAppointments(
         documentNumber: '12345678A',
         agentId: 'agent-1',
-      );
+      )).appointments;
 
       expect(appointments, hasLength(1), reason: 'la misma cita publicada por las dos fuentes debe listarse una vez');
       expect(appointments.single.title, 'LAGUNA RUIDERA MONTESINOS');
@@ -135,10 +136,10 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = AgendaRepositoryImpl(dio: dio);
 
-      final appointments = await repository.loadAppointments(
+      final appointments = (await repository.loadAppointments(
         documentNumber: '12345678A',
         agentId: 'agent-1',
-      );
+      )).appointments;
 
       // La página pinta `.hour` crudo: un DateTime en UTC mostraba la cita a
       // la hora del meridiano, no a la del ciudadano.
@@ -157,6 +158,8 @@ void main() {
     });
 
     test('a 500 whose body carries no parseable appointments propagates instead of becoming "no appointments"', () async {
+      // `_StaticAdapter` responde igual a las dos rutas, así que caen todas
+      // las fuentes: solo entonces el fallo se propaga en vez de degradar.
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(500, {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error'});
       final repository = AgendaRepositoryImpl(dio: dio);
 
@@ -164,6 +167,74 @@ void main() {
         repository.loadAppointments(documentNumber: '12345678A', agentId: 'agent-1'),
         throwsA(isA<DioException>()),
       );
+    });
+
+    test('si SESCAM cae, la agenda se queda con los eventos y marca la fuente de salud', () async {
+      // El caso real del 10/09 en PRE: primaria-citas-pendientes devuelve
+      // 500.00/3031 y eventos responde bien. Antes esto tumbaba la pantalla
+      // entera.
+      final adapter = _AgendaAdapter(healthStatusCode: 500);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final snapshot = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      expect(snapshot.failedSources, unorderedEquals(<AgendaAppointmentSource>{AgendaAppointmentSource.health}));
+      expect(snapshot.isPartial, isTrue);
+      // Los 4 eventos siguen ahí: sin citas de SESCAM no hay franjas contra
+      // las que deduplicar, así que las de primaria publicadas como evento
+      // sobreviven.
+      expect(snapshot.appointments, hasLength(4));
+    });
+
+    test('si los eventos caen, quedan las citas de SESCAM y se marca la fuente general', () async {
+      final adapter = _AgendaAdapter(eventosStatusCode: 500);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final snapshot = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      expect(snapshot.failedSources, unorderedEquals(<AgendaAppointmentSource>{AgendaAppointmentSource.general}));
+      expect(snapshot.appointments, hasLength(1));
+      expect(snapshot.appointments.single.kind, AgendaAppointmentKind.health);
+    });
+
+    test('un 400 de eventos es "sin eventos", no una fuente caída', () async {
+      // `ignoreBadRequest` ya traducía el 400 a lista vacía; lo que se fija
+      // aquí es que eso NO se cuente como degradación y no salga el aviso.
+      final adapter = _AgendaAdapter(eventosStatusCode: 400);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final snapshot = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      );
+
+      expect(snapshot.failedSources, isEmpty);
+      expect(snapshot.isPartial, isFalse);
+      expect(snapshot.appointments, hasLength(1));
+    });
+
+    test('sin idAgente la agenda general ni se pide, y eso no es una fuente caída', () async {
+      final adapter = _AgendaAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final snapshot = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: '  ',
+      );
+
+      expect(adapter.paths, ['/api/v1/ciudadanos/12345678A/salud/primaria-citas-pendientes']);
+      expect(snapshot.failedSources, isEmpty);
+      expect(snapshot.appointments, hasLength(1));
     });
   });
 }
@@ -198,10 +269,25 @@ final class _AgendaAdapter implements HttpClientAdapter {
   _AgendaAdapter({
     final List<Map<String, dynamic>>? primaryCareAppointments,
     this.eventos,
+    this.healthStatusCode = 200,
+    this.eventosStatusCode = 200,
   }) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
 
   /// Eventos de la agenda general; `null` usa la lista de ejemplo del test base.
   final List<Map<String, dynamic>>? eventos;
+
+  /// Código con el que responde cada ruta. Permite tumbar **una sola** fuente,
+  /// que es justo lo que `_StaticAdapter` no puede hacer.
+  final int healthStatusCode;
+  final int eventosStatusCode;
+
+  static ResponseBody _errorBody(final int statusCode) => ResponseBody.fromString(
+    jsonEncode(const {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error interno de la API', 'body': null}),
+    statusCode,
+    headers: {
+      Headers.contentTypeHeader: [Headers.jsonContentType],
+    },
+  );
 
   static const List<Map<String, dynamic>> _defaultPrimaryCareAppointments = [
     {
@@ -234,6 +320,9 @@ final class _AgendaAdapter implements HttpClientAdapter {
       );
     }
     if (options.path.contains('/eventos/')) {
+      if (eventosStatusCode != 200) {
+        return _errorBody(eventosStatusCode);
+      }
       return ResponseBody.fromString(
         jsonEncode(
           {
@@ -275,6 +364,9 @@ final class _AgendaAdapter implements HttpClientAdapter {
       );
     }
 
+    if (healthStatusCode != 200) {
+      return _errorBody(healthStatusCode);
+    }
     return ResponseBody.fromString(
       jsonEncode(
         {
