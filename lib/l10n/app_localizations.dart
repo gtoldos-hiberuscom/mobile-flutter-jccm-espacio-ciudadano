@@ -7505,7 +7505,7 @@ abstract class AppLocalizations {
   /// Etiqueta del botón de descarga del pase (PKPASS) en Android.
   ///
   /// In es, this message translates to:
-  /// **'Wallet'**
+  /// **'Cartera digital'**
   String get appQrDownloadWalletLabelAndroid;
 
   /// Etiqueta del botón de descarga del pase (PKPASS) en iOS.

@@ -27,9 +27,9 @@ void main() {
     );
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    expect(find.bySemanticsLabel('Descargando Wallet'), findsOneWidget);
+    expect(find.bySemanticsLabel('Descargando Cartera digital'), findsOneWidget);
 
-    await tester.tap(find.bySemanticsLabel('Descargando Wallet'));
+    await tester.tap(find.bySemanticsLabel('Descargando Cartera digital'));
     await tester.tap(find.bySemanticsLabel('Descargar PDF'));
     await tester.pump();
 
@@ -51,10 +51,7 @@ void main() {
   testWidgets('labels the pass button after the platform wallet app', (final tester) async {
     await tester.pumpWidget(buildSheet());
 
-    final expectedLabel = switch (debugDefaultTargetPlatformOverride) {
-      TargetPlatform.iOS => 'Cartera digital',
-      _ => 'Wallet',
-    };
+    const expectedLabel = 'Cartera digital';
     expect(find.text(expectedLabel), findsOneWidget);
     expect(find.bySemanticsLabel('Descargar $expectedLabel'), findsOneWidget);
     expect(find.text('PKPASS'), findsNothing);

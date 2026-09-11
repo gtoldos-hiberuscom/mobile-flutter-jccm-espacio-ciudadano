@@ -3876,7 +3876,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appQrDownloadFormatTitle => 'Formato de descarga';
 
   @override
-  String get appQrDownloadWalletLabelAndroid => 'Wallet';
+  String get appQrDownloadWalletLabelAndroid => 'Cartera digital';
 
   @override
   String get appQrDownloadWalletLabelIos => 'Cartera digital';
