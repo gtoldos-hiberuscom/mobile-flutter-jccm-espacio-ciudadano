@@ -29,7 +29,7 @@ final class AuthRepositoryImpl implements AuthRepository {
           _config.ssoRedirectUri,
           discoveryUrl: _discoveryUrl,
           loginHint: loginHint,
-          scopes: scopes,
+          scopes: _effectiveScopes(scopes),
           promptValues: const [Prompt.login, Prompt.selectAccount],
           additionalParameters: const {'max_age': '0'},
           // Ephemeral: isolated ASWebAuthenticationSession on iOS/macOS and
@@ -76,7 +76,7 @@ final class AuthRepositoryImpl implements AuthRepository {
           _config.ssoRedirectUri,
           discoveryUrl: _discoveryUrl,
           refreshToken: refreshToken,
-          scopes: scopes,
+          scopes: _effectiveScopes(scopes),
         ),
       );
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
@@ -131,6 +131,16 @@ final class AuthRepositoryImpl implements AuthRepository {
         stackTrace,
       );
     }
+  }
+
+  /// The caller's scopes plus `offline_access` when this environment's client
+  /// has it assigned. Kept here, at the single point that talks to AppAuth, so
+  /// login and refresh can never disagree about the granted scope.
+  List<String> _effectiveScopes(final List<String> scopes) {
+    if (!_config.ssoOfflineAccess || scopes.contains(offlineAccessScope)) {
+      return scopes;
+    }
+    return [...scopes, offlineAccessScope];
   }
 
   String get _discoveryUrl => _realmUri('.well-known/openid-configuration');

@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart'
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_token_diagnostics.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
@@ -217,6 +218,7 @@ final class AuthSessionController {
     final TokenResponse session, {
     final JwtClaims? claims,
   }) {
+    _logSessionLifetimes(session);
     _ref.read(tokenResponseProvider.notifier).update(session);
     if (claims != null) {
       _ref.read(jwtClaimsProvider.notifier).update(claims.sub.isNotEmpty ? claims : null);
@@ -230,6 +232,22 @@ final class AuthSessionController {
     final decodedClaims = JwtDecoder.decode(accessToken);
     _ref.read(jwtClaimsProvider.notifier).update(decodedClaims.sub.isNotEmpty ? decodedClaims : null);
   }
+
+  /// Traza los lifetimes que Keycloak concedió a esta sesión.
+  ///
+  /// Es el único sitio por el que pasan las tres entradas de sesión —login
+  /// (`startInMemory`), refresco (`persist`) y arranque (`hydrateFromStorage`)—
+  /// así que basta una llamada para verlas todas. Solo imprime metadatos
+  /// derivados (instantes, duraciones, `typ` y scope): nunca material de
+  /// token, de ahí que no dependa de la redacción.
+  void _logSessionLifetimes(final TokenResponse session) => logger.i({
+    'session-lifetimes': SessionTokenDiagnostics.describe(
+      now: DateTime.now(),
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+      tokenAdditionalParameters: session.tokenAdditionalParameters,
+    ),
+  });
 
   TokenResponse _mergeWithCurrentSession(final TokenResponse newSession) {
     final current = _ref.read(tokenResponseProvider);

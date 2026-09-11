@@ -2,6 +2,14 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 
 const List<String> authDefaultScopes = ['openid'];
 
+/// Keycloak scope that turns the issued refresh token into an *offline* token:
+/// one hanging off an offline session, with the realm's offline lifetimes
+/// instead of the online SSO ones. Only requested where the environment
+/// declares the client has it assigned (`AppConfig.ssoOfflineAccess`);
+/// requesting it elsewhere fails the authorization request with
+/// `invalid_scope`.
+const String offlineAccessScope = 'offline_access';
+
 /// Domain contract for authentication operations.
 ///
 /// Implementations must always request full re-authentication

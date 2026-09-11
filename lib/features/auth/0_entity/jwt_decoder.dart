@@ -18,10 +18,22 @@ final class JwtDecoder {
   /// **Never throws.** Returns a [JwtClaims] with `sub: ''` and `exp: 0`
   /// on any failure (malformed token, invalid Base64, invalid JSON).
   static JwtClaims decode(final String token) {
+    final payload = decodePayload(token);
+    return payload.isEmpty ? _empty() : JwtClaims.fromMap(payload);
+  }
+
+  /// Decodes the payload section of [token] as a raw claim map.
+  ///
+  /// **Never throws.** Returns an empty map on any failure (malformed token,
+  /// invalid Base64, invalid JSON). Used for claims that have no place in
+  /// [JwtClaims] because they belong to a refresh token rather than to the
+  /// access token (e.g. Keycloak's `typ`, which tells `Refresh` apart from
+  /// `Offline`).
+  static Map<String, dynamic> decodePayload(final String token) {
     try {
       final parts = token.split('.');
       if (parts.length < 2) {
-        return _empty();
+        return const {};
       }
 
       // Base64Url decode — restore padding stripped by the JWT spec.
@@ -32,10 +44,9 @@ final class JwtDecoder {
       }
 
       final decoded = utf8.decode(base64Url.decode(payload));
-      final map = json.decode(decoded) as Map<String, dynamic>;
-      return JwtClaims.fromMap(map);
+      return json.decode(decoded) as Map<String, dynamic>;
     } catch (_) {
-      return _empty();
+      return const {};
     }
   }
 

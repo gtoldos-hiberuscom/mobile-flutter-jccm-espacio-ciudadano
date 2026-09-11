@@ -25,6 +25,7 @@ void main() {
     'SSO_REDIRECT_URI': 'es.jccm.test://auth/callback',
     'SSO_REALM': 'test-realm',
     'SSO_BASE_URL': 'https://sso.example.invalid/auth',
+    'SSO_OFFLINE_ACCESS': 'false',
   });
 
   late AuthRepositoryImpl repository;
