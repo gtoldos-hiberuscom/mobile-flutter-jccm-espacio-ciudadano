@@ -3879,7 +3879,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appQrDownloadWalletLabelAndroid => 'Wallet';
 
   @override
-  String get appQrDownloadWalletLabelIos => 'Cartera';
+  String get appQrDownloadWalletLabelIos => 'Cartera digital';
 
   @override
   String appQrDownloadFormatLabel(String format) {

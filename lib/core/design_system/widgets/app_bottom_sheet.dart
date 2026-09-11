@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -278,6 +277,8 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final availableFormatCount = [onQrPressed, onPkPassPressed, onPdfPressed].where((final callback) => callback != null).length;
+    final hasSingleFormat = availableFormatCount == 1;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -310,9 +311,10 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
           const SizedBox(height: AppDimensions.space8),
           if (onQrPressed != null) ...[
             _DownloadFormatButton(
-              label: 'QR',
+              label: l10n.appQrCodeLabel,
               onPressed: downloadingFormat == null ? onQrPressed : null,
               isLoading: downloadingFormat == 'QR',
+              primary: hasSingleFormat,
             ),
             const SizedBox(height: AppDimensions.space16),
           ],
@@ -321,7 +323,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
               label: _walletLabel(l10n),
               onPressed: downloadingFormat == null ? onPkPassPressed : null,
               isLoading: downloadingFormat == 'PKPASS',
-              primary: onPdfPressed == null,
+              primary: hasSingleFormat,
             ),
             if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
           ],
@@ -330,7 +332,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
               label: 'PDF',
               onPressed: downloadingFormat == null ? onPdfPressed : null,
               isLoading: downloadingFormat == 'PDF',
-              primary: true,
+              primary: hasSingleFormat,
             ),
         ],
       ),
@@ -341,7 +343,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
 /// Label of the wallet-pass (PKPASS) download button.
 ///
 /// Uses the name of the platform wallet app: "Wallet" on Android and
-/// "Cartera" (Apple Wallet's Spanish name) on iOS.
+/// "Cartera digital" on iOS.
 String _walletLabel(final AppLocalizations l10n) => defaultTargetPlatform == TargetPlatform.iOS ? l10n.appQrDownloadWalletLabelIos : l10n.appQrDownloadWalletLabelAndroid;
 
 class _QrPreview extends StatelessWidget {

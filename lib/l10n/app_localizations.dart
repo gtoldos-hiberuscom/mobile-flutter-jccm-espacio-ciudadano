@@ -7511,7 +7511,7 @@ abstract class AppLocalizations {
   /// Etiqueta del botón de descarga del pase (PKPASS) en iOS.
   ///
   /// In es, this message translates to:
-  /// **'Cartera'**
+  /// **'Cartera digital'**
   String get appQrDownloadWalletLabelIos;
 
   /// Etiqueta de accesibilidad del botón de descarga de un formato (QR, PKPASS, PDF).
