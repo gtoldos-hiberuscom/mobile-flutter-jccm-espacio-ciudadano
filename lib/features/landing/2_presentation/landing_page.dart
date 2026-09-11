@@ -1,19 +1,21 @@
 import 'dart:async' show TimeoutException, unawaited;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_screen.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/clave_login_veil.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Public anonymous landing screen — 00_Splash/Inicio from Figma.
@@ -76,6 +78,16 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         setState(() => _isAuthenticating = isAuthenticating);
       }
       if (next.loginSuccess) {
+        if (next.isolationDegradedWarning) {
+          // Shown via the root ScaffoldMessenger, so it survives the
+          // navigation to home below. Curated copy only (project rule).
+          AppAlertSnackbar.show(
+            context,
+            message: l10n.loginIsolationDegradedWarning,
+            severity: AppAlertSeverity.warning,
+            duration: const Duration(seconds: 8),
+          );
+        }
         ref.read(goRouterProvider).go(Routes.home);
       }
       if (next.error != null) {
@@ -98,8 +110,8 @@ class _LandingPageState extends ConsumerState<LandingPage> {
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: appPageHorizontalPadding(context),
                 ),
                 child: LayoutBuilder(
                   builder: (final context, final constraints) => FittedBox(
@@ -234,23 +246,11 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       ),
     );
 
-    // El guard de sesión hace comprobaciones asíncronas antes de que el router
-    // pinte la home privada, así que sin este velo la home pública se queda a la
-    // vista durante ese hueco y se percibe como una redirección extraña.
-    if (!_isAuthenticating) {
-      return scaffold;
-    }
-
-    return Stack(
-      children: [
-        scaffold,
-        Positioned.fill(
-          child: AppLoadingScreen(
-            title: l10n.loginPageTitle,
-            description: l10n.loginPageLoadingDescription,
-          ),
-        ),
-      ],
+    // Sin AppBar, la home debe declarar el estilo desde el primer frame.
+    // El velo de Cl@ve declara su propio estilo claro cuando está activo.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: ClaveLoginVeil(isAuthenticating: _isAuthenticating, child: scaffold),
     );
   }
 }

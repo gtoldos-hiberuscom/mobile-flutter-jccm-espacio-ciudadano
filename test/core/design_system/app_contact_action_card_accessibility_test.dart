@@ -95,6 +95,24 @@ void main() {
     expect(find.semantics.byLabel('Consultar listado'), findsNothing);
   });
 
+  testWidgets('expone el listado de oficinas como enlace y no como botón', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        AppContactActionCard(
+          title: 'Listado de oficinas de información y registro',
+          subtitle: 'Ir al portal web JCCM',
+          onTap: () {},
+        ),
+      ),
+    );
+
+    final data = find.semantics.byLabel('Listado de oficinas de información y registro. Ir al portal web JCCM').evaluate().single.getSemanticsData();
+    expect(data.flagsCollection.isLink, isTrue);
+    expect(data.flagsCollection.isButton, isFalse);
+    expect(data.hint, 'Abre en navegador externo');
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
+  });
+
   testWidgets('mantiene 48 dp y admite texto al 200 por ciento en 320 dp', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(320, 568);

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-// ignore: clean_layer_files_and_self_imports
 
 final logger = Logger(
   level: Level.debug,

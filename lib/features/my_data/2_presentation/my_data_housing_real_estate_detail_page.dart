@@ -65,12 +65,7 @@ class _PropertyDetailContent extends StatelessWidget {
     final cartographyUrl = property.cartographyUrl?.trim();
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

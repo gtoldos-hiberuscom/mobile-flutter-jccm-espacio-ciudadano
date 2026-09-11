@@ -1,3 +1,5 @@
+import 'dart:ui' show SemanticsRole;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
@@ -57,6 +59,8 @@ class AppSegmentedControl extends StatelessWidget {
       segments.length,
       (final index) => _SegmentButton(
         label: segments[index],
+        position: index + 1,
+        tabCount: segments.length,
         semanticLabel: semanticLabels?[index],
         isSelected: index == selectedIndex,
         isEnabled: enabledSegments?[index] ?? true,
@@ -65,22 +69,27 @@ class AppSegmentedControl extends StatelessWidget {
       ),
     );
 
-    return Semantics(
+    Widget tabGroup(final Widget child) => Semantics(
+      role: SemanticsRole.tabBar,
       container: true,
       explicitChildNodes: true,
       label: semanticLabel,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(AppDimensions.space8),
-        decoration: BoxDecoration(
-          color: AppColors.backgroundWhite,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-          border: Border.all(color: AppColors.borderNeutralLight),
-        ),
-        child: usesScrollableLayout
-            ? SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
+      child: child,
+    );
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppDimensions.space8),
+      decoration: BoxDecoration(
+        color: AppColors.backgroundWhite,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+        border: Border.all(color: AppColors.borderNeutralLight),
+      ),
+      child: usesScrollableLayout
+          ? SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: tabGroup(
+                Row(
                   children: buttons.indexed
                       .expand(
                         (final entry) => [
@@ -90,8 +99,10 @@ class AppSegmentedControl extends StatelessWidget {
                       )
                       .toList(growable: false),
                 ),
-              )
-            : Row(
+              ),
+            )
+          : tabGroup(
+              Row(
                 children: buttons.indexed
                     .expand(
                       (final entry) => [
@@ -101,7 +112,7 @@ class AppSegmentedControl extends StatelessWidget {
                     )
                     .toList(growable: false),
               ),
-      ),
+            ),
     );
   }
 }
@@ -109,6 +120,8 @@ class AppSegmentedControl extends StatelessWidget {
 class _SegmentButton extends StatelessWidget {
   const _SegmentButton({
     required this.label,
+    required this.position,
+    required this.tabCount,
     required this.isSelected,
     required this.isEnabled,
     required this.sortKey,
@@ -117,6 +130,8 @@ class _SegmentButton extends StatelessWidget {
   });
 
   final String label;
+  final int position;
+  final int tabCount;
   final bool isSelected;
   final bool isEnabled;
   final SemanticsSortKey sortKey;
@@ -126,10 +141,15 @@ class _SegmentButton extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Semantics(
+      role: SemanticsRole.tab,
       container: true,
-      button: true,
       label: semanticLabel ?? label,
+      value: MaterialLocalizations.of(context).tabLabel(
+        tabIndex: position,
+        tabCount: tabCount,
+      ),
       selected: isSelected,
+      inMutuallyExclusiveGroup: true,
       enabled: isEnabled,
       sortKey: sortKey,
       onTap: isEnabled ? onTap : null,

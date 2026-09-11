@@ -24,7 +24,9 @@
   "@landingAccessStepLabel": {
     "description": "Etiqueta accesible para un paso numerado de la sección Cómo acceder.",
     "placeholders": {
-      "stepNumber": {"type": "int"}
+      "stepNumber": {
+        "type": "int"
+      }
     }
   },
   "landingCtaButton": "Acceder a mi Espacio ciudadano",
@@ -162,6 +164,10 @@
   "loginPageError": "Error al iniciar sesión",
   "@loginPageError": {
     "description": "Título del mensaje de error mostrado cuando falla la autenticación."
+  },
+  "loginIsolationDegradedWarning": "Tu navegador no permite abrir una sesión aislada. Has accedido correctamente, pero este dispositivo podría recordar tu sesión de Cl@ve en próximos accesos.",
+  "@loginIsolationDegradedWarning": {
+    "description": "Aviso (no bloqueante) tras un login correcto cuando el navegador del dispositivo no soporta pestañas efímeras y la autenticación se hizo en el navegador compartido."
   },
   "loginRetryButton": "Reintentar",
   "@loginRetryButton": {
@@ -592,7 +598,7 @@
   "@legalAccessibilityTitle": {
     "description": "Título de la pantalla de accesibilidad."
   },
-  "legalNoticeTitle": "Aviso legal",
+  "legalNoticeTitle": "Aviso Legal",
   "@legalNoticeTitle": {
     "description": "Título de la pantalla de aviso legal."
   },
@@ -701,6 +707,10 @@
     "description": "Footer — Aviso legal."
   },
   "agendaPageTitle": "Agenda",
+  "agendaPendingAppointmentsTitle": "Citas pendientes",
+  "@agendaPendingAppointmentsTitle": {
+    "description": "Agenda — encabezado del listado de citas pendientes."
+  },
   "@agendaPageTitle": {
     "description": "Agenda — título de la pantalla."
   },
@@ -739,6 +749,14 @@
   "agendaError": "No hemos podido cargar tu agenda.",
   "@agendaError": {
     "description": "Agenda — mensaje de error al cargar."
+  },
+  "agendaHealthAppointmentsUnavailable": "No hemos podido cargar tus citas sanitarias.",
+  "@agendaHealthAppointmentsUnavailable": {
+    "description": "Agenda — aviso de carga parcial cuando la fuente de citas de Atención Primaria (SESCAM) no responde y el resto de la agenda sí se ha cargado."
+  },
+  "agendaEventsUnavailable": "No hemos podido cargar los eventos de tu agenda.",
+  "@agendaEventsUnavailable": {
+    "description": "Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado."
   },
   "agendaLastUpdated": "Última actualización: {timestamp}",
   "@agendaLastUpdated": {
@@ -1011,13 +1029,25 @@
   "@educationUniversityTitlesInfoBody": {
     "description": "Educación — cuerpo principal del modal de ayuda de títulos universitarios."
   },
-  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Ministerio de Ciencia, Innovación y Universidades.",
+  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Sede Electrónica de Universidades.",
   "@educationUniversityTitlesInfoFooter": {
     "description": "Educación — texto de pie del modal de ayuda de títulos universitarios."
   },
   "educationUniversityTitlesInfoContactButton": "Contacto",
   "@educationUniversityTitlesInfoContactButton": {
     "description": "Educación — botón de contacto en el modal de ayuda de títulos universitarios."
+  },
+  "educationNonUniversityTitlesInfoTitle": "Sobre tus títulos no universitarios",
+  "@educationNonUniversityTitlesInfoTitle": {
+    "description": "Educación — título del modal de ayuda de títulos no universitarios."
+  },
+  "educationNonUniversityTitlesInfoBody": "Consulta los datos de los títulos no universitarios que figuren en el registro.",
+  "@educationNonUniversityTitlesInfoBody": {
+    "description": "Educación — cuerpo principal del modal de ayuda de títulos no universitarios."
+  },
+  "educationNonUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación, Formación Profesional y Deportes.",
+  "@educationNonUniversityTitlesInfoFooter": {
+    "description": "Educación — texto de pie del modal de ayuda de títulos no universitarios."
   },
   "educationNonUniversityTitlesTitle": "Títulos no universitarios",
   "@educationNonUniversityTitlesTitle": {
@@ -1159,6 +1189,10 @@
   "myDataJccmAuthorizationRequiredMessage": "Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.",
   "@myDataJccmAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando la consulta de datos JCCM no está autorizada."
+  },
+  "authorizationCheckFailedMessage": "No hemos podido comprobar tus autorizaciones. Inténtalo de nuevo.",
+  "@authorizationCheckFailedMessage": {
+    "description": "Mensaje de error cuando la comprobación de autorizaciones no está disponible (fallo de backend), distinto de una autorización no concedida."
   },
   "myDataJccmAuthorizationRequiredCta": "Ir a Condiciones de uso y autorizaciones",
   "@myDataJccmAuthorizationRequiredCta": {
@@ -1512,10 +1546,6 @@
   "@supportCaptchaLabel": {
     "description": "Etiqueta del checkbox antibot."
   },
-  "supportCaptchaMockBadge": "MOCK",
-  "@supportCaptchaMockBadge": {
-    "description": "Insignia que indica que el captcha es un mock."
-  },
   "supportSubmitButton": "Enviar solicitud",
   "@supportSubmitButton": {
     "description": "Botón de envío del formulario."
@@ -1619,6 +1649,10 @@
   "saludSurfaceCta": "Ver agenda",
   "@saludSurfaceCta": {
     "description": "Home — CTA de la superficie de salud que lleva a la agenda."
+  },
+  "homeNoNewsMessage": "No tienes notificaciones pendientes ni citas próximas.",
+  "@homeNoNewsMessage": {
+    "description": "Home — mensaje de la sección Mis novedades cuando no hay ninguna."
   },
   "homeUpcomingEventsTitle": "Próximos eventos",
   "@homeUpcomingEventsTitle": {
@@ -2029,6 +2063,14 @@
   "@lifeEventsErrorFeedback": {
     "description": "Personalization — snackbar after a save / reset failure."
   },
+  "lifeEventsResetSuccessFeedback": "Tus preferencias se han borrado.",
+  "@lifeEventsResetSuccessFeedback": {
+    "description": "Personalization — snackbar after a successful preference reset."
+  },
+  "lifeEventsResetErrorFeedback": "No hemos podido borrar tus preferencias. Inténtalo de nuevo.",
+  "@lifeEventsResetErrorFeedback": {
+    "description": "Personalization — snackbar after a failed preference reset."
+  },
   "lifeEventsLoadError": "No hemos podido cargar los hechos vitales.",
   "@lifeEventsLoadError": {
     "description": "Personalization — error state when the catalog fails to load."
@@ -2246,9 +2288,15 @@
   "@a11yFileUpload": {
     "description": "Resumen accesible de un archivo y su estado de carga.",
     "placeholders": {
-      "fileName": {"type": "String"},
-      "fileInfo": {"type": "String"},
-      "status": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      },
+      "fileInfo": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
     }
   },
   "caseworkUploadErrorUnsupportedMime": "Formato no admitido.",
@@ -3102,6 +3150,14 @@
   "@familiaNumerosaTitleNumberLabel": {
     "description": "Familia numerosa detail — etiqueta de número de título."
   },
+  "familiaNumerosaCategoryGeneral": "General",
+  "@familiaNumerosaCategoryGeneral": {
+    "description": "Bienestar social — descripción de la categoría General del título de familia numerosa."
+  },
+  "familiaNumerosaCategoryEspecial": "Especial",
+  "@familiaNumerosaCategoryEspecial": {
+    "description": "Bienestar social — descripción de la categoría Especial del título de familia numerosa."
+  },
   "familiaNumerosaCategoryLabel": "Categoría",
   "@familiaNumerosaCategoryLabel": {
     "description": "Familia numerosa detail — etiqueta de categoría."
@@ -3494,7 +3550,7 @@
   "@appPhoneCallHint": {
     "description": "Design system — accessible hint for an action that starts a phone call."
   },
-  "a11yBack": "Volver",
+  "a11yBack": "Atrás",
   "a11yClose": "Cerrar",
   "a11yHelp": "Ayuda",
   "a11yAppName": "Espacio Ciudadano",
@@ -3578,7 +3634,7 @@
   "@a11yLandingH1Label": {
     "description": "Accessibility — semantic H1 label for the landing splash screen."
   },
-  "a11yCastillaLogoLabel": "Logotipo de la Junta de Comunidades de Castilla-La Mancha",
+  "a11yCastillaLogoLabel": "Gobierno de Castilla-La Mancha",
   "@a11yCastillaLogoLabel": {
     "description": "Accessibility — semantic label for the institutional Castilla-La Mancha logo."
   },
@@ -3591,31 +3647,51 @@
   "@a11yFieldError": {
     "description": "Anuncio accesible cuando aparece un error de validación en un campo.",
     "placeholders": {
-      "field": {"type": "String"},
-      "error": {"type": "String"}
+      "field": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
     }
   },
   "a11yExpandTextArea": "Ampliar {field}",
   "@a11yExpandTextArea": {
     "description": "Etiqueta del botón que amplía un área de texto.",
-    "placeholders": {"field": {"type": "String"}}
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
   },
   "a11yCollapseTextArea": "Contraer {field}",
   "@a11yCollapseTextArea": {
     "description": "Etiqueta del botón que contrae un área de texto.",
-    "placeholders": {"field": {"type": "String"}}
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
   },
   "a11ySelectPhoneCountryCode": "Seleccionar prefijo telefónico, actual {countryCode}",
   "@a11ySelectPhoneCountryCode": {
     "description": "Etiqueta del botón selector de prefijo telefónico.",
-    "placeholders": {"countryCode": {"type": "String"}}
+    "placeholders": {
+      "countryCode": {
+        "type": "String"
+      }
+    }
   },
   "a11yFilterButtonActiveCount": "{label}, {count, plural, one {1 filtro activo} other {{count} filtros activos}}",
   "@a11yFilterButtonActiveCount": {
     "description": "Etiqueta accesible de un botón de filtros con el número de filtros activos.",
     "placeholders": {
-      "label": {"type": "String"},
-      "count": {"type": "int"}
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
     }
   },
   "a11yFilterActions": "Acciones de filtros",
@@ -3634,32 +3710,54 @@
   "@a11yListFilterDateRange": {
     "description": "Etiqueta accesible de un filtro de rango de fechas.",
     "placeholders": {
-      "label": {"type": "String"},
-      "startDate": {"type": "String"},
-      "endDate": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
     }
   },
   "a11yErrorState": "Error: {message}",
   "@a11yErrorState": {
     "description": "Anuncio accesible de un estado de error.",
-    "placeholders": {"message": {"type": "String"}}
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
   },
   "a11yEmptyState": "Sin contenido: {message}",
   "@a11yEmptyState": {
     "description": "Anuncio accesible de un estado sin contenido o resultados.",
-    "placeholders": {"message": {"type": "String"}}
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
   },
   "a11yBlockedState": "Acceso no disponible: {message}",
   "@a11yBlockedState": {
     "description": "Anuncio accesible de un estado de acceso bloqueado o no disponible.",
-    "placeholders": {"message": {"type": "String"}}
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
   },
   "a11yAlert": "{title}: {message}",
   "@a11yAlert": {
     "description": "Etiqueta accesible unificada de una alerta.",
     "placeholders": {
-      "title": {"type": "String"},
-      "message": {"type": "String"}
+      "title": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
     }
   },
   "a11yAlertNeutral": "Aviso del sistema",
@@ -3671,30 +3769,46 @@
   "@a11yAgendaCard": {
     "description": "Resumen accesible de una tarjeta de agenda.",
     "placeholders": {
-      "type": {"type": "String"},
-      "details": {"type": "String"}
+      "type": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
     }
   },
   "a11yAttachmentField": "{label}. {hint}",
   "@a11yAttachmentField": {
     "placeholders": {
-      "label": {"type": "String"},
-      "hint": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "hint": {
+        "type": "String"
+      }
     }
   },
   "a11yRequiredAttachmentField": "{label}, obligatorio. {hint}",
   "@a11yRequiredAttachmentField": {
     "placeholders": {
-      "label": {"type": "String"},
-      "hint": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "hint": {
+        "type": "String"
+      }
     }
   },
   "a11yAttachmentSelected": "Archivo adjunto: {fileName}, {fileInfo}",
   "@a11yAttachmentSelected": {
     "description": "Estado anunciado al seleccionar un archivo adjunto.",
     "placeholders": {
-      "fileName": {"type": "String"},
-      "fileInfo": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      },
+      "fileInfo": {
+        "type": "String"
+      }
     }
   },
   "a11yBottomSheet": "Panel inferior",
@@ -3702,19 +3816,31 @@
   "a11yCalendar": "Calendario",
   "a11yCalendarMonth": "Mes mostrado: {monthYear}",
   "@a11yCalendarMonth": {
-    "placeholders": {"monthYear": {"type": "String"}}
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
   },
   "a11ySelectCalendarMonthYear": "Seleccionar mes y año, actual {monthYear}",
   "@a11ySelectCalendarMonthYear": {
-    "placeholders": {"monthYear": {"type": "String"}}
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
   },
   "a11yCalendarHasEvent": "con evento",
   "a11yCalendarOutsideMonth": "fuera del mes mostrado",
   "a11yCaptcha": "{label}, verificación {badge}",
   "@a11yCaptcha": {
     "placeholders": {
-      "label": {"type": "String"},
-      "badge": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "badge": {
+        "type": "String"
+      }
     }
   },
   "a11yCaptchaVerified": "Captcha verificado",
@@ -3727,7 +3853,11 @@
   "drawerGreeting": "Hola, {userName}",
   "@drawerGreeting": {
     "description": "Saludo del menú de perfil.",
-    "placeholders": {"userName": {"type": "String"}}
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
   },
   "drawerLogout": "Cerrar sesión",
   "@drawerLogout": {
@@ -3740,6 +3870,7 @@
   "@drawerHelpAndContact": {
     "description": "Etiqueta del ítem de Ayuda y Contacto en la sección secundaria del menú de perfil."
   },
+  "drawerCloseMenu": "Cerrar menú",
   "drawerGoToSedeElectronica": "Ir a Sede Electrónica",
   "@drawerGoToSedeElectronica": {
     "description": "Botón de acción del menú de perfil que enlaza con la Sede Electrónica."
@@ -3859,6 +3990,11 @@
   "myDataEmploymentOffersPageTitle": "Inscripción en ofertas de empleo",
   "@myDataEmploymentOffersPageTitle": {
     "description": "Título de la pantalla de inscripciones en ofertas de empleo."
+  },
+  "myDataEmploymentOffersPortalLink": "Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha",
+  "myDataEmploymentOffersInfoSheetFooter": "Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.",
+  "@myDataEmploymentOffersInfoSheetFooter": {
+    "description": "Texto de pie del modal informativo de la pantalla de inscripciones en ofertas."
   },
   "myDataEmploymentOffersInfoSheetDescription": "Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.",
   "@myDataEmploymentOffersInfoSheetDescription": {
@@ -4299,10 +4435,6 @@
   "@myDataEducationInterestLinksTitle": {
     "description": "Título de la sección de enlaces de interés en la pestaña de información y servicios de Educación."
   },
-  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
-  "@myDataEducationInterestLinkPlaceholder": {
-    "description": "Placeholder de enlace de interés de Educación según el diseño de Figma."
-  },
   "myDataEducationLinkEducationPortal": "Portal de Educación de Castilla-La Mancha",
   "@myDataEducationLinkEducationPortal": {
     "description": "Enlace al Portal de Educación de Castilla-La Mancha."
@@ -4379,10 +4511,6 @@
   "@myDataHealthAppointmentsError": {
     "description": "Mensaje de error del listado de citas sanitarias."
   },
-  "myDataHealthCip": "CIP: FCCT590551910012",
-  "@myDataHealthCip": {
-    "description": "Código CIP mostrado bajo el título del detalle de Salud."
-  },
   "myDataHealthPendingTab": "Pendientes",
   "@myDataHealthPendingTab": {
     "description": "Pestaña de citas pendientes en Salud."
@@ -4435,10 +4563,6 @@
   "@myDataHealthAppointmentType": {
     "description": "Tipo de cita sanitaria de ejemplo."
   },
-  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
-  "@myDataHealthAppointmentProfessional": {
-    "description": "Profesional sanitario de la cita de ejemplo."
-  },
   "myDataHealthAppointmentDescription": "Cita de Atención Primaria",
   "@myDataHealthAppointmentDescription": {
     "description": "Descripción de la cita sanitaria de ejemplo."
@@ -4447,7 +4571,6 @@
   "@myDataHealthAppointmentModality": {
     "description": "Modalidad de la cita sanitaria de ejemplo."
   },
-
   "gestionTitle": "Gestión",
   "@gestionTitle": {
     "description": "Título de la pantalla principal de Gestión."
@@ -4488,7 +4611,6 @@
   "@gestionSectionComingSoon": {
     "description": "Mensaje cuando una sección de Gestión aún no está implementada."
   },
-
   "gestionExpedientesPageTitle": "Mis expedientes",
   "@gestionExpedientesPageTitle": {
     "description": "Título de la pantalla de listado de expedientes."
@@ -4593,6 +4715,10 @@
   "@gestionAportarDocumentacionRegistroError": {
     "description": "Mensaje de error al fallar el registro de los documentos aportados."
   },
+  "gestionAportarDocumentacionUploadIncompleto": "Falta algún fichero por enviar. Al registrar de nuevo se enviarán todos otra vez.",
+  "@gestionAportarDocumentacionUploadIncompleto": {
+    "description": "Aviso al pulsar Registrar cuando algún fichero no llegó a subirse (cancelado a mitad, por ejemplo)"
+  },
   "gestionAportarDocumentacionUploadErrorParcial": "Algunos ficheros no se han podido enviar. Puedes reintentarlo.",
   "@gestionAportarDocumentacionUploadErrorParcial": {
     "description": "Mensaje cuando alguno de los ficheros subidos en paralelo falla."
@@ -4625,7 +4751,6 @@
   "@gestionAportarDocumentacionFinalizacionError": {
     "description": "Mensaje de error cuando registrarFicheros falla tras haber subido todos los ficheros."
   },
-
   "gestionRegistrosPageTitle": "Mis registros",
   "@gestionRegistrosPageTitle": {
     "description": "Título de la pantalla de mis registros."
@@ -4917,5 +5042,1147 @@
   "gestionNotificacionesLoadError": "No se han podido cargar las notificaciones",
   "@gestionNotificacionesLoadError": {
     "description": "Mensaje de error al cargar la lista de notificaciones."
+  },
+  "consentRevokedSessionClosed": "Has retirado la autorización para consultar tus datos, así que hemos cerrado la sesión. Vuelve a iniciarla para concederla de nuevo.",
+  "@consentRevokedSessionClosed": {
+    "description": "Aviso al cerrar la sesión porque la cláusula obligatoria de consentimiento ya no está aceptada."
+  },
+  "authorizationRevokedMessage": "Ya no tienes autorizada esta consulta. Cerramos la sesión para que puedas volver a concederla al entrar.",
+  "@authorizationRevokedMessage": {
+    "description": "Estado de pantalla cuando la cláusula obligatoria se ha retirado y la sesión se está cerrando."
+  },
+  "mainTabHome": "Inicio",
+  "@mainTabHome": {
+    "description": "Etiqueta de la pestaña Inicio en la barra de navegación inferior."
+  },
+  "mainTabGestion": "Gestión",
+  "@mainTabGestion": {
+    "description": "Etiqueta de la pestaña Gestión en la barra de navegación inferior."
+  },
+  "mainTabMyData": "Mis datos",
+  "@mainTabMyData": {
+    "description": "Etiqueta de la pestaña Mis datos en la barra de navegación inferior."
+  },
+  "mainTabAgenda": "Agenda",
+  "@mainTabAgenda": {
+    "description": "Etiqueta de la pestaña Agenda en la barra de navegación inferior."
+  },
+  "mainTabRecommendations": "Recomendados",
+  "@mainTabRecommendations": {
+    "description": "Etiqueta de la pestaña Recomendados en la barra de navegación inferior."
+  },
+  "notFoundPageTitle": "Página no encontrada",
+  "@notFoundPageTitle": {
+    "description": "Título del AppBar de la pantalla 404."
+  },
+  "notFoundPageMessage": "404 — La ruta solicitada no existe.",
+  "@notFoundPageMessage": {
+    "description": "Mensaje central de la pantalla 404."
+  },
+  "appNotificationContactFormTitle": "Datos de contacto para notificaciones electrónicas",
+  "@appNotificationContactFormTitle": {
+    "description": "Título del formulario de datos de contacto para notificaciones electrónicas."
+  },
+  "appNotificationContactFormRequiredNoteSemantic": "Obligatorio: rellena al menos uno de los medios de contacto",
+  "@appNotificationContactFormRequiredNoteSemantic": {
+    "description": "Etiqueta de accesibilidad de la nota de obligatoriedad del formulario de contacto."
+  },
+  "appNotificationContactFormRequiredNote": "* Obligatorio rellenar al menos uno de los medios de contacto",
+  "@appNotificationContactFormRequiredNote": {
+    "description": "Nota visible de obligatoriedad del formulario de datos de contacto."
+  },
+  "appNotificationContactFormSaveButton": "Guarda cambios",
+  "@appNotificationContactFormSaveButton": {
+    "description": "Botón principal del formulario de datos de contacto para guardar los cambios."
+  },
+  "appPreferenceEditAction": "Editar",
+  "@appPreferenceEditAction": {
+    "description": "Botón de edición de la tarjeta de condiciones de uso y autorizaciones."
+  },
+  "appPreferenceStatusDisabled": "Desactivado",
+  "@appPreferenceStatusDisabled": {
+    "description": "Estado desactivado de una tarjeta de preferencias."
+  },
+  "appPreferenceStatusPending": "Pendiente",
+  "@appPreferenceStatusPending": {
+    "description": "Estado pendiente de una tarjeta de preferencias."
+  },
+  "appPreferenceStatusEnabled": "Activado",
+  "@appPreferenceStatusEnabled": {
+    "description": "Estado activado de una tarjeta de preferencias."
+  },
+  "appPreferenceStatusActive": "Activo",
+  "@appPreferenceStatusActive": {
+    "description": "Etiqueta de estado activo mostrada en la tarjeta de datos de contacto (se muestra en mayúsculas)."
+  },
+  "appNotificationContactCardTitle": "Datos de contacto para notificaciones",
+  "@appNotificationContactCardTitle": {
+    "description": "Título de la tarjeta de preferencias con los datos de contacto para notificaciones."
+  },
+  "appNotificationContactCardEditAction": "Editar datos",
+  "@appNotificationContactCardEditAction": {
+    "description": "Botón de edición de la tarjeta de datos de contacto para notificaciones."
+  },
+  "appQrCodeLabel": "Código QR",
+  "@appQrCodeLabel": {
+    "description": "Etiqueta de accesibilidad de la vista previa del código QR en el bottom sheet de descarga."
+  },
+  "appQrDownloadFormatTitle": "Formato de descarga",
+  "@appQrDownloadFormatTitle": {
+    "description": "Título de la sección de formatos en el bottom sheet de descarga del carnet."
+  },
+  "appQrDownloadWalletLabelAndroid": "Cartera digital",
+  "@appQrDownloadWalletLabelAndroid": {
+    "description": "Etiqueta del botón de descarga del pase (PKPASS) en Android."
+  },
+  "appQrDownloadWalletLabelIos": "Cartera digital",
+  "@appQrDownloadWalletLabelIos": {
+    "description": "Etiqueta del botón de descarga del pase (PKPASS) en iOS."
+  },
+  "appQrDownloadFormatLabel": "Descargar {format}",
+  "@appQrDownloadFormatLabel": {
+    "description": "Etiqueta de accesibilidad del botón de descarga de un formato (QR, PKPASS, PDF).",
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "appQrDownloadingFormatLabel": "Descargando {format}",
+  "@appQrDownloadingFormatLabel": {
+    "description": "Etiqueta de accesibilidad mientras se descarga un formato (QR, PKPASS, PDF).",
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "appCalendarPreviousYearTooltip": "Año anterior",
+  "@appCalendarPreviousYearTooltip": {
+    "description": "Tooltip del botón de año anterior en el selector de mes y año del calendario."
+  },
+  "appCalendarNextYearTooltip": "Año siguiente",
+  "@appCalendarNextYearTooltip": {
+    "description": "Tooltip del botón de año siguiente en el selector de mes y año del calendario."
+  },
+  "appSearchFieldHint": "Buscar",
+  "@appSearchFieldHint": {
+    "description": "Texto de sugerencia por defecto del campo de búsqueda del sistema de diseño."
+  },
+  "commonWeekdayName": "{weekday, select, monday{Lunes} tuesday{Martes} wednesday{Miércoles} thursday{Jueves} friday{Viernes} saturday{Sábado} sunday{Domingo} other{}}",
+  "@commonWeekdayName": {
+    "description": "Nombre completo del día de la semana a partir de su token (monday…sunday)."
+  },
+  "commonMonthName": "{month, select, january{enero} february{febrero} march{marzo} april{abril} may{mayo} june{junio} july{julio} august{agosto} september{septiembre} october{octubre} november{noviembre} december{diciembre} other{}}",
+  "@commonMonthName": {
+    "description": "Nombre completo del mes a partir de su token (january…december)."
+  },
+  "commonMonthShortName": "{month, select, january{ene} february{feb} march{mar} april{abr} may{may} june{jun} july{jul} august{ago} september{sep} october{oct} november{nov} december{dic} other{}}",
+  "@commonMonthShortName": {
+    "description": "Nombre abreviado del mes a partir de su token (january…december)."
+  },
+  "commonUpdatedAt": "Actualizado el {day} {month} {year} a las {time}h",
+  "@commonUpdatedAt": {
+    "description": "Marca de última actualización con fecha y hora (mes ya localizado)."
+  },
+  "agendaFilterDays": "{days} días",
+  "@agendaFilterDays": {
+    "description": "Agenda — pestaña de filtro por número de días (7, 30, 365)."
+  },
+  "agendaRefreshTooltip": "Actualizar agenda",
+  "@agendaRefreshTooltip": {
+    "description": "Agenda — tooltip del botón de refrescar los eventos."
+  },
+  "agendaEmptyAppointments": "No hay citas para el periodo seleccionado.",
+  "@agendaEmptyAppointments": {
+    "description": "Agenda — estado vacío del listado de citas."
+  },
+  "agendaChannelPhone": "telefónica",
+  "@agendaChannelPhone": {
+    "description": "Agenda — canal de cita sanitaria deducido: telefónica."
+  },
+  "agendaChannelInPerson": "presencial",
+  "@agendaChannelInPerson": {
+    "description": "Agenda — canal de cita sanitaria deducido: presencial."
+  },
+  "preferencesInfoSheetBody": "Gestiona tus autorizaciones y avisos.",
+  "@preferencesInfoSheetBody": {
+    "description": "Preferencias — cuerpo del bottom sheet informativo de la pantalla."
+  },
+  "preferencesLifeEventsInactiveDescription": "Para seleccionar tus hechos vitales y poder recibir recomendaciones primero debes aceptar el uso de estos datos en Condiciones de uso y autorizaciones.",
+  "@preferencesLifeEventsInactiveDescription": {
+    "description": "Preferencias — descripción de la tarjeta de hechos vitales cuando la autorización está inactiva."
+  },
+  "preferencesLifeEventsPendingDescription": "Aún no has seleccionado las temáticas de las que quieras recibir actualizaciones dentro de tu sección de recomendaciones",
+  "@preferencesLifeEventsPendingDescription": {
+    "description": "Preferencias — descripción de la tarjeta de hechos vitales cuando no hay selección."
+  },
+  "preferencesLifeEventsActiveDescription": "Tienes hechos vitales seleccionados para recibir recomendaciones personalizadas.",
+  "@preferencesLifeEventsActiveDescription": {
+    "description": "Preferencias — descripción de la tarjeta de hechos vitales con selección activa."
+  },
+  "preferencesSelectAction": "Seleccionar",
+  "@preferencesSelectAction": {
+    "description": "Preferencias — acción de seleccionar hechos vitales."
+  },
+  "preferencesNotificationContactTitle": "Datos de contacto para notificaciones",
+  "@preferencesNotificationContactTitle": {
+    "description": "Preferencias — título de la tarjeta de datos de contacto para notificaciones."
+  },
+  "preferencesNotificationContactInactiveDescription": "Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.",
+  "@preferencesNotificationContactInactiveDescription": {
+    "description": "Preferencias — descripción de la tarjeta de datos de contacto cuando está inactiva."
+  },
+  "preferencesNotificationContactPendingDescription": "Gestiona el medio de aviso para recibir notificaciones electrónicas.",
+  "@preferencesNotificationContactPendingDescription": {
+    "description": "Preferencias — descripción de la tarjeta de datos de contacto cuando está pendiente."
+  },
+  "preferencesNotificationContactActiveDescription": "Tienes configurado al menos un medio de aviso para recibir notificaciones electrónicas.",
+  "@preferencesNotificationContactActiveDescription": {
+    "description": "Preferencias — descripción de la tarjeta de datos de contacto cuando está configurada."
+  },
+  "preferencesManageAction": "Gestionar",
+  "@preferencesManageAction": {
+    "description": "Preferencias — acción de gestionar los datos de contacto."
+  },
+  "preferencesRevokeDialogTitle": "Revocación de permisos",
+  "@preferencesRevokeDialogTitle": {
+    "description": "Preferencias — título del diálogo de confirmación para borrar preferencias."
+  },
+  "preferencesRevokeDialogDescription": "¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\nAl hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.",
+  "@preferencesRevokeDialogDescription": {
+    "description": "Preferencias — descripción del diálogo de confirmación para borrar preferencias."
+  },
+  "preferencesRevokeDialogConfirm": "Eliminar",
+  "@preferencesRevokeDialogConfirm": {
+    "description": "Preferencias — botón de confirmación del diálogo de revocación de permisos."
+  },
+  "preferencesMissingUserIdError": "No se ha encontrado el identificador del usuario.",
+  "@preferencesMissingUserIdError": {
+    "description": "Preferencias — error cuando falta el identificador del usuario al borrar preferencias."
+  },
+  "preferencesResetAuthorizationsError": "No hemos podido borrar tus autorizaciones. Inténtalo de nuevo.",
+  "@preferencesResetAuthorizationsError": {
+    "description": "Preferencias — error al borrar las autorizaciones almacenadas."
+  },
+  "preferencesNotificationContactEditTitle": "Editar datos de contacto",
+  "@preferencesNotificationContactEditTitle": {
+    "description": "Preferencias — título de la pantalla de edición de datos de contacto."
+  },
+  "gestionNotificacionesAltaErrorNoDni": "No hemos podido obtener el DNI del ciudadano.",
+  "@gestionNotificacionesAltaErrorNoDni": {
+    "description": "Datos de contacto de notificaciones — error cuando no se puede obtener el DNI."
+  },
+  "myDataEducationTitleNumberLabel": "Nº TÍTULO: {number}",
+  "@myDataEducationTitleNumberLabel": {
+    "description": "Educación — etiqueta con el número del título universitario."
+  },
+  "myDataEducationExpeditionDateLabel": "FECHA EXPEDICIÓN",
+  "@myDataEducationExpeditionDateLabel": {
+    "description": "Educación — etiqueta de la fecha de expedición del título."
+  },
+  "myDataEducationCompletionDateLabel": "FECHA FINALIZACIÓN",
+  "@myDataEducationCompletionDateLabel": {
+    "description": "Educación — etiqueta de la fecha de finalización de los estudios."
+  },
+  "myDataEducationProvinceLabel": "PROVINCIA",
+  "@myDataEducationProvinceLabel": {
+    "description": "Educación — etiqueta de la provincia del título no universitario."
+  },
+  "myDataEducationBookLabel": "LIBRO: {value}",
+  "@myDataEducationBookLabel": {
+    "description": "Educación — referencia de libro del título no universitario."
+  },
+  "myDataEducationOrderLabel": "ORDEN: {value}",
+  "@myDataEducationOrderLabel": {
+    "description": "Educación — referencia de orden del título no universitario."
+  },
+  "myDataEducationFolioLabel": "FOLIO: {value}",
+  "@myDataEducationFolioLabel": {
+    "description": "Educación — referencia de folio del título no universitario."
+  },
+  "myDataHealthActiveFiltersTooltip": "Criterios de búsqueda activos: {count}",
+  "@myDataHealthActiveFiltersTooltip": {
+    "description": "Salud — tooltip del buscador de citas con filtros activos."
+  },
+  "myDataHealthSearchAppointmentsTooltip": "Buscar citas",
+  "@myDataHealthSearchAppointmentsTooltip": {
+    "description": "Salud — tooltip del buscador de citas sin filtros activos."
+  },
+  "myDataHealthFilterPrimaryCareTitle": "Filtrar citas de primaria",
+  "@myDataHealthFilterPrimaryCareTitle": {
+    "description": "Salud — título del panel de filtros de citas de atención primaria."
+  },
+  "myDataHealthFilterHospitalTitle": "Filtrar citas hospitalarias",
+  "@myDataHealthFilterHospitalTitle": {
+    "description": "Salud — título del panel de filtros de citas hospitalarias."
+  },
+  "myDataHealthFilterDateLabel": "Fecha de la cita",
+  "@myDataHealthFilterDateLabel": {
+    "description": "Salud — etiqueta del filtro por rango de fechas de la cita."
+  },
+  "recommendationsFilterPageTitle": "Filtrar recomendaciones por hecho",
+  "@recommendationsFilterPageTitle": {
+    "description": "Recomendaciones — título de la pantalla de filtros por hecho vital."
+  },
+  "recommendationsFilterInfoMessage": "Selecciona los hechos vitales que quieras usar para filtrar tus recomendaciones.",
+  "@recommendationsFilterInfoMessage": {
+    "description": "Recomendaciones — aviso informativo de la pantalla de filtros por hecho vital."
+  },
+  "recommendationsFilterIntro": "Puede filtrar las recomendaciones según los hechos vitales que haya configurado en sus preferencias, para recibir información personalizada y ajustada a su situación.",
+  "@recommendationsFilterIntro": {
+    "description": "Recomendaciones — texto introductorio de la pantalla de filtros por hecho vital."
+  },
+  "recommendationsFilterByLifeEvents": "Filtrar por hechos vitales",
+  "@recommendationsFilterByLifeEvents": {
+    "description": "Recomendaciones — botón que abre el filtro por hechos vitales."
+  },
+  "recommendationsPreferencesHint": "Personaliza tus recomendaciones editando tus hechos vitales en Preferencias siempre que quieras.",
+  "@recommendationsPreferencesHint": {
+    "description": "Recomendaciones — aviso para personalizar los hechos vitales desde Preferencias."
+  },
+  "recommendationsEmptyNoMatches": "Actualmente no hay recomendaciones disponibles que se ajusten a tus preferencias. Ajusta tus hechos vitales para explorar más opciones o espera a nuevas actualizaciones.",
+  "@recommendationsEmptyNoMatches": {
+    "description": "Recomendaciones — aviso cuando no hay recomendaciones que coincidan con las preferencias."
+  },
+  "recommendationsEditLifeEventsCta": "Editar preferencias - hechos vitales",
+  "@recommendationsEditLifeEventsCta": {
+    "description": "Recomendaciones — botón para editar los hechos vitales desde el estado vacío."
+  },
+  "recommendationsEmptyFiltered": "No hay recomendaciones para el filtro realizado.",
+  "@recommendationsEmptyFiltered": {
+    "description": "Recomendaciones — aviso cuando el filtro aplicado no devuelve resultados."
+  },
+  "recommendationsResetFilterCta": "Resetear filtro",
+  "@recommendationsResetFilterCta": {
+    "description": "Recomendaciones — botón para restablecer el filtro por hechos vitales."
+  },
+  "recommendationsDeadlineFrom": "desde {date}",
+  "@recommendationsDeadlineFrom": {
+    "description": "Recomendaciones — plazo de presentación con solo fecha de inicio."
+  },
+  "recommendationsDeadlineUntil": "hasta {date}",
+  "@recommendationsDeadlineUntil": {
+    "description": "Recomendaciones — plazo de presentación con solo fecha de fin."
+  },
+  "digitalCardsAuthorizationCheckErrorMessage": "No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.",
+  "@digitalCardsAuthorizationCheckErrorMessage": {
+    "description": "Carnets digitales — error al comprobar la autorización necesaria."
+  },
+  "digitalCardsInfoSheetContactHint": "Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.",
+  "digitalCardsInfoSheetContactButton": "Contactar",
+  "digitalCardsInfoSheetTitle": "Sobre Mis Carnets Digitales",
+  "@digitalCardsInfoSheetTitle": {
+    "description": "Carnets digitales — título del bottom sheet informativo."
+  },
+  "digitalCardsInfoSheetBody": "Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.",
+  "@digitalCardsInfoSheetBody": {
+    "description": "Carnets digitales — cuerpo del bottom sheet informativo."
+  },
+  "digitalCardsAuthorizationRequiredMessage": "Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.",
+  "@digitalCardsAuthorizationRequiredMessage": {
+    "description": "Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM."
+  },
+  "digitalCardsSaveDialogTitle": "Guardar {format}",
+  "@digitalCardsSaveDialogTitle": {
+    "description": "Carnets digitales — título del diálogo del sistema para guardar el archivo (QR, PKPASS, PDF)."
+  },
+  "digitalCardsDownloadSuccess": "{format} guardado correctamente.",
+  "@digitalCardsDownloadSuccess": {
+    "description": "Carnets digitales — aviso tras guardar la descarga correctamente."
+  },
+  "digitalCardsDownloadError": "No hemos podido descargar {format}.",
+  "@digitalCardsDownloadError": {
+    "description": "Carnets digitales — error al descargar el archivo del carnet."
+  },
+  "drawerDefaultUserName": "Ciudadano/a",
+  "@drawerDefaultUserName": {
+    "description": "Menú de perfil — nombre por defecto cuando no hay datos del usuario."
+  },
+  "drawerIdentifierFallbackLabel": "Identificador",
+  "@drawerIdentifierFallbackLabel": {
+    "description": "Menú de perfil — etiqueta genérica del documento cuando no es DNI/NIE/NIF."
+  },
+  "gestionNotificacionDetalleAcceptedReloadError": "Has aceptado la notificación, pero no hemos podido cargar el detalle actualizado.",
+  "@gestionNotificacionDetalleAcceptedReloadError": {
+    "description": "Error al recargar el detalle tras aceptar la notificación."
+  },
+  "gestionNotificacionDetalleConfirmTitle": "Confirmación de aceptación de notificación",
+  "@gestionNotificacionDetalleConfirmTitle": {
+    "description": "Título del diálogo de confirmación antes de aceptar una notificación."
+  },
+  "gestionNotificacionDetalleConfirmDescription": "¿Estás seguro que quieres aceptar la notificación?",
+  "@gestionNotificacionDetalleConfirmDescription": {
+    "description": "Cuerpo del diálogo de confirmación antes de aceptar una notificación."
+  },
+  "gestionNotificacionDetalleConfirmCancel": "No",
+  "@gestionNotificacionDetalleConfirmCancel": {
+    "description": "Botón de cancelar del diálogo de confirmación de aceptación."
+  },
+  "gestionNotificacionDetalleConfirmAccept": "Sí, estoy seguro",
+  "@gestionNotificacionDetalleConfirmAccept": {
+    "description": "Botón de confirmar del diálogo de aceptación de notificación."
+  },
+  "gestionNotificacionDetalleAcceptError": "No hemos podido aceptar la notificación. Inténtalo de nuevo.",
+  "@gestionNotificacionDetalleAcceptError": {
+    "description": "Error al fallar la aceptación de la notificación."
+  },
+  "gestionNotificacionDetalleDocumentoDescargado": "Documento descargado.",
+  "@gestionNotificacionDetalleDocumentoDescargado": {
+    "description": "Aviso de éxito tras descargar un documento de la notificación."
+  },
+  "gestionNotificacionDetalleDocumentoDescargaError": "No hemos podido descargar el documento. Inténtalo de nuevo.",
+  "@gestionNotificacionDetalleDocumentoDescargaError": {
+    "description": "Error al fallar la descarga de un documento de la notificación."
+  },
+  "gestionNotificacionDetalleDatosExpedienteTitle": "Datos del expediente",
+  "@gestionNotificacionDetalleDatosExpedienteTitle": {
+    "description": "Título de sección de datos del expediente en el detalle de notificación pendiente."
+  },
+  "gestionNotificacionDetalleOrganismoEmisorLabel": "Organismo emisor",
+  "@gestionNotificacionDetalleOrganismoEmisorLabel": {
+    "description": "Etiqueta del organismo emisor en el detalle de notificación."
+  },
+  "gestionNotificacionDetalleNumExpedienteLabel": "Nº Expediente",
+  "@gestionNotificacionDetalleNumExpedienteLabel": {
+    "description": "Etiqueta del número de expediente en el detalle de notificación."
+  },
+  "gestionNotificacionDetalleEstadoTitle": "Estado notificación",
+  "@gestionNotificacionDetalleEstadoTitle": {
+    "description": "Título de la sección de estado en el detalle de notificación."
+  },
+  "gestionNotificacionDetalleFechaPuestaDisposicionLabel": "Fecha de puesta a disposición",
+  "@gestionNotificacionDetalleFechaPuestaDisposicionLabel": {
+    "description": "Etiqueta de la fecha de puesta a disposición en el detalle de notificación."
+  },
+  "gestionNotificacionesFechaExpiracionLabel": "Fecha de expiración",
+  "@gestionNotificacionesFechaExpiracionLabel": {
+    "description": "Etiqueta de fecha de expiración: detalle de notificación y filtro del listado."
+  },
+  "gestionNotificacionDetalleFechaLecturaLabel": "Fecha de lectura",
+  "@gestionNotificacionDetalleFechaLecturaLabel": {
+    "description": "Etiqueta de la fecha de lectura en el detalle de notificación."
+  },
+  "gestionNotificacionDetalleDocumentosTitle": "Documentos",
+  "@gestionNotificacionDetalleDocumentosTitle": {
+    "description": "Título de la sección de documentos en el detalle de notificación."
+  },
+  "gestionNotificacionDetalleAceptarButton": "Aceptar notificación",
+  "@gestionNotificacionDetalleAceptarButton": {
+    "description": "Botón principal para aceptar una notificación pendiente."
+  },
+  "gestionNotificacionesBuscarTooltip": "Buscar notificaciones",
+  "@gestionNotificacionesBuscarTooltip": {
+    "description": "Tooltip del botón de búsqueda en el listado de notificaciones."
+  },
+  "gestionNotificacionesConfigurarTooltip": "Configurar notificaciones",
+  "@gestionNotificacionesConfigurarTooltip": {
+    "description": "Tooltip del botón de ajustes en el listado de notificaciones."
+  },
+  "gestionNotificacionesFiltrarTitle": "Filtrar notificaciones",
+  "@gestionNotificacionesFiltrarTitle": {
+    "description": "Título del panel de filtros del listado de notificaciones."
+  },
+  "gestionNotificacionesFiltroDescripcionLabel": "Descripción de la notificación",
+  "@gestionNotificacionesFiltroDescripcionLabel": {
+    "description": "Etiqueta del filtro por descripción en el listado de notificaciones."
+  },
+  "gestionNotificacionesFiltrosAnterioresTooltip": "Mostrar filtros anteriores",
+  "@gestionNotificacionesFiltrosAnterioresTooltip": {
+    "description": "Tooltip de la flecha que vuelve a los filtros principales de notificaciones."
+  },
+  "gestionRegistrosBuscarEntradasTooltip": "Buscar entradas de registro",
+  "@gestionRegistrosBuscarEntradasTooltip": {
+    "description": "Tooltip del botón de búsqueda en la pestaña de entradas de registro."
+  },
+  "gestionRegistrosBuscarSalidasTooltip": "Buscar salidas de registro",
+  "@gestionRegistrosBuscarSalidasTooltip": {
+    "description": "Tooltip del botón de búsqueda en la pestaña de salidas de registro."
+  },
+  "gestionRegistrosFiltrarEntradasTitle": "Filtrar entradas de registro",
+  "@gestionRegistrosFiltrarEntradasTitle": {
+    "description": "Título del panel de filtros de entradas de registro."
+  },
+  "gestionRegistrosFiltrarSalidasTitle": "Filtrar salidas de registro",
+  "@gestionRegistrosFiltrarSalidasTitle": {
+    "description": "Título del panel de filtros de salidas de registro."
+  },
+  "gestionRegistrosFiltroDescripcionEntradaLabel": "Descripción de la entrada",
+  "@gestionRegistrosFiltroDescripcionEntradaLabel": {
+    "description": "Etiqueta del filtro por descripción de la entrada de registro."
+  },
+  "gestionRegistrosFiltroDescripcionSalidaLabel": "Descripción de la salida",
+  "@gestionRegistrosFiltroDescripcionSalidaLabel": {
+    "description": "Etiqueta del filtro por descripción de la salida de registro."
+  },
+  "gestionRegistrosFiltroFechaEntradaLabel": "Fecha de entrada",
+  "@gestionRegistrosFiltroFechaEntradaLabel": {
+    "description": "Etiqueta del filtro por fecha de entrada de registro."
+  },
+  "gestionRegistrosFiltroFechaSalidaLabel": "Fecha de salida",
+  "@gestionRegistrosFiltroFechaSalidaLabel": {
+    "description": "Etiqueta del filtro por fecha de salida de registro."
+  },
+  "gestionExpedientesFiltrosActivosTooltip": "Criterios de búsqueda activos: {count}",
+  "@gestionExpedientesFiltrosActivosTooltip": {
+    "description": "Tooltip del botón de búsqueda de expedientes con filtros activos. Placeholder {count}: número de filtros activos (int)."
+  },
+  "gestionExpedientesBuscarTooltip": "Buscar expedientes",
+  "@gestionExpedientesBuscarTooltip": {
+    "description": "Tooltip del botón de búsqueda en el listado de expedientes."
+  },
+  "gestionExpedientesFiltrarTitle": "Filtrar expedientes",
+  "@gestionExpedientesFiltrarTitle": {
+    "description": "Título del panel de filtros del listado de expedientes."
+  },
+  "gestionExpedientesFiltroDescripcionLabel": "Descripción del expediente",
+  "@gestionExpedientesFiltroDescripcionLabel": {
+    "description": "Etiqueta del filtro por descripción del expediente."
+  },
+  "gestionExpedientesFiltroFechaCierreLabel": "Fecha de cierre",
+  "@gestionExpedientesFiltroFechaCierreLabel": {
+    "description": "Etiqueta del filtro por fecha de cierre del expediente."
+  },
+  "gestionFiltroNumeroHint": "Introduce el número",
+  "@gestionFiltroNumeroHint": {
+    "description": "Placeholder genérico de los filtros por número en Gestión."
+  },
+  "gestionFiltroDescripcionHint": "Introduce palabras de la descripción",
+  "@gestionFiltroDescripcionHint": {
+    "description": "Placeholder genérico de los filtros por descripción en Gestión."
+  },
+  "gestionMasInformacionTooltip": "Más información",
+  "@gestionMasInformacionTooltip": {
+    "description": "Tooltip del botón de información (i) en las pantallas de Gestión."
+  },
+  "gestionAportacionPasaporteHint": "N.º de pasaporte",
+  "@gestionAportacionPasaporteHint": {
+    "description": "Placeholder del número de documento cuando el tipo es Pasaporte."
+  },
+  "gestionAportacionCeeHint": "N.º de CEE",
+  "@gestionAportacionCeeHint": {
+    "description": "Placeholder del número de documento cuando el tipo es CEE."
+  },
+  "homeNewsSectionTitle": "Mis novedades",
+  "@homeNewsSectionTitle": {
+    "description": "Home — título de la sección Mis novedades."
+  },
+  "homeMyDataAccessesTitle": "Accesos “Mis datos”",
+  "@homeMyDataAccessesTitle": {
+    "description": "Home — título de la sección de accesos rápidos a Mis datos."
+  },
+  "homeNewsNotificationsTitle": "Notificaciones",
+  "@homeNewsNotificationsTitle": {
+    "description": "Home — etiqueta de la tarjeta de notificaciones en Mis novedades."
+  },
+  "homeNewsNotificationsDescription": "Consulta tus notificaciones pendientes",
+  "@homeNewsNotificationsDescription": {
+    "description": "Home — descripción de la tarjeta de notificaciones en Mis novedades."
+  },
+  "homeNewsAppointmentsTitle": "Próximas citas",
+  "@homeNewsAppointmentsTitle": {
+    "description": "Home — etiqueta de la tarjeta de próximas citas en Mis novedades."
+  },
+  "homeNewsAppointmentsDescription": "Consulta tus próximas citas y eventos",
+  "@homeNewsAppointmentsDescription": {
+    "description": "Home — descripción de la tarjeta de próximas citas en Mis novedades."
+  },
+  "homeNewsLabelWithCount": "{label} ({count})",
+  "@homeNewsLabelWithCount": {
+    "description": "Home — etiqueta de tarjeta de Mis novedades con contador de elementos.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeRecommendedProceduresTitle": "Trámites recomendados",
+  "@homeRecommendedProceduresTitle": {
+    "description": "Home — título de la sección de trámites recomendados."
+  },
+  "homeGoToRecommendationsButton": "Ir a recomendaciones",
+  "@homeGoToRecommendationsButton": {
+    "description": "Home — botón que navega a la pantalla de recomendaciones."
+  },
+  "homeCardsFabLabel": "Carnets",
+  "@homeCardsFabLabel": {
+    "description": "Home — etiqueta del botón flotante de carnets digitales."
+  },
+  "homeCardsFabShowAll": "Mostrar todos",
+  "@homeCardsFabShowAll": {
+    "description": "Home — acción del FAB de carnets que abre el catálogo completo."
+  },
+  "homeCardsFabExpandSemantics": "Mostrar carnés digitales",
+  "@homeCardsFabExpandSemantics": {
+    "description": "Home — etiqueta de accesibilidad del FAB de carnets cuando está contraído."
+  },
+  "homeCardsFabCollapseSemantics": "Cerrar accesos a carnés digitales",
+  "@homeCardsFabCollapseSemantics": {
+    "description": "Home — etiqueta de accesibilidad del FAB de carnets cuando está expandido."
+  },
+  "homeCardsFabLoadingMessage": "Estamos consultando tus carnets digitales.",
+  "@homeCardsFabLoadingMessage": {
+    "description": "Home — aviso mostrado mientras se cargan los carnets digitales."
+  },
+  "homeCardsFabLoadFailedMessage": "No hemos podido consultar tus carnets digitales.",
+  "@homeCardsFabLoadFailedMessage": {
+    "description": "Home — error mostrado cuando falla la carga de los carnets digitales."
+  },
+  "homeCardsFabEmptyMessage": "No tienes carnés digitales disponibles.",
+  "@homeCardsFabEmptyMessage": {
+    "description": "Home — aviso mostrado cuando el usuario no tiene carnets digitales."
+  },
+  "homeRecommendationDeadlineFrom": "desde {date}",
+  "@homeRecommendationDeadlineFrom": {
+    "description": "Home — plazo de un trámite recomendado con solo fecha de inicio.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeRecommendationDeadlineUntil": "hasta {date}",
+  "@homeRecommendationDeadlineUntil": {
+    "description": "Home — plazo de un trámite recomendado con solo fecha de fin.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "helpContactPageTitle": "Ayuda y contacto",
+  "@helpContactPageTitle": {
+    "description": "Título del AppBar de la pantalla de ayuda y contacto."
+  },
+  "helpContactGuidesTitle": "Guías de ayuda",
+  "@helpContactGuidesTitle": {
+    "description": "Ayuda y contacto — encabezado y tarjeta de las guías de ayuda."
+  },
+  "helpContactGuidesIntro": "Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda",
+  "@helpContactGuidesIntro": {
+    "description": "Ayuda y contacto — introducción a las guías de ayuda."
+  },
+  "helpContactGoToJccmPortal": "Ir al portal web JCCM",
+  "@helpContactGoToJccmPortal": {
+    "description": "Ayuda y contacto — subtítulo de las tarjetas que enlazan al portal web JCCM."
+  },
+  "helpContactInfoHeading": "Información de contacto",
+  "@helpContactInfoHeading": {
+    "description": "Ayuda y contacto — encabezado de la pestaña de contacto."
+  },
+  "helpContactPhonesIntro": "Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.",
+  "@helpContactPhonesIntro": {
+    "description": "Ayuda y contacto — introducción a los teléfonos de atención ciudadana."
+  },
+  "helpContactPhonesIntroBold1": "consultas generales e información administrativa",
+  "@helpContactPhonesIntroBold1": {
+    "description": "Ayuda y contacto — primer fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro)."
+  },
+  "helpContactPhonesIntroBold2": "teléfonos de atención ciudadana",
+  "@helpContactPhonesIntroBold2": {
+    "description": "Ayuda y contacto — segundo fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro)."
+  },
+  "helpContactCallCitizenService": "Llamar a Atención a la Ciudadanía",
+  "@helpContactCallCitizenService": {
+    "description": "Ayuda y contacto — subtítulo de las tarjetas de teléfono de atención ciudadana."
+  },
+  "helpContactExpedienteIntro": "Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.",
+  "@helpContactExpedienteIntro": {
+    "description": "Ayuda y contacto — introducción al contacto sobre expedientes."
+  },
+  "helpContactExpedienteIntroBold": "conocer más detalles sobre un expediente",
+  "@helpContactExpedienteIntroBold": {
+    "description": "Ayuda y contacto — fragmento en negrita de la introducción sobre expedientes (debe ser subcadena exacta de helpContactExpedienteIntro)."
+  },
+  "helpContactOfficesListTitle": "Listado de Oficina de Información y registro",
+  "@helpContactOfficesListTitle": {
+    "description": "Ayuda y contacto — tarjeta que enlaza al listado de oficinas de información y registro."
+  },
+  "helpContactSupportIntro": "Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.",
+  "@helpContactSupportIntro": {
+    "description": "Ayuda y contacto — introducción al formulario de soporte técnico."
+  },
+  "helpContactSupportIntroBold": "asistencia técnica",
+  "@helpContactSupportIntroBold": {
+    "description": "Ayuda y contacto — fragmento en negrita de la introducción al soporte (debe ser subcadena exacta de helpContactSupportIntro)."
+  },
+  "helpContactSupportFormButton": "Formulario de Soporte",
+  "@helpContactSupportFormButton": {
+    "description": "Ayuda y contacto — botón que abre el formulario de soporte."
+  },
+  "faqQuestion1": "¿Qué es y qué podré encontrar en el Espacio ciudadano?",
+  "@faqQuestion1": {
+    "description": "FAQ — pregunta sobre qué es el Espacio Ciudadano."
+  },
+  "faqAnswer1": "Espacio Ciudadano reúne en un único lugar información y servicios de la Junta de Comunidades de Castilla-La Mancha. Podrás consultar tus datos, expedientes, notificaciones, citas y otros servicios disponibles.",
+  "@faqAnswer1": {
+    "description": "FAQ — respuesta sobre qué es el Espacio Ciudadano."
+  },
+  "faqQuestion2": "¿Qué necesito para acceder?",
+  "@faqQuestion2": {
+    "description": "FAQ — pregunta sobre los requisitos de acceso."
+  },
+  "faqAnswer2": "Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico.",
+  "@faqAnswer2": {
+    "description": "FAQ — respuesta sobre los requisitos de acceso."
+  },
+  "faqQuestion3": "¿Qué datos personales se almacenan en Espacio Ciudadano?",
+  "@faqQuestion3": {
+    "description": "FAQ — pregunta sobre los datos personales almacenados."
+  },
+  "faqAnswer3": "Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.",
+  "@faqAnswer3": {
+    "description": "FAQ — respuesta sobre los datos personales almacenados."
+  },
+  "faqQuestion4": "Los datos mostrados contienen algún error, ¿puedo corregirlo?",
+  "@faqQuestion4": {
+    "description": "FAQ — pregunta sobre la corrección de datos erróneos."
+  },
+  "faqAnswer4": "Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.",
+  "@faqAnswer4": {
+    "description": "FAQ — respuesta sobre la corrección de datos erróneos."
+  },
+  "faqQuestion5": "¿Qué eventos se muestran en Mi Agenda?",
+  "@faqQuestion5": {
+    "description": "FAQ — pregunta sobre los eventos de Mi Agenda."
+  },
+  "faqAnswer5": "Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.",
+  "@faqAnswer5": {
+    "description": "FAQ — respuesta sobre los eventos de Mi Agenda."
+  },
+  "supportFormPageTitle": "Formulario soporte",
+  "@supportFormPageTitle": {
+    "description": "Título del AppBar del formulario de soporte."
+  },
+  "supportCancelButton": "Cancelar",
+  "@supportCancelButton": {
+    "description": "Formulario de soporte — botón cancelar."
+  },
+  "supportAcceptButton": "Aceptar",
+  "@supportAcceptButton": {
+    "description": "Formulario de soporte — botón aceptar/enviar."
+  },
+  "supportRequiredFieldsNote": "Los campos marcados con un (*) son obligatorios",
+  "@supportRequiredFieldsNote": {
+    "description": "Formulario de soporte — nota sobre los campos obligatorios."
+  },
+  "supportFieldFullName": "Nombre y apellidos",
+  "@supportFieldFullName": {
+    "description": "Formulario de soporte — etiqueta del campo de nombre y apellidos."
+  },
+  "supportFieldFullNameHint": "Ejemplo: María Pérez",
+  "@supportFieldFullNameHint": {
+    "description": "Formulario de soporte — hint del campo de nombre y apellidos."
+  },
+  "supportFieldEmailHint": "Ejemplo: maríapérez@correo.es",
+  "@supportFieldEmailHint": {
+    "description": "Formulario de soporte — hint de los campos de correo electrónico."
+  },
+  "supportFieldConfirmEmail": "Confirma tu correo electrónico",
+  "@supportFieldConfirmEmail": {
+    "description": "Formulario de soporte — etiqueta del campo de confirmación de correo."
+  },
+  "supportFieldSubjectHint": "Ejemplo: Consulta sobre una notificación",
+  "@supportFieldSubjectHint": {
+    "description": "Formulario de soporte — hint del campo de asunto."
+  },
+  "supportFieldSubjectHelper": "Motivo de consulta. Límite de 1000 caracteres",
+  "@supportFieldSubjectHelper": {
+    "description": "Formulario de soporte — texto de ayuda bajo el campo de asunto."
+  },
+  "supportFieldMessage": "Mensaje",
+  "@supportFieldMessage": {
+    "description": "Formulario de soporte — etiqueta del campo de mensaje."
+  },
+  "supportAttachmentSectionLabel": "ADJUNTAR DOCUMENTOS DE EVIDENCIA",
+  "@supportAttachmentSectionLabel": {
+    "description": "Formulario de soporte — etiqueta de la sección de adjuntos."
+  },
+  "supportAttachmentUploadHint": "Puedes subir un único archivo o imagen de máx. 20MB en GIF, JPEG, JPG, PNG, TXT, PDF, DOC, DOCX para ayudar a identificar el problema.",
+  "@supportAttachmentUploadHint": {
+    "description": "Formulario de soporte — hint de la sección de adjuntos."
+  },
+  "supportAttachmentPickDocuments": "Seleccionar documentos",
+  "@supportAttachmentPickDocuments": {
+    "description": "Formulario de soporte — botón para seleccionar el documento adjunto."
+  },
+  "supportAttachmentChangeDocument": "Cambiar documento",
+  "@supportAttachmentChangeDocument": {
+    "description": "Formulario de soporte — botón para cambiar el documento adjunto."
+  },
+  "supportConsentDataUseLabel": "Autorizo el uso y gestión de mis datos",
+  "@supportConsentDataUseLabel": {
+    "description": "Formulario de soporte — texto del checkbox de consentimiento de datos."
+  },
+  "supportPrivacyInfoDescription": "La información relativa a protección de datos aplicable a este formulario se encuentra publicada en",
+  "@supportPrivacyInfoDescription": {
+    "description": "Formulario de soporte — texto que precede al enlace de información de privacidad."
+  },
+  "supportErrorSubjectOverLimit": "El asunto no puede superar los 1000 caracteres.",
+  "@supportErrorSubjectOverLimit": {
+    "description": "Formulario de soporte — error cuando el asunto supera los 1000 caracteres."
+  },
+  "supportErrorAttachmentTooLarge": "El archivo excede el tamaño máximo permitido.",
+  "@supportErrorAttachmentTooLarge": {
+    "description": "Formulario de soporte — error cuando el adjunto supera el tamaño máximo."
+  },
+  "supportErrorAttachmentUnreadable": "No hemos podido leer el archivo seleccionado.",
+  "@supportErrorAttachmentUnreadable": {
+    "description": "Formulario de soporte — error cuando el adjunto no se puede leer."
+  },
+  "landingContentTagline": "Tu información pública en un solo lugar",
+  "@landingContentTagline": {
+    "description": "Landing — eslogan del contenido estático de la pantalla pública."
+  },
+  "landingFeatureNotificationsTitle": "Notificaciones",
+  "@landingFeatureNotificationsTitle": {
+    "description": "Landing — título de la funcionalidad de notificaciones."
+  },
+  "landingFeatureNotificationsDescription": "Recibe alertas y avisos de la administración directamente en tu dispositivo.",
+  "@landingFeatureNotificationsDescription": {
+    "description": "Landing — descripción de la funcionalidad de notificaciones."
+  },
+  "landingFeatureHealthTitle": "Sanidad",
+  "@landingFeatureHealthTitle": {
+    "description": "Landing — título de la funcionalidad de sanidad."
+  },
+  "landingFeatureHealthDescription": "Consulta tu historial médico, citas y tarjeta sanitaria.",
+  "@landingFeatureHealthDescription": {
+    "description": "Landing — descripción de la funcionalidad de sanidad."
+  },
+  "landingFeatureEmploymentTitle": "Empleo",
+  "@landingFeatureEmploymentTitle": {
+    "description": "Landing — título de la funcionalidad de empleo."
+  },
+  "landingFeatureEmploymentDescription": "Gestiona tu situación laboral y accede a ofertas de empleo público.",
+  "@landingFeatureEmploymentDescription": {
+    "description": "Landing — descripción de la funcionalidad de empleo."
+  },
+  "landingFeatureProceduresTitle": "Trámites",
+  "@landingFeatureProceduresTitle": {
+    "description": "Landing — título de la funcionalidad de trámites."
+  },
+  "landingFeatureProceduresDescription": "Realiza gestiones administrativas sin desplazarte.",
+  "@landingFeatureProceduresDescription": {
+    "description": "Landing — descripción de la funcionalidad de trámites."
+  },
+  "landingFeatureDigitalCardsTitle": "Carnets Digitales",
+  "@landingFeatureDigitalCardsTitle": {
+    "description": "Landing — título de la funcionalidad de carnets digitales."
+  },
+  "landingFeatureDigitalCardsDescription": "Accede a tus carnets y documentos oficiales en formato digital.",
+  "@landingFeatureDigitalCardsDescription": {
+    "description": "Landing — descripción de la funcionalidad de carnets digitales."
+  },
+  "landingFeatureCadastreTitle": "Catastro",
+  "@landingFeatureCadastreTitle": {
+    "description": "Landing — título de la funcionalidad de catastro."
+  },
+  "landingFeatureCadastreDescription": "Consulta datos catastrales de tus inmuebles.",
+  "@landingFeatureCadastreDescription": {
+    "description": "Landing — descripción de la funcionalidad de catastro."
+  },
+  "landingAccessStep1Title": "Pulsa \"Acceder\"",
+  "@landingAccessStep1Title": {
+    "description": "Landing — título del paso 1 de acceso."
+  },
+  "landingAccessStep1Description": "Toca el botón para iniciar el proceso de autenticación segura.",
+  "@landingAccessStep1Description": {
+    "description": "Landing — descripción del paso 1 de acceso."
+  },
+  "landingAccessStep2Title": "Autentícate con Cl@ve",
+  "@landingAccessStep2Title": {
+    "description": "Landing — título del paso 2 de acceso."
+  },
+  "landingAccessStep2Description": "Usa Cl@ve PIN o Cl@ve Permanente para identificarte de forma segura.",
+  "@landingAccessStep2Description": {
+    "description": "Landing — descripción del paso 2 de acceso."
+  },
+  "landingAccessStep3Title": "Accede a toda tu información",
+  "@landingAccessStep3Title": {
+    "description": "Landing — título del paso 3 de acceso."
+  },
+  "landingAccessStep3Description": "Consulta y gestiona tu información pública desde un único lugar.",
+  "@landingAccessStep3Description": {
+    "description": "Landing — descripción del paso 3 de acceso."
+  },
+  "legalSearchTooltip": "Buscar",
+  "@legalSearchTooltip": {
+    "description": "Páginas legales — tooltip del botón para abrir la búsqueda en la barra superior."
+  },
+  "legalSearchCloseTooltip": "Cerrar búsqueda",
+  "@legalSearchCloseTooltip": {
+    "description": "Páginas legales — tooltip del botón para cerrar la búsqueda en la barra superior."
+  },
+  "privacyResponsibleTitle": "¿Quién es el responsable del tratamiento?",
+  "@privacyResponsibleTitle": {
+    "description": "Protección de datos — título de la sección del responsable del tratamiento."
+  },
+  "privacyResponsibleIntro": "La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:",
+  "@privacyResponsibleIntro": {
+    "description": "Protección de datos — párrafo introductorio del responsable del tratamiento."
+  },
+  "privacyResponsibleItemProfile": "Sección de perfil usuario",
+  "@privacyResponsibleItemProfile": {
+    "description": "Protección de datos — elemento de la lista de servicios del responsable."
+  },
+  "privacyResponsibleItemVisualizations": "Visualizaciones de los datos seleccionados de la Administración regional y de la Otras temas de interés",
+  "@privacyResponsibleItemVisualizations": {
+    "description": "Protección de datos — elemento de la lista de servicios del responsable."
+  },
+  "privacyResponsibleItemRecommendations": "Recomendaciones realizadas en base a los hechos vitales marcados.",
+  "@privacyResponsibleItemRecommendations": {
+    "description": "Protección de datos — elemento de la lista de servicios del responsable."
+  },
+  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados",
+  "@privacyResponsibleItemDownloads": {
+    "description": "Protección de datos — elemento de la lista de servicios del responsable."
+  },
+  "privacyResponsibleOrgParagraph": "Una vez se seleccione cada una de las opciones proporcionadas por espacio ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.",
+  "@privacyResponsibleOrgParagraph": {
+    "description": "Protección de datos — párrafo sobre los órganos responsables de cada opción."
+  },
+  "privacyResponsibleContactIntro": "Los datos de contacto de este responsable son los siguientes:",
+  "@privacyResponsibleContactIntro": {
+    "description": "Protección de datos — introducción de los datos de contacto del responsable."
+  },
+  "privacyResponsibleContactAddressLabel": "Dirección Postal:\n",
+  "@privacyResponsibleContactAddressLabel": {
+    "description": "Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea)."
+  },
+  "privacyResponsibleContactAddressValue": "Agencia de Transformación Digital\nEdificio CEMAR, Plaza de Grecia, 1, 45071 Toledo\nDirección de correo electrónico:\ndirecciongerenciaatd@jccm.es",
+  "@privacyResponsibleContactAddressValue": {
+    "description": "Protección de datos — bloque con la dirección postal y el correo del responsable."
+  },
+  "privacyPurposeTitle": "¿Cuál es la denominación y finalidad del tratamiento?",
+  "@privacyPurposeTitle": {
+    "description": "Protección de datos — título de la sección de finalidad del tratamiento."
+  },
+  "privacyPurposeIntro": "Las finalidades de los tratamientos con los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:",
+  "@privacyPurposeIntro": {
+    "description": "Protección de datos — párrafo introductorio de las finalidades del tratamiento."
+  },
+  "privacyPurposeItemIdentity": "Gestionar los datos identificativos del ciudadano",
+  "@privacyPurposeItemIdentity": {
+    "description": "Protección de datos — elemento de la lista de finalidades."
+  },
+  "privacyPurposeItemVisualizations": "Visualizar los datos seleccionados de la Administración regional y de la Otras temas de interés",
+  "@privacyPurposeItemVisualizations": {
+    "description": "Protección de datos — elemento de la lista de finalidades."
+  },
+  "privacyAepdTitle": "¿Puedo reclamar ante la Agencia Española de Protección de Datos?",
+  "@privacyAepdTitle": {
+    "description": "Protección de datos — título de la sección sobre reclamaciones ante la AEPD."
+  },
+  "privacyAepdTextBeforeLink": "Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ",
+  "@privacyAepdTextBeforeLink": {
+    "description": "Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio)."
+  },
+  "privacyAepdTextAfterLink": ". También puede reclamar ante la delegada de protección de datos cuyos datos de contacto están en esta información.",
+  "@privacyAepdTextAfterLink": {
+    "description": "Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto)."
+  },
+  "privacySecurityTitle": "¿Qué medidas de seguridad se encuentran implantadas?",
+  "@privacySecurityTitle": {
+    "description": "Protección de datos — título de la sección de medidas de seguridad."
+  },
+  "privacySecurityText": "Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.",
+  "@privacySecurityText": {
+    "description": "Protección de datos — párrafo sobre las medidas de seguridad implantadas."
+  },
+  "privacyProfilingTitle": "Decisiones automatizadas incluida la elaboración de perfiles",
+  "@privacyProfilingTitle": {
+    "description": "Protección de datos — título de la sección de decisiones automatizadas."
+  },
+  "privacyProfilingText": "En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por una persona interesada, existe la elaboración de perfiles.",
+  "@privacyProfilingText": {
+    "description": "Protección de datos — párrafo sobre la elaboración de perfiles."
+  },
+  "privacyDpoTitle": "Datos de contacto con la delegada de protección de datos",
+  "@privacyDpoTitle": {
+    "description": "Protección de datos — título de la sección de contacto con la delegada de protección de datos."
+  },
+  "privacyDpoIntro": "Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la delegada de protección de datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:",
+  "@privacyDpoIntro": {
+    "description": "Protección de datos — párrafo introductorio del contacto con la delegada de protección de datos."
+  },
+  "privacyDpoContactAddressLabel": "Dirección postal:\n",
+  "@privacyDpoContactAddressLabel": {
+    "description": "Protección de datos — etiqueta en negrita de la dirección postal de la delegada (termina en salto de línea)."
+  },
+  "privacyDpoContactAddressValue": "Delegada de protección de datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071 - Toledo\n\n",
+  "@privacyDpoContactAddressValue": {
+    "description": "Protección de datos — bloque con la dirección postal de la delegada de protección de datos (termina en línea en blanco)."
+  },
+  "privacyDpoContactEmailLabel": "Dirección de correo electrónico:\n",
+  "@privacyDpoContactEmailLabel": {
+    "description": "Protección de datos — etiqueta en negrita del correo electrónico de la delegada (termina en salto de línea)."
+  },
+  "accessibilityStatementHeading": "Declaración de accesibilidad",
+  "@accessibilityStatementHeading": {
+    "description": "Accesibilidad — encabezado H1 de la declaración de accesibilidad."
+  },
+  "accessibilityIntroCommitment": "La Junta de Comunidades de Castilla-La Mancha se ha comprometido a hacer accesible su sitio web, de conformidad con el ",
+  "@accessibilityIntroCommitment": {
+    "description": "Accesibilidad y Aviso legal — texto del párrafo introductorio antes del enlace al Real Decreto (termina en espacio)."
+  },
+  "accessibilityIntroDecreeLink": "Real Decreto 1112/2018, de 7 de septiembre",
+  "@accessibilityIntroDecreeLink": {
+    "description": "Accesibilidad y Aviso legal — texto del enlace al Real Decreto 1112/2018 (el glifo ⇲ se añade en código)."
+  },
+  "accessibilityIntroDecreeSuffix": ", sobre accesibilidad de los sitios web y aplicaciones para dispositivos móviles del sector público (en adelante, Real Decreto 1112/2018, de 7 de septiembre).\n\n",
+  "@accessibilityIntroDecreeSuffix": {
+    "description": "Accesibilidad y Aviso legal — texto tras el enlace al Real Decreto (termina en doble salto de línea)."
+  },
+  "accessibilityDeclarationScope": "La presente declaración de accesibilidad se aplica al sitio web ",
+  "@accessibilityDeclarationScope": {
+    "description": "Accesibilidad y Aviso legal — texto antes del enlace al sitio web (termina en espacio)."
+  },
+  "accessibilityComplianceTitle": "Situación de cumplimiento",
+  "@accessibilityComplianceTitle": {
+    "description": "Accesibilidad — título de la sección de situación de cumplimiento."
+  },
+  "accessibilityComplianceText": "b) Este sitio web es parcialmente conforme con el RD 1112/2018, de 7 de septiembre, debido a la falta de conformidad de los aspectos que se indican a continuación.",
+  "@accessibilityComplianceText": {
+    "description": "Accesibilidad — párrafo sobre la conformidad parcial con el RD 1112/2018."
+  },
+  "accessibilityNonAccessibleTitle": "Contenido no accesible",
+  "@accessibilityNonAccessibleTitle": {
+    "description": "Accesibilidad — título de la sección de contenido no accesible."
+  },
+  "accessibilityNonAccessibleIntro": "El contenido que se recoge a continuación no es accesible por los siguientes motivos:",
+  "@accessibilityNonAccessibleIntro": {
+    "description": "Accesibilidad — introducción de la lista de contenido no accesible."
+  },
+  "accessibilityNonAccessibleItemNonConformity": "falta de conformidad con el RD 1112/2018, de 7 de septiembre: Podrían existir fallos puntuales de edición en alguna página web, tanto en contenidos HTML como en documentos finales, publicados en fecha posterior al 20 de septiembre de 2018.",
+  "@accessibilityNonAccessibleItemNonConformity": {
+    "description": "Accesibilidad — elemento de la lista de motivos de contenido no accesible."
+  },
+  "accessibilityNonAccessibleItemBurden": "carga desproporcionada: No resulta aplicable.",
+  "@accessibilityNonAccessibleItemBurden": {
+    "description": "Accesibilidad — elemento de la lista de motivos de contenido no accesible."
+  },
+  "accessibilityNonAccessibleItemOutOfScope": "el contenido no entra dentro del ámbito de la legislación aplicable: Podrían existir archivos ofimáticos en PDF u otros formatos publicados antes del 20 de septiembre de 2018 que no cumplan en su totalidad todos los requisitos de accesibilidad.",
+  "@accessibilityNonAccessibleItemOutOfScope": {
+    "description": "Accesibilidad — elemento de la lista de motivos de contenido no accesible."
+  },
+  "accessibilityPreparationTitle": "Preparación de la presente declaración de accesibilidad",
+  "@accessibilityPreparationTitle": {
+    "description": "Accesibilidad — título de la sección de preparación de la declaración."
+  },
+  "accessibilityPreparationText": "La presente declaración ha sido preparada el 8 de Octubre de 2025.\nEl método empleado para preparar la declaración ha sido una autoevaluación llevada a cabo por el propio organismo.",
+  "@accessibilityPreparationText": {
+    "description": "Accesibilidad — párrafo sobre la fecha y el método de preparación de la declaración."
+  },
+  "accessibilityContactTitle": "Observaciones y datos de contacto",
+  "@accessibilityContactTitle": {
+    "description": "Accesibilidad — título de la sección de observaciones y contacto."
+  },
+  "accessibilityContactIntro": "Puede realizar comunicaciones sobre requisitos de accesibilidad (artículo 10.2.a) del Real Decreto 1112/2018, de 7 de septiembre como, por ejemplo:",
+  "@accessibilityContactIntro": {
+    "description": "Accesibilidad — introducción de la lista de comunicaciones sobre accesibilidad."
+  },
+  "accessibilityContactItemReport": "informar sobre cualquier posible incumplimiento por parte de este sitio web,",
+  "@accessibilityContactItemReport": {
+    "description": "Accesibilidad — elemento de la lista de comunicaciones sobre accesibilidad."
+  },
+  "accessibilityContactItemDifficulties": "transmitir otras dificultades de acceso al contenido,",
+  "@accessibilityContactItemDifficulties": {
+    "description": "Accesibilidad — elemento de la lista de comunicaciones sobre accesibilidad."
+  },
+  "accessibilityContactItemSuggestions": "formular cualquier otra consulta o sugerencia de mejora relativa a la accesibilidad del sitio web,",
+  "@accessibilityContactItemSuggestions": {
+    "description": "Accesibilidad — elemento de la lista de comunicaciones sobre accesibilidad."
+  },
+  "accessibilityContactChannelsIntro": "a través de las siguientes vías:",
+  "@accessibilityContactChannelsIntro": {
+    "description": "Accesibilidad — introducción de la lista de vías de contacto."
+  },
+  "accessibilityContactFormLink": "formulario de contacto",
+  "@accessibilityContactFormLink": {
+    "description": "Accesibilidad — texto del enlace al formulario de contacto (el glifo ⇲ se añade en código)."
+  },
+  "accessibilityOfficesPrefix": "de manera presencial en ",
+  "@accessibilityOfficesPrefix": {
+    "description": "Accesibilidad — texto antes del enlace a las oficinas del 012 y OIRES (termina en espacio)."
+  },
+  "accessibilityOfficesLink": "las oficinas del 012 y OIRES",
+  "@accessibilityOfficesLink": {
+    "description": "Accesibilidad — texto del enlace a las oficinas del 012 y OIRES (el glifo ⇲ se añade en código)."
+  },
+  "accessibilityOfficesSuffix": " oficinas de información y registro).",
+  "@accessibilityOfficesSuffix": {
+    "description": "Accesibilidad — texto tras el enlace a las oficinas del 012 y OIRES (empieza con espacio)."
+  },
+  "accessibilityContactProcessing": "Las comunicaciones serán recibidas y tratadas por la Viceconsejería de Administración Local y Coordinación Administrativa.",
+  "@accessibilityContactProcessing": {
+    "description": "Accesibilidad — párrafo sobre el órgano que recibe las comunicaciones."
+  },
+  "accessibilityEnforcementTitle": "Procedimiento de aplicación",
+  "@accessibilityEnforcementTitle": {
+    "description": "Accesibilidad — título de la sección del procedimiento de aplicación."
+  },
+  "accessibilityEnforcementText": "El procedimiento de reclamación recogido en el artículo 13 del RD 1112/2018 entrará en vigor el 20 de septiembre de 2020.",
+  "@accessibilityEnforcementText": {
+    "description": "Accesibilidad — párrafo sobre el procedimiento de reclamación del artículo 13."
+  },
+  "accessibilityOptionalTitle": "Contenido opcional",
+  "@accessibilityOptionalTitle": {
+    "description": "Accesibilidad — título de la sección de contenido opcional."
+  },
+  "accessibilityOptionalText": "Además de las ayudas de accesibilidad propias de los navegadores se incorporan una serie de atajos de teclado para facilitar la navegación a través del portal:\nUna clave de acceso o Accesskey permite al usuario saltar de inmediato a una parte específica de una página web a través del teclado.",
+  "@accessibilityOptionalText": {
+    "description": "Accesibilidad — párrafo sobre los atajos de teclado del portal."
+  },
+  "accessibilityOptionalItemIncreaseText": "Aumentar el Tamaño del Texto: CTRL +",
+  "@accessibilityOptionalItemIncreaseText": {
+    "description": "Accesibilidad — elemento de la lista de atajos de teclado."
+  },
+  "accessibilityOptionalItemDecreaseText": "Reducir el Tamaño del Texto: CTRL -",
+  "@accessibilityOptionalItemDecreaseText": {
+    "description": "Accesibilidad — elemento de la lista de atajos de teclado."
+  },
+  "legalNoticeHeading": "Aviso legal (...)",
+  "@legalNoticeHeading": {
+    "description": "Aviso legal — encabezado H1 de la página (el texto original incluye \"(...)\")."
+  },
+  "supportErrorSubmitUnauthorized": "No tienes permisos para enviar el formulario de soporte.",
+  "@supportErrorSubmitUnauthorized": {
+    "description": "Error al enviar el formulario de soporte sin permisos (401/403)."
+  },
+  "supportErrorSubmitInvalidData": "No hemos podido validar los datos introducidos.",
+  "@supportErrorSubmitInvalidData": {
+    "description": "Error al enviar el formulario de soporte con datos rechazados por el servidor (400)."
+  },
+  "supportErrorSubmitUnavailable": "No hemos podido enviar tu solicitud. Inténtalo de nuevo más tarde.",
+  "@supportErrorSubmitUnavailable": {
+    "description": "Error genérico al enviar el formulario de soporte."
+  },
+  "notificationContactSaveUnauthorizedError": "No tienes permisos para guardar estos datos de contacto.",
+  "@notificationContactSaveUnauthorizedError": {
+    "description": "Error al guardar los datos de contacto de notificaciones sin permisos (401/403)."
+  },
+  "notificationContactSaveInvalidDataError": "No hemos podido validar los datos introducidos.",
+  "@notificationContactSaveInvalidDataError": {
+    "description": "Error al guardar los datos de contacto con datos rechazados por el servidor (400)."
+  },
+  "notificationContactSaveUnavailableError": "No hemos podido guardar los datos de contacto. Inténtalo de nuevo más tarde.",
+  "@notificationContactSaveUnavailableError": {
+    "description": "Error genérico al guardar los datos de contacto de notificaciones."
+  },
+  "gestionAportacionExpedienteNotFoundError": "No hemos encontrado ningún expediente con esos datos. Revisa que sean correctos.",
+  "@gestionAportacionExpedienteNotFoundError": {
+    "description": "Error cuando la búsqueda de expediente de terceros no encuentra resultados."
+  },
+  "gestionAportacionExpedienteUnauthorizedError": "No tienes permisos para consultar este expediente.",
+  "@gestionAportacionExpedienteUnauthorizedError": {
+    "description": "Error al buscar un expediente de terceros sin permisos."
+  },
+  "gestionAportacionExpedienteUnavailableError": "No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.",
+  "@gestionAportacionExpedienteUnavailableError": {
+    "description": "Error genérico al buscar un expediente de terceros."
   }
 }

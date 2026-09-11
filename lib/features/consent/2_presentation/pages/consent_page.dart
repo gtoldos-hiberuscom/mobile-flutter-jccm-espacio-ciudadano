@@ -135,7 +135,10 @@ class ConsentPage extends ConsumerWidget {
       isOnboarding: isOnboarding,
       isPreferencesEditing: isPreferencesEditing,
       returnTo: returnTo,
-      onShowLegalInfo: () => context.push(Routes.legalPrivacy),
+      // La (i) abre la página legal para LEERLA: sin este marcador se pintaba
+      // como paso del consentimiento y arrastraba aquí sus botones de "Salir" y
+      // "Continuar", que en una página de información no tienen sentido.
+      onShowLegalInfo: () => context.push(Routes.legalPrivacyInfo),
     );
   }
 }
@@ -235,10 +238,7 @@ class _Step2Scaffold extends StatelessWidget {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space8,
-              ),
+              padding: appPagePadding(context, top: AppDimensions.space8, bottom: AppDimensions.space8),
               children: [
                 AppTextBlock(
                   text: l10n.consentStep1FullTitle,

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_expediente_repository_impl.dart';
 
 import '../../test_support/sequence_http_client_adapter.dart';
@@ -90,6 +91,44 @@ void main() {
       final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
 
       expect(result.single.estado, isNull);
+    });
+
+    test('el sobre de autorización sale como señal tipada, no como lista vacía', () async {
+      // Sin traducirlo, el `catch` indulgente lo daba por "no hay
+      // expedientes" y la pantalla lo afirmaba.
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          contentType: Headers.textPlainContentType,
+          body: '{"codigo-respuesta":"412.00","body":null}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R'),
+        throwsA(isA<AuthorizationRequiredException>()),
+      );
+    });
+
+    test('el detalle también traduce el sobre en vez de reventar por datos vacíos', () async {
+      // Antes salía como `StateError('Respuesta de expediente sin datos.')`,
+      // que la pantalla presentaba como error de servicio.
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          contentType: Headers.textPlainContentType,
+          body: '{"codigo-respuesta":"200.00","info-error":{"errores":[{"codigo-error":"3034"}]}}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadExpedienteDetail(citizenId: 'sid-1', documentNumber: '99999999R', numexp: 'EXP-1'),
+        throwsA(isA<AuthorizationRequiredException>()),
+      );
     });
 
     test('returns an empty list when selectbynifexp returns 404', () async {

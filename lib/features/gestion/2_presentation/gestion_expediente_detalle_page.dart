@@ -105,8 +105,8 @@ class _ExpedienteDetalleBody extends StatelessWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.space16,
+            padding: EdgeInsets.symmetric(
+              horizontal: appPageHorizontalPadding(context),
               vertical: AppDimensions.space16,
             ),
             child: Column(

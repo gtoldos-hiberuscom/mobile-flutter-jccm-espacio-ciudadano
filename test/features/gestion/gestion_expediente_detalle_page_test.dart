@@ -33,7 +33,8 @@ Future<void> _pumpDetail(final WidgetTester tester, {required final bool canAtta
         ),
       ],
       child: const MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        locale: Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionExpedienteDetallePage(numexp: 'EXP-1'),
       ),

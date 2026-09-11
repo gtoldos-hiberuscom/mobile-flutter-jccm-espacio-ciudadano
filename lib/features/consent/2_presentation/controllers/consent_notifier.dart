@@ -9,8 +9,10 @@ import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/accept_consent_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/load_clauses_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/0_entity/life_event.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/load_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/mark_life_events_onboarding_seen_usecase.dart';
-import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/reset_life_events_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/personalization/1_domain/usecases/save_life_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/life_events_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/providers/onboarding_preferences_usecase_providers.dart';
 
@@ -185,24 +187,26 @@ class ConsentNotifier extends Notifier<ConsentState> {
       state = state.copyWith(clauses: reloadedClauses);
     }
     state = state.copyWith(status: ConsentStatus.saving);
+    // La limpieza de hechos vitales va ANTES de persistir las cláusulas: se
+    // ejecuta con la autorización de recomendaciones todavía viva en el
+    // backend, y si falla no se ha tocado nada — reintentar deja todo íntegro.
+    final clearError = await _clearLifeEventsSelectionIfRecommendationsClauseRevoked(clausesToPersist);
+    if (!ref.mounted) {
+      return;
+    }
+    if (clearError != null) {
+      state = state.copyWith(
+        status: ConsentStatus.saveError,
+        errorMessage: clearError,
+      );
+      return;
+    }
     final result = await ref.read(acceptConsentUsecaseProvider).execute(idAgente: _idAgente, clauses: clausesToPersist);
     if (!ref.mounted) {
       return;
     }
     switch (result) {
       case AcceptConsentSuccess():
-        final resetError = await _resetLifeEventsIfRecommendationsClauseWasRevoked(clausesToPersist);
-        if (!ref.mounted) {
-          return;
-        }
-        if (resetError != null) {
-          state = ConsentState(
-            status: ConsentStatus.saveError,
-            clauses: clausesToPersist,
-            errorMessage: resetError,
-          );
-          return;
-        }
         final onboardingError = await _skipLifeEventsOnboardingIfClauseWasEnabledFromPreferences(clausesToPersist);
         if (!ref.mounted) {
           return;
@@ -260,7 +264,15 @@ class ConsentNotifier extends Notifier<ConsentState> {
     };
   }
 
-  Future<String?> _resetLifeEventsIfRecommendationsClauseWasRevoked(final List<Clause> clauses) async {
+  /// Limpia la selección de hechos vitales cuando la cláusula de
+  /// recomendaciones pasa de aceptada a retirada editando desde Preferencias.
+  ///
+  /// Mismo esquive que `LifeEventsNotifier.confirmReset`: se persiste el
+  /// catálogo deseleccionado (`PATCH /hechos`), nunca `DELETE /preferencias` —
+  /// en el gateway ese DELETE arrasa el soporte completo del ciudadano,
+  /// cláusulas incluidas, y lo deja irrecuperable: todo pasa a responder el
+  /// sobre 412.00/3034 y ni re-aceptar el consentimiento lo repara.
+  Future<String?> _clearLifeEventsSelectionIfRecommendationsClauseRevoked(final List<Clause> clauses) async {
     if (!_isPreferencesEditing || !_initialSelectedClauseIds.contains(recommendationsConsentClauseId)) {
       return null;
     }
@@ -270,10 +282,25 @@ class ConsentNotifier extends Notifier<ConsentState> {
     if (recommendationsClauseSelected) {
       return null;
     }
-    final result = await ref.read(resetLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
-    return switch (result) {
-      ResetLifeEventsSuccess() => null,
-      ResetLifeEventsFailed(:final message) => message,
+    final loadResult = await ref.read(loadLifeEventsUsecaseProvider).execute(idAgente: _idAgente);
+    if (!ref.mounted) {
+      return null;
+    }
+    final List<LifeEvent> events;
+    switch (loadResult) {
+      case LoadLifeEventsSuccess(events: final loadedEvents):
+        events = loadedEvents;
+      case LoadLifeEventsFailed(:final message):
+        return message;
+    }
+    if (events.every((final event) => !event.selected)) {
+      return null;
+    }
+    final clearedEvents = events.map((final event) => event.copyWith(selected: false)).toList(growable: false);
+    final saveResult = await ref.read(saveLifeEventsUsecaseProvider).execute(idAgente: _idAgente, events: clearedEvents);
+    return switch (saveResult) {
+      SaveLifeEventsSuccess() => null,
+      SaveLifeEventsFailed(:final message) => message,
     };
   }
 

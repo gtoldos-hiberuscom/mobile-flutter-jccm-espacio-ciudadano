@@ -58,6 +58,49 @@ import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/prefe
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendation_life_event_filters_page.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/recommendations_page.dart';
 
+/// Pantalla de detalle de un registro a partir del `extra` de la ruta.
+///
+/// El registro completo viaja en `extra`, que **no** sobrevive a un deep link,
+/// a la restauración de estado ni a un `go()` externo. Sin él no hay nada que
+/// mostrar, así que se cae a [NotFoundScreen] en lugar de castear a ciegas
+/// (`state.extra! as (Registro, bool)` lanzaba dentro del builder, es decir,
+/// pantalla de error de GoRouter). Es el mismo criterio que el resto de rutas
+/// con `extra`.
+/// Construye la página legal de protección de datos según cómo se llegue a
+/// ella.
+///
+/// `from=home` ([Routes.legalPrivacyInfo]) la abre como información: flecha de
+/// volver y sin la barra dicotómica del consentimiento. Sin ese marcador es un
+/// paso del flujo legal, con "Salir" y "Continuar".
+Widget buildLegalPrivacy(final Uri uri) => PrivacyPage(
+  fromHome: uri.queryParameters['from'] == 'home',
+  isOnboarding: uri.queryParameters['mode'] == 'onboarding',
+);
+
+Widget buildGestionRegistroDetail(final Object? extra) => switch (extra) {
+  (final Registro registro, final bool isEntrada) => GestionRegistroDetailPage(registro: registro, isEntrada: isEntrada),
+  _ => const NotFoundScreen(),
+};
+
+/// Detalle de notificación. El id viaja en la ruta y debe ser numérico: un
+/// deep link malformado caía antes en `?? 0` y consultaba al backend por la
+/// notificación 0 (NC-3) — ahora cae en [NotFoundScreen], como el detalle de
+/// registro (H-04).
+Widget buildGestionNotificacionDetalle(final String? idParameter, final Object? extra) {
+  final id = int.tryParse(idParameter ?? '');
+  if (id == null) {
+    return const NotFoundScreen();
+  }
+  // El resumen del listado solo se pasa si se conoce: el repositorio lo usa
+  // como respaldo de lo que el detalle no informe (estado, procedimiento,
+  // fecha de expiración, sistema de origen). Sin resumen (deep link,
+  // restauración) viaja `null`, nunca un dato inventado.
+  return GestionNotificacionDetallePage(
+    notificacionId: id,
+    resumen: extra is Notificacion ? extra : null,
+  );
+}
+
 /// Riverpod provider that owns the application [GoRouter].
 ///
 /// Kept alive for the entire app lifetime so the router is never recreated
@@ -142,10 +185,7 @@ final goRouterProvider = Provider<GoRouter>(
           path: Routes.legalPrivacy,
           pageBuilder: (final BuildContext context, final GoRouterState state) => noTransitionPage(
             state,
-            PrivacyPage(
-              fromHome: state.uri.queryParameters['from'] == 'home',
-              isOnboarding: state.uri.queryParameters['mode'] == 'onboarding',
-            ),
+            buildLegalPrivacy(state.uri),
           ),
         ),
         GoRoute(
@@ -220,14 +260,7 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.gestionNotificacionDetalle,
-              builder: (final BuildContext context, final GoRouterState state) {
-                final summary = state.extra;
-                return GestionNotificacionDetallePage(
-                  notificacionId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
-                  estado: summary is Notificacion ? summary.estado ?? 'expirada' : state.uri.queryParameters['estado'] ?? 'expirada',
-                  sistemaOrigen: summary is Notificacion ? summary.sistemaOrigen : null,
-                );
-              },
+              builder: (final BuildContext context, final GoRouterState state) => buildGestionNotificacionDetalle(state.pathParameters['id'], state.extra),
             ),
 
             GoRoute(
@@ -264,10 +297,7 @@ final goRouterProvider = Provider<GoRouter>(
 
             GoRoute(
               path: Routes.gestionRegistrosDetail,
-              builder: (final BuildContext context, final GoRouterState state) {
-                final args = state.extra! as (Registro, bool);
-                return GestionRegistroDetailPage(registro: args.$1, isEntrada: args.$2);
-              },
+              builder: (final BuildContext context, final GoRouterState state) => buildGestionRegistroDetail(state.extra),
             ),
 
             GoRoute(

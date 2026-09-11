@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
@@ -97,9 +98,11 @@ class _SocialWelfareDataTab extends StatelessWidget {
             hasJccmAuthorization: hasJccmAuthorization,
           ),
           loading: () => const Center(child: AppLoadingIndicator()),
-          error: (final error, final stackTrace) => _SocialWelfareDataList(
-            items: items,
-            hasJccmAuthorization: false,
+          // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
+          // cabe error + reintentar, nunca afirmar que falta el consentimiento.
+          error: (final error, final stackTrace) => ErrorStateWidget(
+            message: AppLocalizations.of(context).authorizationCheckFailedMessage,
+            onRetry: () => ref.invalidate(jccmDataAuthorizationProvider),
           ),
         );
       },
@@ -121,12 +124,7 @@ class _SocialWelfareDataList extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
       itemBuilder: (final context, final index) {
         // Show contextual helper at the top when authorization is missing
         if (!hasJccmAuthorization && index == 0) {
@@ -216,12 +214,7 @@ class _SocialWelfareServicesTab extends ConsumerWidget {
     ];
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
       itemBuilder: (final context, final sectionIndex) => AppExternalLinkSection(
         title: linkSections[sectionIndex].title,
         links: [

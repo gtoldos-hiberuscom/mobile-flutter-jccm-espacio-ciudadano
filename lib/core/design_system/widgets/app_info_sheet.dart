@@ -46,6 +46,7 @@ class AppInfoSheet {
   /// - [title]: The title of the bottom sheet
   /// - [bodyText]: Main informational text
   /// - [footerText]: Optional footer text, shown after a divider
+  /// - [footerSpan]: Rich footer, including inline links; overrides [footerText].
   /// - [actionLabel]: Optional label for action button
   /// - [onActionPressed]: Optional callback for action button
   /// - [actionIcon]: Optional trailing icon for action button
@@ -54,6 +55,7 @@ class AppInfoSheet {
     required final String title,
     required final String bodyText,
     final String? footerText,
+    final InlineSpan? footerSpan,
     final String? actionLabel,
     final VoidCallback? onActionPressed,
     final IconData? actionIcon,
@@ -71,7 +73,7 @@ class AppInfoSheet {
       semanticsLabel == null || semanticsLabel != '',
       'semanticsLabel must not be empty',
     );
-    final hasFooter = footerText != null;
+    final hasFooter = footerText != null || footerSpan != null;
     final hasAction = actionLabel != null;
 
     await AppBottomSheet.show<void>(
@@ -82,6 +84,7 @@ class AppInfoSheet {
       body: _AppInfoSheetBody(
         bodyText: bodyText,
         footerText: footerText,
+        footerSpan: footerSpan,
         actionLabel: actionLabel,
         onActionPressed: onActionPressed,
         actionIcon: actionIcon,
@@ -98,6 +101,7 @@ class _AppInfoSheetBody extends StatelessWidget {
     required this.hasFooter,
     required this.hasAction,
     this.footerText,
+    this.footerSpan,
     this.actionLabel,
     this.onActionPressed,
     this.actionIcon,
@@ -105,6 +109,7 @@ class _AppInfoSheetBody extends StatelessWidget {
 
   final String bodyText;
   final String? footerText;
+  final InlineSpan? footerSpan;
   final String? actionLabel;
   final VoidCallback? onActionPressed;
   final IconData? actionIcon;
@@ -139,11 +144,11 @@ class _AppInfoSheetBody extends StatelessWidget {
           ),
         ],
 
-        if (footerText != null) ...[
+        if (hasFooter) ...[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-            child: Text(
-              footerText!,
+            child: Text.rich(
+              footerSpan ?? TextSpan(text: footerText),
               style: AppTypography.bodyRegular.copyWith(
                 color: AppColors.textPrimary,
               ),

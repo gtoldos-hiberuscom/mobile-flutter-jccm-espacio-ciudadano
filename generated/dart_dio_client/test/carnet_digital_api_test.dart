@@ -61,24 +61,6 @@ void main() {
       // TODO
     });
 
-    // Obtener datos de familia numerosa por intermediación
-    //
-    // Consulta el servicio de intermediación para recuperar los datos del título de familia numerosa del ciudadano. Devuelve información detallada del título incluyendo categoría, vigencia, fecha de caducidad, número de hijos y datos de todos los beneficiarios (titular e hijos) con sus documentos de identidad y fecha de nacimiento.
-    //
-    //Future<Respuesta> obtenerDatosFamiliaNumerosaIntermediacion(String numDocumento, BaseRequestIntermediacion baseRequestIntermediacion, { String authorization }) async
-    test('test obtenerDatosFamiliaNumerosaIntermediacion', () async {
-      // TODO
-    });
-
-    // Obtener datos de familia numerosa por intermediación
-    //
-    // Consulta el servicio de intermediación para recuperar los datos del título de familia numerosa del ciudadano. Devuelve información detallada del título incluyendo categoría, vigencia, fecha de caducidad, número de hijos y datos de todos los beneficiarios (titular e hijos) con sus documentos de identidad y fecha de nacimiento.
-    //
-    //Future<Respuesta> obtenerDatosFamiliaNumerosaIntermediacion1(String numDocumento, BaseRequestIntermediacion baseRequestIntermediacion, { String authorization }) async
-    test('test obtenerDatosFamiliaNumerosaIntermediacion1', () async {
-      // TODO
-    });
-
     // Obtener PDF del carné joven digital
     //
     // Genera el documento PDF del carné joven digital del ciudadano autenticado.

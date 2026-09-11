@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/empleo_api.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_request.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository {
   MyDataEmploymentRepositoryImpl({required final Dio dio}) : _api = EmpleoApi(dio);
@@ -189,21 +190,9 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
     return offers;
   }
 
-  /// El cliente ya devuelve `null` en 404 y la carga cruda en el resto.
-  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) async {
-    try {
-      return await fetch();
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.data;
-      if (rawData == null) {
-        rethrow;
-      }
-      return rawData;
-    }
-  }
+  /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
+  /// resto de errores → se propagan. Ver [intermediacionRawResponse].
+  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) => intermediacionRawResponse(fetch);
 
   Object? _decodePayload(final Object? payload) {
     Object? current = payload;
@@ -324,10 +313,12 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
     return DateTime(year, month, day);
   }
 
-  String _statusLabel(final String? value) {
+  /// `null` cuando el backend no informa el estado: fabricar «Activa» por
+  /// defecto convertía cualquier cuerpo inesperado en una demanda activa falsa.
+  String? _statusLabel(final String? value) {
     final normalized = value?.trim();
     if (normalized == null || normalized.isEmpty) {
-      return 'Activa';
+      return null;
     }
     final upper = normalized.toUpperCase();
     if (upper == 'S' || upper == 'SI' || upper == 'SÍ' || upper == 'TRUE' || upper == '1') {

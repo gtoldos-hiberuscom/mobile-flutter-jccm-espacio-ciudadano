@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ci
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
@@ -39,7 +40,17 @@ final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>((fina
     throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
 
-  return ref.watch(digitalCardsRepositoryProvider).loadCards(citizenId: citizenId);
+  final repository = ref.watch(digitalCardsRepositoryProvider);
+  // Los carnets exigen la cláusula obligatoria y la de la JCCM
+  // (`documentation/consent_clause_access_matrix.md`). La comprobación
+  // proactiva de `digitalCardsAuthorizationProvider` se apoya en la caché
+  // positiva de cláusulas, así que no ve una revocación reciente: esta es la
+  // corrección reactiva.
+  return withAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    request: () => repository.loadCards(citizenId: citizenId),
+  );
 });
 
 final digitalCardQrImageProvider = FutureProvider.autoDispose.family<Uint8List?, DigitalCard>((final ref, final card) async {

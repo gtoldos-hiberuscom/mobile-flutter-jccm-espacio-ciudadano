@@ -10,7 +10,7 @@
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title" : "Fachada Sede API",
-    "version" : "1.86.0"
+    "version" : "1.95.2"
   },
   "servers" : [
     {
@@ -81,6 +81,117 @@
     }
   ],
   "paths" : {
+    "/actuator" : {
+      "get" : {
+        "operationId" : "links",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "$ref" : "#/components/schemas/Link"
+                    }
+                  }
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "$ref" : "#/components/schemas/Link"
+                    }
+                  }
+                }
+              },
+              "application/vnd.spring-boot.actuator.v3+json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "$ref" : "#/components/schemas/Link"
+                    }
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Actuator root web endpoint",
+        "tags" : [
+          "Actuator"
+        ]
+      }
+    },
+    "/actuator/health" : {
+      "get" : {
+        "operationId" : "health",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v3+json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Actuator web endpoint 'health'",
+        "tags" : [
+          "Actuator"
+        ]
+      }
+    },
+    "/actuator/health/**" : {
+      "get" : {
+        "operationId" : "health-path",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v3+json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Actuator web endpoint 'health-path'",
+        "tags" : [
+          "Actuator"
+        ]
+      }
+    },
     "/api/v1/agenda/{idAgente}/eventos/refrescar" : {
       "get" : {
         "description" : "Refresca los eventos de agenda del agente y devuelve el resumen del proceso.",
@@ -1820,7 +1931,8 @@
         },
         "summary" : "Obtener datos del carné de discapacidad",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -1928,7 +2040,8 @@
         },
         "summary" : "Obtener PKPass del carné de discapacidad",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -2038,7 +2151,8 @@
         },
         "summary" : "Obtener datos del carné de familia numerosa",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -2146,7 +2260,8 @@
         },
         "summary" : "Obtener PKPass del carné de familia numerosa",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -2258,7 +2373,8 @@
         },
         "summary" : "Obtener carné joven digital",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -2366,7 +2482,8 @@
         },
         "summary" : "Obtener PDF del carné joven digital",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -2475,7 +2592,8 @@
         },
         "summary" : "Obtener PKPass del carné joven digital",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -2581,7 +2699,8 @@
         },
         "summary" : "Obtener QR del carné joven digital",
         "tags" : [
-          "carnet-digital"
+          "carnet-digital",
+          "ciudadanos"
         ]
       }
     },
@@ -2709,7 +2828,8 @@
         },
         "summary" : "Obtener datos de atencion a la dependencia",
         "tags" : [
-          "intermediacion"
+          "intermediacion",
+          "ciudadanos"
         ]
       }
     },
@@ -2834,7 +2954,8 @@
         },
         "summary" : "Obtener datos de la tarjeta de estacionamiento para personas con discapacidad",
         "tags" : [
-          "intermediacion"
+          "intermediacion",
+          "ciudadanos"
         ]
       }
     },
@@ -2961,7 +3082,8 @@
         },
         "summary" : "Obtener datos del último balneario adjudicado del programa de termalismo",
         "tags" : [
-          "intermediacion"
+          "intermediacion",
+          "ciudadanos"
         ]
       }
     },
@@ -3373,7 +3495,8 @@
         },
         "summary" : "Obtener cláusulas de consentimiento asociadas a un agente",
         "tags" : [
-          "hechos-vitales"
+          "hechos-vitales",
+          "ciudadanos"
         ]
       },
       "patch" : {
@@ -3518,7 +3641,8 @@
         },
         "summary" : "Actualizar las cláusulas de consentimiento de un agente",
         "tags" : [
-          "hechos-vitales"
+          "hechos-vitales",
+          "ciudadanos"
         ]
       },
       "post" : {
@@ -3663,7 +3787,8 @@
         },
         "summary" : "Dar de alta las cláusulas de consentimiento de un agente",
         "tags" : [
-          "hechos-vitales"
+          "hechos-vitales",
+          "ciudadanos"
         ]
       }
     },
@@ -3798,7 +3923,8 @@
         },
         "summary" : "Obtener ofertas de empleo inscritas",
         "tags" : [
-          "intermediacion"
+          "intermediacion",
+          "ciudadanos"
         ]
       }
     },
@@ -3915,7 +4041,8 @@
         },
         "summary" : "Refrescar eventos de la Agenda por idAgente",
         "tags" : [
-          "agenda"
+          "agenda",
+          "ciudadanos"
         ]
       }
     },
@@ -4057,7 +4184,8 @@
         },
         "summary" : "Obtener eventos de la Agenda",
         "tags" : [
-          "agenda"
+          "agenda",
+          "ciudadanos"
         ]
       }
     },
@@ -4248,7 +4376,8 @@
         },
         "summary" : "Consultar expedientes por documento del ciudadano",
         "tags" : [
-          "publicacion"
+          "publicacion",
+          "ciudadanos"
         ]
       }
     },
@@ -4439,7 +4568,8 @@
         },
         "summary" : "Consultar registros de entrada por documento del ciudadano",
         "tags" : [
-          "publicacion"
+          "publicacion",
+          "ciudadanos"
         ]
       }
     },
@@ -4630,7 +4760,8 @@
         },
         "summary" : "Consultar registros de salida por documento del ciudadano",
         "tags" : [
-          "publicacion"
+          "publicacion",
+          "ciudadanos"
         ]
       }
     },
@@ -4827,7 +4958,8 @@
         },
         "summary" : "Consultar un expediente de publicación por número de expediente",
         "tags" : [
-          "publicacion"
+          "publicacion",
+          "ciudadanos"
         ]
       }
     },
@@ -4917,7 +5049,8 @@
         },
         "summary" : "Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma",
         "tags" : [
-          "procedimiento"
+          "procedimiento",
+          "ciudadanos"
         ]
       }
     },
@@ -5077,7 +5210,8 @@
         },
         "summary" : "Iniciar procedimiento administrativo",
         "tags" : [
-          "procedimiento"
+          "procedimiento",
+          "ciudadanos"
         ]
       }
     },
@@ -5260,7 +5394,8 @@
         },
         "summary" : "Registrar fichero y obtener justificante",
         "tags" : [
-          "documentacion"
+          "documentacion",
+          "ciudadanos"
         ]
       }
     },
@@ -5470,7 +5605,8 @@
         ],
         "summary" : "Obtener lista de hechos vitales por agente",
         "tags" : [
-          "hechos-vitales"
+          "hechos-vitales",
+          "ciudadanos"
         ]
       },
       "patch" : {
@@ -5611,7 +5747,8 @@
         },
         "summary" : "Actualizar los hechos vitales seleccionados por un agente",
         "tags" : [
-          "hechos-vitales"
+          "hechos-vitales",
+          "ciudadanos"
         ]
       }
     },
@@ -5717,7 +5854,8 @@
         },
         "summary" : "Eliminar preferencias y configuración de hechos vitales de un agente",
         "tags" : [
-          "hechos-vitales"
+          "hechos-vitales",
+          "ciudadanos"
         ]
       }
     },
@@ -5948,15 +6086,28 @@
         },
         "summary" : "Obtener servicios segmentados por hechos vitales",
         "tags" : [
-          "hechos-vitales"
+          "hechos-vitales",
+          "ciudadanos"
         ]
       }
     },
     "/api/v1/ciudadanos/{idAgente}/registros" : {
       "post" : {
-        "operationId" : "registrosTipoSalida_1",
+        "description" : "Devuelve los registros de tipo entrada para el NIF proporcionado. Se invoca mediante el mismo path con el parámetro query 'tipo=entrada'. Ejemplo: /ciudadanos/{idAgente}/registros?tipo=entrada.",
+        "operationId" : "myPubliSelecByNifTipoProcRegistrosEntradaOperation_1",
         "parameters" : [
           {
+            "description" : "Tipo de registros: entrada | salida",
+            "example" : "entrada",
+            "in" : "query",
+            "name" : "tipo",
+            "required" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "description" : "Identificador único del agente (ciudadano). Ejemplo: PER9999927",
             "in" : "path",
             "name" : "idAgente",
             "required" : true,
@@ -5968,11 +6119,21 @@
         "requestBody" : {
           "content" : {
             "application/json" : {
+              "examples" : {
+                "Ejemplo registros salida" : {
+                  "description" : "Ejemplo registros salida",
+                  "value" : {
+                    "tipodocumento" : "NIF",
+                    "numerodocumento" : "99999999R"
+                  }
+                }
+              },
               "schema" : {
                 "$ref" : "#/components/schemas/DTSELECTBYNIFV2REQ"
               }
             }
           },
+          "description" : "Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como SALIDA.",
           "required" : true
         },
         "responses" : {
@@ -5980,15 +6141,24 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/RespuestaZCSRFCPUBLISELECTBYNIFV2Response"
+                  "oneOf" : [
+                    {
+                      "$ref" : "#/components/schemas/RespuestaZCSRFCPUBLISELECTBYNIFV2Response"
+                    },
+                    {
+                      "$ref" : "#/components/schemas/Respuesta"
+                    }
+                  ]
                 }
               }
             },
-            "description" : "OK"
+            "description" : "Consulta realizada correctamente."
           }
         },
+        "summary" : "Busqueda de registros por tipo",
         "tags" : [
-          "publicacion"
+          "publicacion",
+          "ciudadanos"
         ]
       }
     },
@@ -6189,7 +6359,8 @@
         },
         "summary" : "Consultar un expediente de publicación por número de registro",
         "tags" : [
-          "publicacion"
+          "publicacion",
+          "ciudadanos"
         ]
       }
     },
@@ -6464,6 +6635,7 @@
         "operationId" : "crearTareaSoporte_1",
         "parameters" : [
           {
+            "description" : "Identificador único del agente (ciudadano). Ejemplo: PER9999927",
             "in" : "path",
             "name" : "idAgente",
             "required" : true,
@@ -6564,7 +6736,8 @@
         },
         "summary" : "Crear tarea de soporte/incidencia",
         "tags" : [
-          "soporte"
+          "soporte",
+          "ciudadanos"
         ]
       }
     },
@@ -6575,6 +6748,7 @@
         "parameters" : [
           {
             "description" : "Identificador ciudadano en path cuando se usa ruta /ciudadanos/{id}/...",
+            "example" : "12345678Z",
             "in" : "path",
             "name" : "id",
             "required" : true,
@@ -6693,7 +6867,8 @@
         },
         "summary" : "Obtener datos de discapacidad por intermediación",
         "tags" : [
-          "intermediacion"
+          "intermediacion",
+          "ciudadanos"
         ]
       }
     },
@@ -7017,6 +7192,7 @@
         "parameters" : [
           {
             "description" : "Documento de identificación del ciudadano",
+            "example" : "12345678Z",
             "in" : "path",
             "name" : "id",
             "required" : true,
@@ -7114,6 +7290,7 @@
         "parameters" : [
           {
             "description" : "Documento de identificación del ciudadano",
+            "example" : "12345678Z",
             "in" : "path",
             "name" : "id",
             "required" : true,
@@ -8100,8 +8277,170 @@
         },
         "summary" : "Obtener datos de familia numerosa por intermediación",
         "tags" : [
-          "carnet-digital",
-          "intermediacion"
+          "intermediacion",
+          "ciudadanos"
+        ]
+      }
+    },
+    "/api/v1/ciudadanos/{numDocumento}/educacion/titulos-no-universitarios" : {
+      "post" : {
+        "description" : "Consulta los titulos no universitarios del ciudadano en el servicio de Educacion.",
+        "operationId" : "getTitulosNoUniversitarios_1",
+        "parameters" : [
+          {
+            "description" : "Documento identificativo del ciudadano a consultar.",
+            "example" : "99999999R",
+            "in" : "path",
+            "name" : "numDocumento",
+            "required" : true,
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          {
+            "description" : "Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.",
+            "in" : "header",
+            "name" : "Authorization",
+            "required" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "examples" : {
+                "Body de ejemplo titulos no universitarios" : {
+                  "description" : "Body de ejemplo titulos no universitarios",
+                  "summary" : "Ejemplo de peticion",
+                  "value" : {
+                    "tipodoc" : "NIF",
+                    "docu" : "99999999R"
+                  }
+                }
+              },
+              "schema" : {
+                "$ref" : "#/components/schemas/DTEDUTNUREQ"
+              }
+            }
+          },
+          "description" : "Datos de entrada para la consulta de titulos no universitarios.",
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Respuesta correcta titulos no universitarios" : {
+                    "description" : "Respuesta correcta titulos no universitarios",
+                    "summary" : "Estructura completa Respuesta<DTEDUTNURES>",
+                    "value" : {
+                      "body" : {
+                        "resul" : "0",
+                        "mensaje" : "TRAMITADA",
+                        "pais" : "ESPANA",
+                        "provnac" : "MADRID",
+                        "locnac" : "MADRID",
+                        "fecnac" : "01/01/1967",
+                        "docu" : null,
+                        "elemento" : [
+                          {
+                            "centro" : "ADOLFO SUAREZ",
+                            "codcen" : "28063799",
+                            "provtit" : "MADRID",
+                            "codtitulacion" : "30000",
+                            "titulacion" : "Bachillerato",
+                            "tipotit" : "Titulo",
+                            "tipoest" : "LGE",
+                            "nivel" : "05",
+                            "ley" : null,
+                            "fecfin" : "01/04/1997",
+                            "fecexp" : "30/09/1999",
+                            "nregnac" : null,
+                            "nregaut" : "199905187915",
+                            "nregmec" : "199905187915",
+                            "nordlib" : null,
+                            "numlib" : null,
+                            "numfol" : null,
+                            "codtipotitulo" : "2",
+                            "codpaisexpedicion" : "724",
+                            "paisexpedicion" : "ESPANA"
+                          }
+                        ],
+                        "idpeticion" : "7a7479f7fa5fec7a5t0123008",
+                        "codestado" : "0003"
+                      },
+                      "timestamp" : "2026-06-08T16:33:59.9981",
+                      "mensaje-respuesta" : "Respuesta correcta",
+                      "codigo-respuesta" : "200.00",
+                      "info-error" : null
+                    }
+                  }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description" : "Titulos no universitarios recuperados correctamente"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description" : "Peticion incorrecta o formato de datos invalido"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description" : "No autorizado: token ausente, caducado o invalido"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description" : "Acceso denegado: el documento no coincide con el token o la clausula requerida no esta aceptada"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description" : "No se han encontrado titulos no universitarios para el ciudadano indicado"
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Respuesta"
+                }
+              }
+            },
+            "description" : "Error interno al consultar titulos no universitarios"
+          }
+        },
+        "summary" : "Obtener titulos no universitarios",
+        "tags" : [
+          "educacion",
+          "ciudadanos"
         ]
       }
     },
@@ -8269,7 +8608,8 @@
         },
         "summary" : "Obtener titulos universitarios",
         "tags" : [
-          "educacion"
+          "educacion",
+          "ciudadanos"
         ]
       }
     },
@@ -8405,7 +8745,8 @@
         },
         "summary" : "Consultar situacion de demandante de empleo a fecha actual",
         "tags" : [
-          "sepe"
+          "sepe",
+          "ciudadanos"
         ]
       }
     },
@@ -8509,7 +8850,8 @@
         ],
         "summary" : "Obtener CIP a partir del NIF",
         "tags" : [
-          "sescam"
+          "sescam",
+          "ciudadanos"
         ]
       }
     },
@@ -8636,7 +8978,8 @@
         ],
         "summary" : "Consultar historial de citas pasadas del SESCAM",
         "tags" : [
-          "sescam"
+          "sescam",
+          "ciudadanos"
         ]
       }
     },
@@ -8751,7 +9094,8 @@
         ],
         "summary" : "Consultar citas futuras del SESCAM",
         "tags" : [
-          "sescam"
+          "sescam",
+          "ciudadanos"
         ]
       }
     },
@@ -8898,7 +9242,8 @@
         },
         "summary" : "Consultar listado de vehiculos de un ciudadano",
         "tags" : [
-          "dgt"
+          "dgt",
+          "ciudadanos"
         ]
       }
     },
@@ -9227,7 +9572,8 @@
         },
         "summary" : "Obtener datos catastrales",
         "tags" : [
-          "catastro"
+          "catastro",
+          "ciudadanos"
         ]
       }
     },
@@ -9387,7 +9733,8 @@
         },
         "summary" : "Obtener datos de residencia (INE)",
         "tags" : [
-          "ine"
+          "ine",
+          "ciudadanos"
         ]
       }
     },
@@ -9770,7 +10117,7 @@
         "responses" : {
           "200" : {
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "examples" : {
                   "Respuesta correcta titulos no universitarios" : {
                     "description" : "Respuesta correcta titulos no universitarios",
@@ -9827,7 +10174,7 @@
           },
           "400" : {
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Respuesta"
                 }
@@ -9837,7 +10184,7 @@
           },
           "401" : {
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Respuesta"
                 }
@@ -9847,7 +10194,7 @@
           },
           "403" : {
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Respuesta"
                 }
@@ -9857,7 +10204,7 @@
           },
           "404" : {
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Respuesta"
                 }
@@ -9867,7 +10214,7 @@
           },
           "500" : {
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Respuesta"
                 }
@@ -12106,7 +12453,6 @@
         },
         "summary" : "Obtener datos de familia numerosa por intermediación",
         "tags" : [
-          "carnet-digital",
           "intermediacion"
         ]
       }
@@ -15569,6 +15915,17 @@
           }
         },
         "description" : "Información de error asociada a la respuesta"
+      },
+      "Link" : {
+        "type" : "object",
+        "properties" : {
+          "href" : {
+            "type" : "string"
+          },
+          "templated" : {
+            "type" : "boolean"
+          }
+        }
       },
       "ListaHechosAgente" : {
         "type" : "object",

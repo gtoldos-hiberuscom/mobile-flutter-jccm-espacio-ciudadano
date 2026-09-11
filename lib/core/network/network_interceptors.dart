@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 
 // ─── Auth interceptor ────────────────────────────────────────────────────────
 
@@ -79,19 +81,22 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
       return;
     }
 
-    // Retry on a bare secondary Dio that shares the transport (options +
-    // adapter) but carries no interceptors — crucially not this
-    // QueuedInterceptor. Retrying on the primary Dio would route the retry's
-    // error back into this interceptor's error queue, which is still blocked on
-    // the current onError, deadlocking it permanently and poisoning the queue
-    // for every later failure. The retry error surfaces via handler.next to the
-    // primary chain's ErrorInterceptor, which maps it to an AppError.
-    // Shares the transport (options + adapter) but carries only the logger, so
-    // the retry is still visible in the `[DIO]` logs — never the
-    // AuthRefreshInterceptor (a QueuedInterceptor) nor the ErrorInterceptor
-    // (the primary chain maps the error when we forward via handler.next).
+    // Retry on a secondary Dio that shares the transport (options + adapter)
+    // but NOT this QueuedInterceptor: retrying on the primary Dio would route
+    // the retry's error back into this interceptor's error queue, which is
+    // still blocked on the current onError, deadlocking it permanently and
+    // poisoning the queue for every later failure. The retry error surfaces
+    // via handler.next to the primary chain's ErrorInterceptor, which maps it
+    // to an AppError.
+    // The secondary Dio carries only GeneratedApiCompatInterceptor — the
+    // retried response must be normalized (decode/unwrap/singletons) exactly
+    // like a first-attempt one, because handler.resolve() skips the primary
+    // chain's response interceptors — and the logger, so the retry is still
+    // visible in the `[DIO]` logs. Both are plain Interceptors, so neither
+    // touches the queue.
     final retryDio = Dio(_dio.options)
       ..httpClientAdapter = _dio.httpClientAdapter
+      ..interceptors.add(const GeneratedApiCompatInterceptor())
       ..interceptors.add(EmojiDioLogger());
     try {
       final requestOptions = err.requestOptions;
@@ -109,8 +114,9 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
       handler.next(retryError);
     } on Object {
       // e.g. a StateError from re-sending an already-finalized FormData
-      // (/api/v1/soporte). Surface the original 401 rather than letting it
-      // escape the handler and hang the request.
+      // (/api/v1/soporte, /api/v1/ciudadanos/{idAgente}/soporte). Surface the
+      // original 401 rather than letting it escape the handler and hang the
+      // request.
       handler.next(err);
     }
   }
@@ -184,22 +190,24 @@ final class ErrorInterceptor extends Interceptor {
 
 // ─── Emoji Dio Logger ───────────────────────────────────────────────────────
 
-/// Toggles full request/response body dumping for [EmojiDioLogger] and the
-/// curl logging interceptor on the success path.
-///
-/// Pretty-printing full JSON bodies (e.g. large expediente listings) on every
-/// successful call is a noticeable source of debug-mode slowdown, so it's off
-/// by default. Flip to `true` locally when you need to inspect a response in
-/// detail. Error responses are always logged in full regardless of this flag.
-const bool kVerboseNetworkLogging = true;
-
 class EmojiDioLogger extends Interceptor {
+  /// [verboseBodies] activa el volcado de cabeceras y cuerpos completos. Lo
+  /// decide `buildDioClient` (`kDebugMode && config.debugMode`): nunca en una
+  /// build de release o profile, y nunca con la configuración de producción.
+  EmojiDioLogger({this.verboseBodies = false});
+
+  final bool verboseBodies;
+
   final String dioNote = '[DIO]';
   @override
   void onRequest(final RequestOptions options, final RequestInterceptorHandler handler) {
     logger.d('$dioNote 📑 Request: ${options.method} ${options.uri}');
     final requestData = options.data;
-    if (options.path == '/api/v1/soporte' && requestData is FormData) {
+    // Bajo el mismo gate que el resto de cuerpos: el nombre del fichero que
+    // adjunta el ciudadano es dato suyo, y esta traza no lo pasa por el
+    // redactor. Sigue disponible en desarrollo, que es donde hace falta para
+    // diagnosticar el envío de incidencias.
+    if (verboseBodies && options.path.endsWith('/soporte') && requestData is FormData) {
       final formData = requestData;
       final attachments = formData.files
           .where((final entry) => entry.key == 'adjunto')
@@ -213,12 +221,12 @@ class EmojiDioLogger extends Interceptor {
           .toList(growable: false);
       logger.d('$dioNote 📎 Support attachments: $attachments');
     }
-    if (kVerboseNetworkLogging) {
+    if (verboseBodies) {
       if (options.headers.isNotEmpty) {
-        logger.d('$dioNote 📑 Headers: ${_redact(options.headers)}');
+        logger.d('$dioNote 📑 Headers: ${redactForLog(options.headers)}');
       }
       if (options.data != null) {
-        logger.d('$dioNote 📑 Body: ${_redact(options.data)}');
+        logger.d('$dioNote 📑 Body: ${redactForLog(options.data)}');
       }
     }
     handler.next(options);
@@ -227,75 +235,27 @@ class EmojiDioLogger extends Interceptor {
   @override
   void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
     logger.d('$dioNote 📦 Response: ${response.statusCode} ${response.requestOptions.uri}');
-    final path = response.requestOptions.path;
-    final logResponseBody = kVerboseNetworkLogging || path == '/api/v1/intermediacion/termalismo/datos' || path == '/api/v1/intermediacion/atencion-dependencia/datos' || path.startsWith('/api/v1/ccaa/familia-numerosa/') || (path.startsWith('/api/v1/agenda/') && path.contains('/eventos/'));
-    if (logResponseBody) {
-      logger.d('$dioNote 📦 Response Data: ${_redact(response.data)}');
+    // Sin excepciones por ruta: la lista de cuatro endpoints que había aquí
+    // (termalismo, dependencia, familia numerosa, eventos de agenda) volcaba su
+    // cuerpo aunque `verboseBodies` fuese falso, es decir también en un debug
+    // con la configuración de producción — justo lo que el gate
+    // `kDebugMode && config.debugMode` decide. Con la config de desarrollo ya
+    // se volcaban por `verboseBodies`, así que no se pierde nada.
+    if (verboseBodies) {
+      logger.d('$dioNote 📦 Response Data: ${redactForLog(response.data)}');
     }
     handler.next(response);
   }
 
   @override
   void onError(final DioException err, final ErrorInterceptorHandler handler) {
-    if (_isHandledBusinessResponse(
-      path: err.requestOptions.path,
-      data: err.response?.data,
-    )) {
-      handler.next(err);
-      return;
-    }
-
     final request = err.requestOptions;
     logger
       ..e('$dioNote 💥 Error: ${err.type} ${err.message}')
       ..e('$dioNote 💥 Request: ${request.method} ${request.uri} — status ${err.response?.statusCode ?? 'unavailable'}');
     if (err.response != null) {
-      logger.e('$dioNote 💥 Error Response: ${_redact(err.response?.data)}');
+      logger.e('$dioNote 💥 Error Response: ${redactForLog(err.response?.data)}');
     }
     handler.next(err);
   }
-
-  bool _isHandledBusinessResponse({
-    required final String path,
-    required final Object? data,
-  }) {
-    if (path == '/api/v1/soporte') {
-      return false;
-    }
-    if (data is! Map) {
-      return false;
-    }
-    final responseCode = data['codigo-respuesta']?.toString();
-    final message = data['mensaje-respuesta']?.toString().toLowerCase() ?? '';
-    return responseCode == '412.00' && message.contains('no se pudo dar de alta el soporte');
-  }
-
-  Object? _redact(final Object? value) {
-    if (value is Map) {
-      return value.map((final key, final nestedValue) {
-        final keyText = key.toString().toLowerCase();
-        if (_sensitiveKeyFragments.any(keyText.contains)) {
-          return MapEntry(key, '***');
-        }
-        return MapEntry(key, _redact(nestedValue));
-      });
-    }
-    if (value is Iterable) {
-      return value.map(_redact).toList(growable: false);
-    }
-    return value;
-  }
-
-  static const _sensitiveKeyFragments = [
-    'authorization',
-    'token',
-    'dni',
-    'nif',
-    'docu',
-    'documento',
-    'numdoc',
-    'email',
-    'telefono',
-    'phone',
-  ];
 }

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/network/api_envelope.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 /// Cliente de las consultas de bienestar social por intermediación.
 ///
@@ -32,18 +34,23 @@ final class BienestarSocialApi {
     return _post(citizenId, 'tarjeta-estacionamiento', body);
   }
 
-  /// Devuelve la carga útil cruda, incluida la de los 4xx: el backend informa
-  /// ahí los errores de negocio (`codigo-respuesta` `412.00`, error `3034`) que
-  /// el repositorio traduce a falta de autorización.
+  /// Mismo contrato de estados que el resto de APIs de intermediación:
+  /// 403 → [MyDataAuthorizationRequired], 404 → `null`, y todo lo demás (401
+  /// tras refresco fallido, 429, 4xx de negocio, 5xx) sale como
+  /// `DioException`.
   ///
-  /// El 401 queda fuera a propósito para que salga como `DioException` y
-  /// `AuthRefreshInterceptor` pueda refrescar la sesión y reintentar.
+  /// Antes aceptaba como válido **cualquier** código < 500: el sobre de un 403
+  /// o de un 400 se parseaba como datos y la pantalla afirmaba que el
+  /// ciudadano no tiene título de familia numerosa, discapacidad, termalismo,
+  /// dependencia ni tarjeta de estacionamiento. El sobre de negocio con
+  /// `412.00`/`3034` en un 2xx lo sigue reconociendo el repositorio.
   Future<Object?> _post(final String citizenId, final String operation, final Map<String, Object?> body) async {
     final response = await _dio.post<Object?>(
       '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/bienestar-social/$operation',
       data: body,
-      options: Options(validateStatus: (final status) => status != null && status < 500 && status != 401),
+      options: Options(validateStatus: isHandledIntermediacionStatus),
     );
+    checkIntermediacionAuthorization(response);
     if (response.statusCode == 404) {
       return null;
     }

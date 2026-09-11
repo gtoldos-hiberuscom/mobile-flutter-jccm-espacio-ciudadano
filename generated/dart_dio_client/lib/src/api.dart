@@ -9,6 +9,7 @@ import 'package:espacio_ciudadano_api/src/auth/api_key_auth.dart';
 import 'package:espacio_ciudadano_api/src/auth/basic_auth.dart';
 import 'package:espacio_ciudadano_api/src/auth/bearer_auth.dart';
 import 'package:espacio_ciudadano_api/src/auth/oauth.dart';
+import 'package:espacio_ciudadano_api/src/api/actuator_api.dart';
 import 'package:espacio_ciudadano_api/src/api/agenda_api.dart';
 import 'package:espacio_ciudadano_api/src/api/carnet_digital_api.dart';
 import 'package:espacio_ciudadano_api/src/api/catastro_api.dart';
@@ -119,6 +120,12 @@ class EspacioCiudadanoApi {
     if (this.dio.interceptors.any((i) => i is ApiKeyAuthInterceptor)) {
       (this.dio.interceptors.firstWhere((element) => element is ApiKeyAuthInterceptor) as ApiKeyAuthInterceptor).apiKeys.remove(name);
     }
+  }
+
+  /// Get ActuatorApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  ActuatorApi getActuatorApi() {
+    return ActuatorApi(dio, serializers);
   }
 
   /// Get AgendaApi instance, base route and serializer can be overridden by a given but be careful,

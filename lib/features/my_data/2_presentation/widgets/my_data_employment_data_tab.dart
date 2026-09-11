@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_employment_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_authorization_dialog.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_demand_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_disabled_demand_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_disabled_offers_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_offers_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_server_error.dart';
@@ -32,26 +37,37 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
     final jccmAuthorizationAsync = ref.watch(jccmDataAuthorizationProvider);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ageAuthorizationAsync.when(
             data: (final hasAgeAuthorization) {
               if (!hasAgeAuthorization) {
-                return MyDataAuthorizationContextualHelper(
-                  message: l10n.myDataAgeAuthorizationRequiredMessage,
-                  semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-                  onOpenSettings: _openSettings,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const MyDataEmploymentDisabledDemandCard(),
+                    MyDataAuthorizationContextualHelper(
+                      message: l10n.myDataAgeAuthorizationRequiredMessage,
+                      semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+                      onOpenSettings: _openSettings,
+                    ),
+                  ],
                 );
               }
 
               final demandAsync = ref.watch(employmentDemandProvider);
+              // Rechazo de autorización (respuesta de negocio) ≠ error de servicio.
+              if (demandAsync.error is MyDataAuthorizationRequired) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const MyDataEmploymentDisabledDemandCard(),
+                    MyDataAuthorizationRequiredState(returnTo: Routes.myDataEmployment, onAuthorized: () => ref.invalidate(employmentDemandProvider), scrollable: false),
+                  ],
+                );
+              }
               if (demandAsync.hasError) {
                 return MyDataEmploymentServerError(
                   showBanner: _showUnavailableBanner,
@@ -81,10 +97,17 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                 child: AppLoadingIndicator(),
               ),
             ),
-            error: (final error, final stackTrace) => MyDataAuthorizationContextualHelper(
-              message: l10n.myDataAgeAuthorizationRequiredMessage,
-              semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-              onOpenSettings: _openSettings,
+            // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
+            // cabe error + reintentar, nunca afirmar que falta el consentimiento.
+            error: (final error, final stackTrace) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const MyDataEmploymentDisabledDemandCard(),
+                ErrorStateWidget(
+                  message: l10n.authorizationCheckFailedMessage,
+                  onRetry: () => ref.invalidate(ageDataAuthorizationProvider),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: AppDimensions.space16),
@@ -112,14 +135,11 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                 child: AppLoadingIndicator(),
               ),
             ),
-            error: (final error, final stackTrace) => Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const MyDataEmploymentDisabledOffersCard(),
-                MyDataAuthorizationContextualHelper(
-                  onOpenSettings: _openSettings,
-                ),
-              ],
+            // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
+            // cabe error + reintentar, nunca afirmar que falta el consentimiento.
+            error: (final error, final stackTrace) => ErrorStateWidget(
+              message: l10n.authorizationCheckFailedMessage,
+              onRetry: () => ref.invalidate(jccmDataAuthorizationProvider),
             ),
           ),
         ],
@@ -128,7 +148,23 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
   }
 
   Future<void> _openOffers() async {
-    final hasAuthorization = await ref.read(employmentOffersAuthorizationProvider.future);
+    // El provider lanza cuando el check no puede evaluarse (backend caído):
+    // eso es un fallo, no "sin autorización" — avisar y no bloquear con el
+    // diálogo de autorizar.
+    final bool hasAuthorization;
+    try {
+      hasAuthorization = await ref.read(employmentOffersAuthorizationProvider.future);
+    } on Object catch (error) {
+      logger.e('Employment offers authorization check unavailable: $error');
+      if (mounted) {
+        AppAlertSnackbar.show(
+          context,
+          message: AppLocalizations.of(context).authorizationCheckFailedMessage,
+          severity: AppAlertSeverity.error,
+        );
+      }
+      return;
+    }
     if (!mounted) {
       return;
     }

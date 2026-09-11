@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _pkPassChannel = MethodChannel(
   'es.jccm.espaciociudadano/pkpass',
@@ -72,12 +73,13 @@ Future<void> _downloadFormat(
   )
   action,
 }) async {
+  final l10n = AppLocalizations.of(context);
   if (!ref.read(digitalCardsDownloadingProvider.notifier).tryStartDownload(label)) {
     return;
   }
   try {
     final artifact = await action(ref, card);
-    final saved = await _saveArtifact(artifact, dialogTitle: 'Guardar $label');
+    final saved = await _saveArtifact(artifact, dialogTitle: l10n.digitalCardsSaveDialogTitle(label));
     if (!saved) {
       return;
     }
@@ -86,7 +88,7 @@ Future<void> _downloadFormat(
     }
     AppAlertSnackbar.show(
       context,
-      message: '$label guardado correctamente.',
+      message: l10n.digitalCardsDownloadSuccess(label),
     );
   } catch (_) {
     if (!context.mounted) {
@@ -94,7 +96,7 @@ Future<void> _downloadFormat(
     }
     AppAlertSnackbar.show(
       context,
-      message: 'No hemos podido descargar $label.',
+      message: l10n.digitalCardsDownloadError(label),
       severity: AppAlertSeverity.error,
     );
   } finally {

@@ -66,6 +66,35 @@ cleanup_generated_api_imports() {
   done
 }
 
+cleanup_generated_model_files() {
+  local model_dir="$1/lib/src/model"
+
+  if [[ ! -d "$model_dir" ]]; then
+    echo "Skipping generated model cleanup: $model_dir does not exist"
+    return
+  fi
+
+  echo "Cleaning unused imports and parameters in generated oneOf models..."
+
+  find "$model_dir" -name '*.dart' -not -name '*.g.dart' -print0 | while IFS= read -r -d '' file; do
+    # oneOf wrappers only import the union members and never use the shared helpers.
+    if ! grep -q "package:one_of/one_of.dart" "$file"; then
+      continue
+    fi
+
+    if ! grep -qw 'JsonObject' "$file"; then
+      perl -0pi -e "s@^import 'package:built_value/json_object\\.dart';\\n@@m" "$file"
+    fi
+
+    if ! grep -qw 'InfoError' "$file"; then
+      perl -0pi -e "s@^import 'package:espacio_ciudadano_api/src/model/info_error\\.dart';\\n@@m" "$file"
+    fi
+
+    # The generated _serializeProperties helper of oneOf wrappers is empty and never called.
+    perl -0pi -e 's@^// ignore_for_file: unused_element\n@// ignore_for_file: unused_element, unused_element_parameter\n@m' "$file"
+  done
+}
+
 fix_serializer_generics() {
   local serializers_file="$1/lib/src/serializers.dart"
 
@@ -91,6 +120,7 @@ openapi-generator generate \
 
 fix_body_param_collisions "$OUT"
 cleanup_generated_api_imports "$OUT"
+cleanup_generated_model_files "$OUT"
 fix_serializer_generics "$OUT"
 
 echo "Done. Files written to $OUT"

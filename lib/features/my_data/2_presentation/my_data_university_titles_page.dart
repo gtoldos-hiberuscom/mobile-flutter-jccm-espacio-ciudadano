@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_education_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// University titles list page — Figma node 43973:1882.
@@ -26,7 +28,7 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
       body: titlesAsync.when(
         data: (final titles) => _buildTitlesList(context, l10n, titles),
         loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stack) => _buildErrorState(context, l10n, ref),
+        error: (final error, final stack) => error is MyDataAuthorizationRequired ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataEducationUniversityTitles, onAuthorized: () => ref.invalidate(universityTitlesProvider)) : _buildErrorState(context, l10n, ref),
       ),
     );
   }
@@ -41,12 +43,7 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       itemCount: titles.length,
       separatorBuilder: (final context, final index) => const SizedBox(
         height: AppDimensions.space16,
@@ -64,7 +61,7 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
     return MyDataNoData(
       message: l10n.educationUniversityTitlesNoDataMessage,
       actionLabel: l10n.educationUniversityTitlesInfoContactButton,
-      contactUrl: 'https://www.ciencia.gob.es/',
+      contactUrl: _universityTitlesContactUrl,
     );
   }
 
@@ -96,12 +93,14 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
   }
 
   Future<void> _openContactUrl(final BuildContext context) async {
-    // URL del Ministerio de Ciencia, Innovación y Universidades
-    const url = 'https://www.ciencia.gob.es/';
-
-    await launchExternalUrlWithConfirmation(context, Uri.parse(url));
+    await launchExternalUrlWithConfirmation(context, Uri.parse(_universityTitlesContactUrl));
   }
 }
+
+/// Sede electrónica de Universidades, que es donde se consultan y corrigen los
+/// títulos universitarios. Antes apuntaba al portal del ministerio, que no
+/// lleva a ningún trámite.
+const String _universityTitlesContactUrl = 'https://universidades.sede.gob.es/';
 
 class _UniversityTitleCard extends StatelessWidget {
   const _UniversityTitleCard({required this.title});
@@ -110,6 +109,7 @@ class _UniversityTitleCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppInfoCard(
       leadingBorderWidth: AppDimensions.space4,
       child: Padding(
@@ -122,7 +122,7 @@ class _UniversityTitleCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
                 child: Text(
-                  'Nº TÍTULO: ${title.titleNumber}',
+                  l10n.myDataEducationTitleNumberLabel(title.titleNumber),
                   style: AppTypography.captionUppercase.copyWith(
                     color: AppColors.borderBlueMutedBase,
                   ),
@@ -162,13 +162,13 @@ class _UniversityTitleCard extends StatelessWidget {
             const SizedBox(height: AppDimensions.space4),
             if (title.completionDate != null) ...[
               _DateRow(
-                label: 'FECHA FINALIZACIÓN',
+                label: l10n.myDataEducationCompletionDateLabel,
                 date: title.completionDate!,
               ),
             ],
             if (title.expeditionDate != null) ...[
               _DateRow(
-                label: 'FECHA EXPEDICIÓN',
+                label: l10n.myDataEducationExpeditionDateLabel,
                 date: title.expeditionDate!,
               ),
             ],
@@ -204,7 +204,7 @@ class _DateRow extends StatelessWidget {
           ),
           const SizedBox(width: AppDimensions.space16),
           Text(
-            _formatDate(date),
+            _formatDate(AppLocalizations.of(context), date),
             style: AppTypography.bodyRegular.copyWith(
               color: AppColors.primary,
             ),
@@ -214,26 +214,26 @@ class _DateRow extends StatelessWidget {
     );
   }
 
-  String _formatDate(final DateTime date) {
+  String _formatDate(final AppLocalizations l10n, final DateTime date) {
     final day = date.day;
-    final month = _monthName(date.month);
+    final month = l10n.commonMonthShortName(_monthKey(date.month));
     final year = date.year;
     return '$day $month $year';
   }
 
-  String _monthName(final int month) => switch (month) {
-    1 => 'ene',
-    2 => 'feb',
-    3 => 'mar',
-    4 => 'abr',
+  String _monthKey(final int month) => switch (month) {
+    1 => 'january',
+    2 => 'february',
+    3 => 'march',
+    4 => 'april',
     5 => 'may',
-    6 => 'jun',
-    7 => 'jul',
-    8 => 'ago',
-    9 => 'sep',
-    10 => 'oct',
-    11 => 'nov',
-    12 => 'dic',
-    _ => '',
+    6 => 'june',
+    7 => 'july',
+    8 => 'august',
+    9 => 'september',
+    10 => 'october',
+    11 => 'november',
+    12 => 'december',
+    _ => 'other',
   };
 }

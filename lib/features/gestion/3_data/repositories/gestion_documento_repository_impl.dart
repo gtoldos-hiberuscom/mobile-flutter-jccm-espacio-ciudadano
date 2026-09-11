@@ -3,8 +3,10 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
+import 'package:jccm_espacio_ciudadano/core/network/transfer_timeout.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/representante.dart';
@@ -15,6 +17,21 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
 
   final Dio _dio;
   final ProcedimientoApi _procedimientoApi;
+
+  /// Timeout configurado para el entorno (`TIMEOUT` del config), que aquí solo
+  /// cubre la conexión y el trabajo del servidor: el tiempo de transferencia se
+  /// suma aparte.
+  Duration get _baseTimeout => _dio.options.sendTimeout ?? _dio.options.connectTimeout ?? const Duration(seconds: 20);
+
+  /// Plazo para que el backend procese el buzón y devuelva el justificante.
+  ///
+  /// Se dimensiona con el volumen del lote —lo que el backend tiene que
+  /// mover— con el mismo criterio que las subidas: el plazo del entorno más el
+  /// tiempo del transporte al suelo de rendimiento asumido.
+  Duration _registrarTimeout(final List<({String nombre, String hash, int tamanioBytes})> documentos) {
+    final totalBytes = documentos.fold<int>(0, (final total, final documento) => total + documento.tamanioBytes);
+    return payloadTransferTimeout(payloadBytes: totalBytes, baseTimeout: _baseTimeout);
+  }
 
   @override
   Future<String> subirDocumentoSinFirma({
@@ -27,13 +44,14 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     final CancelToken? cancelToken,
     final void Function(double progreso)? onProgress,
   }) async {
+    final encoded = base64Encode(bytes);
     final adjunto = ADJUNTO(
       (final builder) => builder
         ..idunico = idUnico
         ..nifcif = documentNumber
         ..nombre = nombreFichero
         ..tipoprocedimiento = tipoProcedimiento
-        ..data = base64Encode(bytes)
+        ..data = encoded
         // Metadatos del documento que api-rest-doc.html marca como
         // `required` (`categoria`, `idprop`, `tipodoc`) y que el ejemplo
         // oficial envía siempre. La subida devuelve 200 + hash también sin
@@ -62,6 +80,15 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         idExpediente: idUnico,
         adjuntoBody: adjunto,
         cancelToken: cancelToken,
+        // El timeout general de la app (10 s en producción) es un plazo total
+        // para empujar el cuerpo, así que un adjunto grande no podría subirse
+        // nunca: este va dimensionado por lo que realmente se envía.
+        extra: {
+          generatedApiTimeoutExtraKey: payloadTransferTimeout(
+            payloadBytes: encoded.length,
+            baseTimeout: _baseTimeout,
+          ),
+        },
         onSendProgress: (final sent, final total) {
           if (total > 0) {
             onProgress?.call(sent / total);
@@ -99,6 +126,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final String documentNumber,
     required final Expediente expediente,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async {
     // Bypass deliberado del cliente generado para este campo: el modelo
     // generado declara `datosprocedimiento` como JsonObject no-nulo (no
@@ -116,7 +144,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       representante: representante,
     );
 
-    logger.d('[inicproc] req idunico=$idUnico noexpediente=${expediente.numexp} tipoproc=${expediente.tipoproc ?? ''} category=NIF titular=$documentNumber repNif=${representante?.nifcif ?? documentNumber}');
+    logger.d('[inicproc] req idunico=${maskedIdUnico(idUnico)} noexpediente=${expediente.numexp} tipoproc=${expediente.tipoproc ?? ''} category=NIF titular=${maskedDocument(documentNumber)} repNif=${maskedDocument(representante?.nifcif ?? documentNumber)}');
     Map<String, Object?>? responseBody;
     try {
       // Path gateway (el legacy /api/v1/procedimiento/inicproc no existe en el
@@ -128,6 +156,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
         '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/expedientes/${Uri.encodeComponent(idUnico)}/ficheros/iniciar',
         data: body,
         options: Options(contentType: Headers.jsonContentType),
+        cancelToken: cancelToken,
       );
       _logEnvelope('inicproc', response.statusCode, response.data);
       responseBody = _asMap(_decode(response.data));
@@ -221,6 +250,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     required final InicioProcedimientoResultado inicio,
     required final List<({String nombre, String hash, int tamanioBytes})> documentos,
     final Representante? representante,
+    final CancelToken? cancelToken,
   }) async {
     // Mismo bypass que en iniciarProcedimiento: `DTProcedimiento.datosprocedimiento`
     // exige un `JsonObject` no nulo en el cliente generado, pero enviar `{}`
@@ -236,7 +266,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       representante: representante,
     );
 
-    logger.d('[registrarfichero] req idunico=${inicio.idunico} noexpediente=${expediente.numexp} esPorContraste=${representante != null} documentos=${documentos.length}');
+    logger.d('[registrarfichero] req idunico=${maskedIdUnico(inicio.idunico)} noexpediente=${expediente.numexp} esPorContraste=${representante != null} documentos=${documentos.length}');
     Uint8List? bytes;
     try {
       // Path gateway; mismo criterio que en iniciarProcedimiento: segmento
@@ -244,7 +274,16 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
       final response = await _dio.post<Uint8List>(
         '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/expedientes/${Uri.encodeComponent(inicio.idunico)}/ficheros/registrar',
         data: body,
-        options: Options(contentType: Headers.jsonContentType, responseType: ResponseType.bytes),
+        options: Options(
+          contentType: Headers.jsonContentType,
+          responseType: ResponseType.bytes,
+          // El plazo general (10 s en producción) es el tiempo que tiene el
+          // backend para procesar el buzón entero y devolver el justificante.
+          // Tras subir 100 MB en ~19 minutos, un procesado algo lento tiraba el
+          // lote completo, así que el plazo crece con lo que hay que procesar.
+          receiveTimeout: _registrarTimeout(documentos),
+        ),
+        cancelToken: cancelToken,
       );
       bytes = response.data;
       logger.d('[registrarfichero] ok (200 directo) ${bytes?.length ?? 0} bytes');
@@ -432,7 +471,12 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
   /// así que se registran tanto los campos del sobre como `body.estado`/
   /// `body.mensaje`.
   void _logEnvelope(final String op, final int? statusCode, final Object? raw) {
-    final payload = _asMap(_decode(raw));
+    // El sobre pasa por el redactor de lista blanca ANTES de interpolarse
+    // (LG-3): los campos de diagnóstico siguen visibles, pero cualquier campo
+    // no listado que viaje dentro de `info-error` o del `body` (texto libre
+    // del backend, posible dato personal) queda enmascarado — interpolar el
+    // payload crudo se saltaba esa política.
+    final payload = _asMap(redactForLog(_decode(raw)));
     final body = _asMap(payload?['body']);
     logger.d(
       '[$op] http=$statusCode codigo-respuesta=${payload?['codigo-respuesta']} '
@@ -444,6 +488,10 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
   /// `registrarfichero` responde con bytes crudos (el justificante). En un
   /// error el cuerpo suele ser el sobre JSON del 500; se decodifica a texto
   /// (recortado) para verlo en la traza sin volcar un binario.
+  ///
+  /// La redacción va **antes** del recorte: así los campos de diagnóstico del
+  /// sobre siguen visibles y cualquier dato personal que traiga queda
+  /// enmascarado (recortar primero rompería el JSON y lo enmascararía entero).
   void _logBytesBody(final String op, final int? statusCode, final Object? data) {
     String preview;
     if (data is Uint8List) {
@@ -455,6 +503,7 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
     } else {
       preview = data?.toString() ?? 'null';
     }
+    preview = redactForLog(preview).toString();
     if (preview.length > 600) {
       preview = '${preview.substring(0, 600)}…';
     }

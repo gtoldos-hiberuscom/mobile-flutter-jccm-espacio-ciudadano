@@ -77,6 +77,15 @@ void main() {
       // TODO
     });
 
+    // Busqueda de registros por tipo
+    //
+    // Devuelve los registros de tipo entrada para el NIF proporcionado. Se invoca mediante el mismo path con el parámetro query 'tipo=entrada'. Ejemplo: /ciudadanos/{idAgente}/registros?tipo=entrada.
+    //
+    //Future<MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response> myPubliSelecByNifTipoProcRegistrosEntradaOperation1(String tipo, String idAgente, DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
+    test('test myPubliSelecByNifTipoProcRegistrosEntradaOperation1', () async {
+      // TODO
+    });
+
     // Consultar registros de salida por documento del ciudadano
     //
     // Consulta la lista de registros de salida asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento SALIDA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
@@ -110,11 +119,6 @@ void main() {
     //
     //Future<Respuesta> myPubliSelecByNumExpOperation1(String idAgente, String idExpediente, ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP) async
     test('test myPubliSelecByNumExpOperation1', () async {
-      // TODO
-    });
-
-    //Future<RespuestaZCSRFCPUBLISELECTBYNIFV2Response> registrosTipoSalida1(String idAgente, DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
-    test('test registrosTipoSalida1', () async {
       // TODO
     });
 

@@ -103,6 +103,34 @@ void main() {
       );
     });
 
+    test('loadLifeEvents propagates an error whose envelope carries no listaHechos', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(500, {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error', 'body': null});
+      final repository = LifeEventsRepositoryImpl(dio: dio);
+
+      await expectLater(
+        repository.loadLifeEvents(idAgente: 'PER9998003'),
+        throwsA(isA<DioException>()),
+        reason: 'an error envelope used to be read as "no life events configured"',
+      );
+    });
+
+    test('loadLifeEvents still accepts a 4xx whose envelope genuinely carries the list', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(400, {
+        'codigo-respuesta': '400.00',
+        'body': {
+          'listaHechos': [
+            {'idHecho': 1, 'nombreHecho': 'Familia', 'seleccionado': true},
+          ],
+        },
+      });
+      final repository = LifeEventsRepositoryImpl(dio: dio);
+
+      final events = await repository.loadLifeEvents(idAgente: 'PER9998003');
+
+      expect(events, hasLength(1));
+      expect(events.single.id, 1);
+    });
+
     test('resetPreferences deletes all life events for the agent', () async {
       final adapter = _CapturingAdapter();
       final dio = Dio(
@@ -129,6 +157,32 @@ void main() {
 enum _LifeEventsResponseKind {
   success,
   supportUnavailable,
+}
+
+final class _StaticAdapter implements HttpClientAdapter {
+  _StaticAdapter(this.statusCode, this.body);
+
+  final int statusCode;
+  final Object? body;
+
+  @override
+  Future<ResponseBody> fetch(
+    final RequestOptions options,
+    final Stream<Uint8List>? requestStream,
+    final Future<void>? cancelFuture,
+  ) async {
+    await (requestStream ?? const Stream<Uint8List>.empty()).drain<void>();
+    return ResponseBody.fromString(
+      jsonEncode(body),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({final bool force = false}) {}
 }
 
 final class _CapturingAdapter implements HttpClientAdapter {

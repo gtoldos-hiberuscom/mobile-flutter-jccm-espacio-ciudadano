@@ -40,4 +40,18 @@ abstract interface class ConsentRepository {
   /// the citizen. Throws `ConsentStatusUnknownException` when the remote
   /// service cannot answer, and [StateError] when it answers with no clauses.
   Future<List<Clause>> fetchClauses({final String? idAgente});
+
+  /// Same as [fetchClauses] but **discarding any cached copy** first.
+  ///
+  /// [fetchClauses] and [hasAcceptedClause] are deliberately biased towards a
+  /// remembered "accepted": the in-memory clause cache survives token
+  /// refreshes and the persisted accepted-ids list is a positive-only
+  /// fallback, so an outage never locks the citizen out. The price is that a
+  /// revocation made elsewhere (the portal, another app) stays invisible.
+  ///
+  /// This is the read to use when the backend has just answered that the
+  /// authorisation is missing: only a fresh answer can tell a genuine
+  /// revocation from the gateway failing closed. Concurrent calls still share
+  /// a single in-flight request.
+  Future<List<Clause>> refreshClauses({required final String idAgente});
 }

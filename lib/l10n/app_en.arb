@@ -24,7 +24,9 @@
   "@landingAccessStepLabel": {
     "description": "Accessible label for a numbered step in the How to access section.",
     "placeholders": {
-      "stepNumber": {"type": "int"}
+      "stepNumber": {
+        "type": "int"
+      }
     }
   },
   "landingCtaButton": "Access your space",
@@ -87,33 +89,29 @@
   "@landingAboutWhatYouFindIntro": {
     "description": "Introduction to the list of available content."
   },
-  "landingAboutBullet1": "Your personal and contact information.",
+  "landingAboutBullet1": "Your personal information.",
   "@landingAboutBullet1": {
     "description": "First bullet item in the content list."
   },
-  "landingAboutBullet2": "Your information from other Public Administrations.",
+  "landingAboutBullet2": "Your cases and their processing status.",
   "@landingAboutBullet2": {
     "description": "Second bullet item in the content list."
   },
-  "landingAboutBullet3": "Your ongoing cases and their processing status.",
+  "landingAboutBullet3": "Your notifications.",
   "@landingAboutBullet3": {
     "description": "Third bullet item in the content list."
   },
-  "landingAboutBullet4": "Your pending notifications.",
+  "landingAboutBullet4": "Your digital cards.",
   "@landingAboutBullet4": {
     "description": "Fourth bullet item in the content list."
   },
-  "landingAboutBullet5": "Your digital cards.",
+  "landingAboutBullet5": "Your appointments and events.",
   "@landingAboutBullet5": {
     "description": "Fifth bullet item in the content list."
   },
-  "landingAboutBullet6": "Your information from the Regional Government of Castilla-La Mancha.",
+  "landingAboutBullet6": "Personalized recommendations based on your interests.",
   "@landingAboutBullet6": {
     "description": "Sixth bullet item in the content list."
-  },
-  "landingAboutBullet7": "Additionally, you can receive proactive service recommendations of interest to you.",
-  "@landingAboutBullet7": {
-    "description": "Seventh bullet item in the content list."
   },
   "landingAboutAccessButton": "Access my Citizen Space",
   "@landingAboutAccessButton": {
@@ -166,6 +164,10 @@
   "loginPageError": "Sign-in error",
   "@loginPageError": {
     "description": "Error title shown when the login process fails."
+  },
+  "loginIsolationDegradedWarning": "Your browser cannot open an isolated session. You signed in successfully, but this device may remember your Cl@ve session on future sign-ins.",
+  "@loginIsolationDegradedWarning": {
+    "description": "Non-blocking warning after a successful login when the device browser does not support ephemeral tabs and authentication ran in the shared browser."
   },
   "loginRetryButton": "Try again",
   "@loginRetryButton": {
@@ -705,6 +707,10 @@
     "description": "Footer — Legal notice."
   },
   "agendaPageTitle": "Agenda",
+  "agendaPendingAppointmentsTitle": "Pending appointments",
+  "@agendaPendingAppointmentsTitle": {
+    "description": "Agenda — heading for the pending appointments list."
+  },
   "@agendaPageTitle": {
     "description": "Agenda — page title."
   },
@@ -1015,13 +1021,25 @@
   "@educationUniversityTitlesInfoBody": {
     "description": "Education — help modal main body for university titles."
   },
-  "educationUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Ministry of Science, Innovation and Universities.",
+  "educationUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Universities e-Office.",
   "@educationUniversityTitlesInfoFooter": {
     "description": "Education — help modal footer text for university titles."
   },
   "educationUniversityTitlesInfoContactButton": "Contact",
   "@educationUniversityTitlesInfoContactButton": {
     "description": "Education — contact button in help modal for university titles."
+  },
+  "educationNonUniversityTitlesInfoTitle": "About your non-university qualifications",
+  "@educationNonUniversityTitlesInfoTitle": {
+    "description": "Education — title of the non-university qualifications help modal."
+  },
+  "educationNonUniversityTitlesInfoBody": "Check the details of the non-university qualifications on record.",
+  "@educationNonUniversityTitlesInfoBody": {
+    "description": "Education — main body of the non-university qualifications help modal."
+  },
+  "educationNonUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Ministry of Education, Vocational Training and Sports.",
+  "@educationNonUniversityTitlesInfoFooter": {
+    "description": "Education — footer text of the non-university qualifications help modal."
   },
   "educationNonUniversityTitlesTitle": "Non-university titles",
   "@educationNonUniversityTitlesTitle": {
@@ -1163,6 +1181,10 @@
   "myDataJccmAuthorizationRequiredMessage": "You must authorise the consultation of administrative facts held by the JCCM from your preferences.",
   "@myDataJccmAuthorizationRequiredMessage": {
     "description": "Message shown when JCCM data consultation is not authorised."
+  },
+  "authorizationCheckFailedMessage": "We could not check your authorisations. Please try again.",
+  "@authorizationCheckFailedMessage": {
+    "description": "Error message when the authorisation check is unavailable (backend failure), as opposed to an authorisation not granted."
   },
   "myDataJccmAuthorizationRequiredCta": "Go to Terms of use and authorizations",
   "@myDataJccmAuthorizationRequiredCta": {
@@ -1516,10 +1538,6 @@
   "@supportCaptchaLabel": {
     "description": "Antibot checkbox label."
   },
-  "supportCaptchaMockBadge": "MOCK",
-  "@supportCaptchaMockBadge": {
-    "description": "Badge clarifying the captcha is a mock."
-  },
   "supportSubmitButton": "Send request",
   "@supportSubmitButton": {
     "description": "Submit button copy."
@@ -1623,6 +1641,10 @@
   "saludSurfaceCta": "View agenda",
   "@saludSurfaceCta": {
     "description": "Home — health surface CTA that opens the agenda."
+  },
+  "homeNoNewsMessage": "You have no pending notifications or upcoming appointments.",
+  "@homeNoNewsMessage": {
+    "description": "Home — message for the My updates section when there is nothing."
   },
   "homeUpcomingEventsTitle": "Upcoming events",
   "@homeUpcomingEventsTitle": {
@@ -2033,6 +2055,14 @@
   "@lifeEventsErrorFeedback": {
     "description": "Personalization — snackbar after a save / reset failure."
   },
+  "lifeEventsResetSuccessFeedback": "Your preferences have been cleared.",
+  "@lifeEventsResetSuccessFeedback": {
+    "description": "Personalization — snackbar after a successful preference reset."
+  },
+  "lifeEventsResetErrorFeedback": "We couldn't clear your preferences. Please try again.",
+  "@lifeEventsResetErrorFeedback": {
+    "description": "Personalization — snackbar after a failed preference reset."
+  },
   "lifeEventsLoadError": "We couldn't load the life events.",
   "@lifeEventsLoadError": {
     "description": "Personalization — error state when the catalog fails to load."
@@ -2250,9 +2280,15 @@
   "@a11yFileUpload": {
     "description": "Accessible summary of a file and its upload status.",
     "placeholders": {
-      "fileName": {"type": "String"},
-      "fileInfo": {"type": "String"},
-      "status": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      },
+      "fileInfo": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
     }
   },
   "caseworkUploadErrorUnsupportedMime": "Unsupported file format.",
@@ -3106,6 +3142,14 @@
   "@familiaNumerosaTitleNumberLabel": {
     "description": "Familia numerosa detail — title number label."
   },
+  "familiaNumerosaCategoryGeneral": "General",
+  "@familiaNumerosaCategoryGeneral": {
+    "description": "Social welfare — General category description of the large-family certificate."
+  },
+  "familiaNumerosaCategoryEspecial": "Special",
+  "@familiaNumerosaCategoryEspecial": {
+    "description": "Social welfare — Special category description of the large-family certificate."
+  },
   "familiaNumerosaCategoryLabel": "Category",
   "@familiaNumerosaCategoryLabel": {
     "description": "Familia numerosa detail — category label."
@@ -3245,6 +3289,9 @@
     "description": "Familia numerosa detail — body shown when the citizen has no vigente carnet."
   },
   "familiaNumerosaErrorMessage": "Your large-family card could not be loaded.",
+  "@familiaNumerosaErrorMessage": {
+    "description": "Familia numerosa detail — generic error message."
+  },
   "familiaNumerosaServiceUnavailableMessage": "The service for consulting your large-family title is unavailable. You can reload the information or try again later.",
   "myDataServiceUnavailableUpdate": "Refresh",
   "myDataNoDataContact": "Contact",
@@ -3272,9 +3319,6 @@
   "myDataHousingAddressServiceUnavailableMessage": "The service for consulting your address details is unavailable. You can reload the information or try again later.",
   "myDataHousingRealEstateServiceUnavailableMessage": "The service for consulting your real-estate assets is unavailable. You can reload the information or try again later.",
   "myDataHealthAppointmentsServiceUnavailableMessage": "The service for consulting your health appointments is unavailable. You can reload the information or try again later.",
-  "@familiaNumerosaErrorMessage": {
-    "description": "Familia numerosa detail — generic error message."
-  },
   "familiaNumerosaRetry": "Retry",
   "@familiaNumerosaRetry": {
     "description": "Familia numerosa detail — retry button label."
@@ -3576,7 +3620,7 @@
   "@a11yLandingH1Label": {
     "description": "Accessibility — semantic H1 label for the landing splash screen."
   },
-  "a11yCastillaLogoLabel": "Logo of the Regional Government of Castilla-La Mancha",
+  "a11yCastillaLogoLabel": "Regional Government of Castilla-La Mancha",
   "@a11yCastillaLogoLabel": {
     "description": "Accessibility — semantic label for the institutional Castilla-La Mancha logo."
   },
@@ -3589,31 +3633,51 @@
   "@a11yFieldError": {
     "description": "Accessibility announcement when a field validation error appears.",
     "placeholders": {
-      "field": {"type": "String"},
-      "error": {"type": "String"}
+      "field": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
     }
   },
   "a11yExpandTextArea": "Expand {field}",
   "@a11yExpandTextArea": {
     "description": "Label for the button that expands a text area.",
-    "placeholders": {"field": {"type": "String"}}
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
   },
   "a11yCollapseTextArea": "Collapse {field}",
   "@a11yCollapseTextArea": {
     "description": "Label for the button that collapses a text area.",
-    "placeholders": {"field": {"type": "String"}}
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
   },
   "a11ySelectPhoneCountryCode": "Select phone country code, current {countryCode}",
   "@a11ySelectPhoneCountryCode": {
     "description": "Label for the phone country-code selector button.",
-    "placeholders": {"countryCode": {"type": "String"}}
+    "placeholders": {
+      "countryCode": {
+        "type": "String"
+      }
+    }
   },
   "a11yFilterButtonActiveCount": "{label}, {count, plural, one {1 active filter} other {{count} active filters}}",
   "@a11yFilterButtonActiveCount": {
     "description": "Accessible label for a filter button with its active-filter count.",
     "placeholders": {
-      "label": {"type": "String"},
-      "count": {"type": "int"}
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
     }
   },
   "a11yFilterActions": "Filter actions",
@@ -3632,32 +3696,54 @@
   "@a11yListFilterDateRange": {
     "description": "Accessible label for a date range filter.",
     "placeholders": {
-      "label": {"type": "String"},
-      "startDate": {"type": "String"},
-      "endDate": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
     }
   },
   "a11yErrorState": "Error: {message}",
   "@a11yErrorState": {
     "description": "Accessible announcement for an error state.",
-    "placeholders": {"message": {"type": "String"}}
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
   },
   "a11yEmptyState": "No content: {message}",
   "@a11yEmptyState": {
     "description": "Accessible announcement for an empty or no-results state.",
-    "placeholders": {"message": {"type": "String"}}
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
   },
   "a11yBlockedState": "Access unavailable: {message}",
   "@a11yBlockedState": {
     "description": "Accessible announcement for a blocked or unavailable access state.",
-    "placeholders": {"message": {"type": "String"}}
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
   },
   "a11yAlert": "{title}: {message}",
   "@a11yAlert": {
     "description": "Unified accessible label for an alert.",
     "placeholders": {
-      "title": {"type": "String"},
-      "message": {"type": "String"}
+      "title": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
     }
   },
   "a11yAlertNeutral": "System notice",
@@ -3669,30 +3755,46 @@
   "@a11yAgendaCard": {
     "description": "Accessible summary of an agenda card.",
     "placeholders": {
-      "type": {"type": "String"},
-      "details": {"type": "String"}
+      "type": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
     }
   },
   "a11yAttachmentField": "{label}. {hint}",
   "@a11yAttachmentField": {
     "placeholders": {
-      "label": {"type": "String"},
-      "hint": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "hint": {
+        "type": "String"
+      }
     }
   },
   "a11yRequiredAttachmentField": "{label}, required. {hint}",
   "@a11yRequiredAttachmentField": {
     "placeholders": {
-      "label": {"type": "String"},
-      "hint": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "hint": {
+        "type": "String"
+      }
     }
   },
   "a11yAttachmentSelected": "Attached file: {fileName}, {fileInfo}",
   "@a11yAttachmentSelected": {
     "description": "Status announced when an attachment is selected.",
     "placeholders": {
-      "fileName": {"type": "String"},
-      "fileInfo": {"type": "String"}
+      "fileName": {
+        "type": "String"
+      },
+      "fileInfo": {
+        "type": "String"
+      }
     }
   },
   "a11yBottomSheet": "Bottom sheet",
@@ -3700,19 +3802,31 @@
   "a11yCalendar": "Calendar",
   "a11yCalendarMonth": "Displayed month: {monthYear}",
   "@a11yCalendarMonth": {
-    "placeholders": {"monthYear": {"type": "String"}}
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
   },
   "a11ySelectCalendarMonthYear": "Select month and year, current {monthYear}",
   "@a11ySelectCalendarMonthYear": {
-    "placeholders": {"monthYear": {"type": "String"}}
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
   },
   "a11yCalendarHasEvent": "has event",
   "a11yCalendarOutsideMonth": "outside displayed month",
   "a11yCaptcha": "{label}, {badge} verification",
   "@a11yCaptcha": {
     "placeholders": {
-      "label": {"type": "String"},
-      "badge": {"type": "String"}
+      "label": {
+        "type": "String"
+      },
+      "badge": {
+        "type": "String"
+      }
     }
   },
   "a11yCaptchaVerified": "Captcha verified",
@@ -3725,7 +3839,11 @@
   "drawerGreeting": "Hello, {userName}",
   "@drawerGreeting": {
     "description": "Greeting in the profile menu.",
-    "placeholders": {"userName": {"type": "String"}}
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
   },
   "drawerLogout": "Sign out",
   "@drawerLogout": {
@@ -3738,6 +3856,7 @@
   "@drawerHelpAndContact": {
     "description": "Label for the Help and Contact item in the secondary section of the profile menu."
   },
+  "drawerCloseMenu": "Close menu",
   "drawerGoToSedeElectronica": "Go to eGovernment Portal",
   "@drawerGoToSedeElectronica": {
     "description": "Action button label in the profile menu linking to Sede Electrónica."
@@ -3857,6 +3976,11 @@
   "myDataEmploymentOffersPageTitle": "Employment offer registration",
   "@myDataEmploymentOffersPageTitle": {
     "description": "Title of the employment offer registrations screen."
+  },
+  "myDataEmploymentOffersPortalLink": "Employability Portal of the Regional Government of Castilla-La Mancha",
+  "myDataEmploymentOffersInfoSheetFooter": "If your job offer applications are not correct, check your Employability Portal of the Regional Government of Castilla-La Mancha.",
+  "@myDataEmploymentOffersInfoSheetFooter": {
+    "description": "Footer text of the job offer applications screen help modal."
   },
   "myDataEmploymentOffersInfoSheetDescription": "Check the job offers you have registered for and the status of your application.",
   "@myDataEmploymentOffersInfoSheetDescription": {
@@ -4297,13 +4421,17 @@
   "@myDataEducationInterestLinksTitle": {
     "description": "Title of the links of interest section on the Education information and services tab."
   },
-  "myDataEducationInterestLinkPlaceholder": "Lorem ipsum dolor sit amet",
-  "@myDataEducationInterestLinkPlaceholder": {
-    "description": "Education link placeholder from the Figma design."
+  "myDataEducationLinkEducationPortal": "Castilla-La Mancha Education Portal",
+  "@myDataEducationLinkEducationPortal": {
+    "description": "Link to the Castilla-La Mancha Education Portal."
   },
   "myDataEducationLinkTeachingStaff": "Teaching staff",
   "@myDataEducationLinkTeachingStaff": {
     "description": "Link to the teaching staff portal."
+  },
+  "myDataEducationLinkScholarships": "Grants and scholarships for students",
+  "@myDataEducationLinkScholarships": {
+    "description": "Link to the Ministry of Education grants and scholarships portal."
   },
   "myDataHealthInfoSheetTitle": "About My Health data",
   "@myDataHealthInfoSheetTitle": {
@@ -4369,10 +4497,6 @@
   "@myDataHealthAppointmentsError": {
     "description": "Error message for the health appointments list."
   },
-  "myDataHealthCip": "CIP: FCCT590551910012",
-  "@myDataHealthCip": {
-    "description": "CIP code shown below the Health detail title."
-  },
   "myDataHealthPendingTab": "Pending",
   "@myDataHealthPendingTab": {
     "description": "Pending appointments tab in Health."
@@ -4425,10 +4549,6 @@
   "@myDataHealthAppointmentType": {
     "description": "Type of the sample health appointment."
   },
-  "myDataHealthAppointmentProfessional": "Dr. José Manuel Fernández García",
-  "@myDataHealthAppointmentProfessional": {
-    "description": "Healthcare professional of the sample appointment."
-  },
   "myDataHealthAppointmentDescription": "Primary Care appointment",
   "@myDataHealthAppointmentDescription": {
     "description": "Description of the sample health appointment."
@@ -4436,5 +4556,1619 @@
   "myDataHealthAppointmentModality": "On-demand teleconsultation",
   "@myDataHealthAppointmentModality": {
     "description": "Modality of the sample health appointment."
+  },
+  "gestionTitle": "Procedures",
+  "@gestionTitle": {
+    "description": "Title of the main Procedures (Gestión) screen."
+  },
+  "gestionExpedientesTitle": "My cases",
+  "@gestionExpedientesTitle": {
+    "description": "Title of the navigation card to My cases."
+  },
+  "gestionExpedientesDescription": "View and manage your administrative cases",
+  "@gestionExpedientesDescription": {
+    "description": "Description of the navigation card to My cases."
+  },
+  "gestionRegistrosTitle": "My registry entries",
+  "@gestionRegistrosTitle": {
+    "description": "Title of the navigation card to My registry entries."
+  },
+  "gestionRegistrosDescription": "Access your incoming and outgoing registry entries",
+  "@gestionRegistrosDescription": {
+    "description": "Description of the navigation card to My registry entries."
+  },
+  "gestionAportacionTitle": "Submit documents to a third party's case",
+  "@gestionAportacionTitle": {
+    "description": "Title of the navigation card for submitting documents to third-party cases."
+  },
+  "gestionAportacionDescription": "Attach documents to other people's cases",
+  "@gestionAportacionDescription": {
+    "description": "Description of the navigation card for submitting documents to third-party cases."
+  },
+  "gestionNotificacionesTitle": "My notifications",
+  "@gestionNotificacionesTitle": {
+    "description": "Title of the navigation card to My notifications."
+  },
+  "gestionNotificacionesDescription": "Manage your electronic notifications",
+  "@gestionNotificacionesDescription": {
+    "description": "Description of the navigation card to My notifications."
+  },
+  "gestionSectionComingSoon": "Feature coming soon",
+  "@gestionSectionComingSoon": {
+    "description": "Message when a Gestión section is not implemented yet."
+  },
+  "gestionExpedientesPageTitle": "My cases",
+  "@gestionExpedientesPageTitle": {
+    "description": "Title of the case list screen."
+  },
+  "gestionExpedientesNumExpedienteLabel": "CASE NO.",
+  "@gestionExpedientesNumExpedienteLabel": {
+    "description": "Case number label on the card."
+  },
+  "gestionExpedientesFechaInicioLabel": "START DATE",
+  "@gestionExpedientesFechaInicioLabel": {
+    "description": "Start date label on the case card."
+  },
+  "gestionExpedientesEstadoLabel": "STATUS",
+  "@gestionExpedientesEstadoLabel": {
+    "description": "Status label on the case card."
+  },
+  "gestionExpedientesLoadError": "We could not load your cases",
+  "@gestionExpedientesLoadError": {
+    "description": "Error when loading the list of cases."
+  },
+  "gestionExpedientesEmpty": "You have no active cases",
+  "@gestionExpedientesEmpty": {
+    "description": "Empty list message on the cases screen."
+  },
+  "gestionExpedientesDetalleTitle": "Case details",
+  "@gestionExpedientesDetalleTitle": {
+    "description": "Navigation bar title on the case detail screen."
+  },
+  "gestionExpedientesDatosExpedienteTitle": "Case information",
+  "@gestionExpedientesDatosExpedienteTitle": {
+    "description": "Heading of the first section on the case detail screen."
+  },
+  "gestionExpedientesEstadoTramitacionTitle": "Processing status",
+  "@gestionExpedientesEstadoTramitacionTitle": {
+    "description": "Heading of the second section on the case detail screen."
+  },
+  "gestionExpedientesConsejeriaLabel": "REGIONAL MINISTRY",
+  "@gestionExpedientesConsejeriaLabel": {
+    "description": "Label for the regional ministry on the case detail screen."
+  },
+  "gestionExpedientesOficinaTramitadoraLabel": "PROCESSING OFFICE",
+  "@gestionExpedientesOficinaTramitadoraLabel": {
+    "description": "Processing office label on the case detail screen."
+  },
+  "gestionExpedientesFechaCierreLabel": "CLOSING DATE",
+  "@gestionExpedientesFechaCierreLabel": {
+    "description": "Closing date label on the case detail screen."
+  },
+  "gestionExpedientesAportarDocumentacionButton": "Submit documents",
+  "@gestionExpedientesAportarDocumentacionButton": {
+    "description": "Label of the sticky bottom button on the case detail screen."
+  },
+  "gestionExpedientesDetalleLoadError": "We could not load the case details",
+  "@gestionExpedientesDetalleLoadError": {
+    "description": "Error when loading the details of a case."
+  },
+  "gestionAportarDocumentacionTitle": "Submit documents",
+  "@gestionAportarDocumentacionTitle": {
+    "description": "Title of the document submission screen."
+  },
+  "gestionAportarDocumentacionHelperText": "You can attach up to 5 files of max. 20MB each, in PDF, DOC, DOCX, ZIP, XLS or XLSX format.",
+  "@gestionAportarDocumentacionHelperText": {
+    "description": "Persistent notice with the file upload conditions."
+  },
+  "gestionAportarDocumentacionCancelarButton": "Cancel",
+  "@gestionAportarDocumentacionCancelarButton": {
+    "description": "Button to cancel the document submission."
+  },
+  "gestionAportarDocumentacionSeleccionarButton": "Select documents",
+  "@gestionAportarDocumentacionSeleccionarButton": {
+    "description": "Button to open the file picker."
+  },
+  "gestionAportarDocumentacionRegistrarButton": "Register submitted documents",
+  "@gestionAportarDocumentacionRegistrarButton": {
+    "description": "Button to register the submitted documents."
+  },
+  "gestionAportarDocumentacionMaxFilesError": "You cannot attach more than 5 files.",
+  "@gestionAportarDocumentacionMaxFilesError": {
+    "description": "Error when exceeding the maximum number of allowed files."
+  },
+  "gestionAportarDocumentacionMaxSizeError": "Each file must be 20MB at most.",
+  "@gestionAportarDocumentacionMaxSizeError": {
+    "description": "Error when exceeding the maximum allowed size per file."
+  },
+  "gestionAportarDocumentacionInvalidTypeError": "File format not allowed.",
+  "@gestionAportarDocumentacionInvalidTypeError": {
+    "description": "Error when selecting a file with an unsupported format."
+  },
+  "gestionAportarDocumentacionDuplicateError": "That file has already been added.",
+  "@gestionAportarDocumentacionDuplicateError": {
+    "description": "Error when selecting a file that was already added."
+  },
+  "gestionAportarDocumentacionNoFilesError": "Select at least one file before registering.",
+  "@gestionAportarDocumentacionNoFilesError": {
+    "description": "Error when trying to register without selecting any file."
+  },
+  "gestionAportarDocumentacionRegistroSuccess": "Documents registered successfully.",
+  "@gestionAportarDocumentacionRegistroSuccess": {
+    "description": "Success message after registering the submitted documents."
+  },
+  "gestionAportarDocumentacionRegistroError": "We could not register the documents. Please try again.",
+  "@gestionAportarDocumentacionRegistroError": {
+    "description": "Error message when registering the submitted documents fails."
+  },
+  "gestionAportarDocumentacionUploadIncompleto": "Some files have not been sent yet. Registering again will send all of them once more.",
+  "@gestionAportarDocumentacionUploadIncompleto": {
+    "description": "Notice when pressing Register while some file was never uploaded (e.g. cancelled midway)."
+  },
+  "gestionAportarDocumentacionUploadErrorParcial": "Some files could not be sent. You can try again.",
+  "@gestionAportarDocumentacionUploadErrorParcial": {
+    "description": "Message when some of the files uploaded in parallel fail."
+  },
+  "gestionAportarDocumentacionExitoTitulo": "The documents have been sent successfully",
+  "@gestionAportarDocumentacionExitoTitulo": {
+    "description": "Title of the success dialog when the document submission is completed."
+  },
+  "gestionAportarDocumentacionExitoDescripcion": "The document submission has been registered, although the documents will not be visible from the case.\n\nWe recommend downloading the submission receipt before continuing: it will not be available later",
+  "@gestionAportarDocumentacionExitoDescripcion": {
+    "description": "Description of the success dialog when the document submission is completed."
+  },
+  "gestionAportarDocumentacionCerrarSinDescargarButton": "Close without downloading",
+  "@gestionAportarDocumentacionCerrarSinDescargarButton": {
+    "description": "Secondary button of the document submission success dialog."
+  },
+  "gestionAportarDocumentacionDescargarJustificanteButton": "Download receipt",
+  "@gestionAportarDocumentacionDescargarJustificanteButton": {
+    "description": "Primary button of the document submission success dialog."
+  },
+  "gestionAportarDocumentacionJustificanteDescargado": "Submission receipt downloaded",
+  "@gestionAportarDocumentacionJustificanteDescargado": {
+    "description": "Toast shown after saving the receipt with the native destination picker."
+  },
+  "gestionAportarDocumentacionJustificanteError": "The receipt could not be saved. Please try again.",
+  "@gestionAportarDocumentacionJustificanteError": {
+    "description": "Error snackbar when saving the receipt to the chosen destination fails; the success dialog reopens to retry."
+  },
+  "gestionAportarDocumentacionFinalizacionError": "The documents were uploaded but the registration could not be completed. You can try again.",
+  "@gestionAportarDocumentacionFinalizacionError": {
+    "description": "Error message when registrarFicheros fails after all files were uploaded."
+  },
+  "gestionRegistrosPageTitle": "My registry entries",
+  "@gestionRegistrosPageTitle": {
+    "description": "Title of the My registry entries screen."
+  },
+  "gestionRegistrosEntradasTab": "Incoming entries",
+  "@gestionRegistrosEntradasTab": {
+    "description": "Label of the incoming registry entries tab."
+  },
+  "gestionRegistrosSalidasTab": "Outgoing entries",
+  "@gestionRegistrosSalidasTab": {
+    "description": "Label of the outgoing registry entries tab."
+  },
+  "gestionRegistrosNumRegistroLabel": "REGISTRY NO.",
+  "@gestionRegistrosNumRegistroLabel": {
+    "description": "Label of the registry number field."
+  },
+  "gestionRegistrosFechaLabel": "DATE",
+  "@gestionRegistrosFechaLabel": {
+    "description": "Label of the registry date field."
+  },
+  "gestionRegistrosConsejeriaOrigenLabel": "ORIGIN REGIONAL MINISTRY",
+  "@gestionRegistrosConsejeriaOrigenLabel": {
+    "description": "Label of the origin regional ministry field (outgoing entries)."
+  },
+  "gestionRegistrosConsejeriaDestinoLabel": "DESTINATION REGIONAL MINISTRY",
+  "@gestionRegistrosConsejeriaDestinoLabel": {
+    "description": "Label of the destination regional ministry field (incoming entries)."
+  },
+  "gestionRegistrosDatosRegistroTitle": "Registry entry information",
+  "@gestionRegistrosDatosRegistroTitle": {
+    "description": "Title of the registry data section on the detail screen."
+  },
+  "gestionRegistrosEntradasLoadError": "We could not load your incoming registry entries",
+  "@gestionRegistrosEntradasLoadError": {
+    "description": "Error when loading the list of incoming registry entries."
+  },
+  "gestionRegistrosSalidasLoadError": "We could not load your outgoing registry entries",
+  "@gestionRegistrosSalidasLoadError": {
+    "description": "Error when loading the list of outgoing registry entries."
+  },
+  "gestionRegistrosEntradasEmpty": "You have no incoming registry entries",
+  "@gestionRegistrosEntradasEmpty": {
+    "description": "Empty list message for incoming registry entries."
+  },
+  "gestionRegistrosSalidasEmpty": "You have no outgoing registry entries",
+  "@gestionRegistrosSalidasEmpty": {
+    "description": "Empty list message for outgoing registry entries."
+  },
+  "gestionRegistrosDetalleEntradaTitle": "Incoming registry entry details",
+  "@gestionRegistrosDetalleEntradaTitle": {
+    "description": "Title of the incoming registry entry detail screen."
+  },
+  "gestionRegistrosDetalleSalidaTitle": "Outgoing registry entry details",
+  "@gestionRegistrosDetalleSalidaTitle": {
+    "description": "Title of the outgoing registry entry detail screen."
+  },
+  "gestionAportacionTipoIdLabel": "Identification type and number",
+  "@gestionAportacionTipoIdLabel": {
+    "description": "Label for the identification type and number field on the submission screen."
+  },
+  "gestionAportacionTipoIdHint": "000000000A",
+  "@gestionAportacionTipoIdHint": {
+    "description": "Placeholder for the identification number field on the submission screen."
+  },
+  "gestionAportacionTipoIdHelper": "The number must be a valid NIF, CIF, Passport, NIE or CEE",
+  "@gestionAportacionTipoIdHelper": {
+    "description": "Helper text for the identification type field."
+  },
+  "gestionAportacionIntroText": "Look up the case you want to submit documents to",
+  "@gestionAportacionIntroText": {
+    "description": "Intro text of the document submission screen."
+  },
+  "gestionAportacionPersonaLabel": "IDENTIFY THE INTERESTED PERSON NAMED IN THE CASE",
+  "@gestionAportacionPersonaLabel": {
+    "description": "Section label for identifying the interested person."
+  },
+  "gestionAportacionExpedienteLabel": "SPECIFY THE CASE THE DOCUMENTS ARE SUBMITTED TO",
+  "@gestionAportacionExpedienteLabel": {
+    "description": "Section label for specifying the case."
+  },
+  "gestionAportacionExpedienteNote": "*Fill in only one of the two fields",
+  "@gestionAportacionExpedienteNote": {
+    "description": "Informative note for the case fields."
+  },
+  "gestionAportacionNumRegistroLabel": "CASE REGISTRATION NUMBER",
+  "@gestionAportacionNumRegistroLabel": {
+    "description": "Label for the case registration number field."
+  },
+  "gestionAportacionNumRegistroHint": "Enter the registration number",
+  "@gestionAportacionNumRegistroHint": {
+    "description": "Placeholder for the case registration number field."
+  },
+  "gestionAportacionNumRegistroHelper": "This number is provided when the case is filed",
+  "@gestionAportacionNumRegistroHelper": {
+    "description": "Helper text for the registration number field."
+  },
+  "gestionAportacionCodIdentificadorLabel": "CASE IDENTIFIER CODE",
+  "@gestionAportacionCodIdentificadorLabel": {
+    "description": "Label for the case identifier code field."
+  },
+  "gestionAportacionCodIdentificadorHint": "Enter the identifier code",
+  "@gestionAportacionCodIdentificadorHint": {
+    "description": "Placeholder for the case identifier code field."
+  },
+  "gestionAportacionCodIdentificadorHelper": "You can find this number in the case documentation",
+  "@gestionAportacionCodIdentificadorHelper": {
+    "description": "Helper text for the identifier code field."
+  },
+  "gestionAportacionInfoHeading": "Submit documents to a case",
+  "@gestionAportacionInfoHeading": {
+    "description": "Heading of the informative bottom sheet for document submission."
+  },
+  "gestionAportacionInfoBody": "You can submit documents to a case while the procedure is in progress and before the final decision is issued, only if you are:",
+  "@gestionAportacionInfoBody": {
+    "description": "Body of the informative bottom sheet for document submission."
+  },
+  "gestionAportacionInfoBullet1": "The interested person",
+  "@gestionAportacionInfoBullet1": {
+    "description": "First bullet of the informative bottom sheet for document submission."
+  },
+  "gestionAportacionInfoBullet2": "Their legal representative",
+  "@gestionAportacionInfoBullet2": {
+    "description": "Second bullet of the informative bottom sheet for document submission."
+  },
+  "gestionAportacionInfoBullet3": "An authorized person",
+  "@gestionAportacionInfoBullet3": {
+    "description": "Third bullet of the informative bottom sheet for document submission."
+  },
+  "gestionAportacionSeleccionarTipo": "Select document type",
+  "@gestionAportacionSeleccionarTipo": {
+    "description": "Title of the bottom sheet for selecting the document type."
+  },
+  "gestionAportacionDni": "DNI",
+  "@gestionAportacionDni": {
+    "description": "DNI option in the document type selector."
+  },
+  "gestionAportacionNie": "NIE",
+  "@gestionAportacionNie": {
+    "description": "NIE option in the document type selector."
+  },
+  "gestionAportacionCif": "CIF",
+  "@gestionAportacionCif": {
+    "description": "CIF option in the document type selector."
+  },
+  "gestionAportacionPasaporte": "Passport",
+  "@gestionAportacionPasaporte": {
+    "description": "Passport option in the document type selector."
+  },
+  "gestionAportacionCee": "CEE",
+  "@gestionAportacionCee": {
+    "description": "CEE option in the document type selector."
+  },
+  "gestionAportacionFindButton": "Find case",
+  "@gestionAportacionFindButton": {
+    "description": "Main button of the document submission form."
+  },
+  "gestionAportacionDocNumberRequiredError": "Enter the interested person's document number.",
+  "@gestionAportacionDocNumberRequiredError": {
+    "description": "Validation error when the document number is empty."
+  },
+  "gestionAportacionCamposExpedienteError": "Fill in either the case registration number or the case identifier code (only one of the two).",
+  "@gestionAportacionCamposExpedienteError": {
+    "description": "Validation error when exactly one of the two case fields has not been filled in."
+  },
+  "gestionNotificacionesContextualMessage": "Register your contact details to start receiving notifications from the Regional Government of Castilla-La Mancha.",
+  "@gestionNotificacionesContextualMessage": {
+    "description": "Text of the contextual helper under the disabled notifications card."
+  },
+  "gestionNotificacionesContextualAction": "Activate",
+  "@gestionNotificacionesContextualAction": {
+    "description": "Label of the ghost button in the contextual notifications helper."
+  },
+  "gestionNotificacionesAltaTitle": "Activate notifications",
+  "@gestionNotificacionesAltaTitle": {
+    "description": "NavBar title of the notifications activation screen."
+  },
+  "gestionNotificacionesAltaIntro": "Register your contact details to start receiving notifications from the Regional Government of Castilla-La Mancha.",
+  "@gestionNotificacionesAltaIntro": {
+    "description": "Intro text of the notifications activation screen."
+  },
+  "gestionNotificacionesAltaRequiredNote": "*You must fill in at least one of the contact methods",
+  "@gestionNotificacionesAltaRequiredNote": {
+    "description": "Required-field note on the notifications activation screen."
+  },
+  "gestionNotificacionesAltaPhoneLabel": "Mobile phone",
+  "@gestionNotificacionesAltaPhoneLabel": {
+    "description": "Label of the phone field on the activation screen."
+  },
+  "gestionNotificacionesAltaPhoneHint": "600 000 000",
+  "@gestionNotificacionesAltaPhoneHint": {
+    "description": "Placeholder of the phone field on the activation screen."
+  },
+  "gestionNotificacionesAltaPhoneHelper": "To receive the notifications by SMS",
+  "@gestionNotificacionesAltaPhoneHelper": {
+    "description": "Helper text under the phone field on the activation screen."
+  },
+  "gestionNotificacionesAltaEmailLabel": "Email address",
+  "@gestionNotificacionesAltaEmailLabel": {
+    "description": "Label of the email field on the activation screen."
+  },
+  "gestionNotificacionesAltaEmailHint": "Example: mperez@mail.com",
+  "@gestionNotificacionesAltaEmailHint": {
+    "description": "Placeholder of the email field on the activation screen."
+  },
+  "gestionNotificacionesAltaEmailHelper": "To receive the notifications in your email inbox",
+  "@gestionNotificacionesAltaEmailHelper": {
+    "description": "Helper text under the email field on the activation screen."
+  },
+  "gestionNotificacionesAltaSaveButton": "Sign up for notifications",
+  "@gestionNotificacionesAltaSaveButton": {
+    "description": "Label of the sticky main button on the activation screen."
+  },
+  "gestionNotificacionesAltaInfoTitle": "Contact details",
+  "@gestionNotificacionesAltaInfoTitle": {
+    "description": "Title of the informative bottom sheet on the activation screen."
+  },
+  "gestionNotificacionesAltaInfoBody": "Provide a mobile phone number or an email address to receive notification alerts.",
+  "@gestionNotificacionesAltaInfoBody": {
+    "description": "Body of the informative bottom sheet on the activation screen."
+  },
+  "gestionNotificacionesAltaErrorAtLeastOne": "You must provide at least a mobile phone number or an email address.",
+  "@gestionNotificacionesAltaErrorAtLeastOne": {
+    "description": "Validation error when no contact field is filled in."
+  },
+  "gestionNotificacionesAltaErrorPhone": "Enter a valid mobile phone number.",
+  "@gestionNotificacionesAltaErrorPhone": {
+    "description": "Phone validation error on the activation screen."
+  },
+  "gestionNotificacionesAltaErrorEmail": "Enter a valid email address.",
+  "@gestionNotificacionesAltaErrorEmail": {
+    "description": "Email validation error on the activation screen."
+  },
+  "gestionNotificacionesAltaErrorNoCitizenId": "We could not identify the citizen.",
+  "@gestionNotificacionesAltaErrorNoCitizenId": {
+    "description": "Error when the citizen ID cannot be obtained."
+  },
+  "gestionNotificacionesAltaSuccessMessage": "Contact details saved",
+  "@gestionNotificacionesAltaSuccessMessage": {
+    "description": "Success message after saving the contact details."
+  },
+  "gestionNotificacionesPageTitle": "My notifications",
+  "@gestionNotificacionesPageTitle": {
+    "description": "Title of the notification list screen."
+  },
+  "gestionNotificacionesTabTodo": "All",
+  "@gestionNotificacionesTabTodo": {
+    "description": "'All' tab in the notifications filter."
+  },
+  "gestionNotificacionesTabPendientes": "Pending",
+  "@gestionNotificacionesTabPendientes": {
+    "description": "'Pending' tab in the notifications filter."
+  },
+  "gestionNotificacionesTabAceptadas": "Accepted",
+  "@gestionNotificacionesTabAceptadas": {
+    "description": "'Accepted' tab in the notifications filter."
+  },
+  "gestionNotificacionesTabExpiradas": "Expired",
+  "@gestionNotificacionesTabExpiradas": {
+    "description": "'Expired' tab in the notifications filter."
+  },
+  "gestionNotificacionesProcedimientoLabel": "Procedure",
+  "@gestionNotificacionesProcedimientoLabel": {
+    "description": "Procedure label on the notification card."
+  },
+  "gestionNotificacionesFechaCaducidadLabel": "Expiry date",
+  "@gestionNotificacionesFechaCaducidadLabel": {
+    "description": "Expiry date label on the notification card."
+  },
+  "gestionNotificacionesTagPendiente": "Pending",
+  "@gestionNotificacionesTagPendiente": {
+    "description": "Pending status tag in notifications."
+  },
+  "gestionNotificacionesTagAceptada": "Accepted",
+  "@gestionNotificacionesTagAceptada": {
+    "description": "Accepted status tag in notifications."
+  },
+  "gestionNotificacionesTagRechazada": "Rejected",
+  "@gestionNotificacionesTagRechazada": {
+    "description": "Rejected status tag in notifications."
+  },
+  "gestionNotificacionesTagExpirada": "Expired",
+  "@gestionNotificacionesTagExpirada": {
+    "description": "Expired status tag in notifications."
+  },
+  "gestionNotificacionesEmpty": "You have no notifications at the moment",
+  "@gestionNotificacionesEmpty": {
+    "description": "Empty list message on the notifications screen."
+  },
+  "gestionNotificacionesLoadError": "The notifications could not be loaded",
+  "@gestionNotificacionesLoadError": {
+    "description": "Error message when loading the list of notifications."
+  },
+  "consentRevokedSessionClosed": "You have withdrawn the authorization to access your data, so we have closed your session. Sign in again to grant it once more.",
+  "@consentRevokedSessionClosed": {
+    "description": "Notice shown when the session is closed because the mandatory consent clause is no longer accepted."
+  },
+  "authorizationRevokedMessage": "You no longer have authorization for this query. We are closing your session so you can grant it again when you sign back in.",
+  "@authorizationRevokedMessage": {
+    "description": "Screen state shown when the mandatory clause has been withdrawn and the session is being closed."
+  },
+  "mainTabHome": "Home",
+  "@mainTabHome": {
+    "description": "Label for the Home tab in the bottom navigation bar."
+  },
+  "mainTabGestion": "Procedures",
+  "@mainTabGestion": {
+    "description": "Label for the Procedures (Gestión) tab in the bottom navigation bar."
+  },
+  "mainTabMyData": "My data",
+  "@mainTabMyData": {
+    "description": "Label for the My data tab in the bottom navigation bar."
+  },
+  "mainTabAgenda": "Calendar",
+  "@mainTabAgenda": {
+    "description": "Label for the Calendar (Agenda) tab in the bottom navigation bar."
+  },
+  "mainTabRecommendations": "Recommended",
+  "@mainTabRecommendations": {
+    "description": "Label for the Recommended tab in the bottom navigation bar."
+  },
+  "notFoundPageTitle": "Page not found",
+  "@notFoundPageTitle": {
+    "description": "AppBar title of the 404 not-found screen."
+  },
+  "notFoundPageMessage": "404 — The requested page does not exist.",
+  "@notFoundPageMessage": {
+    "description": "Body message of the 404 not-found screen."
+  },
+  "appNotificationContactFormTitle": "Contact details for electronic notifications",
+  "@appNotificationContactFormTitle": {
+    "description": "Heading of the electronic notifications contact details form."
+  },
+  "appNotificationContactFormRequiredNoteSemantic": "Required: fill in at least one of the contact methods",
+  "@appNotificationContactFormRequiredNoteSemantic": {
+    "description": "Accessibility label for the required-field note in the contact form."
+  },
+  "appNotificationContactFormRequiredNote": "* At least one of the contact methods is required",
+  "@appNotificationContactFormRequiredNote": {
+    "description": "Visible required-field note in the contact details form."
+  },
+  "appNotificationContactFormSaveButton": "Save changes",
+  "@appNotificationContactFormSaveButton": {
+    "description": "Primary button of the contact details form to save changes."
+  },
+  "appPreferenceEditAction": "Edit",
+  "@appPreferenceEditAction": {
+    "description": "Edit action button on the consent preference card."
+  },
+  "appPreferenceStatusDisabled": "Disabled",
+  "@appPreferenceStatusDisabled": {
+    "description": "Disabled status of a preference card."
+  },
+  "appPreferenceStatusPending": "Pending",
+  "@appPreferenceStatusPending": {
+    "description": "Pending status of a preference card."
+  },
+  "appPreferenceStatusEnabled": "Enabled",
+  "@appPreferenceStatusEnabled": {
+    "description": "Enabled status of a preference card."
+  },
+  "appPreferenceStatusActive": "Active",
+  "@appPreferenceStatusActive": {
+    "description": "Active status tag shown on the contact details preference card (rendered uppercase)."
+  },
+  "appNotificationContactCardTitle": "Notification contact details",
+  "@appNotificationContactCardTitle": {
+    "description": "Title of the preference card showing notification contact details."
+  },
+  "appNotificationContactCardEditAction": "Edit details",
+  "@appNotificationContactCardEditAction": {
+    "description": "Edit action button on the notification contact details card."
+  },
+  "appQrCodeLabel": "QR code",
+  "@appQrCodeLabel": {
+    "description": "Accessibility label for the QR code preview in the download bottom sheet."
+  },
+  "appQrDownloadFormatTitle": "Download format",
+  "@appQrDownloadFormatTitle": {
+    "description": "Heading of the format section in the card download bottom sheet."
+  },
+  "appQrDownloadWalletLabelAndroid": "Wallet",
+  "@appQrDownloadWalletLabelAndroid": {
+    "description": "Label of the pass (PKPASS) download button on Android."
+  },
+  "appQrDownloadWalletLabelIos": "Wallet",
+  "@appQrDownloadWalletLabelIos": {
+    "description": "Label of the pass (PKPASS) download button on iOS."
+  },
+  "appQrDownloadFormatLabel": "Download {format}",
+  "@appQrDownloadFormatLabel": {
+    "description": "Accessibility label for the download button of a format (QR, PKPASS, PDF).",
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "appQrDownloadingFormatLabel": "Downloading {format}",
+  "@appQrDownloadingFormatLabel": {
+    "description": "Accessibility label while a format (QR, PKPASS, PDF) is downloading.",
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "appCalendarPreviousYearTooltip": "Previous year",
+  "@appCalendarPreviousYearTooltip": {
+    "description": "Tooltip for the previous-year button in the calendar month/year picker."
+  },
+  "appCalendarNextYearTooltip": "Next year",
+  "@appCalendarNextYearTooltip": {
+    "description": "Tooltip for the next-year button in the calendar month/year picker."
+  },
+  "appSearchFieldHint": "Search",
+  "@appSearchFieldHint": {
+    "description": "Default hint text of the design-system search field."
+  },
+  "commonWeekdayName": "{weekday, select, monday{Monday} tuesday{Tuesday} wednesday{Wednesday} thursday{Thursday} friday{Friday} saturday{Saturday} sunday{Sunday} other{}}",
+  "@commonWeekdayName": {
+    "description": "Full weekday name from its token (monday…sunday)."
+  },
+  "commonMonthName": "{month, select, january{January} february{February} march{March} april{April} may{May} june{June} july{July} august{August} september{September} october{October} november{November} december{December} other{}}",
+  "@commonMonthName": {
+    "description": "Full month name from its token (january…december)."
+  },
+  "commonMonthShortName": "{month, select, january{Jan} february{Feb} march{Mar} april{Apr} may{May} june{Jun} july{Jul} august{Aug} september{Sep} october{Oct} november{Nov} december{Dec} other{}}",
+  "@commonMonthShortName": {
+    "description": "Abbreviated month name from its token (january…december)."
+  },
+  "commonUpdatedAt": "Updated on {day} {month} {year} at {time}",
+  "@commonUpdatedAt": {
+    "description": "Last-updated stamp with date and time (month already localized)."
+  },
+  "agendaFilterDays": "{days} days",
+  "@agendaFilterDays": {
+    "description": "Agenda — filter tab by number of days (7, 30, 365)."
+  },
+  "agendaRefreshTooltip": "Refresh agenda",
+  "@agendaRefreshTooltip": {
+    "description": "Agenda — tooltip of the refresh events button."
+  },
+  "agendaEmptyAppointments": "There are no appointments for the selected period.",
+  "@agendaEmptyAppointments": {
+    "description": "Agenda — empty state of the appointments list."
+  },
+  "agendaChannelPhone": "phone",
+  "@agendaChannelPhone": {
+    "description": "Agenda — inferred health appointment channel: phone."
+  },
+  "agendaChannelInPerson": "in person",
+  "@agendaChannelInPerson": {
+    "description": "Agenda — inferred health appointment channel: in person."
+  },
+  "preferencesInfoSheetBody": "Manage your authorizations and alerts.",
+  "@preferencesInfoSheetBody": {
+    "description": "Preferences — body of the page info bottom sheet."
+  },
+  "preferencesLifeEventsInactiveDescription": "To select your life events and receive recommendations, you must first accept the use of this data in Terms of use and authorizations.",
+  "@preferencesLifeEventsInactiveDescription": {
+    "description": "Preferences — life events card description when the authorization is inactive."
+  },
+  "preferencesLifeEventsPendingDescription": "You have not yet selected the topics you want to receive updates about in your recommendations section",
+  "@preferencesLifeEventsPendingDescription": {
+    "description": "Preferences — life events card description when nothing is selected yet."
+  },
+  "preferencesLifeEventsActiveDescription": "You have life events selected to receive personalized recommendations.",
+  "@preferencesLifeEventsActiveDescription": {
+    "description": "Preferences — life events card description with an active selection."
+  },
+  "preferencesSelectAction": "Select",
+  "@preferencesSelectAction": {
+    "description": "Preferences — action to select life events."
+  },
+  "preferencesNotificationContactTitle": "Contact details for notifications",
+  "@preferencesNotificationContactTitle": {
+    "description": "Preferences — title of the notification contact details card."
+  },
+  "preferencesNotificationContactInactiveDescription": "To receive electronic notifications you must provide at least one contact method for alerts.",
+  "@preferencesNotificationContactInactiveDescription": {
+    "description": "Preferences — notification contact card description when inactive."
+  },
+  "preferencesNotificationContactPendingDescription": "Manage the contact method for receiving electronic notification alerts.",
+  "@preferencesNotificationContactPendingDescription": {
+    "description": "Preferences — notification contact card description when pending."
+  },
+  "preferencesNotificationContactActiveDescription": "You have at least one alert contact method set up for receiving electronic notifications.",
+  "@preferencesNotificationContactActiveDescription": {
+    "description": "Preferences — notification contact card description when configured."
+  },
+  "preferencesManageAction": "Manage",
+  "@preferencesManageAction": {
+    "description": "Preferences — action to manage contact details."
+  },
+  "preferencesRevokeDialogTitle": "Permission revocation",
+  "@preferencesRevokeDialogTitle": {
+    "description": "Preferences — title of the delete-preferences confirmation dialog."
+  },
+  "preferencesRevokeDialogDescription": "Do you want to delete your selection of terms of use, authorizations, and life events?\nDoing so will end your current session, and if you sign in again you will have to complete the process from the beginning.",
+  "@preferencesRevokeDialogDescription": {
+    "description": "Preferences — description of the delete-preferences confirmation dialog."
+  },
+  "preferencesRevokeDialogConfirm": "Delete",
+  "@preferencesRevokeDialogConfirm": {
+    "description": "Preferences — confirm button of the permission revocation dialog."
+  },
+  "preferencesMissingUserIdError": "The user identifier could not be found.",
+  "@preferencesMissingUserIdError": {
+    "description": "Preferences — error when the user identifier is missing while deleting preferences."
+  },
+  "preferencesResetAuthorizationsError": "We could not delete your authorizations. Please try again.",
+  "@preferencesResetAuthorizationsError": {
+    "description": "Preferences — error while deleting stored authorizations."
+  },
+  "preferencesNotificationContactEditTitle": "Edit contact details",
+  "@preferencesNotificationContactEditTitle": {
+    "description": "Preferences — title of the contact details edit page."
+  },
+  "gestionNotificacionesAltaErrorNoDni": "We could not retrieve the citizen's ID number (DNI).",
+  "@gestionNotificacionesAltaErrorNoDni": {
+    "description": "Notification contact details — error when the DNI cannot be retrieved."
+  },
+  "myDataEducationTitleNumberLabel": "DEGREE NO.: {number}",
+  "@myDataEducationTitleNumberLabel": {
+    "description": "Education — label with the university degree number."
+  },
+  "myDataEducationExpeditionDateLabel": "DATE OF ISSUE",
+  "@myDataEducationExpeditionDateLabel": {
+    "description": "Education — label for the degree's date of issue."
+  },
+  "myDataEducationCompletionDateLabel": "COMPLETION DATE",
+  "@myDataEducationCompletionDateLabel": {
+    "description": "Education — label for the studies completion date."
+  },
+  "myDataEducationProvinceLabel": "PROVINCE",
+  "@myDataEducationProvinceLabel": {
+    "description": "Education — province label on the non-university degree card."
+  },
+  "myDataEducationBookLabel": "BOOK: {value}",
+  "@myDataEducationBookLabel": {
+    "description": "Education — book reference of the non-university degree."
+  },
+  "myDataEducationOrderLabel": "ORDER: {value}",
+  "@myDataEducationOrderLabel": {
+    "description": "Education — order reference of the non-university degree."
+  },
+  "myDataEducationFolioLabel": "FOLIO: {value}",
+  "@myDataEducationFolioLabel": {
+    "description": "Education — folio reference of the non-university degree."
+  },
+  "myDataHealthActiveFiltersTooltip": "Active search criteria: {count}",
+  "@myDataHealthActiveFiltersTooltip": {
+    "description": "Health — appointments search tooltip with active filters."
+  },
+  "myDataHealthSearchAppointmentsTooltip": "Search appointments",
+  "@myDataHealthSearchAppointmentsTooltip": {
+    "description": "Health — appointments search tooltip with no active filters."
+  },
+  "myDataHealthFilterPrimaryCareTitle": "Filter primary care appointments",
+  "@myDataHealthFilterPrimaryCareTitle": {
+    "description": "Health — title of the primary care appointments filter sheet."
+  },
+  "myDataHealthFilterHospitalTitle": "Filter hospital appointments",
+  "@myDataHealthFilterHospitalTitle": {
+    "description": "Health — title of the hospital appointments filter sheet."
+  },
+  "myDataHealthFilterDateLabel": "Appointment date",
+  "@myDataHealthFilterDateLabel": {
+    "description": "Health — label of the appointment date range filter."
+  },
+  "recommendationsFilterPageTitle": "Filter recommendations by life event",
+  "@recommendationsFilterPageTitle": {
+    "description": "Recommendations — title of the life event filters page."
+  },
+  "recommendationsFilterInfoMessage": "Select the life events you want to use to filter your recommendations.",
+  "@recommendationsFilterInfoMessage": {
+    "description": "Recommendations — info snackbar on the life event filters page."
+  },
+  "recommendationsFilterIntro": "You can filter recommendations by the life events you have set up in your preferences to receive information personalized and tailored to your situation.",
+  "@recommendationsFilterIntro": {
+    "description": "Recommendations — intro text on the life event filters page."
+  },
+  "recommendationsFilterByLifeEvents": "Filter by life events",
+  "@recommendationsFilterByLifeEvents": {
+    "description": "Recommendations — button that opens the life events filter."
+  },
+  "recommendationsPreferencesHint": "Personalize your recommendations by editing your life events in Preferences whenever you want.",
+  "@recommendationsPreferencesHint": {
+    "description": "Recommendations — hint to personalize life events from Preferences."
+  },
+  "recommendationsEmptyNoMatches": "There are currently no recommendations available that match your preferences. Adjust your life events to explore more options, or wait for new updates.",
+  "@recommendationsEmptyNoMatches": {
+    "description": "Recommendations — notice when no recommendations match the preferences."
+  },
+  "recommendationsEditLifeEventsCta": "Edit preferences - life events",
+  "@recommendationsEditLifeEventsCta": {
+    "description": "Recommendations — button to edit life events from the empty state."
+  },
+  "recommendationsEmptyFiltered": "There are no recommendations for the applied filter.",
+  "@recommendationsEmptyFiltered": {
+    "description": "Recommendations — notice when the applied filter returns no results."
+  },
+  "recommendationsResetFilterCta": "Reset filter",
+  "@recommendationsResetFilterCta": {
+    "description": "Recommendations — button to reset the life events filter."
+  },
+  "recommendationsDeadlineFrom": "from {date}",
+  "@recommendationsDeadlineFrom": {
+    "description": "Recommendations — submission period with only a start date."
+  },
+  "recommendationsDeadlineUntil": "until {date}",
+  "@recommendationsDeadlineUntil": {
+    "description": "Recommendations — submission period with only an end date."
+  },
+  "digitalCardsAuthorizationCheckErrorMessage": "We could not verify the authorization required to display your digital cards.",
+  "@digitalCardsAuthorizationCheckErrorMessage": {
+    "description": "Digital cards — error while checking the required authorization."
+  },
+  "digitalCardsInfoSheetContactHint": "If any data is incorrect or out of date, contact your Health Centre.",
+  "digitalCardsInfoSheetContactButton": "Contact",
+  "digitalCardsInfoSheetTitle": "About My Digital Cards",
+  "@digitalCardsInfoSheetTitle": {
+    "description": "Digital cards — title of the info bottom sheet."
+  },
+  "digitalCardsInfoSheetBody": "Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.",
+  "@digitalCardsInfoSheetBody": {
+    "description": "Digital cards — body of the info bottom sheet."
+  },
+  "digitalCardsAuthorizationRequiredMessage": "You must authorize the consultation of the administrative records held by the JCCM in Terms of use and authorizations.",
+  "@digitalCardsAuthorizationRequiredMessage": {
+    "description": "Digital cards — notice when the JCCM data consultation authorization is missing."
+  },
+  "digitalCardsSaveDialogTitle": "Save {format}",
+  "@digitalCardsSaveDialogTitle": {
+    "description": "Digital cards — system save dialog title for the file (QR, PKPASS, PDF)."
+  },
+  "digitalCardsDownloadSuccess": "{format} saved successfully.",
+  "@digitalCardsDownloadSuccess": {
+    "description": "Digital cards — snackbar after the download is saved successfully."
+  },
+  "digitalCardsDownloadError": "We could not download {format}.",
+  "@digitalCardsDownloadError": {
+    "description": "Digital cards — error while downloading the card file."
+  },
+  "drawerDefaultUserName": "Citizen",
+  "@drawerDefaultUserName": {
+    "description": "Profile menu — default name when no user data is available."
+  },
+  "drawerIdentifierFallbackLabel": "Identifier",
+  "@drawerIdentifierFallbackLabel": {
+    "description": "Profile menu — generic document label when it is not a DNI/NIE/NIF."
+  },
+  "gestionNotificacionDetalleAcceptedReloadError": "You have accepted the notification, but we could not load the updated details.",
+  "@gestionNotificacionDetalleAcceptedReloadError": {
+    "description": "Error shown when the detail reload fails after accepting the notification."
+  },
+  "gestionNotificacionDetalleConfirmTitle": "Confirm notification acceptance",
+  "@gestionNotificacionDetalleConfirmTitle": {
+    "description": "Title of the confirmation dialog before accepting a notification."
+  },
+  "gestionNotificacionDetalleConfirmDescription": "Are you sure you want to accept the notification?",
+  "@gestionNotificacionDetalleConfirmDescription": {
+    "description": "Body of the confirmation dialog before accepting a notification."
+  },
+  "gestionNotificacionDetalleConfirmCancel": "No",
+  "@gestionNotificacionDetalleConfirmCancel": {
+    "description": "Cancel button of the notification acceptance confirmation dialog."
+  },
+  "gestionNotificacionDetalleConfirmAccept": "Yes, I am sure",
+  "@gestionNotificacionDetalleConfirmAccept": {
+    "description": "Confirm button of the notification acceptance confirmation dialog."
+  },
+  "gestionNotificacionDetalleAcceptError": "We could not accept the notification. Please try again.",
+  "@gestionNotificacionDetalleAcceptError": {
+    "description": "Error shown when accepting the notification fails."
+  },
+  "gestionNotificacionDetalleDocumentoDescargado": "Document downloaded.",
+  "@gestionNotificacionDetalleDocumentoDescargado": {
+    "description": "Success toast after downloading a notification document."
+  },
+  "gestionNotificacionDetalleDocumentoDescargaError": "We could not download the document. Please try again.",
+  "@gestionNotificacionDetalleDocumentoDescargaError": {
+    "description": "Error shown when downloading a notification document fails."
+  },
+  "gestionNotificacionDetalleDatosExpedienteTitle": "Case information",
+  "@gestionNotificacionDetalleDatosExpedienteTitle": {
+    "description": "Section title for case information in the pending notification detail."
+  },
+  "gestionNotificacionDetalleOrganismoEmisorLabel": "Issuing body",
+  "@gestionNotificacionDetalleOrganismoEmisorLabel": {
+    "description": "Issuing body label in the notification detail."
+  },
+  "gestionNotificacionDetalleNumExpedienteLabel": "Case No.",
+  "@gestionNotificacionDetalleNumExpedienteLabel": {
+    "description": "Case number label in the notification detail."
+  },
+  "gestionNotificacionDetalleEstadoTitle": "Notification status",
+  "@gestionNotificacionDetalleEstadoTitle": {
+    "description": "Status section title in the notification detail."
+  },
+  "gestionNotificacionDetalleFechaPuestaDisposicionLabel": "Date made available",
+  "@gestionNotificacionDetalleFechaPuestaDisposicionLabel": {
+    "description": "Label for the date the notification was made available."
+  },
+  "gestionNotificacionesFechaExpiracionLabel": "Expiration date",
+  "@gestionNotificacionesFechaExpiracionLabel": {
+    "description": "Expiration date label used in the notification detail and the list filter."
+  },
+  "gestionNotificacionDetalleFechaLecturaLabel": "Read date",
+  "@gestionNotificacionDetalleFechaLecturaLabel": {
+    "description": "Read date label in the notification detail."
+  },
+  "gestionNotificacionDetalleDocumentosTitle": "Documents",
+  "@gestionNotificacionDetalleDocumentosTitle": {
+    "description": "Documents section title in the notification detail."
+  },
+  "gestionNotificacionDetalleAceptarButton": "Accept notification",
+  "@gestionNotificacionDetalleAceptarButton": {
+    "description": "Primary button to accept a pending notification."
+  },
+  "gestionNotificacionesBuscarTooltip": "Search notifications",
+  "@gestionNotificacionesBuscarTooltip": {
+    "description": "Tooltip of the search button in the notifications list."
+  },
+  "gestionNotificacionesConfigurarTooltip": "Configure notifications",
+  "@gestionNotificacionesConfigurarTooltip": {
+    "description": "Tooltip of the settings button in the notifications list."
+  },
+  "gestionNotificacionesFiltrarTitle": "Filter notifications",
+  "@gestionNotificacionesFiltrarTitle": {
+    "description": "Title of the notifications list filter sheet."
+  },
+  "gestionNotificacionesFiltroDescripcionLabel": "Notification description",
+  "@gestionNotificacionesFiltroDescripcionLabel": {
+    "description": "Description filter label in the notifications list."
+  },
+  "gestionNotificacionesFiltrosAnterioresTooltip": "Show previous filters",
+  "@gestionNotificacionesFiltrosAnterioresTooltip": {
+    "description": "Tooltip of the arrow returning to the primary notification filters."
+  },
+  "gestionRegistrosBuscarEntradasTooltip": "Search incoming registry entries",
+  "@gestionRegistrosBuscarEntradasTooltip": {
+    "description": "Tooltip of the search button on the incoming registry entries tab."
+  },
+  "gestionRegistrosBuscarSalidasTooltip": "Search outgoing registry entries",
+  "@gestionRegistrosBuscarSalidasTooltip": {
+    "description": "Tooltip of the search button on the outgoing registry entries tab."
+  },
+  "gestionRegistrosFiltrarEntradasTitle": "Filter incoming registry entries",
+  "@gestionRegistrosFiltrarEntradasTitle": {
+    "description": "Title of the incoming registry entries filter sheet."
+  },
+  "gestionRegistrosFiltrarSalidasTitle": "Filter outgoing registry entries",
+  "@gestionRegistrosFiltrarSalidasTitle": {
+    "description": "Title of the outgoing registry entries filter sheet."
+  },
+  "gestionRegistrosFiltroDescripcionEntradaLabel": "Entry description",
+  "@gestionRegistrosFiltroDescripcionEntradaLabel": {
+    "description": "Description filter label for incoming registry entries."
+  },
+  "gestionRegistrosFiltroDescripcionSalidaLabel": "Outgoing entry description",
+  "@gestionRegistrosFiltroDescripcionSalidaLabel": {
+    "description": "Description filter label for outgoing registry entries."
+  },
+  "gestionRegistrosFiltroFechaEntradaLabel": "Entry date",
+  "@gestionRegistrosFiltroFechaEntradaLabel": {
+    "description": "Date filter label for incoming registry entries."
+  },
+  "gestionRegistrosFiltroFechaSalidaLabel": "Outgoing date",
+  "@gestionRegistrosFiltroFechaSalidaLabel": {
+    "description": "Date filter label for outgoing registry entries."
+  },
+  "gestionExpedientesFiltrosActivosTooltip": "Active search criteria: {count}",
+  "@gestionExpedientesFiltrosActivosTooltip": {
+    "description": "Tooltip of the case search button when filters are active. Placeholder {count}: number of active filters (int)."
+  },
+  "gestionExpedientesBuscarTooltip": "Search cases",
+  "@gestionExpedientesBuscarTooltip": {
+    "description": "Tooltip of the search button in the cases list."
+  },
+  "gestionExpedientesFiltrarTitle": "Filter cases",
+  "@gestionExpedientesFiltrarTitle": {
+    "description": "Title of the cases list filter sheet."
+  },
+  "gestionExpedientesFiltroDescripcionLabel": "Case description",
+  "@gestionExpedientesFiltroDescripcionLabel": {
+    "description": "Description filter label in the cases list."
+  },
+  "gestionExpedientesFiltroFechaCierreLabel": "Closing date",
+  "@gestionExpedientesFiltroFechaCierreLabel": {
+    "description": "Closing date filter label in the cases list."
+  },
+  "gestionFiltroNumeroHint": "Enter the number",
+  "@gestionFiltroNumeroHint": {
+    "description": "Generic placeholder for number filters in the Casework section."
+  },
+  "gestionFiltroDescripcionHint": "Enter words from the description",
+  "@gestionFiltroDescripcionHint": {
+    "description": "Generic placeholder for description filters in the Casework section."
+  },
+  "gestionMasInformacionTooltip": "More information",
+  "@gestionMasInformacionTooltip": {
+    "description": "Tooltip of the info (i) button on Casework screens."
+  },
+  "gestionAportacionPasaporteHint": "Passport number",
+  "@gestionAportacionPasaporteHint": {
+    "description": "Placeholder for the document number when Passport is selected."
+  },
+  "gestionAportacionCeeHint": "CEE number",
+  "@gestionAportacionCeeHint": {
+    "description": "Placeholder for the document number when CEE is selected."
+  },
+  "homeNewsSectionTitle": "My updates",
+  "@homeNewsSectionTitle": {
+    "description": "Home — title of the My updates section."
+  },
+  "homeMyDataAccessesTitle": "“My data” shortcuts",
+  "@homeMyDataAccessesTitle": {
+    "description": "Home — title of the My data quick-access section."
+  },
+  "homeNewsNotificationsTitle": "Notifications",
+  "@homeNewsNotificationsTitle": {
+    "description": "Home — label of the notifications card in My updates."
+  },
+  "homeNewsNotificationsDescription": "Check your pending notifications",
+  "@homeNewsNotificationsDescription": {
+    "description": "Home — description of the notifications card in My updates."
+  },
+  "homeNewsAppointmentsTitle": "Upcoming appointments",
+  "@homeNewsAppointmentsTitle": {
+    "description": "Home — label of the upcoming appointments card in My updates."
+  },
+  "homeNewsAppointmentsDescription": "Check your upcoming appointments and events",
+  "@homeNewsAppointmentsDescription": {
+    "description": "Home — description of the upcoming appointments card in My updates."
+  },
+  "homeNewsLabelWithCount": "{label} ({count})",
+  "@homeNewsLabelWithCount": {
+    "description": "Home — My updates card label with an item count.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeRecommendedProceduresTitle": "Recommended procedures",
+  "@homeRecommendedProceduresTitle": {
+    "description": "Home — title of the recommended procedures section."
+  },
+  "homeGoToRecommendationsButton": "Go to recommendations",
+  "@homeGoToRecommendationsButton": {
+    "description": "Home — button that navigates to the recommendations screen."
+  },
+  "homeCardsFabLabel": "Cards",
+  "@homeCardsFabLabel": {
+    "description": "Home — label of the digital cards floating action button."
+  },
+  "homeCardsFabShowAll": "Show all",
+  "@homeCardsFabShowAll": {
+    "description": "Home — cards FAB action that opens the full catalog."
+  },
+  "homeCardsFabExpandSemantics": "Show digital cards",
+  "@homeCardsFabExpandSemantics": {
+    "description": "Home — accessibility label of the cards FAB when collapsed."
+  },
+  "homeCardsFabCollapseSemantics": "Close digital card shortcuts",
+  "@homeCardsFabCollapseSemantics": {
+    "description": "Home — accessibility label of the cards FAB when expanded."
+  },
+  "homeCardsFabLoadingMessage": "We are checking your digital cards.",
+  "@homeCardsFabLoadingMessage": {
+    "description": "Home — notice shown while digital cards are loading."
+  },
+  "homeCardsFabLoadFailedMessage": "We could not check your digital cards.",
+  "@homeCardsFabLoadFailedMessage": {
+    "description": "Home — error shown when loading digital cards fails."
+  },
+  "homeCardsFabEmptyMessage": "You have no digital cards available.",
+  "@homeCardsFabEmptyMessage": {
+    "description": "Home — notice shown when the user has no digital cards."
+  },
+  "homeRecommendationDeadlineFrom": "from {date}",
+  "@homeRecommendationDeadlineFrom": {
+    "description": "Home — recommended procedure deadline with only a start date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeRecommendationDeadlineUntil": "until {date}",
+  "@homeRecommendationDeadlineUntil": {
+    "description": "Home — recommended procedure deadline with only an end date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "helpContactPageTitle": "Help and contact",
+  "@helpContactPageTitle": {
+    "description": "AppBar title of the help and contact screen."
+  },
+  "helpContactGuidesTitle": "Help guides",
+  "@helpContactGuidesTitle": {
+    "description": "Help and contact — heading and card of the help guides."
+  },
+  "helpContactGuidesIntro": "If you need additional help, these Help Guides are available to you",
+  "@helpContactGuidesIntro": {
+    "description": "Help and contact — introduction to the help guides."
+  },
+  "helpContactGoToJccmPortal": "Go to the JCCM web portal",
+  "@helpContactGoToJccmPortal": {
+    "description": "Help and contact — subtitle of the cards linking to the JCCM web portal."
+  },
+  "helpContactInfoHeading": "Contact information",
+  "@helpContactInfoHeading": {
+    "description": "Help and contact — heading of the contact tab."
+  },
+  "helpContactPhonesIntro": "For general inquiries and administrative information you can get in touch through the citizen service phone lines.",
+  "@helpContactPhonesIntro": {
+    "description": "Help and contact — introduction to the citizen service phone lines."
+  },
+  "helpContactPhonesIntroBold1": "general inquiries and administrative information",
+  "@helpContactPhonesIntroBold1": {
+    "description": "Help and contact — first bold fragment of the phones intro (must be an exact substring of helpContactPhonesIntro)."
+  },
+  "helpContactPhonesIntroBold2": "citizen service phone lines",
+  "@helpContactPhonesIntroBold2": {
+    "description": "Help and contact — second bold fragment of the phones intro (must be an exact substring of helpContactPhonesIntro)."
+  },
+  "helpContactCallCitizenService": "Call the Citizen Service line",
+  "@helpContactCallCitizenService": {
+    "description": "Help and contact — subtitle of the citizen service phone cards."
+  },
+  "helpContactExpedienteIntro": "If you need to know more details about a case file, contact the processing office or the competent regional ministry.",
+  "@helpContactExpedienteIntro": {
+    "description": "Help and contact — introduction to case file contact."
+  },
+  "helpContactExpedienteIntroBold": "know more details about a case file",
+  "@helpContactExpedienteIntroBold": {
+    "description": "Help and contact — bold fragment of the case file intro (must be an exact substring of helpContactExpedienteIntro)."
+  },
+  "helpContactOfficesListTitle": "List of Information and Registry Offices",
+  "@helpContactOfficesListTitle": {
+    "description": "Help and contact — card linking to the list of information and registry offices."
+  },
+  "helpContactSupportIntro": "If you need technical assistance, contact us through the Technical Support form.",
+  "@helpContactSupportIntro": {
+    "description": "Help and contact — introduction to the technical support form."
+  },
+  "helpContactSupportIntroBold": "technical assistance",
+  "@helpContactSupportIntroBold": {
+    "description": "Help and contact — bold fragment of the support intro (must be an exact substring of helpContactSupportIntro)."
+  },
+  "helpContactSupportFormButton": "Support Form",
+  "@helpContactSupportFormButton": {
+    "description": "Help and contact — button that opens the support form."
+  },
+  "faqQuestion1": "What is Citizen Space and what can I find in it?",
+  "@faqQuestion1": {
+    "description": "FAQ — question about what Citizen Space is."
+  },
+  "faqAnswer1": "Citizen Space brings together information and services of the Government of Castilla-La Mancha in a single place. You can check your data, case files, notifications, appointments, and other available services.",
+  "@faqAnswer1": {
+    "description": "FAQ — answer about what Citizen Space is."
+  },
+  "faqQuestion2": "What do I need to sign in?",
+  "@faqQuestion2": {
+    "description": "FAQ — question about access requirements."
+  },
+  "faqAnswer2": "You need to identify yourself with Cl@ve, an electronic certificate, or the enabled access system. You can use Cl@ve Móvil, Cl@ve Permanente, electronic ID, or an electronic certificate.",
+  "@faqAnswer2": {
+    "description": "FAQ — answer about access requirements."
+  },
+  "faqQuestion3": "What personal data is stored in Citizen Space?",
+  "@faqQuestion3": {
+    "description": "FAQ — question about stored personal data."
+  },
+  "faqAnswer3": "The data needed to provide the services available in the app is displayed.",
+  "@faqAnswer3": {
+    "description": "FAQ — answer about stored personal data."
+  },
+  "faqQuestion4": "The data shown contains an error. Can I correct it?",
+  "@faqQuestion4": {
+    "description": "FAQ — question about correcting wrong data."
+  },
+  "faqAnswer4": "Contact the body responsible for the procedure or case file to request the correction.",
+  "@faqAnswer4": {
+    "description": "FAQ — answer about correcting wrong data."
+  },
+  "faqQuestion5": "What events are shown in My Agenda?",
+  "@faqQuestion5": {
+    "description": "FAQ — question about My Agenda events."
+  },
+  "faqAnswer5": "Appointments, notices, and administrative events related to your services are shown.",
+  "@faqAnswer5": {
+    "description": "FAQ — answer about My Agenda events."
+  },
+  "supportFormPageTitle": "Support form",
+  "@supportFormPageTitle": {
+    "description": "AppBar title of the support form."
+  },
+  "supportCancelButton": "Cancel",
+  "@supportCancelButton": {
+    "description": "Support form — cancel button."
+  },
+  "supportAcceptButton": "Accept",
+  "@supportAcceptButton": {
+    "description": "Support form — accept/submit button."
+  },
+  "supportRequiredFieldsNote": "Fields marked with (*) are required",
+  "@supportRequiredFieldsNote": {
+    "description": "Support form — note about required fields."
+  },
+  "supportFieldFullName": "First and last name",
+  "@supportFieldFullName": {
+    "description": "Support form — label of the full name field."
+  },
+  "supportFieldFullNameHint": "Example: María Pérez",
+  "@supportFieldFullNameHint": {
+    "description": "Support form — hint of the full name field."
+  },
+  "supportFieldEmailHint": "Example: mariaperez@email.com",
+  "@supportFieldEmailHint": {
+    "description": "Support form — hint of the email fields."
+  },
+  "supportFieldConfirmEmail": "Confirm your email address",
+  "@supportFieldConfirmEmail": {
+    "description": "Support form — label of the email confirmation field."
+  },
+  "supportFieldSubjectHint": "Example: Question about a notification",
+  "@supportFieldSubjectHint": {
+    "description": "Support form — hint of the subject field."
+  },
+  "supportFieldSubjectHelper": "Reason for your inquiry. 1000-character limit",
+  "@supportFieldSubjectHelper": {
+    "description": "Support form — helper text below the subject field."
+  },
+  "supportFieldMessage": "Message",
+  "@supportFieldMessage": {
+    "description": "Support form — label of the message field."
+  },
+  "supportAttachmentSectionLabel": "ATTACH SUPPORTING DOCUMENTS",
+  "@supportAttachmentSectionLabel": {
+    "description": "Support form — label of the attachments section."
+  },
+  "supportAttachmentUploadHint": "You can upload a single file or image of up to 20 MB in GIF, JPEG, JPG, PNG, TXT, PDF, DOC, or DOCX format to help identify the problem.",
+  "@supportAttachmentUploadHint": {
+    "description": "Support form — hint of the attachments section."
+  },
+  "supportAttachmentPickDocuments": "Select documents",
+  "@supportAttachmentPickDocuments": {
+    "description": "Support form — button to select the attached document."
+  },
+  "supportAttachmentChangeDocument": "Change document",
+  "@supportAttachmentChangeDocument": {
+    "description": "Support form — button to change the attached document."
+  },
+  "supportConsentDataUseLabel": "I authorize the use and management of my data",
+  "@supportConsentDataUseLabel": {
+    "description": "Support form — text of the data consent checkbox."
+  },
+  "supportPrivacyInfoDescription": "The data protection information applicable to this form is published at",
+  "@supportPrivacyInfoDescription": {
+    "description": "Support form — text preceding the privacy information link."
+  },
+  "supportErrorSubjectOverLimit": "The subject cannot exceed 1000 characters.",
+  "@supportErrorSubjectOverLimit": {
+    "description": "Support form — error when the subject exceeds 1000 characters."
+  },
+  "supportErrorAttachmentTooLarge": "The file exceeds the maximum allowed size.",
+  "@supportErrorAttachmentTooLarge": {
+    "description": "Support form — error when the attachment exceeds the maximum size."
+  },
+  "supportErrorAttachmentUnreadable": "We could not read the selected file.",
+  "@supportErrorAttachmentUnreadable": {
+    "description": "Support form — error when the attachment cannot be read."
+  },
+  "landingContentTagline": "Your public information in one place",
+  "@landingContentTagline": {
+    "description": "Landing — tagline of the public screen static content."
+  },
+  "landingFeatureNotificationsTitle": "Notifications",
+  "@landingFeatureNotificationsTitle": {
+    "description": "Landing — title of the notifications feature."
+  },
+  "landingFeatureNotificationsDescription": "Receive alerts and notices from the administration directly on your device.",
+  "@landingFeatureNotificationsDescription": {
+    "description": "Landing — description of the notifications feature."
+  },
+  "landingFeatureHealthTitle": "Health",
+  "@landingFeatureHealthTitle": {
+    "description": "Landing — title of the health feature."
+  },
+  "landingFeatureHealthDescription": "Check your medical history, appointments, and health card.",
+  "@landingFeatureHealthDescription": {
+    "description": "Landing — description of the health feature."
+  },
+  "landingFeatureEmploymentTitle": "Employment",
+  "@landingFeatureEmploymentTitle": {
+    "description": "Landing — title of the employment feature."
+  },
+  "landingFeatureEmploymentDescription": "Manage your employment status and access public employment offers.",
+  "@landingFeatureEmploymentDescription": {
+    "description": "Landing — description of the employment feature."
+  },
+  "landingFeatureProceduresTitle": "Procedures",
+  "@landingFeatureProceduresTitle": {
+    "description": "Landing — title of the procedures feature."
+  },
+  "landingFeatureProceduresDescription": "Complete administrative procedures without traveling.",
+  "@landingFeatureProceduresDescription": {
+    "description": "Landing — description of the procedures feature."
+  },
+  "landingFeatureDigitalCardsTitle": "Digital Cards",
+  "@landingFeatureDigitalCardsTitle": {
+    "description": "Landing — title of the digital cards feature."
+  },
+  "landingFeatureDigitalCardsDescription": "Access your official cards and documents in digital format.",
+  "@landingFeatureDigitalCardsDescription": {
+    "description": "Landing — description of the digital cards feature."
+  },
+  "landingFeatureCadastreTitle": "Cadastre",
+  "@landingFeatureCadastreTitle": {
+    "description": "Landing — title of the cadastre feature."
+  },
+  "landingFeatureCadastreDescription": "Check cadastral data for your properties.",
+  "@landingFeatureCadastreDescription": {
+    "description": "Landing — description of the cadastre feature."
+  },
+  "landingAccessStep1Title": "Tap \"Sign in\"",
+  "@landingAccessStep1Title": {
+    "description": "Landing — title of access step 1."
+  },
+  "landingAccessStep1Description": "Tap the button to start the secure authentication process.",
+  "@landingAccessStep1Description": {
+    "description": "Landing — description of access step 1."
+  },
+  "landingAccessStep2Title": "Authenticate with Cl@ve",
+  "@landingAccessStep2Title": {
+    "description": "Landing — title of access step 2."
+  },
+  "landingAccessStep2Description": "Use Cl@ve PIN or Cl@ve Permanente to identify yourself securely.",
+  "@landingAccessStep2Description": {
+    "description": "Landing — description of access step 2."
+  },
+  "landingAccessStep3Title": "Access all your information",
+  "@landingAccessStep3Title": {
+    "description": "Landing — title of access step 3."
+  },
+  "landingAccessStep3Description": "Check and manage your public information from a single place.",
+  "@landingAccessStep3Description": {
+    "description": "Landing — description of access step 3."
+  },
+  "legalSearchTooltip": "Search",
+  "@legalSearchTooltip": {
+    "description": "Legal pages — tooltip for the button that opens the in-page search."
+  },
+  "legalSearchCloseTooltip": "Close search",
+  "@legalSearchCloseTooltip": {
+    "description": "Legal pages — tooltip for the button that closes the in-page search."
+  },
+  "privacyResponsibleTitle": "Who is the data controller?",
+  "@privacyResponsibleTitle": {
+    "description": "Privacy page — heading of the data controller section."
+  },
+  "privacyResponsibleIntro": "The Digital Transformation Agency is the controller of the data processed for the services provided directly through Espacio Ciudadano, which are the following:",
+  "@privacyResponsibleIntro": {
+    "description": "Privacy page — introductory paragraph of the data controller section."
+  },
+  "privacyResponsibleItemProfile": "User profile section",
+  "@privacyResponsibleItemProfile": {
+    "description": "Privacy page — bullet item in the controller's list of services."
+  },
+  "privacyResponsibleItemVisualizations": "Display of the selected data from the Regional Administration and from Other topics of interest",
+  "@privacyResponsibleItemVisualizations": {
+    "description": "Privacy page — bullet item in the controller's list of services."
+  },
+  "privacyResponsibleItemRecommendations": "Recommendations made on the basis of the life events selected.",
+  "@privacyResponsibleItemRecommendations": {
+    "description": "Privacy page — bullet item in the controller's list of services."
+  },
+  "privacyResponsibleItemDownloads": "Downloads of the selected cards",
+  "@privacyResponsibleItemDownloads": {
+    "description": "Privacy page — bullet item in the controller's list of services."
+  },
+  "privacyResponsibleOrgParagraph": "Once each of the options provided by Espacio Ciudadano is selected, the data controller will be each of the bodies and organizations with competence over that administrative procedure or event.",
+  "@privacyResponsibleOrgParagraph": {
+    "description": "Privacy page — paragraph on the bodies responsible for each option."
+  },
+  "privacyResponsibleContactIntro": "The contact details of this controller are the following:",
+  "@privacyResponsibleContactIntro": {
+    "description": "Privacy page — introduction to the controller's contact details."
+  },
+  "privacyResponsibleContactAddressLabel": "Postal Address:\n",
+  "@privacyResponsibleContactAddressLabel": {
+    "description": "Privacy page — bold label for the controller's postal address (ends with a line break)."
+  },
+  "privacyResponsibleContactAddressValue": "Digital Transformation Agency\nCEMAR Building, Plaza de Grecia, 1, 45071 Toledo\nEmail address:\ndirecciongerenciaatd@jccm.es",
+  "@privacyResponsibleContactAddressValue": {
+    "description": "Privacy page — block with the controller's postal address and email."
+  },
+  "privacyPurposeTitle": "What is the name and purpose of the processing?",
+  "@privacyPurposeTitle": {
+    "description": "Privacy page — heading of the processing purpose section."
+  },
+  "privacyPurposeIntro": "The purposes of the processing of personal data carried out directly within the Espacio Ciudadano processing activity are the following:",
+  "@privacyPurposeIntro": {
+    "description": "Privacy page — introductory paragraph of the processing purposes."
+  },
+  "privacyPurposeItemIdentity": "Managing the citizen's identification data",
+  "@privacyPurposeItemIdentity": {
+    "description": "Privacy page — bullet item in the list of purposes."
+  },
+  "privacyPurposeItemVisualizations": "Displaying the selected data from the Regional Administration and from Other topics of interest",
+  "@privacyPurposeItemVisualizations": {
+    "description": "Privacy page — bullet item in the list of purposes."
+  },
+  "privacyAepdTitle": "Can I lodge a complaint with the Spanish Data Protection Agency?",
+  "@privacyAepdTitle": {
+    "description": "Privacy page — heading of the section on complaints to the AEPD."
+  },
+  "privacyAepdTextBeforeLink": "If you have evidence or indications proving that your right to data protection has been infringed in Espacio Ciudadano, you may lodge a complaint with the Agencia Española de Protección de Datos (Spanish Data Protection Agency), ",
+  "@privacyAepdTextBeforeLink": {
+    "description": "Privacy page — AEPD section text before the link to its website (ends with a comma and a space)."
+  },
+  "privacyAepdTextAfterLink": ". You may also lodge a complaint with the data protection officer, whose contact details are included in this information.",
+  "@privacyAepdTextAfterLink": {
+    "description": "Privacy page — AEPD section text after the link to its website (starts with a period)."
+  },
+  "privacySecurityTitle": "What security measures are in place?",
+  "@privacySecurityTitle": {
+    "description": "Privacy page — heading of the security measures section."
+  },
+  "privacySecurityText": "The security measures implemented to guarantee the security of personal data correspond to those set out in Annex II (Security measures) of Real Decreto 311/2022, de 3 de mayo (Royal Decree 311/2022, of May 3), which regulates the National Security Framework (Esquema Nacional de Seguridad).",
+  "@privacySecurityText": {
+    "description": "Privacy page — paragraph on the implemented security measures."
+  },
+  "privacyProfilingTitle": "Automated decisions, including profiling",
+  "@privacyProfilingTitle": {
+    "description": "Privacy page — heading of the automated decisions section."
+  },
+  "privacyProfilingText": "In the case of recommendations of procedures based on the life events selected by a data subject, profiling does take place.",
+  "@privacyProfilingText": {
+    "description": "Privacy page — paragraph on profiling."
+  },
+  "privacyDpoTitle": "Contact details of the data protection officer",
+  "@privacyDpoTitle": {
+    "description": "Privacy page — heading of the data protection officer contact section."
+  },
+  "privacyDpoIntro": "For any matter related to data protection, you may contact the data protection officer of the Administration of the Junta de Comunidades de Castilla-La Mancha (Regional Government of Castilla-La Mancha), whose contact details are the following:",
+  "@privacyDpoIntro": {
+    "description": "Privacy page — introductory paragraph of the data protection officer contact section."
+  },
+  "privacyDpoContactAddressLabel": "Postal address:\n",
+  "@privacyDpoContactAddressLabel": {
+    "description": "Privacy page — bold label for the data protection officer's postal address (ends with a line break)."
+  },
+  "privacyDpoContactAddressValue": "Data Protection Officer\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071 - Toledo\n\n",
+  "@privacyDpoContactAddressValue": {
+    "description": "Privacy page — block with the data protection officer's postal address (ends with a blank line)."
+  },
+  "privacyDpoContactEmailLabel": "Email address:\n",
+  "@privacyDpoContactEmailLabel": {
+    "description": "Privacy page — bold label for the data protection officer's email address (ends with a line break)."
+  },
+  "accessibilityStatementHeading": "Accessibility statement",
+  "@accessibilityStatementHeading": {
+    "description": "Accessibility page — H1 heading of the accessibility statement."
+  },
+  "accessibilityIntroCommitment": "The Junta de Comunidades de Castilla-La Mancha (Regional Government of Castilla-La Mancha) is committed to making its website accessible, in accordance with ",
+  "@accessibilityIntroCommitment": {
+    "description": "Accessibility and Legal notice pages — introductory paragraph text before the Royal Decree link (ends with a space)."
+  },
+  "accessibilityIntroDecreeLink": "Royal Decree 1112/2018, of September 7",
+  "@accessibilityIntroDecreeLink": {
+    "description": "Accessibility and Legal notice pages — link text for Royal Decree 1112/2018 (the ⇲ glyph is appended in code)."
+  },
+  "accessibilityIntroDecreeSuffix": ", on the accessibility of public sector websites and applications for mobile devices (hereinafter, Royal Decree 1112/2018, of September 7).\n\n",
+  "@accessibilityIntroDecreeSuffix": {
+    "description": "Accessibility and Legal notice pages — text after the Royal Decree link (ends with a double line break)."
+  },
+  "accessibilityDeclarationScope": "This accessibility statement applies to the website ",
+  "@accessibilityDeclarationScope": {
+    "description": "Accessibility and Legal notice pages — text before the website link (ends with a space)."
+  },
+  "accessibilityComplianceTitle": "Compliance status",
+  "@accessibilityComplianceTitle": {
+    "description": "Accessibility page — heading of the compliance status section."
+  },
+  "accessibilityComplianceText": "b) This website is partially compliant with RD 1112/2018, of September 7, due to the lack of conformity of the aspects indicated below.",
+  "@accessibilityComplianceText": {
+    "description": "Accessibility page — paragraph on partial compliance with RD 1112/2018."
+  },
+  "accessibilityNonAccessibleTitle": "Non-accessible content",
+  "@accessibilityNonAccessibleTitle": {
+    "description": "Accessibility page — heading of the non-accessible content section."
+  },
+  "accessibilityNonAccessibleIntro": "The content listed below is not accessible for the following reasons:",
+  "@accessibilityNonAccessibleIntro": {
+    "description": "Accessibility page — introduction to the list of non-accessible content."
+  },
+  "accessibilityNonAccessibleItemNonConformity": "lack of conformity with RD 1112/2018, of September 7: There could be occasional editing errors on some web pages, both in HTML content and in final documents, published after September 20, 2018.",
+  "@accessibilityNonAccessibleItemNonConformity": {
+    "description": "Accessibility page — bullet item in the list of non-accessible content reasons."
+  },
+  "accessibilityNonAccessibleItemBurden": "disproportionate burden: Not applicable.",
+  "@accessibilityNonAccessibleItemBurden": {
+    "description": "Accessibility page — bullet item in the list of non-accessible content reasons."
+  },
+  "accessibilityNonAccessibleItemOutOfScope": "the content does not fall within the scope of the applicable legislation: There could be office files in PDF or other formats published before September 20, 2018 that do not fully meet all accessibility requirements.",
+  "@accessibilityNonAccessibleItemOutOfScope": {
+    "description": "Accessibility page — bullet item in the list of non-accessible content reasons."
+  },
+  "accessibilityPreparationTitle": "Preparation of this accessibility statement",
+  "@accessibilityPreparationTitle": {
+    "description": "Accessibility page — heading of the statement preparation section."
+  },
+  "accessibilityPreparationText": "This statement was prepared on October 8, 2025.\nThe method used to prepare the statement was a self-assessment carried out by the body itself.",
+  "@accessibilityPreparationText": {
+    "description": "Accessibility page — paragraph on the date and method of preparation of the statement."
+  },
+  "accessibilityContactTitle": "Observations and contact information",
+  "@accessibilityContactTitle": {
+    "description": "Accessibility page — heading of the observations and contact section."
+  },
+  "accessibilityContactIntro": "You may submit communications on accessibility requirements (Article 10.2.a) of Royal Decree 1112/2018, of September 7) such as, for example:",
+  "@accessibilityContactIntro": {
+    "description": "Accessibility page — introduction to the list of accessibility communications."
+  },
+  "accessibilityContactItemReport": "reporting any possible non-compliance by this website,",
+  "@accessibilityContactItemReport": {
+    "description": "Accessibility page — bullet item in the list of accessibility communications."
+  },
+  "accessibilityContactItemDifficulties": "conveying other difficulties in accessing the content,",
+  "@accessibilityContactItemDifficulties": {
+    "description": "Accessibility page — bullet item in the list of accessibility communications."
+  },
+  "accessibilityContactItemSuggestions": "raising any other query or suggestion for improvement regarding the accessibility of the website,",
+  "@accessibilityContactItemSuggestions": {
+    "description": "Accessibility page — bullet item in the list of accessibility communications."
+  },
+  "accessibilityContactChannelsIntro": "through the following channels:",
+  "@accessibilityContactChannelsIntro": {
+    "description": "Accessibility page — introduction to the list of contact channels."
+  },
+  "accessibilityContactFormLink": "contact form",
+  "@accessibilityContactFormLink": {
+    "description": "Accessibility page — link text for the contact form (the ⇲ glyph is appended in code)."
+  },
+  "accessibilityOfficesPrefix": "in person at ",
+  "@accessibilityOfficesPrefix": {
+    "description": "Accessibility page — text before the link to the 012 and OIRES offices (ends with a space)."
+  },
+  "accessibilityOfficesLink": "the 012 and OIRES offices",
+  "@accessibilityOfficesLink": {
+    "description": "Accessibility page — link text for the 012 and OIRES offices (the ⇲ glyph is appended in code)."
+  },
+  "accessibilityOfficesSuffix": " information and registration offices).",
+  "@accessibilityOfficesSuffix": {
+    "description": "Accessibility page — text after the link to the 012 and OIRES offices (starts with a space)."
+  },
+  "accessibilityContactProcessing": "Communications will be received and handled by the Viceconsejería de Administración Local y Coordinación Administrativa (Vice-Ministry of Local Administration and Administrative Coordination).",
+  "@accessibilityContactProcessing": {
+    "description": "Accessibility page — paragraph on the body that receives the communications."
+  },
+  "accessibilityEnforcementTitle": "Enforcement procedure",
+  "@accessibilityEnforcementTitle": {
+    "description": "Accessibility page — heading of the enforcement procedure section."
+  },
+  "accessibilityEnforcementText": "The complaint procedure set out in Article 13 of RD 1112/2018 will enter into force on September 20, 2020.",
+  "@accessibilityEnforcementText": {
+    "description": "Accessibility page — paragraph on the Article 13 complaint procedure."
+  },
+  "accessibilityOptionalTitle": "Optional content",
+  "@accessibilityOptionalTitle": {
+    "description": "Accessibility page — heading of the optional content section."
+  },
+  "accessibilityOptionalText": "In addition to the accessibility aids built into browsers, a series of keyboard shortcuts are provided to make it easier to navigate the portal:\nAn access key or Accesskey allows the user to jump immediately to a specific part of a web page using the keyboard.",
+  "@accessibilityOptionalText": {
+    "description": "Accessibility page — paragraph on the portal's keyboard shortcuts."
+  },
+  "accessibilityOptionalItemIncreaseText": "Increase Text Size: CTRL +",
+  "@accessibilityOptionalItemIncreaseText": {
+    "description": "Accessibility page — bullet item in the list of keyboard shortcuts."
+  },
+  "accessibilityOptionalItemDecreaseText": "Decrease Text Size: CTRL -",
+  "@accessibilityOptionalItemDecreaseText": {
+    "description": "Accessibility page — bullet item in the list of keyboard shortcuts."
+  },
+  "legalNoticeHeading": "Legal notice (...)",
+  "@legalNoticeHeading": {
+    "description": "Legal notice page — H1 heading of the page (the original text includes \"(...)\")."
+  },
+  "supportErrorSubmitUnauthorized": "You do not have permission to submit the support form.",
+  "@supportErrorSubmitUnauthorized": {
+    "description": "Error when submitting the support form without permission (401/403)."
+  },
+  "supportErrorSubmitInvalidData": "We could not validate the information provided.",
+  "@supportErrorSubmitInvalidData": {
+    "description": "Error when the server rejects the support form data (400)."
+  },
+  "supportErrorSubmitUnavailable": "We could not send your request. Please try again later.",
+  "@supportErrorSubmitUnavailable": {
+    "description": "Generic error when submitting the support form."
+  },
+  "notificationContactSaveUnauthorizedError": "You do not have permission to save these contact details.",
+  "@notificationContactSaveUnauthorizedError": {
+    "description": "Error when saving the notification contact details without permission (401/403)."
+  },
+  "notificationContactSaveInvalidDataError": "We could not validate the information provided.",
+  "@notificationContactSaveInvalidDataError": {
+    "description": "Error when the server rejects the notification contact data (400)."
+  },
+  "notificationContactSaveUnavailableError": "We could not save the contact details. Please try again later.",
+  "@notificationContactSaveUnavailableError": {
+    "description": "Generic error when saving the notification contact details."
+  },
+  "gestionAportacionExpedienteNotFoundError": "We could not find any case matching those details. Please check they are correct.",
+  "@gestionAportacionExpedienteNotFoundError": {
+    "description": "Error when the third-party case search finds no results."
+  },
+  "gestionAportacionExpedienteUnauthorizedError": "You do not have permission to view this case.",
+  "@gestionAportacionExpedienteUnauthorizedError": {
+    "description": "Error when searching a third-party case without permission."
+  },
+  "gestionAportacionExpedienteUnavailableError": "We could not locate the case. Please try again later.",
+  "@gestionAportacionExpedienteUnavailableError": {
+    "description": "Generic error when searching a third-party case."
   }
 }

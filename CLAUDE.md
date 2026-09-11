@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Toolchain
 
-- Flutter is pinned via **FVM** to `3.41.7` (`.fvmrc`). Local editor uses `.fvm/versions/3.41.7`. Use that SDK; prefer `fvm flutter ...` if FVM is installed, otherwise plain `flutter` against the pinned version.
+- Flutter is pinned via **FVM** to `3.44.0` (`.fvmrc`, Dart 3.12). Use that SDK; prefer `fvm flutter ...` / `fvm dart ...` if FVM is installed, otherwise plain `flutter` against the pinned version.
 - The app does **not** use `--dart-define`d secrets inline; runtime config comes from `config_*.json` files passed via `--dart-define-from-file` (see below). `AppConfig.fromEnvironment()` reads these and **throws** on any missing key — there are no defaults.
 
 ## Common commands
@@ -68,7 +68,7 @@ The contract is **`documentation/ARCHITECTURE.md`** — read the relevant sectio
 
 ### State management — Riverpod 3
 
-Uses `flutter_riverpod` 3 with `Notifier`/`AsyncNotifier` (no `StateNotifier`). `riverpod_lint` rules `missing_provider_scope` and `prefer_final_provider_parameters` are enabled. Tests override providers via `ProviderContainer`.
+Uses `flutter_riverpod` 3 with `Notifier`/`AsyncNotifier` (no `StateNotifier`). `riverpod_lint` is loaded as a `custom_lint` plugin with **all** its rules enabled, so `dart run custom_lint` is what checks them. It is pinned to `3.0.3` on purpose: from 3.1.0 riverpod_lint switched to `analysis_server_plugin` (a different plugin system, run through `dart analyze`) and pins `riverpod` to its own version, so bumping it moves `flutter_riverpod` too — the lint wiring and the riverpod upgrade have to be done together. Tests override providers via `ProviderContainer`.
 
 ### Entities — IMPORTANT divergence from the doc
 

@@ -102,11 +102,13 @@ abstract final class AppIconAssets {
   static const String chevronRight = 'assets/icons/chevron_right.svg';
   static const String docs = 'assets/icons/docs.svg';
   static const String help = 'assets/icons/help.svg';
+  static const String heartCheck = 'assets/icons/heart_check.svg';
   static const String idCard = 'assets/icons/id_card.svg';
   static const String license = 'assets/icons/license.svg';
   static const String mail = 'assets/icons/mail.svg';
   static const String notifications = 'assets/icons/notifications.svg';
   static const String person = 'assets/icons/person.svg';
+  static const String personCelebrate = 'assets/icons/person_celebrate.svg';
   static const String question = 'assets/icons/question.svg';
   static const String health = 'assets/icons/salud.svg';
   static const String schedule = 'assets/icons/schedule.svg';

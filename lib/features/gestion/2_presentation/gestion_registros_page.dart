@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empt
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_registros_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -37,7 +38,7 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
         onBack: () => context.go(Routes.gestion),
         actions: [
           IconButton(
-            tooltip: _selectedTab == _RegistrosTab.entradas ? 'Buscar entradas de registro' : 'Buscar salidas de registro',
+            tooltip: _selectedTab == _RegistrosTab.entradas ? l10n.gestionRegistrosBuscarEntradasTooltip : l10n.gestionRegistrosBuscarSalidasTooltip,
             icon: Badge.count(
               count: _filters.activeCount,
               isLabelVisible: _filters.activeCount > 0,
@@ -73,20 +74,21 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
   }
 
   Future<void> _showFilters() async {
+    final l10n = AppLocalizations.of(context);
     final isEntry = _selectedTab == _RegistrosTab.entradas;
     final result = await AppBottomSheet.show<AppListFilters>(
       context: context,
-      title: isEntry ? 'Filtrar entradas de registro' : 'Filtrar salidas de registro',
+      title: isEntry ? l10n.gestionRegistrosFiltrarEntradasTitle : l10n.gestionRegistrosFiltrarSalidasTitle,
       body: AppListFilterSheet(
         initialFilters: _filters,
         fields: [
-          const AppListTextFilterField(id: 'number', label: 'Número de registro', hint: 'Introduce el número'),
+          AppListTextFilterField(id: 'number', label: l10n.caseworkSearchFieldRegistroLabel, hint: l10n.gestionFiltroNumeroHint),
           AppListTextFilterField(
             id: 'description',
-            label: isEntry ? 'Descripción de la entrada' : 'Descripción de la salida',
-            hint: 'Introduce palabras de la descripción',
+            label: isEntry ? l10n.gestionRegistrosFiltroDescripcionEntradaLabel : l10n.gestionRegistrosFiltroDescripcionSalidaLabel,
+            hint: l10n.gestionFiltroDescripcionHint,
           ),
-          AppListDateRangeFilterField(id: 'date', label: isEntry ? 'Fecha de entrada' : 'Fecha de salida'),
+          AppListDateRangeFilterField(id: 'date', label: isEntry ? l10n.gestionRegistrosFiltroFechaEntradaLabel : l10n.gestionRegistrosFiltroFechaSalidaLabel),
         ],
       ),
     );
@@ -116,10 +118,15 @@ class _EntradasTab extends ConsumerWidget {
         .watch(entradasProvider)
         .when(
           loading: () => const LoadingStateWidget(),
-          error: (final error, final _) => ErrorStateWidget(
-            message: l10n.gestionRegistrosEntradasLoadError,
-            onRetry: () => ref.invalidate(entradasProvider),
-          ),
+          // Igual que en notificaciones: la revocación de la cláusula
+          // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
+          // una autorización que no se pudo comprobar— es error reintentable.
+          error: (final error, final _) => error is ConsentRevoked
+              ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
+              : ErrorStateWidget(
+                  message: l10n.gestionRegistrosEntradasLoadError,
+                  onRetry: () => ref.invalidate(entradasProvider),
+                ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: true),
         );
   }
@@ -136,10 +143,15 @@ class _SalidasTab extends ConsumerWidget {
         .watch(salidasProvider)
         .when(
           loading: () => const LoadingStateWidget(),
-          error: (final error, final _) => ErrorStateWidget(
-            message: l10n.gestionRegistrosSalidasLoadError,
-            onRetry: () => ref.invalidate(salidasProvider),
-          ),
+          // Igual que en notificaciones: la revocación de la cláusula
+          // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
+          // una autorización que no se pudo comprobar— es error reintentable.
+          error: (final error, final _) => error is ConsentRevoked
+              ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
+              : ErrorStateWidget(
+                  message: l10n.gestionRegistrosSalidasLoadError,
+                  onRetry: () => ref.invalidate(salidasProvider),
+                ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: false),
         );
   }
@@ -166,7 +178,7 @@ class _RegistrosList extends StatelessWidget {
       return EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search);
     }
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16, vertical: AppDimensions.space24),
+      padding: EdgeInsets.symmetric(horizontal: appPageHorizontalPadding(context), vertical: AppDimensions.space24),
       itemCount: filtered.length,
       separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
       itemBuilder: (final context, final index) => _RegistroCard(registro: filtered[index], isEntrada: isEntrada),

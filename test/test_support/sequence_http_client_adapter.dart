@@ -22,19 +22,30 @@ final class CapturedRequest {
     required this.path,
     required this.queryParameters,
     required this.jsonBody,
+    this.sendTimeout,
+    this.receiveTimeout,
   });
 
   final String method;
   final String path;
   final Map<String, dynamic> queryParameters;
   final Object? jsonBody;
+
+  /// Plazos efectivos de la petición, ya resueltos con los de la instancia de
+  /// Dio y con cualquier override por petición.
+  final Duration? sendTimeout;
+  final Duration? receiveTimeout;
 }
 
 final class SequenceHttpClientAdapter implements HttpClientAdapter {
-  SequenceHttpClientAdapter(this._responses);
+  SequenceHttpClientAdapter(this._responses, {this.onRequest});
 
   final List<AdapterResponse> _responses;
   final requests = <CapturedRequest>[];
+
+  /// Se invoca con cada petición ya capturada, antes de devolver su respuesta:
+  /// permite cancelar el token a mitad de una secuencia de páginas.
+  final void Function(CapturedRequest request)? onRequest;
 
   @override
   Future<ResponseBody> fetch(
@@ -53,9 +64,12 @@ final class SequenceHttpClientAdapter implements HttpClientAdapter {
         path: options.path,
         queryParameters: Map<String, dynamic>.from(options.queryParameters),
         jsonBody: _decodeRequestBody(bodyBytes),
+        sendTimeout: options.sendTimeout,
+        receiveTimeout: options.receiveTimeout,
       ),
     );
 
+    onRequest?.call(requests.last);
     final response = _responses.removeAt(0);
     return ResponseBody.fromString(
       _encodeResponseBody(response.body),

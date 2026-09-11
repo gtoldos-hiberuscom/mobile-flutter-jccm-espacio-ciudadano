@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -56,7 +57,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       backgroundColor: AppColors.backgroundWhite,
       appBar: AppNavBar(
         type: AppNavBarType.detail,
-        title: 'Formulario soporte',
+        title: l10n.supportFormPageTitle,
         onClose: _goBack,
       ),
       body: SafeArea(
@@ -96,13 +97,13 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
           : AppStickybar(
               children: [
                 AppButton(
-                  label: 'Cancelar',
+                  label: l10n.supportCancelButton,
                   hierarchy: AppButtonHierarchy.tertiary,
                   onPressed: _isSubmitting ? null : _goBack,
                   isExpanded: true,
                 ),
                 AppButton(
-                  label: 'Aceptar',
+                  label: l10n.supportAcceptButton,
                   onPressed: _submit,
                   isExpanded: true,
                   leadingIcon: AppIcons.check,
@@ -188,7 +189,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
     if (_attachmentBytes != null && _attachmentBytes! > _maxAttachmentBytes) {
       AppAlertSnackbar.show(
         context,
-        message: 'El archivo excede el tamaño máximo permitido.',
+        message: AppLocalizations.of(context).supportErrorAttachmentTooLarge,
         severity: AppAlertSeverity.error,
       );
       return;
@@ -206,7 +207,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       setState(() => _isSubmitting = false);
       AppAlertSnackbar.show(
         context,
-        message: 'No hemos podido leer el archivo seleccionado.',
+        message: AppLocalizations.of(context).supportErrorAttachmentUnreadable,
         severity: AppAlertSeverity.error,
       );
       return;
@@ -216,7 +217,9 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       '[SUPPORT] Sending support request '
       '(attachment: ${request.attachment != null})',
     );
-    final result = await ref.read(submitSupportRequestUsecaseProvider).execute(request);
+    // Con sesión, el gateway sólo acepta la ruta /ciudadanos/{idAgente}/soporte.
+    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
+    final result = await ref.read(submitSupportRequestUsecaseProvider).execute(request, idAgente: idAgente);
     if (!mounted) {
       return;
     }
@@ -228,12 +231,16 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
           _sent = true;
           _isSubmitting = false;
         });
-      case SubmitSupportRequestFailed(:final message):
-        logger.e('[SUPPORT] Support request failed: $message');
+      case SubmitSupportRequestFailed(:final reason, :final cause):
+        logger.e('[SUPPORT] Support request failed: ${reason.name}', error: cause);
         setState(() => _isSubmitting = false);
         AppAlertSnackbar.show(
           context,
-          message: message,
+          message: switch (reason) {
+            SubmitSupportRequestFailureReason.unauthorized => AppLocalizations.of(context).supportErrorSubmitUnauthorized,
+            SubmitSupportRequestFailureReason.invalidData => AppLocalizations.of(context).supportErrorSubmitInvalidData,
+            SubmitSupportRequestFailureReason.unavailable => AppLocalizations.of(context).supportErrorSubmitUnavailable,
+          },
           severity: AppAlertSeverity.error,
         );
     }
@@ -241,9 +248,12 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
   Future<SupportRequest> _buildSupportRequest() async {
     final attachment = _attachment;
-    final isAuthenticated = ref.read(jwtClaimsProvider) != null;
+    final claims = ref.read(jwtClaimsProvider);
+    // Con sesión el formulario no pide el nombre: la incidencia lo toma del
+    // token para que SIGUE reciba siempre `nombreApellidos`.
+    final name = claims == null ? _nameController.text.trim() : (claims.fullName ?? '');
     return SupportRequest(
-      name: isAuthenticated ? '' : _nameController.text.trim(),
+      name: name,
       email: _emailController.text.trim(),
       subject: _subjectController.text.trim(),
       message: _descriptionController.text.trim(),
@@ -315,7 +325,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
     if (value.isEmpty) {
       return AppLocalizations.of(context).supportErrorSubjectRequired;
     }
-    return value.length <= 1000 ? null : 'El asunto no puede superar los 1000 caracteres.';
+    return value.length <= 1000 ? null : AppLocalizations.of(context).supportErrorSubjectOverLimit;
   }
 
   String? get _descriptionError {
@@ -386,23 +396,19 @@ class _FormView extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space32,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space32),
       children: [
         Text(
-          'Los campos marcados con un (*) son obligatorios',
+          l10n.supportRequiredFieldsNote,
           style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
         ),
         const SizedBox(height: AppDimensions.space24),
         if (showNameField) ...[
           AppInputCase(
-            label: 'Nombre y apellidos',
-            hint: 'Ejemplo:  María Pérez',
+            label: l10n.supportFieldFullName,
+            hint: l10n.supportFieldFullNameHint,
             controller: nameController,
             isRequired: true,
             state: _inputState(nameError),
@@ -412,8 +418,8 @@ class _FormView extends StatelessWidget {
           const SizedBox(height: AppDimensions.space24),
         ],
         AppInputCase(
-          label: 'Correo electrónico',
-          hint: 'Ejemplo:  maríapérez@correo.es',
+          label: l10n.supportFieldEmail,
+          hint: l10n.supportFieldEmailHint,
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
           isRequired: true,
@@ -423,8 +429,8 @@ class _FormView extends StatelessWidget {
         ),
         const SizedBox(height: AppDimensions.space24),
         AppInputCase(
-          label: 'Confirma tu correo electrónico',
-          hint: 'Ejemplo:  maríapérez@correo.es',
+          label: l10n.supportFieldConfirmEmail,
+          hint: l10n.supportFieldEmailHint,
           controller: emailConfirmController,
           keyboardType: TextInputType.emailAddress,
           isRequired: true,
@@ -434,8 +440,8 @@ class _FormView extends StatelessWidget {
         ),
         const SizedBox(height: AppDimensions.space24),
         AppInputCase(
-          label: 'Asunto',
-          hint: 'Ejemplo:  María Pérez',
+          label: l10n.supportFieldSubject,
+          hint: l10n.supportFieldSubjectHint,
           controller: subjectController,
           isRequired: true,
           state: _inputState(subjectError),
@@ -443,12 +449,12 @@ class _FormView extends StatelessWidget {
           onChanged: (_) => onChanged(),
         ),
         const SizedBox(height: AppDimensions.space8),
-        const AppDescriptionText(
-          text: 'Motivo de consulta. Límite de 1000 caracteres',
+        AppDescriptionText(
+          text: l10n.supportFieldSubjectHelper,
         ),
         const SizedBox(height: AppDimensions.space24),
         AppInputCase(
-          label: 'Mensaje',
+          label: l10n.supportFieldMessage,
           controller: descriptionController,
           isRequired: true,
           state: _inputState(descriptionError),
@@ -459,10 +465,10 @@ class _FormView extends StatelessWidget {
         ),
         const SizedBox(height: AppDimensions.space32),
         AppAttachmentField(
-          label: 'ADJUNTAR DOCUMENTOS DE EVIDENCIA',
-          hint: 'Puedes subir un único archivo o imagen de máx. 20MB en GIF, JPEG, JPG, PNG, TXT, PDF, DOC, DOCX para ayudar a identificar el problema.',
-          pickLabel: 'Seleccionar documentos',
-          changeLabel: 'Cambiar documento',
+          label: l10n.supportAttachmentSectionLabel,
+          hint: l10n.supportAttachmentUploadHint,
+          pickLabel: l10n.supportAttachmentPickDocuments,
+          changeLabel: l10n.supportAttachmentChangeDocument,
           fileName: attachment?.name,
           fileBytes: attachmentBytes,
           isExpanded: true,
@@ -473,7 +479,7 @@ class _FormView extends StatelessWidget {
         const SizedBox(height: AppDimensions.space32),
         if (showConsent) ...[
           AppCheckbox(
-            label: 'Autorizo el uso y gestión de mis datos',
+            label: l10n.supportConsentDataUseLabel,
             value: consentAccepted,
             isError: consentError != null,
             errorText: consentError,
@@ -481,8 +487,8 @@ class _FormView extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space24),
           AppPrivacyInfoText(
-            description: 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en',
-            linkText: 'https://rat.castillalamancha.es/info/2309',
+            description: l10n.supportPrivacyInfoDescription,
+            linkText: 'https://rat.castillalamancha.es/detalle/2309',
             onTap: onOpenPrivacyInfo,
           ),
         ],

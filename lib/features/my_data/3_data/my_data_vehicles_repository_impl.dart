@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_vehicles_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/vehiculos_api.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 
 final class MyDataVehiclesRepositoryImpl implements MyDataVehiclesRepository {
   MyDataVehiclesRepositoryImpl({required final Dio dio}) : _api = VehiculosApi(dio);
@@ -56,26 +57,18 @@ final class MyDataVehiclesRepositoryImpl implements MyDataVehiclesRepository {
   /// El tipo se deduce del documento: estaba fijado a `NIF`, lo que rompía la
   /// consulta para NIE y CIF. Mismo fallo que había en educación.
   ///
-  /// El cliente ya devuelve `null` en 404 y la carga cruda en el resto.
-  Future<Object?> _loadRawVehicles(final String citizenId, final String documentNumber) async {
-    try {
-      return await _api.listado(
+  /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
+  /// resto de errores → se propagan. Ver [intermediacionRawResponse].
+  Future<Object?> _loadRawVehicles(final String citizenId, final String documentNumber) {
+    return intermediacionRawResponse(
+      () => _api.listado(
         citizenId: citizenId,
         body: {
           'tipodoc': documentTypeOf(documentNumber),
           'docu': documentNumber,
         },
-      );
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.data;
-      if (rawData == null) {
-        rethrow;
-      }
-      return rawData;
-    }
+      ),
+    );
   }
 
   Vehicle? _extractVehicle(final Map<String, Object?> raw) {

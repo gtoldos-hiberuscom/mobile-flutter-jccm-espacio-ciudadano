@@ -1,3 +1,5 @@
+import 'dart:ui' show SemanticsRole;
+
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
@@ -53,6 +55,7 @@ class AppTopTabBar extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Semantics(
+      role: SemanticsRole.tabBar,
       container: true,
       explicitChildNodes: true,
       label: semanticLabel,
@@ -78,6 +81,8 @@ class AppTopTabBar extends StatelessWidget {
                   child: _TopTab(
                     label: tabs[i],
                     semanticLabel: semanticLabels?[i],
+                    position: i + 1,
+                    tabCount: tabs.length,
                     isSelected: i == selectedIndex,
                     onTap: () => onTabSelected(i),
                   ),
@@ -95,23 +100,32 @@ class _TopTab extends StatelessWidget {
   const _TopTab({
     required this.label,
     required this.semanticLabel,
+    required this.position,
+    required this.tabCount,
     required this.isSelected,
     required this.onTap,
   });
 
   final String label;
   final String? semanticLabel;
+  final int position;
+  final int tabCount;
   final bool isSelected;
   final VoidCallback onTap;
 
   @override
   Widget build(final BuildContext context) {
     return Semantics(
+      role: SemanticsRole.tab,
       container: true,
       excludeSemantics: true,
-      button: true,
       selected: isSelected,
+      inMutuallyExclusiveGroup: true,
       label: semanticLabel ?? label,
+      value: MaterialLocalizations.of(context).tabLabel(
+        tabIndex: position,
+        tabCount: tabCount,
+      ),
       onTap: onTap,
       child: Material(
         color: Colors.transparent,

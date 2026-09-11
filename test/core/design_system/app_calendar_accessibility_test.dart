@@ -2,6 +2,7 @@ import 'dart:ui' show SemanticsAction, Tristate;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_calendar.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -169,6 +170,40 @@ void main() {
       matching: find.byType(InkWell),
     );
     expect(tester.getSize(day14Target), const Size(48, 48));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('usa celdas de 64 dp en tablet sin tocar el modo compacto', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 1100);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      buildApp(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: AppCalendar(
+            initialDate: DateTime(2026, 8),
+            eventDates: {DateTime(2026, 8, 14)},
+          ),
+        ),
+      ),
+    );
+
+    final day14Target = find.ancestor(of: find.text('14'), matching: find.byType(InkWell));
+    expect(tester.getSize(day14Target), const Size(64, 64));
+    expect(tester.widget<Text>(find.text('14')).style?.fontSize, AppTypography.bodyRegular.fontSize);
+
+    await tester.pumpWidget(
+      buildApp(
+        AppCalendar(
+          initialDate: DateTime(2026, 8),
+          compact: true,
+        ),
+      ),
+    );
+    final compactTarget = find.ancestor(of: find.text('14'), matching: find.byType(InkWell));
+    expect(tester.getSize(compactTarget), const Size(48, 48));
     expect(tester.takeException(), isNull);
   });
 }

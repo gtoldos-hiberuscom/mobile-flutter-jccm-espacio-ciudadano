@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/repositories/agenda_repository.dart';
 
 final class AgendaRepositoryImpl implements AgendaRepository {
@@ -13,38 +14,96 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   final AgendaApi _agendaApi;
 
   @override
-  Future<List<AgendaAppointment>> loadAppointments({
+  Future<AgendaAppointmentsSnapshot> loadAppointments({
     required final String documentNumber,
     final String? agentId,
   }) async {
     final trimmedAgentId = agentId?.trim();
-    final responses = await Future.wait([
-      _loadAppointmentsFrom(
-        () => _sescamApi.citasFuturas(
-          numDocumento: documentNumber,
-          extra: _generatedExtra,
-        ),
-        source: _AgendaAppointmentSource.health,
-      ),
-      if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
-        _loadAppointmentsFrom(
+    // Cada fuente se resuelve por separado: si una cae, la agenda se pinta con
+    // lo que sí llegó y la pantalla avisa de lo que falta. El error solo se
+    // propaga cuando fallan todas las fuentes que se han llegado a intentar.
+    final results = await Future.wait([
+      _captureAppointments(
+        AgendaAppointmentSource.health,
+        () => _loadAppointmentsFrom(
           // La variante `1` apunta al path gateway
-          // /api/v1/ciudadanos/{sid}/eventos/{periodo} (el legacy
-          // /api/v1/agenda/... no existe en el gateway y responde 404). El
-          // periodo va en mayúsculas: TODOS, SEMANA, MES o ANIO.
-          () => _agendaApi.obtenerEventosAgenda1(
-            idAgente: trimmedAgentId,
-            periodo: 'TODOS',
+          // /api/v1/ciudadanos/{numDocumento}/salud/primaria-citas-pendientes
+          // (el legacy /api/v1/sescam/citas/... no existe en el gateway y
+          // responde 404, igual que pasaba con /api/v1/agenda/...). Es el mismo
+          // endpoint que usa Mis Datos → Salud, que sí devuelve las citas.
+          () => _sescamApi.citasFuturas1(
+            numDocumento: documentNumber,
             extra: _generatedExtra,
           ),
-          source: _AgendaAppointmentSource.general,
-          ignoreBadRequest: true,
+          source: AgendaAppointmentSource.health,
+        ),
+      ),
+      // Sin `idAgente` la agenda general ni se pide: eso no es un fallo y no
+      // entra en `failedSources`.
+      if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
+        _captureAppointments(
+          AgendaAppointmentSource.general,
+          () => _loadAppointmentsFrom(
+            // La variante `1` apunta al path gateway
+            // /api/v1/ciudadanos/{sid}/eventos/{periodo} (el legacy
+            // /api/v1/agenda/... no existe en el gateway y responde 404). El
+            // periodo va en mayúsculas: TODOS, SEMANA, MES o ANIO.
+            () => _agendaApi.obtenerEventosAgenda1(
+              idAgente: trimmedAgentId,
+              periodo: 'TODOS',
+              extra: _generatedExtra,
+            ),
+            source: AgendaAppointmentSource.general,
+            ignoreBadRequest: true,
+          ),
         ),
     ]);
 
-    final appointments = responses.expand((final appointments) => appointments).toList(growable: false)..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
+    final failures = results.where((final result) => result.error != null).toList(growable: false);
+    // `results` nunca está vacío: la fuente de salud siempre se intenta.
+    if (failures.length == results.length) {
+      final failure = failures.first;
+      Error.throwWithStackTrace(failure.error!, failure.stackTrace!);
+    }
 
-    return appointments;
+    // Las dos fuentes se solapan: la agenda general publica las citas de
+    // Atención Primaria como eventos con el detalle dentro del mensaje, y
+    // primaria-citas-pendientes las devuelve estructuradas. Cuando coinciden en
+    // fecha y hora se conserva la de SESCAM, que trae centro y profesional en
+    // campos propios, para no pintar la misma cita dos veces. Se filtra por
+    // `source` y no por posición: la lista varía de longitud y puede traer
+    // fuentes caídas. Con SESCAM caída no hay franjas que descartar, así que
+    // las citas de primaria que publica la agenda general sobreviven.
+    final healthAppointments = <AgendaAppointment>[
+      for (final result in results)
+        if (result.source == AgendaAppointmentSource.health) ...result.appointments,
+    ];
+    final healthSlots = healthAppointments.map((final appointment) => _appointmentSlot(appointment.dateTime)).toSet();
+    final appointments = <AgendaAppointment>[
+      ...healthAppointments,
+      for (final result in results)
+        if (result.source != AgendaAppointmentSource.health)
+          for (final appointment in result.appointments)
+            if (appointment.kind != AgendaAppointmentKind.health || !healthSlots.contains(_appointmentSlot(appointment.dateTime))) appointment,
+    ]..sort((final a, final b) => a.dateTime.compareTo(b.dateTime));
+
+    return AgendaAppointmentsSnapshot(
+      appointments: List<AgendaAppointment>.unmodifiable(appointments),
+      failedSources: Set<AgendaAppointmentSource>.unmodifiable(failures.map((final result) => result.source)),
+    );
+  }
+
+  /// Resuelve una fuente sin dejar que su fallo tumbe a las demás: el error se
+  /// devuelve como valor, con su traza, para que quien agrega decida.
+  Future<_AgendaSourceResult> _captureAppointments(
+    final AgendaAppointmentSource source,
+    final Future<List<AgendaAppointment>> Function() load,
+  ) async {
+    try {
+      return (source: source, appointments: await load(), error: null, stackTrace: null);
+    } catch (error, stackTrace) {
+      return (source: source, appointments: const <AgendaAppointment>[], error: error, stackTrace: stackTrace);
+    }
   }
 
   @override
@@ -59,7 +118,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
   Future<List<AgendaAppointment>> _loadAppointmentsFrom(
     final Future<Response<Respuesta>> Function() fetch, {
-    required final _AgendaAppointmentSource source,
+    required final AgendaAppointmentSource source,
     final bool ignoreBadRequest = false,
   }) async {
     final Object? payload;
@@ -78,7 +137,13 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       if (rawData == null) {
         rethrow;
       }
-      return _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+      // Salvage-or-rethrow: si el cuerpo del error no contiene citas parseables,
+      // el fallo se propaga — un 401/403/5xx nunca debe leerse como "sin citas".
+      final salvaged = _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+      if (salvaged.isNotEmpty) {
+        return salvaged;
+      }
+      rethrow;
     }
     if (payload == null) {
       return const [];
@@ -174,7 +239,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
   AgendaAppointment? _tryParseAppointment(
     final Map<String, dynamic> raw, {
-    required final _AgendaAppointmentSource source,
+    required final AgendaAppointmentSource source,
   }) {
     final dateTime = _extractDateTime(raw);
     if (dateTime == null) {
@@ -270,27 +335,27 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       ]),
     );
     final primaryCareDetails = _parsePrimaryCareMessage(message);
-    final isPrimaryCare = source == _AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
+    final isPrimaryCare = source == AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
 
     final description = switch (source) {
-      _AgendaAppointmentSource.health => specialty ?? 'Cita sanitaria',
-      _AgendaAppointmentSource.general when isPrimaryCare => title ?? 'Cita de Atención Primaria',
-      _AgendaAppointmentSource.general => message ?? specialty ?? title ?? 'Cita',
+      AgendaAppointmentSource.health => specialty ?? 'Cita sanitaria',
+      AgendaAppointmentSource.general when isPrimaryCare => title ?? 'Cita de Atención Primaria',
+      AgendaAppointmentSource.general => message ?? specialty ?? title ?? 'Cita',
     };
 
     return AgendaAppointment(
       dateTime: dateTime,
-      title: source == _AgendaAppointmentSource.health
+      title: source == AgendaAppointmentSource.health
           ? professional ?? specialty ?? 'Cita sanitaria'
           : isPrimaryCare
           ? primaryCareDetails?.professional ?? professional ?? title ?? 'Cita de Atención Primaria'
           : title ?? specialty ?? 'Cita',
       description: description,
       kind: switch (source) {
-        _AgendaAppointmentSource.health => AgendaAppointmentKind.health,
-        _AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
-        _AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
-        _AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
+        AgendaAppointmentSource.health => AgendaAppointmentKind.health,
+        AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
+        AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
+        AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
       },
       channel: primaryCareDetails?.channel ?? channel,
       detail: primaryCareDetails?.appointmentDetail ?? detail ?? center,
@@ -408,6 +473,16 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     return _parseDateTime('${date.trim()} $normalizedTime') ?? _parseDateTime(date);
   }
 
+  /// Clave de coincidencia entre fuentes: fecha y hora local a precisión de
+  /// minuto. Las dos fuentes expresan la misma cita con granularidades
+  /// distintas (los eventos añaden segundos; SESCAM publica `HH:mm`) y, si el
+  /// backend emitiera ISO con zona, con husos distintos — la igualdad exacta
+  /// de [DateTime] (que compara también `isUtc`) duplicaba la cita.
+  DateTime _appointmentSlot(final DateTime value) {
+    final local = value.toLocal();
+    return DateTime(local.year, local.month, local.day, local.hour, local.minute);
+  }
+
   DateTime? _parseDateTime(final String? value) {
     if (value == null) {
       return null;
@@ -419,7 +494,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
     final iso = DateTime.tryParse(trimmed);
     if (iso != null) {
-      return iso;
+      // Siempre en hora local: un ISO con `Z` u offset quedaba en UTC, se
+      // pintaba con la hora desplazada y nunca casaba en la deduplicación con
+      // la misma cita expresada en local por la otra fuente.
+      return iso.toLocal();
     }
 
     final dateTimeMatch = RegExp(r'^(\d{1,2})[/-](\d{1,2})[/-](\d{4})(?:\s+(\d{1,2}):(\d{2}))?').firstMatch(trimmed);
@@ -455,9 +533,11 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   }
 }
 
-enum _AgendaAppointmentSource {
-  health,
-  general,
-}
+typedef _AgendaSourceResult = ({
+  AgendaAppointmentSource source,
+  List<AgendaAppointment> appointments,
+  Object? error,
+  StackTrace? stackTrace,
+});
 
 typedef _PrimaryCareMessageDetails = ({String? professional, String? channel, String? appointmentDetail});

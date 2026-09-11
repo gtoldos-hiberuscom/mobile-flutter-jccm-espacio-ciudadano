@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
@@ -320,16 +321,29 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   Future<({Object? data, int? statusCode})> _rawResponse(final Future<Response<Respuesta>> Function() fetch) async {
     try {
       final response = await fetch();
-      return (
-        data: response.extra[generatedApiRawResponseDataExtraKey] ?? response.data,
-        statusCode: response.statusCode,
-      );
+      final data = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+      _throwIfAuthorizationRequired(data, statusCode: response.statusCode);
+      return (data: data, statusCode: response.statusCode);
     } on DioException catch (error) {
       final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
       if (error.response != null || rawData != null) {
+        _throwIfAuthorizationRequired(rawData, statusCode: error.response?.statusCode);
         return (data: rawData, statusCode: error.response?.statusCode);
       }
       rethrow;
+    }
+  }
+
+  /// El sobre de autorización no es "no tienes carnet".
+  ///
+  /// Sin esto, el `412.00` entraba por [_hasBusinessError] y el carnet salía
+  /// como `null`: los tres endpoints rechazados dejaban la lista vacía y la
+  /// pantalla decía "no tienes carnets digitales" a quien en realidad no tenía
+  /// la cláusula aceptada. Ahora sale como señal tipada y la resuelve
+  /// `withAuthorizationGuard`.
+  void _throwIfAuthorizationRequired(final Object? data, {final int? statusCode}) {
+    if (isAuthorizationRequiredEnvelope(data)) {
+      throw AuthorizationRequiredException(statusCode: statusCode, path: 'carnet-digital');
     }
   }
 

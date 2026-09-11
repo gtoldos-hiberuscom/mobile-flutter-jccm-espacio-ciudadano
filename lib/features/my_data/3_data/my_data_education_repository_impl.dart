@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/api/educacion_api.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/intermediacion_response.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/non_university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/university_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_education_repository.dart';
@@ -87,21 +88,9 @@ final class MyDataEducationRepositoryImpl implements MyDataEducationRepository {
     'docu': documentNumber,
   };
 
-  /// El cliente ya devuelve `null` en 404 y la carga cruda en el resto.
-  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) async {
-    try {
-      return await fetch();
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 404) {
-        return null;
-      }
-      final rawData = error.response?.data;
-      if (rawData == null) {
-        rethrow;
-      }
-      return rawData;
-    }
-  }
+  /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
+  /// resto de errores → se propagan. Ver [intermediacionRawResponse].
+  Future<Object?> _rawResponse(final Future<Object?> Function() fetch) => intermediacionRawResponse(fetch);
 
   UniversityTitle? _extractUniversityTitle(final Map<String, Object?> raw) {
     // nomcar = nombre de la carrera (ej: "Licenciado en Filología Hispánica")

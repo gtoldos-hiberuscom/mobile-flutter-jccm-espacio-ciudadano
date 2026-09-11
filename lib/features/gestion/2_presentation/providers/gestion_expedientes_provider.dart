@@ -3,6 +3,8 @@ import 'package:jccm_espacio_ciudadano/core/network/api_client_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_expediente_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/usecases/buscar_expediente_tercero_usecase.dart';
@@ -32,8 +34,15 @@ final expedientesProvider = FutureProvider.autoDispose<List<Expediente>>((final 
     throw StateError('No se ha encontrado el número de documento.');
   }
 
+  // Expedientes y registros solo exigen la cláusula obligatoria: no hay cláusula
+  // intermedia que ofrecer, así que el rechazo solo puede ser revocación (cierra
+  // sesión) o fallo transitorio (error con reintento).
   final repository = ref.watch(gestionExpedienteRepositoryProvider);
-  return repository.loadExpedientes(citizenId: citizenId, documentNumber: documentNumber);
+  return withAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId},
+    request: () => repository.loadExpedientes(citizenId: citizenId, documentNumber: documentNumber),
+  );
 });
 
 final expedienteDetailProvider = FutureProvider.autoDispose.family<Expediente, ExpedienteDetailKey>((final ref, final key) async {
@@ -45,7 +54,11 @@ final expedienteDetailProvider = FutureProvider.autoDispose.family<Expediente, E
   }
 
   final repository = ref.watch(gestionExpedienteRepositoryProvider);
-  return repository.loadExpedienteDetail(citizenId: citizenId, documentNumber: documentNumber, numexp: key.numexp, tipodoc: tercero?.tipodoc ?? 'NIF');
+  return withAuthorizationGuard(
+    ref,
+    requiredClauseIds: const {requiredConsentClauseId},
+    request: () => repository.loadExpedienteDetail(citizenId: citizenId, documentNumber: documentNumber, numexp: key.numexp, tipodoc: tercero?.tipodoc ?? 'NIF'),
+  );
 });
 
 String? _documentNumber(final JwtClaims? claims) {

@@ -66,12 +66,14 @@ final class FakeAuthRepository implements AuthRepository {
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final bool ephemeralSession = true,
   }) => throw UnimplementedError();
 
   @override
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,
+    final bool ephemeralSession = true,
   }) => throw UnimplementedError();
 }
 
@@ -221,6 +223,30 @@ void main() {
       expect(container.read(tokenResponseProvider), isNull);
       expect(storage.store[StorageKeys.accessToken], isNull);
       expect(storage.store[StorageKeys.refreshToken], isNull);
+    });
+  });
+
+  group('AuthSessionController sessionExpiresAt persistence', () {
+    test('persist with an expiry writes it as ISO-8601', () async {
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+      final expiresAt = DateTime.now().add(const Duration(minutes: 5));
+
+      await controller.persist(tokenExpiringIn(const Duration(minutes: 5)));
+
+      final stored = storage.store[StorageKeys.sessionExpiresAt];
+      expect(stored, isNotNull);
+      expect(DateTime.parse(stored!).difference(expiresAt).abs(), lessThan(const Duration(seconds: 5)));
+    });
+
+    test('persist without an expiry deletes the stale persisted instant', () async {
+      storage.store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+
+      await controller.persist(TokenResponse('new-access', 'new-refresh', null, null, null, null, null));
+
+      expect(storage.store[StorageKeys.sessionExpiresAt], isNull, reason: 'hydrateFromStorage must not resurrect an expiry the session no longer has');
     });
   });
 

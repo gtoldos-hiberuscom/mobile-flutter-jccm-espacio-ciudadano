@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.4.0"
+  analyzer_buffer:
+    dependency: transitive
+    description:
+      name: analyzer_buffer
+      sha256: aba2f75e63b3135fd1efaa8b6abefe1aa6e41b6bd9806221620fa48f98156033
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.11"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -225,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.1"
+  custom_lint_builder:
+    dependency: transitive
+    description:
+      name: custom_lint_builder
+      sha256: "1128db6f58e71d43842f3b9be7465c83f0c47f4dd8918f878dd6ad3b72a32072"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.1"
   custom_lint_core:
     dependency: transitive
     description:
@@ -392,13 +408,12 @@ packages:
   flutter_appauth:
     dependency: "direct main"
     description:
-      name: flutter_appauth
-      sha256: "93f2991422eab5c84c697c694ec2b2351447ad70c18a68ab3cb364ef6422ebe4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "12.0.0"
+      path: "packages/flutter_appauth"
+      relative: true
+    source: path
+    version: "12.0.0+jccm.1"
   flutter_appauth_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_appauth_platform_interface
       sha256: a17fe4cd6afa30b634e21922c02657e41130bceb03952a43fa469b95a758c328
@@ -566,6 +581,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "17.2.2"
+  hotreloader:
+    dependency: transitive
+    description:
+      name: hotreloader
+      sha256: "66871df468fc24eee81f1a0a7cb98acc104716f9b7376d355437b48d633c4ebf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.0"
   html:
     dependency: transitive
     description:
@@ -923,6 +946,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  riverpod_analyzer_utils:
+    dependency: transitive
+    description:
+      name: riverpod_analyzer_utils
+      sha256: a0f68adb078b790faa3c655110a017f9a7b7b079a57bbd40f540e80dce5fcd29
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-dev.7"
+  riverpod_lint:
+    dependency: "direct dev"
+    description:
+      name: riverpod_lint
+      sha256: "7ef9c43469e9b5ac4e4c3b24d7c30642e47ce1b12cd7dcdd643534db0a72ed13"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
   rxdart:
     dependency: transitive
     description:
@@ -1088,6 +1127,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  stream_transform:
+    dependency: transitive
+    description:
+      name: stream_transform
+      sha256: a00e5f18bffc764f923e7dec1038527f7fe7a1791361a7117f0358193f13d53a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
   string_scanner:
     dependency: transitive
     description:

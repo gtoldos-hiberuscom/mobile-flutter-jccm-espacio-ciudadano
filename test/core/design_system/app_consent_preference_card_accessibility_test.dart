@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_preference_cards.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
   Widget buildApp(
     final Widget child, {
     final TextScaler textScaler = TextScaler.noScaling,
   }) => MaterialApp(
+    locale: const Locale('es'),
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
     builder: (final context, final child) => MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: textScaler),
       child: child!,

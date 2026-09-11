@@ -29,6 +29,7 @@ final class Clause {
     required this.id,
     required this.label,
     required this.isSelected,
+    this.isPending = false,
     this.version = '1.0',
   });
 
@@ -40,19 +41,26 @@ final class Clause {
   /// Whether the citizen has checked this clause.
   final bool isSelected;
 
+  /// `true` while the backend has no answer recorded for this clause
+  /// (`pendiente` en el sobre): the citizen never accepted **nor** rejected it.
+  /// Distingue "contestada en falso" (revocación real) de "sin contestar"
+  /// (registro nuevo o purgado), que no prueba ninguna revocación.
+  final bool isPending;
+
   /// Version string for consent-record traceability.
   final String version;
 
-  Clause copyWith({final bool? isSelected}) => Clause(
+  Clause copyWith({final bool? isSelected, final bool? isPending}) => Clause(
     id: id,
     label: label,
     isSelected: isSelected ?? this.isSelected,
+    isPending: isPending ?? this.isPending,
     version: version,
   );
 
   @override
-  bool operator ==(final Object other) => identical(this, other) || other is Clause && id == other.id && isSelected == other.isSelected && version == other.version;
+  bool operator ==(final Object other) => identical(this, other) || other is Clause && id == other.id && isSelected == other.isSelected && isPending == other.isPending && version == other.version;
 
   @override
-  int get hashCode => Object.hash(id, isSelected, version);
+  int get hashCode => Object.hash(id, isSelected, isPending, version);
 }

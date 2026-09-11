@@ -12,9 +12,11 @@ final class SaveNotificationContactSuccess extends SaveNotificationContactResult
   final NotificationContact contact;
 }
 
+enum SaveNotificationContactFailureReason { unauthorized, invalidData, unavailable }
+
 final class SaveNotificationContactFailed extends SaveNotificationContactResult {
-  const SaveNotificationContactFailed(this.message, {this.cause});
-  final String message;
+  const SaveNotificationContactFailed(this.reason, {this.cause});
+  final SaveNotificationContactFailureReason reason;
   final Object? cause;
 }
 
@@ -36,18 +38,17 @@ final class SaveNotificationContactUsecase {
       );
       return SaveNotificationContactSuccess(savedContact);
     } on Object catch (error) {
-      return SaveNotificationContactFailed(_messageFor(error), cause: error);
+      return SaveNotificationContactFailed(_reasonFor(error), cause: error);
     }
   }
 
-  String _messageFor(final Object error) {
+  SaveNotificationContactFailureReason _reasonFor(final Object error) {
     final appError = error is DioException ? error.error : error;
     return switch (appError) {
-      UnauthorizedError() => 'No tienes permisos para guardar estos datos de contacto.',
-      NetworkError(:final statusCode) when statusCode == 400 => 'No hemos podido validar los datos introducidos.',
-      NetworkError(:final statusCode) when statusCode == 403 => 'No tienes permisos para guardar estos datos de contacto.',
-      NetworkError() => 'No hemos podido guardar los datos de contacto. Inténtalo de nuevo más tarde.',
-      _ => 'No hemos podido guardar los datos de contacto. Inténtalo de nuevo más tarde.',
+      UnauthorizedError() => SaveNotificationContactFailureReason.unauthorized,
+      NetworkError(:final statusCode) when statusCode == 400 => SaveNotificationContactFailureReason.invalidData,
+      NetworkError(:final statusCode) when statusCode == 403 => SaveNotificationContactFailureReason.unauthorized,
+      _ => SaveNotificationContactFailureReason.unavailable,
     };
   }
 }

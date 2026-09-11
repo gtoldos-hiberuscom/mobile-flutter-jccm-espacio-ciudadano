@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_registros_repository.dart';
@@ -10,6 +12,11 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   GestionRegistrosRepositoryImpl({required final Dio dio}) : _api = PublicacionApi(withGeneratedApiCompat(dio), standardSerializers);
 
   final PublicacionApi _api;
+
+  /// TEMPORAL: en UAT el listado de registros tarda más que el timeout general
+  /// de 20s (incidencia reportada a backend el 04/09/2026); se amplía a 40s
+  /// solo aquí. Retirar cuando backend responda dentro del plazo general.
+  static const _registrosTimeout = Duration(seconds: 60);
 
   @override
   Future<List<Registro>> loadEntradas({
@@ -26,6 +33,7 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
         idAgente: citizenId,
         dtselectbynifv2reqBody: request,
         extra: {
+          generatedApiTimeoutExtraKey: _registrosTimeout,
           generatedApiDecodeStringResponseExtraKey: true,
           generatedApiUnwrapBodyExtraKey: true,
           generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
@@ -47,6 +55,7 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
         idAgente: citizenId,
         dtselectbynifv2reqBody: request,
         extra: {
+          generatedApiTimeoutExtraKey: _registrosTimeout,
           generatedApiDecodeStringResponseExtraKey: true,
           generatedApiUnwrapBodyExtraKey: true,
           generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
@@ -69,17 +78,32 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
   }) async {
     try {
       final response = await fetch(request);
-      return _rawRegistros(response.extra[generatedApiRawResponseDataExtraKey]);
+      final raw = response.extra[generatedApiRawResponseDataExtraKey];
+      _throwIfAuthorizationRequired(raw, statusCode: response.statusCode);
+      return _rawRegistros(raw);
     } on DioException catch (error) {
       if (error.response?.statusCode == 404) {
         return const [];
       }
       final rawData = error.response?.data ?? error.response?.extra[generatedApiRawResponseDataExtraKey];
+      _throwIfAuthorizationRequired(rawData, statusCode: error.response?.statusCode);
       final parsed = _rawRegistros(rawData);
       if (parsed.isNotEmpty) {
         return parsed;
       }
       rethrow;
+    }
+  }
+
+  /// Traduce el sobre de autorización de la fachada a una señal tipada.
+  ///
+  /// Llega con 403, pero también dentro de un 2xx (el gateway falla cerrado),
+  /// así que se comprueba en los dos caminos y **antes** de sacar datos del
+  /// cuerpo — que aquí, además, acepta cuerpos de error como lista.
+  void _throwIfAuthorizationRequired(final Object? data, {final int? statusCode}) {
+    if (isAuthorizationRequiredEnvelope(data)) {
+      logger.w('[registros] sobre de autorización (HTTP ${statusCode ?? 200})');
+      throw AuthorizationRequiredException(statusCode: statusCode, path: 'registros');
     }
   }
 

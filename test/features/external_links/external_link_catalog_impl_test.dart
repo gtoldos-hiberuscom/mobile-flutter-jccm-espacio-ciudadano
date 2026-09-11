@@ -17,4 +17,33 @@ void main() {
       Uri.parse('https://bienestarsocial.castillalamancha.es/'),
     );
   });
+
+  test('el registro de actividades de tratamiento apunta a la ficha, no al buscador', () {
+    const catalog = ExternalLinkCatalogImpl(
+      config: AppConfig.fromMap({'APP_FLAVOR': 'preproduction'}),
+    );
+
+    expect(
+      catalog.findById('support_form_privacy_info')?.url,
+      Uri.parse('https://rat.castillalamancha.es/detalle/2309'),
+    );
+  });
+
+  test('las oficinas de Bienestar Social van filtradas, y las genéricas no', () {
+    const catalog = ExternalLinkCatalogImpl(
+      config: AppConfig.fromMap({'APP_FLAVOR': 'preproduction'}),
+    );
+
+    // Entradas distintas a propósito: la genérica la comparten Ayuda y
+    // contacto, Accesibilidad y la dirección de Vivienda, donde el filtro por
+    // consejería no tiene sentido.
+    expect(
+      catalog.findById('jccm_offices_oir_bienestar_social')?.url.queryParameters['search'],
+      'Consejería Bienestar Social',
+    );
+    expect(
+      catalog.findById('jccm_offices_oir')?.url.queryParameters,
+      isEmpty,
+    );
+  });
 }
