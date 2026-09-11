@@ -72,7 +72,7 @@ Crea una nueva tarea de soporte o incidencia en el sistema SIGUE. Permite adjunt
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getSoporteApi();
-final String idAgente = idAgente_example; // String | 
+final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
 final String datos = datos_example; // String | Campo obligatorio. JSON con los datos de la incidencia: asunto, descripcion, email, nombreApellidos (opcional). Ejemplo: {\\\"asunto\\\":\\\"Error al descargar documento\\\",\\\"descripcion\\\":\\\"Al intentar descargar el documento adjunto de mi expediente DRG-TO/2024/000123, aparece un error 500.\\\",\\\"email\\\":\\\"ciudadano@ejemplo.com\\\",\\\"nombreApellidos\\\":\\\"Juan García López\\\"}
 final MultipartFile adjunto = BINARY_DATA_HERE; // MultipartFile | Archivo adjunto opcional (imagen, PDF, etc.)
 
@@ -88,7 +88,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**|  | 
+ **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
  **datos** | **String**| Campo obligatorio. JSON con los datos de la incidencia: asunto, descripcion, email, nombreApellidos (opcional). Ejemplo: {\\\"asunto\\\":\\\"Error al descargar documento\\\",\\\"descripcion\\\":\\\"Al intentar descargar el documento adjunto de mi expediente DRG-TO/2024/000123, aparece un error 500.\\\",\\\"email\\\":\\\"ciudadano@ejemplo.com\\\",\\\"nombreApellidos\\\":\\\"Juan García López\\\"} | 
  **adjunto** | **MultipartFile**| Archivo adjunto opcional (imagen, PDF, etc.) | [optional] 
 

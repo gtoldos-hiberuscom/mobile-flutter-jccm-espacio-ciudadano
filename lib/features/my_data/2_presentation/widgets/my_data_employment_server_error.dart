@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_demand_skeleton_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_disabled_demand_card.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_offers_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -39,7 +39,7 @@ class MyDataEmploymentServerError extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space24),
         ],
-        const MyDataEmploymentDemandSkeletonCard(),
+        const MyDataEmploymentDisabledDemandCard(),
         const SizedBox(height: AppDimensions.space24),
         MyDataEmploymentDisabledOffersBlock(
           onRetry: onRetry,

@@ -21,7 +21,11 @@ void main() {
     home: Scaffold(body: child),
   );
 
-  AppDrawerMenu menu({final VoidCallback? onPrimary, final VoidCallback? onLogout}) => AppDrawerMenu(
+  AppDrawerMenu menu({
+    final VoidCallback? onPrimary,
+    final VoidCallback? onSecondary,
+    final VoidCallback? onLogout,
+  }) => AppDrawerMenu(
     userName: 'María López',
     nif: '12345678Z',
     primaryItems: [
@@ -31,10 +35,35 @@ void main() {
         onTap: onPrimary,
       ),
     ],
-    secondaryLinks: const [AppDrawerLinkItem(label: 'Ayuda y contacto')],
+    secondaryLinks: [
+      AppDrawerLinkItem(label: 'Ayuda y contacto', onTap: onSecondary),
+    ],
     onLogout: onLogout,
     actionButtonLabel: 'Ir a la Sede Electrónica',
   );
+
+  for (final height in [568.0, 844.0]) {
+    for (final bottomInset in [0.0, 34.0]) {
+      testWidgets('fija la sede a 12 dp de la zona segura: $height / $bottomInset', (final tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = Size(320, height);
+        tester.view.viewPadding = FakeViewPadding(bottom: bottomInset);
+        tester.view.padding = FakeViewPadding(bottom: bottomInset);
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(buildApp(menu(onLogout: () {})));
+        final button = find.ancestor(
+          of: find.text('Ir a la Sede Electrónica'),
+          matching: find.byType(InkWell),
+        );
+        expect(tester.getBottomRight(button).dy, height - bottomInset - 12);
+        await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -200));
+        await tester.pumpAndSettle();
+        expect(tester.getBottomRight(button).dy, height - bottomInset - 12);
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
 
   testWidgets('expone el menú como ruta semántica localizada', (final tester) async {
     await tester.pumpWidget(buildApp(menu()));
@@ -42,7 +71,7 @@ void main() {
     final route = find.semantics.byLabel('Menú de navegación').evaluate().single;
     expect(route.flagsCollection.scopesRoute, isTrue);
     expect(route.flagsCollection.namesRoute, isTrue);
-    expect(find.semantics.byLabel('Cerrar'), findsOneWidget);
+    expect(find.semantics.byLabel('Cerrar menú'), findsOneWidget);
   });
 
   testWidgets('cada opción es un único botón con su estado habilitado', (final tester) async {
@@ -63,6 +92,22 @@ void main() {
     expect(disabled.getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
   });
 
+  testWidgets('cada enlace secundario produce una sola parada de foco con nombre', (final tester) async {
+    var taps = 0;
+    await tester.pumpWidget(
+      buildApp(menu(onSecondary: () => taps++)),
+    );
+
+    final matches = find.semantics.byLabel('Ayuda y contacto').evaluate();
+    expect(matches, hasLength(1));
+    final data = matches.single.getSemanticsData();
+    expect(data.flagsCollection.isButton, isTrue);
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
+
+    await tester.tap(find.text('Ayuda y contacto'));
+    expect(taps, 1);
+  });
+
   testWidgets('localiza el saludo y el cierre de sesión en inglés', (final tester) async {
     await tester.pumpWidget(
       buildApp(menu(onLogout: () {}), locale: const Locale('en')),
@@ -70,16 +115,16 @@ void main() {
 
     expect(find.text('Hello, María López'), findsOneWidget);
     expect(find.semantics.byLabel('Sign out'), findsOneWidget);
-    expect(find.semantics.byLabel('Close'), findsOneWidget);
+    expect(find.semantics.byLabel('Close menu'), findsOneWidget);
   });
 
   testWidgets('mantiene áreas interactivas de al menos 48 dp', (final tester) async {
     await tester.pumpWidget(buildApp(menu(onPrimary: () {})));
 
-    expect(tester.getSize(find.text('Cerrar').first).height, lessThan(48));
+    expect(tester.getSize(find.text('Cerrar menú').first).height, lessThan(48));
     final closeTarget = find
         .ancestor(
-          of: find.text('Cerrar').first,
+          of: find.text('Cerrar menú').first,
           matching: find.byType(ConstrainedBox),
         )
         .first;

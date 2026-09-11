@@ -6,11 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_info_sheet.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empty_state_widget.dart';
@@ -107,20 +108,6 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
               context.go(widget.returnTo);
             }
           },
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.info_outline),
-              // Estaba con `onPressed: () {}`: el botón se pintaba y no hacía
-              // nada. Muestra la explicación de para qué sirven los hechos
-              // vitales, que ya existía como copy sin usar.
-              onPressed: () => AppInfoSheet.show(
-                context: context,
-                title: l10n.lifeEventsTitle,
-                bodyText: l10n.lifeEventsHeaderDescription,
-              ),
-              tooltip: l10n.a11yInformation,
-            ),
-          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -287,12 +274,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
 
     return SingleChildScrollView(
       // Figma node 41779:22467 — content area px:16 py:24 (top handled by IntroSection)
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        0,
-        AppDimensions.space16,
-        AppDimensions.space24,
-      ),
+      padding: appPagePadding(context, bottom: AppDimensions.space24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -353,12 +335,7 @@ class _OnboardingStickyBar extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16 + MediaQuery.of(context).padding.bottom,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16 + MediaQuery.of(context).padding.bottom),
       decoration: const BoxDecoration(
         color: AppColors.surface,
         border: Border(
@@ -409,10 +386,10 @@ class _IntroSection extends StatelessWidget {
   Widget build(final BuildContext context) {
     // Figma content area: px:16, pt:24 → TextBlocks adds px:4, py:8
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16 + AppDimensions.space4, // 20
+      padding: EdgeInsets.fromLTRB(
+        appPageHorizontalPadding(context) + AppDimensions.space4, // 20 on phone
         AppDimensions.space24 + AppDimensions.space8, // 32
-        AppDimensions.space16 + AppDimensions.space4, // 20
+        appPageHorizontalPadding(context) + AppDimensions.space4, // 20 on phone
         AppDimensions.space8,
       ),
       child: Text(
@@ -529,6 +506,7 @@ class _ResetConfirmDialog extends StatelessWidget {
       explicitChildNodes: true,
       label: l10n.lifeEventsResetConfirmTitle,
       child: AlertDialog(
+        constraints: appModalDialogConstraints(context),
         title: Semantics(
           header: true,
           headingLevel: 1,
@@ -580,6 +558,7 @@ class _DiscardChangesDialog extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return AlertDialog(
+      constraints: appModalDialogConstraints(context),
       title: Text(l10n.lifeEventsDiscardConfirmTitle),
       content: Text(l10n.lifeEventsDiscardConfirmBody),
       actions: [

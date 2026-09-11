@@ -12,6 +12,7 @@ export 'package:jccm_espacio_ciudadano/core/accessibility/accessibility_helpers.
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 export 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 // ── Widgets ───────────────────────────────────────────────────────────────────

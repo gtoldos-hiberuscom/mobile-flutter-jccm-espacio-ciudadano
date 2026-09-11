@@ -953,7 +953,7 @@ abstract class AppLocalizations {
   /// Título de la pantalla de aviso legal.
   ///
   /// In es, this message translates to:
-  /// **'Aviso legal'**
+  /// **'Aviso Legal'**
   String get legalNoticeTitle;
 
   /// Título cuando el documento legal solicitado no existe.
@@ -1117,6 +1117,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Agenda'**
   String get agendaPageTitle;
+
+  /// Agenda — encabezado del listado de citas pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pendientes'**
+  String get agendaPendingAppointmentsTitle;
 
   /// Agenda — filtro temporal: todos los eventos.
   ///
@@ -5207,7 +5213,7 @@ abstract class AppLocalizations {
   /// Accessibility — generic label and tooltip for navigating back.
   ///
   /// In es, this message translates to:
-  /// **'Volver'**
+  /// **'Atrás'**
   String get a11yBack;
 
   /// No description provided for @a11yClose.
@@ -5351,7 +5357,7 @@ abstract class AppLocalizations {
   /// Accessibility — semantic label for the institutional Castilla-La Mancha logo.
   ///
   /// In es, this message translates to:
-  /// **'Logotipo de la Junta de Comunidades de Castilla-La Mancha'**
+  /// **'Gobierno de Castilla-La Mancha'**
   String get a11yCastillaLogoLabel;
 
   /// Accessibility — announced by screen reader when a loading state starts.
@@ -5624,6 +5630,12 @@ abstract class AppLocalizations {
   /// **'Ayuda y contacto'**
   String get drawerHelpAndContact;
 
+  /// No description provided for @drawerCloseMenu.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar menú'**
+  String get drawerCloseMenu;
+
   /// Botón de acción del menú de perfil que enlaza con la Sede Electrónica.
   ///
   /// In es, this message translates to:
@@ -5803,6 +5815,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Inscripción en ofertas de empleo'**
   String get myDataEmploymentOffersPageTitle;
+
+  /// No description provided for @myDataEmploymentOffersPortalLink.
+  ///
+  /// In es, this message translates to:
+  /// **'Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha'**
+  String get myDataEmploymentOffersPortalLink;
 
   /// Texto de pie del modal informativo de la pantalla de inscripciones en ofertas.
   ///
@@ -7375,6 +7393,1674 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ya no tienes autorizada esta consulta. Cerramos la sesión para que puedas volver a concederla al entrar.'**
   String get authorizationRevokedMessage;
+
+  /// Etiqueta de la pestaña Inicio en la barra de navegación inferior.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicio'**
+  String get mainTabHome;
+
+  /// Etiqueta de la pestaña Gestión en la barra de navegación inferior.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestión'**
+  String get mainTabGestion;
+
+  /// Etiqueta de la pestaña Mis datos en la barra de navegación inferior.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos'**
+  String get mainTabMyData;
+
+  /// Etiqueta de la pestaña Agenda en la barra de navegación inferior.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get mainTabAgenda;
+
+  /// Etiqueta de la pestaña Recomendados en la barra de navegación inferior.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendados'**
+  String get mainTabRecommendations;
+
+  /// Título del AppBar de la pantalla 404.
+  ///
+  /// In es, this message translates to:
+  /// **'Página no encontrada'**
+  String get notFoundPageTitle;
+
+  /// Mensaje central de la pantalla 404.
+  ///
+  /// In es, this message translates to:
+  /// **'404 — La ruta solicitada no existe.'**
+  String get notFoundPageMessage;
+
+  /// Título del formulario de datos de contacto para notificaciones electrónicas.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto para notificaciones electrónicas'**
+  String get appNotificationContactFormTitle;
+
+  /// Etiqueta de accesibilidad de la nota de obligatoriedad del formulario de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Obligatorio: rellena al menos uno de los medios de contacto'**
+  String get appNotificationContactFormRequiredNoteSemantic;
+
+  /// Nota visible de obligatoriedad del formulario de datos de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'* Obligatorio rellenar al menos uno de los medios de contacto'**
+  String get appNotificationContactFormRequiredNote;
+
+  /// Botón principal del formulario de datos de contacto para guardar los cambios.
+  ///
+  /// In es, this message translates to:
+  /// **'Guarda cambios'**
+  String get appNotificationContactFormSaveButton;
+
+  /// Botón de edición de la tarjeta de condiciones de uso y autorizaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar'**
+  String get appPreferenceEditAction;
+
+  /// Estado desactivado de una tarjeta de preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'Desactivado'**
+  String get appPreferenceStatusDisabled;
+
+  /// Estado pendiente de una tarjeta de preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'Pendiente'**
+  String get appPreferenceStatusPending;
+
+  /// Estado activado de una tarjeta de preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'Activado'**
+  String get appPreferenceStatusEnabled;
+
+  /// Etiqueta de estado activo mostrada en la tarjeta de datos de contacto (se muestra en mayúsculas).
+  ///
+  /// In es, this message translates to:
+  /// **'Activo'**
+  String get appPreferenceStatusActive;
+
+  /// Título de la tarjeta de preferencias con los datos de contacto para notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto para notificaciones'**
+  String get appNotificationContactCardTitle;
+
+  /// Botón de edición de la tarjeta de datos de contacto para notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar datos'**
+  String get appNotificationContactCardEditAction;
+
+  /// Etiqueta de accesibilidad de la vista previa del código QR en el bottom sheet de descarga.
+  ///
+  /// In es, this message translates to:
+  /// **'Código QR'**
+  String get appQrCodeLabel;
+
+  /// Título de la sección de formatos en el bottom sheet de descarga del carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Formato de descarga'**
+  String get appQrDownloadFormatTitle;
+
+  /// Etiqueta del botón de descarga del pase (PKPASS) en Android.
+  ///
+  /// In es, this message translates to:
+  /// **'Cartera digital'**
+  String get appQrDownloadWalletLabelAndroid;
+
+  /// Etiqueta del botón de descarga del pase (PKPASS) en iOS.
+  ///
+  /// In es, this message translates to:
+  /// **'Cartera digital'**
+  String get appQrDownloadWalletLabelIos;
+
+  /// Etiqueta de accesibilidad del botón de descarga de un formato (QR, PKPASS, PDF).
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar {format}'**
+  String appQrDownloadFormatLabel(String format);
+
+  /// Etiqueta de accesibilidad mientras se descarga un formato (QR, PKPASS, PDF).
+  ///
+  /// In es, this message translates to:
+  /// **'Descargando {format}'**
+  String appQrDownloadingFormatLabel(String format);
+
+  /// Tooltip del botón de año anterior en el selector de mes y año del calendario.
+  ///
+  /// In es, this message translates to:
+  /// **'Año anterior'**
+  String get appCalendarPreviousYearTooltip;
+
+  /// Tooltip del botón de año siguiente en el selector de mes y año del calendario.
+  ///
+  /// In es, this message translates to:
+  /// **'Año siguiente'**
+  String get appCalendarNextYearTooltip;
+
+  /// Texto de sugerencia por defecto del campo de búsqueda del sistema de diseño.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar'**
+  String get appSearchFieldHint;
+
+  /// Nombre completo del día de la semana a partir de su token (monday…sunday).
+  ///
+  /// In es, this message translates to:
+  /// **'{weekday, select, monday{Lunes} tuesday{Martes} wednesday{Miércoles} thursday{Jueves} friday{Viernes} saturday{Sábado} sunday{Domingo} other{}}'**
+  String commonWeekdayName(String weekday);
+
+  /// Nombre completo del mes a partir de su token (january…december).
+  ///
+  /// In es, this message translates to:
+  /// **'{month, select, january{enero} february{febrero} march{marzo} april{abril} may{mayo} june{junio} july{julio} august{agosto} september{septiembre} october{octubre} november{noviembre} december{diciembre} other{}}'**
+  String commonMonthName(String month);
+
+  /// Nombre abreviado del mes a partir de su token (january…december).
+  ///
+  /// In es, this message translates to:
+  /// **'{month, select, january{ene} february{feb} march{mar} april{abr} may{may} june{jun} july{jul} august{ago} september{sep} october{oct} november{nov} december{dic} other{}}'**
+  String commonMonthShortName(String month);
+
+  /// Marca de última actualización con fecha y hora (mes ya localizado).
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado el {day} {month} {year} a las {time}h'**
+  String commonUpdatedAt(Object day, Object month, Object time, Object year);
+
+  /// Agenda — pestaña de filtro por número de días (7, 30, 365).
+  ///
+  /// In es, this message translates to:
+  /// **'{days} días'**
+  String agendaFilterDays(Object days);
+
+  /// Agenda — tooltip del botón de refrescar los eventos.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar agenda'**
+  String get agendaRefreshTooltip;
+
+  /// Agenda — estado vacío del listado de citas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay citas para el periodo seleccionado.'**
+  String get agendaEmptyAppointments;
+
+  /// Agenda — canal de cita sanitaria deducido: telefónica.
+  ///
+  /// In es, this message translates to:
+  /// **'telefónica'**
+  String get agendaChannelPhone;
+
+  /// Agenda — canal de cita sanitaria deducido: presencial.
+  ///
+  /// In es, this message translates to:
+  /// **'presencial'**
+  String get agendaChannelInPerson;
+
+  /// Preferencias — cuerpo del bottom sheet informativo de la pantalla.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona tus autorizaciones y avisos.'**
+  String get preferencesInfoSheetBody;
+
+  /// Preferencias — descripción de la tarjeta de hechos vitales cuando la autorización está inactiva.
+  ///
+  /// In es, this message translates to:
+  /// **'Para seleccionar tus hechos vitales y poder recibir recomendaciones primero debes aceptar el uso de estos datos en Condiciones de uso y autorizaciones.'**
+  String get preferencesLifeEventsInactiveDescription;
+
+  /// Preferencias — descripción de la tarjeta de hechos vitales cuando no hay selección.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no has seleccionado las temáticas de las que quieras recibir actualizaciones dentro de tu sección de recomendaciones'**
+  String get preferencesLifeEventsPendingDescription;
+
+  /// Preferencias — descripción de la tarjeta de hechos vitales con selección activa.
+  ///
+  /// In es, this message translates to:
+  /// **'Tienes hechos vitales seleccionados para recibir recomendaciones personalizadas.'**
+  String get preferencesLifeEventsActiveDescription;
+
+  /// Preferencias — acción de seleccionar hechos vitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar'**
+  String get preferencesSelectAction;
+
+  /// Preferencias — título de la tarjeta de datos de contacto para notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto para notificaciones'**
+  String get preferencesNotificationContactTitle;
+
+  /// Preferencias — descripción de la tarjeta de datos de contacto cuando está inactiva.
+  ///
+  /// In es, this message translates to:
+  /// **'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.'**
+  String get preferencesNotificationContactInactiveDescription;
+
+  /// Preferencias — descripción de la tarjeta de datos de contacto cuando está pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona el medio de aviso para recibir notificaciones electrónicas.'**
+  String get preferencesNotificationContactPendingDescription;
+
+  /// Preferencias — descripción de la tarjeta de datos de contacto cuando está configurada.
+  ///
+  /// In es, this message translates to:
+  /// **'Tienes configurado al menos un medio de aviso para recibir notificaciones electrónicas.'**
+  String get preferencesNotificationContactActiveDescription;
+
+  /// Preferencias — acción de gestionar los datos de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestionar'**
+  String get preferencesManageAction;
+
+  /// Preferencias — título del diálogo de confirmación para borrar preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'Revocación de permisos'**
+  String get preferencesRevokeDialogTitle;
+
+  /// Preferencias — descripción del diálogo de confirmación para borrar preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\nAl hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.'**
+  String get preferencesRevokeDialogDescription;
+
+  /// Preferencias — botón de confirmación del diálogo de revocación de permisos.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar'**
+  String get preferencesRevokeDialogConfirm;
+
+  /// Preferencias — error cuando falta el identificador del usuario al borrar preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha encontrado el identificador del usuario.'**
+  String get preferencesMissingUserIdError;
+
+  /// Preferencias — error al borrar las autorizaciones almacenadas.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido borrar tus autorizaciones. Inténtalo de nuevo.'**
+  String get preferencesResetAuthorizationsError;
+
+  /// Preferencias — título de la pantalla de edición de datos de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar datos de contacto'**
+  String get preferencesNotificationContactEditTitle;
+
+  /// Datos de contacto de notificaciones — error cuando no se puede obtener el DNI.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido obtener el DNI del ciudadano.'**
+  String get gestionNotificacionesAltaErrorNoDni;
+
+  /// Educación — etiqueta con el número del título universitario.
+  ///
+  /// In es, this message translates to:
+  /// **'Nº TÍTULO: {number}'**
+  String myDataEducationTitleNumberLabel(Object number);
+
+  /// Educación — etiqueta de la fecha de expedición del título.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA EXPEDICIÓN'**
+  String get myDataEducationExpeditionDateLabel;
+
+  /// Educación — etiqueta de la fecha de finalización de los estudios.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA FINALIZACIÓN'**
+  String get myDataEducationCompletionDateLabel;
+
+  /// Educación — etiqueta de la provincia del título no universitario.
+  ///
+  /// In es, this message translates to:
+  /// **'PROVINCIA'**
+  String get myDataEducationProvinceLabel;
+
+  /// Educación — referencia de libro del título no universitario.
+  ///
+  /// In es, this message translates to:
+  /// **'LIBRO: {value}'**
+  String myDataEducationBookLabel(Object value);
+
+  /// Educación — referencia de orden del título no universitario.
+  ///
+  /// In es, this message translates to:
+  /// **'ORDEN: {value}'**
+  String myDataEducationOrderLabel(Object value);
+
+  /// Educación — referencia de folio del título no universitario.
+  ///
+  /// In es, this message translates to:
+  /// **'FOLIO: {value}'**
+  String myDataEducationFolioLabel(Object value);
+
+  /// Salud — tooltip del buscador de citas con filtros activos.
+  ///
+  /// In es, this message translates to:
+  /// **'Criterios de búsqueda activos: {count}'**
+  String myDataHealthActiveFiltersTooltip(Object count);
+
+  /// Salud — tooltip del buscador de citas sin filtros activos.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar citas'**
+  String get myDataHealthSearchAppointmentsTooltip;
+
+  /// Salud — título del panel de filtros de citas de atención primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar citas de primaria'**
+  String get myDataHealthFilterPrimaryCareTitle;
+
+  /// Salud — título del panel de filtros de citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar citas hospitalarias'**
+  String get myDataHealthFilterHospitalTitle;
+
+  /// Salud — etiqueta del filtro por rango de fechas de la cita.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de la cita'**
+  String get myDataHealthFilterDateLabel;
+
+  /// Recomendaciones — título de la pantalla de filtros por hecho vital.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar recomendaciones por hecho'**
+  String get recommendationsFilterPageTitle;
+
+  /// Recomendaciones — aviso informativo de la pantalla de filtros por hecho vital.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona los hechos vitales que quieras usar para filtrar tus recomendaciones.'**
+  String get recommendationsFilterInfoMessage;
+
+  /// Recomendaciones — texto introductorio de la pantalla de filtros por hecho vital.
+  ///
+  /// In es, this message translates to:
+  /// **'Puede filtrar las recomendaciones según los hechos vitales que haya configurado en sus preferencias, para recibir información personalizada y ajustada a su situación.'**
+  String get recommendationsFilterIntro;
+
+  /// Recomendaciones — botón que abre el filtro por hechos vitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar por hechos vitales'**
+  String get recommendationsFilterByLifeEvents;
+
+  /// Recomendaciones — aviso para personalizar los hechos vitales desde Preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'Personaliza tus recomendaciones editando tus hechos vitales en Preferencias siempre que quieras.'**
+  String get recommendationsPreferencesHint;
+
+  /// Recomendaciones — aviso cuando no hay recomendaciones que coincidan con las preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualmente no hay recomendaciones disponibles que se ajusten a tus preferencias. Ajusta tus hechos vitales para explorar más opciones o espera a nuevas actualizaciones.'**
+  String get recommendationsEmptyNoMatches;
+
+  /// Recomendaciones — botón para editar los hechos vitales desde el estado vacío.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar preferencias - hechos vitales'**
+  String get recommendationsEditLifeEventsCta;
+
+  /// Recomendaciones — aviso cuando el filtro aplicado no devuelve resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay recomendaciones para el filtro realizado.'**
+  String get recommendationsEmptyFiltered;
+
+  /// Recomendaciones — botón para restablecer el filtro por hechos vitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Resetear filtro'**
+  String get recommendationsResetFilterCta;
+
+  /// Recomendaciones — plazo de presentación con solo fecha de inicio.
+  ///
+  /// In es, this message translates to:
+  /// **'desde {date}'**
+  String recommendationsDeadlineFrom(Object date);
+
+  /// Recomendaciones — plazo de presentación con solo fecha de fin.
+  ///
+  /// In es, this message translates to:
+  /// **'hasta {date}'**
+  String recommendationsDeadlineUntil(Object date);
+
+  /// Carnets digitales — error al comprobar la autorización necesaria.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.'**
+  String get digitalCardsAuthorizationCheckErrorMessage;
+
+  /// No description provided for @digitalCardsInfoSheetContactHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.'**
+  String get digitalCardsInfoSheetContactHint;
+
+  /// No description provided for @digitalCardsInfoSheetContactButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Contactar'**
+  String get digitalCardsInfoSheetContactButton;
+
+  /// Carnets digitales — título del bottom sheet informativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Sobre Mis Carnets Digitales'**
+  String get digitalCardsInfoSheetTitle;
+
+  /// Carnets digitales — cuerpo del bottom sheet informativo.
+  ///
+  /// In es, this message translates to:
+  /// **'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.'**
+  String get digitalCardsInfoSheetBody;
+
+  /// Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM.
+  ///
+  /// In es, this message translates to:
+  /// **'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.'**
+  String get digitalCardsAuthorizationRequiredMessage;
+
+  /// Carnets digitales — título del diálogo del sistema para guardar el archivo (QR, PKPASS, PDF).
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar {format}'**
+  String digitalCardsSaveDialogTitle(Object format);
+
+  /// Carnets digitales — aviso tras guardar la descarga correctamente.
+  ///
+  /// In es, this message translates to:
+  /// **'{format} guardado correctamente.'**
+  String digitalCardsDownloadSuccess(Object format);
+
+  /// Carnets digitales — error al descargar el archivo del carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido descargar {format}.'**
+  String digitalCardsDownloadError(Object format);
+
+  /// Menú de perfil — nombre por defecto cuando no hay datos del usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Ciudadano/a'**
+  String get drawerDefaultUserName;
+
+  /// Menú de perfil — etiqueta genérica del documento cuando no es DNI/NIE/NIF.
+  ///
+  /// In es, this message translates to:
+  /// **'Identificador'**
+  String get drawerIdentifierFallbackLabel;
+
+  /// Error al recargar el detalle tras aceptar la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Has aceptado la notificación, pero no hemos podido cargar el detalle actualizado.'**
+  String get gestionNotificacionDetalleAcceptedReloadError;
+
+  /// Título del diálogo de confirmación antes de aceptar una notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmación de aceptación de notificación'**
+  String get gestionNotificacionDetalleConfirmTitle;
+
+  /// Cuerpo del diálogo de confirmación antes de aceptar una notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro que quieres aceptar la notificación?'**
+  String get gestionNotificacionDetalleConfirmDescription;
+
+  /// Botón de cancelar del diálogo de confirmación de aceptación.
+  ///
+  /// In es, this message translates to:
+  /// **'No'**
+  String get gestionNotificacionDetalleConfirmCancel;
+
+  /// Botón de confirmar del diálogo de aceptación de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Sí, estoy seguro'**
+  String get gestionNotificacionDetalleConfirmAccept;
+
+  /// Error al fallar la aceptación de la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido aceptar la notificación. Inténtalo de nuevo.'**
+  String get gestionNotificacionDetalleAcceptError;
+
+  /// Aviso de éxito tras descargar un documento de la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento descargado.'**
+  String get gestionNotificacionDetalleDocumentoDescargado;
+
+  /// Error al fallar la descarga de un documento de la notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido descargar el documento. Inténtalo de nuevo.'**
+  String get gestionNotificacionDetalleDocumentoDescargaError;
+
+  /// Título de sección de datos del expediente en el detalle de notificación pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos del expediente'**
+  String get gestionNotificacionDetalleDatosExpedienteTitle;
+
+  /// Etiqueta del organismo emisor en el detalle de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Organismo emisor'**
+  String get gestionNotificacionDetalleOrganismoEmisorLabel;
+
+  /// Etiqueta del número de expediente en el detalle de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Nº Expediente'**
+  String get gestionNotificacionDetalleNumExpedienteLabel;
+
+  /// Título de la sección de estado en el detalle de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado notificación'**
+  String get gestionNotificacionDetalleEstadoTitle;
+
+  /// Etiqueta de la fecha de puesta a disposición en el detalle de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de puesta a disposición'**
+  String get gestionNotificacionDetalleFechaPuestaDisposicionLabel;
+
+  /// Etiqueta de fecha de expiración: detalle de notificación y filtro del listado.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de expiración'**
+  String get gestionNotificacionesFechaExpiracionLabel;
+
+  /// Etiqueta de la fecha de lectura en el detalle de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de lectura'**
+  String get gestionNotificacionDetalleFechaLecturaLabel;
+
+  /// Título de la sección de documentos en el detalle de notificación.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentos'**
+  String get gestionNotificacionDetalleDocumentosTitle;
+
+  /// Botón principal para aceptar una notificación pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptar notificación'**
+  String get gestionNotificacionDetalleAceptarButton;
+
+  /// Tooltip del botón de búsqueda en el listado de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar notificaciones'**
+  String get gestionNotificacionesBuscarTooltip;
+
+  /// Tooltip del botón de ajustes en el listado de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Configurar notificaciones'**
+  String get gestionNotificacionesConfigurarTooltip;
+
+  /// Título del panel de filtros del listado de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar notificaciones'**
+  String get gestionNotificacionesFiltrarTitle;
+
+  /// Etiqueta del filtro por descripción en el listado de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción de la notificación'**
+  String get gestionNotificacionesFiltroDescripcionLabel;
+
+  /// Tooltip de la flecha que vuelve a los filtros principales de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar filtros anteriores'**
+  String get gestionNotificacionesFiltrosAnterioresTooltip;
+
+  /// Tooltip del botón de búsqueda en la pestaña de entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar entradas de registro'**
+  String get gestionRegistrosBuscarEntradasTooltip;
+
+  /// Tooltip del botón de búsqueda en la pestaña de salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar salidas de registro'**
+  String get gestionRegistrosBuscarSalidasTooltip;
+
+  /// Título del panel de filtros de entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar entradas de registro'**
+  String get gestionRegistrosFiltrarEntradasTitle;
+
+  /// Título del panel de filtros de salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar salidas de registro'**
+  String get gestionRegistrosFiltrarSalidasTitle;
+
+  /// Etiqueta del filtro por descripción de la entrada de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción de la entrada'**
+  String get gestionRegistrosFiltroDescripcionEntradaLabel;
+
+  /// Etiqueta del filtro por descripción de la salida de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción de la salida'**
+  String get gestionRegistrosFiltroDescripcionSalidaLabel;
+
+  /// Etiqueta del filtro por fecha de entrada de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de entrada'**
+  String get gestionRegistrosFiltroFechaEntradaLabel;
+
+  /// Etiqueta del filtro por fecha de salida de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de salida'**
+  String get gestionRegistrosFiltroFechaSalidaLabel;
+
+  /// Tooltip del botón de búsqueda de expedientes con filtros activos. Placeholder {count}: número de filtros activos (int).
+  ///
+  /// In es, this message translates to:
+  /// **'Criterios de búsqueda activos: {count}'**
+  String gestionExpedientesFiltrosActivosTooltip(Object count);
+
+  /// Tooltip del botón de búsqueda en el listado de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar expedientes'**
+  String get gestionExpedientesBuscarTooltip;
+
+  /// Título del panel de filtros del listado de expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtrar expedientes'**
+  String get gestionExpedientesFiltrarTitle;
+
+  /// Etiqueta del filtro por descripción del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción del expediente'**
+  String get gestionExpedientesFiltroDescripcionLabel;
+
+  /// Etiqueta del filtro por fecha de cierre del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de cierre'**
+  String get gestionExpedientesFiltroFechaCierreLabel;
+
+  /// Placeholder genérico de los filtros por número en Gestión.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce el número'**
+  String get gestionFiltroNumeroHint;
+
+  /// Placeholder genérico de los filtros por descripción en Gestión.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce palabras de la descripción'**
+  String get gestionFiltroDescripcionHint;
+
+  /// Tooltip del botón de información (i) en las pantallas de Gestión.
+  ///
+  /// In es, this message translates to:
+  /// **'Más información'**
+  String get gestionMasInformacionTooltip;
+
+  /// Placeholder del número de documento cuando el tipo es Pasaporte.
+  ///
+  /// In es, this message translates to:
+  /// **'N.º de pasaporte'**
+  String get gestionAportacionPasaporteHint;
+
+  /// Placeholder del número de documento cuando el tipo es CEE.
+  ///
+  /// In es, this message translates to:
+  /// **'N.º de CEE'**
+  String get gestionAportacionCeeHint;
+
+  /// Home — título de la sección Mis novedades.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis novedades'**
+  String get homeNewsSectionTitle;
+
+  /// Home — título de la sección de accesos rápidos a Mis datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesos “Mis datos”'**
+  String get homeMyDataAccessesTitle;
+
+  /// Home — etiqueta de la tarjeta de notificaciones en Mis novedades.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get homeNewsNotificationsTitle;
+
+  /// Home — descripción de la tarjeta de notificaciones en Mis novedades.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus notificaciones pendientes'**
+  String get homeNewsNotificationsDescription;
+
+  /// Home — etiqueta de la tarjeta de próximas citas en Mis novedades.
+  ///
+  /// In es, this message translates to:
+  /// **'Próximas citas'**
+  String get homeNewsAppointmentsTitle;
+
+  /// Home — descripción de la tarjeta de próximas citas en Mis novedades.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus próximas citas y eventos'**
+  String get homeNewsAppointmentsDescription;
+
+  /// Home — etiqueta de tarjeta de Mis novedades con contador de elementos.
+  ///
+  /// In es, this message translates to:
+  /// **'{label} ({count})'**
+  String homeNewsLabelWithCount(String label, int count);
+
+  /// Home — título de la sección de trámites recomendados.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites recomendados'**
+  String get homeRecommendedProceduresTitle;
+
+  /// Home — botón que navega a la pantalla de recomendaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Ir a recomendaciones'**
+  String get homeGoToRecommendationsButton;
+
+  /// Home — etiqueta del botón flotante de carnets digitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnets'**
+  String get homeCardsFabLabel;
+
+  /// Home — acción del FAB de carnets que abre el catálogo completo.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar todos'**
+  String get homeCardsFabShowAll;
+
+  /// Home — etiqueta de accesibilidad del FAB de carnets cuando está contraído.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar carnés digitales'**
+  String get homeCardsFabExpandSemantics;
+
+  /// Home — etiqueta de accesibilidad del FAB de carnets cuando está expandido.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar accesos a carnés digitales'**
+  String get homeCardsFabCollapseSemantics;
+
+  /// Home — aviso mostrado mientras se cargan los carnets digitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Estamos consultando tus carnets digitales.'**
+  String get homeCardsFabLoadingMessage;
+
+  /// Home — error mostrado cuando falla la carga de los carnets digitales.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido consultar tus carnets digitales.'**
+  String get homeCardsFabLoadFailedMessage;
+
+  /// Home — aviso mostrado cuando el usuario no tiene carnets digitales.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes carnés digitales disponibles.'**
+  String get homeCardsFabEmptyMessage;
+
+  /// Home — plazo de un trámite recomendado con solo fecha de inicio.
+  ///
+  /// In es, this message translates to:
+  /// **'desde {date}'**
+  String homeRecommendationDeadlineFrom(String date);
+
+  /// Home — plazo de un trámite recomendado con solo fecha de fin.
+  ///
+  /// In es, this message translates to:
+  /// **'hasta {date}'**
+  String homeRecommendationDeadlineUntil(String date);
+
+  /// Título del AppBar de la pantalla de ayuda y contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Ayuda y contacto'**
+  String get helpContactPageTitle;
+
+  /// Ayuda y contacto — encabezado y tarjeta de las guías de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Guías de ayuda'**
+  String get helpContactGuidesTitle;
+
+  /// Ayuda y contacto — introducción a las guías de ayuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda'**
+  String get helpContactGuidesIntro;
+
+  /// Ayuda y contacto — subtítulo de las tarjetas que enlazan al portal web JCCM.
+  ///
+  /// In es, this message translates to:
+  /// **'Ir al portal web JCCM'**
+  String get helpContactGoToJccmPortal;
+
+  /// Ayuda y contacto — encabezado de la pestaña de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Información de contacto'**
+  String get helpContactInfoHeading;
+
+  /// Ayuda y contacto — introducción a los teléfonos de atención ciudadana.
+  ///
+  /// In es, this message translates to:
+  /// **'Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.'**
+  String get helpContactPhonesIntro;
+
+  /// Ayuda y contacto — primer fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro).
+  ///
+  /// In es, this message translates to:
+  /// **'consultas generales e información administrativa'**
+  String get helpContactPhonesIntroBold1;
+
+  /// Ayuda y contacto — segundo fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro).
+  ///
+  /// In es, this message translates to:
+  /// **'teléfonos de atención ciudadana'**
+  String get helpContactPhonesIntroBold2;
+
+  /// Ayuda y contacto — subtítulo de las tarjetas de teléfono de atención ciudadana.
+  ///
+  /// In es, this message translates to:
+  /// **'Llamar a Atención a la Ciudadanía'**
+  String get helpContactCallCitizenService;
+
+  /// Ayuda y contacto — introducción al contacto sobre expedientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.'**
+  String get helpContactExpedienteIntro;
+
+  /// Ayuda y contacto — fragmento en negrita de la introducción sobre expedientes (debe ser subcadena exacta de helpContactExpedienteIntro).
+  ///
+  /// In es, this message translates to:
+  /// **'conocer más detalles sobre un expediente'**
+  String get helpContactExpedienteIntroBold;
+
+  /// Ayuda y contacto — tarjeta que enlaza al listado de oficinas de información y registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Listado de Oficina de Información y registro'**
+  String get helpContactOfficesListTitle;
+
+  /// Ayuda y contacto — introducción al formulario de soporte técnico.
+  ///
+  /// In es, this message translates to:
+  /// **'Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.'**
+  String get helpContactSupportIntro;
+
+  /// Ayuda y contacto — fragmento en negrita de la introducción al soporte (debe ser subcadena exacta de helpContactSupportIntro).
+  ///
+  /// In es, this message translates to:
+  /// **'asistencia técnica'**
+  String get helpContactSupportIntroBold;
+
+  /// Ayuda y contacto — botón que abre el formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Formulario de Soporte'**
+  String get helpContactSupportFormButton;
+
+  /// FAQ — pregunta sobre qué es el Espacio Ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué es y qué podré encontrar en el Espacio ciudadano?'**
+  String get faqQuestion1;
+
+  /// FAQ — respuesta sobre qué es el Espacio Ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'Espacio Ciudadano reúne en un único lugar información y servicios de la Junta de Comunidades de Castilla-La Mancha. Podrás consultar tus datos, expedientes, notificaciones, citas y otros servicios disponibles.'**
+  String get faqAnswer1;
+
+  /// FAQ — pregunta sobre los requisitos de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué necesito para acceder?'**
+  String get faqQuestion2;
+
+  /// FAQ — respuesta sobre los requisitos de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico.'**
+  String get faqAnswer2;
+
+  /// FAQ — pregunta sobre los datos personales almacenados.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué datos personales se almacenan en Espacio Ciudadano?'**
+  String get faqQuestion3;
+
+  /// FAQ — respuesta sobre los datos personales almacenados.
+  ///
+  /// In es, this message translates to:
+  /// **'Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.'**
+  String get faqAnswer3;
+
+  /// FAQ — pregunta sobre la corrección de datos erróneos.
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos mostrados contienen algún error, ¿puedo corregirlo?'**
+  String get faqQuestion4;
+
+  /// FAQ — respuesta sobre la corrección de datos erróneos.
+  ///
+  /// In es, this message translates to:
+  /// **'Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.'**
+  String get faqAnswer4;
+
+  /// FAQ — pregunta sobre los eventos de Mi Agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué eventos se muestran en Mi Agenda?'**
+  String get faqQuestion5;
+
+  /// FAQ — respuesta sobre los eventos de Mi Agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.'**
+  String get faqAnswer5;
+
+  /// Título del AppBar del formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'Formulario soporte'**
+  String get supportFormPageTitle;
+
+  /// Formulario de soporte — botón cancelar.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get supportCancelButton;
+
+  /// Formulario de soporte — botón aceptar/enviar.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptar'**
+  String get supportAcceptButton;
+
+  /// Formulario de soporte — nota sobre los campos obligatorios.
+  ///
+  /// In es, this message translates to:
+  /// **'Los campos marcados con un (*) son obligatorios'**
+  String get supportRequiredFieldsNote;
+
+  /// Formulario de soporte — etiqueta del campo de nombre y apellidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre y apellidos'**
+  String get supportFieldFullName;
+
+  /// Formulario de soporte — hint del campo de nombre y apellidos.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo: María Pérez'**
+  String get supportFieldFullNameHint;
+
+  /// Formulario de soporte — hint de los campos de correo electrónico.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo: maríapérez@correo.es'**
+  String get supportFieldEmailHint;
+
+  /// Formulario de soporte — etiqueta del campo de confirmación de correo.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma tu correo electrónico'**
+  String get supportFieldConfirmEmail;
+
+  /// Formulario de soporte — hint del campo de asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Ejemplo: Consulta sobre una notificación'**
+  String get supportFieldSubjectHint;
+
+  /// Formulario de soporte — texto de ayuda bajo el campo de asunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Motivo de consulta. Límite de 1000 caracteres'**
+  String get supportFieldSubjectHelper;
+
+  /// Formulario de soporte — etiqueta del campo de mensaje.
+  ///
+  /// In es, this message translates to:
+  /// **'Mensaje'**
+  String get supportFieldMessage;
+
+  /// Formulario de soporte — etiqueta de la sección de adjuntos.
+  ///
+  /// In es, this message translates to:
+  /// **'ADJUNTAR DOCUMENTOS DE EVIDENCIA'**
+  String get supportAttachmentSectionLabel;
+
+  /// Formulario de soporte — hint de la sección de adjuntos.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes subir un único archivo o imagen de máx. 20MB en GIF, JPEG, JPG, PNG, TXT, PDF, DOC, DOCX para ayudar a identificar el problema.'**
+  String get supportAttachmentUploadHint;
+
+  /// Formulario de soporte — botón para seleccionar el documento adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar documentos'**
+  String get supportAttachmentPickDocuments;
+
+  /// Formulario de soporte — botón para cambiar el documento adjunto.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar documento'**
+  String get supportAttachmentChangeDocument;
+
+  /// Formulario de soporte — texto del checkbox de consentimiento de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Autorizo el uso y gestión de mis datos'**
+  String get supportConsentDataUseLabel;
+
+  /// Formulario de soporte — texto que precede al enlace de información de privacidad.
+  ///
+  /// In es, this message translates to:
+  /// **'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en'**
+  String get supportPrivacyInfoDescription;
+
+  /// Formulario de soporte — error cuando el asunto supera los 1000 caracteres.
+  ///
+  /// In es, this message translates to:
+  /// **'El asunto no puede superar los 1000 caracteres.'**
+  String get supportErrorSubjectOverLimit;
+
+  /// Formulario de soporte — error cuando el adjunto supera el tamaño máximo.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo excede el tamaño máximo permitido.'**
+  String get supportErrorAttachmentTooLarge;
+
+  /// Formulario de soporte — error cuando el adjunto no se puede leer.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido leer el archivo seleccionado.'**
+  String get supportErrorAttachmentUnreadable;
+
+  /// Landing — eslogan del contenido estático de la pantalla pública.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu información pública en un solo lugar'**
+  String get landingContentTagline;
+
+  /// Landing — título de la funcionalidad de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get landingFeatureNotificationsTitle;
+
+  /// Landing — descripción de la funcionalidad de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Recibe alertas y avisos de la administración directamente en tu dispositivo.'**
+  String get landingFeatureNotificationsDescription;
+
+  /// Landing — título de la funcionalidad de sanidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Sanidad'**
+  String get landingFeatureHealthTitle;
+
+  /// Landing — descripción de la funcionalidad de sanidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tu historial médico, citas y tarjeta sanitaria.'**
+  String get landingFeatureHealthDescription;
+
+  /// Landing — título de la funcionalidad de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Empleo'**
+  String get landingFeatureEmploymentTitle;
+
+  /// Landing — descripción de la funcionalidad de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona tu situación laboral y accede a ofertas de empleo público.'**
+  String get landingFeatureEmploymentDescription;
+
+  /// Landing — título de la funcionalidad de trámites.
+  ///
+  /// In es, this message translates to:
+  /// **'Trámites'**
+  String get landingFeatureProceduresTitle;
+
+  /// Landing — descripción de la funcionalidad de trámites.
+  ///
+  /// In es, this message translates to:
+  /// **'Realiza gestiones administrativas sin desplazarte.'**
+  String get landingFeatureProceduresDescription;
+
+  /// Landing — título de la funcionalidad de carnets digitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnets Digitales'**
+  String get landingFeatureDigitalCardsTitle;
+
+  /// Landing — descripción de la funcionalidad de carnets digitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Accede a tus carnets y documentos oficiales en formato digital.'**
+  String get landingFeatureDigitalCardsDescription;
+
+  /// Landing — título de la funcionalidad de catastro.
+  ///
+  /// In es, this message translates to:
+  /// **'Catastro'**
+  String get landingFeatureCadastreTitle;
+
+  /// Landing — descripción de la funcionalidad de catastro.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta datos catastrales de tus inmuebles.'**
+  String get landingFeatureCadastreDescription;
+
+  /// Landing — título del paso 1 de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Pulsa \"Acceder\"'**
+  String get landingAccessStep1Title;
+
+  /// Landing — descripción del paso 1 de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Toca el botón para iniciar el proceso de autenticación segura.'**
+  String get landingAccessStep1Description;
+
+  /// Landing — título del paso 2 de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Autentícate con Cl@ve'**
+  String get landingAccessStep2Title;
+
+  /// Landing — descripción del paso 2 de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Usa Cl@ve PIN o Cl@ve Permanente para identificarte de forma segura.'**
+  String get landingAccessStep2Description;
+
+  /// Landing — título del paso 3 de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Accede a toda tu información'**
+  String get landingAccessStep3Title;
+
+  /// Landing — descripción del paso 3 de acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta y gestiona tu información pública desde un único lugar.'**
+  String get landingAccessStep3Description;
+
+  /// Páginas legales — tooltip del botón para abrir la búsqueda en la barra superior.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar'**
+  String get legalSearchTooltip;
+
+  /// Páginas legales — tooltip del botón para cerrar la búsqueda en la barra superior.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar búsqueda'**
+  String get legalSearchCloseTooltip;
+
+  /// Protección de datos — título de la sección del responsable del tratamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Quién es el responsable del tratamiento?'**
+  String get privacyResponsibleTitle;
+
+  /// Protección de datos — párrafo introductorio del responsable del tratamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
+  String get privacyResponsibleIntro;
+
+  /// Protección de datos — elemento de la lista de servicios del responsable.
+  ///
+  /// In es, this message translates to:
+  /// **'Sección de perfil usuario'**
+  String get privacyResponsibleItemProfile;
+
+  /// Protección de datos — elemento de la lista de servicios del responsable.
+  ///
+  /// In es, this message translates to:
+  /// **'Visualizaciones de los datos seleccionados de la Administración regional y de la Otras temas de interés'**
+  String get privacyResponsibleItemVisualizations;
+
+  /// Protección de datos — elemento de la lista de servicios del responsable.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendaciones realizadas en base a los hechos vitales marcados.'**
+  String get privacyResponsibleItemRecommendations;
+
+  /// Protección de datos — elemento de la lista de servicios del responsable.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargas de los carnés seleccionados'**
+  String get privacyResponsibleItemDownloads;
+
+  /// Protección de datos — párrafo sobre los órganos responsables de cada opción.
+  ///
+  /// In es, this message translates to:
+  /// **'Una vez se seleccione cada una de las opciones proporcionadas por espacio ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.'**
+  String get privacyResponsibleOrgParagraph;
+
+  /// Protección de datos — introducción de los datos de contacto del responsable.
+  ///
+  /// In es, this message translates to:
+  /// **'Los datos de contacto de este responsable son los siguientes:'**
+  String get privacyResponsibleContactIntro;
+
+  /// Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea).
+  ///
+  /// In es, this message translates to:
+  /// **'Dirección Postal:\n'**
+  String get privacyResponsibleContactAddressLabel;
+
+  /// Protección de datos — bloque con la dirección postal y el correo del responsable.
+  ///
+  /// In es, this message translates to:
+  /// **'Agencia de Transformación Digital\nEdificio CEMAR, Plaza de Grecia, 1, 45071 Toledo\nDirección de correo electrónico:\ndirecciongerenciaatd@jccm.es'**
+  String get privacyResponsibleContactAddressValue;
+
+  /// Protección de datos — título de la sección de finalidad del tratamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cuál es la denominación y finalidad del tratamiento?'**
+  String get privacyPurposeTitle;
+
+  /// Protección de datos — párrafo introductorio de las finalidades del tratamiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Las finalidades de los tratamientos con los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:'**
+  String get privacyPurposeIntro;
+
+  /// Protección de datos — elemento de la lista de finalidades.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestionar los datos identificativos del ciudadano'**
+  String get privacyPurposeItemIdentity;
+
+  /// Protección de datos — elemento de la lista de finalidades.
+  ///
+  /// In es, this message translates to:
+  /// **'Visualizar los datos seleccionados de la Administración regional y de la Otras temas de interés'**
+  String get privacyPurposeItemVisualizations;
+
+  /// Protección de datos — título de la sección sobre reclamaciones ante la AEPD.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Puedo reclamar ante la Agencia Española de Protección de Datos?'**
+  String get privacyAepdTitle;
+
+  /// Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio).
+  ///
+  /// In es, this message translates to:
+  /// **'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano, puede presentar una reclamación ante la Agencia Española de Protección de Datos, '**
+  String get privacyAepdTextBeforeLink;
+
+  /// Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto).
+  ///
+  /// In es, this message translates to:
+  /// **'. También puede reclamar ante la delegada de protección de datos cuyos datos de contacto están en esta información.'**
+  String get privacyAepdTextAfterLink;
+
+  /// Protección de datos — título de la sección de medidas de seguridad.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué medidas de seguridad se encuentran implantadas?'**
+  String get privacySecurityTitle;
+
+  /// Protección de datos — párrafo sobre las medidas de seguridad implantadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.'**
+  String get privacySecurityText;
+
+  /// Protección de datos — título de la sección de decisiones automatizadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Decisiones automatizadas incluida la elaboración de perfiles'**
+  String get privacyProfilingTitle;
+
+  /// Protección de datos — párrafo sobre la elaboración de perfiles.
+  ///
+  /// In es, this message translates to:
+  /// **'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por una persona interesada, existe la elaboración de perfiles.'**
+  String get privacyProfilingText;
+
+  /// Protección de datos — título de la sección de contacto con la delegada de protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos de contacto con la delegada de protección de datos'**
+  String get privacyDpoTitle;
+
+  /// Protección de datos — párrafo introductorio del contacto con la delegada de protección de datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la delegada de protección de datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:'**
+  String get privacyDpoIntro;
+
+  /// Protección de datos — etiqueta en negrita de la dirección postal de la delegada (termina en salto de línea).
+  ///
+  /// In es, this message translates to:
+  /// **'Dirección postal:\n'**
+  String get privacyDpoContactAddressLabel;
+
+  /// Protección de datos — bloque con la dirección postal de la delegada de protección de datos (termina en línea en blanco).
+  ///
+  /// In es, this message translates to:
+  /// **'Delegada de protección de datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071 - Toledo\n\n'**
+  String get privacyDpoContactAddressValue;
+
+  /// Protección de datos — etiqueta en negrita del correo electrónico de la delegada (termina en salto de línea).
+  ///
+  /// In es, this message translates to:
+  /// **'Dirección de correo electrónico:\n'**
+  String get privacyDpoContactEmailLabel;
+
+  /// Accesibilidad — encabezado H1 de la declaración de accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Declaración de accesibilidad'**
+  String get accessibilityStatementHeading;
+
+  /// Accesibilidad y Aviso legal — texto del párrafo introductorio antes del enlace al Real Decreto (termina en espacio).
+  ///
+  /// In es, this message translates to:
+  /// **'La Junta de Comunidades de Castilla-La Mancha se ha comprometido a hacer accesible su sitio web, de conformidad con el '**
+  String get accessibilityIntroCommitment;
+
+  /// Accesibilidad y Aviso legal — texto del enlace al Real Decreto 1112/2018 (el glifo ⇲ se añade en código).
+  ///
+  /// In es, this message translates to:
+  /// **'Real Decreto 1112/2018, de 7 de septiembre'**
+  String get accessibilityIntroDecreeLink;
+
+  /// Accesibilidad y Aviso legal — texto tras el enlace al Real Decreto (termina en doble salto de línea).
+  ///
+  /// In es, this message translates to:
+  /// **', sobre accesibilidad de los sitios web y aplicaciones para dispositivos móviles del sector público (en adelante, Real Decreto 1112/2018, de 7 de septiembre).\n\n'**
+  String get accessibilityIntroDecreeSuffix;
+
+  /// Accesibilidad y Aviso legal — texto antes del enlace al sitio web (termina en espacio).
+  ///
+  /// In es, this message translates to:
+  /// **'La presente declaración de accesibilidad se aplica al sitio web '**
+  String get accessibilityDeclarationScope;
+
+  /// Accesibilidad — título de la sección de situación de cumplimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'Situación de cumplimiento'**
+  String get accessibilityComplianceTitle;
+
+  /// Accesibilidad — párrafo sobre la conformidad parcial con el RD 1112/2018.
+  ///
+  /// In es, this message translates to:
+  /// **'b) Este sitio web es parcialmente conforme con el RD 1112/2018, de 7 de septiembre, debido a la falta de conformidad de los aspectos que se indican a continuación.'**
+  String get accessibilityComplianceText;
+
+  /// Accesibilidad — título de la sección de contenido no accesible.
+  ///
+  /// In es, this message translates to:
+  /// **'Contenido no accesible'**
+  String get accessibilityNonAccessibleTitle;
+
+  /// Accesibilidad — introducción de la lista de contenido no accesible.
+  ///
+  /// In es, this message translates to:
+  /// **'El contenido que se recoge a continuación no es accesible por los siguientes motivos:'**
+  String get accessibilityNonAccessibleIntro;
+
+  /// Accesibilidad — elemento de la lista de motivos de contenido no accesible.
+  ///
+  /// In es, this message translates to:
+  /// **'falta de conformidad con el RD 1112/2018, de 7 de septiembre: Podrían existir fallos puntuales de edición en alguna página web, tanto en contenidos HTML como en documentos finales, publicados en fecha posterior al 20 de septiembre de 2018.'**
+  String get accessibilityNonAccessibleItemNonConformity;
+
+  /// Accesibilidad — elemento de la lista de motivos de contenido no accesible.
+  ///
+  /// In es, this message translates to:
+  /// **'carga desproporcionada: No resulta aplicable.'**
+  String get accessibilityNonAccessibleItemBurden;
+
+  /// Accesibilidad — elemento de la lista de motivos de contenido no accesible.
+  ///
+  /// In es, this message translates to:
+  /// **'el contenido no entra dentro del ámbito de la legislación aplicable: Podrían existir archivos ofimáticos en PDF u otros formatos publicados antes del 20 de septiembre de 2018 que no cumplan en su totalidad todos los requisitos de accesibilidad.'**
+  String get accessibilityNonAccessibleItemOutOfScope;
+
+  /// Accesibilidad — título de la sección de preparación de la declaración.
+  ///
+  /// In es, this message translates to:
+  /// **'Preparación de la presente declaración de accesibilidad'**
+  String get accessibilityPreparationTitle;
+
+  /// Accesibilidad — párrafo sobre la fecha y el método de preparación de la declaración.
+  ///
+  /// In es, this message translates to:
+  /// **'La presente declaración ha sido preparada el 8 de Octubre de 2025.\nEl método empleado para preparar la declaración ha sido una autoevaluación llevada a cabo por el propio organismo.'**
+  String get accessibilityPreparationText;
+
+  /// Accesibilidad — título de la sección de observaciones y contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Observaciones y datos de contacto'**
+  String get accessibilityContactTitle;
+
+  /// Accesibilidad — introducción de la lista de comunicaciones sobre accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Puede realizar comunicaciones sobre requisitos de accesibilidad (artículo 10.2.a) del Real Decreto 1112/2018, de 7 de septiembre como, por ejemplo:'**
+  String get accessibilityContactIntro;
+
+  /// Accesibilidad — elemento de la lista de comunicaciones sobre accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'informar sobre cualquier posible incumplimiento por parte de este sitio web,'**
+  String get accessibilityContactItemReport;
+
+  /// Accesibilidad — elemento de la lista de comunicaciones sobre accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'transmitir otras dificultades de acceso al contenido,'**
+  String get accessibilityContactItemDifficulties;
+
+  /// Accesibilidad — elemento de la lista de comunicaciones sobre accesibilidad.
+  ///
+  /// In es, this message translates to:
+  /// **'formular cualquier otra consulta o sugerencia de mejora relativa a la accesibilidad del sitio web,'**
+  String get accessibilityContactItemSuggestions;
+
+  /// Accesibilidad — introducción de la lista de vías de contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'a través de las siguientes vías:'**
+  String get accessibilityContactChannelsIntro;
+
+  /// Accesibilidad — texto del enlace al formulario de contacto (el glifo ⇲ se añade en código).
+  ///
+  /// In es, this message translates to:
+  /// **'formulario de contacto'**
+  String get accessibilityContactFormLink;
+
+  /// Accesibilidad — texto antes del enlace a las oficinas del 012 y OIRES (termina en espacio).
+  ///
+  /// In es, this message translates to:
+  /// **'de manera presencial en '**
+  String get accessibilityOfficesPrefix;
+
+  /// Accesibilidad — texto del enlace a las oficinas del 012 y OIRES (el glifo ⇲ se añade en código).
+  ///
+  /// In es, this message translates to:
+  /// **'las oficinas del 012 y OIRES'**
+  String get accessibilityOfficesLink;
+
+  /// Accesibilidad — texto tras el enlace a las oficinas del 012 y OIRES (empieza con espacio).
+  ///
+  /// In es, this message translates to:
+  /// **' oficinas de información y registro).'**
+  String get accessibilityOfficesSuffix;
+
+  /// Accesibilidad — párrafo sobre el órgano que recibe las comunicaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Las comunicaciones serán recibidas y tratadas por la Viceconsejería de Administración Local y Coordinación Administrativa.'**
+  String get accessibilityContactProcessing;
+
+  /// Accesibilidad — título de la sección del procedimiento de aplicación.
+  ///
+  /// In es, this message translates to:
+  /// **'Procedimiento de aplicación'**
+  String get accessibilityEnforcementTitle;
+
+  /// Accesibilidad — párrafo sobre el procedimiento de reclamación del artículo 13.
+  ///
+  /// In es, this message translates to:
+  /// **'El procedimiento de reclamación recogido en el artículo 13 del RD 1112/2018 entrará en vigor el 20 de septiembre de 2020.'**
+  String get accessibilityEnforcementText;
+
+  /// Accesibilidad — título de la sección de contenido opcional.
+  ///
+  /// In es, this message translates to:
+  /// **'Contenido opcional'**
+  String get accessibilityOptionalTitle;
+
+  /// Accesibilidad — párrafo sobre los atajos de teclado del portal.
+  ///
+  /// In es, this message translates to:
+  /// **'Además de las ayudas de accesibilidad propias de los navegadores se incorporan una serie de atajos de teclado para facilitar la navegación a través del portal:\nUna clave de acceso o Accesskey permite al usuario saltar de inmediato a una parte específica de una página web a través del teclado.'**
+  String get accessibilityOptionalText;
+
+  /// Accesibilidad — elemento de la lista de atajos de teclado.
+  ///
+  /// In es, this message translates to:
+  /// **'Aumentar el Tamaño del Texto: CTRL +'**
+  String get accessibilityOptionalItemIncreaseText;
+
+  /// Accesibilidad — elemento de la lista de atajos de teclado.
+  ///
+  /// In es, this message translates to:
+  /// **'Reducir el Tamaño del Texto: CTRL -'**
+  String get accessibilityOptionalItemDecreaseText;
+
+  /// Aviso legal — encabezado H1 de la página (el texto original incluye "(...)").
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal (...)'**
+  String get legalNoticeHeading;
+
+  /// Error al enviar el formulario de soporte sin permisos (401/403).
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes permisos para enviar el formulario de soporte.'**
+  String get supportErrorSubmitUnauthorized;
+
+  /// Error al enviar el formulario de soporte con datos rechazados por el servidor (400).
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido validar los datos introducidos.'**
+  String get supportErrorSubmitInvalidData;
+
+  /// Error genérico al enviar el formulario de soporte.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido enviar tu solicitud. Inténtalo de nuevo más tarde.'**
+  String get supportErrorSubmitUnavailable;
+
+  /// Error al guardar los datos de contacto de notificaciones sin permisos (401/403).
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes permisos para guardar estos datos de contacto.'**
+  String get notificationContactSaveUnauthorizedError;
+
+  /// Error al guardar los datos de contacto con datos rechazados por el servidor (400).
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido validar los datos introducidos.'**
+  String get notificationContactSaveInvalidDataError;
+
+  /// Error genérico al guardar los datos de contacto de notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido guardar los datos de contacto. Inténtalo de nuevo más tarde.'**
+  String get notificationContactSaveUnavailableError;
+
+  /// Error cuando la búsqueda de expediente de terceros no encuentra resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos encontrado ningún expediente con esos datos. Revisa que sean correctos.'**
+  String get gestionAportacionExpedienteNotFoundError;
+
+  /// Error al buscar un expediente de terceros sin permisos.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes permisos para consultar este expediente.'**
+  String get gestionAportacionExpedienteUnauthorizedError;
+
+  /// Error genérico al buscar un expediente de terceros.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.'**
+  String get gestionAportacionExpedienteUnavailableError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

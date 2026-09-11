@@ -33,7 +33,7 @@ void main() {
 
     final row = tester.widget<Row>(find.descendant(of: find.byType(AppBar), matching: find.byType(Row)).first);
     expect(row.children.first, isA<Semantics>());
-    expect(find.byTooltip('Volver'), findsOneWidget);
+    expect(find.byTooltip('Atrás'), findsOneWidget);
   });
 
   testWidgets('localiza las acciones predeterminadas en inglés', (final tester) async {
@@ -75,7 +75,7 @@ void main() {
       buildApp(AppHeaderBar(title: 'Preferencias', onBack: () {}, onInfo: () {})),
     );
 
-    for (final tooltip in ['Volver', 'Información']) {
+    for (final tooltip in ['Atrás', 'Información']) {
       final button = find.ancestor(of: find.byTooltip(tooltip), matching: find.byType(IconButton));
       expect(tester.getSize(button).width, greaterThanOrEqualTo(48));
       expect(tester.getSize(button).height, greaterThanOrEqualTo(48));

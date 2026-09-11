@@ -1,3 +1,5 @@
+import 'dart:ui' show SemanticsRole, Tristate;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_tabbed_detail_scaffold.dart';
@@ -49,6 +51,30 @@ void main() {
 
     expect(find.text('Contenido resumido'), findsNothing);
     expect(find.text('Contenido detallado'), findsOneWidget);
+  });
+
+  testWidgets('expone las pestañas de Bienestar social con rol y selección', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        AppTabbedDetailScaffold(
+          title: 'Bienestar social',
+          onBack: () {},
+          tabs: const ['Mis datos de Bienestar', 'Información y servicios'],
+          selectedIndex: 0,
+          onTabSelected: (_) {},
+          tabViews: const [Text('Datos'), Text('Servicios')],
+        ),
+      ),
+    );
+
+    final dataTab = find.semantics.byLabel('Mis datos de Bienestar').evaluate().single;
+    final servicesTab = find.semantics.byLabel('Información y servicios').evaluate().single;
+    expect(dataTab.getSemanticsData().role, SemanticsRole.tab);
+    expect(dataTab.parent!.getSemanticsData().role, SemanticsRole.tabBar);
+    expect(dataTab.flagsCollection.isSelected, Tristate.isTrue);
+    expect(servicesTab.flagsCollection.isSelected, Tristate.isFalse);
+    expect(dataTab.getSemanticsData().value, 'Pestaña 1 de 2');
+    expect(servicesTab.getSemanticsData().value, 'Pestaña 2 de 2');
   });
 
   testWidgets('permite identificar la región de contenido activa', (final tester) async {

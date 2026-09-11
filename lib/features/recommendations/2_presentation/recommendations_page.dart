@@ -152,12 +152,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
           top: false,
           child: LayoutBuilder(
             builder: (final context, final constraints) => SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.space16,
-                AppDimensions.space24,
-                AppDimensions.space16,
-                AppDimensions.space24,
-              ),
+              padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space24),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight > AppDimensions.space48 ? constraints.maxHeight - AppDimensions.space48 : 0,
@@ -290,7 +285,7 @@ class _LifeEventsFilterControls extends StatelessWidget {
       children: [
         Expanded(
           child: AppFilterButton(
-            label: 'Filtrar por hechos vitales',
+            label: l10n.recommendationsFilterByLifeEvents,
             activeFilterCount: activeFilterCount,
             onPressed: onFilter,
           ),
@@ -397,6 +392,19 @@ class _FilterNavigationState extends State<_FilterNavigation> {
 
   @override
   Widget build(final BuildContext context) {
+    if (isTabletLayout(context)) {
+      const filters = [
+        ..._primaryFilters,
+        _RecommendationFilter.immediate,
+      ];
+      return AppFloatingNavigation(
+        tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
+        selectedIndex: filters.indexOf(widget.selectedFilter),
+        tabHorizontalPadding: AppDimensions.space16,
+        onTabSelected: (final index) => widget.onSelected?.call(filters[index]),
+      );
+    }
+
     final filters = _showImmediate ? _immediateFilters : _primaryFilters;
     final selectedIndex = filters.indexOf(widget.selectedFilter);
 
@@ -493,7 +501,7 @@ class _PreferencesHint extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: AppDimensions.space4),
               child: Text(
-                message ?? 'Personaliza tus recomendaciones editando tus hechos vitales en Preferencias siempre que quieras.',
+                message ?? l10n.recommendationsPreferencesHint,
                 style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
               ),
             ),
@@ -570,14 +578,13 @@ class _NoRecommendationsContextualHelper extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppAlertContextual(
       size: AppAlertContextualSize.small,
-      message:
-          'Actualmente no hay recomendaciones disponibles que se ajusten a tus preferencias. '
-          'Ajusta tus hechos vitales para explorar más opciones o espera a nuevas actualizaciones.',
+      message: l10n.recommendationsEmptyNoMatches,
       actionSpacing: AppDimensions.space4,
       action: AppButton(
-        label: 'Editar preferencias - hechos vitales',
+        label: l10n.recommendationsEditLifeEventsCta,
         onPressed: onEditLifeEvents,
         hierarchy: AppButtonHierarchy.ghost,
         size: AppButtonSize.small,
@@ -596,12 +603,13 @@ class _NoFilteredRecommendationsContextualHelper extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppAlertContextual(
       size: AppAlertContextualSize.small,
-      message: 'No hay recomendaciones para el filtro realizado.',
+      message: l10n.recommendationsEmptyFiltered,
       actionSpacing: AppDimensions.space4,
       action: AppButton(
-        label: 'Resetear filtro',
+        label: l10n.recommendationsResetFilterCta,
         onPressed: onResetFilters,
         hierarchy: AppButtonHierarchy.ghost,
         size: AppButtonSize.small,
@@ -615,8 +623,7 @@ enum _RecommendationFilter {
   all,
   recent,
   news,
-  immediate
-  ;
+  immediate;
 
   String label(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -639,6 +646,7 @@ enum _RecommendationFilter {
 }
 
 String? _deadlineText(final BuildContext context, final Recommendation recommendation) {
+  final l10n = AppLocalizations.of(context);
   final start = recommendation.submissionStartDate;
   final end = recommendation.submissionEndDate;
   if (start == null && end == null) {
@@ -648,9 +656,9 @@ String? _deadlineText(final BuildContext context, final Recommendation recommend
     return '${_formatShortDate(start)} - ${_formatShortDate(end)}';
   }
   if (start != null) {
-    return 'desde ${_formatShortDate(start)}';
+    return l10n.recommendationsDeadlineFrom(_formatShortDate(start));
   }
-  return 'hasta ${_formatShortDate(end!)}';
+  return l10n.recommendationsDeadlineUntil(_formatShortDate(end!));
 }
 
 String _formatShortDate(final DateTime date) {

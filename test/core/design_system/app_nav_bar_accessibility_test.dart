@@ -21,7 +21,7 @@ void main() {
     home: Scaffold(appBar: appBar, body: const Text('Contenido')),
   );
 
-  testWidgets('expone el título como H1 y localiza volver', (final tester) async {
+  testWidgets('expone el título como H1 y localiza atrás', (final tester) async {
     await tester.pumpWidget(
       buildApp(
         AppNavBar(
@@ -37,6 +37,21 @@ void main() {
     expect(heading.flagsCollection.isHeader, isTrue);
     expect(heading.headingLevel, 1);
     expect(find.byTooltip('Back'), findsOneWidget);
+  });
+
+  testWidgets('usa el mismo nombre de retroceso que Material en español', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        AppNavBar(
+          type: AppNavBarType.level2,
+          title: 'Información y ayuda',
+          onBack: () {},
+        ),
+      ),
+    );
+
+    expect(find.byTooltip('Atrás'), findsOneWidget);
+    expect(find.byTooltip('Volver'), findsNothing);
   });
 
   testWidgets('localiza cerrar en la variante de detalle', (final tester) async {

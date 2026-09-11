@@ -2,40 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class FaqEntry {
   const FaqEntry({required this.id, required this.question, required this.answer});
 
   final String id;
-  final String question;
-  final String answer;
+  final String Function(AppLocalizations l10n) question;
+  final String Function(AppLocalizations l10n) answer;
 }
+
+String _faqQuestion1(final AppLocalizations l10n) => l10n.faqQuestion1;
+String _faqAnswer1(final AppLocalizations l10n) => l10n.faqAnswer1;
+String _faqQuestion2(final AppLocalizations l10n) => l10n.faqQuestion2;
+String _faqAnswer2(final AppLocalizations l10n) => l10n.faqAnswer2;
+String _faqQuestion3(final AppLocalizations l10n) => l10n.faqQuestion3;
+String _faqAnswer3(final AppLocalizations l10n) => l10n.faqAnswer3;
+String _faqQuestion4(final AppLocalizations l10n) => l10n.faqQuestion4;
+String _faqAnswer4(final AppLocalizations l10n) => l10n.faqAnswer4;
+String _faqQuestion5(final AppLocalizations l10n) => l10n.faqQuestion5;
+String _faqAnswer5(final AppLocalizations l10n) => l10n.faqAnswer5;
 
 const faqEntries = <FaqEntry>[
   FaqEntry(
     id: 'espacio-ciudadano',
-    question: '¿Qué es y qué podré encontrar en el Espacio ciudadano?',
-    answer: 'Espacio Ciudadano reúne en un único lugar información y servicios de la Junta de Comunidades de Castilla-La Mancha. Podrás consultar tus datos, expedientes, notificaciones, citas y otros servicios disponibles.',
+    question: _faqQuestion1,
+    answer: _faqAnswer1,
   ),
   FaqEntry(
     id: 'acceso',
-    question: '¿Qué necesito para acceder?',
-    answer: 'Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico.',
+    question: _faqQuestion2,
+    answer: _faqAnswer2,
   ),
   FaqEntry(
     id: 'datos-personales',
-    question: '¿Qué datos personales se almacenan en Espacio Ciudadano?',
-    answer: 'Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.',
+    question: _faqQuestion3,
+    answer: _faqAnswer3,
   ),
   FaqEntry(
     id: 'corregir-datos',
-    question: 'Los datos mostrados contienen algún error, ¿puedo corregirlo?',
-    answer: 'Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.',
+    question: _faqQuestion4,
+    answer: _faqAnswer4,
   ),
   FaqEntry(
     id: 'agenda',
-    question: '¿Qué eventos se muestran en Mi Agenda?',
-    answer: 'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.',
+    question: _faqQuestion5,
+    answer: _faqAnswer5,
   ),
   // Las preguntas nuevas se añaden aquí cuando el cliente entregue su
   // contenido definitivo — nunca como entradas placeholder: tres «Preguntas a
@@ -58,10 +70,11 @@ class FaqDetailPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.backgroundBlueLighter,
       appBar: AppNavBar(
-        title: 'Preguntas frecuentes',
+        title: l10n.helpFaqSectionTitle,
         leading: IconButton(
           icon: const AppIcon(
             AppIcons.arrowBack,
@@ -81,19 +94,14 @@ class FaqDetailPage extends StatelessWidget {
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
-            AppDimensions.space16,
-            AppDimensions.space24,
-            AppDimensions.space16,
-            AppDimensions.space48,
-          ),
+          padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space48),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AppSectionHeading(entry.question),
+              AppSectionHeading(entry.question(l10n)),
               const SizedBox(height: AppDimensions.space24),
               Text(
-                entry.answer,
+                entry.answer(l10n),
                 style: AppTypography.bodyL.copyWith(color: AppColors.textPrimary),
               ),
             ],

@@ -58,6 +58,7 @@ void main() {
           gestionNotificacionDetalleProvider.overrideWith((final ref, final args) => Completer<NotificacionDetalle>().future),
         ],
         child: MaterialApp(
+          locale: const Locale('es'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(NotificacionEstado.pendiente)),
@@ -108,6 +109,7 @@ void main() {
         ],
         child: MaterialApp.router(
           routerConfig: router,
+          locale: const Locale('es'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         ),
@@ -253,6 +255,7 @@ void main() {
           gestionNotificacionesRepositoryProvider.overrideWithValue(repository),
         ],
         child: MaterialApp(
+          locale: const Locale('es'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(NotificacionEstado.aceptada)),
@@ -354,7 +357,8 @@ Future<void> _pumpAcceptable(
         gestionNotificacionesRepositoryProvider.overrideWithValue(repository),
       ],
       child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        locale: const Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(NotificacionEstado.pendiente)),
       ),
@@ -381,7 +385,8 @@ Future<void> _pumpDetail(
         ),
       ],
       child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        locale: const Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(resumenEstado)),
       ),

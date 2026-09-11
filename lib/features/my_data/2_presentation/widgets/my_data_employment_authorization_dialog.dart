@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class MyDataEmploymentAuthorizationDialog extends StatelessWidget {
@@ -29,6 +30,7 @@ class MyDataEmploymentAuthorizationDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Dialog(
+      constraints: appModalDialogConstraints(context),
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.space16,

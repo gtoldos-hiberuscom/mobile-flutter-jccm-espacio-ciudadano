@@ -1,4 +1,4 @@
-import 'dart:ui' show SemanticsAction, Tristate;
+import 'dart:ui' show SemanticsAction, SemanticsRole, Tristate;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,9 +30,13 @@ void main() {
 
     final first = find.semantics.byLabel('Viviendas').evaluate().single;
     final second = find.semantics.byLabel('Parcelas').evaluate().single;
+    expect(first.getSemanticsData().role, SemanticsRole.tab);
+    expect(first.parent!.getSemanticsData().role, SemanticsRole.tabBar);
+    expect(first.getSemanticsData().value, 'Tab 1 of 2');
     expect(first.getSemanticsData().flagsCollection.isSelected, Tristate.isTrue);
     expect(second.getSemanticsData().flagsCollection.isSelected, Tristate.isFalse);
-    expect(second.getSemanticsData().flagsCollection.isButton, isTrue);
+    expect(second.getSemanticsData().flagsCollection.isButton, isFalse);
+    expect(second.getSemanticsData().flagsCollection.isInMutuallyExclusiveGroup, isTrue);
     expect(second.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
     second.owner!.performAction(second.id, SemanticsAction.tap);
     await tester.pump();
@@ -52,7 +56,7 @@ void main() {
     );
 
     final data = find.semantics.byLabel('Archivadas').evaluate().single.getSemanticsData();
-    expect(data.flagsCollection.isButton, isTrue);
+    expect(data.role, SemanticsRole.tab);
     expect(data.flagsCollection.isEnabled, Tristate.isFalse);
     expect(data.hasAction(SemanticsAction.tap), isFalse);
   });

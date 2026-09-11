@@ -1,11 +1,13 @@
 import 'dart:async' show TimeoutException, unawaited;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -108,8 +110,8 @@ class _LandingPageState extends ConsumerState<LandingPage> {
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: appPageHorizontalPadding(context),
                 ),
                 child: LayoutBuilder(
                   builder: (final context, final constraints) => FittedBox(
@@ -244,7 +246,12 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       ),
     );
 
-    return ClaveLoginVeil(isAuthenticating: _isAuthenticating, child: scaffold);
+    // Sin AppBar, la home debe declarar el estilo desde el primer frame.
+    // El velo de Cl@ve declara su propio estilo claro cuando está activo.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: ClaveLoginVeil(isAuthenticating: _isAuthenticating, child: scaffold),
+    );
   }
 }
 

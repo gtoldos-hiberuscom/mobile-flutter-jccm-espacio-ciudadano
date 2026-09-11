@@ -100,7 +100,7 @@ class _VehiclesDataTab extends ConsumerWidget {
     final AppLocalizations l10n,
   ) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16),
       child: MyDataAuthorizationContextualHelper(
         message: l10n.myDataAgeAuthorizationRequiredMessage,
         semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
@@ -149,12 +149,7 @@ class _AuthorizedVehiclesData extends ConsumerWidget {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -236,12 +231,7 @@ class _VehiclesServicesTab extends ConsumerWidget {
     final config = ref.watch(appConfigProvider);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space16,
-        AppDimensions.space64,
-      ),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -3,6 +3,7 @@ import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
@@ -721,6 +722,7 @@ class AppAlertDialog extends StatelessWidget {
       child: FocusTraversalGroup(
         policy: OrderedTraversalPolicy(),
         child: Dialog(
+          constraints: appModalDialogConstraints(context),
           backgroundColor: Colors.transparent,
           insetPadding: const EdgeInsets.symmetric(
             horizontal: AppDimensions.space16,
@@ -902,6 +904,7 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
       child: FocusTraversalGroup(
         policy: OrderedTraversalPolicy(),
         child: Dialog(
+          constraints: appModalDialogConstraints(context),
           backgroundColor: Colors.transparent,
           insetPadding: const EdgeInsets.symmetric(
             horizontal: AppDimensions.space16,
@@ -1067,6 +1070,7 @@ class AppSuccessDialog extends StatelessWidget {
       child: FocusTraversalGroup(
         policy: OrderedTraversalPolicy(),
         child: Dialog(
+          constraints: appModalDialogConstraints(context),
           backgroundColor: Colors.transparent,
           insetPadding: const EdgeInsets.symmetric(
             horizontal: AppDimensions.space16,

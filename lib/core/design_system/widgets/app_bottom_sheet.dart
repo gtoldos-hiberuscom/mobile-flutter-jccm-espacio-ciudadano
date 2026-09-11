@@ -1,10 +1,9 @@
-import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_loading_indicator.dart';
@@ -66,6 +65,7 @@ class AppBottomSheet extends StatelessWidget {
   }) {
     return showModalBottomSheet<T>(
       context: context,
+      constraints: appModalSheetConstraints(context),
       requestFocus: true,
       backgroundColor: Colors.transparent,
       barrierColor: const Color(0xCC031B35),
@@ -276,6 +276,9 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final availableFormatCount = [onQrPressed, onPkPassPressed, onPdfPressed].where((final callback) => callback != null).length;
+    final hasSingleFormat = availableFormatCount == 1;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -299,7 +302,7 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
               bottom: AppDimensions.space8,
             ),
             child: Text(
-              'Formato de descarga',
+              l10n.appQrDownloadFormatTitle,
               style: AppTypography.leadingBold.copyWith(
                 color: AppColors.primary,
               ),
@@ -308,18 +311,19 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
           const SizedBox(height: AppDimensions.space8),
           if (onQrPressed != null) ...[
             _DownloadFormatButton(
-              label: 'QR',
+              label: l10n.appQrCodeLabel,
               onPressed: downloadingFormat == null ? onQrPressed : null,
               isLoading: downloadingFormat == 'QR',
+              primary: hasSingleFormat,
             ),
             const SizedBox(height: AppDimensions.space16),
           ],
           if (onPkPassPressed != null) ...[
             _DownloadFormatButton(
-              label: 'PKPASS',
+              label: _walletLabel(l10n),
               onPressed: downloadingFormat == null ? onPkPassPressed : null,
               isLoading: downloadingFormat == 'PKPASS',
-              primary: onPdfPressed == null,
+              primary: hasSingleFormat,
             ),
             if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
           ],
@@ -328,13 +332,19 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
               label: 'PDF',
               onPressed: downloadingFormat == null ? onPdfPressed : null,
               isLoading: downloadingFormat == 'PDF',
-              primary: true,
+              primary: hasSingleFormat,
             ),
         ],
       ),
     );
   }
 }
+
+/// Label of the wallet-pass (PKPASS) download button.
+///
+/// Uses the name of the platform wallet app: "Wallet" on Android and
+/// "Cartera digital" on iOS.
+String _walletLabel(final AppLocalizations l10n) => defaultTargetPlatform == TargetPlatform.iOS ? l10n.appQrDownloadWalletLabelIos : l10n.appQrDownloadWalletLabelAndroid;
 
 class _QrPreview extends StatelessWidget {
   const _QrPreview({
@@ -358,7 +368,7 @@ class _QrPreview extends StatelessWidget {
 
         return Center(
           child: Semantics(
-            label: 'Código QR',
+            label: AppLocalizations.of(context).appQrCodeLabel,
             image: true,
             child: ExcludeSemantics(
               child: SizedBox(
@@ -411,10 +421,11 @@ class _DownloadFormatButton extends StatelessWidget {
     final foreground = primary ? AppColors.textOnPrimary : AppColors.textBlack;
     final border = primary ? AppColors.primary : AppColors.secondaryLight400;
 
+    final l10n = AppLocalizations.of(context);
     return Semantics(
       button: true,
       enabled: onPressed != null,
-      label: isLoading ? 'Descargando $label' : 'Descargar $label',
+      label: isLoading ? l10n.appQrDownloadingFormatLabel(label) : l10n.appQrDownloadFormatLabel(label),
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: const BoxDecoration(
@@ -446,17 +457,7 @@ class _DownloadFormatButton extends StatelessWidget {
                         color: foreground,
                       ),
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AppIcon(AppIcons.add, size: 20, color: foreground),
-                        const SizedBox(width: AppDimensions.space8),
-                        Text(label),
-                        const SizedBox(width: AppDimensions.space8),
-                        AppIcon(AppIcons.add, size: 20, color: foreground),
-                      ],
-                    ),
+                  : Text(label),
             ),
           ),
         ),

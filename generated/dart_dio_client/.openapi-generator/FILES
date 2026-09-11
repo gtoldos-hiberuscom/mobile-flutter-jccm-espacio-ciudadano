@@ -4,6 +4,7 @@ README.md
 analysis_options.yaml
 doc/ADJUNTO.md
 doc/ADJUNTOS.md
+doc/ActuatorApi.md
 doc/AgendaApi.md
 doc/ApiError.md
 doc/BaseRequestIntermediacion.md
@@ -41,7 +42,9 @@ doc/HechosVitalesApi.md
 doc/IneApi.md
 doc/InfoError.md
 doc/IntermediacionApi.md
+doc/Link.md
 doc/ListaHechosAgente.md
+doc/MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response.md
 doc/NotificacionIndexaDto.md
 doc/PDATOS.md
 doc/PREGISTRO.md
@@ -71,6 +74,7 @@ doc/ZCSSTTBDOCUMENTO.md
 doc/ZCSTBDOCUMENTO.md
 lib/espacio_ciudadano_api.dart
 lib/src/api.dart
+lib/src/api/actuator_api.dart
 lib/src/api/agenda_api.dart
 lib/src/api/carnet_digital_api.dart
 lib/src/api/catastro_api.dart
@@ -124,7 +128,9 @@ lib/src/model/dtselectbynifv2_req.dart
 lib/src/model/dtsepesvdidefareq.dart
 lib/src/model/hecho.dart
 lib/src/model/info_error.dart
+lib/src/model/link.dart
 lib/src/model/lista_hechos_agente.dart
+lib/src/model/my_publi_selec_by_nif_tipo_proc_registros_entrada_operation1200_response.dart
 lib/src/model/notificacion_indexa_dto.dart
 lib/src/model/pdatos.dart
 lib/src/model/pregistro.dart
@@ -148,6 +154,7 @@ lib/src/model/zcssttbdocumento.dart
 lib/src/model/zcstbdocumento.dart
 lib/src/serializers.dart
 pubspec.yaml
+test/actuator_api_test.dart
 test/adjunto_test.dart
 test/adjuntos_test.dart
 test/agenda_api_test.dart
@@ -187,7 +194,9 @@ test/hechos_vitales_api_test.dart
 test/ine_api_test.dart
 test/info_error_test.dart
 test/intermediacion_api_test.dart
+test/link_test.dart
 test/lista_hechos_agente_test.dart
+test/my_publi_selec_by_nif_tipo_proc_registros_entrada_operation1200_response_test.dart
 test/notificacion_indexa_dto_test.dart
 test/pdatos_test.dart
 test/pregistro_test.dart

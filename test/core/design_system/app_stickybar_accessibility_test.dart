@@ -32,7 +32,9 @@ void main() {
       ),
     );
 
-    expect(find.semantics.byLabel('Acciones principales'), findsOneWidget);
+    final heading = find.semantics.byLabel('Acciones principales').evaluate().single.getSemanticsData();
+    expect(heading.flagsCollection.isHeader, isTrue);
+    expect(heading.headingLevel, 2);
     for (final label in ['Cancelar', 'Guardar']) {
       final data = find.semantics.byLabel(label).evaluate().single.getSemanticsData();
       expect(data.flagsCollection.isButton, isTrue);

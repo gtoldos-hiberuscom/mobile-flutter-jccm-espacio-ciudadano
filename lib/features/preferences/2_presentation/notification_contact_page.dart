@@ -54,7 +54,7 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
       appBar: AppHeaderBar(
-        title: 'Editar datos de contacto',
+        title: AppLocalizations.of(context).preferencesNotificationContactEditTitle,
         backgroundColor: AppColors.backgroundBlueLighter,
         onBack: _leave,
         onInfo: () => _showInfoSheet(context),
@@ -124,26 +124,27 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
     required final String citizenId,
     required final String dni,
   }) async {
+    final l10n = AppLocalizations.of(context);
     final phone = _phoneController.text.trim();
     final email = _emailController.text.trim();
     if (phone.isEmpty && email.isEmpty) {
-      setState(() => _formError = 'Debes indicar al menos un teléfono móvil o un correo electrónico.');
+      setState(() => _formError = l10n.gestionNotificacionesAltaErrorAtLeastOne);
       return;
     }
     if (phone.isNotEmpty && phone.replaceAll(RegExp(r'\D'), '').length != 9) {
-      setState(() => _phoneError = 'Introduce un teléfono móvil válido.');
+      setState(() => _phoneError = l10n.gestionNotificacionesAltaErrorPhone);
       return;
     }
     if (email.isNotEmpty && !_isEmail(email)) {
-      setState(() => _emailError = 'Introduce un correo electrónico válido.');
+      setState(() => _emailError = l10n.gestionNotificacionesAltaErrorEmail);
       return;
     }
     if (citizenId.isEmpty) {
-      setState(() => _formError = 'No hemos podido identificar al ciudadano.');
+      setState(() => _formError = l10n.gestionNotificacionesAltaErrorNoCitizenId);
       return;
     }
     if (dni.isEmpty) {
-      setState(() => _formError = 'No hemos podido obtener el DNI del ciudadano.');
+      setState(() => _formError = l10n.gestionNotificacionesAltaErrorNoDni);
       return;
     }
 
@@ -168,12 +169,18 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
         ref.invalidate(notificationContactProvider(citizenId));
         AppAlertSnackbar.show(
           context,
-          message: 'Datos de contacto guardados',
+          message: l10n.gestionNotificacionesAltaSuccessMessage,
           severity: AppAlertSeverity.success,
         );
         context.go(widget.returnTo);
-      case SaveNotificationContactFailed(:final message):
-        setState(() => _formError = message);
+      case SaveNotificationContactFailed(:final reason):
+        setState(
+          () => _formError = switch (reason) {
+            SaveNotificationContactFailureReason.unauthorized => l10n.notificationContactSaveUnauthorizedError,
+            SaveNotificationContactFailureReason.invalidData => l10n.notificationContactSaveInvalidDataError,
+            SaveNotificationContactFailureReason.unavailable => l10n.notificationContactSaveUnavailableError,
+          },
+        );
     }
   }
 

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class NotFoundScreen extends StatelessWidget {
   const NotFoundScreen({super.key});
 
   @override
-  Widget build(final BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Página no encontrada')),
-    body: const Center(child: Text('404 — La ruta solicitada no existe.')),
-  );
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.notFoundPageTitle)),
+      body: Center(child: Text(l10n.notFoundPageMessage)),
+    );
+  }
 }
 
 class DomainLandingPlaceholder extends StatelessWidget {

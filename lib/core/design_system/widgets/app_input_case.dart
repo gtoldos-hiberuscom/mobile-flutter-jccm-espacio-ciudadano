@@ -26,7 +26,7 @@ class AppSearchField extends StatelessWidget {
     super.key,
     this.controller,
     this.focusNode,
-    this.hintText = 'Buscar',
+    this.hintText,
     this.autofocus = false,
     this.onChanged,
     this.onSubmitted,
@@ -38,7 +38,9 @@ class AppSearchField extends StatelessWidget {
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
-  final String hintText;
+
+  /// Hint shown inside the field. Defaults to the localized search hint.
+  final String? hintText;
   final bool autofocus;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -51,6 +53,7 @@ class AppSearchField extends StatelessWidget {
   Widget build(final BuildContext context) {
     final label = semanticsLabel ?? MaterialLocalizations.of(context).searchFieldLabel;
     assert(label.isNotEmpty, 'semanticsLabel must not be empty');
+    final effectiveHintText = hintText ?? AppLocalizations.of(context).appSearchFieldHint;
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
@@ -76,7 +79,7 @@ class AppSearchField extends StatelessWidget {
             textInputAction: TextInputAction.search,
             autofillHints: autofillHints,
             decoration: InputDecoration(
-              hintText: hintText,
+              hintText: effectiveHintText,
               filled: true,
               fillColor: AppColors.backgroundWhite,
               isDense: true,

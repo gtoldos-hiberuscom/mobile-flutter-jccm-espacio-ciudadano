@@ -44,6 +44,7 @@ class AppDigitalCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final enabled = onDownload != null && !isDownloading;
+    final downloadSemanticLabel = '$downloadLabel $title';
     final summary =
         semanticLabel ??
         [
@@ -144,7 +145,7 @@ class AppDigitalCard extends StatelessWidget {
                   Semantics(
                     button: true,
                     enabled: enabled,
-                    label: downloadLabel,
+                    label: downloadSemanticLabel,
                     value: isDownloading ? l10n.a11yLoading : null,
                     liveRegion: isDownloading,
                     onTap: enabled ? onDownload : null,

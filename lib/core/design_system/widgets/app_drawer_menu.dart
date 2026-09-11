@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -89,7 +90,6 @@ class AppDrawerMenu extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final materialL10n = MaterialLocalizations.of(context);
     final availableWidth = MediaQuery.sizeOf(context).width;
 
     return Drawer(
@@ -114,7 +114,7 @@ class AppDrawerMenu extends StatelessWidget {
               child: Focus(
                 autofocus: true,
                 child: Semantics(
-                  label: materialL10n.closeButtonLabel,
+                  label: l10n.drawerCloseMenu,
                   button: true,
                   onTap: onClose ?? () => Navigator.of(context).pop(),
                   child: ExcludeSemantics(
@@ -132,7 +132,7 @@ class AppDrawerMenu extends StatelessWidget {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text(
-                                materialL10n.closeButtonLabel,
+                                l10n.drawerCloseMenu,
                                 style: AppTypography.leadingMedium.copyWith(
                                   color: AppColors.neutral000,
                                   decoration: TextDecoration.underline,
@@ -161,9 +161,6 @@ class AppDrawerMenu extends StatelessWidget {
             child: LayoutBuilder(
               builder: (final context, final constraints) {
                 return SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.paddingOf(context).bottom,
-                  ),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
@@ -245,62 +242,6 @@ class AppDrawerMenu extends StatelessWidget {
                           ),
 
                           const Spacer(),
-
-                          // ── Bottom action ────────────────────────────────────
-                          if (actionButtonLabel != null)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppDimensions.space24,
-                                vertical: AppDimensions.space16,
-                              ),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Semantics(
-                                  label: actionButtonLabel,
-                                  button: true,
-                                  enabled: onActionButton != null,
-                                  onTap: onActionButton,
-                                  child: ExcludeSemantics(
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onTap: onActionButton,
-                                        child: ConstrainedBox(
-                                          constraints: const BoxConstraints(
-                                            minHeight: AppDimensions.minTouchTarget,
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: AppDimensions.space8,
-                                              vertical: AppDimensions.space8,
-                                            ),
-                                            child: Wrap(
-                                              alignment: WrapAlignment.center,
-                                              crossAxisAlignment: WrapCrossAlignment.center,
-                                              children: [
-                                                Text(
-                                                  actionButtonLabel!,
-                                                  textAlign: TextAlign.center,
-                                                  style: AppTypography.bodyRegular.copyWith(
-                                                    color: AppColors.textWhite,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: AppDimensions.space4),
-                                                const Icon(
-                                                  Icons.open_in_new,
-                                                  color: AppColors.textWhite,
-                                                  size: AppDimensions.iconMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
                         ],
                       ),
                     ),
@@ -309,6 +250,63 @@ class AppDrawerMenu extends StatelessWidget {
               },
             ),
           ),
+          // ── Bottom action ────────────────────────────────────
+          if (actionButtonLabel != null)
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                AppDimensions.space24,
+                AppDimensions.space16,
+                AppDimensions.space24,
+                MediaQuery.viewPaddingOf(context).bottom + AppDimensions.space12,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: Semantics(
+                  label: actionButtonLabel,
+                  button: true,
+                  enabled: onActionButton != null,
+                  onTap: onActionButton,
+                  child: ExcludeSemantics(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: onActionButton,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: AppDimensions.minTouchTarget,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppDimensions.space8,
+                              vertical: AppDimensions.space8,
+                            ),
+                            child: Wrap(
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  actionButtonLabel!,
+                                  textAlign: TextAlign.center,
+                                  style: AppTypography.bodyRegular.copyWith(
+                                    color: AppColors.textWhite,
+                                  ),
+                                ),
+                                const SizedBox(width: AppDimensions.space4),
+                                const Icon(
+                                  Icons.open_in_new,
+                                  color: AppColors.textWhite,
+                                  size: AppDimensions.iconMedium,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -366,9 +364,9 @@ class _DrawerSecondaryTile extends StatelessWidget {
       button: true,
       enabled: link.onTap != null,
       onTap: link.onTap,
-      child: InkWell(
-        onTap: link.onTap,
-        child: ExcludeSemantics(
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: link.onTap,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
             child: Padding(
@@ -435,16 +433,19 @@ void showAppDrawerMenu({
       pageBuilder: (final context, final animation, final secondaryAnimation) {
         return Align(
           alignment: Alignment.centerRight,
-          child: AppDrawerMenu(
-            userName: userName,
-            nif: nif,
-            primaryItems: primaryItems,
-            secondaryLinks: secondaryLinks,
-            onLogout: onLogout,
-            identifierLabel: identifierLabel,
-            onClose: () => Navigator.of(context).pop(),
-            actionButtonLabel: actionButtonLabel,
-            onActionButton: onActionButton,
+          child: ConstrainedBox(
+            constraints: appModalSheetConstraints(context) ?? const BoxConstraints(),
+            child: AppDrawerMenu(
+              userName: userName,
+              nif: nif,
+              primaryItems: primaryItems,
+              secondaryLinks: secondaryLinks,
+              onLogout: onLogout,
+              identifierLabel: identifierLabel,
+              onClose: () => Navigator.of(context).pop(),
+              actionButtonLabel: actionButtonLabel,
+              onActionButton: onActionButton,
+            ),
           ),
         );
       },

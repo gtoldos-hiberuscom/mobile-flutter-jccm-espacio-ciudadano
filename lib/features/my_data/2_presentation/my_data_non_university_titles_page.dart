@@ -43,7 +43,7 @@ class MyDataNonUniversityTitlesPage extends ConsumerWidget {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppDimensions.space16),
+      padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16),
       child: Column(
         children: [
           for (final title in titles) ...[
@@ -106,6 +106,7 @@ class _NonUniversityTitleCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppInfoCard(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
@@ -117,7 +118,7 @@ class _NonUniversityTitleCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
                 child: Text(
-                  _buildReferenceText(),
+                  _buildReferenceText(l10n),
                   style: AppTypography.captionUppercase.copyWith(
                     color: AppColors.borderBlueMutedBase,
                   ),
@@ -151,7 +152,7 @@ class _NonUniversityTitleCard extends StatelessWidget {
             // Province
             if (title.province != null) ...[
               _LabelValueRow(
-                label: 'PROVINCIA',
+                label: l10n.myDataEducationProvinceLabel,
                 value: title.province!,
               ),
             ],
@@ -159,16 +160,16 @@ class _NonUniversityTitleCard extends StatelessWidget {
             // Expedition date
             if (title.expeditionDate != null) ...[
               _LabelValueRow(
-                label: 'FECHA EXPEDICIÓN',
-                value: _formatDate(title.expeditionDate!),
+                label: l10n.myDataEducationExpeditionDateLabel,
+                value: _formatDate(l10n, title.expeditionDate!),
               ),
             ],
 
             // Completion date
             if (title.completionDate != null) ...[
               _LabelValueRow(
-                label: 'FECHA FINALIZACIÓN',
-                value: _formatDate(title.completionDate!),
+                label: l10n.myDataEducationCompletionDateLabel,
+                value: _formatDate(l10n, title.completionDate!),
               ),
             ],
           ],
@@ -179,46 +180,46 @@ class _NonUniversityTitleCard extends StatelessWidget {
 
   bool get _hasReferenceNumbers => title.book != null || title.order != null || title.folio != null;
 
-  String _buildReferenceText() {
+  String _buildReferenceText(final AppLocalizations l10n) {
     final parts = <String>[];
 
     if (title.book != null && title.book!.trim().isNotEmpty) {
-      parts.add('LIBRO: ${title.book}');
+      parts.add(l10n.myDataEducationBookLabel(title.book!));
     }
 
     if (title.order != null && title.order!.trim().isNotEmpty) {
-      parts.add('ORDEN: ${title.order}');
+      parts.add(l10n.myDataEducationOrderLabel(title.order!));
     }
 
     if (title.folio != null && title.folio!.trim().isNotEmpty) {
-      parts.add('FOLIO: ${title.folio}');
+      parts.add(l10n.myDataEducationFolioLabel(title.folio!));
     }
 
     return parts.join('   |   ');
   }
 
-  String _formatDate(final DateTime date) {
+  String _formatDate(final AppLocalizations l10n, final DateTime date) {
     final day = date.day;
-    final month = _monthName(date.month);
+    final month = l10n.commonMonthShortName(_monthKey(date.month));
     final year = date.year;
     return '$day $month $year';
   }
 
-  String _monthName(final int month) {
+  String _monthKey(final int month) {
     return switch (month) {
-      1 => 'ene',
-      2 => 'feb',
-      3 => 'mar',
-      4 => 'abr',
+      1 => 'january',
+      2 => 'february',
+      3 => 'march',
+      4 => 'april',
       5 => 'may',
-      6 => 'jun',
-      7 => 'jul',
-      8 => 'ago',
-      9 => 'sep',
-      10 => 'oct',
-      11 => 'nov',
-      12 => 'dic',
-      _ => '',
+      6 => 'june',
+      7 => 'july',
+      8 => 'august',
+      9 => 'september',
+      10 => 'october',
+      11 => 'november',
+      12 => 'december',
+      _ => 'other',
     };
   }
 }

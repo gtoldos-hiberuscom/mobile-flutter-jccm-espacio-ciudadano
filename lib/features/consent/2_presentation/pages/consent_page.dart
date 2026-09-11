@@ -238,10 +238,7 @@ class _Step2Scaffold extends StatelessWidget {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space8,
-              ),
+              padding: appPagePadding(context, top: AppDimensions.space8, bottom: AppDimensions.space8),
               children: [
                 AppTextBlock(
                   text: l10n.consentStep1FullTitle,

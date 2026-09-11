@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolv
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class DigitalCardsPage extends ConsumerWidget {
@@ -26,13 +27,13 @@ class DigitalCardsPage extends ConsumerWidget {
         onBack: () => context.go(Routes.home),
         leading: IconButton(
           onPressed: () => context.go(Routes.home),
-          tooltip: 'Volver',
+          tooltip: l10n.a11yBack,
           icon: const AppIcon(AppIcons.arrowBack, color: AppColors.textPrimary),
         ),
         actions: [
           IconButton(
             onPressed: () => _showInfo(context),
-            tooltip: 'Informacion',
+            tooltip: l10n.a11yInformation,
             icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
           ),
         ],
@@ -40,8 +41,8 @@ class DigitalCardsPage extends ConsumerWidget {
       body: authorizationAsync.when(
         loading: () => const AppLoadingIndicator(),
         error: (final error, final stackTrace) => _DigitalCardsMessage(
-          message: 'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.',
-          actionLabel: 'Reintentar',
+          message: l10n.digitalCardsAuthorizationCheckErrorMessage,
+          actionLabel: l10n.errorStateRetry,
           onAction: () => ref.invalidate(digitalCardsAuthorizationProvider),
         ),
         data: (final isAuthorized) {
@@ -65,7 +66,7 @@ class DigitalCardsPage extends ConsumerWidget {
               ConsentRevoked() => _DigitalCardsMessage(message: l10n.authorizationRevokedMessage),
               _ => _DigitalCardsMessage(
                 message: l10n.digitalCardsErrorMessage,
-                actionLabel: 'Reintentar',
+                actionLabel: l10n.errorStateRetry,
                 onAction: () => ref.invalidate(digitalCardsProvider),
               ),
             },
@@ -74,36 +75,72 @@ class DigitalCardsPage extends ConsumerWidget {
                 return _DigitalCardsMessage(message: l10n.digitalCardsEmptyMessage);
               }
 
-              return RefreshIndicator(
-                onRefresh: () async => ref.refresh(digitalCardsProvider.future),
-                child: ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppDimensions.space16,
-                    AppDimensions.space24,
-                    AppDimensions.space16,
-                    AppDimensions.space64,
-                  ),
-                  itemBuilder: (final context, final index) {
-                    final card = cards[index];
-                    return AppDigitalCard(
-                      title: _title(card, l10n),
-                      number: card.number,
-                      primaryDateLabel: switch (card.type) {
-                        DigitalCardType.largeFamily => l10n.digitalCardsIssueDate,
-                        DigitalCardType.disability => l10n.digitalCardsEffectiveDate,
-                        DigitalCardType.youth => l10n.digitalCardsExpiryDate,
-                      },
-                      primaryDate: _formatDate(context, card.type == DigitalCardType.youth ? card.expiresAt : card.validFrom),
-                      secondaryDateLabel: card.type == DigitalCardType.largeFamily ? l10n.digitalCardsExpiryDate : null,
-                      secondaryDate: card.type == DigitalCardType.largeFamily ? _formatDate(context, card.expiresAt) : null,
-                      statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
-                      downloadLabel: l10n.digitalCardDownload,
-                      isDownloading: isDownloading,
-                      onDownload: () => showDigitalCardDownloadSheet(context, ref, card),
+              final isTablet = isTabletLayout(context);
+              final orderedCards = [...cards];
+              if (isTablet) {
+                const order = {
+                  DigitalCardType.largeFamily: 0,
+                  DigitalCardType.disability: 1,
+                  DigitalCardType.youth: 2,
+                };
+                orderedCards.sort((final a, final b) => order[a.type]!.compareTo(order[b.type]!));
+              }
+
+              Widget buildCard(final DigitalCard card) {
+                return AppDigitalCard(
+                  title: _title(card, l10n),
+                  number: card.number,
+                  primaryDateLabel: switch (card.type) {
+                    DigitalCardType.largeFamily => l10n.digitalCardsIssueDate,
+                    DigitalCardType.disability => l10n.digitalCardsEffectiveDate,
+                    DigitalCardType.youth => l10n.digitalCardsExpiryDate,
+                  },
+                  primaryDate: _formatDate(context, card.type == DigitalCardType.youth ? card.expiresAt : card.validFrom),
+                  secondaryDateLabel: card.type == DigitalCardType.largeFamily ? l10n.digitalCardsExpiryDate : null,
+                  secondaryDate: card.type == DigitalCardType.largeFamily ? _formatDate(context, card.expiresAt) : null,
+                  statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
+                  downloadLabel: l10n.digitalCardDownload,
+                  isDownloading: isDownloading,
+                  onDownload: () => showDigitalCardDownloadSheet(context, ref, card),
+                );
+              }
+
+              return SafeArea(
+                top: false,
+                child: LayoutBuilder(
+                  builder: (final context, final constraints) {
+                    final horizontalPadding = appPageHorizontalPadding(context);
+                    final cardWidth = (constraints.maxWidth - horizontalPadding * 2 - AppDimensions.space16) / 2;
+                    return RefreshIndicator(
+                      onRefresh: () async => ref.refresh(digitalCardsProvider.future),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          isTablet ? AppDimensions.space16 : AppDimensions.space24,
+                          horizontalPadding,
+                          AppDimensions.space64,
+                        ),
+                        child: isTablet
+                            ? Wrap(
+                                spacing: AppDimensions.space16,
+                                runSpacing: AppDimensions.space16,
+                                children: [
+                                  for (final card in orderedCards) SizedBox(width: cardWidth, child: buildCard(card)),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  for (var index = 0; index < orderedCards.length; index++) ...[
+                                    if (index > 0) const SizedBox(height: AppDimensions.space16),
+                                    buildCard(orderedCards[index]),
+                                  ],
+                                ],
+                              ),
+                      ),
                     );
                   },
-                  separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-                  itemCount: cards.length,
                 ),
               );
             },
@@ -129,10 +166,18 @@ class DigitalCardsPage extends ConsumerWidget {
   }
 
   Future<void> _showInfo(final BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     await AppInfoSheet.show(
       context: context,
-      title: 'Sobre Mis Carnets Digitales',
-      bodyText: 'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.',
+      title: l10n.digitalCardsInfoSheetTitle,
+      bodyText: l10n.digitalCardsInfoSheetBody,
+      footerText: l10n.digitalCardsInfoSheetContactHint,
+      actionLabel: l10n.digitalCardsInfoSheetContactButton,
+      onActionPressed: () => launchExternalUrlWithConfirmation(
+        context,
+        Uri.parse('https://sanidad.castillalamancha.es/ciudadanos'),
+      ),
+      actionIcon: Icons.open_in_new,
     );
   }
 
@@ -161,10 +206,10 @@ class _UnauthorizedCardsContent extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppDimensions.space20,
+        padding: EdgeInsets.fromLTRB(
+          isTabletLayout(context) ? AppDimensions.space40 : AppDimensions.space20,
           AppDimensions.space24,
-          AppDimensions.space20,
+          isTabletLayout(context) ? AppDimensions.space40 : AppDimensions.space20,
           AppDimensions.space8,
         ),
         child: Row(
@@ -176,7 +221,7 @@ class _UnauthorizedCardsContent extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: AppDimensions.space4),
                 child: Text(
-                  'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.',
+                  l10n.digitalCardsAuthorizationRequiredMessage,
                   style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
                 ),
               ),
@@ -214,7 +259,10 @@ class _DigitalCardsMessage extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.space24),
+        padding: EdgeInsets.symmetric(
+          horizontal: isTabletLayout(context) ? AppDimensions.space40 : AppDimensions.space24,
+          vertical: AppDimensions.space24,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -43,52 +43,54 @@ class EmptyStateWidget extends StatelessWidget {
     return Semantics(
       container: true,
       explicitChildNodes: true,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(32),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Semantics(
-                container: true,
-                label: stateLabel,
-                liveRegion: announce,
-                child: const SizedBox(width: 1, height: 1),
-              ),
-              ExcludeSemantics(
-                child: Icon(
-                  icon,
-                  size: 48,
-                  color: theme.colorScheme.onSurfaceVariant,
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(32),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Semantics(
+                  container: true,
+                  label: stateLabel,
+                  liveRegion: announce,
+                  child: const SizedBox(width: 1, height: 1),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Semantics(
-                header: true,
-                headingLevel: 2,
-                child: Text(
-                  message,
-                  style: theme.textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(height: 8),
                 ExcludeSemantics(
+                  child: Icon(
+                    icon,
+                    size: 48,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Semantics(
+                  header: true,
+                  headingLevel: 2,
                   child: Text(
-                    subtitle!,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
+                    message,
+                    style: theme.textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),
                 ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 8),
+                  ExcludeSemantics(
+                    child: Text(
+                      subtitle!,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+                if (action != null) ...[
+                  const SizedBox(height: 24),
+                  action!,
+                ],
               ],
-              if (action != null) ...[
-                const SizedBox(height: 24),
-                action!,
-              ],
-            ],
+            ),
           ),
         ),
       ),
