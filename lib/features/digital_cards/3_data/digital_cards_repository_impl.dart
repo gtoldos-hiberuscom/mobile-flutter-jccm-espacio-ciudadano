@@ -3,9 +3,11 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_cards_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
 
 final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
@@ -17,25 +19,33 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   final CarnetDigitalApi _api;
 
   @override
-  Future<List<DigitalCard>> loadCards({required final String citizenId}) async {
+  Future<DigitalCardsSnapshot> loadCards({required final String citizenId}) async {
     final results = await Future.wait([
       _captureCard(() => _loadLargeFamilyCard(citizenId)),
       _captureCard(() => _loadYouthCard(citizenId)),
       _captureCard(() => _loadDisabilityCard(citizenId)),
     ]);
     final cards = results.map((final result) => result.card).whereType<DigitalCard>().toList(growable: false);
-    if (cards.isNotEmpty) {
-      return cards;
+    final failures = results.where((final result) => result.error != null).toList(growable: false);
+    for (final failure in failures) {
+      logger.e('Digital card load failed', error: failure.error, stackTrace: failure.stackTrace);
+    }
+    if (cards.isNotEmpty || failures.isEmpty) {
+      // Los fallos parciales viajan en el snapshot en vez de tragarse: la
+      // pantalla decide cómo avisar sin perder los carnés que sí cargaron.
+      return DigitalCardsSnapshot(cards: cards, failedCount: failures.length);
     }
 
-    final firstError = results.map((final result) => result.error).whereType<Object>().firstOrNull;
-    if (firstError != null) {
-      Error.throwWithStackTrace(
-        firstError,
-        results.firstWhere((final result) => result.error != null).stackTrace!,
-      );
-    }
-    return const [];
+    // Fallaron las tres: si alguna cayó por el sobre de autorización, es esa la
+    // que hay que propagar. `withAuthorizationGuard` solo reconoce
+    // `AuthorizationRequiredException`, así que con otro fallo por delante la
+    // pantalla mostraría "no se han podido cargar" en vez del CTA de conceder
+    // la cláusula.
+    final failure = failures.firstWhere(
+      (final result) => result.error is AuthorizationRequiredException,
+      orElse: () => failures.first,
+    );
+    Error.throwWithStackTrace(failure.error!, failure.stackTrace!);
   }
 
   Future<({DigitalCard? card, Object? error, StackTrace? stackTrace})> _captureCard(
@@ -143,9 +153,10 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
 
     final payload = _decodePayload(response);
     final map = _firstMap(payload);
-    if (map == null || _hasBusinessError(map)) {
+    if (map == null) {
       return null;
     }
+    _throwIfBusinessError(map);
 
     final dataMap = _payloadBody(map);
     final number = _firstString(dataMap, const ['numeroTitulo', 'NumeroTitulo', 'numero_titulo', 'numTitulo', 'titulo']);
@@ -176,9 +187,10 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
 
     final payload = _decodePayload(response);
     final map = _firstMap(payload);
-    if (map == null || _hasBusinessError(map)) {
+    if (map == null) {
       return null;
     }
+    _throwIfBusinessError(map);
 
     final dataMap = _payloadBody(map);
     final number = _firstString(dataMap, const ['numero', 'Numero', 'numeroCarnet', 'NumeroCarnet', 'numero_carnet', 'codigo', 'Codigo', 'id']);
@@ -207,9 +219,10 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
       return null;
     }
     final map = _firstMap(_decodePayload(response));
-    if (map == null || _hasBusinessError(map)) {
+    if (map == null) {
       return null;
     }
+    _throwIfBusinessError(map);
     final dataMap = _payloadBody(map);
     final effectiveDate = _parseDate(_firstString(dataMap, const ['fechaEfectos', 'FechaEfectos', 'fecha_efectos']));
     final definitive = _firstString(dataMap, const ['validezDefinitiva', 'ValidezDefinitiva'])?.toUpperCase() == 'S';
@@ -350,6 +363,17 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
   bool _hasBusinessError(final Map<String, Object?> map) {
     final code = _firstString(map, const ['codError', 'codigoError', 'errorCode', 'codigo-respuesta']);
     return code != null && code.isNotEmpty && code != '0' && code != '00' && !code.startsWith('200');
+  }
+
+  /// Un sobre con código de error de negocio (incl. 412.00) es un fallo de la
+  /// consulta, no "el ciudadano no tiene este carnet" — que solo lo expresan
+  /// el 404 y el código 3033, ya tratados en [_getOptional].
+  void _throwIfBusinessError(final Map<String, Object?> map) {
+    if (!_hasBusinessError(map)) {
+      return;
+    }
+    logger.e('Digital card business error: ${_firstString(map, const ['codError', 'codigoError', 'errorCode', 'codigo-respuesta'])}');
+    throw StateError('No se ha podido cargar el carnet.');
   }
 
   Map<String, Object?> _payloadBody(final Map<String, Object?> map) {

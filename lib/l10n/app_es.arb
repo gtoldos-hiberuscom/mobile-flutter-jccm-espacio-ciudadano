@@ -225,6 +225,10 @@
   "@consentClausesUnavailableError": {
     "description": "Mensaje de error cuando el catálogo de cláusulas no está disponible al guardar el consentimiento."
   },
+  "consentClausesLoadError": "No se han podido cargar las autorizaciones.",
+  "@consentClausesLoadError": {
+    "description": "Estado de error con reintento cuando el catálogo de cláusulas no carga al abrir el consentimiento."
+  },
   "consentScrollHint": "Desliza hasta el final para continuar",
   "@consentScrollHint": {
     "description": "Indicación para el usuario de que debe desplazarse hasta el final del contenido."
@@ -705,6 +709,10 @@
   "footerLegalNotice": "Aviso legal",
   "@footerLegalNotice": {
     "description": "Footer — Aviso legal."
+  },
+  "agendaRefreshFailedMessage": "No hemos podido actualizar tu agenda con los sistemas de origen. Se muestran los últimos datos disponibles.",
+  "@agendaRefreshFailedMessage": {
+    "description": "Aviso cuando el refresco contra los sistemas origen falla; se recargan los datos cacheados igualmente."
   },
   "agendaPageTitle": "Agenda",
   "agendaPendingAppointmentsTitle": "Citas pendientes",
@@ -1982,6 +1990,10 @@
   "digitalCardsActionComingSoon": "Disponible próximamente.",
   "@digitalCardsActionComingSoon": {
     "description": "Carnets — mensaje stub mientras TASK-53 cablea las descargas reales."
+  },
+  "digitalCardsPartialErrorMessage": "No hemos podido comprobar todos tus carnets. Se muestran los disponibles.",
+  "@digitalCardsPartialErrorMessage": {
+    "description": "Aviso cuando alguna de las consultas de carnets falla pero otras cargan."
   },
   "digitalCardsEmptyMessage": "Aún no tienes carnets digitales asociados.",
   "@digitalCardsEmptyMessage": {
@@ -3848,6 +3860,10 @@
   "a11yAlertError": "Error",
   "@a11yContentLoaded": {
     "description": "Accessibility — announced by screen reader when loading finishes."
+  },
+  "preferencesResetError": "No hemos podido borrar tus preferencias. Inténtalo de nuevo.",
+  "@preferencesResetError": {
+    "description": "Mensaje curado cuando el borrado de preferencias/autorizaciones falla."
   },
   "drawerPreferences": "Preferencias",
   "drawerGreeting": "Hola, {userName}",

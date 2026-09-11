@@ -177,6 +177,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consentClausesUnavailableError => 'No se han podido cargar las autorizaciones. Comprueba tu conexión e inténtalo de nuevo.';
 
   @override
+  String get consentClausesLoadError => 'No se han podido cargar las autorizaciones.';
+
+  @override
   String get consentScrollHint => 'Desliza hasta el final para continuar';
 
   @override
@@ -538,6 +541,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get footerLegalNotice => 'Aviso legal';
+
+  @override
+  String get agendaRefreshFailedMessage => 'No hemos podido actualizar tu agenda con los sistemas de origen. Se muestran los últimos datos disponibles.';
 
   @override
   String get agendaPageTitle => 'Agenda';
@@ -1496,6 +1502,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get digitalCardsActionComingSoon => 'Disponible próximamente.';
+
+  @override
+  String get digitalCardsPartialErrorMessage => 'No hemos podido comprobar todos tus carnets. Se muestran los disponibles.';
 
   @override
   String get digitalCardsEmptyMessage => 'Aún no tienes carnets digitales asociados.';
@@ -2920,6 +2929,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get a11yAlertError => 'Error';
+
+  @override
+  String get preferencesResetError => 'No hemos podido borrar tus preferencias. Inténtalo de nuevo.';
 
   @override
   String get drawerPreferences => 'Preferencias';

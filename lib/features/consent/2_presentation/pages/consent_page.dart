@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
@@ -86,6 +87,7 @@ class ConsentPage extends ConsumerWidget {
               severity: AppAlertSeverity.error,
             );
           case ConsentStatus.loading:
+          case ConsentStatus.loadError:
           case ConsentStatus.step1Locked:
           case ConsentStatus.step1Unlocked:
           case ConsentStatus.step2:
@@ -94,6 +96,17 @@ class ConsentPage extends ConsumerWidget {
         }
       },
     );
+
+    if (state.status == ConsentStatus.loadError) {
+      return Scaffold(
+        body: SafeArea(
+          child: ErrorStateWidget(
+            message: l10n.consentClausesLoadError,
+            onRetry: () => unawaited(notifier.retryLoadClauses()),
+          ),
+        ),
+      );
+    }
 
     final isBeforeClauses = state.status == ConsentStatus.loading || state.status == ConsentStatus.step1Locked || state.status == ConsentStatus.step1Unlocked;
 

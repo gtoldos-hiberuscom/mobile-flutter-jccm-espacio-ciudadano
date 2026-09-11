@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
@@ -308,20 +309,30 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     return null;
   }
 
+  // El detalle crudo (e.toString() del usecase) va solo al logger; el snackbar
+  // muestra únicamente el mensaje curado.
   Future<String?> _resetLifeEvents(final String idAgente) async {
+    final l10n = AppLocalizations.of(context);
     final result = await ref.read(resetLifeEventsUsecaseProvider).execute(idAgente: idAgente);
-    return switch (result) {
-      ResetLifeEventsSuccess() => null,
-      ResetLifeEventsFailed(:final message) => message,
-    };
+    switch (result) {
+      case ResetLifeEventsSuccess():
+        return null;
+      case ResetLifeEventsFailed(:final message, :final cause):
+        logger.e('Life events reset failed: $message', error: cause);
+        return l10n.preferencesResetError;
+    }
   }
 
   Future<String?> _resetConsentClauses(final String idAgente) async {
+    final l10n = AppLocalizations.of(context);
     final resetResult = await ref.read(resetConsentClausesUsecaseProvider).execute(idAgente: idAgente);
-    return switch (resetResult) {
-      ResetConsentClausesSuccess() => null,
-      ResetConsentClausesFailed(:final message) => message,
-    };
+    switch (resetResult) {
+      case ResetConsentClausesSuccess():
+        return null;
+      case ResetConsentClausesFailed(:final message, :final cause):
+        logger.e('Consent clauses reset failed: $message', error: cause);
+        return l10n.preferencesResetError;
+    }
   }
 }
 

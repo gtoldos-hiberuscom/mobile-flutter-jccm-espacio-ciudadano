@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_cards_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/3_data/digital_cards_repository_impl.dart';
 
@@ -34,7 +35,7 @@ final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((fina
   };
 });
 
-final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>((final ref) async {
+final digitalCardsProvider = FutureProvider.autoDispose<DigitalCardsSnapshot>((final ref) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider).trim();
   if (citizenId.isEmpty) {
     throw StateError('No se ha encontrado el identificador de la persona usuaria.');

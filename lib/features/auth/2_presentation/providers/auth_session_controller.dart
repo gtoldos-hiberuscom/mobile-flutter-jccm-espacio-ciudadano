@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
@@ -50,7 +51,7 @@ final class AuthSessionController {
   /// `token()` call. That prevents two requests from racing on the same
   /// refresh token — which, with Keycloak refresh-token rotation enabled,
   /// would make the loser fail with `invalid_grant` and wipe the session.
-  Future<bool>? _inFlightRefresh;
+  Future<SessionRefreshStatus>? _inFlightRefresh;
 
   JwtClaims? get currentClaims => _ref.read(jwtClaimsProvider);
 
@@ -83,24 +84,29 @@ final class AuthSessionController {
     return session;
   }
 
-  Future<bool> refreshIfNeeded({
+  Future<SessionRefreshStatus> refreshIfNeeded({
     final Duration threshold = const Duration(seconds: 60),
   }) async {
     final session = _ref.read(tokenResponseProvider) ?? await hydrateFromStorage();
     final expiresAt = session?.accessTokenExpirationDateTime;
     if (session?.accessToken != null && expiresAt != null && expiresAt.isAfter(DateTime.now().add(threshold))) {
-      return true;
+      return SessionRefreshStatus.valid;
     }
-    return refresh(force: true);
+    return refreshStatus(force: true);
   }
 
-  Future<bool> refresh({final bool force = false}) {
+  /// Compat bool para quien solo necesita "¿hay token utilizable?" (el
+  /// `AuthRefreshInterceptor`): allí un transitorio y un rechazo definitivo
+  /// terminan igual — sin token nuevo, el 401 original se propaga.
+  Future<bool> refresh({final bool force = false}) async => await refreshStatus(force: force) == SessionRefreshStatus.valid;
+
+  Future<SessionRefreshStatus> refreshStatus({final bool force = false}) {
     // Validity short-circuit — synchronous, so it runs before we touch the
     // single-flight guard: a caller with a still-valid token never joins (or
     // starts) a refresh.
     final currentExpiry = _ref.read(tokenResponseProvider)?.accessTokenExpirationDateTime;
     if (!force && currentExpiry != null && currentExpiry.isAfter(DateTime.now().add(_refreshSkew))) {
-      return Future<bool>.value(true);
+      return Future<SessionRefreshStatus>.value(SessionRefreshStatus.valid);
     }
 
     final inFlight = _inFlightRefresh;
@@ -113,7 +119,7 @@ final class AuthSessionController {
     return future.whenComplete(() => _inFlightRefresh = null);
   }
 
-  Future<bool> _doRefresh() async {
+  Future<SessionRefreshStatus> _doRefresh() async {
     final generation = _sessionGeneration;
     final persistedAccessToken = await _storage.read(StorageKeys.accessToken);
     final hasPersistedSession = persistedAccessToken != null && persistedAccessToken.isNotEmpty;
@@ -121,7 +127,7 @@ final class AuthSessionController {
     if (refreshToken == null || refreshToken.isEmpty) {
       // No refresh token at all — nothing can renew this session.
       await clear();
-      return false;
+      return SessionRefreshStatus.definitivelyInvalid;
     }
 
     try {
@@ -129,7 +135,7 @@ final class AuthSessionController {
       if (generation != _sessionGeneration) {
         // A logout (clear()) landed while this refresh was in flight. Drop the
         // rotated tokens instead of re-persisting a session the user just ended.
-        return false;
+        return SessionRefreshStatus.definitivelyInvalid;
       }
       final mergedSession = _mergeWithCurrentSession(newSession);
       if (hasPersistedSession) {
@@ -137,7 +143,7 @@ final class AuthSessionController {
       } else {
         _updateMemory(mergedSession);
       }
-      return true;
+      return SessionRefreshStatus.valid;
     } on AuthException catch (error, stackTrace) {
       // Only a definitive rejection from the authorization server
       // (`invalid_grant` and friends → `remoteFailure`) means the refresh
@@ -147,12 +153,13 @@ final class AuthSessionController {
       logger.e('Failed to refresh session', error: error, stackTrace: stackTrace);
       if (error.reason == AuthFailureReason.remoteFailure) {
         await clear();
+        return SessionRefreshStatus.definitivelyInvalid;
       }
-      return false;
+      return SessionRefreshStatus.unknownTransient;
     } on Object catch (error, stackTrace) {
       // Unexpected non-auth error — treat as transient, keep the session.
       logger.e('Failed to refresh session', error: error, stackTrace: stackTrace);
-      return false;
+      return SessionRefreshStatus.unknownTransient;
     }
   }
 

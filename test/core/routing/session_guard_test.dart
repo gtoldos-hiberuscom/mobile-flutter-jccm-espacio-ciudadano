@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
@@ -107,6 +108,68 @@ void main() {
     });
   });
 
+  group('SessionGuard session refresh tri-state (C6)', () {
+    test('a transient refresh failure fails open and keeps the persisted session', () async {
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
+      final container = ProviderContainer(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(const _FailingAuthRepository(AuthException.unexpected())),
+          secureStorageProvider.overrideWithValue(storage),
+          consentRepositoryProvider.overrideWithValue(consentRepository),
+        ],
+      );
+      addTearDown(container.dispose);
+      container.read(authSessionControllerProvider).startInMemory(
+        TokenResponse(
+          'access',
+          'persisted-refresh',
+          DateTime.now().subtract(const Duration(minutes: 1)),
+          null,
+          null,
+          null,
+          null,
+        ),
+        claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
+      );
+
+      final redirect = await container.read(_guardProvider).redirectPath(Routes.home);
+
+      expect(redirect, isNull, reason: 'a network blip must not eject the user to the landing');
+      expect(storage.store[StorageKeys.accessToken], 'persisted-access');
+    });
+
+    test('a definitive rejection bounces to the landing with the session cleared', () async {
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
+      final container = ProviderContainer(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(const _FailingAuthRepository(AuthException.remoteFailure(message: 'invalid_grant'))),
+          secureStorageProvider.overrideWithValue(storage),
+          consentRepositoryProvider.overrideWithValue(consentRepository),
+        ],
+      );
+      addTearDown(container.dispose);
+      container.read(authSessionControllerProvider).startInMemory(
+        TokenResponse(
+          'access',
+          'persisted-refresh',
+          DateTime.now().subtract(const Duration(minutes: 1)),
+          null,
+          null,
+          null,
+          null,
+        ),
+        claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
+      );
+
+      final redirect = await container.read(_guardProvider).redirectPath(Routes.home);
+
+      expect(redirect, Routes.landing);
+      expect(storage.store[StorageKeys.accessToken], isNull);
+    });
+  });
+
   group('SessionGuard optional clause gate', () {
     test('a backend failure during the optional clause check fails open', () async {
       consentRepository
@@ -157,6 +220,22 @@ final class _FakeSecureStorage implements SecureStorage {
 
   @override
   Future<void> clear() async => store.clear();
+}
+
+/// Repository whose refresh always fails with the given [AuthException].
+final class _FailingAuthRepository implements AuthRepository {
+  const _FailingAuthRepository(this.error);
+
+  final AuthException error;
+
+  @override
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => throw UnimplementedError();
+
+  @override
+  Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw error;
+
+  @override
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();
 }
 
 /// The guard under test never refreshes (the in-memory token is fresh).

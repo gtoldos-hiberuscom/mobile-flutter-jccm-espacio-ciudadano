@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
@@ -47,9 +48,17 @@ final class SessionGuard {
 
     // ── Step 1: determine current expiry ─────────────────────────────────────
 
-    final isValid = await sessionController.refreshIfNeeded();
-    if (!isValid) {
-      return _bounceToLanding();
+    switch (await sessionController.refreshIfNeeded()) {
+      case SessionRefreshStatus.definitivelyInvalid:
+        return _bounceToLanding();
+      case SessionRefreshStatus.unknownTransient:
+        // Fail open: la sesión sigue guardada y el AuthRefreshInterceptor
+        // reintentará por petición; cada pantalla muestra su propio error de
+        // servicio. Expulsar aquí convertía un microcorte de red en un cierre
+        // de sesión silencioso.
+        logger.w('Session refresh unavailable — failing open');
+      case SessionRefreshStatus.valid:
+        break;
     }
     return _consentRedirect(path);
   }

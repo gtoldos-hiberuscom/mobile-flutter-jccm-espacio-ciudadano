@@ -422,6 +422,12 @@ abstract class AppLocalizations {
   /// **'No se han podido cargar las autorizaciones. Comprueba tu conexión e inténtalo de nuevo.'**
   String get consentClausesUnavailableError;
 
+  /// Estado de error con reintento cuando el catálogo de cláusulas no carga al abrir el consentimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'No se han podido cargar las autorizaciones.'**
+  String get consentClausesLoadError;
+
   /// Indicación para el usuario de que debe desplazarse hasta el final del contenido.
   ///
   /// In es, this message translates to:
@@ -1111,6 +1117,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aviso legal'**
   String get footerLegalNotice;
+
+  /// Aviso cuando el refresco contra los sistemas origen falla; se recargan los datos cacheados igualmente.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido actualizar tu agenda con los sistemas de origen. Se muestran los últimos datos disponibles.'**
+  String get agendaRefreshFailedMessage;
 
   /// Agenda — título de la pantalla.
   ///
@@ -2971,6 +2983,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Disponible próximamente.'**
   String get digitalCardsActionComingSoon;
+
+  /// Aviso cuando alguna de las consultas de carnets falla pero otras cargan.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido comprobar todos tus carnets. Se muestran los disponibles.'**
+  String get digitalCardsPartialErrorMessage;
 
   /// Carnets — estado vacío del catálogo.
   ///
@@ -5605,6 +5623,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error'**
   String get a11yAlertError;
+
+  /// Mensaje curado cuando el borrado de preferencias/autorizaciones falla.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido borrar tus preferencias. Inténtalo de nuevo.'**
+  String get preferencesResetError;
 
   /// Etiqueta del ítem de Preferencias en el menú desplegable del perfil.
   ///

@@ -10,8 +10,9 @@ class ResetConsentClausesSuccess extends ResetConsentClausesResult {
 }
 
 class ResetConsentClausesFailed extends ResetConsentClausesResult {
-  const ResetConsentClausesFailed(this.message);
+  const ResetConsentClausesFailed(this.message, {this.cause});
   final String message;
+  final Object? cause;
 }
 
 /// Clears all legal-consent clause selections for a citizen.
@@ -26,7 +27,7 @@ class ResetConsentClausesUsecase {
       await _repository.resetConsentClauses(idAgente: idAgente);
       return const ResetConsentClausesSuccess();
     } catch (e) {
-      return ResetConsentClausesFailed(e.toString());
+      return ResetConsentClausesFailed(e.toString(), cause: e);
     }
   }
 }

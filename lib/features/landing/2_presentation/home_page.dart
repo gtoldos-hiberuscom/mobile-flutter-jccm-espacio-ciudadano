@@ -100,7 +100,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       }
 
       ref.invalidate(digitalCardsProvider);
-      final cards = [...await ref.read(digitalCardsProvider.future)]
+      final snapshot = await ref.read(digitalCardsProvider.future);
+      final cards = [...snapshot.cards]
         ..sort(
           (final a, final b) => _cardOrder(a.type).compareTo(_cardOrder(b.type)),
         );

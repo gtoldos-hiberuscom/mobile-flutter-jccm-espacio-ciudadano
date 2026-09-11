@@ -176,6 +176,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentClausesUnavailableError => 'The authorisations could not be loaded. Check your connection and try again.';
 
   @override
+  String get consentClausesLoadError => 'The authorisations could not be loaded.';
+
+  @override
   String get consentScrollHint => 'Scroll to the end to continue';
 
   @override
@@ -537,6 +540,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get footerLegalNotice => 'Legal notice';
+
+  @override
+  String get agendaRefreshFailedMessage => 'We could not refresh your agenda with the source systems. Showing the latest available data.';
 
   @override
   String get agendaPageTitle => 'Agenda';
@@ -1495,6 +1501,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get digitalCardsActionComingSoon => 'Coming soon.';
+
+  @override
+  String get digitalCardsPartialErrorMessage => 'We could not check all your cards. Showing the available ones.';
 
   @override
   String get digitalCardsEmptyMessage => 'You don\'t have any digital cards yet.';
@@ -2919,6 +2928,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get a11yAlertError => 'Error';
+
+  @override
+  String get preferencesResetError => 'We could not delete your preferences. Please try again.';
 
   @override
   String get drawerPreferences => 'Preferences';

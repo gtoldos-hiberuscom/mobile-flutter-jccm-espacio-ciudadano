@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
@@ -162,9 +163,9 @@ void main() {
       final container = buildContainer();
       final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: 30)));
 
-      final valid = await controller.refreshIfNeeded();
+      final status = await controller.refreshIfNeeded();
 
-      expect(valid, isTrue);
+      expect(status, SessionRefreshStatus.valid);
       expect(repository.refreshCount, 1);
     });
 
@@ -172,10 +173,45 @@ void main() {
       final container = buildContainer();
       final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(minutes: 5)));
 
-      final valid = await controller.refreshIfNeeded();
+      final status = await controller.refreshIfNeeded();
 
-      expect(valid, isTrue);
+      expect(status, SessionRefreshStatus.valid);
       expect(repository.refreshCount, 0);
+    });
+  });
+
+  group('AuthSessionController three-state refresh (C6)', () {
+    test('a transient failure reports unknownTransient and keeps the persisted session', () async {
+      storage.store[StorageKeys.accessToken] = 'old-access';
+      storage.store[StorageKeys.refreshToken] = 'old-refresh';
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
+      repository.errorToThrow = const AuthException.unexpected();
+
+      final status = await controller.refreshIfNeeded();
+
+      expect(status, SessionRefreshStatus.unknownTransient);
+      expect(storage.store[StorageKeys.accessToken], 'old-access', reason: 'a network blip must never destroy the session');
+    });
+
+    test('a definitive rejection reports definitivelyInvalid and clears the session', () async {
+      storage.store[StorageKeys.accessToken] = 'old-access';
+      storage.store[StorageKeys.refreshToken] = 'old-refresh';
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)..startInMemory(tokenExpiringIn(const Duration(seconds: -1)));
+      repository.errorToThrow = const AuthException.remoteFailure(message: 'invalid_grant');
+
+      final status = await controller.refreshIfNeeded();
+
+      expect(status, SessionRefreshStatus.definitivelyInvalid);
+      expect(storage.store[StorageKeys.accessToken], isNull);
+    });
+
+    test('a missing refresh token reports definitivelyInvalid', () async {
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+
+      expect(await controller.refreshStatus(force: true), SessionRefreshStatus.definitivelyInvalid);
     });
   });
 
