@@ -1,4 +1,6 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
@@ -71,7 +73,18 @@ final class LoginUseCase {
           ephemeralSession: false,
         );
       }
-      final JwtClaims user = JwtDecoder.decode(session.accessToken!);
+      final accessToken = session.accessToken!;
+      final payload = JwtDecoder.decodePayload(accessToken);
+      final JwtClaims user = JwtClaims.fromMap(payload);
+
+      // Temporal diagnostic trace to compare personal and representative
+      // certificates. Never print the encoded token itself. In debug builds
+      // configured for development/preproduction, values are visible; in all
+      // other builds the existing allow-list redaction remains in force.
+      logger.d({
+        'event': 'auth_claims_access_token',
+        'claims': redactForLog(payload),
+      });
 
       return LoginSuccess(
         tokenResponse: session,

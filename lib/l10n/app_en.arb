@@ -3869,6 +3869,14 @@
   "@myDataIntro": {
     "description": "Introductory text on the My data screen."
   },
+  "representativeUnavailableTitle": "Information unavailable",
+  "@representativeUnavailableTitle": {
+    "description": "Title shown when opening a section unavailable with a representative certificate."
+  },
+  "representativeUnavailableMessage": "The identification method used to sign in does not allow you to view this information. If you have another way to identify yourself, you can try again.",
+  "@representativeUnavailableMessage": {
+    "description": "Message shown when opening a section unavailable with a representative certificate."
+  },
   "myDataHealthTitle": "Health",
   "@myDataHealthTitle": {
     "description": "Title of the Health card on the My data screen."

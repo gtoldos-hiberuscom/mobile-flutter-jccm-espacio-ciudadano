@@ -5654,6 +5654,18 @@ abstract class AppLocalizations {
   /// **'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.'**
   String get myDataIntro;
 
+  /// Título mostrado al abrir una sección no disponible con certificado de representante.
+  ///
+  /// In es, this message translates to:
+  /// **'Información no disponible'**
+  String get representativeUnavailableTitle;
+
+  /// Mensaje mostrado al abrir una sección no disponible con certificado de representante.
+  ///
+  /// In es, this message translates to:
+  /// **'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'**
+  String get representativeUnavailableMessage;
+
   /// Título de la tarjeta de Salud en la pantalla Mis datos.
   ///
   /// In es, this message translates to:

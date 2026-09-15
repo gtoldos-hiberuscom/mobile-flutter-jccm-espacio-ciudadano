@@ -2947,6 +2947,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataIntro => 'Check the information available about you in the Administration and access services and procedures linked to each area.';
 
   @override
+  String get representativeUnavailableTitle => 'Information unavailable';
+
+  @override
+  String get representativeUnavailableMessage => 'The identification method used to sign in does not allow you to view this information. If you have another way to identify yourself, you can try again.';
+
+  @override
   String get myDataHealthTitle => 'Health';
 
   @override

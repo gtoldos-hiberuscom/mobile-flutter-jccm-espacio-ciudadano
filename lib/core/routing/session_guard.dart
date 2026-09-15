@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
@@ -50,6 +51,10 @@ final class SessionGuard {
     final isValid = await sessionController.refreshIfNeeded();
     if (!isValid) {
       return _bounceToLanding();
+    }
+    final claims = _ref.read(jwtClaimsProvider);
+    if ((claims?.isRepresentative ?? false) && Routes.isUnavailableForRepresentative(path)) {
+      return Routes.representativeUnavailable;
     }
     return _consentRedirect(path);
   }

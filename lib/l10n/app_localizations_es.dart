@@ -2948,6 +2948,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataIntro => 'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.';
 
   @override
+  String get representativeUnavailableTitle => 'Información no disponible';
+
+  @override
+  String get representativeUnavailableMessage => 'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.';
+
+  @override
   String get myDataHealthTitle => 'Salud';
 
   @override

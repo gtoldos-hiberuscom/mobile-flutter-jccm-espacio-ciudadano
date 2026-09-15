@@ -12,12 +12,12 @@ import 'package:jccm_espacio_ciudadano/features/consent/3_data/repositories/cons
 
 void main() {
   group('ConsentRepositoryImpl', () {
-    test('uses sub_alt in the gateway path and idAgente in the write body', () async {
+    test('uses sub_alt in the path and the represented agent in the write body', () async {
       final adapter = _CapturingAdapter();
       final repository = ConsentRepositoryImpl(
         storage: _MemoryAppStorage(),
         dio: _dioWith(adapter),
-        agentId: 'PER9998003',
+        agentId: 'PJU0349051',
       );
 
       await repository.markConsentAccepted(
@@ -32,7 +32,7 @@ void main() {
         '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/clausulas',
         '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/clausulas',
       ]);
-      expect(adapter.jsonBodies.single['idAgente'], 'PER9998003');
+      expect(adapter.jsonBodies.single['idAgente'], 'PJU0349051');
     });
 
     test('markConsentAccepted creates clauses when agent has no remote preference', () async {

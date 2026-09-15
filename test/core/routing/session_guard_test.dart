@@ -32,31 +32,79 @@ void main() {
     return container;
   }
 
-  void startSession(final ProviderContainer container) {
-    container.read(authSessionControllerProvider).startInMemory(
-      TokenResponse(
-        'access',
-        'refresh',
-        DateTime.now().add(const Duration(minutes: 5)),
-        null,
-        null,
-        null,
-        null,
-      ),
-      claims: const JwtClaims(
-        exp: 9999999999,
-        iat: 0,
-        iss: 'test',
-        aud: ['app'],
-        sub: 'sub-1',
-        subAlt: 'PER1',
-      ),
-    );
+  void startSession(
+    final ProviderContainer container, {
+    final String? representedAgentId,
+  }) {
+    container
+        .read(authSessionControllerProvider)
+        .startInMemory(
+          TokenResponse(
+            'access',
+            'refresh',
+            DateTime.now().add(const Duration(minutes: 5)),
+            null,
+            null,
+            null,
+            null,
+          ),
+          claims: JwtClaims(
+            exp: 9999999999,
+            iat: 0,
+            iss: 'test',
+            aud: ['app'],
+            sub: 'sub-1',
+            subAlt: 'PER1',
+            representedAgentId: representedAgentId,
+          ),
+        );
   }
 
   setUp(() {
     storage = _FakeSecureStorage();
     consentRepository = _FakeConsentRepository();
+  });
+
+  group('SessionGuard representative restrictions', () {
+    test('redirects restricted sections without calling their backend', () async {
+      final container = buildContainer();
+      startSession(container, representedAgentId: 'PJU0349051');
+
+      for (final path in [
+        Routes.myDataHealth,
+        Routes.myDataEducation,
+        Routes.myDataSocialWelfare,
+        Routes.myDataEmployment,
+        Routes.myDataVehicles,
+        Routes.myDataHousingAddress,
+        Routes.digitalCards,
+      ]) {
+        expect(
+          await container.read(_guardProvider).redirectPath(path),
+          Routes.representativeUnavailable,
+          reason: path,
+        );
+      }
+    });
+
+    test('allows the supported representative sections', () async {
+      final container = buildContainer();
+      startSession(container, representedAgentId: 'PJU0349051');
+
+      for (final path in [
+        Routes.home,
+        Routes.myData,
+        Routes.myDataHousing,
+        Routes.myDataHousingRealEstate,
+        Routes.gestionExpedientes,
+        Routes.gestionNotificaciones,
+        Routes.recommendations,
+        Routes.agenda,
+        Routes.representativeUnavailable,
+      ]) {
+        expect(await container.read(_guardProvider).redirectPath(path), isNull, reason: path);
+      }
+    });
   });
 
   group('SessionGuard consent gate', () {

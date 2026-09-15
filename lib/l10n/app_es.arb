@@ -3883,6 +3883,14 @@
   "@myDataIntro": {
     "description": "Texto introductorio de la pantalla Mis datos."
   },
+  "representativeUnavailableTitle": "Información no disponible",
+  "@representativeUnavailableTitle": {
+    "description": "Título mostrado al abrir una sección no disponible con certificado de representante."
+  },
+  "representativeUnavailableMessage": "Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.",
+  "@representativeUnavailableMessage": {
+    "description": "Mensaje mostrado al abrir una sección no disponible con certificado de representante."
+  },
   "myDataHealthTitle": "Salud",
   "@myDataHealthTitle": {
     "description": "Título de la tarjeta de Salud en la pantalla Mis datos."
