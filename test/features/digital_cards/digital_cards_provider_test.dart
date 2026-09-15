@@ -39,7 +39,7 @@ void main() {
 
     expect(await container.read(digitalCardsAuthorizationProvider.future), isTrue);
     expect(repository.lastIdAgente, 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6');
-    expect(repository.lastClauseId, jccmDataConsentClauseId);
+    expect(repository.lastClauseId, digitalCardsConsentClauseId);
   });
 
   test('loads cards with sub_alt', () async {

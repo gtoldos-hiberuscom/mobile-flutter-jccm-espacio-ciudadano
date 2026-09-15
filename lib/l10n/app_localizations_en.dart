@@ -4141,7 +4141,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'You must authorize the consultation of the administrative records held by the JCCM in Terms of use and authorizations.';
+  String get digitalCardsAuthorizationRequiredMessage => 'To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {

@@ -7883,7 +7883,7 @@ abstract class AppLocalizations {
   /// Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM.
   ///
   /// In es, this message translates to:
-  /// **'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.'**
+  /// **'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».'**
   String get digitalCardsAuthorizationRequiredMessage;
 
   /// Carnets digitales — título del diálogo del sistema para guardar el archivo (QR, PKPASS, PDF).

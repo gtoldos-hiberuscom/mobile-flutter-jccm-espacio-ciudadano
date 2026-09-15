@@ -5379,7 +5379,7 @@
   "@digitalCardsInfoSheetBody": {
     "description": "Carnets digitales — cuerpo del bottom sheet informativo."
   },
-  "digitalCardsAuthorizationRequiredMessage": "Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.",
+  "digitalCardsAuthorizationRequiredMessage": "Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».",
   "@digitalCardsAuthorizationRequiredMessage": {
     "description": "Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM."
   },

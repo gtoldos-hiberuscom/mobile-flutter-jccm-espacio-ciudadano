@@ -20,6 +20,9 @@ const ageDataConsentClauseId = 2;
 /// Tratamiento de hechos vitales para recomendaciones personalizadas.
 const recommendationsConsentClauseId = 3;
 
+/// Consulta y descarga de carnets digitales.
+const digitalCardsConsentClauseId = 4;
+
 /// Domain entity representing a single legal authorisation clause.
 ///
 /// Pure Dart — no Flutter, Riverpod, Dio, or infrastructure imports.

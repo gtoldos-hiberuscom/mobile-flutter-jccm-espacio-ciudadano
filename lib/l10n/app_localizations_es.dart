@@ -4142,7 +4142,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.';
+  String get digitalCardsAuthorizationRequiredMessage => 'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {

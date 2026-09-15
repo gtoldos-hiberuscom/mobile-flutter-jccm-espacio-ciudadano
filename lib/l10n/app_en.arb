@@ -5365,7 +5365,7 @@
   "@digitalCardsInfoSheetBody": {
     "description": "Digital cards — body of the info bottom sheet."
   },
-  "digitalCardsAuthorizationRequiredMessage": "You must authorize the consultation of the administrative records held by the JCCM in Terms of use and authorizations.",
+  "digitalCardsAuthorizationRequiredMessage": "To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.",
   "@digitalCardsAuthorizationRequiredMessage": {
     "description": "Digital cards — notice when the JCCM data consultation authorization is missing."
   },
