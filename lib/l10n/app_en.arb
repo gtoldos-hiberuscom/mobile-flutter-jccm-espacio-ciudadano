@@ -6186,5 +6186,10 @@
   "gestionAportacionExpedienteUnavailableError": "We could not locate the case. Please try again later.",
   "@gestionAportacionExpedienteUnavailableError": {
     "description": "Generic error when searching a third-party case."
-  }
+  },
+  "sessionUnlockBiometricReason": "Confirm your identity to access your space",
+  "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
+  "biometricAccessDialogDescription": "This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.",
+  "biometricAccessDialogCancel": "Not now",
+  "biometricAccessDialogConfirm": "Enable quick access"
 }

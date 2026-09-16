@@ -13,20 +13,48 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/au
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 
 /// In-memory [SecureStorage] fake.
+///
+/// Records the protection each key was written with, and which keys were read,
+/// so the tests can assert *where* the biometric gate sits: on a real device a
+/// read of a biometric key raises the platform prompt.
 final class FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
+  final Map<String, SecureStorageProtection> writtenWith = {};
+  final List<String> readKeys = [];
+
+  /// Keys whose read fails, simulating a cancelled or failed biometric check.
+  final Set<String> unreadableKeys = {};
+
+  /// Keys whose write fails, simulating a device with no biometrics enrolled
+  /// (the store refuses rather than degrading to an unauthenticated key).
+  final Set<String> unwritableKeys = {};
 
   @override
-  Future<String?> read(final String key) async => store[key];
+  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+    readKeys.add(key);
+    if (unreadableKeys.contains(key)) {
+      throw StateError('biometric check rejected for $key');
+    }
+    return store[key];
+  }
 
   @override
-  Future<void> write(final String key, final String value) async => store[key] = value;
+  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+    if (unwritableKeys.contains(key)) {
+      throw StateError('no biometric hardware available for $key');
+    }
+    writtenWith[key] = protection;
+    store[key] = value;
+  }
 
   @override
-  Future<void> delete(final String key) async => store.remove(key);
+  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
 
   @override
-  Future<void> clear() async => store.clear();
+  Future<void> clear() async {
+    store.clear();
+    writtenWith.clear();
+  }
 }
 
 /// [AuthRepository] fake that counts refreshes, can be gated to force
@@ -106,6 +134,78 @@ void main() {
   setUp(() {
     repository = FakeAuthRepository();
     storage = FakeSecureStorage();
+  });
+
+  group('AuthSessionController biometric protection of the offline token', () {
+    test('only the refresh token is stored behind the biometric gate', () async {
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+
+      await controller.persist(
+        TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+      );
+
+      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.biometric);
+      expect(
+        storage.writtenWith[StorageKeys.accessToken],
+        SecureStorageProtection.standard,
+        reason: 'the access token must stay readable without a prompt, or "if there is an access token you can enter" is impossible',
+      );
+      expect(storage.writtenWith[StorageKeys.idToken], SecureStorageProtection.standard);
+    });
+
+    test('a device that cannot protect the token keeps working instead of crashing', () async {
+      // `enforceBiometrics` makes the write fail rather than silently storing
+      // the token unprotected. Correct policy — but it must not take the
+      // navigation down with it: the session just does not survive a restart,
+      // exactly as it behaved before any of this existed.
+      storage.unwritableKeys.add(StorageKeys.refreshToken);
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+
+      await expectLater(
+        controller.persist(
+          TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+        ),
+        completes,
+      );
+
+      expect(storage.store[StorageKeys.accessToken], 'access');
+      expect(storage.store[StorageKeys.refreshToken], isNull, reason: 'never stored unprotected');
+    });
+
+    test('hydrating on start-up never touches the refresh token, so no prompt is raised', () async {
+      storage.store[StorageKeys.accessToken] = 'access';
+      storage.store[StorageKeys.refreshToken] = 'refresh';
+      storage.store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
+      final container = buildContainer();
+
+      final session = await container.read(authSessionControllerProvider).hydrateFromStorage();
+
+      expect(session?.accessToken, 'access');
+      expect(
+        storage.readKeys,
+        isNot(contains(StorageKeys.refreshToken)),
+        reason: 'reading it would raise the biometric prompt on every cold start, even with a valid access token',
+      );
+    });
+
+    test('a rejected biometric check keeps the session instead of destroying it', () async {
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
+      storage.unreadableKeys.add(StorageKeys.refreshToken);
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider);
+
+      final status = await controller.refreshStatus(force: true);
+
+      expect(status, SessionRefreshStatus.unknownTransient);
+      expect(
+        storage.store[StorageKeys.accessToken],
+        'persisted-access',
+        reason: 'cancelling the prompt says nothing about the token being dead — nothing may be wiped',
+      );
+    });
   });
 
   group('AuthSessionController.refresh single-flight', () {

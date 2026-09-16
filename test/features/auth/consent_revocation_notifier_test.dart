@@ -143,15 +143,15 @@ final class _FakeSecureStorage implements SecureStorage {
   final List<String> deleted = [];
 
   @override
-  Future<String?> read(final String key) async => values[key];
+  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => values[key];
 
   @override
-  Future<void> write(final String key, final String value) async {
+  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
     values[key] = value;
   }
 
   @override
-  Future<void> delete(final String key) async {
+  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async {
     deleted.add(key);
     final _ = values.remove(key);
   }

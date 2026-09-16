@@ -68,13 +68,17 @@ final class AuthSessionController {
       return null;
     }
 
-    final refreshToken = await _storage.read(StorageKeys.refreshToken);
+    // El refresh token se deja fuera a propósito: está protegido con
+    // biometría, así que leerlo aquí levantaría el prompt en cada arranque —
+    // incluso teniendo un access token todavía válido, que es justo el caso
+    // en que el ciudadano no debe tener que autenticarse. Se lee más tarde,
+    // solo si hace falta refrescar (ver [_doRefresh]).
     final idToken = await _storage.read(StorageKeys.idToken);
     final expiresAtValue = await _storage.read(StorageKeys.sessionExpiresAt);
     final expiresAt = expiresAtValue == null ? null : DateTime.tryParse(expiresAtValue);
     final session = TokenResponse(
       accessToken,
-      refreshToken,
+      null,
       expiresAt,
       idToken,
       null,
@@ -85,15 +89,18 @@ final class AuthSessionController {
     return session;
   }
 
+  /// [prompt] es la copia del diálogo biométrico de Android, que solo la capa
+  /// de presentación puede traducir. Sin ella el sistema usa su texto propio.
   Future<SessionRefreshStatus> refreshIfNeeded({
     final Duration threshold = const Duration(seconds: 60),
+    final BiometricPromptCopy? prompt,
   }) async {
     final session = _ref.read(tokenResponseProvider) ?? await hydrateFromStorage();
     final expiresAt = session?.accessTokenExpirationDateTime;
     if (session?.accessToken != null && expiresAt != null && expiresAt.isAfter(DateTime.now().add(threshold))) {
       return SessionRefreshStatus.valid;
     }
-    return refreshStatus(force: true);
+    return refreshStatus(force: true, prompt: prompt);
   }
 
   /// Compat bool para quien solo necesita "¿hay token utilizable?" (el
@@ -101,7 +108,10 @@ final class AuthSessionController {
   /// terminan igual — sin token nuevo, el 401 original se propaga.
   Future<bool> refresh({final bool force = false}) async => await refreshStatus(force: force) == SessionRefreshStatus.valid;
 
-  Future<SessionRefreshStatus> refreshStatus({final bool force = false}) {
+  Future<SessionRefreshStatus> refreshStatus({
+    final bool force = false,
+    final BiometricPromptCopy? prompt,
+  }) {
     // Validity short-circuit — synchronous, so it runs before we touch the
     // single-flight guard: a caller with a still-valid token never joins (or
     // starts) a refresh.
@@ -115,16 +125,36 @@ final class AuthSessionController {
       return inFlight;
     }
 
-    final future = _doRefresh();
+    final future = _doRefresh(prompt);
     _inFlightRefresh = future;
     return future.whenComplete(() => _inFlightRefresh = null);
   }
 
-  Future<SessionRefreshStatus> _doRefresh() async {
+  Future<SessionRefreshStatus> _doRefresh(final BiometricPromptCopy? prompt) async {
     final generation = _sessionGeneration;
     final persistedAccessToken = await _storage.read(StorageKeys.accessToken);
     final hasPersistedSession = persistedAccessToken != null && persistedAccessToken.isNotEmpty;
-    final refreshToken = _ref.read(tokenResponseProvider)?.refreshToken ?? await _storage.read(StorageKeys.refreshToken);
+    // Esta lectura ES la comprobación biométrica: el almacén guardó el token
+    // exigiendo autenticación, así que la plataforma levanta aquí el prompt.
+    // Solo ocurre cuando de verdad hace falta refrescar, nunca al arrancar.
+    final String? refreshToken;
+    try {
+      refreshToken =
+          _ref.read(tokenResponseProvider)?.refreshToken ??
+          await _storage.read(
+            StorageKeys.refreshToken,
+            protection: SecureStorageProtection.biometric,
+            prompt: prompt,
+          );
+    } on Object catch (error, stackTrace) {
+      // La plataforma rechaza la lectura si el ciudadano cancela el prompt,
+      // falla la biometría, o si el juego de huellas cambió e invalidó la
+      // entrada. Ninguna de esas cosas dice que el token esté muerto, así que
+      // no se destruye la sesión: se informa de que no se pudo abrir y quien
+      // llama decide (reintentar el prompt u ofrecer Cl@ve).
+      logger.w('Refresh token unavailable behind the biometric gate', error: error, stackTrace: stackTrace);
+      return SessionRefreshStatus.unknownTransient;
+    }
     if (refreshToken == null || refreshToken.isEmpty) {
       // No refresh token at all — nothing can renew this session.
       await clear();
@@ -170,7 +200,6 @@ final class AuthSessionController {
   }) async {
     await Future.wait([
       if (session.accessToken != null) _storage.write(StorageKeys.accessToken, session.accessToken!),
-      if (session.refreshToken != null) _storage.write(StorageKeys.refreshToken, session.refreshToken!),
       if (session.idToken != null) _storage.write(StorageKeys.idToken, session.idToken!),
       if (session.accessTokenExpirationDateTime != null)
         _storage.write(
@@ -183,7 +212,32 @@ final class AuthSessionController {
         // authoritative after a restart.
         _storage.delete(StorageKeys.sessionExpiresAt),
     ]);
+    await _persistRefreshToken(session.refreshToken);
     _updateMemory(session, claims: claims);
+  }
+
+  /// Guarda el token de larga vida exigiendo biometría, y sigue adelante si el
+  /// dispositivo no puede ofrecerla.
+  ///
+  /// El almacén está configurado con `enforceBiometrics`, así que en un
+  /// terminal sin biometría dada de alta la escritura falla en vez de degradar
+  /// a una clave sin autenticación. Esa es la política correcta —este token
+  /// abre la sesión durante semanas y nunca debe quedar sin proteger—, pero no
+  /// puede tumbar la navegación: sin él la sesión simplemente no sobrevive al
+  /// cierre de la app, que es exactamente como se comportaba hasta ahora.
+  Future<void> _persistRefreshToken(final String? refreshToken) async {
+    if (refreshToken == null) {
+      return;
+    }
+    try {
+      await _storage.write(
+        StorageKeys.refreshToken,
+        refreshToken,
+        protection: SecureStorageProtection.biometric,
+      );
+    } on Object catch (error, stackTrace) {
+      logger.w('Offline token not persisted: this device cannot protect it with biometrics', error: error, stackTrace: stackTrace);
+    }
   }
 
   void startInMemory(
@@ -206,7 +260,7 @@ final class AuthSessionController {
     _sessionGeneration++;
     await Future.wait([
       _storage.delete(StorageKeys.accessToken),
-      _storage.delete(StorageKeys.refreshToken),
+      _storage.delete(StorageKeys.refreshToken, protection: SecureStorageProtection.biometric),
       _storage.delete(StorageKeys.idToken),
       _storage.delete(StorageKeys.sessionExpiresAt),
     ]);

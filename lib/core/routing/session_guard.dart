@@ -109,11 +109,36 @@ final class SessionGuard {
         return Routes.legalPrivacy;
 
       case ConsentNotRequired():
+        await _persistSessionNowConsentIsOnRecord();
         if (path == Routes.consent || path == Routes.legalPrivacy) {
           return null;
         }
         return _optionalConsentRedirect(path);
     }
+  }
+
+  /// Writes the in-memory session to secure storage once the remote says the
+  /// citizen's consent is on record.
+  ///
+  /// This is the counterpart of the [ConsentRequired] branch above, which
+  /// clears a persisted session when consent turns out **not** to be accepted:
+  /// persistence is deliberately gated on consent, so a session is never
+  /// written to disk for someone who has not accepted the data-protection
+  /// clause.
+  ///
+  /// Until this existed, the only caller of `persistCurrentSession()` was the
+  /// consent notifier's `AcceptConsentSuccess` branch, so a returning citizen
+  /// — whose clauses are already accepted and who therefore never re-accepts
+  /// anything — kept the session in memory only and lost it whenever the app
+  /// was closed, even with an access token still valid.
+  Future<void> _persistSessionNowConsentIsOnRecord() async {
+    final sessionController = _ref.read(authSessionControllerProvider);
+    // Reading once is cheaper than re-writing four secure-storage keys on
+    // every navigation to a protected route.
+    if (await sessionController.hasPersistedSession()) {
+      return;
+    }
+    await sessionController.persistCurrentSession();
   }
 
   Future<String?> _optionalConsentRedirect(final String path) async {

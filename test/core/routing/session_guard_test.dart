@@ -106,6 +106,46 @@ void main() {
 
       expect(redirect, isNull);
     });
+
+    test('REGRESSION: confirming consent persists the in-memory session so it survives closing the app', () async {
+      // Until this existed the only caller of persistCurrentSession() was the
+      // consent notifier's acceptance branch, so a returning citizen — who
+      // never re-accepts anything — kept the session in memory only and was
+      // sent back to Cl@ve on every cold start, even holding a valid token.
+      consentRepository.hasAccepted = true;
+      final container = buildContainer();
+      startSession(container);
+
+      await container.read(_guardProvider).redirectPath(Routes.home);
+
+      expect(storage.store[StorageKeys.accessToken], 'access');
+      expect(storage.store[StorageKeys.refreshToken], 'refresh');
+    });
+
+    test('an unconfirmed consent never writes the session to disk', () async {
+      consentRepository.hasAccepted = false;
+      final container = buildContainer();
+      startSession(container);
+
+      await container.read(_guardProvider).redirectPath(Routes.home);
+
+      expect(
+        storage.store[StorageKeys.accessToken],
+        isNull,
+        reason: 'persistence is gated on consent: nothing is stored for a citizen who has not accepted the clause',
+      );
+    });
+
+    test('an already persisted session is not rewritten on every navigation', () async {
+      consentRepository.hasAccepted = true;
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      final container = buildContainer();
+      startSession(container);
+
+      await container.read(_guardProvider).redirectPath(Routes.home);
+
+      expect(storage.store[StorageKeys.accessToken], 'persisted-access');
+    });
   });
 
   group('SessionGuard session refresh tri-state (C6)', () {
@@ -210,13 +250,13 @@ final class _FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
 
   @override
-  Future<String?> read(final String key) async => store[key];
+  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => store[key];
 
   @override
-  Future<void> write(final String key, final String value) async => store[key] = value;
+  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => store[key] = value;
 
   @override
-  Future<void> delete(final String key) async => store.remove(key);
+  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
 
   @override
   Future<void> clear() async => store.clear();

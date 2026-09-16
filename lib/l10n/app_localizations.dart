@@ -9085,6 +9085,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.'**
   String get gestionAportacionExpedienteUnavailableError;
+
+  /// No description provided for @sessionUnlockBiometricReason.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma tu identidad para acceder a tu espacio'**
+  String get sessionUnlockBiometricReason;
+
+  /// No description provided for @biometricAccessDialogTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Quieres activar el acceso rápido con huella o reconocimiento facial?'**
+  String get biometricAccessDialogTitle;
+
+  /// No description provided for @biometricAccessDialogDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.'**
+  String get biometricAccessDialogDescription;
+
+  /// No description provided for @biometricAccessDialogCancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get biometricAccessDialogCancel;
+
+  /// No description provided for @biometricAccessDialogConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar acceso rápido'**
+  String get biometricAccessDialogConfirm;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
