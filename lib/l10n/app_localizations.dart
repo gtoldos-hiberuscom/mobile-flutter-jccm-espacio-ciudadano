@@ -7508,6 +7508,18 @@ abstract class AppLocalizations {
   /// **'Activado'**
   String get appPreferenceStatusEnabled;
 
+  /// Etiqueta de la tarjeta de preferencia cuando no se ha podido consultar su estado. No afirma nada sobre la configuración del ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'No disponible'**
+  String get appPreferenceStatusUnavailable;
+
+  /// Descripción de la tarjeta cuando su estado no ha podido consultarse. La pone la propia tarjeta y no quien la usa: el motivo es el mismo sea cual sea el dato.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido consultar esta información. Inténtalo de nuevo más tarde.'**
+  String get appPreferenceStatusUnavailableDescription;
+
   /// Etiqueta de estado activo mostrada en la tarjeta de datos de contacto (se muestra en mayúsculas).
   ///
   /// In es, this message translates to:

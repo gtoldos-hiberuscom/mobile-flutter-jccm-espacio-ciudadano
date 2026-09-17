@@ -5113,6 +5113,8 @@
   "@appPreferenceStatusEnabled": {
     "description": "Enabled status of a preference card."
   },
+  "appPreferenceStatusUnavailable": "Unavailable",
+  "appPreferenceStatusUnavailableDescription": "We could not load this information. Please try again later.",
   "appPreferenceStatusActive": "Active",
   "@appPreferenceStatusActive": {
     "description": "Active status tag shown on the contact details preference card (rendered uppercase)."

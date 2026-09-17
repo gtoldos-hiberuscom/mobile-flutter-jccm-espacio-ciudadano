@@ -3878,6 +3878,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appPreferenceStatusEnabled => 'Enabled';
 
   @override
+  String get appPreferenceStatusUnavailable => 'Unavailable';
+
+  @override
+  String get appPreferenceStatusUnavailableDescription => 'We could not load this information. Please try again later.';
+
+  @override
   String get appPreferenceStatusActive => 'Active';
 
   @override

@@ -53,7 +53,23 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
     };
     final selectedLifeEvents = lifeEventsEnabled ? await _selectedLifeEvents(ref, args.idAgente) : const <LifeEvent>[];
     final lifeEventsUpdatedAt = _readLifeEventsUpdatedAt(appStorage, args.idAgente);
-    final notificationContact = await ref.watch(notificationContactProvider(args.contactId).future);
+    // El contacto es un bloque más de esta pantalla, no su razón de ser: que
+    // el servicio falle no puede llevarse por delante la biometría, los hechos
+    // vitales, las autorizaciones ni el cierre de sesión, que es lo que pasaba
+    // cuando la excepción subía hasta aquí. Gestión ya falla abierto ante este
+    // mismo fallo (ver `gestion_page.dart`).
+    //
+    // El error no se traduce a «sin contacto»: eso le diría al ciudadano que
+    // no tiene ningún medio de aviso configurado cuando lo único cierto es que
+    // no hemos podido mirarlo. Por eso viaja como estado propio.
+    NotificationContact? notificationContact;
+    bool notificationContactUnavailable = false;
+    try {
+      notificationContact = await ref.watch(notificationContactProvider(args.contactId).future);
+    } on Object catch (error, stackTrace) {
+      logger.e('Notification contact unavailable — failing open', error: error, stackTrace: stackTrace);
+      notificationContactUnavailable = true;
+    }
 
     return _PreferencesState(
       biometricEnabled: appStorage.read<bool>('${StorageKeys.biometricQuickAccessEnabledPrefix}${args.idAgente}') ?? false,
@@ -65,6 +81,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
       selectedLifeEvents: selectedLifeEvents,
       lifeEventsUpdatedAt: lifeEventsUpdatedAt,
       notificationContact: notificationContact,
+      notificationContactUnavailable: notificationContactUnavailable,
     );
   },
   name: 'preferencesStateProvider',
@@ -92,6 +109,7 @@ final class _PreferencesState {
     required this.selectedLifeEvents,
     required this.lifeEventsUpdatedAt,
     required this.notificationContact,
+    required this.notificationContactUnavailable,
     required this.biometricEnabled,
   });
 
@@ -99,6 +117,11 @@ final class _PreferencesState {
   final List<LifeEvent> selectedLifeEvents;
   final DateTime? lifeEventsUpdatedAt;
   final NotificationContact? notificationContact;
+
+  /// Si la consulta del contacto falló. Separado de que [notificationContact]
+  /// sea nulo: una cosa es no tener medio de aviso y otra no haber podido
+  /// comprobarlo.
+  final bool notificationContactUnavailable;
   final bool biometricEnabled;
 }
 
@@ -195,7 +218,11 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
         AppPreferenceCard(
           title: l10n.preferencesNotificationContactTitle,
           icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-          status: preferences.notificationContact == null ? AppPreferenceStatus.pending : AppPreferenceStatus.enabled,
+          status: preferences.notificationContactUnavailable
+              ? AppPreferenceStatus.unavailable
+              : preferences.notificationContact == null
+              ? AppPreferenceStatus.pending
+              : AppPreferenceStatus.enabled,
           inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
           pendingDescription: l10n.preferencesNotificationContactPendingDescription,
           activeDescription: l10n.preferencesNotificationContactActiveDescription,

@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/co
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/preferences_page.dart';
+import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// C5 regression: an unanswerable clause check must surface the page's error
@@ -54,6 +55,61 @@ void main() {
     expect(find.byType(ErrorStateWidget), findsOneWidget);
     expect(find.textContaining('primero debes aceptar'), findsNothing);
   });
+
+  testWidgets('REGRESSION: un contacto que no se puede consultar no tumba la pantalla entera', (final tester) async {
+    // El 17/09, con `/contacto` devolviendo 500 en PRE, la pantalla no llegaba
+    // a pintarse: la excepción subía hasta el provider de la página y dejaba
+    // inalcanzables la biometría, los hechos vitales, las autorizaciones y el
+    // cierre de sesión. Un bloque opcional no puede llevarse por delante todo
+    // lo demás.
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          appStorageProvider.overrideWithValue(_MemoryAppStorage()),
+          jwtClaimsProvider.overrideWith(
+            () => _StubJwtClaimsNotifier(
+              const JwtClaims(
+                exp: 0,
+                iat: 0,
+                iss: 'issuer',
+                aud: [],
+                sub: 'subject',
+                subAlt: 'PER1',
+              ),
+            ),
+          ),
+          checkAcceptedConsentClauseUsecaseProvider.overrideWithValue(
+            CheckAcceptedConsentClauseUsecase(_FakeConsentRepository()),
+          ),
+          notificationContactProvider.overrideWith(
+            (final ref, final citizenId) async => throw StateError('contacto: 500 del gateway'),
+          ),
+        ],
+        child: const MaterialApp(
+          locale: Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: PreferencesPage(),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(
+      find.byType(ErrorStateWidget),
+      findsNothing,
+      reason: 'el contacto es un bloque de la pantalla, no su razón de ser',
+    );
+    expect(find.text('Datos de contacto para notificaciones'), findsOneWidget);
+    expect(
+      // El tag pinta la etiqueta en mayúsculas.
+      find.text('NO DISPONIBLE'),
+      findsOneWidget,
+      reason: 'ni «pendiente» ni «activado»: ambos afirmarían algo que no se ha podido comprobar',
+    );
+    expect(find.textContaining('No hemos podido consultar esta información'), findsOneWidget);
+  });
 }
 
 final class _StubJwtClaimsNotifier extends JwtClaimsNotifier {
@@ -72,7 +128,12 @@ final class _FakeConsentRepository implements ConsentRepository {
 
   @override
   Future<bool> hasAcceptedClause({required final String idAgente, required final int clauseId}) async {
-    throw error!;
+    if (error != null) {
+      throw error!;
+    }
+    // Sin la cláusula aceptada, los hechos vitales no se consultan y el test
+    // ejercita únicamente el camino del contacto.
+    return false;
   }
 
   @override

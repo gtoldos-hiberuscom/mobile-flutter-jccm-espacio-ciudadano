@@ -3879,6 +3879,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPreferenceStatusEnabled => 'Activado';
 
   @override
+  String get appPreferenceStatusUnavailable => 'No disponible';
+
+  @override
+  String get appPreferenceStatusUnavailableDescription => 'No hemos podido consultar esta información. Inténtalo de nuevo más tarde.';
+
+  @override
   String get appPreferenceStatusActive => 'Activo';
 
   @override
