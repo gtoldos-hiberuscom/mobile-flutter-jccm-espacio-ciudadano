@@ -1,16 +1,46 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
+
+/// In-memory [AppStorage] fake — sostiene la preferencia de acceso rápido,
+/// de la que ahora depende que el offline token llegue a guardarse.
+final class FakeAppStorage implements AppStorage {
+  final Map<String, Object> values = {};
+
+  @override
+  T? read<T>(final String key) => values[key] as T?;
+
+  @override
+  Future<bool> write(final String key, final Object value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool> remove(final String key) async {
+    values.remove(key);
+    return true;
+  }
+
+  @override
+  Future<bool> clear() async {
+    values.clear();
+    return true;
+  }
+}
 
 /// In-memory [SecureStorage] fake.
 ///
@@ -21,6 +51,9 @@ final class FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
   final Map<String, SecureStorageProtection> writtenWith = {};
   final List<String> readKeys = [];
+
+  /// Operaciones en orden, como `'delete:clave'` / `'write:clave'`.
+  final List<String> operations = [];
 
   /// Keys whose read fails, simulating a cancelled or failed biometric check.
   final Set<String> unreadableKeys = {};
@@ -43,16 +76,36 @@ final class FakeSecureStorage implements SecureStorage {
     if (unwritableKeys.contains(key)) {
       throw StateError('no biometric hardware available for $key');
     }
+    operations.add('write:$key');
     writtenWith[key] = protection;
     store[key] = value;
   }
 
   @override
-  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
+  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async {
+    operations.add('delete:$key');
+    store.remove(key);
+  }
 
   @override
-  Future<void> clear() async {
-    store.clear();
+  /// Si el último [clear] alcanzó al almacén protegido.
+  bool clearedBiometric = false;
+
+  @override
+  Future<void> clearBiometric() async {
+    clearedBiometric = true;
+    store.remove(StorageKeys.refreshToken);
+  }
+
+  @override
+  Future<void> clear({final bool includeBiometric = true}) async {
+    clearedBiometric = includeBiometric;
+    store.remove(StorageKeys.accessToken);
+    store.remove(StorageKeys.idToken);
+    store.remove(StorageKeys.sessionExpiresAt);
+    if (includeBiometric) {
+      store.remove(StorageKeys.refreshToken);
+    }
     writtenWith.clear();
   }
 }
@@ -60,6 +113,20 @@ final class FakeSecureStorage implements SecureStorage {
 /// [AuthRepository] fake that counts refreshes, can be gated to force
 /// concurrency, and can be made to throw a chosen [AuthException].
 final class FakeAuthRepository implements AuthRepository {
+  final List<String> revokedTokens = [];
+
+  @override
+  Exception? revokeError;
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    final error = revokeError;
+    if (error != null) {
+      throw error;
+    }
+    revokedTokens.add(refreshToken);
+  }
+
   int refreshCount = 0;
   Completer<void>? gate;
   Exception? errorToThrow;
@@ -116,15 +183,31 @@ TokenResponse tokenExpiringIn(final Duration ttl) => TokenResponse(
   null,
 );
 
+/// La preferencia de acceso rápido va por ciudadano, y el `idAgente` sale del
+/// claim `subAlt`: las sesiones de estos tests tienen que declararlo.
+const String _idAgente = 'PER1';
+const String _quickAccessKey = '${StorageKeys.biometricQuickAccessEnabledPrefix}$_idAgente';
+/// Access token con forma de JWT y el claim `sub_alt`. Los de Cerbero lo son,
+/// y el controlador re-decodifica el access token en cada refresco para
+/// refrescar la identidad: con una cadena cualquiera la perdería.
+String _accessTokenFor(final String tag) {
+  String segment(final Map<String, Object?> value) => base64Url.encode(utf8.encode(json.encode(value))).replaceAll('=', '');
+  return '${segment(const {'alg': 'none'})}.${segment({'sub': 'sub-1', 'sub_alt': _idAgente, 'tag': tag, 'exp': 9999999999})}.sig';
+}
+
+const JwtClaims _claims = JwtClaims(exp: 9999999999, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: _idAgente);
+
 void main() {
   late FakeAuthRepository repository;
   late FakeSecureStorage storage;
+  late FakeAppStorage appStorage;
 
   ProviderContainer buildContainer() {
     final container = ProviderContainer(
       overrides: [
         authRepositoryProvider.overrideWithValue(repository),
         secureStorageProvider.overrideWithValue(storage),
+        appStorageProvider.overrideWithValue(appStorage),
       ],
     );
     addTearDown(container.dispose);
@@ -134,6 +217,43 @@ void main() {
   setUp(() {
     repository = FakeAuthRepository();
     storage = FakeSecureStorage();
+    appStorage = FakeAppStorage()
+      // El grueso de los tests ejercita la sesión persistida, que ahora exige
+      // el opt-in; los que comprueban lo contrario lo apagan explícitamente.
+      ..values[_quickAccessKey] = true;
+  });
+
+  group('AuthSessionController.revokeCurrentOfflineSession', () {
+    test('revoca con el token en memoria', () async {
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null), claims: _claims);
+
+      await controller.revokeCurrentOfflineSession();
+
+      expect(repository.revokedTokens, ['refresh']);
+    });
+
+    test('sin token en memoria no intenta nada, y no lee el almacén protegido', () async {
+      // Leerlo levantaría el diálogo biométrico, y pedir la huella para cerrar
+      // sesión es justo lo que se quiso evitar.
+      storage.store[StorageKeys.refreshToken] = 'guardado';
+      final container = buildContainer();
+
+      await container.read(authSessionControllerProvider).revokeCurrentOfflineSession();
+
+      expect(repository.revokedTokens, isEmpty);
+      expect(storage.readKeys, isNot(contains(StorageKeys.refreshToken)));
+    });
+
+    test('un fallo de revocación no impide cerrar sesión', () async {
+      repository.revokeError = Exception('servidor caído');
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null), claims: _claims);
+
+      await expectLater(controller.revokeCurrentOfflineSession(), completes);
+    });
   });
 
   group('AuthSessionController biometric protection of the offline token', () {
@@ -143,6 +263,7 @@ void main() {
 
       await controller.persist(
         TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+        claims: _claims,
       );
 
       expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.biometric);
@@ -172,6 +293,85 @@ void main() {
 
       expect(storage.store[StorageKeys.accessToken], 'access');
       expect(storage.store[StorageKeys.refreshToken], isNull, reason: 'never stored unprotected');
+    });
+
+    test('REGRESSION: the offline token is deleted before being written, so the access control is really applied', () async {
+      // El Keychain no permite cambiar el ACL con SecItemUpdate, y el plugin
+      // sólo lo aplica en SecItemAdd. Sin el borrado previo, una entrada
+      // preexistente —creada sin protección por cualquier build anterior—
+      // conservaría su ACL viejo y el token quedaría legible sin biometría.
+      storage.store[StorageKeys.refreshToken] = 'token-de-una-build-anterior';
+      final container = buildContainer();
+
+      await container.read(authSessionControllerProvider).persist(
+        TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+        claims: _claims,
+      );
+
+      expect(
+        storage.operations,
+        containsAllInOrder(<String>['delete:${StorageKeys.refreshToken}', 'write:${StorageKeys.refreshToken}']),
+      );
+      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.biometric);
+    });
+
+    test('REGRESSION: el borrado de instalación limpia puede dejar fuera el almacén biométrico', () async {
+      // En Android tocar ese almacén lo CREA, y crearlo dispara una migración
+      // que exige autenticar: el ciudadano veía un diálogo de huella nada más
+      // instalar, antes de hacer nada. La rutina de arranque existe por iOS,
+      // donde el Keychain sobrevive a la desinstalación.
+      storage.store[StorageKeys.accessToken] = 'viejo';
+      storage.store[StorageKeys.refreshToken] = 'viejo-offline';
+
+      await storage.clear(includeBiometric: false);
+
+      expect(storage.store[StorageKeys.accessToken], isNull);
+      expect(storage.clearedBiometric, isFalse, reason: 'no debe tocarse el almacén protegido');
+    });
+
+    test('sin el opt-in activado el offline token no se guarda', () async {
+      // Es lo que impide que un ciudadano acabe con una sesión de semanas que
+      // nunca autorizó: hasta que activa el acceso rápido, cerrar la app
+      // termina la sesión igual que siempre.
+      appStorage.values[_quickAccessKey] = false;
+      final container = buildContainer();
+
+      await container.read(authSessionControllerProvider).persist(
+        TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+        claims: _claims,
+      );
+
+      expect(storage.store[StorageKeys.accessToken], 'access');
+      expect(storage.store[StorageKeys.refreshToken], isNull);
+    });
+
+    test('desactivar el opt-in borra del dispositivo el token ya guardado', () async {
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null), claims: _claims);
+      await controller.persist(
+        TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+        claims: _claims,
+      );
+      expect(storage.store[StorageKeys.refreshToken], 'refresh');
+
+      appStorage.values[_quickAccessKey] = false;
+      await controller.applyBiometricQuickAccessChange();
+
+      expect(storage.store[StorageKeys.refreshToken], isNull, reason: 'revocar el acceso rápido no puede dejar el token en el dispositivo');
+    });
+
+    test('activar el opt-in guarda el token de la sesión en curso, sin esperar al siguiente login', () async {
+      appStorage.values[_quickAccessKey] = false;
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null), claims: _claims);
+
+      appStorage.values[_quickAccessKey] = true;
+      await controller.applyBiometricQuickAccessChange();
+
+      expect(storage.store[StorageKeys.refreshToken], 'refresh');
+      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.biometric);
     });
 
     test('hydrating on start-up never touches the refresh token, so no prompt is raised', () async {
@@ -320,12 +520,30 @@ void main() {
       storage.store[StorageKeys.accessToken] = 'old-access';
       storage.store[StorageKeys.refreshToken] = 'old-refresh';
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider);
+      final controller = container.read(authSessionControllerProvider)
+        // Estado idéntico al que deja `hydrateFromStorage`: identidad y access
+        // token en memoria, refresh no —vive en el almacén protegido—. Hace
+        // falta la identidad porque la preferencia de acceso rápido va por
+        // ciudadano.
+        ..startInMemory(
+          TokenResponse('old-access', null, DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
+          claims: _claims,
+        );
+
+      repository.responseBuilder = (final count) => TokenResponse(
+        _accessTokenFor('new-access-$count'),
+        'new-refresh-$count',
+        DateTime.now().add(const Duration(minutes: 5)),
+        null,
+        null,
+        null,
+        null,
+      );
 
       final refreshed = await controller.refresh(force: true);
 
       expect(refreshed, isTrue);
-      expect(storage.store[StorageKeys.accessToken], 'new-access-1');
+      expect(storage.store[StorageKeys.accessToken], _accessTokenFor('new-access-1'));
       expect(storage.store[StorageKeys.refreshToken], 'new-refresh-1');
     });
 

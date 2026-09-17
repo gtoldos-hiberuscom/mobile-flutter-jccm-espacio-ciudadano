@@ -1,4 +1,5 @@
 import 'dart:async' show unawaited;
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
@@ -54,6 +56,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
     final notificationContact = await ref.watch(notificationContactProvider(args.contactId).future);
 
     return _PreferencesState(
+      biometricEnabled: appStorage.read<bool>('${StorageKeys.biometricQuickAccessEnabledPrefix}${args.idAgente}') ?? false,
       lifeEventsStatus: lifeEventsEnabled
           ? selectedLifeEvents.isNotEmpty
                 ? AppPreferenceStatus.enabled
@@ -89,12 +92,14 @@ final class _PreferencesState {
     required this.selectedLifeEvents,
     required this.lifeEventsUpdatedAt,
     required this.notificationContact,
+    required this.biometricEnabled,
   });
 
   final AppPreferenceStatus lifeEventsStatus;
   final List<LifeEvent> selectedLifeEvents;
   final DateTime? lifeEventsUpdatedAt;
   final NotificationContact? notificationContact;
+  final bool biometricEnabled;
 }
 
 class PreferencesPage extends ConsumerStatefulWidget {
@@ -105,6 +110,8 @@ class PreferencesPage extends ConsumerStatefulWidget {
 }
 
 class _PreferencesPageState extends ConsumerState<PreferencesPage> {
+  bool _updatingBiometrics = false;
+
   bool _deletingAccount = false;
 
   @override
@@ -205,6 +212,19 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
             ).toString(),
           ),
         ),
+        const SizedBox(height: AppDimensions.space16),
+        AppPreferenceCard(
+          title: 'Activación de acceso biométrico',
+          icon: const AppIcon(AppIcons.fingerprint, color: AppColors.textPrimary),
+          status: preferences.biometricEnabled ? AppPreferenceStatus.enabled : AppPreferenceStatus.disabled,
+          inactiveDescription: 'No se ha activado el acceso biométrico a la aplicación.',
+          pendingDescription: 'No se ha activado el acceso biométrico a la aplicación.',
+          activeDescription: 'El acceso biométrico a la aplicación está activado.',
+          actionLabel: preferences.biometricEnabled ? 'Desactivar' : 'Activar',
+          actionIcon: preferences.biometricEnabled ? AppIcons.close : AppIcons.check,
+          onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(preferencesArgs, preferences.biometricEnabled)),
+          showInactiveIcon: true,
+        ),
         const SizedBox(height: AppDimensions.space24),
         AppButton(
           label: l10n.lifeEventsResetAction,
@@ -216,6 +236,97 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
         ),
       ],
     );
+  }
+
+  /// Activa o desactiva el acceso rápido con biometría.
+  ///
+  /// Activar exige dos cosas antes de tocar nada: que el dispositivo tenga
+  /// biometría dada de alta —si no, el almacén rechazaría guardar el token y
+  /// la promesa sería falsa— y que el ciudadano la supere ahora, que es la
+  /// forma de comprobar que es quien dice ser antes de dejar su sesión abierta
+  /// durante semanas.
+  ///
+  /// El cambio se aplica a la sesión en curso, no al siguiente login: al
+  /// activar se guarda el token que ya está en memoria y al desactivar se
+  /// borra del dispositivo en el acto.
+  Future<void> _toggleBiometrics(
+    final _PreferencesArgs preferencesArgs,
+    final bool currentlyEnabled,
+  ) async {
+    if (_updatingBiometrics) {
+      return;
+    }
+    setState(() => _updatingBiometrics = true);
+
+    final l10n = AppLocalizations.of(context);
+    final appStorage = ref.read(appStorageProvider);
+
+    try {
+      if (currentlyEnabled) {
+        await appStorage.write('${StorageKeys.biometricQuickAccessEnabledPrefix}${preferencesArgs.idAgente}', false);
+      } else {
+        final authenticator = ref.read(biometricAuthenticatorProvider);
+        if (!await authenticator.canAuthenticateWithBiometrics()) {
+          if (!mounted) {
+            return;
+          }
+          AppAlertSnackbar.show(
+            context,
+            message: l10n.walletErrorNoCapability,
+            severity: AppAlertSeverity.warning,
+          );
+          return;
+        }
+
+        // Igual que en la home: en Android la escritura en el KeyStore ya
+        // autentica, así que pedirlo también aquí encadenaba dos huellas.
+        if (!Platform.isAndroid) {
+          final authenticated = await authenticator.authenticateForSessionUnlock(
+            localizedReason: l10n.sessionUnlockBiometricReason,
+          );
+          if (!authenticated) {
+            return;
+          }
+        }
+        await appStorage.write('${StorageKeys.biometricQuickAccessEnabledPrefix}${preferencesArgs.idAgente}', true);
+      }
+
+      final applied = await ref.read(authSessionControllerProvider).applyBiometricQuickAccessChange();
+      if (!applied) {
+        // No se pudo guardar el token: la preferencia vuelve atrás para no
+        // anunciar un acceso rápido que no existe, y se explica por qué. El
+        // caso típico no es un fallo del dispositivo: es una sesión restaurada
+        // cuyo access token seguía vivo, así que nunca hizo falta refrescar y
+        // no hay credencial de larga vida en memoria que guardar. La salida es
+        // volver a identificarse, no reintentar el interruptor.
+        await appStorage.write('${StorageKeys.biometricQuickAccessEnabledPrefix}${preferencesArgs.idAgente}', false);
+        if (mounted) {
+          AppAlertSnackbar.show(
+            context,
+            message: l10n.preferencesBiometricEnableFailed,
+            severity: AppAlertSeverity.warning,
+          );
+        }
+      }
+      if (!mounted) {
+        return;
+      }
+      ref.invalidate(_preferencesStateProvider(preferencesArgs));
+      if (currentlyEnabled) {
+        // Revocar borra el token de larga vida, así que la sesión en curso ya
+        // no podrá renovarse cuando caduque el access token. Sin este aviso el
+        // ciudadano se encontraba en Cl@ve unos minutos después de tocar un
+        // interruptor que sólo prometía quitar la huella.
+        AppAlertSnackbar.show(
+          context,
+          message: l10n.preferencesBiometricDisabledNotice,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _updatingBiometrics = false);
+      }
+    }
   }
 
   Future<void> _openLifeEvents(final _PreferencesArgs preferencesArgs) async {

@@ -22,20 +22,17 @@ enum SecureStorageProtection {
 /// uses the system prompt plus `NSFaceIDUsageDescription` from `Info.plist`
 /// and ignores this. Passed in from the presentation layer because
 /// `lib/core/storage` has no access to `AppLocalizations`.
-///
-/// Only the fields `flutter_secure_storage` 10.0.0 — the version this project
-/// pins — actually forwards to the platform. Later 10.x releases add a
-/// negative-button label, Secure Enclave wrapping and strong-biometrics-only
-/// enforcement; adopting them means moving the pinned dependency, which is a
-/// decision of its own.
+
 final class BiometricPromptCopy {
   const BiometricPromptCopy({
     required this.title,
     required this.subtitle,
+    required this.cancelLabel,
   });
 
   final String title;
   final String subtitle;
+  final String cancelLabel;
 }
 
 /// Abstract contract for encrypted key-value storage.
@@ -68,13 +65,32 @@ abstract interface class SecureStorage {
     final SecureStorageProtection protection,
   });
 
-  /// Removes all entries from the secure store, whatever their protection.
-  Future<void> clear();
+  /// Vacía de golpe todo lo guardado tras biometría.
+  ///
+  /// Existe como operación propia porque borrar **clave a clave** con
+  /// protección biométrica obliga a la plataforma a usar el cifrador, y en
+  /// Android eso levanta el diálogo de huella: cerrar sesión pedía biometría
+  /// incluso a quien nunca la activó. Vaciar el almacén con nombre propio no
+  /// necesita descifrar nada.
+  Future<void> clearBiometric();
+
+  /// Removes all entries from the secure store.
+  ///
+  /// [includeBiometric] permite dejar fuera el almacén protegido. Merece la
+  /// pena porque en Android **tocarlo lo crea**, y crearlo puede exigir
+  /// autenticación: quien solo quiera limpiar lo ordinario no debe provocarle
+  /// un diálogo de huella al ciudadano.
+  Future<void> clear({final bool includeBiometric});
 }
 
 /// [FlutterSecureStorage]-backed implementation of [SecureStorage].
 final class FlutterSecureStorageImpl implements SecureStorage {
   FlutterSecureStorageImpl(this._storage);
+
+  /// Espacio de nombres del almacén Android reservado a lo que va tras
+  /// biometría. Separado del almacén por defecto a propósito: ver
+  /// [_androidOptions].
+  static const String _biometricStoreName = 'jccm_secure_biometric';
 
   final FlutterSecureStorage _storage;
 
@@ -113,17 +129,23 @@ final class FlutterSecureStorageImpl implements SecureStorage {
   );
 
   @override
-  Future<void> clear() async {
-    // Both policies are wiped: a logout must not leave the biometric-protected
-    // refresh token behind just because the default options do not match it.
+  Future<void> clearBiometric() => _storage.deleteAll(
+    iOptions: _appleOptions(SecureStorageProtection.biometric),
+    aOptions: _androidOptions(SecureStorageProtection.biometric, null),
+  );
+
+  @override
+  Future<void> clear({final bool includeBiometric = true}) async {
     await _storage.deleteAll(
       iOptions: _appleOptions(SecureStorageProtection.standard),
       aOptions: _androidOptions(SecureStorageProtection.standard, null),
     );
-    await _storage.deleteAll(
-      iOptions: _appleOptions(SecureStorageProtection.biometric),
-      aOptions: _androidOptions(SecureStorageProtection.biometric, null),
-    );
+    if (!includeBiometric) {
+      return;
+    }
+    // Por defecto sí: un logout no puede dejar atrás el offline token sólo
+    // porque las opciones por defecto no casen con la entrada protegida.
+    await clearBiometric();
   }
 
   static IOSOptions _appleOptions(final SecureStorageProtection protection) => switch (protection) {
@@ -133,6 +155,10 @@ final class FlutterSecureStorageImpl implements SecureStorage {
     // a session it was never authorised for. The citizen falls back to Cl@ve.
     SecureStorageProtection.biometric => const IOSOptions(
       accessControlFlags: [AccessControlFlag.biometryCurrentSet],
+      // La clave que envuelve el token la custodia el Secure Enclave. Si el
+      // dispositivo no lo tiene, el propio plugin cae a Keychain estándar
+      // conservando los flags, así que no hay nada que degradar a mano.
+      useSecureEnclave: true,
     ),
   };
 
@@ -146,8 +172,25 @@ final class FlutterSecureStorageImpl implements SecureStorage {
       // (`setUserAuthenticationRequired(false)`) whenever biometrics are
       // unavailable — which would store the offline token unprotected.
       enforceBiometrics: true,
+      // Este almacén se crea para una única cosa y con un único algoritmo, así
+      // que no hay nada que migrar jamás. Con la migración activa el plugin
+      // interpreta el primer uso como «cambio de algoritmo» y lanza un proceso
+      // que exige autenticar, colando un diálogo de huella donde no toca.
+      migrateOnAlgorithmChange: false,
+      // Almacén propio, y esto no es cosmético: en Android el cifrador es del
+      // almacén entero, no de cada clave. El almacén por defecto de esta app
+      // se creó hace mucho con un cifrador sin autenticación, y el plugin lo
+      // reutiliza tal cual —`cipher == null` y se salta la biometría—, así que
+      // pedirla por clave no surtía efecto. Con un nombre propio el almacén
+      // nace de cero y su clave se genera con `setUserAuthenticationRequired`.
+      storageNamespace: _biometricStoreName,
+      // `strongBiometricOnly` y no la credencial del dispositivo: el PIN del
+      // terminal ya protege el acceso al propio terminal, y admitirlo aquí
+      // haría que quien conozca ese PIN heredase semanas de sesión.
+      biometricType: AndroidBiometricType.strongBiometricOnly,
       biometricPromptTitle: prompt?.title,
       biometricPromptSubtitle: prompt?.subtitle,
+      biometricPromptNegativeButton: prompt?.cancelLabel,
     ),
   };
 }

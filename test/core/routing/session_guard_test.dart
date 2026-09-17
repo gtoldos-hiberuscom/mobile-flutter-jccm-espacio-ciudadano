@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
@@ -20,12 +21,14 @@ final _guardProvider = Provider<SessionGuard>(SessionGuard.new);
 void main() {
   late _FakeSecureStorage storage;
   late _FakeConsentRepository consentRepository;
+  late _FakeAppStorage appStorage;
 
   ProviderContainer buildContainer() {
     final container = ProviderContainer(
       overrides: [
         authRepositoryProvider.overrideWithValue(_UnusedAuthRepository()),
         secureStorageProvider.overrideWithValue(storage),
+        appStorageProvider.overrideWithValue(appStorage),
         consentRepositoryProvider.overrideWithValue(consentRepository),
       ],
     );
@@ -58,6 +61,9 @@ void main() {
   setUp(() {
     storage = _FakeSecureStorage();
     consentRepository = _FakeConsentRepository();
+    // El acceso rápido activado: es la condición para que la sesión se guarde,
+    // que es justo lo que comprueban estos tests.
+    appStorage = _FakeAppStorage()..values['${StorageKeys.biometricQuickAccessEnabledPrefix}PER1'] = true;
   });
 
   group('SessionGuard consent gate', () {
@@ -156,6 +162,7 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(const _FailingAuthRepository(AuthException.unexpected())),
           secureStorageProvider.overrideWithValue(storage),
+          appStorageProvider.overrideWithValue(appStorage),
           consentRepositoryProvider.overrideWithValue(consentRepository),
         ],
       );
@@ -186,6 +193,7 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(const _FailingAuthRepository(AuthException.remoteFailure(message: 'invalid_grant'))),
           secureStorageProvider.overrideWithValue(storage),
+          appStorageProvider.overrideWithValue(appStorage),
           consentRepositoryProvider.overrideWithValue(consentRepository),
         ],
       );
@@ -246,6 +254,31 @@ void main() {
   });
 }
 
+final class _FakeAppStorage implements AppStorage {
+  final Map<String, Object> values = {};
+
+  @override
+  T? read<T>(final String key) => values[key] as T?;
+
+  @override
+  Future<bool> write(final String key, final Object value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool> remove(final String key) async {
+    values.remove(key);
+    return true;
+  }
+
+  @override
+  Future<bool> clear() async {
+    values.clear();
+    return true;
+  }
+}
+
 final class _FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
 
@@ -259,12 +292,18 @@ final class _FakeSecureStorage implements SecureStorage {
   Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
 
   @override
-  Future<void> clear() async => store.clear();
+  Future<void> clearBiometric() async => store.remove(StorageKeys.refreshToken);
+
+  @override
+  Future<void> clear({final bool includeBiometric = true}) async => store.clear();
 }
 
 /// Repository whose refresh always fails with the given [AuthException].
 final class _FailingAuthRepository implements AuthRepository {
   const _FailingAuthRepository(this.error);
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {}
 
   final AuthException error;
 
@@ -280,6 +319,13 @@ final class _FailingAuthRepository implements AuthRepository {
 
 /// The guard under test never refreshes (the in-memory token is fresh).
 final class _UnusedAuthRepository implements AuthRepository {
+  final List<String> revokedTokens = [];
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedTokens.add(refreshToken);
+  }
+
   @override
   Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => throw UnimplementedError();
 

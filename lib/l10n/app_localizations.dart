@@ -9086,6 +9086,30 @@ abstract class AppLocalizations {
   /// **'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.'**
   String get gestionAportacionExpedienteUnavailableError;
 
+  /// Error al activar el acceso biométrico cuando la sesión en curso no tiene credencial que guardar.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido activar el acceso rápido. Vuelve a identificarte con Cl@ve e inténtalo de nuevo.'**
+  String get preferencesBiometricEnableFailed;
+
+  /// Aviso al desactivar el acceso biométrico: la sesión en curso no podrá renovarse.
+  ///
+  /// In es, this message translates to:
+  /// **'Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve.'**
+  String get preferencesBiometricDisabledNotice;
+
+  /// Botón que descarta el diálogo biométrico del sistema al reanudar sesión (solo Android).
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get sessionUnlockBiometricCancel;
+
+  /// Título del diálogo biométrico del sistema al reanudar una sesión guardada.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso a tu espacio'**
+  String get sessionUnlockBiometricTitle;
+
   /// No description provided for @sessionUnlockBiometricReason.
   ///
   /// In es, this message translates to:

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
@@ -91,6 +92,32 @@ final class AuthRepositoryImpl implements AuthRepository {
         AuthException.unexpected(cause: error),
         stackTrace,
       );
+    }
+  }
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    _requireNotBlank(refreshToken, 'refreshToken');
+
+    try {
+      // Dio propio y desnudo, no el cliente de la app: sus interceptores
+      // reaccionarían al 401 intentando refrescar la misma sesión que estamos
+      // revocando. Aquí no hay nada que reintentar.
+      await Dio().post<void>(
+        _realmUri('protocol/openid-connect/logout'),
+        data: {
+          'client_id': _config.ssoClientId,
+          'refresh_token': refreshToken,
+        },
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+          // Un 400 aquí suele significar «ese token ya no vale», que es
+          // justamente el estado que buscábamos: no es un error que reportar.
+          validateStatus: (final status) => status != null && status < 500,
+        ),
+      );
+    } on Object catch (error, stackTrace) {
+      Error.throwWithStackTrace(AuthException.unexpected(cause: error), stackTrace);
     }
   }
 

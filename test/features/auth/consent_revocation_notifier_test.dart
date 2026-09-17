@@ -157,5 +157,14 @@ final class _FakeSecureStorage implements SecureStorage {
   }
 
   @override
+  Future<void> clearBiometric() async {
+    // El almacén protegido se vacía entero, no clave a clave, para no pedir
+    // huella al cerrar sesión; el token de larga vida cae con él.
+    deleted.add(StorageKeys.refreshToken);
+    final _ = values.remove(StorageKeys.refreshToken);
+  }
+
+
+  @override
   dynamic noSuchMethod(final Invocation invocation) => super.noSuchMethod(invocation);
 }

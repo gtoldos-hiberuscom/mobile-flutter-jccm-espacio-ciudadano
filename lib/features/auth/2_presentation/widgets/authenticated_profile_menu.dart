@@ -80,6 +80,10 @@ void showAuthenticatedProfileMenu({
     // Terminate the federated Cl@ve session (RP-initiated logout) so the
     // broker's SSO cookie is invalidated, then always clear the local session.
     try {
+      // Antes de nada, matar la sesión offline en el servidor: después de
+      // `clear()` ya no habría credencial con la que hacerlo. El front-channel
+      // de `logout` no la toca.
+      await ref.read(authSessionControllerProvider).revokeCurrentOfflineSession();
       final idToken = ref.read(tokenResponseProvider)?.idToken ?? '';
       if (idToken.isNotEmpty) {
         await ref.read(logoutUseCaseProvider).call(idToken: idToken);

@@ -2,7 +2,9 @@ import 'dart:async' show TimeoutException;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
@@ -43,8 +45,69 @@ class LandingNotifier extends Notifier<LandingState> {
   /// CTA would be dead until process death.
   static const loginTimeout = Duration(minutes: 3);
 
+  bool _restoreAttempted = false;
+
   @override
   LandingState build() => const LandingState();
+
+  /// Lleva al ciudadano a su espacio sin pasar por Cl@ve cuando hay una sesión
+  /// guardada que todavía sirve.
+  ///
+  /// Hace falta porque el router arranca siempre en la landing, que es pública,
+  /// y el `SessionGuard` solo actúa como redirect de rutas protegidas: nunca
+  /// sube de la landing al interior. Sin este puente la sesión persistida se
+  /// queda en el Keychain sin que nadie la mire, y el arranque en frío termina
+  /// igual que antes — en Cl@ve.
+  ///
+  /// Reproduce el flujo pedido por el cliente:
+  ///
+  /// * con el access token todavía vivo se entra directamente, sin pedir nada;
+  /// * si ha caducado, [AuthSessionController.refreshIfNeeded] lee el offline
+  ///   token del almacén, y esa lectura **es** la comprobación biométrica;
+  /// * si el refresco no sale adelante —biometría cancelada, token revocado,
+  ///   red caída— no se navega: el ciudadano se queda en la landing y entra
+  ///   con Cl@ve como siempre. Nunca se le muestra un error por esto, porque
+  ///   no ha pedido nada todavía.
+  Future<void> tryRestoreSession({
+    required final String localizedTitle,
+    required final String localizedReason,
+    required final String localizedCancel,
+  }) async {
+    if (_restoreAttempted) {
+      return;
+    }
+    _restoreAttempted = true;
+
+    final sessionController = ref.read(authSessionControllerProvider);
+    // Primero *de quién* es la sesión guardada, leyéndolo del access token sin
+    // cargar nada ni tocar el almacén protegido. Hace falta antes que la
+    // preferencia porque ésta va por ciudadano: en un dispositivo compartido,
+    // el «sí» de uno no puede valer por el siguiente.
+    final idAgente = await sessionController.persistedIdAgente();
+    if (idAgente == null || !ref.mounted) {
+      return;
+    }
+    // La preferencia manda. Si el borrado del token falló al revocar —en
+    // Android exige autenticar y el ciudadano puede cancelarlo—, la entrada
+    // sigue en el dispositivo; sin esta comprobación el acceso rápido
+    // seguiría funcionando pese a figurar como desactivado.
+    if (!sessionController.biometricQuickAccessEnabledFor(idAgente)) {
+      return;
+    }
+
+    final status = await sessionController.refreshIfNeeded(
+      prompt: BiometricPromptCopy(title: localizedTitle, subtitle: localizedReason, cancelLabel: localizedCancel),
+    );
+    if (!ref.mounted || status != SessionRefreshStatus.valid) {
+      return;
+    }
+
+    // El gate de consentimiento sigue siendo cosa del guard: aquí solo se
+    // señala que hay sesión utilizable, y él decide si toca pasar por las
+    // cláusulas antes de entrar.
+    ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
+    state = const LandingState(loginSuccess: true);
+  }
 
   Future<void> login() async {
     if (state.isLoggingIn) {

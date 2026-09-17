@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'dart:async';
 
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
@@ -11,13 +15,30 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/au
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 
+/// `tryRestoreSession` identifica al ciudadano decodificando el access token
+/// guardado, así que el doble necesita un JWT de verdad —sin firma válida, que
+/// no se comprueba— con el claim `sub_alt`.
+const String _idAgente = 'PER1';
+
+String _accessTokenFor(final String idAgente) {
+  String segment(final Map<String, Object?> value) => base64Url.encode(utf8.encode(json.encode(value))).replaceAll('=', '');
+  return '${segment(const {'alg': 'none'})}.${segment({'sub': 'sub-1', 'sub_alt': idAgente, 'exp': 9999999999})}.sig';
+}
+
 void main() {
-  ProviderContainer buildContainer(final AuthRepository repository) {
+  ProviderContainer buildContainer(
+    final AuthRepository repository, {
+    final _FakeSecureStorage? storage,
+    final bool quickAccessEnabled = false,
+  }) {
     final container = ProviderContainer(
       overrides: [
         loginUseCaseProvider.overrideWithValue(LoginUseCase(repository)),
         authRepositoryProvider.overrideWithValue(repository),
-        secureStorageProvider.overrideWithValue(_FakeSecureStorage()),
+        secureStorageProvider.overrideWithValue(storage ?? _FakeSecureStorage()),
+        appStorageProvider.overrideWithValue(
+          _FakeAppStorage()..values['${StorageKeys.biometricQuickAccessEnabledPrefix}$_idAgente'] = quickAccessEnabled,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -39,6 +60,61 @@ void main() {
         expect(state.isLoggingIn, isFalse, reason: 'the veil and the CTA must be released');
         expect(state.error?.cause, isA<TimeoutException>());
       });
+    });
+  });
+
+  group('LandingNotifier.tryRestoreSession', () {
+    test('REGRESSION: con el acceso rápido desactivado no se restaura, aunque quede token guardado', () async {
+      // Revocar en Android exige autenticar para borrar, y el ciudadano puede
+      // cancelarlo: entonces la entrada sigue en el dispositivo. Sin este gate
+      // el acceso rápido seguiría funcionando pese a figurar como desactivado.
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'huerfano';
+      final container = buildContainer(_HangingAuthRepository(), storage: storage);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+    });
+
+    test('REGRESSION: en un dispositivo compartido, el «sí» de un ciudadano no vale por otro', () async {
+      // La preferencia era global y sobrevivía al logout: el segundo en entrar
+      // veía su sesión guardada sin habérsele preguntado, protegida por las
+      // huellas dadas de alta en el aparato, que pueden ser de otra persona.
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor('OTRO-CIUDADANO')
+        ..store[StorageKeys.refreshToken] = 'de-otro';
+      // El acceso rápido está activado, pero para _idAgente, no para éste.
+      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(
+        container.read(landingProvider).loginSuccess,
+        isFalse,
+        reason: 'la preferencia es de quien la dio, no del dispositivo',
+      );
+    });
+
+    test('sin sesión guardada no se intenta nada', () async {
+      final container = buildContainer(_HangingAuthRepository(), quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).loginSuccess, isFalse);
     });
   });
 
@@ -68,6 +144,13 @@ void main() {
 }
 
 final class _HangingAuthRepository implements AuthRepository {
+  final List<String> revokedTokens = [];
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedTokens.add(refreshToken);
+  }
+
   @override
   Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => Completer<TokenResponse>().future;
 
@@ -79,6 +162,13 @@ final class _HangingAuthRepository implements AuthRepository {
 }
 
 final class _ImmediateAuthRepository implements AuthRepository {
+  final List<String> revokedTokens = [];
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedTokens.add(refreshToken);
+  }
+
   @override
   Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) async => TokenResponse(
     'not-a-real-jwt',
@@ -97,6 +187,31 @@ final class _ImmediateAuthRepository implements AuthRepository {
   Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();
 }
 
+final class _FakeAppStorage implements AppStorage {
+  final Map<String, Object> values = {};
+
+  @override
+  T? read<T>(final String key) => values[key] as T?;
+
+  @override
+  Future<bool> write(final String key, final Object value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool> remove(final String key) async {
+    values.remove(key);
+    return true;
+  }
+
+  @override
+  Future<bool> clear() async {
+    values.clear();
+    return true;
+  }
+}
+
 final class _FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
 
@@ -110,5 +225,8 @@ final class _FakeSecureStorage implements SecureStorage {
   Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
 
   @override
-  Future<void> clear() async => store.clear();
+  Future<void> clearBiometric() async => store.remove(StorageKeys.refreshToken);
+
+  @override
+  Future<void> clear({final bool includeBiometric = true}) async => store.clear();
 }

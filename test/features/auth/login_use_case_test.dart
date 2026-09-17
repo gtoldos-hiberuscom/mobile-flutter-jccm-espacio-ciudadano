@@ -8,6 +8,13 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/logout_use_case.da
 /// [AuthRepository] fake that records every login/logout attempt and can be
 /// configured to fail selectively per attempt.
 final class FakeAuthRepository implements AuthRepository {
+  final List<String> revokedTokens = [];
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedTokens.add(refreshToken);
+  }
+
   /// `ephemeralSession` value of each login call, in order.
   final List<bool> loginAttempts = [];
 

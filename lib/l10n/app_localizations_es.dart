@@ -4759,6 +4759,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionExpedienteUnavailableError => 'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.';
 
   @override
+  String get preferencesBiometricEnableFailed => 'No se ha podido activar el acceso rápido. Vuelve a identificarte con Cl@ve e inténtalo de nuevo.';
+
+  @override
+  String get preferencesBiometricDisabledNotice => 'Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve.';
+
+  @override
+  String get sessionUnlockBiometricCancel => 'Cancelar';
+
+  @override
+  String get sessionUnlockBiometricTitle => 'Acceso a tu espacio';
+
+  @override
   String get sessionUnlockBiometricReason => 'Confirma tu identidad para acceder a tu espacio';
 
   @override

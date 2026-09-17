@@ -4758,6 +4758,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionExpedienteUnavailableError => 'We could not locate the case. Please try again later.';
 
   @override
+  String get preferencesBiometricEnableFailed => 'Quick access could not be turned on. Identify yourself again with Cl@ve and try again.';
+
+  @override
+  String get preferencesBiometricDisabledNotice => 'Quick access is now off. When this session ends you will need to identify yourself again with Cl@ve.';
+
+  @override
+  String get sessionUnlockBiometricCancel => 'Cancel';
+
+  @override
+  String get sessionUnlockBiometricTitle => 'Access your space';
+
+  @override
   String get sessionUnlockBiometricReason => 'Confirm your identity to access your space';
 
   @override

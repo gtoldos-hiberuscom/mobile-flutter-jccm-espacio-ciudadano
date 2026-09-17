@@ -1,6 +1,7 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
@@ -10,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_st
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_token_diagnostics.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 
@@ -194,6 +196,84 @@ final class AuthSessionController {
     }
   }
 
+  /// Si el ciudadano de la sesión en curso tiene activado el acceso rápido.
+  ///
+  /// Se lee en cada uso en vez de cachearse: el interruptor de Preferencias
+  /// puede cambiarlo en cualquier momento y la sesión en curso debe respetarlo
+  /// sin esperar a un reinicio.
+  bool get biometricQuickAccessEnabled {
+    final idAgente = _ref.read(citizenEndpointIdsProvider).idAgente;
+    return idAgente != null && biometricQuickAccessEnabledFor(idAgente);
+  }
+
+  /// La misma preferencia para un ciudadano concreto, sin depender de que su
+  /// sesión esté cargada en memoria. La usa la landing, que debe decidir si
+  /// reanudar **antes** de hidratar nada.
+  bool biometricQuickAccessEnabledFor(final String idAgente) =>
+      _ref.read(appStorageProvider).read<bool>('${StorageKeys.biometricQuickAccessEnabledPrefix}$idAgente') ?? false;
+
+  /// El `idAgente` de la sesión guardada, leído del access token del almacén.
+  ///
+  /// No toca el estado en memoria ni el almacén protegido: hace falta saber
+  /// *de quién* es la sesión guardada para consultar su preferencia, y eso
+  /// tiene que poder hacerse sin cargarla ni levantar el prompt biométrico.
+  Future<String?> persistedIdAgente() async {
+    final accessToken = await _storage.read(StorageKeys.accessToken);
+    if (accessToken == null || accessToken.isEmpty) {
+      return null;
+    }
+    final subAlt = JwtDecoder.decode(accessToken).subAlt?.trim();
+    return (subAlt == null || subAlt.isEmpty) ? null : subAlt;
+  }
+
+  /// Aplica un cambio del interruptor de acceso rápido a la sesión en curso.
+  ///
+  /// Al activarlo se guarda el token que ya está en memoria —si no, el acceso
+  /// rápido no funcionaría hasta el siguiente login— y al desactivarlo se
+  /// borra del dispositivo inmediatamente.
+  /// Devuelve `false` si el acceso rápido se pidió activar pero el token no
+  /// llegó a guardarse —biometría cancelada, sin hardware, un fallo del
+  /// almacén—. Quien llama debe entonces revertir la preferencia: dejarla en
+  /// «activado» sin token detrás prometería algo que no se va a cumplir.
+  Future<bool> applyBiometricQuickAccessChange() async {
+    if (!biometricQuickAccessEnabled) {
+      await _deleteRefreshToken();
+      return true;
+    }
+    return _persistRefreshToken(_ref.read(tokenResponseProvider)?.refreshToken);
+  }
+
+  /// Revoca en Keycloak la sesión offline de la sesión en curso.
+  ///
+  /// Usa **solo** el token que ya está en memoria: leerlo del almacén
+  /// protegido levantaría el diálogo biométrico, y pedir la huella para cerrar
+  /// sesión es justo lo que se quiso evitar. Eso deja fuera las sesiones
+  /// restauradas que se cierran sin haber refrescado nunca — se registra para
+  /// que quede constancia, y caducarán solas por el idle del realm.
+  ///
+  /// Nunca propaga: si la revocación falla, el cierre de sesión local debe
+  /// completarse igual.
+  Future<void> revokeCurrentOfflineSession() async {
+    final refreshToken = _ref.read(tokenResponseProvider)?.refreshToken;
+    if (refreshToken == null || refreshToken.isEmpty) {
+      logger.i('Offline session not revoked: no credential in memory to revoke with');
+      return;
+    }
+    try {
+      await _repository.revokeOfflineSession(refreshToken: refreshToken);
+    } on Object catch (error, stackTrace) {
+      logger.w('Could not revoke the offline session in Keycloak', error: error, stackTrace: stackTrace);
+    }
+  }
+
+  Future<void> _deleteRefreshToken() async {
+    try {
+      await _storage.clearBiometric();
+    } on Object catch (error, stackTrace) {
+      logger.w('Could not remove the stored offline token', error: error, stackTrace: stackTrace);
+    }
+  }
+
   Future<void> persist(
     final TokenResponse session, {
     final JwtClaims? claims,
@@ -212,31 +292,59 @@ final class AuthSessionController {
         // authoritative after a restart.
         _storage.delete(StorageKeys.sessionExpiresAt),
     ]);
-    await _persistRefreshToken(session.refreshToken);
+    // La memoria se actualiza ANTES de guardar el token protegido, y el orden
+    // importa: la preferencia de acceso rápido va por ciudadano y se resuelve
+    // con los claims en memoria. Al revés, la primera persistencia de una
+    // sesión consultaría la preferencia sin saber todavía de quién es.
     _updateMemory(session, claims: claims);
+    await _persistRefreshToken(session.refreshToken);
   }
 
-  /// Guarda el token de larga vida exigiendo biometría, y sigue adelante si el
-  /// dispositivo no puede ofrecerla.
+  /// Guarda el token de larga vida exigiendo biometría, si el ciudadano ha
+  /// activado el acceso rápido y el dispositivo puede ofrecerla.
   ///
-  /// El almacén está configurado con `enforceBiometrics`, así que en un
-  /// terminal sin biometría dada de alta la escritura falla en vez de degradar
-  /// a una clave sin autenticación. Esa es la política correcta —este token
-  /// abre la sesión durante semanas y nunca debe quedar sin proteger—, pero no
-  /// puede tumbar la navegación: sin él la sesión simplemente no sobrevive al
-  /// cierre de la app, que es exactamente como se comportaba hasta ahora.
-  Future<void> _persistRefreshToken(final String? refreshToken) async {
+  /// Es un opt-in explícito: sin él, este token mantendría la sesión abierta
+  /// durante semanas detrás de una huella que nadie ha autorizado. Cuando está
+  /// desactivado no se guarda nada, y la sesión deja de existir al cerrar la
+  /// app — el comportamiento de siempre.
+  ///
+  /// El almacén va con `enforceBiometrics`, así que en un terminal sin
+  /// biometría dada de alta la escritura falla en vez de degradar a una clave
+  /// sin autenticación. Esa es la política correcta, pero no puede tumbar la
+  /// navegación: se registra y se sigue.
+  Future<bool> _persistRefreshToken(final String? refreshToken) async {
     if (refreshToken == null) {
-      return;
+      return false;
+    }
+    if (!biometricQuickAccessEnabled) {
+      // Sin acceso rápido no hay nada que guardar, y tampoco se limpia aquí:
+      // en Android tocar el almacén protegido lo crea, y crearlo arrastra un
+      // diálogo de huella. Quien de verdad tiene algo que borrar es quien
+      // desactiva la preferencia, y de eso se ocupa
+      // [applyBiometricQuickAccessChange].
+      return false;
     }
     try {
+      // Se borra antes de escribir, y no es redundante: el Keychain no deja
+      // cambiar el control de acceso con `SecItemUpdate`, y el plugin sólo
+      // aplica el ACL en la rama `SecItemAdd`. Si la entrada ya existía —y
+      // existe en cualquier instalación anterior a esto, creada sin
+      // protección— una escritura normal se limitaría a sustituir el valor y
+      // el token de larga vida se quedaría legible sin biometría, en silencio.
+      // Borrar fuerza el alta, y con ella el ACL.
+      await _storage.delete(
+        StorageKeys.refreshToken,
+        protection: SecureStorageProtection.biometric,
+      );
       await _storage.write(
         StorageKeys.refreshToken,
         refreshToken,
         protection: SecureStorageProtection.biometric,
       );
+      return true;
     } on Object catch (error, stackTrace) {
       logger.w('Offline token not persisted: this device cannot protect it with biometrics', error: error, stackTrace: stackTrace);
+      return false;
     }
   }
 
@@ -260,7 +368,10 @@ final class AuthSessionController {
     _sessionGeneration++;
     await Future.wait([
       _storage.delete(StorageKeys.accessToken),
-      _storage.delete(StorageKeys.refreshToken, protection: SecureStorageProtection.biometric),
+      // El almacén protegido se vacía entero en vez de borrar su clave: ir
+      // clave a clave obliga a usar el cifrador, y en Android eso pide huella
+      // al cerrar sesión — también a quien nunca activó el acceso rápido.
+      _storage.clearBiometric(),
       _storage.delete(StorageKeys.idToken),
       _storage.delete(StorageKeys.sessionExpiresAt),
     ]);

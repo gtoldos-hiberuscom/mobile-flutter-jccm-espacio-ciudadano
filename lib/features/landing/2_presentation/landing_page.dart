@@ -55,10 +55,42 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   /// throw on the second build (this page rebuilds on every veil toggle).
   late final LandingNotifier _landingNotifier;
 
+  /// El intento de reanudar la sesión guardada se lanza una sola vez por
+  /// montaje: `didChangeDependencies` puede correr varias veces (cambios de
+  /// tema, de locale, de métricas).
+  bool _didTryRestore = false;
+
   @override
   void initState() {
     super.initState();
     _landingNotifier = ref.read(landingProvider.notifier);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didTryRestore) {
+      return;
+    }
+    _didTryRestore = true;
+
+    // Las cadenas se resuelven aquí, con el `context` todavía a mano: el
+    // notifier no puede traducirlas y el diálogo biométrico de Android las
+    // necesita. Se aplaza a después del primer frame para no lanzar trabajo
+    // asíncrono durante la construcción del árbol.
+    final l10n = AppLocalizations.of(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      unawaited(
+        ref.read(landingProvider.notifier).tryRestoreSession(
+          localizedTitle: l10n.sessionUnlockBiometricTitle,
+          localizedReason: l10n.sessionUnlockBiometricReason,
+          localizedCancel: l10n.sessionUnlockBiometricCancel,
+        ),
+      );
+    });
   }
 
   @override

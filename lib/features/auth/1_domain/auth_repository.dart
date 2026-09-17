@@ -32,6 +32,15 @@ abstract interface class AuthRepository {
     final List<String> scopes = authDefaultScopes,
   });
 
+  /// Revoca en Keycloak la sesión **offline** asociada a [refreshToken].
+  ///
+  /// El `endSession` de [logout] es de front-channel: cierra la sesión SSO del
+  /// navegador, pero las sesiones offline le sobreviven. Sin esto se acumulan
+  /// en el servidor —también las de quien nunca llegó a usar el acceso rápido,
+  /// porque el scope se pide en todos los logins— y un dispositivo robado
+  /// conservaría acceso pese a haber cerrado sesión.
+  Future<void> revokeOfflineSession({required final String refreshToken});
+
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,

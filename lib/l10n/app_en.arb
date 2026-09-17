@@ -6187,6 +6187,22 @@
   "@gestionAportacionExpedienteUnavailableError": {
     "description": "Generic error when searching a third-party case."
   },
+  "preferencesBiometricEnableFailed": "Quick access could not be turned on. Identify yourself again with Cl@ve and try again.",
+  "@preferencesBiometricEnableFailed": {
+    "description": "Error when enabling biometric quick access and the current session has no credential to store."
+  },
+  "preferencesBiometricDisabledNotice": "Quick access is now off. When this session ends you will need to identify yourself again with Cl@ve.",
+  "@preferencesBiometricDisabledNotice": {
+    "description": "Notice shown when biometric quick access is turned off: the current session cannot be renewed."
+  },
+  "sessionUnlockBiometricCancel": "Cancel",
+  "@sessionUnlockBiometricCancel": {
+    "description": "Button dismissing the system biometric prompt when resuming a session (Android only)."
+  },
+  "sessionUnlockBiometricTitle": "Access your space",
+  "@sessionUnlockBiometricTitle": {
+    "description": "Title of the system biometric prompt shown when resuming a stored session."
+  },
   "sessionUnlockBiometricReason": "Confirm your identity to access your space",
   "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
   "biometricAccessDialogDescription": "This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.",

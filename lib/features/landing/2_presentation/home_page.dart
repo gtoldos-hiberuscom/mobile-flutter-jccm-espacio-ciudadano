@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
@@ -19,6 +25,20 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/p
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 bool _isTablet(final BuildContext context) => isTabletLayout(context);
+
+/// Evita repetir la oferta de acceso rápido si se vuelve a la home dentro de
+/// la misma sesión: vive en un provider y no en el State porque la página se
+/// remonta al navegar por las pestañas del shell.
+final _biometricPromptShownInSessionProvider = NotifierProvider<_BiometricPromptSessionNotifier, bool>(
+  _BiometricPromptSessionNotifier.new,
+);
+
+class _BiometricPromptSessionNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void markShown() => state = true;
+}
 
 /// Authenticated home screen — Figma node 43716:13302 "Inicio".
 ///
@@ -41,6 +61,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _digitalCardsLoadFailed = false;
   List<DigitalCard> _availableDigitalCards = const [];
 
+  bool _biometricDialogShown = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +72,96 @@ class _HomePageState extends ConsumerState<HomePage> {
           await _preloadDigitalCards();
         }
       }),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_biometricDialogShown) {
+      return;
+    }
+    _biometricDialogShown = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        unawaited(_offerBiometricQuickAccess());
+      }
+    });
+  }
+
+  /// Ofrece el acceso rápido con biometría la primera vez que se llega aquí.
+  ///
+  /// Es lo que convierte la sesión persistente en un opt-in: hasta que el
+  /// ciudadano lo acepta no se guarda el token de larga vida, así que nadie
+  /// acaba con una sesión de semanas sin haberla pedido.
+  ///
+  /// No se insiste: si lo rechaza, no se vuelve a preguntar en esta sesión, y
+  /// siempre puede activarlo después desde Preferencias.
+  Future<void> _offerBiometricQuickAccess() async {
+    final appStorage = ref.read(appStorageProvider);
+    // La preferencia va por ciudadano: sin `idAgente` no hay a quién
+    // preguntarle ni dónde anotar la respuesta.
+    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
+    if (idAgente == null) {
+      return;
+    }
+    final enabledKey = '${StorageKeys.biometricQuickAccessEnabledPrefix}$idAgente';
+    if (appStorage.read<bool>(enabledKey) ?? false) {
+      return;
+    }
+    if (ref.read(_biometricPromptShownInSessionProvider)) {
+      return;
+    }
+
+    // Sin biometría dada de alta no se ofrece nada: el almacén rechazaría la
+    // escritura y la promesa de «entra sin identificarte» sería falsa.
+    final hasBiometrics = await ref.read(biometricAuthenticatorProvider).canAuthenticateWithBiometrics();
+    if (!mounted || !hasBiometrics) {
+      return;
+    }
+    ref.read(_biometricPromptShownInSessionProvider.notifier).markShown();
+
+    final accepted = await AppBiometricAccessDialog.show(context);
+    if (!mounted || accepted != true) {
+      // Quien dice que no nunca va a usar su offline token, pero Keycloak ya
+      // se lo emitió: el scope se pide en todos los logins porque hace falta
+      // tenerlo en memoria por si acepta. Se revoca aquí para que no queden
+      // sesiones offline de semanas colgadas en el servidor sin dueño.
+      await ref.read(authSessionControllerProvider).revokeCurrentOfflineSession();
+      return;
+    }
+
+    // En iOS se autentica aquí, al activar: guardar en el Keychain con control
+    // de acceso no pide nada, así que sin esto el permiso de Face ID del
+    // sistema le aparecería al ciudadano días después, al abrir la app y sin
+    // contexto. En Android sobra —escribir en el KeyStore ya exige autenticar,
+    // justo debajo—, y hacerlo igualmente encadenaba dos huellas seguidas.
+    if (!Platform.isAndroid) {
+      final authenticated = await ref.read(biometricAuthenticatorProvider).authenticateForSessionUnlock(
+        localizedReason: AppLocalizations.of(context).sessionUnlockBiometricReason,
+      );
+      if (!mounted || !authenticated) {
+        return;
+      }
+    }
+
+    await appStorage.write(enabledKey, true);
+    // La sesión en curso ya tiene su offline token en memoria: se guarda ahora
+    // para que el acceso rápido funcione desde este mismo momento y no a
+    // partir del siguiente login.
+    final stored = await ref.read(authSessionControllerProvider).applyBiometricQuickAccessChange();
+    if (!stored) {
+      // Sin token guardado la preferencia mentiría, así que se revierte.
+      await appStorage.write(enabledKey, false);
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+    AppAlertToast.show(
+      context,
+      message: 'Acceso biométrico activado',
+      severity: AppAlertSeverity.success,
     );
   }
 
