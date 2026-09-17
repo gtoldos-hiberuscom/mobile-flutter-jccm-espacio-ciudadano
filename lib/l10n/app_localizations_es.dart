@@ -4777,6 +4777,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sessionUnlockBiometricReason => 'Confirma tu identidad para acceder a tu espacio';
 
   @override
+  String get sessionContinueBiometricTitle => 'Continuar en tu espacio';
+
+  @override
+  String get sessionContinueBiometricReason => 'Tu sesión necesita renovarse. Confirma tu identidad para continuar.';
+
+  @override
   String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella o reconocimiento facial?';
 
   @override

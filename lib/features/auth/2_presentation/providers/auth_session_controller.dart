@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_st
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_token_diagnostics.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/biometric_prompt_copy_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
@@ -91,6 +92,50 @@ final class AuthSessionController {
     return session;
   }
 
+  /// Abre el almacén protegido y deja la credencial de larga vida en memoria.
+  ///
+  /// La lectura **es** la comprobación biométrica, así que llamar a esto es
+  /// pedirle la huella al ciudadano. Se hace al arrancar, a propósito: con la
+  /// credencial ya en memoria, ninguna renovación posterior necesita volver al
+  /// almacén, y la sesión transcurre entera sin más diálogos.
+  ///
+  /// La alternativa —abrirlo sólo cuando hiciera falta renovar— dejaba entrar
+  /// sin pedir nada y cobraba la huella cinco minutos después, en mitad de lo
+  /// que el ciudadano estuviera haciendo. Misma huella, peor momento; y por el
+  /// camino, quien cogiera el móvil desbloqueado entraba en la sesión ajena
+  /// sin autenticarse.
+  ///
+  /// Devuelve `false` si no hay nada que abrir o si el ciudadano no supera el
+  /// diálogo. Nunca destruye la sesión guardada: cancelar no dice que la
+  /// credencial esté muerta.
+  Future<bool> unlockPersistedSession({final BiometricPromptCopy? prompt}) async {
+    if (!biometricQuickAccessEnabled) {
+      // El almacén protegido ni se toca: en Android rozarlo lo inicializa, y
+      // eso ya autentica.
+      return false;
+    }
+    final String? refreshToken;
+    try {
+      refreshToken = await _storage.read(
+        StorageKeys.refreshToken,
+        protection: SecureStorageProtection.biometric,
+        prompt: prompt ?? _ref.read(biometricPromptCopyProvider),
+      );
+    } on Object catch (error, stackTrace) {
+      logger.w('Persisted session not unlocked', error: error, stackTrace: stackTrace);
+      return false;
+    }
+    if (refreshToken == null || refreshToken.isEmpty) {
+      return false;
+    }
+    _updateMemory(
+      _mergeWithCurrentSession(
+        TokenResponse(null, refreshToken, null, null, null, null, null),
+      ),
+    );
+    return true;
+  }
+
   /// [prompt] es la copia del diálogo biométrico de Android, que solo la capa
   /// de presentación puede traducir. Sin ella el sistema usa su texto propio.
   Future<SessionRefreshStatus> refreshIfNeeded({
@@ -155,7 +200,10 @@ final class AuthSessionController {
         refreshToken = await _storage.read(
           StorageKeys.refreshToken,
           protection: SecureStorageProtection.biometric,
-          prompt: prompt,
+          // Sin copia explícita Android saca su texto genérico, y los dos
+          // caminos que llegan aquí sin ella —el guard de rutas y el
+          // interceptor— son los que pillan al ciudadano ya dentro de la app.
+          prompt: prompt ?? _ref.read(biometricPromptCopyProvider),
         );
       }
     } on Object catch (error, stackTrace) {
@@ -250,7 +298,17 @@ final class AuthSessionController {
       await _deleteRefreshToken();
       return true;
     }
-    return _persistRefreshToken(_ref.read(tokenResponseProvider)?.refreshToken);
+    // Se guarda la sesión ENTERA, no sólo la credencial de larga vida. El
+    // guard persiste antes de que el ciudadano conteste el diálogo, y en ese
+    // momento la preferencia todavía está desactivada, así que no llegó a
+    // escribir nada: guardar aquí sólo el token de larga vida dejaba la sesión
+    // sin access token, y la reanudación —que empieza identificando al
+    // ciudadano por él— no encontraba nada y mandaba a Cl@ve.
+    final session = _ref.read(tokenResponseProvider);
+    if (session == null) {
+      return false;
+    }
+    return persist(session, claims: currentClaims);
   }
 
   /// Revoca en Keycloak la sesión offline de la sesión en curso.
@@ -289,7 +347,9 @@ final class AuthSessionController {
     }
   }
 
-  Future<void> persist(
+  /// Devuelve `true` si la credencial de larga vida quedó guardada, que es lo
+  /// único que hace reanudable una sesión. Guardar sólo lo demás no sirve.
+  Future<bool> persist(
     final TokenResponse session, {
     final JwtClaims? claims,
   }) async {
@@ -315,7 +375,7 @@ final class AuthSessionController {
         _storage.delete(StorageKeys.idToken),
         _storage.delete(StorageKeys.sessionExpiresAt),
       ]);
-      return;
+      return false;
     }
 
     await Future.wait([
@@ -332,7 +392,7 @@ final class AuthSessionController {
         // authoritative after a restart.
         _storage.delete(StorageKeys.sessionExpiresAt),
     ]);
-    await _persistRefreshToken(session.refreshToken);
+    return _persistRefreshToken(session.refreshToken);
   }
 
   /// Guarda el token de larga vida exigiendo biometría, si el ciudadano ha

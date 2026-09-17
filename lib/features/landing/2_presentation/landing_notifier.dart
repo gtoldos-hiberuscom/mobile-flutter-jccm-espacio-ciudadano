@@ -51,11 +51,6 @@ class LandingNotifier extends Notifier<LandingState> {
   /// CTA would be dead until process death.
   static const loginTimeout = Duration(minutes: 3);
 
-  /// Mismo margen que usa [AuthSessionController.refreshIfNeeded]: un token al
-  /// borde de caducar no se da por bueno, o se entraría para que la primera
-  /// petición se encuentre con un 401.
-  static const Duration _accessTokenMargin = Duration(seconds: 60);
-
   bool _restoreAttempted = false;
 
   @override
@@ -104,27 +99,46 @@ class LandingNotifier extends Notifier<LandingState> {
       return;
     }
 
-    // Hidratar no toca el almacén protegido, así que no puede levantar el
-    // diálogo biométrico: sirve para saber si queda sesión utilizable antes de
-    // decidir si hace falta pedir nada.
-    final session = await sessionController.hydrateFromStorage();
+    // Carga en memoria lo que no está protegido —access token, id token,
+    // caducidad— para que el refresco de más abajo sepa si hace falta pedirle
+    // nada al servidor. No toca el almacén protegido, así que no levanta
+    // ningún diálogo por sí solo.
+    await sessionController.hydrateFromStorage();
     if (!ref.mounted) {
       return;
     }
 
-    final expiresAt = session?.accessTokenExpirationDateTime;
-    final accessTokenUsable = expiresAt != null && expiresAt.isAfter(DateTime.now().add(_accessTokenMargin));
+    // La credencial de larga vida está detrás de la biometría: si el ciudadano
+    // no activó el acceso rápido no hay nada que abrir, y entra por Cl@ve.
+    if (!sessionController.biometricQuickAccessEnabledFor(idAgente)) {
+      return;
+    }
 
-    if (!accessTokenUsable) {
-      // Sin access token vigente sólo queda el de larga vida, y ése sí está
-      // detrás de la biometría: si el ciudadano no activó el acceso rápido, no
-      // hay nada que abrir y entra por Cl@ve como siempre.
-      if (!sessionController.biometricQuickAccessEnabledFor(idAgente)) {
-        return;
-      }
-      final status = await sessionController.refreshIfNeeded(
-        prompt: BiometricPromptCopy(title: localizedTitle, subtitle: localizedReason, cancelLabel: localizedCancel),
-      );
+    // Se pide la huella AQUÍ, al arrancar, aunque el access token guardado
+    // siga vivo. Entrar sin pedir nada y cobrar el diálogo cinco minutos más
+    // tarde —cuando el ciudadano ya está leyendo algo— es la misma huella en
+    // peor momento; y mientras tanto, cualquiera que cogiese el móvil
+    // desbloqueado entraba en la sesión ajena sin autenticarse.
+    //
+    // Con la credencial ya en memoria, las renovaciones de toda la sesión son
+    // silenciosas: es un único diálogo por ejecución, y en el momento en que
+    // se espera.
+    final prompt = BiometricPromptCopy(title: localizedTitle, subtitle: localizedReason, cancelLabel: localizedCancel);
+    final unlocked = await sessionController.unlockPersistedSession(prompt: prompt);
+    if (!ref.mounted) {
+      return;
+    }
+    if (!unlocked) {
+      // Cancelar no dice que la sesión esté muerta: se queda guardada y el
+      // ciudadano sigue en la landing pública, desde donde puede reintentarlo
+      // cerrando y abriendo, o entrar por Cl@ve.
+      return;
+    }
+
+    {
+      // El access token guardado puede seguir sirviendo: si vive, esto no
+      // llama a nadie.
+      final status = await sessionController.refreshIfNeeded(prompt: prompt);
       if (!ref.mounted) {
         return;
       }

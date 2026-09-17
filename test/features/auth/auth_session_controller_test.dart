@@ -62,9 +62,15 @@ final class FakeSecureStorage implements SecureStorage {
   /// (the store refuses rather than degrading to an unauthenticated key).
   final Set<String> unwritableKeys = {};
 
+  /// Copia del diálogo con la que se pidió la última lectura protegida.
+  BiometricPromptCopy? lastReadPrompt;
+
   @override
   Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
     readKeys.add(key);
+    if (protection == SecureStorageProtection.biometric) {
+      lastReadPrompt = prompt;
+    }
     if (unreadableKeys.contains(key)) {
       throw StateError('biometric check rejected for $key');
     }
@@ -87,7 +93,6 @@ final class FakeSecureStorage implements SecureStorage {
     store.remove(key);
   }
 
-  @override
   /// Si el último [clear] alcanzó al almacén protegido.
   bool clearedBiometric = false;
 
@@ -115,7 +120,6 @@ final class FakeSecureStorage implements SecureStorage {
 final class FakeAuthRepository implements AuthRepository {
   final List<String> revokedTokens = [];
 
-  @override
   Exception? revokeError;
 
   @override
@@ -377,6 +381,29 @@ void main() {
       expect(storage.store[StorageKeys.refreshToken], isNull, reason: 'revocar el acceso rápido no puede dejar el token en el dispositivo');
     });
 
+    test('REGRESSION: activar el opt-in guarda la sesión ENTERA, no sólo el token de larga vida', () async {
+      // El guard persiste antes de que el ciudadano conteste el diálogo, y
+      // entonces la preferencia aún está desactivada, así que no escribe nada.
+      // Si al activar se guardaba sólo la credencial de larga vida, la sesión
+      // quedaba sin access token — y la reanudación, que empieza identificando
+      // al ciudadano por él, no encontraba nada y mandaba a Cl@ve.
+      appStorage.values[_quickAccessKey] = false;
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(
+          TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+          claims: _claims,
+        );
+
+      appStorage.values[_quickAccessKey] = true;
+      await controller.applyBiometricQuickAccessChange();
+
+      expect(storage.store[StorageKeys.accessToken], 'access', reason: 'sin él no se puede identificar la sesión guardada');
+      expect(storage.store[StorageKeys.idToken], 'id');
+      expect(storage.store[StorageKeys.sessionExpiresAt], isNotNull, reason: 'sin caducidad no se sabe si el token sigue valiendo');
+      expect(storage.store[StorageKeys.refreshToken], 'refresh');
+    });
+
     test('activar el opt-in guarda el token de la sesión en curso, sin esperar al siguiente login', () async {
       appStorage.values[_quickAccessKey] = false;
       final container = buildContainer();
@@ -429,6 +456,31 @@ void main() {
         'persisted-access',
         reason: 'cancelling the prompt says nothing about the token being dead — nothing may be wiped',
       );
+    });
+
+    test('un refresco sin pantalla detrás sigue explicándose en el diálogo', () async {
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(
+          TokenResponse('persisted-access', null, DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
+          claims: _claims,
+        );
+
+      // Sin argumento `prompt`, que es como llaman el guard de rutas y el
+      // interceptor de Dio: ninguno de los dos tiene `BuildContext` con el que
+      // traducir nada.
+      await controller.refreshStatus(force: true);
+
+      expect(
+        storage.lastReadPrompt,
+        isNotNull,
+        reason: 'sin copia Android saca su texto genérico, y este diálogo es el que pilla al ciudadano ya dentro de la app',
+      );
+      expect(storage.lastReadPrompt!.title, isNotEmpty);
+      expect(storage.lastReadPrompt!.subtitle, isNotEmpty);
+      expect(storage.lastReadPrompt!.cancelLabel, isNotEmpty);
     });
   });
 

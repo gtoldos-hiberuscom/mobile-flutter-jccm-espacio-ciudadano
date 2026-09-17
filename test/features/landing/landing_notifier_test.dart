@@ -65,15 +65,18 @@ void main() {
   });
 
   group('LandingNotifier.tryRestoreSession', () {
-    test('un access token vigente reanuda la sesión sin pedir biometría', () async {
-      // Lo pedido por el cliente: «si hay Access token se puede entrar». A quien
-      // activó el acceso rápido se le puede reanudar sin pedirle nada, porque
-      // cuando ese token caduque habrá con qué renovar. (A quien no lo activó
-      // no se le guarda nada, así que no llega ni a este punto.)
+    test('reanudar pide biometría al arrancar aunque el access token siga vivo', () async {
+      // El diálogo se adelanta al arranque a propósito. Entrar sin pedir nada
+      // y cobrar la huella cinco minutos después —al caducar el access token,
+      // con el ciudadano ya leyendo algo— es la misma huella en peor momento;
+      // y mientras tanto, quien cogiera el móvil desbloqueado entraba en la
+      // sesión ajena sin autenticarse.
+      final repository = _HangingAuthRepository();
       final storage = _FakeSecureStorage()
         ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'guardado'
         ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
-      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
+      final container = buildContainer(repository, storage: storage, quickAccessEnabled: true);
 
       await container.read(landingProvider.notifier).tryRestoreSession(
         localizedTitle: 't',
@@ -84,17 +87,25 @@ void main() {
       expect(container.read(landingProvider).loginSuccess, isTrue);
       expect(
         storage.readKeys,
-        isNot(contains(StorageKeys.refreshToken)),
-        reason: 'con el access token vivo no hay por qué tocar el almacén protegido',
+        contains(StorageKeys.refreshToken),
+        reason: 'leer el almacén protegido ES la comprobación biométrica: sin esa lectura no se le ha pedido nada al ciudadano',
+      );
+      expect(
+        repository.refreshAttempts,
+        0,
+        reason: 'el access token guardado sigue sirviendo: desbloquear no es motivo para salir a la red',
       );
     });
 
-    test('un access token al borde de caducar no se da por bueno', () async {
-      // Entrar con 30 segundos de margen sería entrar para que la primera
-      // petición se encuentre un 401.
+    test('cancelar la biometría al arrancar deja la sesión intacta y al ciudadano fuera', () async {
+      // Cancelar no dice que la credencial esté muerta, así que no se borra
+      // nada: el ciudadano se queda en la landing pública y puede reintentarlo
+      // o entrar por Cl@ve.
       final storage = _FakeSecureStorage()
         ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
-        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(seconds: 30)).toIso8601String();
+        ..store[StorageKeys.refreshToken] = 'guardado'
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String()
+        ..unreadableKeys.add(StorageKeys.refreshToken);
       final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
 
       await container.read(landingProvider.notifier).tryRestoreSession(
@@ -103,6 +114,36 @@ void main() {
         localizedCancel: 'c',
       );
 
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+      expect(
+        container.read(landingProvider).sessionExpired,
+        isFalse,
+        reason: 'decirle que su sesión ha terminado sería mentirle: sigue guardada',
+      );
+      expect(storage.store[StorageKeys.refreshToken], 'guardado');
+    });
+
+    test('un access token al borde de caducar no se da por bueno', () async {
+      // Entrar con 30 segundos de margen sería entrar para que la primera
+      // petición se encuentre un 401.
+      final repository = _HangingAuthRepository();
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'guardado'
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(seconds: 30)).toIso8601String();
+      final container = buildContainer(repository, storage: storage, quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(
+        repository.refreshAttempts,
+        1,
+        reason: 'con 30 segundos de margen hay que renovar, no entrar para que la primera petición se encuentre un 401',
+      );
       expect(container.read(landingProvider).loginSuccess, isFalse);
     });
 
@@ -239,8 +280,15 @@ final class _HangingAuthRepository implements AuthRepository {
   @override
   Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => Completer<TokenResponse>().future;
 
+  /// Veces que se pidió renovar contra el servidor. Distingue «entró con lo que
+  /// ya tenía» de «tuvo que salir a la red».
+  int refreshAttempts = 0;
+
   @override
-  Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();
+  Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) {
+    refreshAttempts++;
+    throw UnimplementedError();
+  }
 
   @override
   Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();

@@ -9122,6 +9122,18 @@ abstract class AppLocalizations {
   /// **'Confirma tu identidad para acceder a tu espacio'**
   String get sessionUnlockBiometricReason;
 
+  /// Título del diálogo biométrico del sistema cuando la sesión se renueva con el ciudadano ya dentro de la app.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar en tu espacio'**
+  String get sessionContinueBiometricTitle;
+
+  /// Motivo del diálogo biométrico al renovar la sesión en pleno uso. Explica el porqué: a diferencia de la reanudación, aquí el ciudadano no ha pedido nada, solo ha navegado.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu sesión necesita renovarse. Confirma tu identidad para continuar.'**
+  String get sessionContinueBiometricReason;
+
   /// No description provided for @biometricAccessDialogTitle.
   ///
   /// In es, this message translates to:
