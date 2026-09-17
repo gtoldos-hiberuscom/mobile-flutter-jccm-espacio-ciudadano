@@ -12,6 +12,7 @@ final class AgendaAppointmentsState {
     required this.updatedAt,
     required this.hasJccmAuthorization,
     this.failedSources = const {},
+    this.healthCipMissing = false,
   });
 
   final List<AgendaAppointment> appointments;
@@ -20,14 +21,14 @@ final class AgendaAppointmentsState {
 
   /// Fuentes caídas en esta carga; vacío = la agenda llegó completa.
   final Set<AgendaAppointmentSource> failedSources;
+  final bool healthCipMissing;
 
   bool get isPartial => failedSources.isNotEmpty;
 
   /// Citas futuras, o `null` cuando la carga fue parcial: con una fuente caída
   /// el recuento no es fiable, y la portada prefiere enseñar la tarjeta sin
   /// número a esconderla porque "hay 0 citas".
-  int? upcomingAppointmentsCount(final DateTime now) =>
-      isPartial ? null : appointments.where((final appointment) => !appointment.dateTime.isBefore(now)).length;
+  int? upcomingAppointmentsCount(final DateTime now) => isPartial ? null : appointments.where((final appointment) => !appointment.dateTime.isBefore(now)).length;
 }
 
 final agendaAppointmentsProvider = FutureProvider.autoDispose<AgendaAppointmentsState>((final ref) async {
@@ -57,11 +58,12 @@ final agendaAppointmentsProvider = FutureProvider.autoDispose<AgendaAppointments
       );
 
   return switch (result) {
-    LoadAgendaAppointmentsSuccess(:final appointments, :final failedSources) => AgendaAppointmentsState(
+    LoadAgendaAppointmentsSuccess(:final appointments, :final failedSources, :final healthCipMissing) => AgendaAppointmentsState(
       appointments: appointments,
       updatedAt: DateTime.now(),
       hasJccmAuthorization: true,
       failedSources: failedSources,
+      healthCipMissing: healthCipMissing,
     ),
     LoadAgendaAppointmentsFailed(:final message) => throw Exception(message),
   };

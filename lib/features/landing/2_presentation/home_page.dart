@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/dig
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
@@ -374,37 +375,27 @@ class _HomeNewsSection extends ConsumerWidget {
       orElse: () => null,
     );
 
-    final muestraNotificaciones = _isTablet(context) || notificationsCount == null || notificationsCount > 0;
-    final muestraCitas = _isTablet(context) || upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0;
-
-    if (!muestraNotificaciones && !muestraCitas) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionTitle(text: l10n.homeNewsSectionTitle),
         SizedBox(height: _isTablet(context) ? AppDimensions.space24 : AppDimensions.space8),
-        if (muestraNotificaciones)
-          AppSimpleNavCard(
-            label: _labelWithCount(l10n, l10n.homeNewsNotificationsTitle, notificationsCount),
-            description: l10n.homeNewsNotificationsDescription,
-            onTap: () => context.go(
-              Uri(
-                path: Routes.gestionNotificaciones,
-                queryParameters: const {'from': 'home'},
-              ).toString(),
-            ),
+        AppSimpleNavCard(
+          label: _notificationLabelWithCount(l10n, l10n.homeNewsNotificationsTitle, notificationsCount),
+          description: notificationsCount == 0 ? l10n.homeNewsNotificationsEmptyDescription : l10n.homeNewsNotificationsDescription,
+          onTap: () => context.go(
+            Uri(
+              path: Routes.gestionNotificaciones,
+              queryParameters: const {'from': 'home'},
+            ).toString(),
           ),
-        if (muestraCitas) ...[
-          if (muestraNotificaciones) SizedBox(height: _isTablet(context) ? AppDimensions.space16 : AppDimensions.space8),
-          AppSimpleNavCard(
-            label: _labelWithCount(l10n, l10n.homeNewsAppointmentsTitle, upcomingAppointmentsCount),
-            description: l10n.homeNewsAppointmentsDescription,
-            onTap: () => context.go(Routes.agenda),
-          ),
-        ],
+        ),
+        SizedBox(height: _isTablet(context) ? AppDimensions.space16 : AppDimensions.space8),
+        AppSimpleNavCard(
+          label: _labelWithCount(l10n, l10n.homeNewsAppointmentsTitle, upcomingAppointmentsCount),
+          description: upcomingAppointmentsCount == 0 ? l10n.homeNewsAppointmentsEmptyDescription : l10n.homeNewsAppointmentsDescription,
+          onTap: () => context.go(Routes.agenda),
+        ),
         const SizedBox(height: AppDimensions.space24),
       ],
     );
@@ -412,6 +403,13 @@ class _HomeNewsSection extends ConsumerWidget {
 
   String _labelWithCount(final AppLocalizations l10n, final String label, final int? count) {
     return count == null ? label : l10n.homeNewsLabelWithCount(label, count);
+  }
+
+  String _notificationLabelWithCount(final AppLocalizations l10n, final String label, final int? count) {
+    if (count == null) {
+      return label;
+    }
+    return count >= gestionNotificacionesInitialLoadLimit ? l10n.homeNewsLabelWithMinimumCount(label, gestionNotificacionesInitialLoadLimit) : l10n.homeNewsLabelWithCount(label, count);
   }
 }
 

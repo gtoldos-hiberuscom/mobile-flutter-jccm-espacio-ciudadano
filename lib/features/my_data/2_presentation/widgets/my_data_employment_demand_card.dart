@@ -23,19 +23,20 @@ class MyDataEmploymentDemandCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                child: Text(
-                  _display(demand.status).toUpperCase(),
-                  style: AppTypography.captionUppercase.copyWith(color: AppColors.borderBlueMutedBase),
-                ),
-              ),
               Text(
                 l10n.myDataEmploymentDemandTitle,
                 style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
               ),
+              const SizedBox(height: AppDimensions.space8),
+              Text(
+                _display(demand.status).toUpperCase(),
+                style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
+              ),
               if (!isNotRegistered) ...[
-                const SizedBox(height: AppDimensions.space8),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
+                  child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
+                ),
                 Text(
                   l10n.myDataEmploymentRegistrationDateLabel.toUpperCase(),
                   style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),

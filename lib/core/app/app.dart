@@ -9,6 +9,8 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/consent_revocation_notifier.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
+const _spanishLocale = Locale('es');
+
 /// Root widget of the application.
 ///
 /// Wires together the router (via [goRouterProvider]), theme, and
@@ -50,6 +52,10 @@ class App extends ConsumerWidget {
     return MaterialApp.router(
       title: appName,
       theme: AppTheme.light(),
+      // El inglés permanece traducido para poder habilitarlo más adelante,
+      // pero por ahora la aplicación no debe seguir el idioma del dispositivo
+      // ni admitir otro idioma distinto del español.
+      locale: _spanishLocale,
       // Sin `darkTheme` a propósito: el design system pinta con tokens light
       // fijos (`AppColors.*` en cientos de sitios), así que declarar el tema
       // oscuro producía, con el móvil en modo oscuro, scaffold/appbar oscuros
@@ -62,10 +68,7 @@ class App extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('es'),
-        Locale('en'),
-      ],
+      supportedLocales: const [_spanishLocale],
     );
   }
 }

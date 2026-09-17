@@ -147,6 +147,34 @@ void main() {
       expect(appointments.single.dateTime.isUtc, isFalse);
     });
 
+    test('una notificación conserva título, asunto y unidad emisora', () async {
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: const [],
+        eventos: const [
+          {
+            'fechaVencimiento': '2026-08-11T23:30:00',
+            'titulo': 'Caducidad de notificación',
+            'mensaje': '<p>Tiene una notificación próxima a caducar:</p> <p>Organismo emisor: UnidadOrganica 2</p> <p> Asunto: Prueba 2</p>',
+            'tipo': 'EVENTO',
+            'area': 'NOTIFICA',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = (await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      )).appointments;
+
+      expect(appointments, hasLength(1));
+      expect(appointments.single.title, 'Caducidad de notificación');
+      expect(appointments.single.description, 'Asunto: Prueba 2');
+      expect(appointments.single.detail, 'UnidadOrganica 2');
+      expect(appointments.single.kind, AgendaAppointmentKind.notification);
+    });
+
     test('refreshes events through the gateway refrescar endpoint', () async {
       final adapter = _AgendaAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
@@ -189,6 +217,42 @@ void main() {
       // sobreviven.
       expect(snapshot.appointments, hasLength(4));
     });
+
+    test('un 500/3031 de SESCAM se identifica como usuario sin CIP y no como fuente caída', () async {
+      final adapter = _AgendaAdapter(
+        healthStatusCode: 500,
+        healthErrorCode: 3031,
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final snapshot = await repository.loadAppointments(
+        documentNumber: '99999999R',
+        agentId: 'agent-1',
+      );
+
+      expect(snapshot.failedSources, isEmpty);
+      expect(snapshot.isPartial, isFalse);
+      expect(snapshot.healthCipMissing, isTrue);
+      expect(snapshot.appointments, hasLength(4));
+    });
+
+    for (final statusCode in [401, 403]) {
+      test('un $statusCode de SESCAM se trata como lista vacía y no muestra aviso', () async {
+        final adapter = _AgendaAdapter(healthStatusCode: statusCode);
+        final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+        final repository = AgendaRepositoryImpl(dio: dio);
+
+        final snapshot = await repository.loadAppointments(
+          documentNumber: '12345678A',
+          agentId: 'agent-1',
+        );
+
+        expect(snapshot.failedSources, isEmpty);
+        expect(snapshot.isPartial, isFalse);
+        expect(snapshot.appointments, hasLength(4));
+      });
+    }
 
     test('si los eventos caen, quedan las citas de SESCAM y se marca la fuente general', () async {
       final adapter = _AgendaAdapter(eventosStatusCode: 500);
@@ -271,6 +335,7 @@ final class _AgendaAdapter implements HttpClientAdapter {
     this.eventos,
     this.healthStatusCode = 200,
     this.eventosStatusCode = 200,
+    this.healthErrorCode,
   }) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
 
   /// Eventos de la agenda general; `null` usa la lista de ejemplo del test base.
@@ -280,9 +345,20 @@ final class _AgendaAdapter implements HttpClientAdapter {
   /// que es justo lo que `_StaticAdapter` no puede hacer.
   final int healthStatusCode;
   final int eventosStatusCode;
+  final int? healthErrorCode;
 
-  static ResponseBody _errorBody(final int statusCode) => ResponseBody.fromString(
-    jsonEncode(const {'codigo-respuesta': '500.00', 'mensaje-respuesta': 'Error interno de la API', 'body': null}),
+  static ResponseBody _errorBody(final int statusCode, {final int? errorCode}) => ResponseBody.fromString(
+    jsonEncode({
+      'codigo-respuesta': '500.00',
+      'mensaje-respuesta': 'Error interno de la API',
+      'body': null,
+      if (errorCode != null)
+        'info-error': {
+          'errores': [
+            {'codigo-error': errorCode, 'mensaje-error': 'Error al obtener las citas futuras'},
+          ],
+        },
+    }),
     statusCode,
     headers: {
       Headers.contentTypeHeader: [Headers.jsonContentType],
@@ -327,33 +403,34 @@ final class _AgendaAdapter implements HttpClientAdapter {
         jsonEncode(
           {
             'body': {
-              'eventos': eventos ??
+              'eventos':
+                  eventos ??
                   [
-                {
-                  'fechaVencimiento': '2026-06-01T09:15:00',
-                  'titulo': 'Registro',
-                  'tipoEvento': 'Trámite administrativo',
-                  'ubicacion': 'Oficina de atención',
-                },
-                {
-                  'fechaVencimiento': '2026-06-15T09:00:00',
-                  'titulo': 'Cita de Atención Primaria',
-                  'tipoEvento': 'CITA',
-                  'mensaje': '<p>Tiene una cita de atención primaria el próximo 15/06/2026</p> <p>Hora:09:00</p> <p>Profesional:LAGUNA RUIDERA MONTESINOS</p> <p>Tipo de cita:DEMANDA</p> <p>Modo de cita:Presencial</p>',
-                },
-                {
-                  'fechaVencimiento': '2026-06-16T08:25:00',
-                  'titulo': 'Cita de atención primaria',
-                  'tipoEvento': 'CITA',
-                  'mensaje': '<p>Tiene una cita de atención primaria el próximo 16/06/2026</p> <p>Hora:08:25</p> <p>Profesional:CAMPO CRIPTANA MOLINO</p> <p>Tipo de cita:TELECONSULTA DEMANDA</p> <p>Modo de cita:Telefónica</p>',
-                },
-                {
-                  'fechaVencimiento': '2030-01-30T00:00:00',
-                  'titulo': 'Caducidad de carnet joven',
-                  'tipoEvento': 'EVENTO',
-                  'mensaje': '<p>El carnet joven caduca el próximo 30/01/2030</p>',
-                },
-              ],
+                    {
+                      'fechaVencimiento': '2026-06-01T09:15:00',
+                      'titulo': 'Registro',
+                      'tipoEvento': 'Trámite administrativo',
+                      'ubicacion': 'Oficina de atención',
+                    },
+                    {
+                      'fechaVencimiento': '2026-06-15T09:00:00',
+                      'titulo': 'Cita de Atención Primaria',
+                      'tipoEvento': 'CITA',
+                      'mensaje': '<p>Tiene una cita de atención primaria el próximo 15/06/2026</p> <p>Hora:09:00</p> <p>Profesional:LAGUNA RUIDERA MONTESINOS</p> <p>Tipo de cita:DEMANDA</p> <p>Modo de cita:Presencial</p>',
+                    },
+                    {
+                      'fechaVencimiento': '2026-06-16T08:25:00',
+                      'titulo': 'Cita de atención primaria',
+                      'tipoEvento': 'CITA',
+                      'mensaje': '<p>Tiene una cita de atención primaria el próximo 16/06/2026</p> <p>Hora:08:25</p> <p>Profesional:CAMPO CRIPTANA MOLINO</p> <p>Tipo de cita:TELECONSULTA DEMANDA</p> <p>Modo de cita:Telefónica</p>',
+                    },
+                    {
+                      'fechaVencimiento': '2030-01-30T00:00:00',
+                      'titulo': 'Caducidad de carnet joven',
+                      'tipoEvento': 'EVENTO',
+                      'mensaje': '<p>El carnet joven caduca el próximo 30/01/2030</p>',
+                    },
+                  ],
             },
           },
         ),
@@ -365,7 +442,7 @@ final class _AgendaAdapter implements HttpClientAdapter {
     }
 
     if (healthStatusCode != 200) {
-      return _errorBody(healthStatusCode);
+      return _errorBody(healthStatusCode, errorCode: healthErrorCode);
     }
     return ResponseBody.fromString(
       jsonEncode(

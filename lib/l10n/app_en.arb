@@ -750,6 +750,10 @@
   "@agendaError": {
     "description": "Agenda — error state message."
   },
+  "agendaHealthCipMissing": "There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.",
+  "@agendaHealthCipMissing": {
+    "description": "Agenda — informational notice when SESCAM returns code 3031 because no CIP is linked to the identity."
+  },
   "agendaLastUpdated": "Last updated: {timestamp}",
   "@agendaLastUpdated": {
     "description": "Agenda — last updated label.",
@@ -3925,9 +3929,13 @@
   "@myDataEmploymentServicesTab": {
     "description": "Second tab on the Employment detail screen."
   },
-  "myDataEmploymentDemandTitle": "Your employment demand",
+  "myDataEmploymentDemandTitle": "My employment demand",
   "@myDataEmploymentDemandTitle": {
     "description": "Employment demand card title."
+  },
+  "myDataEmploymentDemandUnavailableStatus": "Registration inactive",
+  "@myDataEmploymentDemandUnavailableStatus": {
+    "description": "Employment demand card status when the citizen has no active registration."
   },
   "myDataEmploymentRegistrationDateLabel": "Uninterrupted registration date",
   "@myDataEmploymentRegistrationDateLabel": {
@@ -5573,6 +5581,10 @@
   "@homeNewsNotificationsDescription": {
     "description": "Home — description of the notifications card in My updates."
   },
+  "homeNewsNotificationsEmptyDescription": "You have no pending notifications",
+  "@homeNewsNotificationsEmptyDescription": {
+    "description": "Home — description of the notifications card when there are no pending notifications."
+  },
   "homeNewsAppointmentsTitle": "Upcoming appointments",
   "@homeNewsAppointmentsTitle": {
     "description": "Home — label of the upcoming appointments card in My updates."
@@ -5580,6 +5592,10 @@
   "homeNewsAppointmentsDescription": "Check your upcoming appointments and events",
   "@homeNewsAppointmentsDescription": {
     "description": "Home — description of the upcoming appointments card in My updates."
+  },
+  "homeNewsAppointmentsEmptyDescription": "You have no upcoming appointments or events",
+  "@homeNewsAppointmentsEmptyDescription": {
+    "description": "Home — description of the upcoming appointments card when there are no appointments or events."
   },
   "homeNewsLabelWithCount": "{label} ({count})",
   "@homeNewsLabelWithCount": {
@@ -5591,6 +5607,14 @@
       "count": {
         "type": "int"
       }
+    }
+  },
+  "homeNewsLabelWithMinimumCount": "{label} (+{count})",
+  "@homeNewsLabelWithMinimumCount": {
+    "description": "News card label when the count has reached the loading limit",
+    "placeholders": {
+      "label": { "type": "String" },
+      "count": { "type": "int" }
     }
   },
   "homeRecommendedProceduresTitle": "Recommended procedures",

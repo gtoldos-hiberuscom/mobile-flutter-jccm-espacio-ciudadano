@@ -36,6 +36,8 @@ final class AgendaRepositoryImpl implements AgendaRepository {
             extra: _generatedExtra,
           ),
           source: AgendaAppointmentSource.health,
+          ignoreUnauthorized: true,
+          emptyResultErrorCodes: const {'3031'},
         ),
       ),
       // Sin `idAgente` la agenda general ni se pide: eso no es un fallo y no
@@ -59,7 +61,8 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         ),
     ]);
 
-    final failures = results.where((final result) => result.error != null).toList(growable: false);
+    final healthCipMissing = results.any((final result) => result.error is _HealthCipMissing);
+    final failures = results.where((final result) => result.error != null && result.error is! _HealthCipMissing).toList(growable: false);
     // `results` nunca está vacío: la fuente de salud siempre se intenta.
     if (failures.length == results.length) {
       final failure = failures.first;
@@ -90,6 +93,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     return AgendaAppointmentsSnapshot(
       appointments: List<AgendaAppointment>.unmodifiable(appointments),
       failedSources: Set<AgendaAppointmentSource>.unmodifiable(failures.map((final result) => result.source)),
+      healthCipMissing: healthCipMissing,
     );
   }
 
@@ -120,26 +124,42 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final Future<Response<Respuesta>> Function() fetch, {
     required final AgendaAppointmentSource source,
     final bool ignoreBadRequest = false,
+    final bool ignoreUnauthorized = false,
+    final Set<String> emptyResultErrorCodes = const {},
   }) async {
     final Object? payload;
     try {
       final response = await fetch();
-      if (response.statusCode == 404 || (ignoreBadRequest && response.statusCode == 400)) {
+      if (_isEmptyResultStatus(
+        response.statusCode,
+        ignoreBadRequest: ignoreBadRequest,
+        ignoreUnauthorized: ignoreUnauthorized,
+      )) {
         return const [];
       }
       payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
     } on DioException catch (error) {
       final statusCode = error.response?.statusCode;
-      if (statusCode == 404 || (ignoreBadRequest && statusCode == 400)) {
+      if (_isEmptyResultStatus(
+        statusCode,
+        ignoreBadRequest: ignoreBadRequest,
+        ignoreUnauthorized: ignoreUnauthorized,
+      )) {
         return const [];
       }
       final rawData = error.response?.extra[generatedApiRawResponseDataExtraKey] ?? error.response?.data;
       if (rawData == null) {
         rethrow;
       }
+      final decodedError = _decodePayload(rawData);
+      if (_containsErrorCode(decodedError, emptyResultErrorCodes)) {
+        throw const _HealthCipMissing();
+      }
       // Salvage-or-rethrow: si el cuerpo del error no contiene citas parseables,
-      // el fallo se propaga — un 401/403/5xx nunca debe leerse como "sin citas".
-      final salvaged = _appointmentMaps(_decodePayload(rawData)).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+      // el fallo se propaga. La excepción son los estados que la llamada haya
+      // configurado explícitamente como resultado vacío (401/403 y código
+      // funcional 3031 en salud).
+      final salvaged = _appointmentMaps(decodedError).map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
       if (salvaged.isNotEmpty) {
         return salvaged;
       }
@@ -152,6 +172,23 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final decoded = _decodePayload(payload);
     final objects = _appointmentMaps(decoded);
     return objects.map((final raw) => _tryParseAppointment(raw, source: source)).nonNulls.toList(growable: false);
+  }
+
+  bool _isEmptyResultStatus(
+    final int? statusCode, {
+    required final bool ignoreBadRequest,
+    required final bool ignoreUnauthorized,
+  }) => statusCode == 404 || (ignoreBadRequest && statusCode == 400) || (ignoreUnauthorized && (statusCode == 401 || statusCode == 403));
+
+  bool _containsErrorCode(final Object? value, final Set<String> expectedCodes) {
+    if (expectedCodes.isEmpty) {
+      return false;
+    }
+    final maps = _collectMaps(value);
+    return maps.any((final map) {
+      final code = _firstString(map, const ['codigo-error', 'codigoError']);
+      return code != null && expectedCodes.contains(code);
+    });
   }
 
   Map<String, dynamic> get _generatedExtra => const {
@@ -326,21 +363,21 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       'subtipoCita',
       'observaciones',
     ]);
-    final message = _cleanHtml(
-      _firstString(raw, const [
-        'mensaje',
-        'message',
-        'contenido',
-        'texto',
-      ]),
-    );
+    final rawMessage = _firstString(raw, const [
+      'mensaje',
+      'message',
+      'contenido',
+      'texto',
+    ]);
+    final message = _cleanHtml(rawMessage);
+    final notificationDetails = _notificationDetails(raw, rawMessage);
     final primaryCareDetails = _parsePrimaryCareMessage(message);
     final isPrimaryCare = source == AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
 
     final description = switch (source) {
       AgendaAppointmentSource.health => specialty ?? 'Cita sanitaria',
       AgendaAppointmentSource.general when isPrimaryCare => title ?? 'Cita de Atención Primaria',
-      AgendaAppointmentSource.general => message ?? specialty ?? title ?? 'Cita',
+      AgendaAppointmentSource.general => notificationDetails.subject ?? message ?? specialty ?? title ?? 'Cita',
     };
 
     return AgendaAppointment(
@@ -358,9 +395,74 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
       },
       channel: primaryCareDetails?.channel ?? channel,
-      detail: primaryCareDetails?.appointmentDetail ?? detail ?? center,
+      detail: primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? center,
       center: center,
     );
+  }
+
+  _NotificationDetails _notificationDetails(
+    final Map<String, dynamic> raw,
+    final String? rawMessage,
+  ) {
+    final directSubject = _firstString(raw, const [
+      'asunto',
+      'subject',
+      'concepto',
+      'denominacionProcedimiento',
+    ]);
+    final directIssuer = _firstString(raw, const [
+      'emisor',
+      'issuer',
+      'unidadOrganica',
+      'unidadOrganicaNombre',
+      'nombreUnidadOrganica',
+      'unidad',
+      'organismo',
+      'servicio',
+    ]);
+    final lines = _cleanHtmlLines(rawMessage);
+    final subject = directSubject ?? _lineWithLabel(lines, const ['asunto']);
+    const issuerLabels = ['organismo emisor', 'emisor', 'unidad', 'organismo', 'servicio'];
+    final issuer = directIssuer ?? _lineWithLabel(lines, issuerLabels);
+
+    return (
+      subject: subject == null ? null : _withLabel('Asunto', subject),
+      issuer: issuer == null ? null : _withoutLabel(issuer, issuerLabels),
+    );
+  }
+
+  List<String> _cleanHtmlLines(final String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return const [];
+    }
+    final withBreaks = value.replaceAll(RegExp(r'<\s*br\s*/?\s*>', caseSensitive: false), '\n').replaceAll(RegExp(r'</\s*(?:p|div|li)\s*>', caseSensitive: false), '\n');
+    return withBreaks.split('\n').map(_cleanHtml).whereType<String>().where((final line) => line.isNotEmpty).toList(growable: false);
+  }
+
+  String? _lineWithLabel(final List<String> lines, final List<String> labels) {
+    for (final line in lines) {
+      final normalized = line.toLowerCase();
+      if (labels.any((final label) => normalized.startsWith('$label:'))) {
+        return line;
+      }
+    }
+    return null;
+  }
+
+  String _withLabel(final String label, final String value) {
+    final trimmed = value.trim();
+    return trimmed.toLowerCase().startsWith('${label.toLowerCase()}:') ? trimmed : '$label: $trimmed';
+  }
+
+  String _withoutLabel(final String value, final List<String> labels) {
+    final trimmed = value.trim();
+    for (final label in labels) {
+      final prefix = '$label:';
+      if (trimmed.toLowerCase().startsWith(prefix)) {
+        return trimmed.substring(prefix.length).trim();
+      }
+    }
+    return trimmed;
   }
 
   _PrimaryCareMessageDetails? _parsePrimaryCareMessage(final String? message) {
@@ -541,3 +643,8 @@ typedef _AgendaSourceResult = ({
 });
 
 typedef _PrimaryCareMessageDetails = ({String? professional, String? channel, String? appointmentDetail});
+typedef _NotificationDetails = ({String? subject, String? issuer});
+
+final class _HealthCipMissing implements Exception {
+  const _HealthCipMissing();
+}

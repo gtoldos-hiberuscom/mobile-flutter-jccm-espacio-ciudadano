@@ -575,6 +575,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
 
   @override
+  String get agendaHealthCipMissing => 'There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.';
+
+  @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
 
   @override
@@ -2989,7 +2992,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentServicesTab => 'Information and services';
 
   @override
-  String get myDataEmploymentDemandTitle => 'Your employment demand';
+  String get myDataEmploymentDemandTitle => 'My employment demand';
+
+  @override
+  String get myDataEmploymentDemandUnavailableStatus => 'Registration inactive';
 
   @override
   String get myDataEmploymentRegistrationDateLabel => 'Uninterrupted registration date';
@@ -4305,14 +4311,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNewsNotificationsDescription => 'Check your pending notifications';
 
   @override
+  String get homeNewsNotificationsEmptyDescription => 'You have no pending notifications';
+
+  @override
   String get homeNewsAppointmentsTitle => 'Upcoming appointments';
 
   @override
   String get homeNewsAppointmentsDescription => 'Check your upcoming appointments and events';
 
   @override
+  String get homeNewsAppointmentsEmptyDescription => 'You have no upcoming appointments or events';
+
+  @override
   String homeNewsLabelWithCount(String label, int count) {
     return '$label ($count)';
+  }
+
+  @override
+  String homeNewsLabelWithMinimumCount(String label, int count) {
+    return '$label (+$count)';
   }
 
   @override

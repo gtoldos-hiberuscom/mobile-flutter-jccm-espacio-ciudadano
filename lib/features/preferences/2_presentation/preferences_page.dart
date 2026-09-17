@@ -50,7 +50,13 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
     };
     final selectedLifeEvents = lifeEventsEnabled ? await _selectedLifeEvents(ref, args.idAgente) : const <LifeEvent>[];
     final lifeEventsUpdatedAt = _readLifeEventsUpdatedAt(appStorage, args.idAgente);
-    final notificationContact = await ref.watch(notificationContactProvider(args.contactId).future);
+    NotificationContact? notificationContact;
+    var notificationContactUnavailable = false;
+    try {
+      notificationContact = await ref.watch(notificationContactProvider(args.contactId).future);
+    } on Object {
+      notificationContactUnavailable = true;
+    }
 
     return _PreferencesState(
       lifeEventsStatus: lifeEventsEnabled
@@ -61,6 +67,7 @@ final _preferencesStateProvider = FutureProvider.autoDispose.family<_Preferences
       selectedLifeEvents: selectedLifeEvents,
       lifeEventsUpdatedAt: lifeEventsUpdatedAt,
       notificationContact: notificationContact,
+      notificationContactUnavailable: notificationContactUnavailable,
     );
   },
   name: 'preferencesStateProvider',
@@ -88,12 +95,14 @@ final class _PreferencesState {
     required this.selectedLifeEvents,
     required this.lifeEventsUpdatedAt,
     required this.notificationContact,
+    required this.notificationContactUnavailable,
   });
 
   final AppPreferenceStatus lifeEventsStatus;
   final List<LifeEvent> selectedLifeEvents;
   final DateTime? lifeEventsUpdatedAt;
   final NotificationContact? notificationContact;
+  final bool notificationContactUnavailable;
 }
 
 class PreferencesPage extends ConsumerStatefulWidget {
@@ -184,26 +193,37 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           activeFooterText: preferences.lifeEventsUpdatedAt == null ? null : _formatLifeEventsUpdate(l10n, preferences.lifeEventsUpdatedAt!),
         ),
         const SizedBox(height: AppDimensions.space16),
-        AppPreferenceCard(
-          title: l10n.preferencesNotificationContactTitle,
-          icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-          status: preferences.notificationContact == null ? AppPreferenceStatus.pending : AppPreferenceStatus.enabled,
-          inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
-          pendingDescription: l10n.preferencesNotificationContactPendingDescription,
-          activeDescription: l10n.preferencesNotificationContactActiveDescription,
-          actionLabel: l10n.preferencesManageAction,
-          actionIcon: AppIcons.edit,
-          summaryItems: [
-            ?preferences.notificationContact?.phone,
-            ?preferences.notificationContact?.email,
-          ],
-          onAction: () => context.go(
-            Uri(
-              path: Routes.notificationContact,
-              queryParameters: {'returnTo': Routes.preferences},
-            ).toString(),
+        if (preferences.notificationContactUnavailable)
+          ErrorStateWidget(
+            message: l10n.notificationContactErrorLoading,
+            announce: false,
+            onRetry: () {
+              ref
+                ..invalidate(notificationContactProvider(preferencesArgs.contactId))
+                ..invalidate(_preferencesStateProvider(preferencesArgs));
+            },
+          )
+        else
+          AppPreferenceCard(
+            title: l10n.preferencesNotificationContactTitle,
+            icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
+            status: preferences.notificationContact == null ? AppPreferenceStatus.pending : AppPreferenceStatus.enabled,
+            inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
+            pendingDescription: l10n.preferencesNotificationContactPendingDescription,
+            activeDescription: l10n.preferencesNotificationContactActiveDescription,
+            actionLabel: l10n.preferencesManageAction,
+            actionIcon: AppIcons.edit,
+            summaryItems: [
+              ?preferences.notificationContact?.phone,
+              ?preferences.notificationContact?.email,
+            ],
+            onAction: () => context.go(
+              Uri(
+                path: Routes.notificationContact,
+                queryParameters: {'returnTo': Routes.preferences},
+              ).toString(),
+            ),
           ),
-        ),
         const SizedBox(height: AppDimensions.space24),
         AppButton(
           label: l10n.lifeEventsResetAction,

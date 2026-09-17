@@ -94,9 +94,13 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
     final parts = [
       _firstString(data, const ['tipvia', 'tipoVia']),
       _firstString(data, const ['nomvia', 'nombreVia', 'via']),
-      _firstString(data, const ['numres', 'numero']),
+      _prefix('Km', _firstString(data, const ['kimres', 'kilometro', 'km'])),
+      _prefix('Hm', _firstString(data, const ['hecres', 'hectometro', 'hm'])),
+      _prefix('Num', _firstString(data, const ['numres', 'numero'])),
+      _prefix('NumSup', _firstString(data, const ['numsup', 'numeroSuperior'])),
       _prefix('Bloque', _firstString(data, const ['blores', 'bloque'])),
-      _prefix('Esc.', _firstString(data, const ['escres', 'escalera'])),
+      _prefix('Portal', _firstString(data, const ['portes', 'portal'])),
+      _prefix('Escalera', _firstString(data, const ['escres', 'escalera'])),
       _prefix('Planta', _firstString(data, const ['plares', 'planta'])),
       _prefix('Puerta', _firstString(data, const ['pueres', 'puerta'])),
     ].whereType<String>().where((final part) => part.trim().isNotEmpty).toList(growable: false);
