@@ -50,7 +50,7 @@ final class SessionGuard {
 
     switch (await sessionController.refreshIfNeeded()) {
       case SessionRefreshStatus.definitivelyInvalid:
-        return _bounceToLanding();
+        return _bounceToLanding(sessionExpired: true);
       case SessionRefreshStatus.unknownTransient:
         // Fail open: la sesión sigue guardada y el AuthRefreshInterceptor
         // reintentará por petición; cada pantalla muestra su propio error de
@@ -69,8 +69,14 @@ final class SessionGuard {
   /// and the landing page is already what is on screen, the redirect produces
   /// no route change — nothing would ever clear `isLoggingIn`/`loginSuccess`,
   /// leaving the "Accediendo con Cl@ve" veil up and the CTA dead forever.
-  String _bounceToLanding() {
+  /// [sessionExpired] marca la única expulsión que el ciudadano no ha
+  /// provocado: su sesión guardada ya no podía renovarse. La landing lo
+  /// convierte en un aviso; sin él se le devolvía ahí sin explicación.
+  String _bounceToLanding({final bool sessionExpired = false}) {
     _ref.invalidate(landingProvider);
+    if (sessionExpired) {
+      _ref.read(landingProvider.notifier).notifySessionExpired();
+    }
     return Routes.landing;
   }
 

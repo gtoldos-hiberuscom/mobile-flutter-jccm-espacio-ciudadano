@@ -6195,6 +6195,10 @@
   "@preferencesBiometricDisabledNotice": {
     "description": "Notice shown when biometric quick access is turned off: the current session cannot be renewed."
   },
+  "sessionExpiredNotice": "Your session could not be renewed. Identify yourself again with Cl@ve to continue.",
+  "@sessionExpiredNotice": {
+    "description": "Notice shown when the session could not be renewed and was closed. It does not name the specific cause — idle timeout, revocation — because the same notice covers them all."
+  },
   "sessionUnlockBiometricCancel": "Cancel",
   "@sessionUnlockBiometricCancel": {
     "description": "Button dismissing the system biometric prompt when resuming a session (Android only)."

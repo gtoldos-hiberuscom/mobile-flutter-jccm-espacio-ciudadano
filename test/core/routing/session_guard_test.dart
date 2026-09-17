@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.da
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_repository_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_status_unknown_exception.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/consent_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_repository_provider.dart';
@@ -91,6 +92,11 @@ void main() {
 
       expect(redirect, Routes.landing);
       expect(storage.store[StorageKeys.accessToken], isNull);
+      expect(
+        container.read(landingProvider).sessionExpired,
+        isFalse,
+        reason: 'esta expulsión es por consentimiento revocado, no por una sesión irrenovable',
+      );
     });
 
     test('genuinely missing consent with an in-memory session funnels into the legal gate', () async {
@@ -184,6 +190,31 @@ void main() {
 
       expect(redirect, isNull, reason: 'a network blip must not eject the user to the landing');
       expect(storage.store[StorageKeys.accessToken], 'persisted-access');
+    });
+
+    test('una expulsión por sesión irrenovable avisa al ciudadano', () async {
+      // Sin esto el guard le devolvía a la landing sin decir nada, y desde su
+      // punto de vista la app simplemente le echaba.
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
+      final container = ProviderContainer(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(const _FailingAuthRepository(AuthException.remoteFailure(message: 'invalid_grant'))),
+          secureStorageProvider.overrideWithValue(storage),
+          appStorageProvider.overrideWithValue(appStorage),
+          consentRepositoryProvider.overrideWithValue(consentRepository),
+        ],
+      );
+      addTearDown(container.dispose);
+      container.read(authSessionControllerProvider).startInMemory(
+        TokenResponse('access', 'persisted-refresh', DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
+        claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
+      );
+
+      final redirect = await container.read(_guardProvider).redirectPath(Routes.home);
+
+      expect(redirect, Routes.landing);
+      expect(container.read(landingProvider).sessionExpired, isTrue);
     });
 
     test('a definitive rejection bounces to the landing with the session cleared', () async {

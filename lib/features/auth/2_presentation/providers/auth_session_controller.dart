@@ -141,13 +141,23 @@ final class AuthSessionController {
     // Solo ocurre cuando de verdad hace falta refrescar, nunca al arrancar.
     final String? refreshToken;
     try {
-      refreshToken =
-          _ref.read(tokenResponseProvider)?.refreshToken ??
-          await _storage.read(
-            StorageKeys.refreshToken,
-            protection: SecureStorageProtection.biometric,
-            prompt: prompt,
-          );
+      final inMemory = _ref.read(tokenResponseProvider)?.refreshToken;
+      if (inMemory != null && inMemory.isNotEmpty) {
+        refreshToken = inMemory;
+      } else if (!biometricQuickAccessEnabled) {
+        // Sin acceso rápido no hay nada guardado, y el almacén protegido ni se
+        // toca: en Android basta con rozarlo para inicializarlo, y eso
+        // autentica. Intentar leer de un almacén vacío le sacaría un diálogo
+        // de huella a quien precisamente dijo que no quería ninguno.
+        await clear();
+        return SessionRefreshStatus.definitivelyInvalid;
+      } else {
+        refreshToken = await _storage.read(
+          StorageKeys.refreshToken,
+          protection: SecureStorageProtection.biometric,
+          prompt: prompt,
+        );
+      }
     } on Object catch (error, stackTrace) {
       // La plataforma rechaza la lectura si el ciudadano cancela el prompt,
       // falla la biometría, o si el juego de huellas cambió e invalidó la
@@ -261,6 +271,11 @@ final class AuthSessionController {
     }
     try {
       await _repository.revokeOfflineSession(refreshToken: refreshToken);
+      // Se deja constancia del caso bueno a propósito: la llamada va por un
+      // Dio desnudo, sin el interceptor de trazas, así que sin esto revocar
+      // sería indistinguible de no hacer nada — y es justo lo que hay que
+      // poder verificar contra las sesiones offline de Keycloak.
+      logger.i('Offline session revoked in Keycloak');
     } on Object catch (error, stackTrace) {
       logger.w('Could not revoke the offline session in Keycloak', error: error, stackTrace: stackTrace);
     }
@@ -278,6 +293,31 @@ final class AuthSessionController {
     final TokenResponse session, {
     final JwtClaims? claims,
   }) async {
+    // La memoria se actualiza ANTES de decidir nada, y el orden importa: la
+    // preferencia de acceso rápido va por ciudadano y se resuelve con los
+    // claims, así que hay que saber de quién es la sesión antes de saber si
+    // debe guardarse.
+    _updateMemory(session, claims: claims);
+
+    if (!biometricQuickAccessEnabled) {
+      // Sin acceso rápido la sesión no se reanuda al reabrir la app —no habría
+      // con qué sostenerla más allá de los minutos del access token—, así que
+      // guardarle credenciales no le sirve a nadie: sólo dejaría un access
+      // token huérfano en el dispositivo. Su sesión vive en memoria mientras
+      // la app esté abierta, que es exactamente lo que aceptó.
+      //
+      // Se limpia además lo que hubiera de una activación anterior, para que
+      // «no activado» signifique de verdad «nada guardado». El almacén
+      // protegido no se toca: en Android rozarlo lo inicializa y eso pide
+      // huella; de esa entrada se ocupa quien revoca la preferencia.
+      await Future.wait([
+        _storage.delete(StorageKeys.accessToken),
+        _storage.delete(StorageKeys.idToken),
+        _storage.delete(StorageKeys.sessionExpiresAt),
+      ]);
+      return;
+    }
+
     await Future.wait([
       if (session.accessToken != null) _storage.write(StorageKeys.accessToken, session.accessToken!),
       if (session.idToken != null) _storage.write(StorageKeys.idToken, session.idToken!),
@@ -292,11 +332,6 @@ final class AuthSessionController {
         // authoritative after a restart.
         _storage.delete(StorageKeys.sessionExpiresAt),
     ]);
-    // La memoria se actualiza ANTES de guardar el token protegido, y el orden
-    // importa: la preferencia de acceso rápido va por ciudadano y se resuelve
-    // con los claims en memoria. Al revés, la primera persistencia de una
-    // sesión consultaría la preferencia sin saber todavía de quién es.
-    _updateMemory(session, claims: claims);
     await _persistRefreshToken(session.refreshToken);
   }
 
@@ -368,10 +403,19 @@ final class AuthSessionController {
     _sessionGeneration++;
     await Future.wait([
       _storage.delete(StorageKeys.accessToken),
-      // El almacén protegido se vacía entero en vez de borrar su clave: ir
-      // clave a clave obliga a usar el cifrador, y en Android eso pide huella
-      // al cerrar sesión — también a quien nunca activó el acceso rápido.
-      _storage.clearBiometric(),
+      // El almacén protegido NO se toca aquí, y no es un olvido. En Android
+      // cualquier operación sobre él lo inicializa, y la inicialización
+      // autentica: medido con `delete` y con `deleteAll`, y también con la
+      // migración desactivada —entonces entra por `resetOnError` y acaba en
+      // «Reinitializing... Biometric authentication succeeded»—. Cerrar sesión
+      // pedía huella, incluso a quien nunca activó el acceso rápido.
+      //
+      // Dejar ahí el token no lo hace utilizable: se acaba de revocar en
+      // Keycloak, el access token —que es lo que identifica la sesión guardada
+      // y dispara la restauración— sí se borra justo debajo, y el siguiente
+      // login lo sobrescribe. Quien revoca el acceso rápido a propósito sí lo
+      // borra, desde [applyBiometricQuickAccessChange], y ahí la huella sí
+      // tiene sentido.
       _storage.delete(StorageKeys.idToken),
       _storage.delete(StorageKeys.sessionExpiresAt),
     ]);

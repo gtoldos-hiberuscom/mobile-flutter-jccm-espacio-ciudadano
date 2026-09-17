@@ -122,6 +122,15 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         }
         ref.read(goRouterProvider).go(Routes.home);
       }
+      if (next.sessionExpired) {
+        // Curado y sin detalle técnico: el ciudadano no ha pedido nada, sólo
+        // se ha encontrado de vuelta en la landing.
+        AppAlertSnackbar.show(
+          context,
+          message: l10n.sessionExpiredNotice,
+        );
+        ref.read(landingProvider.notifier).clearError();
+      }
       if (next.error != null) {
         final errorMsg = next.error!.cause is TimeoutException ? l10n.loginTimeoutError : l10n.domainGenericLoadError;
         AppAlertSnackbar.show(

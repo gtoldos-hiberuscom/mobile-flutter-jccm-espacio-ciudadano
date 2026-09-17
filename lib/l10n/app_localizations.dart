@@ -9098,6 +9098,12 @@ abstract class AppLocalizations {
   /// **'Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve.'**
   String get preferencesBiometricDisabledNotice;
 
+  /// Aviso cuando la sesión no ha podido renovarse y se ha cerrado. No nombra la causa concreta —inactividad, revocación— porque el mismo aviso cubre todas.
+  ///
+  /// In es, this message translates to:
+  /// **'No ha sido posible renovar tu sesión. Vuelve a identificarte con Cl@ve para continuar.'**
+  String get sessionExpiredNotice;
+
   /// Botón que descarta el diálogo biométrico del sistema al reanudar sesión (solo Android).
   ///
   /// In es, this message translates to:

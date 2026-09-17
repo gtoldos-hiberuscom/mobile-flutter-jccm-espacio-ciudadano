@@ -6209,6 +6209,10 @@
   "@preferencesBiometricDisabledNotice": {
     "description": "Aviso al desactivar el acceso biométrico: la sesión en curso no podrá renovarse."
   },
+  "sessionExpiredNotice": "No ha sido posible renovar tu sesión. Vuelve a identificarte con Cl@ve para continuar.",
+  "@sessionExpiredNotice": {
+    "description": "Aviso cuando la sesión no ha podido renovarse y se ha cerrado. No nombra la causa concreta —inactividad, revocación— porque el mismo aviso cubre todas."
+  },
   "sessionUnlockBiometricCancel": "Cancelar",
   "@sessionUnlockBiometricCancel": {
     "description": "Botón que descarta el diálogo biométrico del sistema al reanudar sesión (solo Android)."

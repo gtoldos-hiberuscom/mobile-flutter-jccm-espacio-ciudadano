@@ -18,6 +18,7 @@ final class LandingState {
     this.error,
     this.loginSuccess = false,
     this.isolationDegradedWarning = false,
+    this.sessionExpired = false,
   });
 
   final bool isLoggingIn;
@@ -27,6 +28,11 @@ final class LandingState {
 
   /// One-shot signal consumed by the page to trigger navigation.
   final bool loginSuccess;
+
+  /// Señal de un solo uso: la sesión guardada no pudo renovarse y se ha
+  /// cerrado. Sin esto el guard devolvía al ciudadano a la landing sin decirle
+  /// por qué, y desde su punto de vista la app simplemente le echaba.
+  final bool sessionExpired;
 
   /// One-shot signal: login succeeded but the browser could not provide an
   /// ephemeral (isolated) session, so the Cl@ve web session may be remembered
@@ -45,6 +51,11 @@ class LandingNotifier extends Notifier<LandingState> {
   /// CTA would be dead until process death.
   static const loginTimeout = Duration(minutes: 3);
 
+  /// Mismo margen que usa [AuthSessionController.refreshIfNeeded]: un token al
+  /// borde de caducar no se da por bueno, o se entraría para que la primera
+  /// petición se encuentre con un 401.
+  static const Duration _accessTokenMargin = Duration(seconds: 60);
+
   bool _restoreAttempted = false;
 
   @override
@@ -61,9 +72,14 @@ class LandingNotifier extends Notifier<LandingState> {
   ///
   /// Reproduce el flujo pedido por el cliente:
   ///
-  /// * con el access token todavía vivo se entra directamente, sin pedir nada;
-  /// * si ha caducado, [AuthSessionController.refreshIfNeeded] lee el offline
-  ///   token del almacén, y esa lectura **es** la comprobación biométrica;
+  /// * con el access token todavía vivo se entra directamente, sin pedir nada
+  ///   y **sin mirar la preferencia**: ese token se guarda sin protección, así
+  ///   que exigir huella para usarlo no protegería nada y sólo costaría un
+  ///   login de Cl@ve — además de contradecir lo pedido por el cliente («si
+  ///   hay Access token se puede entrar»);
+  /// * si ha caducado, hace falta el token de larga vida, y ése sí vive tras
+  ///   la biometría: [AuthSessionController.refreshIfNeeded] lo lee del
+  ///   almacén, y esa lectura **es** la comprobación biométrica;
   /// * si el refresco no sale adelante —biometría cancelada, token revocado,
   ///   red caída— no se navega: el ciudadano se queda en la landing y entra
   ///   con Cl@ve como siempre. Nunca se le muestra un error por esto, porque
@@ -87,19 +103,43 @@ class LandingNotifier extends Notifier<LandingState> {
     if (idAgente == null || !ref.mounted) {
       return;
     }
-    // La preferencia manda. Si el borrado del token falló al revocar —en
-    // Android exige autenticar y el ciudadano puede cancelarlo—, la entrada
-    // sigue en el dispositivo; sin esta comprobación el acceso rápido
-    // seguiría funcionando pese a figurar como desactivado.
-    if (!sessionController.biometricQuickAccessEnabledFor(idAgente)) {
+
+    // Hidratar no toca el almacén protegido, así que no puede levantar el
+    // diálogo biométrico: sirve para saber si queda sesión utilizable antes de
+    // decidir si hace falta pedir nada.
+    final session = await sessionController.hydrateFromStorage();
+    if (!ref.mounted) {
       return;
     }
 
-    final status = await sessionController.refreshIfNeeded(
-      prompt: BiometricPromptCopy(title: localizedTitle, subtitle: localizedReason, cancelLabel: localizedCancel),
-    );
-    if (!ref.mounted || status != SessionRefreshStatus.valid) {
-      return;
+    final expiresAt = session?.accessTokenExpirationDateTime;
+    final accessTokenUsable = expiresAt != null && expiresAt.isAfter(DateTime.now().add(_accessTokenMargin));
+
+    if (!accessTokenUsable) {
+      // Sin access token vigente sólo queda el de larga vida, y ése sí está
+      // detrás de la biometría: si el ciudadano no activó el acceso rápido, no
+      // hay nada que abrir y entra por Cl@ve como siempre.
+      if (!sessionController.biometricQuickAccessEnabledFor(idAgente)) {
+        return;
+      }
+      final status = await sessionController.refreshIfNeeded(
+        prompt: BiometricPromptCopy(title: localizedTitle, subtitle: localizedReason, cancelLabel: localizedCancel),
+      );
+      if (!ref.mounted) {
+        return;
+      }
+      if (status != SessionRefreshStatus.valid) {
+        // Sólo se avisa cuando la sesión está realmente muerta —el servidor ha
+        // rechazado la credencial de larga vida— y no cuando el intento
+        // simplemente no salió adelante: si el ciudadano canceló la biometría
+        // o falló la red, su sesión sigue ahí y decirle que ha terminado sería
+        // mentirle. Sin esta distinción, volver tras dos semanas dejaba al
+        // ciudadano en la landing sin explicación ninguna.
+        if (status == SessionRefreshStatus.definitivelyInvalid) {
+          state = const LandingState(sessionExpired: true);
+        }
+        return;
+      }
     }
 
     // El gate de consentimiento sigue siendo cosa del guard: aquí solo se
@@ -155,6 +195,9 @@ class LandingNotifier extends Notifier<LandingState> {
         }
     }
   }
+
+  /// La invoca el `SessionGuard` al expulsar por una sesión irrenovable.
+  void notifySessionExpired() => state = const LandingState(sessionExpired: true);
 
   void clearError() => state = const LandingState();
 

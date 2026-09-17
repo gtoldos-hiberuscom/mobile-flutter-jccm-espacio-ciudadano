@@ -4764,6 +4764,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesBiometricDisabledNotice => 'Quick access is now off. When this session ends you will need to identify yourself again with Cl@ve.';
 
   @override
+  String get sessionExpiredNotice => 'Your session could not be renewed. Identify yourself again with Cl@ve to continue.';
+
+  @override
   String get sessionUnlockBiometricCancel => 'Cancel';
 
   @override

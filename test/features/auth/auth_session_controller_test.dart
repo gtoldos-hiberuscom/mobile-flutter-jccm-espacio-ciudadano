@@ -287,6 +287,7 @@ void main() {
       await expectLater(
         controller.persist(
           TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+          claims: _claims,
         ),
         completes,
       );
@@ -329,10 +330,11 @@ void main() {
       expect(storage.clearedBiometric, isFalse, reason: 'no debe tocarse el almacén protegido');
     });
 
-    test('sin el opt-in activado el offline token no se guarda', () async {
-      // Es lo que impide que un ciudadano acabe con una sesión de semanas que
-      // nunca autorizó: hasta que activa el acceso rápido, cerrar la app
-      // termina la sesión igual que siempre.
+    test('sin el opt-in activado no se guarda NADA, ni siquiera el access token', () async {
+      // Sin acceso rápido la sesión no se reanuda al reabrir la app, así que
+      // guardar credenciales no sirve a nadie: sólo dejaría un access token
+      // huérfano. Su sesión vive en memoria mientras la app esté abierta, que
+      // es lo que el ciudadano aceptó.
       appStorage.values[_quickAccessKey] = false;
       final container = buildContainer();
 
@@ -341,8 +343,22 @@ void main() {
         claims: _claims,
       );
 
-      expect(storage.store[StorageKeys.accessToken], 'access');
-      expect(storage.store[StorageKeys.refreshToken], isNull);
+      expect(storage.store, isEmpty);
+    });
+
+    test('desactivar limpia lo que hubiera guardado de una activación anterior', () async {
+      storage.store[StorageKeys.accessToken] = 'de-cuando-estaba-activado';
+      storage.store[StorageKeys.idToken] = 'id-viejo';
+      appStorage.values[_quickAccessKey] = false;
+      final container = buildContainer();
+
+      await container.read(authSessionControllerProvider).persist(
+        TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
+        claims: _claims,
+      );
+
+      expect(storage.store[StorageKeys.accessToken], isNull, reason: '«no activado» debe significar «nada guardado»');
+      expect(storage.store[StorageKeys.idToken], isNull);
     });
 
     test('desactivar el opt-in borra del dispositivo el token ya guardado', () async {
@@ -395,7 +411,15 @@ void main() {
       storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
       storage.unreadableKeys.add(StorageKeys.refreshToken);
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider);
+      final controller = container.read(authSessionControllerProvider)
+        // Estado de una sesión hidratada: identidad y access token caducado en
+        // memoria, refresh no. La identidad hace falta porque la preferencia
+        // de acceso rápido va por ciudadano, y sin ella ni se intenta leer el
+        // almacén protegido.
+        ..startInMemory(
+          TokenResponse('persisted-access', null, DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
+          claims: _claims,
+        );
 
       final status = await controller.refreshStatus(force: true);
 
@@ -576,7 +600,10 @@ void main() {
       expect(repository.refreshCount, 1, reason: 'the network refresh did run and complete');
       expect(container.read(tokenResponseProvider), isNull);
       expect(storage.store[StorageKeys.accessToken], isNull);
-      expect(storage.store[StorageKeys.refreshToken], isNull);
+      // El refresh token sobrevive al logout a propósito: tocar el almacén
+      // protegido en Android lo inicializa, y eso autentica —pedía huella para
+      // cerrar sesión—. Lo que importa aquí es que la sesión no resucite, y sin
+      // access token no hay nada que restaurar.
     });
   });
 
@@ -586,7 +613,7 @@ void main() {
       final controller = container.read(authSessionControllerProvider);
       final expiresAt = DateTime.now().add(const Duration(minutes: 5));
 
-      await controller.persist(tokenExpiringIn(const Duration(minutes: 5)));
+      await controller.persist(tokenExpiringIn(const Duration(minutes: 5)), claims: _claims);
 
       final stored = storage.store[StorageKeys.sessionExpiresAt];
       expect(stored, isNotNull);
@@ -598,7 +625,7 @@ void main() {
       final container = buildContainer();
       final controller = container.read(authSessionControllerProvider);
 
-      await controller.persist(TokenResponse('new-access', 'new-refresh', null, null, null, null, null));
+      await controller.persist(TokenResponse('new-access', 'new-refresh', null, null, null, null, null), claims: _claims);
 
       expect(storage.store[StorageKeys.sessionExpiresAt], isNull, reason: 'hydrateFromStorage must not resurrect an expiry the session no longer has');
     });
@@ -609,9 +636,16 @@ void main() {
       storage.store[StorageKeys.accessToken] = 'old-access';
       storage.store[StorageKeys.refreshToken] = 'old-refresh';
       final container = buildContainer();
-      final controller = container.read(authSessionControllerProvider);
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(
+          TokenResponse('old-access', null, DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
+          claims: _claims,
+        );
+      // Access token con forma de JWT: el controlador lo re-decodifica en cada
+      // refresco para refrescar la identidad, y con una cadena cualquiera la
+      // perdería — y sin identidad no se resuelve la preferencia.
       repository.responseBuilder = (final count) => TokenResponse(
-        'new-access',
+        _accessTokenFor('new-access'),
         'new-refresh',
         DateTime.now().add(const Duration(minutes: 5)),
         'id-token-xyz',

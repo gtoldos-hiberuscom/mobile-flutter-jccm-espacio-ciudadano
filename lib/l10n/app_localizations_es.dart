@@ -4765,6 +4765,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesBiometricDisabledNotice => 'Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve.';
 
   @override
+  String get sessionExpiredNotice => 'No ha sido posible renovar tu sesión. Vuelve a identificarte con Cl@ve para continuar.';
+
+  @override
   String get sessionUnlockBiometricCancel => 'Cancelar';
 
   @override

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 
@@ -100,10 +101,16 @@ final class AuthRepositoryImpl implements AuthRepository {
     _requireNotBlank(refreshToken, 'refreshToken');
 
     try {
-      // Dio propio y desnudo, no el cliente de la app: sus interceptores
-      // reaccionarían al 401 intentando refrescar la misma sesión que estamos
-      // revocando. Aquí no hay nada que reintentar.
-      await Dio().post<void>(
+      // Dio propio, no el cliente de la app: sus interceptores reaccionarían
+      // al 401 intentando refrescar la misma sesión que estamos revocando.
+      //
+      // Lleva el logger del proyecto —sin él, revocar y no hacer nada se veían
+      // exactamente igual en la traza— pero **sin `verboseBodies`**: el cuerpo
+      // de esta petición es el propio offline token, y en desarrollo la
+      // redacción está desactivada. Así queda constancia de la llamada y de su
+      // resultado sin que la credencial de larga vida llegue nunca a un log.
+      final revocationClient = Dio()..interceptors.add(EmojiDioLogger());
+      await revocationClient.post<void>(
         _realmUri('protocol/openid-connect/logout'),
         data: {
           'client_id': _config.ssoClientId,

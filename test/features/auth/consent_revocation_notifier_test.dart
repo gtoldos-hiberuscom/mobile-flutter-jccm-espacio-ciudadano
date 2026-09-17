@@ -53,7 +53,12 @@ void main() {
 
     expect(authRepository.logoutIdTokens, ['id-token']);
     expect(container.read(tokenResponseProvider), isNull);
-    expect(storage.deleted, containsAll([StorageKeys.accessToken, StorageKeys.refreshToken, StorageKeys.idToken]));
+    // El refresh token no está en la lista a propósito: el almacén protegido
+    // no se toca al cerrar sesión, porque en Android inicializarlo autentica y
+    // pedía huella para hacer logout. Queda revocado en Keycloak, y sin access
+    // token la sesión guardada ya no se restaura.
+    expect(storage.deleted, containsAll([StorageKeys.accessToken, StorageKeys.idToken]));
+    expect(storage.deleted, isNot(contains(StorageKeys.refreshToken)));
     expect(container.read(consentRevocationProvider), isTrue);
   });
 

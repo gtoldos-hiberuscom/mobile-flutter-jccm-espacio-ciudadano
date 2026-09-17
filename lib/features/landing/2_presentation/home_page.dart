@@ -123,11 +123,15 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     final accepted = await AppBiometricAccessDialog.show(context);
     if (!mounted || accepted != true) {
-      // Quien dice que no nunca va a usar su offline token, pero Keycloak ya
-      // se lo emitió: el scope se pide en todos los logins porque hace falta
-      // tenerlo en memoria por si acepta. Se revoca aquí para que no queden
-      // sesiones offline de semanas colgadas en el servidor sin dueño.
-      await ref.read(authSessionControllerProvider).revokeCurrentOfflineSession();
+      // Aquí NO se revoca, aunque este token vaya a quedar sin usar. Medido en
+      // PRE: `POST /logout` con el refresh token cierra la sesión entera, no
+      // una «sesión offline» aparte —no existe tal cosa: el token revocado es
+      // el de la sesión en curso—. Al rechazar el diálogo, el ciudadano se
+      // quedaba dentro pero con todo devolviendo 403.
+      //
+      // La acumulación se corta al cerrar sesión, que es donde matar la sesión
+      // sí es la intención; y lo que no pase por ahí caduca por el idle del
+      // realm.
       return;
     }
 
