@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -457,10 +458,15 @@ final goRouterProvider = Provider<GoRouter>(
         ),
 
         // ── Design System catalog ─────────────────────────────────────────
-        GoRoute(
-          path: Routes.designSystem,
-          builder: (final BuildContext context, final GoRouterState state) => const DesignSystemCatalogPage(),
-        ),
+        // Catálogo interno de componentes, sólo en debug. NO está en
+        // `Routes._authenticated`, así que es ruta pública: registrarla en
+        // release la deja alcanzable sin sesión (riesgo nº 8 de
+        // documentation/PLAN_DE_PRUEBAS.md).
+        if (kDebugMode)
+          GoRoute(
+            path: Routes.designSystem,
+            builder: (final BuildContext context, final GoRouterState state) => const DesignSystemCatalogPage(),
+          ),
       ],
     );
 
