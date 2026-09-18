@@ -42,11 +42,18 @@ final class AuthRepositoryImpl implements AuthRepository {
           // múltiples. Se puede volver a añadir cuando soporten la combinación.
           promptValues: const [Prompt.login],
           additionalParameters: const {'max_age': '0'},
-          // Sólo tiene efecto en iOS/macOS, donde pide una
-          // ASWebAuthenticationSession aislada de Safari. El plugin de Android
-          // ignora este argumento: sus Custom Tabs comparten el cookie jar del
-          // navegador y no hay API para evitarlo.
-          externalUserAgent: ExternalUserAgent.ephemeralAsWebAuthenticationSession,
+          // En iOS, SFSafariViewController: almacén propio de la app, aislado
+          // de Safari pero compartido con las pestañas que abre la propia app
+          // (`LaunchMode.inAppBrowserView`). Es lo que permite que los portales
+          // de JCCM abran ya identificados sin exponer la sesión a Safari.
+          //
+          // Implica que el estado de Cl@ve sobrevive entre logins dentro de ese
+          // almacén: lo que garantiza la reautenticación es el `ForceAuthn` que
+          // Cerbero propaga desde `prompt=login`, no el aislamiento.
+          //
+          // Android ignora este argumento; macOS se comporta como
+          // asWebAuthenticationSession.
+          externalUserAgent: ExternalUserAgent.sfSafariViewController,
         ),
       );
     } on FlutterAppAuthUserCancelledException catch (error, stackTrace) {
@@ -149,8 +156,10 @@ final class AuthRepositoryImpl implements AuthRepository {
           additionalParameters: {
             'client_id': _config.ssoClientId,
           },
-          // Igual que el login: efecto sólo en iOS/macOS.
-          externalUserAgent: ExternalUserAgent.ephemeralAsWebAuthenticationSession,
+          // Igual que el login. Además evita el diálogo del sistema que
+          // ASWebAuthenticationSession muestra al cerrar sesión, que hablaba de
+          // «iniciar sesión» justo cuando el ciudadano está saliendo.
+          externalUserAgent: ExternalUserAgent.sfSafariViewController,
         ),
       );
     } on FlutterAppAuthUserCancelledException {

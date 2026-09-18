@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
@@ -69,6 +70,21 @@ void main() {
 
     expect(capturedArguments?['promptValues'], <String>['login']);
     expect(capturedArguments?['additionalParameters'], containsPair('max_age', '0'));
+  });
+
+  test('login and logout ask for the SFSafariViewController agent', () async {
+    // De ese agente depende el SSO con los portales de JCCM en iOS: guarda en
+    // un almacén propio de la app, compartido con las pestañas que la app abre
+    // con `LaunchMode.inAppBrowserView`. Con el agente efímero ese almacén se
+    // destruye y los portales vuelven a abrir sin identificar, sin que nada
+    // falle a la vista. Android ignora el argumento.
+    mockChannelThrowing('authorize_and_exchange_code_failed');
+
+    await expectLater(repository.login(), throwsA(isA<AuthException>()));
+    expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
+
+    await expectLater(repository.logout(idToken: 'fake-id-token'), throwsA(isA<AuthException>()));
+    expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
   });
 
   test('other platform error codes keep the existing unexpected mapping', () async {
