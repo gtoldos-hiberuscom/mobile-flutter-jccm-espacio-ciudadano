@@ -15,6 +15,12 @@ final consentRepositoryProvider = Provider<ConsentRepository>((final ref) {
   // select() keeps the repository instance (and its in-memory clause cache)
   // stable across token refreshes: JwtClaims has no `==`, so watching the
   // whole provider would rebuild the repository on every refresh.
-  final agentId = ref.watch(jwtClaimsProvider.select((final claims) => claims?.idAgente));
+  // With a representative certificate the authenticated agent (`PER…`) and
+  // the represented entity (`PJU…`) are different. The gateway path still
+  // uses `sub_alt`, but the clauses request body must identify the represented
+  // agent or the backend rejects the write with 403.
+  final agentId = ref.watch(
+    jwtClaimsProvider.select((final claims) => claims?.effectiveAgentId),
+  );
   return ConsentRepositoryImpl(storage: storage, dio: dio, agentId: agentId);
 });

@@ -27,7 +27,7 @@ final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((fina
       .watch(checkAcceptedConsentClauseUsecaseProvider)
       .execute(
         idAgente: idAgente,
-        clauseId: jccmDataConsentClauseId,
+        clauseId: digitalCardsConsentClauseId,
       );
   return switch (result) {
     AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
@@ -42,14 +42,14 @@ final digitalCardsProvider = FutureProvider.autoDispose<DigitalCardsSnapshot>((f
   }
 
   final repository = ref.watch(digitalCardsRepositoryProvider);
-  // Los carnets exigen la cláusula obligatoria y la de la JCCM
+  // Los carnets exigen la cláusula obligatoria y la específica de carnets
   // (`documentation/consent_clause_access_matrix.md`). La comprobación
   // proactiva de `digitalCardsAuthorizationProvider` se apoya en la caché
   // positiva de cláusulas, así que no ve una revocación reciente: esta es la
   // corrección reactiva.
   return withAuthorizationGuard(
     ref,
-    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    requiredClauseIds: const {requiredConsentClauseId, digitalCardsConsentClauseId},
     request: () => repository.loadCards(citizenId: citizenId),
   );
 });

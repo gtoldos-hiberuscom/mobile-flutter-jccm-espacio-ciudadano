@@ -18,17 +18,18 @@ final class JwtDecoder {
   /// **Never throws.** Returns a [JwtClaims] with `sub: ''` and `exp: 0`
   /// on any failure (malformed token, invalid Base64, invalid JSON).
   static JwtClaims decode(final String token) {
-    final payload = decodePayload(token);
-    return payload.isEmpty ? _empty() : JwtClaims.fromMap(payload);
+    return JwtClaims.fromMap(decodePayload(token));
   }
 
-  /// Decodes the payload section of [token] as a raw claim map.
+  /// Decodes every claim in the JWT payload without filtering it through
+  /// [JwtClaims]. Useful for diagnostics when the identity provider introduces
+  /// claims that the application does not model yet, and for claims that have
+  /// no place in [JwtClaims] because they belong to a refresh token rather
+  /// than to the access token (e.g. Keycloak's `typ`, which tells `Refresh`
+  /// apart from `Offline`).
   ///
   /// **Never throws.** Returns an empty map on any failure (malformed token,
-  /// invalid Base64, invalid JSON). Used for claims that have no place in
-  /// [JwtClaims] because they belong to a refresh token rather than to the
-  /// access token (e.g. Keycloak's `typ`, which tells `Refresh` apart from
-  /// `Offline`).
+  /// invalid Base64, invalid JSON).
   static Map<String, dynamic> decodePayload(final String token) {
     try {
       final parts = token.split('.');
@@ -44,11 +45,13 @@ final class JwtDecoder {
       }
 
       final decoded = utf8.decode(base64Url.decode(payload));
-      return json.decode(decoded) as Map<String, dynamic>;
+      final value = json.decode(decoded);
+      if (value is! Map<String, dynamic>) {
+        return const {};
+      }
+      return value;
     } catch (_) {
       return const {};
     }
   }
-
-  static JwtClaims _empty() => JwtClaims.fromMap(const {});
 }

@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/ex
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/controllers/past_primary_care_appointments_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
@@ -286,6 +287,8 @@ class _SingleShotAppointmentsList extends ConsumerWidget {
           ? MyDataAuthorizationContextualHelper(
               onOpenSettings: () => _openConsentSettings(context),
             )
+          : error is MyDataHealthCipMissing
+          ? const _HealthCipMissingState()
           : _HealthErrorState(
               onRetry: () => switch (scope) {
                 HealthAppointmentScope.primaryCare => ref.invalidate(myDataPrimaryCarePendingAppointmentsProvider),
@@ -325,6 +328,8 @@ class _PastPrimaryCareAppointmentsList extends ConsumerWidget {
         return MyDataAuthorizationContextualHelper(
           onOpenSettings: () => _openConsentSettings(context),
         );
+      case PastPrimaryCareAppointmentsStatus.cipMissing:
+        return const _HealthCipMissingState();
       case PastPrimaryCareAppointmentsStatus.loadError:
         return _HealthErrorState(
           onRetry: () => unawaited(ref.read(pastPrimaryCareAppointmentsProvider.notifier).retry()),
@@ -562,6 +567,19 @@ class _HealthErrorState extends StatelessWidget {
       actionLabel: l10n.myDataServiceUnavailableUpdate,
       onRetry: onRetry,
       scrollable: false,
+    );
+  }
+}
+
+class _HealthCipMissingState extends StatelessWidget {
+  const _HealthCipMissingState();
+
+  @override
+  Widget build(final BuildContext context) {
+    return AppAlertContextual(
+      message: AppLocalizations.of(context).agendaHealthCipMissing,
+      size: AppAlertContextualSize.small,
+      announce: true,
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
 
@@ -21,6 +22,9 @@ enum PastPrimaryCareAppointmentsStatus {
 
   /// El backend rechazó la consulta por falta de autorización (cláusula 1).
   authorizationRequired,
+
+  /// SESCAM no tiene un CIP vinculado a la identidad del ciudadano.
+  cipMissing,
 }
 
 /// Estado del listado paginado de citas pasadas de atención primaria.
@@ -108,11 +112,13 @@ class PastPrimaryCareAppointmentsNotifier extends Notifier<PastPrimaryCareAppoin
 
     _isFetching = true;
     try {
-      final page = await ref.read(myDataHealthRepositoryProvider).loadPrimaryCareAppointments(
-        citizenId: citizenId,
-        filter: HealthAppointmentFilter.past,
-        page: _nextPage,
-      );
+      final page = await ref
+          .read(myDataHealthRepositoryProvider)
+          .loadPrimaryCareAppointments(
+            citizenId: citizenId,
+            filter: HealthAppointmentFilter.past,
+            page: _nextPage,
+          );
       if (!ref.mounted) {
         return;
       }
@@ -135,6 +141,15 @@ class PastPrimaryCareAppointmentsNotifier extends Notifier<PastPrimaryCareAppoin
       }
       state = state.copyWith(
         status: state.appointments.isEmpty ? PastPrimaryCareAppointmentsStatus.authorizationRequired : PastPrimaryCareAppointmentsStatus.loaded,
+        hasMore: false,
+        isLoadingMore: false,
+      );
+    } on MyDataHealthCipMissing {
+      if (!ref.mounted) {
+        return;
+      }
+      state = state.copyWith(
+        status: state.appointments.isEmpty ? PastPrimaryCareAppointmentsStatus.cipMissing : PastPrimaryCareAppointmentsStatus.loaded,
         hasMore: false,
         isLoadingMore: false,
       );

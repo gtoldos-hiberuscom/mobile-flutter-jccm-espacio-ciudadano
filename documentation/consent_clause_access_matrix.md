@@ -25,6 +25,7 @@ las autorizaciones. Empiezan en 0.
 | 1 | Condiciones de uso (JCCM) | `jccmDataConsentClauseId` | Consulta de hechos administrativos de la JCCM en bienestar social, empleo, educación y salud. |
 | 2 | Espacio Ciudadano (AGE) | `ageDataConsentClauseId` | Consulta de información de la Administración General del Estado. |
 | 3 | Recomendaciones | `recommendationsConsentClauseId` | Uso de preferencias y hechos vitales para recomendaciones personalizadas. |
+| 4 | Carnets | `digitalCardsConsentClauseId` | Consulta y descarga de carnets digitales. |
 
 > Una versión anterior de este documento numeraba las cláusulas de 1 a 4, con un
 > desfase de uno respecto al API. Quien tradujera la matriz a código directamente
@@ -53,11 +54,11 @@ las autorizaciones. Empiezan en 0.
 
 ## Carnet
 
-| Área | Información | Origen | 0 · Protección de datos | 1 · JCCM | 2 · AGE | 3 · Recomendaciones |
-| --- | --- | --- | --- | --- | --- | --- |
-| Carnet | Discapacidad | JCCM | Sí | Sí | No | No |
-| Carnet | Familia Numerosa | JCCM | Sí | Sí | No | No |
-| Carnet | Joven | JCCM | Sí | Sí | No | No |
+| Área | Información | Origen | 0 · Protección de datos | 1 · JCCM | 2 · AGE | 3 · Recomendaciones | 4 · Carnets |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Carnet | Discapacidad | JCCM | Sí | No | No | No | Sí |
+| Carnet | Familia Numerosa | JCCM | Sí | No | No | No | Sí |
+| Carnet | Joven | JCCM | Sí | No | No | No | Sí |
 
 ## Agenda
 

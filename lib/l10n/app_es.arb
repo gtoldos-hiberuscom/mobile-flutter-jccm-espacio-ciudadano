@@ -762,6 +762,10 @@
   "@agendaHealthAppointmentsUnavailable": {
     "description": "Agenda — aviso de carga parcial cuando la fuente de citas de Atención Primaria (SESCAM) no responde y el resto de la agenda sí se ha cargado."
   },
+  "agendaHealthCipMissing": "En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.",
+  "@agendaHealthCipMissing": {
+    "description": "Agenda — aviso informativo cuando SESCAM devuelve el código 3031 porque no existe un CIP vinculado a la identidad."
+  },
   "agendaEventsUnavailable": "No hemos podido cargar los eventos de tu agenda.",
   "@agendaEventsUnavailable": {
     "description": "Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado."
@@ -3899,6 +3903,14 @@
   "@myDataIntro": {
     "description": "Texto introductorio de la pantalla Mis datos."
   },
+  "representativeUnavailableTitle": "Información no disponible",
+  "@representativeUnavailableTitle": {
+    "description": "Título mostrado al abrir una sección no disponible con certificado de representante."
+  },
+  "representativeUnavailableMessage": "Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.",
+  "@representativeUnavailableMessage": {
+    "description": "Mensaje mostrado al abrir una sección no disponible con certificado de representante."
+  },
   "myDataHealthTitle": "Salud",
   "@myDataHealthTitle": {
     "description": "Título de la tarjeta de Salud en la pantalla Mis datos."
@@ -3947,9 +3959,13 @@
   "@myDataEmploymentServicesTab": {
     "description": "Segunda pestaña del detalle de Empleo."
   },
-  "myDataEmploymentDemandTitle": "Tu demanda de empleo",
+  "myDataEmploymentDemandTitle": "Mi demanda de empleo",
   "@myDataEmploymentDemandTitle": {
     "description": "Título de la tarjeta de demanda de empleo."
+  },
+  "myDataEmploymentDemandUnavailableStatus": "Inscripción no activa",
+  "@myDataEmploymentDemandUnavailableStatus": {
+    "description": "Estado de la tarjeta de demanda de empleo cuando el ciudadano no tiene una inscripción activa."
   },
   "myDataEmploymentRegistrationDateLabel": "Fecha de inscripción sin interrupciones",
   "@myDataEmploymentRegistrationDateLabel": {
@@ -5403,7 +5419,7 @@
   "@digitalCardsInfoSheetBody": {
     "description": "Carnets digitales — cuerpo del bottom sheet informativo."
   },
-  "digitalCardsAuthorizationRequiredMessage": "Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.",
+  "digitalCardsAuthorizationRequiredMessage": "Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».",
   "@digitalCardsAuthorizationRequiredMessage": {
     "description": "Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM."
   },
@@ -5603,6 +5619,10 @@
   "@homeNewsNotificationsDescription": {
     "description": "Home — descripción de la tarjeta de notificaciones en Mis novedades."
   },
+  "homeNewsNotificationsEmptyDescription": "No tienes notificaciones pendientes",
+  "@homeNewsNotificationsEmptyDescription": {
+    "description": "Home — descripción de la tarjeta de notificaciones cuando no hay ninguna pendiente."
+  },
   "homeNewsAppointmentsTitle": "Próximas citas",
   "@homeNewsAppointmentsTitle": {
     "description": "Home — etiqueta de la tarjeta de próximas citas en Mis novedades."
@@ -5610,6 +5630,10 @@
   "homeNewsAppointmentsDescription": "Consulta tus próximas citas y eventos",
   "@homeNewsAppointmentsDescription": {
     "description": "Home — descripción de la tarjeta de próximas citas en Mis novedades."
+  },
+  "homeNewsAppointmentsEmptyDescription": "No tienes próximas citas ni eventos",
+  "@homeNewsAppointmentsEmptyDescription": {
+    "description": "Home — descripción de la tarjeta de próximas citas cuando no hay ninguna cita ni evento."
   },
   "homeNewsLabelWithCount": "{label} ({count})",
   "@homeNewsLabelWithCount": {
@@ -5621,6 +5645,14 @@
       "count": {
         "type": "int"
       }
+    }
+  },
+  "homeNewsLabelWithMinimumCount": "{label} (+{count})",
+  "@homeNewsLabelWithMinimumCount": {
+    "description": "Etiqueta de una tarjeta de novedades cuando el recuento ha alcanzado el límite de carga",
+    "placeholders": {
+      "label": { "type": "String" },
+      "count": { "type": "int" }
     }
   },
   "homeRecommendedProceduresTitle": "Trámites recomendados",

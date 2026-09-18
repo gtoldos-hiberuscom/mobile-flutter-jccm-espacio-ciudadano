@@ -10,6 +10,8 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/consent_status_
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/consent_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
+import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/repositories/notification_contact_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/preferences_page.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -56,7 +58,7 @@ void main() {
     expect(find.textContaining('primero debes aceptar'), findsNothing);
   });
 
-  testWidgets('REGRESSION: un contacto que no se puede consultar no tumba la pantalla entera', (final tester) async {
+  testWidgets('a failing contact request does not block the rest of preferences', (final tester) async {
     // El 17/09, con `/contacto` devolviendo 500 en PRE, la pantalla no llegaba
     // a pintarse: la excepción subía hasta el provider de la página y dejaba
     // inalcanzables la biometría, los hechos vitales, las autorizaciones y el
@@ -79,11 +81,9 @@ void main() {
             ),
           ),
           checkAcceptedConsentClauseUsecaseProvider.overrideWithValue(
-            CheckAcceptedConsentClauseUsecase(_FakeConsentRepository()),
+            CheckAcceptedConsentClauseUsecase(_FakeConsentRepository(accepted: false)),
           ),
-          notificationContactProvider.overrideWith(
-            (final ref, final citizenId) async => throw StateError('contacto: 500 del gateway'),
-          ),
+          notificationContactRepositoryProvider.overrideWithValue(_FailingNotificationContactRepository()),
         ],
         child: const MaterialApp(
           locale: Locale('es'),
@@ -93,22 +93,13 @@ void main() {
         ),
       ),
     );
-    await tester.pump();
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    expect(
-      find.byType(ErrorStateWidget),
-      findsNothing,
-      reason: 'el contacto es un bloque de la pantalla, no su razón de ser',
-    );
-    expect(find.text('Datos de contacto para notificaciones'), findsOneWidget);
-    expect(
-      // El tag pinta la etiqueta en mayúsculas.
-      find.text('NO DISPONIBLE'),
-      findsOneWidget,
-      reason: 'ni «pendiente» ni «activado»: ambos afirmarían algo que no se ha podido comprobar',
-    );
-    expect(find.textContaining('No hemos podido consultar esta información'), findsOneWidget);
+    final context = tester.element(find.byType(PreferencesPage));
+    final l10n = AppLocalizations.of(context);
+    expect(find.text(l10n.lifeEventsTitle), findsOneWidget);
+    expect(find.text(l10n.notificationContactErrorLoading), findsOneWidget);
+    expect(find.byType(ErrorStateWidget), findsOneWidget);
   });
 }
 
@@ -122,18 +113,18 @@ final class _StubJwtClaimsNotifier extends JwtClaimsNotifier {
 }
 
 final class _FakeConsentRepository implements ConsentRepository {
-  _FakeConsentRepository({this.error});
+  _FakeConsentRepository({this.error, this.accepted});
 
   final Exception? error;
+  final bool? accepted;
 
   @override
   Future<bool> hasAcceptedClause({required final String idAgente, required final int clauseId}) async {
-    if (error != null) {
-      throw error!;
+    final pendingError = error;
+    if (pendingError != null) {
+      throw pendingError;
     }
-    // Sin la cláusula aceptada, los hechos vitales no se consultan y el test
-    // ejercita únicamente el camino del contacto.
-    return false;
+    return accepted ?? false;
   }
 
   @override
@@ -149,6 +140,18 @@ final class _FakeConsentRepository implements ConsentRepository {
 
   @override
   Future<List<Clause>> fetchClauses({final String? idAgente}) => throw UnimplementedError();
+}
+
+final class _FailingNotificationContactRepository implements NotificationContactRepository {
+  @override
+  Future<NotificationContact?> loadContact({required final String citizenId}) => throw Exception('contact backend down');
+
+  @override
+  Future<NotificationContact> saveContact({
+    required final String citizenId,
+    required final String dni,
+    required final NotificationContact contact,
+  }) => throw UnimplementedError();
 }
 
 final class _MemoryAppStorage implements AppStorage {

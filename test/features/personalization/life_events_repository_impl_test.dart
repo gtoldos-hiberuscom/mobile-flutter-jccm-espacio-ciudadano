@@ -9,7 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/personalization/3_data/life_even
 
 void main() {
   group('LifeEventsRepositoryImpl', () {
-    test('uses sub_alt in the gateway path and idAgente in the write body', () async {
+    test('uses sub_alt in the path and the represented agent in the write body', () async {
       final adapter = _CapturingAdapter();
       final dio = Dio(
         BaseOptions(
@@ -21,7 +21,7 @@ void main() {
       )..httpClientAdapter = adapter;
       final repository = LifeEventsRepositoryImpl(
         dio: dio,
-        agentId: 'PER9998003',
+        agentId: 'PJU0349051',
       );
 
       await repository.saveLifeEvents(
@@ -35,7 +35,7 @@ void main() {
         adapter.path,
         '/api/v1/ciudadanos/f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6/hechos',
       );
-      expect(adapter.jsonBody?['idAgente'], 'PER9998003');
+      expect(adapter.jsonBody?['idAgente'], 'PJU0349051');
     });
 
     test('saveLifeEvents persists user preferences in backend', () async {
@@ -115,14 +115,15 @@ void main() {
     });
 
     test('loadLifeEvents still accepts a 4xx whose envelope genuinely carries the list', () async {
-      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(400, {
-        'codigo-respuesta': '400.00',
-        'body': {
-          'listaHechos': [
-            {'idHecho': 1, 'nombreHecho': 'Familia', 'seleccionado': true},
-          ],
-        },
-      });
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))
+        ..httpClientAdapter = _StaticAdapter(400, {
+          'codigo-respuesta': '400.00',
+          'body': {
+            'listaHechos': [
+              {'idHecho': 1, 'nombreHecho': 'Familia', 'seleccionado': true},
+            ],
+          },
+        });
       final repository = LifeEventsRepositoryImpl(dio: dio);
 
       final events = await repository.loadLifeEvents(idAgente: 'PER9998003');

@@ -50,7 +50,7 @@ final salidasProvider = FutureProvider.autoDispose<List<Registro>>((final ref) a
 
 String? _documentNumber(final JwtClaims? claims) {
   final candidates = [
-    claims?.personIdentifier,
+    claims?.effectivePersonIdentifier,
     claims?.preferredUsername,
     claims?.sub,
   ];

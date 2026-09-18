@@ -23,8 +23,8 @@ class MyDataEmploymentDisabledDemandCard extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space8),
           Text(
-            '-',
-            style: AppTypography.bodyRegular.copyWith(color: AppColors.textSecondary),
+            AppLocalizations.of(context).myDataEmploymentDemandUnavailableStatus.toUpperCase(),
+            style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: AppDimensions.space8),
           const Divider(height: 1, thickness: 1, color: AppColors.neutral100),

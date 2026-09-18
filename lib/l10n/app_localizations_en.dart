@@ -581,6 +581,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
 
   @override
+  String get agendaHealthCipMissing => 'There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.';
+
+  @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
 
   @override
@@ -2959,6 +2962,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataIntro => 'Check the information available about you in the Administration and access services and procedures linked to each area.';
 
   @override
+  String get representativeUnavailableTitle => 'Information unavailable';
+
+  @override
+  String get representativeUnavailableMessage => 'The identification method used to sign in does not allow you to view this information. If you have another way to identify yourself, you can try again.';
+
+  @override
   String get myDataHealthTitle => 'Health';
 
   @override
@@ -2995,7 +3004,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentServicesTab => 'Information and services';
 
   @override
-  String get myDataEmploymentDemandTitle => 'Your employment demand';
+  String get myDataEmploymentDemandTitle => 'My employment demand';
+
+  @override
+  String get myDataEmploymentDemandUnavailableStatus => 'Registration inactive';
 
   @override
   String get myDataEmploymentRegistrationDateLabel => 'Uninterrupted registration date';
@@ -4159,7 +4171,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'You must authorize the consultation of the administrative records held by the JCCM in Terms of use and authorizations.';
+  String get digitalCardsAuthorizationRequiredMessage => 'To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {
@@ -4317,14 +4329,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNewsNotificationsDescription => 'Check your pending notifications';
 
   @override
+  String get homeNewsNotificationsEmptyDescription => 'You have no pending notifications';
+
+  @override
   String get homeNewsAppointmentsTitle => 'Upcoming appointments';
 
   @override
   String get homeNewsAppointmentsDescription => 'Check your upcoming appointments and events';
 
   @override
+  String get homeNewsAppointmentsEmptyDescription => 'You have no upcoming appointments or events';
+
+  @override
   String homeNewsLabelWithCount(String label, int count) {
     return '$label ($count)';
+  }
+
+  @override
+  String homeNewsLabelWithMinimumCount(String label, int count) {
+    return '$label (+$count)';
   }
 
   @override

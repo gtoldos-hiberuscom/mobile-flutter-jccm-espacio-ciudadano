@@ -165,7 +165,7 @@ void main() {
       expect(result, hasLength(50));
     });
 
-    test('el barrido falla si la última página cabía llena en el tope', () async {
+    test('al alcanzar el tope devuelve lo acumulado sin seguir pidiendo páginas', () async {
       final adapter = SequenceHttpClientAdapter([
         for (var page = 0; page < 3; page++)
           AdapterResponse(
@@ -180,13 +180,38 @@ void main() {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = GestionNotificacionesRepositoryImpl(dio: dio, maxPages: 3);
 
-      // Devolver las 150 acumuladas como si fueran todas es la vía silenciosa
-      // que este contrato no permite: la pantalla ofrece reintentar.
-      await expectLater(
-        repository.loadNotificaciones(citizenId: 'PER9998003', estado: NotificacionEstado.aceptada),
-        throwsA(isA<NotificacionesPaginacionIncompletaException>()),
+      final result = await repository.loadNotificaciones(
+        citizenId: 'PER9998003',
+        estado: NotificacionEstado.aceptada,
       );
+
+      expect(result, hasLength(150));
       expect(adapter.requests, hasLength(3));
+    });
+
+    test('la carga normal se limita a diez páginas aunque exista más histórico', () async {
+      final adapter = SequenceHttpClientAdapter([
+        for (var page = 0; page < 10; page++)
+          AdapterResponse(
+            statusCode: 200,
+            body: {
+              'content': [
+                for (var id = 1; id <= 50; id++) {'idNotificacion': page * 50 + id, 'concepto': 'Notificación $id'},
+              ],
+            },
+          ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final result = await repository.loadNotificaciones(
+        citizenId: 'PER9998003',
+        estado: NotificacionEstado.expirada,
+      );
+
+      expect(result, hasLength(500));
+      expect(adapter.requests, hasLength(10));
+      expect(adapter.requests.last.queryParameters['page'], 9);
     });
 
     test('una página que repite los ids de la anterior corta el barrido', () async {
@@ -569,6 +594,43 @@ void main() {
       expect(detail.documentos.single.orden, 1);
       expect(detail.documentos.single.nombre, 'Documento 1');
       expect(detail.documentos.single.tamanoBytes, isNull);
+    });
+
+    test('usa nombre-documento de la información adicional del documento', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: {
+            'body': {
+              'id': 346234,
+              'estado': 'ACEPTADA',
+              'documentos': [
+                {
+                  'orden': null,
+                  'identificadorReferencia': null,
+                  'documento': {
+                    'identificador': 'APHO_TEST_0625_346234_8135586',
+                    'informacionAdicional': [
+                      {'clave': 'nombre-documento', 'valor': 'prueba.pdf'},
+                      {'clave': 'formato-documento', 'valor': 'PDF'},
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final detail = await repository.loadNotificacion(
+        citizenId: '99999999R',
+        notificacionId: 346234,
+        resumen: _resumen(id: 346234, estado: NotificacionEstado.aceptada),
+      );
+
+      expect(detail.documentos.single.nombre, 'prueba.pdf');
     });
 
     test('descarta solo el documento que no permite descargar nada', () async {

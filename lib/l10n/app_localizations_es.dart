@@ -582,6 +582,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
 
   @override
+  String get agendaHealthCipMissing => 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
+
+  @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
 
   @override
@@ -2960,6 +2963,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataIntro => 'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.';
 
   @override
+  String get representativeUnavailableTitle => 'Información no disponible';
+
+  @override
+  String get representativeUnavailableMessage => 'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.';
+
+  @override
   String get myDataHealthTitle => 'Salud';
 
   @override
@@ -2996,7 +3005,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentServicesTab => 'Información y servicios';
 
   @override
-  String get myDataEmploymentDemandTitle => 'Tu demanda de empleo';
+  String get myDataEmploymentDemandTitle => 'Mi demanda de empleo';
+
+  @override
+  String get myDataEmploymentDemandUnavailableStatus => 'Inscripción no activa';
 
   @override
   String get myDataEmploymentRegistrationDateLabel => 'Fecha de inscripción sin interrupciones';
@@ -4160,7 +4172,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.';
+  String get digitalCardsAuthorizationRequiredMessage => 'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {
@@ -4318,14 +4330,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNewsNotificationsDescription => 'Consulta tus notificaciones pendientes';
 
   @override
+  String get homeNewsNotificationsEmptyDescription => 'No tienes notificaciones pendientes';
+
+  @override
   String get homeNewsAppointmentsTitle => 'Próximas citas';
 
   @override
   String get homeNewsAppointmentsDescription => 'Consulta tus próximas citas y eventos';
 
   @override
+  String get homeNewsAppointmentsEmptyDescription => 'No tienes próximas citas ni eventos';
+
+  @override
   String homeNewsLabelWithCount(String label, int count) {
     return '$label ($count)';
+  }
+
+  @override
+  String homeNewsLabelWithMinimumCount(String label, int count) {
+    return '$label (+$count)';
   }
 
   @override

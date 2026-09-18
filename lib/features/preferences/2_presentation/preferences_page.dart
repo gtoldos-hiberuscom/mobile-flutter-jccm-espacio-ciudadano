@@ -215,30 +215,37 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           activeFooterText: preferences.lifeEventsUpdatedAt == null ? null : _formatLifeEventsUpdate(l10n, preferences.lifeEventsUpdatedAt!),
         ),
         const SizedBox(height: AppDimensions.space16),
-        AppPreferenceCard(
-          title: l10n.preferencesNotificationContactTitle,
-          icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-          status: preferences.notificationContactUnavailable
-              ? AppPreferenceStatus.unavailable
-              : preferences.notificationContact == null
-              ? AppPreferenceStatus.pending
-              : AppPreferenceStatus.enabled,
-          inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
-          pendingDescription: l10n.preferencesNotificationContactPendingDescription,
-          activeDescription: l10n.preferencesNotificationContactActiveDescription,
-          actionLabel: l10n.preferencesManageAction,
-          actionIcon: AppIcons.edit,
-          summaryItems: [
-            ?preferences.notificationContact?.phone,
-            ?preferences.notificationContact?.email,
-          ],
-          onAction: () => context.go(
-            Uri(
-              path: Routes.notificationContact,
-              queryParameters: {'returnTo': Routes.preferences},
-            ).toString(),
+        if (preferences.notificationContactUnavailable)
+          ErrorStateWidget(
+            message: l10n.notificationContactErrorLoading,
+            announce: false,
+            onRetry: () {
+              ref
+                ..invalidate(notificationContactProvider(preferencesArgs.contactId))
+                ..invalidate(_preferencesStateProvider(preferencesArgs));
+            },
+          )
+        else
+          AppPreferenceCard(
+            title: l10n.preferencesNotificationContactTitle,
+            icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
+            status: preferences.notificationContact == null ? AppPreferenceStatus.pending : AppPreferenceStatus.enabled,
+            inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
+            pendingDescription: l10n.preferencesNotificationContactPendingDescription,
+            activeDescription: l10n.preferencesNotificationContactActiveDescription,
+            actionLabel: l10n.preferencesManageAction,
+            actionIcon: AppIcons.edit,
+            summaryItems: [
+              ?preferences.notificationContact?.phone,
+              ?preferences.notificationContact?.email,
+            ],
+            onAction: () => context.go(
+              Uri(
+                path: Routes.notificationContact,
+                queryParameters: {'returnTo': Routes.preferences},
+              ).toString(),
+            ),
           ),
-        ),
         const SizedBox(height: AppDimensions.space16),
         AppPreferenceCard(
           title: 'Activación de acceso biométrico',

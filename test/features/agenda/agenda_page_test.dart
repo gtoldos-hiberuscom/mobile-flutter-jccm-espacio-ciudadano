@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _citasSanitariasCaidas = 'No hemos podido cargar tus citas sanitarias.';
+const _sinCip = 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
 const _eventosCaidos = 'No hemos podido cargar los eventos de tu agenda.';
 const _errorTotal = 'No hemos podido cargar tu agenda.';
 const _sinCitas = 'No hay citas para el periodo seleccionado.';
@@ -66,6 +67,36 @@ void main() {
     expect(find.byType(AppAlertContextual), findsNothing);
   });
 
+  testWidgets('la notificación muestra título, asunto y unidad emisora', (final tester) async {
+    await _pumpAgenda(
+      tester,
+      appointments: [
+        AgendaAppointment(
+          dateTime: DateTime(2030, 6, 11, 23, 30),
+          title: 'Caducidad de notificación',
+          description: 'Asunto: Gestión electrónica de la Contratación',
+          detail: 'Servicio de contratación electrónica y registros',
+        ),
+      ],
+    );
+
+    expect(find.text('Caducidad de notificación'), findsOneWidget);
+    expect(find.text('Asunto: Gestión electrónica de la Contratación'), findsOneWidget);
+    expect(find.text('Servicio de contratación electrónica y registros'), findsOneWidget);
+  });
+
+  testWidgets('el usuario sin CIP ve el aviso informativo específico', (final tester) async {
+    await _pumpAgenda(
+      tester,
+      appointments: const [],
+      healthCipMissing: true,
+    );
+
+    expect(find.text(_sinCip), findsOneWidget);
+    expect(find.text(_citasSanitariasCaidas), findsNothing);
+    expect(find.text(_sinCitas), findsNothing);
+  });
+
   testWidgets('si la fuente que sobrevive no trae nada, el aviso sustituye al estado vacío', (final tester) async {
     // Decir "no hay citas" cuando no hemos podido mirarlo todo sería mentira.
     await _pumpAgenda(
@@ -89,6 +120,7 @@ Future<void> _pumpAgenda(
   final WidgetTester tester, {
   required final List<AgendaAppointment> appointments,
   final Set<AgendaAppointmentSource> failedSources = const {},
+  final bool healthCipMissing = false,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -99,6 +131,7 @@ Future<void> _pumpAgenda(
             updatedAt: DateTime(2026, 9, 10),
             hasJccmAuthorization: true,
             failedSources: failedSources,
+            healthCipMissing: healthCipMissing,
           ),
         ),
       ],

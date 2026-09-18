@@ -1196,6 +1196,12 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar tus citas sanitarias.'**
   String get agendaHealthAppointmentsUnavailable;
 
+  /// Agenda — aviso informativo cuando SESCAM devuelve el código 3031 porque no existe un CIP vinculado a la identidad.
+  ///
+  /// In es, this message translates to:
+  /// **'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.'**
+  String get agendaHealthCipMissing;
+
   /// Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado.
   ///
   /// In es, this message translates to:
@@ -5678,6 +5684,18 @@ abstract class AppLocalizations {
   /// **'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.'**
   String get myDataIntro;
 
+  /// Título mostrado al abrir una sección no disponible con certificado de representante.
+  ///
+  /// In es, this message translates to:
+  /// **'Información no disponible'**
+  String get representativeUnavailableTitle;
+
+  /// Mensaje mostrado al abrir una sección no disponible con certificado de representante.
+  ///
+  /// In es, this message translates to:
+  /// **'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'**
+  String get representativeUnavailableMessage;
+
   /// Título de la tarjeta de Salud en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
@@ -5753,8 +5771,14 @@ abstract class AppLocalizations {
   /// Título de la tarjeta de demanda de empleo.
   ///
   /// In es, this message translates to:
-  /// **'Tu demanda de empleo'**
+  /// **'Mi demanda de empleo'**
   String get myDataEmploymentDemandTitle;
+
+  /// Estado de la tarjeta de demanda de empleo cuando el ciudadano no tiene una inscripción activa.
+  ///
+  /// In es, this message translates to:
+  /// **'Inscripción no activa'**
+  String get myDataEmploymentDemandUnavailableStatus;
 
   /// Etiqueta de la fecha de inscripción sin interrupciones.
   ///
@@ -7919,7 +7943,7 @@ abstract class AppLocalizations {
   /// Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM.
   ///
   /// In es, this message translates to:
-  /// **'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.'**
+  /// **'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».'**
   String get digitalCardsAuthorizationRequiredMessage;
 
   /// Carnets digitales — título del diálogo del sistema para guardar el archivo (QR, PKPASS, PDF).
@@ -8216,6 +8240,12 @@ abstract class AppLocalizations {
   /// **'Consulta tus notificaciones pendientes'**
   String get homeNewsNotificationsDescription;
 
+  /// Home — descripción de la tarjeta de notificaciones cuando no hay ninguna pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes notificaciones pendientes'**
+  String get homeNewsNotificationsEmptyDescription;
+
   /// Home — etiqueta de la tarjeta de próximas citas en Mis novedades.
   ///
   /// In es, this message translates to:
@@ -8228,11 +8258,23 @@ abstract class AppLocalizations {
   /// **'Consulta tus próximas citas y eventos'**
   String get homeNewsAppointmentsDescription;
 
+  /// Home — descripción de la tarjeta de próximas citas cuando no hay ninguna cita ni evento.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes próximas citas ni eventos'**
+  String get homeNewsAppointmentsEmptyDescription;
+
   /// Home — etiqueta de tarjeta de Mis novedades con contador de elementos.
   ///
   /// In es, this message translates to:
   /// **'{label} ({count})'**
   String homeNewsLabelWithCount(String label, int count);
+
+  /// Etiqueta de una tarjeta de novedades cuando el recuento ha alcanzado el límite de carga
+  ///
+  /// In es, this message translates to:
+  /// **'{label} (+{count})'**
+  String homeNewsLabelWithMinimumCount(String label, int count);
 
   /// Home — título de la sección de trámites recomendados.
   ///

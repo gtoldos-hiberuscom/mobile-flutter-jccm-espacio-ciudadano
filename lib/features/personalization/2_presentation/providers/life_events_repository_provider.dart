@@ -10,7 +10,12 @@ import 'package:jccm_espacio_ciudadano/features/personalization/3_data/life_even
 /// single composition root that wires the API client into the concrete impl.
 final lifeEventsRepositoryProvider = Provider<LifeEventsRepository>((final ref) {
   final dio = ref.watch(dioProvider);
-  final agentId = ref.watch(jwtClaimsProvider)?.idAgente;
+  // The gateway URL uses `sub_alt`, while write bodies must identify the
+  // active subject. With a representative certificate that subject is the
+  // represented `PJU…`, not the authenticated representative's `PER…`.
+  final agentId = ref.watch(
+    jwtClaimsProvider.select((final claims) => claims?.effectiveAgentId),
+  );
   return LifeEventsRepositoryImpl(
     dio: dio,
     agentId: agentId,

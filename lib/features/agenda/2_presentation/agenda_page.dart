@@ -163,6 +163,10 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           const SizedBox(height: AppDimensions.space8),
           _AgendaPartialLoadNotice(source: source),
         ],
+        if (state.healthCipMissing) ...[
+          const SizedBox(height: AppDimensions.space8),
+          const _AgendaHealthCipMissingNotice(),
+        ],
         const SizedBox(height: AppDimensions.space12),
         if (!state.hasJccmAuthorization)
           const SizedBox.shrink()
@@ -170,7 +174,9 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         // el aviso de arriba es el único mensaje. Se mira `state.appointments`
         // y no la lista filtrada, para que un filtro sin resultados sí siga
         // diciendo que ese periodo está vacío.
-        else if (appointments.isEmpty && !(state.appointments.isEmpty && state.isPartial))
+        else if (appointments.isEmpty && state.appointments.isEmpty && (state.isPartial || state.healthCipMissing))
+          const SizedBox.shrink()
+        else if (appointments.isEmpty)
           const _AgendaEmptyState()
         else ...[
           Semantics(
@@ -438,6 +444,19 @@ class _AgendaPartialLoadNotice extends StatelessWidget {
       severity: AppAlertSeverity.warning,
       size: AppAlertContextualSize.small,
       // Aparece después de cargar, no junto con la pantalla.
+      announce: true,
+    );
+  }
+}
+
+class _AgendaHealthCipMissingNotice extends StatelessWidget {
+  const _AgendaHealthCipMissingNotice();
+
+  @override
+  Widget build(final BuildContext context) {
+    return AppAlertContextual(
+      message: AppLocalizations.of(context).agendaHealthCipMissing,
+      size: AppAlertContextualSize.small,
       announce: true,
     );
   }
