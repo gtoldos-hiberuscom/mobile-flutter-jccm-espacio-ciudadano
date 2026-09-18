@@ -1,5 +1,13 @@
 # Fix OIDC/AppAuth con Cl@ve: reautenticación forzada y selector de método
 
+> **Actualización 18/09/2026 (#282296).** Dos cosas de este documento quedaron
+> superadas: (1) `promptValues: [Prompt.login, Prompt.selectAccount]` **rompía** la
+> propagación del `ForceAuthn` —Cerbero compara el parámetro entero contra `"login"`—,
+> hoy se envía `prompt=login` a secas; y (2) el `externalUserAgent` efímero ya sólo
+> afecta a iOS: el fork de Android se retiró al corregir la causa real. El último punto
+> del checklist de abajo (propagación de `prompt=login` hacia Cl@ve) está **resuelto y
+> verificado**. Ver `../docs/auth/clave_forceauthn_retest_2026-09.md`.
+
 **Rama:** `fix/appauth` · **Fecha:** 2026-07-07 · **Librería:** `flutter_appauth 12.0.0`
 
 ## Problema
@@ -115,7 +123,7 @@ aprovechaba el SSO), no hay pérdida funcional.
 - [ ] `es.jccm.espaciociudadano://auth/callback` registrado también como **post_logout_redirect_uri** válido (Keycloak: "Valid post logout redirect URIs"). Sin esto, `endSession` fallará (la app lo tolera y limpia la sesión local igualmente, pero la cookie SSO no se invalidaría).
 - [ ] `end_session_endpoint` presente en `https://<SSO_HOST>/auth/realms/usuarios/.well-known/openid-configuration`.
 - [ ] Los errores/cancelaciones de Cl@ve (certificado caducado, contraseña caducada, cancelar) **redirigen de vuelta a la app** vía `redirect_uri` con `error=...`, no dejan al usuario en la plataforma web de Cl@ve.
-- [ ] El broker **propaga `prompt=login` y `max_age=0`** hacia el IdP de Cl@ve (Keycloak debe re-lanzar la autenticación en el identity provider, no servir la sesión del broker).
+- [x] El broker **propaga `prompt=login` y `max_age=0`** hacia el IdP de Cl@ve — verificado 18/09/2026 leyendo la `SAMLRequest` (`ForceAuthn="true"`), siempre que el `prompt` sea exactamente `login` (Keycloak debe re-lanzar la autenticación en el identity provider, no servir la sesión del broker).
 - [ ] El broker no persiste en cookie el último método de autenticación de forma no reseteable (o la ignora cuando llega `prompt=login`).
 
 ## Manejo de errores/cancelación (estado tras el fix)

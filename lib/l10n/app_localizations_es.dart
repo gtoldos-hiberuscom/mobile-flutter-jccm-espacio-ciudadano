@@ -131,12 +131,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginPageError => 'Error al iniciar sesión';
 
   @override
-  String get loginIsolationDegradedWarning => 'Tu navegador no permite abrir una sesión aislada. Has accedido correctamente, pero este dispositivo podría recordar tu sesión de Cl@ve en próximos accesos.';
-
-  @override
-  String get loginRetryButton => 'Reintentar';
-
-  @override
   String get logoutConfirm => '¿Cerrar sesión?';
 
   @override

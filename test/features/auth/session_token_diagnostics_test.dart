@@ -37,6 +37,29 @@ void main() {
     expect(offline['refresh_expires_in'], 0);
   });
 
+  test('surfaces auth_time, which tells a real re-login from a reused SSO session', () {
+    // #282296: dos logins consecutivos con el mismo `auth_time` significan que
+    // el broker resolvió con la sesión que ya tenía, no que reautenticase.
+    final diagnostics = SessionTokenDiagnostics.describe(
+      now: now,
+      accessToken: fakeJwt({
+        'exp': now.add(const Duration(minutes: 5)).millisecondsSinceEpoch ~/ 1000,
+        'auth_time': 1789041600,
+      }),
+    );
+
+    expect(diagnostics['auth_time'], 1789041600);
+  });
+
+  test('omits auth_time when the token does not carry it', () {
+    final diagnostics = SessionTokenDiagnostics.describe(
+      now: now,
+      accessToken: fakeJwt({'exp': now.add(const Duration(minutes: 5)).millisecondsSinceEpoch ~/ 1000}),
+    );
+
+    expect(diagnostics['auth_time'], isNull);
+  });
+
   test('reports the access-token lifetime and the granted scope', () {
     final diagnostics = SessionTokenDiagnostics.describe(
       now: now,

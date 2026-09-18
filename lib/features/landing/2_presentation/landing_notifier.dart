@@ -17,7 +17,6 @@ final class LandingState {
     this.isLoggingIn = false,
     this.error,
     this.loginSuccess = false,
-    this.isolationDegradedWarning = false,
     this.sessionExpired = false,
   });
 
@@ -33,11 +32,6 @@ final class LandingState {
   /// cerrado. Sin esto el guard devolvía al ciudadano a la landing sin decirle
   /// por qué, y desde su punto de vista la app simplemente le echaba.
   final bool sessionExpired;
-
-  /// One-shot signal: login succeeded but the browser could not provide an
-  /// ephemeral (isolated) session, so the Cl@ve web session may be remembered
-  /// by this device's browser. The page shows a warning snackbar.
-  final bool isolationDegradedWarning;
 }
 
 /// Owns the login flow state for the public landing screen.
@@ -187,13 +181,10 @@ class LandingNotifier extends Notifier<LandingState> {
     }
 
     switch (result) {
-      case LoginSuccess(:final tokenResponse, :final jwtClaims, :final sessionIsolationDegraded):
+      case LoginSuccess(:final tokenResponse, :final jwtClaims):
         ref.read(authSessionControllerProvider).startInMemory(tokenResponse, claims: jwtClaims);
         ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
-        state = LandingState(
-          loginSuccess: true,
-          isolationDegradedWarning: sessionIsolationDegraded,
-        );
+        state = const LandingState(loginSuccess: true);
 
       case LoginFailed(:final cause):
         // The user only ever sees a curated generic message; this log line is

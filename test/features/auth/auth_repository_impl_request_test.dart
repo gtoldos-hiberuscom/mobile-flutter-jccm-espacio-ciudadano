@@ -4,12 +4,12 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/3_data/auth_repository_impl.dart';
 
-/// Exercises the real MethodChannel serialization path of the vendored
-/// flutter_appauth fork contract:
+/// Comprueba, sobre el MethodChannel real, qué parámetros salen de verdad
+/// hacia AppAuth y cómo se mapean sus errores de plataforma.
 ///
-/// 1. `externalUserAgent` travels as the enum index (1 = ephemeral, 0 = not).
-/// 2. The fork's `ephemeral_browsing_unavailable` platform error is mapped to
-///    [AuthException.ephemeralUnavailable] by the repository.
+/// El test del `prompt` es el que cubre el bug de #282296: el valor exacto
+/// decide si Cerbero propaga `ForceAuthn` a Cl@ve, y ningún fallo visible
+/// avisaría de haberlo roto.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -54,30 +54,21 @@ void main() {
     });
   }
 
-  test('login serialises the ephemeral external user agent as index 1', () async {
-    mockChannelThrowing('ephemeral_browsing_unavailable');
-
-    await expectLater(
-      repository.login(),
-      throwsA(
-        isA<AuthException>().having(
-          (final e) => e.reason,
-          'reason',
-          AuthFailureReason.ephemeralUnavailable,
-        ),
-      ),
-    );
-    expect(capturedArguments?['externalUserAgent'], 1);
-  });
-
-  test('login with ephemeralSession=false serialises index 0', () async {
+  test('login sends prompt=login ALONE, or Cerbero drops ForceAuthn', () async {
+    // #282296: la extensión de Cerbero compara el parámetro `prompt` entero
+    // contra "login". Comprobado en PRE el 18/09/2026 leyendo la SAMLRequest
+    // que el broker manda a Cl@ve:
+    //   prompt=login                 → ForceAuthn="true"
+    //   prompt=login select_account  → ForceAuthn="false"
+    // Añadir cualquier otro valor aquí apaga la reautenticación en Cl@ve sin
+    // que nada falle a la vista. Si Cerbero llega a soportar la combinación
+    // del estándar, este test es el sitio donde consta el porqué.
     mockChannelThrowing('authorize_and_exchange_code_failed');
 
-    await expectLater(
-      repository.login(ephemeralSession: false),
-      throwsA(isA<AuthException>()),
-    );
-    expect(capturedArguments?['externalUserAgent'], 0);
+    await expectLater(repository.login(), throwsA(isA<AuthException>()));
+
+    expect(capturedArguments?['promptValues'], <String>['login']);
+    expect(capturedArguments?['additionalParameters'], containsPair('max_age', '0'));
   });
 
   test('other platform error codes keep the existing unexpected mapping', () async {
@@ -93,21 +84,5 @@ void main() {
         ),
       ),
     );
-  });
-
-  test('logout maps ephemeral_browsing_unavailable and serialises index 1', () async {
-    mockChannelThrowing('ephemeral_browsing_unavailable');
-
-    await expectLater(
-      repository.logout(idToken: 'fake-id-token'),
-      throwsA(
-        isA<AuthException>().having(
-          (final e) => e.reason,
-          'reason',
-          AuthFailureReason.ephemeralUnavailable,
-        ),
-      ),
-    );
-    expect(capturedArguments?['externalUserAgent'], 1);
   });
 }

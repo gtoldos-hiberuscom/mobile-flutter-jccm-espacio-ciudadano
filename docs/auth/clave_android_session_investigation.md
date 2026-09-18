@@ -2,14 +2,21 @@
 
 **Fecha:** 2026-08-31 · **Alcance:** Android (iOS ya usa sesión efímera desde 2026-07)
 **Documentos hermanos:**
-[diseño del fork](flutter_appauth_android_ephemeral_design.md) ·
-[resultados de la POC](flutter_appauth_android_ephemeral_poc_results.md) ·
-[plan de mantenimiento](flutter_appauth_fork_maintenance_plan.md) ·
+[diseño del fork](historico/flutter_appauth_android_ephemeral_design.md) ·
+[resultados de la POC](historico/flutter_appauth_android_ephemeral_poc_results.md) ·
+[plan de mantenimiento](historico/flutter_appauth_fork_maintenance_plan.md) ·
 antecedente: `documentation/appauth_clave_relogin_fix.md` (fix de julio 2026)
 
 Etiquetas de evidencia: **CONFIRMED** (código/doc oficial/ejecución verificada) ·
 **OBSERVED** (comportamiento visto en prueba) · **INFERRED** (deducción razonable) ·
 **UNVERIFIED** (sin demostrar).
+
+> **Actualización 2026-09-18 (#282296):** repetida la medición en PRE con el
+> `ForceAuthn` de Cerbero ya desplegado. La conclusión de este documento se
+> **revisada el mismo día**: la causa era que la app enviaba `prompt=login select_account`
+> y Cerbero sólo reconoce `prompt=login`, así que el `ForceAuthn` salía en `false`.
+> Corregido el parámetro, Cl@ve desafía **sin** aislamiento del navegador. Ver
+> `clave_forceauthn_retest_2026-09.md`.
 
 ---
 
@@ -321,6 +328,12 @@ Decisión de producto; el fork soporta ambas.
   — refuerza la re-autenticación aunque NO sustituye al aislamiento (el estado
   por-método de Cl@ve sobrevive a ForceAuthn; ver Root cause #4).
 - `prompt=select_account`: sin efecto conocido en Cl@ve (no es un OP multi-cuenta). INFERRED.
+  **Corregido 18/09/2026 (#282296): no era inocuo.** La extensión de Cerbero compara el
+  parámetro `prompt` **entero** contra `"login"`, así que enviar `login select_account`
+  hacía que la `AuthnRequest` saliera con `ForceAuthn="false"`. Con `prompt=login` a
+  secas, Cl@ve vuelve a desafiar **sin** aislamiento del navegador — lo que invalida la
+  conclusión de más abajo sobre que ninguna solución de protocolo basta. Ver
+  `clave_forceauthn_retest_2026-09.md`.
 - RP-Initiated Logout / revocación: cierran Keycloak, no Cl@ve (CONFIRMED spec).
 - SLO SAML hacia Cl@ve desde Keycloak: perfil no estándar (STORK), solo SP
   firmado, interoperabilidad dudosa y aunque funcionara no limpia el estado
@@ -346,7 +359,7 @@ Decisión de producto; el fork soporta ambas.
 ## Recommendation
 
 **Opción 3**: fork mínimo de `flutter_appauth` según
-`flutter_appauth_android_ephemeral_design.md`, con política *required* + error
+`historico/flutter_appauth_android_ephemeral_design.md`, con política *required* + error
 tipado + sonda de capacidad, degradación decidida en Dart, y plan de PR
 upstream. En paralelo (independiente del fork): pedir a backend la verificación
 de versión de Keycloak / flag "Force authentication" del broker SAML de Cl@ve.

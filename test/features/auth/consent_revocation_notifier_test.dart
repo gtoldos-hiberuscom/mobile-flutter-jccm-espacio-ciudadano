@@ -131,7 +131,7 @@ final class _RecordingAuthRepository implements AuthRepository {
   Exception? logoutError;
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) async {
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {
     logoutIdTokens.add(idToken);
     final pending = logoutError;
     if (pending != null) {

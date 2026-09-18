@@ -110,16 +110,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         setState(() => _isAuthenticating = isAuthenticating);
       }
       if (next.loginSuccess) {
-        if (next.isolationDegradedWarning) {
-          // Shown via the root ScaffoldMessenger, so it survives the
-          // navigation to home below. Curated copy only (project rule).
-          AppAlertSnackbar.show(
-            context,
-            message: l10n.loginIsolationDegradedWarning,
-            severity: AppAlertSeverity.warning,
-            duration: const Duration(seconds: 8),
-          );
-        }
         ref.read(goRouterProvider).go(Routes.home);
       }
       if (next.sessionExpired) {
