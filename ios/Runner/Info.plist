@@ -31,6 +31,10 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Necesitamos acceder a tus fotos para que puedas adjuntar documentos a tus trámites.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Necesitamos acceder a la cámara para que puedas hacer fotografías y adjuntarlas a tus trámites.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>La ubicación solo se usa para incluirla en las fotografías que hagas al adjuntar documentos a tus trámites.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
