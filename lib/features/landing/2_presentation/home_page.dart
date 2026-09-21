@@ -1,17 +1,24 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
@@ -19,6 +26,20 @@ import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/p
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 bool _isTablet(final BuildContext context) => isTabletLayout(context);
+
+/// Evita repetir la oferta de acceso rápido si se vuelve a la home dentro de
+/// la misma sesión: vive en un provider y no en el State porque la página se
+/// remonta al navegar por las pestañas del shell.
+final _biometricPromptShownInSessionProvider = NotifierProvider<_BiometricPromptSessionNotifier, bool>(
+  _BiometricPromptSessionNotifier.new,
+);
+
+class _BiometricPromptSessionNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void markShown() => state = true;
+}
 
 /// Authenticated home screen — Figma node 43716:13302 "Inicio".
 ///
@@ -41,6 +62,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool _digitalCardsLoadFailed = false;
   List<DigitalCard> _availableDigitalCards = const [];
 
+  bool _biometricDialogShown = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +73,100 @@ class _HomePageState extends ConsumerState<HomePage> {
           await _preloadDigitalCards();
         }
       }),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_biometricDialogShown) {
+      return;
+    }
+    _biometricDialogShown = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        unawaited(_offerBiometricQuickAccess());
+      }
+    });
+  }
+
+  /// Ofrece el acceso rápido con biometría la primera vez que se llega aquí.
+  ///
+  /// Es lo que convierte la sesión persistente en un opt-in: hasta que el
+  /// ciudadano lo acepta no se guarda el token de larga vida, así que nadie
+  /// acaba con una sesión de semanas sin haberla pedido.
+  ///
+  /// No se insiste: si lo rechaza, no se vuelve a preguntar en esta sesión, y
+  /// siempre puede activarlo después desde Preferencias.
+  Future<void> _offerBiometricQuickAccess() async {
+    final appStorage = ref.read(appStorageProvider);
+    // La preferencia va por ciudadano: sin `idAgente` no hay a quién
+    // preguntarle ni dónde anotar la respuesta.
+    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
+    if (idAgente == null) {
+      return;
+    }
+    final enabledKey = '${StorageKeys.biometricQuickAccessEnabledPrefix}$idAgente';
+    if (appStorage.read<bool>(enabledKey) ?? false) {
+      return;
+    }
+    if (ref.read(_biometricPromptShownInSessionProvider)) {
+      return;
+    }
+
+    // Sin biometría dada de alta no se ofrece nada: el almacén rechazaría la
+    // escritura y la promesa de «entra sin identificarte» sería falsa.
+    final hasBiometrics = await ref.read(biometricAuthenticatorProvider).canAuthenticateWithBiometrics();
+    if (!mounted || !hasBiometrics) {
+      return;
+    }
+    ref.read(_biometricPromptShownInSessionProvider.notifier).markShown();
+
+    final accepted = await AppBiometricAccessDialog.show(context);
+    if (!mounted || accepted != true) {
+      // Aquí NO se revoca, aunque este token vaya a quedar sin usar. Medido en
+      // PRE: `POST /logout` con el refresh token cierra la sesión entera, no
+      // una «sesión offline» aparte —no existe tal cosa: el token revocado es
+      // el de la sesión en curso—. Al rechazar el diálogo, el ciudadano se
+      // quedaba dentro pero con todo devolviendo 403.
+      //
+      // La acumulación se corta al cerrar sesión, que es donde matar la sesión
+      // sí es la intención; y lo que no pase por ahí caduca por el idle del
+      // realm.
+      return;
+    }
+
+    // En iOS se autentica aquí, al activar: guardar en el Keychain con control
+    // de acceso no pide nada, así que sin esto el permiso de Face ID del
+    // sistema le aparecería al ciudadano días después, al abrir la app y sin
+    // contexto. En Android sobra —escribir en el KeyStore ya exige autenticar,
+    // justo debajo—, y hacerlo igualmente encadenaba dos huellas seguidas.
+    if (!Platform.isAndroid) {
+      final authenticated = await ref.read(biometricAuthenticatorProvider).authenticateForSessionUnlock(
+        localizedReason: AppLocalizations.of(context).sessionUnlockBiometricReason,
+      );
+      if (!mounted || !authenticated) {
+        return;
+      }
+    }
+
+    await appStorage.write(enabledKey, true);
+    // La sesión en curso ya tiene su offline token en memoria: se guarda ahora
+    // para que el acceso rápido funcione desde este mismo momento y no a
+    // partir del siguiente login.
+    final stored = await ref.read(authSessionControllerProvider).applyBiometricQuickAccessChange();
+    if (!stored) {
+      // Sin token guardado la preferencia mentiría, así que se revierte.
+      await appStorage.write(enabledKey, false);
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+    AppAlertToast.show(
+      context,
+      message: 'Acceso biométrico activado',
+      severity: AppAlertSeverity.success,
     );
   }
 
@@ -100,7 +217,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       }
 
       ref.invalidate(digitalCardsProvider);
-      final cards = [...await ref.read(digitalCardsProvider.future)]
+      final snapshot = await ref.read(digitalCardsProvider.future);
+      final cards = [...snapshot.cards]
         ..sort(
           (final a, final b) => _cardOrder(a.type).compareTo(_cardOrder(b.type)),
         );
@@ -374,37 +492,27 @@ class _HomeNewsSection extends ConsumerWidget {
       orElse: () => null,
     );
 
-    final muestraNotificaciones = _isTablet(context) || notificationsCount == null || notificationsCount > 0;
-    final muestraCitas = _isTablet(context) || upcomingAppointmentsCount == null || upcomingAppointmentsCount > 0;
-
-    if (!muestraNotificaciones && !muestraCitas) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionTitle(text: l10n.homeNewsSectionTitle),
         SizedBox(height: _isTablet(context) ? AppDimensions.space24 : AppDimensions.space8),
-        if (muestraNotificaciones)
-          AppSimpleNavCard(
-            label: _labelWithCount(l10n, l10n.homeNewsNotificationsTitle, notificationsCount),
-            description: l10n.homeNewsNotificationsDescription,
-            onTap: () => context.go(
-              Uri(
-                path: Routes.gestionNotificaciones,
-                queryParameters: const {'from': 'home'},
-              ).toString(),
-            ),
+        AppSimpleNavCard(
+          label: _notificationLabelWithCount(l10n, l10n.homeNewsNotificationsTitle, notificationsCount),
+          description: notificationsCount == 0 ? l10n.homeNewsNotificationsEmptyDescription : l10n.homeNewsNotificationsDescription,
+          onTap: () => context.go(
+            Uri(
+              path: Routes.gestionNotificaciones,
+              queryParameters: const {'from': 'home'},
+            ).toString(),
           ),
-        if (muestraCitas) ...[
-          if (muestraNotificaciones) SizedBox(height: _isTablet(context) ? AppDimensions.space16 : AppDimensions.space8),
-          AppSimpleNavCard(
-            label: _labelWithCount(l10n, l10n.homeNewsAppointmentsTitle, upcomingAppointmentsCount),
-            description: l10n.homeNewsAppointmentsDescription,
-            onTap: () => context.go(Routes.agenda),
-          ),
-        ],
+        ),
+        SizedBox(height: _isTablet(context) ? AppDimensions.space16 : AppDimensions.space8),
+        AppSimpleNavCard(
+          label: _labelWithCount(l10n, l10n.homeNewsAppointmentsTitle, upcomingAppointmentsCount),
+          description: upcomingAppointmentsCount == 0 ? l10n.homeNewsAppointmentsEmptyDescription : l10n.homeNewsAppointmentsDescription,
+          onTap: () => context.go(Routes.agenda),
+        ),
         const SizedBox(height: AppDimensions.space24),
       ],
     );
@@ -412,6 +520,13 @@ class _HomeNewsSection extends ConsumerWidget {
 
   String _labelWithCount(final AppLocalizations l10n, final String label, final int? count) {
     return count == null ? label : l10n.homeNewsLabelWithCount(label, count);
+  }
+
+  String _notificationLabelWithCount(final AppLocalizations l10n, final String label, final int? count) {
+    if (count == null) {
+      return label;
+    }
+    return count >= gestionNotificacionesInitialLoadLimit ? l10n.homeNewsLabelWithMinimumCount(label, gestionNotificacionesInitialLoadLimit) : l10n.homeNewsLabelWithCount(label, count);
   }
 }
 

@@ -17,6 +17,7 @@ class AppConfig {
         'SSO_REDIRECT_URI': String.fromEnvironment('SSO_REDIRECT_URI'),
         'SSO_REALM': String.fromEnvironment('SSO_REALM'),
         'SSO_BASE_URL': String.fromEnvironment('SSO_BASE_URL'),
+        'SSO_OFFLINE_ACCESS': String.fromEnvironment('SSO_OFFLINE_ACCESS'),
       };
 
   final Map<String, Object?> _json;
@@ -138,6 +139,16 @@ class AppConfig {
 
   String get ssoBaseUrl => _getConfigValue('SSO_BASE_URL', (final v) => v as String);
 
+  /// Whether this environment's Keycloak client has the `offline_access`
+  /// client scope assigned, so the app may request it at login.
+  ///
+  /// It is per-environment because the same client id is configured
+  /// differently in each Cerbero: PRE accepts the scope, UAT rejects the
+  /// authorization request outright with `invalid_scope`, and the client does
+  /// not exist yet in production. Requesting it where it is not assigned
+  /// breaks login, so it must never default to true.
+  bool get ssoOfflineAccess => _getConfigValue('SSO_OFFLINE_ACCESS', _parseBool);
+
   T _getConfigValue<T>(final String key, final T Function(Object) parser) {
     final value = _json[key];
     if (value == null) {
@@ -163,5 +174,5 @@ class AppConfig {
   };
 
   @override
-  String toString() => 'AppConfig(env: $environment, baseUrl: $baseUrl, appName: $appName, timeout: $timeout, debugMode: $debugMode, ssoClientId: $ssoClientId, ssoRedirectUri: $ssoRedirectUri, ssoRealm: $ssoRealm, ssoBaseUrl: $ssoBaseUrl)';
+  String toString() => 'AppConfig(env: $environment, baseUrl: $baseUrl, appName: $appName, timeout: $timeout, debugMode: $debugMode, ssoClientId: $ssoClientId, ssoRedirectUri: $ssoRedirectUri, ssoRealm: $ssoRealm, ssoBaseUrl: $ssoBaseUrl, ssoOfflineAccess: $ssoOfflineAccess)';
 }

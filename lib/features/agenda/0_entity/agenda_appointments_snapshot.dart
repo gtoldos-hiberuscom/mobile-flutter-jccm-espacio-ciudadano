@@ -19,10 +19,12 @@ final class AgendaAppointmentsSnapshot {
   const AgendaAppointmentsSnapshot({
     required this.appointments,
     this.failedSources = const {},
+    this.healthCipMissing = false,
   });
 
   final List<AgendaAppointment> appointments;
   final Set<AgendaAppointmentSource> failedSources;
+  final bool healthCipMissing;
 
   /// La carga trae menos de lo que debería: la pantalla debe avisar de lo que
   /// falta sin bloquear lo que sí llegó.

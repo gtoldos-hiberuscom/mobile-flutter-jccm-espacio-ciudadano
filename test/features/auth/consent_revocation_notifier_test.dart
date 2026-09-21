@@ -53,7 +53,12 @@ void main() {
 
     expect(authRepository.logoutIdTokens, ['id-token']);
     expect(container.read(tokenResponseProvider), isNull);
-    expect(storage.deleted, containsAll([StorageKeys.accessToken, StorageKeys.refreshToken, StorageKeys.idToken]));
+    // El refresh token no está en la lista a propósito: el almacén protegido
+    // no se toca al cerrar sesión, porque en Android inicializarlo autentica y
+    // pedía huella para hacer logout. Queda revocado en Keycloak, y sin access
+    // token la sesión guardada ya no se restaura.
+    expect(storage.deleted, containsAll([StorageKeys.accessToken, StorageKeys.idToken]));
+    expect(storage.deleted, isNot(contains(StorageKeys.refreshToken)));
     expect(container.read(consentRevocationProvider), isTrue);
   });
 
@@ -126,7 +131,7 @@ final class _RecordingAuthRepository implements AuthRepository {
   Exception? logoutError;
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) async {
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {
     logoutIdTokens.add(idToken);
     final pending = logoutError;
     if (pending != null) {
@@ -143,18 +148,27 @@ final class _FakeSecureStorage implements SecureStorage {
   final List<String> deleted = [];
 
   @override
-  Future<String?> read(final String key) async => values[key];
+  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => values[key];
 
   @override
-  Future<void> write(final String key, final String value) async {
+  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
     values[key] = value;
   }
 
   @override
-  Future<void> delete(final String key) async {
+  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async {
     deleted.add(key);
     final _ = values.remove(key);
   }
+
+  @override
+  Future<void> clearBiometric() async {
+    // El almacén protegido se vacía entero, no clave a clave, para no pedir
+    // huella al cerrar sesión; el token de larga vida cae con él.
+    deleted.add(StorageKeys.refreshToken);
+    final _ = values.remove(StorageKeys.refreshToken);
+  }
+
 
   @override
   dynamic noSuchMethod(final Invocation invocation) => super.noSuchMethod(invocation);

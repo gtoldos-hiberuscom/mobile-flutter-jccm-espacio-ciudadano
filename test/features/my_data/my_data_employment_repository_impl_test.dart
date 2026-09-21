@@ -91,6 +91,25 @@ void main() {
       expect(demand, isNull, reason: 'the default status used to be a fabricated "Activa"');
     });
 
+    test('resul 1 con titular no identificado y datos nulos significa que no hay demanda activa', () async {
+      final adapter = _StaticAdapter(200, {
+        'body': {
+          'resul': 1,
+          'mensaje': 'Titular no identificado',
+          'idpeticion': 'request-id',
+          'inscrito': null,
+          'ultimainscrip': null,
+        },
+        'codigo-respuesta': '200.00',
+      });
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = MyDataEmploymentRepositoryImpl(dio: dio);
+
+      final demand = await repository.loadDemand(citizenId: 'citizen-1', documentNumber: '12345678A');
+
+      expect(demand, isNull);
+    });
+
     test('un 403 con el sobre de autorización pide autorizar', () async {
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = _StaticAdapter(403, {'codigo-respuesta': '412.00'});
       final repository = MyDataEmploymentRepositoryImpl(dio: dio);

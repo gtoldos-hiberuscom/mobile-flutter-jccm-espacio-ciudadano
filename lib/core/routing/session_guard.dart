@@ -2,8 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/0_entity/clause.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_consent_required_usecase.dart';
@@ -47,9 +49,21 @@ final class SessionGuard {
 
     // ── Step 1: determine current expiry ─────────────────────────────────────
 
-    final isValid = await sessionController.refreshIfNeeded();
-    if (!isValid) {
-      return _bounceToLanding();
+    switch (await sessionController.refreshIfNeeded()) {
+      case SessionRefreshStatus.definitivelyInvalid:
+        return _bounceToLanding(sessionExpired: true);
+      case SessionRefreshStatus.unknownTransient:
+        // Fail open: la sesión sigue guardada y el AuthRefreshInterceptor
+        // reintentará por petición; cada pantalla muestra su propio error de
+        // servicio. Expulsar aquí convertía un microcorte de red en un cierre
+        // de sesión silencioso.
+        logger.w('Session refresh unavailable — failing open');
+      case SessionRefreshStatus.valid:
+        break;
+    }
+    final claims = _ref.read(jwtClaimsProvider);
+    if ((claims?.isRepresentative ?? false) && Routes.isUnavailableForRepresentative(path)) {
+      return Routes.representativeUnavailable;
     }
     return _consentRedirect(path);
   }
@@ -60,8 +74,14 @@ final class SessionGuard {
   /// and the landing page is already what is on screen, the redirect produces
   /// no route change — nothing would ever clear `isLoggingIn`/`loginSuccess`,
   /// leaving the "Accediendo con Cl@ve" veil up and the CTA dead forever.
-  String _bounceToLanding() {
+  /// [sessionExpired] marca la única expulsión que el ciudadano no ha
+  /// provocado: su sesión guardada ya no podía renovarse. La landing lo
+  /// convierte en un aviso; sin él se le devolvía ahí sin explicación.
+  String _bounceToLanding({final bool sessionExpired = false}) {
     _ref.invalidate(landingProvider);
+    if (sessionExpired) {
+      _ref.read(landingProvider.notifier).notifySessionExpired();
+    }
     return Routes.landing;
   }
 
@@ -100,11 +120,36 @@ final class SessionGuard {
         return Routes.legalPrivacy;
 
       case ConsentNotRequired():
+        await _persistSessionNowConsentIsOnRecord();
         if (path == Routes.consent || path == Routes.legalPrivacy) {
           return null;
         }
         return _optionalConsentRedirect(path);
     }
+  }
+
+  /// Writes the in-memory session to secure storage once the remote says the
+  /// citizen's consent is on record.
+  ///
+  /// This is the counterpart of the [ConsentRequired] branch above, which
+  /// clears a persisted session when consent turns out **not** to be accepted:
+  /// persistence is deliberately gated on consent, so a session is never
+  /// written to disk for someone who has not accepted the data-protection
+  /// clause.
+  ///
+  /// Until this existed, the only caller of `persistCurrentSession()` was the
+  /// consent notifier's `AcceptConsentSuccess` branch, so a returning citizen
+  /// — whose clauses are already accepted and who therefore never re-accepts
+  /// anything — kept the session in memory only and lost it whenever the app
+  /// was closed, even with an access token still valid.
+  Future<void> _persistSessionNowConsentIsOnRecord() async {
+    final sessionController = _ref.read(authSessionControllerProvider);
+    // Reading once is cheaper than re-writing four secure-storage keys on
+    // every navigation to a protected route.
+    if (await sessionController.hasPersistedSession()) {
+      return;
+    }
+    await sessionController.persistCurrentSession();
   }
 
   Future<String?> _optionalConsentRedirect(final String path) async {

@@ -33,6 +33,42 @@ void main() {
       expect(address?.variationDate, DateTime(2035, 7, 25));
     });
 
+    test('compone todos los componentes del domicilio y los datos de población del INE', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))
+        ..httpClientAdapter = _StaticAdapter(200, {
+          'body': {
+            'tipvia': 'CALLE',
+            'nomvia': 'DEL OLVIDO',
+            'kimres': '000',
+            'hecres': '003',
+            'numres': '4',
+            'numsup': '4',
+            'blores': 'AT',
+            'portes': '3J',
+            'escres': '22',
+            'plares': '02',
+            'pueres': 'B',
+            'codpos': '15873',
+            'denmun': 'LEON',
+            'denpro': 'LEON',
+            'denencol': '',
+            'denensin': 'LEON',
+            'dennuc': 'DISEMINADO',
+          },
+        });
+      final repository = MyDataHousingRepositoryImpl(dio: dio);
+
+      final address = await repository.loadAddress(citizenId: 'citizen-1', documentNumber: '12345678A');
+
+      expect(
+        address?.address,
+        'CALLE DEL OLVIDO Km 000 Hm 003 Num 4 NumSup 4 Bloque AT Portal 3J Escalera 22 Planta 02 Puerta B',
+      );
+      expect(address?.collectiveEntity, isNull);
+      expect(address?.singleEntity, 'LEON');
+      expect(address?.populationUnit, 'DISEMINADO');
+    });
+
     test('returns null when address data is not found', () async {
       final adapter = _HousingAdapter(returnNotFound: true);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;

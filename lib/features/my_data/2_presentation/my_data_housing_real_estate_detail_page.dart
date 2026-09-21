@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/real_estate_property.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Real-estate asset detail — Figma node 43973:2120.
@@ -26,7 +26,7 @@ class MyDataHousingRealEstateDetailPage extends ConsumerWidget {
 
     return AppDetailScaffold(
       title: l10n.myDataHousingRealEstateReferenceTitle(decodedReference),
-      onBack: () => context.go(Routes.myDataHousingRealEstate),
+      onBack: () => context.canPop() ? context.pop() : context.go(Routes.myDataHousingRealEstate),
       appBarBackgroundColor: AppColors.backgroundBlueLighter,
       leadingIcon: AppIcons.close,
       leadingTooltip: l10n.myDataHousingRealEstateDetailClose,

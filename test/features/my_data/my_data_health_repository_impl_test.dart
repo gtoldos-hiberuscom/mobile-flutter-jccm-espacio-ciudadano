@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_health_repository_impl.dart';
 
@@ -157,6 +158,22 @@ void main() {
           filter: HealthAppointmentFilter.pending,
         ),
         throwsA(isA<DioException>()),
+      );
+    });
+
+    test('identifica el 500/3031 como ausencia de CIP en SESCAM', () async {
+      final adapter = _MyDataHealthAdapter(
+        errorStatus: 500,
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas futuras"}]}}',
+      );
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadPrimaryCareAppointments(
+          citizenId: _citizenId,
+          filter: HealthAppointmentFilter.pending,
+        ),
+        throwsA(isA<MyDataHealthCipMissing>()),
       );
     });
 

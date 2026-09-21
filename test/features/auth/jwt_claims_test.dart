@@ -1,7 +1,27 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 
 void main() {
+  group('JwtDecoder.decodePayload', () {
+    test('keeps claims not modeled by JwtClaims', () {
+      final payload = base64Url.encode(
+        utf8.encode('{"sub":"citizen","representative_claim":"company"}'),
+      );
+
+      expect(
+        JwtDecoder.decodePayload('header.$payload.signature'),
+        {'sub': 'citizen', 'representative_claim': 'company'},
+      );
+    });
+
+    test('returns an empty map for a malformed token', () {
+      expect(JwtDecoder.decodePayload('not-a-jwt'), isEmpty);
+    });
+  });
+
   group('JwtClaims.normalizedPersonIdentifier', () {
     test('normalizes the document identifier for ciudadanos endpoints', () {
       final claims = _claims(personIdentifier: '  99999999r ');
@@ -76,6 +96,36 @@ void main() {
 
     test('returns null when the token carries no name', () {
       expect(JwtClaims.fromMap(const {}).fullName, isNull);
+    });
+  });
+
+  group('JwtClaims representation', () {
+    test('uses the represented agent as the effective request-body identity', () {
+      final claims = JwtClaims.fromMap(const {
+        'idAgente': 'PER4856936',
+        'idagente_representado': 'PJU0349051',
+        'nombreRepresentado': 'ENTIDAD DE PRUEBAS 01',
+        'nifRepresentado': 'Q0000000J',
+        'clasificacionCertificado': '11',
+      });
+
+      expect(claims.isRepresentative, isTrue);
+      expect(claims.effectiveAgentId, 'PJU0349051');
+      expect(claims.effectivePersonIdentifier, 'Q0000000J');
+      expect(claims.representedName, 'ENTIDAD DE PRUEBAS 01');
+      expect(claims.representedNif, 'Q0000000J');
+      expect(claims.certificateClassification, '11');
+    });
+
+    test('uses the authenticated agent for a normal certificate', () {
+      final claims = JwtClaims.fromMap(const {
+        'idAgente': 'PER9998003',
+        'PersonIdentifier': '99999999R',
+      });
+
+      expect(claims.isRepresentative, isFalse);
+      expect(claims.effectiveAgentId, 'PER9998003');
+      expect(claims.effectivePersonIdentifier, '99999999R');
     });
   });
 }

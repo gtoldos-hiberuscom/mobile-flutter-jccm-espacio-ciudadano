@@ -332,18 +332,6 @@ abstract class AppLocalizations {
   /// **'Error al iniciar sesión'**
   String get loginPageError;
 
-  /// Aviso (no bloqueante) tras un login correcto cuando el navegador del dispositivo no soporta pestañas efímeras y la autenticación se hizo en el navegador compartido.
-  ///
-  /// In es, this message translates to:
-  /// **'Tu navegador no permite abrir una sesión aislada. Has accedido correctamente, pero este dispositivo podría recordar tu sesión de Cl@ve en próximos accesos.'**
-  String get loginIsolationDegradedWarning;
-
-  /// Texto del botón para reintentar el proceso de login.
-  ///
-  /// In es, this message translates to:
-  /// **'Reintentar'**
-  String get loginRetryButton;
-
   /// Texto de confirmación para cerrar la sesión del usuario.
   ///
   /// In es, this message translates to:
@@ -421,6 +409,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se han podido cargar las autorizaciones. Comprueba tu conexión e inténtalo de nuevo.'**
   String get consentClausesUnavailableError;
+
+  /// Estado de error con reintento cuando el catálogo de cláusulas no carga al abrir el consentimiento.
+  ///
+  /// In es, this message translates to:
+  /// **'No se han podido cargar las autorizaciones.'**
+  String get consentClausesLoadError;
 
   /// Indicación para el usuario de que debe desplazarse hasta el final del contenido.
   ///
@@ -1112,6 +1106,12 @@ abstract class AppLocalizations {
   /// **'Aviso legal'**
   String get footerLegalNotice;
 
+  /// Aviso cuando el refresco contra los sistemas origen falla; se recargan los datos cacheados igualmente.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido actualizar tu agenda con los sistemas de origen. Se muestran los últimos datos disponibles.'**
+  String get agendaRefreshFailedMessage;
+
   /// Agenda — título de la pantalla.
   ///
   /// In es, this message translates to:
@@ -1183,6 +1183,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hemos podido cargar tus citas sanitarias.'**
   String get agendaHealthAppointmentsUnavailable;
+
+  /// Agenda — aviso informativo cuando SESCAM devuelve el código 3031 porque no existe un CIP vinculado a la identidad.
+  ///
+  /// In es, this message translates to:
+  /// **'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.'**
+  String get agendaHealthCipMissing;
 
   /// Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado.
   ///
@@ -2971,6 +2977,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Disponible próximamente.'**
   String get digitalCardsActionComingSoon;
+
+  /// Aviso cuando alguna de las consultas de carnets falla pero otras cargan.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido comprobar todos tus carnets. Se muestran los disponibles.'**
+  String get digitalCardsPartialErrorMessage;
 
   /// Carnets — estado vacío del catálogo.
   ///
@@ -5606,6 +5618,12 @@ abstract class AppLocalizations {
   /// **'Error'**
   String get a11yAlertError;
 
+  /// Mensaje curado cuando el borrado de preferencias/autorizaciones falla.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido borrar tus preferencias. Inténtalo de nuevo.'**
+  String get preferencesResetError;
+
   /// Etiqueta del ítem de Preferencias en el menú desplegable del perfil.
   ///
   /// In es, this message translates to:
@@ -5653,6 +5671,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.'**
   String get myDataIntro;
+
+  /// Título mostrado al abrir una sección no disponible con certificado de representante.
+  ///
+  /// In es, this message translates to:
+  /// **'Información no disponible'**
+  String get representativeUnavailableTitle;
+
+  /// Mensaje mostrado al abrir una sección no disponible con certificado de representante.
+  ///
+  /// In es, this message translates to:
+  /// **'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'**
+  String get representativeUnavailableMessage;
 
   /// Título de la tarjeta de Salud en la pantalla Mis datos.
   ///
@@ -5729,8 +5759,14 @@ abstract class AppLocalizations {
   /// Título de la tarjeta de demanda de empleo.
   ///
   /// In es, this message translates to:
-  /// **'Tu demanda de empleo'**
+  /// **'Mi demanda de empleo'**
   String get myDataEmploymentDemandTitle;
+
+  /// Estado de la tarjeta de demanda de empleo cuando el ciudadano no tiene una inscripción activa.
+  ///
+  /// In es, this message translates to:
+  /// **'Inscripción no activa'**
+  String get myDataEmploymentDemandUnavailableStatus;
 
   /// Etiqueta de la fecha de inscripción sin interrupciones.
   ///
@@ -7484,6 +7520,18 @@ abstract class AppLocalizations {
   /// **'Activado'**
   String get appPreferenceStatusEnabled;
 
+  /// Etiqueta de la tarjeta de preferencia cuando no se ha podido consultar su estado. No afirma nada sobre la configuración del ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'No disponible'**
+  String get appPreferenceStatusUnavailable;
+
+  /// Descripción de la tarjeta cuando su estado no ha podido consultarse. La pone la propia tarjeta y no quien la usa: el motivo es el mismo sea cual sea el dato.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido consultar esta información. Inténtalo de nuevo más tarde.'**
+  String get appPreferenceStatusUnavailableDescription;
+
   /// Etiqueta de estado activo mostrada en la tarjeta de datos de contacto (se muestra en mayúsculas).
   ///
   /// In es, this message translates to:
@@ -7883,7 +7931,7 @@ abstract class AppLocalizations {
   /// Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM.
   ///
   /// In es, this message translates to:
-  /// **'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.'**
+  /// **'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».'**
   String get digitalCardsAuthorizationRequiredMessage;
 
   /// Carnets digitales — título del diálogo del sistema para guardar el archivo (QR, PKPASS, PDF).
@@ -8180,6 +8228,12 @@ abstract class AppLocalizations {
   /// **'Consulta tus notificaciones pendientes'**
   String get homeNewsNotificationsDescription;
 
+  /// Home — descripción de la tarjeta de notificaciones cuando no hay ninguna pendiente.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes notificaciones pendientes'**
+  String get homeNewsNotificationsEmptyDescription;
+
   /// Home — etiqueta de la tarjeta de próximas citas en Mis novedades.
   ///
   /// In es, this message translates to:
@@ -8192,11 +8246,23 @@ abstract class AppLocalizations {
   /// **'Consulta tus próximas citas y eventos'**
   String get homeNewsAppointmentsDescription;
 
+  /// Home — descripción de la tarjeta de próximas citas cuando no hay ninguna cita ni evento.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes próximas citas ni eventos'**
+  String get homeNewsAppointmentsEmptyDescription;
+
   /// Home — etiqueta de tarjeta de Mis novedades con contador de elementos.
   ///
   /// In es, this message translates to:
   /// **'{label} ({count})'**
   String homeNewsLabelWithCount(String label, int count);
+
+  /// Etiqueta de una tarjeta de novedades cuando el recuento ha alcanzado el límite de carga
+  ///
+  /// In es, this message translates to:
+  /// **'{label} (+{count})'**
+  String homeNewsLabelWithMinimumCount(String label, int count);
 
   /// Home — título de la sección de trámites recomendados.
   ///
@@ -9061,6 +9127,78 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.'**
   String get gestionAportacionExpedienteUnavailableError;
+
+  /// Error al activar el acceso biométrico cuando la sesión en curso no tiene credencial que guardar.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido activar el acceso rápido. Vuelve a identificarte con Cl@ve e inténtalo de nuevo.'**
+  String get preferencesBiometricEnableFailed;
+
+  /// Aviso al desactivar el acceso biométrico: la sesión en curso no podrá renovarse.
+  ///
+  /// In es, this message translates to:
+  /// **'Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve.'**
+  String get preferencesBiometricDisabledNotice;
+
+  /// Aviso cuando la sesión no ha podido renovarse y se ha cerrado. No nombra la causa concreta —inactividad, revocación— porque el mismo aviso cubre todas.
+  ///
+  /// In es, this message translates to:
+  /// **'No ha sido posible renovar tu sesión. Vuelve a identificarte con Cl@ve para continuar.'**
+  String get sessionExpiredNotice;
+
+  /// Botón que descarta el diálogo biométrico del sistema al reanudar sesión (solo Android).
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get sessionUnlockBiometricCancel;
+
+  /// Título del diálogo biométrico del sistema al reanudar una sesión guardada.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso a tu espacio'**
+  String get sessionUnlockBiometricTitle;
+
+  /// No description provided for @sessionUnlockBiometricReason.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirma tu identidad para acceder a tu espacio'**
+  String get sessionUnlockBiometricReason;
+
+  /// Título del diálogo biométrico del sistema cuando la sesión se renueva con el ciudadano ya dentro de la app.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar en tu espacio'**
+  String get sessionContinueBiometricTitle;
+
+  /// Motivo del diálogo biométrico al renovar la sesión en pleno uso. Explica el porqué: a diferencia de la reanudación, aquí el ciudadano no ha pedido nada, solo ha navegado.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu sesión necesita renovarse. Confirma tu identidad para continuar.'**
+  String get sessionContinueBiometricReason;
+
+  /// No description provided for @biometricAccessDialogTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Quieres activar el acceso rápido con huella o reconocimiento facial?'**
+  String get biometricAccessDialogTitle;
+
+  /// No description provided for @biometricAccessDialogDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.'**
+  String get biometricAccessDialogDescription;
+
+  /// No description provided for @biometricAccessDialogCancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get biometricAccessDialogCancel;
+
+  /// No description provided for @biometricAccessDialogConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar acceso rápido'**
+  String get biometricAccessDialogConfirm;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

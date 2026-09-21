@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,18 +8,19 @@ import 'package:jccm_espacio_ciudadano/core/routing/route_observer.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/session_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/representative_unavailable_page.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/pages/consent_page.dart';
 import 'package:jccm_espacio_ciudadano/features/design_system/2_presentation/pages/design_system_catalog_page.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_page.dart';
-import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportacion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_aportar_documentacion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expediente_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expedientes_page.dart';
+import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificacion_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_alta_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_page.dart';
-import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificacion_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registro_detail_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_registros_page.dart';
@@ -415,6 +417,11 @@ final goRouterProvider = Provider<GoRouter>(
             ),
 
             GoRoute(
+              path: Routes.representativeUnavailable,
+              builder: (final BuildContext context, final GoRouterState state) => const RepresentativeUnavailablePage(),
+            ),
+
+            GoRoute(
               path: Routes.recommendations,
               builder: (final BuildContext context, final GoRouterState state) => const RecommendationsPage(),
             ),
@@ -457,10 +464,15 @@ final goRouterProvider = Provider<GoRouter>(
         ),
 
         // ── Design System catalog ─────────────────────────────────────────
-        GoRoute(
-          path: Routes.designSystem,
-          builder: (final BuildContext context, final GoRouterState state) => const DesignSystemCatalogPage(),
-        ),
+        // Catálogo interno de componentes, sólo en debug. NO está en
+        // `Routes._authenticated`, así que es ruta pública: registrarla en
+        // release la deja alcanzable sin sesión (riesgo nº 8 de
+        // documentation/PLAN_DE_PRUEBAS.md).
+        if (kDebugMode)
+          GoRoute(
+            path: Routes.designSystem,
+            builder: (final BuildContext context, final GoRouterState state) => const DesignSystemCatalogPage(),
+          ),
       ],
     );
 

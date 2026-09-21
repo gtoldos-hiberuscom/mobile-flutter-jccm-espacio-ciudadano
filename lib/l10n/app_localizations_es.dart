@@ -131,12 +131,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginPageError => 'Error al iniciar sesión';
 
   @override
-  String get loginIsolationDegradedWarning => 'Tu navegador no permite abrir una sesión aislada. Has accedido correctamente, pero este dispositivo podría recordar tu sesión de Cl@ve en próximos accesos.';
-
-  @override
-  String get loginRetryButton => 'Reintentar';
-
-  @override
   String get logoutConfirm => '¿Cerrar sesión?';
 
   @override
@@ -175,6 +169,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get consentClausesUnavailableError => 'No se han podido cargar las autorizaciones. Comprueba tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get consentClausesLoadError => 'No se han podido cargar las autorizaciones.';
 
   @override
   String get consentScrollHint => 'Desliza hasta el final para continuar';
@@ -540,6 +537,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get footerLegalNotice => 'Aviso legal';
 
   @override
+  String get agendaRefreshFailedMessage => 'No hemos podido actualizar tu agenda con los sistemas de origen. Se muestran los últimos datos disponibles.';
+
+  @override
   String get agendaPageTitle => 'Agenda';
 
   @override
@@ -574,6 +574,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
+
+  @override
+  String get agendaHealthCipMissing => 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
 
   @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
@@ -1496,6 +1499,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get digitalCardsActionComingSoon => 'Disponible próximamente.';
+
+  @override
+  String get digitalCardsPartialErrorMessage => 'No hemos podido comprobar todos tus carnets. Se muestran los disponibles.';
 
   @override
   String get digitalCardsEmptyMessage => 'Aún no tienes carnets digitales asociados.';
@@ -2922,6 +2928,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get a11yAlertError => 'Error';
 
   @override
+  String get preferencesResetError => 'No hemos podido borrar tus preferencias. Inténtalo de nuevo.';
+
+  @override
   String get drawerPreferences => 'Preferencias';
 
   @override
@@ -2946,6 +2955,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get myDataIntro => 'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.';
+
+  @override
+  String get representativeUnavailableTitle => 'Información no disponible';
+
+  @override
+  String get representativeUnavailableMessage => 'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.';
 
   @override
   String get myDataHealthTitle => 'Salud';
@@ -2984,7 +2999,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentServicesTab => 'Información y servicios';
 
   @override
-  String get myDataEmploymentDemandTitle => 'Tu demanda de empleo';
+  String get myDataEmploymentDemandTitle => 'Mi demanda de empleo';
+
+  @override
+  String get myDataEmploymentDemandUnavailableStatus => 'Inscripción no activa';
 
   @override
   String get myDataEmploymentRegistrationDateLabel => 'Fecha de inscripción sin interrupciones';
@@ -3867,6 +3885,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPreferenceStatusEnabled => 'Activado';
 
   @override
+  String get appPreferenceStatusUnavailable => 'No disponible';
+
+  @override
+  String get appPreferenceStatusUnavailableDescription => 'No hemos podido consultar esta información. Inténtalo de nuevo más tarde.';
+
+  @override
   String get appPreferenceStatusActive => 'Activo';
 
   @override
@@ -4142,7 +4166,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.';
+  String get digitalCardsAuthorizationRequiredMessage => 'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {
@@ -4300,14 +4324,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNewsNotificationsDescription => 'Consulta tus notificaciones pendientes';
 
   @override
+  String get homeNewsNotificationsEmptyDescription => 'No tienes notificaciones pendientes';
+
+  @override
   String get homeNewsAppointmentsTitle => 'Próximas citas';
 
   @override
   String get homeNewsAppointmentsDescription => 'Consulta tus próximas citas y eventos';
 
   @override
+  String get homeNewsAppointmentsEmptyDescription => 'No tienes próximas citas ni eventos';
+
+  @override
   String homeNewsLabelWithCount(String label, int count) {
     return '$label ($count)';
+  }
+
+  @override
+  String homeNewsLabelWithMinimumCount(String label, int count) {
+    return '$label (+$count)';
   }
 
   @override
@@ -4745,4 +4780,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gestionAportacionExpedienteUnavailableError => 'No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.';
+
+  @override
+  String get preferencesBiometricEnableFailed => 'No se ha podido activar el acceso rápido. Vuelve a identificarte con Cl@ve e inténtalo de nuevo.';
+
+  @override
+  String get preferencesBiometricDisabledNotice => 'Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve.';
+
+  @override
+  String get sessionExpiredNotice => 'No ha sido posible renovar tu sesión. Vuelve a identificarte con Cl@ve para continuar.';
+
+  @override
+  String get sessionUnlockBiometricCancel => 'Cancelar';
+
+  @override
+  String get sessionUnlockBiometricTitle => 'Acceso a tu espacio';
+
+  @override
+  String get sessionUnlockBiometricReason => 'Confirma tu identidad para acceder a tu espacio';
+
+  @override
+  String get sessionContinueBiometricTitle => 'Continuar en tu espacio';
+
+  @override
+  String get sessionContinueBiometricReason => 'Tu sesión necesita renovarse. Confirma tu identidad para continuar.';
+
+  @override
+  String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella o reconocimiento facial?';
+
+  @override
+  String get biometricAccessDialogDescription => 'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.';
+
+  @override
+  String get biometricAccessDialogCancel => 'Ahora no';
+
+  @override
+  String get biometricAccessDialogConfirm => 'Activar acceso rápido';
 }

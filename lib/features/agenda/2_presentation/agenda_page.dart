@@ -6,9 +6,11 @@ import 'package:flutter/semantics.dart' show OrdinalSortKey;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
+import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/usecases/refresh_agenda_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
@@ -30,8 +32,10 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
   bool _refreshing = false;
 
   /// Pide al backend que consulte los sistemas origen (`eventos/refrescar`) y
-  /// después recarga los eventos. Si el refresco falla se recarga igualmente:
-  /// el usuario pidió actualizar y los datos cacheados pueden haber cambiado.
+  /// después recarga los eventos. Si el refresco falla se recarga igualmente
+  /// —el usuario pidió actualizar y los datos cacheados pueden haber cambiado—
+  /// pero se le avisa: sin el aviso, el «Actualizado el …» recién estampado
+  /// afirmaba frescura sobre datos que los sistemas origen no refrescaron.
   Future<void> _refreshAgenda() async {
     if (_refreshing) {
       return;
@@ -40,7 +44,17 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
     try {
       final agentId = ref.read(citizenEndpointIdsProvider).idAgente;
       if (agentId != null && agentId.isNotEmpty) {
-        await ref.read(refreshAgendaEventsUsecaseProvider).execute(agentId: agentId);
+        final result = await ref.read(refreshAgendaEventsUsecaseProvider).execute(agentId: agentId);
+        if (result case RefreshAgendaEventsFailed(:final message, :final cause)) {
+          logger.e('Agenda refresh failed: $message', error: cause);
+          if (mounted) {
+            AppAlertSnackbar.show(
+              context,
+              message: AppLocalizations.of(context).agendaRefreshFailedMessage,
+              severity: AppAlertSeverity.error,
+            );
+          }
+        }
       }
     } finally {
       if (mounted) {
@@ -149,6 +163,10 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           const SizedBox(height: AppDimensions.space8),
           _AgendaPartialLoadNotice(source: source),
         ],
+        if (state.healthCipMissing) ...[
+          const SizedBox(height: AppDimensions.space8),
+          const _AgendaHealthCipMissingNotice(),
+        ],
         const SizedBox(height: AppDimensions.space12),
         if (!state.hasJccmAuthorization)
           const SizedBox.shrink()
@@ -156,7 +174,9 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         // el aviso de arriba es el único mensaje. Se mira `state.appointments`
         // y no la lista filtrada, para que un filtro sin resultados sí siga
         // diciendo que ese periodo está vacío.
-        else if (appointments.isEmpty && !(state.appointments.isEmpty && state.isPartial))
+        else if (appointments.isEmpty && state.appointments.isEmpty && (state.isPartial || state.healthCipMissing))
+          const SizedBox.shrink()
+        else if (appointments.isEmpty)
           const _AgendaEmptyState()
         else ...[
           Semantics(
@@ -424,6 +444,19 @@ class _AgendaPartialLoadNotice extends StatelessWidget {
       severity: AppAlertSeverity.warning,
       size: AppAlertContextualSize.small,
       // Aparece después de cargar, no junto con la pantalla.
+      announce: true,
+    );
+  }
+}
+
+class _AgendaHealthCipMissingNotice extends StatelessWidget {
+  const _AgendaHealthCipMissingNotice();
+
+  @override
+  Widget build(final BuildContext context) {
+    return AppAlertContextual(
+      message: AppLocalizations.of(context).agendaHealthCipMissing,
+      size: AppAlertContextualSize.small,
       announce: true,
     );
   }

@@ -165,11 +165,6 @@
   "@loginPageError": {
     "description": "Error title shown when the login process fails."
   },
-  "loginIsolationDegradedWarning": "Your browser cannot open an isolated session. You signed in successfully, but this device may remember your Cl@ve session on future sign-ins.",
-  "@loginIsolationDegradedWarning": {
-    "description": "Non-blocking warning after a successful login when the device browser does not support ephemeral tabs and authentication ran in the shared browser."
-  },
-  "loginRetryButton": "Try again",
   "@loginRetryButton": {
     "description": "Button label to retry the login process."
   },
@@ -224,6 +219,10 @@
   "consentClausesUnavailableError": "The authorisations could not be loaded. Check your connection and try again.",
   "@consentClausesUnavailableError": {
     "description": "Error message when the clause catalogue is unavailable while saving consent."
+  },
+  "consentClausesLoadError": "The authorisations could not be loaded.",
+  "@consentClausesLoadError": {
+    "description": "Retryable error state when the clause catalogue fails to load on opening consent."
   },
   "consentScrollHint": "Scroll to the end to continue",
   "@consentScrollHint": {
@@ -706,6 +705,10 @@
   "@footerLegalNotice": {
     "description": "Footer — Legal notice."
   },
+  "agendaRefreshFailedMessage": "We could not refresh your agenda with the source systems. Showing the latest available data.",
+  "@agendaRefreshFailedMessage": {
+    "description": "Notice when the source-system refresh fails; cached data is reloaded anyway."
+  },
   "agendaPageTitle": "Agenda",
   "agendaPendingAppointmentsTitle": "Pending appointments",
   "@agendaPendingAppointmentsTitle": {
@@ -749,6 +752,10 @@
   "agendaError": "We couldn't load your agenda.",
   "@agendaError": {
     "description": "Agenda — error state message."
+  },
+  "agendaHealthCipMissing": "There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.",
+  "@agendaHealthCipMissing": {
+    "description": "Agenda — informational notice when SESCAM returns code 3031 because no CIP is linked to the identity."
   },
   "agendaLastUpdated": "Last updated: {timestamp}",
   "@agendaLastUpdated": {
@@ -1974,6 +1981,10 @@
   "digitalCardsActionComingSoon": "Coming soon.",
   "@digitalCardsActionComingSoon": {
     "description": "Cards — stub snackbar shown while TASK-53 wires the real downloads."
+  },
+  "digitalCardsPartialErrorMessage": "We could not check all your cards. Showing the available ones.",
+  "@digitalCardsPartialErrorMessage": {
+    "description": "Notice when some card lookups fail but others load."
   },
   "digitalCardsEmptyMessage": "You don't have any digital cards yet.",
   "@digitalCardsEmptyMessage": {
@@ -3835,6 +3846,10 @@
   "@a11yContentLoaded": {
     "description": "Accessibility — announced by screen reader when loading finishes."
   },
+  "preferencesResetError": "We could not delete your preferences. Please try again.",
+  "@preferencesResetError": {
+    "description": "Curated message when deleting preferences/authorisations fails."
+  },
   "drawerPreferences": "Preferences",
   "drawerGreeting": "Hello, {userName}",
   "@drawerGreeting": {
@@ -3868,6 +3883,14 @@
   "myDataIntro": "Check the information available about you in the Administration and access services and procedures linked to each area.",
   "@myDataIntro": {
     "description": "Introductory text on the My data screen."
+  },
+  "representativeUnavailableTitle": "Information unavailable",
+  "@representativeUnavailableTitle": {
+    "description": "Title shown when opening a section unavailable with a representative certificate."
+  },
+  "representativeUnavailableMessage": "The identification method used to sign in does not allow you to view this information. If you have another way to identify yourself, you can try again.",
+  "@representativeUnavailableMessage": {
+    "description": "Message shown when opening a section unavailable with a representative certificate."
   },
   "myDataHealthTitle": "Health",
   "@myDataHealthTitle": {
@@ -3917,9 +3940,13 @@
   "@myDataEmploymentServicesTab": {
     "description": "Second tab on the Employment detail screen."
   },
-  "myDataEmploymentDemandTitle": "Your employment demand",
+  "myDataEmploymentDemandTitle": "My employment demand",
   "@myDataEmploymentDemandTitle": {
     "description": "Employment demand card title."
+  },
+  "myDataEmploymentDemandUnavailableStatus": "Registration inactive",
+  "@myDataEmploymentDemandUnavailableStatus": {
+    "description": "Employment demand card status when the citizen has no active registration."
   },
   "myDataEmploymentRegistrationDateLabel": "Uninterrupted registration date",
   "@myDataEmploymentRegistrationDateLabel": {
@@ -5097,6 +5124,8 @@
   "@appPreferenceStatusEnabled": {
     "description": "Enabled status of a preference card."
   },
+  "appPreferenceStatusUnavailable": "Unavailable",
+  "appPreferenceStatusUnavailableDescription": "We could not load this information. Please try again later.",
   "appPreferenceStatusActive": "Active",
   "@appPreferenceStatusActive": {
     "description": "Active status tag shown on the contact details preference card (rendered uppercase)."
@@ -5365,7 +5394,7 @@
   "@digitalCardsInfoSheetBody": {
     "description": "Digital cards — body of the info bottom sheet."
   },
-  "digitalCardsAuthorizationRequiredMessage": "You must authorize the consultation of the administrative records held by the JCCM in Terms of use and authorizations.",
+  "digitalCardsAuthorizationRequiredMessage": "To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.",
   "@digitalCardsAuthorizationRequiredMessage": {
     "description": "Digital cards — notice when the JCCM data consultation authorization is missing."
   },
@@ -5565,6 +5594,10 @@
   "@homeNewsNotificationsDescription": {
     "description": "Home — description of the notifications card in My updates."
   },
+  "homeNewsNotificationsEmptyDescription": "You have no pending notifications",
+  "@homeNewsNotificationsEmptyDescription": {
+    "description": "Home — description of the notifications card when there are no pending notifications."
+  },
   "homeNewsAppointmentsTitle": "Upcoming appointments",
   "@homeNewsAppointmentsTitle": {
     "description": "Home — label of the upcoming appointments card in My updates."
@@ -5572,6 +5605,10 @@
   "homeNewsAppointmentsDescription": "Check your upcoming appointments and events",
   "@homeNewsAppointmentsDescription": {
     "description": "Home — description of the upcoming appointments card in My updates."
+  },
+  "homeNewsAppointmentsEmptyDescription": "You have no upcoming appointments or events",
+  "@homeNewsAppointmentsEmptyDescription": {
+    "description": "Home — description of the upcoming appointments card when there are no appointments or events."
   },
   "homeNewsLabelWithCount": "{label} ({count})",
   "@homeNewsLabelWithCount": {
@@ -5583,6 +5620,14 @@
       "count": {
         "type": "int"
       }
+    }
+  },
+  "homeNewsLabelWithMinimumCount": "{label} (+{count})",
+  "@homeNewsLabelWithMinimumCount": {
+    "description": "News card label when the count has reached the loading limit",
+    "placeholders": {
+      "label": { "type": "String" },
+      "count": { "type": "int" }
     }
   },
   "homeRecommendedProceduresTitle": "Recommended procedures",
@@ -6170,5 +6215,32 @@
   "gestionAportacionExpedienteUnavailableError": "We could not locate the case. Please try again later.",
   "@gestionAportacionExpedienteUnavailableError": {
     "description": "Generic error when searching a third-party case."
-  }
+  },
+  "preferencesBiometricEnableFailed": "Quick access could not be turned on. Identify yourself again with Cl@ve and try again.",
+  "@preferencesBiometricEnableFailed": {
+    "description": "Error when enabling biometric quick access and the current session has no credential to store."
+  },
+  "preferencesBiometricDisabledNotice": "Quick access is now off. When this session ends you will need to identify yourself again with Cl@ve.",
+  "@preferencesBiometricDisabledNotice": {
+    "description": "Notice shown when biometric quick access is turned off: the current session cannot be renewed."
+  },
+  "sessionExpiredNotice": "Your session could not be renewed. Identify yourself again with Cl@ve to continue.",
+  "@sessionExpiredNotice": {
+    "description": "Notice shown when the session could not be renewed and was closed. It does not name the specific cause — idle timeout, revocation — because the same notice covers them all."
+  },
+  "sessionUnlockBiometricCancel": "Cancel",
+  "@sessionUnlockBiometricCancel": {
+    "description": "Button dismissing the system biometric prompt when resuming a session (Android only)."
+  },
+  "sessionUnlockBiometricTitle": "Access your space",
+  "@sessionUnlockBiometricTitle": {
+    "description": "Title of the system biometric prompt shown when resuming a stored session."
+  },
+  "sessionUnlockBiometricReason": "Confirm your identity to access your space",
+  "sessionContinueBiometricTitle": "Continue in your space",
+  "sessionContinueBiometricReason": "Your session needs renewing. Confirm your identity to continue.",
+  "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
+  "biometricAccessDialogDescription": "This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.",
+  "biometricAccessDialogCancel": "Not now",
+  "biometricAccessDialogConfirm": "Enable quick access"
 }

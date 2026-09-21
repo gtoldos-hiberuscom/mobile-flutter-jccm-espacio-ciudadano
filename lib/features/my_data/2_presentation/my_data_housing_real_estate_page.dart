@@ -118,12 +118,12 @@ class _PropertiesContent extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: AppDimensions.space16),
                 child: _PropertyCard(
                   property: property,
-                  onTap: () {
+                  onTap: () async {
                     final reference = property.cadastralReference?.trim();
                     if (reference == null || reference.isEmpty) {
                       return;
                     }
-                    context.go('${Routes.myDataHousingRealEstate}/${Uri.encodeComponent(reference)}');
+                    await context.push('${Routes.myDataHousingRealEstate}/${Uri.encodeComponent(reference)}');
                   },
                 ),
               ),

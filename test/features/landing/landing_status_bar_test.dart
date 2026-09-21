@@ -32,4 +32,14 @@ void main() {
 class _StaticLandingNotifier extends LandingNotifier {
   @override
   void consumeLoginSuccess() {}
+
+  /// Neutralizado: la landing intenta reanudar la sesión guardada al montarse,
+  /// lo que arrastraría el almacén seguro y `AppConfig` a un test que sólo
+  /// mira la barra de estado.
+  @override
+  Future<void> tryRestoreSession({
+    required final String localizedTitle,
+    required final String localizedReason,
+    required final String localizedCancel,
+  }) async {}
 }

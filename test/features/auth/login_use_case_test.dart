@@ -5,14 +5,24 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.da
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/logout_use_case.dart';
 
-/// [AuthRepository] fake that records every login/logout attempt and can be
-/// configured to fail selectively per attempt.
+/// [AuthRepository] fake that counts login/logout calls and can be configured
+/// to fail selectively per attempt.
+///
+/// El recuento importa: los dos casos de uso **no** reintentan. Un fallo se
+/// devuelve como resultado sellado, nunca se enmascara con un segundo intento.
 final class FakeAuthRepository implements AuthRepository {
-  /// `ephemeralSession` value of each login call, in order.
-  final List<bool> loginAttempts = [];
+  final List<String> revokedTokens = [];
 
-  /// `ephemeralSession` value of each logout call, in order.
-  final List<bool> logoutAttempts = [];
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedTokens.add(refreshToken);
+  }
+
+  /// Número de llamadas a login, en orden.
+  int loginCalls = 0;
+
+  /// Número de llamadas a logout, en orden.
+  int logoutCalls = 0;
 
   /// Errors to throw for login attempts, consumed in order. A `null` entry
   /// (or an exhausted list) means the attempt succeeds.
@@ -25,10 +35,9 @@ final class FakeAuthRepository implements AuthRepository {
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
-    final bool ephemeralSession = true,
   }) async {
-    loginAttempts.add(ephemeralSession);
-    final error = loginAttempts.length <= loginErrors.length ? loginErrors[loginAttempts.length - 1] : null;
+    loginCalls++;
+    final error = loginCalls <= loginErrors.length ? loginErrors[loginCalls - 1] : null;
     if (error != null) {
       throw error;
     }
@@ -47,10 +56,9 @@ final class FakeAuthRepository implements AuthRepository {
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,
-    final bool ephemeralSession = true,
   }) async {
-    logoutAttempts.add(ephemeralSession);
-    final error = logoutAttempts.length <= logoutErrors.length ? logoutErrors[logoutAttempts.length - 1] : null;
+    logoutCalls++;
+    final error = logoutCalls <= logoutErrors.length ? logoutErrors[logoutCalls - 1] : null;
     if (error != null) {
       throw error;
     }
@@ -74,72 +82,40 @@ void main() {
     logoutUseCase = LogoutUseCase(repository);
   });
 
-  group('LoginUseCase ephemeral degradation', () {
-    test('successful ephemeral login is not flagged as degraded', () async {
+  group('LoginUseCase', () {
+    test('a successful login is returned as LoginSuccess, with a single attempt', () async {
       final result = await loginUseCase.call();
 
       expect(result, isA<LoginSuccess>());
-      expect((result as LoginSuccess).sessionIsolationDegraded, isFalse);
-      expect(repository.loginAttempts, [true]);
+      expect(repository.loginCalls, 1);
     });
 
-    test('ephemeralUnavailable triggers a single non-ephemeral retry flagged as degraded', () async {
-      repository.loginErrors.add(const AuthException.ephemeralUnavailable());
-
-      final result = await loginUseCase.call();
-
-      expect(result, isA<LoginSuccess>());
-      expect((result as LoginSuccess).sessionIsolationDegraded, isTrue);
-      expect(repository.loginAttempts, [true, false]);
-    });
-
-    test('other AuthExceptions fail without retrying', () async {
+    test('an AuthException surfaces as LoginFailed without retrying', () async {
       repository.loginErrors.add(const AuthException.cancelled());
 
       final result = await loginUseCase.call();
 
       expect(result, isA<LoginFailed>());
       expect((result as LoginFailed).cause, isA<AuthException>());
-      expect(repository.loginAttempts, [true]);
-    });
-
-    test('failure on the degraded retry surfaces as LoginFailed', () async {
-      repository.loginErrors.addAll([
-        const AuthException.ephemeralUnavailable(),
-        const AuthException.unexpected(),
-      ]);
-
-      final result = await loginUseCase.call();
-
-      expect(result, isA<LoginFailed>());
-      expect(repository.loginAttempts, [true, false]);
+      expect(repository.loginCalls, 1);
     });
   });
 
-  group('LogoutUseCase ephemeral degradation', () {
-    test('successful ephemeral logout does not retry', () async {
+  group('LogoutUseCase', () {
+    test('a successful logout is returned as LogoutSuccess, with a single attempt', () async {
       final result = await logoutUseCase.call(idToken: 'fake-id-token');
 
       expect(result, isA<LogoutSuccess>());
-      expect(repository.logoutAttempts, [true]);
+      expect(repository.logoutCalls, 1);
     });
 
-    test('ephemeralUnavailable retries silently without an ephemeral session', () async {
-      repository.logoutErrors.add(const AuthException.ephemeralUnavailable());
-
-      final result = await logoutUseCase.call(idToken: 'fake-id-token');
-
-      expect(result, isA<LogoutSuccess>());
-      expect(repository.logoutAttempts, [true, false]);
-    });
-
-    test('other errors surface as LogoutFailed without retrying', () async {
+    test('an error surfaces as LogoutFailed without retrying', () async {
       repository.logoutErrors.add(const AuthException.unexpected());
 
       final result = await logoutUseCase.call(idToken: 'fake-id-token');
 
       expect(result, isA<LogoutFailed>());
-      expect(repository.logoutAttempts, [true]);
+      expect(repository.logoutCalls, 1);
     });
   });
 }

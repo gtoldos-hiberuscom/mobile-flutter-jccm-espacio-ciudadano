@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/repositories/co
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_accepted_consent_clause_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_cards_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
 
@@ -39,7 +40,7 @@ void main() {
 
     expect(await container.read(digitalCardsAuthorizationProvider.future), isTrue);
     expect(repository.lastIdAgente, 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6');
-    expect(repository.lastClauseId, jccmDataConsentClauseId);
+    expect(repository.lastClauseId, digitalCardsConsentClauseId);
   });
 
   test('loads cards with sub_alt', () async {
@@ -65,7 +66,7 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    expect(await container.read(digitalCardsProvider.future), isEmpty);
+    expect((await container.read(digitalCardsProvider.future)).cards, isEmpty);
     expect(repository.lastCitizenId, 'f5b3ec2b-8b7a-34fe-89cd-b924c86f91f6');
   });
 }
@@ -110,9 +111,9 @@ final class _RecordingDigitalCardsRepository implements DigitalCardsRepository {
   String? lastCitizenId;
 
   @override
-  Future<List<DigitalCard>> loadCards({required final String citizenId}) async {
+  Future<DigitalCardsSnapshot> loadCards({required final String citizenId}) async {
     lastCitizenId = citizenId;
-    return const [];
+    return const DigitalCardsSnapshot(cards: [], failedCount: 0);
   }
 
   @override
