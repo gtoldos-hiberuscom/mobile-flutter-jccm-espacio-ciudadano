@@ -70,7 +70,8 @@ class DigitalCardsPage extends ConsumerWidget {
                 onAction: () => ref.invalidate(digitalCardsProvider),
               ),
             },
-            data: (final cards) {
+            data: (final snapshot) {
+              final cards = snapshot.cards;
               if (cards.isEmpty) {
                 return _DigitalCardsMessage(message: l10n.digitalCardsEmptyMessage);
               }
@@ -105,7 +106,7 @@ class DigitalCardsPage extends ConsumerWidget {
                 );
               }
 
-              return SafeArea(
+              final list = SafeArea(
                 top: false,
                 child: LayoutBuilder(
                   builder: (final context, final constraints) {
@@ -142,6 +143,35 @@ class DigitalCardsPage extends ConsumerWidget {
                     );
                   },
                 ),
+              );
+
+              if (!snapshot.hasPartialFailures) {
+                return list;
+              }
+
+              // Fallo parcial visible: sin este aviso, un listado incompleto
+              // se presentaba como el catálogo completo de carnés.
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppDimensions.space16,
+                      AppDimensions.space16,
+                      AppDimensions.space16,
+                      0,
+                    ),
+                    child: AppAlertContextual(
+                      message: l10n.digitalCardsPartialErrorMessage,
+                      size: AppAlertContextualSize.small,
+                      action: AppButton(
+                        label: l10n.errorStateRetry,
+                        hierarchy: AppButtonHierarchy.ghost,
+                        onPressed: () => ref.invalidate(digitalCardsProvider),
+                      ),
+                    ),
+                  ),
+                  Expanded(child: list),
+                ],
               );
             },
           );

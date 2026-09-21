@@ -165,11 +165,6 @@
   "@loginPageError": {
     "description": "Título del mensaje de error mostrado cuando falla la autenticación."
   },
-  "loginIsolationDegradedWarning": "Tu navegador no permite abrir una sesión aislada. Has accedido correctamente, pero este dispositivo podría recordar tu sesión de Cl@ve en próximos accesos.",
-  "@loginIsolationDegradedWarning": {
-    "description": "Aviso (no bloqueante) tras un login correcto cuando el navegador del dispositivo no soporta pestañas efímeras y la autenticación se hizo en el navegador compartido."
-  },
-  "loginRetryButton": "Reintentar",
   "@loginRetryButton": {
     "description": "Texto del botón para reintentar el proceso de login."
   },
@@ -224,6 +219,10 @@
   "consentClausesUnavailableError": "No se han podido cargar las autorizaciones. Comprueba tu conexión e inténtalo de nuevo.",
   "@consentClausesUnavailableError": {
     "description": "Mensaje de error cuando el catálogo de cláusulas no está disponible al guardar el consentimiento."
+  },
+  "consentClausesLoadError": "No se han podido cargar las autorizaciones.",
+  "@consentClausesLoadError": {
+    "description": "Estado de error con reintento cuando el catálogo de cláusulas no carga al abrir el consentimiento."
   },
   "consentScrollHint": "Desliza hasta el final para continuar",
   "@consentScrollHint": {
@@ -706,6 +705,10 @@
   "@footerLegalNotice": {
     "description": "Footer — Aviso legal."
   },
+  "agendaRefreshFailedMessage": "No hemos podido actualizar tu agenda con los sistemas de origen. Se muestran los últimos datos disponibles.",
+  "@agendaRefreshFailedMessage": {
+    "description": "Aviso cuando el refresco contra los sistemas origen falla; se recargan los datos cacheados igualmente."
+  },
   "agendaPageTitle": "Agenda",
   "agendaPendingAppointmentsTitle": "Citas pendientes",
   "@agendaPendingAppointmentsTitle": {
@@ -753,6 +756,10 @@
   "agendaHealthAppointmentsUnavailable": "No hemos podido cargar tus citas sanitarias.",
   "@agendaHealthAppointmentsUnavailable": {
     "description": "Agenda — aviso de carga parcial cuando la fuente de citas de Atención Primaria (SESCAM) no responde y el resto de la agenda sí se ha cargado."
+  },
+  "agendaHealthCipMissing": "En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.",
+  "@agendaHealthCipMissing": {
+    "description": "Agenda — aviso informativo cuando SESCAM devuelve el código 3031 porque no existe un CIP vinculado a la identidad."
   },
   "agendaEventsUnavailable": "No hemos podido cargar los eventos de tu agenda.",
   "@agendaEventsUnavailable": {
@@ -1982,6 +1989,10 @@
   "digitalCardsActionComingSoon": "Disponible próximamente.",
   "@digitalCardsActionComingSoon": {
     "description": "Carnets — mensaje stub mientras TASK-53 cablea las descargas reales."
+  },
+  "digitalCardsPartialErrorMessage": "No hemos podido comprobar todos tus carnets. Se muestran los disponibles.",
+  "@digitalCardsPartialErrorMessage": {
+    "description": "Aviso cuando alguna de las consultas de carnets falla pero otras cargan."
   },
   "digitalCardsEmptyMessage": "Aún no tienes carnets digitales asociados.",
   "@digitalCardsEmptyMessage": {
@@ -3849,6 +3860,10 @@
   "@a11yContentLoaded": {
     "description": "Accessibility — announced by screen reader when loading finishes."
   },
+  "preferencesResetError": "No hemos podido borrar tus preferencias. Inténtalo de nuevo.",
+  "@preferencesResetError": {
+    "description": "Mensaje curado cuando el borrado de preferencias/autorizaciones falla."
+  },
   "drawerPreferences": "Preferencias",
   "drawerGreeting": "Hola, {userName}",
   "@drawerGreeting": {
@@ -3882,6 +3897,14 @@
   "myDataIntro": "Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.",
   "@myDataIntro": {
     "description": "Texto introductorio de la pantalla Mis datos."
+  },
+  "representativeUnavailableTitle": "Información no disponible",
+  "@representativeUnavailableTitle": {
+    "description": "Título mostrado al abrir una sección no disponible con certificado de representante."
+  },
+  "representativeUnavailableMessage": "Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.",
+  "@representativeUnavailableMessage": {
+    "description": "Mensaje mostrado al abrir una sección no disponible con certificado de representante."
   },
   "myDataHealthTitle": "Salud",
   "@myDataHealthTitle": {
@@ -3931,9 +3954,13 @@
   "@myDataEmploymentServicesTab": {
     "description": "Segunda pestaña del detalle de Empleo."
   },
-  "myDataEmploymentDemandTitle": "Tu demanda de empleo",
+  "myDataEmploymentDemandTitle": "Mi demanda de empleo",
   "@myDataEmploymentDemandTitle": {
     "description": "Título de la tarjeta de demanda de empleo."
+  },
+  "myDataEmploymentDemandUnavailableStatus": "Inscripción no activa",
+  "@myDataEmploymentDemandUnavailableStatus": {
+    "description": "Estado de la tarjeta de demanda de empleo cuando el ciudadano no tiene una inscripción activa."
   },
   "myDataEmploymentRegistrationDateLabel": "Fecha de inscripción sin interrupciones",
   "@myDataEmploymentRegistrationDateLabel": {
@@ -5111,6 +5138,14 @@
   "@appPreferenceStatusEnabled": {
     "description": "Estado activado de una tarjeta de preferencias."
   },
+  "appPreferenceStatusUnavailable": "No disponible",
+  "@appPreferenceStatusUnavailable": {
+    "description": "Etiqueta de la tarjeta de preferencia cuando no se ha podido consultar su estado. No afirma nada sobre la configuración del ciudadano."
+  },
+  "appPreferenceStatusUnavailableDescription": "No hemos podido consultar esta información. Inténtalo de nuevo más tarde.",
+  "@appPreferenceStatusUnavailableDescription": {
+    "description": "Descripción de la tarjeta cuando su estado no ha podido consultarse. La pone la propia tarjeta y no quien la usa: el motivo es el mismo sea cual sea el dato."
+  },
   "appPreferenceStatusActive": "Activo",
   "@appPreferenceStatusActive": {
     "description": "Etiqueta de estado activo mostrada en la tarjeta de datos de contacto (se muestra en mayúsculas)."
@@ -5379,7 +5414,7 @@
   "@digitalCardsInfoSheetBody": {
     "description": "Carnets digitales — cuerpo del bottom sheet informativo."
   },
-  "digitalCardsAuthorizationRequiredMessage": "Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM en Condiciones de uso y autorizaciones.",
+  "digitalCardsAuthorizationRequiredMessage": "Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».",
   "@digitalCardsAuthorizationRequiredMessage": {
     "description": "Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM."
   },
@@ -5579,6 +5614,10 @@
   "@homeNewsNotificationsDescription": {
     "description": "Home — descripción de la tarjeta de notificaciones en Mis novedades."
   },
+  "homeNewsNotificationsEmptyDescription": "No tienes notificaciones pendientes",
+  "@homeNewsNotificationsEmptyDescription": {
+    "description": "Home — descripción de la tarjeta de notificaciones cuando no hay ninguna pendiente."
+  },
   "homeNewsAppointmentsTitle": "Próximas citas",
   "@homeNewsAppointmentsTitle": {
     "description": "Home — etiqueta de la tarjeta de próximas citas en Mis novedades."
@@ -5586,6 +5625,10 @@
   "homeNewsAppointmentsDescription": "Consulta tus próximas citas y eventos",
   "@homeNewsAppointmentsDescription": {
     "description": "Home — descripción de la tarjeta de próximas citas en Mis novedades."
+  },
+  "homeNewsAppointmentsEmptyDescription": "No tienes próximas citas ni eventos",
+  "@homeNewsAppointmentsEmptyDescription": {
+    "description": "Home — descripción de la tarjeta de próximas citas cuando no hay ninguna cita ni evento."
   },
   "homeNewsLabelWithCount": "{label} ({count})",
   "@homeNewsLabelWithCount": {
@@ -5597,6 +5640,14 @@
       "count": {
         "type": "int"
       }
+    }
+  },
+  "homeNewsLabelWithMinimumCount": "{label} (+{count})",
+  "@homeNewsLabelWithMinimumCount": {
+    "description": "Etiqueta de una tarjeta de novedades cuando el recuento ha alcanzado el límite de carga",
+    "placeholders": {
+      "label": { "type": "String" },
+      "count": { "type": "int" }
     }
   },
   "homeRecommendedProceduresTitle": "Trámites recomendados",
@@ -6184,5 +6235,38 @@
   "gestionAportacionExpedienteUnavailableError": "No hemos podido localizar el expediente. Inténtalo de nuevo más tarde.",
   "@gestionAportacionExpedienteUnavailableError": {
     "description": "Error genérico al buscar un expediente de terceros."
-  }
+  },
+  "preferencesBiometricEnableFailed": "No se ha podido activar el acceso rápido. Vuelve a identificarte con Cl@ve e inténtalo de nuevo.",
+  "@preferencesBiometricEnableFailed": {
+    "description": "Error al activar el acceso biométrico cuando la sesión en curso no tiene credencial que guardar."
+  },
+  "preferencesBiometricDisabledNotice": "Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve.",
+  "@preferencesBiometricDisabledNotice": {
+    "description": "Aviso al desactivar el acceso biométrico: la sesión en curso no podrá renovarse."
+  },
+  "sessionExpiredNotice": "No ha sido posible renovar tu sesión. Vuelve a identificarte con Cl@ve para continuar.",
+  "@sessionExpiredNotice": {
+    "description": "Aviso cuando la sesión no ha podido renovarse y se ha cerrado. No nombra la causa concreta —inactividad, revocación— porque el mismo aviso cubre todas."
+  },
+  "sessionUnlockBiometricCancel": "Cancelar",
+  "@sessionUnlockBiometricCancel": {
+    "description": "Botón que descarta el diálogo biométrico del sistema al reanudar sesión (solo Android)."
+  },
+  "sessionUnlockBiometricTitle": "Acceso a tu espacio",
+  "@sessionUnlockBiometricTitle": {
+    "description": "Título del diálogo biométrico del sistema al reanudar una sesión guardada."
+  },
+  "sessionUnlockBiometricReason": "Confirma tu identidad para acceder a tu espacio",
+  "sessionContinueBiometricTitle": "Continuar en tu espacio",
+  "@sessionContinueBiometricTitle": {
+    "description": "Título del diálogo biométrico del sistema cuando la sesión se renueva con el ciudadano ya dentro de la app."
+  },
+  "sessionContinueBiometricReason": "Tu sesión necesita renovarse. Confirma tu identidad para continuar.",
+  "@sessionContinueBiometricReason": {
+    "description": "Motivo del diálogo biométrico al renovar la sesión en pleno uso. Explica el porqué: a diferencia de la reanudación, aquí el ciudadano no ha pedido nada, solo ha navegado."
+  },
+  "biometricAccessDialogTitle": "¿Quieres activar el acceso rápido con huella o reconocimiento facial?",
+  "biometricAccessDialogDescription": "Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.",
+  "biometricAccessDialogCancel": "Ahora no",
+  "biometricAccessDialogConfirm": "Activar acceso rápido"
 }

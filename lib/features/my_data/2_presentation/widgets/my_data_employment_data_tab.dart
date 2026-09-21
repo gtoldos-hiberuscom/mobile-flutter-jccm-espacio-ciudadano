@@ -81,7 +81,7 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
               }
 
               return demandAsync.when(
-                data: (final demand) => demand == null ? const MyDataEmploymentDemandEmpty() : MyDataEmploymentDemandCard(demand: demand),
+                data: (final demand) => demand == null ? const MyDataEmploymentDisabledDemandCard() : MyDataEmploymentDemandCard(demand: demand),
                 loading: () => const Center(
                   child: Padding(
                     padding: EdgeInsets.all(AppDimensions.space24),

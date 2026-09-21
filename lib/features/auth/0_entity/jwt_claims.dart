@@ -31,6 +31,10 @@ final class JwtClaims {
     this.firstSurname,
     this.preferredUsername,
     this.idAgente,
+    this.representedAgentId,
+    this.representedName,
+    this.representedNif,
+    this.certificateClassification,
     this.givenName,
     this.familyName,
   });
@@ -61,8 +65,38 @@ final class JwtClaims {
   final String? firstSurname;
   final String? preferredUsername;
   final String? idAgente;
+  final String? representedAgentId;
+  final String? representedName;
+  final String? representedNif;
+  final String? certificateClassification;
   final String? givenName;
   final String? familyName;
+
+  /// Whether the authenticated natural person is acting on behalf of another
+  /// person or legal entity.
+  bool get isRepresentative => representedAgentId?.trim().isNotEmpty ?? false;
+
+  /// Agent identifier expected in request bodies for the active identity.
+  /// The URL continues to use [subAlt], which the gateway resolves itself.
+  String? get effectiveAgentId {
+    final represented = representedAgentId?.trim();
+    if (represented != null && represented.isNotEmpty) {
+      return represented;
+    }
+    final own = idAgente?.trim();
+    return own == null || own.isEmpty ? null : own;
+  }
+
+  /// Document number of the subject whose data is being queried. A
+  /// representative certificate authenticates the natural person, but
+  /// expediente/registro request bodies must identify the represented entity.
+  String? get effectivePersonIdentifier {
+    final represented = representedNif?.trim().toUpperCase();
+    if (represented != null && represented.isNotEmpty) {
+      return represented;
+    }
+    return normalizedPersonIdentifier;
+  }
 
   /// Nombre y apellidos del ciudadano tal y como los informa Cerbero
   /// (`given_name` + `first_surname` + `second_surname`), con `name` como
@@ -149,6 +183,10 @@ final class JwtClaims {
       firstSurname: _str(payload['first_surname']),
       preferredUsername: _str(payload['preferred_username']),
       idAgente: _str(payload['idAgente']),
+      representedAgentId: _str(payload['idagente_representado']),
+      representedName: _str(payload['nombreRepresentado']),
+      representedNif: _str(payload['nifRepresentado']),
+      certificateClassification: _str(payload['clasificacionCertificado']),
       givenName: _str(payload['given_name']),
       familyName: _str(payload['family_name']),
     );

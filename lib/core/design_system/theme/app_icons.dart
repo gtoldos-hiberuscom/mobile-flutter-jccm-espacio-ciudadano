@@ -16,6 +16,7 @@ abstract final class AppIcons {
   static const IconData close = Icons.close;
   static const IconData check = Icons.check;
   static const IconData more = Icons.more_horiz;
+  static const IconData fingerprint = Icons.fingerprint;
   static const IconData dehaze = Icons.dehaze;
   static const IconData arrowBack = Icons.arrow_back;
   static const IconData arrowForward = Icons.arrow_forward;

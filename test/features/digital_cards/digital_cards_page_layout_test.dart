@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_cards_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_cards_page.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -35,7 +36,7 @@ void main() {
       ProviderScope(
         overrides: [
           digitalCardsAuthorizationProvider.overrideWith((final ref) async => true),
-          digitalCardsProvider.overrideWith((final ref) async => cards),
+          digitalCardsProvider.overrideWith((final ref) async => DigitalCardsSnapshot(cards: cards, failedCount: 0)),
         ],
         child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

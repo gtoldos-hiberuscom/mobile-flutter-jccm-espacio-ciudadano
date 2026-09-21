@@ -53,6 +53,25 @@ void main() {
       expect(repository.markCalls, isEmpty, reason: 'a payload without clause $requiredConsentClauseId must never reach the backend');
     });
 
+    test('a failed catalogue load surfaces as loadError and retryLoadClauses recovers', () async {
+      repository.fetchError = const ConsentStatusUnknownException(message: 'clausulas endpoint unavailable');
+      final container = buildContainer();
+      final subscription = container.listen(consentProvider('PER1'), (final _, final _) {});
+      addTearDown(subscription.close);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(container.read(consentProvider('PER1')).status, ConsentStatus.loadError);
+
+      repository
+        ..fetchError = null
+        ..clauses = const [Clause(id: 0, label: 'Protección de datos', isSelected: false)];
+      await container.read(consentProvider('PER1').notifier).retryLoadClauses();
+
+      final state = container.read(consentProvider('PER1'));
+      expect(state.status, ConsentStatus.step1Locked);
+      expect(state.clauses, hasLength(1));
+    });
+
     test('accept() recovers when the catalogue reload succeeds', () async {
       repository.fetchError = const ConsentStatusUnknownException(message: 'clausulas endpoint unavailable');
       final container = buildContainer();

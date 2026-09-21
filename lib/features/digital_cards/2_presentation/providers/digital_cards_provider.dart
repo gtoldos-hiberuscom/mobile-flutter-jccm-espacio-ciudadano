@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/check_
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/authorization_guard.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/providers/consent_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
+import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_cards_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/1_domain/repositories/digital_cards_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/3_data/digital_cards_repository_impl.dart';
 
@@ -26,7 +27,7 @@ final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((fina
       .watch(checkAcceptedConsentClauseUsecaseProvider)
       .execute(
         idAgente: idAgente,
-        clauseId: jccmDataConsentClauseId,
+        clauseId: digitalCardsConsentClauseId,
       );
   return switch (result) {
     AcceptedConsentClauseStatus(:final isAccepted) => isAccepted,
@@ -34,21 +35,21 @@ final digitalCardsAuthorizationProvider = FutureProvider.autoDispose<bool>((fina
   };
 });
 
-final digitalCardsProvider = FutureProvider.autoDispose<List<DigitalCard>>((final ref) async {
+final digitalCardsProvider = FutureProvider.autoDispose<DigitalCardsSnapshot>((final ref) async {
   final citizenId = ref.watch(ciudadanosEndpointIdProvider).trim();
   if (citizenId.isEmpty) {
     throw StateError('No se ha encontrado el identificador de la persona usuaria.');
   }
 
   final repository = ref.watch(digitalCardsRepositoryProvider);
-  // Los carnets exigen la cláusula obligatoria y la de la JCCM
+  // Los carnets exigen la cláusula obligatoria y la específica de carnets
   // (`documentation/consent_clause_access_matrix.md`). La comprobación
   // proactiva de `digitalCardsAuthorizationProvider` se apoya en la caché
   // positiva de cláusulas, así que no ve una revocación reciente: esta es la
   // corrección reactiva.
   return withAuthorizationGuard(
     ref,
-    requiredClauseIds: const {requiredConsentClauseId, jccmDataConsentClauseId},
+    requiredClauseIds: const {requiredConsentClauseId, digitalCardsConsentClauseId},
     request: () => repository.loadCards(citizenId: citizenId),
   );
 });

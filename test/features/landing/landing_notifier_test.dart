@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'dart:async';
 
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
@@ -11,13 +16,30 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/au
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 
+/// `tryRestoreSession` identifica al ciudadano decodificando el access token
+/// guardado, así que el doble necesita un JWT de verdad —sin firma válida, que
+/// no se comprueba— con el claim `sub_alt`.
+const String _idAgente = 'PER1';
+
+String _accessTokenFor(final String idAgente) {
+  String segment(final Map<String, Object?> value) => base64Url.encode(utf8.encode(json.encode(value))).replaceAll('=', '');
+  return '${segment(const {'alg': 'none'})}.${segment({'sub': 'sub-1', 'sub_alt': idAgente, 'exp': 9999999999})}.sig';
+}
+
 void main() {
-  ProviderContainer buildContainer(final AuthRepository repository) {
+  ProviderContainer buildContainer(
+    final AuthRepository repository, {
+    final _FakeSecureStorage? storage,
+    final bool quickAccessEnabled = false,
+  }) {
     final container = ProviderContainer(
       overrides: [
         loginUseCaseProvider.overrideWithValue(LoginUseCase(repository)),
         authRepositoryProvider.overrideWithValue(repository),
-        secureStorageProvider.overrideWithValue(_FakeSecureStorage()),
+        secureStorageProvider.overrideWithValue(storage ?? _FakeSecureStorage()),
+        appStorageProvider.overrideWithValue(
+          _FakeAppStorage()..values['${StorageKeys.biometricQuickAccessEnabledPrefix}$_idAgente'] = quickAccessEnabled,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -39,6 +61,186 @@ void main() {
         expect(state.isLoggingIn, isFalse, reason: 'the veil and the CTA must be released');
         expect(state.error?.cause, isA<TimeoutException>());
       });
+    });
+  });
+
+  group('LandingNotifier.tryRestoreSession', () {
+    test('reanudar pide biometría al arrancar aunque el access token siga vivo', () async {
+      // El diálogo se adelanta al arranque a propósito. Entrar sin pedir nada
+      // y cobrar la huella cinco minutos después —al caducar el access token,
+      // con el ciudadano ya leyendo algo— es la misma huella en peor momento;
+      // y mientras tanto, quien cogiera el móvil desbloqueado entraba en la
+      // sesión ajena sin autenticarse.
+      final repository = _HangingAuthRepository();
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'guardado'
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
+      final container = buildContainer(repository, storage: storage, quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).loginSuccess, isTrue);
+      expect(
+        storage.readKeys,
+        contains(StorageKeys.refreshToken),
+        reason: 'leer el almacén protegido ES la comprobación biométrica: sin esa lectura no se le ha pedido nada al ciudadano',
+      );
+      expect(
+        repository.refreshAttempts,
+        0,
+        reason: 'el access token guardado sigue sirviendo: desbloquear no es motivo para salir a la red',
+      );
+    });
+
+    test('cancelar la biometría al arrancar deja la sesión intacta y al ciudadano fuera', () async {
+      // Cancelar no dice que la credencial esté muerta, así que no se borra
+      // nada: el ciudadano se queda en la landing pública y puede reintentarlo
+      // o entrar por Cl@ve.
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'guardado'
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String()
+        ..unreadableKeys.add(StorageKeys.refreshToken);
+      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+      expect(
+        container.read(landingProvider).sessionExpired,
+        isFalse,
+        reason: 'decirle que su sesión ha terminado sería mentirle: sigue guardada',
+      );
+      expect(storage.store[StorageKeys.refreshToken], 'guardado');
+    });
+
+    test('un access token al borde de caducar no se da por bueno', () async {
+      // Entrar con 30 segundos de margen sería entrar para que la primera
+      // petición se encuentre un 401.
+      final repository = _HangingAuthRepository();
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'guardado'
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(seconds: 30)).toIso8601String();
+      final container = buildContainer(repository, storage: storage, quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(
+        repository.refreshAttempts,
+        1,
+        reason: 'con 30 segundos de margen hay que renovar, no entrar para que la primera petición se encuentre un 401',
+      );
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+    });
+
+    test('REGRESSION: con el access token caducado y sin acceso rápido, no se restaura', () async {
+      // Revocar en Android exige autenticar para borrar, y el ciudadano puede
+      // cancelarlo: entonces la entrada sigue en el dispositivo. Sin este gate
+      // el acceso rápido seguiría funcionando pese a figurar como desactivado.
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'huerfano';
+      final container = buildContainer(_HangingAuthRepository(), storage: storage);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+    });
+
+    test('REGRESSION: en un dispositivo compartido, el «sí» de un ciudadano no vale por otro', () async {
+      // La preferencia era global y sobrevivía al logout: el segundo en entrar
+      // veía su sesión guardada sin habérsele preguntado, protegida por las
+      // huellas dadas de alta en el aparato, que pueden ser de otra persona.
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor('OTRO-CIUDADANO')
+        ..store[StorageKeys.refreshToken] = 'de-otro';
+      // El acceso rápido está activado, pero para _idAgente, no para éste.
+      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(
+        container.read(landingProvider).loginSuccess,
+        isFalse,
+        reason: 'la preferencia es de quien la dio, no del dispositivo',
+      );
+    });
+
+    test('si el servidor rechaza la credencial, se avisa de que la sesión terminó', () async {
+      // El caso de volver tras dos semanas: la huella funciona, pero el token
+      // ya caducó por inactividad. Antes se quedaba en la landing sin decir
+      // nada, y desde fuera parecía que la app le hubiera echado sin motivo.
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'caducado'
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().subtract(const Duration(minutes: 1)).toIso8601String();
+      final container = buildContainer(
+        const _FailingAuthRepository(AuthException.remoteFailure(message: 'invalid_grant')),
+        storage: storage,
+        quickAccessEnabled: true,
+      );
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).sessionExpired, isTrue);
+    });
+
+    test('si la biometría se cancela NO se dice que la sesión ha terminado', () async {
+      // Cancelar no mata nada: el token sigue siendo bueno y al reintentar
+      // entra. Avisar de lo contrario sería mentirle.
+      final storage = _FakeSecureStorage()
+        ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
+        ..store[StorageKeys.refreshToken] = 'bueno'
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().subtract(const Duration(minutes: 1)).toIso8601String()
+        ..unreadableKeys.add(StorageKeys.refreshToken);
+      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).sessionExpired, isFalse);
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+    });
+
+    test('sin sesión guardada no se intenta nada', () async {
+      final container = buildContainer(_HangingAuthRepository(), quickAccessEnabled: true);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(
+        localizedTitle: 't',
+        localizedReason: 'r',
+        localizedCancel: 'c',
+      );
+
+      expect(container.read(landingProvider).loginSuccess, isFalse);
     });
   });
 
@@ -68,19 +270,40 @@ void main() {
 }
 
 final class _HangingAuthRepository implements AuthRepository {
-  @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => Completer<TokenResponse>().future;
+  final List<String> revokedTokens = [];
 
   @override
-  Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedTokens.add(refreshToken);
+  }
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => Completer<TokenResponse>().future;
+
+  /// Veces que se pidió renovar contra el servidor. Distingue «entró con lo que
+  /// ya tenía» de «tuvo que salir a la red».
+  int refreshAttempts = 0;
+
+  @override
+  Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) {
+    refreshAttempts++;
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) => throw UnimplementedError();
 }
 
 final class _ImmediateAuthRepository implements AuthRepository {
+  final List<String> revokedTokens = [];
+
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) async => TokenResponse(
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedTokens.add(refreshToken);
+  }
+
+  @override
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) async => TokenResponse(
     'not-a-real-jwt',
     'refresh',
     DateTime.now().add(const Duration(minutes: 5)),
@@ -94,21 +317,82 @@ final class _ImmediateAuthRepository implements AuthRepository {
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) => throw UnimplementedError();
+}
+
+final class _FakeAppStorage implements AppStorage {
+  final Map<String, Object> values = {};
+
+  @override
+  T? read<T>(final String key) => values[key] as T?;
+
+  @override
+  Future<bool> write(final String key, final Object value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool> remove(final String key) async {
+    values.remove(key);
+    return true;
+  }
+
+  @override
+  Future<bool> clear() async {
+    values.clear();
+    return true;
+  }
 }
 
 final class _FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
 
-  @override
-  Future<String?> read(final String key) async => store[key];
+  /// Claves leídas, en orden. Sirve para comprobar que la reanudación no toca
+  /// el almacén protegido cuando no hace falta — en un dispositivo real, esa
+  /// lectura es el diálogo biométrico.
+  final List<String> readKeys = [];
+
+  /// Claves cuya lectura falla: simula una biometría cancelada o fallida.
+  final Set<String> unreadableKeys = {};
 
   @override
-  Future<void> write(final String key, final String value) async => store[key] = value;
+  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+    readKeys.add(key);
+    if (unreadableKeys.contains(key)) {
+      throw StateError('biometría rechazada para $key');
+    }
+    return store[key];
+  }
 
   @override
-  Future<void> delete(final String key) async => store.remove(key);
+  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => store[key] = value;
 
   @override
-  Future<void> clear() async => store.clear();
+  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
+
+  @override
+  Future<void> clearBiometric() async => store.remove(StorageKeys.refreshToken);
+
+  @override
+  Future<void> clear({final bool includeBiometric = true}) async => store.clear();
+}
+
+/// Repositorio cuyo refresco siempre falla con la excepción dada.
+final class _FailingAuthRepository implements AuthRepository {
+  const _FailingAuthRepository(this.error);
+
+  final AuthException error;
+
+  @override
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {}
+
+  @override
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
+
+  @override
+  Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw error;
+
+  @override
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {}
 }

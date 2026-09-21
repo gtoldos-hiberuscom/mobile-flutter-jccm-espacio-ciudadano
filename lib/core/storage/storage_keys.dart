@@ -22,6 +22,18 @@ abstract final class StorageKeys {
 
   // ── Non-sensitive keys ────────────────────────────────────────────────────
 
+  /// Prefix for the per-user biometric quick-access opt-in.
+  /// Full key = biometricQuickAccessEnabledPrefix + idAgente
+  ///
+  /// Va por ciudadano y no por dispositivo: en un móvil compartido, una clave
+  /// global haría que el segundo en entrar heredara el «sí» del primero y su
+  /// sesión se guardara sin habérselo preguntado.
+  static const String biometricQuickAccessEnabledPrefix = 'biometric_quick_access_enabled_';
+
+  /// Prefix for the per-user "quick-access offer already shown" flag.
+  /// Full key = biometricQuickAccessPromptSeenPrefix + idAgente
+  static const String biometricQuickAccessPromptSeenPrefix = 'biometric_quick_access_prompt_seen_';
+
   /// The locale code last selected by the user (e.g. `'es'`).
   static const String selectedLocale = 'selected_locale';
 

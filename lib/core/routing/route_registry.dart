@@ -82,6 +82,7 @@ abstract final class Routes {
   static const String myDataHousingAddress = '/my-data/housing/address';
   static const String myDataVehicles = '/my-data/vehicles';
   static const String digitalCards = '/digital-cards';
+  static const String representativeUnavailable = '/representative-unavailable';
   static const String agenda = '/agenda';
   static const String recommendations = '/recommendations';
   static const String recommendationLifeEventFilters = '/recommendations/life-events-filter';
@@ -121,6 +122,7 @@ abstract final class Routes {
     myDataSocialWelfareParking,
     myDataVehicles,
     digitalCards,
+    representativeUnavailable,
     recommendations,
     recommendationLifeEventFilters,
     home,
@@ -134,6 +136,13 @@ abstract final class Routes {
 
   /// Returns true when [path] requires authentication.
   static bool requiresAuth(final String path) => _authenticated.any(path.startsWith);
+
+  /// Sections that the backend does not expose when authentication was made
+  /// with a representative certificate. Real-estate data remains available;
+  /// the address subsection does not.
+  static bool isUnavailableForRepresentative(final String path) {
+    return path.startsWith(myDataHealth) || path.startsWith(myDataEducation) || path.startsWith(myDataSocialWelfare) || path.startsWith(myDataEmployment) || path.startsWith(myDataVehicles) || path.startsWith(myDataHousingAddress) || path.startsWith(digitalCards);
+  }
 
   static bool isKnownRoute(final String? path) {
     if (path == null || path.isEmpty) {

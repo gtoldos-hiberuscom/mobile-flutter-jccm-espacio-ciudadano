@@ -63,7 +63,7 @@ final expedienteDetailProvider = FutureProvider.autoDispose.family<Expediente, E
 
 String? _documentNumber(final JwtClaims? claims) {
   final candidates = [
-    claims?.personIdentifier,
+    claims?.effectivePersonIdentifier,
     claims?.preferredUsername,
     claims?.sub,
   ];

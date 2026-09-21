@@ -131,12 +131,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginPageError => 'Sign-in error';
 
   @override
-  String get loginIsolationDegradedWarning => 'Your browser cannot open an isolated session. You signed in successfully, but this device may remember your Cl@ve session on future sign-ins.';
-
-  @override
-  String get loginRetryButton => 'Try again';
-
-  @override
   String get logoutConfirm => 'Sign out?';
 
   @override
@@ -174,6 +168,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentClausesUnavailableError => 'The authorisations could not be loaded. Check your connection and try again.';
+
+  @override
+  String get consentClausesLoadError => 'The authorisations could not be loaded.';
 
   @override
   String get consentScrollHint => 'Scroll to the end to continue';
@@ -539,6 +536,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get footerLegalNotice => 'Legal notice';
 
   @override
+  String get agendaRefreshFailedMessage => 'We could not refresh your agenda with the source systems. Showing the latest available data.';
+
+  @override
   String get agendaPageTitle => 'Agenda';
 
   @override
@@ -573,6 +573,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
+
+  @override
+  String get agendaHealthCipMissing => 'There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.';
 
   @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
@@ -1495,6 +1498,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get digitalCardsActionComingSoon => 'Coming soon.';
+
+  @override
+  String get digitalCardsPartialErrorMessage => 'We could not check all your cards. Showing the available ones.';
 
   @override
   String get digitalCardsEmptyMessage => 'You don\'t have any digital cards yet.';
@@ -2921,6 +2927,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get a11yAlertError => 'Error';
 
   @override
+  String get preferencesResetError => 'We could not delete your preferences. Please try again.';
+
+  @override
   String get drawerPreferences => 'Preferences';
 
   @override
@@ -2945,6 +2954,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myDataIntro => 'Check the information available about you in the Administration and access services and procedures linked to each area.';
+
+  @override
+  String get representativeUnavailableTitle => 'Information unavailable';
+
+  @override
+  String get representativeUnavailableMessage => 'The identification method used to sign in does not allow you to view this information. If you have another way to identify yourself, you can try again.';
 
   @override
   String get myDataHealthTitle => 'Health';
@@ -2983,7 +2998,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentServicesTab => 'Information and services';
 
   @override
-  String get myDataEmploymentDemandTitle => 'Your employment demand';
+  String get myDataEmploymentDemandTitle => 'My employment demand';
+
+  @override
+  String get myDataEmploymentDemandUnavailableStatus => 'Registration inactive';
 
   @override
   String get myDataEmploymentRegistrationDateLabel => 'Uninterrupted registration date';
@@ -3866,6 +3884,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appPreferenceStatusEnabled => 'Enabled';
 
   @override
+  String get appPreferenceStatusUnavailable => 'Unavailable';
+
+  @override
+  String get appPreferenceStatusUnavailableDescription => 'We could not load this information. Please try again later.';
+
+  @override
   String get appPreferenceStatusActive => 'Active';
 
   @override
@@ -4141,7 +4165,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'You must authorize the consultation of the administrative records held by the JCCM in Terms of use and authorizations.';
+  String get digitalCardsAuthorizationRequiredMessage => 'To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {
@@ -4299,14 +4323,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNewsNotificationsDescription => 'Check your pending notifications';
 
   @override
+  String get homeNewsNotificationsEmptyDescription => 'You have no pending notifications';
+
+  @override
   String get homeNewsAppointmentsTitle => 'Upcoming appointments';
 
   @override
   String get homeNewsAppointmentsDescription => 'Check your upcoming appointments and events';
 
   @override
+  String get homeNewsAppointmentsEmptyDescription => 'You have no upcoming appointments or events';
+
+  @override
   String homeNewsLabelWithCount(String label, int count) {
     return '$label ($count)';
+  }
+
+  @override
+  String homeNewsLabelWithMinimumCount(String label, int count) {
+    return '$label (+$count)';
   }
 
   @override
@@ -4744,4 +4779,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionAportacionExpedienteUnavailableError => 'We could not locate the case. Please try again later.';
+
+  @override
+  String get preferencesBiometricEnableFailed => 'Quick access could not be turned on. Identify yourself again with Cl@ve and try again.';
+
+  @override
+  String get preferencesBiometricDisabledNotice => 'Quick access is now off. When this session ends you will need to identify yourself again with Cl@ve.';
+
+  @override
+  String get sessionExpiredNotice => 'Your session could not be renewed. Identify yourself again with Cl@ve to continue.';
+
+  @override
+  String get sessionUnlockBiometricCancel => 'Cancel';
+
+  @override
+  String get sessionUnlockBiometricTitle => 'Access your space';
+
+  @override
+  String get sessionUnlockBiometricReason => 'Confirm your identity to access your space';
+
+  @override
+  String get sessionContinueBiometricTitle => 'Continue in your space';
+
+  @override
+  String get sessionContinueBiometricReason => 'Your session needs renewing. Confirm your identity to continue.';
+
+  @override
+  String get biometricAccessDialogTitle => 'Would you like to enable quick access with fingerprint or facial recognition?';
+
+  @override
+  String get biometricAccessDialogDescription => 'This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.';
+
+  @override
+  String get biometricAccessDialogCancel => 'Not now';
+
+  @override
+  String get biometricAccessDialogConfirm => 'Enable quick access';
 }

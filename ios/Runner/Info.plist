@@ -89,5 +89,7 @@
 	</array>
 	<key>UIRequiresFullScreen</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Usa Face ID para confirmar tu identidad y acceder a tu espacio ciudadano.</string>
 </dict>
 </plist>

@@ -27,6 +27,10 @@ enum ConsentStatus {
   /// Clause catalogue is being fetched.
   loading,
 
+  /// The clause catalogue could not be loaded — show an explicit error with
+  /// retry instead of a legal screen with zero authorisations.
+  loadError,
+
   /// Step 1 — citizen has not yet scrolled to the bottom of the legal text.
   step1Locked,
 
@@ -110,13 +114,20 @@ class ConsentNotifier extends Notifier<ConsentState> {
           status: _hasReachedLegalTextEnd ? ConsentStatus.step1Unlocked : ConsentStatus.step1Locked,
           clauses: clauses,
         );
-      case LoadClausesFailed():
-        // Degrade gracefully — show step 1 with empty clause list so the
-        // citizen can still read the legal text and accept.
-        state = ConsentState(
-          status: _hasReachedLegalTextEnd ? ConsentStatus.step1Unlocked : ConsentStatus.step1Locked,
-        );
+      case LoadClausesFailed(:final message):
+        // Error explícito con reintento: degradar a un paso legal sin ninguna
+        // autorización visible confundía "catálogo caído" con "no hay
+        // autorizaciones opcionales" (el guard P-04 bloqueaba después, pero
+        // demasiado tarde para explicar qué pasaba).
+        logger.e('Consent clause catalogue load failed: $message');
+        state = const ConsentState(status: ConsentStatus.loadError);
     }
+  }
+
+  /// Reintento manual tras [ConsentStatus.loadError].
+  Future<void> retryLoadClauses() {
+    state = const ConsentState();
+    return _loadClauses();
   }
 
   // ── Public actions ────────────────────────────────────────────────────────

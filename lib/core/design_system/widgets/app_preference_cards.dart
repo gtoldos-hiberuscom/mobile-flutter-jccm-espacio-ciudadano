@@ -12,6 +12,15 @@ enum AppPreferenceStatus {
   disabled,
   pending,
   enabled,
+
+  /// No se ha podido averiguar el estado.
+  ///
+  /// Distinto de [disabled] y de [pending]: esos dos **afirman** algo sobre la
+  /// configuración del ciudadano, y decirle que algo está desactivado o
+  /// pendiente cuando lo que ha fallado es la consulta es mentirle. A
+  /// diferencia del resto, su descripción no la pone quien usa la tarjeta:
+  /// el motivo es siempre el mismo y no depende de qué se estuviera mirando.
+  unavailable,
 }
 
 class AppPreferenceList extends StatelessWidget {
@@ -167,11 +176,13 @@ class AppPreferenceCard extends StatelessWidget {
       AppPreferenceStatus.disabled => inactiveDescription,
       AppPreferenceStatus.pending => pendingDescription,
       AppPreferenceStatus.enabled => activeDescription,
+      AppPreferenceStatus.unavailable => l10n.appPreferenceStatusUnavailableDescription,
     };
     final statusLabel = switch (status) {
       AppPreferenceStatus.disabled => l10n.appPreferenceStatusDisabled,
       AppPreferenceStatus.pending => l10n.appPreferenceStatusPending,
       AppPreferenceStatus.enabled => l10n.appPreferenceStatusEnabled,
+      AppPreferenceStatus.unavailable => l10n.appPreferenceStatusUnavailable,
     };
 
     return Semantics(
@@ -662,26 +673,32 @@ class AppPreferenceStatusTag extends StatelessWidget {
       AppPreferenceStatus.disabled => l10n.appPreferenceStatusDisabled,
       AppPreferenceStatus.pending => l10n.appPreferenceStatusPending,
       AppPreferenceStatus.enabled => l10n.appPreferenceStatusEnabled,
+      AppPreferenceStatus.unavailable => l10n.appPreferenceStatusUnavailable,
     };
     final background = switch (status) {
       AppPreferenceStatus.disabled => AppColors.background,
       AppPreferenceStatus.pending => AppColors.warningLight,
       AppPreferenceStatus.enabled => AppColors.successLight,
+      // Neutro a propósito: ni verde ni ámbar, que dirían algo del ciudadano.
+      AppPreferenceStatus.unavailable => AppColors.background,
     };
     final border = switch (status) {
       AppPreferenceStatus.disabled => AppColors.primary,
       AppPreferenceStatus.pending => AppColors.warningDark,
       AppPreferenceStatus.enabled => AppColors.successDark,
+      AppPreferenceStatus.unavailable => AppColors.primary,
     };
     final foreground = switch (status) {
       AppPreferenceStatus.disabled => AppColors.primary,
       AppPreferenceStatus.pending => AppColors.warningDark,
       AppPreferenceStatus.enabled => AppColors.successDark,
+      AppPreferenceStatus.unavailable => AppColors.primary,
     };
     final icon = switch (status) {
       AppPreferenceStatus.disabled => AppIcons.hourglass,
       AppPreferenceStatus.pending => AppIcons.warning,
       AppPreferenceStatus.enabled => AppIcons.check,
+      AppPreferenceStatus.unavailable => AppIcons.info,
     };
     final showIcon = showInactiveIcon;
 

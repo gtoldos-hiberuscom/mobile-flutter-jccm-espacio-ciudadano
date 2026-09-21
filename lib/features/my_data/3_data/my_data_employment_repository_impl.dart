@@ -46,17 +46,28 @@ final class MyDataEmploymentRepositoryImpl implements MyDataEmploymentRepository
       return null;
     }
 
+    final status = _statusLabel(
+      _firstString(data, const ['inscrito', 'estado', 'situacion', 'situación']),
+    );
+    final uninterruptedRegistrationDate = _parseDate(
+      _firstString(data, const ['ultimainscrip', 'ultimaInscrip', 'fechaInscripcion', 'fecha_inscripcion']),
+    );
+
+    // `resul` es el código de resultado de la consulta, no el estado de la
+    // demanda. Por ejemplo, `resul: 1` + "Titular no identificado" + campos
+    // nulos significa que no hay una demanda activa; tratar ese 1 como un
+    // booleano fabricaba el estado «Activa».
+    if (status == null && uninterruptedRegistrationDate == null) {
+      return null;
+    }
+
     final demand = EmploymentDemand(
-      status: _statusLabel(
-        _firstString(data, const ['inscrito', 'estado', 'situacion', 'situación', 'resul']),
-      ),
-      uninterruptedRegistrationDate: _parseDate(
-        _firstString(data, const ['ultimainscrip', 'ultimaInscrip', 'fechaInscripcion', 'fecha_inscripcion']),
-      ),
+      status: status,
+      uninterruptedRegistrationDate: uninterruptedRegistrationDate,
       message: _firstString(data, const ['mensaje', 'literalError', 'descripcion']),
     );
 
-    return demand.hasData ? demand : null;
+    return demand;
   }
 
   @override

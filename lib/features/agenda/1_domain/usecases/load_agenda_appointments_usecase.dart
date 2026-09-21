@@ -10,6 +10,7 @@ final class LoadAgendaAppointmentsSuccess extends LoadAgendaAppointmentsResult {
   const LoadAgendaAppointmentsSuccess({
     required this.appointments,
     this.failedSources = const {},
+    this.healthCipMissing = false,
   });
 
   final List<AgendaAppointment> appointments;
@@ -18,6 +19,7 @@ final class LoadAgendaAppointmentsSuccess extends LoadAgendaAppointmentsResult {
   /// pantalla debe avisar de lo que falta sin bloquear lo que sí llegó; el
   /// fallo total sigue llegando como [LoadAgendaAppointmentsFailed].
   final Set<AgendaAppointmentSource> failedSources;
+  final bool healthCipMissing;
 }
 
 final class LoadAgendaAppointmentsFailed extends LoadAgendaAppointmentsResult {
@@ -44,6 +46,7 @@ final class LoadAgendaAppointmentsUsecase {
       return LoadAgendaAppointmentsSuccess(
         appointments: snapshot.appointments,
         failedSources: snapshot.failedSources,
+        healthCipMissing: snapshot.healthCipMissing,
       );
     } on Object catch (error) {
       return LoadAgendaAppointmentsFailed(

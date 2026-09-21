@@ -1,10 +1,12 @@
 # Plan de pruebas — Espacio Ciudadano CLM (app móvil)
 
 **Aplicación:** `jccm_espacio_ciudadano` — Carpeta Ciudadana CLM (Android + iOS)
-**Versión del plan:** 1.1 — 25/08/2026
+**Versión del plan:** 1.2 — 17/09/2026
 **Ámbito:** pruebas funcionales manuales de toda la app. Integra y amplía el plan parcial anterior (antiguos TC-1 a TC-50), corrigiendo los casos cuyo resultado esperado no coincidía con el comportamiento implementado.
 
-> **Cambios v1.1:** se eliminan todos los casos de **biometría** (funcionalidad que se retira de la app) y se añade la sección **Acceso de representantes** (funcionalidad en definición; ajustar los casos cuando esté especificada e implementada).
+> **Cambios v1.2:** la **biometría vuelve a la app** como *acceso rápido* opcional (#282847), así que se revierte la retirada que anunciaba la v1.1: se reescribe el TC-203 —la sesión ya no muere al cerrar la app— y se añaden los casos TC-209…TC-219 en la sección 25. Se actualiza el riesgo nº 1, que pedía justo lo contrario.
+>
+> **Cambios v1.1:** se eliminaban todos los casos de **biometría** (por una retirada que finalmente no se ejecutó; ver v1.2) y se añade la sección **Acceso de representantes** (funcionalidad en definición; ajustar los casos cuando esté especificada e implementada).
 
 ---
 
@@ -384,12 +386,35 @@
 
 | ID | Acción | Resultado esperado |
 |---|---|---|
-| TC-203 | Cerrar la app y volver a abrirla | Se muestra la landing y es necesario identificarse de nuevo con Cl@ve/certificado (no existe acceso rápido; la sesión no se rehidrata automáticamente). |
+| TC-203 | Cerrar la app y volver a abrirla **con el acceso rápido desactivado** | Se muestra la landing y es necesario identificarse de nuevo con Cl@ve/certificado. |
 | TC-204 | Dejar la sesión caducar y realizar una acción con red | La app intenta renovar el token automáticamente; si lo consigue, la acción se completa sin que el usuario lo perciba. |
 | TC-205 | Renovación imposible (refresh token caducado/revocado) | Se muestra "Tu sesión ha caducado" donde aplique y/o se redirige a la landing al navegar; no se muestran errores técnicos. |
 | TC-206 | Navegar a una ruta protegida sin sesión (p. ej. tras expulsión) | El guard de sesión redirige a la landing. |
 | TC-207 | Restaurar la app desde una copia de seguridad en un dispositivo nuevo (Android e iOS) | La primera apertura tras la restauración **no** conserva la sesión: el almacenamiento seguro restaurado se limpia y se exige login completo. |
 | TC-208 | Verificar la privacidad de los errores | En ningún fallo de red/servicio se muestran al usuario trazas técnicas, códigos crudos ni URLs del backend. |
+
+### Acceso rápido con biometría (#282847)
+
+Es **opcional y por ciudadano**: nada de esto ocurre si no se ha activado. Requiere huella o
+reconocimiento facial configurados en el dispositivo.
+
+> **Aviso de ejecución:** el **simulador de iOS no evalúa el control de acceso biométrico** (no tiene
+> Secure Enclave), así que estos casos dan falso negativo ahí. Se prueban en dispositivo físico; en
+> Android vale el emulador con huella registrada.
+
+| ID | Acción | Resultado esperado |
+|---|---|---|
+| TC-209 | Entrar por primera vez con biometría disponible en el dispositivo | Aparece el diálogo "¿Quieres activar el acceso rápido con huella o reconocimiento facial?", con "Activar acceso rápido" y "Ahora no". |
+| TC-210 | Pulsar "Activar acceso rápido" | El sistema pide la autenticación biométrica **en ese momento**, no días después; al superarla el acceso rápido queda activo. |
+| TC-211 | Pulsar "Ahora no" | No se guarda ninguna credencial: la sesión en curso sigue, y al reabrir la app se exige Cl@ve. |
+| TC-212 | Que falle la activación | "No se ha podido activar el acceso rápido. Vuelve a identificarte con Cl@ve e inténtalo de nuevo." |
+| TC-213 | Reabrir la app con acceso rápido activo y el token de acceso aún vigente | Entra directamente: sin diálogo biométrico y sin Cl@ve. |
+| TC-214 | Reabrir la app con acceso rápido activo y el token de acceso caducado | Pide biometría con el título "Acceso a tu espacio"; superada, entra sin pasar por Cl@ve. |
+| TC-215 | Cancelar el diálogo biométrico al reabrir | Vuelve a la landing **sin mensaje de error** y **sin perder la sesión guardada**; al reintentar y superar la biometría, entra. Cancelar no equivale a revocar. |
+| TC-216 | Que el servidor rechace la renovación durante la sesión | Aviso "No ha sido posible renovar tu sesión. Vuelve a identificarte con Cl@ve para continuar." Este aviso **no** debe salir cuando lo que ocurrió fue una biometría cancelada (TC-215). |
+| TC-217 | Desactivar el acceso rápido desde Preferencias | "Se ha desactivado el acceso rápido. Cuando termine esta sesión tendrás que identificarte de nuevo con Cl@ve." Al reabrir, se exige Cl@ve. |
+| TC-218 | Cerrar sesión con el acceso rápido activo | El cierre de sesión **no** pide huella; después, reabrir la app exige Cl@ve. |
+| TC-219 | Entrar con un ciudadano distinto en el mismo dispositivo | La preferencia es por ciudadano: lo que active A no se le aplica a B. |
 
 ## 26. Transversales
 
@@ -432,14 +457,14 @@
 
 Puntos detectados en el código que el equipo debe decidir si son defectos a corregir o comportamiento aceptado. No son casos de prueba ejecutables tal cual, pero deben vigilarse en regresión:
 
-1. **Retirada de la biometría**: el código actual todavía incluye la funcionalidad (diálogo de activación en la Home, tarjeta en Preferencias, desbloqueo automático en la landing y textos asociados). Al retirarla, verificar en regresión que no queda ningún resto visible (diálogos, tarjetas, prompts, literales) y que la app siempre exige login con Cl@ve al reabrirse.
+1. ~~**Retirada de la biometría**~~ — **anulado en v1.2**: la retirada no se ejecutó. La biometría se mantiene y se ha desarrollado como *acceso rápido* opcional por ciudadano (#282847), con la sesión sobreviviendo al cierre de la app. Los casos están en la sección 25; **no** debe verificarse la ausencia de restos de biometría.
 2. **Acceso de representantes sin implementar**: no existe todavía en el código; la sección 3 de este plan es provisional y debe concretarse con la especificación definitiva.
 3. **Documentos de notificaciones sin descarga**: en el detalle de una notificación aceptada/expirada los documentos se listan pero no tienen acción de descarga (existen los textos de descarga en los recursos, sin UI asociada).
 4. **Rechazo de notificaciones no implementado**: existen literales para "Rechazar definitivamente" pero no hay botón ni flujo.
 5. **Banner offline no integrado**: el componente "Sin conexión. Mostrando datos guardados." está implementado pero no se usa en ninguna pantalla.
 6. **Citas hospitalarias desactivadas** por flag en código (`kHospitalAppointmentsEnabled = false`): el selector Primaria/Hospitalaria aparece deshabilitado.
 7. **Ruta `/gestion/registros/detail`** exige datos de navegación (`extra`); si se llega sin ellos (deep link/restauración) la app puede crashear.
-8. **`/design-system`** (catálogo interno de componentes) es accesible sin autenticación; valorar si debe deshabilitarse en release.
+8. ~~**`/design-system`** (catálogo interno de componentes) es accesible sin autenticación~~ — **corregido el 17/09**: la ruta sólo se registra en compilaciones de depuración (`kDebugMode` en `app_router.dart`). En regresión sobre una build de **release**, comprobar que `/design-system` ya no responde.
 9. **`/login` es un placeholder** no funcional si se navega directamente; `/` (splash) y `/maintenance` no tienen ruta registrada (caen en 404).
 10. **Campana de notificaciones oculta** en todas las AppBar (`showNotifications: false`) aunque existe el handler.
 11. **No hay notificaciones push**: "Mis novedades" son contadores consultados por API al abrir la home.
@@ -459,7 +484,7 @@ Puntos detectados en el código que el equipo debe decidir si son defectos a cor
 | TC-3 a TC-6 | TC-018…TC-021 | La elección de método (Permanente/Móvil/Certificado) ocurre en la web de Cl@ve, no en una pantalla propia de la app. |
 | TC-7 a TC-13 | TC-034…TC-042 | Igual flujo; añadido el caso de error de guardado. |
 | TC-14 a TC-17 | TC-043…TC-046 | "Rellenar luego" y "Aceptar" llevan directamente a la Home. |
-| TC-18, TC-19 | **Eliminados** | La biometría se retira de la app (ver riesgo nº 1); tras el onboarding se navega directamente a la Home y cada apertura de la app exige login con Cl@ve. |
+| TC-18, TC-19 | TC-209…TC-219 | **Restituidos en v1.2**: la retirada de la biometría no se ejecutó. Ahora es un *acceso rápido* opcional por ciudadano y la sesión sobrevive al cierre de la app. |
 | TC-20 | TC-047…TC-059 | Añadidos estados del FAB Carnets y ocultación de novedades a 0. |
 | TC-21 a TC-25 | TC-054, TC-060…TC-069 | Corregido: los formatos QR/PDF solo aplican al Carnet Joven; PKPASS a todos. |
 | TC-26 a TC-29 | TC-070, TC-108…TC-111 | Igual, con literales exactos. |

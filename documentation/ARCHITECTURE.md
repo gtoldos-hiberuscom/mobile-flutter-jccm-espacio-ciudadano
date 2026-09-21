@@ -260,7 +260,8 @@ class FetchCheckinsSuccess extends FetchCheckinsResult {
 
 class FetchCheckinsFailed extends FetchCheckinsResult {
   final String message;
-  FetchCheckinsFailed(this.message);
+  final Object? cause;
+  FetchCheckinsFailed(this.message, {this.cause});
 }
 
 class FetchCheckinsUsecase {
@@ -272,12 +273,39 @@ class FetchCheckinsUsecase {
     try {
       return FetchCheckinsSuccess(await _repository.fetchCheckins());
     } catch (e, s) {
-      // Logging is done outside; here we only package the error
-      return FetchCheckinsFailed(e.toString());
+      // Logging is done outside; here we only package the error.
+      // Keep the cause: the raw message is for the logger, NEVER for the UI
+      // (see "Failed results are never flattened" below).
+      return FetchCheckinsFailed(e.toString(), cause: e);
     }
   }
 }
 ```
+
+**Failed results are never flattened into business values.**
+
+A `Failed` variant means *the operation could not be performed* — it never
+means `false`, `null`, an empty list, or any other default. Presentation must
+either rethrow it inside the provider (`Failed(:final message) => throw
+StateError(message)` → `AsyncError` → an explicit error state with retry) or
+map it to an explicit error state of its own. The raw `message` goes only to
+the logger; the UI shows curated l10n keys exclusively.
+
+This is not stylistic. Flattening `CheckAcceptedConsentClauseFailed` to
+`false` told citizens they had not granted an RGPD consent they had granted,
+and swallowing a clausulas failure as "consent not accepted" destroyed valid
+sessions during a backend outage (incident 2026-08-31). The same rule applies
+one layer down: a repository must never coerce a transport error into "no
+data" — 404 (or an explicit business code) is the only answer that means
+"nothing on record"; everything else propagates. Reference implementations:
+`isHandledIntermediacionStatus`, `intermediacionRawResponse`,
+`digital_cards_provider.dart`, `ConsentStatusUnknownException`.
+
+When an operation aggregates several sources, a partial failure is neither an
+error nor a silent success: the repository returns a snapshot carrying what
+loaded **and** what did not, and the screen renders the data with a visible
+notice (`AgendaAppointmentsSnapshot`, `DigitalCardsSnapshot`). It only throws
+when every source that was actually attempted failed.
 
 #### 5.2.2. Abstract Repositories
 

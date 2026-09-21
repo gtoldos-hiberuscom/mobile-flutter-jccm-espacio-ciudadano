@@ -19,7 +19,7 @@ void main() {
   });
 
   test('loads every card using the generated client endpoints', () async {
-    final cards = await repository.loadCards(citizenId: 'sid-123');
+    final cards = (await repository.loadCards(citizenId: 'sid-123')).cards;
 
     expect(cards.map((final card) => card.type), [
       DigitalCardType.largeFamily,
@@ -52,15 +52,35 @@ void main() {
     );
   });
 
+  test('con todos los carnets caídos, el rechazo por autorización gana al fallo de servicio', () async {
+    // Familia numerosa es la primera consulta, así que su 500 sería el primer
+    // fallo de la lista: sin preferir el sobre, la pantalla pintaría "no se han
+    // podido cargar tus carnets" y se perdería el CTA de conceder la cláusula.
+    adapter.failingPaths.add('/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa');
+    adapter.unauthorizedPaths.addAll([
+      '/api/v1/ciudadanos/sid-123/carnet-digital/joven',
+      '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
+    ]);
+
+    await expectLater(
+      repository.loadCards(citizenId: 'sid-123'),
+      throwsA(isA<AuthorizationRequiredException>()),
+    );
+  });
+
   test('un carnet válido sobrevive al rechazo por autorización de los otros', () async {
     adapter.unauthorizedPaths.addAll([
       '/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa',
       '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
     ]);
 
-    final cards = await repository.loadCards(citizenId: 'sid-123');
+    final snapshot = await repository.loadCards(citizenId: 'sid-123');
 
-    expect(cards.map((final card) => card.type), [DigitalCardType.youth]);
+    expect(snapshot.cards.map((final card) => card.type), [DigitalCardType.youth]);
+    // El rechazo de los otros dos no se traga: viaja en el snapshot para que la
+    // pantalla avise de que el listado está incompleto.
+    expect(snapshot.failedCount, 2);
+    expect(snapshot.hasPartialFailures, isTrue);
   });
 
   test('uses the card-specific PKPASS endpoint', () async {
@@ -98,11 +118,16 @@ void main() {
   test('keeps a valid youth card when another card endpoint fails', () async {
     adapter.failingPaths.add('/api/v1/ciudadanos/sid-123/carnet-digital/familia-numerosa');
 
-    final cards = await repository.loadCards(citizenId: 'sid-123');
+    final snapshot = await repository.loadCards(citizenId: 'sid-123');
+    final cards = snapshot.cards;
 
     final youthCard = cards.singleWhere((final card) => card.type == DigitalCardType.youth);
     expect(youthCard.number, '99999999R-R955-C233-J452-Z864');
     expect(youthCard.expiresAt, DateTime(2030, 1, 30));
+    // El fallo parcial ya no se traga: viaja en el snapshot para que la
+    // pantalla avise de que el listado puede estar incompleto.
+    expect(snapshot.failedCount, 1);
+    expect(snapshot.hasPartialFailures, isTrue);
   });
 
   test('keeps a valid youth card when the other cards return business code 3033', () async {
@@ -111,7 +136,7 @@ void main() {
       '/api/v1/ciudadanos/sid-123/carnet-digital/discapacidad',
     });
 
-    final cards = await repository.loadCards(citizenId: 'sid-123');
+    final cards = (await repository.loadCards(citizenId: 'sid-123')).cards;
 
     expect(cards, hasLength(1));
     expect(cards.single.type, DigitalCardType.youth);

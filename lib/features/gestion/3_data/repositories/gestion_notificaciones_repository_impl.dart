@@ -27,11 +27,14 @@ import 'package:jccm_espacio_ciudadano/features/gestion/3_data/mappers/notificac
 /// UAT antes de mergear.
 const int _kNotificationsPageSize = 50;
 
-/// Tope defensivo de páginas por estado: 20 × 50 = 1000 notificaciones, veinte
-/// veces el caso real más grande visto (~45 en un estado). No está para acotar
-/// datos legítimos, sino para que un contrato roto —un backend que ignore
-/// `page` y devuelva siempre lo mismo— no deje la app pidiendo páginas sin fin.
-const int _kNotificationsMaxPages = 20;
+/// Tope de carga inicial por estado: 10 × 50 = 500 notificaciones.
+///
+/// PRE contiene ciudadanos de prueba con miles de notificaciones expiradas.
+/// Descargar el histórico completo al abrir la bandeja provoca decenas de
+/// peticiones y acaba activando el rate limit (429) del gateway. El listado
+/// viene ordenado por el backend, por lo que se conservan las 500 primeras; la
+/// repetición consecutiva de ids se sigue detectando como contrato roto.
+const int _kNotificationsMaxPages = gestionNotificacionesInitialLoadLimit ~/ _kNotificationsPageSize;
 
 final class GestionNotificacionesRepositoryImpl implements GestionNotificacionesRepository {
   GestionNotificacionesRepositoryImpl({required final Dio dio, final int maxPages = _kNotificationsMaxPages}) : _dio = withGeneratedApiCompat(dio), _api = CiudadanosApi(withGeneratedApiCompat(dio), standardSerializers), _maxPages = maxPages;
@@ -200,7 +203,11 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       }
       previousPageIds = pageIds;
     }
-    throw _paginacionIncompleta(estado, _maxPages, notifications.length, 'tope de páginas alcanzado con la última página llena');
+    logger.w(
+      '[notificaciones] carga limitada de ${notificacionEstadoQueryValue(estado)} '
+      'a $_maxPages páginas (${notifications.length} acumuladas)',
+    );
+    return notifications.values.toList(growable: false);
   }
 
   /// Traza y construye el fallo de barrido incompleto. Solo lleva el token del
@@ -548,15 +555,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     final Notificacion? resumen,
   }) {
     final suelto = _map(data['procedimiento']);
-    final resuelto =
-        _string(procedimiento, 'denominacion') ??
-        _additional(procedimiento, 'denominacion') ??
-        _string(procedimiento, 'idFicha') ??
-        _additional(procedimiento, 'idFicha') ??
-        _string(data, 'procedimiento') ??
-        _string(suelto, 'denominacion') ??
-        _additional(suelto, 'denominacion') ??
-        _string(suelto, 'idFicha');
+    final resuelto = _string(procedimiento, 'denominacion') ?? _additional(procedimiento, 'denominacion') ?? _string(procedimiento, 'idFicha') ?? _additional(procedimiento, 'idFicha') ?? _string(data, 'procedimiento') ?? _string(suelto, 'denominacion') ?? _additional(suelto, 'denominacion') ?? _string(suelto, 'idFicha');
     if (resuelto != null) {
       return resuelto;
     }
@@ -582,13 +581,12 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
     return trimmed.isEmpty ? null : trimmed;
   }
 
-  int? _documentSize(final Map<String, Object?>? map, final Map<String, Object?>? nested) =>
-      _int(map, 'tamano') ?? _int(map, 'tamanoBytes') ?? _int(nested, 'tamano') ?? _int(nested, 'tamanoBytes');
+  int? _documentSize(final Map<String, Object?>? map, final Map<String, Object?>? nested) => _int(map, 'tamano') ?? _int(map, 'tamanoBytes') ?? _int(nested, 'tamano') ?? _int(nested, 'tamanoBytes');
 
   Map<String, Object?>? _map(final Object? value) => value is Map ? _stringKeyMap(value) : null;
   List<Object?> _list(final Object? value) => value is List ? value.cast<Object?>() : const [];
   DateTime? _date(final Object? value) => value is String ? DateTime.tryParse(value) : null;
-  String? _documentName(final Map<String, Object?>? map) => _string(map, 'nombre') ?? _string(map, 'nombreFichero') ?? _string(map, 'nombreDocumento') ?? _string(map, 'titulo') ?? _string(map, 'descripcion');
+  String? _documentName(final Map<String, Object?>? map) => _string(map, 'nombre') ?? _string(map, 'nombreFichero') ?? _string(map, 'nombreDocumento') ?? _string(map, 'titulo') ?? _string(map, 'descripcion') ?? _additional(map, 'nombre-documento');
 
   String? _additional(final Map<String, Object?>? map, final String key) {
     for (final item in _list(map?['informacionAdicional'])) {
