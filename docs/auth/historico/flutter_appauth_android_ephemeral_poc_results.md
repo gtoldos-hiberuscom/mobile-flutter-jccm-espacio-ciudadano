@@ -1,5 +1,18 @@
 # POC — Ephemeral Custom Tabs en `flutter_appauth` (Android): resultados
 
+> ⚠️ **Documento histórico — la solución que describe no llegó a hacer falta.**
+>
+> Se escribió en agosto de 2026 para aislar la sesión del navegador en Android. En
+> septiembre se descubrió que la causa real del bug era otra: la app enviaba
+> `prompt=login select_account` y la extensión de Cerbero compara ese parámetro
+> **entero** contra `"login"`, así que la `AuthnRequest` hacia Cl@ve salía con
+> `ForceAuthn="false"`. Corregido el `prompt`, Cl@ve vuelve a desafiar con la librería
+> de serie y el fork se retiró. Ver
+> [`../clave_forceauthn_retest_2026-09.md`](../clave_forceauthn_retest_2026-09.md).
+>
+> Se conserva por el método y por si algún día vuelve a hacer falta navegación efímera:
+> el fork sigue recuperable del historial de git (`docs/auth/historico/poc_evidence/fork_ephemeral.diff`).
+
 **Fecha:** 2026-08-31 · **Estado:** POC satisfactoria (ver límites en §8)
 **Investigación asociada:** `docs/auth/clave_android_session_investigation.md`
 **Diseño del fork:** `docs/auth/flutter_appauth_android_ephemeral_design.md`

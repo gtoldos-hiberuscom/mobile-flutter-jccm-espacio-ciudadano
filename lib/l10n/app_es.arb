@@ -165,11 +165,6 @@
   "@loginPageError": {
     "description": "Título del mensaje de error mostrado cuando falla la autenticación."
   },
-  "loginIsolationDegradedWarning": "Tu navegador no permite abrir una sesión aislada. Has accedido correctamente, pero este dispositivo podría recordar tu sesión de Cl@ve en próximos accesos.",
-  "@loginIsolationDegradedWarning": {
-    "description": "Aviso (no bloqueante) tras un login correcto cuando el navegador del dispositivo no soporta pestañas efímeras y la autenticación se hizo en el navegador compartido."
-  },
-  "loginRetryButton": "Reintentar",
   "@loginRetryButton": {
     "description": "Texto del botón para reintentar el proceso de login."
   },

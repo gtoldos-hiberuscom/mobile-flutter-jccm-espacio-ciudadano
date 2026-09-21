@@ -165,11 +165,6 @@
   "@loginPageError": {
     "description": "Error title shown when the login process fails."
   },
-  "loginIsolationDegradedWarning": "Your browser cannot open an isolated session. You signed in successfully, but this device may remember your Cl@ve session on future sign-ins.",
-  "@loginIsolationDegradedWarning": {
-    "description": "Non-blocking warning after a successful login when the device browser does not support ephemeral tabs and authentication ran in the shared browser."
-  },
-  "loginRetryButton": "Try again",
   "@loginRetryButton": {
     "description": "Button label to retry the login process."
   },

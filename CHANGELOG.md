@@ -11,6 +11,24 @@ Proyectos al que se imputa cada cambio.
 
 ## [Sin publicar]
 
+### Corregido
+
+- El login de Cl@ve vuelve a exigir autenticación en cada intento en Android. La app
+  enviaba `prompt=login select_account` y la extensión de Cerbero compara ese parámetro
+  **entero** contra `"login"`, así que la `AuthnRequest` hacia Cl@ve salía con
+  `ForceAuthn="false"` y la pasarela identificaba al ciudadano en silencio dentro de su
+  ventana de 60 minutos. Ahora se envía `prompt=login` a secas, verificado leyendo la
+  `SAMLRequest` que el broker emite. [282296]
+
+### Eliminado
+
+- Retirado el fork vendorizado de `flutter_appauth` (Ephemeral Custom Tabs en Android) y
+  toda su maquinaria de degradación —error tipado, reintento en sesión compartida, aviso
+  al usuario y sus textos—. Mitigaba el síntoma del problema anterior; con la causa
+  corregida, la librería publicada se comporta igual, validado en preproducción. iOS
+  conserva su sesión efímera, que es de serie. La documentación del fork queda archivada
+  en `docs/auth/historico/`. [282296]
+
 ## [0.1.5+7] - 2026-09-11
 
 Entrega a QA y cliente contra preproducción. Integra en una sola versión el

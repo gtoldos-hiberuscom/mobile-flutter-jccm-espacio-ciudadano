@@ -17,7 +17,6 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<AuthorizationTokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
-    final bool ephemeralSession = true,
   }) async {
     try {
       // `prompt=login` and `max_age=0` are sent on every attempt so the
@@ -32,16 +31,29 @@ final class AuthRepositoryImpl implements AuthRepository {
           discoveryUrl: _discoveryUrl,
           loginHint: loginHint,
           scopes: _effectiveScopes(scopes),
-          promptValues: const [Prompt.login, Prompt.selectAccount],
+          // SÓLO `login`. El estándar permite combinar valores separados por
+          // espacio, pero la extensión de Cerbero compara el parámetro entero
+          // contra "login", así que `prompt=login select_account` no le casa y
+          // la AuthnRequest hacia Cl@ve sale con ForceAuthn="false".
+          // Comprobado en PRE el 18/09/2026 leyendo la SAMLRequest (#282296):
+          //   prompt=login                 → ForceAuthn="true"
+          //   prompt=login select_account  → ForceAuthn="false"
+          // `select_account` no aportaba nada: Cerbero no tiene cuentas
+          // múltiples. Se puede volver a añadir cuando soporten la combinación.
+          promptValues: const [Prompt.login],
           additionalParameters: const {'max_age': '0'},
-          // Ephemeral: isolated ASWebAuthenticationSession on iOS/macOS and
-          // Ephemeral Custom Tab on Android (vendored fork). On Android the
-          // fork aborts with ephemeral_browsing_unavailable rather than
-          // silently sharing the Chrome cookie jar; the caller may then retry
-          // with ephemeralSession=false (degraded, user-visible warning).
-          externalUserAgent: ephemeralSession
-              ? ExternalUserAgent.ephemeralAsWebAuthenticationSession
-              : ExternalUserAgent.asWebAuthenticationSession,
+          // En iOS, SFSafariViewController: almacén propio de la app, aislado
+          // de Safari pero compartido con las pestañas que abre la propia app
+          // (`LaunchMode.inAppBrowserView`). Es lo que permite que los portales
+          // de JCCM abran ya identificados sin exponer la sesión a Safari.
+          //
+          // Implica que el estado de Cl@ve sobrevive entre logins dentro de ese
+          // almacén: lo que garantiza la reautenticación es el `ForceAuthn` que
+          // Cerbero propaga desde `prompt=login`, no el aislamiento.
+          //
+          // Android ignora este argumento; macOS se comporta como
+          // asWebAuthenticationSession.
+          externalUserAgent: ExternalUserAgent.sfSafariViewController,
         ),
       );
     } on FlutterAppAuthUserCancelledException catch (error, stackTrace) {
@@ -132,7 +144,6 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,
-    final bool ephemeralSession = true,
   }) async {
     _requireNotBlank(idToken, 'idToken');
 
@@ -145,11 +156,10 @@ final class AuthRepositoryImpl implements AuthRepository {
           additionalParameters: {
             'client_id': _config.ssoClientId,
           },
-          // Match the login flow: ephemeral session unless the caller already
-          // degraded because the device browser cannot provide one.
-          externalUserAgent: ephemeralSession
-              ? ExternalUserAgent.ephemeralAsWebAuthenticationSession
-              : ExternalUserAgent.asWebAuthenticationSession,
+          // Igual que el login. Además evita el diálogo del sistema que
+          // ASWebAuthenticationSession muestra al cerrar sesión, que hablaba de
+          // «iniciar sesión» justo cuando el ciudadano está saliendo.
+          externalUserAgent: ExternalUserAgent.sfSafariViewController,
         ),
       );
     } on FlutterAppAuthUserCancelledException {
@@ -209,13 +219,6 @@ final class AuthRepositoryImpl implements AuthRepository {
   static AuthException _mapPlatformException(
     final FlutterAppAuthPlatformException error,
   ) {
-    // Raised by the vendored Android fork BEFORE opening any browser when an
-    // ephemeral session was requested but the selected browser cannot provide
-    // one. Typed so the use case can retry with a shared session + warning.
-    if (error.code == 'ephemeral_browsing_unavailable') {
-      return AuthException.ephemeralUnavailable(cause: error);
-    }
-
     final details = error.platformErrorDetails;
     final oauthError = details.error?.trim();
     final description = details.errorDescription?.trim();

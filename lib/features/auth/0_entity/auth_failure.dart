@@ -1,10 +1,6 @@
 enum AuthFailureReason {
   cancelled,
   configuration,
-  /// An ephemeral (isolated) browser session was required but the device's
-  /// browser cannot provide one. The flow was aborted before opening the
-  /// browser; callers may retry with a shared (non-ephemeral) session.
-  ephemeralUnavailable,
   invalidResponse,
   remoteFailure,
   unexpected,
@@ -25,10 +21,6 @@ final class AuthException implements Exception {
     required final String message,
     final Object? cause,
   }) = _AuthConfigurationException;
-
-  const factory AuthException.ephemeralUnavailable({
-    final Object? cause,
-  }) = _AuthEphemeralUnavailableException;
 
   const factory AuthException.invalidResponse({
     required final String message,
@@ -65,14 +57,6 @@ final class _AuthConfigurationException extends AuthException {
     required super.message,
     super.cause,
   }) : super._(reason: AuthFailureReason.configuration);
-}
-
-final class _AuthEphemeralUnavailableException extends AuthException {
-  const _AuthEphemeralUnavailableException({super.cause})
-    : super._(
-        reason: AuthFailureReason.ephemeralUnavailable,
-        message: 'The browser cannot provide an ephemeral (isolated) session.',
-      );
 }
 
 final class _AuthInvalidResponseException extends AuthException {

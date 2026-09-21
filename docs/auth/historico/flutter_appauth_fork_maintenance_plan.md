@@ -1,5 +1,18 @@
 # Plan de mantenimiento — fork de `flutter_appauth` (Android ephemeral CCT)
 
+> ⚠️ **Documento histórico — la solución que describe no llegó a hacer falta.**
+>
+> Se escribió en agosto de 2026 para aislar la sesión del navegador en Android. En
+> septiembre se descubrió que la causa real del bug era otra: la app enviaba
+> `prompt=login select_account` y la extensión de Cerbero compara ese parámetro
+> **entero** contra `"login"`, así que la `AuthnRequest` hacia Cl@ve salía con
+> `ForceAuthn="false"`. Corregido el `prompt`, Cl@ve vuelve a desafiar con la librería
+> de serie y el fork se retiró. Ver
+> [`../clave_forceauthn_retest_2026-09.md`](../clave_forceauthn_retest_2026-09.md).
+>
+> Se conserva por el método y por si algún día vuelve a hacer falta navegación efímera:
+> el fork sigue recuperable del historial de git (`docs/auth/historico/poc_evidence/fork_ephemeral.diff`).
+
 **Fecha:** 2026-08-31 · **Diseño:** `flutter_appauth_android_ephemeral_design.md`
 
 ## 1. Origen upstream y estrategia de branch

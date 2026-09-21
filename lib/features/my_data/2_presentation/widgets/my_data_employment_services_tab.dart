@@ -41,7 +41,14 @@ class MyDataEmploymentServicesTab extends ConsumerWidget {
             links: [
               AppExternalLinkItem(
                 label: l10n.myDataEmploymentLinkEmploymentClm,
-                onTap: () => _launchExternalUrl(context, config.employmentUrl),
+                // En pestaña integrada a propósito: comparte la sesión del
+                // navegador con la del login, y por eso Empleo CLM abre ya
+                // identificado (#282847, análisis de SSO con portales).
+                onTap: () => _launchExternalUrl(
+                  context,
+                  config.employmentUrl,
+                  mode: LaunchMode.inAppBrowserView,
+                ),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataEmploymentLinkPublicEmploymentClm,
@@ -55,6 +62,10 @@ class MyDataEmploymentServicesTab extends ConsumerWidget {
   }
 }
 
-Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
-  await launchExternalUrlWithConfirmation(context, url);
+Future<void> _launchExternalUrl(
+  final BuildContext context,
+  final Uri url, {
+  final LaunchMode mode = LaunchMode.externalApplication,
+}) async {
+  await launchExternalUrlWithConfirmation(context, url, mode: mode);
 }

@@ -278,7 +278,7 @@ final class _HangingAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => Completer<TokenResponse>().future;
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => Completer<TokenResponse>().future;
 
   /// Veces que se pidió renovar contra el servidor. Distingue «entró con lo que
   /// ya tenía» de «tuvo que salir a la red».
@@ -291,7 +291,7 @@ final class _HangingAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) => throw UnimplementedError();
 }
 
 final class _ImmediateAuthRepository implements AuthRepository {
@@ -303,7 +303,7 @@ final class _ImmediateAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) async => TokenResponse(
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) async => TokenResponse(
     'not-a-real-jwt',
     'refresh',
     DateTime.now().add(const Duration(minutes: 5)),
@@ -317,7 +317,7 @@ final class _ImmediateAuthRepository implements AuthRepository {
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) => throw UnimplementedError();
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) => throw UnimplementedError();
 }
 
 final class _FakeAppStorage implements AppStorage {
@@ -388,11 +388,11 @@ final class _FailingAuthRepository implements AuthRepository {
   Future<void> revokeOfflineSession({required final String refreshToken}) async {}
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint, final bool ephemeralSession = true}) => throw UnimplementedError();
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw error;
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri, final bool ephemeralSession = true}) async {}
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {}
 }

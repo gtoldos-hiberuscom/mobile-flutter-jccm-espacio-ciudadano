@@ -1,0 +1,77 @@
+I/flutter ( 2291): ℹ️ 11:08:37.537 {
+I/flutter ( 2291):   "session-lifetimes": {
+I/flutter ( 2291):     "access_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "expires_at": "2026-09-18T09:13:38.000Z",
+I/flutter ( 2291):       "ttl_minutes": 5
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "refresh_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "exp": null,
+I/flutter ( 2291):       "typ": "Offline"
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "granted_scope": "openid ext_profile offline_access profile clave_representado",
+I/flutter ( 2291):     "refresh_expires_in": "0",
+I/flutter ( 2291):     "auth_time": 1789722518
+I/flutter ( 2291):   }
+I/flutter ( 2291): }
+
+I/flutter ( 2291): ℹ️ 11:08:37.990 {
+I/flutter ( 2291):   "session-lifetimes": {
+I/flutter ( 2291):     "access_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "expires_at": "2026-09-18T09:13:38.000Z",
+I/flutter ( 2291):       "ttl_minutes": 5
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "refresh_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "exp": null,
+I/flutter ( 2291):       "typ": "Offline"
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "granted_scope": "openid ext_profile offline_access profile clave_representado",
+I/flutter ( 2291):     "refresh_expires_in": "0",
+I/flutter ( 2291):     "auth_time": 1789722518
+I/flutter ( 2291):   }
+I/flutter ( 2291): }
+
+I/flutter ( 2291): 🐛 11:08:52.171 [DIO] 📑 Request: POST https://sso-cerbero-pre.cm-pre.jccm.es/auth/realms/usuarios/protocol/openid-connect/logout
+
+I/flutter ( 2291): 🐛 11:08:52.428 [DIO] 📦 Response: 204 https://sso-cerbero-pre.cm-pre.jccm.es/auth/realms/usuarios/protocol/openid-connect/logout
+
+I/flutter ( 2291): ℹ️ 11:08:52.429 Offline session revoked in Keycloak
+
+I/flutter ( 2291): ℹ️ 11:08:58.561 {
+I/flutter ( 2291):   "session-lifetimes": {
+I/flutter ( 2291):     "access_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "expires_at": "2026-09-18T09:14:00.000Z",
+I/flutter ( 2291):       "ttl_minutes": 5
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "refresh_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "exp": null,
+I/flutter ( 2291):       "typ": "Offline"
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "granted_scope": "openid ext_profile offline_access profile clave_representado",
+I/flutter ( 2291):     "refresh_expires_in": "0",
+I/flutter ( 2291):     "auth_time": 1789722539
+I/flutter ( 2291):   }
+I/flutter ( 2291): }
+
+I/flutter ( 2291): ℹ️ 11:08:58.787 {
+I/flutter ( 2291):   "session-lifetimes": {
+I/flutter ( 2291):     "access_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "expires_at": "2026-09-18T09:14:00.000Z",
+I/flutter ( 2291):       "ttl_minutes": 5
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "refresh_token": {
+I/flutter ( 2291):       "present": true,
+I/flutter ( 2291):       "exp": null,
+I/flutter ( 2291):       "typ": "Offline"
+I/flutter ( 2291):     },
+I/flutter ( 2291):     "granted_scope": "openid ext_profile offline_access profile clave_representado",
+I/flutter ( 2291):     "refresh_expires_in": "0",
+I/flutter ( 2291):     "auth_time": 1789722539
+I/flutter ( 2291):   }
+I/flutter ( 2291): }

@@ -50,6 +50,13 @@ final class SessionTokenDiagnostics {
       // Seconds the authorization server says the refresh token is good for.
       // `0` on an offline token: it outlives the session that created it.
       'refresh_expires_in': tokenAdditionalParameters?['refresh_expires_in'],
+      // Instant at which Keycloak says the citizen last authenticated (RFC
+      // 7519 `auth_time`, in seconds). It is what tells a *real* re-login
+      // apart from the broker resolving with the SSO session it already had:
+      // two consecutive logins that share an `auth_time` mean `prompt=login`
+      // did not reach the identity provider, no matter what the app sent.
+      // Diagnostic for #282296; it is an instant, never token material.
+      'auth_time': accessPayload['auth_time'],
     };
   }
 
