@@ -7907,25 +7907,25 @@ abstract class AppLocalizations {
   /// No description provided for @digitalCardsInfoSheetContactHint.
   ///
   /// In es, this message translates to:
-  /// **'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.'**
+  /// **'Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.'**
   String get digitalCardsInfoSheetContactHint;
 
   /// No description provided for @digitalCardsInfoSheetContactButton.
   ///
   /// In es, this message translates to:
-  /// **'Contactar'**
+  /// **'Consultar el listado de contactos'**
   String get digitalCardsInfoSheetContactButton;
 
   /// Carnets digitales — título del bottom sheet informativo.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Mis Carnets Digitales'**
+  /// **'Saber más sobre Mis carnets digitales'**
   String get digitalCardsInfoSheetTitle;
 
   /// Carnets digitales — cuerpo del bottom sheet informativo.
   ///
   /// In es, this message translates to:
-  /// **'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.'**
+  /// **'Consulta y descarga los carnets digitales asociados a tu perfil y utilízalos para realizar tus gestiones en cualquier momento.'**
   String get digitalCardsInfoSheetBody;
 
   /// Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM.

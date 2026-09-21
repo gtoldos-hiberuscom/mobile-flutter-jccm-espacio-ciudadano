@@ -4154,16 +4154,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsAuthorizationCheckErrorMessage => 'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.';
 
   @override
-  String get digitalCardsInfoSheetContactHint => 'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.';
+  String get digitalCardsInfoSheetContactHint => 'Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.';
 
   @override
-  String get digitalCardsInfoSheetContactButton => 'Contactar';
+  String get digitalCardsInfoSheetContactButton => 'Consultar el listado de contactos';
 
   @override
-  String get digitalCardsInfoSheetTitle => 'Sobre Mis Carnets Digitales';
+  String get digitalCardsInfoSheetTitle => 'Saber más sobre Mis carnets digitales';
 
   @override
-  String get digitalCardsInfoSheetBody => 'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.';
+  String get digitalCardsInfoSheetBody => 'Consulta y descarga los carnets digitales asociados a tu perfil y utilízalos para realizar tus gestiones en cualquier momento.';
 
   @override
   String get digitalCardsAuthorizationRequiredMessage => 'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».';

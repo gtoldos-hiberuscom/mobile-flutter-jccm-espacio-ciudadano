@@ -125,7 +125,6 @@ class HechosVitalesApi {
   /// Actualiza el estado de aceptación de las cláusulas de consentimiento ya registradas para el ciudadano. A diferencia del alta (POST), este endpoint modifica cláusulas existentes. Recibe el identificador del agente y la lista completa de cláusulas con su versión y nuevo estado de selección. Devuelve true si la actualización se realizó correctamente.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
   /// * [clausulasAgente] - Cuerpo de la petición con el identificador del agente y la lista de cláusulas a actualizar. Cada cláusula incluye su identificador, versión y nuevo estado de selección (true=aceptada, false=rechazada).
   /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
@@ -138,7 +137,6 @@ class HechosVitalesApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> actualizarClausulas1({ 
-    required String idAgente,
     required ClausulasAgente clausulasAgente,
     String? authorization,
     CancelToken? cancelToken,
@@ -148,7 +146,7 @@ class HechosVitalesApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/hechos-vitales/clausulas'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _path = r'/api/v1/hechos-vitales/clausulas';
     final _options = Options(
       method: r'PATCH',
       headers: <String, dynamic>{
@@ -325,7 +323,6 @@ class HechosVitalesApi {
   /// Actualiza la lista de hechos vitales seleccionados por el ciudadano. Recibe el identificador del agente y la lista completa de hechos vitales con su estado de selección. Solo los hechos con seleccionado&#x3D;true quedarán activos para el agente. Devuelve true si la actualización se realizó correctamente.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
   /// * [listaHechosAgente] - Cuerpo de la petición con el identificador del agente y la lista de hechos vitales a actualizar. Cada hecho incluye su identificador y el estado de selección (true=activo, false=inactivo).
   /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
@@ -338,7 +335,6 @@ class HechosVitalesApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> actualizarListaHechos1({ 
-    required String idAgente,
     required ListaHechosAgente listaHechosAgente,
     String? authorization,
     CancelToken? cancelToken,
@@ -348,7 +344,7 @@ class HechosVitalesApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/hechos-vitales/hechos'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _path = r'/api/v1/hechos-vitales/hechos';
     final _options = Options(
       method: r'PATCH',
       headers: <String, dynamic>{
@@ -681,7 +677,6 @@ class HechosVitalesApi {
   /// Registra por primera vez (alta inicial) las cláusulas de consentimiento seleccionadas por el ciudadano. Recibe el identificador del agente y la lista de cláusulas con su versión y estado de aceptación. Devuelve true si el registro se ha realizado correctamente.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
   /// * [clausulasAgente] - Cuerpo de la petición con el identificador del agente y la lista de cláusulas a registrar. Cada cláusula incluye su identificador, versión y estado de selección (true=aceptada, false=rechazada).
   /// * [authorization] - Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
@@ -694,7 +689,6 @@ class HechosVitalesApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> enviarClausulas1({ 
-    required String idAgente,
     required ClausulasAgente clausulasAgente,
     String? authorization,
     CancelToken? cancelToken,
@@ -704,7 +698,7 @@ class HechosVitalesApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/hechos-vitales/clausulas'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _path = r'/api/v1/hechos-vitales/clausulas';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{

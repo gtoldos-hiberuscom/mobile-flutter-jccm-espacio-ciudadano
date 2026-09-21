@@ -31,9 +31,6 @@ final class SupportRepositoryImpl implements SupportRepository {
       return;
     }
     await _api.crearTareaSoporte(
-      // El path público /api/v1/soporte no interpola `idAgente` (el OpenAPI lo
-      // declara por error) y sin sesión no hay identificador que aportar.
-      idAgente: '',
       datos: datos,
       adjunto: adjunto,
     );

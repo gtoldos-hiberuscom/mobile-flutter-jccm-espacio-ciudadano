@@ -4153,16 +4153,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsAuthorizationCheckErrorMessage => 'We could not verify the authorization required to display your digital cards.';
 
   @override
-  String get digitalCardsInfoSheetContactHint => 'If any data is incorrect or out of date, contact your Health Centre.';
+  String get digitalCardsInfoSheetContactHint => 'If any information on the card is incorrect or out of date, contact the issuing organization to request a correction.';
 
   @override
-  String get digitalCardsInfoSheetContactButton => 'Contact';
+  String get digitalCardsInfoSheetContactButton => 'View the contact list';
 
   @override
-  String get digitalCardsInfoSheetTitle => 'About My Digital Cards';
+  String get digitalCardsInfoSheetTitle => 'Learn more about My digital cards';
 
   @override
-  String get digitalCardsInfoSheetBody => 'Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.';
+  String get digitalCardsInfoSheetBody => 'View and download the digital cards linked to your profile and use them to complete your formalities at any time.';
 
   @override
   String get digitalCardsAuthorizationRequiredMessage => 'To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.';

@@ -66,7 +66,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliNumRegOperation**
-> Respuesta myPubliNumRegOperation(idAgente, idRegistro, ZCSRFCPUBLISELECTBYNUMREG)
+> Respuesta myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG)
 
 Consultar un expediente de publicación por número de registro
 
@@ -77,12 +77,10 @@ Consulta el detalle de un expediente de publicación a partir del número de reg
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
-final String idRegistro = idRegistro_example; // String | 
 final ZCSRFCPUBLISELECTBYNUMREG ZCSRFCPUBLISELECTBYNUMREG = {"pnumdoc":"99999999R","pregistro":"1103488/2024","ptipodoc":"NIF"}; // ZCSRFCPUBLISELECTBYNUMREG | Cuerpo de la petición con el número de documento, número de registro y tipo de documento del ciudadano para localizar el expediente.
 
 try {
-    final response = api.myPubliNumRegOperation(idAgente, idRegistro, ZCSRFCPUBLISELECTBYNUMREG);
+    final response = api.myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliNumRegOperation: $e\n');
@@ -93,8 +91,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
- **idRegistro** | **String**|  | 
  **ZCSRFCPUBLISELECTBYNUMREG** | [**ZCSRFCPUBLISELECTBYNUMREG**](ZCSRFCPUBLISELECTBYNUMREG.md)| Cuerpo de la petición con el número de documento, número de registro y tipo de documento del ciudadano para localizar el expediente. | 
 
 ### Return type
@@ -248,7 +244,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNifTipoProcEntradaOperation1**
-> Respuesta myPubliSelecByNifTipoProcEntradaOperation1(idAgente, DTSELECTBYNIFV2REQ)
+> Respuesta myPubliSelecByNifTipoProcEntradaOperation1(DTSELECTBYNIFV2REQ)
 
 Consultar registros de entrada por documento del ciudadano
 
@@ -259,11 +255,10 @@ Consulta la lista de registros de entrada asociados al ciudadano según su tipo 
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
 final DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ = {"tipodocumento":"NIF","numerodocumento":"99999999R"}; // DTSELECTBYNIFV2REQ | Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como ENTRADA.
 
 try {
-    final response = api.myPubliSelecByNifTipoProcEntradaOperation1(idAgente, DTSELECTBYNIFV2REQ);
+    final response = api.myPubliSelecByNifTipoProcEntradaOperation1(DTSELECTBYNIFV2REQ);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcEntradaOperation1: $e\n');
@@ -274,7 +269,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
  **DTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)| Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como ENTRADA. | 
 
 ### Return type
@@ -293,7 +287,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNifTipoProcExpOperation**
-> Respuesta myPubliSelecByNifTipoProcExpOperation(idAgente, DTSELECTBYNIFV2REQ)
+> Respuesta myPubliSelecByNifTipoProcExpOperation(DTSELECTBYNIFV2REQ)
 
 Consultar expedientes por documento del ciudadano
 
@@ -304,11 +298,10 @@ Consulta la lista de expedientes asociados al ciudadano según su tipo y número
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
 final DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ = {"tipodocumento":"NIF","numerodocumento":"99999999R"}; // DTSELECTBYNIFV2REQ | Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como EXP.
 
 try {
-    final response = api.myPubliSelecByNifTipoProcExpOperation(idAgente, DTSELECTBYNIFV2REQ);
+    final response = api.myPubliSelecByNifTipoProcExpOperation(DTSELECTBYNIFV2REQ);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcExpOperation: $e\n');
@@ -319,7 +312,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
  **DTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)| Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como EXP. | 
 
 ### Return type
@@ -430,7 +422,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNifTipoProcSalidaOperation**
-> Respuesta myPubliSelecByNifTipoProcSalidaOperation(idAgente, DTSELECTBYNIFV2REQ)
+> Respuesta myPubliSelecByNifTipoProcSalidaOperation(DTSELECTBYNIFV2REQ)
 
 Consultar registros de salida por documento del ciudadano
 
@@ -441,11 +433,10 @@ Consulta la lista de registros de salida asociados al ciudadano según su tipo y
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
 final DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ = {"tipodocumento":"NIF","numerodocumento":"99999999R"}; // DTSELECTBYNIFV2REQ | Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como SALIDA.
 
 try {
-    final response = api.myPubliSelecByNifTipoProcSalidaOperation(idAgente, DTSELECTBYNIFV2REQ);
+    final response = api.myPubliSelecByNifTipoProcSalidaOperation(DTSELECTBYNIFV2REQ);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliSelecByNifTipoProcSalidaOperation: $e\n');
@@ -456,7 +447,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
  **DTSELECTBYNIFV2REQ** | [**DTSELECTBYNIFV2REQ**](DTSELECTBYNIFV2REQ.md)| Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como SALIDA. | 
 
 ### Return type
@@ -567,7 +557,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **myPubliSelecByNumExpOperation1**
-> Respuesta myPubliSelecByNumExpOperation1(idAgente, idExpediente, ZCSRFCPUBLISELECTBYNUMEXP)
+> Respuesta myPubliSelecByNumExpOperation1(ZCSRFCPUBLISELECTBYNUMEXP)
 
 Consultar un expediente de publicación por número de expediente
 
@@ -578,12 +568,10 @@ Consulta el detalle de un expediente de publicación a partir del número de exp
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getPublicacionApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
-final String idExpediente = idExpediente_example; // String | 
 final ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP = {"pnumdoc":"03874761C","pnumexp":"S020/2024/0001-PR","ptipodoc":"NIF"}; // ZCSRFCPUBLISELECTBYNUMEXP | Cuerpo de la petición con número de documento, número de expediente y tipo de documento del ciudadano para localizar el expediente.
 
 try {
-    final response = api.myPubliSelecByNumExpOperation1(idAgente, idExpediente, ZCSRFCPUBLISELECTBYNUMEXP);
+    final response = api.myPubliSelecByNumExpOperation1(ZCSRFCPUBLISELECTBYNUMEXP);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling PublicacionApi->myPubliSelecByNumExpOperation1: $e\n');
@@ -594,8 +582,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
- **idExpediente** | **String**|  | 
  **ZCSRFCPUBLISELECTBYNUMEXP** | [**ZCSRFCPUBLISELECTBYNUMEXP**](ZCSRFCPUBLISELECTBYNUMEXP.md)| Cuerpo de la petición con número de documento, número de expediente y tipo de documento del ciudadano para localizar el expediente. | 
 
 ### Return type

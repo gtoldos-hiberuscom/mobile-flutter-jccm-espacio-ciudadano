@@ -5404,13 +5404,13 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Carnets digitales — error al comprobar la autorización necesaria."
   },
-  "digitalCardsInfoSheetContactHint": "Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.",
-  "digitalCardsInfoSheetContactButton": "Contactar",
-  "digitalCardsInfoSheetTitle": "Sobre Mis Carnets Digitales",
+  "digitalCardsInfoSheetContactHint": "Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.",
+  "digitalCardsInfoSheetContactButton": "Consultar el listado de contactos",
+  "digitalCardsInfoSheetTitle": "Saber más sobre Mis carnets digitales",
   "@digitalCardsInfoSheetTitle": {
     "description": "Carnets digitales — título del bottom sheet informativo."
   },
-  "digitalCardsInfoSheetBody": "Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.",
+  "digitalCardsInfoSheetBody": "Consulta y descarga los carnets digitales asociados a tu perfil y utilízalos para realizar tus gestiones en cualquier momento.",
   "@digitalCardsInfoSheetBody": {
     "description": "Carnets digitales — cuerpo del bottom sheet informativo."
   },

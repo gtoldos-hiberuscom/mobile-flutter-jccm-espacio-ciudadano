@@ -120,8 +120,6 @@ class DocumentacionApi {
   /// Registra un fichero en el procedimiento administrativo indicado. Devuelve el justificante de registro como fichero PDF firmado o justificante de envío.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
-  /// * [idExpediente] 
   /// * [registrarFicheroRequest] - Datos del procedimiento y documentos a registrar. Incluye información del procedimiento, solicitante, documentos adjuntos y datos de firma.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -133,8 +131,6 @@ class DocumentacionApi {
   /// Returns a [Future] containing a [Response] with a [Uint8List] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Uint8List>> registrarFicheroOperation1({ 
-    required String idAgente,
-    required String idExpediente,
     required RegistrarFicheroRequest registrarFicheroRequest,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -143,7 +139,7 @@ class DocumentacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/documentacion/registrarfichero'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString()).replaceAll('{' r'idExpediente' '}', encodeQueryParameter(_serializers, idExpediente, const FullType(String)).toString());
+    final _path = r'/api/v1/documentacion/registrarfichero';
     final _options = Options(
       method: r'POST',
       responseType: ResponseType.bytes,

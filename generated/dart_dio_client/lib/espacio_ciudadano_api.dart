@@ -10,7 +10,6 @@ export 'package:espacio_ciudadano_api/src/auth/oauth.dart';
 export 'package:espacio_ciudadano_api/src/serializers.dart';
 export 'package:espacio_ciudadano_api/src/model/date.dart';
 
-export 'package:espacio_ciudadano_api/src/api/actuator_api.dart';
 export 'package:espacio_ciudadano_api/src/api/agenda_api.dart';
 export 'package:espacio_ciudadano_api/src/api/carnet_digital_api.dart';
 export 'package:espacio_ciudadano_api/src/api/catastro_api.dart';
@@ -57,7 +56,6 @@ export 'package:espacio_ciudadano_api/src/model/datos_representante.dart';
 export 'package:espacio_ciudadano_api/src/model/documento_registro.dart';
 export 'package:espacio_ciudadano_api/src/model/hecho.dart';
 export 'package:espacio_ciudadano_api/src/model/info_error.dart';
-export 'package:espacio_ciudadano_api/src/model/link.dart';
 export 'package:espacio_ciudadano_api/src/model/lista_hechos_agente.dart';
 export 'package:espacio_ciudadano_api/src/model/my_publi_selec_by_nif_tipo_proc_registros_entrada_operation1200_response.dart';
 export 'package:espacio_ciudadano_api/src/model/notificacion_indexa_dto.dart';

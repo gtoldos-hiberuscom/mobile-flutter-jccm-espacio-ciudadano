@@ -11,7 +11,7 @@ void main() {
     //
     // Inicia un nuevo procedimiento administrativo en el sistema CESAR. Valida los datos del procedimiento y crea el registro correspondiente.
     //
-    //Future<Respuesta> getIniProc(String idAgente, String idExpediente, DTProcedimiento dTProcedimiento) async
+    //Future<Respuesta> getIniProc(DTProcedimiento dTProcedimiento) async
     test('test getIniProc', () async {
       // TODO
     });
@@ -41,7 +41,7 @@ void main() {
 
     // Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma
     //
-    //Future<RESULTADOPROCEDIMIENTO> miSubirAdjuntoSinFirmaOperation(String idAgente, String idExpediente, ADJUNTO ADJUNTO) async
+    //Future<RESULTADOPROCEDIMIENTO> miSubirAdjuntoSinFirmaOperation(ADJUNTO ADJUNTO) async
     test('test miSubirAdjuntoSinFirmaOperation', () async {
       // TODO
     });

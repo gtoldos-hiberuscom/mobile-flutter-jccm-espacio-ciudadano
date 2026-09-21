@@ -71,7 +71,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **obtenerDatosAtencionDependenciaIntermediacion1**
-> Respuesta obtenerDatosAtencionDependenciaIntermediacion1(idAgente, baseRequestIntermediacion, authorization)
+> Respuesta obtenerDatosAtencionDependenciaIntermediacion1(baseRequestIntermediacion, authorization)
 
 Obtener datos de atencion a la dependencia
 
@@ -82,12 +82,11 @@ Consulta la situacion actual del expediente y prestaciones de dependencia del ci
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIntermediacionApi();
-final String idAgente = idAgente_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/...
 final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO TEST"}; // BaseRequestIntermediacion | Cuerpo de peticion para consultar datos de atencion a la dependencia por intermediacion.
 final String authorization = authorization_example; // String | Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
-    final response = api.obtenerDatosAtencionDependenciaIntermediacion1(idAgente, baseRequestIntermediacion, authorization);
+    final response = api.obtenerDatosAtencionDependenciaIntermediacion1(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling IntermediacionApi->obtenerDatosAtencionDependenciaIntermediacion1: $e\n');
@@ -98,7 +97,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/... | 
  **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de peticion para consultar datos de atencion a la dependencia por intermediacion. | 
  **authorization** | **String**| Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 
@@ -165,7 +163,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **obtenerDatosDiscapacidadIntermediacion1**
-> Respuesta obtenerDatosDiscapacidadIntermediacion1(id, baseRequestIntermediacion, authorization)
+> Respuesta obtenerDatosDiscapacidadIntermediacion1(baseRequestIntermediacion, authorization)
 
 Obtener datos de discapacidad por intermediación
 
@@ -176,12 +174,11 @@ Consulta el servicio de intermediación para recuperar los datos del certificado
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIntermediacionApi();
-final String id = id_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{id}/...
 final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO TEST"}; // BaseRequestIntermediacion | Cuerpo de petición para consultar datos de discapacidad por intermediación.
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
-    final response = api.obtenerDatosDiscapacidadIntermediacion1(id, baseRequestIntermediacion, authorization);
+    final response = api.obtenerDatosDiscapacidadIntermediacion1(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling IntermediacionApi->obtenerDatosDiscapacidadIntermediacion1: $e\n');
@@ -192,7 +189,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{id}/... | 
  **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de petición para consultar datos de discapacidad por intermediación. | 
  **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 
@@ -259,7 +255,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **obtenerDatosFamiliaNumerosaIntermediacion1**
-> Respuesta obtenerDatosFamiliaNumerosaIntermediacion1(numDocumento, baseRequestIntermediacion, authorization)
+> Respuesta obtenerDatosFamiliaNumerosaIntermediacion1(baseRequestIntermediacion, authorization)
 
 Obtener datos de familia numerosa por intermediación
 
@@ -270,12 +266,11 @@ Consulta el servicio de intermediación para recuperar los datos del título de 
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIntermediacionApi();
-final String numDocumento = numDocumento_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{numDocumento}/...
 final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO"}; // BaseRequestIntermediacion | Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
 
 try {
-    final response = api.obtenerDatosFamiliaNumerosaIntermediacion1(numDocumento, baseRequestIntermediacion, authorization);
+    final response = api.obtenerDatosFamiliaNumerosaIntermediacion1(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling IntermediacionApi->obtenerDatosFamiliaNumerosaIntermediacion1: $e\n');
@@ -286,7 +281,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **numDocumento** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{numDocumento}/... | 
  **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de petición para consultar datos de familia numerosa por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre. | 
  **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud. | [optional] 
 
@@ -306,7 +300,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **obtenerDatosTarjetaEstacionamientoIntermediacion**
-> Respuesta obtenerDatosTarjetaEstacionamientoIntermediacion(idAgente, baseRequestIntermediacion, authorization)
+> Respuesta obtenerDatosTarjetaEstacionamientoIntermediacion(baseRequestIntermediacion, authorization)
 
 Obtener datos de la tarjeta de estacionamiento para personas con discapacidad
 
@@ -317,12 +311,11 @@ Consulta la información de la tarjeta de estacionamiento en vigor de personas c
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIntermediacionApi();
-final String idAgente = idAgente_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/...
 final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO TEST"}; // BaseRequestIntermediacion | Cuerpo de petición para consultar datos de tarjeta de estacionamiento por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
 
 try {
-    final response = api.obtenerDatosTarjetaEstacionamientoIntermediacion(idAgente, baseRequestIntermediacion, authorization);
+    final response = api.obtenerDatosTarjetaEstacionamientoIntermediacion(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling IntermediacionApi->obtenerDatosTarjetaEstacionamientoIntermediacion: $e\n');
@@ -333,7 +326,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/... | 
  **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de petición para consultar datos de tarjeta de estacionamiento por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre. | 
  **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud. | [optional] 
 
@@ -447,7 +439,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **obtenerDatosTermalismoIntermediacion1**
-> Respuesta obtenerDatosTermalismoIntermediacion1(idAgente, baseRequestIntermediacion, authorization)
+> Respuesta obtenerDatosTermalismoIntermediacion1(baseRequestIntermediacion, authorization)
 
 Obtener datos del último balneario adjudicado del programa de termalismo
 
@@ -458,12 +450,11 @@ Consulta el último balneario adjudicado en el programa de termalismo de Castill
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIntermediacionApi();
-final String idAgente = idAgente_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/...
 final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO TEST"}; // BaseRequestIntermediacion | Cuerpo de petición para consultar datos de termalismo por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre.
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud.
 
 try {
-    final response = api.obtenerDatosTermalismoIntermediacion1(idAgente, baseRequestIntermediacion, authorization);
+    final response = api.obtenerDatosTermalismoIntermediacion1(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling IntermediacionApi->obtenerDatosTermalismoIntermediacion1: $e\n');
@@ -474,7 +465,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/... | 
  **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de petición para consultar datos de termalismo por intermediación. Campo obligatorio 'tipo' indica el tipo de petición (A=Consulta), 'idaut' es el identificador de autoridad que realiza la consulta, 'proc' es el código de procedimiento, 'tipodoc' es el tipo de documento del ciudadano (NIF/NIE), 'docu' es el número de documento, 'doc_funcionario' es el documento del funcionario que realiza la consulta y 'nombre_funcionario' es su nombre. | 
  **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. Requerido para autenticar la solicitud. | [optional] 
 
@@ -494,7 +484,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **obtenerOfertasEmpleoInscritas**
-> Respuesta obtenerOfertasEmpleoInscritas(idAgente, baseRequestIntermediacion, authorization)
+> Respuesta obtenerOfertasEmpleoInscritas(baseRequestIntermediacion, authorization)
 
 Obtener ofertas de empleo inscritas
 
@@ -505,12 +495,11 @@ Consulta las ofertas de empleo en las que el ciudadano figura inscrito. La respu
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getIntermediacionApi();
-final String idAgente = idAgente_example; // String | Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/...
 final BaseRequestIntermediacion baseRequestIntermediacion = {"tipo":"A","idaut":"ESP-CIUDADANO","proc":"JCCMEC","tipodoc":"NIF","docu":"99999999R","doc_funcionario":"00000000T","nombre_funcionario":"USUARIO TEST"}; // BaseRequestIntermediacion | Cuerpo de peticion para consultar ofertas de empleo inscritas por intermediacion.
 final String authorization = authorization_example; // String | Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
-    final response = api.obtenerOfertasEmpleoInscritas(idAgente, baseRequestIntermediacion, authorization);
+    final response = api.obtenerOfertasEmpleoInscritas(baseRequestIntermediacion, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling IntermediacionApi->obtenerOfertasEmpleoInscritas: $e\n');
@@ -521,7 +510,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador ciudadano en path cuando se usa ruta /ciudadanos/{idAgente}/... | 
  **baseRequestIntermediacion** | [**BaseRequestIntermediacion**](BaseRequestIntermediacion.md)| Cuerpo de peticion para consultar ofertas de empleo inscritas por intermediacion. | 
  **authorization** | **String**| Token JWT de autorizacion en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 

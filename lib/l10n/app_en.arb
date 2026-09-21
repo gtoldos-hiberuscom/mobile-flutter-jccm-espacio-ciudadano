@@ -5384,13 +5384,13 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Digital cards — error while checking the required authorization."
   },
-  "digitalCardsInfoSheetContactHint": "If any data is incorrect or out of date, contact your Health Centre.",
-  "digitalCardsInfoSheetContactButton": "Contact",
-  "digitalCardsInfoSheetTitle": "About My Digital Cards",
+  "digitalCardsInfoSheetContactHint": "If any information on the card is incorrect or out of date, contact the issuing organization to request a correction.",
+  "digitalCardsInfoSheetContactButton": "View the contact list",
+  "digitalCardsInfoSheetTitle": "Learn more about My digital cards",
   "@digitalCardsInfoSheetTitle": {
     "description": "Digital cards — title of the info bottom sheet."
   },
-  "digitalCardsInfoSheetBody": "Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.",
+  "digitalCardsInfoSheetBody": "View and download the digital cards linked to your profile and use them to complete your formalities at any time.",
   "@digitalCardsInfoSheetBody": {
     "description": "Digital cards — body of the info bottom sheet."
   },
