@@ -67,10 +67,10 @@ class AppDigitalCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
         child: Stack(
           children: [
-            Positioned(
-              right: statusLabel == null ? 8 : -4,
-              bottom: statusLabel == null ? -23 : -48,
-              child: const _DigitalCardDots(),
+            const Positioned(
+              right: AppDimensions.space8,
+              bottom: AppDimensions.space8,
+              child: _DigitalCardDots(key: ValueKey('digital-card-map-pattern')),
             ),
             Padding(
               padding: const EdgeInsets.all(AppDimensions.space16),
@@ -207,15 +207,15 @@ final TextStyle _cardCaptionStyle = AppTypography.captionRegular.copyWith(
 );
 
 class _DigitalCardDots extends StatelessWidget {
-  const _DigitalCardDots();
+  const _DigitalCardDots({super.key});
 
   static const _pattern = <String>[
-    '111',
-    '111',
-    '001111',
-    '0011111',
-    '001111',
-    '00010',
+    '...111.',
+    '...111.',
+    '000011.',
+    '.000011',
+    '.00001.',
+    '....0..',
   ];
 
   @override
@@ -228,14 +228,17 @@ class _DigitalCardDots extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               for (var col = 0; col < _pattern[row].length; col++)
-                Container(
-                  width: 17,
-                  height: 17,
-                  margin: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: _pattern[row][col] == '1' ? AppColors.secondaryLight400 : AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
+                SizedBox.square(
+                  dimension: 23,
+                  child: _pattern[row][col] == '.'
+                      ? null
+                      : Container(
+                          margin: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: _pattern[row][col] == '1' ? AppColors.secondaryLight400 : AppColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
                 ),
             ],
           ),

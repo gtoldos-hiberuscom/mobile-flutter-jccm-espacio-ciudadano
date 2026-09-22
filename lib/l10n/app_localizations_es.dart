@@ -2510,7 +2510,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentDemandNoDataMessage => 'No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.';
 
   @override
-  String get myDataEmploymentOffersNoDataMessage => 'No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.';
+  String get myDataEmploymentOffersNoDataMessage => 'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
   String get discapacidadServiceUnavailableMessage => 'El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
@@ -4236,6 +4236,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gestionNotificacionDetalleDocumentosTitle => 'Documentos';
+
+  @override
+  String get gestionNotificacionDetalleAcuseRecibo => 'Acuse de recibo.pdf';
 
   @override
   String get gestionNotificacionDetalleAceptarButton => 'Aceptar notificación';

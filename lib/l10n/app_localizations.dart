@@ -4889,7 +4889,7 @@ abstract class AppLocalizations {
   /// No description provided for @myDataEmploymentOffersNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.'**
+  /// **'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.'**
   String get myDataEmploymentOffersNoDataMessage;
 
   /// No description provided for @discapacidadServiceUnavailableMessage.
@@ -8059,6 +8059,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Documentos'**
   String get gestionNotificacionDetalleDocumentosTitle;
+
+  /// Nombre visible del justificante de comparecencia de una notificación aceptada.
+  ///
+  /// In es, this message translates to:
+  /// **'Acuse de recibo.pdf'**
+  String get gestionNotificacionDetalleAcuseRecibo;
 
   /// Botón principal para aceptar una notificación pendiente.
   ///

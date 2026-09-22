@@ -36,6 +36,14 @@ class AppConfig {
     final flavor => throw Exception('Unsupported APP_FLAVOR for Sede URL: $flavor'),
   };
 
+  /// Legacy facade endpoint used by the authenticated support form.
+  Uri get authenticatedSupportUrl => switch (environment.trim().toLowerCase()) {
+    'development' || 'uat' => Uri.parse('https://fachada-sede-api-uat.cm-pre.jccm.es/api/v1/soporte'),
+    'preproduction' || 'pre' => Uri.parse('https://fachada-sede-api-pre.cm-pre.jccm.es/api/v1/soporte'),
+    'production' || 'pro' => Uri.parse('https://fachada-sede-api.jccm.es/api/v1/soporte'),
+    final flavor => throw Exception('Unsupported APP_FLAVOR for authenticated support URL: $flavor'),
+  };
+
   Uri procedureUrl(final int procedureId) => sedeBaseUrl.resolve('tramites/$procedureId');
 
   /// URLs shown in the domain service screens. They deliberately live in the

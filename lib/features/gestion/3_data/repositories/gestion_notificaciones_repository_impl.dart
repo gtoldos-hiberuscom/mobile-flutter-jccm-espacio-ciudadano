@@ -101,7 +101,7 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
   }
 
   @override
-  Future<Uint8List> downloadDocumento({
+  Future<NotificacionArchivoDescargado> downloadDocumento({
     required final String citizenId,
     required final int notificacionId,
     required final int orden,
@@ -113,13 +113,47 @@ final class GestionNotificacionesRepositoryImpl implements GestionNotificaciones
       orden: orden,
       sisOrigen: sistemaOrigen,
     );
+    return _downloadedFile(response, emptyMessage: 'El documento llegó vacío.');
+  }
+
+  @override
+  Future<NotificacionArchivoDescargado> downloadJustificante({
+    required final String citizenId,
+    required final int notificacionId,
+    final String? sistemaOrigen,
+  }) async {
+    final response = await _api.descargarJustificante(
+      id: citizenId,
+      notificacionId: notificacionId,
+      sisOrigen: sistemaOrigen,
+    );
+    return _downloadedFile(response, emptyMessage: 'El justificante llegó vacío.');
+  }
+
+  NotificacionArchivoDescargado _downloadedFile(
+    final Response<Uint8List> response, {
+    required final String emptyMessage,
+  }) {
     final bytes = response.data;
-    // Un 200 sin cuerpo no es un documento vacío que merezca guardarse: es un
-    // fallo del que la pantalla tiene que avisar.
     if (bytes == null || bytes.isEmpty) {
-      throw const FormatException('El documento llegó vacío.');
+      throw FormatException(emptyMessage);
     }
-    return bytes;
+    return (bytes: bytes, nombreFichero: _contentDispositionFileName(response.headers.value('content-disposition')));
+  }
+
+  String? _contentDispositionFileName(final String? value) {
+    if (value == null) {
+      return null;
+    }
+    final encoded = RegExp(r'''filename\*\s*=\s*(?:UTF-8'')?([^;]+)''', caseSensitive: false).firstMatch(value)?.group(1)?.trim();
+    if (encoded != null) {
+      try {
+        return Uri.decodeComponent(encoded.replaceAll(RegExp(r'''^["']|["']$'''), ''));
+      } on FormatException {
+        // Se intenta a continuación la variante filename convencional.
+      }
+    }
+    return RegExp(r'''filename\s*=\s*"([^"]+)"''', caseSensitive: false).firstMatch(value)?.group(1) ?? RegExp(r'''filename\s*=\s*([^;\s]+)''', caseSensitive: false).firstMatch(value)?.group(1);
   }
 
   @override

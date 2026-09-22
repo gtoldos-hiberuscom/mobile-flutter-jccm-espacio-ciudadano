@@ -279,63 +279,61 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final availableFormatCount = [onQrPressed, onPkPassPressed, onPdfPressed].where((final callback) => callback != null).length;
     final hasSingleFormat = availableFormatCount == 1;
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (onQrPressed != null) ...[
-            _QrPreview(
-              imageBytes: qrImageBytes,
-              isLoading: isQrLoading,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (onQrPressed != null) ...[
+          _QrPreview(
+            imageBytes: qrImageBytes,
+            isLoading: isQrLoading,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppDimensions.space16,
+              vertical: AppDimensions.space8,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space8,
-              ),
-              child: Divider(height: 1, color: AppColors.neutral100),
-            ),
-          ],
-          Padding(
-            padding: const EdgeInsets.only(
-              top: AppDimensions.space4,
-              bottom: AppDimensions.space8,
-            ),
-            child: Text(
-              l10n.appQrDownloadFormatTitle,
-              style: AppTypography.leadingBold.copyWith(
-                color: AppColors.primary,
-              ),
+            child: Divider(height: 1, color: AppColors.neutral100),
+          ),
+        ],
+        Padding(
+          padding: const EdgeInsets.only(
+            top: AppDimensions.space4,
+            bottom: AppDimensions.space8,
+          ),
+          child: Text(
+            l10n.appQrDownloadFormatTitle,
+            style: AppTypography.leadingBold.copyWith(
+              color: AppColors.primary,
             ),
           ),
-          const SizedBox(height: AppDimensions.space8),
-          if (onQrPressed != null) ...[
-            _DownloadFormatButton(
-              label: l10n.appQrCodeLabel,
-              onPressed: downloadingFormat == null ? onQrPressed : null,
-              isLoading: downloadingFormat == 'QR',
-              primary: hasSingleFormat,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-          ],
-          if (onPkPassPressed != null) ...[
-            _DownloadFormatButton(
-              label: _walletLabel(l10n),
-              onPressed: downloadingFormat == null ? onPkPassPressed : null,
-              isLoading: downloadingFormat == 'PKPASS',
-              primary: hasSingleFormat,
-            ),
-            if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
-          ],
-          if (onPdfPressed != null)
-            _DownloadFormatButton(
-              label: 'PDF',
-              onPressed: downloadingFormat == null ? onPdfPressed : null,
-              isLoading: downloadingFormat == 'PDF',
-              primary: hasSingleFormat,
-            ),
+        ),
+        const SizedBox(height: AppDimensions.space8),
+        if (onQrPressed != null) ...[
+          _DownloadFormatButton(
+            label: l10n.appQrCodeLabel,
+            onPressed: downloadingFormat == null ? onQrPressed : null,
+            isLoading: downloadingFormat == 'QR',
+            primary: hasSingleFormat,
+          ),
+          const SizedBox(height: AppDimensions.space16),
         ],
-      ),
+        if (onPkPassPressed != null) ...[
+          _DownloadFormatButton(
+            label: _walletLabel(l10n),
+            onPressed: downloadingFormat == null ? onPkPassPressed : null,
+            isLoading: downloadingFormat == 'PKPASS',
+            primary: hasSingleFormat,
+          ),
+          if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
+        ],
+        if (onPdfPressed != null)
+          _DownloadFormatButton(
+            label: 'PDF',
+            onPressed: downloadingFormat == null ? onPdfPressed : null,
+            isLoading: downloadingFormat == 'PDF',
+            primary: hasSingleFormat,
+          ),
+      ],
     );
   }
 }
@@ -359,7 +357,10 @@ class _QrPreview extends StatelessWidget {
   Widget build(final BuildContext context) {
     return LayoutBuilder(
       builder: (final context, final constraints) {
-        final heightLimit = MediaQuery.sizeOf(context).height * 0.42;
+        // Keep enough vertical space for the download actions. The parent
+        // bottom sheet remains scrollable as a fallback for very small
+        // viewports and large accessibility text sizes.
+        final heightLimit = MediaQuery.sizeOf(context).height * 0.30;
         final availableWidth = constraints.maxWidth < 326 ? constraints.maxWidth : 326.0;
         final desiredHeight = availableWidth * 331 / 326;
         final scale = desiredHeight > heightLimit ? heightLimit / desiredHeight : 1.0;

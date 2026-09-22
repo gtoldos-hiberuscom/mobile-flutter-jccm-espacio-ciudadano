@@ -6,9 +6,11 @@ según la documentación funcional facilitada por el cliente.
 
 Estado: migradas **cláusulas, hechos vitales y preferencias, recomendaciones,
 educación, salud, bienestar social, empleo, vivienda y vehículos**. Quedan
-agenda, carnets digitales, gestión y contacto de notificaciones. Soporte con
-sesión ya va por `/ciudadanos/{idAgente}/soporte`; sin sesión sigue en
-`/api/v1/soporte`, que el gateway no sirve (404).
+agenda, carnets digitales, gestión y contacto de notificaciones. Soporte usa
+`/api/v1/soporte` en la fachada correspondiente al entorno cuando existe
+sesión. Sin sesión usa temporalmente la
+URL absoluta de DES
+`https://gateway-espacio-ciudadano-des.cm-pre.jccm.es/api/v1/ciudadanos/soporte`.
 Las citas hospitalarias están ocultas tras un flag, pendientes de validar diseño.
 
 > **Corrección importante (revisada con el OpenAPI de UAT).** Las rutas nuevas
@@ -671,7 +673,7 @@ trámite), así que no ha hecho falta tocarlo.
 ## Otros puntos a revisar
 
 - `network_interceptors.dart` tiene rutas literales para logging y para el
-  multipart de soporte (`/api/v1/soporte`, `/api/v1/intermediacion/...`,
+  multipart de soporte (`/api/v1/ciudadanos/soporte`, `/api/v1/intermediacion/...`,
   `/api/v1/agenda/`, `/api/v1/ccaa/familia-numerosa/`). Hay que actualizarlas al
   renombrar.
 - `features/gestion/3_data/repositories/` construye rutas a mano

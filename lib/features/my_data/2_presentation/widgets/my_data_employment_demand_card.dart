@@ -12,12 +12,11 @@ class MyDataEmploymentDemandCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final isNotRegistered = _isNotRegistered(demand.status);
 
     return AppInfoCard(
       leadingBorderWidth: AppDimensions.space4,
       child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: isNotRegistered ? AppDimensions.space64 : 110),
+        constraints: const BoxConstraints(minHeight: 110),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
           child: Column(
@@ -32,21 +31,19 @@ class MyDataEmploymentDemandCard extends StatelessWidget {
                 _display(demand.status).toUpperCase(),
                 style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
               ),
-              if (!isNotRegistered) ...[
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
-                  child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
-                ),
-                Text(
-                  l10n.myDataEmploymentRegistrationDateLabel.toUpperCase(),
-                  style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
-                ),
-                const SizedBox(height: AppDimensions.space4),
-                Text(
-                  _formatDate(context, demand.uninterruptedRegistrationDate),
-                  style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
-                ),
-              ],
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
+                child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
+              ),
+              Text(
+                l10n.myDataEmploymentRegistrationDateLabel.toUpperCase(),
+                style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+              ),
+              const SizedBox(height: AppDimensions.space4),
+              Text(
+                _formatDate(context, demand.uninterruptedRegistrationDate),
+                style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
+              ),
             ],
           ),
         ),
@@ -76,11 +73,6 @@ String _display(final String? value) {
     return '-';
   }
   return normalized;
-}
-
-bool _isNotRegistered(final String? value) {
-  final normalized = value?.trim().toLowerCase();
-  return normalized == 'no inscrito' || normalized == 'no activa';
 }
 
 String _formatDate(final BuildContext context, final DateTime? date) {

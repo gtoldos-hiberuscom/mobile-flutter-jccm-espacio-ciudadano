@@ -5,6 +5,8 @@ import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.da
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_detalle.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 
+typedef NotificacionArchivoDescargado = ({Uint8List bytes, String? nombreFichero});
+
 /// Máximo de notificaciones que se cargan inicialmente para un estado.
 ///
 /// Alcanzar este valor no implica que el listado esté completo, por lo que la
@@ -48,11 +50,11 @@ abstract interface class GestionNotificacionesRepository {
   });
 
   Future<void> transitionNotificacion({
-    required String citizenId,
-    required int notificacionId,
-    required String accion,
-    String? sistemaOrigen,
-    String? justificacion,
+    required final String citizenId,
+    required final int notificacionId,
+    required final String accion,
+    final String? sistemaOrigen,
+    final String? justificacion,
   });
 
   /// Bytes de un documento de la notificación, identificado por su [orden].
@@ -60,10 +62,17 @@ abstract interface class GestionNotificacionesRepository {
   /// `Uint8List` y no `List<int>` porque es lo que entrega el cliente generado
   /// (`ResponseType.bytes`) y lo que pide el guardado nativo: una conversión
   /// intermedia solo duplicaría el fichero en memoria.
-  Future<Uint8List> downloadDocumento({
+  Future<NotificacionArchivoDescargado> downloadDocumento({
     required final String citizenId,
     required final int notificacionId,
     required final int orden,
+    final String? sistemaOrigen,
+  });
+
+  /// Justificante PDF que acredita la comparecencia en la notificación.
+  Future<NotificacionArchivoDescargado> downloadJustificante({
+    required final String citizenId,
+    required final int notificacionId,
     final String? sistemaOrigen,
   });
 }

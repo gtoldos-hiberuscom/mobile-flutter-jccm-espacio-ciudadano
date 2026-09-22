@@ -5482,6 +5482,10 @@
   "@gestionNotificacionDetalleDocumentosTitle": {
     "description": "Documents section title in the notification detail."
   },
+  "gestionNotificacionDetalleAcuseRecibo": "Acknowledgement of receipt.pdf",
+  "@gestionNotificacionDetalleAcuseRecibo": {
+    "description": "Visible name of the appearance receipt for an accepted notification."
+  },
   "gestionNotificacionDetalleAceptarButton": "Accept notification",
   "@gestionNotificacionDetalleAceptarButton": {
     "description": "Primary button to accept a pending notification."

@@ -4237,6 +4237,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionNotificacionDetalleDocumentosTitle => 'Documents';
 
   @override
+  String get gestionNotificacionDetalleAcuseRecibo => 'Acknowledgement of receipt.pdf';
+
+  @override
   String get gestionNotificacionDetalleAceptarButton => 'Accept notification';
 
   @override

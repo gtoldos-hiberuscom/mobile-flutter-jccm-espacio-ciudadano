@@ -6,6 +6,9 @@ import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 
+/// Marks a request that must never use or refresh an authenticated session.
+const anonymousRequestExtraKey = 'auth.anonymous_request';
+
 // ─── Auth interceptor ────────────────────────────────────────────────────────
 
 /// Attaches a Bearer Authorization header to every outgoing request.
@@ -27,6 +30,13 @@ final class AuthInterceptor extends Interceptor {
     final RequestOptions options,
     final RequestInterceptorHandler handler,
   ) {
+    if (options.extra[anonymousRequestExtraKey] == true) {
+      options.headers.removeWhere(
+        (final key, final value) => key.toLowerCase() == HttpHeaders.authorizationHeader,
+      );
+      handler.next(options);
+      return;
+    }
     final hasAuthorizationHeader = options.headers.keys.any(
       (final key) => key.toLowerCase() == HttpHeaders.authorizationHeader,
     );
@@ -59,7 +69,7 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
     final ErrorInterceptorHandler handler,
   ) async {
     final response = err.response;
-    if (response?.statusCode != HttpStatus.unauthorized || err.requestOptions.extra[_authRetryKey] == true) {
+    if (response?.statusCode != HttpStatus.unauthorized || err.requestOptions.extra[_authRetryKey] == true || err.requestOptions.extra[anonymousRequestExtraKey] == true) {
       handler.next(err);
       return;
     }
@@ -114,7 +124,7 @@ final class AuthRefreshInterceptor extends QueuedInterceptor {
       handler.next(retryError);
     } on Object {
       // e.g. a StateError from re-sending an already-finalized FormData
-      // (/api/v1/soporte, /api/v1/ciudadanos/{idAgente}/soporte). Surface the
+      // (/api/v1/ciudadanos/soporte, /api/v1/soporte). Surface the
       // original 401 rather than letting it escape the handler and hang the
       // request.
       handler.next(err);

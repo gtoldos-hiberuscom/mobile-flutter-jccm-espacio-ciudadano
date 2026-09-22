@@ -1,17 +1,15 @@
 package es.jccm.espaciociudadano
 
-import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
+import androidx.core.content.FileProvider
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import java.io.File
 
 class MainActivity : FlutterFragmentActivity() {
-    private var pendingPkPassResult: MethodChannel.Result? = null
-    private var pendingPkPassBytes: ByteArray? = null
-
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
@@ -21,12 +19,8 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     private fun handlePkPassMethod(call: MethodCall, result: MethodChannel.Result) {
-        if (call.method != "savePkPass") {
+        if (call.method != "openPkPass") {
             result.notImplemented()
-            return
-        }
-        if (pendingPkPassResult != null) {
-            result.error("save_in_progress", "Ya hay un archivo PKPASS pendiente de guardar.", null)
             return
         }
 
@@ -37,52 +31,35 @@ class MainActivity : FlutterFragmentActivity() {
             return
         }
 
-        pendingPkPassResult = result
-        pendingPkPassBytes = bytes
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = PKPASS_MIME_TYPE
-            putExtra(Intent.EXTRA_TITLE, fileName)
-        }
-        startActivityForResult(intent, SAVE_PKPASS_REQUEST_CODE)
-    }
-
-    @Deprecated("Deprecated in Android")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != SAVE_PKPASS_REQUEST_CODE) {
-            return
-        }
-
-        val result = pendingPkPassResult
-        val bytes = pendingPkPassBytes
-        pendingPkPassResult = null
-        pendingPkPassBytes = null
-
-        if (resultCode != Activity.RESULT_OK || data?.data == null) {
-            result?.success(false)
-            return
-        }
-
         try {
-            writePkPass(data.data!!, bytes!!)
-            result?.success(true)
+            val passDirectory = File(cacheDir, PKPASS_CACHE_DIRECTORY).apply { mkdirs() }
+            val safeFileName = File(fileName).name.let {
+                if (it.endsWith(PKPASS_EXTENSION, ignoreCase = true)) it else "$it$PKPASS_EXTENSION"
+            }
+            val passFile = File(passDirectory, safeFileName).apply { writeBytes(bytes) }
+            val passUri = FileProvider.getUriForFile(
+                this,
+                "$packageName.fileprovider",
+                passFile,
+            )
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(passUri, PKPASS_MIME_TYPE)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                clipData = android.content.ClipData.newRawUri(fileName, passUri)
+            }
+            startActivity(intent)
+            result.success(true)
+        } catch (_: ActivityNotFoundException) {
+            result.success(false)
         } catch (error: Exception) {
-            result?.error("save_failed", error.message, null)
-        }
-    }
-
-    private fun writePkPass(uri: Uri, bytes: ByteArray) {
-        contentResolver.openOutputStream(uri, "w").use { stream ->
-            requireNotNull(stream) { "No se ha podido abrir el destino seleccionado." }
-            stream.write(bytes)
-            stream.flush()
+            result.error("open_failed", error.message, null)
         }
     }
 
     companion object {
         private const val PKPASS_CHANNEL = "es.jccm.espaciociudadano/pkpass"
         private const val PKPASS_MIME_TYPE = "application/vnd.apple.pkpass"
-        private const val SAVE_PKPASS_REQUEST_CODE = 42137
+        private const val PKPASS_CACHE_DIRECTORY = "wallet_passes"
+        private const val PKPASS_EXTENSION = ".pkpass"
     }
 }

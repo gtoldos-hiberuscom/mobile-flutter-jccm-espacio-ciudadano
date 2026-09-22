@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_bottom_sheet.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_calendar.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_list_filter_sheet.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -135,6 +136,43 @@ void main() {
       find.descendant(of: find.byType(AppBottomSheet), matching: find.byType(SingleChildScrollView)),
       findsOneWidget,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('muestra las siete columnas del calendario dentro de un modal de 320 dp', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(320, 700);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      buildApp(
+        Builder(
+          builder: (final context) => TextButton(
+            onPressed: () => unawaited(
+              AppBottomSheet.show<AppListFilters>(
+                context: context,
+                title: 'Filtrar resultados',
+                body: sheet(),
+              ),
+            ),
+            child: const Text('Abrir filtros'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Abrir filtros'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Seleccionar rango de fechas'));
+    await tester.pumpAndSettle();
+
+    final sheetRect = tester.getRect(find.byType(AppBottomSheet).last);
+    final calendarRect = tester.getRect(find.byType(AppCalendar));
+    final sundayRect = tester.getRect(find.text('Dom'));
+    expect(calendarRect.left, greaterThan(sheetRect.left));
+    expect(calendarRect.right, lessThan(sheetRect.right));
+    expect(sundayRect.left, greaterThanOrEqualTo(calendarRect.left));
+    expect(sundayRect.right, lessThanOrEqualTo(calendarRect.right));
     expect(tester.takeException(), isNull);
   });
 }

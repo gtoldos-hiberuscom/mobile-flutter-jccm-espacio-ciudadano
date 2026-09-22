@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
@@ -93,5 +92,31 @@ void main() {
     for (final button in buttons) {
       expect(button.style?.backgroundColor?.resolve({}), AppColors.backgroundWhite);
     }
+  });
+
+  testWidgets('keeps every download action visible on a short viewport', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 600);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: AppBottomSheet(
+            body: AppQrDownloadBottomSheetBody(
+              onQrPressed: () {},
+              onPkPassPressed: () {},
+              onPdfPressed: () {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.bySemanticsLabel('Descargar PDF').hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }
