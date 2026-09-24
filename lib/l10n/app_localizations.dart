@@ -4889,7 +4889,7 @@ abstract class AppLocalizations {
   /// No description provided for @myDataEmploymentOffersNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.'**
+  /// **'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.'**
   String get myDataEmploymentOffersNoDataMessage;
 
   /// No description provided for @discapacidadServiceUnavailableMessage.
@@ -6779,7 +6779,7 @@ abstract class AppLocalizations {
   /// Etiqueta del número de expediente en la tarjeta.
   ///
   /// In es, this message translates to:
-  /// **'Nº EXPEDIENTE.'**
+  /// **'Nº EXPEDIENTE'**
   String get gestionExpedientesNumExpedienteLabel;
 
   /// Etiqueta de la fecha de inicio en la tarjeta de expediente.
@@ -6815,7 +6815,7 @@ abstract class AppLocalizations {
   /// Encabezado de la primera sección en la pantalla de detalle de expediente.
   ///
   /// In es, this message translates to:
-  /// **'Datos del Expediente'**
+  /// **'Datos del expediente'**
   String get gestionExpedientesDatosExpedienteTitle;
 
   /// Encabezado de la segunda sección en la pantalla de detalle de expediente.
@@ -6992,11 +6992,23 @@ abstract class AppLocalizations {
   /// **'Entradas de registro'**
   String get gestionRegistrosEntradasTab;
 
+  /// Texto introductorio del tab de entradas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los registros de comunicaciones que has enviado a la Junta de Comunidades de Castilla-La Mancha (JCCM).'**
+  String get gestionRegistrosEntradasDescription;
+
   /// Etiqueta del tab de salidas de registro.
   ///
   /// In es, this message translates to:
   /// **'Salidas de registro'**
   String get gestionRegistrosSalidasTab;
+
+  /// Texto introductorio del tab de salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta los registros de comunicaciones que has recibido de la Junta de Comunidades de Castilla-La Mancha (JCCM).'**
+  String get gestionRegistrosSalidasDescription;
 
   /// Etiqueta del campo número de registro.
   ///
@@ -7009,6 +7021,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'FECHA'**
   String get gestionRegistrosFechaLabel;
+
+  /// Etiqueta de fecha en las tarjetas de entradas y salidas de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'FECHA DE REGISTRO'**
+  String get gestionRegistrosCardDateLabel;
 
   /// Etiqueta del campo consejería de origen (salidas).
   ///
@@ -7907,25 +7925,25 @@ abstract class AppLocalizations {
   /// No description provided for @digitalCardsInfoSheetContactHint.
   ///
   /// In es, this message translates to:
-  /// **'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.'**
+  /// **'Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.'**
   String get digitalCardsInfoSheetContactHint;
 
   /// No description provided for @digitalCardsInfoSheetContactButton.
   ///
   /// In es, this message translates to:
-  /// **'Contactar'**
+  /// **'Consultar el listado de contactos'**
   String get digitalCardsInfoSheetContactButton;
 
   /// Carnets digitales — título del bottom sheet informativo.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Mis Carnets Digitales'**
+  /// **'Saber más sobre Mis carnets digitales'**
   String get digitalCardsInfoSheetTitle;
 
   /// Carnets digitales — cuerpo del bottom sheet informativo.
   ///
   /// In es, this message translates to:
-  /// **'Descarga los carnets emitidos por la Junta de Comunidades de Castilla-La Mancha.'**
+  /// **'Consulta y descarga los carnets digitales asociados a tu perfil y utilízalos para realizar tus gestiones en cualquier momento.'**
   String get digitalCardsInfoSheetBody;
 
   /// Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM.
@@ -8059,6 +8077,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Documentos'**
   String get gestionNotificacionDetalleDocumentosTitle;
+
+  /// Nombre visible del justificante de comparecencia de una notificación aceptada.
+  ///
+  /// In es, this message translates to:
+  /// **'Acuse de recibo.pdf'**
+  String get gestionNotificacionDetalleAcuseRecibo;
 
   /// Botón principal para aceptar una notificación pendiente.
   ///
@@ -8732,28 +8756,40 @@ abstract class AppLocalizations {
   /// **'¿Quién es el responsable del tratamiento?'**
   String get privacyResponsibleTitle;
 
+  /// Protección de datos — título del documento.
+  ///
+  /// In es, this message translates to:
+  /// **'Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano'**
+  String get privacyDocumentTitle;
+
+  /// Protección de datos — aviso mostrado cuando no se puede abrir el correo y se copia la dirección.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay una aplicación de correo disponible. La dirección se ha copiado al portapapeles.'**
+  String get privacyEmailCopied;
+
   /// Protección de datos — párrafo introductorio del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
+  /// **'1. La Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
   String get privacyResponsibleIntro;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Sección de perfil usuario'**
+  /// **'Visualización de las notificaciones y registro'**
   String get privacyResponsibleItemProfile;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Visualizaciones de los datos seleccionados de la Administración regional y de la Otras temas de interés'**
+  /// **'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado'**
   String get privacyResponsibleItemVisualizations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Recomendaciones realizadas en base a los hechos vitales marcados.'**
+  /// **'Recomendaciones realizadas en base a los hechos vitales marcados'**
   String get privacyResponsibleItemRecommendations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
@@ -8762,10 +8798,16 @@ abstract class AppLocalizations {
   /// **'Descargas de los carnés seleccionados'**
   String get privacyResponsibleItemDownloads;
 
+  /// Protección de datos — elemento de la lista de servicios del responsable.
+  ///
+  /// In es, this message translates to:
+  /// **'Visualización de la agenda'**
+  String get privacyResponsibleItemAgenda;
+
   /// Protección de datos — párrafo sobre los órganos responsables de cada opción.
   ///
   /// In es, this message translates to:
-  /// **'Una vez se seleccione cada una de las opciones proporcionadas por espacio ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.'**
+  /// **'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento o hecho administrativo.'**
   String get privacyResponsibleOrgParagraph;
 
   /// Protección de datos — introducción de los datos de contacto del responsable.
@@ -8783,7 +8825,7 @@ abstract class AppLocalizations {
   /// Protección de datos — bloque con la dirección postal y el correo del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Agencia de Transformación Digital\nEdificio CEMAR, Plaza de Grecia, 1, 45071 Toledo\nDirección de correo electrónico:\ndirecciongerenciaatd@jccm.es'**
+  /// **'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es'**
   String get privacyResponsibleContactAddressValue;
 
   /// Protección de datos — título de la sección de finalidad del tratamiento.
@@ -8792,23 +8834,77 @@ abstract class AppLocalizations {
   /// **'¿Cuál es la denominación y finalidad del tratamiento?'**
   String get privacyPurposeTitle;
 
+  /// Protección de datos — responsable y contacto del Registro de Población.
+  ///
+  /// In es, this message translates to:
+  /// **'2. La Oficina del Dato es responsable del tratamiento de datos del Registro de Población, a cuyos datos se puede acceder en el apartado “Datos de empadronamiento del Registro de Población” en la sección \"Mis datos de contacto\".\n\nLos datos de contacto de este responsable son los siguientes:\n\nDirección Postal:\nOficina del Dato de Castilla-La Mancha\nC/ Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\nDirección de correo electrónico: oficinadeldato@jccm.es'**
+  String get privacyPopulationControllerText;
+
   /// Protección de datos — párrafo introductorio de las finalidades del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'Las finalidades de los tratamientos con los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:'**
+  /// **'Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:'**
   String get privacyPurposeIntro;
 
   /// Protección de datos — elemento de la lista de finalidades.
   ///
   /// In es, this message translates to:
-  /// **'Gestionar los datos identificativos del ciudadano'**
+  /// **'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en las áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.'**
   String get privacyPurposeItemIdentity;
 
   /// Protección de datos — elemento de la lista de finalidades.
   ///
   /// In es, this message translates to:
-  /// **'Visualizar los datos seleccionados de la Administración regional y de la Otras temas de interés'**
+  /// **'Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.'**
   String get privacyPurposeItemVisualizations;
+
+  /// Protección de datos — título de legitimación.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cuál es la legitimación de este tratamiento?'**
+  String get privacyLegalBasisTitle;
+
+  /// Protección de datos — bases jurídicas.
+  ///
+  /// In es, this message translates to:
+  /// **'Las bases jurídicas que hacen lícito el tratamiento de Espacio Ciudadano son las siguientes:\n\n• Para el acceso a servicios como la consulta del estado de tramitación de un expediente, notificaciones, así como el resto de información administrativa en poder de esta Administración, las bases jurídicas son: 6.1.c) Obligación legal y la 6.1.e) Misión en interés público o ejercicio de poderes públicos.\nY su detalle, entre otras normas legales:\nArtículo 53 de la Ley 39/2015, de 1 de octubre, del Procedimiento Administrativo Común de las Administraciones Públicas.\nReal Decreto 203/2021, de 30 de marzo, por el que se aprueba el Reglamento de actuación y funcionamiento del sector público por medios electrónicos.\nLey 4/2025, de 11 de julio, de Simplificación, Agilización y Digitalización Administrativa.\n• En el caso de consulta de su información administrativa en poder de la Administración General del Estado, la base jurídica es el consentimiento que se recoge al marcar la opción seleccionada, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\", sin que ello le impida poder seguir disfrutando del resto de servicios.\n• La base jurídica para el tratamiento de las recomendaciones realizadas en base a los hechos vitales marcados es el consentimiento, que podrá retirar en cualquier momento retirando la autorización inicial de los hechos vitales anteriormente marcados en el apartado \"Perfil de usuario\", sin que ello le impida poder seguir disfrutando del resto de servicios.\n• La base jurídica para el tratamiento de los eventos es el consentimiento expreso, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\".\n• Asimismo, la base jurídica para la consulta y descarga de los carnets seleccionados es el consentimiento expreso, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\".\n\nLas bases jurídicas que hacen lícito el tratamiento del Registro de Población son las siguientes:\n\n• Para el teléfono y el correo electrónico: 6.1.a) Consentimiento del interesado/a que podrá retirar en cualquier momento.\n• Para el resto de los datos: 6.1.e) Misión en interés público o ejercicio de poderes públicos (Ley 10/2002, de Estadística de Castilla-La Mancha).'**
+  String get privacyLegalBasisText;
+
+  /// Protección de datos — título de cesiones.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Existen cesiones de datos?'**
+  String get privacyTransfersTitle;
+
+  /// Protección de datos — información sobre cesiones.
+  ///
+  /// In es, this message translates to:
+  /// **'No existen cesiones de datos personales en el tratamiento de Espacio Ciudadano.\n\nEn el caso del tratamiento del Registro de Población se podrán ceder datos a otros órganos de la Administración regional para la comunicación de estos con la ciudadanía, previa valoración de la compatibilidad de la finalidad del tratamiento, en aplicación del artículo 6.4 del Reglamento General de Protección de Datos.'**
+  String get privacyTransfersText;
+
+  /// Protección de datos — título de conservación.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Durante cuánto tiempo se conservarán los datos?'**
+  String get privacyRetentionTitle;
+
+  /// Protección de datos — plazo de conservación.
+  ///
+  /// In es, this message translates to:
+  /// **'El plazo de conservación de los datos será el necesario para cumplir con la finalidad para la que se recabaron y para determinar las posibles responsabilidades que se pudieran derivar de dicha finalidad y del tratamiento de los datos. Será de aplicación lo dispuesto en la normativa de archivos y documentación.'**
+  String get privacyRetentionText;
+
+  /// Protección de datos — título de ejercicio de derechos.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo se pueden ejercer los derechos previstos en la normativa de protección de datos?'**
+  String get privacyRightsTitle;
+
+  /// Protección de datos — medios para ejercer derechos.
+  ///
+  /// In es, this message translates to:
+  /// **'Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha.\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.'**
+  String get privacyRightsText;
 
   /// Protección de datos — título de la sección sobre reclamaciones ante la AEPD.
   ///

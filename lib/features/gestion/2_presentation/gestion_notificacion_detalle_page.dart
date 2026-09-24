@@ -42,7 +42,7 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
 
   /// Orden del documento que se está descargando, o `null` si ninguno: una
   /// descarga a la vez, para no encadenar dos selectores nativos.
-  int? _downloadingOrden;
+  String? _downloadingKey;
 
   /// Si ya se ha comparecido en esta pantalla. Manda sobre el respaldo del
   /// resumen y sobre el mensaje de error de la relectura.
@@ -87,8 +87,9 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
           ),
           data: (final value) => _DetalleContent(
             value: value,
-            downloadingOrden: _downloadingOrden,
+            downloadingKey: _downloadingKey,
             onDownload: (final document) => _download(document, value.sistemaOrigen),
+            onDownloadJustificante: () => _downloadJustificante(value.sistemaOrigen),
           ),
         ),
       ),
@@ -211,17 +212,17 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
   /// persona. El backend solo identifica el documento por su `orden`
   /// (`GET .../notificaciones/{id}/documentos/{orden}`).
   Future<void> _download(final NotificacionDocumento document, final String? sistemaOrigen) async {
-    if (_downloadingOrden != null) {
+    if (_downloadingKey != null) {
       return;
     }
     final l10n = AppLocalizations.of(context);
-    setState(() => _downloadingOrden = document.orden);
+    setState(() => _downloadingKey = 'documento-${document.orden}');
     try {
       final citizenId = ref.read(gestionNotificacionesTransitionCitizenIdProvider);
       if (citizenId.isEmpty) {
         throw StateError('No hay ciudadano identificado.');
       }
-      final bytes = await ref
+      final file = await ref
           .read(gestionNotificacionesRepositoryProvider)
           .downloadDocumento(
             citizenId: citizenId,
@@ -233,8 +234,8 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
         return;
       }
       final ruta = await saveBytesWithPicker(
-        bytes: bytes,
-        fileName: _documentFileName(document),
+        bytes: file.bytes,
+        fileName: _safePdfFileName(file.nombreFichero, fallback: _documentFileName(document)),
         dialogTitle: l10n.documentDownload,
       );
       if (!mounted || ruta == null) {
@@ -252,10 +253,60 @@ class _GestionNotificacionDetallePageState extends ConsumerState<GestionNotifica
       AppAlertSnackbar.show(context, message: l10n.gestionNotificacionDetalleDocumentoDescargaError, severity: AppAlertSeverity.error);
     } finally {
       if (mounted) {
-        setState(() => _downloadingOrden = null);
+        setState(() => _downloadingKey = null);
       }
     }
   }
+
+  Future<void> _downloadJustificante(final String? sistemaOrigen) async {
+    if (_downloadingKey != null) {
+      return;
+    }
+    final l10n = AppLocalizations.of(context);
+    setState(() => _downloadingKey = 'justificante');
+    try {
+      final citizenId = ref.read(gestionNotificacionesTransitionCitizenIdProvider);
+      if (citizenId.isEmpty) {
+        throw StateError('No hay ciudadano identificado.');
+      }
+      final file = await ref
+          .read(gestionNotificacionesRepositoryProvider)
+          .downloadJustificante(
+            citizenId: citizenId,
+            notificacionId: widget.notificacionId,
+            sistemaOrigen: sistemaOrigen ?? widget.resumen?.sistemaOrigen,
+          );
+      if (!mounted) {
+        return;
+      }
+      final ruta = await saveBytesWithPicker(
+        bytes: file.bytes,
+        fileName: _safePdfFileName(file.nombreFichero, fallback: l10n.gestionNotificacionDetalleAcuseRecibo),
+        dialogTitle: l10n.documentDownload,
+      );
+      if (!mounted || ruta == null) {
+        return;
+      }
+      AppAlertSnackbar.show(context, message: l10n.gestionNotificacionDetalleDocumentoDescargado, severity: AppAlertSeverity.success);
+    } on Object catch (error, stackTrace) {
+      logger.e('Error al descargar el justificante de la notificación ${widget.notificacionId}', error: error, stackTrace: stackTrace);
+      if (mounted) {
+        AppAlertSnackbar.show(context, message: l10n.gestionNotificacionDetalleDocumentoDescargaError, severity: AppAlertSeverity.error);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _downloadingKey = null);
+      }
+    }
+  }
+}
+
+String _safePdfFileName(final String? value, {required final String fallback}) {
+  final limpio = value?.trim().replaceAll(RegExp(r'[/\\]'), '-');
+  if (limpio == null || limpio.isEmpty) {
+    return fallback;
+  }
+  return limpio.toLowerCase().endsWith('.pdf') ? limpio : '$limpio.pdf';
 }
 
 /// Nombre con el que se propone guardar el documento.
@@ -274,10 +325,11 @@ String _documentFileName(final NotificacionDocumento document) {
 }
 
 class _DetalleContent extends StatelessWidget {
-  const _DetalleContent({required this.value, required this.onDownload, this.downloadingOrden});
+  const _DetalleContent({required this.value, required this.onDownload, required this.onDownloadJustificante, this.downloadingKey});
   final NotificacionDetalle value;
   final ValueChanged<NotificacionDocumento> onDownload;
-  final int? downloadingOrden;
+  final VoidCallback onDownloadJustificante;
+  final String? downloadingKey;
 
   @override
   Widget build(final BuildContext context) {
@@ -324,15 +376,21 @@ class _DetalleContent extends StatelessWidget {
               label: l10n.gestionNotificacionDetalleFechaLecturaLabel,
               value: _formatDate(context, value.fechaLectura!),
             ),
-          if (!_isPending(value.estado) && value.documentos.isNotEmpty) ...[
+          if (!_isPending(value.estado) && (value.documentos.isNotEmpty || value.estado == NotificacionEstado.aceptada)) ...[
             _SectionTitle(l10n.gestionNotificacionDetalleDocumentosTitle),
             ...value.documentos.map(
               (final document) => _DocumentCard(
                 document: document,
-                downloading: downloadingOrden == document.orden,
-                onTap: downloadingOrden == null ? () => onDownload(document) : null,
+                downloading: downloadingKey == 'documento-${document.orden}',
+                onTap: downloadingKey == null ? () => onDownload(document) : null,
               ),
             ),
+            if (value.estado == NotificacionEstado.aceptada)
+              _DownloadCard(
+                fileName: l10n.gestionNotificacionDetalleAcuseRecibo,
+                downloading: downloadingKey == 'justificante',
+                onTap: downloadingKey == null ? onDownloadJustificante : null,
+              ),
           ],
         ],
       ),
@@ -428,6 +486,22 @@ class _DocumentCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
+  Widget build(final BuildContext context) => _DownloadCard(
+    fileName: _documentFileName(document),
+    sizeBytes: document.tamanoBytes,
+    downloading: downloading,
+    onTap: onTap,
+  );
+}
+
+class _DownloadCard extends StatelessWidget {
+  const _DownloadCard({required this.fileName, required this.downloading, this.sizeBytes, this.onTap});
+  final String fileName;
+  final int? sizeBytes;
+  final bool downloading;
+  final VoidCallback? onTap;
+
+  @override
   Widget build(final BuildContext context) => Semantics(
     button: true,
     child: InkWell(
@@ -449,19 +523,19 @@ class _DocumentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                downloading
-                    ? const SizedBox(
-                        width: AppDimensions.iconMedium,
-                        height: AppDimensions.iconMedium,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
-                      )
-                    : const AppIcon(AppIcons.draft, color: AppColors.textPrimary),
+                if (downloading)
+                  const SizedBox(
+                    width: AppDimensions.iconMedium,
+                    height: AppDimensions.iconMedium,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                  )
+                else
+                  const AppIcon(AppIcons.draft, color: AppColors.textPrimary),
                 const SizedBox(width: AppDimensions.space8),
                 Expanded(
                   child: Text(
-                    _documentFileName(document),
+                    fileName,
                     style: AppTypography.leadingBold.copyWith(
                       color: AppColors.primary,
                       decoration: TextDecoration.underline,
@@ -474,8 +548,8 @@ class _DocumentCard extends StatelessWidget {
             const SizedBox(height: AppDimensions.space16),
             Text(
               [
-                _documentFileName(document).split('.').last.toUpperCase(),
-                if (document.tamanoBytes != null) _formatSize(document.tamanoBytes!),
+                fileName.split('.').last.toUpperCase(),
+                if (sizeBytes != null) _formatSize(sizeBytes!),
               ].join(', '),
               style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
             ),

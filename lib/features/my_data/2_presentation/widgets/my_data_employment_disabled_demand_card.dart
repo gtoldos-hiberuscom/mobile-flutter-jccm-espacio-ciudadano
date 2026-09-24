@@ -8,6 +8,8 @@ class MyDataEmploymentDisabledDemandCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AppInfoCard(
       leadingBorderWidth: AppDimensions.space4,
       contentPadding: const EdgeInsets.symmetric(
@@ -18,16 +20,26 @@ class MyDataEmploymentDisabledDemandCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            AppLocalizations.of(context).myDataEmploymentDemandTitle,
+            l10n.myDataEmploymentDemandTitle,
             style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
           ),
           const SizedBox(height: AppDimensions.space8),
           Text(
-            AppLocalizations.of(context).myDataEmploymentDemandUnavailableStatus.toUpperCase(),
+            l10n.myDataEmploymentDemandUnavailableStatus.toUpperCase(),
             style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: AppDimensions.space8),
           const Divider(height: 1, thickness: 1, color: AppColors.neutral100),
+          const SizedBox(height: AppDimensions.space8),
+          Text(
+            l10n.myDataEmploymentRegistrationDateLabel.toUpperCase(),
+            style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+          ),
+          const SizedBox(height: AppDimensions.space4),
+          Text(
+            '-',
+            style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
+          ),
         ],
       ),
     );

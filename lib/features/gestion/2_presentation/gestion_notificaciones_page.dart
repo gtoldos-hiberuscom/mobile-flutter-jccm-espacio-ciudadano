@@ -49,7 +49,10 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
       l10n.gestionNotificacionesTabAceptadas,
       l10n.gestionNotificacionesTabExpiradas,
     ];
-    final notifAsync = ref.watch(gestionNotificacionesProvider(_currentEstado));
+    // Se carga la bandeja completa una sola vez. Las pestañas son una vista
+    // local de esos datos: cambiar de filtro no debe volver a consultar el
+    // backend ni dejar varias peticiones compitiendo entre sí.
+    final notifAsync = ref.watch(gestionNotificacionesProvider(null));
 
     return Scaffold(
       appBar: AppNavBar(
@@ -92,7 +95,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                 child: _FilterBar(
                   labels: tabLabels,
                   selectedIndex: _selectedTab,
-                  onSelected: (final i) => setState(() => _selectedTab = i),
+                  onSelected: (final index) => setState(() => _selectedTab = index),
                 ),
               ),
               Expanded(
@@ -110,16 +113,17 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                         )
                       : ErrorStateWidget(
                           message: l10n.gestionNotificacionesLoadError,
-                          onRetry: () => ref.invalidate(gestionNotificacionesProvider(_currentEstado)),
+                          onRetry: () => ref.invalidate(gestionNotificacionesProvider(null)),
                         ),
                   data: (final notifs) {
-                    final filtered = notifs
+                    final tabFiltered = _currentEstado == null ? notifs : notifs.where((final notification) => notification.estado == _currentEstado).toList(growable: false);
+                    final filtered = tabFiltered
                         .where((final notification) {
                           final description = notification.concepto.isNotEmpty ? notification.concepto : notification.procedimientoDenominacion;
                           return appFilterContains(description, _filters.text('description')) && appFilterDateInRange(notification.fechaCaducidad, _filters.range('date'));
                         })
                         .toList(growable: false);
-                    return notifs.isEmpty
+                    return tabFiltered.isEmpty
                         ? EmptyStateWidget(message: l10n.gestionNotificacionesEmpty)
                         : filtered.isEmpty
                         ? EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search)

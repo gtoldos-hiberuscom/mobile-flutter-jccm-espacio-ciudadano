@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
@@ -687,6 +689,56 @@ void main() {
         adapter.requests.single.path,
         '/api/v1/ciudadanos/99999999R/notificaciones/7924/comparecer',
       );
+    });
+
+    test('conserva el nombre real del documento indicado por Content-Disposition', () async {
+      final adapter = SequenceHttpClientAdapter([
+        AdapterResponse(
+          statusCode: 200,
+          body: Uint8List.fromList([37, 80, 68, 70]),
+          contentType: 'application/pdf',
+          headers: const {
+            'content-disposition': ["attachment; filename*=UTF-8''Resoluci%C3%B3n.pdf"],
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final file = await repository.downloadDocumento(
+        citizenId: '99999999R',
+        notificacionId: 7924,
+        orden: 1,
+        sistemaOrigen: 'notifica2',
+      );
+
+      expect(file.bytes, [37, 80, 68, 70]);
+      expect(file.nombreFichero, 'Resolución.pdf');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/notificaciones/7924/documentos/1');
+    });
+
+    test('descarga el justificante de comparecencia y conserva su nombre', () async {
+      final adapter = SequenceHttpClientAdapter([
+        AdapterResponse(
+          statusCode: 200,
+          body: Uint8List.fromList([37, 80, 68, 70]),
+          contentType: 'application/pdf',
+          headers: const {
+            'content-disposition': ['attachment; filename="acuse-7924.pdf"'],
+          },
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionNotificacionesRepositoryImpl(dio: dio);
+
+      final file = await repository.downloadJustificante(
+        citizenId: '99999999R',
+        notificacionId: 7924,
+        sistemaOrigen: 'notifica2',
+      );
+
+      expect(file.nombreFichero, 'acuse-7924.pdf');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/99999999R/notificaciones/7924/justificante');
     });
 
     test('"Todo" consulta los cuatro estados y etiqueta cada elemento', () async {

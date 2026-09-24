@@ -51,5 +51,43 @@ void main() {
     expect(find.text('Mi demanda de empleo'), findsOneWidget);
     expect(find.text('INSCRIPCIÓN NO ACTIVA'), findsOneWidget);
     expect(find.byType(Divider), findsOneWidget);
+    expect(find.text('FECHA DE INSCRIPCIÓN SIN INTERRUPCIONES'), findsOneWidget);
+    expect(find.text('-'), findsOneWidget);
+  });
+
+  testWidgets('muestra un guion en la fecha cuando la demanda figura como no inscrita', (final tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: [Locale('es')],
+        home: Scaffold(
+          body: MyDataEmploymentDemandCard(
+            demand: EmploymentDemand(status: 'No Inscrito'),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('FECHA DE INSCRIPCIÓN SIN INTERRUPCIONES'), findsOneWidget);
+    expect(find.text('-'), findsOneWidget);
+  });
+
+  testWidgets('muestra un guion cuando la demanda activa no incluye fecha de inscripción', (final tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: [Locale('es')],
+        home: Scaffold(
+          body: MyDataEmploymentDemandCard(
+            demand: EmploymentDemand(status: 'Activa'),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('FECHA DE INSCRIPCIÓN SIN INTERRUPCIONES'), findsOneWidget);
+    expect(find.text('-'), findsOneWidget);
   });
 }

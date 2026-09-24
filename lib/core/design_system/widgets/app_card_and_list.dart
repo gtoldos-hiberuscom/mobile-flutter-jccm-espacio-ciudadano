@@ -331,6 +331,7 @@ class AppCard extends StatelessWidget {
     this.expiryDateLabel,
     this.extraLabel,
     this.extraText,
+    this.inlineMetadata = false,
     // ── Agenda slots ─────────────────────────────────────────────────────────
     this.date,
     this.time,
@@ -411,6 +412,9 @@ class AppCard extends StatelessWidget {
 
   /// Value text for the optional info block rendered below the ref block.
   final String? extraText;
+
+  /// Displays reference metadata labels and values on the same row.
+  final bool inlineMetadata;
 
   // ── Agenda ────────────────────────────────────────────────────────────────
 
@@ -643,35 +647,49 @@ class AppCard extends StatelessWidget {
     final FontWeight valueWeight = FontWeight.w400,
     final Widget? trailingIcon,
   }) {
+    final labelWidget = Text(
+      label.toUpperCase(),
+      maxLines: inlineMetadata ? 1 : null,
+      softWrap: !inlineMetadata,
+      style: AppTypography.captionUppercase.copyWith(color: labelColor),
+    );
+    final valueWidget = Text(
+      value,
+      style: AppTypography.smallRegular.copyWith(
+        color: valueColor,
+        fontWeight: valueWeight,
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label.toUpperCase(),
-            style: AppTypography.captionUppercase.copyWith(color: labelColor),
-          ),
-          const SizedBox(height: AppDimensions.space4),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  value,
-                  style: AppTypography.smallRegular.copyWith(
-                    color: valueColor,
-                    fontWeight: valueWeight,
-                  ),
-                ),
-              ),
-              if (trailingIcon != null) ...[
-                const SizedBox(width: AppDimensions.space4),
-                trailingIcon,
+      child: inlineMetadata
+          ? Row(
+              children: [
+                Expanded(child: labelWidget),
+                const SizedBox(width: AppDimensions.space8),
+                Expanded(child: valueWidget),
+                if (trailingIcon != null) ...[
+                  const SizedBox(width: AppDimensions.space4),
+                  trailingIcon,
+                ],
               ],
-            ],
-          ),
-        ],
-      ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                labelWidget,
+                const SizedBox(height: AppDimensions.space4),
+                Row(
+                  children: [
+                    Expanded(child: valueWidget),
+                    if (trailingIcon != null) ...[
+                      const SizedBox(width: AppDimensions.space4),
+                      trailingIcon,
+                    ],
+                  ],
+                ),
+              ],
+            ),
     );
   }
 

@@ -113,6 +113,37 @@ void main() {
     expect(number.maxLines, isNull);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('muestra completo el mapa decorativo con y sin estado', (final tester) async {
+    final variants = <AppDigitalCard>[
+      card(onDownload: () {}),
+      const AppDigitalCard(title: 'Joven', number: '00000000000000000000', downloadLabel: 'Descargar'),
+    ];
+
+    for (final variant in variants) {
+      await tester.pumpWidget(buildApp(variant));
+
+      final cardBounds = tester.getRect(find.byType(AppDigitalCard));
+      final mapBounds = tester.getRect(find.byKey(const ValueKey('digital-card-map-pattern')));
+
+      expect(cardBounds.contains(mapBounds.topLeft), isTrue);
+      expect(cardBounds.contains(mapBounds.bottomRight), isTrue);
+    }
+  });
+
+  testWidgets('el mapa conserva los huecos de su silueta', (final tester) async {
+    await tester.pumpWidget(buildApp(card(onDownload: () {})));
+
+    final map = find.byKey(const ValueKey('digital-card-map-pattern'));
+    final paintedDots = find.descendant(
+      of: map,
+      matching: find.byWidgetPredicate(
+        (final widget) => widget is Container && widget.decoration is BoxDecoration && (widget.decoration! as BoxDecoration).shape == BoxShape.circle,
+      ),
+    );
+
+    expect(paintedDots, findsNWidgets(24));
+  });
 }
 
 void _noop() {}

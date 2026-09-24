@@ -108,14 +108,23 @@ Future<bool> _saveArtifact(
   final DigitalCardArtifact artifact, {
   required final String dialogTitle,
 }) async {
-  if (Platform.isAndroid && artifact.extension.toLowerCase() == 'pkpass') {
-    return await _pkPassChannel.invokeMethod<bool>('savePkPass', {
-          'fileName': artifact.fileName,
-          'bytes': artifact.bytes,
-        }) ??
-        false;
+  if ((Platform.isAndroid || Platform.isIOS) && artifact.extension.toLowerCase() == 'pkpass') {
+    try {
+      final openedInWallet =
+          await _pkPassChannel.invokeMethod<bool>('openPkPass', {
+            'fileName': artifact.fileName,
+            'bytes': artifact.bytes,
+          }) ??
+          false;
+      if (openedInWallet) {
+        return true;
+      }
+    } on Exception {
+      // Wallet could not open the pass; continue with the manual save flow.
+    }
   }
 
+  // If no wallet app can handle the pass, let the user save it manually.
   final path = await FilePicker.saveFile(
     dialogTitle: dialogTitle,
     fileName: artifact.fileName,

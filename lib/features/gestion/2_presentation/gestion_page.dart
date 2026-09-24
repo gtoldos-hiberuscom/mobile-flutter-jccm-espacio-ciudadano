@@ -74,9 +74,9 @@ class GestionPage extends ConsumerWidget {
               children: [
                 for (final section in sections) ...[
                   if (section.hasDividerAbove) ...[
-                    const SizedBox(height: AppDimensions.space8),
+                    const SizedBox(height: AppDimensions.space16),
                     const AppDivider(strength: AppDividerStrength.medium),
-                    const SizedBox(height: AppDimensions.space8),
+                    const SizedBox(height: AppDimensions.space16),
                   ],
                   AppNavigationCard(
                     title: section.title,
@@ -85,9 +85,9 @@ class GestionPage extends ConsumerWidget {
                   ),
                   if (!section.hasDividerAbove) const SizedBox(height: AppDimensions.space16),
                 ],
-                const SizedBox(height: AppDimensions.space8),
+                const SizedBox(height: AppDimensions.space16),
                 const AppDivider(),
-                const SizedBox(height: AppDimensions.space8),
+                const SizedBox(height: AppDimensions.space16),
                 AppNavigationCard(
                   title: l10n.gestionNotificacionesTitle,
                   isDisabled: !notificacionesEnabled,

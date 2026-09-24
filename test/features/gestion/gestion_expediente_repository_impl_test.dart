@@ -29,6 +29,14 @@ void main() {
       expect(adapter.requests.single.method, 'POST');
       expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes');
       expect(
+        adapter.requests.single.receiveTimeout,
+        GestionExpedienteRepositoryImpl.expedientesTimeout,
+      );
+      expect(
+        adapter.requests.single.sendTimeout,
+        GestionExpedienteRepositoryImpl.expedientesTimeout,
+      );
+      expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
           'numerodocumento': '99999999R',
@@ -51,8 +59,10 @@ void main() {
           "numexp": "WMEQ/2026/000002",
           "titulo": "",
           "desproc": "MODIFICACIÓN DE DECLARACIONES",
+          "desasunto": "Modificación de una declaración responsable",
           "desconsej": "CONSEJERÍA DE AGRICULTURA",
-          "fechareg": "2026-06-18",
+          "fechareg": "0000-00-00",
+          "fechaini": "2026-06-18",
           "estado": "01",
           "descrip": "SOLICITUD ENTRADA EN ÓRGANO COMPETENTE"
         }
@@ -72,7 +82,7 @@ void main() {
 
       expect(result, hasLength(1));
       expect(result.single.numexp, 'WMEQ/2026/000002');
-      expect(result.single.titulo, 'MODIFICACIÓN DE DECLARACIONES');
+      expect(result.single.titulo, 'Modificación de una declaración responsable');
       expect(result.single.consejeria, 'CONSEJERÍA DE AGRICULTURA');
       expect(result.single.fechaInicio, '2026-06-18');
       expect(result.single.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
@@ -184,7 +194,7 @@ void main() {
       "tlfno": "600000000",
       "bezei": "Toledo",
       "registro": "123456/2024",
-      "fechareg": "2024-10-22"
+      "fechareg": "0000-00-00"
     },
     "resultado": "Correcto"
   },
@@ -203,7 +213,7 @@ void main() {
       );
 
       expect(result.numexp, 'S020/2024/0001-PR');
-      expect(result.titulo, 'SOLICITUD DE AYUDAS PARA EL FOMENTO DE LA ACUICULTURA');
+      expect(result.titulo, 'Solicitud de ayudas');
       expect(result.consejeria, 'CONSEJERÍA DE DESARROLLO SOSTENIBLE');
       expect(result.oficinaTramitadora, isNull);
       expect(result.fechaInicio, '2024-10-22');
@@ -218,7 +228,7 @@ void main() {
       expect(result.datosAportacion?.desasunto, 'Solicitud de ayudas');
       expect(result.datosAportacion?.source, 'TRAM');
       expect(result.datosAportacion?.registro, '123456/2024');
-      expect(result.datosAportacion?.fechareg, '2024-10-22');
+      expect(result.datosAportacion?.fechareg, '0000-00-00');
       expect(result.datosAportacion?.nombre, 'Juan');
       expect(result.datosAportacion?.apellido1, 'García');
       expect(result.datosAportacion?.apellido2, 'López');
@@ -230,6 +240,14 @@ void main() {
       expect(result.datosAportacion?.bezei, 'Toledo');
       expect(adapter.requests.single.method, 'POST');
       expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/detalle');
+      expect(
+        adapter.requests.single.receiveTimeout,
+        GestionExpedienteRepositoryImpl.expedientesTimeout,
+      );
+      expect(
+        adapter.requests.single.sendTimeout,
+        GestionExpedienteRepositoryImpl.expedientesTimeout,
+      );
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{

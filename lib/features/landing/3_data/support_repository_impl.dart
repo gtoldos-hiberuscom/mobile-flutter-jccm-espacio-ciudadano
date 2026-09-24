@@ -1,43 +1,45 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
+import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/support_request.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/repositories/support_repository.dart';
 
 final class SupportRepositoryImpl implements SupportRepository {
-  SupportRepositoryImpl({required final Dio dio}) : _api = SoporteApi(withGeneratedApiCompat(dio), standardSerializers);
+  SupportRepositoryImpl({required final Dio dio, required final Uri authenticatedEndpoint}) : _dio = dio, _authenticatedEndpoint = authenticatedEndpoint;
 
-  /// Ruta pública (sin sesión). El gateway de Espacio Ciudadano no la sirve
-  /// (404): sólo expone `/api/v1/ciudadanos/**`.
-  static const endpoint = '/api/v1/soporte';
+  /// Ruta pública para enviar solicitudes de soporte sin sesión.
+  static const endpoint = 'https://gateway-espacio-ciudadano-des.cm-pre.jccm.es/api/v1/ciudadanos/soporte';
 
-  /// Ruta autenticada que sirve el gateway para un ciudadano con sesión.
-  static String citizenEndpoint(final String idAgente) => '/api/v1/ciudadanos/$idAgente/soporte';
-
-  final SoporteApi _api;
+  final Dio _dio;
+  final Uri _authenticatedEndpoint;
 
   @override
   Future<void> submitSupportRequest(final SupportRequest request, {final String? idAgente}) async {
     final datos = _requestData(request);
     final adjunto = _attachment(request);
     if (idAgente != null && idAgente.isNotEmpty) {
-      await _api.crearTareaSoporte1(
-        idAgente: idAgente,
-        datos: datos,
-        adjunto: adjunto,
+      await _dio.post<void>(
+        _authenticatedEndpoint.toString(),
+        data: _formData(datos: datos, adjunto: adjunto),
+        options: Options(contentType: Headers.multipartFormDataContentType),
       );
       return;
     }
-    await _api.crearTareaSoporte(
-      // El path público /api/v1/soporte no interpola `idAgente` (el OpenAPI lo
-      // declara por error) y sin sesión no hay identificador que aportar.
-      idAgente: '',
-      datos: datos,
-      adjunto: adjunto,
+    await _dio.post<void>(
+      endpoint,
+      data: _formData(datos: datos, adjunto: adjunto),
+      options: Options(
+        contentType: Headers.multipartFormDataContentType,
+        extra: const {anonymousRequestExtraKey: true},
+      ),
     );
   }
+
+  FormData _formData({required final String datos, required final MultipartFile? adjunto}) => FormData.fromMap(<String, dynamic>{
+    'datos': datos,
+    'adjunto': ?adjunto,
+  });
 
   String _requestData(final SupportRequest request) {
     return jsonEncode(

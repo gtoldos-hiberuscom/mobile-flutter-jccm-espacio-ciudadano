@@ -18,7 +18,7 @@ Method | HTTP request | Description
 
 
 # **getIniProc**
-> Respuesta getIniProc(idAgente, idExpediente, dTProcedimiento)
+> Respuesta getIniProc(dTProcedimiento)
 
 Iniciar procedimiento administrativo
 
@@ -29,12 +29,10 @@ Inicia un nuevo procedimiento administrativo en el sistema CESAR. Valida los dat
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getProcedimientoApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
-final String idExpediente = idExpediente_example; // String | 
 final DTProcedimiento dTProcedimiento = {"idunico":"03874761C_171447919011019","tipoprocedimiento":"020","unidadorganica":"012848","consejeria":"001952","provincia":"","noexpediente":"EXP-2024-00789","registro":{"noregistro":null,"fecha":null},"identificacion":{"category":"NIF","nifcif":"99999999R"},"asunto":"","asudescripcion":"","source":"TRAM","datossolicitante":{"apellido1":"García","apellido2":"López","nombre":"Juan","codigopostal":"45000","domicilio":"Calle Mayor","entidad":"","numero":"1","poblacion":"Toledo","provincia":"Toledo"},"datospago":{},"adjuntos":{}}; // DTProcedimiento | Datos del procedimiento a iniciar. Incluye identificación del ciudadano, datos del solicitante y referencias administrativas.
 
 try {
-    final response = api.getIniProc(idAgente, idExpediente, dTProcedimiento);
+    final response = api.getIniProc(dTProcedimiento);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ProcedimientoApi->getIniProc: $e\n');
@@ -45,8 +43,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
- **idExpediente** | **String**|  | 
  **dTProcedimiento** | [**DTProcedimiento**](DTProcedimiento.md)| Datos del procedimiento a iniciar. Incluye identificación del ciudadano, datos del solicitante y referencias administrativas. | 
 
 ### Return type
@@ -194,7 +190,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **miSubirAdjuntoSinFirmaOperation**
-> RESULTADOPROCEDIMIENTO miSubirAdjuntoSinFirmaOperation(idAgente, idExpediente, ADJUNTO)
+> RESULTADOPROCEDIMIENTO miSubirAdjuntoSinFirmaOperation(ADJUNTO)
 
 Servicio que permite subir al buzon de tramitacion un documento codificado en base64 sin firma
 
@@ -203,12 +199,10 @@ Servicio que permite subir al buzon de tramitacion un documento codificado en ba
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getProcedimientoApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
-final String idExpediente = idExpediente_example; // String | 
 final ADJUNTO ADJUNTO = ; // ADJUNTO | 
 
 try {
-    final response = api.miSubirAdjuntoSinFirmaOperation(idAgente, idExpediente, ADJUNTO);
+    final response = api.miSubirAdjuntoSinFirmaOperation(ADJUNTO);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling ProcedimientoApi->miSubirAdjuntoSinFirmaOperation: $e\n');
@@ -219,8 +213,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
- **idExpediente** | **String**|  | 
  **ADJUNTO** | [**ADJUNTO**](ADJUNTO.md)|  | 
 
 ### Return type

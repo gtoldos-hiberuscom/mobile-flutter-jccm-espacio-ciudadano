@@ -373,8 +373,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final notificationDetails = _notificationDetails(raw, rawMessage);
     final primaryCareDetails = _parsePrimaryCareMessage(message);
     final isPrimaryCare = source == AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
+    final isOnDemandHealthAppointment = source == AgendaAppointmentSource.health && _isOnDemandAppointment(specialty);
 
     final description = switch (source) {
+      AgendaAppointmentSource.health when isOnDemandHealthAppointment => 'Cita de Atención Primaria',
       AgendaAppointmentSource.health => specialty ?? 'Cita sanitaria',
       AgendaAppointmentSource.general when isPrimaryCare => title ?? 'Cita de Atención Primaria',
       AgendaAppointmentSource.general => notificationDetails.subject ?? message ?? specialty ?? title ?? 'Cita',
@@ -395,7 +397,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
       },
       channel: primaryCareDetails?.channel ?? channel,
-      detail: primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? center,
+      detail: isOnDemandHealthAppointment ? _primaryCareAppointmentDetail(specialty, channel) : primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? center,
       center: center,
     );
   }
@@ -480,14 +482,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final professional = valueBetween('Profesional:', 'Tipo de cita:');
     final appointmentType = valueBetween('Tipo de cita:', 'Modo de cita:');
     final channel = valueBetween('Modo de cita:', null);
-    final normalizedType = appointmentType?.toLowerCase();
-    final isOnDemand = normalizedType?.contains('demanda') ?? false;
-    final isRemote = (channel?.toLowerCase().contains('telef') ?? false) || (normalizedType?.contains('teleconsulta') ?? false);
-    final appointmentDetail = isOnDemand
-        ? isRemote
-              ? 'Teleconsulta a demanda'
-              : 'Consulta a demanda'
-        : appointmentType;
+    final appointmentDetail = _primaryCareAppointmentDetail(appointmentType, channel);
 
     return (
       professional: professional,
@@ -495,6 +490,22 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       appointmentDetail: appointmentDetail,
     );
   }
+
+  String? _primaryCareAppointmentDetail(
+    final String? appointmentType,
+    final String? channel,
+  ) {
+    final normalizedType = appointmentType?.toLowerCase();
+    final isOnDemand = normalizedType?.contains('demanda') ?? false;
+    if (!isOnDemand) {
+      return appointmentType;
+    }
+
+    final isRemote = (channel?.toLowerCase().contains('telef') ?? false) || (normalizedType?.contains('teleconsulta') ?? false);
+    return isRemote ? 'Teleconsulta a demanda' : 'Consulta a demanda';
+  }
+
+  bool _isOnDemandAppointment(final String? appointmentType) => appointmentType?.toLowerCase().contains('demanda') ?? false;
 
   bool _isPrimaryCareEvent(
     final String? title,

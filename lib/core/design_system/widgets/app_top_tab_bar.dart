@@ -61,7 +61,7 @@ class AppTopTabBar extends StatelessWidget {
       label: semanticLabel,
       child: DecoratedBox(
         decoration: const BoxDecoration(
-          color: AppColors.statusNeutralLight,
+          color: AppColors.backgroundBlueMutedLight,
           border: Border(
             bottom: BorderSide(color: AppColors.borderBlueMutedLight),
           ),

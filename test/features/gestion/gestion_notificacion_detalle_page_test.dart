@@ -90,7 +90,10 @@ void main() {
     final router = GoRouter(
       initialLocation: '/',
       routes: [
-        GoRoute(path: '/', builder: (final _, final _) => const Scaffold(body: SizedBox.shrink())),
+        GoRoute(
+          path: '/',
+          builder: (final _, final _) => const Scaffold(body: SizedBox.shrink()),
+        ),
         GoRoute(path: '/detalle', builder: (final _, final _) => const GestionNotificacionDetallePage(notificacionId: 7924, resumen: null)),
       ],
     );
@@ -198,6 +201,7 @@ void main() {
     expect(find.text(_acceptedTag), findsOneWidget);
     expect(find.text('Documentos'), findsOneWidget);
     expect(find.text('Notificacion.pdf'), findsOneWidget);
+    expect(find.text('Acuse de recibo.pdf'), findsOneWidget);
     expect(find.text(_acceptLabel), findsNothing);
 
     // Deja expirar el snackbar para no terminar con timers pendientes.
@@ -308,15 +312,22 @@ final class _FakeNotificacionesRepository implements GestionNotificacionesReposi
   }
 
   @override
-  Future<Uint8List> downloadDocumento({
+  Future<NotificacionArchivoDescargado> downloadDocumento({
     required final String citizenId,
     required final int notificacionId,
     required final int orden,
     final String? sistemaOrigen,
   }) {
     downloads.add(orden);
-    return onDownload!(orden);
+    return onDownload!(orden).then((final bytes) => (bytes: bytes, nombreFichero: null));
   }
+
+  @override
+  Future<NotificacionArchivoDescargado> downloadJustificante({
+    required final String citizenId,
+    required final int notificacionId,
+    final String? sistemaOrigen,
+  }) => onDownload!(0).then((final bytes) => (bytes: bytes, nombreFichero: null));
 
   @override
   dynamic noSuchMethod(final Invocation invocation) => throw UnimplementedError('$invocation');
@@ -358,7 +369,7 @@ Future<void> _pumpAcceptable(
       ],
       child: MaterialApp(
         locale: const Locale('es'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(NotificacionEstado.pendiente)),
       ),
@@ -386,7 +397,7 @@ Future<void> _pumpDetail(
       ],
       child: MaterialApp(
         locale: const Locale('es'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(resumenEstado)),
       ),
