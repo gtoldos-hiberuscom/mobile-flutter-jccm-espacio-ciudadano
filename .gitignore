@@ -47,3 +47,11 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Plataformas no soportadas: la app es solo Android + iOS.
+# `flutter create` las declaró en .metadata y sus artefactos generados
+# (Flutter/ephemeral, GeneratedPluginRegistrant) se colaban en los commits.
+/macos/
+/linux/
+/windows/
+/web/
