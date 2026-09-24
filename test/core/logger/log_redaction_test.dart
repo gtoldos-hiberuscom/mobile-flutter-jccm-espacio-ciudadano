@@ -1,7 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 
 void main() {
+  test('resume cuerpos binarios aunque la redacción de desarrollo esté desactivada', () {
+    expect(redactForLog(Uint8List.fromList([37, 80, 68, 70])), '<binary: 4 bytes>');
+  });
+
   // `config_development.json` y `config_preproduction.json` llevan
   // LOG_REDACTION_OFF=true, así que `flutter test --dart-define-from-file=…`
   // desactiva la redacción y estos casos dejarían de tener sentido. Se saltan

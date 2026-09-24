@@ -20,7 +20,7 @@ void main() {
     //
     // Actualiza el estado de aceptación de las cláusulas de consentimiento ya registradas para el ciudadano. A diferencia del alta (POST), este endpoint modifica cláusulas existentes. Recibe el identificador del agente y la lista completa de cláusulas con su versión y nuevo estado de selección. Devuelve true si la actualización se realizó correctamente.
     //
-    //Future<Respuesta> actualizarClausulas1(String idAgente, ClausulasAgente clausulasAgente, { String authorization }) async
+    //Future<Respuesta> actualizarClausulas1(ClausulasAgente clausulasAgente, { String authorization }) async
     test('test actualizarClausulas1', () async {
       // TODO
     });
@@ -38,7 +38,7 @@ void main() {
     //
     // Actualiza la lista de hechos vitales seleccionados por el ciudadano. Recibe el identificador del agente y la lista completa de hechos vitales con su estado de selección. Solo los hechos con seleccionado=true quedarán activos para el agente. Devuelve true si la actualización se realizó correctamente.
     //
-    //Future<Respuesta> actualizarListaHechos1(String idAgente, ListaHechosAgente listaHechosAgente, { String authorization }) async
+    //Future<Respuesta> actualizarListaHechos1(ListaHechosAgente listaHechosAgente, { String authorization }) async
     test('test actualizarListaHechos1', () async {
       // TODO
     });
@@ -74,7 +74,7 @@ void main() {
     //
     // Registra por primera vez (alta inicial) las cláusulas de consentimiento seleccionadas por el ciudadano. Recibe el identificador del agente y la lista de cláusulas con su versión y estado de aceptación. Devuelve true si el registro se ha realizado correctamente.
     //
-    //Future<Respuesta> enviarClausulas1(String idAgente, ClausulasAgente clausulasAgente, { String authorization }) async
+    //Future<Respuesta> enviarClausulas1(ClausulasAgente clausulasAgente, { String authorization }) async
     test('test enviarClausulas1', () async {
       // TODO
     });

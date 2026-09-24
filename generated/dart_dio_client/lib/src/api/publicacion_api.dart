@@ -124,8 +124,6 @@ class PublicacionApi {
   /// Consulta el detalle de un expediente de publicación a partir del número de registro, el tipo de documento y el número de documento del ciudadano. La respuesta devuelve la estructura completa del expediente, incluyendo datos identificativos, órgano gestor, estado de tramitación y relación de documentos asociados.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
-  /// * [idRegistro] 
   /// * [ZCSRFCPUBLISELECTBYNUMREG] - Cuerpo de la petición con el número de documento, número de registro y tipo de documento del ciudadano para localizar el expediente.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -137,8 +135,6 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> myPubliNumRegOperation({ 
-    required String idAgente,
-    required String idRegistro,
     required ZCSRFCPUBLISELECTBYNUMREG zcsrfcpubliselectbynumregBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -147,7 +143,7 @@ class PublicacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/publicacion/selectbynumreg'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString()).replaceAll('{' r'idRegistro' '}', encodeQueryParameter(_serializers, idRegistro, const FullType(String)).toString());
+    final _path = r'/api/v1/publicacion/selectbynumreg';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -514,7 +510,6 @@ class PublicacionApi {
   /// Consulta la lista de registros de entrada asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento ENTRADA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
   /// * [DTSELECTBYNIFV2REQ] - Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como ENTRADA.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -526,7 +521,6 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> myPubliSelecByNifTipoProcEntradaOperation1({ 
-    required String idAgente,
     required DTSELECTBYNIFV2REQ dtselectbynifv2reqBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -535,7 +529,7 @@ class PublicacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/publicacion/selectbynifentrada'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _path = r'/api/v1/publicacion/selectbynifentrada';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -611,7 +605,6 @@ class PublicacionApi {
   /// Consulta la lista de expedientes asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento EXP y devuelve los expedientes localizados con información de tramitación, órgano responsable y documentos asociados.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
   /// * [DTSELECTBYNIFV2REQ] - Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como EXP.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -623,7 +616,6 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> myPubliSelecByNifTipoProcExpOperation({ 
-    required String idAgente,
     required DTSELECTBYNIFV2REQ dtselectbynifv2reqBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -632,7 +624,7 @@ class PublicacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/publicacion/selectbynifexp'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _path = r'/api/v1/publicacion/selectbynifexp';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -910,7 +902,6 @@ class PublicacionApi {
   /// Consulta la lista de registros de salida asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento SALIDA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
   /// * [DTSELECTBYNIFV2REQ] - Cuerpo de la petición con tipo y número de documento del ciudadano. El tipo de procedimiento se establece internamente como SALIDA.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -922,7 +913,6 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> myPubliSelecByNifTipoProcSalidaOperation({ 
-    required String idAgente,
     required DTSELECTBYNIFV2REQ dtselectbynifv2reqBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -931,7 +921,7 @@ class PublicacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/publicacion/selectbynifsalida'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _path = r'/api/v1/publicacion/selectbynifsalida';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -1203,8 +1193,6 @@ class PublicacionApi {
   /// Consulta el detalle de un expediente de publicación a partir del número de expediente, el tipo de documento y el número de documento del ciudadano. La respuesta devuelve la estructura completa del expediente con datos identificativos, estado, órgano gestor y documentos asociados.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
-  /// * [idExpediente] 
   /// * [ZCSRFCPUBLISELECTBYNUMEXP] - Cuerpo de la petición con número de documento, número de expediente y tipo de documento del ciudadano para localizar el expediente.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -1216,8 +1204,6 @@ class PublicacionApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> myPubliSelecByNumExpOperation1({ 
-    required String idAgente,
-    required String idExpediente,
     required ZCSRFCPUBLISELECTBYNUMEXP zcsrfcpubliselectbynumexpBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -1226,7 +1212,7 @@ class PublicacionApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/publicacion/selectbynumexp'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString()).replaceAll('{' r'idExpediente' '}', encodeQueryParameter(_serializers, idExpediente, const FullType(String)).toString());
+    final _path = r'/api/v1/publicacion/selectbynumexp';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{

@@ -237,6 +237,61 @@ void main() {
         reason: 'the retry error body must arrive decoded and unwrapped, not as the raw envelope',
       );
     });
+  });
 
+  group('anonymous requests', () {
+    test('AuthInterceptor removes authorization and does not attach the current token', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 200, body: <String, dynamic>{}),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      String? authorization;
+      dio.interceptors
+        ..add(AuthInterceptor(() => 'active-token'))
+        ..add(
+          InterceptorsWrapper(
+            onRequest: (final options, final handler) {
+              authorization = options.headers['Authorization'] as String?;
+              handler.next(options);
+            },
+          ),
+        );
+
+      await dio.get<dynamic>(
+        '/public',
+        options: Options(
+          headers: {'Authorization': 'Bearer stale-token'},
+          extra: const {anonymousRequestExtraKey: true},
+        ),
+      );
+
+      expect(authorization, isNull);
+    });
+
+    test('a public 401 does not trigger session refresh', () async {
+      var refreshCalls = 0;
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 401, body: <String, dynamic>{}),
+      ]);
+      final dio = buildDio(
+        adapter,
+        tokenGetter: () => 'active-token',
+        refreshSession: ({final bool force = false}) async {
+          refreshCalls++;
+          return true;
+        },
+      );
+
+      await expectLater(
+        dio.get<dynamic>(
+          '/public',
+          options: Options(extra: const {anonymousRequestExtraKey: true}),
+        ),
+        throwsA(isA<DioException>()),
+      );
+
+      expect(refreshCalls, 0);
+      expect(adapter.requests, hasLength(1));
+    });
   });
 }

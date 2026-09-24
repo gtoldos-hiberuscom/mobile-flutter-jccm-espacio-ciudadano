@@ -22,7 +22,6 @@ class SoporteApi {
   /// Crea una nueva tarea de soporte o incidencia en el sistema SIGUE. Permite adjuntar un archivo opcional (captura, documento, etc.). El campo &#39;datos&#39; debe ser un JSON con los datos de la incidencia.
   ///
   /// Parameters:
-  /// * [idAgente] 
   /// * [datos] - Campo obligatorio. JSON con los datos de la incidencia: asunto, descripcion, email, nombreApellidos (opcional). Ejemplo: {\\\"asunto\\\":\\\"Error al descargar documento\\\",\\\"descripcion\\\":\\\"Al intentar descargar el documento adjunto de mi expediente DRG-TO/2024/000123, aparece un error 500.\\\",\\\"email\\\":\\\"ciudadano@ejemplo.com\\\",\\\"nombreApellidos\\\":\\\"Juan García López\\\"}
   /// * [adjunto] - Archivo adjunto opcional (imagen, PDF, etc.)
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
@@ -35,7 +34,6 @@ class SoporteApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> crearTareaSoporte({ 
-    required String idAgente,
     required String datos,
     MultipartFile? adjunto,
     CancelToken? cancelToken,
@@ -45,7 +43,7 @@ class SoporteApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/soporte'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString());
+    final _path = r'/api/v1/soporte';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{

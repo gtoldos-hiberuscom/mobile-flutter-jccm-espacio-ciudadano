@@ -18,7 +18,7 @@ void main() {
     //
     // Consulta el detalle de un expediente de publicación a partir del número de registro, el tipo de documento y el número de documento del ciudadano. La respuesta devuelve la estructura completa del expediente, incluyendo datos identificativos, órgano gestor, estado de tramitación y relación de documentos asociados.
     //
-    //Future<Respuesta> myPubliNumRegOperation(String idAgente, String idRegistro, ZCSRFCPUBLISELECTBYNUMREG ZCSRFCPUBLISELECTBYNUMREG) async
+    //Future<Respuesta> myPubliNumRegOperation(ZCSRFCPUBLISELECTBYNUMREG ZCSRFCPUBLISELECTBYNUMREG) async
     test('test myPubliNumRegOperation', () async {
       // TODO
     });
@@ -54,7 +54,7 @@ void main() {
     //
     // Consulta la lista de registros de entrada asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento ENTRADA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
     //
-    //Future<Respuesta> myPubliSelecByNifTipoProcEntradaOperation1(String idAgente, DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
+    //Future<Respuesta> myPubliSelecByNifTipoProcEntradaOperation1(DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
     test('test myPubliSelecByNifTipoProcEntradaOperation1', () async {
       // TODO
     });
@@ -63,7 +63,7 @@ void main() {
     //
     // Consulta la lista de expedientes asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento EXP y devuelve los expedientes localizados con información de tramitación, órgano responsable y documentos asociados.
     //
-    //Future<Respuesta> myPubliSelecByNifTipoProcExpOperation(String idAgente, DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
+    //Future<Respuesta> myPubliSelecByNifTipoProcExpOperation(DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
     test('test myPubliSelecByNifTipoProcExpOperation', () async {
       // TODO
     });
@@ -90,7 +90,7 @@ void main() {
     //
     // Consulta la lista de registros de salida asociados al ciudadano según su tipo y número de documento. El endpoint fuerza internamente el tipo de procedimiento SALIDA y devuelve el listado de anotaciones del Registro Único con su información de tramitación.
     //
-    //Future<Respuesta> myPubliSelecByNifTipoProcSalidaOperation(String idAgente, DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
+    //Future<Respuesta> myPubliSelecByNifTipoProcSalidaOperation(DTSELECTBYNIFV2REQ DTSELECTBYNIFV2REQ) async
     test('test myPubliSelecByNifTipoProcSalidaOperation', () async {
       // TODO
     });
@@ -117,7 +117,7 @@ void main() {
     //
     // Consulta el detalle de un expediente de publicación a partir del número de expediente, el tipo de documento y el número de documento del ciudadano. La respuesta devuelve la estructura completa del expediente con datos identificativos, estado, órgano gestor y documentos asociados.
     //
-    //Future<Respuesta> myPubliSelecByNumExpOperation1(String idAgente, String idExpediente, ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP) async
+    //Future<Respuesta> myPubliSelecByNumExpOperation1(ZCSRFCPUBLISELECTBYNUMEXP ZCSRFCPUBLISELECTBYNUMEXP) async
     test('test myPubliSelecByNumExpOperation1', () async {
       // TODO
     });

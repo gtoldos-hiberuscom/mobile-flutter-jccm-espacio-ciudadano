@@ -44,7 +44,7 @@ class GestionExpedienteDetallePage extends ConsumerWidget {
         loading: () => const LoadingStateWidget(),
         error: (final error, final _) => ErrorStateWidget(
           message: l10n.gestionExpedientesDetalleLoadError,
-          onRetry: () => ref.invalidate(expedienteDetailProvider(key)),
+          onRetry: () => ref.refresh(expedienteDetailProvider(key)),
         ),
         data: (final expediente) => _ExpedienteDetalleBody(expediente: expediente, tercero: tercero),
       ),
@@ -84,12 +84,13 @@ class _ExpedienteDetalleBody extends StatelessWidget {
       if (_hasValue(expediente.fechaInicio))
         AppInfoLabelEntry(
           label: l10n.gestionExpedientesFechaInicioLabel,
-          value: _formatDate(context, expediente.fechaInicio!),
+          value: _formatDate(expediente.fechaInicio!),
+          valueColor: AppColors.textBase,
         ),
       if (_hasValue(expediente.fechaFin))
         AppInfoLabelEntry(
           label: l10n.gestionExpedientesFechaCierreLabel,
-          value: _formatDate(context, expediente.fechaFin!),
+          value: _formatDate(expediente.fechaFin!),
           valueColor: AppColors.textBase,
         ),
       if (_hasValue(expediente.estado))
@@ -112,14 +113,16 @@ class _ExpedienteDetalleBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_hasValue(expediente.titulo))
+                if (_hasValue(expediente.titulo)) ...[
                   AppTextBlock(
                     text: _sentenceCase(expediente.titulo),
                     variant: AppTextBlockVariant.h2,
-                    color: AppColors.textBase,
+                    color: AppColors.primary,
                     showLeadingIcon: false,
                     showTrailingIcon: false,
                   ),
+                  const SizedBox(height: AppDimensions.space16),
+                ],
                 if (dataItems.isNotEmpty) ...[
                   AppTextBlock(
                     text: l10n.gestionExpedientesDatosExpedienteTitle,
@@ -129,10 +132,12 @@ class _ExpedienteDetalleBody extends StatelessWidget {
                     showTrailingIcon: false,
                   ),
                   AppInfoLabelList(items: dataItems, horizontal: false),
+                  const SizedBox(height: AppDimensions.space16),
                   const AppDivider(
                     dark: true,
                     strength: AppDividerStrength.soft,
                   ),
+                  const SizedBox(height: AppDimensions.space16),
                 ],
                 if (statusItems.isNotEmpty) ...[
                   AppTextBlock(
@@ -143,6 +148,7 @@ class _ExpedienteDetalleBody extends StatelessWidget {
                     showTrailingIcon: false,
                   ),
                   AppInfoLabelList(items: statusItems, horizontal: false),
+                  const SizedBox(height: AppDimensions.space16),
                   const AppDivider(
                     dark: true,
                     strength: AppDividerStrength.soft,
@@ -195,14 +201,11 @@ class _ExpedienteDetalleBody extends StatelessWidget {
     return '${formatted[0].toUpperCase()}${formatted.substring(1)}';
   }
 
-  String _formatDate(final BuildContext context, final String rawDate) {
+  String _formatDate(final String rawDate) {
     final date = DateTime.tryParse(rawDate);
     if (date == null) {
       return rawDate;
     }
-    return DateFormat(
-      'd MMM yyyy',
-      Localizations.localeOf(context).languageCode,
-    ).format(date);
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 }

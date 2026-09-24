@@ -31,6 +31,7 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
     return Scaffold(
       appBar: AppNavBar(
         type: AppNavBarType.level2,
+        backgroundColor: AppColors.surface,
         title: l10n.gestionExpedientesPageTitle,
         onBack: () => context.go(Routes.gestion),
         actions: [
@@ -65,7 +66,7 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
                 ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
                 : ErrorStateWidget(
                     message: l10n.gestionExpedientesLoadError,
-                    onRetry: () => ref.invalidate(expedientesProvider),
+                    onRetry: () => ref.refresh(expedientesProvider),
                   ),
             data: (final expedientes) {
               if (expedientes.isEmpty) {

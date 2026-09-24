@@ -78,7 +78,8 @@ void main() {
       // Gana la de SESCAM: trae profesional y modo en campos propios en vez de
       // dentro del mensaje del evento.
       expect(duplicated.single.title, 'LAGUNA RUIDERA MONTESINOS');
-      expect(duplicated.single.description, 'DEMANDA');
+      expect(duplicated.single.description, 'Cita de Atención Primaria');
+      expect(duplicated.single.detail, 'Consulta a demanda');
       expect(appointments, hasLength(4));
     });
 

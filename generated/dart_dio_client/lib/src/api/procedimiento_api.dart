@@ -25,8 +25,6 @@ class ProcedimientoApi {
   /// Inicia un nuevo procedimiento administrativo en el sistema CESAR. Valida los datos del procedimiento y crea el registro correspondiente.
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
-  /// * [idExpediente] 
   /// * [dTProcedimiento] - Datos del procedimiento a iniciar. Incluye identificación del ciudadano, datos del solicitante y referencias administrativas.
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -38,8 +36,6 @@ class ProcedimientoApi {
   /// Returns a [Future] containing a [Response] with a [Respuesta] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<Respuesta>> getIniProc({ 
-    required String idAgente,
-    required String idExpediente,
     required DTProcedimiento dTProcedimiento,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -48,7 +44,7 @@ class ProcedimientoApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/procedimiento/inicproc'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString()).replaceAll('{' r'idExpediente' '}', encodeQueryParameter(_serializers, idExpediente, const FullType(String)).toString());
+    final _path = r'/api/v1/procedimiento/inicproc';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -413,8 +409,6 @@ class ProcedimientoApi {
   /// 
   ///
   /// Parameters:
-  /// * [idAgente] - Identificador único del agente (ciudadano). Ejemplo: PER9999927
-  /// * [idExpediente] 
   /// * [ADJUNTO] 
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
@@ -426,8 +420,6 @@ class ProcedimientoApi {
   /// Returns a [Future] containing a [Response] with a [RESULTADOPROCEDIMIENTO] as data
   /// Throws [DioException] if API call or serialization fails
   Future<Response<RESULTADOPROCEDIMIENTO>> miSubirAdjuntoSinFirmaOperation({ 
-    required String idAgente,
-    required String idExpediente,
     required ADJUNTO adjuntoBody,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -436,7 +428,7 @@ class ProcedimientoApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/v1/procedimiento/subiradjuntosinfirma'.replaceAll('{' r'idAgente' '}', encodeQueryParameter(_serializers, idAgente, const FullType(String)).toString()).replaceAll('{' r'idExpediente' '}', encodeQueryParameter(_serializers, idExpediente, const FullType(String)).toString());
+    final _path = r'/api/v1/procedimiento/subiradjuntosinfirma';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{

@@ -217,7 +217,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       '[SUPPORT] Sending support request '
       '(attachment: ${request.attachment != null})',
     );
-    // Con sesión, el gateway sólo acepta la ruta /ciudadanos/{idAgente}/soporte.
+    // La presencia de idAgente selecciona la ruta autenticada /api/v1/soporte.
     final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
     final result = await ref.read(submitSupportRequestUsecaseProvider).execute(request, idAgente: idAgente);
     if (!mounted) {
