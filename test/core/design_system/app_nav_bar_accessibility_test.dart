@@ -54,6 +54,21 @@ void main() {
     expect(find.byTooltip('Volver'), findsNothing);
   });
 
+  testWidgets('permite sobrescribir el color de fondo', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        AppNavBar(
+          type: AppNavBarType.level2,
+          title: 'Mis registros',
+          backgroundColor: Colors.white,
+          onBack: () {},
+        ),
+      ),
+    );
+
+    expect(tester.widget<AppBar>(find.byType(AppBar)).backgroundColor, Colors.white);
+  });
+
   testWidgets('localiza cerrar en la variante de detalle', (final tester) async {
     await tester.pumpWidget(
       buildApp(

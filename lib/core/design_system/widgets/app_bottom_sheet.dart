@@ -87,6 +87,9 @@ class AppBottomSheet extends StatelessWidget {
   Widget build(final BuildContext context) {
     final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
     final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
+    final verticalMargin = isLandscape ? AppDimensions.space8 : AppDimensions.space32;
+    final mediaQuery = MediaQuery.of(context);
+    final maxCardHeight = (mediaQuery.size.height - mediaQuery.padding.vertical - keyboardInset - (verticalMargin * 2)).clamp(0.0, double.infinity);
     final l10n = AppLocalizations.of(context);
     return Semantics(
       container: true,
@@ -100,61 +103,64 @@ class AppBottomSheet extends StatelessWidget {
           child: Padding(
             padding:
                 EdgeInsets.only(
-                  bottom: (isLandscape ? AppDimensions.space8 : AppDimensions.space40) + keyboardInset,
-                  top: isLandscape ? AppDimensions.space8 : AppDimensions.space32,
+                  bottom: verticalMargin + keyboardInset,
+                  top: verticalMargin,
                 ).copyWith(
                   left: horizontalMargin,
                   right: horizontalMargin,
                 ),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.backgroundWhite,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-                border: Border.all(color: AppColors.neutral300),
-                boxShadow: AppShadows.overAll,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildHeader(context, l10n),
-                  Flexible(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (title != null)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppDimensions.space16,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: maxCardHeight),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundWhite,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+                  border: Border.all(color: AppColors.neutral300),
+                  boxShadow: AppShadows.overAll,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildHeader(context, l10n),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (title != null)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.space16,
+                                ),
+                                child: _buildTitle(),
                               ),
-                              child: _buildTitle(),
-                            ),
-                          Semantics(
-                            sortKey: const OrdinalSortKey(2),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppDimensions.space16,
-                              ),
-                              child: body,
-                            ),
-                          ),
-                          if (footer != null)
                             Semantics(
-                              sortKey: const OrdinalSortKey(3),
+                              sortKey: const OrdinalSortKey(2),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppDimensions.space16,
                                 ),
-                                child: footer,
+                                child: body,
                               ),
                             ),
-                        ],
+                            if (footer != null)
+                              Semantics(
+                                sortKey: const OrdinalSortKey(3),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppDimensions.space16,
+                                  ),
+                                  child: footer,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: isLandscape ? AppDimensions.space16 : AppDimensions.space32),
-                ],
+                    SizedBox(height: isLandscape ? AppDimensions.space16 : AppDimensions.space32),
+                  ],
+                ),
               ),
             ),
           ),
@@ -279,63 +285,61 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final availableFormatCount = [onQrPressed, onPkPassPressed, onPdfPressed].where((final callback) => callback != null).length;
     final hasSingleFormat = availableFormatCount == 1;
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (onQrPressed != null) ...[
-            _QrPreview(
-              imageBytes: qrImageBytes,
-              isLoading: isQrLoading,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (onQrPressed != null) ...[
+          _QrPreview(
+            imageBytes: qrImageBytes,
+            isLoading: isQrLoading,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppDimensions.space16,
+              vertical: AppDimensions.space8,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space8,
-              ),
-              child: Divider(height: 1, color: AppColors.neutral100),
-            ),
-          ],
-          Padding(
-            padding: const EdgeInsets.only(
-              top: AppDimensions.space4,
-              bottom: AppDimensions.space8,
-            ),
-            child: Text(
-              l10n.appQrDownloadFormatTitle,
-              style: AppTypography.leadingBold.copyWith(
-                color: AppColors.primary,
-              ),
+            child: Divider(height: 1, color: AppColors.neutral100),
+          ),
+        ],
+        Padding(
+          padding: const EdgeInsets.only(
+            top: AppDimensions.space4,
+            bottom: AppDimensions.space8,
+          ),
+          child: Text(
+            l10n.appQrDownloadFormatTitle,
+            style: AppTypography.leadingBold.copyWith(
+              color: AppColors.primary,
             ),
           ),
-          const SizedBox(height: AppDimensions.space8),
-          if (onQrPressed != null) ...[
-            _DownloadFormatButton(
-              label: l10n.appQrCodeLabel,
-              onPressed: downloadingFormat == null ? onQrPressed : null,
-              isLoading: downloadingFormat == 'QR',
-              primary: hasSingleFormat,
-            ),
-            const SizedBox(height: AppDimensions.space16),
-          ],
-          if (onPkPassPressed != null) ...[
-            _DownloadFormatButton(
-              label: _walletLabel(l10n),
-              onPressed: downloadingFormat == null ? onPkPassPressed : null,
-              isLoading: downloadingFormat == 'PKPASS',
-              primary: hasSingleFormat,
-            ),
-            if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
-          ],
-          if (onPdfPressed != null)
-            _DownloadFormatButton(
-              label: 'PDF',
-              onPressed: downloadingFormat == null ? onPdfPressed : null,
-              isLoading: downloadingFormat == 'PDF',
-              primary: hasSingleFormat,
-            ),
+        ),
+        const SizedBox(height: AppDimensions.space8),
+        if (onQrPressed != null) ...[
+          _DownloadFormatButton(
+            label: l10n.appQrCodeLabel,
+            onPressed: downloadingFormat == null ? onQrPressed : null,
+            isLoading: downloadingFormat == 'QR',
+            primary: hasSingleFormat,
+          ),
+          const SizedBox(height: AppDimensions.space16),
         ],
-      ),
+        if (onPkPassPressed != null) ...[
+          _DownloadFormatButton(
+            label: _walletLabel(l10n),
+            onPressed: downloadingFormat == null ? onPkPassPressed : null,
+            isLoading: downloadingFormat == 'PKPASS',
+            primary: hasSingleFormat,
+          ),
+          if (onPdfPressed != null) const SizedBox(height: AppDimensions.space16),
+        ],
+        if (onPdfPressed != null)
+          _DownloadFormatButton(
+            label: 'PDF',
+            onPressed: downloadingFormat == null ? onPdfPressed : null,
+            isLoading: downloadingFormat == 'PDF',
+            primary: hasSingleFormat,
+          ),
+      ],
     );
   }
 }
@@ -359,7 +363,10 @@ class _QrPreview extends StatelessWidget {
   Widget build(final BuildContext context) {
     return LayoutBuilder(
       builder: (final context, final constraints) {
-        final heightLimit = MediaQuery.sizeOf(context).height * 0.42;
+        // Keep enough vertical space for the download actions. The parent
+        // bottom sheet remains scrollable as a fallback for very small
+        // viewports and large accessibility text sizes.
+        final heightLimit = MediaQuery.sizeOf(context).height * 0.30;
         final availableWidth = constraints.maxWidth < 326 ? constraints.maxWidth : 326.0;
         final desiredHeight = availableWidth * 331 / 326;
         final scale = desiredHeight > heightLimit ? heightLimit / desiredHeight : 1.0;

@@ -105,7 +105,7 @@ void main() {
     expect(tester.getSize(previousTarget), const Size(48, 48));
   });
 
-  testWidgets('usa scroll horizontal y reflujo al 200 por ciento en 320 dp', (final tester) async {
+  testWidgets('adapta las siete columnas y el encabezado al 200 por ciento en 320 dp', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(320, 900);
     addTearDown(tester.view.reset);
@@ -127,8 +127,15 @@ void main() {
       find.byWidgetPredicate(
         (final widget) => widget is SingleChildScrollView && widget.scrollDirection == Axis.horizontal,
       ),
-      findsOneWidget,
+      findsNothing,
     );
+    final calendarRect = tester.getRect(find.byType(AppCalendar));
+    final sundayRect = tester.getRect(find.text('Dom'));
+    expect(sundayRect.right, lessThanOrEqualTo(calendarRect.right));
+    expect(sundayRect.left, greaterThanOrEqualTo(calendarRect.left));
+    final dayTarget = find.ancestor(of: find.text('15'), matching: find.byType(InkWell)).first;
+    expect(tester.getSize(dayTarget).width, lessThan(48));
+    expect(tester.getSize(dayTarget).height, 48);
     expect(tester.getTopLeft(find.text('Mayo 2026')).dy, lessThan(tester.getTopLeft(find.byIcon(Icons.chevron_left)).dy));
     expect(tester.takeException(), isNull);
   });

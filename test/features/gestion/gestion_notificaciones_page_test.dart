@@ -13,6 +13,52 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 const _procedimientoLabel = 'PROCEDIMIENTO';
 
 void main() {
+  testWidgets('los cambios de pestaña filtran en memoria sin hacer nuevas peticiones', (final tester) async {
+    final requested = <NotificacionEstado?>[];
+    await _pumpWithLoader(tester, (final estado) async {
+      requested.add(estado);
+      return [
+        _notification(id: 1, concepto: 'Pendiente local', estado: NotificacionEstado.pendiente),
+        _notification(id: 2, concepto: 'Aceptada local', estado: NotificacionEstado.aceptada),
+      ];
+    });
+    final l10n = AppLocalizations.of(tester.element(find.byType(GestionNotificacionesPage)));
+
+    await tester.tap(find.text(l10n.gestionNotificacionesTabPendientes));
+    await tester.pump();
+    expect(find.text('Pendiente local'), findsOneWidget);
+    expect(find.text('Aceptada local'), findsNothing);
+
+    await tester.tap(find.text(l10n.gestionNotificacionesTabAceptadas));
+    await tester.pump();
+
+    expect(requested, [null]);
+    expect(find.text('Aceptada local'), findsOneWidget);
+    expect(find.text('Pendiente local'), findsNothing);
+  });
+
+  testWidgets('reintentar vuelve a cargar el filtro seleccionado', (final tester) async {
+    var acceptedAttempts = 0;
+    await _pumpWithLoader(tester, (final estado) async {
+      expect(estado, isNull);
+      if (acceptedAttempts++ == 0) {
+        throw Exception('fallo transitorio');
+      }
+      return [_notification(id: 3, concepto: 'Recuperada', estado: NotificacionEstado.aceptada)];
+    });
+    final l10n = AppLocalizations.of(tester.element(find.byType(GestionNotificacionesPage)));
+
+    await tester.tap(find.text(l10n.gestionNotificacionesTabAceptadas));
+    await tester.pump();
+    expect(find.text(l10n.gestionNotificacionesLoadError), findsOneWidget);
+
+    await tester.tap(find.text(l10n.errorStateRetry));
+    await tester.pumpAndSettle();
+
+    expect(acceptedAttempts, 2);
+    expect(find.text('Recuperada'), findsOneWidget);
+  });
+
   testWidgets('tablet muestra los cuatro filtros compactos y permite seleccionar expiradas', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(800, 1100);
@@ -38,7 +84,8 @@ void main() {
     await tester.tap(find.text(l10n.gestionNotificacionesTabExpiradas));
     await tester.pumpAndSettle();
     final container = ProviderScope.containerOf(context);
-    expect(container.exists(gestionNotificacionesProvider(NotificacionEstado.expirada)), isTrue);
+    expect(container.exists(gestionNotificacionesProvider(null)), isTrue);
+    expect(container.exists(gestionNotificacionesProvider(NotificacionEstado.expirada)), isFalse);
     expect(tester.takeException(), isNull);
   });
 
@@ -104,10 +151,19 @@ void main() {
 }
 
 Future<void> _pumpList(final WidgetTester tester, final List<Notificacion> notificaciones) async {
+  await _pumpWithLoader(tester, (final _) async => notificaciones);
+  await tester.pumpAndSettle();
+}
+
+Future<void> _pumpWithLoader(
+  final WidgetTester tester,
+  final Future<List<Notificacion>> Function(NotificacionEstado? estado) loader,
+) async {
   await tester.pumpWidget(
     ProviderScope(
+      retry: (final _, final _) => null,
       overrides: [
-        gestionNotificacionesProvider.overrideWith((final ref, final estado) async => notificaciones),
+        gestionNotificacionesProvider.overrideWith((final ref, final estado) => loader(estado)),
       ],
       child: const MaterialApp(
         locale: Locale('es'),
@@ -117,5 +173,16 @@ Future<void> _pumpList(final WidgetTester tester, final List<Notificacion> notif
       ),
     ),
   );
-  await tester.pumpAndSettle();
+  await tester.pump();
 }
+
+Notificacion _notification({
+  required final int id,
+  required final String concepto,
+  required final NotificacionEstado? estado,
+}) => Notificacion(
+  id: id,
+  concepto: concepto,
+  procedimientoDenominacion: 'Procedimiento',
+  estado: estado,
+);

@@ -171,25 +171,7 @@ class _AppCalendarState extends State<AppCalendar> {
       container: true,
       explicitChildNodes: true,
       label: widget.semanticsLabel ?? l10n.a11yCalendar,
-      child: LayoutBuilder(
-        builder: (final context, final constraints) {
-          // Seven 48 dp touch targets plus the 8 dp horizontal grid padding.
-          // This fits the 358 dp content width used by Agenda on a 390 dp
-          // viewport, so the Sunday column is not pushed off-screen.
-          const minimumWidth = (AppDimensions.minTouchTarget * DateTime.daysPerWeek) + (AppDimensions.space8 * 2);
-          final calendar = SizedBox(
-            width: constraints.maxWidth < minimumWidth ? minimumWidth : constraints.maxWidth,
-            child: _buildCalendarContent(l10n, monthLabel),
-          );
-          if (constraints.maxWidth >= minimumWidth) {
-            return calendar;
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: calendar,
-          );
-        },
-      ),
+      child: _buildCalendarContent(l10n, monthLabel),
     );
   }
 
@@ -502,50 +484,57 @@ class _AppCalendarState extends State<AppCalendar> {
           child: InkWell(
             onTap: canSelect ? () => widget.onDateSelected?.call(date) : null,
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            child: SizedBox.square(
-              dimension: _dayTargetSize,
-              child: Center(
-                child: Container(
-                  width: dayBoxSize,
-                  height: dayBoxSize,
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                    border: border,
-                    boxShadow: highlighted ? AppShadows.low : null,
-                  ),
-                  alignment: Alignment.center,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    clipBehavior: Clip.none,
-                    fit: StackFit.expand,
-                    children: [
-                      Center(
-                        child: Text(
-                          '${date.day}',
-                          style: _dayTextStyle.copyWith(
-                            color: textColor,
-                            fontWeight: fontWeight,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+            child: LayoutBuilder(
+              builder: (final context, final constraints) {
+                final targetWidth = constraints.maxWidth < _dayTargetSize ? constraints.maxWidth : _dayTargetSize;
+                final boxWidth = dayBoxSize < targetWidth ? dayBoxSize : targetWidth;
+                return SizedBox(
+                  width: targetWidth,
+                  height: _dayTargetSize,
+                  child: Center(
+                    child: Container(
+                      width: boxWidth,
+                      height: dayBoxSize,
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                        border: border,
+                        boxShadow: highlighted ? AppShadows.low : null,
                       ),
-                      if (hasEvent)
-                        Positioned(
-                          bottom: _isTabletGrid ? 3 : 1,
-                          child: Container(
-                            width: _isTabletGrid ? AppDimensions.space8 : 6,
-                            height: _isTabletGrid ? AppDimensions.space8 : 6,
-                            decoration: const BoxDecoration(
-                              color: AppColors.primaryDark,
-                              shape: BoxShape.circle,
+                      alignment: Alignment.center,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        clipBehavior: Clip.none,
+                        fit: StackFit.expand,
+                        children: [
+                          Center(
+                            child: Text(
+                              '${date.day}',
+                              style: _dayTextStyle.copyWith(
+                                color: textColor,
+                                fontWeight: fontWeight,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                        ),
-                    ],
+                          if (hasEvent)
+                            Positioned(
+                              bottom: _isTabletGrid ? 3 : 1,
+                              child: Container(
+                                width: _isTabletGrid ? AppDimensions.space8 : 6,
+                                height: _isTabletGrid ? AppDimensions.space8 : 6,
+                                decoration: const BoxDecoration(
+                                  color: AppColors.primaryDark,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
-import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente_aportacion_datos.dart';
@@ -12,6 +12,8 @@ import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/ge
 
 final class GestionExpedienteRepositoryImpl implements GestionExpedienteRepository {
   GestionExpedienteRepositoryImpl({required final Dio dio}) : _api = PublicacionApi(withGeneratedApiCompat(dio), standardSerializers);
+
+  static const expedientesTimeout = Duration(seconds: 60);
 
   final PublicacionApi _api;
 
@@ -33,6 +35,9 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
             ..tipodocumento = 'NIF',
         ),
         extra: {
+          // La consulta agrega expedientes de varios sistemas y en PRE puede
+          // superar el timeout global de 20 segundos.
+          generatedApiTimeoutExtraKey: expedientesTimeout,
           generatedApiDecodeStringResponseExtraKey: true,
           generatedApiUnwrapBodyExtraKey: true,
           generatedApiNormalizeSingletonCollectionsExtraKey: const ['publicacionportal.item'],
@@ -88,6 +93,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
         // ..ptipodoc = tipodoc,
       ),
       extra: {
+        generatedApiTimeoutExtraKey: expedientesTimeout,
         generatedApiDecodeStringResponseExtraKey: true,
         generatedApiUnwrapBodyExtraKey: true,
         // A diferencia de selectbynif, aquí `publicacionportal` es un objeto
@@ -209,12 +215,12 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   Expediente _toExpedienteDetailMap(final Map<String, Object?> data, {required final bool canAttachDocuments}) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
-      titulo: _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      titulo: _string(data, 'desasunto') ?? _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
       // "Oficina tramitadora": mejor candidato disponible es `desuniorg`
       // (descripción de la unidad orgánica, campo paralelo a `desconsej`).
       oficinaTramitadora: _string(data, 'desuniorg'),
-      fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
+      fechaInicio: _nonSentinelDate(_string(data, 'fechareg')) ?? _nonSentinelDate(_string(data, 'fechaini')),
       // "0000-00-00" es el sentinel SAP de fecha nula; se trata como ausente.
       fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
       estado: _estadoDescripcion(data),
@@ -285,9 +291,9 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
   Expediente _toExpedienteByNifMap(final Map<String, Object?> data) {
     return Expediente(
       numexp: _string(data, 'numexp') ?? '',
-      titulo: _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? _string(data, 'desasunto') ?? '',
+      titulo: _string(data, 'desasunto') ?? _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
-      fechaInicio: _string(data, 'fechareg') ?? _string(data, 'fechaini'),
+      fechaInicio: _nonSentinelDate(_string(data, 'fechareg')) ?? _nonSentinelDate(_string(data, 'fechaini')),
       estado: _estadoDescripcion(data),
     );
   }

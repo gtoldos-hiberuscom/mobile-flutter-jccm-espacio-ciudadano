@@ -30,6 +30,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.onNotificationsTap,
     this.onHelpTap,
     this.profileInitials,
+    this.backgroundColor,
   }) : assert(title == null || title != '', 'title must not be empty'),
        assert(
          profileInitials == null || profileInitials != '',
@@ -46,6 +47,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? titleWidget;
   final bool showLeading;
   final bool showNotifications;
+  final Color? backgroundColor;
 
   /// Called when the user avatar is tapped (opens the profile drawer).
   final VoidCallback? onAvatarTap;
@@ -68,12 +70,14 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     },
   );
 
-  Color get _backgroundColor => switch (type) {
-    AppNavBarType.grey => AppColors.backgroundBlueMutedLight,
-    AppNavBarType.detail => AppColors.backgroundBlueLighter,
-    AppNavBarType.level2 => AppColors.statusNeutralLight,
-    _ => AppColors.surface,
-  };
+  Color get _backgroundColor =>
+      backgroundColor ??
+      switch (type) {
+        AppNavBarType.grey => AppColors.backgroundBlueMutedLight,
+        AppNavBarType.detail => AppColors.backgroundBlueLighter,
+        AppNavBarType.level2 => AppColors.statusNeutralLight,
+        _ => AppColors.surface,
+      };
 
   Color get _foregroundColor => switch (type) {
     AppNavBarType.level2 => AppColors.primary,
@@ -479,12 +483,14 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
               maxLines: 1,
             )..layout();
             final paddedWidth = painter.width.ceilToDouble() + 32;
-            if (paddedWidth > width) width = paddedWidth;
+            if (paddedWidth > width) {
+              width = paddedWidth;
+            }
             painter.dispose();
           }
           return width;
         }).toList();
-        final totalWidth = widths.fold(0.0, (final sum, final width) => sum + width);
+        final totalWidth = widths.fold<double>(0, (final sum, final width) => sum + width);
         final extraWidth = constraints.hasBoundedWidth && constraints.maxWidth > totalWidth ? (constraints.maxWidth - totalWidth) / tabs.length : 0.0;
 
         return TabBar(

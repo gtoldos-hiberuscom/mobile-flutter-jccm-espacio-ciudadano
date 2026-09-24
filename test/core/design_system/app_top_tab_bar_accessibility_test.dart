@@ -2,6 +2,7 @@ import 'dart:ui' show SemanticsAction, SemanticsRole, Tristate;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_top_tab_bar.dart';
 
 void main() {
@@ -92,6 +93,25 @@ void main() {
         greaterThanOrEqualTo(48),
       );
     }
+  });
+
+  testWidgets('usa el fondo neutral light especificado en Figma', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        AppTopTabBar(
+          tabs: const ['Entradas de registro', 'Salidas de registro'],
+          selectedIndex: 0,
+          onTabSelected: (_) {},
+        ),
+      ),
+    );
+
+    final background = tester.widget<DecoratedBox>(
+      find.byWidgetPredicate(
+        (final widget) => widget is DecoratedBox && widget.decoration is BoxDecoration && (widget.decoration as BoxDecoration).color == AppColors.backgroundBlueMutedLight,
+      ),
+    );
+    expect((background.decoration as BoxDecoration).color, const Color(0xFFE0E5EB));
   });
 
   testWidgets('crece sin truncar al 200 por ciento en 320 dp', (

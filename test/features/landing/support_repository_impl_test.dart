@@ -8,11 +8,18 @@ import 'package:jccm_espacio_ciudadano/features/landing/0_entity/support_request
 import 'package:jccm_espacio_ciudadano/features/landing/3_data/support_repository_impl.dart';
 
 void main() {
+  final authenticatedEndpoint = Uri.parse(
+    'https://fachada-sede-api-pre.cm-pre.jccm.es/api/v1/soporte',
+  );
+
   group('SupportRepositoryImpl', () {
     test('submits the support form to support API', () async {
       final adapter = _RecordingAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
-      final repository = SupportRepositoryImpl(dio: dio);
+      final repository = SupportRepositoryImpl(
+        dio: dio,
+        authenticatedEndpoint: authenticatedEndpoint,
+      );
 
       await repository.submitSupportRequest(
         SupportRequest(
@@ -29,6 +36,10 @@ void main() {
       );
 
       expect(adapter.request?.method, 'POST');
+      expect(
+        adapter.request?.path,
+        'https://gateway-espacio-ciudadano-des.cm-pre.jccm.es/api/v1/ciudadanos/soporte',
+      );
       expect(adapter.request?.path, SupportRepositoryImpl.endpoint);
       expect(adapter.request?.contentType, startsWith('multipart/form-data'));
       expect(jsonDecode(adapter.request!.fields['datos']!) as Map<String, dynamic>, <String, dynamic>{
@@ -42,10 +53,13 @@ void main() {
       expect(adapter.request?.files.single.length, 3);
     });
 
-    test('submits to the citizen support route when a session idAgente is given', () async {
+    test('submits to the authenticated support route when a session idAgente is given', () async {
       final adapter = _RecordingAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
-      final repository = SupportRepositoryImpl(dio: dio);
+      final repository = SupportRepositoryImpl(
+        dio: dio,
+        authenticatedEndpoint: authenticatedEndpoint,
+      );
 
       await repository.submitSupportRequest(
         const SupportRequest(
@@ -59,8 +73,10 @@ void main() {
       );
 
       expect(adapter.request?.method, 'POST');
-      expect(adapter.request?.path, '/api/v1/ciudadanos/PER9999927/soporte');
-      expect(adapter.request?.path, SupportRepositoryImpl.citizenEndpoint('PER9999927'));
+      expect(
+        adapter.request?.path,
+        'https://fachada-sede-api-pre.cm-pre.jccm.es/api/v1/soporte',
+      );
       expect(adapter.request?.contentType, startsWith('multipart/form-data'));
       expect(jsonDecode(adapter.request!.fields['datos']!) as Map<String, dynamic>, <String, dynamic>{
         'asunto': 'No puedo acceder',
@@ -73,7 +89,10 @@ void main() {
     test('falls back to the public support route when idAgente is empty', () async {
       final adapter = _RecordingAdapter();
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
-      final repository = SupportRepositoryImpl(dio: dio);
+      final repository = SupportRepositoryImpl(
+        dio: dio,
+        authenticatedEndpoint: authenticatedEndpoint,
+      );
 
       await repository.submitSupportRequest(
         const SupportRequest(

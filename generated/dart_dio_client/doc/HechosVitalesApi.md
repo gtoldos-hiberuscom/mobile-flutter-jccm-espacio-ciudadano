@@ -74,7 +74,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **actualizarClausulas1**
-> Respuesta actualizarClausulas1(idAgente, clausulasAgente, authorization)
+> Respuesta actualizarClausulas1(clausulasAgente, authorization)
 
 Actualizar las cláusulas de consentimiento de un agente
 
@@ -85,12 +85,11 @@ Actualiza el estado de aceptación de las cláusulas de consentimiento ya regist
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getHechosVitalesApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
 final ClausulasAgente clausulasAgente = {"idAgente":"PER9999927","clausulas":[{"idClausula":"001","version":1,"seleccionado":true},{"idClausula":"002","version":1,"seleccionado":true},{"idClausula":"003","version":1,"seleccionado":true},{"idClausula":"004","version":1,"seleccionado":false}]}; // ClausulasAgente | Cuerpo de la petición con el identificador del agente y la lista de cláusulas a actualizar. Cada cláusula incluye su identificador, versión y nuevo estado de selección (true=aceptada, false=rechazada).
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
-    final response = api.actualizarClausulas1(idAgente, clausulasAgente, authorization);
+    final response = api.actualizarClausulas1(clausulasAgente, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling HechosVitalesApi->actualizarClausulas1: $e\n');
@@ -101,7 +100,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
  **clausulasAgente** | [**ClausulasAgente**](ClausulasAgente.md)| Cuerpo de la petición con el identificador del agente y la lista de cláusulas a actualizar. Cada cláusula incluye su identificador, versión y nuevo estado de selección (true=aceptada, false=rechazada). | 
  **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 
@@ -168,7 +166,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **actualizarListaHechos1**
-> Respuesta actualizarListaHechos1(idAgente, listaHechosAgente, authorization)
+> Respuesta actualizarListaHechos1(listaHechosAgente, authorization)
 
 Actualizar los hechos vitales seleccionados por un agente
 
@@ -179,12 +177,11 @@ Actualiza la lista de hechos vitales seleccionados por el ciudadano. Recibe el i
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getHechosVitalesApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
 final ListaHechosAgente listaHechosAgente = {"idAgente":"PER9999927","listaHechos":[{"idHecho":1,"seleccionado":true},{"idHecho":3,"seleccionado":true},{"idHecho":17,"seleccionado":true},{"idHecho":19,"seleccionado":true}]}; // ListaHechosAgente | Cuerpo de la petición con el identificador del agente y la lista de hechos vitales a actualizar. Cada hecho incluye su identificador y el estado de selección (true=activo, false=inactivo).
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
-    final response = api.actualizarListaHechos1(idAgente, listaHechosAgente, authorization);
+    final response = api.actualizarListaHechos1(listaHechosAgente, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling HechosVitalesApi->actualizarListaHechos1: $e\n');
@@ -195,7 +192,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
  **listaHechosAgente** | [**ListaHechosAgente**](ListaHechosAgente.md)| Cuerpo de la petición con el identificador del agente y la lista de hechos vitales a actualizar. Cada hecho incluye su identificador y el estado de selección (true=activo, false=inactivo). | 
  **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 
@@ -352,7 +348,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **enviarClausulas1**
-> Respuesta enviarClausulas1(idAgente, clausulasAgente, authorization)
+> Respuesta enviarClausulas1(clausulasAgente, authorization)
 
 Dar de alta las cláusulas de consentimiento de un agente
 
@@ -363,12 +359,11 @@ Registra por primera vez (alta inicial) las cláusulas de consentimiento selecci
 import 'package:espacio_ciudadano_api/api.dart';
 
 final api = EspacioCiudadanoApi().getHechosVitalesApi();
-final String idAgente = idAgente_example; // String | Identificador único del agente (ciudadano). Ejemplo: PER9999927
 final ClausulasAgente clausulasAgente = {"idAgente":"PER9999927","clausulas":[{"idClausula":"001","version":1,"seleccionado":true},{"idClausula":"002","version":1,"seleccionado":false},{"idClausula":"003","version":1,"seleccionado":true},{"idClausula":"004","version":1,"seleccionado":false}]}; // ClausulasAgente | Cuerpo de la petición con el identificador del agente y la lista de cláusulas a registrar. Cada cláusula incluye su identificador, versión y estado de selección (true=aceptada, false=rechazada).
 final String authorization = authorization_example; // String | Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'.
 
 try {
-    final response = api.enviarClausulas1(idAgente, clausulasAgente, authorization);
+    final response = api.enviarClausulas1(clausulasAgente, authorization);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling HechosVitalesApi->enviarClausulas1: $e\n');
@@ -379,7 +374,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **idAgente** | **String**| Identificador único del agente (ciudadano). Ejemplo: PER9999927 | 
  **clausulasAgente** | [**ClausulasAgente**](ClausulasAgente.md)| Cuerpo de la petición con el identificador del agente y la lista de cláusulas a registrar. Cada cláusula incluye su identificador, versión y estado de selección (true=aceptada, false=rechazada). | 
  **authorization** | **String**| Token JWT de autorización en cabecera HTTP con formato 'Bearer <token>'. | [optional] 
 

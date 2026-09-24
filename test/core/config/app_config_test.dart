@@ -39,6 +39,21 @@ void main() {
     expect(_config('pre').digitalHealthUrl.host, 'sescampre.jccm.es');
     expect(_config('pro').employmentUrl.path, '/private/posicion-global');
   });
+
+  test('resolves the authenticated support facade for every environment', () {
+    expect(
+      _config('development').authenticatedSupportUrl,
+      Uri.parse('https://fachada-sede-api-uat.cm-pre.jccm.es/api/v1/soporte'),
+    );
+    expect(
+      _config('preproduction').authenticatedSupportUrl,
+      Uri.parse('https://fachada-sede-api-pre.cm-pre.jccm.es/api/v1/soporte'),
+    );
+    expect(
+      _config('production').authenticatedSupportUrl,
+      Uri.parse('https://fachada-sede-api.jccm.es/api/v1/soporte'),
+    );
+  });
 }
 
 AppConfig _config(final String flavor) => AppConfig.fromMap({

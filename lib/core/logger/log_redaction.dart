@@ -13,7 +13,6 @@
 library;
 
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 const String redactedPlaceholder = '***';
@@ -98,7 +97,15 @@ const Set<String> loggableKeys = {
 /// cuerpo opaco (por ejemplo el base64 de un PDF).
 /// Con [logRedactionDisabled] puesto no enmascara nada — solo para depurar en
 /// local.
-Object? redactForLog(final Object? value) => _redact(value, isRoot: true);
+Object? redactForLog(final Object? value) {
+  // Los clientes Dio con ResponseType.bytes entregan Uint8List. Volcarla
+  // completa genera miles de números por cada PDF o imagen y puede bloquear
+  // la consola, incluso cuando la redacción está desactivada en desarrollo.
+  if (value is Uint8List) {
+    return '<binary: ${value.length} bytes>';
+  }
+  return _redact(value, isRoot: true);
+}
 
 Object? _redact(final Object? value, {final bool isRoot = false, final bool loggableContext = false}) {
   if (logRedactionDisabled) {

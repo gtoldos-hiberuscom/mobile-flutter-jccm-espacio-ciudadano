@@ -35,7 +35,6 @@ Serializers _$serializers = (Serializers().toBuilder()
       ..add(DocumentoRegistro.serializer)
       ..add(Hecho.serializer)
       ..add(InfoError.serializer)
-      ..add(Link.serializer)
       ..add(ListaHechosAgente.serializer)
       ..add(MyPubliSelecByNifTipoProcRegistrosEntradaOperation1200Response
           .serializer)

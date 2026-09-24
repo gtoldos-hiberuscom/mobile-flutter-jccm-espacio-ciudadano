@@ -9,11 +9,13 @@ final class AdapterResponse {
     required this.statusCode,
     required this.body,
     this.contentType = Headers.jsonContentType,
+    this.headers = const {},
   });
 
   final int statusCode;
   final Object? body;
   final String contentType;
+  final Map<String, List<String>> headers;
 }
 
 final class CapturedRequest {
@@ -71,13 +73,12 @@ final class SequenceHttpClientAdapter implements HttpClientAdapter {
 
     onRequest?.call(requests.last);
     final response = _responses.removeAt(0);
-    return ResponseBody.fromString(
-      _encodeResponseBody(response.body),
-      response.statusCode,
-      headers: {
-        Headers.contentTypeHeader: [response.contentType],
-      },
-    );
+    final headers = {
+      Headers.contentTypeHeader: [response.contentType],
+      ...response.headers,
+    };
+    final body = response.body;
+    return body is Uint8List ? ResponseBody.fromBytes(body, response.statusCode, headers: headers) : ResponseBody.fromString(_encodeResponseBody(body), response.statusCode, headers: headers);
   }
 
   Object? _decodeRequestBody(final List<int> bodyBytes) {

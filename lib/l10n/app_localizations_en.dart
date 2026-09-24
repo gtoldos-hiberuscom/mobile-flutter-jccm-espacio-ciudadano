@@ -3620,13 +3620,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionRegistrosEntradasTab => 'Incoming entries';
 
   @override
+  String get gestionRegistrosEntradasDescription => 'View the communication records you have sent to the Regional Government of Castilla-La Mancha (JCCM).';
+
+  @override
   String get gestionRegistrosSalidasTab => 'Outgoing entries';
+
+  @override
+  String get gestionRegistrosSalidasDescription => 'View the communication records you have received from the Regional Government of Castilla-La Mancha (JCCM).';
 
   @override
   String get gestionRegistrosNumRegistroLabel => 'REGISTRY NO.';
 
   @override
   String get gestionRegistrosFechaLabel => 'DATE';
+
+  @override
+  String get gestionRegistrosCardDateLabel => 'REGISTRATION DATE';
 
   @override
   String get gestionRegistrosConsejeriaOrigenLabel => 'ORIGIN REGIONAL MINISTRY';
@@ -4153,16 +4162,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsAuthorizationCheckErrorMessage => 'We could not verify the authorization required to display your digital cards.';
 
   @override
-  String get digitalCardsInfoSheetContactHint => 'If any data is incorrect or out of date, contact your Health Centre.';
+  String get digitalCardsInfoSheetContactHint => 'If any information on the card is incorrect or out of date, contact the issuing organization to request a correction.';
 
   @override
-  String get digitalCardsInfoSheetContactButton => 'Contact';
+  String get digitalCardsInfoSheetContactButton => 'View the contact list';
 
   @override
-  String get digitalCardsInfoSheetTitle => 'About My Digital Cards';
+  String get digitalCardsInfoSheetTitle => 'Learn more about My digital cards';
 
   @override
-  String get digitalCardsInfoSheetBody => 'Download the cards issued by the Junta de Comunidades de Castilla-La Mancha.';
+  String get digitalCardsInfoSheetBody => 'View and download the digital cards linked to your profile and use them to complete your formalities at any time.';
 
   @override
   String get digitalCardsAuthorizationRequiredMessage => 'To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.';
@@ -4235,6 +4244,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gestionNotificacionDetalleDocumentosTitle => 'Documents';
+
+  @override
+  String get gestionNotificacionDetalleAcuseRecibo => 'Acknowledgement of receipt.pdf';
 
   @override
   String get gestionNotificacionDetalleAceptarButton => 'Accept notification';
@@ -4583,19 +4595,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyResponsibleTitle => 'Who is the data controller?';
 
   @override
-  String get privacyResponsibleIntro => 'The Digital Transformation Agency is the controller of the data processed for the services provided directly through Espacio Ciudadano, which are the following:';
+  String get privacyDocumentTitle => 'Information on personal data processing in Espacio Ciudadano';
 
   @override
-  String get privacyResponsibleItemProfile => 'User profile section';
+  String get privacyEmailCopied => 'No email application is available. The address has been copied to the clipboard.';
 
   @override
-  String get privacyResponsibleItemVisualizations => 'Display of the selected data from the Regional Administration and from Other topics of interest';
+  String get privacyResponsibleIntro => '1. The Management Directorate of the Castilla-La Mancha Digital Transformation Agency is the controller of data processed for services provided directly through Espacio Ciudadano, which are the following:';
+
+  @override
+  String get privacyResponsibleItemProfile => 'Display of notifications and the registry';
+
+  @override
+  String get privacyResponsibleItemVisualizations => 'Display of selected data from the Regional Administration and the General State Administration';
 
   @override
   String get privacyResponsibleItemRecommendations => 'Recommendations made on the basis of the life events selected.';
 
   @override
   String get privacyResponsibleItemDownloads => 'Downloads of the selected cards';
+
+  @override
+  String get privacyResponsibleItemAgenda => 'Display of the agenda';
 
   @override
   String get privacyResponsibleOrgParagraph => 'Once each of the options provided by Espacio Ciudadano is selected, the data controller will be each of the bodies and organizations with competence over that administrative procedure or event.';
@@ -4607,19 +4628,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyResponsibleContactAddressLabel => 'Postal Address:\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Digital Transformation Agency\nCEMAR Building, Plaza de Grecia, 1, 45071 Toledo\nEmail address:\ndirecciongerenciaatd@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Management Directorate of the Castilla-La Mancha Digital Transformation Agency\nCEMAR Building\nPlaza de Grecia, S/N\n45071 Toledo\n\nEmail address: direcciongerenciaatd@jccm.es';
 
   @override
   String get privacyPurposeTitle => 'What is the name and purpose of the processing?';
 
   @override
+  String get privacyPopulationControllerText => '2. The Castilla-La Mancha Data Office is the controller for Population Register data. Its contact address is C/ Cabriel, 12 – Edificio CIE III, 45071 Toledo, and its email address is oficinadeldato@jccm.es.';
+
+  @override
   String get privacyPurposeIntro => 'The purposes of the processing of personal data carried out directly within the Espacio Ciudadano processing activity are the following:';
 
   @override
-  String get privacyPurposeItemIdentity => 'Managing the citizen\'s identification data';
+  String get privacyPurposeItemIdentity => 'Management of Espacio Ciudadano as a tool for citizens to interact with the Regional Administration and its autonomous bodies:\n\n• Managing citizens\' contact details for electronic-notification alerts.\n• Managing information on ongoing proceedings, their status and notifications.\n• Displaying selected education, health, social welfare, employment, housing and vehicle data.\n• Managing authorizations and consent.\n• Managing recommendations based exclusively on selected life events and creating a profile for this purpose.\n• Displaying agenda events.';
 
   @override
-  String get privacyPurposeItemVisualizations => 'Displaying the selected data from the Regional Administration and from Other topics of interest';
+  String get privacyPurposeItemVisualizations => 'The purposes of Population Register processing are:\n\n• Producing official statistics.\n• Communication between JCCM bodies and citizens.\n• Evaluating the quality of services provided.';
+
+  @override
+  String get privacyLegalBasisTitle => 'What is the legal basis for this processing?';
+
+  @override
+  String get privacyLegalBasisText => 'The legal bases for Espacio Ciudadano processing are legal obligation and performance of a task carried out in the public interest (Article 6.1(c) and (e) GDPR), including Law 39/2015, Royal Decree 203/2021 and Law 4/2025. Processing of State Administration information, recommendations, events and selected cards is based on consent, which may be withdrawn in the user profile.\n\nFor the Population Register, telephone and email processing is based on consent (Article 6.1(a)); other data is processed in the public interest (Article 6.1(e), Law 10/2002 on Castilla-La Mancha Statistics).';
+
+  @override
+  String get privacyTransfersTitle => 'Are data transferred?';
+
+  @override
+  String get privacyTransfersText => 'Personal data is not transferred as part of Espacio Ciudadano processing.\n\nPopulation Register data may be transferred to other regional Administration bodies for communication with citizens, after assessing purpose compatibility under Article 6.4 GDPR.';
+
+  @override
+  String get privacyRetentionTitle => 'How long will the data be retained?';
+
+  @override
+  String get privacyRetentionText => 'Data will be retained for as long as necessary to fulfil the purpose for which it was collected and to determine any liabilities arising from that purpose and processing. Archives and documentation rules will apply.';
+
+  @override
+  String get privacyRightsTitle => 'How can data-protection rights be exercised?';
+
+  @override
+  String get privacyRightsText => 'You may exercise your rights of access, rectification, erasure, restriction, objection and not to be subject to automated decisions free of charge, either in writing through a Registry Office addressed to the controller, or online at https://www.jccm.es/tramites/1001969.';
 
   @override
   String get privacyAepdTitle => 'Can I lodge a complaint with the Spanish Data Protection Agency?';

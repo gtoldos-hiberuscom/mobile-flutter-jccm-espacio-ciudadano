@@ -20,7 +20,7 @@ void main() {
     //
     // Registra un fichero en el procedimiento administrativo indicado. Devuelve el justificante de registro como fichero PDF firmado o justificante de envío.
     //
-    //Future<Uint8List> registrarFicheroOperation1(String idAgente, String idExpediente, RegistrarFicheroRequest registrarFicheroRequest) async
+    //Future<Uint8List> registrarFicheroOperation1(RegistrarFicheroRequest registrarFicheroRequest) async
     test('test registrarFicheroOperation1', () async {
       // TODO
     });
