@@ -3513,7 +3513,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionExpedientesPageTitle => 'Mis expedientes';
 
   @override
-  String get gestionExpedientesNumExpedienteLabel => 'Nº EXPEDIENTE.';
+  String get gestionExpedientesNumExpedienteLabel => 'Nº EXPEDIENTE';
 
   @override
   String get gestionExpedientesFechaInicioLabel => 'FECHA DE INICIO';
@@ -3531,7 +3531,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionExpedientesDetalleTitle => 'Detalle de expediente';
 
   @override
-  String get gestionExpedientesDatosExpedienteTitle => 'Datos del Expediente';
+  String get gestionExpedientesDatosExpedienteTitle => 'Datos del expediente';
 
   @override
   String get gestionExpedientesEstadoTramitacionTitle => 'Estado de tramitación';
@@ -3621,13 +3621,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionRegistrosEntradasTab => 'Entradas de registro';
 
   @override
+  String get gestionRegistrosEntradasDescription => 'Consulta los registros de comunicaciones que has enviado a la Junta de Comunidades de Castilla-La Mancha (JCCM).';
+
+  @override
   String get gestionRegistrosSalidasTab => 'Salidas de registro';
+
+  @override
+  String get gestionRegistrosSalidasDescription => 'Consulta los registros de comunicaciones que has recibido de la Junta de Comunidades de Castilla-La Mancha (JCCM).';
 
   @override
   String get gestionRegistrosNumRegistroLabel => 'Nº REGISTRO';
 
   @override
   String get gestionRegistrosFechaLabel => 'FECHA';
+
+  @override
+  String get gestionRegistrosCardDateLabel => 'FECHA DE REGISTRO';
 
   @override
   String get gestionRegistrosConsejeriaOrigenLabel => 'CONSERJERÍA DE ORIGEN';
@@ -4587,22 +4596,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyResponsibleTitle => '¿Quién es el responsable del tratamiento?';
 
   @override
-  String get privacyResponsibleIntro => 'La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
+  String get privacyDocumentTitle => 'Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano';
 
   @override
-  String get privacyResponsibleItemProfile => 'Sección de perfil usuario';
+  String get privacyEmailCopied => 'No hay una aplicación de correo disponible. La dirección se ha copiado al portapapeles.';
 
   @override
-  String get privacyResponsibleItemVisualizations => 'Visualizaciones de los datos seleccionados de la Administración regional y de la Otras temas de interés';
+  String get privacyResponsibleIntro => '1. La Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
 
   @override
-  String get privacyResponsibleItemRecommendations => 'Recomendaciones realizadas en base a los hechos vitales marcados.';
+  String get privacyResponsibleItemProfile => 'Visualización de las notificaciones y registro';
+
+  @override
+  String get privacyResponsibleItemVisualizations => 'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado';
+
+  @override
+  String get privacyResponsibleItemRecommendations => 'Recomendaciones realizadas en base a los hechos vitales marcados';
 
   @override
   String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados';
 
   @override
-  String get privacyResponsibleOrgParagraph => 'Una vez se seleccione cada una de las opciones proporcionadas por espacio ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.';
+  String get privacyResponsibleItemAgenda => 'Visualización de la agenda';
+
+  @override
+  String get privacyResponsibleOrgParagraph => 'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento o hecho administrativo.';
 
   @override
   String get privacyResponsibleContactIntro => 'Los datos de contacto de este responsable son los siguientes:';
@@ -4611,19 +4629,47 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyResponsibleContactAddressLabel => 'Dirección Postal:\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Agencia de Transformación Digital\nEdificio CEMAR, Plaza de Grecia, 1, 45071 Toledo\nDirección de correo electrónico:\ndirecciongerenciaatd@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es';
 
   @override
   String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad del tratamiento?';
 
   @override
-  String get privacyPurposeIntro => 'Las finalidades de los tratamientos con los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:';
+  String get privacyPopulationControllerText => '2. La Oficina del Dato es responsable del tratamiento de datos del Registro de Población, a cuyos datos se puede acceder en el apartado “Datos de empadronamiento del Registro de Población” en la sección \"Mis datos de contacto\".\n\nLos datos de contacto de este responsable son los siguientes:\n\nDirección Postal:\nOficina del Dato de Castilla-La Mancha\nC/ Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\nDirección de correo electrónico: oficinadeldato@jccm.es';
 
   @override
-  String get privacyPurposeItemIdentity => 'Gestionar los datos identificativos del ciudadano';
+  String get privacyPurposeIntro => 'Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:';
 
   @override
-  String get privacyPurposeItemVisualizations => 'Visualizar los datos seleccionados de la Administración regional y de la Otras temas de interés';
+  String get privacyPurposeItemIdentity => 'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en las áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.';
+
+  @override
+  String get privacyPurposeItemVisualizations => 'Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.';
+
+  @override
+  String get privacyLegalBasisTitle => '¿Cuál es la legitimación de este tratamiento?';
+
+  @override
+  String get privacyLegalBasisText =>
+      'Las bases jurídicas que hacen lícito el tratamiento de Espacio Ciudadano son las siguientes:\n\n• Para el acceso a servicios como la consulta del estado de tramitación de un expediente, notificaciones, así como el resto de información administrativa en poder de esta Administración, las bases jurídicas son: 6.1.c) Obligación legal y la 6.1.e) Misión en interés público o ejercicio de poderes públicos.\nY su detalle, entre otras normas legales:\nArtículo 53 de la Ley 39/2015, de 1 de octubre, del Procedimiento Administrativo Común de las Administraciones Públicas.\nReal Decreto 203/2021, de 30 de marzo, por el que se aprueba el Reglamento de actuación y funcionamiento del sector público por medios electrónicos.\nLey 4/2025, de 11 de julio, de Simplificación, Agilización y Digitalización Administrativa.\n• En el caso de consulta de su información administrativa en poder de la Administración General del Estado, la base jurídica es el consentimiento que se recoge al marcar la opción seleccionada, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\", sin que ello le impida poder seguir disfrutando del resto de servicios.\n• La base jurídica para el tratamiento de las recomendaciones realizadas en base a los hechos vitales marcados es el consentimiento, que podrá retirar en cualquier momento retirando la autorización inicial de los hechos vitales anteriormente marcados en el apartado \"Perfil de usuario\", sin que ello le impida poder seguir disfrutando del resto de servicios.\n• La base jurídica para el tratamiento de los eventos es el consentimiento expreso, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\".\n• Asimismo, la base jurídica para la consulta y descarga de los carnets seleccionados es el consentimiento expreso, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\".\n\nLas bases jurídicas que hacen lícito el tratamiento del Registro de Población son las siguientes:\n\n• Para el teléfono y el correo electrónico: 6.1.a) Consentimiento del interesado/a que podrá retirar en cualquier momento.\n• Para el resto de los datos: 6.1.e) Misión en interés público o ejercicio de poderes públicos (Ley 10/2002, de Estadística de Castilla-La Mancha).';
+
+  @override
+  String get privacyTransfersTitle => '¿Existen cesiones de datos?';
+
+  @override
+  String get privacyTransfersText => 'No existen cesiones de datos personales en el tratamiento de Espacio Ciudadano.\n\nEn el caso del tratamiento del Registro de Población se podrán ceder datos a otros órganos de la Administración regional para la comunicación de estos con la ciudadanía, previa valoración de la compatibilidad de la finalidad del tratamiento, en aplicación del artículo 6.4 del Reglamento General de Protección de Datos.';
+
+  @override
+  String get privacyRetentionTitle => '¿Durante cuánto tiempo se conservarán los datos?';
+
+  @override
+  String get privacyRetentionText => 'El plazo de conservación de los datos será el necesario para cumplir con la finalidad para la que se recabaron y para determinar las posibles responsabilidades que se pudieran derivar de dicha finalidad y del tratamiento de los datos. Será de aplicación lo dispuesto en la normativa de archivos y documentación.';
+
+  @override
+  String get privacyRightsTitle => '¿Cómo se pueden ejercer los derechos previstos en la normativa de protección de datos?';
+
+  @override
+  String get privacyRightsText => 'Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha.\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.';
 
   @override
   String get privacyAepdTitle => '¿Puedo reclamar ante la Agencia Española de Protección de Datos?';

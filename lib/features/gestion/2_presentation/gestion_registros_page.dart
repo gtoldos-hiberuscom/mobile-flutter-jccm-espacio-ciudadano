@@ -34,6 +34,7 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
     return Scaffold(
       appBar: AppNavBar(
         type: AppNavBarType.level2,
+        backgroundColor: AppColors.surface,
         title: l10n.gestionRegistrosPageTitle,
         onBack: () => context.go(Routes.gestion),
         actions: [
@@ -61,10 +62,31 @@ class _GestionRegistrosPageState extends State<GestionRegistrosPage> {
               color: AppColors.backgroundBlueLighter,
               child: SafeArea(
                 top: false,
-                child: switch (_selectedTab) {
-                  _RegistrosTab.entradas => _EntradasTab(filters: _entryFilters),
-                  _RegistrosTab.salidas => _SalidasTab(filters: _exitFilters),
-                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: appPageHorizontalPadding(context),
+                        top: AppDimensions.space24,
+                        right: appPageHorizontalPadding(context),
+                      ),
+                      child: Text(
+                        switch (_selectedTab) {
+                          _RegistrosTab.entradas => l10n.gestionRegistrosEntradasDescription,
+                          _RegistrosTab.salidas => l10n.gestionRegistrosSalidasDescription,
+                        },
+                        style: AppTypography.bodyRegular.copyWith(color: AppColors.textBase),
+                      ),
+                    ),
+                    Expanded(
+                      child: switch (_selectedTab) {
+                        _RegistrosTab.entradas => _EntradasTab(filters: _entryFilters),
+                        _RegistrosTab.salidas => _SalidasTab(filters: _exitFilters),
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -125,7 +147,7 @@ class _EntradasTab extends ConsumerWidget {
               ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
               : ErrorStateWidget(
                   message: l10n.gestionRegistrosEntradasLoadError,
-                  onRetry: () => ref.invalidate(entradasProvider),
+                  onRetry: () => ref.refresh(entradasProvider),
                 ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: true),
         );
@@ -150,7 +172,7 @@ class _SalidasTab extends ConsumerWidget {
               ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
               : ErrorStateWidget(
                   message: l10n.gestionRegistrosSalidasLoadError,
-                  onRetry: () => ref.invalidate(salidasProvider),
+                  onRetry: () => ref.refresh(salidasProvider),
                 ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: false),
         );
@@ -201,8 +223,9 @@ class _RegistroCard extends StatelessWidget {
       showArrow: true,
       refNumber: registro.numregistro,
       refNumberLabel: l10n.gestionRegistrosNumRegistroLabel,
-      expiryDate: _formatDate(context, registro.fecha),
-      expiryDateLabel: l10n.gestionRegistrosFechaLabel,
+      expiryDate: _formatDate(registro.fecha),
+      expiryDateLabel: l10n.gestionRegistrosCardDateLabel,
+      inlineMetadata: true,
       onTap: () => context.push(
         Routes.gestionRegistrosDetail,
         extra: (registro, isEntrada),
@@ -210,7 +233,7 @@ class _RegistroCard extends StatelessWidget {
     );
   }
 
-  String? _formatDate(final BuildContext context, final String? rawDate) {
+  String? _formatDate(final String? rawDate) {
     if (rawDate == null || rawDate.trim().isEmpty) {
       return null;
     }
@@ -218,14 +241,7 @@ class _RegistroCard extends StatelessWidget {
     if (date == null) {
       return rawDate;
     }
-    final parts = DateFormat(
-      'd MMM yyyy',
-      Localizations.localeOf(context).languageCode,
-    ).format(date).split(' ');
-    if (parts.length >= 3 && parts[1].isNotEmpty) {
-      parts[1] = '${parts[1][0].toUpperCase()}${parts[1].substring(1)}';
-    }
-    return parts.join(' ');
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 
   String _sentenceCase(final String value) {

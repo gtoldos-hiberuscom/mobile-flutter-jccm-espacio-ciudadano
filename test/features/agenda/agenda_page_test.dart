@@ -85,6 +85,29 @@ void main() {
     expect(find.text('Servicio de contratación electrónica y registros'), findsOneWidget);
   });
 
+  testWidgets('la cita de primaria sigue la jerarquía de contenido de Figma', (final tester) async {
+    await _pumpAgenda(
+      tester,
+      appointments: [
+        AgendaAppointment(
+          dateTime: DateTime(2026, 9, 25, 10),
+          title: 'ALVARO NOMBRE LARGO GARCIA BULERO',
+          description: 'Cita de Atención Primaria',
+          kind: AgendaAppointmentKind.health,
+          channel: 'Presencial',
+          detail: 'Consulta a demanda',
+          center: 'C.S. PALOMAREJOS_PREN',
+        ),
+      ],
+    );
+
+    expect(find.text('Cita de Atención Primaria'), findsOneWidget);
+    expect(find.text('Presencial'), findsOneWidget);
+    expect(find.text('Alvaro nombre largo garcia bulero'), findsOneWidget);
+    expect(find.text('Consulta a demanda'), findsOneWidget);
+    expect(find.text('C.S. PALOMAREJOS_PREN'), findsNothing);
+  });
+
   testWidgets('el usuario sin CIP ve el aviso informativo específico', (final tester) async {
     await _pumpAgenda(
       tester,

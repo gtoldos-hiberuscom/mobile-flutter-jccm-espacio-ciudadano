@@ -139,6 +139,54 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('mantiene el modal alto dentro de los márgenes verticales', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(393, 780);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      buildApp(
+        Builder(
+          builder: (final context) => TextButton(
+            onPressed: () => unawaited(
+              AppBottomSheet.show<AppListFilters>(
+                context: context,
+                title: 'Filtrar expedientes',
+                body: const AppListFilterSheet(
+                  initialFilters: AppListFilters(),
+                  fields: [
+                    AppListTextFilterField(id: 'number', label: 'Número de expediente', hint: 'Introduce el número'),
+                    AppListTextFilterField(id: 'description', label: 'Descripción del expediente', hint: 'Introduce palabras'),
+                    AppListDateRangeFilterField(id: 'startDate', label: 'Fecha de inicio'),
+                    AppListDateRangeFilterField(id: 'endDate', label: 'Fecha de cierre'),
+                  ],
+                ),
+              ),
+            ),
+            child: const Text('Abrir filtros'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Abrir filtros'));
+    await tester.pumpAndSettle();
+
+    final card = find
+        .descendant(
+          of: find.byType(AppBottomSheet),
+          matching: find.byWidgetPredicate(
+            (final widget) => widget is Container && widget.decoration is BoxDecoration,
+          ),
+        )
+        .first;
+    final cardRect = tester.getRect(card);
+    expect(cardRect.top, greaterThanOrEqualTo(32));
+    expect(cardRect.bottom, lessThanOrEqualTo(780 - 32));
+    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('muestra las siete columnas del calendario dentro de un modal de 320 dp', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(320, 700);

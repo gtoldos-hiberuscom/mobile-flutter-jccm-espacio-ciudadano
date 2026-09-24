@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
@@ -11,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart' show launchUrl;
 
 /// Data-protection information screen from Figma node `41775:12413`.
 class PrivacyPage extends ConsumerStatefulWidget {
@@ -245,16 +247,26 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       l10n.privacyResponsibleItemVisualizations,
       l10n.privacyResponsibleItemRecommendations,
       l10n.privacyResponsibleItemDownloads,
+      l10n.privacyResponsibleItemAgenda,
     ];
     final responsibleOrg = l10n.privacyResponsibleOrgParagraph;
     final responsibleContactIntro = l10n.privacyResponsibleContactIntro;
     final responsibleContact = '${l10n.privacyResponsibleContactAddressLabel}${l10n.privacyResponsibleContactAddressValue}';
+    final populationControllerText = l10n.privacyPopulationControllerText;
     final purposeTitle = l10n.privacyPurposeTitle;
     final purposeIntro = l10n.privacyPurposeIntro;
     final purposeItems = [
       l10n.privacyPurposeItemIdentity,
       l10n.privacyPurposeItemVisualizations,
     ];
+    final legalBasisTitle = l10n.privacyLegalBasisTitle;
+    final legalBasisText = l10n.privacyLegalBasisText;
+    final transfersTitle = l10n.privacyTransfersTitle;
+    final transfersText = l10n.privacyTransfersText;
+    final retentionTitle = l10n.privacyRetentionTitle;
+    final retentionText = l10n.privacyRetentionText;
+    final rightsTitle = l10n.privacyRightsTitle;
+    final rightsText = l10n.privacyRightsText;
     final aepdTitle = l10n.privacyAepdTitle;
     final aepdText = '${l10n.privacyAepdTextBeforeLink}https://www.aepd.es/${l10n.privacyAepdTextAfterLink}';
     final securityTitle = l10n.privacySecurityTitle;
@@ -266,16 +278,15 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     final dpoContact = '${l10n.privacyDpoContactAddressLabel}${l10n.privacyDpoContactAddressValue}${l10n.privacyDpoContactEmailLabel}protecciondatos@jccm.es';
 
     return [
-      if (fromHome)
-        _SearchableEntry(
-          id: 'page-title',
-          searchText: l10n.legalPrivacyTitle,
-          child: _PageTitle(
-            l10n.legalPrivacyTitle,
-            color: AppColors.textPrimary,
-            highlightQuery: _searchQuery,
-          ),
+      _SearchableEntry(
+        id: 'page-title',
+        searchText: l10n.privacyDocumentTitle,
+        child: _PageTitle(
+          l10n.privacyDocumentTitle,
+          color: textColor,
+          highlightQuery: _searchQuery,
         ),
+      ),
       _SearchableEntry(
         id: 'responsible-title',
         searchText: responsibleTitle,
@@ -304,17 +315,27 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'responsible-contact',
         searchText: responsibleContact,
-        child: _ContactBlock(
+        child: _LinkedBodyBlock(
+          text: responsibleContact,
           style: bodyStyle,
           color: textColor,
           highlightQuery: _searchQuery,
-          children: [
-            TextSpan(
-              text: l10n.privacyResponsibleContactAddressLabel,
-              style: fromHome ? bodyStyle : AppTypography.bodyBold,
-            ),
-            TextSpan(text: l10n.privacyResponsibleContactAddressValue),
-          ],
+          links: {
+            'direcciongerenciaatd@jccm.es': () => _openEmail(context, 'direcciongerenciaatd@jccm.es'),
+          },
+        ),
+      ),
+      _SearchableEntry(
+        id: 'population-controller',
+        searchText: populationControllerText,
+        child: _LinkedBodyBlock(
+          text: populationControllerText,
+          style: bodyStyle,
+          color: textColor,
+          highlightQuery: _searchQuery,
+          links: {
+            'oficinadeldato@jccm.es': () => _openEmail(context, 'oficinadeldato@jccm.es'),
+          },
         ),
       ),
       _SearchableEntry(
@@ -330,7 +351,62 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'purpose-items',
         searchText: purposeItems.join(' '),
-        child: _BulletList(style: bodyStyle, color: textColor, items: purposeItems, highlightQuery: _searchQuery),
+        child: _ContentColumn(
+          children: [
+            for (final item in purposeItems) _BodyBlock(item, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
+          ],
+        ),
+      ),
+      _SearchableEntry(
+        id: 'legal-basis-title',
+        searchText: legalBasisTitle,
+        child: _SectionTitle(legalBasisTitle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'legal-basis-text',
+        searchText: legalBasisText,
+        child: _BodyBlock(legalBasisText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'transfers-title',
+        searchText: transfersTitle,
+        child: _SectionTitle(transfersTitle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'transfers-text',
+        searchText: transfersText,
+        child: _BodyBlock(transfersText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'retention-title',
+        searchText: retentionTitle,
+        child: _SectionTitle(retentionTitle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'retention-text',
+        searchText: retentionText,
+        child: _BodyBlock(retentionText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'rights-title',
+        searchText: rightsTitle,
+        child: _SectionTitle(rightsTitle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'rights-text',
+        searchText: rightsText,
+        child: _LinkedBodyBlock(
+          text: rightsText,
+          style: bodyStyle,
+          color: textColor,
+          highlightQuery: _searchQuery,
+          links: {
+            'https://www.jccm.es/tramites/1001969': () => launchExternalUrlWithConfirmation(
+              context,
+              Uri.parse('https://www.jccm.es/tramites/1001969'),
+            ),
+          },
+        ),
       ),
       _SearchableEntry(
         id: 'aepd-title',
@@ -380,22 +456,14 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'dpo-contact',
         searchText: dpoContact,
-        child: _ContactBlock(
+        child: _LinkedBodyBlock(
+          text: dpoContact,
           style: bodyStyle,
           color: textColor,
           highlightQuery: _searchQuery,
-          children: [
-            TextSpan(
-              text: l10n.privacyDpoContactAddressLabel,
-              style: fromHome ? bodyStyle : AppTypography.bodyBold,
-            ),
-            TextSpan(text: l10n.privacyDpoContactAddressValue),
-            TextSpan(
-              text: l10n.privacyDpoContactEmailLabel,
-              style: fromHome ? bodyStyle : AppTypography.bodyBold,
-            ),
-            const TextSpan(text: 'protecciondatos@jccm.es'),
-          ],
+          links: {
+            'protecciondatos@jccm.es': () => _openEmail(context, 'protecciondatos@jccm.es'),
+          },
         ),
       ),
     ];
@@ -421,6 +489,24 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       context,
       message: AppLocalizations.of(context).externalLinkOpenFailed,
       severity: AppAlertSeverity.error,
+    );
+  }
+
+  Future<void> _openEmail(final BuildContext context, final String address) async {
+    final opened = await launchUrl(
+      Uri(scheme: 'mailto', path: address),
+      mode: LaunchMode.externalApplication,
+    );
+    if (!context.mounted || opened) {
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: address));
+    if (!context.mounted) {
+      return;
+    }
+    AppAlertSnackbar.show(
+      context,
+      message: AppLocalizations.of(context).privacyEmailCopied,
     );
   }
 }
@@ -591,32 +677,73 @@ class _BodyBlock extends StatelessWidget {
   );
 }
 
-class _ContactBlock extends StatelessWidget {
-  const _ContactBlock({
-    required this.children,
+class _LinkedBodyBlock extends StatelessWidget {
+  const _LinkedBodyBlock({
+    required this.text,
+    required this.links,
     this.color = AppColors.textBase,
     this.style = AppTypography.bodyRegular,
     this.highlightQuery = '',
   });
 
-  final List<InlineSpan> children;
+  final String text;
+  final Map<String, VoidCallback> links;
   final Color color;
   final TextStyle style;
   final String highlightQuery;
 
   @override
-  Widget build(final BuildContext context) => Padding(
-    padding: const EdgeInsets.all(AppDimensions.space4),
-    child: RichText(
-      text: TextSpan(
-        children: _highlightInlineSpans(
-          children,
-          style.copyWith(color: color),
-          highlightQuery,
+  Widget build(final BuildContext context) {
+    final baseStyle = style.copyWith(color: color);
+    final spans = <InlineSpan>[];
+    var offset = 0;
+
+    while (offset < text.length) {
+      String? nextLabel;
+      var nextIndex = text.length;
+      for (final label in links.keys) {
+        final index = text.indexOf(label, offset);
+        if (index >= 0 && index < nextIndex) {
+          nextIndex = index;
+          nextLabel = label;
+        }
+      }
+
+      if (nextLabel == null) {
+        spans.addAll(_highlightTextSpans(text.substring(offset), baseStyle, highlightQuery));
+        break;
+      }
+      if (nextIndex > offset) {
+        spans.addAll(_highlightTextSpans(text.substring(offset, nextIndex), baseStyle, highlightQuery));
+      }
+      spans.add(
+        WidgetSpan(
+          alignment: PlaceholderAlignment.baseline,
+          baseline: TextBaseline.alphabetic,
+          child: Semantics(
+            link: true,
+            label: nextLabel,
+            child: InkWell(
+              onTap: links[nextLabel],
+              child: Text(
+                nextLabel,
+                style: baseStyle.copyWith(
+                  color: AppColors.textLinkOnLight,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
+      offset = nextIndex + nextLabel.length;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+      child: Text.rich(TextSpan(style: baseStyle, children: spans)),
+    );
+  }
 }
 
 class _BulletList extends StatelessWidget {
@@ -741,29 +868,6 @@ class _HighlightedText extends StatelessWidget {
       children: _highlightTextSpans(text, style, query),
     ),
   );
-}
-
-List<InlineSpan> _highlightInlineSpans(
-  final List<InlineSpan> spans,
-  final TextStyle baseStyle,
-  final String query,
-) {
-  final highlighted = <InlineSpan>[];
-  for (final span in spans) {
-    if (span is TextSpan) {
-      final text = span.text;
-      final style = baseStyle.merge(span.style);
-      if (text != null && text.isNotEmpty) {
-        highlighted.addAll(_highlightTextSpans(text, style, query));
-      }
-      if (span.children != null) {
-        highlighted.addAll(_highlightInlineSpans(span.children!, style, query));
-      }
-    } else {
-      highlighted.add(span);
-    }
-  }
-  return highlighted;
 }
 
 List<TextSpan> _highlightTextSpans(

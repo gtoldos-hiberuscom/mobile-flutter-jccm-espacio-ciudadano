@@ -16,6 +16,43 @@ void main() {
 
     expect(find.text('Aportar documentación'), findsNothing);
   });
+
+  testWidgets('reintenta la carga del detalle después de un error', (final tester) async {
+    var attempts = 0;
+
+    await tester.pumpWidget(
+      ProviderScope(
+        retry: (final _, final _) => null,
+        overrides: [
+          expedienteDetailProvider.overrideWith((final ref, final key) async {
+            attempts++;
+            if (attempts == 1) {
+              throw Exception('Error transitorio');
+            }
+            return Expediente(
+              numexp: key.numexp,
+              titulo: 'Expediente recuperado',
+              consejeria: 'JCCM',
+            );
+          }),
+        ],
+        child: const MaterialApp(
+          locale: Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: GestionExpedienteDetallePage(numexp: 'EXP-1'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Reintentar'), findsOneWidget);
+    await tester.tap(find.text('Reintentar'));
+    await tester.pumpAndSettle();
+
+    expect(attempts, 2);
+    expect(find.text('Expediente recuperado'), findsOneWidget);
+  });
 }
 
 Future<void> _pumpDetail(final WidgetTester tester, {required final bool canAttachDocuments}) async {
@@ -34,7 +71,7 @@ Future<void> _pumpDetail(final WidgetTester tester, {required final bool canAtta
       ],
       child: const MaterialApp(
         locale: Locale('es'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionExpedienteDetallePage(numexp: 'EXP-1'),
       ),
