@@ -12,6 +12,10 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
 
 # Las reglas de `riverpod_lint` se cargan a través de `custom_lint` (ver el pin
 # de la versión en pubspec.yaml) y se ejecutan con `dart run custom_lint`.
