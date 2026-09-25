@@ -2167,6 +2167,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationContactErrorLoading => 'We couldn\'t load your contact details.';
 
   @override
+  String get notificationContactNotRegistered => 'You are not registered for the notification service. Enter your details to register.';
+
+  @override
   String get notificationContactErrorPhoneInvalid => 'Enter a valid mobile phone number.';
 
   @override
@@ -4160,12 +4163,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get digitalCardsAuthorizationCheckErrorMessage => 'We could not verify the authorization required to display your digital cards.';
-
-  @override
-  String get digitalCardsInfoSheetContactHint => 'If any information on the card is incorrect or out of date, contact the issuing organization to request a correction.';
-
-  @override
-  String get digitalCardsInfoSheetContactButton => 'View the contact list';
 
   @override
   String get digitalCardsInfoSheetTitle => 'Learn more about My digital cards';

@@ -2894,6 +2894,10 @@
   "@notificationContactErrorLoading": {
     "description": "Notifications contact — global error state message."
   },
+  "notificationContactNotRegistered": "You are not registered for the notification service. Enter your details to register.",
+  "@notificationContactNotRegistered": {
+    "description": "Notice shown when the contact service returns 404 because the citizen is not registered."
+  },
   "notificationContactErrorPhoneInvalid": "Enter a valid mobile phone number.",
   "@notificationContactErrorPhoneInvalid": {
     "description": "Notifications contact — phone validation error."
@@ -5396,8 +5400,6 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Digital cards — error while checking the required authorization."
   },
-  "digitalCardsInfoSheetContactHint": "If any information on the card is incorrect or out of date, contact the issuing organization to request a correction.",
-  "digitalCardsInfoSheetContactButton": "View the contact list",
   "digitalCardsInfoSheetTitle": "Learn more about My digital cards",
   "@digitalCardsInfoSheetTitle": {
     "description": "Digital cards — title of the info bottom sheet."

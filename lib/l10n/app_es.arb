@@ -2902,6 +2902,10 @@
   "@notificationContactErrorLoading": {
     "description": "Notifications contact — mensaje del estado de error global."
   },
+  "notificationContactNotRegistered": "No estás dado de alta en el servicio de notificaciones. Completa tus datos para darte de alta.",
+  "@notificationContactNotRegistered": {
+    "description": "Aviso mostrado cuando el servicio de contacto devuelve 404 porque el ciudadano no está dado de alta."
+  },
   "notificationContactErrorPhoneInvalid": "Introduce un teléfono móvil válido.",
   "@notificationContactErrorPhoneInvalid": {
     "description": "Notifications contact — error de validación del teléfono móvil."
@@ -5416,8 +5420,6 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Carnets digitales — error al comprobar la autorización necesaria."
   },
-  "digitalCardsInfoSheetContactHint": "Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.",
-  "digitalCardsInfoSheetContactButton": "Consultar el listado de contactos",
   "digitalCardsInfoSheetTitle": "Saber más sobre Mis carnets digitales",
   "@digitalCardsInfoSheetTitle": {
     "description": "Carnets digitales — título del bottom sheet informativo."

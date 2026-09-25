@@ -4226,6 +4226,12 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar tus datos de contacto.'**
   String get notificationContactErrorLoading;
 
+  /// Aviso mostrado cuando el servicio de contacto devuelve 404 porque el ciudadano no está dado de alta.
+  ///
+  /// In es, this message translates to:
+  /// **'No estás dado de alta en el servicio de notificaciones. Completa tus datos para darte de alta.'**
+  String get notificationContactNotRegistered;
+
   /// Notifications contact — error de validación del teléfono móvil.
   ///
   /// In es, this message translates to:
@@ -7921,18 +7927,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.'**
   String get digitalCardsAuthorizationCheckErrorMessage;
-
-  /// No description provided for @digitalCardsInfoSheetContactHint.
-  ///
-  /// In es, this message translates to:
-  /// **'Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.'**
-  String get digitalCardsInfoSheetContactHint;
-
-  /// No description provided for @digitalCardsInfoSheetContactButton.
-  ///
-  /// In es, this message translates to:
-  /// **'Consultar el listado de contactos'**
-  String get digitalCardsInfoSheetContactButton;
 
   /// Carnets digitales — título del bottom sheet informativo.
   ///

@@ -8,7 +8,6 @@ import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolv
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class DigitalCardsPage extends ConsumerWidget {
@@ -201,13 +200,6 @@ class DigitalCardsPage extends ConsumerWidget {
       context: context,
       title: l10n.digitalCardsInfoSheetTitle,
       bodyText: l10n.digitalCardsInfoSheetBody,
-      footerText: l10n.digitalCardsInfoSheetContactHint,
-      actionLabel: l10n.digitalCardsInfoSheetContactButton,
-      onActionPressed: () => launchExternalUrlWithConfirmation(
-        context,
-        Uri.parse('https://sanidad.castillalamancha.es/ciudadanos'),
-      ),
-      actionIcon: Icons.open_in_new,
     );
   }
 

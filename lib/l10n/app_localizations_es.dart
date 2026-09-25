@@ -2168,6 +2168,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationContactErrorLoading => 'No hemos podido cargar tus datos de contacto.';
 
   @override
+  String get notificationContactNotRegistered => 'No estás dado de alta en el servicio de notificaciones. Completa tus datos para darte de alta.';
+
+  @override
   String get notificationContactErrorPhoneInvalid => 'Introduce un teléfono móvil válido.';
 
   @override
@@ -4161,12 +4164,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get digitalCardsAuthorizationCheckErrorMessage => 'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.';
-
-  @override
-  String get digitalCardsInfoSheetContactHint => 'Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.';
-
-  @override
-  String get digitalCardsInfoSheetContactButton => 'Consultar el listado de contactos';
 
   @override
   String get digitalCardsInfoSheetTitle => 'Saber más sobre Mis carnets digitales';
