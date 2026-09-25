@@ -5440,6 +5440,10 @@
   "@digitalCardsDownloadSuccess": {
     "description": "Carnets digitales — aviso tras guardar la descarga correctamente."
   },
+  "digitalCardsPkPassAddedToWallet": "Carnet descargado y añadido a Wallet.",
+  "@digitalCardsPkPassAddedToWallet": {
+    "description": "Carnets digitales — aviso tras añadir correctamente un carnet a Apple Wallet en iOS."
+  },
   "digitalCardsDownloadError": "No hemos podido descargar {format}.",
   "@digitalCardsDownloadError": {
     "description": "Carnets digitales — error al descargar el archivo del carnet."

@@ -5420,6 +5420,10 @@
   "@digitalCardsDownloadSuccess": {
     "description": "Digital cards — snackbar after the download is saved successfully."
   },
+  "digitalCardsPkPassAddedToWallet": "Card downloaded and added to Wallet.",
+  "@digitalCardsPkPassAddedToWallet": {
+    "description": "Digital cards — snackbar after successfully adding a card to Apple Wallet on iOS."
+  },
   "digitalCardsDownloadError": "We could not download {format}.",
   "@digitalCardsDownloadError": {
     "description": "Digital cards — error while downloading the card file."

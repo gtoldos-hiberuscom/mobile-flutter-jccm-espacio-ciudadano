@@ -7958,6 +7958,12 @@ abstract class AppLocalizations {
   /// **'{format} guardado correctamente.'**
   String digitalCardsDownloadSuccess(Object format);
 
+  /// Carnets digitales — aviso tras añadir correctamente un carnet a Apple Wallet en iOS.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet descargado y añadido a Wallet.'**
+  String get digitalCardsPkPassAddedToWallet;
+
   /// Carnets digitales — error al descargar el archivo del carnet.
   ///
   /// In es, this message translates to:

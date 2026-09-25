@@ -4185,6 +4185,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get digitalCardsPkPassAddedToWallet => 'Carnet descargado y añadido a Wallet.';
+
+  @override
   String digitalCardsDownloadError(Object format) {
     return 'No hemos podido descargar $format.';
   }
