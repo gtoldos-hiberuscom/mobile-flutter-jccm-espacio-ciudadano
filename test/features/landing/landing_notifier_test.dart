@@ -64,6 +64,30 @@ void main() {
     });
   });
 
+  group('LandingNotifier.login cierra la sesión anterior (JCCMEC-224/228)', () {
+    test('cierra la sesión que quedó abierta ANTES de mandar a Cl@ve', () async {
+      // Si el cierre fuera después del authorize no serviría de nada: Cerbero
+      // ya habría cortado con `already authenticated as different user`.
+      final storage = _FakeSecureStorage()..store[StorageKeys.idToken] = 'id-del-ciudadano-anterior';
+      final repository = _ImmediateAuthRepository();
+      final container = buildContainer(repository, storage: storage);
+
+      await container.read(landingProvider.notifier).login();
+
+      expect(repository.logoutIdTokens, ['id-del-ciudadano-anterior']);
+      expect(repository.calls, ['logout', 'login']);
+    });
+
+    test('un cierre de sesión en regla no hace pagar una pestaña de más', () async {
+      final repository = _ImmediateAuthRepository();
+      final container = buildContainer(repository);
+
+      await container.read(landingProvider.notifier).login();
+
+      expect(repository.calls, ['login']);
+    });
+  });
+
   group('LandingNotifier.tryRestoreSession', () {
     test('reanudar pide biometría al arrancar aunque el access token siga vivo', () async {
       // El diálogo se adelanta al arranque a propósito. Entrar sin pedir nada
@@ -297,27 +321,40 @@ final class _HangingAuthRepository implements AuthRepository {
 final class _ImmediateAuthRepository implements AuthRepository {
   final List<String> revokedTokens = [];
 
+  /// Orden en que se invocó cada operación. El arreglo de JCCMEC-224/228
+  /// depende de que el cierre vaya **antes** del authorize: hacerlo después no
+  /// sirve de nada.
+  final List<String> calls = [];
+
+  final List<String> logoutIdTokens = [];
+
   @override
   Future<void> revokeOfflineSession({required final String refreshToken}) async {
     revokedTokens.add(refreshToken);
   }
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) async => TokenResponse(
-    'not-a-real-jwt',
-    'refresh',
-    DateTime.now().add(const Duration(minutes: 5)),
-    null,
-    null,
-    null,
-    null,
-  );
+  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) async {
+    calls.add('login');
+    return TokenResponse(
+      'not-a-real-jwt',
+      'refresh',
+      DateTime.now().add(const Duration(minutes: 5)),
+      null,
+      null,
+      null,
+      null,
+    );
+  }
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) => throw UnimplementedError();
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {
+    calls.add('logout');
+    logoutIdTokens.add(idToken);
+  }
 }
 
 final class _FakeAppStorage implements AppStorage {

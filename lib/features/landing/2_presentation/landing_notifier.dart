@@ -163,6 +163,17 @@ class LandingNotifier extends Notifier<LandingState> {
     }
     state = const LandingState(isLoggingIn: true);
 
+    // Antes de mandar a nadie a Cl@ve, cerrar la sesión que un login anterior
+    // pudiera haber dejado abierta en el navegador. Si no, Cerbero identifica
+    // bien al nuevo ciudadano y corta al volver, porque en esa sesión sigue el
+    // anterior (JCCMEC-224 / JCCMEC-228). No hace nada si el último cierre de
+    // sesión fue en regla, así que el caso normal no paga ninguna pestaña de
+    // más.
+    await ref.read(authSessionControllerProvider).endStaleBrowserSession();
+    if (!ref.mounted) {
+      return;
+    }
+
     final LoginResult result;
     try {
       result = await ref.read(loginUseCaseProvider).call().timeout(loginTimeout);
