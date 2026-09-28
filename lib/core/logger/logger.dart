@@ -6,6 +6,18 @@ import 'package:logger/logger.dart';
 final logger = Logger(
   level: Level.debug,
   printer: SimpleEmojiPrinter(),
+  // DIAGNOSTICO TEMPORAL (28/09, UAT de JCCMEC-224/228). Sin `filter`, el
+  // paquete usa `DevelopmentFilter`, que solo emite cuando `kDebugMode` es
+  // true: en una build *profile* o *release* la app no escribe NI UNA traza,
+  // ni siquiera en PRE. Eso dejo el UAT sin forma de ver por que fallaba el
+  // cierre de la sesion previa.
+  //
+  // `ProductionFilter` emite segun el `level`, que aqui ya esta acotado.
+  // REVISAR ANTES DE INTEGRAR: decidir si esto se queda, si se ata a
+  // `AppConfig.debugMode` (hoy solo gobierna el log verboso de red, y ademas
+  // combinado con `kDebugMode`), y que se redacta en un entorno con datos
+  // reales.
+  filter: ProductionFilter(),
 );
 
 class SimpleEmojiPrinter extends LogPrinter {

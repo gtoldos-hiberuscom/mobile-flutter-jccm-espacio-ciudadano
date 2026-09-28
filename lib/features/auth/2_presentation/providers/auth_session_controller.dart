@@ -350,6 +350,27 @@ final class AuthSessionController {
     }
   }
 
+  /// Recuerda qué sesión de navegador hay que cerrar después, guardando el
+  /// `id_token` en cuanto el ciudadano se identifica.
+  ///
+  /// Se separa a propósito de [persist]: aquello persiste **la sesión del
+  /// ciudadano** y por eso el `SessionGuard` lo condiciona a que el
+  /// consentimiento conste (`session_guard.dart`, rama `ConsentNotRequired`).
+  /// Esto es otra cosa — no guarda una credencial de acceso, guarda la pista
+  /// para poder cerrar lo que la propia app acaba de abrir en el navegador — y
+  /// atarla al gate de consentimiento la hacía depender de que un servicio
+  /// remoto respondiera bien: si el gate falla y deja pasar, no quedaba pista, y
+  /// el siguiente login se encontraba la sesión anterior viva.
+  ///
+  /// El `id_token` no autoriza nada contra el gateway y [clear] lo borra, así
+  /// que quien sale no deja nada detrás.
+  Future<void> rememberBrowserSession(final String? idToken) async {
+    if (idToken == null || idToken.isEmpty) {
+      return;
+    }
+    await _storage.write(StorageKeys.idToken, idToken);
+  }
+
   /// Cierra en Cerbero la sesión de navegador que dejó abierta un login
   /// anterior, antes de arrancar uno nuevo.
   ///
