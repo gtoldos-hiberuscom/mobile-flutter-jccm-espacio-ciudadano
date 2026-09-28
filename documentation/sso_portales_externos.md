@@ -562,6 +562,27 @@ Lo que sobrevive es el estado del **IdP de certificado** dentro del almacén del
 circunscribe al certificado — que en la Administración no es precisamente minoritario, pero
 tampoco es todo el mundo.
 
+### 10.4 bis El camino importa: falla al cerrar sesión, no al matar la app
+
+Contrastado el 28/09 en **dos dispositivos distintos** —el de pruebas y el de un compañero, con
+versiones probablemente distintas— y el patrón es el mismo:
+
+| Camino | ¿Cl@ve pide el certificado? |
+|---|---|
+| Matar la app sin cerrar sesión → entrar | **Sí** |
+| «Cerrar sesión» en el menú → entrar | **No** |
+
+Es contraintuitivo: el camino que **más** limpia es el que peor se comporta. Matar la app no abre
+ningún navegador y el método vuelve a pedirse; cerrar sesión sí abre uno —el `endSession` navega a
+Cerbero y vuelve— y tras esa navegación el certificado ya no se revalida.
+
+Afina el diagnóstico: no es que el estado del método sobreviva siempre, es que **el camino del
+cierre de sesión lo deja reutilizable**. Y explica por qué el POC de §10.6 funciona: ataca
+exactamente ese punto, vaciando el almacén justo después de ese cierre.
+
+> Queda sin explicar **por qué** esa navegación lo deja así. No hace falta saberlo para arreglarlo,
+> pero conviene no dar por entendido lo que no se ha medido.
+
 ### 10.5 Por qué importa más que el defecto de §8
 
 | | JCCMEC-224/228 | Este hallazgo |
