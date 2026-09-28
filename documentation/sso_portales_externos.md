@@ -558,9 +558,9 @@ distinto.
 
 Lo que sobrevive es el estado del **IdP de certificado** dentro del almacén del navegador.
 
-**Pero tiene caducidad propia.** Reportado por un compañero el 28/09: *esperando un rato, luego sí
-deja elegir certificado*. Así que no es un estado pegado para siempre, es una **sesión con TTL**.
-Cuánto dura está **sin medir** — conviene hacerlo, porque cambia cómo se prioriza.
+**Pero tiene caducidad propia, y es corta.** Reportado por un compañero el 28/09: esperando, vuelve a
+dejar elegir certificado, y el margen es de **unos minutos como mucho**. No es un estado pegado para
+siempre: es una sesión con un TTL breve.
 
 Eso acota el riesgo sin eliminarlo: el peligro existe **si el segundo ciudadano entra poco después
 del primero**, que es justamente el caso realista de un móvil compartido o un mostrador de
@@ -592,15 +592,30 @@ exactamente ese punto, vaciando el almacén justo después de ese cierre.
 > Queda sin explicar **por qué** esa navegación lo deja así. No hace falta saberlo para arreglarlo,
 > pero conviene no dar por entendido lo que no se ha medido.
 
-### 10.5 Por qué importa más que el defecto de §8
+### 10.5 Cuánto importa, de verdad
+
+Con el TTL medido en **minutos**, la valoración baja respecto a la primera impresión. Conviene
+dejarlo escrito con precisión, porque de esto depende cómo se prioriza y cómo se cuenta a JCCM:
 
 | | JCCMEC-224/228 | Este hallazgo |
 |---|---|---|
 | Efecto | El ciudadano **no puede** entrar | El ciudadano **entra como otro** |
-| Quién lo nota | Cualquiera que cambie de usuario | Nadie: es silencioso |
-| Riesgo | Funcional | **Privacidad**: sesión ajena en móvil compartido |
+| Visibilidad | Se ve y molesta | **Silencioso** |
+| Ventana | Siempre | Sólo los **primeros minutos** tras cerrar sesión |
+| Alcance | Cualquier método | **Sólo certificado** |
+| Plataformas | Ambas | Medido en iOS; Android sin medir |
 
-Un bloqueo se ve y molesta. Esto no se ve.
+O sea: **más silencioso, pero mucho menos probable**. Hace falta que el siguiente ciudadano entre
+casi inmediatamente — que es justo lo que pasa cuando alguien te presta el móvil en el momento, y
+lo que hace QA todo el día, pero no el uso normal.
+
+> La primera redacción de esta sección decía que era «más grave» que el defecto de §8. Con el TTL
+> medido, esa afirmación no se sostiene y se corrige. Sigue siendo un defecto de privacidad real y
+> hay que arreglarlo, pero no es crítico ni justifica parar nada.
+
+Un efecto lateral que conviene tener presente: **donde más muerde es en las propias pruebas**. Quien
+valide la app cambiando de usuario en segundos lo verá constantemente y puede confundirlo con otros
+fallos — exactamente lo que ocurrió durante este UAT.
 
 ### 10.6 Cómo se arregla
 
