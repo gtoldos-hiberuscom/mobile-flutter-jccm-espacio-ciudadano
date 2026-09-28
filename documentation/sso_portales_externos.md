@@ -541,7 +541,7 @@ lo dejó escrito. Lo que faltó fue la comprobación pendiente, que es la que se
 el resultado que aquel documento temía. El fork sigue vendorizado y sin usar: volver a él era, según
 ese mismo documento, **una línea**.
 
-### 10.4 Descartada la ventana de 60 minutos: es el método, y sólo el certificado
+### 10.4 No es la ventana de 60 minutos: es el método, sólo el certificado, y caduca solo
 
 Medido el 28/09, misma sesión, build de `develop`. Tras cerrar sesión y volver a Acceder:
 
@@ -551,12 +551,21 @@ Medido el 28/09, misma sesión, build de `develop`. Tras cerrar sesión y volver
 | **Cl@ve PIN** | **Pide el flujo completo** (app de Cl@ve incluida) y entra |
 | Cl@ve Permanente | No se pudo probar: no carga desde el móvil por la VPN (dominios de la Seguridad Social) |
 
-La ventana de 60 minutos de la pasarela queda **descartada** como causa: opera sobre la pasarela
+La ventana de 60 minutos de la pasarela queda **descartada como causa**: opera sobre la pasarela
 entera, así que habría auto-identificado también con PIN. Y cuando actúa de verdad ni siquiera
 llega a mostrarse el selector — que es lo que se vio en el primer intento del día, un caso
 distinto.
 
 Lo que sobrevive es el estado del **IdP de certificado** dentro del almacén del navegador.
+
+**Pero tiene caducidad propia.** Reportado por un compañero el 28/09: *esperando un rato, luego sí
+deja elegir certificado*. Así que no es un estado pegado para siempre, es una **sesión con TTL**.
+Cuánto dura está **sin medir** — conviene hacerlo, porque cambia cómo se prioriza.
+
+Eso acota el riesgo sin eliminarlo: el peligro existe **si el segundo ciudadano entra poco después
+del primero**, que es justamente el caso realista de un móvil compartido o un mostrador de
+atención. Y refuerza el POC de §10.6: con el borrado explícito, el resultado deja de depender de
+cuánto haya esperado nadie.
 
 **Esto acota el impacto:** quien se identifica con Cl@ve PIN no está afectado. El riesgo se
 circunscribe al certificado — que en la Administración no es precisamente minoritario, pero
