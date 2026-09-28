@@ -1,6 +1,5 @@
 import Flutter
 import PassKit
-import SafariServices
 import UIKit
 
 @main
@@ -25,40 +24,6 @@ import UIKit
       binaryMessenger: registrar.messenger())
     channel.setMethodCallHandler { [weak self] call, result in
       self?.handlePkPassMethod(call, result: result)
-    }
-
-    let browserChannel = FlutterMethodChannel(
-      name: "es.jccm.espaciociudadano/browser_session",
-      binaryMessenger: registrar.messenger())
-    browserChannel.setMethodCallHandler { call, result in
-      AppDelegate.handleBrowserSessionMethod(call, result: result)
-    }
-  }
-
-  /// Vacía el almacén de datos de `SFSafariViewController`, que es el contenedor
-  /// propio de la app donde viven la sesión de Cl@ve y la de los portales.
-  ///
-  /// POC de JCCMEC-224/228 (§10.6 de `documentation/sso_portales_externos.md`).
-  /// Lo que se quiere medir: si este borrado se lleva también el **estado del
-  /// IdP de certificado** —la asociación del certificado con el host, que es lo
-  /// que hoy permite entrar como el ciudadano anterior sin pedir nada— o sólo
-  /// las cookies. Apple documenta «local storage, cached resources and cookies»
-  /// y no dice nada del certificado, así que no se puede saber sin probarlo.
-  ///
-  /// Devuelve `false` en iOS 15, donde la API no existe (el mínimo de la app).
-  private static func handleBrowserSessionMethod(
-    _ call: FlutterMethodCall, result: @escaping FlutterResult
-  ) {
-    guard call.method == "clearWebsiteData" else {
-      result(FlutterMethodNotImplemented)
-      return
-    }
-    if #available(iOS 16.0, *) {
-      SFSafariViewController.DataStore.default.clearWebsiteData {
-        result(true)
-      }
-    } else {
-      result(false)
     }
   }
 

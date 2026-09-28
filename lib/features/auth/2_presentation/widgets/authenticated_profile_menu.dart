@@ -90,12 +90,6 @@ void showAuthenticatedProfileMenu({
       }
     } finally {
       await ref.read(authSessionControllerProvider).clear();
-      // Cerrar la sesion en Cerbero no se lleva el estado del IdP de
-      // certificado, que vive en el contenedor del navegador: sin esto, el
-      // siguiente ciudadano entra como el anterior sin que se le pida nada
-      // (§10 de documentation/sso_portales_externos.md). Va en el `finally`
-      // a proposito: si el cierre federado ha fallado, limpiar importa mas.
-      await ref.read(authSessionControllerProvider).clearBrowserSessionData();
     }
 
     if (context.mounted) {
