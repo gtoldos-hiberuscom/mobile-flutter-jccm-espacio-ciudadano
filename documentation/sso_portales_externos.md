@@ -641,6 +641,26 @@ segundo, desde la app **no hay arreglo**; solo lo sueltan matar la app o esperar
 (menos de cinco minutos). Es un comportamiento del IdP de Cl@ve: cachear una negociación fallida de
 forma que impida reintentar no debería ocurrir, y eso hay que reportárselo a ellos.
 
+### 10.4 quater Android es peor: ahí no se suelta
+
+Medido el 28/09 en emulador Pixel 9 (Android 17) contra PRE, y **contradice la conclusión
+tranquilizadora de iOS**:
+
+| | iOS | Android |
+|---|---|---|
+| Dónde vive la pestaña | `SFSafariViewController`, contenedor **de la app** | Custom Tab **dentro de Chrome** |
+| ¿Muere al cerrar la app? | Sí | **No** — Chrome es otro proceso |
+| ¿Se suelta esperando? | Sí, ~30 s | **No**, ni tras varios minutos |
+| ¿Se suelta matando la app? | Sí | **No** |
+| Qué lo suelta | El tiempo | **Sólo borrar los datos de Chrome** |
+
+Comprobado por contraste: con el certificado pegado y sin soltarse ni esperando ni matando la app,
+un `pm clear com.android.chrome` lo libera de inmediato. El estado vive en Chrome.
+
+**Consecuencia:** en Android esto **no es una molestia pasajera, es persistente**. El ciudadano no
+tiene forma razonable de salir — nadie va a ir a borrar los datos de su navegador — y el apaño de
+«cerrar la app» que sirve en iOS **aquí no funciona**.
+
 ### 10.5 Cuánto importa, de verdad
 
 Con el TTL medido en **~30 segundos**, la valoración baja mucho respecto a la primera impresión.
@@ -654,8 +674,12 @@ Conviene dejarlo escrito con precisión, porque de esto depende cómo se prioriz
 | Alcance | Cualquier método | Sólo certificado |
 | Plataformas | Ambas | Medido en iOS; Android sin medir |
 
-Para que alguien heredase la identificación de otro haría falta coger el dispositivo y entrar **en
-menos de medio minuto**. Existe, pero no es el escenario de un móvil compartido normal.
+Para que alguien heredase la identificación de otro **en iOS** haría falta coger el dispositivo y
+entrar **en menos de medio minuto**. Existe, pero no es el escenario de un móvil compartido normal.
+
+**En Android no hay tal ventana: el estado no caduca** (§10.4 quater). Ahí sí es un defecto
+persistente, y la tabla de arriba —escrita con los datos de iOS— **no le aplica**. Cualquier
+priorización tiene que separar las dos plataformas.
 
 > Esta sección ha cambiado dos veces según se afinaba la medición: primero decía que el hallazgo era
 > «más grave» que el defecto de §8, luego que el TTL era de minutos. Con 30 segundos medidos, **ni
