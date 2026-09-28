@@ -558,9 +558,9 @@ distinto.
 
 Lo que sobrevive es el estado del **IdP de certificado** dentro del almacén del navegador.
 
-**Pero tiene caducidad propia, y es corta.** Reportado por un compañero el 28/09: esperando, vuelve a
-dejar elegir certificado, y el margen es de **unos minutos como mucho**. No es un estado pegado para
-siempre: es una sesión con un TTL breve.
+**Pero caduca solo, y muy rápido: unos 30 segundos.** Medido el 28/09 cronómetro en mano, después de
+estimarlo primero en «minutos» y luego en «un minuto». No es un estado pegado: es una conexión
+ociosa que se cierra sola.
 
 Eso acota el riesgo sin eliminarlo: el peligro existe **si el segundo ciudadano entra poco después
 del primero**, que es justamente el caso realista de un móvil compartido o un mostrador de
@@ -643,80 +643,52 @@ forma que impida reintentar no debería ocurrir, y eso hay que reportárselo a e
 
 ### 10.5 Cuánto importa, de verdad
 
-Con el TTL medido en **minutos**, la valoración baja respecto a la primera impresión. Conviene
-dejarlo escrito con precisión, porque de esto depende cómo se prioriza y cómo se cuenta a JCCM:
+Con el TTL medido en **~30 segundos**, la valoración baja mucho respecto a la primera impresión.
+Conviene dejarlo escrito con precisión, porque de esto depende cómo se prioriza y cómo se cuenta:
 
 | | JCCMEC-224/228 | Este hallazgo |
 |---|---|---|
-| Efecto | El ciudadano **no puede** entrar | El ciudadano **entra como otro** |
-| Visibilidad | Se ve y molesta | **Silencioso** |
-| Ventana | Siempre | Sólo los **primeros minutos** tras cerrar sesión |
-| Alcance | Cualquier método | **Sólo certificado** |
+| Efecto | El ciudadano **no puede** entrar | Reeligiendo certificado, entra como el anterior |
+| Persistencia | **Permanente** hasta cerrar sesión | **Se suelta solo en ~30 s** |
+| Visibilidad | Se ve y molesta | Silencioso |
+| Alcance | Cualquier método | Sólo certificado |
 | Plataformas | Ambas | Medido en iOS; Android sin medir |
 
-O sea: **más silencioso, pero mucho menos probable**. Hace falta que el siguiente ciudadano entre
-casi inmediatamente — que es justo lo que pasa cuando alguien te presta el móvil en el momento, y
-lo que hace QA todo el día, pero no el uso normal.
+Para que alguien heredase la identificación de otro haría falta coger el dispositivo y entrar **en
+menos de medio minuto**. Existe, pero no es el escenario de un móvil compartido normal.
 
-> La primera redacción de esta sección decía que era «más grave» que el defecto de §8. Con el TTL
-> medido, esa afirmación no se sostiene y se corrige. Sigue siendo un defecto de privacidad real y
-> hay que arreglarlo, pero no es crítico ni justifica parar nada.
+> Esta sección ha cambiado dos veces según se afinaba la medición: primero decía que el hallazgo era
+> «más grave» que el defecto de §8, luego que el TTL era de minutos. Con 30 segundos medidos, **ni
+> es más grave ni es urgente**. Se deja la traza del cambio a propósito: la primera impresión sobre
+> un estado que caduca solo casi siempre exagera.
 
-Un efecto lateral que conviene tener presente: **donde más muerde es en las propias pruebas**. Quien
-valide la app cambiando de usuario en segundos lo verá constantemente y puede confundirlo con otros
-fallos — exactamente lo que ocurrió durante este UAT.
+**Donde sí muerde de verdad es en las pruebas.** Quien valide cambiando de usuario en segundos lo
+verá constantemente — y, peor, puede *creer que ha arreglado algo* cuando lo único que ha pasado es
+que se ha entretenido 30 segundos. Ocurrió durante este UAT y costó un POC entero (§10.4 ter).
 
 ### 10.6 Cómo se arregla
 
-**El nudo:** hoy el SSO con los portales se consigue *por herencia de cookies* — login y portales
-comparten almacén de navegador (§6, Opción 2 bis). Ese almacén compartido es lo que hace que Empleo
-y Educamos abran identificados **y** lo que deja vivo el estado del IdP de certificado. Mientras el
-SSO dependa de compartir el almacén, **SSO y aislamiento son incompatibles**: no es una elección de
-implementación, es la misma propiedad vista por sus dos caras.
+**Lo primero: probablemente no hace falta arreglarlo desde la app.** Con ~30 segundos de vida, el
+estado se suelta solo antes de que casi nadie lo note. El POC que se escribió para atacarlo
+—vaciar el almacén con `clearWebsiteData` vía canal nativo— **se midió y no servía** (§10.4 ter), y
+se retiró.
 
-De peor a mejor:
+Si aun así se quisiera cerrar del todo:
 
-**1. Volver al aislamiento.** `ExternalUserAgent.ephemeralAsWebAuthenticationSession` en iOS, y en
-Android el fork de Custom Tabs efímeras, que **sigue vendorizado y sin usar** — según
-`../docs/auth/clave_forceauthn_retest_2026-09.md`, volver a él es *una línea*. Mata el problema de
-raíz porque destruye el contenedor entero. **Precio: se pierde el SSO con Empleo y Educamos**, que
-es lo que el cliente pidió. Cambia un problema por otro.
+**1. Reportarlo a Cl@ve.** Es lo que corresponde. Dos comportamientos de su IdP: que no revalide el
+certificado cuando le llega `ForceAuthn`, y que una negociación **cancelada** deje bloqueados los
+reintentos durante esos segundos (`003002`). Hay evidencia medida para pedirlo.
 
-**2. Vaciar el almacén al cerrar sesión — ✅ MEDIDO Y FUNCIONA (28/09).**
-`SFSafariViewController.DataStore.default.clearWebsiteData` (iOS 16+). Mantiene el SSO durante la
-sesión y limpia al salir.
+**2. Volver al aislamiento** (`ephemeralAsWebAuthenticationSession` en iOS; en Android el fork, que
+sigue vendorizado y a una línea). Lo mata de raíz, pero **cuesta el SSO con Empleo y Educamos**. Por
+30 segundos, no compensa.
 
-POC en la rama `poc/ios-clear-website-data`: canal nativo en `ios/Runner/AppDelegate.swift`
-(`es.jccm.espaciociudadano/browser_session`), envoltorio Dart en
-`lib/core/security/browser_session_store.dart`, invocado desde el logout del menú de perfil y desde
-`endStaleBrowserSession()`. **Nunca durante la sesión**: mientras dura, el contenedor compartido es
-lo que hace que Empleo y Educamos abran identificados.
+**3. El puente SSO en Cerbero** (Opción 1 de §6), que sigue pendiente desde septiembre. Deshace el
+nudo: con enlaces de un solo uso, el SSO deja de necesitar el almacén compartido y se puede aislar
+sin perder nada. Su justificación no es este hallazgo — es el diseño correcto — pero encaja.
 
-**Resultado en dispositivo** (iPhone 16 / iOS 26.5, PRE): entrar con certificado → cerrar sesión →
-Acceder → certificado **vuelve a pedir el certificado**. Queda respondida la pregunta que estaba
-abierta desde agosto (punto 2 de la Opción 2 bis, §6): **el borrado SÍ alcanza al estado del IdP de
-certificado**, no sólo a las cookies.
-
-Lo que sigue sin resolver: el mínimo de la app es **iOS 15** y la API es 16+ (sin limpieza por
-debajo), y en **Android no hay equivalente** — allí el problema, si existe, queda abierto y no se ha
-medido todavía.
-
-**3. Que Cl@ve invalide el método al recibir `ForceAuthn`.** Lo correcto de origen: si al IdP le
-llega una reautenticación forzada, el certificado debería volver a pedirse. No depende de nosotros,
-pero ahora hay evidencia medida para pedirlo (§10.4).
-
-**4. El puente SSO en Cerbero — la que de verdad lo resuelve.** Es la **Opción 1** de §6, recomendada
-desde septiembre y pendiente de JCCM. Con un puente (Cerbero acepta el token de la app y devuelve un
-enlace de un solo uso y vida corta), **el SSO deja de necesitar cookies compartidas**. Y en cuanto
-deja de necesitarlas, se puede volver al aislamiento **sin perder nada**: login efímero y portales
-identificados a la vez. Deshace el nudo en lugar de elegir un lado.
-
-> Lo que este hallazgo aporta al caso del puente: hasta ahora era la opción *mejor*. Ahora es la
-> única que no obliga a elegir entre el SSO que pidió el cliente y la protección en dispositivo
-> compartido que pidió el cliente. Sin puente, **hay que sacrificar una de las dos**.
-
-Resuelve además §10.7, por el mismo motivo: con enlaces emitidos por Cerbero para el ciudadano en
-curso, un portal no puede quedarse mostrando al anterior.
+**Apaño mientras tanto, para QA y para el ciudadano:** cerrar sesión **y cerrar la app**. O
+simplemente esperar medio minuto.
 
 ### 10.7 Además: la identidad sobrevive en Educamos
 
