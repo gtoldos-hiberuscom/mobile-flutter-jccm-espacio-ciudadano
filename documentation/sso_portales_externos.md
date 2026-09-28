@@ -1,9 +1,13 @@
 # SSO con portales externos desde la app (Empleo CLM, Educamos CLM, Carpeta Salud)
 
-**Estado:** **resuelto y validado en las dos plataformas** (18/09/2026). Lo que sigue conserva el
-análisis porque explica el porqué de cada decisión, pero ya no es una propuesta.
-**Fecha:** 2026-09-18 (reescribe el análisis del 17/09) · **Tickets:** JCCMEC ·
-gestproy #282847 (sesión de Cl@ve) y #282296 (causa real del bug de reautenticación).
+**Estado:** el **SSO sigue resuelto y validado en las dos plataformas** (18/09/2026). El efecto
+secundario que la validación no cubrió —**cambiar de ciudadano sin cerrar sesión quedaba
+bloqueado**, JCCMEC-224 / JCCMEC-228— está **arreglado y validado en iOS el 28/09**, con el SSO
+comprobado intacto; falta el mismo contraste en Android (§8).
+Lo que sigue conserva el análisis porque explica el porqué de cada decisión.
+**Fecha:** 2026-09-18 (reescribe el análisis del 17/09), ampliado el 2026-09-28 con §8 ·
+**Tickets:** JCCMEC-224, JCCMEC-228 · gestproy #282847 (sesión de Cl@ve) y #282296 (causa real
+del bug de reautenticación).
 
 > **Por qué se reescribió.** La primera versión partía de que el login de la app corría en una
 > pestaña de navegador aislada en **las dos** plataformas, y de ahí concluía que no había nada
@@ -202,7 +206,7 @@ SSO se produce **sin escribir una línea**.
 - **Ya no hay coste de seguridad que asumir**: la reautenticación la fuerza el `ForceAuthn` (§5).
 - **Pero es SSO parcial y no determinista**: para Educamos son los 60 minutos de la pasarela Cl@ve;
   para Empleo depende de en qué realm viva su cliente; y no funciona en iOS de ninguna manera.
-- **Está sin medir.** Es la comprobación más barata que hay pendiente (§8) y conviene hacerla antes
+- **Está sin medir.** Es la comprobación más barata que hay pendiente (§9) y conviene hacerla antes
   de la llamada: cambia lo que se puede prometer.
 
 ### Opción 2 bis — SSO dentro del contenedor de la app *(**IMPLEMENTADA** para iOS, 18/09/2026)*
@@ -305,7 +309,140 @@ cualquier camino pasa por que Cerbero emita algo que el navegador entienda.
 La **4** pierde sentido mientras el SSO funcione. La **5** quedó parcialmente adoptada: los dos
 portales abren en pestaña integrada, el resto de enlaces no.
 
-## 8. Qué queda por confirmar
+## 8. El hueco: cambiar de ciudadano sin cerrar sesión (JCCMEC-224 / JCCMEC-228)
+
+> Añadido el 28/09/2026. **No invalida nada de lo anterior**: el SSO con los portales sigue
+> funcionando como se midió el 18/09. Lo que documenta esta sección es un efecto secundario del
+> mismo cambio, que la validación de aquel día no llegó a cubrir.
+
+### 8.1 Qué reporta el cliente
+
+Los dos tiques son el mismo defecto visto en plataformas distintas:
+
+| | JCCMEC-224 (25/09) | JCCMEC-228 (28/09) |
+|---|---|---|
+| Plataforma de la captura | Android (Custom Tab, `cm-pre.jccm.es`) | iOS (`SFSafariViewController`, `sso-cerbero-pre.cm-pre.jccm.es`) |
+| Mensaje | `You are already authenticated as different user 'per9999927' in this session. Please sign out first.` | Idéntico, usuario `per2446221` |
+
+El error lo pinta **Cerbero dentro del navegador**, durante el `authorize`: la app no llega a
+recibir ningún token. Las salidas que encuentra el ciudadano son entrar con el usuario anterior y
+cerrar sesión, o desinstalar la app.
+
+JCCMEC-224 incluye además un punto distinto —«Empleo y Educamos se abren dentro de la app, deberían
+abrirse en navegador»— que **no es un defecto**: es la Opción 2 bis de §6, deliberada, y es lo que
+da el SSO en iOS. Decisión de G.T. el 28/09: se queda como está.
+
+### 8.2 Causa raíz
+
+La retirada del aislamiento (§5) dejó que la **cookie de sesión de Cerbero del realm `usuarios`
+sobreviva en el navegador compartido**: Chrome/Custom Tab en Android, almacén de
+`SFSafariViewController` en iOS. Eso es precisamente lo que hace posible el SSO con los portales.
+
+Lo que invalida esa cookie es el RP-initiated logout —`_appAuth.endSession`,
+`lib/features/auth/3_data/auth_repository_impl.dart:151-164`—, y **sólo se dispara desde dos
+sitios**: el botón «Cerrar sesión» del menú de perfil
+(`lib/features/auth/2_presentation/widgets/authenticated_profile_menu.dart:89`) y la revocación de
+consentimiento (`lib/features/auth/2_presentation/providers/consent_revocation_notifier.dart:56`).
+**No hay nada equivalente en el arranque de un login.**
+
+Con eso, la secuencia del tique es:
+
+1. El ciudadano A entra y **mata la app sin cerrar sesión** → la cookie de Cerbero sigue viva.
+2. El ciudadano B pulsa Acceder → `prompt=login` → `ForceAuthn=true` → Cl@ve **autentica bien a B**.
+3. El assertion SAML vuelve a Cerbero, que encuentra en esa sesión de navegador la identidad A y
+   corta con `already authenticated as different user`.
+
+Es el comportamiento estándar de Keycloak con brokering de identidad. **No es un defecto de Cerbero
+ni de la app: es el hueco entre las dos**, y aparece porque hoy nadie cierra la sesión del navegador
+salvo que el ciudadano pulse explícitamente «Cerrar sesión».
+
+### 8.3 Por qué no lo detectó la validación del 18/09
+
+Aquel día se midió *login → **cerrar sesión** → login vuelve a desafiar* (§9). Ese camino pasa por
+`endSession` y limpia la cookie, así que funciona. El caso *login → **matar la app** → login con
+otro ciudadano* no se probó. Conviene incorporarlo al plan de pruebas como escenario propio.
+
+### 8.4 Agravante: la vuelta a la app
+
+El enlace «Volver a la aplicación» de esa página de error lo emite **Cerbero**, y apunta al cliente
+**web** de Espacio Ciudadano, no a la app. Desde el punto de vista del ciudadano no hay salida:
+tendría que adivinar quién era el usuario anterior. Esa parte no se arregla desde el repo.
+
+### 8.5 El arreglo (**IMPLEMENTADO y validado en iOS, con y sin acceso rápido**, 28/09/2026)
+
+> **Medido en dispositivo el 28/09** — iPhone 16 con iOS 26.5, build *profile* contra **PRE**.
+> Entrada con **certificado** y **acceso rápido activado**, app matada desde el selector sin cerrar
+> sesión, y segundo login con
+> **otro ciudadano**: entra sin el corte de Cerbero, y se ve la pestaña del cierre abrirse y
+> cerrarse un instante antes de la de Cl@ve. **El SSO sigue intacto**: Empleo CLM y Educamos CLM
+> abren ya identificados con el ciudadano en curso — que era el riesgo de regresión de todo esto.
+>
+> **Pieza 2 validada por separado**, y hacía falta: el escenario de arriba no la ejercita, porque
+> con el opt-in activo el `id_token` ya se guardaba antes. Se repitió **desinstalando la app**
+> —en iOS es lo único que limpia el almacén del navegador—, entrando con un ciudadano que
+> **rechaza el acceso rápido**, matando la app y entrando con otro: **entra sin el corte**. Cl@ve
+> pidió el certificado, que es lo correcto: el `ForceAuthn` que propaga `prompt=login` sigue
+> haciendo su trabajo y nadie hereda la identificación del anterior.
+>
+> **Sin medir:** Android, y que un cierre de sesión en regla no haga pagar la pestaña de más.
+
+Dos piezas. Sin la segunda, el arreglo dejaría fuera justo al perfil del tique.
+
+**1. Cerrar la sesión del navegador antes de un login nuevo.**
+`AuthSessionController.endStaleBrowserSession()` — si al iniciar sesión queda un `id_token` de un
+login anterior, cierra esa sesión en Cerbero reutilizando el `logout()` que ya existía
+(`auth_repository_impl.dart:144-178`) y sólo después arranca el `authorize`. Lo dispara
+`LandingNotifier.login()` antes del caso de uso. Nunca propaga ni bloquea: entrar con un posible
+corte de Cerbero por delante es mejor que no poder entrar por un fallo de red, y por eso tampoco
+borra el `id_token` — si el cierre falla, la pista sigue ahí para el siguiente intento, y cerrar
+una sesión ya cerrada es inocuo. El caso normal no paga nada: tras un cierre de sesión en regla
+`clear()` ya borró el `id_token`, así que no hay pestaña de más. Techo de 15 s para que un cierre
+que no resuelve no retrase la pantalla de Cl@ve.
+
+**2. Guardar el `id_token` también sin acceso rápido.** `persist()` no guardaba **nada** en disco
+sin biometría —razonado en su día: *«sólo dejaría un access token huérfano»*— y eso arrastraba al
+`id_token`, que no es una credencial de acceso: no autoriza nada contra el gateway, sólo acredita
+quién fue el titular. Ahora se escribe siempre. Sin esto el arreglo no sirve a quien no activa el
+acceso rápido, que es precisamente el ciudadano de un móvil compartido. Decisión de G.T., 28/09.
+
+Ficheros: `auth_session_controller.dart` (las dos piezas), `landing_notifier.dart` (el disparo).
+Tests nuevos en `auth_session_controller_test.dart` y `landing_notifier_test.dart`, incluido uno que
+fija el **orden** —cerrar después del `authorize` no serviría de nada—. Suite en verde (1.100) y
+`custom_lint` limpio.
+
+**Lo que queda por medir**, y es lo único que puede cambiar el diseño: si el cierre
+puede hacerse **por detrás** (petición HTTP con Dio, invisible) en lugar de por el navegador. Hoy va
+por el navegador, que es el camino garantizado —el mismo que ya funciona al pulsar «Cerrar
+sesión»— a costa de que el ciudadano vea abrirse dos pestañas seguidas cuando hay algo que cerrar.
+
+**Descartada de momento:** `SFSafariViewControllerDataStore.clearWebsiteData` (iOS 16+, §6 Opción
+2 bis). El mínimo de la app es iOS 15, no lo expone `flutter_appauth` —exigiría un canal nativo— y
+en Android no hay equivalente, así que no resolvería el caso en las dos plataformas.
+
+**Sigue en pie, y no depende de nosotros:** que Cerbero restituya en esa pantalla la opción de
+cerrar la sesión anterior y continuar (§8.4). Resolvería el caso sin app de por medio.
+
+### 8.6 Hallazgo colateral: identidad cruzada en disco
+
+Salió al analizar el escenario y es **independiente** del bloqueo anterior —ocurre después, si el
+ciudadano llega a entrar—. Verificado en código:
+
+- `lib/core/routing/session_guard.dart:149` llama a `hasPersistedSession()`
+  (`auth_session_controller.dart:62-65`), que sólo pregunta *«¿hay algún access token en disco?»*,
+  **no de quién**. Con el token de A en disco, la sesión de B **nunca se persiste** y la de A
+  **nunca se borra**.
+- `clear()` (`auth_session_controller.dart:460-484`) no toca el almacén biométrico, y está
+  justificado por escrito — pero esa justificación («se acaba de revocar en Keycloak y el siguiente
+  login lo sobrescribe») **asume que hubo logout explícito**. En este escenario no lo hay.
+- La clave del offline token es `'refresh_token'` (`storage_keys.dart:13`), **sin sufijo de
+  ciudadano**, mientras que todas las claves de `SharedPreferences` sí llevan `+ idAgente`
+  (`storage_keys.dart:25-57`).
+
+**No está demostrado que se haya manifestado** en lo que reporta el cliente: su bloqueo ocurre
+antes, en el navegador. Pero explica por qué «desinstalar» aparece como una de las salidas, y
+merece tique propio.
+
+## 9. Qué queda por confirmar
 
 **Medido y cerrado el 18/09/2026:**
 
@@ -320,6 +457,13 @@ portales abren en pestaña integrada, el resto de enlaces no.
   vuelve a desafiar.
 - ✅ **Login con certificado dentro de `SFSafariViewController`**, dos veces. Era el riesgo que tenía
   parada esta opción desde agosto.
+
+**Lo que aquella validación NO cubrió (28/09/2026):**
+
+- ❌ **Cambio de ciudadano sin cerrar sesión.** Se midió *login → cerrar sesión → login*, que pasa
+  por `endSession` y limpia la cookie. **Falta** *login → matar la app → login con otro ciudadano*,
+  que es justo lo que está roto (§8, JCCMEC-224 / JCCMEC-228). Debe entrar en el plan de pruebas
+  como escenario propio, no como variante del anterior.
 
 **Pendiente de validar en producto:**
 
@@ -348,7 +492,7 @@ portales abren en pestaña integrada, el resto de enlaces no.
 4. Versión de Keycloak de Cerbero y disponibilidad de *token exchange* (para el puente).
 5. Si los portales pueden implementar un endpoint de entrada por ticket, o debe resolverlo Cerbero.
 
-## 9. Referencias
+## 10. Referencias
 
 - `../docs/auth/clave_forceauthn_retest_2026-09.md` — la causa real del bug de reautenticación y la
   retirada del aislamiento de Android (#282296).
