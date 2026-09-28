@@ -589,8 +589,25 @@ Afina el diagnóstico: no es que el estado del método sobreviva siempre, es que
 cierre de sesión lo deja reutilizable**. Y explica por qué el POC de §10.6 funciona: ataca
 exactamente ese punto, vaciando el almacén justo después de ese cierre.
 
-> Queda sin explicar **por qué** esa navegación lo deja así. No hace falta saberlo para arreglarlo,
-> pero conviene no dar por entendido lo que no se ha medido.
+**Explicación, confirmada por contraste el 28/09:** el estado no vive en una cookie, vive en la
+**conexión TLS** con el IdP de certificado — la negociación en la que se eligió el certificado. Las
+cookies se guardan en disco y sobreviven a cerrar la app; las conexiones abiertas, no.
+
+| Secuencia | Conexión TLS | ¿Pide certificado? |
+|---|---|---|
+| Cerrar sesión, volver a entrar | viva | **No** |
+| Cerrar sesión, **matar la app**, entrar | destruida | **Sí** |
+| Matar la app sin cerrar sesión, entrar | destruida | **Sí** |
+
+Encaja con todo lo demás: con que el estado **caduque en minutos** (es el *keep-alive* de una
+conexión ociosa) y con que vaciar el almacén lo resuelva en iOS.
+
+> **Apaño inmediato, sin esperar a ningún arreglo:** cerrar sesión **y cerrar la app**. Sirve para
+> QA y para el ciudadano de un dispositivo compartido.
+
+> ⚠️ **Predicción para Android, sin comprobar:** allí la pestaña corre dentro de **Chrome**, un
+> proceso aparte que **no muere** al matar la app. Si la explicación es correcta, el apaño **no
+> funcionará en Android**. Comprobarlo antes de darlo por bueno a nadie.
 
 ### 10.5 Cuánto importa, de verdad
 
