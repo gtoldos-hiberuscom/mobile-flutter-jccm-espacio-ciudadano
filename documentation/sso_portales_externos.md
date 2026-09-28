@@ -703,6 +703,13 @@ Si aun así se quisiera cerrar del todo:
 certificado cuando le llega `ForceAuthn`, y que una negociación **cancelada** deje bloqueados los
 reintentos durante esos segundos (`003002`). Hay evidencia medida para pedirlo.
 
+> **Por qué «antes sí se podía elegir certificado».** Porque era cierto: hasta el 18/09 el login
+> corría en **contenedor efímero** —fork de Custom Tabs en Android, sesión efímera en iOS— que se
+> destruía al terminar, así que cada login empezaba de cero y el certificado se pedía siempre. Al
+> retirarlo, el contenedor pasa a compartirse: eso es lo que da el SSO **y** lo que trae esto.
+> Corte exacto: **`0.1.5+7` (11/09) y anteriores** lo tenían; **`0.1.6+8` y `0.1.7+9`**, no. Explica
+> que un compañero pueda elegir certificado y otra no: están a distinto lado de esa línea.
+
 **2. Volver al aislamiento** (`ephemeralAsWebAuthenticationSession` en iOS; en Android el fork, que
 sigue vendorizado y a una línea). Lo mata de raíz, pero **cuesta el SSO con Empleo y Educamos**. Por
 30 segundos, no compensa.
@@ -715,6 +722,15 @@ sin perder nada. Su justificación no es este hallazgo — es el diseño correct
 simplemente esperar medio minuto.
 
 **Vías descartadas, para no volver a recorrerlas:**
+
+- **Quitar `max_age=0` del authorize.** Hipótesis razonable — en su día el fallo fue justo un
+  parámetro que Cerbero no parseaba (`prompt=login select_account`), y `max_age` es redundante con
+  `prompt=login`. **Medido el 28/09 en Android**, elegido a propósito porque allí el estado **no
+  caduca** y por tanto el reloj no puede falsear el resultado: con Chrome recién limpiado y sin
+  `max_age`, el certificado **sigue sin poder reelegirse**. Descartada, y el experimento revertido.
+  De paso queda confirmado que no hay deriva respecto a septiembre: el retest del 18/09 dice que
+  «`prompt` y `max_age=0` se envían incondicionalmente en los dos casos», y es exactamente lo que se
+  envía hoy.
 
 - **Recrear la instancia de `FlutterAppAuth`** no limpia nada. Comprobado en el plugin
   (`flutter_appauth-12.0.0/ios/.../AppAuthIOSAuthorization.m:165-178`): **ya se construye un agente
