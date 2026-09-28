@@ -605,6 +605,18 @@ conexión ociosa) y con que vaciar el almacén lo resuelva en iOS.
 > **Apaño inmediato, sin esperar a ningún arreglo:** cerrar sesión **y cerrar la app**. Sirve para
 > QA y para el ciudadano de un dispositivo compartido.
 
+**Segundo síntoma, misma raíz — y peor para el ciudadano (28/09).** Si al elegir certificado se
+**cancela** la selección, Cl@ve devuelve `003002 - Authentication Failed (no certificate has been
+submitted)` y, a partir de ahí, **cada reintento devuelve lo mismo sin volver a ofrecer la lista de
+certificados**, hasta matar la app. La conexión queda negociada **sin** certificado y se reutiliza.
+Evidencia: `evidencia/uat_20260928_cancelar_certificado_bloquea.png`.
+
+Es peor que el caso anterior porque le ocurre a **cualquiera que se equivoque al elegir**, no solo
+en dispositivos compartidos, y la única salida —cerrar la app— no la deduce nadie.
+
+**Vida del estado, medida:** vuelve a funcionar solo pasados **menos de cinco minutos**, que es el
+orden de un *keep-alive* de conexión ociosa. Coherente con el diagnóstico.
+
 > ⚠️ **Predicción para Android, sin comprobar:** allí la pestaña corre dentro de **Chrome**, un
 > proceso aparte que **no muere** al matar la app. Si la explicación es correcta, el apaño **no
 > funcionará en Android**. Comprobarlo antes de darlo por bueno a nadie.
