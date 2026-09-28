@@ -45,7 +45,7 @@ class MyDataEmploymentOffersPage extends ConsumerWidget {
     final recognizer = TapGestureRecognizer()
       ..onTap = () => launchExternalUrlWithConfirmation(
         context,
-        Uri.parse('https://empleabilidad-pre.cm-pre.jccm.es/'),
+        Uri.parse('https://empleo.castillalamancha.es/'),
       );
     try {
       await AppInfoSheet.show(

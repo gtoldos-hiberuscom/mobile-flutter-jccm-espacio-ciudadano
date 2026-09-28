@@ -137,11 +137,10 @@ abstract final class Routes {
   /// Returns true when [path] requires authentication.
   static bool requiresAuth(final String path) => _authenticated.any(path.startsWith);
 
-  /// Sections that the backend does not expose when authentication was made
-  /// with a representative certificate. Real-estate data remains available;
-  /// the address subsection does not.
+  /// Personal information that cannot be queried with a representative
+  /// certificate. Primary-care appointments are gated inside the Health tab.
   static bool isUnavailableForRepresentative(final String path) {
-    return path.startsWith(myDataHealth) || path.startsWith(myDataEducation) || path.startsWith(myDataSocialWelfare) || path.startsWith(myDataEmployment) || path.startsWith(myDataVehicles) || path.startsWith(myDataHousingAddress) || path.startsWith(digitalCards);
+    return path.startsWith(myDataEducationUniversityTitles);
   }
 
   static bool isKnownRoute(final String? path) {

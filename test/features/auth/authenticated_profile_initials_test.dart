@@ -39,6 +39,26 @@ void main() {
     expect(await initialsFor(tester, null), isNull);
   });
 
+  testWidgets('uses the represented party initials with a representative certificate', (final tester) async {
+    final initials = await initialsFor(
+      tester,
+      const JwtClaims(
+        exp: 0,
+        iat: 0,
+        iss: '',
+        aud: [],
+        sub: 'sub',
+        givenName: 'Titular',
+        firstSurname: 'Certificado',
+        representedAgentId: 'PJU0349051',
+        representedName: 'Entidad Representada',
+        representedNif: 'Q0000000J',
+      ),
+    );
+
+    expect(initials, 'ER');
+  });
+
   testWidgets('returns null when the claims carry no name', (final tester) async {
     final initials = await initialsFor(
       tester,

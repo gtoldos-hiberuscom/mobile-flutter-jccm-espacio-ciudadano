@@ -79,13 +79,7 @@ void main() {
       startSession(container, representedAgentId: 'PJU0349051');
 
       for (final path in [
-        Routes.myDataHealth,
-        Routes.myDataEducation,
-        Routes.myDataSocialWelfare,
-        Routes.myDataEmployment,
-        Routes.myDataVehicles,
-        Routes.myDataHousingAddress,
-        Routes.digitalCards,
+        Routes.myDataEducationUniversityTitles,
       ]) {
         expect(
           await container.read(_guardProvider).redirectPath(path),
@@ -102,8 +96,18 @@ void main() {
       for (final path in [
         Routes.home,
         Routes.myData,
+        Routes.myDataHealth,
+        Routes.myDataEducation,
+        Routes.myDataSocialWelfare,
+        Routes.myDataEmployment,
+        Routes.myDataVehicles,
+        Routes.myDataEducationNonUniversityTitles,
+        Routes.myDataSocialWelfareFamily,
+        Routes.myDataEmploymentOffers,
         Routes.myDataHousing,
         Routes.myDataHousingRealEstate,
+        Routes.myDataHousingAddress,
+        Routes.digitalCards,
         Routes.gestionExpedientes,
         Routes.gestionNotificaciones,
         Routes.recommendations,
@@ -221,18 +225,20 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      container.read(authSessionControllerProvider).startInMemory(
-        TokenResponse(
-          'access',
-          'persisted-refresh',
-          DateTime.now().subtract(const Duration(minutes: 1)),
-          null,
-          null,
-          null,
-          null,
-        ),
-        claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
-      );
+      container
+          .read(authSessionControllerProvider)
+          .startInMemory(
+            TokenResponse(
+              'access',
+              'persisted-refresh',
+              DateTime.now().subtract(const Duration(minutes: 1)),
+              null,
+              null,
+              null,
+              null,
+            ),
+            claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
+          );
 
       final redirect = await container.read(_guardProvider).redirectPath(Routes.home);
 
@@ -254,10 +260,12 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      container.read(authSessionControllerProvider).startInMemory(
-        TokenResponse('access', 'persisted-refresh', DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
-        claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
-      );
+      container
+          .read(authSessionControllerProvider)
+          .startInMemory(
+            TokenResponse('access', 'persisted-refresh', DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
+            claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
+          );
 
       final redirect = await container.read(_guardProvider).redirectPath(Routes.home);
 
@@ -277,18 +285,20 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      container.read(authSessionControllerProvider).startInMemory(
-        TokenResponse(
-          'access',
-          'persisted-refresh',
-          DateTime.now().subtract(const Duration(minutes: 1)),
-          null,
-          null,
-          null,
-          null,
-        ),
-        claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
-      );
+      container
+          .read(authSessionControllerProvider)
+          .startInMemory(
+            TokenResponse(
+              'access',
+              'persisted-refresh',
+              DateTime.now().subtract(const Duration(minutes: 1)),
+              null,
+              null,
+              null,
+              null,
+            ),
+            claims: const JwtClaims(exp: 0, iat: 0, iss: 'test', aud: ['app'], sub: 'sub-1', subAlt: 'PER1'),
+          );
 
       final redirect = await container.read(_guardProvider).redirectPath(Routes.home);
 

@@ -7244,6 +7244,12 @@ abstract class AppLocalizations {
   /// **'Introduce el número de documento de la persona interesada.'**
   String get gestionAportacionDocNumberRequiredError;
 
+  /// Error al intentar aportar desde el flujo de terceros a un expediente del usuario autenticado.
+  ///
+  /// In es, this message translates to:
+  /// **'Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.'**
+  String get gestionAportacionOwnExpedienteError;
+
   /// Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente.
   ///
   /// In es, this message translates to:

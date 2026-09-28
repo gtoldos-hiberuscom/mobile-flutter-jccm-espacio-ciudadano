@@ -112,6 +112,7 @@ void main() {
       expect(claims.isRepresentative, isTrue);
       expect(claims.effectiveAgentId, 'PJU0349051');
       expect(claims.effectivePersonIdentifier, 'Q0000000J');
+      expect(claims.effectiveDisplayName, 'ENTIDAD DE PRUEBAS 01');
       expect(claims.representedName, 'ENTIDAD DE PRUEBAS 01');
       expect(claims.representedNif, 'Q0000000J');
       expect(claims.certificateClassification, '11');
@@ -126,6 +127,7 @@ void main() {
       expect(claims.isRepresentative, isFalse);
       expect(claims.effectiveAgentId, 'PER9998003');
       expect(claims.effectivePersonIdentifier, '99999999R');
+      expect(claims.effectiveDisplayName, isNull);
     });
   });
 }

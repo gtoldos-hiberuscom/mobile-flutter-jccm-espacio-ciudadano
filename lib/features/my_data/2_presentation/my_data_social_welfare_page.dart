@@ -14,7 +14,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/m
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Social welfare data page — Figma node 43973:1893.
-class MyDataSocialWelfarePage extends StatefulWidget {
+class MyDataSocialWelfarePage extends ConsumerStatefulWidget {
   const MyDataSocialWelfarePage({
     super.key,
     this.backRoute = Routes.myData,
@@ -23,15 +23,16 @@ class MyDataSocialWelfarePage extends StatefulWidget {
   final String backRoute;
 
   @override
-  State<MyDataSocialWelfarePage> createState() => _MyDataSocialWelfarePageState();
+  ConsumerState<MyDataSocialWelfarePage> createState() => _MyDataSocialWelfarePageState();
 }
 
-class _MyDataSocialWelfarePageState extends State<MyDataSocialWelfarePage> {
-  _SocialWelfareTab _selectedTab = _SocialWelfareTab.data;
+class _MyDataSocialWelfarePageState extends ConsumerState<MyDataSocialWelfarePage> {
+  _SocialWelfareTab? _selectedTab;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final selectedTab = _selectedTab ?? _SocialWelfareTab.data;
 
     return AppTabbedDetailScaffold(
       title: l10n.socialWelfareScreenTitle,
@@ -40,10 +41,8 @@ class _MyDataSocialWelfarePageState extends State<MyDataSocialWelfarePage> {
         l10n.socialWelfareDataTab,
         l10n.socialWelfareServicesTab,
       ],
-      selectedIndex: _selectedTab.index,
-      onTabSelected: (final index) => setState(
-        () => _selectedTab = _SocialWelfareTab.values[index],
-      ),
+      selectedIndex: selectedTab.index,
+      onTabSelected: (final index) => setState(() => _selectedTab = _SocialWelfareTab.values[index]),
       tabViews: const [
         _SocialWelfareDataTab(),
         _SocialWelfareServicesTab(),

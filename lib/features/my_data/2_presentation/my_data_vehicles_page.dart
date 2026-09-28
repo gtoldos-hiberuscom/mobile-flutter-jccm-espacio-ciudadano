@@ -18,10 +18,10 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/m
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-const _dgtContactUrl = 'https://sede.dgt.gob.es/es/contenido/contactar/index.html';
+const _dgtContactUrl = 'https://www.dgt.es/inicio/';
 
 /// Vehicles list page — Figma node 43973:2068.
-class MyDataVehiclesPage extends StatefulWidget {
+class MyDataVehiclesPage extends ConsumerStatefulWidget {
   const MyDataVehiclesPage({
     super.key,
     this.backRoute = Routes.myData,
@@ -30,22 +30,23 @@ class MyDataVehiclesPage extends StatefulWidget {
   final String backRoute;
 
   @override
-  State<MyDataVehiclesPage> createState() => _MyDataVehiclesPageState();
+  ConsumerState<MyDataVehiclesPage> createState() => _MyDataVehiclesPageState();
 }
 
-class _MyDataVehiclesPageState extends State<MyDataVehiclesPage> {
-  _VehiclesTab _selectedTab = _VehiclesTab.data;
+class _MyDataVehiclesPageState extends ConsumerState<MyDataVehiclesPage> {
+  _VehiclesTab? _selectedTab;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final selectedTab = _selectedTab ?? _VehiclesTab.data;
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataVehiclesTitle,
       onBack: () => context.go(widget.backRoute),
       onInfo: () => _showVehiclesInfoSheet(context),
       tabs: [l10n.myDataVehiclesDataTab, l10n.myDataVehiclesServicesTab],
-      selectedIndex: _selectedTab.index,
+      selectedIndex: selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _VehiclesTab.values[index]),
       tabViews: const [
         _VehiclesDataTab(),

@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
@@ -18,6 +19,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -35,7 +37,7 @@ class MyDataHealthPage extends ConsumerStatefulWidget {
 }
 
 class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
-  _HealthTab _selectedTab = _HealthTab.data;
+  _HealthTab? _selectedTab;
   HealthAppointmentScope _selectedScope = HealthAppointmentScope.primaryCare;
   HealthAppointmentFilter _selectedAppointmentFilter = HealthAppointmentFilter.pending;
   AppListFilters _appointmentFilters = const AppListFilters();
@@ -43,12 +45,14 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
+    final selectedTab = _selectedTab ?? (isRepresentative ? _HealthTab.services : _HealthTab.data);
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataHealthTitle,
       onBack: () => context.go(widget.backRoute),
       onInfo: () => _showHealthInfoSheet(context),
-      actions: _selectedTab == _HealthTab.data
+      actions: selectedTab == _HealthTab.data
           ? [
               IconButton(
                 tooltip: _appointmentFilters.activeCount > 0 ? l10n.myDataHealthActiveFiltersTooltip(_appointmentFilters.activeCount) : l10n.myDataHealthSearchAppointmentsTooltip,
@@ -62,16 +66,19 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
             ]
           : const [],
       tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
-      selectedIndex: _selectedTab.index,
+      selectedIndex: selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _HealthTab.values[index]),
       tabViews: [
-        _HealthAppointmentsTab(
-          selectedScope: _selectedScope,
-          onScopeSelected: (final scope) => setState(() => _selectedScope = scope),
-          selectedAppointmentFilter: _selectedAppointmentFilter,
-          onAppointmentFilterSelected: (final filter) => setState(() => _selectedAppointmentFilter = filter),
-          filters: _appointmentFilters,
-        ),
+        if (isRepresentative)
+          const MyDataRepresentativeUnavailable()
+        else
+          _HealthAppointmentsTab(
+            selectedScope: _selectedScope,
+            onScopeSelected: (final scope) => setState(() => _selectedScope = scope),
+            selectedAppointmentFilter: _selectedAppointmentFilter,
+            onAppointmentFilterSelected: (final filter) => setState(() => _selectedAppointmentFilter = filter),
+            filters: _appointmentFilters,
+          ),
         const _HealthServicesTab(),
       ],
     );
@@ -492,7 +499,7 @@ class _AppointmentsContent extends StatelessWidget {
       return MyDataNoData(
         message: emptyMessage,
         actionLabel: l10n.myDataNoDataContact,
-        contactUrl: 'https://sanidad.castillalamancha.es/ciudadanos',
+        contactUrl: 'https://sanidad.castillalamancha.es/ciudadanos/listado-de-centros',
         scrollable: false,
       );
     }

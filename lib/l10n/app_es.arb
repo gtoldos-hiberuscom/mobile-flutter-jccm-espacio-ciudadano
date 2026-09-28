@@ -4954,6 +4954,10 @@
   "@gestionAportacionDocNumberRequiredError": {
     "description": "Error de validación cuando el número de documento está vacío."
   },
+  "gestionAportacionOwnExpedienteError": "Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.",
+  "@gestionAportacionOwnExpedienteError": {
+    "description": "Error al intentar aportar desde el flujo de terceros a un expediente del usuario autenticado."
+  },
   "gestionAportacionCamposExpedienteError": "Rellena el número de registro o el código identificador del expediente (solo uno de los dos).",
   "@gestionAportacionCamposExpedienteError": {
     "description": "Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente."

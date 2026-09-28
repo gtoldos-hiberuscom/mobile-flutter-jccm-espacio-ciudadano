@@ -3747,6 +3747,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionDocNumberRequiredError => 'Introduce el número de documento de la persona interesada.';
 
   @override
+  String get gestionAportacionOwnExpedienteError => 'Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.';
+
+  @override
   String get gestionAportacionCamposExpedienteError => 'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).';
 
   @override
