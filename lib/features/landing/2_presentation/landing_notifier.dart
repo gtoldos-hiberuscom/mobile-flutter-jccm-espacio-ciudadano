@@ -210,18 +210,16 @@ class LandingNotifier extends Notifier<LandingState> {
         // The user only ever sees a curated generic message; this log line is
         // the sole record of the real OAuth error/error_description.
         logger.e('Cl@ve login failed: $cause');
-        // Un intento fallido deja el contenedor del navegador en un estado que
-        // envenena los siguientes. Medido el 28/09: al cancelar la seleccion de
-        // certificado, Cl@ve responde «003002 - Authentication Failed (no
-        // certificate has been submitted)» y a partir de ahi CADA reintento
-        // devuelve lo mismo, sin volver a ofrecer la lista de certificados,
-        // hasta que el ciudadano mata la app — la unica forma de destruir esa
-        // conexion (§10.4 bis). Nadie deduce eso: se queda bloqueado sin saber
-        // por que. Limpiar aqui devuelve el siguiente intento a cero.
-        await ref.read(authSessionControllerProvider).clearBrowserSessionData();
-        if (!ref.mounted) {
-          return;
-        }
+        // NO se limpia aqui el contenedor del navegador, y se probo: al
+        // cancelar la seleccion de certificado, Cl@ve devuelve «003002 -
+        // Authentication Failed (no certificate has been submitted)» y cada
+        // reintento repite el error sin volver a ofrecer la lista. Se anadio el
+        // borrado en esta rama y se midio el 28/09 con los logs del simulador:
+        // «Browser website data cleared» SE EJECUTA y el bloqueo persiste
+        // igual. Ese estado no vive en los datos del sitio sino en la conexion,
+        // fuera del alcance de `clearWebsiteData`; solo lo sueltan matar la app
+        // o esperar a que caduque (§10.4 bis). Se retiro para no dejar codigo
+        // que aparenta arreglar algo que no arregla.
         if (cause is AuthException) {
           // Cancellations are silent — user deliberately dismissed the flow.
           state = cause.reason == AuthFailureReason.cancelled ? const LandingState() : LandingState(error: cause);

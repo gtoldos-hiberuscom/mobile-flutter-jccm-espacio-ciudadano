@@ -589,9 +589,10 @@ Afina el diagnóstico: no es que el estado del método sobreviva siempre, es que
 cierre de sesión lo deja reutilizable**. Y explica por qué el POC de §10.6 funciona: ataca
 exactamente ese punto, vaciando el almacén justo después de ese cierre.
 
-**Explicación, confirmada por contraste el 28/09:** el estado no vive en una cookie, vive en la
-**conexión TLS** con el IdP de certificado — la negociación en la que se eligió el certificado. Las
-cookies se guardan en disco y sobreviven a cerrar la app; las conexiones abiertas, no.
+**Explicación:** hay **dos** estados distintos, no uno — una primera redacción de esta sección los
+unificó en «todo es la conexión TLS» y la medición lo desmintió (§10.4 ter). Lo que comparten es que
+ambos mueren al cerrar la app: las cookies se guardan en disco y sobreviven, las conexiones
+abiertas no.
 
 | Secuencia | Conexión TLS | ¿Pide certificado? |
 |---|---|---|
@@ -620,6 +621,25 @@ orden de un *keep-alive* de conexión ociosa. Coherente con el diagnóstico.
 > ⚠️ **Predicción para Android, sin comprobar:** allí la pestaña corre dentro de **Chrome**, un
 > proceso aparte que **no muere** al matar la app. Si la explicación es correcta, el apaño **no
 > funcionará en Android**. Comprobarlo antes de darlo por bueno a nadie.
+
+### 10.4 ter Dos estados, no uno: qué alcanza el borrado y qué no
+
+Medido el 28/09 en el simulador de iPhone, **con los logs a la vista** — y desmiente la explicación
+unificada que esta sección daba antes:
+
+| Síntoma | ¿Lo arregla vaciar el almacén? | Dónde vive el estado |
+|---|---|---|
+| Tras **cerrar sesión**, el certificado no se puede reelegir | **Sí** | Datos del sitio (cookies) |
+| Tras **cancelar** la selección, `003002` en bucle | **No** | La conexión, fuera de `clearWebsiteData` |
+
+Cómo se midió el segundo: se añadió el borrado también en la rama de login fallido y se leyó el
+log del simulador. La línea `Browser website data cleared` **se ejecuta** — y el bloqueo persiste
+igual. El cambio se retiró: dejaba código que aparentaba arreglar algo que no arregla.
+
+Consecuencia práctica: el POC de §10.6 resuelve el primer síntoma, **no el segundo**. Para el
+segundo, desde la app **no hay arreglo**; solo lo sueltan matar la app o esperar a que caduque
+(menos de cinco minutos). Es un comportamiento del IdP de Cl@ve: cachear una negociación fallida de
+forma que impida reintentar no debería ocurrir, y eso hay que reportárselo a ellos.
 
 ### 10.5 Cuánto importa, de verdad
 
