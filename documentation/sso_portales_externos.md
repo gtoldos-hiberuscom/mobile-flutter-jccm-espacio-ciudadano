@@ -690,6 +690,18 @@ sin perder nada. Su justificación no es este hallazgo — es el diseño correct
 **Apaño mientras tanto, para QA y para el ciudadano:** cerrar sesión **y cerrar la app**. O
 simplemente esperar medio minuto.
 
+**Vías descartadas, para no volver a recorrerlas:**
+
+- **Recrear la instancia de `FlutterAppAuth`** no limpia nada. Comprobado en el plugin
+  (`flutter_appauth-12.0.0/ios/.../AppAuthIOSAuthorization.m:165-178`): **ya se construye un agente
+  externo nuevo en cada llamada** (`[[OIDExternalUserAgentIOSSafariViewController alloc] init…]`), y
+  el estado sobrevive igual. No vive en ese objeto ni en la instancia Dart, sino en el proceso del
+  sistema que lo respalda y en la caché de red de la app, donde no llega ninguna API pública.
+- **Vaciar el almacén** (`clearWebsiteData`): medido, se ejecuta y no lo suelta (§10.4 ter).
+- **Un punto medio entre compartir y aislar** no existe: el plugin sólo ofrece tres agentes —el
+  efímero (`OIDExternalUserAgentIOSNoSSO`, que aísla y mata el SSO), el `SFSafariViewController` que
+  usamos, y el `ASWebAuthenticationSession` por defecto—. O se comparte contenedor, o no.
+
 ### 10.7 Además: la identidad sobrevive en Educamos
 
 Medido en la misma sesión. Tras cambiar de ciudadano en la app, **Empleo CLM** abre con el ciudadano
