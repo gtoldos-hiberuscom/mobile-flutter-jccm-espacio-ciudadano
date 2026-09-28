@@ -1,6 +1,7 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
+import 'package:jccm_espacio_ciudadano/core/security/browser_session_store.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
@@ -29,13 +30,16 @@ final class AuthSessionController {
     required final Ref ref,
     required final AuthRepository repository,
     required final SecureStorage storage,
+    final BrowserSessionStore browserSession = const BrowserSessionStore(),
   }) : _ref = ref,
        _repository = repository,
-       _storage = storage;
+       _storage = storage,
+       _browserSession = browserSession;
 
   final Ref _ref;
   final AuthRepository _repository;
   final SecureStorage _storage;
+  final BrowserSessionStore _browserSession;
 
   /// Small skew applied to the synchronous validity short-circuit in [refresh]
   /// so a token on the edge of expiry is renewed rather than reused.
@@ -378,7 +382,20 @@ final class AuthSessionController {
     } on Object catch (error, stackTrace) {
       logger.w('Could not close the browser session left open by a previous login', error: error, stackTrace: stackTrace);
     }
+    await clearBrowserSessionData();
   }
+
+  /// Vacía el almacén del navegador de la app tras cerrar sesión.
+  ///
+  /// Cerrar la sesión en Cerbero no basta: el estado del **IdP de certificado**
+  /// vive en el contenedor del navegador y sobrevive al cierre, de modo que el
+  /// siguiente ciudadano puede entrar como el anterior sin que se le pida nada
+  /// (§10 de `documentation/sso_portales_externos.md`).
+  ///
+  /// Se hace **al salir**, no antes: mientras la sesión dura, ese contenedor
+  /// compartido es justamente lo que permite que Empleo y Educamos abran ya
+  /// identificados. Vaciarlo al cerrar preserva el SSO y corta la herencia.
+  Future<void> clearBrowserSessionData() => _browserSession.clearWebsiteData();
 
   Future<void> _deleteRefreshToken() async {
     try {
