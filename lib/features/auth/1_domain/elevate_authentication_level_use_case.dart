@@ -30,8 +30,8 @@ final class ElevationSucceeded extends ElevationResult {
 ///
 /// Es un desenlace esperado, no un error: con Cl@ve Permanente sin reforzar se
 /// vuelve con el mismo nivel bajo. La sesión nueva **sí se adopta** —es del
-/// mismo ciudadano y es más reciente que la anterior, que además ya se cerró en
-/// el navegador—, y la pantalla vuelve a bloquear explicando qué falta.
+/// mismo ciudadano y más reciente que la anterior—, y la pantalla vuelve a
+/// bloquear explicando qué falta.
 ///
 /// Nunca se reintenta solo: metería al ciudadano en un carrusel de Cl@ve.
 final class ElevationInsufficient extends ElevationResult {
@@ -49,8 +49,10 @@ final class ElevationInsufficient extends ElevationResult {
 /// El token nuevo es **de otra persona**.
 ///
 /// Pasa en un móvil compartido, o al elegir otro certificado. No se adopta el
-/// token nuevo y tampoco se conserva el viejo: su sesión de navegador se cerró
-/// al empezar la elevación. Quien llama tiene que cerrar sesión del todo.
+/// token nuevo, y tampoco vale seguir con el viejo: acaba de identificarse
+/// **otra persona** en este dispositivo, y no hay forma de saber si quien lo
+/// tiene en la mano sigue siendo el titular de la sesión anterior. Quien llama
+/// tiene que cerrar sesión del todo.
 final class ElevationIdentityMismatch extends ElevationResult {
   ElevationIdentityMismatch({required this.previous, required this.next});
 
@@ -91,28 +93,39 @@ final class ElevationFailed extends ElevationResult {
 final class ElevateAuthenticationLevelUseCase {
   const ElevateAuthenticationLevelUseCase({
     required final LoginUseCase login,
-    required final Future<void> Function() endStaleBrowserSession,
     required final Map<String, String> stepUpParameters,
   }) : _login = login,
-       _endStaleBrowserSession = endStaleBrowserSession,
        _stepUpParameters = stepUpParameters;
 
   final LoginUseCase _login;
 
-  /// Cierra la sesión de navegador de la identificación anterior.
-  final Future<void> Function() _endStaleBrowserSession;
-
   final Map<String, String> _stepUpParameters;
 
+  /// **No se cierra la sesión de navegador anterior, y es deliberado.**
+  ///
+  /// `endStaleBrowserSession` del controlador de sesión hace `end_session` en
+  /// Keycloak con el `id_token_hint`, y eso **termina la sesión de usuario que
+  /// el ciudadano está usando en ese momento**: le mata el refresh token, y en
+  /// la siguiente navegación `SessionGuard` no puede renovar y lo expulsa al
+  /// landing. Esa función existe para el instante *anterior* a un login desde
+  /// la landing, cuando no hay sesión viva de app y sólo queda una de navegador
+  /// huérfana — por eso cerrar sesión en regla borra el `id_token` y deja esa
+  /// función sin nada que hacer. Aquí la premisa está invertida.
+  ///
+  /// Y tampoco hace falta, por dos motivos medidos:
+  /// - `prompt=login` fuerza el `ForceAuthn` hacia Cl@ve, así que la
+  ///   reautenticación está garantizada sin cerrar nada (#282296);
+  /// - el login se abre en un contenedor **aislado** en las dos plataformas,
+  ///   que no lleva ninguna cookie de la sesión anterior: no hay nada que
+  ///   cortocircuitar.
+  ///
+  /// El precio asumido: la sesión anterior queda viva en Cerbero hasta que
+  /// caduque. Es del mismo ciudadano, el aislamiento impide heredarla, y el
+  /// cierre de sesión normal se ocupa de la que esté en curso.
   Future<ElevationResult> call({
     required final AuthenticationLevel minimum,
     required final JwtClaims currentClaims,
   }) async {
-    // La sesión de navegador viva sostiene la identificación de nivel bajo: sin
-    // cerrarla, Cerbero puede cortocircuitar y devolver el mismo nivel. Nunca
-    // propaga: si el cierre falla, se intenta elevar igual.
-    await _endStaleBrowserSession();
-
     final result = await _login(extraParameters: _stepUpParameters);
 
     switch (result) {

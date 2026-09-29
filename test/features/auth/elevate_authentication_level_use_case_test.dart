@@ -22,7 +22,6 @@ void main() {
 
   ElevateAuthenticationLevelUseCase buildUseCase() => ElevateAuthenticationLevelUseCase(
     login: LoginUseCase(repository),
-    endStaleBrowserSession: () async => events.add('endStaleBrowserSession'),
     stepUpParameters: const {'acr_values': 'substantial'},
   );
 
@@ -31,14 +30,20 @@ void main() {
     repository = _FakeAuthRepository(onLogin: () => events.add('authorize'));
   });
 
-  test('cierra la sesión de navegador ANTES de autorizar', () async {
-    // Si no, Cerbero puede cortocircuitar sobre la identificación de nivel bajo
-    // que sigue viva y devolver el mismo nivel.
+  // Regresión del 29/09: elevar expulsaba al landing al navegar. La elevación
+  // cerraba la sesión de navegador anterior, y ese `end_session` termina en
+  // Keycloak la sesión de usuario VIVA: le mata el refresh token y en la
+  // siguiente navegación `SessionGuard` no puede renovar y expulsa.
+  //
+  // No hace falta cerrarla: `prompt=login` fuerza el ForceAuthn y el login se
+  // abre en un contenedor aislado que no lleva cookies de la sesión anterior.
+  test('NO cierra la sesión anterior: autoriza directamente', () async {
     repository.tokenFor = _token(_claimsToken(document: '99999999R', level: 'substantial'));
 
     await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
 
-    expect(events, ['endStaleBrowserSession', 'authorize']);
+    expect(events, ['authorize']);
+    expect(repository.logoutCalls, isZero);
   });
 
   test('traslada los parámetros de elevación al login', () async {
@@ -65,9 +70,7 @@ void main() {
     final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
 
     expect(result, isA<ElevationInsufficient>());
-    // Es del mismo ciudadano y más reciente que la anterior, así que se adopta:
-    // quien llama la necesita para no quedarse con tokens de una sesión que ya
-    // se cerró en el navegador.
+    // Es del mismo ciudadano y más reciente que la anterior, así que se adopta.
     expect((result as ElevationInsufficient).tokenResponse, isNotNull);
   });
 
@@ -161,6 +164,7 @@ final class _FakeAuthRepository implements AuthRepository {
 
   Map<String, String>? lastExtraParameters;
   int loginCalls = 0;
+  int logoutCalls = 0;
 
   @override
   Future<TokenResponse> login({
@@ -192,5 +196,5 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<void> revokeOfflineSession({required final String refreshToken}) => throw UnimplementedError();
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) => throw UnimplementedError();
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async => logoutCalls++;
 }

@@ -110,8 +110,8 @@ class ElevationNotifier extends Notifier<ElevationState> {
           );
 
         case ElevationIdentityMismatch():
-          // No se adopta el token nuevo, y tampoco vale conservar el viejo: su
-          // sesión de navegador se cerró al empezar. Salida honesta: reset.
+          // Acaba de identificarse otra persona en este dispositivo: no se
+          // adopta el token nuevo, y tampoco vale seguir con el viejo.
           logger.w({'event': 'auth_elevation_identity_mismatch'});
           await session.clear();
           if (!ref.mounted) {
