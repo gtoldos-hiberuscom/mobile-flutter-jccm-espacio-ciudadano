@@ -4558,6 +4558,91 @@
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Título del bloque de citas hospitalarias."
   },
+  "myDataHealthHospitalLinkTitle": "Mis citas hospitalarias",
+  "@myDataHealthHospitalLinkTitle": {
+    "description": "Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM."
+  },
+  "myDataHealthHospitalLinkDescription": "Consulta la información sobre tus citas hospitalarias del SESCAM.",
+  "@myDataHealthHospitalLinkDescription": {
+    "description": "Salud — descripción del enlace a citas hospitalarias."
+  },
+  "myDataHealthHospitalContactHint": "Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.",
+  "@myDataHealthHospitalContactHint": {
+    "description": "Salud — aviso de que los datos hospitalarios los mantiene el SESCAM."
+  },
+  "myDataHealthHospitalPendingTab": "Citas pendientes",
+  "@myDataHealthHospitalPendingTab": {
+    "description": "Salud — pestaña de citas hospitalarias pendientes."
+  },
+  "myDataHealthHospitalPastTab": "Citas pasadas",
+  "@myDataHealthHospitalPastTab": {
+    "description": "Salud — pestaña de citas hospitalarias pasadas."
+  },
+  "myDataHealthHospitalPendingEmpty": "No tienes citas hospitalarias pendientes.",
+  "@myDataHealthHospitalPendingEmpty": {
+    "description": "Salud — mensaje cuando no hay citas hospitalarias pendientes."
+  },
+  "myDataHealthHospitalPastEmpty": "No tienes citas hospitalarias pasadas.",
+  "@myDataHealthHospitalPastEmpty": {
+    "description": "Salud — mensaje cuando no hay citas hospitalarias pasadas."
+  },
+  "myDataHealthHospitalFieldService": "Servicio",
+  "@myDataHealthHospitalFieldService": {
+    "description": "Salud — etiqueta del servicio médico de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldProvision": "Prestación",
+  "@myDataHealthHospitalFieldProvision": {
+    "description": "Salud — etiqueta de la prestación de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldRoom": "Sala",
+  "@myDataHealthHospitalFieldRoom": {
+    "description": "Salud — etiqueta de la sala de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldCenter": "Centro",
+  "@myDataHealthHospitalFieldCenter": {
+    "description": "Salud — etiqueta del hospital de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldAgenda": "Agenda",
+  "@myDataHealthHospitalFieldAgenda": {
+    "description": "Salud — etiqueta de la agenda de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldDateTime": "Fecha y hora",
+  "@myDataHealthHospitalFieldDateTime": {
+    "description": "Salud — etiqueta de la fecha y hora de una cita hospitalaria."
+  },
+  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
+  "@myDataHealthHospitalDateTimeValue": {
+    "description": "Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHealthCipValue": "CIP: {cip}",
+  "@myDataHealthCipValue": {
+    "description": "Salud — identificador CIP del ciudadano.",
+    "placeholders": {
+      "cip": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHealthCipUnavailable": "CIP no disponible",
+  "@myDataHealthCipUnavailable": {
+    "description": "Salud — texto cuando el CIP no se ha podido obtener."
+  },
+  "myDataHealthLevelRequiredMessage": "Para consultar tus citas hospitalarias necesitas un nivel de seguridad más alto. Vuelve a identificarte con certificado digital o DNI electrónico.",
+  "@myDataHealthLevelRequiredMessage": {
+    "description": "Salud — bloqueo por nivel de autenticación insuficiente para datos de salud."
+  },
+  "myDataHealthLevelUnverifiedMessage": "No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.",
+  "@myDataHealthLevelUnverifiedMessage": {
+    "description": "Salud — el nivel de autenticación no se ha podido leer del token."
+  },
   "myDataHealthLoadMoreAppointments": "Cargar más citas",
   "@myDataHealthLoadMoreAppointments": {
     "description": "Botón para cargar la siguiente página de citas pasadas de primaria."

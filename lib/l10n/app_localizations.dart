@@ -6650,6 +6650,114 @@ abstract class AppLocalizations {
   /// **'Citas hospitalarias'**
   String get myDataHealthHospitalAppointmentsTitle;
 
+  /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis citas hospitalarias'**
+  String get myDataHealthHospitalLinkTitle;
+
+  /// Salud — descripción del enlace a citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la información sobre tus citas hospitalarias del SESCAM.'**
+  String get myDataHealthHospitalLinkDescription;
+
+  /// Salud — aviso de que los datos hospitalarios los mantiene el SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.'**
+  String get myDataHealthHospitalContactHint;
+
+  /// Salud — pestaña de citas hospitalarias pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pendientes'**
+  String get myDataHealthHospitalPendingTab;
+
+  /// Salud — pestaña de citas hospitalarias pasadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pasadas'**
+  String get myDataHealthHospitalPastTab;
+
+  /// Salud — mensaje cuando no hay citas hospitalarias pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes citas hospitalarias pendientes.'**
+  String get myDataHealthHospitalPendingEmpty;
+
+  /// Salud — mensaje cuando no hay citas hospitalarias pasadas.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes citas hospitalarias pasadas.'**
+  String get myDataHealthHospitalPastEmpty;
+
+  /// Salud — etiqueta del servicio médico de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio'**
+  String get myDataHealthHospitalFieldService;
+
+  /// Salud — etiqueta de la prestación de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Prestación'**
+  String get myDataHealthHospitalFieldProvision;
+
+  /// Salud — etiqueta de la sala de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Sala'**
+  String get myDataHealthHospitalFieldRoom;
+
+  /// Salud — etiqueta del hospital de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro'**
+  String get myDataHealthHospitalFieldCenter;
+
+  /// Salud — etiqueta de la agenda de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get myDataHealthHospitalFieldAgenda;
+
+  /// Salud — etiqueta de la fecha y hora de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha y hora'**
+  String get myDataHealthHospitalFieldDateTime;
+
+  /// Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».
+  ///
+  /// In es, this message translates to:
+  /// **'{date}, {time}'**
+  String myDataHealthHospitalDateTimeValue(String date, String time);
+
+  /// Salud — identificador CIP del ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP: {cip}'**
+  String myDataHealthCipValue(String cip);
+
+  /// Salud — texto cuando el CIP no se ha podido obtener.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP no disponible'**
+  String get myDataHealthCipUnavailable;
+
+  /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'Para consultar tus citas hospitalarias necesitas un nivel de seguridad más alto. Vuelve a identificarte con certificado digital o DNI electrónico.'**
+  String get myDataHealthLevelRequiredMessage;
+
+  /// Salud — el nivel de autenticación no se ha podido leer del token.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.'**
+  String get myDataHealthLevelUnverifiedMessage;
+
   /// Botón para cargar la siguiente página de citas pasadas de primaria.
   ///
   /// In es, this message translates to:

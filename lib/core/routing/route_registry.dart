@@ -65,6 +65,7 @@ abstract final class Routes {
   static const String gestionRegistrosDetail = '/gestion/registros/detail';
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
+  static const String myDataHealthHospitalAppointments = '/my-data/health/hospital-appointments';
   static const String myDataEmployment = '/my-data/employment';
   static const String myDataEmploymentOffers = '/my-data/employment/offers';
   static const String myDataSocialWelfare = '/my-data/social-welfare';
@@ -106,6 +107,12 @@ abstract final class Routes {
     gestionRegistros,
     gestionRegistrosDetail,
     myData,
+    // `requiresAuth` ya las cubría por `startsWith(myData)`, pero este conjunto
+    // alimenta además `isKnownRoute`, que exige coincidencia exacta y es quien
+    // valida el `returnTo` al volver de Preferencias. Sin estar aquí, aceptar
+    // el clausulado desde Salud devolvía a `/home` en vez de a la consulta.
+    myDataHealth,
+    myDataHealthHospitalAppointments,
     myDataEmployment,
     myDataEmploymentOffers,
     myDataEducation,

@@ -12,6 +12,13 @@ enum AppAgendaInfoCardType {
   credential,
 }
 
+/// Par etiqueta/valor de las filas opcionales de [AppAgendaInfoCard.details].
+///
+/// Existe para las citas hospitalarias, que muestran más campos que los cuatro
+/// huecos del cuerpo y los necesita **etiquetados**: `Sala`, `Centro`,
+/// `Agenda`… El resto de usos de la tarjeta no pasan ninguna y no cambian.
+typedef AppAgendaInfoCardDetail = ({String label, String value});
+
 /// Compact agenda card used for notifications, health appointments and
 /// credential expiry events.
 class AppAgendaInfoCard extends StatelessWidget {
@@ -25,6 +32,7 @@ class AppAgendaInfoCard extends StatelessWidget {
     this.channel,
     this.primaryText,
     this.secondaryText,
+    this.details = const <AppAgendaInfoCardDetail>[],
     this.semanticsLabel,
   }) : assert(day.length > 0, 'day must not be empty'),
        assert(weekday.length > 0, 'weekday must not be empty'),
@@ -39,6 +47,11 @@ class AppAgendaInfoCard extends StatelessWidget {
   final String? channel;
   final String? primaryText;
   final String? secondaryText;
+
+  /// Filas etiquetadas adicionales, bajo los huecos anteriores. Vacío por
+  /// defecto: las tarjetas que no las pasan se pintan exactamente igual que
+  /// antes.
+  final List<AppAgendaInfoCardDetail> details;
   final String? semanticsLabel;
 
   bool get _isNotification => type == AppAgendaInfoCardType.notification;
@@ -60,6 +73,10 @@ class AppAgendaInfoCard extends StatelessWidget {
       if (channel case final value? when value.isNotEmpty) _displayCase(value),
       if (primaryText case final value? when value.isNotEmpty) _displayCase(value),
       if (secondaryText case final value? when value.isNotEmpty) _displayCase(value),
+      // Las filas se leen «etiqueta: valor» para que el lector de pantalla
+      // diga de qué campo se trata, igual que se ve en pantalla.
+      for (final detail in details)
+        if (detail.value.trim().isNotEmpty) '${detail.label}: ${_displayCase(detail.value)}',
     ].where((final part) => part.isNotEmpty);
     final effectiveLabel = semanticsLabel ?? l10n.a11yAgendaCard(typeLabel, semanticParts.join(', '));
     final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
@@ -74,6 +91,7 @@ class AppAgendaInfoCard extends StatelessWidget {
       channel: channel,
       primaryText: primaryText,
       secondaryText: secondaryText,
+      details: details,
     );
     final typeIcon = _TypeIcon(type: type, semanticsLabel: typeLabel);
 
@@ -228,12 +246,14 @@ class _ContentBlock extends StatelessWidget {
     required this.channel,
     required this.primaryText,
     required this.secondaryText,
+    required this.details,
   });
 
   final String title;
   final String? channel;
   final String? primaryText;
   final String? secondaryText;
+  final List<AppAgendaInfoCardDetail> details;
 
   @override
   Widget build(final BuildContext context) {
@@ -273,6 +293,31 @@ class _ContentBlock extends StatelessWidget {
               ),
             ),
           ),
+        for (final detail in details)
+          if (detail.value.trim().isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: AppDimensions.space4),
+              // Sin `maxLines` ni `ellipsis`: el requisito pide que los textos
+              // largos y el escalado de fuente permitan leer el dato completo,
+              // así que la fila crece en vez de recortar.
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${detail.label}: ',
+                      style: AppTypography.captionRegular.copyWith(
+                        color: AppColors.blueMuted900,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    TextSpan(
+                      text: _displayCase(detail.value),
+                      style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
+                    ),
+                  ],
+                ),
+              ),
+            ),
       ],
     );
   }
