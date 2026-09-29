@@ -73,28 +73,17 @@ void main() {
   });
 
   group('qué agente de navegador se pide', () {
-    // `isolateBrowserSession` se fuerza en vez de depender de `Platform`, que
-    // en los tests es el host.
-    AuthRepositoryImpl android() => AuthRepositoryImpl(config: config, isolateBrowserSession: true);
-    AuthRepositoryImpl ios() => AuthRepositoryImpl(config: config, isolateBrowserSession: false);
+    // `isolateBrowserSession` se fuerza para no depender del host en los tests.
+    // Por defecto vale `true` en las dos plataformas.
+    AuthRepositoryImpl aislado() => AuthRepositoryImpl(config: config, isolateBrowserSession: true);
 
-    test('el login de iOS NO se aísla: de ese almacén depende el SSO', () async {
-      // `SFSafariViewController` guarda en un almacén propio de la app,
-      // compartido con las pestañas que la app abre con
-      // `LaunchMode.inAppBrowserView`. Con el agente efímero ese almacén se
-      // destruye y los portales de JCCM vuelven a abrir sin identificar, sin
-      // que nada falle a la vista.
+    test('el login se aísla POR DEFECTO, sin depender de la plataforma', () async {
+      // Desde el 29/09 también en iOS: allí el estado del certificado dura ~30 s
+      // pero el de la pasarela Cl@ve reidentifica sola durante 60 MINUTOS, y en
+      // esa ventana otro ciudadano entraría con la identidad del anterior.
       mockChannelThrowing('authorize_and_exchange_code_failed');
 
-      await expectLater(ios().login(), throwsA(isA<AuthException>()));
-
-      expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
-    });
-
-    test('el login de Android SÍ se aísla: es lo que suelta el certificado', () async {
-      mockChannelThrowing('authorize_and_exchange_code_failed');
-
-      await expectLater(android().login(), throwsA(isA<AuthException>()));
+      await expectLater(AuthRepositoryImpl(config: config).login(), throwsA(isA<AuthException>()));
 
       expect(
         capturedArguments?['externalUserAgent'],
@@ -102,7 +91,18 @@ void main() {
       );
     });
 
-    test('EL LOGOUT NUNCA se aísla, tampoco en Android', () async {
+    test('el login aislado pide el agente efímero', () async {
+      mockChannelThrowing('authorize_and_exchange_code_failed');
+
+      await expectLater(aislado().login(), throwsA(isA<AuthException>()));
+
+      expect(
+        capturedArguments?['externalUserAgent'],
+        ExternalUserAgent.ephemeralAsWebAuthenticationSession.index,
+      );
+    });
+
+    test('EL LOGOUT NUNCA se aísla, en ninguna plataforma', () async {
       // El cierre tiene que correr por el contenedor COMPARTIDO, que es donde
       // vive la sesión que hay que invalidar. Aislado sería un no-op contra un
       // contenedor recién creado y vacío, y la sesión anterior quedaría viva e
@@ -110,7 +110,7 @@ void main() {
       // ambos agentes por coherencia, esto es lo que lo para.
       mockChannelThrowing('end_session_failed');
 
-      await expectLater(android().logout(idToken: 'fake-id-token'), throwsA(isA<AuthException>()));
+      await expectLater(aislado().logout(idToken: 'fake-id-token'), throwsA(isA<AuthException>()));
 
       expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
     });
@@ -120,7 +120,7 @@ void main() {
       // sesión aislada: entrar sin aislamiento, pero a sabiendas.
       mockChannelThrowing('authorize_and_exchange_code_failed');
 
-      await expectLater(android().login(isolateSession: false), throwsA(isA<AuthException>()));
+      await expectLater(aislado().login(isolateSession: false), throwsA(isA<AuthException>()));
 
       expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
     });

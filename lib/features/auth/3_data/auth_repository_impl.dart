@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:dio/dio.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
@@ -13,38 +11,49 @@ final class AuthRepositoryImpl implements AuthRepository {
     required final AppConfig config,
     final bool? isolateBrowserSession,
   }) : _config = config,
-       _isolateBrowserSession = isolateBrowserSession ?? Platform.isAndroid;
+       _isolateBrowserSession = isolateBrowserSession ?? true;
 
   final AppConfig _config;
   final FlutterAppAuth _appAuth = const FlutterAppAuth();
 
   /// Si el `/authorize` se abre en un contenedor **aislado**, que se destruye al
-  /// terminar. Sólo Android.
+  /// terminar. **En las dos plataformas.**
   ///
-  /// **Por qué.** Allí el canal TLS con el IdP de certificado vive en el perfil
-  /// de Chrome, una capa por debajo de cookies y tokens, y no lo suelta nada de
-  /// lo que la app puede hacer: medido el 29/09, cuatro ciclos
-  /// `logout 204 → login` con `auth_time` nuevo cada vez —o sea, Cerbero cierra
-  /// y Cl@ve reautentica de verdad— y el certificado **no se volvió a pedir en
-  /// ninguno**, tampoco pasada la ventana de 60 minutos de Cl@ve. Lo único que
-  /// lo libera es borrar los datos de Chrome, que no se le puede pedir a un
-  /// ciudadano. Aislar el contenedor es la única palanca que llega ahí.
+  /// **Por qué.** Lo que hace que un ciudadano entre con la identidad de otro no
+  /// es la sesión —esa se cierra bien— sino estado que vive en el navegador, una
+  /// capa por debajo de cookies y tokens, y que nadie puede invalidar desde la
+  /// app. Hay dos, con relojes distintos:
   ///
-  /// **El precio, asumido:** en Android se pierde el SSO con Empleo y Educamos,
-  /// que se sostenía justo sobre ese contenedor compartido. Escalado a JCCM; la
+  /// - **El del IdP de certificado.** En Android vive en el perfil de Chrome y
+  ///   **no caduca**: medido el 29/09, cuatro ciclos `logout 204 → login` con
+  ///   `auth_time` nuevo cada vez —Cerbero cierra y Cl@ve reautentica de verdad—
+  ///   y el certificado no se volvió a pedir en ninguno, tampoco pasada la
+  ///   ventana de 60 minutos. En iOS dura ~30 s (medido el 28/09).
+  /// - **El de la pasarela Cl@ve**, que reidentifica sola durante **60 minutos**
+  ///   — lo declara ella misma en su selector. Es lo que hace que Cl@ve
+  ///   Permanente «aguante» mucho más que el certificado.
+  ///
+  /// Aislar el contenedor es la única palanca que llega a los dos. Es lo que
+  /// devuelve la reelección de certificado y lo que impide que, dentro de esa
+  /// hora, otro ciudadano entre con la identidad del anterior.
+  ///
+  /// **El precio, asumido y medido:** se pierde el SSO con Empleo y Educamos.
+  /// Se sostenía justo sobre el contenedor compartido. Escalado a JCCM; la
   /// salida de fondo es el puente SSO en Cerbero
   /// (`documentation/sso_portales_externos.md` §6, Opción 1).
-  ///
-  /// **iOS no**: allí el SSO funciona y el estado se suelta solo en ~30 s, así
-  /// que el cambio costaría más de lo que arregla.
   final bool _isolateBrowserSession;
 
   /// El agente del **login**. Ver [_isolateBrowserSession].
   ///
-  /// En Android, `ephemeralAsWebAuthenticationSession` es lo que el fork
-  /// vendorizado traduce a una Custom Tab efímera; el plugin de serie lo ignora
-  /// (el enum es «iOS y macOS»). De ahí que el fork esté pineado al índice de
-  /// ese valor — lo guarda `external_user_agent_contract_test.dart`.
+  /// `ephemeralAsWebAuthenticationSession` significa cosas distintas en cada
+  /// plataforma, y las dos son las que queremos:
+  /// - **iOS**: `ASWebAuthenticationSession` efímera, sin compartir nada. Ojo a
+  ///   la consecuencia visible: ese agente muestra **un diálogo de permiso del
+  ///   sistema** antes de abrir el navegador. Lo impone Apple y no se puede
+  ///   quitar; es el peaje de aislar en iOS.
+  /// - **Android**: el enum es «iOS y macOS» y el plugin de serie lo ignora; lo
+  ///   traduce a Custom Tab efímera el fork vendorizado, que compara el ÍNDICE
+  ///   del enum — lo guarda `external_user_agent_contract_test.dart`.
   ExternalUserAgent _authorizeAgent({required final bool isolateSession}) =>
       isolateSession && _isolateBrowserSession
       ? ExternalUserAgent.ephemeralAsWebAuthenticationSession
@@ -80,20 +89,10 @@ final class AuthRepositoryImpl implements AuthRepository {
           // múltiples. Se puede volver a añadir cuando soporten la combinación.
           promptValues: const [Prompt.login],
           additionalParameters: const {'max_age': '0'},
-          // Depende de la plataforma, y la diferencia importa: ver
-          // [_isolateBrowserSession].
-          //
-          // En iOS es `SFSafariViewController`, almacén propio de la app,
-          // aislado de Safari pero compartido con las pestañas que abre la
-          // propia app (`LaunchMode.inAppBrowserView`). Es lo que permite que
-          // los portales de JCCM abran ya identificados sin exponer la sesión a
-          // Safari, y por eso allí NO se aísla: el estado de Cl@ve sobrevive
-          // entre logins, pero la reautenticación la garantiza el `ForceAuthn`
-          // que Cerbero propaga desde `prompt=login`.
-          //
-          // En Android es una Custom Tab **efímera**, que se destruye al
-          // terminar. Es lo que devuelve la reelección de certificado, y cuesta
-          // el SSO con los portales.
+          // Contenedor aislado, que se destruye al terminar: ver
+          // [_isolateBrowserSession]. Es lo que devuelve la reelección de
+          // certificado y lo que evita heredar identidad dentro de la ventana de
+          // 60 minutos de Cl@ve, y cuesta el SSO con los portales de JCCM.
           externalUserAgent: _authorizeAgent(isolateSession: isolateSession),
         ),
       );
@@ -197,7 +196,7 @@ final class AuthRepositoryImpl implements AuthRepository {
           additionalParameters: {
             'client_id': _config.ssoClientId,
           },
-          // **NO efímero, y en Android tampoco. No es un descuido.**
+          // **NO efímero, en ninguna plataforma. No es un descuido.**
           //
           // El cierre tiene que correr por el contenedor COMPARTIDO, que es
           // donde vive la sesión que hay que invalidar. Si se aislara también,
@@ -208,13 +207,15 @@ final class AuthRepositoryImpl implements AuthRepository {
           // (`0.1.6+8`, `0.1.7+9`), que ya arrastra sesión en el perfil de
           // Chrome.
           //
-          // El fork sólo reacciona a `ephemeralAsWebAuthenticationSession`, así
-          // que dejar este valor basta para que el logout siga yendo por una
-          // Custom Tab normal.
+          // En Android, el fork sólo reacciona a
+          // `ephemeralAsWebAuthenticationSession`, así que este valor basta para
+          // que el cierre siga yendo por una Custom Tab normal.
           //
           // En iOS, además, evita el diálogo del sistema que
           // ASWebAuthenticationSession muestra al cerrar sesión, que hablaba de
-          // «iniciar sesión» justo cuando el ciudadano está saliendo.
+          // «iniciar sesión» justo cuando el ciudadano está saliendo. Ese
+          // diálogo sí aparece ya en el login, que es el peaje de aislar; no hay
+          // razón para pagarlo también al salir.
           externalUserAgent: ExternalUserAgent.sfSafariViewController,
         ),
       );
