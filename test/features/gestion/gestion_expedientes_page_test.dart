@@ -7,6 +7,35 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
+  testWidgets('muestra la oficina tramitadora en la cabecera de la tarjeta', (final tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          expedientesProvider.overrideWith(
+            (final ref) async => const [
+              Expediente(
+                numexp: 'EXP-1',
+                titulo: 'Expediente de prueba',
+                consejeria: 'Consejería que no debe mostrarse',
+                oficinaTramitadora: 'Oficina tramitadora',
+              ),
+            ],
+          ),
+        ],
+        child: const MaterialApp(
+          locale: Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: GestionExpedientesPage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('OFICINA TRAMITADORA'), findsOneWidget);
+    expect(find.text('CONSEJERÍA QUE NO DEBE MOSTRARSE'), findsNothing);
+  });
+
   testWidgets('reintenta la carga de expedientes después de un error', (final tester) async {
     var attempts = 0;
 

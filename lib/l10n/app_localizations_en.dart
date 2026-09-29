@@ -4520,6 +4520,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportConsentDataUseLabel => 'I authorize the use and management of my data';
 
   @override
+  String get supportCaptchaBadge => 'Verification';
+
+  @override
+  String get supportCaptchaPendingSemantics => 'not verified, tap to verify';
+
+  @override
+  String get supportCaptchaCheckingSemantics => 'verifying';
+
+  @override
+  String get supportCaptchaVerifiedSemantics => 'verified';
+
+  @override
   String get supportPrivacyInfoDescription => 'The data protection information applicable to this form is published at';
 
   @override

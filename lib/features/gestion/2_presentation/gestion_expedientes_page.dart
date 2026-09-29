@@ -148,7 +148,7 @@ class _GestionExpedienteCard extends StatelessWidget {
 
     return AppCard(
       title: _sentenceCase(expediente.titulo),
-      categoryLabel: expediente.consejeria.toUpperCase(),
+      categoryLabel: expediente.oficinaTramitadora?.toUpperCase() ?? '',
       showArrow: true,
       refNumber: expediente.numexp,
       refNumberLabel: l10n.gestionExpedientesNumExpedienteLabel,

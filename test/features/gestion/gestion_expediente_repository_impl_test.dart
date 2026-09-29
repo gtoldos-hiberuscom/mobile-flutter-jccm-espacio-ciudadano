@@ -12,7 +12,7 @@ void main() {
         const AdapterResponse(
           statusCode: 200,
           contentType: Headers.textPlainContentType,
-          body: '{"publicacionportal":{"item":{"numexp":"EXP-1","titulo":"Solicitud general","desconsej":"Consejería A","fechareg":"2026-06-20","estado":"ABIERTO"}}}',
+          body: '{"publicacionportal":{"item":{"numexp":"EXP-1","titulo":"Solicitud general","desconsej":"Consejería A","desuniorg":"Oficina tramitadora A","fechareg":"2026-06-20","estado":"ABIERTO"}}}',
         ),
       ]);
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
@@ -24,6 +24,7 @@ void main() {
       expect(result.single.numexp, 'EXP-1');
       expect(result.single.titulo, 'Solicitud general');
       expect(result.single.consejeria, 'Consejería A');
+      expect(result.single.oficinaTramitadora, 'Oficina tramitadora A');
       expect(result.single.fechaInicio, '2026-06-20');
       expect(result.single.estado, 'ABIERTO');
       expect(adapter.requests.single.method, 'POST');
@@ -86,6 +87,21 @@ void main() {
       expect(result.single.consejeria, 'CONSEJERÍA DE AGRICULTURA');
       expect(result.single.fechaInicio, '2026-06-18');
       expect(result.single.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
+    });
+
+    test('sends CIF as document type for a legal entity', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 200, body: '{"publicacionportal":{"item":[]}}'),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: 'Q0000000J');
+
+      expect(adapter.requests.single.jsonBody, <String, dynamic>{
+        'numerodocumento': 'Q0000000J',
+        'tipodocumento': 'CIF',
+      });
     });
 
     test('does not expose a numeric status code when its description is absent', () async {

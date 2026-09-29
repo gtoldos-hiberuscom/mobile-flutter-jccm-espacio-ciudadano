@@ -4521,6 +4521,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get supportConsentDataUseLabel => 'Autorizo el uso y gestión de mis datos';
 
   @override
+  String get supportCaptchaBadge => 'Verificación';
+
+  @override
+  String get supportCaptchaPendingSemantics => 'pendiente de verificar, pulsa para verificar';
+
+  @override
+  String get supportCaptchaCheckingSemantics => 'verificando';
+
+  @override
+  String get supportCaptchaVerifiedSemantics => 'verificado';
+
+  @override
   String get supportPrivacyInfoDescription => 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en';
 
   @override

@@ -5870,6 +5870,22 @@
   "@supportConsentDataUseLabel": {
     "description": "Support form — text of the data consent checkbox."
   },
+  "supportCaptchaBadge": "Verification",
+  "@supportCaptchaBadge": {
+    "description": "Support form — caption under the anti-robot box icon."
+  },
+  "supportCaptchaPendingSemantics": "not verified, tap to verify",
+  "@supportCaptchaPendingSemantics": {
+    "description": "Support form — accessible state of the unchecked anti-robot box."
+  },
+  "supportCaptchaCheckingSemantics": "verifying",
+  "@supportCaptchaCheckingSemantics": {
+    "description": "Support form — accessible state of the anti-robot box while checking."
+  },
+  "supportCaptchaVerifiedSemantics": "verified",
+  "@supportCaptchaVerifiedSemantics": {
+    "description": "Support form — accessible state of the checked anti-robot box."
+  },
   "supportPrivacyInfoDescription": "The data protection information applicable to this form is published at",
   "@supportPrivacyInfoDescription": {
     "description": "Support form — text preceding the privacy information link."

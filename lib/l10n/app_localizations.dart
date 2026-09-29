@@ -8606,6 +8606,30 @@ abstract class AppLocalizations {
   /// **'Autorizo el uso y gestión de mis datos'**
   String get supportConsentDataUseLabel;
 
+  /// Formulario de soporte — rótulo bajo el icono de la casilla anti-robot.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación'**
+  String get supportCaptchaBadge;
+
+  /// Formulario de soporte — estado accesible de la casilla anti-robot sin marcar.
+  ///
+  /// In es, this message translates to:
+  /// **'pendiente de verificar, pulsa para verificar'**
+  String get supportCaptchaPendingSemantics;
+
+  /// Formulario de soporte — estado accesible de la casilla anti-robot mientras comprueba.
+  ///
+  /// In es, this message translates to:
+  /// **'verificando'**
+  String get supportCaptchaCheckingSemantics;
+
+  /// Formulario de soporte — estado accesible de la casilla anti-robot ya marcada.
+  ///
+  /// In es, this message translates to:
+  /// **'verificado'**
+  String get supportCaptchaVerifiedSemantics;
+
   /// Formulario de soporte — texto que precede al enlace de información de privacidad.
   ///
   /// In es, this message translates to:

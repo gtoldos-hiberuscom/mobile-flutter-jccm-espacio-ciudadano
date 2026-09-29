@@ -5894,6 +5894,22 @@
   "@supportConsentDataUseLabel": {
     "description": "Formulario de soporte — texto del checkbox de consentimiento de datos."
   },
+  "supportCaptchaBadge": "Verificación",
+  "@supportCaptchaBadge": {
+    "description": "Formulario de soporte — rótulo bajo el icono de la casilla anti-robot."
+  },
+  "supportCaptchaPendingSemantics": "pendiente de verificar, pulsa para verificar",
+  "@supportCaptchaPendingSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot sin marcar."
+  },
+  "supportCaptchaCheckingSemantics": "verificando",
+  "@supportCaptchaCheckingSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot mientras comprueba."
+  },
+  "supportCaptchaVerifiedSemantics": "verificado",
+  "@supportCaptchaVerifiedSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot ya marcada."
+  },
   "supportPrivacyInfoDescription": "La información relativa a protección de datos aplicable a este formulario se encuentra publicada en",
   "@supportPrivacyInfoDescription": {
     "description": "Formulario de soporte — texto que precede al enlace de información de privacidad."

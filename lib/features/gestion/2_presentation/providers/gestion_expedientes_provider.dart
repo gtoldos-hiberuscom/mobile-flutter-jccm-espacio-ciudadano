@@ -10,6 +10,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/ge
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/usecases/buscar_expediente_tercero_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/3_data/repositories/gestion_expediente_repository_impl.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
 
 /// Clave del detalle de expediente: `tercero` no nulo sustituye el
 /// documento del JWT por el del titular localizado al aportar a un
@@ -57,7 +58,12 @@ final expedienteDetailProvider = FutureProvider.autoDispose.family<Expediente, E
   return withAuthorizationGuard(
     ref,
     requiredClauseIds: const {requiredConsentClauseId},
-    request: () => repository.loadExpedienteDetail(citizenId: citizenId, documentNumber: documentNumber, numexp: key.numexp, tipodoc: tercero?.tipodoc ?? 'NIF'),
+    request: () => repository.loadExpedienteDetail(
+      citizenId: citizenId,
+      documentNumber: documentNumber,
+      numexp: key.numexp,
+      tipodoc: tercero?.tipodoc ?? documentTypeOf(documentNumber),
+    ),
   );
 });
 
