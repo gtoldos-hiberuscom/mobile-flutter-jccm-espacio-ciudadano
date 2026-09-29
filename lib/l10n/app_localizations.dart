@@ -6758,6 +6758,24 @@ abstract class AppLocalizations {
   /// **'No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.'**
   String get myDataHealthLevelUnverifiedMessage;
 
+  /// Salud — acción para volver a identificarse con un método más seguro.
+  ///
+  /// In es, this message translates to:
+  /// **'Elevar nivel de seguridad'**
+  String get myDataHealthLevelElevateAction;
+
+  /// Salud — la elevación se completó pero el nivel sigue siendo insuficiente.
+  ///
+  /// In es, this message translates to:
+  /// **'El método con el que te has identificado no alcanza el nivel exigido. Vuelve a intentarlo con certificado digital o DNI electrónico.'**
+  String get myDataHealthLevelStillInsufficientMessage;
+
+  /// Salud — la elevación de nivel falló por un error.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido elevar tu nivel de seguridad. Inténtalo de nuevo.'**
+  String get myDataHealthLevelElevationFailedMessage;
+
   /// Botón para cargar la siguiente página de citas pasadas de primaria.
   ///
   /// In es, this message translates to:

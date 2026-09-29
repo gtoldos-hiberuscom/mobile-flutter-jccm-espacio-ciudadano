@@ -4643,6 +4643,18 @@
   "@myDataHealthLevelUnverifiedMessage": {
     "description": "Salud — el nivel de autenticación no se ha podido leer del token."
   },
+  "myDataHealthLevelElevateAction": "Elevar nivel de seguridad",
+  "@myDataHealthLevelElevateAction": {
+    "description": "Salud — acción para volver a identificarse con un método más seguro."
+  },
+  "myDataHealthLevelStillInsufficientMessage": "El método con el que te has identificado no alcanza el nivel exigido. Vuelve a intentarlo con certificado digital o DNI electrónico.",
+  "@myDataHealthLevelStillInsufficientMessage": {
+    "description": "Salud — la elevación se completó pero el nivel sigue siendo insuficiente."
+  },
+  "myDataHealthLevelElevationFailedMessage": "No hemos podido elevar tu nivel de seguridad. Inténtalo de nuevo.",
+  "@myDataHealthLevelElevationFailedMessage": {
+    "description": "Salud — la elevación de nivel falló por un error."
+  },
   "myDataHealthLoadMoreAppointments": "Cargar más citas",
   "@myDataHealthLoadMoreAppointments": {
     "description": "Botón para cargar la siguiente página de citas pasadas de primaria."

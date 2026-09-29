@@ -3508,6 +3508,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthLevelUnverifiedMessage => 'No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.';
 
   @override
+  String get myDataHealthLevelElevateAction => 'Elevar nivel de seguridad';
+
+  @override
+  String get myDataHealthLevelStillInsufficientMessage => 'El método con el que te has identificado no alcanza el nivel exigido. Vuelve a intentarlo con certificado digital o DNI electrónico.';
+
+  @override
+  String get myDataHealthLevelElevationFailedMessage => 'No hemos podido elevar tu nivel de seguridad. Inténtalo de nuevo.';
+
+  @override
   String get myDataHealthLoadMoreAppointments => 'Cargar más citas';
 
   @override

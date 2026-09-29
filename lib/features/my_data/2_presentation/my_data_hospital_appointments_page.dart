@@ -1,3 +1,4 @@
+import 'dart:async' show unawaited;
 import 'dart:ui' show SemanticsRole;
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/erro
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level_required.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
@@ -221,14 +223,11 @@ class _HospitalAppointmentsList extends ConsumerWidget {
       loading: () => const Center(child: Padding(padding: EdgeInsets.all(AppDimensions.space32), child: AppLoadingIndicator())),
       error: (final error, final _) => switch (error) {
         MyDataAuthorizationRequired() => MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings),
-        // Apartados 4 y 5: nivel insuficiente se explica y se distingue de un
-        // fallo de servicio. Se separa «tu nivel es bajo» de «no hemos sabido
-        // leer tu nivel» para que en QA no parezcan el mismo problema. La
-        // acción de elevar todavía no existe: llega con el caso de uso de
-        // elevación, y hasta entonces el bloqueo ya es correcto.
-        AuthenticationLevelRequired(current: final reading) => AppAlertContextual(
-          message: reading is KnownAuthenticationLevel ? l10n.myDataHealthLevelRequiredMessage : l10n.myDataHealthLevelUnverifiedMessage,
-          announce: true,
+        // Apartados 4 y 5: nivel insuficiente se explica, se distingue de un
+        // fallo de servicio, y se ofrece elevarlo.
+        AuthenticationLevelRequired(current: final reading, minimum: final minimum) => _LevelBlockedState(
+          reading: reading,
+          minimum: minimum,
         ),
         MyDataHealthCipMissing() => AppAlertContextual(
           message: l10n.agendaHealthCipMissing,
@@ -255,6 +254,54 @@ class _HospitalAppointmentsList extends ConsumerWidget {
               scrollable: false,
             )
           : _HospitalAppointmentSections(appointments: appointments, l10n: l10n),
+    );
+  }
+}
+
+/// Bloqueo por nivel de seguridad, con la acción para elevarlo.
+///
+/// Tres textos distintos y no uno, porque no son el mismo problema: «tu nivel
+/// es bajo», «no hemos sabido leer tu nivel» y «te has reidentificado pero el
+/// método sigue sin bastar». El segundo hace autodiagnosticable un literal de
+/// `authNLevel` que la app todavía no interprete, en vez de un bloqueo mudo.
+///
+/// **No reintenta solo** cuando la elevación vuelve insuficiente: eso metería
+/// al ciudadano en un carrusel de Cl@ve. La acción sigue disponible.
+class _LevelBlockedState extends ConsumerWidget {
+  const _LevelBlockedState({required this.reading, required this.minimum});
+
+  final AuthenticationLevelReading reading;
+  final AuthenticationLevel minimum;
+
+  @override
+  Widget build(final BuildContext context, final WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final elevation = ref.watch(elevationProvider);
+
+    final message = switch (elevation.outcome) {
+      ElevationOutcome.stillInsufficient => l10n.myDataHealthLevelStillInsufficientMessage,
+      ElevationOutcome.failed => l10n.myDataHealthLevelElevationFailedMessage,
+      // `succeeded` no llega a pintarse aquí: el gate deja de lanzar y la
+      // pantalla pasa a mostrar el listado por derivación.
+      _ => reading is KnownAuthenticationLevel ? l10n.myDataHealthLevelRequiredMessage : l10n.myDataHealthLevelUnverifiedMessage,
+    };
+
+    return AppAlertContextual(
+      message: message,
+      announce: true,
+      action: AppButton(
+        label: l10n.myDataHealthLevelElevateAction,
+        isLoading: elevation.isElevating,
+        isExpanded: true,
+        onPressed: elevation.isElevating
+            ? null
+            : () {
+                final notifier = ref.read(elevationProvider.notifier)..acknowledge();
+                // El notifier lleva su propia guarda de reentrada y traza sus
+                // fallos; no hay nada que esperar aquí.
+                unawaited(notifier.elevate(minimum: minimum));
+              },
+      ),
     );
   }
 }
