@@ -19,7 +19,21 @@ dependencies:
   file_selector: ^1.0.3
   flutter:
     sdk: flutter
-  flutter_appauth: ^12.0.0
+  # Fork vendorizado. El unico delta son 2 ficheros del plugin Android
+  # (`setEphemeralBrowsingEnabled` sobre la Custom Tab); iOS, macOS y Dart son
+  # copia de upstream 12.0.0 sin tocar. Ver packages/flutter_appauth/CHANGELOG_JCCM.md
+  # y docs/auth/.
+  #
+  # Por que vuelve: en Android el canal TLS con el IdP de certificado vive en el
+  # perfil de Chrome y no lo suelta ni el logout ni esperar a que caduque la
+  # ventana de Cl@ve (medido el 29/09, cuatro ciclos logout->login con auth_time
+  # nuevo y sin volver a pedir certificado). Aislar el contenedor es la unica
+  # palanca que llega ahi desde la app.
+  flutter_appauth:
+    path: packages/flutter_appauth
+  # Pin EXACTO: el fork asume que ephemeralAsWebAuthenticationSession.index == 1.
+  # Lo guarda test/features/auth/external_user_agent_contract_test.dart.
+  flutter_appauth_platform_interface: 12.0.0
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^3.0.3
