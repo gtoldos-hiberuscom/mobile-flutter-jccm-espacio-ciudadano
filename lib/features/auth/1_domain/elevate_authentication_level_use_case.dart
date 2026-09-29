@@ -25,8 +25,8 @@ final class ElevationSucceeded extends ElevationResult {
 ///
 /// Es un desenlace esperado, no un error: con Cl@ve Permanente sin reforzar se
 /// vuelve con el mismo nivel bajo. La sesión nueva **sí se adopta** —es del
-/// mismo ciudadano y es más reciente que la anterior, que además ya se cerró en
-/// el navegador—, y la pantalla vuelve a bloquear explicando qué falta.
+/// mismo ciudadano y más reciente que la anterior—, y la pantalla vuelve a
+/// bloquear explicando qué falta.
 ///
 /// Nunca se reintenta solo: metería al ciudadano en un carrusel de Cl@ve.
 final class ElevationInsufficient extends ElevationResult {
@@ -44,8 +44,10 @@ final class ElevationInsufficient extends ElevationResult {
 /// El token nuevo es **de otra persona**.
 ///
 /// Pasa en un móvil compartido, o al elegir otro certificado. No se adopta el
-/// token nuevo y tampoco se conserva el viejo: su sesión de navegador se cerró
-/// al empezar la elevación. Quien llama tiene que cerrar sesión del todo.
+/// token nuevo, y tampoco vale seguir con el viejo: acaba de identificarse
+/// **otra persona** en este dispositivo, y no hay forma de saber si quien lo
+/// tiene en la mano sigue siendo el titular de la sesión anterior. Quien llama
+/// tiene que cerrar sesión del todo.
 final class ElevationIdentityMismatch extends ElevationResult {
   ElevationIdentityMismatch({required this.previous, required this.next});
 
@@ -92,14 +94,28 @@ final class ElevateAuthenticationLevelUseCase {
 
   final LoginUseCase _login;
 
-
   final Map<String, String> _stepUpParameters;
 
+  /// **Lo único que garantiza la reautenticación es `prompt=login`.**
+  ///
+  /// El contenedor del navegador es **compartido** —`SFSafariViewController` en
+  /// iOS, Custom Tab en Android—, así que el estado de Cl@ve sobrevive entre
+  /// accesos: la pasarela reidentifica sola durante unos 60 minutos y el estado
+  /// del IdP de certificado vive por debajo de las cookies. Nada de eso lo puede
+  /// invalidar la app.
+  ///
+  /// Lo que sí llega es el `ForceAuthn` que Cerbero propaga desde
+  /// `prompt=login` (#282296), y por eso la elevación no necesita cerrar ni
+  /// limpiar nada antes: basta con volver a atravesar la pasarela.
+  ///
+  /// **Consecuencia a vigilar en las pruebas:** dentro de esa ventana, el
+  /// método de identificación puede no volver a pedirse aunque Cl@ve sí
+  /// desafíe, así que una elevación puede volver con el mismo nivel. Ese
+  /// desenlace está contemplado ([ElevationInsufficient]) y no es un error.
   Future<ElevationResult> call({
     required final AuthenticationLevel minimum,
     required final JwtClaims currentClaims,
   }) async {
-
     final result = await _login(extraParameters: _stepUpParameters);
 
     switch (result) {
