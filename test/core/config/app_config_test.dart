@@ -2,6 +2,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 
 void main() {
+  group('SSO_STEP_UP_PARAMS', () {
+    test('vacío no añade parámetros, que es el caso de los tres entornos hoy', () {
+      expect(_stepUpConfig('').ssoStepUpParameters, isEmpty);
+      expect(_stepUpConfig('   ').ssoStepUpParameters, isEmpty);
+    });
+
+    test('parsea pares clave=valor', () {
+      expect(
+        _stepUpConfig('acr_values=substantial&foo=bar').ssoStepUpParameters,
+        {'acr_values': 'substantial', 'foo': 'bar'},
+      );
+    });
+
+    test('conserva el valor entero aunque lleve «=» dentro', () {
+      expect(
+        _stepUpConfig('acr_values=http://eidas.europa.eu/loa/high?a=b').ssoStepUpParameters,
+        {'acr_values': 'http://eidas.europa.eu/loa/high?a=b'},
+      );
+    });
+
+    // Elevar sin el parámetro sigue siendo mejor que no poder entrar, así que
+    // una configuración mal puesta se ignora entera en vez de romper el login.
+    test('un valor mal formado se ignora entero en vez de romper el login', () {
+      expect(_stepUpConfig('sin-igual').ssoStepUpParameters, isEmpty);
+      expect(_stepUpConfig('=solo-valor').ssoStepUpParameters, isEmpty);
+      expect(_stepUpConfig('clave=').ssoStepUpParameters, isEmpty);
+      expect(_stepUpConfig('acr_values=substantial&roto').ssoStepUpParameters, isEmpty);
+    });
+  });
+
   test('resolves JCCM Sede URLs for every environment', () {
     expect(_config('development').sedeBaseUrl, Uri.parse('https://sede-uat.cm-pre.jccm.es/'));
     expect(_config('preproduction').sedeBaseUrl, Uri.parse('https://sede.cm-pre.jccm.es/'));
@@ -59,3 +89,5 @@ void main() {
 AppConfig _config(final String flavor) => AppConfig.fromMap({
   'APP_FLAVOR': flavor,
 });
+
+AppConfig _stepUpConfig(final String raw) => AppConfig.fromMap({'SSO_STEP_UP_PARAMS': raw});

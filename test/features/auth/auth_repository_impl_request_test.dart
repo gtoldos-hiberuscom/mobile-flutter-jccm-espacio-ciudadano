@@ -27,6 +27,7 @@ void main() {
     'SSO_REALM': 'test-realm',
     'SSO_BASE_URL': 'https://sso.example.invalid/auth',
     'SSO_OFFLINE_ACCESS': 'false',
+    'SSO_STEP_UP_PARAMS': '',
   });
 
   late AuthRepositoryImpl repository;
@@ -70,6 +71,35 @@ void main() {
 
     expect(capturedArguments?['promptValues'], <String>['login']);
     expect(capturedArguments?['additionalParameters'], containsPair('max_age', '0'));
+  });
+
+  // La elevación de nivel necesita justo la reautenticación que sostienen
+  // `prompt` y `max_age`, así que un parámetro de elevación no debe poder
+  // apagarla. Es el fallo que nadie vería: el login seguiría funcionando y
+  // Cl@ve dejaría de desafiar.
+  test('los parámetros de elevación NO pueden pisar prompt ni max_age', () async {
+    mockChannelThrowing('authorize_and_exchange_code_failed');
+
+    await expectLater(
+      repository.login(
+        extraParameters: const {
+          'acr_values': 'substantial',
+          // Los dos intentos de sabotaje, deliberados:
+          'max_age': '86400',
+          'prompt': 'none',
+        },
+      ),
+      throwsA(isA<AuthException>()),
+    );
+
+    expect(capturedArguments?['promptValues'], <String>['login']);
+    final additional = capturedArguments!['additionalParameters']! as Map<Object?, Object?>;
+    expect(additional['max_age'], '0');
+    expect(additional['acr_values'], 'substantial');
+    // El `prompt` se descarta de la entrada, no solo se fusiona por debajo:
+    // viaja además en `promptValues`, y duplicarlo en la URL no tiene un
+    // ganador definido.
+    expect(additional.containsKey('prompt'), isFalse);
   });
 
   group('qué agente de navegador se pide', () {

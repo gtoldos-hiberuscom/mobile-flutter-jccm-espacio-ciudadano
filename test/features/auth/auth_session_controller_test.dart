@@ -167,6 +167,7 @@ final class FakeAuthRepository implements AuthRepository {
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) => throw UnimplementedError();
 
   final List<String> logoutIdTokens = [];

@@ -391,6 +391,7 @@ final class _FailingAuthRepository implements AuthRepository {
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) => throw UnimplementedError();
 
   @override
@@ -414,6 +415,7 @@ final class _UnusedAuthRepository implements AuthRepository {
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) => throw UnimplementedError();
 
   @override

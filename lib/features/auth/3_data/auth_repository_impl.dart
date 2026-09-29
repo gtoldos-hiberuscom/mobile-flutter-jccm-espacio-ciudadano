@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
@@ -59,11 +60,42 @@ final class AuthRepositoryImpl implements AuthRepository {
       ? ExternalUserAgent.ephemeralAsWebAuthenticationSession
       : ExternalUserAgent.sfSafariViewController;
 
+  /// Parámetros de la petición de autorización: los de elevación, más lo que
+  /// sostiene la reautenticación, que **no se puede pisar**.
+  ///
+  /// `prompt` y `max_age` son justo lo que hace que Cerbero propague
+  /// `ForceAuthn` a Cl@ve (#282296). Un parámetro de elevación que los tocara
+  /// apagaría la reautenticación **que la propia elevación necesita**, y no
+  /// fallaría nada a la vista: el login seguiría entrando y Cl@ve dejaría de
+  /// desafiar. Así que se descartan de la entrada, con aviso en la traza, en vez
+  /// de confiar en el orden de la fusión — `prompt` viaja además por
+  /// `promptValues`, y duplicarlo en la URL no tiene un ganador definido.
+  ///
+  /// El valor viene de configuración (`SSO_STEP_UP_PARAMS`), así que esto
+  /// protege también de una configuración mal puesta, no solo del código.
+  Map<String, String> _authorizationParameters(final Map<String, String> extraParameters) {
+    final reserved = extraParameters.keys.where(_reservedAuthorizationKeys.contains).toList(growable: false);
+    if (reserved.isNotEmpty) {
+      logger.w({
+        'event': 'auth_step_up_reserved_parameters_ignored',
+        'keys': reserved,
+      });
+    }
+    return {
+      for (final entry in extraParameters.entries)
+        if (!_reservedAuthorizationKeys.contains(entry.key)) entry.key: entry.value,
+      'max_age': '0',
+    };
+  }
+
+  static const Set<String> _reservedAuthorizationKeys = {'prompt', 'max_age'};
+
   @override
   Future<AuthorizationTokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) async {
     try {
       // `prompt=login` and `max_age=0` are sent on every attempt so the
@@ -88,7 +120,7 @@ final class AuthRepositoryImpl implements AuthRepository {
           // `select_account` no aportaba nada: Cerbero no tiene cuentas
           // múltiples. Se puede volver a añadir cuando soporten la combinación.
           promptValues: const [Prompt.login],
-          additionalParameters: const {'max_age': '0'},
+          additionalParameters: _authorizationParameters(extraParameters),
           // Contenedor aislado, que se destruye al terminar: ver
           // [_isolateBrowserSession]. Es lo que devuelve la reelección de
           // certificado y lo que evita heredar identidad dentro de la ventana de

@@ -3507,6 +3507,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthLevelUnverifiedMessage => 'We could not verify your security level, so we cannot show your hospital appointments. Sign in again or try later.';
 
   @override
+  String get myDataHealthLevelElevateAction => 'Raise security level';
+
+  @override
+  String get myDataHealthLevelStillInsufficientMessage => 'The method you signed in with does not reach the required level. Try again using a digital certificate or your electronic ID card.';
+
+  @override
+  String get myDataHealthLevelElevationFailedMessage => 'We could not raise your security level. Please try again.';
+
+  @override
   String get myDataHealthLoadMoreAppointments => 'Load more appointments';
 
   @override

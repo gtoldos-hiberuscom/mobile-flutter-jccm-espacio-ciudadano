@@ -4629,6 +4629,18 @@
   "@myDataHealthLevelUnverifiedMessage": {
     "description": "Health — the authentication level could not be read from the token."
   },
+  "myDataHealthLevelElevateAction": "Raise security level",
+  "@myDataHealthLevelElevateAction": {
+    "description": "Health — action to sign in again with a stronger method."
+  },
+  "myDataHealthLevelStillInsufficientMessage": "The method you signed in with does not reach the required level. Try again using a digital certificate or your electronic ID card.",
+  "@myDataHealthLevelStillInsufficientMessage": {
+    "description": "Health — elevation completed but the level is still insufficient."
+  },
+  "myDataHealthLevelElevationFailedMessage": "We could not raise your security level. Please try again.",
+  "@myDataHealthLevelElevationFailedMessage": {
+    "description": "Health — the level elevation failed with an error."
+  },
   "myDataHealthLoadMoreAppointments": "Load more appointments",
   "@myDataHealthLoadMoreAppointments": {
     "description": "Button that loads the next page of past primary care appointments."

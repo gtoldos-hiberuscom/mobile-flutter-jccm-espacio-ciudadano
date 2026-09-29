@@ -31,10 +31,19 @@ abstract interface class AuthRepository {
   ///
   /// Pasar `false` es exactamente eso — entrar a sabiendas sin aislamiento—, y
   /// es lo que hace `LoginUsecase` al reintentar, avisando al ciudadano.
+  /// [extraParameters] añade parámetros a la petición de autorización, para la
+  /// elevación de nivel de seguridad.
+  ///
+  /// **No puede pisar `prompt` ni `max_age`**, y la implementación lo impide:
+  /// son lo que sostiene el `ForceAuthn` hacia Cl@ve, así que un parámetro de
+  /// elevación mal puesto no debe poder desactivar la reautenticación que la
+  /// elevación necesita. Existe para poder probar en un entorno lo que exija
+  /// Cerbero (`acr_values` u otro) sin tocar código.
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   });
 
   Future<TokenResponse> refreshToken({

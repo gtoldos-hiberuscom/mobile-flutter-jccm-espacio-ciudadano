@@ -49,6 +49,7 @@ final class LoginUseCase {
   Future<LoginResult> call({
     final String? loginHint,
     final List<String> scopes = authDefaultScopes,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) async {
     try {
       // Se intenta **siempre** con aislamiento. Si el navegador no puede darlo,
@@ -63,6 +64,7 @@ final class LoginUseCase {
         session = await _repository.login(
           loginHint: loginHint,
           scopes: scopes,
+          extraParameters: extraParameters,
         );
       } on AuthException catch (e) {
         if (e.reason != AuthFailureReason.ephemeralUnavailable) {
@@ -73,6 +75,7 @@ final class LoginUseCase {
           loginHint: loginHint,
           scopes: scopes,
           isolateSession: false,
+          extraParameters: extraParameters,
         );
       }
       final accessToken = session.accessToken!;

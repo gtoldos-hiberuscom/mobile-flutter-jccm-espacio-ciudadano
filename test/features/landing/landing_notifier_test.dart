@@ -331,6 +331,7 @@ final class _HangingAuthRepository implements AuthRepository {
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) => Completer<TokenResponse>().future;
 
   /// Veces que se pidió renovar contra el servidor. Distingue «entró con lo que
@@ -369,6 +370,7 @@ final class _ImmediateAuthRepository implements AuthRepository {
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) async {
     calls.add('login');
     return TokenResponse(
@@ -464,6 +466,7 @@ final class _FailingAuthRepository implements AuthRepository {
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final bool isolateSession = true,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) => throw UnimplementedError();
 
   @override
