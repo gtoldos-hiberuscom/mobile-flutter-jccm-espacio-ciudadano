@@ -3450,6 +3450,64 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Citas hospitalarias';
 
   @override
+  String get myDataHealthHospitalLinkTitle => 'Mis citas hospitalarias';
+
+  @override
+  String get myDataHealthHospitalLinkDescription => 'Consulta la información sobre tus citas hospitalarias del SESCAM.';
+
+  @override
+  String get myDataHealthHospitalContactHint => 'Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.';
+
+  @override
+  String get myDataHealthHospitalPendingTab => 'Citas pendientes';
+
+  @override
+  String get myDataHealthHospitalPastTab => 'Citas pasadas';
+
+  @override
+  String get myDataHealthHospitalPendingEmpty => 'No tienes citas hospitalarias pendientes.';
+
+  @override
+  String get myDataHealthHospitalPastEmpty => 'No tienes citas hospitalarias pasadas.';
+
+  @override
+  String get myDataHealthHospitalFieldService => 'Servicio';
+
+  @override
+  String get myDataHealthHospitalFieldProvision => 'Prestación';
+
+  @override
+  String get myDataHealthHospitalFieldRoom => 'Sala';
+
+  @override
+  String get myDataHealthHospitalFieldCenter => 'Centro';
+
+  @override
+  String get myDataHealthHospitalFieldAgenda => 'Agenda';
+
+  @override
+  String get myDataHealthHospitalFieldDateTime => 'Fecha y hora';
+
+  @override
+  String myDataHealthHospitalDateTimeValue(String date, String time) {
+    return '$date, $time';
+  }
+
+  @override
+  String myDataHealthCipValue(String cip) {
+    return 'CIP: $cip';
+  }
+
+  @override
+  String get myDataHealthCipUnavailable => 'CIP no disponible';
+
+  @override
+  String get myDataHealthLevelRequiredMessage => 'Para consultar tus citas hospitalarias necesitas un nivel de seguridad más alto. Vuelve a identificarte con certificado digital o DNI electrónico.';
+
+  @override
+  String get myDataHealthLevelUnverifiedMessage => 'No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.';
+
+  @override
   String get myDataHealthLoadMoreAppointments => 'Cargar más citas';
 
   @override

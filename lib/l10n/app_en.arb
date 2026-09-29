@@ -4544,6 +4544,91 @@
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Title of the hospital appointments block."
   },
+  "myDataHealthHospitalLinkTitle": "My hospital appointments",
+  "@myDataHealthHospitalLinkTitle": {
+    "description": "Health — link from My data to the SESCAM hospital appointments screen."
+  },
+  "myDataHealthHospitalLinkDescription": "Check the information about your SESCAM hospital appointments.",
+  "@myDataHealthHospitalLinkDescription": {
+    "description": "Health — description of the hospital appointments link."
+  },
+  "myDataHealthHospitalContactHint": "If any of the data is out of date, you must contact SESCAM.",
+  "@myDataHealthHospitalContactHint": {
+    "description": "Health — notice that hospital data is maintained by SESCAM."
+  },
+  "myDataHealthHospitalPendingTab": "Upcoming appointments",
+  "@myDataHealthHospitalPendingTab": {
+    "description": "Health — upcoming hospital appointments tab."
+  },
+  "myDataHealthHospitalPastTab": "Past appointments",
+  "@myDataHealthHospitalPastTab": {
+    "description": "Health — past hospital appointments tab."
+  },
+  "myDataHealthHospitalPendingEmpty": "You have no upcoming hospital appointments.",
+  "@myDataHealthHospitalPendingEmpty": {
+    "description": "Health — message when there are no upcoming hospital appointments."
+  },
+  "myDataHealthHospitalPastEmpty": "You have no past hospital appointments.",
+  "@myDataHealthHospitalPastEmpty": {
+    "description": "Health — message when there are no past hospital appointments."
+  },
+  "myDataHealthHospitalFieldService": "Service",
+  "@myDataHealthHospitalFieldService": {
+    "description": "Health — label for the medical service of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldProvision": "Provision",
+  "@myDataHealthHospitalFieldProvision": {
+    "description": "Health — label for the provision of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldRoom": "Room",
+  "@myDataHealthHospitalFieldRoom": {
+    "description": "Health — label for the room of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldCenter": "Centre",
+  "@myDataHealthHospitalFieldCenter": {
+    "description": "Health — label for the hospital of an appointment."
+  },
+  "myDataHealthHospitalFieldAgenda": "Agenda",
+  "@myDataHealthHospitalFieldAgenda": {
+    "description": "Health — label for the agenda of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldDateTime": "Date and time",
+  "@myDataHealthHospitalFieldDateTime": {
+    "description": "Health — label for the date and time of a hospital appointment."
+  },
+  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
+  "@myDataHealthHospitalDateTimeValue": {
+    "description": "Health — date and time of a hospital appointment, e.g. \"03/02/2026, 11:40\".",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHealthCipValue": "CIP: {cip}",
+  "@myDataHealthCipValue": {
+    "description": "Health — the citizen's CIP identifier.",
+    "placeholders": {
+      "cip": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHealthCipUnavailable": "CIP unavailable",
+  "@myDataHealthCipUnavailable": {
+    "description": "Health — text shown when the CIP could not be retrieved."
+  },
+  "myDataHealthLevelRequiredMessage": "Checking your hospital appointments requires a higher security level. Sign in again using a digital certificate or your electronic ID card.",
+  "@myDataHealthLevelRequiredMessage": {
+    "description": "Health — blocked because the authentication level is too low for health data."
+  },
+  "myDataHealthLevelUnverifiedMessage": "We could not verify your security level, so we cannot show your hospital appointments. Sign in again or try later.",
+  "@myDataHealthLevelUnverifiedMessage": {
+    "description": "Health — the authentication level could not be read from the token."
+  },
   "myDataHealthLoadMoreAppointments": "Load more appointments",
   "@myDataHealthLoadMoreAppointments": {
     "description": "Button that loads the next page of past primary care appointments."

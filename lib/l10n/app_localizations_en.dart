@@ -3449,6 +3449,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
 
   @override
+  String get myDataHealthHospitalLinkTitle => 'My hospital appointments';
+
+  @override
+  String get myDataHealthHospitalLinkDescription => 'Check the information about your SESCAM hospital appointments.';
+
+  @override
+  String get myDataHealthHospitalContactHint => 'If any of the data is out of date, you must contact SESCAM.';
+
+  @override
+  String get myDataHealthHospitalPendingTab => 'Upcoming appointments';
+
+  @override
+  String get myDataHealthHospitalPastTab => 'Past appointments';
+
+  @override
+  String get myDataHealthHospitalPendingEmpty => 'You have no upcoming hospital appointments.';
+
+  @override
+  String get myDataHealthHospitalPastEmpty => 'You have no past hospital appointments.';
+
+  @override
+  String get myDataHealthHospitalFieldService => 'Service';
+
+  @override
+  String get myDataHealthHospitalFieldProvision => 'Provision';
+
+  @override
+  String get myDataHealthHospitalFieldRoom => 'Room';
+
+  @override
+  String get myDataHealthHospitalFieldCenter => 'Centre';
+
+  @override
+  String get myDataHealthHospitalFieldAgenda => 'Agenda';
+
+  @override
+  String get myDataHealthHospitalFieldDateTime => 'Date and time';
+
+  @override
+  String myDataHealthHospitalDateTimeValue(String date, String time) {
+    return '$date, $time';
+  }
+
+  @override
+  String myDataHealthCipValue(String cip) {
+    return 'CIP: $cip';
+  }
+
+  @override
+  String get myDataHealthCipUnavailable => 'CIP unavailable';
+
+  @override
+  String get myDataHealthLevelRequiredMessage => 'Checking your hospital appointments requires a higher security level. Sign in again using a digital certificate or your electronic ID card.';
+
+  @override
+  String get myDataHealthLevelUnverifiedMessage => 'We could not verify your security level, so we cannot show your hospital appointments. Sign in again or try later.';
+
+  @override
   String get myDataHealthLoadMoreAppointments => 'Load more appointments';
 
   @override

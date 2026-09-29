@@ -184,6 +184,15 @@ class _HealthAppointmentsTab extends ConsumerWidget {
                   children: [
                     _CipText(cip: ref.watch(myDataHealthCipProvider).asData?.value),
                     const SizedBox(height: AppDimensions.space16),
+                    // Apartado 2.1 del requisito: el acceso a hospitalaria es un
+                    // enlace a su propia pantalla, no otro selector apilado
+                    // aquí. Mismo patrón que Vivienda y Educación.
+                    AppNavigationCard(
+                      title: l10n.myDataHealthHospitalLinkTitle,
+                      description: l10n.myDataHealthHospitalLinkDescription,
+                      onTap: () => context.go(Routes.myDataHealthHospitalAppointments),
+                    ),
+                    const SizedBox(height: AppDimensions.space16),
                     if (kHospitalAppointmentsEnabled) ...[
                       AppSegmentedControl(
                         segments: [l10n.myDataHealthScopePrimaryCare, l10n.myDataHealthScopeHospital],

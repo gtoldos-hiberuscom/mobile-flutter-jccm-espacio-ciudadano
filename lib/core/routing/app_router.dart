@@ -40,6 +40,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_e
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_employment_offers_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_employment_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_health_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_hospital_appointments_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_address_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_real_estate_detail_page.dart';
@@ -317,6 +318,11 @@ final goRouterProvider = Provider<GoRouter>(
               builder: (final BuildContext context, final GoRouterState state) => MyDataHealthPage(
                 backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
               ),
+            ),
+
+            GoRoute(
+              path: Routes.myDataHealthHospitalAppointments,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataHospitalAppointmentsPage(),
             ),
 
             GoRoute(
