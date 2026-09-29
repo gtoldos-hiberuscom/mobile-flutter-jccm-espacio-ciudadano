@@ -4,7 +4,9 @@ import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_lev
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/elevate_authentication_level_use_case.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_session_controller.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/auth_use_case_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/consent/2_presentation/controllers/consent_notifier.dart';
 
 /// Desenlace de la última elevación, para que la pantalla lo cuente.
 enum ElevationOutcome {
@@ -77,14 +79,25 @@ class ElevationNotifier extends Notifier<ElevationState> {
       switch (result) {
         case ElevationSucceeded(:final tokenResponse, :final jwtClaims):
         case ElevationInsufficient(:final tokenResponse, :final jwtClaims):
-          // Se adopta igual que en `LandingNotifier.login`, que es lo que esta
-          // elevación es: un login.
+          // Se adopta haciendo **exactamente lo mismo que
+          // `LandingNotifier.login`**, que es lo que esta elevación es: un
+          // login. Dos pasos, y ninguno más.
           session.startInMemory(tokenResponse, claims: jwtClaims);
-          // No dejar guardados los tokens del nivel anterior.
-          await session.persistCurrentSession();
           if (!ref.mounted) {
             return;
           }
+          // Lo que el login hace y aquí faltaba: el estado de consentimiento
+          // cacheado es del token anterior.
+          ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
+          // **NO se persiste la sesión aquí, y no es un olvido.** Persistir es
+          // decisión del `SessionGuard`, que solo lo hace tras confirmar el
+          // consentimiento (`_persistSessionNowConsentIsOnRecord`). Al
+          // persistir por nuestra cuenta, `hasPersistedSession()` pasaba a ser
+          // `true` antes de que el gate hubiera confirmado nada, y entonces un
+          // `ConsentRequired` en la siguiente navegación tomaba la rama
+          // destructiva del guard —`clear()` + rebote— y **echaba al ciudadano
+          // al landing público justo después de elevar**. Sin persistir, ese
+          // mismo `ConsentRequired` lleva al gate legal, que es recuperable.
           state = ElevationState(
             outcome: result is ElevationSucceeded ? ElevationOutcome.succeeded : ElevationOutcome.stillInsufficient,
           );
