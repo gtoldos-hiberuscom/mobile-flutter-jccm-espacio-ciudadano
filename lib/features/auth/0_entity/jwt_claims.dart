@@ -37,6 +37,8 @@ final class JwtClaims {
     this.certificateClassification,
     this.givenName,
     this.familyName,
+    this.authNLevelRaw,
+    this.idpSelected,
   });
 
   final int exp;
@@ -72,6 +74,22 @@ final class JwtClaims {
   final String? givenName;
   final String? familyName;
 
+  /// Nivel de autenticación alcanzado, **tal y como lo escribe Cerbero**
+  /// (`authNLevel`): `low`, `substantial`…
+  ///
+  /// Se guarda el literal crudo a propósito. La entidad no decide la política
+  /// de acceso: interpretarlo y ordenarlo es cosa de `AuthenticationLevel`, y
+  /// conservar el original es lo único que permite diagnosticar un valor que
+  /// todavía no sabemos leer en vez de tratarlo como ausente.
+  final String? authNLevelRaw;
+
+  /// Proveedor de identidad con el que se identificó el ciudadano
+  /// (`idpSelected`): `SEGSOC`, `AFIRMA`… Solo para diagnóstico.
+  ///
+  /// **No deducir el nivel de aquí.** El requisito exige el claim, no el
+  /// método: la correspondencia método → nivel la fija Cl@ve, no la app.
+  final String? idpSelected;
+
   /// Whether the authenticated natural person is acting on behalf of another
   /// person or legal entity.
   bool get isRepresentative => representedAgentId?.trim().isNotEmpty ?? false;
@@ -96,6 +114,28 @@ final class JwtClaims {
       return represented;
     }
     return normalizedPersonIdentifier;
+  }
+
+  /// Si [other] identifica **a la misma persona** que estos claims.
+  ///
+  /// Se compara por documento, nunca por [sub]: Cerbero emite sujetos distintos
+  /// según el proveedor de identidad (`SEGSOC` frente a `AFIRMA`), y ese salto
+  /// es exactamente el que provoca una elevación de nivel — comparar [sub]
+  /// daría «otra persona» en el caso normal.
+  ///
+  /// Se compara también la representación: entrar o salir de una representación
+  /// cambia de quién son los datos que se van a mostrar, que es materialmente
+  /// el mismo riesgo.
+  ///
+  /// Sin documento en cualquiera de los dos lados devuelve `false`: no se puede
+  /// probar la igualdad, así que no se afirma.
+  bool identifiesSamePersonAs(final JwtClaims other) {
+    final own = (effectivePersonIdentifier ?? subAlt)?.trim().toUpperCase();
+    final theirs = (other.effectivePersonIdentifier ?? other.subAlt)?.trim().toUpperCase();
+    if (own == null || own.isEmpty || theirs == null || theirs.isEmpty) {
+      return false;
+    }
+    return own == theirs && isRepresentative == other.isRepresentative;
   }
 
   /// Nombre y apellidos del ciudadano tal y como los informa Cerbero
@@ -189,6 +229,8 @@ final class JwtClaims {
       certificateClassification: _str(payload['clasificacionCertificado']),
       givenName: _str(payload['given_name']),
       familyName: _str(payload['family_name']),
+      authNLevelRaw: _str(payload['authNLevel']),
+      idpSelected: _str(payload['idpSelected']),
     );
   }
 
