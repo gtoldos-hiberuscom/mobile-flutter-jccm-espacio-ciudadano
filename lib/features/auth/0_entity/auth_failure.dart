@@ -1,6 +1,15 @@
 enum AuthFailureReason {
   cancelled,
   configuration,
+
+  /// Se pidió una sesión de navegador **aislada** y el navegador del
+  /// dispositivo no puede darla.
+  ///
+  /// El fork lo lanza **antes de abrir nada**, en vez de compartir el
+  /// contenedor en silencio — que es lo peor que podría pasar aquí, porque el
+  /// aislamiento es justamente lo que se está comprando. Quien llama puede
+  /// reintentar sin aislamiento, avisando al ciudadano.
+  ephemeralUnavailable,
   invalidResponse,
   remoteFailure,
   unexpected,
@@ -21,6 +30,10 @@ final class AuthException implements Exception {
     required final String message,
     final Object? cause,
   }) = _AuthConfigurationException;
+
+  const factory AuthException.ephemeralUnavailable({
+    final Object? cause,
+  }) = _AuthEphemeralUnavailableException;
 
   const factory AuthException.invalidResponse({
     required final String message,
@@ -57,6 +70,14 @@ final class _AuthConfigurationException extends AuthException {
     required super.message,
     super.cause,
   }) : super._(reason: AuthFailureReason.configuration);
+}
+
+final class _AuthEphemeralUnavailableException extends AuthException {
+  const _AuthEphemeralUnavailableException({super.cause})
+    : super._(
+        reason: AuthFailureReason.ephemeralUnavailable,
+        message: 'The browser cannot provide an ephemeral (isolated) session.',
+      );
 }
 
 final class _AuthInvalidResponseException extends AuthException {

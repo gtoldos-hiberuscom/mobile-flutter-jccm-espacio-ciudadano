@@ -1,4 +1,5 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 
 const List<String> authDefaultScopes = ['openid'];
 
@@ -18,9 +19,22 @@ const String offlineAccessScope = 'offline_access';
 /// `prompt` importa: Cerbero lo compara entero contra `"login"` y cualquier
 /// combinación adicional apaga el `ForceAuthn` hacia Cl@ve (#282296).
 abstract interface class AuthRepository {
+  /// [isolateSession] pide que el login ocurra en un contenedor de navegador
+  /// **aislado**, que se destruye al terminar, para que no sobreviva estado de
+  /// Cl@ve entre accesos.
+  ///
+  /// Es una petición, no una garantía: dónde se puede cumplir lo decide la
+  /// implementación —hoy sólo Android, ver `AuthRepositoryImpl`—. Si se pide y
+  /// el navegador del dispositivo no puede darlo, el flujo **aborta con
+  /// [AuthFailureReason.ephemeralUnavailable] antes de abrir nada**, para que
+  /// quien llama decida: nunca se comparte el contenedor en silencio.
+  ///
+  /// Pasar `false` es exactamente eso — entrar a sabiendas sin aislamiento—, y
+  /// es lo que hace `LoginUsecase` al reintentar, avisando al ciudadano.
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final bool isolateSession = true,
   });
 
   Future<TokenResponse> refreshToken({

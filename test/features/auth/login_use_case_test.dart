@@ -8,8 +8,13 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/logout_use_case.da
 /// [AuthRepository] fake that counts login/logout calls and can be configured
 /// to fail selectively per attempt.
 ///
-/// El recuento importa: los dos casos de uso **no** reintentan. Un fallo se
-/// devuelve como resultado sellado, nunca se enmascara con un segundo intento.
+/// El recuento importa: los casos de uso **no** reintentan ante un fallo. Un
+/// error se devuelve como resultado sellado, nunca se enmascara con un segundo
+/// intento.
+///
+/// La única excepción, deliberada, es no poder abrir sesión **aislada**: ahí sí
+/// se reintenta sin aislamiento, porque lo contrario deja al ciudadano sin
+/// poder entrar. Por eso se guarda también [isolateSessionCalls].
 final class FakeAuthRepository implements AuthRepository {
   final List<String> revokedTokens = [];
 
@@ -31,12 +36,17 @@ final class FakeAuthRepository implements AuthRepository {
   /// Same for logout attempts.
   final List<Exception?> logoutErrors = [];
 
+  /// El valor de `isolateSession` recibido en cada intento, en orden.
+  final List<bool> isolateSessionCalls = [];
+
   @override
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final bool isolateSession = true,
   }) async {
     loginCalls++;
+    isolateSessionCalls.add(isolateSession);
     final error = loginCalls <= loginErrors.length ? loginErrors[loginCalls - 1] : null;
     if (error != null) {
       throw error;
@@ -98,6 +108,46 @@ void main() {
       expect(result, isA<LoginFailed>());
       expect((result as LoginFailed).cause, isA<AuthException>());
       expect(repository.loginCalls, 1);
+    });
+
+    test('siempre se pide aislamiento en el primer intento', () async {
+      await loginUseCase.call();
+
+      expect(repository.isolateSessionCalls, [true]);
+    });
+
+    test('si el navegador no puede aislar, se entra igual pero MARCADO', () async {
+      // El fork aborta antes de abrir nada. Dejar al ciudadano sin acceder
+      // sería peor; entrar sin avisar, también: en ese dispositivo su sesión de
+      // Cl@ve puede quedar recordada, que es justo lo que el aislamiento evita.
+      repository.loginErrors.add(const AuthException.ephemeralUnavailable());
+
+      final result = await loginUseCase.call();
+
+      expect(result, isA<LoginSuccess>());
+      expect((result as LoginSuccess).sessionIsolationDegraded, isTrue);
+      expect(
+        repository.isolateSessionCalls,
+        [true, false],
+        reason: 'el reintento tiene que renunciar al aislamiento explícitamente',
+      );
+    });
+
+    test('un login normal NO se marca como degradado', () async {
+      final result = await loginUseCase.call();
+
+      expect((result as LoginSuccess).sessionIsolationDegraded, isFalse);
+    });
+
+    test('si el reintento también falla, es un fallo y no un acceso degradado', () async {
+      repository.loginErrors
+        ..add(const AuthException.ephemeralUnavailable())
+        ..add(const AuthException.cancelled());
+
+      final result = await loginUseCase.call();
+
+      expect(result, isA<LoginFailed>());
+      expect(repository.loginCalls, 2);
     });
   });
 

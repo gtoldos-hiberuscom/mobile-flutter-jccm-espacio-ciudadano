@@ -72,19 +72,76 @@ void main() {
     expect(capturedArguments?['additionalParameters'], containsPair('max_age', '0'));
   });
 
-  test('login and logout ask for the SFSafariViewController agent', () async {
-    // De ese agente depende el SSO con los portales de JCCM en iOS: guarda en
-    // un almacén propio de la app, compartido con las pestañas que la app abre
-    // con `LaunchMode.inAppBrowserView`. Con el agente efímero ese almacén se
-    // destruye y los portales vuelven a abrir sin identificar, sin que nada
-    // falle a la vista. Android ignora el argumento.
-    mockChannelThrowing('authorize_and_exchange_code_failed');
+  group('qué agente de navegador se pide', () {
+    // `isolateBrowserSession` se fuerza en vez de depender de `Platform`, que
+    // en los tests es el host.
+    AuthRepositoryImpl android() => AuthRepositoryImpl(config: config, isolateBrowserSession: true);
+    AuthRepositoryImpl ios() => AuthRepositoryImpl(config: config, isolateBrowserSession: false);
 
-    await expectLater(repository.login(), throwsA(isA<AuthException>()));
-    expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
+    test('el login de iOS NO se aísla: de ese almacén depende el SSO', () async {
+      // `SFSafariViewController` guarda en un almacén propio de la app,
+      // compartido con las pestañas que la app abre con
+      // `LaunchMode.inAppBrowserView`. Con el agente efímero ese almacén se
+      // destruye y los portales de JCCM vuelven a abrir sin identificar, sin
+      // que nada falle a la vista.
+      mockChannelThrowing('authorize_and_exchange_code_failed');
 
-    await expectLater(repository.logout(idToken: 'fake-id-token'), throwsA(isA<AuthException>()));
-    expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
+      await expectLater(ios().login(), throwsA(isA<AuthException>()));
+
+      expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
+    });
+
+    test('el login de Android SÍ se aísla: es lo que suelta el certificado', () async {
+      mockChannelThrowing('authorize_and_exchange_code_failed');
+
+      await expectLater(android().login(), throwsA(isA<AuthException>()));
+
+      expect(
+        capturedArguments?['externalUserAgent'],
+        ExternalUserAgent.ephemeralAsWebAuthenticationSession.index,
+      );
+    });
+
+    test('EL LOGOUT NUNCA se aísla, tampoco en Android', () async {
+      // El cierre tiene que correr por el contenedor COMPARTIDO, que es donde
+      // vive la sesión que hay que invalidar. Aislado sería un no-op contra un
+      // contenedor recién creado y vacío, y la sesión anterior quedaría viva e
+      // inalcanzable para la app — peor que no cerrar. Si alguien "unifica"
+      // ambos agentes por coherencia, esto es lo que lo para.
+      mockChannelThrowing('end_session_failed');
+
+      await expectLater(android().logout(idToken: 'fake-id-token'), throwsA(isA<AuthException>()));
+
+      expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
+    });
+
+    test('un login degradado a propósito tampoco se aísla', () async {
+      // Es el reintento de `LoginUsecase` cuando el navegador no puede dar
+      // sesión aislada: entrar sin aislamiento, pero a sabiendas.
+      mockChannelThrowing('authorize_and_exchange_code_failed');
+
+      await expectLater(android().login(isolateSession: false), throwsA(isA<AuthException>()));
+
+      expect(capturedArguments?['externalUserAgent'], ExternalUserAgent.sfSafariViewController.index);
+    });
+  });
+
+  test('el fork avisando de que no puede aislar se mapea a su propio motivo', () async {
+    // Lo lanza ANTES de abrir el navegador. Tipado aparte porque `LoginUsecase`
+    // lo distingue para reintentar sin aislamiento y avisar; si cayera en
+    // `unexpected`, el ciudadano se quedaría sin poder entrar.
+    mockChannelThrowing('ephemeral_browsing_unavailable');
+
+    await expectLater(
+      AuthRepositoryImpl(config: config, isolateBrowserSession: true).login(),
+      throwsA(
+        isA<AuthException>().having(
+          (final e) => e.reason,
+          'reason',
+          AuthFailureReason.ephemeralUnavailable,
+        ),
+      ),
+    );
   });
 
   test('other platform error codes keep the existing unexpected mapping', () async {

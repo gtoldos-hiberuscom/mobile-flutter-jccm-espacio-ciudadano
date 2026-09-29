@@ -5642,8 +5642,12 @@
   "@homeNewsLabelWithMinimumCount": {
     "description": "News card label when the count has reached the loading limit",
     "placeholders": {
-      "label": { "type": "String" },
-      "count": { "type": "int" }
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
     }
   },
   "homeRecommendedProceduresTitle": "Recommended procedures",
@@ -5966,9 +5970,13 @@
   },
   "privacyResponsibleTitle": "Who is the data controller?",
   "privacyDocumentTitle": "Information on personal data processing in Espacio Ciudadano",
-  "@privacyDocumentTitle": {"description": "Privacy page — document title."},
+  "@privacyDocumentTitle": {
+    "description": "Privacy page — document title."
+  },
   "privacyEmailCopied": "No email application is available. The address has been copied to the clipboard.",
-  "@privacyEmailCopied": {"description": "Privacy page — notice shown when email cannot be opened and the address is copied."},
+  "@privacyEmailCopied": {
+    "description": "Privacy page — notice shown when email cannot be opened and the address is copied."
+  },
   "@privacyResponsibleTitle": {
     "description": "Privacy page — heading of the data controller section."
   },
@@ -5993,7 +6001,9 @@
     "description": "Privacy page — bullet item in the controller's list of services."
   },
   "privacyResponsibleItemAgenda": "Display of the agenda",
-  "@privacyResponsibleItemAgenda": {"description": "Privacy page — bullet item in the controller's list of services."},
+  "@privacyResponsibleItemAgenda": {
+    "description": "Privacy page — bullet item in the controller's list of services."
+  },
   "privacyResponsibleOrgParagraph": "Once each of the options provided by Espacio Ciudadano is selected, the data controller will be each of the bodies and organizations with competence over that administrative procedure or event.",
   "@privacyResponsibleOrgParagraph": {
     "description": "Privacy page — paragraph on the bodies responsible for each option."
@@ -6012,7 +6022,9 @@
   },
   "privacyPurposeTitle": "What is the name and purpose of the processing?",
   "privacyPopulationControllerText": "2. The Castilla-La Mancha Data Office is the controller for Population Register data. Its contact address is C/ Cabriel, 12 – Edificio CIE III, 45071 Toledo, and its email address is oficinadeldato@jccm.es.",
-  "@privacyPopulationControllerText": {"description": "Privacy page — Population Register controller and contact."},
+  "@privacyPopulationControllerText": {
+    "description": "Privacy page — Population Register controller and contact."
+  },
   "@privacyPurposeTitle": {
     "description": "Privacy page — heading of the processing purpose section."
   },
@@ -6029,21 +6041,37 @@
     "description": "Privacy page — bullet item in the list of purposes."
   },
   "privacyLegalBasisTitle": "What is the legal basis for this processing?",
-  "@privacyLegalBasisTitle": {"description": "Privacy page — legal basis title."},
+  "@privacyLegalBasisTitle": {
+    "description": "Privacy page — legal basis title."
+  },
   "privacyLegalBasisText": "The legal bases for Espacio Ciudadano processing are legal obligation and performance of a task carried out in the public interest (Article 6.1(c) and (e) GDPR), including Law 39/2015, Royal Decree 203/2021 and Law 4/2025. Processing of State Administration information, recommendations, events and selected cards is based on consent, which may be withdrawn in the user profile.\n\nFor the Population Register, telephone and email processing is based on consent (Article 6.1(a)); other data is processed in the public interest (Article 6.1(e), Law 10/2002 on Castilla-La Mancha Statistics).",
-  "@privacyLegalBasisText": {"description": "Privacy page — legal bases."},
+  "@privacyLegalBasisText": {
+    "description": "Privacy page — legal bases."
+  },
   "privacyTransfersTitle": "Are data transferred?",
-  "@privacyTransfersTitle": {"description": "Privacy page — transfers title."},
+  "@privacyTransfersTitle": {
+    "description": "Privacy page — transfers title."
+  },
   "privacyTransfersText": "Personal data is not transferred as part of Espacio Ciudadano processing.\n\nPopulation Register data may be transferred to other regional Administration bodies for communication with citizens, after assessing purpose compatibility under Article 6.4 GDPR.",
-  "@privacyTransfersText": {"description": "Privacy page — information about transfers."},
+  "@privacyTransfersText": {
+    "description": "Privacy page — information about transfers."
+  },
   "privacyRetentionTitle": "How long will the data be retained?",
-  "@privacyRetentionTitle": {"description": "Privacy page — retention title."},
+  "@privacyRetentionTitle": {
+    "description": "Privacy page — retention title."
+  },
   "privacyRetentionText": "Data will be retained for as long as necessary to fulfil the purpose for which it was collected and to determine any liabilities arising from that purpose and processing. Archives and documentation rules will apply.",
-  "@privacyRetentionText": {"description": "Privacy page — retention period."},
+  "@privacyRetentionText": {
+    "description": "Privacy page — retention period."
+  },
   "privacyRightsTitle": "How can data-protection rights be exercised?",
-  "@privacyRightsTitle": {"description": "Privacy page — exercising rights title."},
+  "@privacyRightsTitle": {
+    "description": "Privacy page — exercising rights title."
+  },
   "privacyRightsText": "You may exercise your rights of access, rectification, erasure, restriction, objection and not to be subject to automated decisions free of charge, either in writing through a Registry Office addressed to the controller, or online at https://www.jccm.es/tramites/1001969.",
-  "@privacyRightsText": {"description": "Privacy page — ways to exercise rights."},
+  "@privacyRightsText": {
+    "description": "Privacy page — ways to exercise rights."
+  },
   "privacyAepdTitle": "Can I lodge a complaint with the Spanish Data Protection Agency?",
   "@privacyAepdTitle": {
     "description": "Privacy page — heading of the section on complaints to the AEPD."
@@ -6282,5 +6310,9 @@
   "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
   "biometricAccessDialogDescription": "This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.",
   "biometricAccessDialogCancel": "Not now",
-  "biometricAccessDialogConfirm": "Enable quick access"
+  "biometricAccessDialogConfirm": "Enable quick access",
+  "loginIsolationDegradedWarning": "Your browser cannot open an isolated session. You signed in successfully, but this device may remember your Cl@ve session on future sign-ins.",
+  "@loginIsolationDegradedWarning": {
+    "description": "Non-blocking warning after a successful login when the device browser does not support ephemeral tabs and authentication ran in the shared browser."
+  }
 }

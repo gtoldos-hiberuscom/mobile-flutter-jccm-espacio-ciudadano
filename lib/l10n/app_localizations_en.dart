@@ -4863,4 +4863,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get biometricAccessDialogConfirm => 'Enable quick access';
+
+  @override
+  String get loginIsolationDegradedWarning => 'Your browser cannot open an isolated session. You signed in successfully, but this device may remember your Cl@ve session on future sign-ins.';
 }

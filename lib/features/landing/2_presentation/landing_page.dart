@@ -110,6 +110,18 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         setState(() => _isAuthenticating = isAuthenticating);
       }
       if (next.loginSuccess) {
+        if (next.isolationDegradedWarning) {
+          // Antes de navegar, y por el ScaffoldMessenger raíz, para que
+          // sobreviva al cambio de pantalla. Mensaje curado, sin detalle
+          // técnico: lo que le importa al ciudadano es que en ESTE dispositivo
+          // su sesión de Cl@ve puede quedar recordada.
+          AppAlertSnackbar.show(
+            context,
+            message: l10n.loginIsolationDegradedWarning,
+            severity: AppAlertSeverity.warning,
+            duration: const Duration(seconds: 8),
+          );
+        }
         ref.read(goRouterProvider).go(Routes.home);
       }
       if (next.sessionExpired) {

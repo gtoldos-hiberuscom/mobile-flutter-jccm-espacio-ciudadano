@@ -166,6 +166,7 @@ final class FakeAuthRepository implements AuthRepository {
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final bool isolateSession = true,
   }) => throw UnimplementedError();
 
   final List<String> logoutIdTokens = [];
