@@ -86,6 +86,15 @@ const Set<String> loggableKeys = {
   'aplicacion',
   'tipoentidad',
   'fecha-cambio',
+  // Nivel de autenticación de Cerbero y proveedor de identidad elegido. Un LoA
+  // (`low`/`substantial`) y el nombre de un IdP (`SEGSOC`, `AFIRMA`) describen
+  // CÓMO se identificó alguien, no QUIÉN es. Sin ellos no se puede diagnosticar
+  // un bloqueo por nivel insuficiente, que es justo lo que hay que medir en PRE.
+  //
+  // Ojo al formato: este conjunto se consulta con la clave ya pasada a
+  // minúsculas, así que van en minúscula aunque el claim sea `authNLevel`.
+  'authnlevel',
+  'idpselected',
 };
 
 /// Prepara [value] para una traza: claves y estructura intactas, valores
