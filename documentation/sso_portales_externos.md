@@ -538,8 +538,14 @@ el fork (`../docs/auth/clave_forceauthn_retest_2026-09.md`, §5):
 
 El fork se retiró sin cerrar ese punto. La validación no fue floja: fue consciente de su límite y
 lo dejó escrito. Lo que faltó fue la comprobación pendiente, que es la que se hizo el 28/09 — con
-el resultado que aquel documento temía. El fork sigue vendorizado y sin usar: volver a él era, según
-ese mismo documento, **una línea**.
+el resultado que aquel documento temía.
+
+> **Corrección (29/09).** Este documento afirmaba aquí y en §10.6 que «el fork sigue vendorizado y
+> volver a él es una línea». **Era falso desde el 18/09**: el commit `a09ebec` borró el paquete
+> entero (41 ficheros) *y* la maquinaria de degradación, y entre medias el login migró a
+> `sfSafariViewController`, que el fork ni siquiera mira. Volver costó restaurar el paquete,
+> repineárlo, bifurcar el agente por plataforma y reponer el reintento degradado y su aviso. Se
+> anota porque esas frases se usaron para valorar alternativas.
 
 ### 10.4 No es la ventana de 60 minutos: es el método, sólo el certificado, y caduca solo
 
@@ -710,9 +716,11 @@ reintentos durante esos segundos (`003002`). Hay evidencia medida para pedirlo.
 > Corte exacto: **`0.1.5+7` (11/09) y anteriores** lo tenían; **`0.1.6+8` y `0.1.7+9`**, no. Explica
 > que un compañero pueda elegir certificado y otra no: están a distinto lado de esa línea.
 
-**2. Volver al aislamiento** (`ephemeralAsWebAuthenticationSession` en iOS; en Android el fork, que
-sigue vendorizado y a una línea). Lo mata de raíz, pero **cuesta el SSO con Empleo y Educamos**. Por
-30 segundos, no compensa.
+**2. Volver al aislamiento** (`ephemeralAsWebAuthenticationSession`, que en Android traduce el fork
+vendorizado). Lo mata de raíz, pero **cuesta el SSO con Empleo y Educamos**.
+
+> **Es lo que se hizo el 29/09, y sólo en Android** (§10.8). En iOS, con 30 segundos de vida, no
+> compensa; en Android el estado **no caduca nunca**, y ahí la cuenta sale al revés.
 
 **3. El puente SSO en Cerbero** (Opción 1 de §6), que sigue pendiente desde septiembre. Deshace el
 nudo: con enlaces de un solo uso, el SSO deja de necesitar el almacén compartido y se puede aislar
@@ -749,6 +757,61 @@ nuevo —su realm es `usuarios`, el que la app cierra— pero **Educamos CLM sig
 anterior**: vive en el realm `educacion`, que no cierra nadie, ni el arreglo ni el botón «Cerrar
 sesión». Mismo riesgo de privacidad, y con datos educativos de por medio. Es independiente de §10.1
 y también preexistente: el logout en regla tampoco lo cierra.
+
+### 10.8 Resuelto en Android aislando el login (29/09/2026)
+
+**Lo que se descartó primero, con medida.** Se dijo que en Android el certificado no se puede
+reelegir «hasta que expira Cl@ve», o sea la ventana de 60 minutos de la pasarela. **No es cierto.**
+Medido en emulador contra PRE con la librería de serie, leyendo `auth_time` de los claims:
+
+| Hora | Qué pasó |
+|---|---|
+| 08:25:34 | login con certificado |
+| 08:25:38 | `POST .../logout` → **204** |
+| 08:25:43 | login: `auth_time` **nuevo**, sin pedir certificado |
+| 09:31:11 | login **pasada la ventana**: `auth_time` nuevo, sin pedir certificado |
+| 10:36:38 | ídem |
+
+Cerbero cierra y Cl@ve **reautentica de verdad** cada vez —`auth_time` cambia siempre— y aun así el
+certificado no se vuelve a pedir, tampoco fuera de la ventana. **Ojo con la medida: `auth_time` no
+sirve para esto.** Cambia en todos los intentos y aun así el método no se revalida; hay que mirar si
+sale el selector de certificados, no el reloj.
+
+**Lo que sí funciona.** Devolver el aislamiento al login **sólo en Android**, con el fork
+vendorizado. Medido el mismo día, sin limpiar nada:
+
+| Hora | Qué pasó |
+|---|---|
+| 12:25:31 | login con certificado |
+| 12:26:13 | cerrar sesión → **204** |
+| 12:26:41 | Acceder |
+| 12:26:59 | **selector de certificados de vuelta** |
+
+Minuto y medio, sin esperas y con Chrome intacto. Es **la primera vez que el aislamiento se mide con
+certificado**: la POC del 31/08 lo dejó fuera por escrito y el A/B del 18/09 midió Cl@ve Permanente.
+Que el fork actuaba está comprobado por partida doble — traza
+`FlutterAppauthEphemeral: ephemeralRequested=true … ephemeralSupported=true` y marcadores del fork
+en el DEX del APK instalado, con `net/openid/appauth` como control positivo.
+
+**El precio, también medido:** Empleo CLM abre con «Acceso persona», sin identificar. El SSO en
+Android se sostenía justo sobre el contenedor compartido. Decisión de JCCM, ya escalada; la salida
+de fondo sigue siendo el puente SSO en Cerbero (§6, Opción 1).
+
+**Tres cosas que el diseño da por sentadas y conviene no tocar sin leer esto:**
+
+1. **El logout NO se aísla, tampoco en Android.** Tiene que correr por el contenedor compartido, que
+   es donde vive la sesión que hay que invalidar. Aislado sería un *no-op* contra un contenedor
+   recién creado, y la sesión anterior quedaría viva e **inalcanzable para la app** — peor que no
+   cerrar. Importa sobre todo a quien actualice desde `0.1.6+8`/`0.1.7+9`, que ya arrastra sesión en
+   el perfil de Chrome.
+2. **iOS no se toca.** Allí el login sigue en `SFSafariViewController`, de cuyo almacén depende el
+   SSO, y el problema dura ~30 s: se pagaría el riesgo mayor por el beneficio menor.
+3. **Si el navegador no puede aislar**, el fork aborta *antes de abrir nada* y la app reintenta sin
+   aislamiento **avisando al ciudadano**. Ni dejarle sin entrar, ni entrar en silencio.
+
+**Lo que esto NO arregla:** la identidad que sobrevive en Educamos (§10.7). Vive en el realm
+`educacion` y se crea cuando el ciudadano abre Educamos **en Chrome**, no en el login, así que
+ningún cambio en el login la toca.
 
 ## 11. Referencias
 
