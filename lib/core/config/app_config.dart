@@ -44,6 +44,10 @@ class AppConfig {
     final flavor => throw Exception('Unsupported APP_FLAVOR for authenticated support URL: $flavor'),
   };
 
+  /// Web support form, used when the citizen has no session: the gateway
+  /// cannot serve the anonymous in-app form (JCCMEC-212).
+  Uri get webSupportFormUrl => environmentUrl(uat: 'https://espaciociudadano-uat.jccm.es/soporte', pre: 'https://espaciociudadano-pre.jccm.es/soporte', pro: 'https://espaciociudadano.jccm.es/soporte');
+
   Uri procedureUrl(final int procedureId) => sedeBaseUrl.resolve('tramites/$procedureId');
 
   /// URLs shown in the domain service screens. They deliberately live in the
