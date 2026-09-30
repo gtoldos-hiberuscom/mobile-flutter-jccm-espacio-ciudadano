@@ -22,6 +22,7 @@ void main() {
       final dio = _buildDio(debugMode: true);
 
       expect(dio.interceptors.whereType<CurlLoggerDioInterceptor>(), hasLength(1));
+      expect(dio.interceptors.whereType<BodySafeCurlLoggerDioInterceptor>(), hasLength(1));
       expect(dio.interceptors.whereType<EmojiDioLogger>().single.verboseBodies, isTrue);
     });
   });

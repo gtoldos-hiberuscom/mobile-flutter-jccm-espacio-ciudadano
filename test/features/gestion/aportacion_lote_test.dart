@@ -45,6 +45,38 @@ void main() {
       expect(lote.puedeEditarLista, isFalse);
     });
 
+    test('con la cola parada y algún fichero en error se puede reintentar y registrar', () {
+      final lote = AportacionLote(
+        archivos: [
+          _archivo('uno.pdf', AportacionArchivoEstado.completado, hash: 'h1'),
+          _archivo('dos.pdf', AportacionArchivoEstado.error),
+        ],
+      );
+
+      expect(lote.puedeRegistrar, isFalse);
+      expect(lote.puedeReintentarYRegistrar, isTrue);
+
+      // Con algo todavía subiendo o por subir, la cola no ha terminado.
+      for (final enCola in [AportacionArchivoEstado.enviando, AportacionArchivoEstado.noEnviado]) {
+        final conCola = lote.copyWith(archivos: [...lote.archivos, _archivo('tres.pdf', enCola)]);
+        expect(conCola.puedeReintentarYRegistrar, isFalse, reason: 'estado $enCola');
+      }
+      // Sin ningún fallido no hay nada que reintentar.
+      expect(AportacionLote(archivos: [lote.archivos.first]).puedeReintentarYRegistrar, isFalse);
+      expect(lote.copyWith(cerrando: true).puedeReintentarYRegistrar, isFalse);
+    });
+
+    test('mientras se reintenta para registrar no se registra ni se edita la lista', () {
+      final lote = AportacionLote(
+        archivos: [_archivo('uno.pdf', AportacionArchivoEstado.completado, hash: 'h1')],
+        reintentandoParaRegistrar: true,
+      );
+
+      expect(lote.puedeRegistrar, isFalse);
+      expect(lote.puedeReintentarYRegistrar, isFalse);
+      expect(lote.puedeEditarLista, isFalse);
+    });
+
     test('haySubidasEnCurso solo con algún fichero enviando', () {
       final subiendo = AportacionLote(archivos: [_archivo('uno.pdf', AportacionArchivoEstado.enviando)]);
       final parado = AportacionLote(archivos: [_archivo('uno.pdf', AportacionArchivoEstado.error)]);

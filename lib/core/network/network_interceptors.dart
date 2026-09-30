@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
@@ -8,6 +9,15 @@ import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 
 /// Marks a request that must never use or refresh an authenticated session.
 const anonymousRequestExtraKey = 'auth.anonymous_request';
+
+/// Marca una petición cuyo cuerpo no se vuelca en ningún log de red.
+///
+/// Para cuerpos enormes —un adjunto en base64 son ~27 MB—: construir e
+/// imprimir esa traza corre en el hilo de la interfaz y congela la pantalla en
+/// las builds de desarrollo. Método, URL, estado y errores se siguen trazando.
+const omitBodyFromLogsExtraKey = 'log.omit_body';
+
+bool _omitsBody(final RequestOptions options) => options.extra[omitBodyFromLogsExtraKey] == true;
 
 // ─── Auth interceptor ────────────────────────────────────────────────────────
 
@@ -235,7 +245,9 @@ class EmojiDioLogger extends Interceptor {
       if (options.headers.isNotEmpty) {
         logger.d('$dioNote 📑 Headers: ${redactForLog(options.headers)}');
       }
-      if (options.data != null) {
+      if (_omitsBody(options)) {
+        logger.d('$dioNote 📑 Body: <omitido>');
+      } else if (options.data != null) {
         logger.d('$dioNote 📑 Body: ${redactForLog(options.data)}');
       }
     }
@@ -267,5 +279,33 @@ class EmojiDioLogger extends Interceptor {
       logger.e('$dioNote 💥 Error Response: ${redactForLog(err.response?.data)}');
     }
     handler.next(err);
+  }
+}
+
+/// `CurlLoggerDioInterceptor` que respeta [omitBodyFromLogsExtraKey].
+///
+/// El original reconstruye el curl con el cuerpo entero y lo hace **siempre**
+/// en `onError`; con una subida de 20 MB eso congela la pantalla.
+final class BodySafeCurlLoggerDioInterceptor extends CurlLoggerDioInterceptor {
+  BodySafeCurlLoggerDioInterceptor();
+
+  @override
+  // El tipo `DioError` lo impone la firma del paquete.
+  // ignore: deprecated_member_use
+  void onError(final DioError err, final ErrorInterceptorHandler handler) {
+    if (_omitsBody(err.requestOptions)) {
+      handler.next(err);
+      return;
+    }
+    super.onError(err, handler);
+  }
+
+  @override
+  void onResponse(final Response<dynamic> response, final ResponseInterceptorHandler handler) {
+    if (_omitsBody(response.requestOptions)) {
+      handler.next(response);
+      return;
+    }
+    super.onResponse(response, handler);
   }
 }
