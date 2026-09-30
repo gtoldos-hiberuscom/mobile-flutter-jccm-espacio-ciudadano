@@ -152,19 +152,13 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
             if (!hasAuthorization) {
               return MyDataAuthorizationContextualHelper(onOpenSettings: _openConsentSettings);
             }
+            // La entradilla y el aviso de contacto **no van aquí**: viven en la
+            // (i), como en atención primaria. El §2.1 los cita como textos de
+            // referencia de la web, pero ese mismo apartado pide adaptar la
+            // composición a los patrones de la APP en vez de reproducirla.
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.myDataHealthHospitalLinkDescription,
-                  style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
-                ),
-                const SizedBox(height: AppDimensions.space4),
-                Text(
-                  l10n.myDataHealthHospitalContactHint,
-                  style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
-                ),
-                const SizedBox(height: AppDimensions.space16),
                 const MyDataHealthCipField(),
                 const SizedBox(height: AppDimensions.space16),
                 AppSegmentedControl(
