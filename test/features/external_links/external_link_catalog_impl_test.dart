@@ -29,6 +29,17 @@ void main() {
     );
   });
 
+  test('el formulario de soporte web sigue el entorno', () {
+    const catalog = ExternalLinkCatalogImpl(
+      config: AppConfig.fromMap({'APP_FLAVOR': 'preproduction'}),
+    );
+
+    expect(
+      catalog.findById('web_support_form')?.url,
+      Uri.parse('https://espaciociudadano-pre.jccm.es/soporte'),
+    );
+  });
+
   test('las oficinas de Bienestar Social van filtradas, y las genéricas no', () {
     const catalog = ExternalLinkCatalogImpl(
       config: AppConfig.fromMap({'APP_FLAVOR': 'preproduction'}),
