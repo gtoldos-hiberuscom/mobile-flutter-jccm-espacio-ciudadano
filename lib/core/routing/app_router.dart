@@ -47,6 +47,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_h
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_real_estate_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_non_university_titles_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_page.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_primary_care_appointments_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_dependency_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_disability_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_family_page.dart';
@@ -318,6 +319,11 @@ final goRouterProvider = Provider<GoRouter>(
               builder: (final BuildContext context, final GoRouterState state) => MyDataHealthPage(
                 backRoute: state.uri.queryParameters['from'] == 'home' ? Routes.home : Routes.myData,
               ),
+            ),
+
+            GoRoute(
+              path: Routes.myDataHealthPrimaryCareAppointments,
+              builder: (final BuildContext context, final GoRouterState state) => const MyDataPrimaryCareAppointmentsPage(),
             ),
 
             GoRoute(

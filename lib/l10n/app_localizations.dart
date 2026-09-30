@@ -6650,6 +6650,30 @@ abstract class AppLocalizations {
   /// **'Citas hospitalarias'**
   String get myDataHealthHospitalAppointmentsTitle;
 
+  /// Salud — tarjeta del menú que lleva a las citas de atención primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Atención primaria'**
+  String get myDataHealthPrimaryCareNavTitle;
+
+  /// Salud — descripción de la tarjeta de atención primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas de atención primaria'**
+  String get myDataHealthPrimaryCareNavDescription;
+
+  /// Salud — tarjeta del menú que lleva a las citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Atención hospitalaria'**
+  String get myDataHealthHospitalNavTitle;
+
+  /// Salud — descripción de la tarjeta de atención hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas hospitalarias del SESCAM'**
+  String get myDataHealthHospitalNavDescription;
+
   /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.
   ///
   /// In es, this message translates to:
@@ -6749,31 +6773,31 @@ abstract class AppLocalizations {
   /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
   ///
   /// In es, this message translates to:
-  /// **'Para consultar tus citas hospitalarias necesitas un nivel de seguridad más alto. Vuelve a identificarte con certificado digital o DNI electrónico.'**
+  /// **'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.'**
   String get myDataHealthLevelRequiredMessage;
 
   /// Salud — el nivel de autenticación no se ha podido leer del token.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.'**
+  /// **'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.'**
   String get myDataHealthLevelUnverifiedMessage;
 
   /// Salud — acción para volver a identificarse con un método más seguro.
   ///
   /// In es, this message translates to:
-  /// **'Elevar nivel de seguridad'**
+  /// **'Continuar'**
   String get myDataHealthLevelElevateAction;
 
   /// Salud — la elevación se completó pero el nivel sigue siendo insuficiente.
   ///
   /// In es, this message translates to:
-  /// **'El método con el que te has identificado no alcanza el nivel exigido. Vuelve a intentarlo con certificado digital o DNI electrónico.'**
+  /// **'El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.'**
   String get myDataHealthLevelStillInsufficientMessage;
 
   /// Salud — la elevación de nivel falló por un error.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido elevar tu nivel de seguridad. Inténtalo de nuevo.'**
+  /// **'No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.'**
   String get myDataHealthLevelElevationFailedMessage;
 
   /// Botón para cargar la siguiente página de citas pasadas de primaria.

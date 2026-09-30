@@ -4558,6 +4558,22 @@
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Título del bloque de citas hospitalarias."
   },
+  "myDataHealthPrimaryCareNavTitle": "Atención primaria",
+  "@myDataHealthPrimaryCareNavTitle": {
+    "description": "Salud — tarjeta del menú que lleva a las citas de atención primaria."
+  },
+  "myDataHealthPrimaryCareNavDescription": "Citas de atención primaria",
+  "@myDataHealthPrimaryCareNavDescription": {
+    "description": "Salud — descripción de la tarjeta de atención primaria."
+  },
+  "myDataHealthHospitalNavTitle": "Atención hospitalaria",
+  "@myDataHealthHospitalNavTitle": {
+    "description": "Salud — tarjeta del menú que lleva a las citas hospitalarias."
+  },
+  "myDataHealthHospitalNavDescription": "Citas hospitalarias del SESCAM",
+  "@myDataHealthHospitalNavDescription": {
+    "description": "Salud — descripción de la tarjeta de atención hospitalaria."
+  },
   "myDataHealthHospitalLinkTitle": "Mis citas hospitalarias",
   "@myDataHealthHospitalLinkTitle": {
     "description": "Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM."
@@ -4635,23 +4651,23 @@
   "@myDataHealthCipUnavailable": {
     "description": "Salud — texto cuando el CIP no se ha podido obtener."
   },
-  "myDataHealthLevelRequiredMessage": "Para consultar tus citas hospitalarias necesitas un nivel de seguridad más alto. Vuelve a identificarte con certificado digital o DNI electrónico.",
+  "myDataHealthLevelRequiredMessage": "El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.",
   "@myDataHealthLevelRequiredMessage": {
     "description": "Salud — bloqueo por nivel de autenticación insuficiente para datos de salud."
   },
-  "myDataHealthLevelUnverifiedMessage": "No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.",
+  "myDataHealthLevelUnverifiedMessage": "No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.",
   "@myDataHealthLevelUnverifiedMessage": {
     "description": "Salud — el nivel de autenticación no se ha podido leer del token."
   },
-  "myDataHealthLevelElevateAction": "Elevar nivel de seguridad",
+  "myDataHealthLevelElevateAction": "Continuar",
   "@myDataHealthLevelElevateAction": {
     "description": "Salud — acción para volver a identificarse con un método más seguro."
   },
-  "myDataHealthLevelStillInsufficientMessage": "El método con el que te has identificado no alcanza el nivel exigido. Vuelve a intentarlo con certificado digital o DNI electrónico.",
+  "myDataHealthLevelStillInsufficientMessage": "El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.",
   "@myDataHealthLevelStillInsufficientMessage": {
     "description": "Salud — la elevación se completó pero el nivel sigue siendo insuficiente."
   },
-  "myDataHealthLevelElevationFailedMessage": "No hemos podido elevar tu nivel de seguridad. Inténtalo de nuevo.",
+  "myDataHealthLevelElevationFailedMessage": "No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.",
   "@myDataHealthLevelElevationFailedMessage": {
     "description": "Salud — la elevación de nivel falló por un error."
   },

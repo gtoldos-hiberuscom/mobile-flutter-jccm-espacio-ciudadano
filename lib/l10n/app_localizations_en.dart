@@ -3449,6 +3449,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
 
   @override
+  String get myDataHealthPrimaryCareNavTitle => 'Primary care';
+
+  @override
+  String get myDataHealthPrimaryCareNavDescription => 'Primary care appointments';
+
+  @override
+  String get myDataHealthHospitalNavTitle => 'Hospital care';
+
+  @override
+  String get myDataHealthHospitalNavDescription => 'SESCAM hospital appointments';
+
+  @override
   String get myDataHealthHospitalLinkTitle => 'My hospital appointments';
 
   @override
@@ -3501,19 +3513,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthCipUnavailable => 'CIP unavailable';
 
   @override
-  String get myDataHealthLevelRequiredMessage => 'Checking your hospital appointments requires a higher security level. Sign in again using a digital certificate or your electronic ID card.';
+  String get myDataHealthLevelRequiredMessage => 'Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.';
 
   @override
-  String get myDataHealthLevelUnverifiedMessage => 'We could not verify your security level, so we cannot show your hospital appointments. Sign in again or try later.';
+  String get myDataHealthLevelUnverifiedMessage => 'Your access level could not be verified, so your hospital appointments cannot be shown. Press \"Continue\" to restart the session.';
 
   @override
-  String get myDataHealthLevelElevateAction => 'Raise security level';
+  String get myDataHealthLevelElevateAction => 'Continue';
 
   @override
-  String get myDataHealthLevelStillInsufficientMessage => 'The method you signed in with does not reach the required level. Try again using a digital certificate or your electronic ID card.';
+  String get myDataHealthLevelStillInsufficientMessage => 'The identification method used does not reach the required access level. Press \"Continue\" and identify yourself with a digital certificate or your electronic ID card.';
 
   @override
-  String get myDataHealthLevelElevationFailedMessage => 'We could not raise your security level. Please try again.';
+  String get myDataHealthLevelElevationFailedMessage => 'Your access level could not be raised. Please try again.';
 
   @override
   String get myDataHealthLoadMoreAppointments => 'Load more appointments';
