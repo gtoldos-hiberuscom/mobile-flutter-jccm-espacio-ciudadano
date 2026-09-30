@@ -65,6 +65,7 @@ abstract final class Routes {
   static const String gestionRegistrosDetail = '/gestion/registros/detail';
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
+  static const String myDataHealthPrimaryCareAppointments = '/my-data/health/primary-care';
   static const String myDataHealthHospitalAppointments = '/my-data/health/hospital-appointments';
   static const String myDataEmployment = '/my-data/employment';
   static const String myDataEmploymentOffers = '/my-data/employment/offers';
@@ -112,6 +113,7 @@ abstract final class Routes {
     // valida el `returnTo` al volver de Preferencias. Sin estar aquí, aceptar
     // el clausulado desde Salud devolvía a `/home` en vez de a la consulta.
     myDataHealth,
+    myDataHealthPrimaryCareAppointments,
     myDataHealthHospitalAppointments,
     myDataEmployment,
     myDataEmploymentOffers,

@@ -1,6 +1,4 @@
 import 'dart:async' show unawaited;
-import 'dart:ui' show SemanticsRole;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,8 +14,10 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_appointment_date_filter.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_appointment_sections.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_health_cip_field.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -37,6 +37,7 @@ class MyDataHospitalAppointmentsPage extends ConsumerStatefulWidget {
 
 class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalAppointmentsPage> {
   HealthAppointmentFilter _filter = HealthAppointmentFilter.pending;
+  AppListFilters _filters = const AppListFilters();
 
   /// Filtros cuyo provider ya se ha retenido, para no suscribirse dos veces.
   final Set<HealthAppointmentFilter> _retained = <HealthAppointmentFilter>{};
@@ -73,6 +74,17 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
     }
     _retain(filter);
     setState(() => _filter = filter);
+  }
+
+  Future<void> _showFilters() async {
+    final result = await showMyDataAppointmentDateFilter(
+      context: context,
+      sheetTitle: AppLocalizations.of(context).myDataHealthFilterHospitalTitle,
+      initialFilters: _filters,
+    );
+    if (result != null && mounted) {
+      setState(() => _filters = result);
+    }
   }
 
   Future<void> _showInfoSheet() async {
@@ -123,6 +135,9 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
       title: l10n.myDataHealthHospitalAppointmentsTitle,
       onBack: () => context.go(Routes.myDataHealth),
       onInfo: _showInfoSheet,
+      actions: [
+        myDataAppointmentDateFilterAction(context: context, filters: _filters, onPressed: _showFilters),
+      ],
       body: SingleChildScrollView(
         padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
         child: authorizationAsync.when(
@@ -150,7 +165,7 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
                   style: AppTypography.smallRegular.copyWith(color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: AppDimensions.space16),
-                const _HospitalCipField(),
+                const MyDataHealthCipField(),
                 const SizedBox(height: AppDimensions.space16),
                 AppSegmentedControl(
                   segments: [l10n.myDataHealthHospitalPendingTab, l10n.myDataHealthHospitalPastTab],
@@ -159,7 +174,7 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
                   semanticLabel: l10n.myDataHealthHospitalAppointmentsTitle,
                 ),
                 const SizedBox(height: AppDimensions.space16),
-                _HospitalAppointmentsList(filter: _filter, onOpenConsentSettings: _openConsentSettings),
+                _HospitalAppointmentsList(filter: _filter, filters: _filters, onOpenConsentSettings: _openConsentSettings),
               ],
             );
           },
@@ -169,50 +184,12 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
   }
 }
 
-/// Identificador CIP del ciudadano.
-class _HospitalCipField extends ConsumerWidget {
-  const _HospitalCipField();
-
-  @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-
-    // Se usa `when` y no `asData?.value`: con lo segundo un fallo del servicio
-    // se presentaría como «no tienes CIP», que es exactamente el tipo de
-    // mensaje falso que el apartado 2.2 prohíbe.
-    return ref.watch(myDataHealthCipProvider).when(
-      loading: () => Text(
-        l10n.myDataHealthCipValue('…'),
-        style: AppTypography.captionRegular.copyWith(color: AppColors.primary),
-      ),
-      error: (final error, final _) => error is MyDataHealthCipMissing
-          ? AppAlertContextual(
-              message: l10n.agendaHealthCipMissing,
-              size: AppAlertContextualSize.small,
-              announce: true,
-            )
-          : Text(
-              l10n.myDataHealthCipUnavailable,
-              style: AppTypography.captionRegular.copyWith(color: AppColors.primary),
-            ),
-      data: (final cip) => cip == null || cip.isEmpty
-          ? Text(
-              l10n.myDataHealthCipUnavailable,
-              style: AppTypography.captionRegular.copyWith(color: AppColors.primary),
-            )
-          : Text(
-              l10n.myDataHealthCipValue(cip),
-              style: AppTypography.captionRegular.copyWith(color: AppColors.primary),
-            ),
-    );
-  }
-}
-
 /// Listado del filtro activo. Es la única parte de la pantalla que conmuta.
 class _HospitalAppointmentsList extends ConsumerWidget {
-  const _HospitalAppointmentsList({required this.filter, required this.onOpenConsentSettings});
+  const _HospitalAppointmentsList({required this.filter, required this.filters, required this.onOpenConsentSettings});
 
   final HealthAppointmentFilter filter;
+  final AppListFilters filters;
   final VoidCallback onOpenConsentSettings;
 
   @override
@@ -243,19 +220,33 @@ class _HospitalAppointmentsList extends ConsumerWidget {
           scrollable: false,
         ),
       },
-      data: (final appointments) => appointments.isEmpty
-          // Mensaje propio de cada pestaña: el apartado 2.2 pide no dejar la
-          // pantalla vacía sin explicación, y «no tienes pendientes» no dice lo
-          // mismo que «no tienes pasadas».
-          ? MyDataNoData(
-              message: filter == HealthAppointmentFilter.pending ? l10n.myDataHealthHospitalPendingEmpty : l10n.myDataHealthHospitalPastEmpty,
-              actionLabel: l10n.myDataNoDataContact,
-              contactUrl: 'https://sanidad.castillalamancha.es/ciudadanos',
-              scrollable: false,
-            )
-          : _HospitalAppointmentSections(appointments: appointments, l10n: l10n),
+      // Mensaje propio de cada pestaña: el apartado 2.2 pide no dejar la
+      // pantalla vacía sin explicación, y «no tienes pendientes» no dice lo
+      // mismo que «no tienes pasadas».
+      data: (final appointments) => MyDataAppointmentSections(
+        entries: _entries(appointments, filters),
+        emptyMessage: filter == HealthAppointmentFilter.pending ? l10n.myDataHealthHospitalPendingEmpty : l10n.myDataHealthHospitalPastEmpty,
+      ),
     );
   }
+}
+
+List<MyDataAppointmentEntry> _entries(final List<HospitalAppointment> appointments, final AppListFilters filters) {
+  final range = filters.range(myDataAppointmentDateFilterFieldId);
+  return [
+    for (final appointment in appointments)
+      if (appFilterDateInRange(appointment.dateTime, range))
+        (
+          dateTime: appointment.dateTime,
+          // Una tarjeta por cita, sin indexar por fecha en ningún punto del
+          // camino: el apartado 6.3 exige que varias citas del mismo día
+          // —incluso de la misma hora— se vean todas.
+          card: HospitalAppointmentCard(
+            key: ValueKey(appointment.id ?? '${appointment.dateTime}|${appointment.service}|${appointment.provision}|${appointment.room}'),
+            appointment: appointment,
+          ),
+        ),
+  ];
 }
 
 /// Bloqueo por nivel de seguridad, con la acción para elevarlo.
@@ -301,61 +292,6 @@ class _LevelBlockedState extends ConsumerWidget {
                 // fallos; no hay nada que esperar aquí.
                 unawaited(notifier.elevate(minimum: minimum));
               },
-      ),
-    );
-  }
-}
-
-/// Agrupación por año y mes, igual que las citas de primaria y que la Agenda.
-class _HospitalAppointmentSections extends StatelessWidget {
-  const _HospitalAppointmentSections({required this.appointments, required this.l10n});
-
-  final List<HospitalAppointment> appointments;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(final BuildContext context) {
-    final sections = <int, Map<int, List<HospitalAppointment>>>{};
-    for (final appointment in appointments) {
-      final date = appointment.dateTime;
-      sections.putIfAbsent(date.year, () => <int, List<HospitalAppointment>>{}).putIfAbsent(date.month, () => <HospitalAppointment>[]).add(appointment);
-    }
-
-    return Semantics(
-      role: SemanticsRole.list,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (final year in sections.entries) ...[
-            Semantics(
-              header: true,
-              headingLevel: 2,
-              child: Text(year.key.toString(), style: AppTypography.h2.copyWith(color: AppColors.textBase)),
-            ),
-            const SizedBox(height: AppDimensions.space8),
-            for (final month in year.value.entries) ...[
-              Semantics(
-                header: true,
-                headingLevel: 3,
-                child: Text(l10n.commonMonthName(_monthKey(month.key)), style: AppTypography.h3.copyWith(color: AppColors.textBase)),
-              ),
-              const SizedBox(height: AppDimensions.space8),
-              for (final appointment in month.value) ...[
-                Semantics(
-                  role: SemanticsRole.listItem,
-                  // Una tarjeta por cita, sin indexar por fecha en ningún punto
-                  // del camino: el apartado 6.3 exige que varias citas del
-                  // mismo día —incluso de la misma hora— se vean todas.
-                  child: HospitalAppointmentCard(
-                    key: ValueKey(appointment.id ?? '${appointment.dateTime}|${appointment.service}|${appointment.provision}|${appointment.room}'),
-                    appointment: appointment,
-                  ),
-                ),
-                const SizedBox(height: AppDimensions.space12),
-              ],
-            ],
-          ],
-        ],
       ),
     );
   }
@@ -411,7 +347,7 @@ class HospitalAppointmentCard extends StatelessWidget {
     return AppAgendaInfoCard(
       type: AppAgendaInfoCardType.health,
       day: date.day.toString(),
-      weekday: l10n.commonWeekdayName(_weekdayKey(date.weekday)),
+      weekday: l10n.commonWeekdayName(weekdayKey(date.weekday)),
       time: formattedTime,
       title: _present(appointment.service) ? appointment.service : l10n.myDataHealthHospitalAppointmentsTitle,
       channel: _present(appointment.provision) ? appointment.provision : null,
@@ -423,30 +359,3 @@ class HospitalAppointmentCard extends StatelessWidget {
 bool _present(final String? value) => value != null && value.trim().isNotEmpty;
 
 String _two(final int value) => value.toString().padLeft(2, '0');
-
-String _weekdayKey(final int weekday) => switch (weekday) {
-  DateTime.monday => 'monday',
-  DateTime.tuesday => 'tuesday',
-  DateTime.wednesday => 'wednesday',
-  DateTime.thursday => 'thursday',
-  DateTime.friday => 'friday',
-  DateTime.saturday => 'saturday',
-  DateTime.sunday => 'sunday',
-  _ => 'other',
-};
-
-String _monthKey(final int month) => switch (month) {
-  1 => 'january',
-  2 => 'february',
-  3 => 'march',
-  4 => 'april',
-  5 => 'may',
-  6 => 'june',
-  7 => 'july',
-  8 => 'august',
-  9 => 'september',
-  10 => 'october',
-  11 => 'november',
-  12 => 'december',
-  _ => 'other',
-};

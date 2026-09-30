@@ -3450,6 +3450,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Citas hospitalarias';
 
   @override
+  String get myDataHealthPrimaryCareNavTitle => 'Atención primaria';
+
+  @override
+  String get myDataHealthPrimaryCareNavDescription => 'Citas de atención primaria';
+
+  @override
+  String get myDataHealthHospitalNavTitle => 'Atención hospitalaria';
+
+  @override
+  String get myDataHealthHospitalNavDescription => 'Citas hospitalarias del SESCAM';
+
+  @override
   String get myDataHealthHospitalLinkTitle => 'Mis citas hospitalarias';
 
   @override
@@ -3502,19 +3514,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthCipUnavailable => 'CIP no disponible';
 
   @override
-  String get myDataHealthLevelRequiredMessage => 'Para consultar tus citas hospitalarias necesitas un nivel de seguridad más alto. Vuelve a identificarte con certificado digital o DNI electrónico.';
+  String get myDataHealthLevelRequiredMessage => 'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
 
   @override
-  String get myDataHealthLevelUnverifiedMessage => 'No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.';
+  String get myDataHealthLevelUnverifiedMessage => 'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.';
 
   @override
-  String get myDataHealthLevelElevateAction => 'Elevar nivel de seguridad';
+  String get myDataHealthLevelElevateAction => 'Continuar';
 
   @override
-  String get myDataHealthLevelStillInsufficientMessage => 'El método con el que te has identificado no alcanza el nivel exigido. Vuelve a intentarlo con certificado digital o DNI electrónico.';
+  String get myDataHealthLevelStillInsufficientMessage => 'El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.';
 
   @override
-  String get myDataHealthLevelElevationFailedMessage => 'No hemos podido elevar tu nivel de seguridad. Inténtalo de nuevo.';
+  String get myDataHealthLevelElevationFailedMessage => 'No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.';
 
   @override
   String get myDataHealthLoadMoreAppointments => 'Cargar más citas';

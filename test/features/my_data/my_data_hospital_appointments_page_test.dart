@@ -18,9 +18,9 @@ const _sinPasadas = 'No tienes citas hospitalarias pasadas.';
 const _servicioCaido =
     'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
 const _nivelInsuficiente =
-    'Para consultar tus citas hospitalarias necesitas un nivel de seguridad más alto. Vuelve a identificarte con certificado digital o DNI electrónico.';
+    'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
 const _nivelSinVerificar =
-    'No hemos podido comprobar tu nivel de seguridad, así que no podemos mostrar tus citas hospitalarias. Vuelve a identificarte o inténtalo más tarde.';
+    'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.';
 
 void main() {
   testWidgets('abre en pendientes y pinta el CIP y los campos de la cita', (final tester) async {
