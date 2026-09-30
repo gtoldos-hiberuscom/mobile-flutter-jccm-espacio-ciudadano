@@ -92,7 +92,8 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     final lote = ref.watch(gestionAportarDocumentacionProvider(_key));
 
     // Solo se anuncian los fallos que ninguna tarjeta explica por sí sola
-    // —abrir o cerrar la transacción—: el de una subida ya se ve en su propia
+    // —abrir o cerrar la transacción— y, una vez por pasada de la cola, que
+    // algún fichero no llegó: el detalle de cada subida ya se ve en su propia
     // tarjeta. `secuencia` cambia en cada fallo, así que reintentar el cierre
     // y que vuelva a fallar avisa otra vez en vez de callarse porque el error
     // «no ha cambiado».
@@ -168,16 +169,18 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                 leadingIcon: AppIcons.upload,
                 onPressed: _pickFiles,
               ),
-              // Como en la web, no se ofrece registrar sin documentos; y hasta
-              // que todos estén subidos se muestra deshabilitado, porque cada
-              // entrada de `documentos` necesita el hash de su subida.
+              // Como en la web, no se ofrece registrar sin documentos; y
+              // mientras algo sube se muestra deshabilitado, porque cada
+              // entrada de `documentos` necesita el hash de su subida. Con la
+              // cola parada y ficheros en error sí se habilita: reintenta los
+              // fallidos y cierra si llegan todos.
               if (lote.archivos.isNotEmpty)
                 AppButton(
                   label: l10n.gestionAportarDocumentacionRegistrarButton,
                   isExpanded: true,
                   leadingIcon: AppIcons.check,
-                  isLoading: lote.cerrando,
-                  onPressed: lote.puedeRegistrar ? _registrar : null,
+                  isLoading: lote.cerrando || lote.reintentandoParaRegistrar,
+                  onPressed: lote.puedeRegistrar || lote.puedeReintentarYRegistrar ? _registrar : null,
                 ),
             ],
           ),
@@ -324,6 +327,7 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     return switch (error.tipo) {
       AportacionLoteErrorTipo.aperturaTransaccion => l10n.gestionAportarDocumentacionRegistroError,
       AportacionLoteErrorTipo.cierre => l10n.gestionAportarDocumentacionFinalizacionError,
+      AportacionLoteErrorTipo.subidaParcial => l10n.gestionAportarDocumentacionUploadErrorParcial,
     };
   }
 
@@ -331,6 +335,15 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
   /// fichero — se sustituye todo carácter fuera de `[A-Za-z0-9._-]`.
   String _nombreFicheroJustificante(final String numexp) => 'justificante_${numexp.replaceAll(RegExp('[^A-Za-z0-9._-]'), '_')}.pdf';
 }
+
+/// Tope de la barra mientras se envía: el último tramo lo reserva la espera
+/// del hash.
+///
+/// Con el cuerpo ya enviado, el servidor todavía tiene que procesar el adjunto
+/// y devolver su hash —con 20 MB, un buen rato—. Pintar el 100 % entonces daba
+/// la subida por terminada cuando aún podía fallar; el 100 % llega solo con el
+/// hash, al pasar a «Subido», que es cuando el fichero se puede eliminar.
+const double _topeProgresoEnvio = 0.9;
 
 class _AportacionArchivoCard extends StatelessWidget {
   const _AportacionArchivoCard({
@@ -374,7 +387,10 @@ class _AportacionArchivoCard extends StatelessWidget {
         fileName: archivo.nombre,
         fileInfo: _formatFileInfo(archivo.tamanioBytes),
         status: status,
-        progress: archivo.progreso,
+        progress: switch (archivo.progreso) {
+          final progreso? => progreso * _topeProgresoEnvio,
+          null => null,
+        },
         onDelete: onDelete,
         onCancel: onCancel,
         onRemove: onRemove,
@@ -383,15 +399,18 @@ class _AportacionArchivoCard extends StatelessWidget {
     );
   }
 
+  /// Unidades decimales, como iOS en Archivos y como el límite
+  /// `maxTamanioBytesAportacion`: el tamaño de la tarjeta tiene que coincidir
+  /// con el que el ciudadano vio al elegir el fichero.
   String _formatFileInfo(final int bytes) {
-    if (bytes < 1024) {
+    if (bytes < 1000) {
       return '$bytes B';
     }
-    final kb = bytes / 1024;
-    if (kb < 1024) {
+    final kb = bytes / 1000;
+    if (kb < 1000) {
       return '${kb.toStringAsFixed(kb >= 100 ? 0 : 1)} KB';
     }
-    final mb = kb / 1024;
+    final mb = kb / 1000;
     return '${mb.toStringAsFixed(mb >= 100 ? 0 : 1)} MB';
   }
 }

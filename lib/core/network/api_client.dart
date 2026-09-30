@@ -1,4 +1,3 @@
-import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
@@ -38,8 +37,10 @@ Dio buildDioClient({
     // `dart:developer.log`, sin ninguna guarda de modo debug: en `onError` lo
     // hace SIEMPRE, ignorando `printOnSuccess`. Era lo único de esta pila que
     // seguía emitiendo en una build de release, así que ni se registra fuera
-    // de desarrollo.
-    dio.interceptors.add(CurlLoggerDioInterceptor());
+    // de desarrollo. La variante `BodySafe` respeta
+    // `omitBodyFromLogsExtraKey`: sin ella, cada subida de adjuntos volcaba
+    // el fichero entero en base64 y congelaba la pantalla.
+    dio.interceptors.add(BodySafeCurlLoggerDioInterceptor());
   }
 
   return dio;

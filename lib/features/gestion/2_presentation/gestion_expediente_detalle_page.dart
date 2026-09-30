@@ -41,6 +41,10 @@ class GestionExpedienteDetallePage extends ConsumerWidget {
         );
       },
       body: detailAsync.when(
+        // Al reintentar, `refresh` conserva el error mientras recarga y por
+        // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
+        // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
+        skipLoadingOnRefresh: false,
         loading: () => const LoadingStateWidget(),
         error: (final error, final _) => ErrorStateWidget(
           message: l10n.gestionExpedientesDetalleLoadError,

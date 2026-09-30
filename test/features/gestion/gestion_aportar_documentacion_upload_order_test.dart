@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
@@ -45,6 +47,8 @@ void main() {
     final repository = _RecordingDocumentoRepository();
     final container = ProviderContainer(
       overrides: [
+        connectivityRawStreamProvider.overrideWith((final ref) => Stream.value([ConnectivityResult.wifi])),
+        appVueltaDeSegundoPlanoProvider.overrideWithValue(const Stream<void>.empty()),
         citizenEndpointIdsProvider.overrideWithValue((numDocumento: 'PER9998003', idAgente: 'PER9998003')),
         gestionDocumentoRepositoryProvider.overrideWithValue(repository),
         expedienteDetailProvider.overrideWith(

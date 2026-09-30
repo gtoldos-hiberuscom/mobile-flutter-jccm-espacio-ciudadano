@@ -6,6 +6,7 @@ import 'package:espacio_ciudadano_api/espacio_ciudadano_api.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/log_redaction.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
+import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/core/network/transfer_timeout.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/inicio_procedimiento_resultado.dart';
@@ -88,6 +89,9 @@ final class GestionDocumentoRepositoryImpl implements GestionDocumentoRepository
             payloadBytes: encoded.length,
             baseTimeout: _baseTimeout,
           ),
+          // El cuerpo es el fichero en base64: volcarlo al log congela la
+          // pantalla en desarrollo (JCCMEC-185).
+          omitBodyFromLogsExtraKey: true,
         },
         onSendProgress: (final sent, final total) {
           if (total > 0) {

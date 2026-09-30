@@ -139,6 +139,10 @@ class _EntradasTab extends ConsumerWidget {
     return ref
         .watch(entradasProvider)
         .when(
+          // Al reintentar, `refresh` conserva el error mientras recarga y por
+          // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
+          // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
+          skipLoadingOnRefresh: false,
           loading: () => const LoadingStateWidget(),
           // Igual que en notificaciones: la revocación de la cláusula
           // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
@@ -164,6 +168,10 @@ class _SalidasTab extends ConsumerWidget {
     return ref
         .watch(salidasProvider)
         .when(
+          // Al reintentar, `refresh` conserva el error mientras recarga y por
+          // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
+          // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
+          skipLoadingOnRefresh: false,
           loading: () => const LoadingStateWidget(),
           // Igual que en notificaciones: la revocación de la cláusula
           // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
