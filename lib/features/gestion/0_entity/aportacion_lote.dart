@@ -3,9 +3,10 @@ import 'package:meta/meta.dart';
 
 /// Paso de la transacción de aportación que falló.
 ///
-/// Solo se modelan los dos fallos que **ninguna tarjeta explica por sí sola**:
-/// la subida de un fichero concreto ya se anuncia en su propia tarjeta
-/// (`AportacionArchivoEstado.error`), y duplicarla en un aviso sobraría.
+/// Se modelan los fallos que **ninguna tarjeta explica por sí sola**: la
+/// subida de un fichero concreto ya se anuncia en su propia tarjeta
+/// (`AportacionArchivoEstado.error`), así que no hay un aviso por fichero sino
+/// uno solo por pasada de la cola ([subidaParcial]).
 enum AportacionLoteErrorTipo {
   /// `iniciarProcedimiento` (o la lectura previa del expediente) no pudo abrir
   /// la transacción: no hay `idunico` con el que subir nada.
@@ -14,6 +15,11 @@ enum AportacionLoteErrorTipo {
   /// `registrarfichero` no pudo cerrar la transacción. Los ficheros siguen
   /// subidos y con su hash: la transacción no ha muerto, solo el cierre.
   cierre,
+
+  /// La cola terminó con algún fichero en error —típicamente, se perdió la
+  /// red a mitad de subida—. Un único aviso por pasada, no uno por fichero:
+  /// cada tarjeta ya muestra su propio fallo y su "Reintentar".
+  subidaParcial,
 }
 
 /// Fallo del lote listo para que la presentación elija su mensaje curado.
@@ -51,7 +57,7 @@ final class AportacionLoteError {
 /// orquestación que nadie pinta, y publicarlo invitaría a que la UI lo usara.
 @immutable
 final class AportacionLote {
-  const AportacionLote({this.archivos = const [], this.cerrando = false, this.error});
+  const AportacionLote({this.archivos = const [], this.cerrando = false, this.reintentandoParaRegistrar = false, this.error});
 
   final List<AportacionArchivo> archivos;
 
@@ -59,6 +65,11 @@ final class AportacionLote {
   /// lista de documentos construida, así que retirar o añadir algo no se podría
   /// honrar y las acciones por fichero se apagan.
   final bool cerrando;
+
+  /// Se pulsó "Registrar" con ficheros en error: se están volviendo a subir y,
+  /// si todos llegan, la transacción se cierra sin volver a pulsar nada.
+  /// Mientras tanto la lista no se edita, igual que durante [cerrando].
+  final bool reintentandoParaRegistrar;
 
   final AportacionLoteError? error;
 
@@ -70,11 +81,17 @@ final class AportacionLote {
   /// subida y solo un fichero completado lo tiene.
   bool get todosSubidos => archivos.isNotEmpty && archivos.every((final a) => a.estado == AportacionArchivoEstado.completado);
 
-  bool get puedeRegistrar => todosSubidos && !cerrando;
+  bool get puedeRegistrar => todosSubidos && !cerrando && !reintentandoParaRegistrar;
+
+  /// La cola ya terminó —nada subiendo ni pendiente— y algún fichero quedó en
+  /// error: "Registrar" se ofrece igualmente y reintenta los fallidos antes de
+  /// cerrar. Sin esto el botón se quedaba apagado tras perder la red y el
+  /// único camino era ir tarjeta por tarjeta.
+  bool get puedeReintentarYRegistrar => !cerrando && !reintentandoParaRegistrar && archivos.any((final a) => a.estado == AportacionArchivoEstado.error) && archivos.every((final a) => a.estado == AportacionArchivoEstado.completado || a.estado == AportacionArchivoEstado.error);
 
   /// Las acciones por fichero (cancelar, reintentar, eliminar) están vivas
-  /// salvo mientras se cierra la transacción.
-  bool get puedeEditarLista => !cerrando;
+  /// salvo mientras se cierra la transacción o se reintenta para cerrarla.
+  bool get puedeEditarLista => !cerrando && !reintentandoParaRegistrar;
 
   /// [clearError] descarta el fallo pendiente independientemente de [error] —
   /// mismo convenio que `AportacionArchivo.copyWith`, porque pasar `null`
@@ -82,21 +99,23 @@ final class AportacionLote {
   AportacionLote copyWith({
     final List<AportacionArchivo>? archivos,
     final bool? cerrando,
+    final bool? reintentandoParaRegistrar,
     final AportacionLoteError? error,
     final bool clearError = false,
   }) {
     return AportacionLote(
       archivos: archivos ?? this.archivos,
       cerrando: cerrando ?? this.cerrando,
+      reintentandoParaRegistrar: reintentandoParaRegistrar ?? this.reintentandoParaRegistrar,
       error: clearError ? null : (error ?? this.error),
     );
   }
 
   @override
-  bool operator ==(final Object other) => identical(this, other) || other is AportacionLote && runtimeType == other.runtimeType && cerrando == other.cerrando && error == other.error && _archivosIguales(archivos, other.archivos);
+  bool operator ==(final Object other) => identical(this, other) || other is AportacionLote && runtimeType == other.runtimeType && cerrando == other.cerrando && reintentandoParaRegistrar == other.reintentandoParaRegistrar && error == other.error && _archivosIguales(archivos, other.archivos);
 
   @override
-  int get hashCode => Object.hash(Object.hashAll(archivos), cerrando, error);
+  int get hashCode => Object.hash(Object.hashAll(archivos), cerrando, reintentandoParaRegistrar, error);
 }
 
 /// Comparación elemento a elemento: `List.==` en Dart es identidad, y cada

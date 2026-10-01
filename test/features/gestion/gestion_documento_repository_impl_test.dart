@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/core/network/transfer_timeout.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente_aportacion_datos.dart';
@@ -339,6 +340,35 @@ void main() {
         expect(request.sendTimeout, greaterThan(const Duration(minutes: 3)));
         // Si alguien sube el límite de tamaño, el plazo lo sigue solo.
         expect(request.sendTimeout, greaterThan(productionTimeout));
+      });
+
+      test('la subida pide no volcar su cuerpo en los logs de red', () async {
+        // El cuerpo es el fichero en base64: volcarlo congela la pantalla en
+        // desarrollo (JCCMEC-185).
+        Map<String, dynamic>? extra;
+        final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))
+          ..httpClientAdapter = SequenceHttpClientAdapter([
+            const AdapterResponse(statusCode: 200, body: '{"body":"HASH","codigo-respuesta":"200.00"}'),
+          ])
+          ..interceptors.add(
+            InterceptorsWrapper(
+              onRequest: (final options, final handler) {
+                extra = options.extra;
+                handler.next(options);
+              },
+            ),
+          );
+
+        await GestionDocumentoRepositoryImpl(dio: dio).subirDocumentoSinFirma(
+          citizenId: 'sid-1',
+          documentNumber: '03874761C',
+          idUnico: '03874761C_1700000000000',
+          tipoProcedimiento: '020',
+          nombreFichero: 'documento.pdf',
+          bytes: Uint8List(16),
+        );
+
+        expect(extra?[omitBodyFromLogsExtraKey], isTrue);
       });
 
       test('un fichero pequeño no alarga el plazo de forma apreciable', () async {

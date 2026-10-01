@@ -1,5 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_aportar_documentacion_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
@@ -18,7 +20,12 @@ void main() {
     late GestionAportarDocumentacionNotifier notifier;
 
     setUp(() {
-      container = ProviderContainer();
+      container = ProviderContainer(
+        overrides: [
+          connectivityRawStreamProvider.overrideWith((final ref) => Stream.value([ConnectivityResult.wifi])),
+          appVueltaDeSegundoPlanoProvider.overrideWithValue(const Stream<void>.empty()),
+        ],
+      );
       notifier = container.read(_provider.notifier);
     });
 
@@ -49,6 +56,14 @@ void main() {
 
       expect(result, isA<AddArchivosRejectedTooMany>());
       expect(archivos(), hasLength(5));
+    });
+
+    test('el límite de 20 MB es decimal, como muestra iOS', () {
+      // 20.900.000 bytes: iOS lo muestra como «21 MB» y cabía en 20 MiB.
+      final result = notifier.addArchivos([archivo('veintiuno.pdf', bytes: 20900000)]);
+
+      expect(result, isA<AddArchivosRejectedTooLarge>());
+      expect(notifier.addArchivos([archivo('justo.pdf', bytes: 20000000)]), isA<AddArchivosAdded>());
     });
 
     test('rejects a file larger than 20MB', () {

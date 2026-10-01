@@ -56,6 +56,10 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
         child: SafeArea(
           top: false,
           child: expedientesAsync.when(
+            // Al reintentar, `refresh` conserva el error mientras recarga y por
+            // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
+            // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
+            skipLoadingOnRefresh: false,
             loading: () => const LoadingStateWidget(),
             // La retirada de la cláusula obligatoria ya está cerrando la
             // sesión: decir "no se han podido cargar" sería mentir en el

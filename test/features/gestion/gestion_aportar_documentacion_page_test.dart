@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/aportacion_archivo.dart';
@@ -21,6 +23,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_i
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _registrarLabel = 'Registrar documentos aportados';
+const _avisoParcial = 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
 const _tercero = TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R');
 
 /// Clave de la familia: la misma con la que la página consulta el detalle.
@@ -68,9 +71,24 @@ void main() {
     return AportacionArchivo(path: created.path, nombre: nombre, tamanioBytes: 64);
   }
 
-  Future<ProviderContainer> pumpPage(final WidgetTester tester, final _FakeDocumentoRepository repository) async {
+  /// Conectividad del sistema, controlada por el test. Sin override el
+  /// provider real falla por falta de plugin y Riverpod agenda un reintento
+  /// que queda como timer pendiente.
+  late StreamController<List<ConnectivityResult>> conectividad;
+
+  /// Vuelta de segundo plano, controlada por el test.
+  late StreamController<void> vueltaDeSegundoPlano;
+
+  Future<ProviderContainer> pumpPage(final WidgetTester tester, final _FakeDocumentoRepository repository, {final Duration? plazoSinProgreso}) async {
+    conectividad = StreamController<List<ConnectivityResult>>.broadcast();
+    addTearDown(conectividad.close);
+    vueltaDeSegundoPlano = StreamController<void>.broadcast();
+    addTearDown(vueltaDeSegundoPlano.close);
     final container = ProviderContainer(
       overrides: [
+        connectivityRawStreamProvider.overrideWith((final ref) => conectividad.stream),
+        appVueltaDeSegundoPlanoProvider.overrideWithValue(vueltaDeSegundoPlano.stream),
+        if (plazoSinProgreso != null) plazoSinProgresoSubidaProvider.overrideWithValue(plazoSinProgreso),
         citizenEndpointIdsProvider.overrideWithValue((numDocumento: 'PER9998003', idAgente: 'PER9998003')),
         gestionDocumentoRepositoryProvider.overrideWithValue(repository),
         expedienteDetailProvider.overrideWith(
@@ -169,7 +187,7 @@ void main() {
     expect(registrarHabilitado(tester), isTrue);
   });
 
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fichero que falla no corta la cola y bloquea el registro', (final tester) async {
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fichero que falla no corta la cola y avisa una sola vez', (final tester) async {
     final primero = file('primero.pdf');
     final segundo = file('segundo.pdf');
     final tercero = file('tercero.pdf');
@@ -184,9 +202,114 @@ void main() {
     expect(repository.subidas, ['primero.pdf', 'segundo.pdf', 'tercero.pdf']);
     final estados = container.read(_provider).archivos.map((final a) => a.estado).toList();
     expect(estados, [AportacionArchivoEstado.completado, AportacionArchivoEstado.error, AportacionArchivoEstado.completado]);
-    // La tarjeta en rojo es el aviso: no se añade snackbar por fichero.
     expect(find.text('Reintentar'), findsOneWidget);
-    expect(registrarHabilitado(tester), isFalse);
+    // Un único aviso al vaciarse la cola, no uno por fichero (JCCMEC-185).
+    expect(find.text(_avisoParcial), findsOneWidget);
+    // Con la cola parada, "Registrar" se ofrece: reintenta los fallidos.
+    expect(registrarHabilitado(tester), isTrue);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'perder la red a mitad de subida la da por fallida y el reintento la completa', (final tester) async {
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    // La primera subida se cuelga como con el modo avión en iOS: solo termina
+    // si alguien cancela su token.
+    final repository = _FakeDocumentoRepository(colgarPath: primero.path);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero, segundo]);
+    await esperar(tester, () => container.read(_provider).haySubidasEnCurso);
+
+    await tester.runAsync(() async => conectividad.add([ConnectivityResult.none]));
+    await esperar(tester, () => !container.read(_provider).haySubidasEnCurso);
+
+    // Ninguna tarjeta congelada en «enviando»: la que subía falla y la que
+    // esperaba no se intenta sin red.
+    final lote = container.read(_provider);
+    expect(lote.archivos.map((final a) => a.estado), everyElement(AportacionArchivoEstado.error));
+    expect(repository.subidas, ['primero.pdf']);
+    expect(find.text(_avisoParcial), findsOneWidget);
+    expect(registrarHabilitado(tester), isTrue);
+
+    // Vuelve la red y se pulsa "Registrar": reintenta los fallidos y cierra.
+    // Por el notifier y no con un tap: el snackbar tapa la barra inferior.
+    repository.colgarPath = null;
+    await tester.runAsync(() async => conectividad.add([ConnectivityResult.wifi]));
+    await tester.pump();
+    // Sin `await` directo: la transacción se abrió con el reloj falso y sus
+    // continuaciones solo corren con pumps, que es lo que hace `esperar`.
+    Object? resultado;
+    unawaited(container.read(_provider.notifier).registrar().then((final r) => resultado = r));
+    await esperar(tester, () => resultado != null);
+
+    expect(resultado, isNotNull);
+    expect(repository.subidas, ['primero.pdf', 'primero.pdf', 'segundo.pdf']);
+    expect(repository.iniciarCalls, 1);
+    expect(repository.registrarCalls, 1);
+    expect(repository.registrados.map((final d) => d.hash), ['hash-primero.pdf', 'hash-segundo.pdf']);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'volver de segundo plano con una subida en curso la da por fallida', (final tester) async {
+    final primero = file('primero.pdf');
+    // Esperando la respuesta del servidor con una conexión que iOS cortó al
+    // suspender la app: sin nadie que la aborte no termina nunca.
+    final repository = _FakeDocumentoRepository(colgarPath: primero.path);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero]);
+    await esperar(tester, () => container.read(_provider).haySubidasEnCurso);
+
+    await tester.runAsync(() async => vueltaDeSegundoPlano.add(null));
+    await esperar(tester, () => !container.read(_provider).haySubidasEnCurso);
+
+    expect(container.read(_provider).archivos.single.estado, AportacionArchivoEstado.error);
+    expect(find.text('Reintentar'), findsOneWidget);
+    expect(find.text(_avisoParcial), findsOneWidget);
+    expect(registrarHabilitado(tester), isTrue);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'con el cuerpo enviado la barra espera al 90 % y el hash la completa', (final tester) async {
+    final primero = file('primero.pdf');
+    final repository = _FakeDocumentoRepository(colgarPath: primero.path, progresoAlColgar: 1);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero]);
+    await esperar(tester, () => container.read(_provider).archivos.single.progreso == 1);
+
+    // Cuerpo enviado pero sin hash: la barra no se da por terminada.
+    expect(tester.widget<AppFileUpload>(find.byType(AppFileUpload)).progress, closeTo(0.9, 1e-9));
+    expect(tester.widget<AppFileUpload>(find.byType(AppFileUpload)).status, AppFileUploadStatus.uploading);
+
+    // El fake solo se destraba abortando; al reintentarlo sí llega el hash y
+    // la tarjeta pasa a «Subido»: barra completa y ya se puede eliminar.
+    await tester.runAsync(() async => vueltaDeSegundoPlano.add(null));
+    await esperar(tester, () => !container.read(_provider).haySubidasEnCurso);
+    repository.colgarPath = null;
+    container.read(_provider.notifier).reintentarArchivo(primero.path);
+    await esperar(tester, () => container.read(_provider).todosSubidos);
+
+    expect(tester.widget<AppFileUpload>(find.byType(AppFileUpload)).status, AppFileUploadStatus.complete);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'una subida sin progreso se aborta y deja reintentar', (final tester) async {
+    final primero = file('primero.pdf');
+    // Red perdida sin evento del sistema (cobertura débil): nadie avisa, solo
+    // deja de avanzar.
+    final repository = _FakeDocumentoRepository(colgarPath: primero.path);
+    final container = await pumpPage(tester, repository, plazoSinProgreso: const Duration(milliseconds: 50));
+
+    container.read(_provider.notifier).addArchivos([primero]);
+    await esperar(tester, () => container.read(_provider).archivos.single.estado == AportacionArchivoEstado.error);
+
+    expect(container.read(_provider).archivos.single.estado, AportacionArchivoEstado.error);
+    expect(find.text(_avisoParcial), findsOneWidget);
+
+    repository.colgarPath = null;
+    container.read(_provider.notifier).reintentarArchivo(primero.path);
+    await esperar(tester, () => container.read(_provider).todosSubidos);
+
+    expect(container.read(_provider).todosSubidos, isTrue);
+    expect(repository.subidas, ['primero.pdf', 'primero.pdf']);
   });
 
   testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'Reintentar vuelve a subir solo ese fichero', (final tester) async {
@@ -297,7 +420,7 @@ void main() {
     expect(repository.iniciarCalls, 1);
   });
 
-  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fallo al abrir la transacción avisa y deja los ficheros pendientes', (final tester) async {
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fallo al abrir la transacción avisa y deja los ficheros para reintentar', (final tester) async {
     final repository = _FakeDocumentoRepository(iniciarFalla: true);
     final container = await pumpPage(tester, repository);
 
@@ -306,7 +429,11 @@ void main() {
 
     // Ninguna tarjeta explica este fallo por sí sola, así que sí lleva aviso.
     expect(find.text('No hemos podido registrar la documentación. Inténtalo de nuevo.'), findsOneWidget);
-    expect(container.read(_provider).archivos.single.estado, AportacionArchivoEstado.noEnviado);
+    // En error y no «Seleccionado»: esa tarjeta no ofrece "Reintentar" y el
+    // lote se quedaba sin salida (JCCMEC-185).
+    expect(container.read(_provider).archivos.single.estado, AportacionArchivoEstado.error);
+    expect(find.text('Reintentar'), findsOneWidget);
+    expect(registrarHabilitado(tester), isTrue);
     expect(repository.subidas, isEmpty);
 
     repository.iniciarFalla = false;
@@ -386,7 +513,7 @@ void main() {
 }
 
 final class _FakeDocumentoRepository implements GestionDocumentoRepository {
-  _FakeDocumentoRepository({this.cancelPath, this.failPath, this.registrarFalla = false, this.iniciarFalla = false, this.onUpload});
+  _FakeDocumentoRepository({this.cancelPath, this.failPath, this.colgarPath, this.progresoAlColgar = 0.1, this.registrarFalla = false, this.iniciarFalla = false, this.onUpload});
 
   /// Fichero cuya subida cancela el ciudadano con la X mientras está en curso.
   final String? cancelPath;
@@ -394,6 +521,14 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
   /// Fichero cuya subida falla por un error de red. Mutable para poder
   /// reintentarlo con éxito en el mismo test.
   String? failPath;
+
+  /// Fichero cuya subida no termina nunca salvo que se cancele su token: la
+  /// red caída sin que el socket se rompa. Mutable para reintentar con éxito.
+  String? colgarPath;
+
+  /// Progreso de envío que se notifica antes de colgarse: `1` reproduce el
+  /// cuerpo ya enviado esperando el hash.
+  final double progresoAlColgar;
 
   /// `registrarfichero` falla, que es como se llega al reintento del cierre.
   bool registrarFalla;
@@ -461,6 +596,14 @@ final class _FakeDocumentoRepository implements GestionDocumentoRepository {
     final path = '$idUnico/$nombreFichero';
     subidas.add(nombreFichero);
     await onUpload?.call(nombreFichero);
+    if (colgarPath != null && colgarPath!.endsWith(nombreFichero)) {
+      onProgress?.call(progresoAlColgar);
+      await cancelToken!.whenCancel;
+      throw DioException(
+        requestOptions: RequestOptions(path: path),
+        type: DioExceptionType.cancel,
+      );
+    }
     if (failPath != null && failPath!.endsWith(nombreFichero)) {
       throw DioException(
         requestOptions: RequestOptions(path: path),
