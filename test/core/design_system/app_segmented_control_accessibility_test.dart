@@ -96,7 +96,7 @@ void main() {
     }
   });
 
-  testWidgets('se desplaza y no trunca opciones al 200 por ciento', (final tester) async {
+  testWidgets('al 200 por ciento apila las opciones sin desplazamiento ni cortes', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(320, 568);
     addTearDown(tester.view.reset);
@@ -113,9 +113,18 @@ void main() {
       ),
     );
 
-    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    // WCAG 2.5.1 / 1.4.4: todas las opciones a la vista, sin deslizar.
+    expect(find.byType(SingleChildScrollView), findsNothing);
+    double? previousBottom;
     for (final label in labels) {
       expect(tester.widget<Text>(find.text(label)).maxLines, isNull);
+      final rect = tester.getRect(find.text(label));
+      expect(rect.left, greaterThanOrEqualTo(0));
+      expect(rect.right, lessThanOrEqualTo(320));
+      if (previousBottom != null) {
+        expect(rect.top, greaterThan(previousBottom));
+      }
+      previousBottom = rect.bottom;
     }
     expect(tester.takeException(), isNull);
   });

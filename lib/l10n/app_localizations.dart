@@ -4226,6 +4226,12 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar tus datos de contacto.'**
   String get notificationContactErrorLoading;
 
+  /// Aviso mostrado cuando el servicio de contacto devuelve 404 porque el ciudadano no está dado de alta.
+  ///
+  /// In es, this message translates to:
+  /// **'No estás dado de alta en el servicio de notificaciones. Completa tus datos para darte de alta.'**
+  String get notificationContactNotRegistered;
+
   /// Notifications contact — error de validación del teléfono móvil.
   ///
   /// In es, this message translates to:
@@ -5581,6 +5587,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Seleccionar mes y año, actual {monthYear}'**
   String a11ySelectCalendarMonthYear(String monthYear);
+
+  /// Encabezado accesible de un grupo de citas: mes y año en un único nodo.
+  ///
+  /// In es, this message translates to:
+  /// **'{month} de {year}'**
+  String a11yMonthYear(String month, String year);
 
   /// No description provided for @a11yCalendarHasEvent.
   ///
@@ -7238,6 +7250,12 @@ abstract class AppLocalizations {
   /// **'Introduce el número de documento de la persona interesada.'**
   String get gestionAportacionDocNumberRequiredError;
 
+  /// Error al intentar aportar desde el flujo de terceros a un expediente del usuario autenticado.
+  ///
+  /// In es, this message translates to:
+  /// **'Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.'**
+  String get gestionAportacionOwnExpedienteError;
+
   /// Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente.
   ///
   /// In es, this message translates to:
@@ -7922,18 +7940,6 @@ abstract class AppLocalizations {
   /// **'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.'**
   String get digitalCardsAuthorizationCheckErrorMessage;
 
-  /// No description provided for @digitalCardsInfoSheetContactHint.
-  ///
-  /// In es, this message translates to:
-  /// **'Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.'**
-  String get digitalCardsInfoSheetContactHint;
-
-  /// No description provided for @digitalCardsInfoSheetContactButton.
-  ///
-  /// In es, this message translates to:
-  /// **'Consultar el listado de contactos'**
-  String get digitalCardsInfoSheetContactButton;
-
   /// Carnets digitales — título del bottom sheet informativo.
   ///
   /// In es, this message translates to:
@@ -7963,6 +7969,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{format} guardado correctamente.'**
   String digitalCardsDownloadSuccess(Object format);
+
+  /// Carnets digitales — aviso tras añadir correctamente un carnet a Apple Wallet en iOS.
+  ///
+  /// In es, this message translates to:
+  /// **'Carnet descargado y añadido a Wallet.'**
+  String get digitalCardsPkPassAddedToWallet;
 
   /// Carnets digitales — error al descargar el archivo del carnet.
   ///
@@ -8599,6 +8611,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Autorizo el uso y gestión de mis datos'**
   String get supportConsentDataUseLabel;
+
+  /// Formulario de soporte — rótulo bajo el icono de la casilla anti-robot.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación'**
+  String get supportCaptchaBadge;
+
+  /// Formulario de soporte — estado accesible de la casilla anti-robot sin marcar.
+  ///
+  /// In es, this message translates to:
+  /// **'pendiente de verificar, pulsa para verificar'**
+  String get supportCaptchaPendingSemantics;
+
+  /// Formulario de soporte — estado accesible de la casilla anti-robot mientras comprueba.
+  ///
+  /// In es, this message translates to:
+  /// **'verificando'**
+  String get supportCaptchaCheckingSemantics;
+
+  /// Formulario de soporte — estado accesible de la casilla anti-robot ya marcada.
+  ///
+  /// In es, this message translates to:
+  /// **'verificado'**
+  String get supportCaptchaVerifiedSemantics;
 
   /// Formulario de soporte — texto que precede al enlace de información de privacidad.
   ///

@@ -2167,6 +2167,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationContactErrorLoading => 'We couldn\'t load your contact details.';
 
   @override
+  String get notificationContactNotRegistered => 'You are not registered for the notification service. Enter your details to register.';
+
+  @override
   String get notificationContactErrorPhoneInvalid => 'Enter a valid mobile phone number.';
 
   @override
@@ -2904,6 +2907,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String a11ySelectCalendarMonthYear(String monthYear) {
     return 'Select month and year, current $monthYear';
+  }
+
+  @override
+  String a11yMonthYear(String month, String year) {
+    return '$month $year';
   }
 
   @override
@@ -3743,6 +3751,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionDocNumberRequiredError => 'Enter the interested person\'s document number.';
 
   @override
+  String get gestionAportacionOwnExpedienteError => 'Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.';
+
+  @override
   String get gestionAportacionCamposExpedienteError => 'Fill in either the case registration number or the case identifier code (only one of the two).';
 
   @override
@@ -4162,12 +4173,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsAuthorizationCheckErrorMessage => 'We could not verify the authorization required to display your digital cards.';
 
   @override
-  String get digitalCardsInfoSheetContactHint => 'If any information on the card is incorrect or out of date, contact the issuing organization to request a correction.';
-
-  @override
-  String get digitalCardsInfoSheetContactButton => 'View the contact list';
-
-  @override
   String get digitalCardsInfoSheetTitle => 'Learn more about My digital cards';
 
   @override
@@ -4185,6 +4190,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String digitalCardsDownloadSuccess(Object format) {
     return '$format saved successfully.';
   }
+
+  @override
+  String get digitalCardsPkPassAddedToWallet => 'Card downloaded and added to Wallet.';
 
   @override
   String digitalCardsDownloadError(Object format) {
@@ -4515,6 +4523,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get supportConsentDataUseLabel => 'I authorize the use and management of my data';
+
+  @override
+  String get supportCaptchaBadge => 'Verification';
+
+  @override
+  String get supportCaptchaPendingSemantics => 'not verified, tap to verify';
+
+  @override
+  String get supportCaptchaCheckingSemantics => 'verifying';
+
+  @override
+  String get supportCaptchaVerifiedSemantics => 'verified';
 
   @override
   String get supportPrivacyInfoDescription => 'The data protection information applicable to this form is published at';

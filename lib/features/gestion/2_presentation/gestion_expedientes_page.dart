@@ -84,14 +84,23 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
                   icon: AppIcons.search,
                 );
               }
-              return ListView.separated(
+              // Todas las tarjetas se construyen: una lista perezosa no crea
+              // las que están fuera de la vista y el teclado no llega a ellas
+              // sin deslizar antes (WCAG 2.1.1). El recorrido del foco ya las
+              // trae a la vista.
+              return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
                   horizontal: appPageHorizontalPadding(context),
                   vertical: AppDimensions.space24,
                 ),
-                itemCount: filteredExpedientes.length,
-                separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-                itemBuilder: (final context, final index) => _GestionExpedienteCard(expediente: filteredExpedientes[index]),
+                child: Column(
+                  children: [
+                    for (final (index, expediente) in filteredExpedientes.indexed) ...[
+                      if (index > 0) const SizedBox(height: AppDimensions.space16),
+                      _GestionExpedienteCard(expediente: expediente),
+                    ],
+                  ],
+                ),
               );
             },
           ),
@@ -152,7 +161,9 @@ class _GestionExpedienteCard extends StatelessWidget {
 
     return AppCard(
       title: _sentenceCase(expediente.titulo),
-      categoryLabel: expediente.consejeria.toUpperCase(),
+      // Sin oficina no se pinta la etiqueta: vacía dejaba un hueco y un
+      // «.» suelto al inicio del nombre accesible (WCAG 2.4.3).
+      categoryLabel: (expediente.oficinaTramitadora?.trim().isEmpty ?? true) ? null : expediente.oficinaTramitadora!.toUpperCase(),
       showArrow: true,
       refNumber: expediente.numexp,
       refNumberLabel: l10n.gestionExpedientesNumExpedienteLabel,

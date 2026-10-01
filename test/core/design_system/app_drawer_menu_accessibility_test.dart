@@ -1,8 +1,11 @@
 import 'dart:ui' show SemanticsAction, Tristate;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_drawer_menu.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
@@ -154,5 +157,102 @@ void main() {
     expect(tester.widget<Text>(find.text('Mis preferencias personales')).maxLines, isNull);
     expect(tester.widget<Text>(find.text('Ir a la Sede Electrónica')).maxLines, isNull);
     expect(tester.takeException(), isNull);
+  });
+
+  AppDrawerMenu fullMenu() => AppDrawerMenu(
+    userName: 'María López',
+    nif: '12345678Z',
+    primaryItems: [
+      AppDrawerMenuItem(label: 'Preferencias', icon: Icons.settings, onTap: () {}),
+      AppDrawerMenuItem(label: 'Mis carnets digitales', icon: Icons.badge, onTap: () {}),
+    ],
+    secondaryLinks: [
+      AppDrawerLinkItem(label: 'Ayuda y contacto', icon: Icons.help_outline, onTap: () {}),
+      AppDrawerLinkItem(label: 'Accesibilidad', icon: Icons.accessibility_new, onTap: () {}),
+      AppDrawerLinkItem(label: 'Aviso legal', onTap: () {}),
+      AppDrawerLinkItem(label: 'Protección de datos', onTap: () {}),
+    ],
+    onLogout: () {},
+    onClose: () {},
+    actionButtonLabel: 'Ir a Sede Electrónica',
+    onActionButton: () {},
+  );
+
+  Finder ring() => find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter);
+
+  testWidgets('WCAG 2.4.3: el tabulador recorre cada control una sola vez y sin paradas vacías', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 1000);
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(buildApp(fullMenu()));
+    await tester.pumpAndSettle();
+
+    const expected = [
+      'Cerrar menú',
+      'Preferencias',
+      'Mis carnets digitales',
+      'Cerrar sesión',
+      'Ayuda y contacto',
+      'Accesibilidad',
+      'Aviso legal',
+      'Protección de datos',
+      'Ir a Sede Electrónica',
+    ];
+    final visited = <String>[];
+    // «Cerrar» recibe el foco inicial; desde ahí se avanza con el tabulador.
+    for (var i = 0; i < expected.length; i++) {
+      if (i > 0) {
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+        await tester.pumpAndSettle();
+      }
+      final focused = primaryFocus!.context!;
+      final label = expected.firstWhere(
+        (final text) => find.descendant(of: find.byWidget(focused.widget), matching: find.textContaining(text)).evaluate().isNotEmpty,
+        orElse: () => '<sin nombre>',
+      );
+      visited.add(label);
+      // WCAG 2.4.7 / 1.4.11: cada parada muestra el anillo de foco.
+      expect(
+        find.ancestor(of: find.byWidget(focused.widget), matching: ring()),
+        findsOneWidget,
+        reason: label,
+      );
+    }
+    expect(visited, expected);
+  });
+
+  testWidgets('WCAG 1.4.3: el texto blanco no pierde contraste al recibir el foco', (final tester) async {
+    await tester.pumpWidget(buildApp(fullMenu()));
+    await tester.pumpAndSettle();
+
+    for (final inkWell in tester.widgetList<InkWell>(find.byType(InkWell))) {
+      expect(inkWell.focusColor, Colors.transparent);
+      expect(inkWell.hoverColor, Colors.transparent);
+    }
+    // Blanco sobre el fondo del menú: 4,5:1 como mínimo.
+    final white = AppColors.textWhite.computeLuminance();
+    final background = AppColors.secondary.computeLuminance();
+    expect((white + 0.05) / (background + 0.05), greaterThanOrEqualTo(4.5));
+  });
+
+  testWidgets('la sede electrónica se anuncia como enlace externo', (final tester) async {
+    await tester.pumpWidget(buildApp(fullMenu()));
+    await tester.pumpAndSettle();
+
+    final data = find.semantics.byLabel('Ir a Sede Electrónica').evaluate().single.getSemanticsData();
+    expect(data.flagsCollection.isLink, isTrue);
+    expect(data.flagsCollection.isButton, isFalse);
+    expect(data.hint, 'Abre en navegador externo');
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
+  });
+
+  testWidgets('con pantalla táctil el foco inicial en «Cerrar» no pinta el anillo', (final tester) async {
+    FocusManager.instance.highlightStrategy = FocusHighlightStrategy.alwaysTouch;
+    addTearDown(() => FocusManager.instance.highlightStrategy = FocusHighlightStrategy.alwaysTraditional);
+    await tester.pumpWidget(buildApp(fullMenu()));
+    await tester.pumpAndSettle();
+
+    expect(primaryFocus?.context, isNotNull);
+    expect(ring(), findsNothing);
   });
 }

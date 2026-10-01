@@ -82,7 +82,7 @@ void main() {
     }
   });
 
-  testWidgets('usa desplazamiento horizontal y no trunca al 200 por ciento', (
+  testWidgets('al 200 por ciento muestra todos los destinos sin desplazamiento y conserva el nombre', (
     final tester,
   ) async {
     tester.view.devicePixelRatio = 1;
@@ -101,11 +101,32 @@ void main() {
       ),
     );
 
-    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    // WCAG 2.5.1: ningún destino exige desplazar la barra.
+    expect(find.byType(SingleChildScrollView), findsNothing);
     for (final item in scaledItems) {
-      expect(tester.widget<Text>(find.text(item.label)).maxLines, isNull);
+      final tab = find.semantics.byLabel(item.label);
+      expect(tab, findsOneWidget);
+      // Como el visor de contenido grande de iOS: el nombre se muestra
+      // ampliado con una pulsación larga.
+      expect(find.byWidgetPredicate((final w) => w is Tooltip && w.message == item.label), findsOneWidget);
     }
+    final rects = [for (final item in scaledItems) tester.getRect(find.byWidgetPredicate((final w) => w is Tooltip && w.message == item.label))];
+    for (final rect in rects) {
+      expect(rect.left, greaterThanOrEqualTo(0));
+      expect(rect.right, lessThanOrEqualTo(320));
+      expect(rect.height, greaterThanOrEqualTo(48));
+    }
+    await tester.longPress(find.byWidgetPredicate((final w) => w is Tooltip && w.message == 'Recomendados'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Recomendados'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('sin ampliación conserva las etiquetas visibles', (final tester) async {
+    await tester.pumpWidget(buildApp(AppBottomTabBar(items: items, currentIndex: 0, onTap: (_) {})));
+    expect(find.text('Inicio'), findsOneWidget);
+    expect(find.text('Gestión'), findsOneWidget);
+    expect(find.byType(Tooltip), findsNothing);
   });
 
   testWidgets('rechaza una selección fuera de rango', (final tester) async {

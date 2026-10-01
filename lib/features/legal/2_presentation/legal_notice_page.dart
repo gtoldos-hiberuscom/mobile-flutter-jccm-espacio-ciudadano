@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,24 +20,18 @@ class _LegalNoticePageState extends ConsumerState<LegalNoticePage> {
   late final ScrollController _scrollController;
   final _searchController = TextEditingController();
   bool _isSearching = false;
-  late final TapGestureRecognizer _decreeRecognizer;
-  late final TapGestureRecognizer _siteRecognizer;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _searchController.addListener(() => setState(() {}));
-    _decreeRecognizer = TapGestureRecognizer()..onTap = () => _openExternalLink('boe_rd_1112_2018');
-    _siteRecognizer = TapGestureRecognizer()..onTap = () => _openExternalLink('espacio_ciudadano');
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
     _searchController.dispose();
-    _decreeRecognizer.dispose();
-    _siteRecognizer.dispose();
     super.dispose();
   }
 
@@ -105,8 +98,8 @@ class _LegalNoticePageState extends ConsumerState<LegalNoticePage> {
               ),
               const SizedBox(height: AppDimensions.space32),
               _LegalNoticeBody(
-                decreeRecognizer: _decreeRecognizer,
-                siteRecognizer: _siteRecognizer,
+                onDecreeTap: () => _openExternalLink('boe_rd_1112_2018'),
+                onSiteTap: () => _openExternalLink('espacio_ciudadano'),
                 query: _searchController.text.trim(),
               ),
             ],
@@ -140,27 +133,35 @@ class _LegalNoticePageState extends ConsumerState<LegalNoticePage> {
 
 class _LegalNoticeBody extends StatelessWidget {
   const _LegalNoticeBody({
-    required this.decreeRecognizer,
-    required this.siteRecognizer,
+    required this.onDecreeTap,
+    required this.onSiteTap,
     required this.query,
   });
 
-  final TapGestureRecognizer decreeRecognizer;
-  final TapGestureRecognizer siteRecognizer;
+  final VoidCallback onDecreeTap;
+  final VoidCallback onSiteTap;
   final String query;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final style = AppTypography.leadingMedium.copyWith(color: AppColors.textPrimary);
+    final linkStyle = style.copyWith(
+      decoration: TextDecoration.underline,
+      decorationColor: AppColors.textPrimary,
+    );
     return Text.rich(
       TextSpan(
-        style: AppTypography.leadingMedium.copyWith(color: AppColors.textPrimary),
+        style: style,
         children: [
           ..._legalTextSpans(l10n.accessibilityIntroCommitment, query),
-          ..._legalTextSpans('${l10n.accessibilityIntroDecreeLink} ⇲', query, recognizer: decreeRecognizer),
+          // Enlaces enfocables con teclado, con anillo de foco y rol de enlace
+          // (WCAG 2.1.1, 2.4.7 y 4.1.2). Sin el sombreado de foco de Material,
+          // que bajaba el contraste del texto a 3,4:1 (1.4.3).
+          AppInlineLink.span(text: l10n.accessibilityIntroDecreeLink, style: linkStyle, onTap: onDecreeTap),
           ..._legalTextSpans(l10n.accessibilityIntroDecreeSuffix, query),
           ..._legalTextSpans(l10n.accessibilityDeclarationScope, query),
-          ..._legalTextSpans('https://espaciociudadano.jccm.es/⇲', query, recognizer: siteRecognizer),
+          AppInlineLink.span(text: 'https://espaciociudadano.jccm.es/', style: linkStyle, onTap: onSiteTap),
           const TextSpan(text: '.'),
         ],
       ),
@@ -168,33 +169,31 @@ class _LegalNoticeBody extends StatelessWidget {
   }
 }
 
-// Text spans let links wrap naturally within the paragraph and remain tappable.
+/// Fragmentos de texto con las coincidencias de la búsqueda resaltadas.
 List<TextSpan> _legalTextSpans(
   final String text,
-  final String query, {
-  final TapGestureRecognizer? recognizer,
-}) {
+  final String query,
+) {
   if (query.isEmpty) {
-    return [TextSpan(text: text, recognizer: recognizer)];
+    return [TextSpan(text: text)];
   }
   final matches = RegExp(RegExp.escape(query), caseSensitive: false).allMatches(text);
   final spans = <TextSpan>[];
   var start = 0;
   for (final match in matches) {
     if (match.start > start) {
-      spans.add(TextSpan(text: text.substring(start, match.start), recognizer: recognizer));
+      spans.add(TextSpan(text: text.substring(start, match.start)));
     }
     spans.add(
       TextSpan(
         text: text.substring(match.start, match.end),
-        recognizer: recognizer,
         style: TextStyle(backgroundColor: AppColors.secondary.withValues(alpha: 0.3)),
       ),
     );
     start = match.end;
   }
   if (start < text.length) {
-    spans.add(TextSpan(text: text.substring(start), recognizer: recognizer));
+    spans.add(TextSpan(text: text.substring(start)));
   }
   return spans;
 }

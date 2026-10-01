@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -183,7 +182,7 @@ class _AccessibilityAppBar extends StatelessWidget implements PreferredSizeWidge
 
 // ── Contenido ────────────────────────────────────────────────────────────────
 
-class _AccessibilityBody extends StatefulWidget {
+class _AccessibilityBody extends StatelessWidget {
   const _AccessibilityBody({
     required this.onRoyalDecreeTap,
     required this.onSiteTap,
@@ -199,39 +198,9 @@ class _AccessibilityBody extends StatefulWidget {
   final String highlightQuery;
 
   @override
-  State<_AccessibilityBody> createState() => _AccessibilityBodyState();
-}
-
-class _AccessibilityBodyState extends State<_AccessibilityBody> {
-  /// Inline links flow with the surrounding text, so they use gesture
-  /// recognizers rather than `WidgetSpan`s, which would not wrap.
-  late final TapGestureRecognizer _royalDecree;
-  late final TapGestureRecognizer _site;
-  late final TapGestureRecognizer _contactForm;
-  late final TapGestureRecognizer _offices;
-
-  @override
-  void initState() {
-    super.initState();
-    _royalDecree = TapGestureRecognizer()..onTap = () => widget.onRoyalDecreeTap();
-    _site = TapGestureRecognizer()..onTap = () => widget.onSiteTap();
-    _contactForm = TapGestureRecognizer()..onTap = () => widget.onContactFormTap();
-    _offices = TapGestureRecognizer()..onTap = () => widget.onOfficesTap();
-  }
-
-  @override
-  void dispose() {
-    _royalDecree.dispose();
-    _site.dispose();
-    _contactForm.dispose();
-    _offices.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final q = widget.highlightQuery;
+    final q = highlightQuery;
     final style = AppTypography.leadingMedium.copyWith(color: AppColors.textPrimary);
     final linkStyle = style.copyWith(
       decoration: TextDecoration.underline,
@@ -247,17 +216,19 @@ class _AccessibilityBodyState extends State<_AccessibilityBody> {
               style: style,
               children: [
                 TextSpan(text: l10n.accessibilityIntroCommitment),
-                TextSpan(
-                  text: '${l10n.accessibilityIntroDecreeLink}⇲',
+                // Enlaces enfocables con teclado (WCAG 2.1.1): un `TextSpan`
+                // con reconocedor sólo respondía al dedo.
+                AppInlineLink.span(
+                  text: l10n.accessibilityIntroDecreeLink,
                   style: linkStyle,
-                  recognizer: _royalDecree,
+                  onTap: onRoyalDecreeTap,
                 ),
                 TextSpan(text: l10n.accessibilityIntroDecreeSuffix),
                 TextSpan(text: l10n.accessibilityDeclarationScope),
-                TextSpan(
-                  text: 'https://espaciociudadano.jccm.es/⇲',
+                AppInlineLink.span(
+                  text: 'https://espaciociudadano.jccm.es/',
                   style: linkStyle,
-                  recognizer: _site,
+                  onTap: onSiteTap,
                 ),
                 const TextSpan(text: '.'),
               ],
@@ -323,8 +294,8 @@ class _AccessibilityBodyState extends State<_AccessibilityBody> {
               _A11yLinkedBulletList(
                 style: style,
                 linkStyle: linkStyle,
-                contactForm: _contactForm,
-                offices: _offices,
+                onContactFormTap: onContactFormTap,
+                onOfficesTap: onOfficesTap,
               ),
               _HighlightedText(
                 text: l10n.accessibilityContactProcessing,
@@ -494,14 +465,14 @@ class _A11yLinkedBulletList extends StatelessWidget {
   const _A11yLinkedBulletList({
     required this.style,
     required this.linkStyle,
-    required this.contactForm,
-    required this.offices,
+    required this.onContactFormTap,
+    required this.onOfficesTap,
   });
 
   final TextStyle style;
   final TextStyle linkStyle;
-  final GestureRecognizer contactForm;
-  final GestureRecognizer offices;
+  final VoidCallback onContactFormTap;
+  final VoidCallback onOfficesTap;
 
   @override
   Widget build(final BuildContext context) {
@@ -514,10 +485,10 @@ class _A11yLinkedBulletList extends StatelessWidget {
         children: [
           _linkedBullet(
             children: [
-              TextSpan(
-                text: '${l10n.accessibilityContactFormLink}⇲',
+              AppInlineLink.span(
+                text: l10n.accessibilityContactFormLink,
                 style: linkStyle,
-                recognizer: contactForm,
+                onTap: onContactFormTap,
               ),
               const TextSpan(text: ','),
             ],
@@ -525,10 +496,10 @@ class _A11yLinkedBulletList extends StatelessWidget {
           _linkedBullet(
             children: [
               TextSpan(text: l10n.accessibilityOfficesPrefix),
-              TextSpan(
-                text: '${l10n.accessibilityOfficesLink}⇲',
+              AppInlineLink.span(
+                text: l10n.accessibilityOfficesLink,
                 style: linkStyle,
-                recognizer: offices,
+                onTap: onOfficesTap,
               ),
               TextSpan(text: l10n.accessibilityOfficesSuffix),
             ],

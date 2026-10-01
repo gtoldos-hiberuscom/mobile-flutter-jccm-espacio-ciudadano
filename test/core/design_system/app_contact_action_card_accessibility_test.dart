@@ -3,6 +3,7 @@ import 'dart:ui' show SemanticsAction, Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_contact_content.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
@@ -133,5 +134,23 @@ void main() {
 
     expect(tester.getSize(find.byType(InkWell)).height, greaterThanOrEqualTo(48));
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('muestra el anillo de foco común al recibir el foco del teclado', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        AppContactActionCard(
+          title: 'Guías de ayuda',
+          subtitle: 'Ir al portal web JCCM',
+          onTap: () {},
+        ),
+      ),
+    );
+    expect(find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter), findsNothing);
+
+    Focus.of(tester.element(find.text('Guías de ayuda'))).requestFocus();
+    await tester.pumpAndSettle();
+
+    expect(find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter), findsOneWidget);
   });
 }

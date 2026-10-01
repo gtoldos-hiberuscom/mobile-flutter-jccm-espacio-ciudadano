@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/network/authorization_envelope.dart'
 import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_registros_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
 
 final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository {
   GestionRegistrosRepositoryImpl({required final Dio dio}) : _api = PublicacionApi(withGeneratedApiCompat(dio), standardSerializers);
@@ -68,7 +69,7 @@ final class GestionRegistrosRepositoryImpl implements GestionRegistrosRepository
     return DTSELECTBYNIFV2REQ(
       (final builder) => builder
         ..numerodocumento = documentNumber
-        ..tipodocumento = 'NIF',
+        ..tipodocumento = documentTypeOf(documentNumber),
     );
   }
 

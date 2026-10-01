@@ -3,6 +3,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class AppExternalLinkSection extends StatelessWidget {
@@ -66,36 +67,38 @@ class AppExternalLinkItem extends StatelessWidget {
       child: ExcludeSemantics(
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
-              child: Padding(
-                padding: const EdgeInsets.only(left: AppDimensions.space16),
-                child: Row(
-                  children: [
-                    const _AppDoubleBullet(),
-                    const SizedBox(width: AppDimensions.space8),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                        child: Text(
-                          label,
-                          style: AppTypography.bodyLink.copyWith(
-                            color: AppColors.primary,
+          child: AppFocusRing(
+            child: InkWell(
+              onTap: onTap,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: AppDimensions.space16),
+                  child: Row(
+                    children: [
+                      const _AppDoubleBullet(),
+                      const SizedBox(width: AppDimensions.space8),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                          child: Text(
+                            label,
+                            style: AppTypography.bodyLink.copyWith(
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: AppDimensions.space8),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                      child: AppIcon(
-                        AppIcons.openInNew,
-                        color: AppColors.textBase,
+                      const SizedBox(width: AppDimensions.space8),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                        child: AppIcon(
+                          AppIcons.openInNew,
+                          color: AppColors.textBase,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

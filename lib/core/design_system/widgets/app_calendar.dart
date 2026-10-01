@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show OrdinalSortKey;
 import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
@@ -6,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// A month calendar widget following the JCCM design system (Figma node
@@ -29,7 +31,12 @@ class AppCalendar extends StatefulWidget {
     this.firstDayOfWeek = DateTime.monday,
     this.compact = false,
     this.semanticsLabel,
+    this.headingLevel,
   }) : assert(
+         headingLevel == null || (headingLevel >= 1 && headingLevel <= 6),
+         'headingLevel must be between 1 and 6',
+       ),
+       assert(
          firstDayOfWeek >= DateTime.monday && firstDayOfWeek <= DateTime.sunday,
          'firstDayOfWeek must be between Monday and Sunday',
        ),
@@ -59,6 +66,11 @@ class AppCalendar extends StatefulWidget {
   /// Uses reduced typography and spacing. Agenda keeps the regular variant.
   final bool compact;
   final String? semanticsLabel;
+
+  /// Nivel de encabezado del nombre del calendario («Calendario»). Cuando la
+  /// pantalla lo trata como una sección propia, las tecnologías de asistencia
+  /// pueden llegar a él con la navegación por encabezados (WCAG 1.3.1).
+  final int? headingLevel;
 
   @override
   State<AppCalendar> createState() => _AppCalendarState();
@@ -167,12 +179,55 @@ class _AppCalendarState extends State<AppCalendar> {
     final l10n = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toLanguageTag();
     final monthLabel = _capitalize('${DateFormat.MMMM(locale).format(_currentMonth)} ${_currentMonth.year}');
+    final name = widget.semanticsLabel ?? l10n.a11yCalendar;
+    final headingLevel = widget.headingLevel;
+    if (headingLevel == null) {
+      return Semantics(
+        container: true,
+        explicitChildNodes: true,
+        label: name,
+        child: _buildCalendarContent(l10n, monthLabel),
+      );
+    }
+    // Encabezado propio, anunciado antes que el contenido del calendario.
     return Semantics(
       container: true,
       explicitChildNodes: true,
-      label: widget.semanticsLabel ?? l10n.a11yCalendar,
-      child: _buildCalendarContent(l10n, monthLabel),
+      child: Stack(
+        children: [
+          _buildCalendarContent(l10n, monthLabel),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Semantics(
+              header: true,
+              headingLevel: headingLevel,
+              sortKey: const OrdinalSortKey(-1),
+              label: name,
+              child: const SizedBox(width: 1, height: 1),
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  /// Escalado del texto de la rejilla. Se limita al 200 %, el mínimo que
+  /// exige WCAG 1.4.4: más allá, siete columnas no caben en un móvil.
+  TextScaler get _gridTextScaler => MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 2);
+
+  bool get _hasLargeText => MediaQuery.textScalerOf(context).scale(1) > 1.5;
+
+  /// Alto de la cifra del día con el texto ampliado.
+  double get _dayTextHeight {
+    final painter = TextPainter(
+      text: TextSpan(text: '30', style: _dayTextStyle),
+      textDirection: Directionality.of(context),
+      textScaler: _gridTextScaler,
+    )..layout();
+    final height = painter.height.ceilToDouble();
+    painter.dispose();
+    return height;
   }
 
   Widget _buildCalendarContent(final AppLocalizations l10n, final String monthLabel) {
@@ -268,15 +323,17 @@ class _AppCalendarState extends State<AppCalendar> {
       child: ExcludeSemantics(
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            child: SizedBox.square(
-              dimension: AppDimensions.minTouchTarget,
-              child: Icon(
-                icon,
-                color: AppColors.textWhite,
-                size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
+          child: AppFocusRing(
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              child: SizedBox.square(
+                dimension: AppDimensions.minTouchTarget,
+                child: Icon(
+                  icon,
+                  color: AppColors.textWhite,
+                  size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
+                ),
               ),
             ),
           ),
@@ -294,46 +351,48 @@ class _AppCalendarState extends State<AppCalendar> {
       child: ExcludeSemantics(
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: _showMonthYearPicker,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            child: Container(
-              constraints: BoxConstraints(
-                minHeight: widget.compact ? AppDimensions.space40 : AppDimensions.space48,
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space8,
-                vertical: AppDimensions.space4,
-              ),
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(12, 13, 13, 0.16),
-                border: Border.all(color: AppColors.borderBlueMutedBase),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                boxShadow: AppShadows.low,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.calendar_today_outlined,
-                    size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
-                    color: AppColors.textWhite,
-                  ),
-                  const SizedBox(width: AppDimensions.space8),
-                  Expanded(
-                    child: Text(
-                      monthLabel,
-                      style: (widget.compact ? AppTypography.bodyBold : AppTypography.h2).copyWith(color: AppColors.textWhite),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+          child: AppFocusRing(
+            child: InkWell(
+              onTap: _showMonthYearPicker,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: widget.compact ? AppDimensions.space40 : AppDimensions.space48,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space8,
+                  vertical: AppDimensions.space4,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(12, 13, 13, 0.16),
+                  border: Border.all(color: AppColors.borderBlueMutedBase),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  boxShadow: AppShadows.low,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
+                      color: AppColors.textWhite,
                     ),
-                  ),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
-                    color: AppColors.textWhite,
-                  ),
-                ],
+                    const SizedBox(width: AppDimensions.space8),
+                    // Sin recorte: con el texto ampliado el mes y el año pasan
+                    // a varias líneas en lugar de quedarse en «Septi…» (1.4.4).
+                    Expanded(
+                      child: Text(
+                        monthLabel,
+                        style: (widget.compact ? AppTypography.bodyBold : AppTypography.h2).copyWith(color: AppColors.textWhite),
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      size: widget.compact ? AppDimensions.iconSmall : AppDimensions.iconMedium,
+                      color: AppColors.textWhite,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -345,10 +404,13 @@ class _AppCalendarState extends State<AppCalendar> {
   // ── Weekday labels ────────────────────────────────────────────────────────
   Widget _buildWeekdayRow() {
     final locale = Localizations.localeOf(context).toLanguageTag();
+    // Con el texto ampliado se usa la inicial («L», «M», «X»…): la
+    // abreviatura de tres letras no cabe en una columna y se solapaba.
+    final format = _hasLargeText ? DateFormat.EEEEE(locale) : DateFormat.E(locale);
     final labels = [
       for (var offset = 0; offset < 7; offset++)
         _capitalize(
-          DateFormat.E(locale).format(
+          format.format(
             DateTime(2024, 1, 1 + ((widget.firstDayOfWeek - DateTime.monday + offset) % 7)),
           ),
         ),
@@ -359,15 +421,18 @@ class _AppCalendarState extends State<AppCalendar> {
         children: labels
             .map(
               (final label) => Expanded(
-                child: SizedBox(
-                  height: _isTabletGrid
-                      ? AppDimensions.space40
-                      : widget.compact
-                      ? AppDimensions.space24
-                      : AppDimensions.space32,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: _isTabletGrid
+                        ? AppDimensions.space40
+                        : widget.compact
+                        ? AppDimensions.space24
+                        : AppDimensions.space32,
+                  ),
                   child: Center(
                     child: Text(
                       label,
+                      textScaler: _gridTextScaler,
                       style: _dayTextStyle.copyWith(
                         color: AppColors.textWhite,
                       ),
@@ -432,14 +497,18 @@ class _AppCalendarState extends State<AppCalendar> {
     final canSelect = isCurrentMonth && widget.onDateSelected != null;
     final materialL10n = MaterialLocalizations.of(context);
     final l10n = AppLocalizations.of(context);
-    final hasLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.5;
-    final dayBoxSize = _isTabletGrid
+    final baseBoxSize = _isTabletGrid
         ? 52.0
-        : hasLargeText
+        : _hasLargeText
         ? AppDimensions.space40
         : widget.compact
         ? AppDimensions.space32
         : 36.0;
+    // La casilla crece con la cifra para que las filas no se solapen con el
+    // texto ampliado (WCAG 1.4.4).
+    final textBox = _dayTextHeight + AppDimensions.space8;
+    final dayBoxSize = textBox > baseBoxSize ? textBox : baseBoxSize;
+    final targetHeight = dayBoxSize + AppDimensions.space8 > _dayTargetSize ? dayBoxSize + AppDimensions.space8 : _dayTargetSize;
     final semanticParts = [
       materialL10n.formatFullDate(date),
       if (today) materialL10n.currentDateLabel,
@@ -481,60 +550,64 @@ class _AppCalendarState extends State<AppCalendar> {
       child: ExcludeSemantics(
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: canSelect ? () => widget.onDateSelected?.call(date) : null,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            child: LayoutBuilder(
-              builder: (final context, final constraints) {
-                final targetWidth = constraints.maxWidth < _dayTargetSize ? constraints.maxWidth : _dayTargetSize;
-                final boxWidth = dayBoxSize < targetWidth ? dayBoxSize : targetWidth;
-                return SizedBox(
-                  width: targetWidth,
-                  height: _dayTargetSize,
-                  child: Center(
-                    child: Container(
-                      width: boxWidth,
-                      height: dayBoxSize,
-                      decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                        border: border,
-                        boxShadow: highlighted ? AppShadows.low : null,
-                      ),
-                      alignment: Alignment.center,
-                      child: Stack(
+          child: AppFocusRing(
+            enabled: canSelect,
+            child: InkWell(
+              onTap: canSelect ? () => widget.onDateSelected?.call(date) : null,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              child: LayoutBuilder(
+                builder: (final context, final constraints) {
+                  final targetWidth = constraints.maxWidth < _dayTargetSize ? constraints.maxWidth : _dayTargetSize;
+                  final boxWidth = dayBoxSize < targetWidth ? dayBoxSize : targetWidth;
+                  return SizedBox(
+                    width: targetWidth,
+                    height: targetHeight,
+                    child: Center(
+                      child: Container(
+                        width: boxWidth,
+                        height: dayBoxSize,
+                        decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                          border: border,
+                          boxShadow: highlighted ? AppShadows.low : null,
+                        ),
                         alignment: Alignment.center,
-                        clipBehavior: Clip.none,
-                        fit: StackFit.expand,
-                        children: [
-                          Center(
-                            child: Text(
-                              '${date.day}',
-                              style: _dayTextStyle.copyWith(
-                                color: textColor,
-                                fontWeight: fontWeight,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.none,
+                          fit: StackFit.expand,
+                          children: [
+                            Center(
+                              child: Text(
+                                '${date.day}',
+                                textScaler: _gridTextScaler,
+                                style: _dayTextStyle.copyWith(
+                                  color: textColor,
+                                  fontWeight: fontWeight,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          if (hasEvent)
-                            Positioned(
-                              bottom: _isTabletGrid ? 3 : 1,
-                              child: Container(
-                                width: _isTabletGrid ? AppDimensions.space8 : 6,
-                                height: _isTabletGrid ? AppDimensions.space8 : 6,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.primaryDark,
-                                  shape: BoxShape.circle,
+                            if (hasEvent)
+                              Positioned(
+                                bottom: _isTabletGrid ? 3 : 1,
+                                child: Container(
+                                  width: _isTabletGrid ? AppDimensions.space8 : 6,
+                                  height: _isTabletGrid ? AppDimensions.space8 : 6,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primaryDark,
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),

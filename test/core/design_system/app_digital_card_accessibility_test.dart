@@ -2,7 +2,9 @@ import 'dart:ui' show SemanticsAction, Tristate;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_digital_card.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
@@ -143,6 +145,36 @@ void main() {
     );
 
     expect(paintedDots, findsNWidgets(24));
+  });
+
+  testWidgets('WCAG 1.4.3: rótulos y «Descargar» alcanzan 4,5:1 sobre el carnet', (final tester) async {
+    double contrast(final Color a, final Color b) {
+      final la = a.computeLuminance();
+      final lb = b.computeLuminance();
+      final (hi, lo) = la > lb ? (la, lb) : (lb, la);
+      return (hi + 0.05) / (lo + 0.05);
+    }
+
+    await tester.pumpWidget(buildApp(card(onDownload: () {})));
+
+    expect(contrast(cardCaptionColor, AppColors.primaryLight), greaterThanOrEqualTo(4.5));
+    expect(contrast(downloadColor, AppColors.primaryLight), greaterThanOrEqualTo(4.5));
+    expect(tester.widget<Text>(find.text('Título / Carnet')).style!.color, cardCaptionColor);
+    final button = tester.widget<TextButton>(find.byType(TextButton));
+    expect(button.style!.foregroundColor!.resolve(const {}), downloadColor);
+    // El foco no pinta un velo que baje el contraste del texto.
+    expect(button.style!.overlayColor!.resolve(const {WidgetState.focused}), Colors.transparent);
+  });
+
+  testWidgets('WCAG 1.4.11 / 2.4.7: «Descargar» muestra el anillo de foco', (final tester) async {
+    await tester.pumpWidget(buildApp(card(onDownload: () {})));
+    final ring = find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter);
+    expect(ring, findsNothing);
+
+    Focus.of(tester.element(find.text('Descargar'))).requestFocus();
+    await tester.pumpAndSettle();
+
+    expect(find.ancestor(of: find.text('Descargar'), matching: ring), findsOneWidget);
   });
 }
 

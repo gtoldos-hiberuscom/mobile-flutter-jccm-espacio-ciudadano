@@ -1,8 +1,10 @@
-import 'dart:ui' show SemanticsRole, Tristate;
+import 'dart:ui' show SemanticsAction, SemanticsRole, Tristate;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_notificaciones_page.dart';
@@ -147,6 +149,96 @@ void main() {
     ]);
 
     expect(find.text(_procedimientoLabel), findsNothing);
+  });
+
+  testWidgets('WCAG 2.1.1 / 4.1.2: cada notificación es un botón activable por el lector', (final tester) async {
+    await _pumpList(tester, [_notification(id: 1, concepto: 'Resolución de ayuda', estado: NotificacionEstado.pendiente)]);
+
+    final data = find.semantics.byLabel(RegExp('Resolución de ayuda')).evaluate().single.getSemanticsData();
+    expect(data.flagsCollection.isButton, isTrue);
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
+  });
+
+  testWidgets('WCAG 2.1.1 / 2.4.7: el tabulador recorre una lista larga y marca cada notificación', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(375, 667);
+    addTearDown(tester.view.reset);
+    final notifications = [
+      for (var i = 1; i <= 12; i++) _notification(id: i, concepto: 'Notificación número $i', estado: NotificacionEstado.pendiente),
+    ];
+    await _pumpList(tester, notifications);
+
+    final ring = find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter);
+    final reached = <String>{};
+    for (var i = 0; i < 60 && reached.length < notifications.length; i++) {
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pumpAndSettle();
+      final focused = primaryFocus?.context;
+      if (focused == null) {
+        continue;
+      }
+      for (final notification in notifications) {
+        final title = find.text(notification.concepto);
+        if (find.descendant(of: find.byWidget(focused.widget), matching: title).evaluate().isNotEmpty) {
+          reached.add(notification.concepto);
+          final rect = tester.getRect(title);
+          expect(rect.top, greaterThanOrEqualTo(0));
+          expect(rect.bottom, lessThanOrEqualTo(667));
+          expect(find.ancestor(of: title, matching: ring), findsOneWidget);
+        }
+      }
+    }
+    expect(reached, notifications.map((final n) => n.concepto).toSet());
+  });
+
+  testWidgets('WCAG 4.1.2: en móvil la posición de cada filtro se cuenta sobre los cuatro', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(375, 667);
+    addTearDown(tester.view.reset);
+    await _pumpList(tester, const []);
+    final l10n = AppLocalizations.of(tester.element(find.byType(GestionNotificacionesPage)));
+
+    expect(find.semantics.byLabel(l10n.gestionNotificacionesTabTodo).evaluate().single.getSemanticsData().value, 'Pestaña 1 de 4');
+
+    await tester.tap(find.byTooltip(l10n.gestionNotificacionesTabExpiradas));
+    await tester.pumpAndSettle();
+    expect(find.semantics.byLabel(l10n.gestionNotificacionesTabExpiradas).evaluate().single.getSemanticsData().value, 'Pestaña 4 de 4');
+  });
+
+  testWidgets('WCAG 2.5.1: al 200 por ciento los cuatro filtros se ven sin deslizar ni flechas', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(375, 667);
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [gestionNotificacionesProvider.overrideWith((final ref, final estado) async => const <Notificacion>[])],
+        child: MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (final context, final child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(2)),
+            child: child!,
+          ),
+          home: const GestionNotificacionesPage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final l10n = AppLocalizations.of(tester.element(find.byType(GestionNotificacionesPage)));
+
+    for (final label in [
+      l10n.gestionNotificacionesTabTodo,
+      l10n.gestionNotificacionesTabPendientes,
+      l10n.gestionNotificacionesTabAceptadas,
+      l10n.gestionNotificacionesTabExpiradas,
+    ]) {
+      final rect = tester.getRect(find.text(label));
+      expect(rect.left, greaterThanOrEqualTo(0));
+      expect(rect.right, lessThanOrEqualTo(375));
+    }
+    expect(find.byTooltip(l10n.gestionNotificacionesTabExpiradas), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }
 

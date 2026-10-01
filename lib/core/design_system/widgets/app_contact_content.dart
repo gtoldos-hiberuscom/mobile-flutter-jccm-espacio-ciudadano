@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class AppSectionHeading extends StatelessWidget {
@@ -169,41 +170,46 @@ class AppContactActionCard extends StatelessWidget {
         child: Material(
           color: AppColors.backgroundWhite,
           borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-          child: InkWell(
-            onTap: onTap,
+          // Foco de teclado visible y con contraste (WCAG 1.4.11 / 2.4.7): el
+          // InkWell sólo aporta un sombreado que no llega a 3:1.
+          child: AppFocusRing(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: AppColors.backgroundWhite,
-                border: Border.all(color: AppColors.borderBlueMutedLight),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                boxShadow: AppShadows.low,
-              ),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
-                child: Padding(
-                  padding: const EdgeInsets.all(AppDimensions.space16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
-                            ),
-                            const SizedBox(height: AppDimensions.space4),
-                            Text(
-                              subtitle,
-                              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-                            ),
-                          ],
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundWhite,
+                  border: Border.all(color: AppColors.borderBlueMutedLight),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  boxShadow: AppShadows.low,
+                ),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimensions.space16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
+                              ),
+                              const SizedBox(height: AppDimensions.space4),
+                              Text(
+                                subtitle,
+                                style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: AppDimensions.space16),
-                      AppIcon(icon, color: AppColors.textBase, size: iconSize),
-                    ],
+                        const SizedBox(width: AppDimensions.space16),
+                        AppIcon(icon, color: AppColors.textBase, size: iconSize),
+                      ],
+                    ),
                   ),
                 ),
               ),

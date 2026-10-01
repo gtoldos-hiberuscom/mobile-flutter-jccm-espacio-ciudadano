@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_list.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 enum AppNavBarType { inicio, main, level2, detail, grey }
@@ -61,13 +62,29 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   /// Called from the help action shown to unauthenticated users on Inicio.
   final VoidCallback? onHelpTap;
 
+  /// Altura de la barra sin ampliación de texto.
+  double get _baseHeight => switch (type) {
+    AppNavBarType.inicio || AppNavBarType.detail => AppDimensions.appBarHeightInicio,
+    AppNavBarType.main => AppDimensions.appBarHeight + 2,
+    _ => AppDimensions.appBarHeight,
+  };
+
+  /// Altura de la barra con el texto ampliado (WCAG 1.4.4): el título puede
+  /// ocupar hasta dos líneas y la barra crece con él en lugar de recortarlo.
+  /// Sin título la altura no cambia.
+  double _toolbarHeightFor(final TextScaler textScaler) {
+    if (title == null || type == AppNavBarType.inicio) {
+      return _baseHeight;
+    }
+    return _baseHeight * textScaler.scale(1).clamp(1.0, 2.0);
+  }
+
+  /// `Scaffold` recorta la barra a esta altura. El getter no recibe
+  /// `BuildContext`, así que la ampliación se lee del `PlatformDispatcher`;
+  /// `build` usa `MediaQuery`, que en la app se deriva del mismo valor.
   @override
   Size get preferredSize => Size.fromHeight(
-    switch (type) {
-      AppNavBarType.inicio || AppNavBarType.detail => AppDimensions.appBarHeightInicio,
-      AppNavBarType.main => AppDimensions.appBarHeight + 2,
-      _ => AppDimensions.appBarHeight,
-    },
+    _toolbarHeightFor(TextScaler.linear(WidgetsBinding.instance.platformDispatcher.textScaleFactor)) + (type == AppNavBarType.level2 ? 1 : 0),
   );
 
   Color get _backgroundColor =>
@@ -95,7 +112,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     if (leading != null) {
-      return leading;
+      return _withFocusRing(leading!);
     }
 
     final button = switch (type) {
@@ -110,22 +127,31 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       _ => null,
     };
-    return button == null ? null : Semantics(sortKey: const OrdinalSortKey(1), child: button);
+    return button == null ? null : Semantics(sortKey: const OrdinalSortKey(1), child: _withFocusRing(button));
   }
 
+  /// Los iconos de la barra son circulares de 48 dp: el anillo de foco
+  /// (WCAG 1.4.11 / 2.4.7) sigue esa forma.
+  static Widget _withFocusRing(final Widget child) => AppFocusRing(
+    borderRadius: const BorderRadius.all(Radius.circular(AppDimensions.minTouchTarget / 2)),
+    child: child,
+  );
+
   List<Widget>? _effectiveActions(final AppLocalizations l10n) {
-    final items = <Widget>[...?actions];
+    final items = <Widget>[...?actions?.map(_withFocusRing)];
 
     if (isLoggedIn && showNotifications && type != AppNavBarType.inicio) {
       items.add(
-        IconButton(
-          constraints: const BoxConstraints.tightFor(
-            width: AppDimensions.minTouchTarget,
-            height: AppDimensions.minTouchTarget,
+        _withFocusRing(
+          IconButton(
+            constraints: const BoxConstraints.tightFor(
+              width: AppDimensions.minTouchTarget,
+              height: AppDimensions.minTouchTarget,
+            ),
+            icon: const AppSvgIcon(AppIconAssets.notifications, color: AppColors.textPrimary),
+            onPressed: onNotificationsTap,
+            tooltip: l10n.userMenuNotifications,
           ),
-          icon: const AppSvgIcon(AppIconAssets.notifications, color: AppColors.textPrimary),
-          onPressed: onNotificationsTap,
-          tooltip: l10n.userMenuNotifications,
         ),
       );
     }
@@ -134,12 +160,14 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       items.add(
         Padding(
           padding: const EdgeInsets.only(right: AppDimensions.space8),
-          child: IconButton(
-            onPressed: onAvatarTap,
-            tooltip: l10n.userMenuProfile,
-            icon: AppAvatar(
-              initials: profileInitials,
-              size: AppAvatarSize.small,
+          child: _withFocusRing(
+            IconButton(
+              onPressed: onAvatarTap,
+              tooltip: l10n.userMenuProfile,
+              icon: AppAvatar(
+                initials: profileInitials,
+                size: AppAvatarSize.small,
+              ),
             ),
           ),
         ),
@@ -184,11 +212,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: _backgroundColor,
       foregroundColor: _foregroundColor,
       automaticallyImplyLeading: false,
-      toolbarHeight: switch (type) {
-        AppNavBarType.detail => AppDimensions.appBarHeightInicio,
-        AppNavBarType.main => AppDimensions.appBarHeight + 2,
-        _ => AppDimensions.appBarHeight,
-      },
+      toolbarHeight: _toolbarHeightFor(MediaQuery.textScalerOf(context)),
       titleSpacing: showLeading ? null : AppDimensions.space16,
       leading: _leadingWidget(l10n),
       title: title == null
@@ -197,9 +221,16 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
               header: true,
               headingLevel: 1,
               sortKey: const OrdinalSortKey(0),
+              // `AppBar` limita la ampliación del título a 1,34; se recupera
+              // la del sistema para que llegue al 200 % (WCAG 1.4.4).
+              // `AppBar` impone además una sola línea: se permite el salto
+              // hasta las dos líneas previstas.
               child: Text(
                 title!,
                 maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                textScaler: MediaQuery.textScalerOf(context),
                 style: AppTypography.h3.copyWith(color: _foregroundColor),
               ),
             ),
@@ -493,6 +524,33 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
         final totalWidth = widths.fold<double>(0, (final sum, final width) => sum + width);
         final extraWidth = constraints.hasBoundedWidth && constraints.maxWidth > totalWidth ? (constraints.maxWidth - totalWidth) / tabs.length : 0.0;
 
+        // Altura de las pestañas con el texto ampliado (WCAG 1.4.4): `Tab`
+        // fija 46/72 dp y recortaría una etiqueta a dos líneas, así que se
+        // mide el texto al ancho que tendrá cada pestaña y todas comparten
+        // la altura mayor.
+        final hasIcons = tabs.any((final tab) => tab.icon != null);
+        final baseHeight = hasIcons ? 72.0 : kTextTabBarHeight;
+        var tabHeight = baseHeight;
+        for (final entry in tabs.asMap().entries) {
+          final labelWidth = scrollable
+              ? widths[entry.key] + extraWidth - 32
+              : constraints.hasBoundedWidth
+              ? constraints.maxWidth / tabs.length - 32
+              : double.infinity;
+          for (final style in [labelStyle, unselectedLabelStyle]) {
+            final painter = TextPainter(
+              text: TextSpan(text: entry.value.label, style: style),
+              textDirection: Directionality.of(context),
+              textScaler: MediaQuery.textScalerOf(context),
+            )..layout(maxWidth: labelWidth < 0 ? 0 : labelWidth);
+            final needed = painter.height.ceilToDouble() + (hasIcons ? 30 : 0) + AppDimensions.space16;
+            if (needed > tabHeight) {
+              tabHeight = needed;
+            }
+            painter.dispose();
+          }
+        }
+
         return TabBar(
           controller: controller,
           isScrollable: scrollable,
@@ -506,14 +564,20 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
           tabs: tabs.asMap().entries.map((final entry) {
             final tab = entry.value;
             final text = Text(tab.label, textAlign: TextAlign.center);
-            final child = Tab(
-              icon: tab.icon != null ? ExcludeSemantics(child: Icon(tab.icon, size: 20)) : null,
-              child: tab.semanticsLabel == null
-                  ? text
-                  : Semantics(
-                      label: tab.semanticsLabel,
-                      child: ExcludeSemantics(child: text),
-                    ),
+            // El InkWell de TabBar envuelve a la pestaña, así que el anillo
+            // de foco (WCAG 1.4.11 / 2.4.7) observa ese nodo ancestro.
+            final child = AppFocusRing(
+              trackEnclosingFocus: true,
+              child: Tab(
+                height: tabHeight,
+                icon: tab.icon != null ? ExcludeSemantics(child: Icon(tab.icon, size: 20)) : null,
+                child: tab.semanticsLabel == null
+                    ? text
+                    : Semantics(
+                        label: tab.semanticsLabel,
+                        child: ExcludeSemantics(child: text),
+                      ),
+              ),
             );
             return isScrollable ? SizedBox(width: widths[entry.key] + extraWidth, child: child) : child;
           }).toList(),
@@ -708,74 +772,78 @@ class AppNavCard extends StatelessWidget {
       enabled: isEnabled,
       onTap: isEnabled ? onTap : null,
       child: ExcludeSemantics(
-        child: InkWell(
-          onTap: isEnabled ? onTap : null,
+        child: AppFocusRing(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-          child: Container(
-            padding: const EdgeInsets.only(
-              left: AppDimensions.space8,
-              right: AppDimensions.space16,
-              top: AppDimensions.space8,
-              bottom: AppDimensions.space8,
-            ),
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              border: Border.all(
-                color: isEnabled ? const Color(0xFFA0B2C5) : Colors.black.withValues(alpha: 0.08),
+          enabled: isEnabled,
+          child: InkWell(
+            onTap: isEnabled ? onTap : null,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+            child: Container(
+              padding: const EdgeInsets.only(
+                left: AppDimensions.space8,
+                right: AppDimensions.space16,
+                top: AppDimensions.space8,
+                bottom: AppDimensions.space8,
               ),
-              boxShadow: isEnabled ? AppShadows.medium : const <BoxShadow>[],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 64,
-                  height: 64,
-                  padding: const EdgeInsets.all(AppDimensions.space4),
-                  decoration: BoxDecoration(
-                    color: leadingBg,
-                    borderRadius: BorderRadius.circular(AppDimensions.space4),
-                  ),
-                  child: Center(
-                    child: iconAsset == null
-                        ? Icon(
-                            icon,
-                            size: AppDimensions.iconMedium,
-                            color: iconColor,
-                          )
-                        : AppSvgIcon(
-                            iconAsset!,
-                            color: iconColor,
-                          ),
-                  ),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                border: Border.all(
+                  color: isEnabled ? const Color(0xFFA0B2C5) : Colors.black.withValues(alpha: 0.08),
                 ),
-                const SizedBox(width: AppDimensions.space16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        label,
-                        style: AppTypography.leadingMedium.copyWith(color: titleColor),
-                      ),
-                      if (description != null) ...[
-                        const SizedBox(height: AppDimensions.space4),
+                boxShadow: isEnabled ? AppShadows.medium : const <BoxShadow>[],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    padding: const EdgeInsets.all(AppDimensions.space4),
+                    decoration: BoxDecoration(
+                      color: leadingBg,
+                      borderRadius: BorderRadius.circular(AppDimensions.space4),
+                    ),
+                    child: Center(
+                      child: iconAsset == null
+                          ? Icon(
+                              icon,
+                              size: AppDimensions.iconMedium,
+                              color: iconColor,
+                            )
+                          : AppSvgIcon(
+                              iconAsset!,
+                              color: iconColor,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(width: AppDimensions.space16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                         Text(
-                          description!,
-                          style: AppTypography.smallRegular.copyWith(color: descColor),
+                          label,
+                          style: AppTypography.leadingMedium.copyWith(color: titleColor),
                         ),
+                        if (description != null) ...[
+                          const SizedBox(height: AppDimensions.space4),
+                          Text(
+                            description!,
+                            style: AppTypography.smallRegular.copyWith(color: descColor),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                AppSvgIcon(
-                  AppIconAssets.chevronRight,
-                  size: AppDimensions.iconLarge,
-                  color: iconColor,
-                ),
-              ],
+                  const SizedBox(width: AppDimensions.space8),
+                  AppSvgIcon(
+                    AppIconAssets.chevronRight,
+                    size: AppDimensions.iconLarge,
+                    color: iconColor,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -808,49 +876,53 @@ class AppSimpleNavCard extends StatelessWidget {
       enabled: onTap != null,
       onTap: onTap,
       child: ExcludeSemantics(
-        child: InkWell(
-          onTap: onTap,
+        child: AppFocusRing(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(
-              AppDimensions.space24,
-              AppDimensions.space12,
-              AppDimensions.space16,
-              AppDimensions.space12,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              border: Border.all(color: AppColors.borderBlueMutedLight),
-              boxShadow: AppShadows.medium,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        label,
-                        style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
-                      ),
-                      const SizedBox(height: AppDimensions.space4),
-                      Text(
-                        description,
-                        style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
-                      ),
-                    ],
+          enabled: onTap != null,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(
+                AppDimensions.space24,
+                AppDimensions.space12,
+                AppDimensions.space16,
+                AppDimensions.space12,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                border: Border.all(color: AppColors.borderBlueMutedLight),
+                boxShadow: AppShadows.medium,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          label,
+                          style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
+                        ),
+                        const SizedBox(height: AppDimensions.space4),
+                        Text(
+                          description,
+                          style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: AppDimensions.space8),
-                const AppIcon(
-                  AppIcons.arrowForward,
-                  size: AppDimensions.iconLarge,
-                  color: AppColors.textPrimary,
-                ),
-              ],
+                  const SizedBox(width: AppDimensions.space8),
+                  const AppIcon(
+                    AppIcons.arrowForward,
+                    size: AppDimensions.iconLarge,
+                    color: AppColors.textPrimary,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -880,6 +952,44 @@ class AppQuickAccessCard extends StatelessWidget {
   final VoidCallback? onTap;
   final String? semanticLabel;
 
+  /// Alto mínimo reservado a la etiqueta (dos líneas sin ampliación).
+  static const double labelMinHeight = 44;
+
+  static final TextStyle _labelStyle = AppTypography.bodyRegular.copyWith(
+    color: AppColors.primary,
+    fontWeight: FontWeight.w500,
+  );
+
+  /// Alto que necesita una tarjeta de [width] dp para que ninguna de
+  /// [labels] se recorte con la ampliación de texto actual (WCAG 1.4.4).
+  ///
+  /// Pensado para rejillas de tarjetas, donde todas comparten alto:
+  /// [iconAreaHeight] es el bloque del icono y el resto se mide con la
+  /// etiqueta más alta al ancho disponible.
+  static double heightFor(
+    final BuildContext context, {
+    required final Iterable<String> labels,
+    required final double width,
+    required final double iconAreaHeight,
+  }) {
+    const border = 1.0;
+    final maxWidth = width - (AppDimensions.space8 + border) * 2;
+    var labelHeight = labelMinHeight;
+    for (final label in labels) {
+      final painter = TextPainter(
+        text: TextSpan(text: label, style: _labelStyle),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+        textAlign: TextAlign.center,
+      )..layout(maxWidth: maxWidth < 0 ? 0 : maxWidth);
+      if (painter.height > labelHeight) {
+        labelHeight = painter.height.ceilToDouble();
+      }
+      painter.dispose();
+    }
+    return (AppDimensions.space8 + border) * 2 + iconAreaHeight + AppDimensions.space8 + labelHeight;
+  }
+
   @override
   Widget build(final BuildContext context) {
     return Semantics(
@@ -888,56 +998,57 @@ class AppQuickAccessCard extends StatelessWidget {
       enabled: onTap != null,
       onTap: onTap,
       child: ExcludeSemantics(
-        child: InkWell(
-          onTap: onTap,
+        child: AppFocusRing(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-          child: Container(
-            padding: const EdgeInsets.all(AppDimensions.space8),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-              border: Border.all(color: AppColors.borderBlueMutedLight),
-              boxShadow: AppShadows.medium,
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.backgroundBlueLighter,
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                    ),
-                    child: Center(
-                      child: iconAsset == null
-                          ? AppIcon(
-                              icon!,
-                              size: 40,
-                              color: AppColors.primary,
-                            )
-                          : AppSvgIcon(
-                              iconAsset!,
-                              size: 32,
-                              color: AppColors.primary,
-                            ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppDimensions.space8),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 44),
-                  child: Center(
-                    child: Text(
-                      label,
-                      textAlign: TextAlign.center,
-                      style: AppTypography.bodyRegular.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w500,
+          enabled: onTap != null,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.space8),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                border: Border.all(color: AppColors.borderBlueMutedLight),
+                boxShadow: AppShadows.medium,
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundBlueLighter,
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                      ),
+                      child: Center(
+                        child: iconAsset == null
+                            ? AppIcon(
+                                icon!,
+                                size: 40,
+                                color: AppColors.primary,
+                              )
+                            : AppSvgIcon(
+                                iconAsset!,
+                                size: 32,
+                                color: AppColors.primary,
+                              ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: AppDimensions.space8),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: labelMinHeight),
+                    child: Center(
+                      child: Text(
+                        label,
+                        textAlign: TextAlign.center,
+                        style: _labelStyle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -970,6 +1081,8 @@ class AppFloatingNavigation extends StatelessWidget {
     this.spacing = AppDimensions.space8,
     this.compact = false,
     this.tabMinHeight = AppDimensions.minTouchTarget,
+    this.tabPositions,
+    this.semanticTabCount,
   });
 
   final List<String> tabs;
@@ -986,9 +1099,25 @@ class AppFloatingNavigation extends StatelessWidget {
   final bool compact;
   final double tabMinHeight;
 
+  /// Posición (desde 1) de cada pestaña visible dentro del conjunto completo.
+  /// Para barras que sólo muestran una parte de las pestañas a la vez: el
+  /// lector de pantalla anuncia «pestaña 4 de 4» aunque se vean dos (4.1.2).
+  final List<int>? tabPositions;
+
+  /// Número total de pestañas del conjunto cuando no se muestran todas.
+  final int? semanticTabCount;
+
   @override
   Widget build(final BuildContext context) {
     assert(tabs.isNotEmpty, 'tabs must not be empty');
+    assert(
+      tabPositions == null || tabPositions!.length == tabs.length,
+      'tabPositions must match tabs length',
+    );
+    assert(
+      semanticTabCount == null || semanticTabCount! >= tabs.length,
+      'semanticTabCount must cover every visible tab',
+    );
     assert(tabs.every((final tab) => tab.isNotEmpty), 'tab labels must not be empty');
     assert(
       selectedIndex == -1 || (selectedIndex >= 0 && selectedIndex < tabs.length),
@@ -1008,18 +1137,23 @@ class AppFloatingNavigation extends StatelessWidget {
       final bool isEnabled = enabledTabs?[index] ?? true;
       return _FloatingNavTab(
         label: tabs[index],
-        position: index + 1,
-        tabCount: tabs.length,
+        position: tabPositions?[index] ?? index + 1,
+        tabCount: semanticTabCount ?? tabs.length,
         isSelected: isSelected,
         isEnabled: isEnabled,
         minWidth: minTabWidths?[index] ?? AppDimensions.minTouchTarget,
         horizontalPadding: tabHorizontalPadding,
         compact: compact,
         minHeight: tabMinHeight,
+        allowsLineBreaks: MediaQuery.textScalerOf(context).scale(1) > 1.5,
         onTap: () => onTabSelected(index),
       );
     });
-    final usesScrollableLayout = scrollable || MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    // Con el texto ampliado las pestañas se reparten en varias líneas en vez
+    // de exigir un desplazamiento horizontal (WCAG 2.5.1 y 1.4.4): todas
+    // quedan a la vista y se activan con una pulsación simple.
+    final usesWrapLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final usesScrollableLayout = scrollable && !usesWrapLayout;
 
     Widget tabGroup(final List<Widget> children) => Semantics(
       role: SemanticsRole.tabBar,
@@ -1038,7 +1172,28 @@ class AppFloatingNavigation extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
         border: Border.all(color: AppColors.borderNeutralLight),
       ),
-      child: usesScrollableLayout
+      child: usesWrapLayout
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: spacing,
+              children: [
+                ?leading,
+                Expanded(
+                  child: Semantics(
+                    role: SemanticsRole.tabBar,
+                    container: true,
+                    explicitChildNodes: true,
+                    child: Wrap(
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: tabsContent,
+                    ),
+                  ),
+                ),
+                ?trailing,
+              ],
+            )
+          : usesScrollableLayout
           ? SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -1124,7 +1279,12 @@ class AppBottomTabBar extends StatelessWidget {
       'currentIndex is out of range',
     );
     final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
-    final usesScrollableLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    // Con el texto muy ampliado las etiquetas no caben en cinco destinos y
+    // desplazar la barra rompería el patrón de navegación (WCAG 2.5.1). Como
+    // el visor de contenido grande de iOS: todos los destinos quedan visibles
+    // con su icono, el nombre sigue en el nodo semántico y una pulsación
+    // larga lo muestra ampliado.
+    final showsIconOnly = MediaQuery.textScalerOf(context).scale(1) > 1.5;
     final tabs = List.generate(items.length, (final int index) {
       final item = items[index];
       final isSelected = index == currentIndex;
@@ -1144,73 +1304,84 @@ class AppBottomTabBar extends StatelessWidget {
         child: ExcludeSemantics(
           child: Material(
             color: Colors.transparent,
-            child: InkWell(
-              onTap: () => onTap(index),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
-                child: SizedBox(
-                  height: usesScrollableLayout
-                      ? null
-                      : isLandscape
-                      ? 56
-                      : AppDimensions.bottomNavHeight,
-                  child: usesScrollableLayout || isLandscape
-                      ? Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppDimensions.space8,
-                                vertical: AppDimensions.space8,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  icon,
-                                  const SizedBox(width: AppDimensions.space8),
-                                  Flexible(
-                                    child: Text(
-                                      item.label,
-                                      style: AppTypography.smallRegular.copyWith(
-                                        color: AppColors.textWhite,
+            child: AppFocusRing(
+              child: InkWell(
+                onTap: () => onTap(index),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+                  child: SizedBox(
+                    height: isLandscape ? 56 : AppDimensions.bottomNavHeight,
+                    child: showsIconOnly
+                        ? Tooltip(
+                            message: item.label,
+                            excludeFromSemantics: true,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                icon,
+                                const SizedBox(height: AppDimensions.space8),
+                                _BottomTabIndicator(isSelected: isSelected),
+                              ],
+                            ),
+                          )
+                        : isLandscape
+                        ? Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.space8,
+                                  vertical: AppDimensions.space8,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    icon,
+                                    const SizedBox(width: AppDimensions.space8),
+                                    Flexible(
+                                      child: Text(
+                                        item.label,
+                                        style: AppTypography.smallRegular.copyWith(
+                                          color: AppColors.textWhite,
+                                        ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                      textAlign: TextAlign.center,
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child: _BottomTabIndicator(isSelected: isSelected),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            icon,
-                            const SizedBox(height: AppDimensions.space8),
-                            Text(
-                              item.label,
-                              style: AppTypography.smallRegular.copyWith(
-                                color: AppColors.textWhite,
+                              Positioned(
+                                bottom: 0,
+                                child: _BottomTabIndicator(isSelected: isSelected),
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: AppDimensions.space4),
-                            _BottomTabIndicator(isSelected: isSelected),
-                          ],
-                        ),
+                            ],
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              icon,
+                              const SizedBox(height: AppDimensions.space8),
+                              Text(
+                                item.label,
+                                style: AppTypography.smallRegular.copyWith(
+                                  color: AppColors.textWhite,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: AppDimensions.space4),
+                              _BottomTabIndicator(isSelected: isSelected),
+                            ],
+                          ),
+                  ),
                 ),
               ),
             ),
           ),
         ),
       );
-      return usesScrollableLayout ? SizedBox(width: 160, child: tab) : tab;
+      return tab;
     });
 
     Widget tabBar(final Widget child) => Semantics(
@@ -1228,12 +1399,7 @@ class AppBottomTabBar extends StatelessWidget {
         bottom: MediaQuery.of(context).padding.bottom,
       ),
       color: AppColors.primary,
-      child: usesScrollableLayout
-          ? SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: tabBar(Row(children: tabs)),
-            )
-          : tabBar(Row(children: tabs.map((final tab) => Expanded(child: tab)).toList())),
+      child: tabBar(Row(children: tabs.map((final tab) => Expanded(child: tab)).toList())),
     );
   }
 }
@@ -1307,50 +1473,54 @@ class AppFab extends StatelessWidget {
           child: Material(
             color: isEnabled ? AppColors.primary : AppColors.textDisabled,
             shape: isExtended ? const StadiumBorder() : const CircleBorder(),
-            child: InkWell(
-              onTap: onPressed,
-              customBorder: isExtended ? null : const CircleBorder(),
-              borderRadius: isExtended ? borderRadius : null,
-              child: isExtended
-                  ? ConstrainedBox(
-                      constraints: const BoxConstraints(minHeight: 48),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppDimensions.space16,
-                          vertical: AppDimensions.space8,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _AppFabIcon(
-                              icon: icon,
-                              iconAsset: iconAsset,
-                              size: iconSize,
-                            ),
-                            const SizedBox(width: AppDimensions.space4),
-                            Flexible(
-                              child: Text(
-                                label!,
-                                style: AppTypography.bodyRegular.copyWith(
-                                  color: AppColors.textWhite,
+            child: AppFocusRing(
+              borderRadius: BorderRadius.circular(isExtended ? AppDimensions.radiusRound : 28),
+              enabled: isEnabled,
+              child: InkWell(
+                onTap: onPressed,
+                customBorder: isExtended ? null : const CircleBorder(),
+                borderRadius: isExtended ? borderRadius : null,
+                child: isExtended
+                    ? ConstrainedBox(
+                        constraints: const BoxConstraints(minHeight: 48),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.space16,
+                            vertical: AppDimensions.space8,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _AppFabIcon(
+                                icon: icon,
+                                iconAsset: iconAsset,
+                                size: iconSize,
+                              ),
+                              const SizedBox(width: AppDimensions.space4),
+                              Flexible(
+                                child: Text(
+                                  label!,
+                                  style: AppTypography.bodyRegular.copyWith(
+                                    color: AppColors.textWhite,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        width: 56,
+                        height: 56,
+                        child: Center(
+                          child: _AppFabIcon(
+                            icon: icon,
+                            iconAsset: iconAsset,
+                            size: iconSize,
+                          ),
                         ),
                       ),
-                    )
-                  : SizedBox(
-                      width: 56,
-                      height: 56,
-                      child: Center(
-                        child: _AppFabIcon(
-                          icon: icon,
-                          iconAsset: iconAsset,
-                          size: iconSize,
-                        ),
-                      ),
-                    ),
+              ),
             ),
           ),
         ),
@@ -1399,7 +1569,12 @@ class _FloatingNavTab extends StatelessWidget {
     required this.compact,
     required this.minHeight,
     required this.onTap,
+    this.allowsLineBreaks = false,
   });
+
+  /// Con el texto ampliado una etiqueta más ancha que la barra pasa a varias
+  /// líneas en lugar de salirse.
+  final bool allowsLineBreaks;
 
   final String label;
   final int position;
@@ -1459,20 +1634,24 @@ class _FloatingNavTab extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-            child: InkWell(
-              onTap: isEnabled ? onTap : null,
+            child: AppFocusRing(
               borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppDimensions.space8,
-                ).copyWith(left: horizontalPadding, right: horizontalPadding),
-                child: Center(
-                  child: Text(
-                    label,
-                    style: textStyle,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    softWrap: false,
+              enabled: isEnabled,
+              child: InkWell(
+                onTap: isEnabled ? onTap : null,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppDimensions.space8,
+                  ).copyWith(left: horizontalPadding, right: horizontalPadding),
+                  child: Center(
+                    child: Text(
+                      label,
+                      style: textStyle,
+                      textAlign: TextAlign.center,
+                      maxLines: allowsLineBreaks ? null : 1,
+                      softWrap: allowsLineBreaks,
+                    ),
                   ),
                 ),
               ),

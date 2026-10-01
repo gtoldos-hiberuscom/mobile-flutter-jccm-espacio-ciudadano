@@ -82,7 +82,7 @@ void main() {
     }
   });
 
-  testWidgets('el título permite dos líneas y no usa elipsis', (final tester) async {
+  testWidgets('el título ocupa las líneas que necesite y no usa elipsis', (final tester) async {
     await tester.pumpWidget(
       buildApp(
         AppHeaderBar(title: 'Editar datos de contacto', onBack: () {}),
@@ -90,8 +90,10 @@ void main() {
     );
 
     final title = tester.widget<Text>(find.text('Editar datos de contacto'));
-    expect(title.maxLines, 2);
-    expect(title.overflow, isNull);
+    // Sin límite de líneas: la barra crece con el título (WCAG 1.4.4).
+    expect(title.maxLines, isNull);
+    expect(title.softWrap, isTrue);
+    expect(title.overflow, TextOverflow.visible);
     expect(tester.takeException(), isNull);
   });
 }

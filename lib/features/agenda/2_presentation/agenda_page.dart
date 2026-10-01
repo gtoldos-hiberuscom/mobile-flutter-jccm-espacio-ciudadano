@@ -147,6 +147,8 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             key: ValueKey('${_selectedFilter.name}-${initialDate.year}-${initialDate.month}'),
             initialDate: initialDate,
             eventDates: eventDates,
+            // «Calendario» es una sección de la pantalla (WCAG 1.3.1).
+            headingLevel: 2,
           ),
         ),
         if (state.hasJccmAuthorization) ...[
@@ -284,16 +286,22 @@ class _LastUpdateRow extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              const AppIcon(
-                AppIcons.autorenew,
-                color: AppColors.borderBlueMutedBase,
+              // Icono decorativo: el texto ya dice qué es. Texto e icono usan
+              // el color secundario de texto, que supera 4,5:1 sobre el fondo
+              // de la Agenda (WCAG 1.4.3); el gris azulado anterior se quedaba
+              // en 3,8:1.
+              const ExcludeSemantics(
+                child: AppIcon(
+                  AppIcons.autorenew,
+                  color: AppColors.textSecondary,
+                ),
               ),
               const SizedBox(width: AppDimensions.space8),
               Expanded(
                 child: Text(
                   _formatUpdateDate(l10n, updatedAt),
                   style: AppTypography.smallRegular.copyWith(
-                    color: AppColors.borderBlueMutedBase,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -308,10 +316,13 @@ class _LastUpdateRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
             boxShadow: AppShadows.low,
           ),
-          child: IconButton(
-            icon: const AppIcon(AppIcons.autorenew, color: AppColors.textPrimary),
-            onPressed: onRefresh,
-            tooltip: l10n.agendaRefreshTooltip,
+          child: AppFocusRing(
+            enabled: onRefresh != null,
+            child: IconButton(
+              icon: const AppIcon(AppIcons.autorenew, color: AppColors.textPrimary),
+              onPressed: onRefresh,
+              tooltip: l10n.agendaRefreshTooltip,
+            ),
           ),
         ),
       ],

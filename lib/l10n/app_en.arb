@@ -2894,6 +2894,10 @@
   "@notificationContactErrorLoading": {
     "description": "Notifications contact — global error state message."
   },
+  "notificationContactNotRegistered": "You are not registered for the notification service. Enter your details to register.",
+  "@notificationContactNotRegistered": {
+    "description": "Notice shown when the contact service returns 404 because the citizen is not registered."
+  },
   "notificationContactErrorPhoneInvalid": "Enter a valid mobile phone number.",
   "@notificationContactErrorPhoneInvalid": {
     "description": "Notifications contact — phone validation error."
@@ -3823,6 +3827,17 @@
   "@a11ySelectCalendarMonthYear": {
     "placeholders": {
       "monthYear": {
+        "type": "String"
+      }
+    }
+  },
+  "a11yMonthYear": "{month} {year}",
+  "@a11yMonthYear": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
         "type": "String"
       }
     }
@@ -5396,8 +5411,6 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Digital cards — error while checking the required authorization."
   },
-  "digitalCardsInfoSheetContactHint": "If any information on the card is incorrect or out of date, contact the issuing organization to request a correction.",
-  "digitalCardsInfoSheetContactButton": "View the contact list",
   "digitalCardsInfoSheetTitle": "Learn more about My digital cards",
   "@digitalCardsInfoSheetTitle": {
     "description": "Digital cards — title of the info bottom sheet."
@@ -5417,6 +5430,10 @@
   "digitalCardsDownloadSuccess": "{format} saved successfully.",
   "@digitalCardsDownloadSuccess": {
     "description": "Digital cards — snackbar after the download is saved successfully."
+  },
+  "digitalCardsPkPassAddedToWallet": "Card downloaded and added to Wallet.",
+  "@digitalCardsPkPassAddedToWallet": {
+    "description": "Digital cards — snackbar after successfully adding a card to Apple Wallet on iOS."
   },
   "digitalCardsDownloadError": "We could not download {format}.",
   "@digitalCardsDownloadError": {
@@ -5863,6 +5880,22 @@
   "supportConsentDataUseLabel": "I authorize the use and management of my data",
   "@supportConsentDataUseLabel": {
     "description": "Support form — text of the data consent checkbox."
+  },
+  "supportCaptchaBadge": "Verification",
+  "@supportCaptchaBadge": {
+    "description": "Support form — caption under the anti-robot box icon."
+  },
+  "supportCaptchaPendingSemantics": "not verified, tap to verify",
+  "@supportCaptchaPendingSemantics": {
+    "description": "Support form — accessible state of the unchecked anti-robot box."
+  },
+  "supportCaptchaCheckingSemantics": "verifying",
+  "@supportCaptchaCheckingSemantics": {
+    "description": "Support form — accessible state of the anti-robot box while checking."
+  },
+  "supportCaptchaVerifiedSemantics": "verified",
+  "@supportCaptchaVerifiedSemantics": {
+    "description": "Support form — accessible state of the checked anti-robot box."
   },
   "supportPrivacyInfoDescription": "The data protection information applicable to this form is published at",
   "@supportPrivacyInfoDescription": {

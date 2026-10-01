@@ -61,7 +61,7 @@ class MyDataEmploymentDemandEmpty extends StatelessWidget {
     return MyDataNoData(
       message: l10n.myDataEmploymentDemandNoDataMessage,
       actionLabel: l10n.myDataEmploymentInfoSheetOfficeContactsButton,
-      contactUrl: 'https://www.jccm.es/oficinas-oir',
+      contactUrl: 'https://www.sepe.es/HomeSepe',
       scrollable: false,
     );
   }

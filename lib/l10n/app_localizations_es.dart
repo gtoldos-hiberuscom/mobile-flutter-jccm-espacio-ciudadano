@@ -2168,6 +2168,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationContactErrorLoading => 'No hemos podido cargar tus datos de contacto.';
 
   @override
+  String get notificationContactNotRegistered => 'No estás dado de alta en el servicio de notificaciones. Completa tus datos para darte de alta.';
+
+  @override
   String get notificationContactErrorPhoneInvalid => 'Introduce un teléfono móvil válido.';
 
   @override
@@ -2905,6 +2908,11 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String a11ySelectCalendarMonthYear(String monthYear) {
     return 'Seleccionar mes y año, actual $monthYear';
+  }
+
+  @override
+  String a11yMonthYear(String month, String year) {
+    return '$month de $year';
   }
 
   @override
@@ -3744,6 +3752,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionDocNumberRequiredError => 'Introduce el número de documento de la persona interesada.';
 
   @override
+  String get gestionAportacionOwnExpedienteError => 'Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.';
+
+  @override
   String get gestionAportacionCamposExpedienteError => 'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).';
 
   @override
@@ -4163,12 +4174,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsAuthorizationCheckErrorMessage => 'No hemos podido comprobar la autorización necesaria para mostrar tus carnets digitales.';
 
   @override
-  String get digitalCardsInfoSheetContactHint => 'Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.';
-
-  @override
-  String get digitalCardsInfoSheetContactButton => 'Consultar el listado de contactos';
-
-  @override
   String get digitalCardsInfoSheetTitle => 'Saber más sobre Mis carnets digitales';
 
   @override
@@ -4186,6 +4191,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String digitalCardsDownloadSuccess(Object format) {
     return '$format guardado correctamente.';
   }
+
+  @override
+  String get digitalCardsPkPassAddedToWallet => 'Carnet descargado y añadido a Wallet.';
 
   @override
   String digitalCardsDownloadError(Object format) {
@@ -4516,6 +4524,18 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get supportConsentDataUseLabel => 'Autorizo el uso y gestión de mis datos';
+
+  @override
+  String get supportCaptchaBadge => 'Verificación';
+
+  @override
+  String get supportCaptchaPendingSemantics => 'pendiente de verificar, pulsa para verificar';
+
+  @override
+  String get supportCaptchaCheckingSemantics => 'verificando';
+
+  @override
+  String get supportCaptchaVerifiedSemantics => 'verificado';
 
   @override
   String get supportPrivacyInfoDescription => 'La información relativa a protección de datos aplicable a este formulario se encuentra publicada en';

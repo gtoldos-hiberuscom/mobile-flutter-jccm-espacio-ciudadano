@@ -110,69 +110,79 @@ class _UniversityTitleCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return AppInfoCard(
-      leadingBorderWidth: AppDimensions.space4,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title number
-            if (title.titleNumber.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                child: Text(
-                  l10n.myDataEducationTitleNumberLabel(title.titleNumber),
-                  style: AppTypography.captionUppercase.copyWith(
-                    color: AppColors.borderBlueMutedBase,
+    // Un título, un nodo, en orden de lectura (WCAG 1.3.1).
+    final semanticLabel = [
+      if (title.titleNumber.isNotEmpty) _spoken(l10n.myDataEducationTitleNumberLabel(title.titleNumber)),
+      title.titleName,
+      title.universityName,
+      if (title.completionDate != null) '${_spoken(l10n.myDataEducationCompletionDateLabel)}: ${_DateRow.format(l10n, title.completionDate!)}',
+      if (title.expeditionDate != null) '${_spoken(l10n.myDataEducationExpeditionDateLabel)}: ${_DateRow.format(l10n, title.expeditionDate!)}',
+    ].join('. ');
+    return Semantics(
+      container: true,
+      label: semanticLabel,
+      child: ExcludeSemantics(
+        child: AppInfoCard(
+          leadingBorderWidth: AppDimensions.space4,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title number
+                if (title.titleNumber.isNotEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                    // 6,2:1 sobre blanco (WCAG 1.4.3); sin recorte al ampliar el
+                    // texto (1.4.4).
+                    child: Text(
+                      l10n.myDataEducationTitleNumberLabel(title.titleNumber),
+                      style: AppTypography.captionUppercase.copyWith(
+                        color: AppColors.textPlaceholder,
+                      ),
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
+                ],
 
-            // Title name
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-              child: Text(
-                title.titleName,
-                style: AppTypography.leadingBold.copyWith(
-                  color: AppColors.textPrimary,
+                // Title name
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                  child: Text(
+                    title.titleName,
+                    style: AppTypography.leadingBold.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
                 ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
+
+                // University name
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                  child: Text(
+                    title.universityName,
+                    style: AppTypography.bodyRegular.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+
+                // Dates
+                const SizedBox(height: AppDimensions.space4),
+                if (title.completionDate != null) ...[
+                  _DateRow(
+                    label: l10n.myDataEducationCompletionDateLabel,
+                    date: title.completionDate!,
+                  ),
+                ],
+                if (title.expeditionDate != null) ...[
+                  _DateRow(
+                    label: l10n.myDataEducationExpeditionDateLabel,
+                    date: title.expeditionDate!,
+                  ),
+                ],
+              ],
             ),
-
-            // University name
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-              child: Text(
-                title.universityName,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.primary,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-
-            // Dates
-            const SizedBox(height: AppDimensions.space4),
-            if (title.completionDate != null) ...[
-              _DateRow(
-                label: l10n.myDataEducationCompletionDateLabel,
-                date: title.completionDate!,
-              ),
-            ],
-            if (title.expeditionDate != null) ...[
-              _DateRow(
-                label: l10n.myDataEducationExpeditionDateLabel,
-                date: title.expeditionDate!,
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -190,38 +200,54 @@ class _DateRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final labelText = Text(
+      label,
+      style: AppTypography.captionUppercase.copyWith(
+        color: AppColors.primary,
+      ),
+    );
+    final dateText = Text(
+      format(AppLocalizations.of(context), date),
+      style: AppTypography.bodyRegular.copyWith(
+        color: AppColors.primary,
+      ),
+    );
+    // Con el texto ampliado la fecha, que no se encoge, dejaba a la etiqueta
+    // una columna tan estrecha que se partía letra a letra: se apilan
+    // (WCAG 1.4.4).
+    if (MediaQuery.textScalerOf(context).scale(1) > 1.5) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            labelText,
+            const SizedBox(height: AppDimensions.space4),
+            dateText,
+          ],
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
       child: Row(
         children: [
-          Expanded(
-            child: Text(
-              label,
-              style: AppTypography.captionUppercase.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-          ),
+          Expanded(child: labelText),
           const SizedBox(width: AppDimensions.space16),
-          Text(
-            _formatDate(AppLocalizations.of(context), date),
-            style: AppTypography.bodyRegular.copyWith(
-              color: AppColors.primary,
-            ),
-          ),
+          dateText,
         ],
       ),
     );
   }
 
-  String _formatDate(final AppLocalizations l10n, final DateTime date) {
+  static String format(final AppLocalizations l10n, final DateTime date) {
     final day = date.day;
     final month = l10n.commonMonthShortName(_monthKey(date.month));
     final year = date.year;
     return '$day $month $year';
   }
 
-  String _monthKey(final int month) => switch (month) {
+  static String _monthKey(final int month) => switch (month) {
     1 => 'january',
     2 => 'february',
     3 => 'march',
@@ -236,4 +262,11 @@ class _DateRow extends StatelessWidget {
     12 => 'december',
     _ => 'other',
   };
+}
+
+/// Rótulo en mayúsculas pasado a frase para el lector de pantalla, que de
+/// otro modo puede deletrearlo («FECHA EXPEDICIÓN» → «Fecha expedición»).
+String _spoken(final String value) {
+  final lower = value.trim().toLowerCase();
+  return lower.isEmpty ? lower : '${lower[0].toUpperCase()}${lower.substring(1)}';
 }

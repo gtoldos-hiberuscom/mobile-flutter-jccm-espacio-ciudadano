@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Variant for [AppCard] — mirrors the Figma `propClass` property.
@@ -255,10 +256,13 @@ class AppRecommendationCard extends StatelessWidget {
         enabled: true,
         onTap: onTap,
         child: ExcludeSemantics(
-          child: InkWell(
-            onTap: onTap,
+          child: AppFocusRing(
             borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-            child: content,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+              child: content,
+            ),
           ),
         ),
       ),
@@ -468,7 +472,7 @@ class AppCard extends StatelessWidget {
     final effectiveExpiryDateLabel = expiryDateLabel ?? l10n.appCardExpiryLabel;
     // WCAG 4.1.2 — unified semantic label for complex cards.
     final semanticSegments = <String>[
-      ?categoryLabel,
+      if (categoryLabel?.trim().isNotEmpty ?? false) categoryLabel!,
       title,
       if (refNumber != null) '$effectiveRefNumberLabel: $refNumber',
       if (expiryDate != null) '$effectiveExpiryDateLabel: $expiryDate',
@@ -500,16 +504,30 @@ class AppCard extends StatelessWidget {
         : Material(
             color: Colors.transparent,
             borderRadius: _borderRadius,
-            child: InkWell(
-              onTap: effectiveOnTap,
+            // Anillo de foco común (WCAG 1.4.11 / 2.4.7) en lugar del
+            // sombreado de Material, que no llega a 3:1.
+            child: AppFocusRing(
               borderRadius: _borderRadius,
-              child: content,
+              child: InkWell(
+                onTap: effectiveOnTap,
+                borderRadius: _borderRadius,
+                focusColor: Colors.transparent,
+                // La pulsación ya la expone la tarjeta; repetida aquí, las dos
+                // acciones chocan y Flutter no funde los nodos.
+                excludeFromSemantics: true,
+                child: content,
+              ),
             ),
           );
+    // Solo los adjuntos y el botón de acción necesitan nodo propio. Sin ellos
+    // la semántica del InkWell (foco y pulsación) se funde en la tarjeta: con
+    // nodos hijos explícitos quedaba un segundo nodo vacío, enfocable y sin
+    // nombre, en cada tarjeta (WCAG 2.4.3).
+    final hasInteractiveChildren = attachmentLabel != null || actionButton != null;
 
     return Semantics(
       container: true,
-      explicitChildNodes: true,
+      explicitChildNodes: hasInteractiveChildren,
       label: composedLabel,
       button: onTap != null,
       enabled: _isDisabled ? false : (onTap != null ? true : null),
@@ -1049,35 +1067,40 @@ class AppListItem extends StatelessWidget {
     // de AppList (DecoratedBox con color) ese Material queda por debajo del
     // fondo y el ripple no se ve, y Flutter lo avisa en debug. Un Material
     // transparente propio lo pinta encima del contenedor.
-    final tile = Material(
-      type: MaterialType.transparency,
-      child: ListTile(
-        minTileHeight: AppDimensions.minTouchTarget,
-        onTap: effectiveOnTap,
-        leading: leading,
-        trailing:
-            trailing ??
-            (onTap != null && !isDisabled
-                ? const Icon(
-                    Icons.chevron_right_rounded,
-                    color: AppColors.textSecondary,
-                    size: AppDimensions.iconMedium,
-                  )
-                : null),
-        title: Text(
-          title,
-          style: AppTypography.bodyBase.copyWith(
-            color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+    // El anillo de foco (WCAG 1.4.11 / 2.4.7) se pinta encima del tile: el
+    // resaltado de foco propio de ListTile no alcanza 3:1 ni se ve en Android.
+    final tile = AppFocusRing(
+      enabled: effectiveOnTap != null,
+      child: Material(
+        type: MaterialType.transparency,
+        child: ListTile(
+          minTileHeight: AppDimensions.minTouchTarget,
+          onTap: effectiveOnTap,
+          leading: leading,
+          trailing:
+              trailing ??
+              (onTap != null && !isDisabled
+                  ? const Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.textSecondary,
+                      size: AppDimensions.iconMedium,
+                    )
+                  : null),
+          title: Text(
+            title,
+            style: AppTypography.bodyBase.copyWith(
+              color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+            ),
           ),
+          subtitle: subtitle != null
+              ? Text(
+                  subtitle!,
+                  style: AppTypography.bodyS.copyWith(
+                    color: isDisabled ? AppColors.textDisabled : AppColors.textSecondary,
+                  ),
+                )
+              : null,
         ),
-        subtitle: subtitle != null
-            ? Text(
-                subtitle!,
-                style: AppTypography.bodyS.copyWith(
-                  color: isDisabled ? AppColors.textDisabled : AppColors.textSecondary,
-                ),
-              )
-            : null,
       ),
     );
 

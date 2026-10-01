@@ -2902,6 +2902,10 @@
   "@notificationContactErrorLoading": {
     "description": "Notifications contact — mensaje del estado de error global."
   },
+  "notificationContactNotRegistered": "No estás dado de alta en el servicio de notificaciones. Completa tus datos para darte de alta.",
+  "@notificationContactNotRegistered": {
+    "description": "Aviso mostrado cuando el servicio de contacto devuelve 404 porque el ciudadano no está dado de alta."
+  },
   "notificationContactErrorPhoneInvalid": "Introduce un teléfono móvil válido.",
   "@notificationContactErrorPhoneInvalid": {
     "description": "Notifications contact — error de validación del teléfono móvil."
@@ -3837,6 +3841,18 @@
   "@a11ySelectCalendarMonthYear": {
     "placeholders": {
       "monthYear": {
+        "type": "String"
+      }
+    }
+  },
+  "a11yMonthYear": "{month} de {year}",
+  "@a11yMonthYear": {
+    "description": "Encabezado accesible de un grupo de citas: mes y año en un único nodo.",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
         "type": "String"
       }
     }
@@ -4950,6 +4966,10 @@
   "@gestionAportacionDocNumberRequiredError": {
     "description": "Error de validación cuando el número de documento está vacío."
   },
+  "gestionAportacionOwnExpedienteError": "Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.",
+  "@gestionAportacionOwnExpedienteError": {
+    "description": "Error al intentar aportar desde el flujo de terceros a un expediente del usuario autenticado."
+  },
   "gestionAportacionCamposExpedienteError": "Rellena el número de registro o el código identificador del expediente (solo uno de los dos).",
   "@gestionAportacionCamposExpedienteError": {
     "description": "Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente."
@@ -5416,8 +5436,6 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Carnets digitales — error al comprobar la autorización necesaria."
   },
-  "digitalCardsInfoSheetContactHint": "Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.",
-  "digitalCardsInfoSheetContactButton": "Consultar el listado de contactos",
   "digitalCardsInfoSheetTitle": "Saber más sobre Mis carnets digitales",
   "@digitalCardsInfoSheetTitle": {
     "description": "Carnets digitales — título del bottom sheet informativo."
@@ -5437,6 +5455,10 @@
   "digitalCardsDownloadSuccess": "{format} guardado correctamente.",
   "@digitalCardsDownloadSuccess": {
     "description": "Carnets digitales — aviso tras guardar la descarga correctamente."
+  },
+  "digitalCardsPkPassAddedToWallet": "Carnet descargado y añadido a Wallet.",
+  "@digitalCardsPkPassAddedToWallet": {
+    "description": "Carnets digitales — aviso tras añadir correctamente un carnet a Apple Wallet en iOS."
   },
   "digitalCardsDownloadError": "No hemos podido descargar {format}.",
   "@digitalCardsDownloadError": {
@@ -5883,6 +5905,22 @@
   "supportConsentDataUseLabel": "Autorizo el uso y gestión de mis datos",
   "@supportConsentDataUseLabel": {
     "description": "Formulario de soporte — texto del checkbox de consentimiento de datos."
+  },
+  "supportCaptchaBadge": "Verificación",
+  "@supportCaptchaBadge": {
+    "description": "Formulario de soporte — rótulo bajo el icono de la casilla anti-robot."
+  },
+  "supportCaptchaPendingSemantics": "pendiente de verificar, pulsa para verificar",
+  "@supportCaptchaPendingSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot sin marcar."
+  },
+  "supportCaptchaCheckingSemantics": "verificando",
+  "@supportCaptchaCheckingSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot mientras comprueba."
+  },
+  "supportCaptchaVerifiedSemantics": "verificado",
+  "@supportCaptchaVerifiedSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot ya marcada."
   },
   "supportPrivacyInfoDescription": "La información relativa a protección de datos aplicable a este formulario se encuentra publicada en",
   "@supportPrivacyInfoDescription": {
