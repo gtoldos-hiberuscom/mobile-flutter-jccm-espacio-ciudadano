@@ -36,6 +36,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
   final Map<String, GlobalKey> _entryKeys = <String, GlobalKey>{};
   bool _isSearching = false;
   String _searchQuery = '';
+  bool _hasReachedEnd = false;
 
   @override
   void initState() {
@@ -74,6 +75,9 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     if (position.pixels < position.maxScrollExtent - AppDimensions.space64) {
       return;
     }
+    if (!_hasReachedEnd) {
+      setState(() => _hasReachedEnd = true);
+    }
     final idAgente = ref.read(citizenEndpointIdsProvider).idAgente ?? '';
     ref.read(consentProvider(idAgente).notifier).onScrollReachedEnd();
   }
@@ -84,7 +88,23 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente ?? '';
     final consentState = ref.watch(consentProvider(idAgente));
     final consentNotifier = ref.read(consentProvider(idAgente).notifier);
-    final canAccept = consentState.status == ConsentStatus.step1Unlocked;
+    // Leer hasta el final es lo único que pide el paso legal. Si el catálogo de
+    // cláusulas no llegó a cargar (el gateway responde 429 a ráfagas), el
+    // botón se quedaba gris para siempre y sin explicación: ahora se habilita
+    // igual y al pulsarlo reintenta la carga antes de avanzar.
+    final isLoadingClauses = consentState.status == ConsentStatus.loading;
+    final canAccept = _hasReachedEnd && (consentState.status == ConsentStatus.step1Unlocked || consentState.status == ConsentStatus.loadError);
+    if (!widget.fromHome) {
+      ref.listen<ConsentState>(consentProvider(idAgente), (final prev, final next) {
+        if (next.status == ConsentStatus.loadError && prev?.status != ConsentStatus.loadError && context.mounted) {
+          AppAlertSnackbar.show(
+            context,
+            message: l10n.consentClausesUnavailableError,
+            severity: AppAlertSeverity.error,
+          );
+        }
+      });
+    }
     final fromHome = widget.fromHome;
     final textColor = fromHome ? AppColors.textPrimary : AppColors.textBase;
     final entries = _contentEntries(
@@ -172,11 +192,20 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
                 primaryLabel: l10n.consentFinalAcceptButton,
                 primaryLeadingIcon: AppIcons.check,
                 onPrimary: canAccept
-                    ? () {
+                    ? () async {
+                        if (consentState.status == ConsentStatus.loadError) {
+                          await consentNotifier.retryLoadClauses();
+                          if (!mounted || ref.read(consentProvider(idAgente)).status != ConsentStatus.step1Unlocked) {
+                            return;
+                          }
+                        }
                         consentNotifier.proceedToStep2();
-                        context.go(Routes.consentOnboarding);
+                        if (context.mounted) {
+                          context.go(Routes.consentOnboarding);
+                        }
                       }
                     : null,
+                isPrimaryLoading: _hasReachedEnd && isLoadingClauses,
               ),
           ],
         ),

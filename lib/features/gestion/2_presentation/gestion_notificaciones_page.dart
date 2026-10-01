@@ -201,7 +201,10 @@ class _FilterBarState extends State<_FilterBar> {
 
   @override
   Widget build(final BuildContext context) {
-    if (isTabletLayout(context)) {
+    // En tablet y con el texto ampliado se muestran los cuatro filtros, en
+    // varias líneas si hace falta: ninguno exige deslizar ni una flecha para
+    // alcanzarlo (WCAG 2.5.1).
+    if (isTabletLayout(context) || MediaQuery.textScalerOf(context).scale(1) > 1.5) {
       return AppFloatingNavigation(
         tabs: widget.labels,
         selectedIndex: widget.selectedIndex,
@@ -216,6 +219,10 @@ class _FilterBarState extends State<_FilterBar> {
     return AppFloatingNavigation(
       tabs: indexes.map((final index) => widget.labels[index]).toList(growable: false),
       selectedIndex: selectedIndex,
+      // Cada grupo es una vista parcial: la posición anunciada («pestaña 4
+      // de 4») se refiere a los cuatro filtros (WCAG 4.1.2).
+      tabPositions: indexes.map((final index) => index + 1).toList(growable: false),
+      semanticTabCount: widget.labels.length,
       minTabWidths: _showExpired ? const [128, 206] : const [76, 150, 150],
       onTabSelected: (final index) => widget.onSelected(indexes[index]),
       leading: _showExpired
@@ -252,11 +259,14 @@ class _FloatingNavigationArrow extends StatelessWidget {
     return SizedBox(
       width: AppDimensions.minTouchTarget,
       height: 40,
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        icon: AppIcon(icon, color: AppColors.textPrimary),
-        onPressed: onPressed,
-        tooltip: tooltip,
+      child: AppFocusRing(
+        borderRadius: const BorderRadius.all(Radius.circular(AppDimensions.radiusRound)),
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          icon: AppIcon(icon, color: AppColors.textPrimary),
+          onPressed: onPressed,
+          tooltip: tooltip,
+        ),
       ),
     );
   }
@@ -283,32 +293,41 @@ class _NotificacionCard extends StatelessWidget {
       notificacion.procedimientoIdFicha,
     ].whereType<String>().join(', ');
 
+    // El nodo lleva la acción: al excluir la semántica del InkWell se perdía,
+    // y VoiceOver y el acceso completo con teclado de iOS no podían activar
+    // ni enfocar la tarjeta (WCAG 2.1.1 / 4.1.2).
     return Semantics(
+      container: true,
       button: true,
       label: semanticLabel,
+      onTap: onTap,
       child: ExcludeSemantics(
         child: Material(
           color: Colors.transparent,
           borderRadius: borderRadius,
-          child: InkWell(
-            onTap: onTap,
+          // Anillo de foco común (WCAG 1.4.11 / 2.4.7).
+          child: AppFocusRing(
             borderRadius: borderRadius,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: borderRadius,
-                border: Border.all(color: AppColors.borderBlueMutedLight),
-                boxShadow: AppShadows.medium,
-              ),
-              padding: const EdgeInsets.all(AppDimensions.space16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _headerRow(l10n),
-                  _titleRow(l10n),
-                  _refBlock(context, l10n),
-                ],
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: borderRadius,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: borderRadius,
+                  border: Border.all(color: AppColors.borderBlueMutedLight),
+                  boxShadow: AppShadows.medium,
+                ),
+                padding: const EdgeInsets.all(AppDimensions.space16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _headerRow(l10n),
+                    _titleRow(l10n),
+                    _refBlock(context, l10n),
+                  ],
+                ),
               ),
             ),
           ),

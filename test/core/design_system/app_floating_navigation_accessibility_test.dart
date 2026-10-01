@@ -79,7 +79,7 @@ void main() {
     }
   });
 
-  testWidgets('permite desplazamiento horizontal y no trunca al 200 por ciento', (
+  testWidgets('al 200 por ciento reparte las pestañas en varias líneas sin desplazamiento', (
     final tester,
   ) async {
     tester.view.devicePixelRatio = 1;
@@ -98,9 +98,39 @@ void main() {
       ),
     );
 
-    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    // WCAG 2.5.1: ninguna pestaña exige deslizar para alcanzarla.
+    expect(find.byType(SingleChildScrollView), findsNothing);
+    expect(find.byType(Wrap), findsOneWidget);
     for (final label in labels) {
-      expect(tester.widget<Text>(find.text(label)).maxLines, 1);
+      final rect = tester.getRect(find.text(label));
+      expect(rect.left, greaterThanOrEqualTo(0));
+      expect(rect.right, lessThanOrEqualTo(320));
+      expect(tester.widget<Text>(find.text(label)).maxLines, isNull);
+      expect(find.semantics.byLabel(label), findsOneWidget);
+    }
+    expect(
+      find.byWidgetPredicate((final w) => w is Semantics && w.properties.role == SemanticsRole.tabBar),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('los filtros de Agenda no se desplazan al 200 por ciento', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(375, 667);
+    addTearDown(tester.view.reset);
+
+    const labels = ['Todos', '7 días', '30 días', '365 días'];
+    await tester.pumpWidget(
+      buildApp(
+        AppFloatingNavigation(tabs: labels, selectedIndex: 0, scrollable: true, onTabSelected: (_) {}),
+        textScaler: const TextScaler.linear(2),
+      ),
+    );
+
+    expect(find.byType(SingleChildScrollView), findsNothing);
+    for (final label in labels) {
+      expect(tester.getRect(find.text(label)).right, lessThanOrEqualTo(375));
     }
     expect(tester.takeException(), isNull);
   });

@@ -3,6 +3,7 @@ import 'dart:ui' show SemanticsAction, Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
@@ -89,5 +90,31 @@ void main() {
     final text = tester.widget<Text>(find.text('Continuar con la tramitacion administrativa'));
     expect(text.maxLines, isNull);
     expect(text.overflow, isNull);
+  });
+
+  testWidgets('muestra el anillo de foco común sin desplazar el botón', (final tester) async {
+    await tester.pumpWidget(buildApp(AppButton(label: 'Continuar', onPressed: () {})));
+    final before = tester.getRect(find.byType(ElevatedButton));
+
+    Focus.of(tester.element(find.text('Continuar'))).requestFocus();
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter),
+      findsOneWidget,
+    );
+    expect(tester.getRect(find.byType(ElevatedButton)), before);
+  });
+
+  testWidgets('el icono deshabilitado no muestra anillo de foco', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(const AppIconButton(icon: Icons.close, onPressed: null, semanticsLabel: 'Cerrar')),
+    );
+    await tester.pump();
+
+    expect(
+      find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter),
+      findsNothing,
+    );
   });
 }

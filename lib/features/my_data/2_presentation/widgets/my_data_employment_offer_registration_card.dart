@@ -15,39 +15,47 @@ class MyDataEmploymentOfferRegistrationCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final fields = [
+      (l10n.myDataEmploymentOfferPublicationDateLabel, _formatDate(context, offer.publicationDate)),
+      (l10n.myDataEmploymentOfferRegistrationDateLabel, _formatDate(context, offer.registrationDate)),
+      (l10n.myDataEmploymentOfferSelectionEndDateLabel, _formatDate(context, offer.selectionEndDate)),
+    ];
+    // Una oferta, un nodo: nombre, estado y cada fecha con su etiqueta, en
+    // orden de lectura (WCAG 1.3.1). Las etiquetas van sin mayúsculas para
+    // que el lector no las deletree.
+    final semanticLabel = [
+      _display(offer.title),
+      _display(offer.applicationStatus),
+      for (final (label, value) in fields) '$label: $value',
+    ].join('. ');
 
-    return AppInfoCard(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              _display(offer.title),
-              style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
+    return Semantics(
+      container: true,
+      label: semanticLabel,
+      child: ExcludeSemantics(
+        child: AppInfoCard(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _display(offer.title),
+                  style: AppTypography.leadingBold.copyWith(color: AppColors.primary),
+                ),
+                const SizedBox(height: AppDimensions.space8),
+                Text(
+                  _display(offer.applicationStatus).toUpperCase(),
+                  style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
+                  child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
+                ),
+                for (final (label, value) in fields) MyDataEmploymentOfferFieldRow(label: label, value: value),
+              ],
             ),
-            const SizedBox(height: AppDimensions.space8),
-            Text(
-              _display(offer.applicationStatus).toUpperCase(),
-              style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
-              child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
-            ),
-            MyDataEmploymentOfferFieldRow(
-              label: l10n.myDataEmploymentOfferPublicationDateLabel,
-              value: _formatDate(context, offer.publicationDate),
-            ),
-            MyDataEmploymentOfferFieldRow(
-              label: l10n.myDataEmploymentOfferRegistrationDateLabel,
-              value: _formatDate(context, offer.registrationDate),
-            ),
-            MyDataEmploymentOfferFieldRow(
-              label: l10n.myDataEmploymentOfferSelectionEndDateLabel,
-              value: _formatDate(context, offer.selectionEndDate),
-            ),
-          ],
+          ),
         ),
       ),
     );

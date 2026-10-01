@@ -44,10 +44,13 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
           ageAuthorizationAsync.when(
             data: (final hasAgeAuthorization) {
               if (!hasAgeAuthorization) {
+                // Sin la clausula AGE no se puede consultar si la demanda
+                // esta activa. Se conserva la tarjeta, pero sin afirmar un
+                // estado que realmente desconocemos.
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const MyDataEmploymentDisabledDemandCard(),
+                    const MyDataEmploymentDisabledDemandCard(showUnavailableDetails: false),
                     MyDataAuthorizationContextualHelper(
                       message: l10n.myDataAgeAuthorizationRequiredMessage,
                       semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,

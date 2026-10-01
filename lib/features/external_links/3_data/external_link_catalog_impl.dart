@@ -150,6 +150,7 @@ final class ExternalLinkCatalogImpl implements ExternalLinkCatalog {
     ExternalLink(id: 'historia_social_unica', displayKey: 'externalLinkHistoriaSocialUnicaLabel', url: config.socialHistoryUrl, category: ExternalLinkCategory.socialHistoria),
     ExternalLink(id: 'infancia_familias', displayKey: 'externalLinkInfanciaFamiliasLabel', url: config.childrenAndFamiliesUrl, category: ExternalLinkCategory.infanciaFamilias),
     for (var index = 0; index < 3; index++) ExternalLink(id: 'social_welfare_procedure_$index', displayKey: 'externalLinkBienestarSocialClmLabel', url: config.socialWelfareProcedure(index), category: ExternalLinkCategory.socialWelfareCLM),
+    ExternalLink(id: 'web_support_form', displayKey: 'helpPageTitle', url: config.webSupportFormUrl, category: ExternalLinkCategory.legalInformation),
     ExternalLink(
       id: 'sede_jccm',
       displayKey: 'drawerGoToSedeElectronica',

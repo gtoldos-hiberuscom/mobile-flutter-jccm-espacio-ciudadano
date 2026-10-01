@@ -13,6 +13,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/pr
 import 'package:jccm_espacio_ciudadano/features/landing/0_entity/support_request.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/1_domain/usecases/submit_support_request_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/providers/support_form_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/support_fake_captcha.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class SupportFormPage extends ConsumerStatefulWidget {
@@ -34,6 +35,9 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   XFile? _attachment;
   int? _attachmentBytes;
   bool _consentAccepted = false;
+  // Casilla "No soy un robot" del flujo público. Sin sesión el botón de
+  // envío queda desactivado hasta que el ciudadano la marque.
+  bool _captchaVerified = false;
   bool _submitted = false;
   bool _sent = false;
   bool _isSubmitting = false;
@@ -52,6 +56,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isAuthenticated = ref.watch(jwtClaimsProvider) != null;
+    final canSubmit = isAuthenticated || _captchaVerified;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundWhite,
@@ -81,12 +86,15 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 descriptionError: _descriptionError,
                 consentAccepted: _consentAccepted,
                 consentError: _consentError,
+                captchaVerified: _captchaVerified,
                 attachment: _attachment,
                 attachmentBytes: _attachmentBytes,
                 showNameField: !isAuthenticated,
                 showConsent: !isAuthenticated,
+                showCaptcha: !isAuthenticated,
                 onChanged: _refreshValidation,
                 onConsentChanged: (final value) => setState(() => _consentAccepted = value),
+                onCaptchaVerified: () => setState(() => _captchaVerified = true),
                 onPickAttachment: _pickAttachment,
                 onRemoveAttachment: _removeAttachment,
                 onOpenPrivacyInfo: _openPrivacyInfo,
@@ -104,7 +112,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 ),
                 AppButton(
                   label: l10n.supportAcceptButton,
-                  onPressed: _submit,
+                  onPressed: canSubmit ? _submit : null,
                   isExpanded: true,
                   leadingIcon: AppIcons.check,
                   isLoading: _isSubmitting,
@@ -277,6 +285,7 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
       _attachment = null;
       _attachmentBytes = null;
       _consentAccepted = false;
+      _captchaVerified = false;
       _submitted = false;
       _sent = false;
       _isSubmitting = false;
@@ -361,12 +370,15 @@ class _FormView extends StatelessWidget {
     required this.descriptionError,
     required this.consentAccepted,
     required this.consentError,
+    required this.captchaVerified,
     required this.attachment,
     required this.attachmentBytes,
     required this.showNameField,
     required this.showConsent,
+    required this.showCaptcha,
     required this.onChanged,
     required this.onConsentChanged,
+    required this.onCaptchaVerified,
     required this.onPickAttachment,
     required this.onRemoveAttachment,
     required this.onOpenPrivacyInfo,
@@ -384,12 +396,15 @@ class _FormView extends StatelessWidget {
   final String? descriptionError;
   final bool consentAccepted;
   final String? consentError;
+  final bool captchaVerified;
   final XFile? attachment;
   final int? attachmentBytes;
   final bool showNameField;
   final bool showConsent;
+  final bool showCaptcha;
   final VoidCallback onChanged;
   final ValueChanged<bool> onConsentChanged;
+  final VoidCallback onCaptchaVerified;
   final VoidCallback onPickAttachment;
   final VoidCallback onRemoveAttachment;
   final VoidCallback onOpenPrivacyInfo;
@@ -485,7 +500,16 @@ class _FormView extends StatelessWidget {
             errorText: consentError,
             onChanged: (final value) => onConsentChanged(value ?? false),
           ),
+        ],
+        if (showCaptcha) ...[
           const SizedBox(height: AppDimensions.space24),
+          SupportFakeCaptcha(
+            verified: captchaVerified,
+            onVerified: onCaptchaVerified,
+          ),
+        ],
+        if (showConsent) ...[
+          const SizedBox(height: AppDimensions.space32),
           AppPrivacyInfoText(
             description: l10n.supportPrivacyInfoDescription,
             linkText: 'https://rat.castillalamancha.es/detalle/2309',

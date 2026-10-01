@@ -2902,6 +2902,10 @@
   "@notificationContactErrorLoading": {
     "description": "Notifications contact — mensaje del estado de error global."
   },
+  "notificationContactNotRegistered": "No estás dado de alta en el servicio de notificaciones. Completa tus datos para darte de alta.",
+  "@notificationContactNotRegistered": {
+    "description": "Aviso mostrado cuando el servicio de contacto devuelve 404 porque el ciudadano no está dado de alta."
+  },
   "notificationContactErrorPhoneInvalid": "Introduce un teléfono móvil válido.",
   "@notificationContactErrorPhoneInvalid": {
     "description": "Notifications contact — error de validación del teléfono móvil."
@@ -3837,6 +3841,18 @@
   "@a11ySelectCalendarMonthYear": {
     "placeholders": {
       "monthYear": {
+        "type": "String"
+      }
+    }
+  },
+  "a11yMonthYear": "{month} de {year}",
+  "@a11yMonthYear": {
+    "description": "Encabezado accesible de un grupo de citas: mes y año en un único nodo.",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
         "type": "String"
       }
     }
@@ -4950,6 +4966,10 @@
   "@gestionAportacionDocNumberRequiredError": {
     "description": "Error de validación cuando el número de documento está vacío."
   },
+  "gestionAportacionOwnExpedienteError": "Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.",
+  "@gestionAportacionOwnExpedienteError": {
+    "description": "Error al intentar aportar desde el flujo de terceros a un expediente del usuario autenticado."
+  },
   "gestionAportacionCamposExpedienteError": "Rellena el número de registro o el código identificador del expediente (solo uno de los dos).",
   "@gestionAportacionCamposExpedienteError": {
     "description": "Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente."
@@ -5416,8 +5436,6 @@
   "@digitalCardsAuthorizationCheckErrorMessage": {
     "description": "Carnets digitales — error al comprobar la autorización necesaria."
   },
-  "digitalCardsInfoSheetContactHint": "Si algún dato del carnet es incorrecto o no está actualizado, contacta con el organismo que lo ha emitido para solicitar su modificación.",
-  "digitalCardsInfoSheetContactButton": "Consultar el listado de contactos",
   "digitalCardsInfoSheetTitle": "Saber más sobre Mis carnets digitales",
   "@digitalCardsInfoSheetTitle": {
     "description": "Carnets digitales — título del bottom sheet informativo."
@@ -5437,6 +5455,10 @@
   "digitalCardsDownloadSuccess": "{format} guardado correctamente.",
   "@digitalCardsDownloadSuccess": {
     "description": "Carnets digitales — aviso tras guardar la descarga correctamente."
+  },
+  "digitalCardsPkPassAddedToWallet": "Carnet descargado y añadido a Wallet.",
+  "@digitalCardsPkPassAddedToWallet": {
+    "description": "Carnets digitales — aviso tras añadir correctamente un carnet a Apple Wallet en iOS."
   },
   "digitalCardsDownloadError": "No hemos podido descargar {format}.",
   "@digitalCardsDownloadError": {
@@ -5884,6 +5906,22 @@
   "@supportConsentDataUseLabel": {
     "description": "Formulario de soporte — texto del checkbox de consentimiento de datos."
   },
+  "supportCaptchaBadge": "Verificación",
+  "@supportCaptchaBadge": {
+    "description": "Formulario de soporte — rótulo bajo el icono de la casilla anti-robot."
+  },
+  "supportCaptchaPendingSemantics": "pendiente de verificar, pulsa para verificar",
+  "@supportCaptchaPendingSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot sin marcar."
+  },
+  "supportCaptchaCheckingSemantics": "verificando",
+  "@supportCaptchaCheckingSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot mientras comprueba."
+  },
+  "supportCaptchaVerifiedSemantics": "verificado",
+  "@supportCaptchaVerifiedSemantics": {
+    "description": "Formulario de soporte — estado accesible de la casilla anti-robot ya marcada."
+  },
   "supportPrivacyInfoDescription": "La información relativa a protección de datos aplicable a este formulario se encuentra publicada en",
   "@supportPrivacyInfoDescription": {
     "description": "Formulario de soporte — texto que precede al enlace de información de privacidad."
@@ -6036,7 +6074,7 @@
   "@privacyResponsibleContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal y el correo del responsable."
   },
-  "privacyPurposeTitle": "¿Cuál es la denominación y finalidad del tratamiento?",
+  "privacyPurposeTitle": "¿Cuál es la denominación y finalidad de tratamiento?",
   "@privacyPurposeTitle": {
     "description": "Protección de datos — título de la sección de finalidad del tratamiento."
   },
@@ -6048,7 +6086,7 @@
   "@privacyPurposeIntro": {
     "description": "Protección de datos — párrafo introductorio de las finalidades del tratamiento."
   },
-  "privacyPurposeItemIdentity": "Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en las áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.",
+  "privacyPurposeItemIdentity": "Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.",
   "@privacyPurposeItemIdentity": {
     "description": "Protección de datos — elemento de la lista de finalidades."
   },
@@ -6070,17 +6108,17 @@
   "@privacyRetentionText": {"description": "Protección de datos — plazo de conservación."},
   "privacyRightsTitle": "¿Cómo se pueden ejercer los derechos previstos en la normativa de protección de datos?",
   "@privacyRightsTitle": {"description": "Protección de datos — título de ejercicio de derechos."},
-  "privacyRightsText": "Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha.\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.",
+  "privacyRightsText": "Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.",
   "@privacyRightsText": {"description": "Protección de datos — medios para ejercer derechos."},
   "privacyAepdTitle": "¿Puedo reclamar ante la Agencia Española de Protección de Datos?",
   "@privacyAepdTitle": {
     "description": "Protección de datos — título de la sección sobre reclamaciones ante la AEPD."
   },
-  "privacyAepdTextBeforeLink": "Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ",
+  "privacyAepdTextBeforeLink": "Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ",
   "@privacyAepdTextBeforeLink": {
     "description": "Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio)."
   },
-  "privacyAepdTextAfterLink": ". También puede reclamar ante la delegada de protección de datos cuyos datos de contacto están en esta información.",
+  "privacyAepdTextAfterLink": ". También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.",
   "@privacyAepdTextAfterLink": {
     "description": "Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto)."
   },
@@ -6092,19 +6130,19 @@
   "@privacySecurityText": {
     "description": "Protección de datos — párrafo sobre las medidas de seguridad implantadas."
   },
-  "privacyProfilingTitle": "Decisiones automatizadas incluida la elaboración de perfiles",
+  "privacyProfilingTitle": "Decisiones automatizadas, incluida la elaboración de perfiles",
   "@privacyProfilingTitle": {
     "description": "Protección de datos — título de la sección de decisiones automatizadas."
   },
-  "privacyProfilingText": "En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por una persona interesada, existe la elaboración de perfiles.",
+  "privacyProfilingText": "En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.",
   "@privacyProfilingText": {
     "description": "Protección de datos — párrafo sobre la elaboración de perfiles."
   },
-  "privacyDpoTitle": "Datos de contacto con la delegada de protección de datos",
+  "privacyDpoTitle": "Datos de contacto de la delegada de protección de datos",
   "@privacyDpoTitle": {
     "description": "Protección de datos — título de la sección de contacto con la delegada de protección de datos."
   },
-  "privacyDpoIntro": "Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la delegada de protección de datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:",
+  "privacyDpoIntro": "Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:",
   "@privacyDpoIntro": {
     "description": "Protección de datos — párrafo introductorio del contacto con la delegada de protección de datos."
   },
@@ -6112,7 +6150,7 @@
   "@privacyDpoContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal de la delegada (termina en salto de línea)."
   },
-  "privacyDpoContactAddressValue": "Delegada de protección de datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071 - Toledo\n\n",
+  "privacyDpoContactAddressValue": "Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n",
   "@privacyDpoContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal de la delegada de protección de datos (termina en línea en blanco)."
   },

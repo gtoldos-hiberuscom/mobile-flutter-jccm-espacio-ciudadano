@@ -108,4 +108,36 @@ void main() {
     expect(text.overflow, isNot(TextOverflow.ellipsis));
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('heightFor crece con la etiqueta más alta al ampliar el texto', (final tester) async {
+    Future<double> measure(final TextScaler textScaler, final List<String> labels) async {
+      late double height;
+      await tester.pumpWidget(
+        MaterialApp(
+          builder: (final context, final child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: textScaler),
+            child: child!,
+          ),
+          home: Builder(
+            builder: (final context) {
+              height = AppQuickAccessCard.heightFor(context, labels: labels, width: 109, iconAreaHeight: 80);
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      return height;
+    }
+
+    const labels = ['Salud', 'Bienestar Social', 'Vehículos'];
+    final minimum = await measure(TextScaler.noScaling, const ['Salud']);
+    final base = await measure(TextScaler.noScaling, labels);
+    final scaled = await measure(const TextScaler.linear(2), labels);
+
+    // Con una etiqueta corta basta el mínimo reservado a la etiqueta.
+    expect(minimum, 2 * (8 + 1) + 80 + 8 + AppQuickAccessCard.labelMinHeight);
+    expect(base, greaterThanOrEqualTo(minimum));
+    // Al 200 por ciento «Bienestar Social» ocupa más líneas y la tarjeta crece.
+    expect(scaled, greaterThan(base + AppQuickAccessCard.labelMinHeight));
+  });
 }

@@ -139,6 +139,10 @@ class _EntradasTab extends ConsumerWidget {
     return ref
         .watch(entradasProvider)
         .when(
+          // Al reintentar, `refresh` conserva el error mientras recarga y por
+          // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
+          // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
+          skipLoadingOnRefresh: false,
           loading: () => const LoadingStateWidget(),
           // Igual que en notificaciones: la revocación de la cláusula
           // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
@@ -164,6 +168,10 @@ class _SalidasTab extends ConsumerWidget {
     return ref
         .watch(salidasProvider)
         .when(
+          // Al reintentar, `refresh` conserva el error mientras recarga y por
+          // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
+          // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
+          skipLoadingOnRefresh: false,
           loading: () => const LoadingStateWidget(),
           // Igual que en notificaciones: la revocación de la cláusula
           // obligatoria ya está cerrando la sesión, y todo lo demás —incluida
@@ -199,11 +207,18 @@ class _RegistrosList extends StatelessWidget {
     if (filtered.isEmpty) {
       return EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search);
     }
-    return ListView.separated(
+    // Todas las tarjetas se construyen para que el teclado llegue a las que
+    // están fuera de la vista (WCAG 2.1.1).
+    return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: appPageHorizontalPadding(context), vertical: AppDimensions.space24),
-      itemCount: filtered.length,
-      separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-      itemBuilder: (final context, final index) => _RegistroCard(registro: filtered[index], isEntrada: isEntrada),
+      child: Column(
+        children: [
+          for (final (index, registro) in filtered.indexed) ...[
+            if (index > 0) const SizedBox(height: AppDimensions.space16),
+            _RegistroCard(registro: registro, isEntrada: isEntrada),
+          ],
+        ],
+      ),
     );
   }
 }

@@ -51,42 +51,84 @@ class AppTabbedDetailScaffold extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     assert(tabs.every((final tab) => tab.isNotEmpty), 'tab labels must not be empty');
+    final tabBar = AppTopTabBar(
+      tabs: tabs,
+      selectedIndex: selectedIndex,
+      onTabSelected: onTabSelected,
+    );
+    final activeView = Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: activeViewSemanticLabel,
+      child: tabViews[selectedIndex],
+    );
+    final header = AppHeaderBar(
+      title: title,
+      titleSemanticsLabel: titleSemanticsLabel,
+      leadingTooltip: leadingTooltip,
+      infoTooltip: infoTooltip,
+      onBack: onBack,
+      onInfo: onInfo,
+      actions: actions,
+      backgroundColor: appBarBackgroundColor,
+    );
+    final usesLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.5;
     return Scaffold(
-      appBar: AppHeaderBar(
-        title: title,
-        titleSemanticsLabel: titleSemanticsLabel,
-        leadingTooltip: leadingTooltip,
-        infoTooltip: infoTooltip,
-        onBack: onBack,
-        onInfo: onInfo,
-        actions: actions,
-        backgroundColor: appBarBackgroundColor,
-      ),
+      // Con el texto ampliado la cabecera va dentro del desplazamiento.
+      appBar: usesLargeText ? null : header,
       body: Container(
         width: double.infinity,
         height: double.infinity,
         color: backgroundColor,
         child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              AppTopTabBar(
-                tabs: tabs,
-                selectedIndex: selectedIndex,
-                onTabSelected: onTabSelected,
-              ),
-              Expanded(
-                child: Semantics(
-                  container: true,
-                  explicitChildNodes: true,
-                  label: activeViewSemanticLabel,
-                  child: tabViews[selectedIndex],
+          top: usesLargeText,
+          child: usesLargeText
+              // Con el texto ampliado la cabecera y las pestañas se desplazan
+              // con el contenido: fijas ocupaban gran parte de la pantalla y
+              // dejaban muy poco espacio para leer (WCAG 1.4.4). La cabecera
+              // reaparece en cuanto se desplaza hacia arriba, con el botón de
+              // volver.
+              ? NestedScrollView(
+                  floatHeaderSlivers: true,
+                  headerSliverBuilder: (final context, final _) => [
+                    SliverPersistentHeader(
+                      floating: true,
+                      delegate: _FloatingHeaderDelegate(
+                        header: header,
+                        height: header.toolbarHeightOf(context),
+                      ),
+                    ),
+                    SliverToBoxAdapter(child: tabBar),
+                  ],
+                  body: activeView,
+                )
+              : Column(
+                  children: [
+                    tabBar,
+                    Expanded(child: activeView),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
   }
+}
+
+class _FloatingHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _FloatingHeaderDelegate({required this.header, required this.height});
+
+  final AppHeaderBar header;
+  final double height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(final BuildContext context, final double shrinkOffset, final bool overlapsContent) => SizedBox(height: height, child: header);
+
+  @override
+  bool shouldRebuild(final _FloatingHeaderDelegate oldDelegate) => oldDelegate.header != header || oldDelegate.height != height;
 }

@@ -79,8 +79,8 @@ Future<void> _downloadFormat(
   }
   try {
     final artifact = await action(ref, card);
-    final saved = await _saveArtifact(artifact, dialogTitle: l10n.digitalCardsSaveDialogTitle(label));
-    if (!saved) {
+    final saveResult = await _saveArtifact(artifact, dialogTitle: l10n.digitalCardsSaveDialogTitle(label));
+    if (saveResult == _ArtifactSaveResult.cancelled) {
       return;
     }
     if (!context.mounted) {
@@ -88,7 +88,7 @@ Future<void> _downloadFormat(
     }
     AppAlertSnackbar.show(
       context,
-      message: l10n.digitalCardsDownloadSuccess(label),
+      message: saveResult == _ArtifactSaveResult.addedToIosWallet ? l10n.digitalCardsPkPassAddedToWallet : l10n.digitalCardsDownloadSuccess(label),
     );
   } catch (_) {
     if (!context.mounted) {
@@ -104,7 +104,9 @@ Future<void> _downloadFormat(
   }
 }
 
-Future<bool> _saveArtifact(
+enum _ArtifactSaveResult { cancelled, saved, addedToIosWallet }
+
+Future<_ArtifactSaveResult> _saveArtifact(
   final DigitalCardArtifact artifact, {
   required final String dialogTitle,
 }) async {
@@ -117,7 +119,7 @@ Future<bool> _saveArtifact(
           }) ??
           false;
       if (openedInWallet) {
-        return true;
+        return Platform.isIOS ? _ArtifactSaveResult.addedToIosWallet : _ArtifactSaveResult.saved;
       }
     } on Exception {
       // Wallet could not open the pass; continue with the manual save flow.
@@ -133,10 +135,10 @@ Future<bool> _saveArtifact(
     bytes: artifact.bytes,
   );
   if (path == null) {
-    return false;
+    return _ArtifactSaveResult.cancelled;
   }
   if (!Platform.isAndroid && !Platform.isIOS) {
     await File(path).writeAsBytes(artifact.bytes);
   }
-  return true;
+  return _ArtifactSaveResult.saved;
 }

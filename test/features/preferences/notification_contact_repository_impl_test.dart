@@ -7,6 +7,18 @@ import '../../test_support/sequence_http_client_adapter.dart';
 
 void main() {
   group('NotificationContactRepositoryImpl', () {
+    test('maps a 404 to a citizen that is not registered', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 404, body: <String, dynamic>{}),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = NotificationContactRepositoryImpl(dio: dio);
+
+      final result = await repository.loadContact(citizenId: 'PER1');
+
+      expect(result, isNull);
+    });
+
     test('preserves the case of sub_alt in the citizen path', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(statusCode: 404, body: <String, dynamic>{}),

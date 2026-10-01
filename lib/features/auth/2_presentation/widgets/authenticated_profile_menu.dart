@@ -24,6 +24,12 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// the empty string.
 String? authenticatedProfileInitials(final WidgetRef ref) {
   final claims = ref.watch(jwtClaimsProvider);
+  final representedName = claims?.isRepresentative ?? false ? claims?.representedName?.trim() : null;
+  if (representedName != null && representedName.isNotEmpty) {
+    final words = representedName.split(RegExp(r'\s+'));
+    final initials = words.take(2).map(_initial).whereType<String>().join();
+    return initials.isEmpty ? null : initials;
+  }
   final initials = [
     _initial(claims?.givenName),
     _initial(claims?.firstSurname),
@@ -100,7 +106,7 @@ void showAuthenticatedProfileMenu({
   showAppDrawerMenu(
     context: context,
     userName: _userName(l10n, claims),
-    nif: claims?.normalizedPersonIdentifier ?? claims?.idAgente ?? '-',
+    nif: claims?.effectivePersonIdentifier ?? claims?.idAgente ?? '-',
     primaryItems: [
       AppDrawerMenuItem(
         label: l10n.drawerPreferences,
@@ -140,6 +146,11 @@ void showAuthenticatedProfileMenu({
 }
 
 String _userName(final AppLocalizations l10n, final JwtClaims? claims) {
+  final effectiveName = claims?.isRepresentative ?? false ? claims?.effectiveDisplayName?.trim() : null;
+  if (effectiveName != null && effectiveName.isNotEmpty) {
+    return effectiveName;
+  }
+
   final givenName = claims?.givenName?.trim();
   final firstSurname = claims?.firstSurname?.trim();
   final nameParts = [

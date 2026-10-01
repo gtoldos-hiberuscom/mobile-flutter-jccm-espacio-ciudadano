@@ -24,6 +24,7 @@ class AppNotificationContactForm extends StatelessWidget {
     required this.onLeave,
     required this.onSave,
     super.key,
+    this.notice,
   });
 
   final String? formError;
@@ -35,6 +36,7 @@ class AppNotificationContactForm extends StatelessWidget {
   final VoidCallback onClearError;
   final VoidCallback onLeave;
   final VoidCallback onSave;
+  final String? notice;
 
   @override
   Widget build(final BuildContext context) {
@@ -58,6 +60,12 @@ class AppNotificationContactForm extends StatelessWidget {
                     style: AppTypography.h2.copyWith(color: AppColors.textBase),
                   ),
                 ),
+                if (notice != null) ...[
+                  const SizedBox(height: AppDimensions.space16),
+                  AppAlertBanner(
+                    message: notice!,
+                  ),
+                ],
                 const SizedBox(height: AppDimensions.space24),
                 Semantics(
                   label: l10n.appNotificationContactFormRequiredNoteSemantic,

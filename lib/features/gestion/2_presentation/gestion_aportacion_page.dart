@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/usecases/buscar_expediente_tercero_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
@@ -53,6 +54,25 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
     final documentNumber = _docNumberController.text.trim();
     if (documentNumber.isEmpty) {
       AppAlertSnackbar.show(context, message: l10n.gestionAportacionDocNumberRequiredError, severity: AppAlertSeverity.error);
+      return;
+    }
+
+    final claims = ref.read(jwtClaimsProvider);
+    final authenticatedDocuments = <String?>[
+      claims?.effectivePersonIdentifier,
+      claims?.normalizedPersonIdentifier,
+      claims?.preferredUsername,
+      claims?.sub,
+    ];
+    final isOwnDocument = authenticatedDocuments.whereType<String>().any(
+      (final candidate) => _normalizedDocument(documentNumber) == _normalizedDocument(candidate),
+    );
+    if (isOwnDocument) {
+      AppAlertSnackbar.show(
+        context,
+        message: l10n.gestionAportacionOwnExpedienteError,
+        severity: AppAlertSeverity.error,
+      );
       return;
     }
 
@@ -257,6 +277,8 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
     );
   }
 }
+
+String _normalizedDocument(final String value) => value.replaceAll(RegExp('[^A-Za-z0-9]'), '').toUpperCase();
 
 class _SectionLabel extends StatelessWidget {
   const _SectionLabel({required this.text});
