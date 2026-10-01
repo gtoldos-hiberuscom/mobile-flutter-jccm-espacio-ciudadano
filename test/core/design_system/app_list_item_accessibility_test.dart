@@ -3,6 +3,7 @@ import 'dart:ui' show SemanticsAction, Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_list.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 
 void main() {
   Widget buildApp(final Widget child) => MaterialApp(
@@ -111,5 +112,24 @@ void main() {
     );
 
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('muestra el anillo de foco común al recibir el foco del teclado', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(AppListItem(title: 'Preguntas frecuentes', onTap: () {})),
+    );
+    expect(find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter), findsNothing);
+
+    Focus.of(tester.element(find.text('Preguntas frecuentes'))).requestFocus();
+    await tester.pumpAndSettle();
+
+    expect(find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter), findsOneWidget);
+  });
+
+  testWidgets('informativo no pinta anillo de foco', (final tester) async {
+    await tester.pumpWidget(buildApp(const AppListItem(title: 'Sólo lectura')));
+    await tester.pump();
+
+    expect(find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter), findsNothing);
   });
 }

@@ -392,11 +392,12 @@ class _FilterNavigationState extends State<_FilterNavigation> {
 
   @override
   Widget build(final BuildContext context) {
-    if (isTabletLayout(context)) {
-      const filters = [
-        ..._primaryFilters,
-        _RecommendationFilter.immediate,
-      ];
+    // En tablet caben los cuatro filtros. Con el texto ampliado también se
+    // muestran todos, repartidos en varias líneas: así ninguno exige deslizar
+    // ni pulsar una flecha para alcanzarlo (WCAG 2.5.1).
+    final showsAllFilters = isTabletLayout(context) || MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    if (showsAllFilters) {
+      const filters = _RecommendationFilter.values;
       return AppFloatingNavigation(
         tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
         selectedIndex: filters.indexOf(widget.selectedFilter),
@@ -425,6 +426,10 @@ class _FilterNavigationState extends State<_FilterNavigation> {
           key: ValueKey(_showImmediate),
           tabs: filters.map((final filter) => filter.label(context)).toList(growable: false),
           selectedIndex: selectedIndex,
+          // Cada grupo es una vista parcial de los cuatro filtros: la posición
+          // anunciada se refiere al conjunto completo (4.1.2).
+          tabPositions: filters.map((final filter) => filter.index + 1).toList(growable: false),
+          semanticTabCount: _RecommendationFilter.values.length,
           enabledTabs: List<bool>.filled(filters.length, true),
           minTabWidths: List<double>.filled(filters.length, 40),
           tabMinHeight: AppDimensions.space40,
@@ -465,11 +470,14 @@ class _FloatingNavigationArrow extends StatelessWidget {
     return SizedBox(
       width: AppDimensions.minTouchTarget,
       height: 40,
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        icon: AppIcon(icon, color: AppColors.textPrimary),
-        onPressed: onPressed,
-        tooltip: tooltip,
+      child: AppFocusRing(
+        borderRadius: const BorderRadius.all(Radius.circular(AppDimensions.radiusRound)),
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          icon: AppIcon(icon, color: AppColors.textPrimary),
+          onPressed: onPressed,
+          tooltip: tooltip,
+        ),
       ),
     );
   }

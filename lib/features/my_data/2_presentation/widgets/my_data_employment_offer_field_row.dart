@@ -13,6 +13,26 @@ class MyDataEmploymentOfferFieldRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final labelText = Text(
+      label.toUpperCase(),
+      style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+    );
+    final valueStyle = AppTypography.bodyRegular.copyWith(color: AppColors.primary);
+    // Con el texto ampliado la etiqueta y el valor se apilan: la columna fija
+    // del valor partía la fecha en varias líneas (WCAG 1.4.4).
+    if (MediaQuery.textScalerOf(context).scale(1) > 1.5) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            labelText,
+            const SizedBox(height: AppDimensions.space4),
+            Text(value, style: valueStyle),
+          ],
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space12),
       child: Row(

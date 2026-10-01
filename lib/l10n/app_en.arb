@@ -3831,6 +3831,17 @@
       }
     }
   },
+  "a11yMonthYear": "{month} {year}",
+  "@a11yMonthYear": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "a11yCalendarHasEvent": "has event",
   "a11yCalendarOutsideMonth": "outside displayed month",
   "a11yCaptcha": "{label}, {badge} verification",

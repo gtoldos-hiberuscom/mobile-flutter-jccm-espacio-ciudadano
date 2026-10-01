@@ -2,6 +2,7 @@ import 'dart:ui' show SemanticsAction, Tristate;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -147,5 +148,46 @@ void main() {
 
     expect(tester.widget<Text>(find.text('Datos')).maxLines, 2);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('la barra crece con el texto al 200 por ciento y el título ocupa dos líneas', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(320, 568);
+    addTearDown(tester.view.reset);
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+    const title = 'Ayuda y contacto';
+    final bar = AppNavBar(
+      title: title,
+      leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {}),
+    );
+    await tester.pumpWidget(buildApp(bar, textScaler: const TextScaler.linear(2)));
+
+    const singleLineHeight = 20 * (28 / 20) * 2;
+    expect(bar.preferredSize.height, 2 * (56 + 2));
+    expect(tester.getSize(find.byType(AppBar)).height, bar.preferredSize.height);
+    expect(tester.getSize(find.text(title)).height, greaterThan(singleLineHeight));
+    expect(tester.getSize(find.text(title)).height, lessThanOrEqualTo(bar.preferredSize.height));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('sin ampliación conserva la altura de diseño', (final tester) async {
+    final level2 = AppNavBar(type: AppNavBarType.level2, title: 'Datos', onBack: () {});
+    expect(level2.preferredSize.height, 56 + 1);
+    expect(const AppNavBar(type: AppNavBarType.detail, title: 'Detalle').preferredSize.height, 64);
+    expect(const AppNavBar().preferredSize.height, 58);
+  });
+
+  testWidgets('el botón de retroceso muestra el anillo de foco común', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(AppNavBar(type: AppNavBarType.level2, title: 'Datos', onBack: () {})),
+    );
+    expect(find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter), findsNothing);
+
+    Focus.of(tester.element(find.byIcon(Icons.arrow_back_rounded))).requestFocus();
+    await tester.pumpAndSettle();
+
+    expect(find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter), findsOneWidget);
   });
 }

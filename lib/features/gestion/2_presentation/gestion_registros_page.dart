@@ -199,11 +199,18 @@ class _RegistrosList extends StatelessWidget {
     if (filtered.isEmpty) {
       return EmptyStateWidget(message: l10n.caseworkSearchNoResults, subtitle: l10n.caseworkSearchNoResultsHint, icon: AppIcons.search);
     }
-    return ListView.separated(
+    // Todas las tarjetas se construyen para que el teclado llegue a las que
+    // están fuera de la vista (WCAG 2.1.1).
+    return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: appPageHorizontalPadding(context), vertical: AppDimensions.space24),
-      itemCount: filtered.length,
-      separatorBuilder: (final context, final index) => const SizedBox(height: AppDimensions.space16),
-      itemBuilder: (final context, final index) => _RegistroCard(registro: filtered[index], isEntrada: isEntrada),
+      child: Column(
+        children: [
+          for (final (index, registro) in filtered.indexed) ...[
+            if (index > 0) const SizedBox(height: AppDimensions.space16),
+            _RegistroCard(registro: registro, isEntrada: isEntrada),
+          ],
+        ],
+      ),
     );
   }
 }

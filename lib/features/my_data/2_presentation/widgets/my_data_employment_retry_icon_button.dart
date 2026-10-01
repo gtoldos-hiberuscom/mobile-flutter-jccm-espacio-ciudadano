@@ -23,16 +23,18 @@ class MyDataEmploymentRetryIconButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
             boxShadow: AppShadows.low,
           ),
-          child: InkWell(
-            onTap: onPressed,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-            child: const SizedBox(
-              width: AppDimensions.minTouchTarget,
-              height: AppDimensions.minTouchTarget,
-              child: Center(
-                child: AppIcon(
-                  AppIcons.autorenew,
-                  color: AppColors.textPrimary,
+          child: AppFocusRing(
+            child: InkWell(
+              onTap: onPressed,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              child: const SizedBox(
+                width: AppDimensions.minTouchTarget,
+                height: AppDimensions.minTouchTarget,
+                child: Center(
+                  child: AppIcon(
+                    AppIcons.autorenew,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
             ),

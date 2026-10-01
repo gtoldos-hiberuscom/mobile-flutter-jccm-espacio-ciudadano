@@ -3845,6 +3845,18 @@
       }
     }
   },
+  "a11yMonthYear": "{month} de {year}",
+  "@a11yMonthYear": {
+    "description": "Encabezado accesible de un grupo de citas: mes y año en un único nodo.",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "a11yCalendarHasEvent": "con evento",
   "a11yCalendarOutsideMonth": "fuera del mes mostrado",
   "a11yCaptcha": "{label}, verificación {badge}",

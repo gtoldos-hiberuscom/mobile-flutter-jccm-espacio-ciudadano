@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class AppFilterButton extends StatelessWidget {
@@ -62,45 +63,49 @@ class AppSelectableFilterChip extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          child: InkWell(
-            onTap: onTap,
-            canRequestFocus: onTap != null,
+          child: AppFocusRing(
             borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-            child: Container(
-              width: double.infinity,
-              constraints: const BoxConstraints(minHeight: 52),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space16,
-                vertical: AppDimensions.space12,
-              ),
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundBlueMutedLight,
-                border: Border.all(
-                  color: onTap == null ? AppColors.outline : AppColors.secondary,
-                  width: isSelected ? 2 : 1,
+            enabled: onTap != null,
+            child: InkWell(
+              onTap: onTap,
+              canRequestFocus: onTap != null,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+              child: Container(
+                width: double.infinity,
+                constraints: const BoxConstraints(minHeight: 52),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space16,
+                  vertical: AppDimensions.space12,
                 ),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-                boxShadow: AppShadows.low,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      label,
-                      style: AppTypography.bodyRegular.copyWith(
-                        color: onTap == null ? AppColors.textDisabled : AppColors.textBlack,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                decoration: BoxDecoration(
+                  color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundBlueMutedLight,
+                  border: Border.all(
+                    color: onTap == null ? AppColors.outline : AppColors.secondary,
+                    width: isSelected ? 2 : 1,
+                  ),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+                  boxShadow: AppShadows.low,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        label,
+                        style: AppTypography.bodyRegular.copyWith(
+                          color: onTap == null ? AppColors.textDisabled : AppColors.textBlack,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  if (isSelected) ...[
-                    const SizedBox(width: AppDimensions.space8),
-                    AppIcon(
-                      AppIcons.checkCircle,
-                      color: onTap == null ? AppColors.textDisabled : AppColors.secondary,
-                    ),
+                    if (isSelected) ...[
+                      const SizedBox(width: AppDimensions.space8),
+                      AppIcon(
+                        AppIcons.checkCircle,
+                        color: onTap == null ? AppColors.textDisabled : AppColors.secondary,
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),

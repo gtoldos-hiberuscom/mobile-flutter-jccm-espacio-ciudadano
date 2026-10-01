@@ -122,6 +122,13 @@ abstract final class AppColors {
 
   // Kept for backward-compat with existing widgets
   static const Color textSecondary = neutral700;
+
+  /// Texto de ejemplo de los campos y prefijos como «(ES)». 6,2:1 sobre
+  /// blanco y 5,1:1 sobre el azul claro de foco (WCAG 1.4.3).
+  static const Color textPlaceholder = Color(0xFF4F6377);
+
+  /// Texto de ayuda bajo los campos. 9,4:1 sobre blanco (WCAG 1.4.3).
+  static const Color textHelper = blueMuted900;
   static const Color textDisabled = neutral500;
   static const Color textOnPrimary = Color(0xFFFFFFFF);
   static const Color textOnSurface = blue900;

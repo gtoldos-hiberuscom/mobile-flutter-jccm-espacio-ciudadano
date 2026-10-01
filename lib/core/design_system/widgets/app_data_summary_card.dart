@@ -3,6 +3,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 
 /// Interactive summary card for compact data records.
 ///
@@ -135,10 +136,16 @@ class AppDataSummaryCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           borderRadius: borderRadius,
-          child: InkWell(
-            onTap: onTap,
+          // Anillo de foco común (WCAG 1.4.11 / 2.4.7) en lugar del sombreado
+          // de Material, que no llega a 3:1.
+          child: AppFocusRing(
             borderRadius: borderRadius,
-            child: content,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: borderRadius,
+              focusColor: Colors.transparent,
+              child: content,
+            ),
           ),
         ),
       ),

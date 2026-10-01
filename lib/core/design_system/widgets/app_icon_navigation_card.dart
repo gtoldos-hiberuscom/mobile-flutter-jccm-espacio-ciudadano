@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 
 /// Interactive navigation card with a leading icon tile.
 ///
@@ -47,51 +48,54 @@ class AppIconNavigationCard extends StatelessWidget {
           ),
           child: Material(
             color: Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
+            child: AppFocusRing(
               borderRadius: borderRadius,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppDimensions.space8,
-                  AppDimensions.space8,
-                  AppDimensions.space16,
-                  AppDimensions.space8,
-                ),
-                child: Row(
-                  children: [
-                    _AppNavigationIconTile(icon: icon),
-                    const SizedBox(width: AppDimensions.space16),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              title,
-                              style: AppTypography.leadingMedium.copyWith(
-                                color: AppColors.primary,
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: borderRadius,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppDimensions.space8,
+                    AppDimensions.space8,
+                    AppDimensions.space16,
+                    AppDimensions.space8,
+                  ),
+                  child: Row(
+                    children: [
+                      _AppNavigationIconTile(icon: icon),
+                      const SizedBox(width: AppDimensions.space16),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                title,
+                                style: AppTypography.leadingMedium.copyWith(
+                                  color: AppColors.primary,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: AppDimensions.space4),
-                            Text(
-                              description,
-                              style: AppTypography.smallRegular.copyWith(
-                                color: AppColors.primary,
+                              const SizedBox(height: AppDimensions.space4),
+                              Text(
+                                description,
+                                style: AppTypography.smallRegular.copyWith(
+                                  color: AppColors.primary,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: AppDimensions.space8),
-                    const AppIcon(
-                      AppIcons.arrowForward,
-                      color: AppColors.textPrimary,
-                      size: AppDimensions.iconLarge,
-                    ),
-                  ],
+                      const SizedBox(width: AppDimensions.space8),
+                      const AppIcon(
+                        AppIcons.arrowForward,
+                        color: AppColors.textPrimary,
+                        size: AppDimensions.iconLarge,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

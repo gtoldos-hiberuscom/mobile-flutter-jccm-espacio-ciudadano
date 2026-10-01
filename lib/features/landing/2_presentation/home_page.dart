@@ -142,9 +142,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     // contexto. En Android sobra —escribir en el KeyStore ya exige autenticar,
     // justo debajo—, y hacerlo igualmente encadenaba dos huellas seguidas.
     if (!Platform.isAndroid) {
-      final authenticated = await ref.read(biometricAuthenticatorProvider).authenticateForSessionUnlock(
-        localizedReason: AppLocalizations.of(context).sessionUnlockBiometricReason,
-      );
+      final authenticated = await ref
+          .read(biometricAuthenticatorProvider)
+          .authenticateForSessionUnlock(
+            localizedReason: AppLocalizations.of(context).sessionUnlockBiometricReason,
+          );
       if (!mounted || !authenticated) {
         return;
       }
@@ -570,36 +572,56 @@ class _QuickAccessGrid extends StatelessWidget {
         route: Routes.myDataVehicles,
       ),
     ];
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: items.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _isTablet(context) ? 6 : 3,
-        mainAxisExtent: _isTablet(context) ? 180 + (MediaQuery.textScalerOf(context).scale(16) - 16) * 4 : null,
-        mainAxisSpacing: AppDimensions.space8,
-        crossAxisSpacing: AppDimensions.space8,
-        childAspectRatio: 0.73,
-      ),
-      itemBuilder: (final context, final index) {
-        final item = items[index];
-        return AppQuickAccessCard(
-          label: item.label,
-          icon: item.icon,
-          iconAsset: item.iconAsset,
-          onTap: () {
-            final route = item.route;
-            if (route == null) {
-              onComingSoon();
-              return;
-            }
-            unawaited(
-              context.push(
-                Uri(
-                  path: route,
-                  queryParameters: const {'from': 'home'},
-                ).toString(),
-              ),
+    return LayoutBuilder(
+      builder: (final context, final constraints) {
+        final tablet = _isTablet(context);
+        // Con el texto muy ampliado, dos columnas dan a cada etiqueta ancho
+        // suficiente para no partir palabras (WCAG 1.4.4).
+        final crossAxisCount = tablet
+            ? 6
+            : MediaQuery.textScalerOf(context).scale(1) > 1.5
+            ? 2
+            : 3;
+        final cellWidth = (constraints.maxWidth - AppDimensions.space8 * (crossAxisCount - 1)) / crossAxisCount;
+        // El alto se mide con la etiqueta más alta en lugar de fijarse por
+        // proporción: así ninguna tarjeta recorta su texto.
+        final cellHeight = AppQuickAccessCard.heightFor(
+          context,
+          labels: items.map((final item) => item.label),
+          width: cellWidth,
+          iconAreaHeight: tablet ? 112 : 80,
+        );
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: items.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            mainAxisExtent: cellHeight,
+            mainAxisSpacing: AppDimensions.space8,
+            crossAxisSpacing: AppDimensions.space8,
+          ),
+          itemBuilder: (final context, final index) {
+            final item = items[index];
+            return AppQuickAccessCard(
+              label: item.label,
+              icon: item.icon,
+              iconAsset: item.iconAsset,
+              onTap: () {
+                final route = item.route;
+                if (route == null) {
+                  onComingSoon();
+                  return;
+                }
+                unawaited(
+                  context.push(
+                    Uri(
+                      path: route,
+                      queryParameters: const {'from': 'home'},
+                    ).toString(),
+                  ),
+                );
+              },
             );
           },
         );

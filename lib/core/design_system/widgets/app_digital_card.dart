@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Digital credential card matching the Carnets Digitales Figma component.
@@ -150,27 +151,33 @@ class AppDigitalCard extends StatelessWidget {
                     liveRegion: isDownloading,
                     onTap: enabled ? onDownload : null,
                     child: ExcludeSemantics(
-                      child: TextButton.icon(
-                        onPressed: enabled ? onDownload : null,
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.blue300,
-                          disabledForegroundColor: AppColors.blue300.withValues(alpha: 0.55),
-                          minimumSize: const Size(0, AppDimensions.minTouchTarget),
-                          padding: const EdgeInsets.all(AppDimensions.space8),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        icon: isDownloading
-                            ? const SizedBox.square(
-                                dimension: AppDimensions.iconSmall,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: AppColors.blue300,
-                                ),
-                              )
-                            : const AppIcon(AppIcons.download),
-                        label: Text(
-                          downloadLabel,
-                          style: AppTypography.bodyBold,
+                      // Anillo de foco común (1.4.11 / 2.4.7) y sin el velo de
+                      // foco de Material, que bajaba el texto a 3,8:1 (1.4.3).
+                      child: AppFocusRing(
+                        enabled: enabled,
+                        child: TextButton.icon(
+                          onPressed: enabled ? onDownload : null,
+                          style: TextButton.styleFrom(
+                            foregroundColor: downloadColor,
+                            disabledForegroundColor: downloadColor.withValues(alpha: 0.55),
+                            overlayColor: Colors.transparent,
+                            minimumSize: const Size(0, AppDimensions.minTouchTarget),
+                            padding: const EdgeInsets.all(AppDimensions.space8),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          icon: isDownloading
+                              ? const SizedBox.square(
+                                  dimension: AppDimensions.iconSmall,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: downloadColor,
+                                  ),
+                                )
+                              : const AppIcon(AppIcons.download),
+                          label: Text(
+                            downloadLabel,
+                            style: AppTypography.bodyBold,
+                          ),
                         ),
                       ),
                     ),
@@ -201,8 +208,18 @@ class _CardDate extends StatelessWidget {
   );
 }
 
+/// Color de «Descargar»: 7,3:1 sobre el fondo del carnet (WCAG 1.4.3). El
+/// azul anterior se quedaba en 3,7:1.
+@visibleForTesting
+const Color downloadColor = AppColors.secondaryLight200;
+
+/// Color de los rótulos («Título», «Número de carnet», fechas): 6,2:1 sobre el
+/// fondo del carnet (WCAG 1.4.3). El gris anterior se quedaba en 4,2:1.
+@visibleForTesting
+const Color cardCaptionColor = AppColors.blueMuted500;
+
 final TextStyle _cardCaptionStyle = AppTypography.captionRegular.copyWith(
-  color: const Color(0xFF98A9BB),
+  color: cardCaptionColor,
   fontWeight: FontWeight.w400,
 );
 

@@ -5588,6 +5588,12 @@ abstract class AppLocalizations {
   /// **'Seleccionar mes y año, actual {monthYear}'**
   String a11ySelectCalendarMonthYear(String monthYear);
 
+  /// Encabezado accesible de un grupo de citas: mes y año en un único nodo.
+  ///
+  /// In es, this message translates to:
+  /// **'{month} de {year}'**
+  String a11yMonthYear(String month, String year);
+
   /// No description provided for @a11yCalendarHasEvent.
   ///
   /// In es, this message translates to:

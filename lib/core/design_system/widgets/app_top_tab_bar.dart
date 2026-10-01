@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 
 /// A top tab bar component for switching between sections.
 ///
@@ -131,38 +132,41 @@ class _TopTab extends StatelessWidget {
         color: Colors.transparent,
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
-          child: InkWell(
-            onTap: onTap,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.space8,
-                      vertical: AppDimensions.space8,
-                    ),
-                    child: Text(
-                      label,
-                      textAlign: TextAlign.center,
-                      style: AppTypography.smallRegular.copyWith(
-                        color: AppColors.textBase,
+          child: AppFocusRing(
+            borderRadius: BorderRadius.zero,
+            child: InkWell(
+              onTap: onTap,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimensions.space8,
+                        vertical: AppDimensions.space8,
+                      ),
+                      child: Text(
+                        label,
+                        textAlign: TextAlign.center,
+                        style: AppTypography.smallRegular.copyWith(
+                          color: AppColors.textBase,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                if (isSelected)
-                  Container(
-                    width: AppDimensions.iconMedium,
-                    height: AppDimensions.space4,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(AppDimensions.radiusXs),
+                  if (isSelected)
+                    Container(
+                      width: AppDimensions.iconMedium,
+                      height: AppDimensions.space4,
+                      decoration: const BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(AppDimensions.radiusXs),
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

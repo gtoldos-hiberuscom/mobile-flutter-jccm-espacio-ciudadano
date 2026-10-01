@@ -168,13 +168,18 @@ class _HealthAppointmentsTab extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              switch (selectedScope) {
-                HealthAppointmentScope.primaryCare => l10n.myDataHealthAppointmentsTitle,
-                HealthAppointmentScope.hospital => l10n.myDataHealthHospitalAppointmentsTitle,
-              },
-              style: AppTypography.h2.copyWith(
-                color: AppColors.primary,
+            // Encabezado de sección (WCAG 1.3.1).
+            Semantics(
+              header: true,
+              headingLevel: 2,
+              child: Text(
+                switch (selectedScope) {
+                  HealthAppointmentScope.primaryCare => l10n.myDataHealthAppointmentsTitle,
+                  HealthAppointmentScope.hospital => l10n.myDataHealthHospitalAppointmentsTitle,
+                },
+                style: AppTypography.h2.copyWith(
+                  color: AppColors.primary,
+                ),
               ),
             ),
             const SizedBox(height: AppDimensions.space24),
@@ -509,18 +514,30 @@ class _AppointmentsContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (final yearSection in sections) ...[
-          Text(
-            yearSection.year.toString(),
-            style: AppTypography.h2.copyWith(
-              color: AppColors.textBase,
+          // Año y mes como encabezados; el mes se anuncia con su año
+          // («septiembre de 2026») para entenderse fuera de contexto (1.3.1).
+          Semantics(
+            header: true,
+            headingLevel: 3,
+            child: Text(
+              yearSection.year.toString(),
+              style: AppTypography.h2.copyWith(
+                color: AppColors.textBase,
+              ),
             ),
           ),
           const SizedBox(height: AppDimensions.space8),
           for (final monthSection in yearSection.months) ...[
-            Text(
-              l10n.commonMonthName(_monthKey(monthSection.month)),
-              style: AppTypography.h3.copyWith(
-                color: AppColors.textBase,
+            Semantics(
+              header: true,
+              headingLevel: 4,
+              label: l10n.a11yMonthYear(l10n.commonMonthName(_monthKey(monthSection.month)), yearSection.year.toString()),
+              excludeSemantics: true,
+              child: Text(
+                l10n.commonMonthName(_monthKey(monthSection.month)),
+                style: AppTypography.h3.copyWith(
+                  color: AppColors.textBase,
+                ),
               ),
             ),
             const SizedBox(height: AppDimensions.space8),
@@ -658,105 +675,108 @@ class _AppointmentCardShell extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.borderBlueMutedLight),
-      ),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              width: 78,
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: AppColors.borderBlueMutedLight,
-                    width: 4,
+    // Un único nodo por cita, en orden de lectura (WCAG 1.3.1).
+    return MergeSemantics(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.borderBlueMutedLight),
+        ),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                width: 78,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: AppColors.borderBlueMutedLight,
+                      width: 4,
+                    ),
+                    right: BorderSide(color: AppColors.backgroundBlueMutedLight),
                   ),
-                  right: BorderSide(color: AppColors.backgroundBlueMutedLight),
                 ),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space12,
-                vertical: AppDimensions.space16,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    dateTime.day.toString(),
-                    style: AppTypography.h1.copyWith(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  Text(
-                    AppLocalizations.of(context).commonWeekdayName(_weekdayKey(dateTime.weekday)),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.captionRegular.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppDimensions.space8,
-                  AppDimensions.space16,
-                  AppDimensions.space8,
-                  AppDimensions.space16,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space12,
+                  vertical: AppDimensions.space16,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
+                    Text(
+                      dateTime.day.toString(),
+                      style: AppTypography.h1.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.of(context).commonWeekdayName(_weekdayKey(dateTime.weekday)),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.captionRegular.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppDimensions.space8,
+                    AppDimensions.space16,
+                    AppDimensions.space8,
+                    AppDimensions.space16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            _formatTime(dateTime),
+                            style: AppTypography.smallRegular.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          const SizedBox(width: AppDimensions.space16),
+                          Flexible(
+                            child: Text(
+                              heading,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.captionUppercase.copyWith(
+                                color: AppColors.textPlaceholder,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppDimensions.space4),
+                      Text(
+                        title,
+                        style: AppTypography.bodyBold.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.space4),
+                      for (final line in lines)
                         Text(
-                          _formatTime(dateTime),
+                          line,
                           style: AppTypography.smallRegular.copyWith(
                             color: AppColors.primary,
                           ),
                         ),
-                        const SizedBox(width: AppDimensions.space16),
-                        Flexible(
-                          child: Text(
-                            heading,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTypography.captionUppercase.copyWith(
-                              color: AppColors.borderBlueMutedBase,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.space4),
-                    Text(
-                      title,
-                      style: AppTypography.bodyBold.copyWith(
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: AppDimensions.space4),
-                    for (final line in lines)
-                      Text(
-                        line,
-                        style: AppTypography.smallRegular.copyWith(
-                          color: AppColors.primary,
-                        ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

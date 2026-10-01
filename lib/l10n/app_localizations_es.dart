@@ -2911,6 +2911,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String a11yMonthYear(String month, String year) {
+    return '$month de $year';
+  }
+
+  @override
   String get a11yCalendarHasEvent => 'con evento';
 
   @override

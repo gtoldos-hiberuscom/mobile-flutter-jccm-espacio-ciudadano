@@ -157,10 +157,15 @@ class _AuthorizedVehiclesData extends ConsumerWidget {
           // Section title
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-            child: Text(
-              l10n.myDataVehiclesSectionTitle,
-              style: AppTypography.h2.copyWith(
-                color: AppColors.primary,
+            // Encabezado de sección, bajo el título de la pantalla (WCAG 1.3.1).
+            child: Semantics(
+              header: true,
+              headingLevel: 2,
+              child: Text(
+                l10n.myDataVehiclesSectionTitle,
+                style: AppTypography.h2.copyWith(
+                  color: AppColors.primary,
+                ),
               ),
             ),
           ),
@@ -196,6 +201,16 @@ class _VehicleCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
+    // Un vehículo, un nodo, con la etiqueta antes del dato: por separado se
+    // leían la matrícula y su rótulo sueltos y en orden inverso (WCAG 1.3.1).
+    return Semantics(
+      container: true,
+      label: '${l10n.myDataVehiclesLicensePlateLabel}: ${vehicle.licensePlate}',
+      child: ExcludeSemantics(child: _buildCard(l10n)),
+    );
+  }
+
+  Widget _buildCard(final AppLocalizations l10n) {
     return AppInfoCard(
       leadingBorderWidth: AppDimensions.space4,
       contentPadding: const EdgeInsets.symmetric(

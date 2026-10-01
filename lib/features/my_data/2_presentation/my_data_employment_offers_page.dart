@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -42,30 +41,26 @@ class MyDataEmploymentOffersPage extends ConsumerWidget {
     final linkLabel = l10n.myDataEmploymentOffersPortalLink;
     final footer = l10n.myDataEmploymentOffersInfoSheetFooter;
     final linkStart = footer.indexOf(linkLabel);
-    final recognizer = TapGestureRecognizer()
-      ..onTap = () => launchExternalUrlWithConfirmation(
-        context,
-        Uri.parse('https://empleo.castillalamancha.es/'),
-      );
-    try {
-      await AppInfoSheet.show(
-        context: context,
-        title: l10n.myDataEmploymentOffersPageTitle,
-        bodyText: l10n.myDataEmploymentOffersInfoSheetDescription,
-        footerSpan: TextSpan(
-          children: [
-            TextSpan(text: footer.substring(0, linkStart)),
-            TextSpan(
-              text: linkLabel,
-              style: AppTypography.bodyLink.copyWith(color: AppColors.textPrimary),
-              recognizer: recognizer,
+    // Enlace enfocable con teclado, con anillo de foco y rol de enlace
+    // externo (WCAG 2.1.1, 2.4.7 y 4.1.2).
+    await AppInfoSheet.show(
+      context: context,
+      title: l10n.myDataEmploymentOffersPageTitle,
+      bodyText: l10n.myDataEmploymentOffersInfoSheetDescription,
+      footerSpan: TextSpan(
+        children: [
+          TextSpan(text: footer.substring(0, linkStart)),
+          AppInlineLink.span(
+            text: linkLabel,
+            style: AppTypography.bodyLink.copyWith(color: AppColors.textPrimary),
+            onTap: () => launchExternalUrlWithConfirmation(
+              context,
+              Uri.parse('https://empleo.castillalamancha.es/'),
             ),
-            TextSpan(text: footer.substring(linkStart + linkLabel.length)),
-          ],
-        ),
-      );
-    } finally {
-      recognizer.dispose();
-    }
+          ),
+          TextSpan(text: footer.substring(linkStart + linkLabel.length)),
+        ],
+      ),
+    );
   }
 }
