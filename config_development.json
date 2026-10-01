@@ -9,5 +9,6 @@
   "SSO_OFFLINE_ACCESS": "false",
   "SSO_REALM": "usuarios",
   "SSO_CLIENT_ID": "add-espacio_ciudadano_mobile-fo",
-  "SSO_REDIRECT_URI": "es.jccm.espaciociudadano://auth/callback"
+  "SSO_REDIRECT_URI": "es.jccm.espaciociudadano://auth/callback",
+  "SSO_STEP_UP_PARAMS": ""
 }
