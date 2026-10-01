@@ -18,6 +18,7 @@ class AppConfig {
         'SSO_REALM': String.fromEnvironment('SSO_REALM'),
         'SSO_BASE_URL': String.fromEnvironment('SSO_BASE_URL'),
         'SSO_OFFLINE_ACCESS': String.fromEnvironment('SSO_OFFLINE_ACCESS'),
+        'SSO_STEP_UP_PARAMS': String.fromEnvironment('SSO_STEP_UP_PARAMS'),
       };
 
   final Map<String, Object?> _json;
@@ -160,6 +161,40 @@ class AppConfig {
   /// not exist yet in production. Requesting it where it is not assigned
   /// breaks login, so it must never default to true.
   bool get ssoOfflineAccess => _getConfigValue('SSO_OFFLINE_ACCESS', _parseBool);
+
+  /// Parámetros extra que este entorno añade a la petición de autorización
+  /// cuando se eleva el nivel de seguridad, en formato `clave=valor&clave=valor`.
+  ///
+  /// **Vacío en los tres entornos**, y a propósito: el mecanismo que funciona
+  /// hoy es repetir el login, que ya fuerza la reautenticación de Cl@ve por el
+  /// `prompt=login`, y no consta que Cerbero soporte pedir un nivel concreto.
+  /// Esta clave existe para poder **probarlo** —`acr_values=...`, por ejemplo—
+  /// cambiando la configuración y volviendo a entrar, sin tocar código ni
+  /// desplegar una build especial. Si resulta que Cerbero lo atiende, se
+  /// promueve; si no, se queda vacía y no se ha perdido nada.
+  ///
+  /// Un valor mal formado se ignora entero en vez de romper el login: elevar
+  /// sin el parámetro sigue siendo mejor que no poder entrar.
+  Map<String, String> get ssoStepUpParameters {
+    final raw = _getConfigValue('SSO_STEP_UP_PARAMS', (final v) => v as String).trim();
+    if (raw.isEmpty) {
+      return const <String, String>{};
+    }
+    final parsed = <String, String>{};
+    for (final pair in raw.split('&')) {
+      final separator = pair.indexOf('=');
+      if (separator <= 0) {
+        return const <String, String>{};
+      }
+      final key = pair.substring(0, separator).trim();
+      final value = pair.substring(separator + 1).trim();
+      if (key.isEmpty || value.isEmpty) {
+        return const <String, String>{};
+      }
+      parsed[key] = value;
+    }
+    return Map.unmodifiable(parsed);
+  }
 
   T _getConfigValue<T>(final String key, final T Function(Object) parser) {
     final value = _json[key];

@@ -35,6 +35,7 @@ final class FakeAuthRepository implements AuthRepository {
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) async {
     loginCalls++;
     final error = loginCalls <= loginErrors.length ? loginErrors[loginCalls - 1] : null;
