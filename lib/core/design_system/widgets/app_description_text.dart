@@ -34,8 +34,9 @@ class AppDescriptionText extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final isError = state == AppDescriptionTextState.error;
     final (color, icon) = switch (state) {
+      // El gris azulado anterior se quedaba en 2,9:1 (WCAG 1.4.3).
       AppDescriptionTextState.helper => (
-        AppColors.neutralDark,
+        AppColors.textHelper,
         Icons.info_outline_rounded,
       ),
       AppDescriptionTextState.error => (

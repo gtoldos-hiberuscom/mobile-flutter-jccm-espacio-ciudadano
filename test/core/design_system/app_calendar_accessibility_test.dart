@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_calendar.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
@@ -130,14 +131,75 @@ void main() {
       findsNothing,
     );
     final calendarRect = tester.getRect(find.byType(AppCalendar));
-    final sundayRect = tester.getRect(find.text('Dom'));
+    // Con el texto ampliado los días de la semana usan la inicial («D»).
+    expect(find.text('Dom'), findsNothing);
+    final sundayRect = tester.getRect(find.text('D'));
     expect(sundayRect.right, lessThanOrEqualTo(calendarRect.right));
     expect(sundayRect.left, greaterThanOrEqualTo(calendarRect.left));
     final dayTarget = find.ancestor(of: find.text('15'), matching: find.byType(InkWell)).first;
     expect(tester.getSize(dayTarget).width, lessThan(48));
-    expect(tester.getSize(dayTarget).height, 48);
+    expect(tester.getSize(dayTarget).height, greaterThanOrEqualTo(48));
+    // La cifra cabe en su casilla: las filas no se solapan.
+    expect(tester.getSize(find.text('15')).height, lessThanOrEqualTo(tester.getSize(dayTarget).height));
     expect(tester.getTopLeft(find.text('Mayo 2026')).dy, lessThan(tester.getTopLeft(find.byIcon(Icons.chevron_left)).dy));
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('en la Agenda al 200 por ciento el mes no se recorta y las filas no se solapan', (final tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(375, 900);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(textScaler: TextScaler.linear(2)),
+        child: buildApp(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: AppCalendar(initialDate: DateTime(2026, 9), eventDates: {DateTime(2026, 9, 14)}),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final monthText = tester.widget<Text>(find.text('Septiembre 2026'));
+    expect(monthText.maxLines, isNull);
+    expect(monthText.overflow, isNot(TextOverflow.ellipsis));
+
+    final row1 = tester.getRect(find.text('7'));
+    final row2 = tester.getRect(find.text('14'));
+    expect(row2.top, greaterThanOrEqualTo(row1.bottom));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('expone «Calendario» como encabezado cuando se indica un nivel', (final tester) async {
+    await tester.pumpWidget(buildApp(AppCalendar(initialDate: DateTime(2026, 9), headingLevel: 2)));
+
+    final heading = find.semantics.byLabel('Calendario').evaluate().single.getSemanticsData();
+    expect(heading.flagsCollection.isHeader, isTrue);
+    expect(heading.headingLevel, 2);
+  });
+
+  testWidgets('sin nivel de encabezado mantiene el nombre del grupo', (final tester) async {
+    await tester.pumpWidget(buildApp(AppCalendar(initialDate: DateTime(2026, 9))));
+
+    final group = find.semantics.byLabel('Calendario').evaluate().single.getSemanticsData();
+    expect(group.flagsCollection.isHeader, isFalse);
+  });
+
+  testWidgets('las flechas, el selector de mes y los días muestran el anillo de foco', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(AppCalendar(initialDate: DateTime(2026, 9), onDateSelected: (_) {})),
+    );
+    final ring = find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter);
+
+    for (final target in [find.byIcon(Icons.chevron_left), find.text('Septiembre 2026'), find.text('15')]) {
+      Focus.of(tester.element(target)).requestFocus();
+      await tester.pumpAndSettle();
+      expect(find.ancestor(of: target, matching: ring), findsOneWidget);
+    }
   });
 
   testWidgets('encaja las siete columnas en la Agenda de 390 dp', (

@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 
 /// A segmented control for selecting between multiple options.
 ///
@@ -54,7 +55,7 @@ class AppSegmentedControl extends StatelessWidget {
     assert(semanticLabels == null || semanticLabels!.length == segments.length, 'semanticLabels must match segments length');
     assert(semanticLabels == null || semanticLabels!.every((final label) => label.isNotEmpty), 'semanticLabels must not contain empty values');
 
-    final usesScrollableLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final usesStackedLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
     final buttons = List.generate(
       segments.length,
       (final index) => _SegmentButton(
@@ -85,20 +86,21 @@ class AppSegmentedControl extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
         border: Border.all(color: AppColors.borderNeutralLight),
       ),
-      child: usesScrollableLayout
-          ? SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: tabGroup(
-                Row(
-                  children: buttons.indexed
-                      .expand(
-                        (final entry) => [
-                          if (entry.$1 > 0) const SizedBox(width: AppDimensions.space8),
-                          SizedBox(width: 160, child: entry.$2),
-                        ],
-                      )
-                      .toList(growable: false),
-                ),
+      // Con el texto ampliado los segmentos se apilan a todo el ancho: se
+      // leen sin cortes y no exigen deslizar para alcanzarlos (WCAG 1.4.4 y
+      // 2.5.1).
+      child: usesStackedLayout
+          ? tabGroup(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: buttons.indexed
+                    .expand(
+                      (final entry) => [
+                        if (entry.$1 > 0) const SizedBox(height: AppDimensions.space8),
+                        entry.$2,
+                      ],
+                    )
+                    .toList(growable: false),
               ),
             )
           : tabGroup(
@@ -157,30 +159,34 @@ class _SegmentButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-          child: InkWell(
-            onTap: isEnabled ? onTap : null,
+          child: AppFocusRing(
             borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-            child: Container(
-              constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundWhite,
-                border: Border.all(
-                  color: isSelected ? AppColors.borderDarkPrimary : AppColors.neutral500,
+            enabled: isEnabled,
+            child: InkWell(
+              onTap: isEnabled ? onTap : null,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+              child: Container(
+                constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundWhite,
+                  border: Border.all(
+                    color: isSelected ? AppColors.borderDarkPrimary : AppColors.neutral500,
+                  ),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+                  boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
                 ),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-                boxShadow: isSelected ? AppShadows.low : AppShadows.medium,
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.space8,
-                vertical: AppDimensions.space8,
-              ),
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: isEnabled ? AppColors.textBlack : AppColors.textDisabled,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.space8,
+                  vertical: AppDimensions.space8,
+                ),
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: AppTypography.bodyRegular.copyWith(
+                    color: isEnabled ? AppColors.textBlack : AppColors.textDisabled,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                  ),
                 ),
               ),
             ),

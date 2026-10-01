@@ -72,6 +72,7 @@ class _NotificationContactPageState extends ConsumerState<NotificationContactPag
           data: (final contact) {
             _initialize(contact);
             return AppNotificationContactForm(
+              notice: contact == null ? AppLocalizations.of(context).notificationContactNotRegistered : null,
               formError: _formError,
               phoneError: _phoneError,
               emailError: _emailError,

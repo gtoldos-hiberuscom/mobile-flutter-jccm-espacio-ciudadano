@@ -9,6 +9,7 @@ import 'package:jccm_espacio_ciudadano/core/network/generated_api_compat.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente_aportacion_datos.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_expediente_repository.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/3_data/document_type.dart';
 
 final class GestionExpedienteRepositoryImpl implements GestionExpedienteRepository {
   GestionExpedienteRepositoryImpl({required final Dio dio}) : _api = PublicacionApi(withGeneratedApiCompat(dio), standardSerializers);
@@ -22,7 +23,8 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     required final String citizenId,
     required final String documentNumber,
   }) async {
-    logger.d('[selectbynifexp] req numerodocumento=${maskedDocument(documentNumber)} tipodocumento=NIF');
+    final documentType = documentTypeOf(documentNumber);
+    logger.d('[selectbynifexp] req numerodocumento=${maskedDocument(documentNumber)} tipodocumento=$documentType');
     try {
       // La variante `1` apunta al path gateway POST
       // /api/v1/ciudadanos/{sid}/expedientes (el sufijo del generador se
@@ -32,7 +34,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
         dtselectbynifv2reqBody: DTSELECTBYNIFV2REQ(
           (final builder) => builder
             ..numerodocumento = documentNumber
-            ..tipodocumento = 'NIF',
+            ..tipodocumento = documentType,
         ),
         extra: {
           // La consulta agrega expedientes de varios sistemas y en PRE puede
@@ -75,7 +77,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     required final String numexp,
     final String tipodoc = 'NIF',
   }) async {
-    logger.d('[selectbynumexp] req pnumdoc=${maskedDocument(documentNumber)} pnumexp=$numexp ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    logger.d('[selectbynumexp] req pnumdoc=${maskedDocument(documentNumber)} pnumexp=$numexp ptipodoc=$tipodoc');
     // Path gateway POST /api/v1/ciudadanos/{sid}/expedientes/{idExpediente}.
     // El segmento `{idExpediente}` va fijo a `detalle` — como documenta el
     // gateway — porque los números de expediente llevan barras
@@ -89,8 +91,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
         (final builder) => builder
           ..pnumdoc = documentNumber
           ..pnumexp = numexp
-          ..ptipodoc = 'NIF',
-        // ..ptipodoc = tipodoc,
+          ..ptipodoc = tipodoc,
       ),
       extra: {
         generatedApiTimeoutExtraKey: expedientesTimeout,
@@ -122,7 +123,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
     required final String numRegistro,
     final String tipodoc = 'NIF',
   }) async {
-    logger.d('[selectbynumreg] req pnumdoc=${maskedDocument(documentNumber)} pregistro=$numRegistro ptipodoc=NIF (tipodoc recibido=$tipodoc)');
+    logger.d('[selectbynumreg] req pnumdoc=${maskedDocument(documentNumber)} pregistro=$numRegistro ptipodoc=$tipodoc');
     // La variante `1` apunta al path gateway POST
     // /api/v1/ciudadanos/{sid}/registros/{idRegistro}. El backend identifica
     // el registro por el `pregistro` del cuerpo; el path param es decorativo.
@@ -134,8 +135,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
           ..pnumdoc = documentNumber
           ..pregistro = numRegistro
           // El backend rechaza ptipodoc='DNI' con 403; igual que
-          // selectbynumexp, siempre debe enviarse 'NIF'.
-          ..ptipodoc = 'NIF',
+          ..ptipodoc = tipodoc,
       ),
       extra: {
         generatedApiDecodeStringResponseExtraKey: true,
@@ -293,6 +293,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       numexp: _string(data, 'numexp') ?? '',
       titulo: _string(data, 'desasunto') ?? _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
+      oficinaTramitadora: _string(data, 'desuniorg'),
       fechaInicio: _nonSentinelDate(_string(data, 'fechareg')) ?? _nonSentinelDate(_string(data, 'fechaini')),
       estado: _estadoDescripcion(data),
     );

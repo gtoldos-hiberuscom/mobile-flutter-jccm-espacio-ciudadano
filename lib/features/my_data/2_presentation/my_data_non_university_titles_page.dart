@@ -107,72 +107,89 @@ class _NonUniversityTitleCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return AppInfoCard(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Book, Order, Folio numbers
-            if (_hasReferenceNumbers) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                child: Text(
-                  _buildReferenceText(l10n),
-                  style: AppTypography.captionUppercase.copyWith(
-                    color: AppColors.borderBlueMutedBase,
+    // Un título, un nodo: referencias, titulación, centro y cada dato con su
+    // etiqueta, en orden de lectura (WCAG 1.3.1).
+    final semanticLabel = [
+      if (_hasReferenceNumbers) _spoken(_buildReferenceText(l10n).replaceAll('   |   ', ', ')),
+      title.titleName,
+      title.centerName,
+      if (title.province != null) '${_spoken(l10n.myDataEducationProvinceLabel)}: ${title.province}',
+      if (title.expeditionDate != null) '${_spoken(l10n.myDataEducationExpeditionDateLabel)}: ${_formatDate(l10n, title.expeditionDate!)}',
+      if (title.completionDate != null) '${_spoken(l10n.myDataEducationCompletionDateLabel)}: ${_formatDate(l10n, title.completionDate!)}',
+    ].join('. ');
+    return Semantics(
+      container: true,
+      label: semanticLabel,
+      child: ExcludeSemantics(
+        child: AppInfoCard(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Book, Order, Folio numbers
+                if (_hasReferenceNumbers) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                    // 6,2:1 sobre blanco (WCAG 1.4.3); sin recorte al ampliar el
+                    // texto (1.4.4).
+                    child: Text(
+                      _buildReferenceText(l10n),
+                      style: AppTypography.captionUppercase.copyWith(
+                        color: AppColors.textPlaceholder,
+                      ),
+                    ),
                   ),
-                  maxLines: 2,
-                ),
-              ),
-            ],
+                ],
 
-            // Title name (larger, bold)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-              child: Text(
-                title.titleName,
-                style: AppTypography.leadingBold.copyWith(
-                  color: AppColors.textPrimary,
+                // Title name (larger, bold)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                  child: Text(
+                    title.titleName,
+                    style: AppTypography.leadingBold.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
                 ),
-              ),
+
+                // Center name
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                  child: Text(
+                    title.centerName,
+                    style: AppTypography.bodyRegular.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+
+                // Province
+                if (title.province != null) ...[
+                  _LabelValueRow(
+                    label: l10n.myDataEducationProvinceLabel,
+                    value: title.province!,
+                  ),
+                ],
+
+                // Expedition date
+                if (title.expeditionDate != null) ...[
+                  _LabelValueRow(
+                    label: l10n.myDataEducationExpeditionDateLabel,
+                    value: _formatDate(l10n, title.expeditionDate!),
+                  ),
+                ],
+
+                // Completion date
+                if (title.completionDate != null) ...[
+                  _LabelValueRow(
+                    label: l10n.myDataEducationCompletionDateLabel,
+                    value: _formatDate(l10n, title.completionDate!),
+                  ),
+                ],
+              ],
             ),
-
-            // Center name
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-              child: Text(
-                title.centerName,
-                style: AppTypography.bodyRegular.copyWith(
-                  color: AppColors.primary,
-                ),
-              ),
-            ),
-
-            // Province
-            if (title.province != null) ...[
-              _LabelValueRow(
-                label: l10n.myDataEducationProvinceLabel,
-                value: title.province!,
-              ),
-            ],
-
-            // Expedition date
-            if (title.expeditionDate != null) ...[
-              _LabelValueRow(
-                label: l10n.myDataEducationExpeditionDateLabel,
-                value: _formatDate(l10n, title.expeditionDate!),
-              ),
-            ],
-
-            // Completion date
-            if (title.completionDate != null) ...[
-              _LabelValueRow(
-                label: l10n.myDataEducationCompletionDateLabel,
-                value: _formatDate(l10n, title.completionDate!),
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -235,30 +252,50 @@ class _LabelValueRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final labelText = Text(
+      label,
+      style: AppTypography.captionUppercase.copyWith(
+        color: AppColors.primary,
+      ),
+    );
+    final valueText = Text(
+      value,
+      style: AppTypography.bodyRegular.copyWith(
+        color: AppColors.primary,
+      ),
+    );
+    // Con el texto ampliado etiqueta y valor se apilan en lugar de repartirse
+    // dos columnas estrechas (WCAG 1.4.4).
+    if (MediaQuery.textScalerOf(context).scale(1) > 1.5) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            labelText,
+            const SizedBox(height: AppDimensions.space4),
+            valueText,
+          ],
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              label,
-              style: AppTypography.captionUppercase.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-          ),
+          Expanded(child: labelText),
           const SizedBox(width: AppDimensions.space16),
-          Expanded(
-            child: Text(
-              value,
-              style: AppTypography.bodyRegular.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-          ),
+          Expanded(child: valueText),
         ],
       ),
     );
   }
+}
+
+/// Rótulo en mayúsculas pasado a frase para el lector de pantalla, que de
+/// otro modo puede deletrearlo («FECHA EXPEDICIÓN» → «Fecha expedición»).
+String _spoken(final String value) {
+  final lower = value.trim().toLowerCase();
+  return lower.isEmpty ? lower : '${lower[0].toUpperCase()}${lower.substring(1)}';
 }

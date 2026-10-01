@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// A single item in the drawer menu (primary section with icon).
@@ -111,42 +112,43 @@ class AppDrawerMenu extends StatelessWidget {
             padding: const EdgeInsets.all(AppDimensions.space8),
             child: Align(
               alignment: Alignment.centerRight,
-              child: Focus(
-                autofocus: true,
-                child: Semantics(
-                  label: l10n.drawerCloseMenu,
-                  button: true,
-                  onTap: onClose ?? () => Navigator.of(context).pop(),
-                  child: ExcludeSemantics(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: onClose ?? () => Navigator.of(context).pop(),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: AppDimensions.minTouchTarget,
-                            minHeight: AppDimensions.minTouchTarget,
-                          ),
-                          child: Wrap(
-                            alignment: WrapAlignment.end,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Text(
-                                l10n.drawerCloseMenu,
-                                style: AppTypography.leadingMedium.copyWith(
-                                  color: AppColors.neutral000,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: AppColors.neutral000,
-                                ),
-                              ),
-                              const SizedBox(width: AppDimensions.space4),
-                              const Icon(
-                                Icons.close,
+              // El foco inicial va al propio control: un `Focus` envolvente
+              // añadía una parada de teclado sin nombre antes de «Cerrar»
+              // (WCAG 2.4.3).
+              child: Semantics(
+                label: l10n.drawerCloseMenu,
+                button: true,
+                onTap: onClose ?? () => Navigator.of(context).pop(),
+                child: ExcludeSemantics(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: _DrawerInkWell(
+                      autofocus: true,
+                      onTap: onClose ?? () => Navigator.of(context).pop(),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minWidth: AppDimensions.minTouchTarget,
+                          minHeight: AppDimensions.minTouchTarget,
+                        ),
+                        child: Wrap(
+                          alignment: WrapAlignment.end,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              l10n.drawerCloseMenu,
+                              style: AppTypography.leadingMedium.copyWith(
                                 color: AppColors.neutral000,
-                                size: AppDimensions.iconMedium,
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColors.neutral000,
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: AppDimensions.space4),
+                            const Icon(
+                              Icons.close,
+                              color: AppColors.neutral000,
+                              size: AppDimensions.iconMedium,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -261,15 +263,18 @@ class AppDrawerMenu extends StatelessWidget {
               ),
               child: SizedBox(
                 width: double.infinity,
+                // Abre la sede en el navegador: se anuncia como enlace
+                // externo, igual que el resto de salidas de la app (4.1.2).
                 child: Semantics(
                   label: actionButtonLabel,
-                  button: true,
+                  link: true,
+                  hint: l10n.externalLinkA11yHint,
                   enabled: onActionButton != null,
                   onTap: onActionButton,
                   child: ExcludeSemantics(
                     child: Material(
                       color: Colors.transparent,
-                      child: InkWell(
+                      child: _DrawerInkWell(
                         onTap: onActionButton,
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(
@@ -326,7 +331,7 @@ class _DrawerPrimaryTile extends StatelessWidget {
       enabled: item.onTap != null,
       onTap: item.onTap,
       child: ExcludeSemantics(
-        child: InkWell(
+        child: _DrawerInkWell(
           onTap: item.onTap,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
@@ -365,7 +370,7 @@ class _DrawerSecondaryTile extends StatelessWidget {
       enabled: link.onTap != null,
       onTap: link.onTap,
       child: ExcludeSemantics(
-        child: InkWell(
+        child: _DrawerInkWell(
           onTap: link.onTap,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
@@ -400,6 +405,35 @@ class _DrawerSecondaryTile extends StatelessWidget {
       ),
     );
   }
+}
+
+/// `InkWell` del menú con el anillo de foco común (WCAG 1.4.11 / 2.4.7).
+///
+/// Sin sombreado de foco ni de paso del puntero: el blanco translúcido que
+/// pinta Material aclaraba el fondo y dejaba el texto blanco en 3,8:1
+/// (WCAG 1.4.3). El anillo ya indica el foco.
+class _DrawerInkWell extends StatelessWidget {
+  const _DrawerInkWell({
+    required this.onTap,
+    required this.child,
+    this.autofocus = false,
+  });
+
+  final VoidCallback? onTap;
+  final Widget child;
+  final bool autofocus;
+
+  @override
+  Widget build(final BuildContext context) => AppFocusRing(
+    enabled: onTap != null,
+    child: InkWell(
+      onTap: onTap,
+      autofocus: autofocus,
+      focusColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      child: child,
+    ),
+  );
 }
 
 /// Shows the [AppDrawerMenu] as a modal aligned to the right edge.

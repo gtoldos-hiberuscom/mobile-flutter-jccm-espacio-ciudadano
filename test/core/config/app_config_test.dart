@@ -54,6 +54,12 @@ void main() {
       Uri.parse('https://fachada-sede-api.jccm.es/api/v1/soporte'),
     );
   });
+
+  test('resolves the web support form for every environment', () {
+    expect(_config('development').webSupportFormUrl, Uri.parse('https://espaciociudadano-uat.jccm.es/soporte'));
+    expect(_config('preproduction').webSupportFormUrl, Uri.parse('https://espaciociudadano-pre.jccm.es/soporte'));
+    expect(_config('production').webSupportFormUrl, Uri.parse('https://espaciociudadano.jccm.es/soporte'));
+  });
 }
 
 AppConfig _config(final String flavor) => AppConfig.fromMap({

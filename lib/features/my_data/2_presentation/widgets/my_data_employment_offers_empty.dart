@@ -12,7 +12,7 @@ class MyDataEmploymentOffersEmpty extends StatelessWidget {
     return MyDataNoData(
       message: l10n.myDataEmploymentOffersNoDataMessage,
       actionLabel: l10n.myDataEmploymentOffersPortalLink,
-      contactUrl: 'https://empleabilidad-pre.cm-pre.jccm.es/',
+      contactUrl: 'https://empleo.castillalamancha.es/',
       scrollable: false,
     );
   }

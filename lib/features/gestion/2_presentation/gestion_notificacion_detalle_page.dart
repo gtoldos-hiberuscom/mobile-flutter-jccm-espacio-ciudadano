@@ -376,16 +376,19 @@ class _DetalleContent extends StatelessWidget {
               label: l10n.gestionNotificacionDetalleFechaLecturaLabel,
               value: _formatDate(context, value.fechaLectura!),
             ),
-          if (!_isPending(value.estado) && (value.documentos.isNotEmpty || value.estado == NotificacionEstado.aceptada)) ...[
+          if (_showsDocumentsSection(value)) ...[
             _SectionTitle(l10n.gestionNotificacionDetalleDocumentosTitle),
-            ...value.documentos.map(
-              (final document) => _DocumentCard(
-                document: document,
-                downloading: downloadingKey == 'documento-${document.orden}',
-                onTap: downloadingKey == null ? () => onDownload(document) : null,
+            // Una notificacion expirada solo conserva disponible el acuse de
+            // recibo. Los documentos notificados se desbloquean al aceptar.
+            if (value.estado != NotificacionEstado.expirada)
+              ...value.documentos.map(
+                (final document) => _DocumentCard(
+                  document: document,
+                  downloading: downloadingKey == 'documento-${document.orden}',
+                  onTap: downloadingKey == null ? () => onDownload(document) : null,
+                ),
               ),
-            ),
-            if (value.estado == NotificacionEstado.aceptada)
+            if (value.estado == NotificacionEstado.aceptada || value.estado == NotificacionEstado.expirada)
               _DownloadCard(
                 fileName: l10n.gestionNotificacionDetalleAcuseRecibo,
                 downloading: downloadingKey == 'justificante',
@@ -574,5 +577,6 @@ String _statusLabel(final AppLocalizations l10n, final NotificacionEstado estado
 };
 bool _showsExpiration(final NotificacionEstado? estado) => estado == NotificacionEstado.pendiente || estado == NotificacionEstado.expirada;
 bool _isPending(final NotificacionEstado? estado) => estado == NotificacionEstado.pendiente;
+bool _showsDocumentsSection(final NotificacionDetalle value) => value.estado == NotificacionEstado.aceptada || value.estado == NotificacionEstado.expirada || (!_isPending(value.estado) && value.documentos.isNotEmpty);
 String _formatDate(final BuildContext context, final DateTime date) => DateFormat('d MMM yyyy', Localizations.localeOf(context).languageCode).format(date);
 String _formatSize(final int bytes) => bytes >= 1048576 ? '${(bytes / 1048576).toStringAsFixed(1)} MB' : '${(bytes / 1024).ceil()} KB';

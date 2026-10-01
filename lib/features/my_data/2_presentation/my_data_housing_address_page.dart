@@ -117,7 +117,7 @@ class _AddressEmpty extends StatelessWidget {
     return MyDataNoData(
       message: l10n.myDataHousingAddressNoDataMessage,
       actionLabel: l10n.myDataNoDataOfficeContacts,
-      contactUrl: 'https://www.jccm.es/oficinas-oir',
+      contactUrl: 'https://www.ine.es/',
     );
   }
 }

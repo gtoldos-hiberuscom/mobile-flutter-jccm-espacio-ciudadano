@@ -66,24 +66,34 @@ class AppStickybar extends StatelessWidget {
                 ),
               ],
             ),
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                padding: appPagePadding(
-                  context,
-                  top: AppDimensions.space16,
-                  bottom: isLandscape ? AppDimensions.space16 : AppDimensions.space48,
+            // Con el texto muy ampliado la barra puede superar la pantalla:
+            // se limita a un 70 % de la altura y su contenido pasa a
+            // desplazarse para que todas las acciones sigan siendo
+            // alcanzables (WCAG 1.4.4). Mientras cabe, no cambia nada.
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.7),
+              child: SafeArea(
+                top: false,
+                child: SingleChildScrollView(
+                  primary: false,
+                  child: Padding(
+                    padding: appPagePadding(
+                      context,
+                      top: AppDimensions.space16,
+                      bottom: isLandscape ? AppDimensions.space16 : AppDimensions.space48,
+                    ),
+                    child: isLandscape && children.length > 1 && !usesVerticalLayout
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: _buildHorizontalChildren(),
+                          )
+                        : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: _buildSpacedChildren(),
+                          ),
+                  ),
                 ),
-                child: isLandscape && children.length > 1 && !usesVerticalLayout
-                    ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _buildHorizontalChildren(),
-                      )
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: _buildSpacedChildren(),
-                      ),
               ),
             ),
           ),

@@ -81,8 +81,10 @@ class LandingAboutPage extends ConsumerWidget {
                         Semantics(
                           label: '${l10n.landingAboutBodyPrefix} ${l10n.landingAboutBodyBold} ${l10n.landingAboutBodySuffix}',
                           child: ExcludeSemantics(
-                            child: RichText(
-                              text: TextSpan(
+                            // `Text.rich` y no `RichText`: este último ignora la
+                            // ampliación de texto del sistema (WCAG 1.4.4).
+                            child: Text.rich(
+                              TextSpan(
                                 style: AppTypography.bodyBase.copyWith(
                                   color: AppColors.textBase,
                                 ),

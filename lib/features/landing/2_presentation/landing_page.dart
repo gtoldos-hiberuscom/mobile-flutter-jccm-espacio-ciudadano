@@ -21,7 +21,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// Public anonymous landing screen — 00_Splash/Inicio from Figma.
 ///
 /// Layout (top to bottom):
-/// - Scrollable hero area:
+/// - Scrollable hero area (grows and scrolls with the system text size):
 ///   1. `castilla_logo.svg` (116×68 dp, centered)
 ///   2. `espacioCiudadano_logo.svg` (256×64 dp)
 ///   3. Tagline text (Body/Large/Medium + Headings/H2)
@@ -84,11 +84,13 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         return;
       }
       unawaited(
-        ref.read(landingProvider.notifier).tryRestoreSession(
-          localizedTitle: l10n.sessionUnlockBiometricTitle,
-          localizedReason: l10n.sessionUnlockBiometricReason,
-          localizedCancel: l10n.sessionUnlockBiometricCancel,
-        ),
+        ref
+            .read(landingProvider.notifier)
+            .tryRestoreSession(
+              localizedTitle: l10n.sessionUnlockBiometricTitle,
+              localizedReason: l10n.sessionUnlockBiometricReason,
+              localizedCancel: l10n.sessionUnlockBiometricCancel,
+            ),
       );
     });
   }
@@ -144,12 +146,13 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                 padding: EdgeInsets.symmetric(
                   horizontal: appPageHorizontalPadding(context),
                 ),
-                child: LayoutBuilder(
-                  builder: (final context, final constraints) => FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.topCenter,
-                    child: SizedBox(
-                      width: 353.15,
+                // Con el texto ampliado (WCAG 1.4.4) el contenido se desplaza
+                // en lugar de encogerse: un `FittedBox` reduciría logotipos y
+                // eslogan hasta hacerlos ilegibles.
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 353.15),
                       // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
                       child: Stack(
                         children: [
@@ -294,8 +297,10 @@ class _TaglineText extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return RichText(
-      text: TextSpan(
+    // `Text.rich` y no `RichText`: este último ignora la ampliación de texto
+    // del sistema (WCAG 1.4.4).
+    return Text.rich(
+      TextSpan(
         style: AppTypography.bodyL.copyWith(color: AppColors.textPrimary),
         children: [
           TextSpan(text: l10n.landingTaglinePrefix),

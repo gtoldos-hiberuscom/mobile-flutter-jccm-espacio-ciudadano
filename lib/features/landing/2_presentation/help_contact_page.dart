@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/providers/external_links_provider.dart';
@@ -36,6 +37,7 @@ class _HelpContactPageState extends ConsumerState<HelpContactPage> with SingleTi
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isAuthenticated = ref.watch(jwtClaimsProvider) != null;
     return Scaffold(
       backgroundColor: AppColors.backgroundBlueLighter,
       appBar: AppNavBar(
@@ -80,7 +82,10 @@ class _HelpContactPageState extends ConsumerState<HelpContactPage> with SingleTi
                   _ContactTab(
                     onCallPhone: _callPhone,
                     onOpenOffices: () => _openExternalLink('jccm_offices_oir'),
-                    onOpenSupport: _navigateToSupportForm,
+                    // Sin sesión el gateway no atiende el formulario de la
+                    // app, así que se manda al de la web (JCCMEC-212).
+                    opensSupportOutsideApp: !isAuthenticated,
+                    onOpenSupport: isAuthenticated ? _navigateToSupportForm : () => _openExternalLink('web_support_form'),
                   ),
                 ],
               ),
@@ -184,11 +189,13 @@ class _ContactTab extends StatelessWidget {
   const _ContactTab({
     required this.onCallPhone,
     required this.onOpenOffices,
+    required this.opensSupportOutsideApp,
     required this.onOpenSupport,
   });
 
   final ValueChanged<String> onCallPhone;
   final VoidCallback onOpenOffices;
+  final bool opensSupportOutsideApp;
   final VoidCallback onOpenSupport;
 
   @override
@@ -240,7 +247,8 @@ class _ContactTab extends StatelessWidget {
         const SizedBox(height: AppDimensions.space24),
         AppButton(
           label: l10n.helpContactSupportFormButton,
-          trailingIcon: AppIcons.arrowForward,
+          semanticsLabel: opensSupportOutsideApp ? '${l10n.helpContactSupportFormButton}. ${l10n.externalLinkA11yHint}' : null,
+          trailingIcon: opensSupportOutsideApp ? AppIcons.openInNew : AppIcons.arrowForward,
           isExpanded: true,
           onPressed: onOpenSupport,
         ),

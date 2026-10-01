@@ -98,6 +98,17 @@ final class JwtClaims {
     return normalizedPersonIdentifier;
   }
 
+  /// Name shown by authenticated UI for the identity whose data is active.
+  /// Representative certificates must display the represented party instead
+  /// of the natural person who owns the certificate.
+  String? get effectiveDisplayName {
+    final represented = representedName?.trim();
+    if (isRepresentative && represented != null && represented.isNotEmpty) {
+      return represented;
+    }
+    return fullName;
+  }
+
   /// Nombre y apellidos del ciudadano tal y como los informa Cerbero
   /// (`given_name` + `first_surname` + `second_surname`), con `name` como
   /// alternativa. Null cuando el token no trae ninguno.

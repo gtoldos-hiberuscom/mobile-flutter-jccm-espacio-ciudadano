@@ -284,6 +284,30 @@ void main() {
     descarga.completeError(StateError('descarga cortada por el test'));
     await tester.pumpAndSettle(const Duration(seconds: 5));
   });
+
+  testWidgets('una notificacion expirada muestra solo el acuse de recibo', (final tester) async {
+    await _pumpDetailWithDocuments(
+      tester,
+      estado: NotificacionEstado.expirada,
+      documentos: const [NotificacionDocumento(orden: 1, nombre: 'Notificacion.pdf')],
+    );
+
+    expect(find.text('Documentos'), findsOneWidget);
+    expect(find.text('Acuse de recibo.pdf'), findsOneWidget);
+    expect(find.text('Notificacion.pdf'), findsNothing);
+  });
+
+  testWidgets('una notificacion aceptada muestra sus documentos y el acuse de recibo', (final tester) async {
+    await _pumpDetailWithDocuments(
+      tester,
+      estado: NotificacionEstado.aceptada,
+      documentos: const [NotificacionDocumento(orden: 1, nombre: 'Notificacion.pdf')],
+    );
+
+    expect(find.text('Documentos'), findsOneWidget);
+    expect(find.text('Notificacion.pdf'), findsOneWidget);
+    expect(find.text('Acuse de recibo.pdf'), findsOneWidget);
+  });
 }
 
 final class _FakeNotificacionesRepository implements GestionNotificacionesRepository {
@@ -400,6 +424,34 @@ Future<void> _pumpDetail(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(resumenEstado)),
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
+Future<void> _pumpDetailWithDocuments(
+  final WidgetTester tester, {
+  required final NotificacionEstado estado,
+  required final List<NotificacionDocumento> documentos,
+}) async {
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        gestionNotificacionDetalleProvider.overrideWith(
+          (final ref, final args) async => NotificacionDetalle(
+            id: args.id,
+            titulo: 'Requerimiento de subsanacion',
+            estado: estado,
+            documentos: documentos,
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: GestionNotificacionDetallePage(notificacionId: 7924, resumen: _resumen(estado)),
       ),
     ),
   );

@@ -7,6 +7,21 @@ import '../../test_support/sequence_http_client_adapter.dart';
 
 void main() {
   group('GestionRegistrosRepositoryImpl', () {
+    test('sends CIF as document type for legal entity register queries', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(statusCode: 200, body: '{"publicacionportal":{"item":[]}}'),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionRegistrosRepositoryImpl(dio: dio);
+
+      await repository.loadEntradas(citizenId: 'sid-1', documentNumber: 'B12345674');
+
+      expect(adapter.requests.single.jsonBody, <String, dynamic>{
+        'numerodocumento': 'B12345674',
+        'tipodocumento': 'CIF',
+      });
+    });
+
     test('loads entradas when backend sends a singleton item as object', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(

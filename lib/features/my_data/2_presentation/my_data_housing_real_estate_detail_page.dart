@@ -88,6 +88,8 @@ class _PropertyDetailContent extends StatelessWidget {
               hierarchy: AppButtonHierarchy.secondary,
               trailingIcon: AppIcons.openInNew,
               isExpanded: true,
+              // Abre la sede del Catastro en el navegador (WCAG 4.1.2).
+              isExternalLink: true,
               onPressed: () => _launchCartography(context, cartographyUrl),
             ),
           ],
@@ -132,9 +134,14 @@ class _SectionTitle extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-      child: Text(
-        title,
-        style: AppTypography.h2.copyWith(color: AppColors.primary),
+      // Encabezado de sección, bajo el título de la pantalla (WCAG 1.3.1).
+      child: Semantics(
+        header: true,
+        headingLevel: 2,
+        child: Text(
+          title,
+          style: AppTypography.h2.copyWith(color: AppColors.primary),
+        ),
       ),
     );
   }
@@ -147,25 +154,44 @@ class _HolderRow extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final name = Text(
+      _display(holder.name).toUpperCase(),
+      style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+    );
+    final ownership = Text(
+      _display(holder.ownership),
+      style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+    );
+    // Con el texto ampliado, dos columnas a medias dejaban el nombre y el
+    // porcentaje en pocas letras por línea: se apilan a todo el ancho
+    // (WCAG 1.4.4).
+    final usesLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.5;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Text(
-              _display(holder.name).toUpperCase(),
-              style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
-            ),
-          ),
-          const SizedBox(width: AppDimensions.space16),
-          Expanded(
-            child: Text(
-              _display(holder.ownership),
-              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-            ),
-          ),
-        ],
+      // Un titular, un nodo: nombre y porcentaje juntos (WCAG 1.3.1). El
+      // nombre va sin mayúsculas para que no se deletree.
+      child: Semantics(
+        container: true,
+        label: '${_display(holder.name)}, ${_display(holder.ownership)}',
+        child: ExcludeSemantics(
+          child: usesLargeText
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    name,
+                    const SizedBox(height: AppDimensions.space4),
+                    ownership,
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: name),
+                    const SizedBox(width: AppDimensions.space16),
+                    Expanded(child: ownership),
+                  ],
+                ),
+        ),
       ),
     );
   }

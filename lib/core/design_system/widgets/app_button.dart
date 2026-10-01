@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -34,27 +35,6 @@ enum AppButtonIntent {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FOCUS RING WRAPPER
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/// Renders a 1.5 dp `AppColors.secondary` ring with a 2 dp gap.
-/// Mirrors Figma Focus state outer border.
-class _FocusRingWrapper extends StatelessWidget {
-  const _FocusRingWrapper({required this.child});
-  final Widget child;
-
-  @override
-  Widget build(final BuildContext context) => Container(
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusXs + 3)),
-      border: Border.fromBorderSide(BorderSide(color: AppColors.secondary, width: 1.5)),
-    ),
-    padding: const EdgeInsets.all(2),
-    child: child,
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
 // APP BUTTON — LABEL BUTTON  (Figma node `165:6169`)
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -62,7 +42,7 @@ class _FocusRingWrapper extends StatelessWidget {
 ///
 /// Hierarchies: Primary, Secondary, Ghost, Tertiary.
 /// Sizes: Medium (48 dp, padding 8 dp all sides), Small (48 dp, padding 0 dp vertical / 8 dp horizontal).
-/// States: Default, Focus (keyboard ring), Pressed (bg change), Disabled, Loading.
+/// States: Default, Focus ([AppFocusRing]), Pressed (bg change), Disabled, Loading.
 class AppButton extends StatefulWidget {
   const AppButton({
     required this.label,
@@ -77,6 +57,7 @@ class AppButton extends StatefulWidget {
     this.trailingIcon,
     this.isLoading = false,
     this.isExpanded = false,
+    this.isExternalLink = false,
     // ignore: deprecated_member_use_from_same_package
     @Deprecated('Use hierarchy instead') final AppButtonVariant? variant,
   }) : _legacyVariant = variant;
@@ -92,6 +73,10 @@ class AppButton extends StatefulWidget {
   final Widget? icon;
   final bool isLoading;
   final bool isExpanded;
+
+  /// Abre una dirección web externa: se anuncia como enlace, con el aviso de
+  /// que sale al navegador, en lugar de como botón (WCAG 4.1.2).
+  final bool isExternalLink;
   // ignore: deprecated_member_use_from_same_package
   final AppButtonVariant? _legacyVariant;
 
@@ -100,21 +85,6 @@ class AppButton extends StatefulWidget {
 }
 
 class _AppButtonState extends State<AppButton> {
-  final _focusNode = FocusNode();
-  bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(_onFocusChange);
-  }
-
-  void _onFocusChange() {
-    if (mounted) {
-      setState(() => _isFocused = _focusNode.hasFocus);
-    }
-  }
-
   @override
   void didUpdateWidget(covariant final AppButton oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -133,14 +103,6 @@ class _AppButtonState extends State<AppButton> {
         Directionality.of(context),
       ).ignore();
     });
-  }
-
-  @override
-  void dispose() {
-    _focusNode
-      ..removeListener(_onFocusChange)
-      ..dispose();
-    super.dispose();
   }
 
   AppButtonHierarchy get _effectiveHierarchy {
@@ -182,10 +144,9 @@ class _AppButtonState extends State<AppButton> {
 
     Widget button = _buildCoreButton(hierarchy, isDisabled, l10n);
 
-    // Focus ring — keyboard focus.
-    if (_isFocused && !isDisabled) {
-      button = _FocusRingWrapper(child: button);
-    }
+    // Anillo de foco común (WCAG 1.4.11 / 2.4.7): se pinta encima del botón
+    // sin alterar su tamaño, así enfocarlo no lo desplaza.
+    button = AppFocusRing(enabled: !isDisabled, child: button);
 
     if (widget.isExpanded) {
       button = SizedBox(width: double.infinity, child: button);
@@ -195,7 +156,9 @@ class _AppButtonState extends State<AppButton> {
 
     return Semantics(
       label: widget.isLoading ? '$semanticLabel, ${l10n.a11yLoading}' : semanticLabel,
-      button: true,
+      hint: widget.isExternalLink ? l10n.externalLinkA11yHint : null,
+      button: !widget.isExternalLink,
+      link: widget.isExternalLink,
       enabled: !isDisabled && !widget.isLoading,
       onTap: isDisabled || widget.isLoading ? null : widget.onPressed,
       child: ExcludeSemantics(child: button),
@@ -259,7 +222,6 @@ class _AppButtonState extends State<AppButton> {
       final pressedBg = widget.intent == AppButtonIntent.none ? AppColors.primaryLight : bg.withValues(alpha: 0.85);
 
       return ElevatedButton(
-        focusNode: _focusNode,
         onPressed: onPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith(
@@ -279,7 +241,6 @@ class _AppButtonState extends State<AppButton> {
         AppButtonIntent.success => AppColors.success,
       };
       return OutlinedButton(
-        focusNode: _focusNode,
         onPressed: onPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith(
@@ -295,7 +256,6 @@ class _AppButtonState extends State<AppButton> {
     // ── Ghost ─────────────────────────────────────────────────────────────────
     if (hierarchy == AppButtonHierarchy.ghost) {
       return TextButton(
-        focusNode: _focusNode,
         onPressed: onPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith(
@@ -315,13 +275,15 @@ class _AppButtonState extends State<AppButton> {
     };
 
     return TextButton(
-      focusNode: _focusNode,
       onPressed: onPressed,
       style: baseStyle.copyWith(
         backgroundColor: WidgetStateProperty.resolveWith(
           (final s) => s.contains(WidgetState.pressed) ? AppColors.blueMuted500 : tertiaryBg,
         ),
         foregroundColor: WidgetStateProperty.all(AppColors.textBlack),
+        // Sin borde, el fondo azul muy claro se quedaba en 1,1:1 sobre blanco
+        // y el botón no se distinguía como control (WCAG 1.4.11).
+        side: WidgetStateProperty.all(const BorderSide(color: tertiaryBorderColor)),
       ),
       child: content(AppColors.textBlack),
     );
@@ -397,21 +359,6 @@ class AppIconButton extends StatefulWidget {
 }
 
 class _AppIconButtonState extends State<AppIconButton> {
-  final _focusNode = FocusNode();
-  bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(_onFocusChange);
-  }
-
-  void _onFocusChange() {
-    if (mounted) {
-      setState(() => _isFocused = _focusNode.hasFocus);
-    }
-  }
-
   @override
   void didUpdateWidget(covariant final AppIconButton oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -430,14 +377,6 @@ class _AppIconButtonState extends State<AppIconButton> {
         Directionality.of(context),
       ).ignore();
     });
-  }
-
-  @override
-  void dispose() {
-    _focusNode
-      ..removeListener(_onFocusChange)
-      ..dispose();
-    super.dispose();
   }
 
   @override
@@ -480,7 +419,6 @@ class _AppIconButtonState extends State<AppIconButton> {
 
     Widget button = switch (widget.hierarchy) {
       AppButtonHierarchy.primary || AppButtonHierarchy.disabled => ElevatedButton(
-        focusNode: _focusNode,
         onPressed: effectiveOnPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith((final s) {
@@ -502,7 +440,6 @@ class _AppIconButtonState extends State<AppIconButton> {
         child: iconChild,
       ),
       AppButtonHierarchy.secondary => OutlinedButton(
-        focusNode: _focusNode,
         onPressed: effectiveOnPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith((final s) => s.contains(WidgetState.pressed) ? AppColors.blueMuted100 : AppColors.backgroundWhite),
@@ -512,7 +449,6 @@ class _AppIconButtonState extends State<AppIconButton> {
         child: iconChild,
       ),
       AppButtonHierarchy.ghost => TextButton(
-        focusNode: _focusNode,
         onPressed: effectiveOnPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith((final s) => s.contains(WidgetState.pressed) ? AppColors.blueMuted100 : Colors.transparent),
@@ -521,11 +457,11 @@ class _AppIconButtonState extends State<AppIconButton> {
         child: iconChild,
       ),
       AppButtonHierarchy.tertiary => TextButton(
-        focusNode: _focusNode,
         onPressed: effectiveOnPressed,
         style: baseStyle.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith((final s) => s.contains(WidgetState.pressed) ? AppColors.blueMuted500 : colors.background),
           foregroundColor: WidgetStateProperty.all(colors.foreground),
+          side: WidgetStateProperty.all(const BorderSide(color: tertiaryBorderColor)),
         ),
         child: iconChild,
       ),
@@ -541,9 +477,7 @@ class _AppIconButtonState extends State<AppIconButton> {
       );
     }
 
-    if (_isFocused && !isDisabled) {
-      button = _FocusRingWrapper(child: button);
-    }
+    button = AppFocusRing(enabled: !isDisabled, child: button);
 
     return Semantics(
       label: widget.isLoading ? '${widget.semanticsLabel}, ${l10n.a11yLoading}' : widget.semanticsLabel,
@@ -623,6 +557,10 @@ abstract final class _ButtonColors {
     };
   }
 }
+
+/// Borde de los botones terciarios: 4,1:1 sobre blanco y 3,6:1 sobre su
+/// propio fondo (WCAG 1.4.11).
+const Color tertiaryBorderColor = AppColors.borderBlueMutedBase;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // DEPRECATED — BACKWARDS COMPATIBILITY

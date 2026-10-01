@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 
 /// Interactive navigation card with title, short description and arrow.
 ///
@@ -48,49 +49,53 @@ class AppNavigationCard extends StatelessWidget {
           ),
           child: Material(
             color: Colors.transparent,
-            child: InkWell(
-              onTap: isDisabled ? null : onTap,
+            child: AppFocusRing(
               borderRadius: borderRadius,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 80),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppDimensions.space24,
-                    AppDimensions.space8,
-                    AppDimensions.space16,
-                    AppDimensions.space8,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                style: AppTypography.leadingMedium.copyWith(color: textColor),
-                              ),
-                              if (description != null) ...[
-                                const SizedBox(height: AppDimensions.space4),
+              enabled: !isDisabled,
+              child: InkWell(
+                onTap: isDisabled ? null : onTap,
+                borderRadius: borderRadius,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 80),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppDimensions.space24,
+                      AppDimensions.space8,
+                      AppDimensions.space16,
+                      AppDimensions.space8,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                  description!,
-                                  style: AppTypography.smallRegular.copyWith(color: textColor),
+                                  title,
+                                  style: AppTypography.leadingMedium.copyWith(color: textColor),
                                 ),
+                                if (description != null) ...[
+                                  const SizedBox(height: AppDimensions.space4),
+                                  Text(
+                                    description!,
+                                    style: AppTypography.smallRegular.copyWith(color: textColor),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: AppDimensions.space8),
-                      AppIcon(
-                        AppIcons.arrowForward,
-                        color: isDisabled ? AppColors.disabled : AppColors.textPrimary,
-                        size: AppDimensions.iconLarge,
-                      ),
-                    ],
+                        const SizedBox(width: AppDimensions.space8),
+                        AppIcon(
+                          AppIcons.arrowForward,
+                          color: isDisabled ? AppColors.disabled : AppColors.textPrimary,
+                          size: AppDimensions.iconLarge,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

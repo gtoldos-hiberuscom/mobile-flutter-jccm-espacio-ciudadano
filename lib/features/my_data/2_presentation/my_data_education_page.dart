@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
@@ -14,7 +15,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/m
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Education data detail — Figma node 43973:1875.
-class MyDataEducationPage extends StatefulWidget {
+class MyDataEducationPage extends ConsumerStatefulWidget {
   const MyDataEducationPage({
     super.key,
     this.backRoute = Routes.myData,
@@ -23,25 +24,27 @@ class MyDataEducationPage extends StatefulWidget {
   final String backRoute;
 
   @override
-  State<MyDataEducationPage> createState() => _MyDataEducationPageState();
+  ConsumerState<MyDataEducationPage> createState() => _MyDataEducationPageState();
 }
 
-class _MyDataEducationPageState extends State<MyDataEducationPage> {
-  _EducationTab _selectedTab = _EducationTab.data;
+class _MyDataEducationPageState extends ConsumerState<MyDataEducationPage> {
+  _EducationTab? _selectedTab;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
+    final selectedTab = _selectedTab ?? _EducationTab.data;
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataEducationTitle,
       onBack: () => context.go(widget.backRoute),
       tabs: [l10n.myDataEducationDataTab, l10n.myDataEducationServicesTab],
-      selectedIndex: _selectedTab.index,
+      selectedIndex: selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _EducationTab.values[index]),
-      tabViews: const [
-        _EducationDataTab(),
-        _EducationServicesTab(),
+      tabViews: [
+        _EducationDataTab(isRepresentative: isRepresentative),
+        const _EducationServicesTab(),
       ],
     );
   }
@@ -50,7 +53,9 @@ class _MyDataEducationPageState extends State<MyDataEducationPage> {
 enum _EducationTab { data, services }
 
 class _EducationDataTab extends ConsumerWidget {
-  const _EducationDataTab();
+  const _EducationDataTab({required this.isRepresentative});
+
+  final bool isRepresentative;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -59,6 +64,7 @@ class _EducationDataTab extends ConsumerWidget {
     return authorizationAsync.when(
       data: (final hasAgeAuthorization) => _EducationDataContent(
         hasAgeAuthorization: hasAgeAuthorization,
+        isRepresentative: isRepresentative,
       ),
       loading: () => const Center(child: AppLoadingIndicator()),
       // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
@@ -72,9 +78,10 @@ class _EducationDataTab extends ConsumerWidget {
 }
 
 class _EducationDataContent extends StatelessWidget {
-  const _EducationDataContent({required this.hasAgeAuthorization});
+  const _EducationDataContent({required this.hasAgeAuthorization, required this.isRepresentative});
 
   final bool hasAgeAuthorization;
+  final bool isRepresentative;
 
   @override
   Widget build(final BuildContext context) {
@@ -92,7 +99,12 @@ class _EducationDataContent extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.space16),
           ],
-          if (hasAgeAuthorization)
+          if (isRepresentative)
+            AppAlertContextual(
+              size: AppAlertContextualSize.small,
+              message: l10n.representativeUnavailableMessage,
+            )
+          else if (hasAgeAuthorization)
             AppNavigationCard(
               title: l10n.myDataEducationUniversityTitles,
               description: l10n.myDataEducationTitlesDescription,

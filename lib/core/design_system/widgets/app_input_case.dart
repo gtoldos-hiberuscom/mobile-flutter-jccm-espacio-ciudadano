@@ -5,6 +5,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.d
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_description_text.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_label.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -80,6 +81,7 @@ class AppSearchField extends StatelessWidget {
             autofillHints: autofillHints,
             decoration: InputDecoration(
               hintText: effectiveHintText,
+              hintStyle: AppTypography.bodyRegular.copyWith(color: AppColors.textPlaceholder),
               filled: true,
               fillColor: AppColors.backgroundWhite,
               isDense: true,
@@ -325,62 +327,65 @@ class _AppInputCaseState extends State<AppInputCase> {
               ),
             ),
             const SizedBox(height: AppDimensions.space4),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.low,
-              ),
-              child: TextField(
-                controller: widget.controller,
-                focusNode: _focusNode,
-                onChanged: widget.onChanged,
-                onSubmitted: widget.onSubmitted,
-                obscureText: widget.obscureText,
-                keyboardType: widget.keyboardType,
-                textInputAction: widget.textInputAction,
-                autofillHints: widget.autofillHints,
-                autocorrect: widget.autocorrect,
-                enableSuggestions: widget.enableSuggestions,
-                enabled: !isDisabled,
-                readOnly: widget.readOnly,
-                maxLines: widget.maxLines,
-                style: AppTypography.leadingMedium.copyWith(
-                  color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
+            AppFocusRing(
+              enabled: !isDisabled,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                  boxShadow: isDisabled ? const <BoxShadow>[] : AppShadows.low,
                 ),
-                decoration: InputDecoration(
-                  hintText: widget.hint,
-                  hintStyle: AppTypography.leadingMedium.copyWith(
-                    color: AppColors.borderBlueMutedBase,
+                child: TextField(
+                  controller: widget.controller,
+                  focusNode: _focusNode,
+                  onChanged: widget.onChanged,
+                  onSubmitted: widget.onSubmitted,
+                  obscureText: widget.obscureText,
+                  keyboardType: widget.keyboardType,
+                  textInputAction: widget.textInputAction,
+                  autofillHints: widget.autofillHints,
+                  autocorrect: widget.autocorrect,
+                  enableSuggestions: widget.enableSuggestions,
+                  enabled: !isDisabled,
+                  readOnly: widget.readOnly,
+                  maxLines: widget.maxLines,
+                  style: AppTypography.leadingMedium.copyWith(
+                    color: isDisabled ? AppColors.textDisabled : AppColors.textPrimary,
                   ),
-                  filled: true,
-                  fillColor: fillColor,
-                  prefixIcon: widget.prefixIcon,
-                  suffixIcon: _trailIcon,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.space8,
-                    vertical: AppDimensions.space12,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                    borderSide: BorderSide(color: borderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                    borderSide: BorderSide(color: borderColor, width: 2),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                    borderSide: BorderSide(
-                      color: AppColors.outline.withValues(alpha: 0.5),
+                  decoration: InputDecoration(
+                    hintText: widget.hint,
+                    hintStyle: AppTypography.leadingMedium.copyWith(
+                      color: AppColors.textPlaceholder,
                     ),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                    borderSide: const BorderSide(color: AppColors.error),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
-                    borderSide: const BorderSide(color: AppColors.error, width: 2),
+                    filled: true,
+                    fillColor: fillColor,
+                    prefixIcon: widget.prefixIcon,
+                    suffixIcon: _trailIcon,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.space8,
+                      vertical: AppDimensions.space12,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                      borderSide: BorderSide(color: borderColor, width: 2),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                      borderSide: BorderSide(
+                        color: AppColors.outline.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                      borderSide: const BorderSide(color: AppColors.error),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+                      borderSide: const BorderSide(color: AppColors.error, width: 2),
+                    ),
                   ),
                 ),
               ),
@@ -609,7 +614,7 @@ class _AppInputAreaState extends State<AppInputArea> {
                       decoration: InputDecoration(
                         hintText: widget.hint,
                         hintStyle: AppTypography.bodyRegular.copyWith(
-                          color: AppColors.neutralDark,
+                          color: AppColors.textPlaceholder,
                         ),
                         filled: false,
                         border: InputBorder.none,
