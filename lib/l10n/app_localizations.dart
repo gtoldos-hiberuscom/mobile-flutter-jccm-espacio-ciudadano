@@ -8831,7 +8831,7 @@ abstract class AppLocalizations {
   /// Protección de datos — título de la sección de finalidad del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'¿Cuál es la denominación y finalidad del tratamiento?'**
+  /// **'¿Cuál es la denominación y finalidad de tratamiento?'**
   String get privacyPurposeTitle;
 
   /// Protección de datos — responsable y contacto del Registro de Población.
@@ -8849,7 +8849,7 @@ abstract class AppLocalizations {
   /// Protección de datos — elemento de la lista de finalidades.
   ///
   /// In es, this message translates to:
-  /// **'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en las áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.'**
+  /// **'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.'**
   String get privacyPurposeItemIdentity;
 
   /// Protección de datos — elemento de la lista de finalidades.
@@ -8903,7 +8903,7 @@ abstract class AppLocalizations {
   /// Protección de datos — medios para ejercer derechos.
   ///
   /// In es, this message translates to:
-  /// **'Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha.\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.'**
+  /// **'Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.'**
   String get privacyRightsText;
 
   /// Protección de datos — título de la sección sobre reclamaciones ante la AEPD.
@@ -8915,13 +8915,13 @@ abstract class AppLocalizations {
   /// Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio).
   ///
   /// In es, this message translates to:
-  /// **'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano, puede presentar una reclamación ante la Agencia Española de Protección de Datos, '**
+  /// **'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, '**
   String get privacyAepdTextBeforeLink;
 
   /// Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto).
   ///
   /// In es, this message translates to:
-  /// **'. También puede reclamar ante la delegada de protección de datos cuyos datos de contacto están en esta información.'**
+  /// **'. También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.'**
   String get privacyAepdTextAfterLink;
 
   /// Protección de datos — título de la sección de medidas de seguridad.
@@ -8939,25 +8939,25 @@ abstract class AppLocalizations {
   /// Protección de datos — título de la sección de decisiones automatizadas.
   ///
   /// In es, this message translates to:
-  /// **'Decisiones automatizadas incluida la elaboración de perfiles'**
+  /// **'Decisiones automatizadas, incluida la elaboración de perfiles'**
   String get privacyProfilingTitle;
 
   /// Protección de datos — párrafo sobre la elaboración de perfiles.
   ///
   /// In es, this message translates to:
-  /// **'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por una persona interesada, existe la elaboración de perfiles.'**
+  /// **'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.'**
   String get privacyProfilingText;
 
   /// Protección de datos — título de la sección de contacto con la delegada de protección de datos.
   ///
   /// In es, this message translates to:
-  /// **'Datos de contacto con la delegada de protección de datos'**
+  /// **'Datos de contacto de la delegada de protección de datos'**
   String get privacyDpoTitle;
 
   /// Protección de datos — párrafo introductorio del contacto con la delegada de protección de datos.
   ///
   /// In es, this message translates to:
-  /// **'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la delegada de protección de datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:'**
+  /// **'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:'**
   String get privacyDpoIntro;
 
   /// Protección de datos — etiqueta en negrita de la dirección postal de la delegada (termina en salto de línea).
@@ -8969,7 +8969,7 @@ abstract class AppLocalizations {
   /// Protección de datos — bloque con la dirección postal de la delegada de protección de datos (termina en línea en blanco).
   ///
   /// In es, this message translates to:
-  /// **'Delegada de protección de datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071 - Toledo\n\n'**
+  /// **'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n'**
   String get privacyDpoContactAddressValue;
 
   /// Protección de datos — etiqueta en negrita del correo electrónico de la delegada (termina en salto de línea).

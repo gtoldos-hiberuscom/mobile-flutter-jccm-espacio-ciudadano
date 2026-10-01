@@ -4632,7 +4632,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyResponsibleContactAddressValue => 'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es';
 
   @override
-  String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad del tratamiento?';
+  String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad de tratamiento?';
 
   @override
   String get privacyPopulationControllerText => '2. La Oficina del Dato es responsable del tratamiento de datos del Registro de Población, a cuyos datos se puede acceder en el apartado “Datos de empadronamiento del Registro de Población” en la sección \"Mis datos de contacto\".\n\nLos datos de contacto de este responsable son los siguientes:\n\nDirección Postal:\nOficina del Dato de Castilla-La Mancha\nC/ Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\nDirección de correo electrónico: oficinadeldato@jccm.es';
@@ -4641,7 +4641,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyPurposeIntro => 'Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:';
 
   @override
-  String get privacyPurposeItemIdentity => 'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en las áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.';
+  String get privacyPurposeItemIdentity => 'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.';
 
   @override
   String get privacyPurposeItemVisualizations => 'Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.';
@@ -4669,16 +4669,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyRightsTitle => '¿Cómo se pueden ejercer los derechos previstos en la normativa de protección de datos?';
 
   @override
-  String get privacyRightsText => 'Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha.\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.';
+  String get privacyRightsText => 'Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.';
 
   @override
   String get privacyAepdTitle => '¿Puedo reclamar ante la Agencia Española de Protección de Datos?';
 
   @override
-  String get privacyAepdTextBeforeLink => 'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ';
+  String get privacyAepdTextBeforeLink => 'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ';
 
   @override
-  String get privacyAepdTextAfterLink => '. También puede reclamar ante la delegada de protección de datos cuyos datos de contacto están en esta información.';
+  String get privacyAepdTextAfterLink => '. También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.';
 
   @override
   String get privacySecurityTitle => '¿Qué medidas de seguridad se encuentran implantadas?';
@@ -4687,22 +4687,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacySecurityText => 'Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.';
 
   @override
-  String get privacyProfilingTitle => 'Decisiones automatizadas incluida la elaboración de perfiles';
+  String get privacyProfilingTitle => 'Decisiones automatizadas, incluida la elaboración de perfiles';
 
   @override
-  String get privacyProfilingText => 'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por una persona interesada, existe la elaboración de perfiles.';
+  String get privacyProfilingText => 'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.';
 
   @override
-  String get privacyDpoTitle => 'Datos de contacto con la delegada de protección de datos';
+  String get privacyDpoTitle => 'Datos de contacto de la delegada de protección de datos';
 
   @override
-  String get privacyDpoIntro => 'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la delegada de protección de datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:';
+  String get privacyDpoIntro => 'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:';
 
   @override
   String get privacyDpoContactAddressLabel => 'Dirección postal:\n';
 
   @override
-  String get privacyDpoContactAddressValue => 'Delegada de protección de datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071 - Toledo\n\n';
+  String get privacyDpoContactAddressValue => 'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n';
 
   @override
   String get privacyDpoContactEmailLabel => 'Dirección de correo electrónico:\n';

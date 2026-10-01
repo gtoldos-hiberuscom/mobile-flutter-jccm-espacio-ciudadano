@@ -4673,7 +4673,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyAepdTitle => 'Can I lodge a complaint with the Spanish Data Protection Agency?';
 
   @override
-  String get privacyAepdTextBeforeLink => 'If you have evidence or indications proving that your right to data protection has been infringed in Espacio Ciudadano, you may lodge a complaint with the Agencia Española de Protección de Datos (Spanish Data Protection Agency), ';
+  String get privacyAepdTextBeforeLink => 'If you have evidence or indications proving that your right to data protection has been infringed in Espacio Ciudadano or in the Population Register, you may lodge a complaint with the Agencia Española de Protección de Datos (Spanish Data Protection Agency), ';
 
   @override
   String get privacyAepdTextAfterLink => '. You may also lodge a complaint with the data protection officer, whose contact details are included in this information.';

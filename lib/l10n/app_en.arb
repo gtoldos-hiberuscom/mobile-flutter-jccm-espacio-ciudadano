@@ -6048,7 +6048,7 @@
   "@privacyAepdTitle": {
     "description": "Privacy page — heading of the section on complaints to the AEPD."
   },
-  "privacyAepdTextBeforeLink": "If you have evidence or indications proving that your right to data protection has been infringed in Espacio Ciudadano, you may lodge a complaint with the Agencia Española de Protección de Datos (Spanish Data Protection Agency), ",
+  "privacyAepdTextBeforeLink": "If you have evidence or indications proving that your right to data protection has been infringed in Espacio Ciudadano or in the Population Register, you may lodge a complaint with the Agencia Española de Protección de Datos (Spanish Data Protection Agency), ",
   "@privacyAepdTextBeforeLink": {
     "description": "Privacy page — AEPD section text before the link to its website (ends with a comma and a space)."
   },
