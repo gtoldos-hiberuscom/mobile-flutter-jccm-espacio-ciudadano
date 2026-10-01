@@ -4652,6 +4652,26 @@
   "@myDataHealthCipUnavailable": {
     "description": "Health — text shown when the CIP could not be retrieved."
   },
+  "identityVerificationDialogTitle": "Identity verification",
+  "@identityVerificationDialogTitle": {
+    "description": "Health — title of the notice that the query requires a higher security level."
+  },
+  "identityVerificationDialogBody": "This query requires a higher security level and you need to identify yourself again.",
+  "@identityVerificationDialogBody": {
+    "description": "Health — reason shown in the identity verification notice."
+  },
+  "identityVerificationDialogDoNotShowAgain": "Do not show again",
+  "@identityVerificationDialogDoNotShowAgain": {
+    "description": "Health — checkbox to skip the notice and go straight to Cl@ve next time."
+  },
+  "identityVerificationDialogBack": "Back",
+  "@identityVerificationDialogBack": {
+    "description": "Health — action to leave the query without raising the level."
+  },
+  "identityVerificationDialogContinue": "Go to Cl@ve",
+  "@identityVerificationDialogContinue": {
+    "description": "Health — action to go to Cl@ve and identify again."
+  },
   "myDataHealthLevelRequiredMessage": "Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.",
   "@myDataHealthLevelRequiredMessage": {
     "description": "Health — blocked because the authentication level is too low for health data."

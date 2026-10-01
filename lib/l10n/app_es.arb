@@ -4667,6 +4667,26 @@
   "@myDataHealthCipUnavailable": {
     "description": "Salud — texto cuando el CIP no se ha podido obtener."
   },
+  "identityVerificationDialogTitle": "Verificación de identidad",
+  "@identityVerificationDialogTitle": {
+    "description": "Salud — título del aviso de que la consulta exige más nivel de seguridad."
+  },
+  "identityVerificationDialogBody": "Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.",
+  "@identityVerificationDialogBody": {
+    "description": "Salud — motivo del aviso de verificación de identidad."
+  },
+  "identityVerificationDialogDoNotShowAgain": "No volver a mostrar",
+  "@identityVerificationDialogDoNotShowAgain": {
+    "description": "Salud — casilla para omitir el aviso y pasar directo a Cl@ve la próxima vez."
+  },
+  "identityVerificationDialogBack": "Volver",
+  "@identityVerificationDialogBack": {
+    "description": "Salud — acción de salir de la consulta sin elevar el nivel."
+  },
+  "identityVerificationDialogContinue": "Acceder a cl@ve",
+  "@identityVerificationDialogContinue": {
+    "description": "Salud — acción de ir a Cl@ve a identificarse de nuevo."
+  },
   "myDataHealthLevelRequiredMessage": "El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.",
   "@myDataHealthLevelRequiredMessage": {
     "description": "Salud — bloqueo por nivel de autenticación insuficiente para datos de salud."
