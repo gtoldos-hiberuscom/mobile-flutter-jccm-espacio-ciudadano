@@ -48,6 +48,13 @@ abstract final class StorageKeys {
   /// Full key = lifeEventsLastUpdatedAtPrefix + idAgente
   static const String lifeEventsLastUpdatedAtPrefix = 'life_events_last_updated_at_';
 
+  /// Prefijo del «no volver a mostrar» del aviso de verificación de identidad.
+  ///
+  /// Clave completa = identityVerificationNoticeSuppressedPrefix + idAgente.
+  /// Marcarlo **no** salta el control de nivel: solo omite la explicación y
+  /// lleva directo a Cl@ve la próxima vez que haga falta elevar.
+  static const String identityVerificationNoticeSuppressedPrefix = 'identity_verification_notice_suppressed_';
+
   /// Prefix for per-user legal-consent accepted flag.
   /// Full key = consentAcceptedPrefix + idAgente
   static const String consentAcceptedPrefix = 'consent_accepted_';

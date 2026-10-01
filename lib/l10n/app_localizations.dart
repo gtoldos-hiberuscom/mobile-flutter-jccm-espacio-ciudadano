@@ -6770,6 +6770,36 @@ abstract class AppLocalizations {
   /// **'CIP no disponible'**
   String get myDataHealthCipUnavailable;
 
+  /// Salud — título del aviso de que la consulta exige más nivel de seguridad.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación de identidad'**
+  String get identityVerificationDialogTitle;
+
+  /// Salud — motivo del aviso de verificación de identidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.'**
+  String get identityVerificationDialogBody;
+
+  /// Salud — casilla para omitir el aviso y pasar directo a Cl@ve la próxima vez.
+  ///
+  /// In es, this message translates to:
+  /// **'No volver a mostrar'**
+  String get identityVerificationDialogDoNotShowAgain;
+
+  /// Salud — acción de salir de la consulta sin elevar el nivel.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get identityVerificationDialogBack;
+
+  /// Salud — acción de ir a Cl@ve a identificarse de nuevo.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder a cl@ve'**
+  String get identityVerificationDialogContinue;
+
   /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
   ///
   /// In es, this message translates to:

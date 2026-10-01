@@ -4,10 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level_required.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
@@ -243,51 +247,131 @@ List<MyDataAppointmentEntry> _entries(final List<HospitalAppointment> appointmen
   ];
 }
 
-/// Bloqueo por nivel de seguridad, con la acción para elevarlo.
+/// Bloqueo por nivel de seguridad.
 ///
-/// Tres textos distintos y no uno, porque no son el mismo problema: «tu nivel
-/// es bajo», «no hemos sabido leer tu nivel» y «te has reidentificado pero el
-/// método sigue sin bastar». El segundo hace autodiagnosticable un literal de
-/// `authNLevel` que la app todavía no interprete, en vez de un bloqueo mudo.
+/// El aviso es un **diálogo bloqueante** ([AppIdentityVerificationDialog],
+/// Figma `Alerts/Dialog`) y no un bloque en línea: detrás no hay nada que
+/// consultar hasta que se eleve, y sus dos botones son dicotómicos — volver a
+/// Salud o ir a Cl@ve.
 ///
-/// **No reintenta solo** cuando la elevación vuelve insuficiente: eso metería
-/// al ciudadano en un carrusel de Cl@ve. La acción sigue disponible.
-class _LevelBlockedState extends ConsumerWidget {
+/// Se abre una sola vez por entrada, y **vuelve a abrirse solo cuando llega un
+/// desenlace**: así se cuenta que el método elegido no bastó o que la elevación
+/// falló, sin reintentar en bucle. Un reintento automático metería al ciudadano
+/// en un carrusel de Cl@ve.
+///
+/// Quien marcó «No volver a mostrar» se salta el diálogo y va directo a Cl@ve.
+/// Eso omite **la explicación, no el control**: el gate sigue decidiendo.
+class _LevelBlockedState extends ConsumerStatefulWidget {
   const _LevelBlockedState({required this.reading, required this.minimum});
 
   final AuthenticationLevelReading reading;
   final AuthenticationLevel minimum;
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  ConsumerState<_LevelBlockedState> createState() => _LevelBlockedStateState();
+}
+
+class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
+  bool _isShowing = false;
+  bool _hasOpenedOnce = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((final _) => _open());
+  }
+
+  String? get _suppressionKey {
+    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
+    return idAgente == null || idAgente.isEmpty
+        ? null
+        : '${StorageKeys.identityVerificationNoticeSuppressedPrefix}$idAgente';
+  }
+
+  bool get _isSuppressed {
+    final key = _suppressionKey;
+    return key != null && (ref.read(appStorageProvider).read<bool>(key) ?? false);
+  }
+
+  void _elevate() {
+    final notifier = ref.read(elevationProvider.notifier)..acknowledge();
+    // El notifier lleva su propia guarda de reentrada y traza sus fallos.
+    unawaited(notifier.elevate(minimum: widget.minimum));
+  }
+
+  Future<void> _open({final String? message}) async {
+    if (_isShowing || !mounted) {
+      return;
+    }
+    _hasOpenedOnce = true;
+
+    // El diseño da un solo texto para cualquier bloqueo por nivel, así que un
+    // literal que no sepamos leer se ve igual que un nivel bajo. La distinción
+    // se conserva en la traza: sin ella, un `authNLevel` nuevo de Cerbero sería
+    // indistinguible de un ciudadano con Cl@ve PIN.
+    if (widget.reading is! KnownAuthenticationLevel) {
+      logger.w({'event': 'auth_level_not_readable', 'reading': widget.reading.toString()});
+    }
+
+    if (_isSuppressed) {
+      _elevate();
+      return;
+    }
+
+    _isShowing = true;
+    final choice = await AppIdentityVerificationDialog.show(context, message: message);
+    _isShowing = false;
+    if (!mounted || choice == null) {
+      return;
+    }
+
+    if (choice.suppressFuture) {
+      final key = _suppressionKey;
+      if (key != null) {
+        unawaited(ref.read(appStorageProvider).write(key, true));
+      }
+    }
+
+    if (choice.accepted) {
+      _elevate();
+    } else {
+      context.go(Routes.myDataHealth);
+    }
+  }
+
+  @override
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final elevation = ref.watch(elevationProvider);
 
-    final message = switch (elevation.outcome) {
-      ElevationOutcome.stillInsufficient => l10n.myDataHealthLevelStillInsufficientMessage,
-      ElevationOutcome.failed => l10n.myDataHealthLevelElevationFailedMessage,
-      // `succeeded` no llega a pintarse aquí: el gate deja de lanzar y la
-      // pantalla pasa a mostrar el listado por derivación.
-      _ => reading is KnownAuthenticationLevel ? l10n.myDataHealthLevelRequiredMessage : l10n.myDataHealthLevelUnverifiedMessage,
-    };
+    // El desenlace es una señal de un solo uso: se consume reabriendo el aviso
+    // con lo que haya pasado, y solo entonces.
+    ref.listen<ElevationState>(elevationProvider, (final previous, final next) {
+      final outcome = next.outcome;
+      if (outcome == null || outcome == previous?.outcome || !_hasOpenedOnce) {
+        return;
+      }
+      final message = switch (outcome) {
+        ElevationOutcome.stillInsufficient => l10n.myDataHealthLevelStillInsufficientMessage,
+        ElevationOutcome.failed => l10n.myDataHealthLevelElevationFailedMessage,
+        // `succeeded` no llega aquí: el gate deja de lanzar y la pantalla pasa
+        // a mostrar el listado por derivación. `identityChanged` cierra sesión.
+        _ => null,
+      };
+      if (message != null) {
+        unawaited(_open(message: message));
+      }
+    });
 
-    return AppAlertContextual(
-      message: message,
-      announce: true,
-      action: AppButton(
-        label: l10n.myDataHealthLevelElevateAction,
-        isLoading: elevation.isElevating,
-        isExpanded: true,
-        onPressed: elevation.isElevating
-            ? null
-            : () {
-                final notifier = ref.read(elevationProvider.notifier)..acknowledge();
-                // El notifier lleva su propia guarda de reentrada y traza sus
-                // fallos; no hay nada que esperar aquí.
-                unawaited(notifier.elevate(minimum: minimum));
-              },
-      ),
-    );
+    // Mientras el diálogo decide, detrás no hay nada que enseñar. Durante la
+    // elevación sí se indica que algo está pasando, que es cierto.
+    return ref.watch(elevationProvider).isElevating
+        ? const Center(
+            child: Padding(
+              padding: EdgeInsets.all(AppDimensions.space32),
+              child: AppLoadingIndicator(),
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }
 

@@ -3514,6 +3514,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthCipUnavailable => 'CIP no disponible';
 
   @override
+  String get identityVerificationDialogTitle => 'Verificación de identidad';
+
+  @override
+  String get identityVerificationDialogBody => 'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.';
+
+  @override
+  String get identityVerificationDialogDoNotShowAgain => 'No volver a mostrar';
+
+  @override
+  String get identityVerificationDialogBack => 'Volver';
+
+  @override
+  String get identityVerificationDialogContinue => 'Acceder a cl@ve';
+
+  @override
   String get myDataHealthLevelRequiredMessage => 'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
 
   @override

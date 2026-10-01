@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
@@ -11,16 +12,16 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
+import '../auth/auth_session_controller_test.dart' show FakeAppStorage;
+
 const _pendientes = 'Citas pendientes';
 const _pasadas = 'Citas pasadas';
 const _sinPendientes = 'No tienes citas hospitalarias pendientes.';
 const _sinPasadas = 'No tienes citas hospitalarias pasadas.';
 const _servicioCaido =
     'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
-const _nivelInsuficiente =
-    'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
-const _nivelSinVerificar =
-    'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.';
+const _avisoTitulo = 'Verificación de identidad';
+const _avisoCuerpo = 'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.';
 
 void main() {
   testWidgets('abre en pendientes y pinta el CIP y los campos de la cita', (final tester) async {
@@ -136,7 +137,7 @@ void main() {
 
     expect(find.text(_servicioCaido), findsNothing);
     expect(find.text(_sinPendientes), findsNothing);
-    expect(find.text(_nivelInsuficiente), findsNothing);
+    expect(find.text(_avisoTitulo), findsNothing);
   });
 
   testWidgets('sin autorización previa no se pinta ni el CIP ni las pestañas', (final tester) async {
@@ -146,22 +147,34 @@ void main() {
     expect(find.textContaining('CIP:'), findsNothing);
   });
 
-  // Apartados 4 y 5. Lo que importa es que NO se presente como un fallo de
-  // servicio, que es donde caía antes de darle su propia rama.
-  testWidgets('con nivel bajo se explica el nivel y no se pide nada al SESCAM', (final tester) async {
+  // Apartados 4 y 5. El aviso es un diálogo bloqueante, y lo que importa es que
+  // NO se presente como un fallo de servicio y que la petición no llegue a
+  // salir.
+  testWidgets('con nivel bajo se abre el aviso y no se pide nada al SESCAM', (final tester) async {
     final repository = _SpyHealthRepository(pending: [_cita('TRAUMATOLOGIA')]);
     await _pump(tester, authNLevel: 'low', repository: repository);
 
-    expect(find.text(_nivelInsuficiente), findsOneWidget);
+    expect(find.text(_avisoTitulo), findsOneWidget);
+    expect(find.text(_avisoCuerpo), findsOneWidget);
+    expect(find.text('Volver'), findsOneWidget);
+    expect(find.text('Acceder a cl@ve'), findsOneWidget);
     expect(find.text(_servicioCaido), findsNothing);
     expect(repository.callsFor(HealthAppointmentFilter.pending), isZero);
   });
 
-  testWidgets('un nivel que no se sabe leer se distingue del nivel bajo', (final tester) async {
+  // El diseño da un solo texto para cualquier bloqueo por nivel, así que un
+  // literal que no sabemos leer avisa igual. La distinción vive en la traza.
+  testWidgets('un nivel que no se sabe leer avisa igual', (final tester) async {
     await _pump(tester, authNLevel: 'enhanced');
 
-    expect(find.text(_nivelSinVerificar), findsOneWidget);
-    expect(find.text(_nivelInsuficiente), findsNothing);
+    expect(find.text(_avisoTitulo), findsOneWidget);
+    expect(find.text(_avisoCuerpo), findsOneWidget);
+  });
+
+  testWidgets('el aviso ofrece no volver a mostrarlo', (final tester) async {
+    await _pump(tester, authNLevel: 'low');
+
+    expect(find.text('No volver a mostrar'), findsOneWidget);
   });
 }
 
@@ -205,6 +218,7 @@ Future<void> _pump(
             ),
           ),
         ),
+        appStorageProvider.overrideWithValue(FakeAppStorage()),
         myDataHealthRepositoryProvider.overrideWithValue(spy),
         jccmDataAuthorizationProvider.overrideWith((final ref) async => hasAuthorization),
         myDataHealthCipProvider.overrideWith((final ref) async => 'PNRV901264600010'),
