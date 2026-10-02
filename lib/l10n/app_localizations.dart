@@ -107,19 +107,19 @@ abstract class AppLocalizations {
   /// Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio.
   ///
   /// In es, this message translates to:
-  /// **'Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha'**
+  /// **'Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de Castilla-La Mancha.'**
   String get landingTagline;
 
-  /// Primera parte del eslogan (peso regular) que precede al nombre de la región.
+  /// Primera parte del eslogan que precede al nombre de la región.
   ///
   /// In es, this message translates to:
-  /// **'Gestión ágil y online de trámites para la ciudadanía de '**
+  /// **'Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de '**
   String get landingTaglinePrefix;
 
-  /// Nombre de la región resaltado con tipografía H2 en el eslogan.
+  /// Nombre de la región al final del eslogan.
   ///
   /// In es, this message translates to:
-  /// **'Castilla-La Mancha'**
+  /// **'Castilla-La Mancha.'**
   String get landingTaglineHighlight;
 
   /// Etiqueta accesible para un paso numerado de la sección Cómo acceder.
@@ -137,7 +137,7 @@ abstract class AppLocalizations {
   /// Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano.
   ///
   /// In es, this message translates to:
-  /// **'Información y ayuda sobre el espacio'**
+  /// **'Saber más sobre Espacio ciudadano'**
   String get landingAboutButton;
 
   /// Enlace de texto que navega a la pantalla de ayuda con el acceso.
@@ -179,13 +179,13 @@ abstract class AppLocalizations {
   /// Título del AppBar de la pantalla de información sobre el Espacio Ciudadano.
   ///
   /// In es, this message translates to:
-  /// **'Saber más sobre el Espacio Ciudadano'**
+  /// **'Saber más sobre Espacio Ciudadano'**
   String get landingAboutPageTitle;
 
   /// Título principal de la pantalla de información sobre el Espacio Ciudadano.
   ///
   /// In es, this message translates to:
-  /// **'Espacio ciudadano'**
+  /// **'¿Qué es el Espacio ciudadano?'**
   String get landingAboutTitle;
 
   /// Texto inicial del párrafo descriptivo (precede al texto en negrita).
@@ -206,16 +206,22 @@ abstract class AppLocalizations {
   /// **'en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.'**
   String get landingAboutBodySuffix;
 
+  /// Párrafo descriptivo de la pantalla de información sobre Espacio ciudadano.
+  ///
+  /// In es, this message translates to:
+  /// **'Espacio ciudadano es un espacio digital donde puedes consultar tus trámites, encontrar otros que pueden interesarte y acceder a información y servicios que facilitan tu relación con la Administración.'**
+  String get landingAboutBody;
+
   /// Encabezado de la sección de contenidos de la pantalla about.
   ///
   /// In es, this message translates to:
-  /// **'¿Qué encontrarás?'**
+  /// **'¿Qué puedo consultar?'**
   String get landingAboutWhatYouFindTitle;
 
   /// Introducción a la lista de contenidos disponibles.
   ///
   /// In es, this message translates to:
-  /// **'Tus datos en relación con la Junta de Comunidades de Castilla-La Mancha:'**
+  /// **'En el Espacio ciudadano encontrarás:'**
   String get landingAboutWhatYouFindIntro;
 
   /// Primer elemento de la lista de contenidos.
@@ -245,19 +251,25 @@ abstract class AppLocalizations {
   /// Quinto elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Tus citas o eventos.'**
+  /// **'Tus citas y eventos.'**
   String get landingAboutBullet5;
 
   /// Sexto elemento de la lista de contenidos.
   ///
   /// In es, this message translates to:
-  /// **'Recomendaciones personalizadas basadas en tus intereses.'**
+  /// **'Recomendaciones personalizadas según tus intereses.'**
   String get landingAboutBullet6;
+
+  /// Enlace a la información de ayuda y contacto desde la pantalla about.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar información de Ayuda y contacto'**
+  String get landingAboutHelpLink;
 
   /// Botón de acción principal de la pantalla about que inicia el flujo de autenticación.
   ///
   /// In es, this message translates to:
-  /// **'Acceder a mi Espacio Ciudadano'**
+  /// **'Acceder a mi Espacio ciudadano'**
   String get landingAboutAccessButton;
 
   /// Enlace de texto externo en la pantalla about.
@@ -3025,6 +3037,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.'**
   String get lifeEventsHeaderDescription;
+
+  /// Personalización — título principal durante el primer acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Recomendaciones personalizadas'**
+  String get lifeEventsOnboardingTitle;
+
+  /// Personalización — introducción durante el primer acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.'**
+  String get lifeEventsOnboardingDescription;
+
+  /// Personalización — acción para posponer la configuración durante el primer acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Completar más tarde'**
+  String get lifeEventsCompleteLaterAction;
 
   /// Personalization — large intro heading on the hechos vitales screen.
   ///
@@ -8789,7 +8819,7 @@ abstract class AppLocalizations {
   /// Protección de datos — título de la sección del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'¿Quién es el responsable del tratamiento?'**
+  /// **'¿Quién es responsable del tratamiento de datos?'**
   String get privacyResponsibleTitle;
 
   /// Protección de datos — título del documento.
@@ -8807,31 +8837,31 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo introductorio del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'1. La Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
+  /// **'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:'**
   String get privacyResponsibleIntro;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Visualización de las notificaciones y registro'**
+  /// **'Información del perfil de usuario.'**
   String get privacyResponsibleItemProfile;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado'**
+  /// **'Visualización de datos seleccionados de la Administración regional y de otros temas de interés.'**
   String get privacyResponsibleItemVisualizations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Recomendaciones realizadas en base a los hechos vitales marcados'**
+  /// **'Recomendaciones personalizadas según los hechos vitales indicados.'**
   String get privacyResponsibleItemRecommendations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Descargas de los carnés seleccionados'**
+  /// **'Descargas de los carnés seleccionados.'**
   String get privacyResponsibleItemDownloads;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
@@ -8843,31 +8873,31 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo sobre los órganos responsables de cada opción.
   ///
   /// In es, this message translates to:
-  /// **'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento o hecho administrativo.'**
+  /// **'Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.'**
   String get privacyResponsibleOrgParagraph;
 
   /// Protección de datos — introducción de los datos de contacto del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Los datos de contacto de este responsable son los siguientes:'**
+  /// **'Para contactar con el responsable, puedes hacelo mediante:'**
   String get privacyResponsibleContactIntro;
 
   /// Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea).
   ///
   /// In es, this message translates to:
-  /// **'Dirección Postal:\n'**
+  /// **'Dirección postal\n'**
   String get privacyResponsibleContactAddressLabel;
 
   /// Protección de datos — bloque con la dirección postal y el correo del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es'**
+  /// **'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es'**
   String get privacyResponsibleContactAddressValue;
 
   /// Protección de datos — título de la sección de finalidad del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'¿Cuál es la denominación y finalidad de tratamiento?'**
+  /// **'¿Cuál es la denominación y finalidad del tratamiento?'**
   String get privacyPurposeTitle;
 
   /// Protección de datos — responsable y contacto del Registro de Población.
@@ -8879,19 +8909,19 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo introductorio de las finalidades del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:'**
+  /// **'Las finalidades de los tratamientos de datos personales que se realizan directamente en Espacio Ciudadano son:'**
   String get privacyPurposeIntro;
 
   /// Protección de datos — elemento de la lista de finalidades.
   ///
   /// In es, this message translates to:
-  /// **'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.'**
+  /// **'Gestionar los datos identificativos de la ciudadanía.'**
   String get privacyPurposeItemIdentity;
 
   /// Protección de datos — elemento de la lista de finalidades.
   ///
   /// In es, this message translates to:
-  /// **'Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.'**
+  /// **'Mostrar los datos seleccionados de la Administración regional y de otros temas de interés.'**
   String get privacyPurposeItemVisualizations;
 
   /// Protección de datos — título de legitimación.
@@ -8951,67 +8981,73 @@ abstract class AppLocalizations {
   /// Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio).
   ///
   /// In es, this message translates to:
-  /// **'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, '**
+  /// **'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la '**
   String get privacyAepdTextBeforeLink;
+
+  /// Protección de datos — texto del enlace a la AEPD.
+  ///
+  /// In es, this message translates to:
+  /// **'Agencia Española de Protección de Datos (AEPD)'**
+  String get privacyAepdLinkLabel;
 
   /// Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto).
   ///
   /// In es, this message translates to:
-  /// **'. También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.'**
+  /// **'.\n\nTambién puedes reclamar ante la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM), cuya información de contacto está indicada más adelante.'**
   String get privacyAepdTextAfterLink;
 
   /// Protección de datos — título de la sección de medidas de seguridad.
   ///
   /// In es, this message translates to:
-  /// **'¿Qué medidas de seguridad se encuentran implantadas?'**
+  /// **'¿Qué medidas de seguridad están implantadas?'**
   String get privacySecurityTitle;
 
   /// Protección de datos — párrafo sobre las medidas de seguridad implantadas.
   ///
   /// In es, this message translates to:
-  /// **'Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.'**
+  /// **'Las medidas implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.'**
   String get privacySecurityText;
 
   /// Protección de datos — título de la sección de decisiones automatizadas.
   ///
   /// In es, this message translates to:
-  /// **'Decisiones automatizadas, incluida la elaboración de perfiles'**
+  /// **'Decisiones automatizadas y elaboración de perfiles'**
   String get privacyProfilingTitle;
 
   /// Protección de datos — párrafo sobre la elaboración de perfiles.
   ///
   /// In es, this message translates to:
-  /// **'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.'**
+  /// **'Las recomendaciones de trámites que se muestran en función de los hechos vitales indicados por la persona interesada implican la elaboración de perfiles.'**
   String get privacyProfilingText;
 
   /// Protección de datos — título de la sección de contacto con la delegada de protección de datos.
   ///
   /// In es, this message translates to:
-  /// **'Datos de contacto de la delegada de protección de datos'**
+  /// **'Información de contacto de la Delegada de Protección de Datos'**
   String get privacyDpoTitle;
 
   /// Protección de datos — párrafo introductorio del contacto con la delegada de protección de datos.
   ///
   /// In es, this message translates to:
-  /// **'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:'**
+  /// **'Para cualquier cuestión relacionada con la protección de datos puedes dirigirte a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM).\n\nPuedes contactar mediante:'**
   String get privacyDpoIntro;
 
   /// Protección de datos — etiqueta en negrita de la dirección postal de la delegada (termina en salto de línea).
   ///
   /// In es, this message translates to:
-  /// **'Dirección postal:\n'**
+  /// **'Dirección postal\n'**
   String get privacyDpoContactAddressLabel;
 
   /// Protección de datos — bloque con la dirección postal de la delegada de protección de datos (termina en línea en blanco).
   ///
   /// In es, this message translates to:
-  /// **'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n'**
+  /// **'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12, edificio CIE III\n45071 Toledo\n\n'**
   String get privacyDpoContactAddressValue;
 
   /// Protección de datos — etiqueta en negrita del correo electrónico de la delegada (termina en salto de línea).
   ///
   /// In es, this message translates to:
-  /// **'Dirección de correo electrónico:\n'**
+  /// **'Correo electrónico\n'**
   String get privacyDpoContactEmailLabel;
 
   /// Accesibilidad — encabezado H1 de la declaración de accesibilidad.
@@ -9311,25 +9347,25 @@ abstract class AppLocalizations {
   /// No description provided for @biometricAccessDialogTitle.
   ///
   /// In es, this message translates to:
-  /// **'¿Quieres activar el acceso rápido con huella o reconocimiento facial?'**
+  /// **'¿Quieres activar el acceso rápido con huella dactilar o reconocimiento facial?'**
   String get biometricAccessDialogTitle;
 
   /// No description provided for @biometricAccessDialogDescription.
   ///
   /// In es, this message translates to:
-  /// **'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.'**
+  /// **'Podrás acceder a la aplicación de forma más rápida sin tener que autentificarte cada vez. Para proteger tus datos te pediremos que vuelvas a autentificarte cada cierto tiempo.'**
   String get biometricAccessDialogDescription;
 
   /// No description provided for @biometricAccessDialogCancel.
   ///
   /// In es, this message translates to:
-  /// **'Ahora no'**
+  /// **'Completar más tarde'**
   String get biometricAccessDialogCancel;
 
   /// No description provided for @biometricAccessDialogConfirm.
   ///
   /// In es, this message translates to:
-  /// **'Activar acceso rápido'**
+  /// **'Activar'**
   String get biometricAccessDialogConfirm;
 }
 

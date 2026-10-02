@@ -8,15 +8,15 @@
   "@landingTitle": {
     "description": "Main title displayed in the hero section of the public landing screen."
   },
-  "landingTagline": "Agile and online management of procedures for the citizens of Castilla-La Mancha",
+  "landingTagline": "Access and consult the procedures and services available to the citizens of Castilla-La Mancha digitally.",
   "@landingTagline": {
     "description": "Subtitle shown below the title on the landing screen."
   },
-  "landingTaglinePrefix": "Agile and online management of procedures for the citizens of ",
+  "landingTaglinePrefix": "Access and consult the procedures and services available to the citizens of ",
   "@landingTaglinePrefix": {
     "description": "First part of the tagline (regular weight) preceding the region name."
   },
-  "landingTaglineHighlight": "Castilla-La Mancha",
+  "landingTaglineHighlight": "Castilla-La Mancha digitally.",
   "@landingTaglineHighlight": {
     "description": "Region name highlighted with H2 typography in the tagline."
   },
@@ -81,11 +81,15 @@
   "@landingAboutBodySuffix": {
     "description": "Closing text of the descriptive paragraph (after the bold fragment)."
   },
-  "landingAboutWhatYouFindTitle": "What will you find?",
+  "landingAboutBody": "Citizen Space is a digital space where you can check your procedures, find others that may interest you, and access information and services that make it easier to interact with the Administration.",
+  "@landingAboutBody": {
+    "description": "Descriptive paragraph on the Citizen Space about screen."
+  },
+  "landingAboutWhatYouFindTitle": "What can I check?",
   "@landingAboutWhatYouFindTitle": {
     "description": "Section heading for the list of available content."
   },
-  "landingAboutWhatYouFindIntro": "You will have access to various information such as:",
+  "landingAboutWhatYouFindIntro": "In Citizen Space you will find:",
   "@landingAboutWhatYouFindIntro": {
     "description": "Introduction to the list of available content."
   },
@@ -112,6 +116,10 @@
   "landingAboutBullet6": "Personalized recommendations based on your interests.",
   "@landingAboutBullet6": {
     "description": "Sixth bullet item in the content list."
+  },
+  "landingAboutHelpLink": "Show Help and contact information",
+  "@landingAboutHelpLink": {
+    "description": "Link to Help and contact information from the about screen."
   },
   "landingAboutAccessButton": "Access my Citizen Space",
   "@landingAboutAccessButton": {
@@ -2013,6 +2021,18 @@
   "lifeEventsHeaderDescription": "Select the life events that best describe your situation to receive personalized recommendations.",
   "@lifeEventsHeaderDescription": {
     "description": "Personalization — descriptive header on the life-events screen."
+  },
+  "lifeEventsOnboardingTitle": "Personalized recommendations",
+  "@lifeEventsOnboardingTitle": {
+    "description": "Personalization — main heading during first access."
+  },
+  "lifeEventsOnboardingDescription": "Select the situations, interests, or needs that best match you to receive personalized recommendations.",
+  "@lifeEventsOnboardingDescription": {
+    "description": "Personalization — introduction during first access."
+  },
+  "lifeEventsCompleteLaterAction": "Complete later",
+  "@lifeEventsCompleteLaterAction": {
+    "description": "Personalization — action to postpone setup during first access."
   },
   "lifeEventsIntroHeading": "Select the topics you would like to receive information about",
   "@lifeEventsIntroHeading": {
@@ -6085,6 +6105,8 @@
   "@privacyAepdTextBeforeLink": {
     "description": "Privacy page — AEPD section text before the link to its website (ends with a comma and a space)."
   },
+  "privacyAepdLinkLabel": "Spanish Data Protection Agency (AEPD)",
+  "@privacyAepdLinkLabel": {"description": "Privacy page — AEPD link text."},
   "privacyAepdTextAfterLink": ". You may also lodge a complaint with the data protection officer, whose contact details are included in this information.",
   "@privacyAepdTextAfterLink": {
     "description": "Privacy page — AEPD section text after the link to its website (starts with a period)."
@@ -6313,7 +6335,7 @@
   "sessionContinueBiometricTitle": "Continue in your space",
   "sessionContinueBiometricReason": "Your session needs renewing. Confirm your identity to continue.",
   "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
-  "biometricAccessDialogDescription": "This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.",
-  "biometricAccessDialogCancel": "Not now",
-  "biometricAccessDialogConfirm": "Enable quick access"
+  "biometricAccessDialogDescription": "You will be able to access the application more quickly without having to authenticate every time. To protect your data, we will ask you to authenticate again periodically.",
+  "biometricAccessDialogCancel": "Complete later",
+  "biometricAccessDialogConfirm": "Enable"
 }

@@ -15,13 +15,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingTitle => 'Espacio Ciudadano';
 
   @override
-  String get landingTagline => 'Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha';
+  String get landingTagline => 'Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de Castilla-La Mancha.';
 
   @override
-  String get landingTaglinePrefix => 'Gestión ágil y online de trámites para la ciudadanía de ';
+  String get landingTaglinePrefix => 'Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de ';
 
   @override
-  String get landingTaglineHighlight => 'Castilla-La Mancha';
+  String get landingTaglineHighlight => 'Castilla-La Mancha.';
 
   @override
   String landingAccessStepLabel(int stepNumber) {
@@ -32,7 +32,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingCtaButton => 'Acceder a mi Espacio ciudadano';
 
   @override
-  String get landingAboutButton => 'Información y ayuda sobre el espacio';
+  String get landingAboutButton => 'Saber más sobre Espacio ciudadano';
 
   @override
   String get landingHelpLink => 'Ayuda y contacto';
@@ -53,10 +53,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingHelpExternalLink => 'Enlace externo';
 
   @override
-  String get landingAboutPageTitle => 'Saber más sobre el Espacio Ciudadano';
+  String get landingAboutPageTitle => 'Saber más sobre Espacio Ciudadano';
 
   @override
-  String get landingAboutTitle => 'Espacio ciudadano';
+  String get landingAboutTitle => '¿Qué es el Espacio ciudadano?';
 
   @override
   String get landingAboutBodyPrefix => 'es el área digital donde aparecerá información relevante con el objetivo de';
@@ -68,10 +68,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingAboutBodySuffix => 'en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.';
 
   @override
-  String get landingAboutWhatYouFindTitle => '¿Qué encontrarás?';
+  String get landingAboutBody => 'Espacio ciudadano es un espacio digital donde puedes consultar tus trámites, encontrar otros que pueden interesarte y acceder a información y servicios que facilitan tu relación con la Administración.';
 
   @override
-  String get landingAboutWhatYouFindIntro => 'Tus datos en relación con la Junta de Comunidades de Castilla-La Mancha:';
+  String get landingAboutWhatYouFindTitle => '¿Qué puedo consultar?';
+
+  @override
+  String get landingAboutWhatYouFindIntro => 'En el Espacio ciudadano encontrarás:';
 
   @override
   String get landingAboutBullet1 => 'Tu información personal.';
@@ -86,13 +89,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingAboutBullet4 => 'Tus carnets digitales.';
 
   @override
-  String get landingAboutBullet5 => 'Tus citas o eventos.';
+  String get landingAboutBullet5 => 'Tus citas y eventos.';
 
   @override
-  String get landingAboutBullet6 => 'Recomendaciones personalizadas basadas en tus intereses.';
+  String get landingAboutBullet6 => 'Recomendaciones personalizadas según tus intereses.';
 
   @override
-  String get landingAboutAccessButton => 'Acceder a mi Espacio Ciudadano';
+  String get landingAboutHelpLink => 'Mostrar información de Ayuda y contacto';
+
+  @override
+  String get landingAboutAccessButton => 'Acceder a mi Espacio ciudadano';
 
   @override
   String get landingAboutExternalLink => 'Enlace externo';
@@ -1523,6 +1529,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get lifeEventsHeaderDescription => 'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.';
+
+  @override
+  String get lifeEventsOnboardingTitle => 'Recomendaciones personalizadas';
+
+  @override
+  String get lifeEventsOnboardingDescription => 'Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.';
+
+  @override
+  String get lifeEventsCompleteLaterAction => 'Completar más tarde';
 
   @override
   String get lifeEventsIntroHeading => 'Selecciona las temáticas sobre las que te gustaría recibir información';
@@ -4613,7 +4628,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get legalSearchCloseTooltip => 'Cerrar búsqueda';
 
   @override
-  String get privacyResponsibleTitle => '¿Quién es el responsable del tratamiento?';
+  String get privacyResponsibleTitle => '¿Quién es responsable del tratamiento de datos?';
 
   @override
   String get privacyDocumentTitle => 'Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano';
@@ -4622,49 +4637,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyEmailCopied => 'No hay una aplicación de correo disponible. La dirección se ha copiado al portapapeles.';
 
   @override
-  String get privacyResponsibleIntro => '1. La Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
+  String get privacyResponsibleIntro => 'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:';
 
   @override
-  String get privacyResponsibleItemProfile => 'Visualización de las notificaciones y registro';
+  String get privacyResponsibleItemProfile => 'Información del perfil de usuario.';
 
   @override
-  String get privacyResponsibleItemVisualizations => 'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado';
+  String get privacyResponsibleItemVisualizations => 'Visualización de datos seleccionados de la Administración regional y de otros temas de interés.';
 
   @override
-  String get privacyResponsibleItemRecommendations => 'Recomendaciones realizadas en base a los hechos vitales marcados';
+  String get privacyResponsibleItemRecommendations => 'Recomendaciones personalizadas según los hechos vitales indicados.';
 
   @override
-  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados';
+  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados.';
 
   @override
   String get privacyResponsibleItemAgenda => 'Visualización de la agenda';
 
   @override
-  String get privacyResponsibleOrgParagraph => 'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento o hecho administrativo.';
+  String get privacyResponsibleOrgParagraph => 'Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.';
 
   @override
-  String get privacyResponsibleContactIntro => 'Los datos de contacto de este responsable son los siguientes:';
+  String get privacyResponsibleContactIntro => 'Para contactar con el responsable, puedes hacelo mediante:';
 
   @override
-  String get privacyResponsibleContactAddressLabel => 'Dirección Postal:\n';
+  String get privacyResponsibleContactAddressLabel => 'Dirección postal\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es';
 
   @override
-  String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad de tratamiento?';
+  String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad del tratamiento?';
 
   @override
   String get privacyPopulationControllerText => '2. La Oficina del Dato es responsable del tratamiento de datos del Registro de Población, a cuyos datos se puede acceder en el apartado “Datos de empadronamiento del Registro de Población” en la sección \"Mis datos de contacto\".\n\nLos datos de contacto de este responsable son los siguientes:\n\nDirección Postal:\nOficina del Dato de Castilla-La Mancha\nC/ Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\nDirección de correo electrónico: oficinadeldato@jccm.es';
 
   @override
-  String get privacyPurposeIntro => 'Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:';
+  String get privacyPurposeIntro => 'Las finalidades de los tratamientos de datos personales que se realizan directamente en Espacio Ciudadano son:';
 
   @override
-  String get privacyPurposeItemIdentity => 'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.';
+  String get privacyPurposeItemIdentity => 'Gestionar los datos identificativos de la ciudadanía.';
 
   @override
-  String get privacyPurposeItemVisualizations => 'Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.';
+  String get privacyPurposeItemVisualizations => 'Mostrar los datos seleccionados de la Administración regional y de otros temas de interés.';
 
   @override
   String get privacyLegalBasisTitle => '¿Cuál es la legitimación de este tratamiento?';
@@ -4695,37 +4710,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyAepdTitle => '¿Puedo reclamar ante la Agencia Española de Protección de Datos?';
 
   @override
-  String get privacyAepdTextBeforeLink => 'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ';
+  String get privacyAepdTextBeforeLink => 'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ';
 
   @override
-  String get privacyAepdTextAfterLink => '. También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.';
+  String get privacyAepdLinkLabel => 'Agencia Española de Protección de Datos (AEPD)';
 
   @override
-  String get privacySecurityTitle => '¿Qué medidas de seguridad se encuentran implantadas?';
+  String get privacyAepdTextAfterLink => '.\n\nTambién puedes reclamar ante la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM), cuya información de contacto está indicada más adelante.';
 
   @override
-  String get privacySecurityText => 'Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.';
+  String get privacySecurityTitle => '¿Qué medidas de seguridad están implantadas?';
 
   @override
-  String get privacyProfilingTitle => 'Decisiones automatizadas, incluida la elaboración de perfiles';
+  String get privacySecurityText => 'Las medidas implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.';
 
   @override
-  String get privacyProfilingText => 'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.';
+  String get privacyProfilingTitle => 'Decisiones automatizadas y elaboración de perfiles';
 
   @override
-  String get privacyDpoTitle => 'Datos de contacto de la delegada de protección de datos';
+  String get privacyProfilingText => 'Las recomendaciones de trámites que se muestran en función de los hechos vitales indicados por la persona interesada implican la elaboración de perfiles.';
 
   @override
-  String get privacyDpoIntro => 'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:';
+  String get privacyDpoTitle => 'Información de contacto de la Delegada de Protección de Datos';
 
   @override
-  String get privacyDpoContactAddressLabel => 'Dirección postal:\n';
+  String get privacyDpoIntro => 'Para cualquier cuestión relacionada con la protección de datos puedes dirigirte a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM).\n\nPuedes contactar mediante:';
 
   @override
-  String get privacyDpoContactAddressValue => 'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n';
+  String get privacyDpoContactAddressLabel => 'Dirección postal\n';
 
   @override
-  String get privacyDpoContactEmailLabel => 'Dirección de correo electrónico:\n';
+  String get privacyDpoContactAddressValue => 'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12, edificio CIE III\n45071 Toledo\n\n';
+
+  @override
+  String get privacyDpoContactEmailLabel => 'Correo electrónico\n';
 
   @override
   String get accessibilityStatementHeading => 'Declaración de accesibilidad';
@@ -4875,14 +4893,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sessionContinueBiometricReason => 'Tu sesión necesita renovarse. Confirma tu identidad para continuar.';
 
   @override
-  String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella o reconocimiento facial?';
+  String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella dactilar o reconocimiento facial?';
 
   @override
-  String get biometricAccessDialogDescription => 'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.';
+  String get biometricAccessDialogDescription => 'Podrás acceder a la aplicación de forma más rápida sin tener que autentificarte cada vez. Para proteger tus datos te pediremos que vuelvas a autentificarte cada cierto tiempo.';
 
   @override
-  String get biometricAccessDialogCancel => 'Ahora no';
+  String get biometricAccessDialogCancel => 'Completar más tarde';
 
   @override
-  String get biometricAccessDialogConfirm => 'Activar acceso rápido';
+  String get biometricAccessDialogConfirm => 'Activar';
 }

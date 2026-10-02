@@ -15,13 +15,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingTitle => 'Citizen Space';
 
   @override
-  String get landingTagline => 'Agile and online management of procedures for the citizens of Castilla-La Mancha';
+  String get landingTagline => 'Access and consult the procedures and services available to the citizens of Castilla-La Mancha digitally.';
 
   @override
-  String get landingTaglinePrefix => 'Agile and online management of procedures for the citizens of ';
+  String get landingTaglinePrefix => 'Access and consult the procedures and services available to the citizens of ';
 
   @override
-  String get landingTaglineHighlight => 'Castilla-La Mancha';
+  String get landingTaglineHighlight => 'Castilla-La Mancha digitally.';
 
   @override
   String landingAccessStepLabel(int stepNumber) {
@@ -68,10 +68,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingAboutBodySuffix => 'in the procedures and processes in which you are involved or that may be of interest to you.';
 
   @override
-  String get landingAboutWhatYouFindTitle => 'What will you find?';
+  String get landingAboutBody => 'Citizen Space is a digital space where you can check your procedures, find others that may interest you, and access information and services that make it easier to interact with the Administration.';
 
   @override
-  String get landingAboutWhatYouFindIntro => 'You will have access to various information such as:';
+  String get landingAboutWhatYouFindTitle => 'What can I check?';
+
+  @override
+  String get landingAboutWhatYouFindIntro => 'In Citizen Space you will find:';
 
   @override
   String get landingAboutBullet1 => 'Your personal information.';
@@ -90,6 +93,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get landingAboutBullet6 => 'Personalized recommendations based on your interests.';
+
+  @override
+  String get landingAboutHelpLink => 'Show Help and contact information';
 
   @override
   String get landingAboutAccessButton => 'Access my Citizen Space';
@@ -1522,6 +1528,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lifeEventsHeaderDescription => 'Select the life events that best describe your situation to receive personalized recommendations.';
+
+  @override
+  String get lifeEventsOnboardingTitle => 'Personalized recommendations';
+
+  @override
+  String get lifeEventsOnboardingDescription => 'Select the situations, interests, or needs that best match you to receive personalized recommendations.';
+
+  @override
+  String get lifeEventsCompleteLaterAction => 'Complete later';
 
   @override
   String get lifeEventsIntroHeading => 'Select the topics you would like to receive information about';
@@ -4696,6 +4711,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyAepdTextBeforeLink => 'If you have evidence or indications proving that your right to data protection has been infringed in Espacio Ciudadano or in the Population Register, you may lodge a complaint with the Agencia Española de Protección de Datos (Spanish Data Protection Agency), ';
 
   @override
+  String get privacyAepdLinkLabel => 'Spanish Data Protection Agency (AEPD)';
+
+  @override
   String get privacyAepdTextAfterLink => '. You may also lodge a complaint with the data protection officer, whose contact details are included in this information.';
 
   @override
@@ -4876,11 +4894,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get biometricAccessDialogTitle => 'Would you like to enable quick access with fingerprint or facial recognition?';
 
   @override
-  String get biometricAccessDialogDescription => 'This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.';
+  String get biometricAccessDialogDescription => 'You will be able to access the application more quickly without having to authenticate every time. To protect your data, we will ask you to authenticate again periodically.';
 
   @override
-  String get biometricAccessDialogCancel => 'Not now';
+  String get biometricAccessDialogCancel => 'Complete later';
 
   @override
-  String get biometricAccessDialogConfirm => 'Enable quick access';
+  String get biometricAccessDialogConfirm => 'Enable';
 }

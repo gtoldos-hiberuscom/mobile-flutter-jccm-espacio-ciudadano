@@ -8,17 +8,17 @@
   "@landingTitle": {
     "description": "Título principal mostrado en la sección hero de la pantalla de inicio pública."
   },
-  "landingTagline": "Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha",
+  "landingTagline": "Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de Castilla-La Mancha.",
   "@landingTagline": {
     "description": "Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio."
   },
-  "landingTaglinePrefix": "Gestión ágil y online de trámites para la ciudadanía de ",
+  "landingTaglinePrefix": "Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de ",
   "@landingTaglinePrefix": {
-    "description": "Primera parte del eslogan (peso regular) que precede al nombre de la región."
+    "description": "Primera parte del eslogan que precede al nombre de la región."
   },
-  "landingTaglineHighlight": "Castilla-La Mancha",
+  "landingTaglineHighlight": "Castilla-La Mancha.",
   "@landingTaglineHighlight": {
-    "description": "Nombre de la región resaltado con tipografía H2 en el eslogan."
+    "description": "Nombre de la región al final del eslogan."
   },
   "landingAccessStepLabel": "Paso {stepNumber}",
   "@landingAccessStepLabel": {
@@ -33,7 +33,7 @@
   "@landingCtaButton": {
     "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
   },
-  "landingAboutButton": "Información y ayuda sobre el espacio",
+  "landingAboutButton": "Saber más sobre Espacio ciudadano",
   "@landingAboutButton": {
     "description": "Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano."
   },
@@ -61,11 +61,11 @@
   "@landingHelpExternalLink": {
     "description": "Enlace de texto externo en la pantalla de ayuda."
   },
-  "landingAboutPageTitle": "Saber más sobre el Espacio Ciudadano",
+  "landingAboutPageTitle": "Saber más sobre Espacio Ciudadano",
   "@landingAboutPageTitle": {
     "description": "Título del AppBar de la pantalla de información sobre el Espacio Ciudadano."
   },
-  "landingAboutTitle": "Espacio ciudadano",
+  "landingAboutTitle": "¿Qué es el Espacio ciudadano?",
   "@landingAboutTitle": {
     "description": "Título principal de la pantalla de información sobre el Espacio Ciudadano."
   },
@@ -81,11 +81,15 @@
   "@landingAboutBodySuffix": {
     "description": "Texto final del párrafo descriptivo (tras el fragmento en negrita)."
   },
-  "landingAboutWhatYouFindTitle": "¿Qué encontrarás?",
+  "landingAboutBody": "Espacio ciudadano es un espacio digital donde puedes consultar tus trámites, encontrar otros que pueden interesarte y acceder a información y servicios que facilitan tu relación con la Administración.",
+  "@landingAboutBody": {
+    "description": "Párrafo descriptivo de la pantalla de información sobre Espacio ciudadano."
+  },
+  "landingAboutWhatYouFindTitle": "¿Qué puedo consultar?",
   "@landingAboutWhatYouFindTitle": {
     "description": "Encabezado de la sección de contenidos de la pantalla about."
   },
-  "landingAboutWhatYouFindIntro": "Tus datos en relación con la Junta de Comunidades de Castilla-La Mancha:",
+  "landingAboutWhatYouFindIntro": "En el Espacio ciudadano encontrarás:",
   "@landingAboutWhatYouFindIntro": {
     "description": "Introducción a la lista de contenidos disponibles."
   },
@@ -105,15 +109,19 @@
   "@landingAboutBullet4": {
     "description": "Cuarto elemento de la lista de contenidos."
   },
-  "landingAboutBullet5": "Tus citas o eventos.",
+  "landingAboutBullet5": "Tus citas y eventos.",
   "@landingAboutBullet5": {
     "description": "Quinto elemento de la lista de contenidos."
   },
-  "landingAboutBullet6": "Recomendaciones personalizadas basadas en tus intereses.",
+  "landingAboutBullet6": "Recomendaciones personalizadas según tus intereses.",
   "@landingAboutBullet6": {
     "description": "Sexto elemento de la lista de contenidos."
   },
-  "landingAboutAccessButton": "Acceder a mi Espacio Ciudadano",
+  "landingAboutHelpLink": "Mostrar información de Ayuda y contacto",
+  "@landingAboutHelpLink": {
+    "description": "Enlace a la información de ayuda y contacto desde la pantalla about."
+  },
+  "landingAboutAccessButton": "Acceder a mi Espacio ciudadano",
   "@landingAboutAccessButton": {
     "description": "Botón de acción principal de la pantalla about que inicia el flujo de autenticación."
   },
@@ -2021,6 +2029,18 @@
   "lifeEventsHeaderDescription": "Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.",
   "@lifeEventsHeaderDescription": {
     "description": "Personalization — descriptive header on the hechos vitales screen."
+  },
+  "lifeEventsOnboardingTitle": "Recomendaciones personalizadas",
+  "@lifeEventsOnboardingTitle": {
+    "description": "Personalización — título principal durante el primer acceso."
+  },
+  "lifeEventsOnboardingDescription": "Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.",
+  "@lifeEventsOnboardingDescription": {
+    "description": "Personalización — introducción durante el primer acceso."
+  },
+  "lifeEventsCompleteLaterAction": "Completar más tarde",
+  "@lifeEventsCompleteLaterAction": {
+    "description": "Personalización — acción para posponer la configuración durante el primer acceso."
   },
   "lifeEventsIntroHeading": "Selecciona las temáticas sobre las que te gustaría recibir información",
   "@lifeEventsIntroHeading": {
@@ -6022,7 +6042,7 @@
   "@legalSearchCloseTooltip": {
     "description": "Páginas legales — tooltip del botón para cerrar la búsqueda en la barra superior."
   },
-  "privacyResponsibleTitle": "¿Quién es el responsable del tratamiento?",
+  "privacyResponsibleTitle": "¿Quién es responsable del tratamiento de datos?",
   "@privacyResponsibleTitle": {
     "description": "Protección de datos — título de la sección del responsable del tratamiento."
   },
@@ -6034,23 +6054,23 @@
   "@privacyEmailCopied": {
     "description": "Protección de datos — aviso mostrado cuando no se puede abrir el correo y se copia la dirección."
   },
-  "privacyResponsibleIntro": "1. La Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:",
+  "privacyResponsibleIntro": "La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:",
   "@privacyResponsibleIntro": {
     "description": "Protección de datos — párrafo introductorio del responsable del tratamiento."
   },
-  "privacyResponsibleItemProfile": "Visualización de las notificaciones y registro",
+  "privacyResponsibleItemProfile": "Información del perfil de usuario.",
   "@privacyResponsibleItemProfile": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemVisualizations": "Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado",
+  "privacyResponsibleItemVisualizations": "Visualización de datos seleccionados de la Administración regional y de otros temas de interés.",
   "@privacyResponsibleItemVisualizations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemRecommendations": "Recomendaciones realizadas en base a los hechos vitales marcados",
+  "privacyResponsibleItemRecommendations": "Recomendaciones personalizadas según los hechos vitales indicados.",
   "@privacyResponsibleItemRecommendations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados",
+  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados.",
   "@privacyResponsibleItemDownloads": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
@@ -6058,23 +6078,23 @@
   "@privacyResponsibleItemAgenda": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleOrgParagraph": "Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento o hecho administrativo.",
+  "privacyResponsibleOrgParagraph": "Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.",
   "@privacyResponsibleOrgParagraph": {
     "description": "Protección de datos — párrafo sobre los órganos responsables de cada opción."
   },
-  "privacyResponsibleContactIntro": "Los datos de contacto de este responsable son los siguientes:",
+  "privacyResponsibleContactIntro": "Para contactar con el responsable, puedes hacelo mediante:",
   "@privacyResponsibleContactIntro": {
     "description": "Protección de datos — introducción de los datos de contacto del responsable."
   },
-  "privacyResponsibleContactAddressLabel": "Dirección Postal:\n",
+  "privacyResponsibleContactAddressLabel": "Dirección postal\n",
   "@privacyResponsibleContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea)."
   },
-  "privacyResponsibleContactAddressValue": "Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es",
+  "privacyResponsibleContactAddressValue": "Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es",
   "@privacyResponsibleContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal y el correo del responsable."
   },
-  "privacyPurposeTitle": "¿Cuál es la denominación y finalidad de tratamiento?",
+  "privacyPurposeTitle": "¿Cuál es la denominación y finalidad del tratamiento?",
   "@privacyPurposeTitle": {
     "description": "Protección de datos — título de la sección de finalidad del tratamiento."
   },
@@ -6082,15 +6102,15 @@
   "@privacyPopulationControllerText": {
     "description": "Protección de datos — responsable y contacto del Registro de Población."
   },
-  "privacyPurposeIntro": "Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:",
+  "privacyPurposeIntro": "Las finalidades de los tratamientos de datos personales que se realizan directamente en Espacio Ciudadano son:",
   "@privacyPurposeIntro": {
     "description": "Protección de datos — párrafo introductorio de las finalidades del tratamiento."
   },
-  "privacyPurposeItemIdentity": "Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.",
+  "privacyPurposeItemIdentity": "Gestionar los datos identificativos de la ciudadanía.",
   "@privacyPurposeItemIdentity": {
     "description": "Protección de datos — elemento de la lista de finalidades."
   },
-  "privacyPurposeItemVisualizations": "Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.",
+  "privacyPurposeItemVisualizations": "Mostrar los datos seleccionados de la Administración regional y de otros temas de interés.",
   "@privacyPurposeItemVisualizations": {
     "description": "Protección de datos — elemento de la lista de finalidades."
   },
@@ -6114,47 +6134,49 @@
   "@privacyAepdTitle": {
     "description": "Protección de datos — título de la sección sobre reclamaciones ante la AEPD."
   },
-  "privacyAepdTextBeforeLink": "Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ",
+  "privacyAepdTextBeforeLink": "Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ",
   "@privacyAepdTextBeforeLink": {
     "description": "Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio)."
   },
-  "privacyAepdTextAfterLink": ". También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.",
+  "privacyAepdLinkLabel": "Agencia Española de Protección de Datos (AEPD)",
+  "@privacyAepdLinkLabel": {"description": "Protección de datos — texto del enlace a la AEPD."},
+  "privacyAepdTextAfterLink": ".\n\nTambién puedes reclamar ante la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM), cuya información de contacto está indicada más adelante.",
   "@privacyAepdTextAfterLink": {
     "description": "Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto)."
   },
-  "privacySecurityTitle": "¿Qué medidas de seguridad se encuentran implantadas?",
+  "privacySecurityTitle": "¿Qué medidas de seguridad están implantadas?",
   "@privacySecurityTitle": {
     "description": "Protección de datos — título de la sección de medidas de seguridad."
   },
-  "privacySecurityText": "Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.",
+  "privacySecurityText": "Las medidas implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.",
   "@privacySecurityText": {
     "description": "Protección de datos — párrafo sobre las medidas de seguridad implantadas."
   },
-  "privacyProfilingTitle": "Decisiones automatizadas, incluida la elaboración de perfiles",
+  "privacyProfilingTitle": "Decisiones automatizadas y elaboración de perfiles",
   "@privacyProfilingTitle": {
     "description": "Protección de datos — título de la sección de decisiones automatizadas."
   },
-  "privacyProfilingText": "En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.",
+  "privacyProfilingText": "Las recomendaciones de trámites que se muestran en función de los hechos vitales indicados por la persona interesada implican la elaboración de perfiles.",
   "@privacyProfilingText": {
     "description": "Protección de datos — párrafo sobre la elaboración de perfiles."
   },
-  "privacyDpoTitle": "Datos de contacto de la delegada de protección de datos",
+  "privacyDpoTitle": "Información de contacto de la Delegada de Protección de Datos",
   "@privacyDpoTitle": {
     "description": "Protección de datos — título de la sección de contacto con la delegada de protección de datos."
   },
-  "privacyDpoIntro": "Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:",
+  "privacyDpoIntro": "Para cualquier cuestión relacionada con la protección de datos puedes dirigirte a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM).\n\nPuedes contactar mediante:",
   "@privacyDpoIntro": {
     "description": "Protección de datos — párrafo introductorio del contacto con la delegada de protección de datos."
   },
-  "privacyDpoContactAddressLabel": "Dirección postal:\n",
+  "privacyDpoContactAddressLabel": "Dirección postal\n",
   "@privacyDpoContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal de la delegada (termina en salto de línea)."
   },
-  "privacyDpoContactAddressValue": "Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n",
+  "privacyDpoContactAddressValue": "Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12, edificio CIE III\n45071 Toledo\n\n",
   "@privacyDpoContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal de la delegada de protección de datos (termina en línea en blanco)."
   },
-  "privacyDpoContactEmailLabel": "Dirección de correo electrónico:\n",
+  "privacyDpoContactEmailLabel": "Correo electrónico\n",
   "@privacyDpoContactEmailLabel": {
     "description": "Protección de datos — etiqueta en negrita del correo electrónico de la delegada (termina en salto de línea)."
   },
@@ -6351,8 +6373,8 @@
   "@sessionContinueBiometricReason": {
     "description": "Motivo del diálogo biométrico al renovar la sesión en pleno uso. Explica el porqué: a diferencia de la reanudación, aquí el ciudadano no ha pedido nada, solo ha navegado."
   },
-  "biometricAccessDialogTitle": "¿Quieres activar el acceso rápido con huella o reconocimiento facial?",
-  "biometricAccessDialogDescription": "Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.",
-  "biometricAccessDialogCancel": "Ahora no",
-  "biometricAccessDialogConfirm": "Activar acceso rápido"
+  "biometricAccessDialogTitle": "¿Quieres activar el acceso rápido con huella dactilar o reconocimiento facial?",
+  "biometricAccessDialogDescription": "Podrás acceder a la aplicación de forma más rápida sin tener que autentificarte cada vez. Para proteger tus datos te pediremos que vuelvas a autentificarte cada cierto tiempo.",
+  "biometricAccessDialogCancel": "Completar más tarde",
+  "biometricAccessDialogConfirm": "Activar"
 }
