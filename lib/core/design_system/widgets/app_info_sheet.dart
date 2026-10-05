@@ -60,6 +60,7 @@ class AppInfoSheet {
     final VoidCallback? onActionPressed,
     final IconData? actionIcon,
     final String? semanticsLabel,
+    final String? closeLabel,
   }) async {
     assert(title != '', 'title must not be empty');
     assert(bodyText != '', 'bodyText must not be empty');
@@ -80,6 +81,7 @@ class AppInfoSheet {
       context: context,
       title: title,
       semanticsLabel: semanticsLabel,
+      closeLabel: closeLabel,
       horizontalMargin: AppDimensions.space4,
       body: _AppInfoSheetBody(
         bodyText: bodyText,

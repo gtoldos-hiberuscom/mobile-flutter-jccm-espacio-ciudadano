@@ -425,6 +425,10 @@
   "@externalNavigationDialogTitle": {
     "description": "Title of the confirmation dialog shown before opening an external link."
   },
+  "drawerElectronicOfficeDialogTitle": "We are going to redirect you to the Electronic Office",
+  "@drawerElectronicOfficeDialogTitle": {
+    "description": "Title of the confirmation dialog shown when opening the Electronic Office from the side menu."
+  },
   "externalNavigationDialogBody": "The content will open in a browser window",
   "@externalNavigationDialogBody": {
     "description": "Message in the confirmation dialog shown before opening an external link."
@@ -1931,7 +1935,7 @@
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Cards — label for the familia numerosa type."
   },
-  "digitalCardsTypeJoven": "Youth",
+  "digitalCardsTypeJoven": "Youth card",
   "@digitalCardsTypeJoven": {
     "description": "Cards — label for the carnet joven type."
   },
@@ -5189,9 +5193,13 @@
   "@appQrCodeLabel": {
     "description": "Accessibility label for the QR code preview in the download bottom sheet."
   },
-  "appQrDownloadFormatTitle": "Download format",
+  "appQrDownloadFormatTitle": "Would you like to save the card?",
   "@appQrDownloadFormatTitle": {
-    "description": "Heading of the format section in the card download bottom sheet."
+    "description": "Question heading the format section in the card download bottom sheet."
+  },
+  "appQrDownloadFormatDescription": "Choose how you want to download it:",
+  "@appQrDownloadFormatDescription": {
+    "description": "Introductory text for the card download options."
   },
   "appQrDownloadWalletLabelAndroid": "Wallet",
   "@appQrDownloadWalletLabelAndroid": {
@@ -5271,11 +5279,23 @@
   "@preferencesInfoSheetBody": {
     "description": "Preferences — body of the page info bottom sheet."
   },
-  "preferencesLifeEventsInactiveDescription": "To select your life events and receive recommendations, you must first accept the use of this data in Terms of use and authorizations.",
+  "consentAuthorizationsInfoTitle": "Learn more about Terms of use and authorization",
+  "@consentAuthorizationsInfoTitle": {
+    "description": "Consent — title of the information sheet opened from the information button."
+  },
+  "consentAuthorizationsInfoBody": "If you do not authorize the use of your data, public administrations will not be able to show you the information they hold about you.",
+  "@consentAuthorizationsInfoBody": {
+    "description": "Consent — explanation shown in the terms and authorizations information sheet."
+  },
+  "consentAuthorizationsInfoClose": "Close",
+  "@consentAuthorizationsInfoClose": {
+    "description": "Consent — action to close the terms and authorizations information sheet."
+  },
+  "preferencesLifeEventsInactiveDescription": "Accept the use of your life-event data in Terms of use and authorizations so you can select them and receive personalized recommendations.",
   "@preferencesLifeEventsInactiveDescription": {
     "description": "Preferences — life events card description when the authorization is inactive."
   },
-  "preferencesLifeEventsPendingDescription": "You have not yet selected the topics you want to receive updates about in your recommendations section",
+  "preferencesLifeEventsPendingDescription": "Select the situations, interests, or needs that best suit you to receive personalized recommendations.",
   "@preferencesLifeEventsPendingDescription": {
     "description": "Preferences — life events card description when nothing is selected yet."
   },
@@ -5287,11 +5307,11 @@
   "@preferencesSelectAction": {
     "description": "Preferences — action to select life events."
   },
-  "preferencesNotificationContactTitle": "Contact details for notifications",
+  "preferencesNotificationContactTitle": "Contact details for notification alerts",
   "@preferencesNotificationContactTitle": {
     "description": "Preferences — title of the notification contact details card."
   },
-  "preferencesNotificationContactInactiveDescription": "To receive electronic notifications you must provide at least one contact method for alerts.",
+  "preferencesNotificationContactInactiveDescription": "Enter a mobile phone number or email address to receive alerts when you have new notifications.",
   "@preferencesNotificationContactInactiveDescription": {
     "description": "Preferences — notification contact card description when inactive."
   },
@@ -5307,11 +5327,35 @@
   "@preferencesManageAction": {
     "description": "Preferences — action to manage contact details."
   },
-  "preferencesRevokeDialogTitle": "Permission revocation",
+  "preferencesAddContactAction": "Add details",
+  "@preferencesAddContactAction": {
+    "description": "Preferences — action to add contact details when none are configured."
+  },
+  "preferencesBiometricTitle": "Biometric access",
+  "@preferencesBiometricTitle": {
+    "description": "Preferences — title of the biometric access card."
+  },
+  "preferencesBiometricInactiveDescription": "Enable fingerprint or facial recognition access to enter the application more quickly.",
+  "@preferencesBiometricInactiveDescription": {
+    "description": "Preferences — description shown when biometric access is disabled."
+  },
+  "preferencesBiometricActiveDescription": "Biometric access to the application is enabled.",
+  "@preferencesBiometricActiveDescription": {
+    "description": "Preferences — description shown when biometric access is enabled."
+  },
+  "preferencesBiometricEnableAction": "Enable",
+  "@preferencesBiometricEnableAction": {
+    "description": "Preferences — action to enable biometric access."
+  },
+  "preferencesBiometricDisableAction": "Disable",
+  "@preferencesBiometricDisableAction": {
+    "description": "Preferences — action to disable biometric access."
+  },
+  "preferencesRevokeDialogTitle": "You are about to delete your preferences",
   "@preferencesRevokeDialogTitle": {
     "description": "Preferences — title of the delete-preferences confirmation dialog."
   },
-  "preferencesRevokeDialogDescription": "Do you want to delete your selection of terms of use, authorizations, and life events?\nDoing so will end your current session, and if you sign in again you will have to complete the process from the beginning.",
+  "preferencesRevokeDialogDescription": "Deleting your preferences will remove the authorizations you granted the organization to access your personal data.\n\nIf you access the application again, you will need to complete the authentication process and accept the Terms of use and authorizations again.",
   "@preferencesRevokeDialogDescription": {
     "description": "Preferences — description of the delete-preferences confirmation dialog."
   },
@@ -5745,11 +5789,19 @@
   "@helpContactGuidesTitle": {
     "description": "Help and contact — heading and card of the help guides."
   },
-  "helpContactGuidesIntro": "If you need additional help, these Help Guides are available to you",
+  "helpFaqIntro": "Find answers to the most common questions about Citizen Space.",
+  "@helpFaqIntro": {
+    "description": "Help and contact — introduction to the frequently asked questions list."
+  },
+  "helpContactGuidesIntro": "Browse the available guides to resolve your questions step by step.",
   "@helpContactGuidesIntro": {
     "description": "Help and contact — introduction to the help guides."
   },
-  "helpContactGoToJccmPortal": "Go to the JCCM web portal",
+  "helpContactShowAllGuides": "Show all guides",
+  "@helpContactShowAllGuides": {
+    "description": "Help and contact — title of the card that opens all guides."
+  },
+  "helpContactGoToJccmPortal": "Go to the Castilla-La Mancha portal",
   "@helpContactGoToJccmPortal": {
     "description": "Help and contact — subtitle of the cards linking to the JCCM web portal."
   },
@@ -5757,15 +5809,15 @@
   "@helpContactInfoHeading": {
     "description": "Help and contact — heading of the contact tab."
   },
-  "helpContactPhonesIntro": "For general inquiries and administrative information you can get in touch through the citizen service phone lines.",
+  "helpContactPhonesIntro": "For general inquiries or administrative information, you can contact the Citizen Service.",
   "@helpContactPhonesIntro": {
     "description": "Help and contact — introduction to the citizen service phone lines."
   },
-  "helpContactPhonesIntroBold1": "general inquiries and administrative information",
+  "helpContactPhonesIntroBold1": "general inquiries or administrative information",
   "@helpContactPhonesIntroBold1": {
     "description": "Help and contact — first bold fragment of the phones intro (must be an exact substring of helpContactPhonesIntro)."
   },
-  "helpContactPhonesIntroBold2": "citizen service phone lines",
+  "helpContactPhonesIntroBold2": "Citizen Service",
   "@helpContactPhonesIntroBold2": {
     "description": "Help and contact — second bold fragment of the phones intro (must be an exact substring of helpContactPhonesIntro)."
   },
@@ -5773,7 +5825,7 @@
   "@helpContactCallCitizenService": {
     "description": "Help and contact — subtitle of the citizen service phone cards."
   },
-  "helpContactExpedienteIntro": "If you need to know more details about a case file, contact the processing office or the competent regional ministry.",
+  "helpContactExpedienteIntro": "For more details about a case file, contact the processing office or the responsible regional ministry.",
   "@helpContactExpedienteIntro": {
     "description": "Help and contact — introduction to case file contact."
   },
@@ -5785,7 +5837,7 @@
   "@helpContactOfficesListTitle": {
     "description": "Help and contact — card linking to the list of information and registry offices."
   },
-  "helpContactSupportIntro": "If you need technical assistance, contact us through the Technical Support form.",
+  "helpContactSupportIntro": "If you need technical assistance, you can contact the technical support team through a form.",
   "@helpContactSupportIntro": {
     "description": "Help and contact — introduction to the technical support form."
   },
@@ -5797,7 +5849,7 @@
   "@helpContactSupportFormButton": {
     "description": "Help and contact — button that opens the support form."
   },
-  "faqQuestion1": "What is Citizen Space and what can I find in it?",
+  "faqQuestion1": "What is Citizen Space and what can I view?",
   "@faqQuestion1": {
     "description": "FAQ — question about what Citizen Space is."
   },
@@ -5805,7 +5857,7 @@
   "@faqAnswer1": {
     "description": "FAQ — answer about what Citizen Space is."
   },
-  "faqQuestion2": "What do I need to sign in?",
+  "faqQuestion2": "What do I need to access my Citizen Space?",
   "@faqQuestion2": {
     "description": "FAQ — question about access requirements."
   },
@@ -5813,7 +5865,7 @@
   "@faqAnswer2": {
     "description": "FAQ — answer about access requirements."
   },
-  "faqQuestion3": "What personal data is stored in Citizen Space?",
+  "faqQuestion3": "What personal data is stored?",
   "@faqQuestion3": {
     "description": "FAQ — question about stored personal data."
   },
@@ -5821,7 +5873,7 @@
   "@faqAnswer3": {
     "description": "FAQ — answer about stored personal data."
   },
-  "faqQuestion4": "The data shown contains an error. Can I correct it?",
+  "faqQuestion4": "How can I correct incorrect data?",
   "@faqQuestion4": {
     "description": "FAQ — question about correcting wrong data."
   },
@@ -5829,13 +5881,21 @@
   "@faqAnswer4": {
     "description": "FAQ — answer about correcting wrong data."
   },
-  "faqQuestion5": "What events are shown in My Agenda?",
+  "faqQuestion5": "Which case files and procedures can I view?",
   "@faqQuestion5": {
     "description": "FAQ — question about My Agenda events."
   },
-  "faqAnswer5": "Appointments, notices, and administrative events related to your services are shown.",
+  "faqAnswer5": "You can view available case files and procedures associated with your identity and the services integrated into Citizen Space.",
   "@faqAnswer5": {
-    "description": "FAQ — answer about My Agenda events."
+    "description": "FAQ — answer about available case files and procedures."
+  },
+  "faqQuestion6": "Which events will appear in my agenda?",
+  "@faqQuestion6": {
+    "description": "FAQ — question about agenda events."
+  },
+  "faqAnswer6": "Appointments, notices, and administrative events related to your services are shown.",
+  "@faqAnswer6": {
+    "description": "FAQ — answer about agenda events."
   },
   "supportFormPageTitle": "Support form",
   "@supportFormPageTitle": {

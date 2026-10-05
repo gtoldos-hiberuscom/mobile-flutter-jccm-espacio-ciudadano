@@ -28,6 +28,7 @@ class AppBottomSheet extends StatelessWidget {
     this.onClose,
     this.horizontalMargin = AppDimensions.space16,
     this.semanticsLabel,
+    this.closeLabel,
   }) : assert(title == null || title.length > 0, 'title must not be empty'),
        assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
        assert(horizontalMargin >= 0, 'horizontalMargin must not be negative');
@@ -51,6 +52,9 @@ class AppBottomSheet extends StatelessWidget {
   /// bottom-sheet label.
   final String? semanticsLabel;
 
+  /// Optional visible close label. Defaults to the design-system copy.
+  final String? closeLabel;
+
   /// Shows the bottom sheet as a modal with the JCCM scrim colour.
   static Future<T?> show<T>({
     required final BuildContext context,
@@ -62,6 +66,7 @@ class AppBottomSheet extends StatelessWidget {
     final bool enableDrag = true,
     final double horizontalMargin = AppDimensions.space16,
     final String? semanticsLabel,
+    final String? closeLabel,
   }) {
     return showModalBottomSheet<T>(
       context: context,
@@ -79,6 +84,7 @@ class AppBottomSheet extends StatelessWidget {
         onClose: onClose,
         horizontalMargin: horizontalMargin,
         semanticsLabel: semanticsLabel,
+        closeLabel: closeLabel,
       ),
     );
   }
@@ -207,7 +213,7 @@ class AppBottomSheet extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              l10n.a11yBottomSheetClose,
+                              closeLabel ?? l10n.a11yBottomSheetClose,
                               style: AppTypography.leadingMedium.copyWith(
                                 color: AppColors.textBase,
                                 decoration: TextDecoration.underline,
@@ -304,16 +310,28 @@ class AppQrDownloadBottomSheetBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(
             top: AppDimensions.space4,
-            bottom: AppDimensions.space8,
+            bottom: AppDimensions.space4,
           ),
-          child: Text(
-            l10n.appQrDownloadFormatTitle,
-            style: AppTypography.leadingBold.copyWith(
-              color: AppColors.primary,
+          child: Semantics(
+            header: true,
+            headingLevel: 2,
+            child: Text(
+              l10n.appQrDownloadFormatTitle,
+              style: AppTypography.leadingBold.copyWith(
+                color: AppColors.primary,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: AppDimensions.space8),
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppDimensions.space16),
+          child: Text(
+            l10n.appQrDownloadFormatDescription,
+            style: AppTypography.bodyRegular.copyWith(
+              color: AppColors.textBase,
+            ),
+          ),
+        ),
         if (onQrPressed != null) ...[
           _DownloadFormatButton(
             label: l10n.appQrCodeLabel,
@@ -366,7 +384,13 @@ class _QrPreview extends StatelessWidget {
         // Keep enough vertical space for the download actions. The parent
         // bottom sheet remains scrollable as a fallback for very small
         // viewports and large accessibility text sizes.
-        final heightLimit = MediaQuery.sizeOf(context).height * 0.30;
+        // Reserve room for the heading, explanatory copy and the three
+        // download actions. On taller screens the preview grows up to its
+        // design size; on short screens it shrinks before actions need scroll.
+        final heightLimit = (MediaQuery.sizeOf(context).height - 520).clamp(
+          120.0,
+          331.0,
+        );
         final availableWidth = constraints.maxWidth < 326 ? constraints.maxWidth : 326.0;
         final desiredHeight = availableWidth * 331 / 326;
         final scale = desiredHeight > heightLimit ? heightLimit / desiredHeight : 1.0;

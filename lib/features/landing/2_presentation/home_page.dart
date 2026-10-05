@@ -76,16 +76,17 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_biometricDialogShown) {
+  void _scheduleBiometricOffer(final String? idAgente) {
+    // Los claims pueden llegar después del primer frame de Home. No damos la
+    // oferta por procesada hasta tener el identificador con el que se guarda
+    // la preferencia; de lo contrario nunca se reintentaba en ese login.
+    if (idAgente == null || _biometricDialogShown) {
       return;
     }
     _biometricDialogShown = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        unawaited(_offerBiometricQuickAccess());
+        unawaited(_offerBiometricQuickAccess(idAgente));
       }
     });
   }
@@ -98,14 +99,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   ///
   /// No se insiste: si lo rechaza, no se vuelve a preguntar en esta sesión, y
   /// siempre puede activarlo después desde Preferencias.
-  Future<void> _offerBiometricQuickAccess() async {
+  Future<void> _offerBiometricQuickAccess(final String idAgente) async {
     final appStorage = ref.read(appStorageProvider);
-    // La preferencia va por ciudadano: sin `idAgente` no hay a quién
-    // preguntarle ni dónde anotar la respuesta.
-    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
-    if (idAgente == null) {
-      return;
-    }
     final enabledKey = '${StorageKeys.biometricQuickAccessEnabledPrefix}$idAgente';
     if (appStorage.read<bool>(enabledKey) ?? false) {
       return;
@@ -181,6 +176,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(final BuildContext context) {
+    final idAgente = ref.watch(citizenEndpointIdsProvider).idAgente;
+    _scheduleBiometricOffer(idAgente);
+
     return Scaffold(
       appBar: AppNavBar(
         type: AppNavBarType.inicio,

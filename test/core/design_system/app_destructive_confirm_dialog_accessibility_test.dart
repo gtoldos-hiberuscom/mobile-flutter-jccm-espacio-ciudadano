@@ -53,6 +53,25 @@ void main() {
     );
   });
 
+  testWidgets('permite ocultar el icono en variantes sin ilustración', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        AppDestructiveConfirmDialog(
+          title: 'Vas a borrar tus preferencias',
+          description: 'Se eliminarán las autorizaciones concedidas.',
+          confirmLabel: 'Borrar',
+          cancelLabel: 'Cancelar',
+          icon: null,
+          onConfirm: () {},
+          onCancel: () {},
+        ),
+      ),
+    );
+
+    expect(find.byType(Icon), findsNothing);
+    expect(find.text('Vas a borrar tus preferencias'), findsOneWidget);
+  });
+
   testWidgets('mantiene cancelar y eliminar como acciones independientes', (final tester) async {
     var cancelled = false;
     var confirmed = false;

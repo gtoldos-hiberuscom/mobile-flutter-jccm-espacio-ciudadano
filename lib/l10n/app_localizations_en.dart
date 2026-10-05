@@ -326,6 +326,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalNavigationDialogTitle => 'You are about to leave the application';
 
   @override
+  String get drawerElectronicOfficeDialogTitle => 'We are going to redirect you to the Electronic Office';
+
+  @override
   String get externalNavigationDialogBody => 'The content will open in a browser window';
 
   @override
@@ -1446,7 +1449,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsTypeFamiliaNumerosa => 'Large Family';
 
   @override
-  String get digitalCardsTypeJoven => 'Youth';
+  String get digitalCardsTypeJoven => 'Youth card';
 
   @override
   String get digitalCardsTypeDiscapacidad => 'Disability';
@@ -3937,7 +3940,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appQrCodeLabel => 'QR code';
 
   @override
-  String get appQrDownloadFormatTitle => 'Download format';
+  String get appQrDownloadFormatTitle => 'Would you like to save the card?';
+
+  @override
+  String get appQrDownloadFormatDescription => 'Choose how you want to download it:';
 
   @override
   String get appQrDownloadWalletLabelAndroid => 'Wallet';
@@ -4054,10 +4060,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesInfoSheetBody => 'Manage your authorizations and alerts.';
 
   @override
-  String get preferencesLifeEventsInactiveDescription => 'To select your life events and receive recommendations, you must first accept the use of this data in Terms of use and authorizations.';
+  String get consentAuthorizationsInfoTitle => 'Learn more about Terms of use and authorization';
 
   @override
-  String get preferencesLifeEventsPendingDescription => 'You have not yet selected the topics you want to receive updates about in your recommendations section';
+  String get consentAuthorizationsInfoBody => 'If you do not authorize the use of your data, public administrations will not be able to show you the information they hold about you.';
+
+  @override
+  String get consentAuthorizationsInfoClose => 'Close';
+
+  @override
+  String get preferencesLifeEventsInactiveDescription => 'Accept the use of your life-event data in Terms of use and authorizations so you can select them and receive personalized recommendations.';
+
+  @override
+  String get preferencesLifeEventsPendingDescription => 'Select the situations, interests, or needs that best suit you to receive personalized recommendations.';
 
   @override
   String get preferencesLifeEventsActiveDescription => 'You have life events selected to receive personalized recommendations.';
@@ -4066,10 +4081,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesSelectAction => 'Select';
 
   @override
-  String get preferencesNotificationContactTitle => 'Contact details for notifications';
+  String get preferencesNotificationContactTitle => 'Contact details for notification alerts';
 
   @override
-  String get preferencesNotificationContactInactiveDescription => 'To receive electronic notifications you must provide at least one contact method for alerts.';
+  String get preferencesNotificationContactInactiveDescription => 'Enter a mobile phone number or email address to receive alerts when you have new notifications.';
 
   @override
   String get preferencesNotificationContactPendingDescription => 'Manage the contact method for receiving electronic notification alerts.';
@@ -4081,10 +4096,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesManageAction => 'Manage';
 
   @override
-  String get preferencesRevokeDialogTitle => 'Permission revocation';
+  String get preferencesAddContactAction => 'Add details';
 
   @override
-  String get preferencesRevokeDialogDescription => 'Do you want to delete your selection of terms of use, authorizations, and life events?\nDoing so will end your current session, and if you sign in again you will have to complete the process from the beginning.';
+  String get preferencesBiometricTitle => 'Biometric access';
+
+  @override
+  String get preferencesBiometricInactiveDescription => 'Enable fingerprint or facial recognition access to enter the application more quickly.';
+
+  @override
+  String get preferencesBiometricActiveDescription => 'Biometric access to the application is enabled.';
+
+  @override
+  String get preferencesBiometricEnableAction => 'Enable';
+
+  @override
+  String get preferencesBiometricDisableAction => 'Disable';
+
+  @override
+  String get preferencesRevokeDialogTitle => 'You are about to delete your preferences';
+
+  @override
+  String get preferencesRevokeDialogDescription => 'Deleting your preferences will remove the authorizations you granted the organization to access your personal data.\n\nIf you access the application again, you will need to complete the authentication process and accept the Terms of use and authorizations again.';
 
   @override
   String get preferencesRevokeDialogConfirm => 'Delete';
@@ -4423,28 +4456,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpContactGuidesTitle => 'Help guides';
 
   @override
-  String get helpContactGuidesIntro => 'If you need additional help, these Help Guides are available to you';
+  String get helpFaqIntro => 'Find answers to the most common questions about Citizen Space.';
 
   @override
-  String get helpContactGoToJccmPortal => 'Go to the JCCM web portal';
+  String get helpContactGuidesIntro => 'Browse the available guides to resolve your questions step by step.';
+
+  @override
+  String get helpContactShowAllGuides => 'Show all guides';
+
+  @override
+  String get helpContactGoToJccmPortal => 'Go to the Castilla-La Mancha portal';
 
   @override
   String get helpContactInfoHeading => 'Contact information';
 
   @override
-  String get helpContactPhonesIntro => 'For general inquiries and administrative information you can get in touch through the citizen service phone lines.';
+  String get helpContactPhonesIntro => 'For general inquiries or administrative information, you can contact the Citizen Service.';
 
   @override
-  String get helpContactPhonesIntroBold1 => 'general inquiries and administrative information';
+  String get helpContactPhonesIntroBold1 => 'general inquiries or administrative information';
 
   @override
-  String get helpContactPhonesIntroBold2 => 'citizen service phone lines';
+  String get helpContactPhonesIntroBold2 => 'Citizen Service';
 
   @override
   String get helpContactCallCitizenService => 'Call the Citizen Service line';
 
   @override
-  String get helpContactExpedienteIntro => 'If you need to know more details about a case file, contact the processing office or the competent regional ministry.';
+  String get helpContactExpedienteIntro => 'For more details about a case file, contact the processing office or the responsible regional ministry.';
 
   @override
   String get helpContactExpedienteIntroBold => 'know more details about a case file';
@@ -4453,7 +4492,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpContactOfficesListTitle => 'List of Information and Registry Offices';
 
   @override
-  String get helpContactSupportIntro => 'If you need technical assistance, contact us through the Technical Support form.';
+  String get helpContactSupportIntro => 'If you need technical assistance, you can contact the technical support team through a form.';
 
   @override
   String get helpContactSupportIntroBold => 'technical assistance';
@@ -4462,34 +4501,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpContactSupportFormButton => 'Support Form';
 
   @override
-  String get faqQuestion1 => 'What is Citizen Space and what can I find in it?';
+  String get faqQuestion1 => 'What is Citizen Space and what can I view?';
 
   @override
   String get faqAnswer1 => 'Citizen Space brings together information and services of the Government of Castilla-La Mancha in a single place. You can check your data, case files, notifications, appointments, and other available services.';
 
   @override
-  String get faqQuestion2 => 'What do I need to sign in?';
+  String get faqQuestion2 => 'What do I need to access my Citizen Space?';
 
   @override
   String get faqAnswer2 => 'You need to identify yourself with Cl@ve, an electronic certificate, or the enabled access system. You can use Cl@ve Móvil, Cl@ve Permanente, electronic ID, or an electronic certificate.';
 
   @override
-  String get faqQuestion3 => 'What personal data is stored in Citizen Space?';
+  String get faqQuestion3 => 'What personal data is stored?';
 
   @override
   String get faqAnswer3 => 'The data needed to provide the services available in the app is displayed.';
 
   @override
-  String get faqQuestion4 => 'The data shown contains an error. Can I correct it?';
+  String get faqQuestion4 => 'How can I correct incorrect data?';
 
   @override
   String get faqAnswer4 => 'Contact the body responsible for the procedure or case file to request the correction.';
 
   @override
-  String get faqQuestion5 => 'What events are shown in My Agenda?';
+  String get faqQuestion5 => 'Which case files and procedures can I view?';
 
   @override
-  String get faqAnswer5 => 'Appointments, notices, and administrative events related to your services are shown.';
+  String get faqAnswer5 => 'You can view available case files and procedures associated with your identity and the services integrated into Citizen Space.';
+
+  @override
+  String get faqQuestion6 => 'Which events will appear in my agenda?';
+
+  @override
+  String get faqAnswer6 => 'Appointments, notices, and administrative events related to your services are shown.';
 
   @override
   String get supportFormPageTitle => 'Support form';

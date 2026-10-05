@@ -7,8 +7,11 @@ import 'package:url_launcher/url_launcher.dart';
 // reexporta aquí para que no tengan que depender de url_launcher.
 export 'package:url_launcher/url_launcher.dart' show LaunchMode;
 
-Future<bool> confirmExternalNavigation(final BuildContext context) {
-  return AppExternalNavigationDialog.show(context);
+Future<bool> confirmExternalNavigation(
+  final BuildContext context, {
+  final String? title,
+}) {
+  return AppExternalNavigationDialog.show(context, title: title);
 }
 
 /// [mode] por defecto abre en el navegador del sistema, que es lo que hace

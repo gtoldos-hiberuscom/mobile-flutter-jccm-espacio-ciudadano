@@ -686,6 +686,12 @@ abstract class AppLocalizations {
   /// **'Vas a salir de la aplicación'**
   String get externalNavigationDialogTitle;
 
+  /// Título del diálogo de confirmación al abrir la Sede Electrónica desde el menú lateral.
+  ///
+  /// In es, this message translates to:
+  /// **'Te vamos a redirigir a la Sede Electrónica'**
+  String get drawerElectronicOfficeDialogTitle;
+
   /// Mensaje del diálogo de confirmación antes de abrir un enlace externo.
   ///
   /// In es, this message translates to:
@@ -2873,7 +2879,7 @@ abstract class AppLocalizations {
   /// Carnets — etiqueta del tipo carnet joven.
   ///
   /// In es, this message translates to:
-  /// **'Joven'**
+  /// **'Carnet Joven'**
   String get digitalCardsTypeJoven;
 
   /// Carnets — etiqueta del tipo discapacidad.
@@ -7622,11 +7628,17 @@ abstract class AppLocalizations {
   /// **'Código QR'**
   String get appQrCodeLabel;
 
-  /// Título de la sección de formatos en el bottom sheet de descarga del carnet.
+  /// Pregunta que encabeza la sección de formatos en el bottom sheet de descarga del carnet.
   ///
   /// In es, this message translates to:
-  /// **'Formato de descarga'**
+  /// **'¿Quieres guardar el carnet?'**
   String get appQrDownloadFormatTitle;
+
+  /// Texto introductorio de las opciones de descarga del carnet.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige cómo quieres descargarlo:'**
+  String get appQrDownloadFormatDescription;
 
   /// Etiqueta del botón de descarga del pase (PKPASS) en Android.
   ///
@@ -7730,16 +7742,34 @@ abstract class AppLocalizations {
   /// **'Gestiona tus autorizaciones y avisos.'**
   String get preferencesInfoSheetBody;
 
+  /// Consentimiento — título del panel informativo abierto desde el botón de información.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Condiciones de uso y autorización'**
+  String get consentAuthorizationsInfoTitle;
+
+  /// Consentimiento — explicación mostrada en el panel informativo de condiciones y autorizaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Si no autorizas el uso de tus datos, las Administraciones públicas no podrán mostrarte la información que tienen sobre ti.'**
+  String get consentAuthorizationsInfoBody;
+
+  /// Consentimiento — acción para cerrar el panel informativo de condiciones y autorizaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get consentAuthorizationsInfoClose;
+
   /// Preferencias — descripción de la tarjeta de hechos vitales cuando la autorización está inactiva.
   ///
   /// In es, this message translates to:
-  /// **'Para seleccionar tus hechos vitales y poder recibir recomendaciones primero debes aceptar el uso de estos datos en Condiciones de uso y autorizaciones.'**
+  /// **'Acepta el uso de tus datos sobre los hechos vitales en las Condiciones de uso y autorizaciones para poder seleccionarlos y recibir recomendaciones personalizadas.'**
   String get preferencesLifeEventsInactiveDescription;
 
   /// Preferencias — descripción de la tarjeta de hechos vitales cuando no hay selección.
   ///
   /// In es, this message translates to:
-  /// **'Aún no has seleccionado las temáticas de las que quieras recibir actualizaciones dentro de tu sección de recomendaciones'**
+  /// **'Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.'**
   String get preferencesLifeEventsPendingDescription;
 
   /// Preferencias — descripción de la tarjeta de hechos vitales con selección activa.
@@ -7757,13 +7787,13 @@ abstract class AppLocalizations {
   /// Preferencias — título de la tarjeta de datos de contacto para notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'Datos de contacto para notificaciones'**
+  /// **'Datos de contacto para recibir avisos de notificaciones'**
   String get preferencesNotificationContactTitle;
 
   /// Preferencias — descripción de la tarjeta de datos de contacto cuando está inactiva.
   ///
   /// In es, this message translates to:
-  /// **'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.'**
+  /// **'Indica un teléfono móvil o un correo electrónico para recibir avisos cuando tengas notificaciones nuevas.'**
   String get preferencesNotificationContactInactiveDescription;
 
   /// Preferencias — descripción de la tarjeta de datos de contacto cuando está pendiente.
@@ -7784,22 +7814,58 @@ abstract class AppLocalizations {
   /// **'Gestionar'**
   String get preferencesManageAction;
 
+  /// Preferencias — acción para añadir datos de contacto cuando no hay ninguno configurado.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir datos'**
+  String get preferencesAddContactAction;
+
+  /// Preferencias — título de la tarjeta de acceso biométrico.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso biométrico'**
+  String get preferencesBiometricTitle;
+
+  /// Preferencias — descripción del acceso biométrico desactivado.
+  ///
+  /// In es, this message translates to:
+  /// **'Activa el acceso con huella dactilar o reconocimiento facial para acceder a la aplicación de forma más rápida.'**
+  String get preferencesBiometricInactiveDescription;
+
+  /// Preferencias — descripción del acceso biométrico activado.
+  ///
+  /// In es, this message translates to:
+  /// **'El acceso biométrico a la aplicación está activado.'**
+  String get preferencesBiometricActiveDescription;
+
+  /// Preferencias — acción para activar el acceso biométrico.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar'**
+  String get preferencesBiometricEnableAction;
+
+  /// Preferencias — acción para desactivar el acceso biométrico.
+  ///
+  /// In es, this message translates to:
+  /// **'Desactivar'**
+  String get preferencesBiometricDisableAction;
+
   /// Preferencias — título del diálogo de confirmación para borrar preferencias.
   ///
   /// In es, this message translates to:
-  /// **'Revocación de permisos'**
+  /// **'Vas a borrar tus preferencias'**
   String get preferencesRevokeDialogTitle;
 
   /// Preferencias — descripción del diálogo de confirmación para borrar preferencias.
   ///
   /// In es, this message translates to:
-  /// **'¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\nAl hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.'**
+  /// **'Al borrar tus preferencias, se eliminarán las autorizaciones que has concedido a la organización para consultar tus datos personales.\n\nSi vuelves a acceder a la aplicación, tendrás que completar de nuevo el proceso de autentificación y aceptar las Condiciones de uso y las autorizaciones.'**
   String get preferencesRevokeDialogDescription;
 
   /// Preferencias — botón de confirmación del diálogo de revocación de permisos.
   ///
   /// In es, this message translates to:
-  /// **'Eliminar'**
+  /// **'Borrar'**
   String get preferencesRevokeDialogConfirm;
 
   /// Preferencias — error cuando falta el identificador del usuario al borrar preferencias.
@@ -8408,16 +8474,28 @@ abstract class AppLocalizations {
   /// **'Guías de ayuda'**
   String get helpContactGuidesTitle;
 
+  /// Ayuda y contacto — introducción al listado de preguntas frecuentes.
+  ///
+  /// In es, this message translates to:
+  /// **'Resuelve las dudas más habituales sobre Espacio ciudadano.'**
+  String get helpFaqIntro;
+
   /// Ayuda y contacto — introducción a las guías de ayuda.
   ///
   /// In es, this message translates to:
-  /// **'Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda'**
+  /// **'Consulta las guías disponibles para resolver tus dudas paso a paso.'**
   String get helpContactGuidesIntro;
+
+  /// Ayuda y contacto — título de la tarjeta que abre todas las guías.
+  ///
+  /// In es, this message translates to:
+  /// **'Mostrar todas las guías'**
+  String get helpContactShowAllGuides;
 
   /// Ayuda y contacto — subtítulo de las tarjetas que enlazan al portal web JCCM.
   ///
   /// In es, this message translates to:
-  /// **'Ir al portal web JCCM'**
+  /// **'Ir al portal de Castilla-La Mancha'**
   String get helpContactGoToJccmPortal;
 
   /// Ayuda y contacto — encabezado de la pestaña de contacto.
@@ -8429,19 +8507,19 @@ abstract class AppLocalizations {
   /// Ayuda y contacto — introducción a los teléfonos de atención ciudadana.
   ///
   /// In es, this message translates to:
-  /// **'Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.'**
+  /// **'Para consultas generales o información administrativa, puedes contactar con el servicio de Atención a la ciudadanía.'**
   String get helpContactPhonesIntro;
 
   /// Ayuda y contacto — primer fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro).
   ///
   /// In es, this message translates to:
-  /// **'consultas generales e información administrativa'**
+  /// **'consultas generales o información administrativa'**
   String get helpContactPhonesIntroBold1;
 
   /// Ayuda y contacto — segundo fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro).
   ///
   /// In es, this message translates to:
-  /// **'teléfonos de atención ciudadana'**
+  /// **'Atención a la ciudadanía'**
   String get helpContactPhonesIntroBold2;
 
   /// Ayuda y contacto — subtítulo de las tarjetas de teléfono de atención ciudadana.
@@ -8453,7 +8531,7 @@ abstract class AppLocalizations {
   /// Ayuda y contacto — introducción al contacto sobre expedientes.
   ///
   /// In es, this message translates to:
-  /// **'Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.'**
+  /// **'Para conocer más detalles sobre un expediente, debes contactar con la oficina tramitadora o la consejería responsable que corresponda.'**
   String get helpContactExpedienteIntro;
 
   /// Ayuda y contacto — fragmento en negrita de la introducción sobre expedientes (debe ser subcadena exacta de helpContactExpedienteIntro).
@@ -8465,13 +8543,13 @@ abstract class AppLocalizations {
   /// Ayuda y contacto — tarjeta que enlaza al listado de oficinas de información y registro.
   ///
   /// In es, this message translates to:
-  /// **'Listado de Oficina de Información y registro'**
+  /// **'Listado de Oficinas de Información y Registro'**
   String get helpContactOfficesListTitle;
 
   /// Ayuda y contacto — introducción al formulario de soporte técnico.
   ///
   /// In es, this message translates to:
-  /// **'Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.'**
+  /// **'Si necesitas asistencia técnica, puedes contactar con el equipo de soporte técnico a través de un formulario.'**
   String get helpContactSupportIntro;
 
   /// Ayuda y contacto — fragmento en negrita de la introducción al soporte (debe ser subcadena exacta de helpContactSupportIntro).
@@ -8489,7 +8567,7 @@ abstract class AppLocalizations {
   /// FAQ — pregunta sobre qué es el Espacio Ciudadano.
   ///
   /// In es, this message translates to:
-  /// **'¿Qué es y qué podré encontrar en el Espacio ciudadano?'**
+  /// **'¿Qué es Espacio ciudadano y qué puedo consultar?'**
   String get faqQuestion1;
 
   /// FAQ — respuesta sobre qué es el Espacio Ciudadano.
@@ -8501,7 +8579,7 @@ abstract class AppLocalizations {
   /// FAQ — pregunta sobre los requisitos de acceso.
   ///
   /// In es, this message translates to:
-  /// **'¿Qué necesito para acceder?'**
+  /// **'¿Qué necesito para acceder a mi Espacio ciudadano?'**
   String get faqQuestion2;
 
   /// FAQ — respuesta sobre los requisitos de acceso.
@@ -8513,7 +8591,7 @@ abstract class AppLocalizations {
   /// FAQ — pregunta sobre los datos personales almacenados.
   ///
   /// In es, this message translates to:
-  /// **'¿Qué datos personales se almacenan en Espacio Ciudadano?'**
+  /// **'¿Qué datos personales se almacenan?'**
   String get faqQuestion3;
 
   /// FAQ — respuesta sobre los datos personales almacenados.
@@ -8525,7 +8603,7 @@ abstract class AppLocalizations {
   /// FAQ — pregunta sobre la corrección de datos erróneos.
   ///
   /// In es, this message translates to:
-  /// **'Los datos mostrados contienen algún error, ¿puedo corregirlo?'**
+  /// **'¿Cómo puedo corregir un dato incorrecto?'**
   String get faqQuestion4;
 
   /// FAQ — respuesta sobre la corrección de datos erróneos.
@@ -8537,14 +8615,26 @@ abstract class AppLocalizations {
   /// FAQ — pregunta sobre los eventos de Mi Agenda.
   ///
   /// In es, this message translates to:
-  /// **'¿Qué eventos se muestran en Mi Agenda?'**
+  /// **'¿Qué expedientes y trámites puedo consultar?'**
   String get faqQuestion5;
 
-  /// FAQ — respuesta sobre los eventos de Mi Agenda.
+  /// FAQ — respuesta sobre los expedientes y trámites disponibles.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes consultar los expedientes y trámites disponibles que estén relacionados con tu identidad y con los servicios integrados en Espacio Ciudadano.'**
+  String get faqAnswer5;
+
+  /// FAQ — pregunta sobre los eventos de la agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué eventos aparecerán en mi agenda?'**
+  String get faqQuestion6;
+
+  /// FAQ — respuesta sobre los eventos de la agenda.
   ///
   /// In es, this message translates to:
   /// **'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.'**
-  String get faqAnswer5;
+  String get faqAnswer6;
 
   /// Título del AppBar del formulario de soporte.
   ///

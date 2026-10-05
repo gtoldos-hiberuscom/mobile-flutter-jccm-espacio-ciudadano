@@ -208,7 +208,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           pendingDescription: l10n.preferencesLifeEventsPendingDescription,
           activeDescription: l10n.preferencesLifeEventsActiveDescription,
           actionLabel: l10n.preferencesSelectAction,
-          actionIcon: preferences.lifeEventsStatus == AppPreferenceStatus.enabled ? null : AppIcons.edit,
+          actionIcon: null,
           onAction: preferences.lifeEventsStatus != AppPreferenceStatus.disabled ? () => unawaited(_openLifeEvents(preferencesArgs)) : null,
           filledAction: preferences.lifeEventsStatus != AppPreferenceStatus.disabled,
           summaryItems: preferences.selectedLifeEvents.map((final event) => event.label).toList(growable: false),
@@ -229,11 +229,11 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           AppPreferenceCard(
             title: l10n.preferencesNotificationContactTitle,
             icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-            status: preferences.notificationContact == null ? AppPreferenceStatus.pending : AppPreferenceStatus.enabled,
+            status: preferences.notificationContact == null ? AppPreferenceStatus.disabled : AppPreferenceStatus.enabled,
             inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
             pendingDescription: l10n.preferencesNotificationContactPendingDescription,
             activeDescription: l10n.preferencesNotificationContactActiveDescription,
-            actionLabel: l10n.preferencesManageAction,
+            actionLabel: preferences.notificationContact == null ? l10n.preferencesAddContactAction : l10n.preferencesManageAction,
             actionIcon: AppIcons.edit,
             summaryItems: [
               ?preferences.notificationContact?.phone,
@@ -248,13 +248,13 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           ),
         const SizedBox(height: AppDimensions.space16),
         AppPreferenceCard(
-          title: 'Activación de acceso biométrico',
+          title: l10n.preferencesBiometricTitle,
           icon: const AppIcon(AppIcons.fingerprint, color: AppColors.textPrimary),
           status: preferences.biometricEnabled ? AppPreferenceStatus.enabled : AppPreferenceStatus.disabled,
-          inactiveDescription: 'No se ha activado el acceso biométrico a la aplicación.',
-          pendingDescription: 'No se ha activado el acceso biométrico a la aplicación.',
-          activeDescription: 'El acceso biométrico a la aplicación está activado.',
-          actionLabel: preferences.biometricEnabled ? 'Desactivar' : 'Activar',
+          inactiveDescription: l10n.preferencesBiometricInactiveDescription,
+          pendingDescription: l10n.preferencesBiometricInactiveDescription,
+          activeDescription: l10n.preferencesBiometricActiveDescription,
+          actionLabel: preferences.biometricEnabled ? l10n.preferencesBiometricDisableAction : l10n.preferencesBiometricEnableAction,
           actionIcon: preferences.biometricEnabled ? AppIcons.close : AppIcons.check,
           onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(preferencesArgs, preferences.biometricEnabled)),
           showInactiveIcon: true,
@@ -384,6 +384,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       description: l10n.preferencesRevokeDialogDescription,
       cancelLabel: l10n.lifeEventsResetCancel,
       confirmLabel: l10n.preferencesRevokeDialogConfirm,
+      icon: null,
     );
     if (confirmed != true || !mounted) {
       return;

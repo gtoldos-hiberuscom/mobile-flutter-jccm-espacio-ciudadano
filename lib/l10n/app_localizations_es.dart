@@ -327,6 +327,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get externalNavigationDialogTitle => 'Vas a salir de la aplicación';
 
   @override
+  String get drawerElectronicOfficeDialogTitle => 'Te vamos a redirigir a la Sede Electrónica';
+
+  @override
   String get externalNavigationDialogBody => 'El contenido se abrirá en una ventana de tu navegador';
 
   @override
@@ -1447,7 +1450,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsTypeFamiliaNumerosa => 'Familia Numerosa';
 
   @override
-  String get digitalCardsTypeJoven => 'Joven';
+  String get digitalCardsTypeJoven => 'Carnet Joven';
 
   @override
   String get digitalCardsTypeDiscapacidad => 'Discapacidad';
@@ -3938,7 +3941,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appQrCodeLabel => 'Código QR';
 
   @override
-  String get appQrDownloadFormatTitle => 'Formato de descarga';
+  String get appQrDownloadFormatTitle => '¿Quieres guardar el carnet?';
+
+  @override
+  String get appQrDownloadFormatDescription => 'Elige cómo quieres descargarlo:';
 
   @override
   String get appQrDownloadWalletLabelAndroid => 'Cartera digital';
@@ -4055,10 +4061,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesInfoSheetBody => 'Gestiona tus autorizaciones y avisos.';
 
   @override
-  String get preferencesLifeEventsInactiveDescription => 'Para seleccionar tus hechos vitales y poder recibir recomendaciones primero debes aceptar el uso de estos datos en Condiciones de uso y autorizaciones.';
+  String get consentAuthorizationsInfoTitle => 'Saber más sobre Condiciones de uso y autorización';
 
   @override
-  String get preferencesLifeEventsPendingDescription => 'Aún no has seleccionado las temáticas de las que quieras recibir actualizaciones dentro de tu sección de recomendaciones';
+  String get consentAuthorizationsInfoBody => 'Si no autorizas el uso de tus datos, las Administraciones públicas no podrán mostrarte la información que tienen sobre ti.';
+
+  @override
+  String get consentAuthorizationsInfoClose => 'Cerrar';
+
+  @override
+  String get preferencesLifeEventsInactiveDescription => 'Acepta el uso de tus datos sobre los hechos vitales en las Condiciones de uso y autorizaciones para poder seleccionarlos y recibir recomendaciones personalizadas.';
+
+  @override
+  String get preferencesLifeEventsPendingDescription => 'Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.';
 
   @override
   String get preferencesLifeEventsActiveDescription => 'Tienes hechos vitales seleccionados para recibir recomendaciones personalizadas.';
@@ -4067,10 +4082,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesSelectAction => 'Seleccionar';
 
   @override
-  String get preferencesNotificationContactTitle => 'Datos de contacto para notificaciones';
+  String get preferencesNotificationContactTitle => 'Datos de contacto para recibir avisos de notificaciones';
 
   @override
-  String get preferencesNotificationContactInactiveDescription => 'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.';
+  String get preferencesNotificationContactInactiveDescription => 'Indica un teléfono móvil o un correo electrónico para recibir avisos cuando tengas notificaciones nuevas.';
 
   @override
   String get preferencesNotificationContactPendingDescription => 'Gestiona el medio de aviso para recibir notificaciones electrónicas.';
@@ -4082,13 +4097,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesManageAction => 'Gestionar';
 
   @override
-  String get preferencesRevokeDialogTitle => 'Revocación de permisos';
+  String get preferencesAddContactAction => 'Añadir datos';
 
   @override
-  String get preferencesRevokeDialogDescription => '¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\nAl hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.';
+  String get preferencesBiometricTitle => 'Acceso biométrico';
 
   @override
-  String get preferencesRevokeDialogConfirm => 'Eliminar';
+  String get preferencesBiometricInactiveDescription => 'Activa el acceso con huella dactilar o reconocimiento facial para acceder a la aplicación de forma más rápida.';
+
+  @override
+  String get preferencesBiometricActiveDescription => 'El acceso biométrico a la aplicación está activado.';
+
+  @override
+  String get preferencesBiometricEnableAction => 'Activar';
+
+  @override
+  String get preferencesBiometricDisableAction => 'Desactivar';
+
+  @override
+  String get preferencesRevokeDialogTitle => 'Vas a borrar tus preferencias';
+
+  @override
+  String get preferencesRevokeDialogDescription => 'Al borrar tus preferencias, se eliminarán las autorizaciones que has concedido a la organización para consultar tus datos personales.\n\nSi vuelves a acceder a la aplicación, tendrás que completar de nuevo el proceso de autentificación y aceptar las Condiciones de uso y las autorizaciones.';
+
+  @override
+  String get preferencesRevokeDialogConfirm => 'Borrar';
 
   @override
   String get preferencesMissingUserIdError => 'No se ha encontrado el identificador del usuario.';
@@ -4424,37 +4457,43 @@ class AppLocalizationsEs extends AppLocalizations {
   String get helpContactGuidesTitle => 'Guías de ayuda';
 
   @override
-  String get helpContactGuidesIntro => 'Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda';
+  String get helpFaqIntro => 'Resuelve las dudas más habituales sobre Espacio ciudadano.';
 
   @override
-  String get helpContactGoToJccmPortal => 'Ir al portal web JCCM';
+  String get helpContactGuidesIntro => 'Consulta las guías disponibles para resolver tus dudas paso a paso.';
+
+  @override
+  String get helpContactShowAllGuides => 'Mostrar todas las guías';
+
+  @override
+  String get helpContactGoToJccmPortal => 'Ir al portal de Castilla-La Mancha';
 
   @override
   String get helpContactInfoHeading => 'Información de contacto';
 
   @override
-  String get helpContactPhonesIntro => 'Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.';
+  String get helpContactPhonesIntro => 'Para consultas generales o información administrativa, puedes contactar con el servicio de Atención a la ciudadanía.';
 
   @override
-  String get helpContactPhonesIntroBold1 => 'consultas generales e información administrativa';
+  String get helpContactPhonesIntroBold1 => 'consultas generales o información administrativa';
 
   @override
-  String get helpContactPhonesIntroBold2 => 'teléfonos de atención ciudadana';
+  String get helpContactPhonesIntroBold2 => 'Atención a la ciudadanía';
 
   @override
   String get helpContactCallCitizenService => 'Llamar a Atención a la Ciudadanía';
 
   @override
-  String get helpContactExpedienteIntro => 'Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.';
+  String get helpContactExpedienteIntro => 'Para conocer más detalles sobre un expediente, debes contactar con la oficina tramitadora o la consejería responsable que corresponda.';
 
   @override
   String get helpContactExpedienteIntroBold => 'conocer más detalles sobre un expediente';
 
   @override
-  String get helpContactOfficesListTitle => 'Listado de Oficina de Información y registro';
+  String get helpContactOfficesListTitle => 'Listado de Oficinas de Información y Registro';
 
   @override
-  String get helpContactSupportIntro => 'Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.';
+  String get helpContactSupportIntro => 'Si necesitas asistencia técnica, puedes contactar con el equipo de soporte técnico a través de un formulario.';
 
   @override
   String get helpContactSupportIntroBold => 'asistencia técnica';
@@ -4463,34 +4502,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get helpContactSupportFormButton => 'Formulario de Soporte';
 
   @override
-  String get faqQuestion1 => '¿Qué es y qué podré encontrar en el Espacio ciudadano?';
+  String get faqQuestion1 => '¿Qué es Espacio ciudadano y qué puedo consultar?';
 
   @override
   String get faqAnswer1 => 'Espacio Ciudadano reúne en un único lugar información y servicios de la Junta de Comunidades de Castilla-La Mancha. Podrás consultar tus datos, expedientes, notificaciones, citas y otros servicios disponibles.';
 
   @override
-  String get faqQuestion2 => '¿Qué necesito para acceder?';
+  String get faqQuestion2 => '¿Qué necesito para acceder a mi Espacio ciudadano?';
 
   @override
   String get faqAnswer2 => 'Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico.';
 
   @override
-  String get faqQuestion3 => '¿Qué datos personales se almacenan en Espacio Ciudadano?';
+  String get faqQuestion3 => '¿Qué datos personales se almacenan?';
 
   @override
   String get faqAnswer3 => 'Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.';
 
   @override
-  String get faqQuestion4 => 'Los datos mostrados contienen algún error, ¿puedo corregirlo?';
+  String get faqQuestion4 => '¿Cómo puedo corregir un dato incorrecto?';
 
   @override
   String get faqAnswer4 => 'Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.';
 
   @override
-  String get faqQuestion5 => '¿Qué eventos se muestran en Mi Agenda?';
+  String get faqQuestion5 => '¿Qué expedientes y trámites puedo consultar?';
 
   @override
-  String get faqAnswer5 => 'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.';
+  String get faqAnswer5 => 'Puedes consultar los expedientes y trámites disponibles que estén relacionados con tu identidad y con los servicios integrados en Espacio Ciudadano.';
+
+  @override
+  String get faqQuestion6 => '¿Qué eventos aparecerán en mi agenda?';
+
+  @override
+  String get faqAnswer6 => 'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.';
 
   @override
   String get supportFormPageTitle => 'Formulario soporte';

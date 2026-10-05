@@ -58,6 +58,12 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/carnets/
+    - assets/icons/carnets/discapacidad.svg
+    - assets/icons/carnets/familia.svg
+    - assets/icons/carnets/joven.svg
+    - assets/icons/carnets/logo_fondo.svg
+    - assets/icons/carnets/download.svg
   fonts:
     - family: Roboto
       fonts:

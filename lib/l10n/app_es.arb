@@ -425,6 +425,10 @@
   "@externalNavigationDialogTitle": {
     "description": "Título del diálogo de confirmación antes de abrir un enlace externo."
   },
+  "drawerElectronicOfficeDialogTitle": "Te vamos a redirigir a la Sede Electrónica",
+  "@drawerElectronicOfficeDialogTitle": {
+    "description": "Título del diálogo de confirmación al abrir la Sede Electrónica desde el menú lateral."
+  },
   "externalNavigationDialogBody": "El contenido se abrirá en una ventana de tu navegador",
   "@externalNavigationDialogBody": {
     "description": "Mensaje del diálogo de confirmación antes de abrir un enlace externo."
@@ -1939,7 +1943,7 @@
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Carnets — etiqueta del tipo familia numerosa."
   },
-  "digitalCardsTypeJoven": "Joven",
+  "digitalCardsTypeJoven": "Carnet Joven",
   "@digitalCardsTypeJoven": {
     "description": "Carnets — etiqueta del tipo carnet joven."
   },
@@ -5214,9 +5218,13 @@
   "@appQrCodeLabel": {
     "description": "Etiqueta de accesibilidad de la vista previa del código QR en el bottom sheet de descarga."
   },
-  "appQrDownloadFormatTitle": "Formato de descarga",
+  "appQrDownloadFormatTitle": "¿Quieres guardar el carnet?",
   "@appQrDownloadFormatTitle": {
-    "description": "Título de la sección de formatos en el bottom sheet de descarga del carnet."
+    "description": "Pregunta que encabeza la sección de formatos en el bottom sheet de descarga del carnet."
+  },
+  "appQrDownloadFormatDescription": "Elige cómo quieres descargarlo:",
+  "@appQrDownloadFormatDescription": {
+    "description": "Texto introductorio de las opciones de descarga del carnet."
   },
   "appQrDownloadWalletLabelAndroid": "Cartera digital",
   "@appQrDownloadWalletLabelAndroid": {
@@ -5296,11 +5304,23 @@
   "@preferencesInfoSheetBody": {
     "description": "Preferencias — cuerpo del bottom sheet informativo de la pantalla."
   },
-  "preferencesLifeEventsInactiveDescription": "Para seleccionar tus hechos vitales y poder recibir recomendaciones primero debes aceptar el uso de estos datos en Condiciones de uso y autorizaciones.",
+  "consentAuthorizationsInfoTitle": "Saber más sobre Condiciones de uso y autorización",
+  "@consentAuthorizationsInfoTitle": {
+    "description": "Consentimiento — título del panel informativo abierto desde el botón de información."
+  },
+  "consentAuthorizationsInfoBody": "Si no autorizas el uso de tus datos, las Administraciones públicas no podrán mostrarte la información que tienen sobre ti.",
+  "@consentAuthorizationsInfoBody": {
+    "description": "Consentimiento — explicación mostrada en el panel informativo de condiciones y autorizaciones."
+  },
+  "consentAuthorizationsInfoClose": "Cerrar",
+  "@consentAuthorizationsInfoClose": {
+    "description": "Consentimiento — acción para cerrar el panel informativo de condiciones y autorizaciones."
+  },
+  "preferencesLifeEventsInactiveDescription": "Acepta el uso de tus datos sobre los hechos vitales en las Condiciones de uso y autorizaciones para poder seleccionarlos y recibir recomendaciones personalizadas.",
   "@preferencesLifeEventsInactiveDescription": {
     "description": "Preferencias — descripción de la tarjeta de hechos vitales cuando la autorización está inactiva."
   },
-  "preferencesLifeEventsPendingDescription": "Aún no has seleccionado las temáticas de las que quieras recibir actualizaciones dentro de tu sección de recomendaciones",
+  "preferencesLifeEventsPendingDescription": "Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.",
   "@preferencesLifeEventsPendingDescription": {
     "description": "Preferencias — descripción de la tarjeta de hechos vitales cuando no hay selección."
   },
@@ -5312,11 +5332,11 @@
   "@preferencesSelectAction": {
     "description": "Preferencias — acción de seleccionar hechos vitales."
   },
-  "preferencesNotificationContactTitle": "Datos de contacto para notificaciones",
+  "preferencesNotificationContactTitle": "Datos de contacto para recibir avisos de notificaciones",
   "@preferencesNotificationContactTitle": {
     "description": "Preferencias — título de la tarjeta de datos de contacto para notificaciones."
   },
-  "preferencesNotificationContactInactiveDescription": "Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.",
+  "preferencesNotificationContactInactiveDescription": "Indica un teléfono móvil o un correo electrónico para recibir avisos cuando tengas notificaciones nuevas.",
   "@preferencesNotificationContactInactiveDescription": {
     "description": "Preferencias — descripción de la tarjeta de datos de contacto cuando está inactiva."
   },
@@ -5332,15 +5352,39 @@
   "@preferencesManageAction": {
     "description": "Preferencias — acción de gestionar los datos de contacto."
   },
-  "preferencesRevokeDialogTitle": "Revocación de permisos",
+  "preferencesAddContactAction": "Añadir datos",
+  "@preferencesAddContactAction": {
+    "description": "Preferencias — acción para añadir datos de contacto cuando no hay ninguno configurado."
+  },
+  "preferencesBiometricTitle": "Acceso biométrico",
+  "@preferencesBiometricTitle": {
+    "description": "Preferencias — título de la tarjeta de acceso biométrico."
+  },
+  "preferencesBiometricInactiveDescription": "Activa el acceso con huella dactilar o reconocimiento facial para acceder a la aplicación de forma más rápida.",
+  "@preferencesBiometricInactiveDescription": {
+    "description": "Preferencias — descripción del acceso biométrico desactivado."
+  },
+  "preferencesBiometricActiveDescription": "El acceso biométrico a la aplicación está activado.",
+  "@preferencesBiometricActiveDescription": {
+    "description": "Preferencias — descripción del acceso biométrico activado."
+  },
+  "preferencesBiometricEnableAction": "Activar",
+  "@preferencesBiometricEnableAction": {
+    "description": "Preferencias — acción para activar el acceso biométrico."
+  },
+  "preferencesBiometricDisableAction": "Desactivar",
+  "@preferencesBiometricDisableAction": {
+    "description": "Preferencias — acción para desactivar el acceso biométrico."
+  },
+  "preferencesRevokeDialogTitle": "Vas a borrar tus preferencias",
   "@preferencesRevokeDialogTitle": {
     "description": "Preferencias — título del diálogo de confirmación para borrar preferencias."
   },
-  "preferencesRevokeDialogDescription": "¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\nAl hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.",
+  "preferencesRevokeDialogDescription": "Al borrar tus preferencias, se eliminarán las autorizaciones que has concedido a la organización para consultar tus datos personales.\n\nSi vuelves a acceder a la aplicación, tendrás que completar de nuevo el proceso de autentificación y aceptar las Condiciones de uso y las autorizaciones.",
   "@preferencesRevokeDialogDescription": {
     "description": "Preferencias — descripción del diálogo de confirmación para borrar preferencias."
   },
-  "preferencesRevokeDialogConfirm": "Eliminar",
+  "preferencesRevokeDialogConfirm": "Borrar",
   "@preferencesRevokeDialogConfirm": {
     "description": "Preferencias — botón de confirmación del diálogo de revocación de permisos."
   },
@@ -5770,11 +5814,19 @@
   "@helpContactGuidesTitle": {
     "description": "Ayuda y contacto — encabezado y tarjeta de las guías de ayuda."
   },
-  "helpContactGuidesIntro": "Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda",
+  "helpFaqIntro": "Resuelve las dudas más habituales sobre Espacio ciudadano.",
+  "@helpFaqIntro": {
+    "description": "Ayuda y contacto — introducción al listado de preguntas frecuentes."
+  },
+  "helpContactGuidesIntro": "Consulta las guías disponibles para resolver tus dudas paso a paso.",
   "@helpContactGuidesIntro": {
     "description": "Ayuda y contacto — introducción a las guías de ayuda."
   },
-  "helpContactGoToJccmPortal": "Ir al portal web JCCM",
+  "helpContactShowAllGuides": "Mostrar todas las guías",
+  "@helpContactShowAllGuides": {
+    "description": "Ayuda y contacto — título de la tarjeta que abre todas las guías."
+  },
+  "helpContactGoToJccmPortal": "Ir al portal de Castilla-La Mancha",
   "@helpContactGoToJccmPortal": {
     "description": "Ayuda y contacto — subtítulo de las tarjetas que enlazan al portal web JCCM."
   },
@@ -5782,15 +5834,15 @@
   "@helpContactInfoHeading": {
     "description": "Ayuda y contacto — encabezado de la pestaña de contacto."
   },
-  "helpContactPhonesIntro": "Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.",
+  "helpContactPhonesIntro": "Para consultas generales o información administrativa, puedes contactar con el servicio de Atención a la ciudadanía.",
   "@helpContactPhonesIntro": {
     "description": "Ayuda y contacto — introducción a los teléfonos de atención ciudadana."
   },
-  "helpContactPhonesIntroBold1": "consultas generales e información administrativa",
+  "helpContactPhonesIntroBold1": "consultas generales o información administrativa",
   "@helpContactPhonesIntroBold1": {
     "description": "Ayuda y contacto — primer fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro)."
   },
-  "helpContactPhonesIntroBold2": "teléfonos de atención ciudadana",
+  "helpContactPhonesIntroBold2": "Atención a la ciudadanía",
   "@helpContactPhonesIntroBold2": {
     "description": "Ayuda y contacto — segundo fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro)."
   },
@@ -5798,7 +5850,7 @@
   "@helpContactCallCitizenService": {
     "description": "Ayuda y contacto — subtítulo de las tarjetas de teléfono de atención ciudadana."
   },
-  "helpContactExpedienteIntro": "Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.",
+  "helpContactExpedienteIntro": "Para conocer más detalles sobre un expediente, debes contactar con la oficina tramitadora o la consejería responsable que corresponda.",
   "@helpContactExpedienteIntro": {
     "description": "Ayuda y contacto — introducción al contacto sobre expedientes."
   },
@@ -5806,11 +5858,11 @@
   "@helpContactExpedienteIntroBold": {
     "description": "Ayuda y contacto — fragmento en negrita de la introducción sobre expedientes (debe ser subcadena exacta de helpContactExpedienteIntro)."
   },
-  "helpContactOfficesListTitle": "Listado de Oficina de Información y registro",
+  "helpContactOfficesListTitle": "Listado de Oficinas de Información y Registro",
   "@helpContactOfficesListTitle": {
     "description": "Ayuda y contacto — tarjeta que enlaza al listado de oficinas de información y registro."
   },
-  "helpContactSupportIntro": "Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.",
+  "helpContactSupportIntro": "Si necesitas asistencia técnica, puedes contactar con el equipo de soporte técnico a través de un formulario.",
   "@helpContactSupportIntro": {
     "description": "Ayuda y contacto — introducción al formulario de soporte técnico."
   },
@@ -5822,7 +5874,7 @@
   "@helpContactSupportFormButton": {
     "description": "Ayuda y contacto — botón que abre el formulario de soporte."
   },
-  "faqQuestion1": "¿Qué es y qué podré encontrar en el Espacio ciudadano?",
+  "faqQuestion1": "¿Qué es Espacio ciudadano y qué puedo consultar?",
   "@faqQuestion1": {
     "description": "FAQ — pregunta sobre qué es el Espacio Ciudadano."
   },
@@ -5830,7 +5882,7 @@
   "@faqAnswer1": {
     "description": "FAQ — respuesta sobre qué es el Espacio Ciudadano."
   },
-  "faqQuestion2": "¿Qué necesito para acceder?",
+  "faqQuestion2": "¿Qué necesito para acceder a mi Espacio ciudadano?",
   "@faqQuestion2": {
     "description": "FAQ — pregunta sobre los requisitos de acceso."
   },
@@ -5838,7 +5890,7 @@
   "@faqAnswer2": {
     "description": "FAQ — respuesta sobre los requisitos de acceso."
   },
-  "faqQuestion3": "¿Qué datos personales se almacenan en Espacio Ciudadano?",
+  "faqQuestion3": "¿Qué datos personales se almacenan?",
   "@faqQuestion3": {
     "description": "FAQ — pregunta sobre los datos personales almacenados."
   },
@@ -5846,7 +5898,7 @@
   "@faqAnswer3": {
     "description": "FAQ — respuesta sobre los datos personales almacenados."
   },
-  "faqQuestion4": "Los datos mostrados contienen algún error, ¿puedo corregirlo?",
+  "faqQuestion4": "¿Cómo puedo corregir un dato incorrecto?",
   "@faqQuestion4": {
     "description": "FAQ — pregunta sobre la corrección de datos erróneos."
   },
@@ -5854,13 +5906,21 @@
   "@faqAnswer4": {
     "description": "FAQ — respuesta sobre la corrección de datos erróneos."
   },
-  "faqQuestion5": "¿Qué eventos se muestran en Mi Agenda?",
+  "faqQuestion5": "¿Qué expedientes y trámites puedo consultar?",
   "@faqQuestion5": {
     "description": "FAQ — pregunta sobre los eventos de Mi Agenda."
   },
-  "faqAnswer5": "Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.",
+  "faqAnswer5": "Puedes consultar los expedientes y trámites disponibles que estén relacionados con tu identidad y con los servicios integrados en Espacio Ciudadano.",
   "@faqAnswer5": {
-    "description": "FAQ — respuesta sobre los eventos de Mi Agenda."
+    "description": "FAQ — respuesta sobre los expedientes y trámites disponibles."
+  },
+  "faqQuestion6": "¿Qué eventos aparecerán en mi agenda?",
+  "@faqQuestion6": {
+    "description": "FAQ — pregunta sobre los eventos de la agenda."
+  },
+  "faqAnswer6": "Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.",
+  "@faqAnswer6": {
+    "description": "FAQ — respuesta sobre los eventos de la agenda."
   },
   "supportFormPageTitle": "Formulario soporte",
   "@supportFormPageTitle": {

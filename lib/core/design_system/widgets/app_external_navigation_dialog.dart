@@ -16,19 +16,25 @@ class AppExternalNavigationDialog extends StatelessWidget {
   const AppExternalNavigationDialog({
     required this.onCancel,
     required this.onContinue,
+    this.title,
     super.key,
   });
 
   final VoidCallback onCancel;
   final VoidCallback onContinue;
+  final String? title;
 
-  static Future<bool> show(final BuildContext context) async {
+  static Future<bool> show(
+    final BuildContext context, {
+    final String? title,
+  }) async {
     final confirmed = await showDialog<bool>(
       context: context,
       requestFocus: true,
       barrierDismissible: false,
       barrierColor: const Color(0xCC031B35),
       builder: (final dialogContext) => AppExternalNavigationDialog(
+        title: title,
         onCancel: () => Navigator.of(dialogContext).pop(false),
         onContinue: () => Navigator.of(dialogContext).pop(true),
       ),
@@ -39,7 +45,7 @@ class AppExternalNavigationDialog extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final title = l10n.externalNavigationDialogTitle;
+    final dialogTitle = title ?? l10n.externalNavigationDialogTitle;
     final useVerticalActions = MediaQuery.textScalerOf(context).scale(1) > 1.5;
 
     final cancelButton = AppButton(
@@ -59,7 +65,7 @@ class AppExternalNavigationDialog extends StatelessWidget {
       scopesRoute: true,
       namesRoute: true,
       explicitChildNodes: true,
-      label: title,
+      label: dialogTitle,
       child: FocusTraversalGroup(
         policy: OrderedTraversalPolicy(),
         child: Dialog(
@@ -114,7 +120,7 @@ class AppExternalNavigationDialog extends StatelessWidget {
                         bottom: AppDimensions.space8,
                       ),
                       child: Text(
-                        title,
+                        dialogTitle,
                         textAlign: TextAlign.center,
                         style: AppTypography.h3.copyWith(color: AppColors.primary),
                       ),

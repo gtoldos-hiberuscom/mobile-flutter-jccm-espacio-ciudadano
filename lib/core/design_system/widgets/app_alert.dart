@@ -849,7 +849,7 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
   final String cancelLabel;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
-  final IconData icon;
+  final IconData? icon;
   final String? semanticsLabel;
 
   /// Displays this dialog and returns `true` on confirm, `false` on cancel.
@@ -859,7 +859,7 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
     required final String description,
     required final String confirmLabel,
     required final String cancelLabel,
-    final IconData icon = AppIcons.info,
+    final IconData? icon = AppIcons.info,
     final String? semanticsLabel,
   }) {
     return showDialog<bool>(
@@ -928,19 +928,21 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: ExcludeSemantics(
-                      child: Container(
-                        padding: const EdgeInsets.all(AppDimensions.space8),
-                        decoration: BoxDecoration(
-                          color: AppColors.errorLight,
-                          borderRadius: BorderRadius.circular(64),
+                  if (icon != null) ...[
+                    Center(
+                      child: ExcludeSemantics(
+                        child: Container(
+                          padding: const EdgeInsets.all(AppDimensions.space8),
+                          decoration: BoxDecoration(
+                            color: AppColors.errorLight,
+                            borderRadius: BorderRadius.circular(64),
+                          ),
+                          child: AppIcon(icon!, color: AppColors.errorDark),
                         ),
-                        child: AppIcon(icon, color: AppColors.errorDark),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: AppDimensions.space12),
+                    const SizedBox(height: AppDimensions.space12),
+                  ],
                   Semantics(
                     header: true,
                     headingLevel: 1,
