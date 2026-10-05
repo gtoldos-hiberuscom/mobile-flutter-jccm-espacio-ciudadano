@@ -167,7 +167,7 @@ class _GestionExpedienteCard extends StatelessWidget {
       showArrow: true,
       refNumber: expediente.numexp,
       refNumberLabel: l10n.gestionExpedientesNumExpedienteLabel,
-      expiryDate: _formatDate(context, expediente.fechaInicio),
+      expiryDate: _formatDate(expediente.fechaInicio),
       expiryDateLabel: l10n.gestionExpedientesFechaInicioLabel,
       extraLabel: expediente.estado != null ? l10n.gestionExpedientesEstadoLabel : null,
       extraText: expediente.estado == null ? null : _sentenceCase(expediente.estado!),
@@ -177,21 +177,13 @@ class _GestionExpedienteCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(final BuildContext context, final String? rawDate) {
+  // dd/mm/aaaa, el mismo formato que la web y que el detalle (JCCMEC-238).
+  String _formatDate(final String? rawDate) {
     final date = rawDate == null ? null : DateTime.tryParse(rawDate);
     if (date == null) {
       return rawDate ?? '-';
     }
-    final formatted = DateFormat(
-      'd MMM yyyy',
-      Localizations.localeOf(context).languageCode,
-    ).format(date);
-    final parts = formatted.split(' ');
-    if (parts.length < 3 || parts[1].isEmpty) {
-      return formatted;
-    }
-    parts[1] = '${parts[1][0].toUpperCase()}${parts[1].substring(1)}';
-    return parts.join(' ');
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 
   String _sentenceCase(final String value) {
