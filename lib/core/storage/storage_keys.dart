@@ -55,4 +55,9 @@ abstract final class StorageKeys {
   /// Prefix for per-user accepted legal-clause ids.
   /// Full key = consentAcceptedClausesPrefix + idAgente
   static const String consentAcceptedClausesPrefix = 'consent_accepted_clauses_';
+
+  /// Última versión `x.y.z` cuya actualización recomendada descartó el usuario
+  /// con «Ahora no». Va por dispositivo, no por ciudadano: el aviso aparece
+  /// antes de identificarse.
+  static const String appUpdateIgnoredVersion = 'app_update_ignored_version';
 }

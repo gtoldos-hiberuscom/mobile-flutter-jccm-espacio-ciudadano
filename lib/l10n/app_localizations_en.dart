@@ -4883,4 +4883,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get biometricAccessDialogConfirm => 'Enable quick access';
+
+  @override
+  String get appUpdateRequiredTitle => 'Update required';
+
+  @override
+  String appUpdateRequiredBody(String version) {
+    return 'To keep using the app you need to install version $version. Earlier versions are no longer supported.';
+  }
+
+  @override
+  String get appUpdateRecommendedTitle => 'A new version is available';
+
+  @override
+  String appUpdateRecommendedBody(String version) {
+    return 'Version $version includes improvements and fixes. You can update now or later.';
+  }
+
+  @override
+  String get appUpdateAction => 'Update';
+
+  @override
+  String get appUpdateLater => 'Not now';
+
+  @override
+  String get appUpdateStoreUnavailable => 'The app store could not be opened. Please try again later.';
+
+  @override
+  String get appUpdateA11yDialog => 'App update notice';
 }

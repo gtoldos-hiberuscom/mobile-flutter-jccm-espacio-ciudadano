@@ -5,6 +5,7 @@
   "TIMEOUT": "10",
   "DEBUG_MODE": "false",
   "LOG_REDACTION_OFF": "false",
+  "APP_UPDATE_MOCK": "none",
   "SSO_BASE_URL": "https://cerbero.jccm.es/auth",
   "SSO_OFFLINE_ACCESS": "false",
   "SSO_REALM": "usuarios",
