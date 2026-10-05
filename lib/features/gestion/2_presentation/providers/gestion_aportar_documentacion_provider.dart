@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:file_selector/file_selector.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/app/app_lifecycle_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
 import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
@@ -36,30 +36,6 @@ const List<String> extensionesPermitidasAportacion = ['pdf', 'doc', 'docx', 'zip
 /// serie, bloqueaba los reintentos de las demás. Este plazo mide inactividad,
 /// no duración, así que una subida lenta pero viva no lo alcanza nunca.
 final plazoSinProgresoSubidaProvider = Provider<Duration>((final ref) => const Duration(seconds: 30));
-
-/// Emite cada vez que la app vuelve a primer plano **tras haber estado en
-/// segundo plano** (pantalla bloqueada o salir de la app).
-///
-/// Solo cuenta haber pasado por `paused`: bajar el centro de control deja la
-/// app `inactive` sin suspenderla, y eso no corta ninguna conexión.
-final appVueltaDeSegundoPlanoProvider = Provider<Stream<void>>((final ref) {
-  final controller = StreamController<void>.broadcast();
-  var suspendida = false;
-  final listener = AppLifecycleListener(
-    onPause: () => suspendida = true,
-    onResume: () {
-      if (suspendida) {
-        suspendida = false;
-        controller.add(null);
-      }
-    },
-  );
-  ref.onDispose(() {
-    listener.dispose();
-    unawaited(controller.close());
-  });
-  return controller.stream;
-});
 
 sealed class AddArchivosResult {
   const AddArchivosResult();
@@ -165,7 +141,7 @@ class GestionAportarDocumentacionNotifier extends Notifier<AportacionLote> {
     // respuesta del servidor tras enviar el cuerpo— se quedaba en «enviando»
     // con una conexión muerta y un plazo que no había corrido (JCCMEC-185).
     // Se da por fallida para que el ciudadano pueda reintentarla ya.
-    final vueltaDeSegundoPlano = ref.read(appVueltaDeSegundoPlanoProvider).listen((final _) {
+    final vueltaDeSegundoPlano = ref.read(appResumedFromBackgroundProvider).listen((final _) {
       if (_cancelTokens.isNotEmpty) {
         logger.w('La app vuelve de segundo plano con subidas en curso: se abortan');
       }

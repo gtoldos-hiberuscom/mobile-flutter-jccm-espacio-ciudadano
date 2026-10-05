@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/app/app_lifecycle_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
@@ -87,7 +88,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         connectivityRawStreamProvider.overrideWith((final ref) => conectividad.stream),
-        appVueltaDeSegundoPlanoProvider.overrideWithValue(vueltaDeSegundoPlano.stream),
+        appResumedFromBackgroundProvider.overrideWithValue(vueltaDeSegundoPlano.stream),
         if (plazoSinProgreso != null) plazoSinProgresoSubidaProvider.overrideWithValue(plazoSinProgreso),
         citizenEndpointIdsProvider.overrideWithValue((numDocumento: 'PER9998003', idAgente: 'PER9998003')),
         gestionDocumentoRepositoryProvider.overrideWithValue(repository),
