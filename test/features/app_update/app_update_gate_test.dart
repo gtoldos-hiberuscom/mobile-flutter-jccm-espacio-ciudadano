@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/app/app_lifecycle_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_version.dart';
+import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/store_platform.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/update_policy.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/2_presentation/providers/app_update_repository_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/2_presentation/widgets/app_update_dialog.dart';
@@ -51,6 +52,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appUpdateStorePlatformProvider.overrideWithValue(StorePlatform.ios),
           appUpdateRepositoryProvider.overrideWithValue(manifests),
           installedVersionRepositoryProvider.overrideWithValue(installed),
           appUpdatePreferencesRepositoryProvider.overrideWithValue(preferences),

@@ -74,6 +74,7 @@ final class CheckAppUpdateUsecase {
           policy: policy,
           latestVersion: manifest.latestVersion,
           storeUrl: manifest.storeUrl,
+          displayVersion: manifest.displayVersion,
         ),
       );
     } on Object catch (e) {

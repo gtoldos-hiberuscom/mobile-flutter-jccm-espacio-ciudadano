@@ -14,21 +14,26 @@ final class AppUpdateInfo {
     required this.policy,
     required this.latestVersion,
     required this.storeUrl,
+    this.displayVersion,
   }) : assert(policy != UpdatePolicy.none, 'AppUpdateInfo only exists when there is something to notify');
 
   final UpdatePolicy policy;
   final AppVersion latestVersion;
   final Uri storeUrl;
 
+  /// Versión que se enseña en el aviso; `null` cuando [latestVersion] es un
+  /// `versionCode` (Android) y el texto va sin número.
+  final String? displayVersion;
+
   /// `true` cuando el aviso no se puede descartar.
   bool get isForced => policy == UpdatePolicy.forced;
 
   @override
-  bool operator ==(final Object other) => identical(this, other) || other is AppUpdateInfo && runtimeType == other.runtimeType && policy == other.policy && latestVersion == other.latestVersion && storeUrl == other.storeUrl;
+  bool operator ==(final Object other) => identical(this, other) || other is AppUpdateInfo && runtimeType == other.runtimeType && policy == other.policy && latestVersion == other.latestVersion && storeUrl == other.storeUrl && displayVersion == other.displayVersion;
 
   @override
-  int get hashCode => Object.hash(policy, latestVersion, storeUrl);
+  int get hashCode => Object.hash(policy, latestVersion, storeUrl, displayVersion);
 
   @override
-  String toString() => 'AppUpdateInfo(policy: ${policy.name}, latest: $latestVersion, store: ${storeUrl.host})';
+  String toString() => 'AppUpdateInfo(policy: ${policy.name}, latest: $latestVersion, display: $displayVersion, store: ${storeUrl.host})';
 }

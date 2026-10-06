@@ -81,6 +81,14 @@ void main() {
       expect((result as UpdateAvailable).info.isForced, isTrue);
     });
 
+    test('propaga la versión legible del manifiesto al aviso', () async {
+      final shown = await build(installed: '1.0.0', manifest: buildManifest()).execute();
+      expect((shown as UpdateAvailable).info.displayVersion, '2.0.0');
+
+      final hidden = await build(installed: '1.0.0', manifest: buildManifest(hideVersion: true)).execute();
+      expect((hidden as UpdateAvailable).info.displayVersion, isNull);
+    });
+
     test('fallo del repositorio de manifiestos → Failed con la causa', () async {
       final result = await build(installed: '1.0.0', manifestError: const FormatException('roto')).execute();
       expect(result, isA<CheckAppUpdateFailed>());

@@ -5,15 +5,19 @@ import 'package:jccm_espacio_ciudadano/features/app_update/1_domain/domain.dart'
 
 final Uri playStoreUrl = Uri.parse('https://play.google.com/store/apps/details?id=es.jccm.espaciociudadano');
 
+/// Manifiesto de prueba. Por defecto enseña la versión (como App Store y el
+/// mock); [hideVersion] imita a Google Play, que solo da el versionCode.
 AppUpdateManifest buildManifest({
   final String latest = '2.0.0',
   final String min = '1.0.0',
   final UpdatePolicy policy = UpdatePolicy.recommended,
+  final bool hideVersion = false,
 }) => AppUpdateManifest(
   latestVersion: AppVersion.parse(latest),
   minVersion: AppVersion.parse(min),
   policy: policy,
   storeUrl: playStoreUrl,
+  displayVersion: hideVersion ? null : latest,
 );
 
 final class FakeAppUpdateRepository implements AppUpdateRepository {
@@ -46,18 +50,29 @@ final class FakeAppUpdateRepository implements AppUpdateRepository {
 }
 
 final class FakeInstalledVersionRepository implements InstalledVersionRepository {
-  FakeInstalledVersionRepository(this.version, {this.error});
+  FakeInstalledVersionRepository(this.version, {this.applicationIdValue = 'es.jccm.espaciociudadano', this.error});
 
   AppVersion version;
+  String applicationIdValue;
   Exception? error;
 
   @override
   Future<AppVersion> installedVersion() async {
+    _throwIfFailing();
+    return version;
+  }
+
+  @override
+  Future<String> applicationId() async {
+    _throwIfFailing();
+    return applicationIdValue;
+  }
+
+  void _throwIfFailing() {
     final failure = error;
     if (failure != null) {
       throw failure;
     }
-    return version;
   }
 }
 

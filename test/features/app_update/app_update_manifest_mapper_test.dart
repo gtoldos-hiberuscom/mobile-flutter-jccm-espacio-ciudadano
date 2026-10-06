@@ -29,6 +29,7 @@ void main() {
       expect(android.minVersion, const AppVersion(1, 0, 0));
       expect(android.policy, UpdatePolicy.recommended);
       expect(android.storeUrl.host, 'play.google.com');
+      expect(android.displayVersion, '1.2.0');
 
       final ios = AppUpdateManifestMapper.fromDto(dto, platformKey: 'ios');
       expect(ios.latestVersion, const AppVersion(1, 3, 0));

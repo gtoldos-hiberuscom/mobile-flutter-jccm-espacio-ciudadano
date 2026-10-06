@@ -17,6 +17,7 @@ final class AppUpdateManifest {
     required this.minVersion,
     required this.policy,
     required this.storeUrl,
+    this.displayVersion,
   });
 
   /// Última versión publicada en la tienda.
@@ -31,12 +32,16 @@ final class AppUpdateManifest {
   /// Ficha de la app en la tienda (Play Store / App Store). Siempre `https`.
   final Uri storeUrl;
 
-  @override
-  bool operator ==(final Object other) => identical(this, other) || other is AppUpdateManifest && runtimeType == other.runtimeType && latestVersion == other.latestVersion && minVersion == other.minVersion && policy == other.policy && storeUrl == other.storeUrl;
+  /// Versión tal y como la ve el ciudadano (`x.y.z` de marketing). `null`
+  /// cuando [latestVersion] es un `versionCode` y no debe enseñarse.
+  final String? displayVersion;
 
   @override
-  int get hashCode => Object.hash(latestVersion, minVersion, policy, storeUrl);
+  bool operator ==(final Object other) => identical(this, other) || other is AppUpdateManifest && runtimeType == other.runtimeType && latestVersion == other.latestVersion && minVersion == other.minVersion && policy == other.policy && storeUrl == other.storeUrl && displayVersion == other.displayVersion;
 
   @override
-  String toString() => 'AppUpdateManifest(latest: $latestVersion, min: $minVersion, policy: ${policy.name}, store: ${storeUrl.host})';
+  int get hashCode => Object.hash(latestVersion, minVersion, policy, storeUrl, displayVersion);
+
+  @override
+  String toString() => 'AppUpdateManifest(latest: $latestVersion, min: $minVersion, policy: ${policy.name}, store: ${storeUrl.host}, display: $displayVersion)';
 }

@@ -28,11 +28,14 @@ final class AppUpdateManifestMapper {
       throw FormatException('Store URL rejected (host: ${storeUrl?.host ?? '?'})');
     }
 
+    final latestVersion = AppVersion.parse(platform.latestVersion);
     return AppUpdateManifest(
-      latestVersion: AppVersion.parse(platform.latestVersion),
+      latestVersion: latestVersion,
       minVersion: AppVersion.parse(platform.minVersion),
       policy: policy,
       storeUrl: storeUrl,
+      // El manifiesto trae versión de marketing: se puede enseñar.
+      displayVersion: latestVersion.toString(),
     );
   }
 }
