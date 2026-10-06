@@ -79,11 +79,14 @@ Definir la base de analítica, trazas y monitoring sin exponer datos sensibles d
 
 - 2026-10-05T18:30:00+02:00 | by G.T. | Se añade a esta historia el **control de versión / aviso de actualización** (decisión del 05/10: no se abre tique aparte). Feature `lib/features/app_update/` (4 capas): `AppVersion`, `UpdatePolicy`, `CheckAppUpdateUsecase` (instalada < min → forzada; < latest → `policy`; si no, nada; la recomendada ignorada se guarda por versión en `StorageKeys.appUpdateIgnoredVersion`), `AppUpdateGate` en `MaterialApp.router(builder:)` (overlay bloqueante, atrás interceptado por `didPopRoute`), re-comprobación al volver de segundo plano (`appResumedFromBackgroundProvider`, movido de gestión a `lib/core/app/`). Transporte **mock** (`StaticAppUpdateRepositoryImpl`, escenario por `APP_UPDATE_MOCK`); el real sustituirá solo `appUpdateRepositoryProvider`. Fail-open ante cualquier fallo. Observabilidad: líneas `logger` `[app_update]` (en el repo no existen `lib/core/analytics/` ni `lib/core/logging/` pese a lo anotado arriba). Tests en `test/features/app_update/`. Doc: `documentation/app_update_check.md`. Pendiente del cliente: id numérico de App Store y tecnología del transporte.
 
+- 2026-10-06T17:30:00+02:00 | by G.T. | **Transporte real del aviso de actualización** (decisión del 06/10: directamente de las tiendas, sin manifiesto propio ni etiquetas en la ficha). iOS: búsqueda de iTunes (`ItunesAppUpdateRepositoryImpl`), solo recomienda. Android: API oficial de actualizaciones in-app (`in_app_update` 5.0.0, `PlayAppUpdateRepositoryImpl`), en espacio de versionCode y sin número en el aviso; forzada solo con `updatePriority >= 4` (Google Play Developer API). Selector `APP_UPDATE_SOURCE` (`store` por defecto; `mock-*` para desarrollo) sustituye a `APP_UPDATE_MOCK`; versión ignorada por fuente. Evidencia de que rascar Play es inviable en `documentation/app_update_check.md`. La app no está publicada en ninguna tienda: el transporte real no se puede validar hasta publicar (iOS: release en App Store; Android: pista interna con firma de Play).
+
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-22T01:35:57+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 execution started.
 - 2026-05-04T12:00:00+02:00 | by ticket-manager | Status transitioned from `In Progress` → `Done` after reconciling against merged implementation on `develop`.
 - 2026-10-05T18:30:00+02:00 | by G.T. | Alcance ampliado con el aviso de actualización de la app (transporte mock). Rama `feat/JCCMEC-63-aviso-actualizacion-app`. Estado sin cambios.
+- 2026-10-06T17:30:00+02:00 | by G.T. | Transporte real de tienda (iTunes Lookup / in_app_update) y selector `APP_UPDATE_SOURCE`. Misma rama. Estado sin cambios.
 
 ### Sprint 8 closure
 - 2026-08-25T12:00:00+02:00 | by plan-manager | Sprint 8 (SP-EC-APP-SQ3-08) closure: Telemetry verification with PII-redaction spot-check.
