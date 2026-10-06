@@ -1,5 +1,3 @@
-import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
-
 const String _androidStore = 'https://play.google.com/store/apps/details?id=es.jccm.espaciociudadano';
 
 // TODO(JCCMEC-63): id numérico de App Store Connect pendiente del cliente.
@@ -51,16 +49,4 @@ enum AppUpdateMockScenario {
 
   /// Manifiesto JSON del escenario, con el contrato real.
   final String manifestJson;
-
-  /// Escenario por nombre (`forced` | `recommended` | `none`). Un nombre
-  /// desconocido cae en [none] para no bloquear a nadie por una errata.
-  static AppUpdateMockScenario fromName(final String name) {
-    for (final scenario in values) {
-      if (scenario.name == name) {
-        return scenario;
-      }
-    }
-    logger.w('[app_update] escenario mock desconocido "$name"; se usa "none"');
-    return none;
-  }
 }

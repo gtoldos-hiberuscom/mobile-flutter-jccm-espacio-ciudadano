@@ -56,8 +56,11 @@ abstract final class StorageKeys {
   /// Full key = consentAcceptedClausesPrefix + idAgente
   static const String consentAcceptedClausesPrefix = 'consent_accepted_clauses_';
 
-  /// Última versión `x.y.z` cuya actualización recomendada descartó el usuario
-  /// con «Ahora no». Va por dispositivo, no por ciudadano: el aviso aparece
-  /// antes de identificarse.
-  static const String appUpdateIgnoredVersion = 'app_update_ignored_version';
+  /// Prefix for the last app-update version the user dismissed with «Ahora no».
+  /// Full key = appUpdateIgnoredVersionPrefix + fuente (`store` | `mock`).
+  ///
+  /// Va por dispositivo, no por ciudadano (el aviso aparece antes de
+  /// identificarse) y por fuente: la `99.0.0` descartada del mock en un móvil
+  /// de pruebas no debe silenciar la versión real de la tienda.
+  static const String appUpdateIgnoredVersionPrefix = 'app_update_ignored_version_';
 }

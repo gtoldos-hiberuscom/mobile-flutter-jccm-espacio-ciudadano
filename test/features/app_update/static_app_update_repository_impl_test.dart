@@ -44,16 +44,4 @@ void main() {
       expect(repo.fetchManifest(), throwsFormatException);
     });
   });
-
-  group('AppUpdateMockScenario.fromName', () {
-    test('resuelve cada escenario por su nombre', () {
-      expect(AppUpdateMockScenario.fromName('forced'), AppUpdateMockScenario.forced);
-      expect(AppUpdateMockScenario.fromName('recommended'), AppUpdateMockScenario.recommended);
-      expect(AppUpdateMockScenario.fromName('none'), AppUpdateMockScenario.none);
-    });
-
-    test('un nombre desconocido cae en "none"', () {
-      expect(AppUpdateMockScenario.fromName('typo'), AppUpdateMockScenario.none);
-    });
-  });
 }
