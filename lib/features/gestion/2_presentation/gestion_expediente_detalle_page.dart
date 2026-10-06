@@ -85,12 +85,12 @@ class _ExpedienteDetalleBody extends StatelessWidget {
         ),
     ];
     final statusItems = <AppInfoLabelEntry>[
-      if (_hasValue(expediente.fechaInicio))
-        AppInfoLabelEntry(
-          label: l10n.gestionExpedientesFechaInicioLabel,
-          value: _formatDate(expediente.fechaInicio!),
-          valueColor: AppColors.textBase,
-        ),
+      // La fecha de inicio se pinta siempre, con «-» si no viene (JCCMEC-238).
+      AppInfoLabelEntry(
+        label: l10n.gestionExpedientesFechaInicioLabel,
+        value: _hasValue(expediente.fechaInicio) ? _formatDate(expediente.fechaInicio!) : '-',
+        valueColor: AppColors.textBase,
+      ),
       if (_hasValue(expediente.fechaFin))
         AppInfoLabelEntry(
           label: l10n.gestionExpedientesFechaCierreLabel,
