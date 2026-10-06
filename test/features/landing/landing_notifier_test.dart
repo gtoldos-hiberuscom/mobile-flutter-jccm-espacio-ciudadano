@@ -86,6 +86,31 @@ void main() {
 
       expect(repository.calls, ['login']);
     });
+
+    test('el login guarda la pista para cerrar la sesión, sin esperar al guard', () async {
+      // El `SessionGuard` sólo persiste cuando el gate de consentimiento
+      // responde que no hace falta consentimiento. Si ese gate falla y deja
+      // pasar, no quedaba `id_token` guardado y el siguiente login se
+      // encontraba la sesión anterior viva en el navegador. Por eso se guarda
+      // aquí, en cuanto la sesión existe, y no más tarde.
+      final storage = _FakeSecureStorage();
+      final repository = _ImmediateAuthRepository()..idTokenToReturn = 'id-de-esta-sesion';
+      final container = buildContainer(repository, storage: storage);
+
+      await container.read(landingProvider.notifier).login();
+
+      expect(storage.store[StorageKeys.idToken], 'id-de-esta-sesion');
+    });
+
+    test('sin idToken en la respuesta no se guarda nada', () async {
+      final storage = _FakeSecureStorage();
+      final repository = _ImmediateAuthRepository();
+      final container = buildContainer(repository, storage: storage);
+
+      await container.read(landingProvider.notifier).login();
+
+      expect(storage.store.containsKey(StorageKeys.idToken), isFalse);
+    });
   });
 
   group('LandingNotifier.tryRestoreSession', () {
@@ -333,6 +358,8 @@ final class _ImmediateAuthRepository implements AuthRepository {
     revokedTokens.add(refreshToken);
   }
 
+  String? idTokenToReturn;
+
   @override
   Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) async {
     calls.add('login');
@@ -340,7 +367,7 @@ final class _ImmediateAuthRepository implements AuthRepository {
       'not-a-real-jwt',
       'refresh',
       DateTime.now().add(const Duration(minutes: 5)),
-      null,
+      idTokenToReturn,
       null,
       null,
       null,

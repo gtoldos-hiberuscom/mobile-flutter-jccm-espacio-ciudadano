@@ -194,6 +194,15 @@ class LandingNotifier extends Notifier<LandingState> {
     switch (result) {
       case LoginSuccess(:final tokenResponse, :final jwtClaims):
         ref.read(authSessionControllerProvider).startInMemory(tokenResponse, claims: jwtClaims);
+        // Aqui, y no mas tarde: este login acaba de abrir una sesion en el
+        // navegador, y la pista para cerrarla tiene que quedar guardada antes
+        // de que nada pueda fallar. Dejarlo en manos del `SessionGuard` la ataba
+        // al gate de consentimiento, que al fallar deja pasar sin persistir
+        // nada — y entonces el siguiente login no tenia con que cerrar.
+        await ref.read(authSessionControllerProvider).rememberBrowserSession(tokenResponse.idToken);
+        if (!ref.mounted) {
+          return;
+        }
         ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
         state = const LandingState(loginSuccess: true);
 
