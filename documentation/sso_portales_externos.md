@@ -3,7 +3,9 @@
 **Estado (05/10/2026):** el SSO funciona en las dos plataformas y **se ha decidido conservarlo**: el
 login comparte el contenedor del navegador, **sin sesión efímera en ninguna plataforma**. El efecto
 secundario que la validación del 18/09 no cubrió —**cambiar de ciudadano sin cerrar sesión quedaba
-bloqueado**, JCCMEC-224 / JCCMEC-228— está arreglado y validado en iOS el 28/09.
+bloqueado**, JCCMEC-224 / JCCMEC-228— está arreglado y validado en iOS el 28/09, e **integrado en
+`develop` el 06/10/2026** (rama `fix/JCCMEC-224-228-cambio-de-ciudadano`, gestproy #288784). Falta la
+misma medida en Android (TC-505 y TC-506 del UAT).
 
 Esa decisión tiene un precio **conocido y medido** (§10 entero), que se asume a sabiendas:
 
@@ -18,8 +20,8 @@ descartó** porque costaba el SSO. Se conservan porque el análisis vale igual y
 recorrer el camino, pero **no están en la app**; el código quedó en `fix/clave-ephemeral-android`.
 Lo que sigue conserva el análisis porque explica el porqué de cada decisión.
 **Fecha:** 2026-09-18 (reescribe el análisis del 17/09), ampliado el 2026-09-28 con §8 ·
-**Tickets:** JCCMEC-224, JCCMEC-228 · gestproy #282847 (sesión de Cl@ve) y #282296 (causa real
-del bug de reautenticación).
+**Tickets:** JCCMEC-224, JCCMEC-228 · gestproy #288784 (el arreglo de §8.5), #282847 (sesión de
+Cl@ve) y #282296 (causa real del bug de reautenticación).
 
 > **Por qué se reescribió.** La primera versión partía de que el login de la app corría en una
 > pestaña de navegador aislada en **las dos** plataformas, y de ahí concluía que no había nada
@@ -417,7 +419,15 @@ sin biometría —razonado en su día: *«sólo dejaría un access token huérfa
 quién fue el titular. Ahora se escribe siempre. Sin esto el arreglo no sirve a quien no activa el
 acceso rápido, que es precisamente el ciudadano de un móvil compartido. Decisión de G.T., 28/09.
 
-Ficheros: `auth_session_controller.dart` (las dos piezas), `landing_notifier.dart` (el disparo).
+**3. Guardar la pista en cuanto existe la sesión, no en el guard** (añadido tras el UAT, TC-507).
+El `id_token` sólo se escribía desde el `SessionGuard`, en la rama `ConsentNotRequired`, así que la
+capacidad de cerrar la sesión previa dependía de que el gate de consentimiento respondiera bien: si
+fallaba y dejaba pasar, no quedaba pista. `AuthSessionController.rememberBrowserSession()` la guarda
+desde `LandingNotifier.login()` en cuanto llega el token. Ataca la causa **más probable** de la
+incidencia del UAT, no una confirmada: con los logs habilitados dejó de reproducirse.
+
+Ficheros: `auth_session_controller.dart` (las tres piezas), `landing_notifier.dart` (el disparo y
+la pista).
 Tests nuevos en `auth_session_controller_test.dart` y `landing_notifier_test.dart`, incluido uno que
 fija el **orden** —cerrar después del `authorize` no serviría de nada—. Suite en verde (1.100) y
 `custom_lint` limpio.
