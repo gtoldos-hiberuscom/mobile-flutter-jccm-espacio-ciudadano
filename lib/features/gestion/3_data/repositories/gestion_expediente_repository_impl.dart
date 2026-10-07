@@ -134,7 +134,8 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
         (final builder) => builder
           ..pnumdoc = documentNumber
           ..pregistro = numRegistro
-          // El backend rechaza ptipodoc='DNI' con 403; igual que
+          // El backend rechaza ptipodoc='DNI' con 403: el llamador debe pasar
+          // el tipo que entiende el backend (NIF/NIE/CIF), nunca `DNI`.
           ..ptipodoc = tipodoc,
       ),
       extra: {
