@@ -163,6 +163,17 @@ class LandingNotifier extends Notifier<LandingState> {
     }
     state = const LandingState(isLoggingIn: true);
 
+    // Antes de mandar a nadie a Cl@ve, cerrar la sesión que un login anterior
+    // pudiera haber dejado abierta en el navegador. Si no, Cerbero identifica
+    // bien al nuevo ciudadano y corta al volver, porque en esa sesión sigue el
+    // anterior (JCCMEC-224 / JCCMEC-228). No hace nada si el último cierre de
+    // sesión fue en regla, así que el caso normal no paga ninguna pestaña de
+    // más.
+    await ref.read(authSessionControllerProvider).endStaleBrowserSession();
+    if (!ref.mounted) {
+      return;
+    }
+
     final LoginResult result;
     try {
       result = await ref.read(loginUseCaseProvider).call().timeout(loginTimeout);
@@ -183,6 +194,15 @@ class LandingNotifier extends Notifier<LandingState> {
     switch (result) {
       case LoginSuccess(:final tokenResponse, :final jwtClaims):
         ref.read(authSessionControllerProvider).startInMemory(tokenResponse, claims: jwtClaims);
+        // Aqui, y no mas tarde: este login acaba de abrir una sesion en el
+        // navegador, y la pista para cerrarla tiene que quedar guardada antes
+        // de que nada pueda fallar. Dejarlo en manos del `SessionGuard` la ataba
+        // al gate de consentimiento, que al fallar deja pasar sin persistir
+        // nada — y entonces el siguiente login no tenia con que cerrar.
+        await ref.read(authSessionControllerProvider).rememberBrowserSession(tokenResponse.idToken);
+        if (!ref.mounted) {
+          return;
+        }
         ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
         state = const LandingState(loginSuccess: true);
 

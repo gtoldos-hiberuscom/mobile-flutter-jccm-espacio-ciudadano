@@ -29,7 +29,7 @@ class MyDataSocialWelfareThermalSpaPage extends ConsumerWidget {
         title: l10n.socialWelfareTermalismoInfoSheetTitle,
         bodyText: l10n.socialWelfareTermalismoInfoSheetDescription,
         footerText: l10n.familiaNumerosaContactHint,
-        actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+        actionLabel: l10n.familiaNumerosaMoreInformation,
         onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
         actionIcon: AppIcons.openInNew,
       ),

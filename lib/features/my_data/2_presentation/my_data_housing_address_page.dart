@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
@@ -45,9 +46,15 @@ class MyDataHousingAddressPage extends ConsumerWidget {
       title: l10n.myDataHousingAddressInfoSheetTitle,
       bodyText: l10n.myDataHousingAddressInfoSheetDescription,
       footerText: l10n.myDataHousingAddressInfoSheetFooter,
+      actionLabel: l10n.familiaNumerosaMoreInformation,
+      onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(_ineUrl)),
+      actionIcon: AppIcons.openInNew,
+      actionIsExternalLink: true,
     );
   }
 }
+
+const String _ineUrl = 'https://www.ine.es/';
 
 class _AddressContent extends StatelessWidget {
   const _AddressContent({required this.address});

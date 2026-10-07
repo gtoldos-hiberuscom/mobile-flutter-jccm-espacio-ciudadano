@@ -53,6 +53,7 @@ class _MyDataEmploymentPageState extends ConsumerState<MyDataEmploymentPage> {
       actionLabel: l10n.myDataEmploymentInfoSheetOfficeContactsButton,
       onActionPressed: () => _launchExternalUrl(context, 'https://www.sepe.es/HomeSepe'),
       actionIcon: AppIcons.openInNew,
+      actionIsExternalLink: true,
     );
   }
 }

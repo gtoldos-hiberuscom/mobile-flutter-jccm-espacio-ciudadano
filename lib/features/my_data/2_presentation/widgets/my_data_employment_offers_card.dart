@@ -44,6 +44,9 @@ class MyDataEmploymentDisabledOffersBlock extends StatelessWidget {
       children: [
         const MyDataEmploymentDisabledOffersCard(),
         MyDataAuthorizationContextualHelper(
+          message: l10n.myDataEmploymentOffersAuthorizationRequiredMessage,
+          semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+          showTextAction: true,
           onOpenSettings: onOpenSettings,
         ),
         const SizedBox(height: AppDimensions.space8),

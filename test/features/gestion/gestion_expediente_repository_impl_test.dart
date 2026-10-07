@@ -89,6 +89,44 @@ void main() {
       expect(result.single.estado, 'SOLICITUD ENTRADA EN ÓRGANO COMPETENTE');
     });
 
+    // JCCMEC-238: la fecha de inicio es `fechaini`, como en la web, aunque el
+    // registro de entrada (`fechareg`) venga informado con otro día.
+    test('prefers fechaini over fechareg as fechaInicio in the list', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: '{"publicacionportal":{"item":{"numexp":"KM2K/2026/0003","fechareg":"2026-07-14","fechaini":"2026-07-15"}}}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      final result = await repository.loadExpedientes(citizenId: 'sid-1', documentNumber: '99999999R');
+
+      expect(result.single.fechaInicio, '2026-07-15');
+    });
+
+    test('prefers fechaini over fechareg as fechaInicio in the detail', () async {
+      final adapter = SequenceHttpClientAdapter([
+        const AdapterResponse(
+          statusCode: 200,
+          body: '{"isubrc":0,"publicacionportal":{"numexp":"KM2K/2026/0003","registro":"1120973/2026","fechareg":"2026-07-14","fechaini":"2026-07-15"},"resultado":"Correcto"}',
+        ),
+      ]);
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = GestionExpedienteRepositoryImpl(dio: dio);
+
+      final result = await repository.loadExpedienteDetail(
+        citizenId: 'sid-1',
+        documentNumber: '99999999R',
+        numexp: 'KM2K/2026/0003',
+      );
+
+      expect(result.fechaInicio, '2026-07-15');
+      // El registro de entrada sigue viajando intacto para la aportación.
+      expect(result.datosAportacion?.fechareg, '2026-07-14');
+    });
+
     test('sends CIF as document type for a legal entity', () async {
       final adapter = SequenceHttpClientAdapter([
         const AdapterResponse(statusCode: 200, body: '{"publicacionportal":{"item":[]}}'),

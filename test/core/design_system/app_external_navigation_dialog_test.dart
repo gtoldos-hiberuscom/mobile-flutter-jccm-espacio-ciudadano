@@ -64,4 +64,25 @@ void main() {
 
     expect(result, isTrue);
   });
+
+  testWidgets('allows a contextual title for the electronic office', (final tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: AppExternalNavigationDialog(
+          title: 'Te vamos a redirigir a la Sede Electrónica',
+          onCancel: () {},
+          onContinue: () {},
+        ),
+      ),
+    );
+
+    expect(
+      find.text('Te vamos a redirigir a la Sede Electrónica'),
+      findsOneWidget,
+    );
+    expect(find.text('Vas a salir de la aplicación'), findsNothing);
+  });
 }

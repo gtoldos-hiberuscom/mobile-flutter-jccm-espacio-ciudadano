@@ -89,6 +89,11 @@ class DigitalCardsPage extends ConsumerWidget {
               Widget buildCard(final DigitalCard card) {
                 return AppDigitalCard(
                   title: _title(card, l10n),
+                  cardArtAsset: switch (card.type) {
+                    DigitalCardType.largeFamily => AppDigitalCardAssets.largeFamily,
+                    DigitalCardType.disability => AppDigitalCardAssets.disability,
+                    DigitalCardType.youth => AppDigitalCardAssets.youth,
+                  },
                   number: card.number,
                   primaryDateLabel: switch (card.type) {
                     DigitalCardType.largeFamily => l10n.digitalCardsIssueDate,

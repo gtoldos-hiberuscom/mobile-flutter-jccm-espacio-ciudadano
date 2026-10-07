@@ -378,12 +378,19 @@ class _AppCalendarState extends State<AppCalendar> {
                       color: AppColors.textWhite,
                     ),
                     const SizedBox(width: AppDimensions.space8),
-                    // Sin recorte: con el texto ampliado el mes y el año pasan
-                    // a varias líneas en lugar de quedarse en «Septi…» (1.4.4).
+                    // El mes y el año deben permanecer juntos. Si el ancho
+                    // disponible no basta, se reduce la tipografía de forma
+                    // proporcional en vez de partir el año en otra línea.
                     Expanded(
-                      child: Text(
-                        monthLabel,
-                        style: (widget.compact ? AppTypography.bodyBold : AppTypography.h2).copyWith(color: AppColors.textWhite),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text(
+                          monthLabel,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: (widget.compact ? AppTypography.bodyBold : AppTypography.h2).copyWith(color: AppColors.textWhite),
+                        ),
                       ),
                     ),
                     Icon(

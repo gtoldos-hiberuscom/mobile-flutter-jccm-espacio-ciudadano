@@ -1,6 +1,7 @@
 import 'dart:ui' show SemanticsFlag;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -25,13 +26,14 @@ void main() {
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
 
-    final route = find.semantics.byLabel('¿Quieres activar el acceso rápido con huella o reconocimiento facial?').evaluate().first.getSemanticsData();
+    final route = find.semantics.byLabel('¿Quieres activar el acceso rápido con huella dactilar o reconocimiento facial?').evaluate().first.getSemanticsData();
     // ignore: deprecated_member_use
     expect(route.hasFlag(SemanticsFlag.scopesRoute), isTrue);
     // ignore: deprecated_member_use
     expect(route.hasFlag(SemanticsFlag.namesRoute), isTrue);
-    expect(find.semantics.byLabel('Ahora no'), findsOneWidget);
-    expect(find.semantics.byLabel('Activar acceso rápido'), findsOneWidget);
+    expect(find.semantics.byLabel('Completar más tarde'), findsOneWidget);
+    expect(find.semantics.byLabel('Activar'), findsOneWidget);
+    expect(find.byType(SvgPicture), findsOneWidget);
   });
 
   testWidgets('localiza título, explicación y decisiones en inglés', (final tester) async {
@@ -45,9 +47,14 @@ void main() {
       ),
       findsWidgets,
     );
-    expect(find.text('This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.'), findsOneWidget);
-    expect(find.semantics.byLabel('Not now'), findsOneWidget);
-    expect(find.semantics.byLabel('Enable quick access'), findsOneWidget);
+    expect(
+      find.text(
+        'You will be able to access the application more quickly without having to authenticate every time. To protect your data, we will ask you to authenticate again periodically.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.semantics.byLabel('Complete later'), findsOneWidget);
+    expect(find.semantics.byLabel('Enable'), findsOneWidget);
   });
 
   testWidgets('devuelve true al activar el acceso rápido', (final tester) async {
@@ -77,14 +84,14 @@ void main() {
 
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Activar acceso rápido'));
+    await tester.tap(find.text('Activar'));
     await tester.pumpAndSettle();
 
     expect(result, isTrue);
     expect(find.byType(AppAlertDialog), findsNothing);
   });
 
-  testWidgets('devuelve false al elegir ahora no', (final tester) async {
+  testWidgets('devuelve false al elegir completar más tarde', (final tester) async {
     // El diálogo ha crecido desde que se escribió este test y sus botones
     // caían fuera de la superficie de 800x600 por defecto — fuera, no
     // ocultos: el tap no llegaba a impactar nada.
@@ -111,7 +118,7 @@ void main() {
 
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Ahora no'));
+    await tester.tap(find.text('Completar más tarde'));
     await tester.pumpAndSettle();
 
     expect(result, isFalse);

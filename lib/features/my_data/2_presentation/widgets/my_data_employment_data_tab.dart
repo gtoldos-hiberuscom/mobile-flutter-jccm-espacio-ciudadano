@@ -52,8 +52,9 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                   children: [
                     const MyDataEmploymentDisabledDemandCard(showUnavailableDetails: false),
                     MyDataAuthorizationContextualHelper(
-                      message: l10n.myDataAgeAuthorizationRequiredMessage,
+                      message: l10n.myDataEmploymentDemandAuthorizationRequiredMessage,
                       semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+                      showTextAction: true,
                       onOpenSettings: _openSettings,
                     ),
                   ],
@@ -67,7 +68,13 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const MyDataEmploymentDisabledDemandCard(),
-                    MyDataAuthorizationRequiredState(returnTo: Routes.myDataEmployment, onAuthorized: () => ref.invalidate(employmentDemandProvider), scrollable: false),
+                    MyDataAuthorizationRequiredState(
+                      returnTo: Routes.myDataEmployment,
+                      message: l10n.myDataEmploymentDemandAuthorizationRequiredMessage,
+                      showTextAction: true,
+                      onAuthorized: () => ref.invalidate(employmentDemandProvider),
+                      scrollable: false,
+                    ),
                   ],
                 );
               }
@@ -127,6 +134,9 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                 children: [
                   const MyDataEmploymentDisabledOffersCard(),
                   MyDataAuthorizationContextualHelper(
+                    message: l10n.myDataEmploymentOffersAuthorizationRequiredMessage,
+                    semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+                    showTextAction: true,
                     onOpenSettings: _openSettings,
                   ),
                 ],

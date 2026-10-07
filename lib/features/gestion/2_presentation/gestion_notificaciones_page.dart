@@ -463,10 +463,10 @@ class _NotificacionCard extends StatelessWidget {
   /// el estado y en "Todo" no hay filtro del que deducirlo.
   Widget? _statusTag(final AppLocalizations l10n) {
     return switch (notificacion.estado) {
-      NotificacionEstado.pendiente => AppTag(status: AppTagStatus.warning, label: l10n.gestionNotificacionesTagPendiente, showIcon: false),
-      NotificacionEstado.aceptada => AppTag(status: AppTagStatus.success, label: l10n.gestionNotificacionesTagAceptada, showIcon: false),
-      NotificacionEstado.rechazada => AppTag(status: AppTagStatus.error, label: l10n.gestionNotificacionesTagRechazada, showIcon: false),
-      NotificacionEstado.expirada => AppTag(status: AppTagStatus.infoInactive, label: l10n.gestionNotificacionesTagExpirada, showIcon: false),
+      NotificacionEstado.pendiente => AppTag(status: AppTagStatus.warning, label: l10n.gestionNotificacionesTagPendiente),
+      NotificacionEstado.aceptada => AppTag(status: AppTagStatus.success, label: l10n.gestionNotificacionesTagAceptada),
+      NotificacionEstado.rechazada => AppTag(status: AppTagStatus.error, label: l10n.gestionNotificacionesTagRechazada),
+      NotificacionEstado.expirada => AppTag(status: AppTagStatus.infoInactive, label: l10n.gestionNotificacionesTagExpirada),
       null => null,
     };
   }

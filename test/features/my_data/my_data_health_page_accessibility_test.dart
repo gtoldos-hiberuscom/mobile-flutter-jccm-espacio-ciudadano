@@ -51,7 +51,8 @@ void main() {
     expect(month.flagsCollection.isHeader, isTrue);
     expect(month.headingLevel, 4);
 
-    // La cita se anuncia en un único nodo, con el canal incluido.
-    expect(find.semantics.byLabel(RegExp('23.*Medicina de familia.*Telefónica')), findsOneWidget);
+    // La cita se anuncia en un único nodo, con el canal como encabezado y el
+    // profesional como contenido principal.
+    expect(find.semantics.byLabel(RegExp('23.*Dra. García.*Telefónica.*Medicina de familia')), findsOneWidget);
   });
 }

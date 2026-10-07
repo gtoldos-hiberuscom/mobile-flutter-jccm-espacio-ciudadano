@@ -148,12 +148,21 @@ class ConsentPage extends ConsumerWidget {
       isOnboarding: isOnboarding,
       isPreferencesEditing: isPreferencesEditing,
       returnTo: returnTo,
-      // La (i) abre la página legal para LEERLA: sin este marcador se pintaba
-      // como paso del consentimiento y arrastraba aquí sus botones de "Salir" y
-      // "Continuar", que en una página de información no tienen sentido.
-      onShowLegalInfo: () => context.push(Routes.legalPrivacyInfo),
+      onShowLegalInfo: () => showConsentAuthorizationsInfoSheet(context),
     );
   }
+}
+
+Future<void> showConsentAuthorizationsInfoSheet(
+  final BuildContext context,
+) {
+  final l10n = AppLocalizations.of(context);
+  return AppInfoSheet.show(
+    context: context,
+    title: l10n.consentAuthorizationsInfoTitle,
+    bodyText: l10n.consentAuthorizationsInfoBody,
+    closeLabel: l10n.consentAuthorizationsInfoClose,
+  );
 }
 
 /// Resolves the next route after the consent choices have been persisted.
