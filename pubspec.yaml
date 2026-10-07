@@ -1,7 +1,7 @@
 name: jccm_espacio_ciudadano
 description: "Carpeta Ciudadana CLM — citizen-facing mobile application for JCCM digital services."
 publish_to: 'none'
-version: 0.1.8+10
+version: 0.1.9+11
 
 environment:
   sdk: ^3.10.1
