@@ -93,21 +93,15 @@ class AppConsentPreferenceCard extends StatelessWidget {
               sortKey: const OrdinalSortKey(0),
               header: true,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const ExcludeSemantics(
-                    child: SizedBox(
-                      width: AppDimensions.iconMedium,
-                      height: AppDimensions.space32,
-                      child: AppIcon(AppIcons.verified, color: AppColors.textPrimary),
-                    ),
-                  ),
-                  const SizedBox(width: AppDimensions.space4),
                   Expanded(
                     child: Text(
                       l10n.consentStep1FullTitle,
                       style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
                     ),
+                  ),
+                  const ExcludeSemantics(
+                    child: AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
                   ),
                 ],
               ),
@@ -142,6 +136,7 @@ class AppPreferenceCard extends StatelessWidget {
     this.filledAction = false,
     this.summaryItems = const [],
     this.activeFooterText,
+    this.showActiveStatus = false,
   }) : assert(title != '', 'title must not be empty'),
        assert(inactiveDescription != '', 'inactiveDescription must not be empty'),
        assert(pendingDescription != '', 'pendingDescription must not be empty'),
@@ -162,6 +157,7 @@ class AppPreferenceCard extends StatelessWidget {
   final bool filledAction;
   final List<String> summaryItems;
   final String? activeFooterText;
+  final bool showActiveStatus;
 
   @override
   Widget build(final BuildContext context) {
@@ -172,6 +168,8 @@ class AppPreferenceCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final contentColor = status == AppPreferenceStatus.enabled ? AppColors.textPrimary : AppColors.borderBlueMutedBase;
     final hasActiveSummary = status == AppPreferenceStatus.enabled && summaryItems.isNotEmpty;
+    final isActive = status == AppPreferenceStatus.enabled;
+    final showsStatusTag = !hasActiveSummary || (isActive && showActiveStatus);
     final description = switch (status) {
       AppPreferenceStatus.disabled => inactiveDescription,
       AppPreferenceStatus.pending => pendingDescription,
@@ -207,7 +205,7 @@ class AppPreferenceCard extends StatelessWidget {
               sortKey: const OrdinalSortKey(0),
               label: statusLabel,
               child: ExcludeSemantics(
-                child: hasActiveSummary
+                child: !showsStatusTag
                     ? const SizedBox.square(dimension: 1)
                     : AppPreferenceStatusTag(
                         status: status,
@@ -215,30 +213,36 @@ class AppPreferenceCard extends StatelessWidget {
                       ),
               ),
             ),
-            if (!hasActiveSummary) const SizedBox(height: AppDimensions.space8),
+            if (showsStatusTag) const SizedBox(height: AppDimensions.space8),
             Semantics(
               sortKey: const OrdinalSortKey(1),
               header: true,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ExcludeSemantics(
-                    child: SizedBox(
-                      width: AppDimensions.iconMedium,
-                      height: AppDimensions.space32,
-                      child: icon,
+                  if (!isActive) ...[
+                    ExcludeSemantics(
+                      child: SizedBox(
+                        width: AppDimensions.iconMedium,
+                        height: AppDimensions.space32,
+                        child: icon,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: AppDimensions.space4),
+                    const SizedBox(width: AppDimensions.space4),
+                  ],
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: AppDimensions.space4),
+                      padding: EdgeInsets.only(top: isActive ? 0 : AppDimensions.space4),
                       child: Text(
                         title,
                         style: AppTypography.leadingBold.copyWith(color: contentColor),
                       ),
                     ),
                   ),
+                  if (isActive)
+                    const ExcludeSemantics(
+                      child: AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
+                    ),
                 ],
               ),
             ),

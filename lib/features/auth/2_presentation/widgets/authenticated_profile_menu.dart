@@ -63,7 +63,11 @@ void showAuthenticatedProfileMenu({
       return;
     }
 
-    if (!await confirmExternalNavigation(context) || !context.mounted) {
+    if (!await confirmExternalNavigation(
+          context,
+          title: l10n.drawerElectronicOfficeDialogTitle,
+        ) ||
+        !context.mounted) {
       return;
     }
     final result = await ref.read(externalLinkLauncherProvider).launch(link);

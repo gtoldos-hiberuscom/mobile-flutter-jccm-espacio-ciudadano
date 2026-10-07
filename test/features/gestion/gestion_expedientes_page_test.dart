@@ -39,6 +39,34 @@ void main() {
     expect(find.text('CONSEJERÍA QUE NO DEBE MOSTRARSE'), findsNothing);
   });
 
+  testWidgets('muestra la fecha de inicio como dd/mm/aaaa, igual que la web', (final tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          expedientesProvider.overrideWith(
+            (final ref) async => const [
+              Expediente(
+                numexp: 'WM49/2026/000062',
+                titulo: 'Expediente de prueba',
+                consejeria: 'JCCM',
+                fechaInicio: '2026-08-27',
+              ),
+            ],
+          ),
+        ],
+        child: const MaterialApp(
+          locale: Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: GestionExpedientesPage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('27/08/2026'), findsOneWidget);
+  });
+
   testWidgets('reintenta la carga de expedientes después de un error', (final tester) async {
     var attempts = 0;
 

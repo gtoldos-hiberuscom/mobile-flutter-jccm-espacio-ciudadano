@@ -145,7 +145,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('en la Agenda al 200 por ciento el mes no se recorta y las filas no se solapan', (final tester) async {
+  testWidgets('en la Agenda al 200 por ciento el mes se ajusta en una línea y las filas no se solapan', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(375, 900);
     addTearDown(tester.view.reset);
@@ -165,7 +165,7 @@ void main() {
     );
 
     final monthText = tester.widget<Text>(find.text('Septiembre 2026'));
-    expect(monthText.maxLines, isNull);
+    expect(monthText.maxLines, 1);
     expect(monthText.overflow, isNot(TextOverflow.ellipsis));
 
     final row1 = tester.getRect(find.text('7'));

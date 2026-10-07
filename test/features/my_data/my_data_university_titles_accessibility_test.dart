@@ -58,7 +58,7 @@ void main() {
     final labelRect = tester.getRect(label);
     // La etiqueta usa todo el ancho: no se parte letra a letra.
     expect(labelRect.width, greaterThan(150));
-    final dateRect = tester.getRect(find.text('2 jun 2000'));
+    final dateRect = tester.getRect(find.text('02/06/2000'));
     expect(dateRect.top, greaterThanOrEqualTo(labelRect.bottom));
 
     for (final text in [title.titleName, title.universityName]) {
@@ -75,7 +75,7 @@ void main() {
 
     expect(
       find.semantics.byLabel(
-        'Nº título: 1988000333. ${title.titleName}. ${title.universityName}. Fecha finalización: 2 jun 2000. Fecha expedición: 2 sep 2000',
+        'Nº título: 1988000333. ${title.titleName}. ${title.universityName}. Fecha finalización: 02/06/2000. Fecha expedición: 02/09/2000',
       ),
       findsOneWidget,
     );

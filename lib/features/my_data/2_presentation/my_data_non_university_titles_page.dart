@@ -87,10 +87,13 @@ class MyDataNonUniversityTitlesPage extends ConsumerWidget {
       title: l10n.educationNonUniversityTitlesInfoTitle,
       bodyText: l10n.educationNonUniversityTitlesInfoBody,
       footerText: l10n.educationNonUniversityTitlesInfoFooter,
-      // El pie decía "contacta con el Ministerio" sin dar forma de hacerlo.
-      actionLabel: l10n.myDataNoDataContact,
+      actionLabel: l10n.educationTitlesInfoMoreInformation,
       onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(_nonUniversityTitlesContactUrl)),
       actionIcon: AppIcons.openInNew,
+      actionHierarchy: AppButtonHierarchy.ghost,
+      actionIsExpanded: false,
+      actionIsExternalLink: true,
+      actionAlignment: Alignment.center,
     );
   }
 }
@@ -111,11 +114,11 @@ class _NonUniversityTitleCard extends StatelessWidget {
     // etiqueta, en orden de lectura (WCAG 1.3.1).
     final semanticLabel = [
       if (_hasReferenceNumbers) _spoken(_buildReferenceText(l10n).replaceAll('   |   ', ', ')),
-      title.titleName,
-      title.centerName,
-      if (title.province != null) '${_spoken(l10n.myDataEducationProvinceLabel)}: ${title.province}',
-      if (title.expeditionDate != null) '${_spoken(l10n.myDataEducationExpeditionDateLabel)}: ${_formatDate(l10n, title.expeditionDate!)}',
-      if (title.completionDate != null) '${_spoken(l10n.myDataEducationCompletionDateLabel)}: ${_formatDate(l10n, title.completionDate!)}',
+      _displayCase(title.titleName),
+      _displayCase(title.centerName),
+      if (title.province != null) '${_spoken(l10n.myDataEducationProvinceLabel)}: ${_displayCase(title.province!)}',
+      if (title.completionDate != null) '${_spoken(l10n.myDataEducationCompletionDateLabel)}: ${_formatDate(title.completionDate!)}',
+      if (title.expeditionDate != null) '${_spoken(l10n.myDataEducationExpeditionDateLabel)}: ${_formatDate(title.expeditionDate!)}',
     ].join('. ');
     return Semantics(
       container: true,
@@ -146,7 +149,7 @@ class _NonUniversityTitleCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
                   child: Text(
-                    title.titleName,
+                    _displayCase(title.titleName),
                     style: AppTypography.leadingBold.copyWith(
                       color: AppColors.textPrimary,
                     ),
@@ -157,7 +160,7 @@ class _NonUniversityTitleCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
                   child: Text(
-                    title.centerName,
+                    _displayCase(title.centerName),
                     style: AppTypography.bodyRegular.copyWith(
                       color: AppColors.primary,
                     ),
@@ -168,23 +171,21 @@ class _NonUniversityTitleCard extends StatelessWidget {
                 if (title.province != null) ...[
                   _LabelValueRow(
                     label: l10n.myDataEducationProvinceLabel,
-                    value: title.province!,
+                    value: _displayCase(title.province!),
                   ),
                 ],
 
-                // Expedition date
-                if (title.expeditionDate != null) ...[
-                  _LabelValueRow(
-                    label: l10n.myDataEducationExpeditionDateLabel,
-                    value: _formatDate(l10n, title.expeditionDate!),
-                  ),
-                ],
-
-                // Completion date
+                // Figma CardInfo lists completion before expedition.
                 if (title.completionDate != null) ...[
                   _LabelValueRow(
                     label: l10n.myDataEducationCompletionDateLabel,
-                    value: _formatDate(l10n, title.completionDate!),
+                    value: _formatDate(title.completionDate!),
+                  ),
+                ],
+                if (title.expeditionDate != null) ...[
+                  _LabelValueRow(
+                    label: l10n.myDataEducationExpeditionDateLabel,
+                    value: _formatDate(title.expeditionDate!),
                   ),
                 ],
               ],
@@ -215,30 +216,7 @@ class _NonUniversityTitleCard extends StatelessWidget {
     return parts.join('   |   ');
   }
 
-  String _formatDate(final AppLocalizations l10n, final DateTime date) {
-    final day = date.day;
-    final month = l10n.commonMonthShortName(_monthKey(date.month));
-    final year = date.year;
-    return '$day $month $year';
-  }
-
-  String _monthKey(final int month) {
-    return switch (month) {
-      1 => 'january',
-      2 => 'february',
-      3 => 'march',
-      4 => 'april',
-      5 => 'may',
-      6 => 'june',
-      7 => 'july',
-      8 => 'august',
-      9 => 'september',
-      10 => 'october',
-      11 => 'november',
-      12 => 'december',
-      _ => 'other',
-    };
-  }
+  String _formatDate(final DateTime date) => '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
 }
 
 class _LabelValueRow extends StatelessWidget {
@@ -298,4 +276,15 @@ class _LabelValueRow extends StatelessWidget {
 String _spoken(final String value) {
   final lower = value.trim().toLowerCase();
   return lower.isEmpty ? lower : '${lower[0].toUpperCase()}${lower.substring(1)}';
+}
+
+/// Algunos servicios devuelven los títulos, centros y provincias enteramente
+/// en mayúsculas. Se presentan como frase sin alterar los valores mixtos.
+String _displayCase(final String value) {
+  final trimmed = value.trim();
+  final hasLetters = RegExp('[A-Za-zÁÉÍÓÚÜÑ]').hasMatch(trimmed);
+  if (!hasLetters || trimmed != trimmed.toUpperCase()) {
+    return trimmed;
+  }
+  return _spoken(trimmed);
 }

@@ -4,7 +4,6 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart'
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_page_layout.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
@@ -78,13 +77,12 @@ class AppSelectableFilterChip extends StatelessWidget {
                   vertical: AppDimensions.space12,
                 ),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundBlueMutedLight,
+                  color: isSelected ? AppColors.backgroundBlueLighter : AppColors.backgroundWhite,
                   border: Border.all(
                     color: onTap == null ? AppColors.outline : AppColors.secondary,
                     width: isSelected ? 2 : 1,
                   ),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-                  boxShadow: AppShadows.low,
                 ),
                 child: Row(
                   children: [
@@ -143,10 +141,9 @@ class AppFilterActionsBar extends StatelessWidget {
       explicitChildNodes: true,
       label: groupLabel,
       child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.backgroundWhite.withValues(alpha: 0.94),
-          border: Border.all(color: AppColors.borderNeutralLight),
-          boxShadow: AppShadows.low,
+        decoration: const BoxDecoration(
+          color: AppColors.backgroundBlueLighter,
+          border: Border(top: BorderSide(color: AppColors.backgroundBlueMutedLight)),
         ),
         child: SafeArea(
           top: false,
@@ -186,6 +183,7 @@ class AppFilterActionsBar extends StatelessWidget {
     hierarchy: AppButtonHierarchy.secondary,
     leadingIcon: AppIcons.autorenew,
     isExpanded: true,
+    showDisabledOutline: true,
   );
 
   Widget _applyButton() => AppButton(
@@ -193,5 +191,6 @@ class AppFilterActionsBar extends StatelessWidget {
     onPressed: onApply,
     leadingIcon: AppIcons.check,
     isExpanded: true,
+    showDisabledOutline: true,
   );
 }

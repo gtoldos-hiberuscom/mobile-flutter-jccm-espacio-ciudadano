@@ -67,9 +67,13 @@ Future<void> _showFamilyInfoSheet(final BuildContext context, final WidgetRef re
     title: l10n.familiaNumerosaInfoSheetTitle,
     bodyText: l10n.familiaNumerosaInfoSheetDescription,
     footerText: l10n.familiaNumerosaContactHint,
-    actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+    actionLabel: l10n.familiaNumerosaMoreInformation,
     onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
     actionIcon: AppIcons.openInNew,
+    actionHierarchy: AppButtonHierarchy.ghost,
+    actionIsExpanded: false,
+    actionIsExternalLink: true,
+    actionAlignment: Alignment.center,
   );
 }
 
@@ -180,6 +184,7 @@ class _NoLargeFamilyData extends StatelessWidget {
       padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space64),
       child: _FamilyContactHelper(
         message: l10n.familiaNumerosaNoDataMessage,
+        contactMessage: l10n.familiaNumerosaNoDataContactHint,
         ref: ref,
       ),
     );
@@ -206,24 +211,42 @@ class _LargeFamilyError extends StatelessWidget {
 class _FamilyContactHelper extends StatelessWidget {
   const _FamilyContactHelper({
     required this.message,
+    required this.contactMessage,
     required this.ref,
   });
 
   final String message;
+  final String contactMessage;
   final WidgetRef ref;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return AppAlertContextual(
-      message: message,
-      action: AppButton(
-        label: l10n.familiaNumerosaOfficeContactsButton,
-        hierarchy: AppButtonHierarchy.secondary,
-        trailingIcon: AppIcons.openInNew,
-        onPressed: () => launchSocialWelfareOfficeContacts(context, ref),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppAlertContextual(message: message),
+        const SizedBox(height: AppDimensions.space16),
+        Padding(
+          // Alineado con el texto del aviso: 4 de padding + icono de 24 + 8 de gap.
+          padding: const EdgeInsets.only(left: AppDimensions.space32 + AppDimensions.space4),
+          child: Text(
+            contactMessage,
+            style: AppTypography.bodyRegular.copyWith(color: AppColors.primaryDark),
+          ),
+        ),
+        const SizedBox(height: AppDimensions.space16),
+        Align(
+          child: AppButton(
+            label: l10n.familiaNumerosaContactListButton,
+            hierarchy: AppButtonHierarchy.ghost,
+            trailingIcon: AppIcons.openInNew,
+            isExternalLink: true,
+            onPressed: () => launchSocialWelfareOfficeContacts(context, ref),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -73,7 +73,7 @@ void main() {
 
     final close = find.semantics.byLabel('Cerrar');
     expect(close.evaluate().single.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
-    final closeTarget = find.ancestor(of: find.text('Salir'), matching: find.byType(InkWell));
+    final closeTarget = find.ancestor(of: find.text('Cerrar'), matching: find.byType(InkWell));
     expect(tester.getSize(closeTarget).height, greaterThanOrEqualTo(48));
     tester.semantics.tap(close);
     expect(closes, 1);
@@ -102,7 +102,7 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('Abrir'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Salir'));
+    await tester.tap(find.text('Cerrar'));
     await tester.pumpAndSettle();
 
     expect(find.byType(AppBottomSheet), findsNothing);

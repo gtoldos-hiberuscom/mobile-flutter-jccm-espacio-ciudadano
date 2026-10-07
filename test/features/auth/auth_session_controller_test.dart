@@ -168,11 +168,21 @@ final class FakeAuthRepository implements AuthRepository {
     final String? loginHint,
   }) => throw UnimplementedError();
 
+  final List<String> logoutIdTokens = [];
+
+  Exception? logoutError;
+
   @override
   Future<void> logout({
     required final String idToken,
     final String? postLogoutRedirectUri,
-  }) => throw UnimplementedError();
+  }) async {
+    logoutIdTokens.add(idToken);
+    final error = logoutError;
+    if (error != null) {
+      throw error;
+    }
+  }
 }
 
 TokenResponse tokenExpiringIn(final Duration ttl) => TokenResponse(
@@ -332,11 +342,17 @@ void main() {
       expect(storage.clearedBiometric, isFalse, reason: 'no debe tocarse el almacén protegido');
     });
 
-    test('sin el opt-in activado no se guarda NADA, ni siquiera el access token', () async {
+    test('sin el opt-in activado no se guarda ninguna credencial, sólo la pista para cerrar sesión', () async {
       // Sin acceso rápido la sesión no se reanuda al reabrir la app, así que
       // guardar credenciales no sirve a nadie: sólo dejaría un access token
       // huérfano. Su sesión vive en memoria mientras la app esté abierta, que
       // es lo que el ciudadano aceptó.
+      //
+      // El `id_token` es la excepción, y no es una credencial: no autoriza
+      // nada contra el gateway. Es lo único con lo que se puede cerrar después
+      // la sesión que este login deja abierta en el navegador
+      // (JCCMEC-224/228). Quitarlo de aquí deja el arreglo sin efecto justo
+      // para quien no activa el acceso rápido.
       appStorage.values[_quickAccessKey] = false;
       final container = buildContainer();
 
@@ -345,10 +361,13 @@ void main() {
         claims: _claims,
       );
 
-      expect(storage.store, isEmpty);
+      expect(storage.store[StorageKeys.accessToken], isNull);
+      expect(storage.store[StorageKeys.refreshToken], isNull);
+      expect(storage.store[StorageKeys.sessionExpiresAt], isNull);
+      expect(storage.store[StorageKeys.idToken], 'id', reason: 'sin esto no hay con qué cerrar la sesión del navegador');
     });
 
-    test('desactivar limpia lo que hubiera guardado de una activación anterior', () async {
+    test('desactivar limpia las credenciales de una activación anterior y refresca la pista de cierre', () async {
       storage.store[StorageKeys.accessToken] = 'de-cuando-estaba-activado';
       storage.store[StorageKeys.idToken] = 'id-viejo';
       appStorage.values[_quickAccessKey] = false;
@@ -359,8 +378,8 @@ void main() {
         claims: _claims,
       );
 
-      expect(storage.store[StorageKeys.accessToken], isNull, reason: '«no activado» debe significar «nada guardado»');
-      expect(storage.store[StorageKeys.idToken], isNull);
+      expect(storage.store[StorageKeys.accessToken], isNull, reason: '«no activado» debe significar «ninguna credencial guardada»');
+      expect(storage.store[StorageKeys.idToken], 'id', reason: 'la pista de cierre se sustituye por la de esta sesión, no se borra');
     });
 
     test('desactivar el opt-in borra del dispositivo el token ya guardado', () async {
@@ -730,6 +749,50 @@ void main() {
       await controller.clear();
 
       expect(storage.store[StorageKeys.idToken], isNull);
+    });
+  });
+
+  group('AuthSessionController.endStaleBrowserSession (JCCMEC-224/228)', () {
+    test('cierra en Cerbero la sesión que dejó abierta el login anterior', () async {
+      storage.store[StorageKeys.idToken] = 'id-del-ciudadano-anterior';
+      final container = buildContainer();
+
+      await container.read(authSessionControllerProvider).endStaleBrowserSession();
+
+      expect(repository.logoutIdTokens, ['id-del-ciudadano-anterior']);
+    });
+
+    test('no hace nada si el cierre anterior fue en regla', () async {
+      // `clear()` borra el idToken, así que tras pulsar «Cerrar sesión» no
+      // queda nada que cerrar: el caso normal no paga una pestaña de más.
+      final container = buildContainer();
+
+      await container.read(authSessionControllerProvider).endStaleBrowserSession();
+
+      expect(repository.logoutIdTokens, isEmpty);
+    });
+
+    test('un fallo al cerrar no impide entrar', () async {
+      // Entrar con un posible corte de Cerbero por delante es mejor que no
+      // poder entrar por un fallo de red.
+      storage.store[StorageKeys.idToken] = 'id-del-ciudadano-anterior';
+      repository.logoutError = Exception('sin red');
+      final container = buildContainer();
+
+      await expectLater(
+        container.read(authSessionControllerProvider).endStaleBrowserSession(),
+        completes,
+      );
+    });
+
+    test('conserva la pista si el cierre falla, para poder reintentarlo', () async {
+      storage.store[StorageKeys.idToken] = 'id-del-ciudadano-anterior';
+      repository.logoutError = Exception('sin red');
+      final container = buildContainer();
+
+      await container.read(authSessionControllerProvider).endStaleBrowserSession();
+
+      expect(storage.store[StorageKeys.idToken], 'id-del-ciudadano-anterior');
     });
   });
 }

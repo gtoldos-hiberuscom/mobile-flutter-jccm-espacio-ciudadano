@@ -106,12 +106,21 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
 
   Future<void> _showHealthInfoSheet(final BuildContext context) async {
     final l10n = AppLocalizations.of(context);
+    final config = ref.read(appConfigProvider);
     await AppInfoSheet.show(
       context: context,
       title: l10n.myDataHealthInfoSheetTitle,
       bodyText: l10n.myDataHealthInfoSheetDescription,
       footerText: l10n.myDataHealthInfoSheetContactHint,
+      actionLabel: l10n.myDataHealthInfoSheetMoreInformation,
+      actionIcon: AppIcons.openInNew,
+      actionIsExternalLink: true,
+      onActionPressed: () => _launchExternalUrl(context, config.sescamUrl),
     );
+  }
+
+  Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
+    await launchExternalUrlWithConfirmation(context, url);
   }
 }
 
@@ -187,6 +196,8 @@ class _HealthAppointmentsTab extends ConsumerWidget {
               data: (final hasJccmAuthorization) {
                 if (!hasJccmAuthorization) {
                   return MyDataAuthorizationContextualHelper(
+                    message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage,
+                    semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
                     onOpenSettings: () => _openConsentSettings(context),
                   );
                 }
@@ -297,6 +308,8 @@ class _SingleShotAppointmentsList extends ConsumerWidget {
       ),
       error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
           ? MyDataAuthorizationContextualHelper(
+              message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage,
+              semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
               onOpenSettings: () => _openConsentSettings(context),
             )
           : error is MyDataHealthCipMissing
@@ -338,6 +351,8 @@ class _PastPrimaryCareAppointmentsList extends ConsumerWidget {
         );
       case PastPrimaryCareAppointmentsStatus.authorizationRequired:
         return MyDataAuthorizationContextualHelper(
+          message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage,
+          semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
           onOpenSettings: () => _openConsentSettings(context),
         );
       case PastPrimaryCareAppointmentsStatus.cipMissing:
@@ -473,8 +488,9 @@ class _CipText extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final value = cip?.trim();
-    final label = value == null || value.isEmpty ? 'CIP: -' : 'CIP: $value';
+    final label = l10n.myDataHealthCipLabel(value == null || value.isEmpty ? '-' : value);
 
     return Text(
       label,
@@ -522,7 +538,7 @@ class _AppointmentsContent extends StatelessWidget {
             child: Text(
               yearSection.year.toString(),
               style: AppTypography.h2.copyWith(
-                color: AppColors.textBase,
+                color: AppColors.primary,
               ),
             ),
           ),
@@ -536,7 +552,7 @@ class _AppointmentsContent extends StatelessWidget {
               child: Text(
                 l10n.commonMonthName(_monthKey(monthSection.month)),
                 style: AppTypography.h3.copyWith(
-                  color: AppColors.textBase,
+                  color: AppColors.primary,
                 ),
               ),
             ),
@@ -617,7 +633,7 @@ class _AppointmentCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final date = appointment.dateTime;
-    final detail = appointment.modality ?? appointment.center ?? '';
+    final detail = appointment.description;
     final channel = appointment.channel?.trim();
     final isPhone = detail.toLowerCase().contains('teleconsulta') || detail.toLowerCase().contains('telef');
 
@@ -626,9 +642,11 @@ class _AppointmentCard extends StatelessWidget {
       day: date.day.toString(),
       weekday: l10n.commonWeekdayName(_weekdayKey(date.weekday)),
       time: '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
-      title: appointment.description,
+      title: appointment.professional,
       channel: channel != null && channel.isNotEmpty ? channel : (isPhone ? l10n.agendaChannelPhone : l10n.agendaChannelInPerson),
-      primaryText: appointment.professional,
+      showTypeIcon: false,
+      channelBeforeTitle: true,
+      titleIsRegular: true,
       secondaryText: detail,
     );
   }

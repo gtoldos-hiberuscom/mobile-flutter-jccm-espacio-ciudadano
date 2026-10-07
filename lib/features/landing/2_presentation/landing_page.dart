@@ -143,8 +143,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: appPageHorizontalPadding(context),
+                padding: EdgeInsets.only(
+                  left: appPageHorizontalPadding(context),
+                  top: AppDimensions.space8,
+                  right: appPageHorizontalPadding(context),
                 ),
                 // Con el texto ampliado (WCAG 1.4.4) el contenido se desplaza
                 // en lugar de encogerse: un `FittedBox` reduciría logotipos y
@@ -152,7 +154,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                 child: SingleChildScrollView(
                   child: Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 353.15),
+                      constraints: const BoxConstraints(maxWidth: 358),
                       // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
                       child: Stack(
                         children: [
@@ -196,8 +198,8 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                               const SizedBox(height: AppDimensions.space24),
 
                               // ── Tagline ─────────────────────────────────────────
-                              const Align(
-                                alignment: Alignment.centerLeft,
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: AppDimensions.space20),
                                 child: _TaglineText(),
                               ),
                               const SizedBox(height: AppDimensions.space24),
@@ -205,7 +207,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                               // ── Hero composition (splash_logo bg + mask group) ──
                               ExcludeSemantics(
                                 child: AspectRatio(
-                                  aspectRatio: 353.15 / 301.45,
+                                  aspectRatio: 358 / 301.445,
                                   child: LayoutBuilder(
                                     builder: (final context, final constraints) {
                                       final w = constraints.maxWidth;
@@ -213,11 +215,16 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                                       return Stack(
                                         clipBehavior: Clip.none,
                                         children: [
-                                          // Background decorative shape (full size)
-                                          Positioned.fill(
+                                          // Figma: 353.147 px inside the 358 px
+                                          // artwork container.
+                                          Positioned(
+                                            left: 0,
+                                            top: 0,
+                                            bottom: 0,
+                                            width: w * (353.147 / 358),
                                             child: Image.asset(
                                               'assets/images/splash_logo.png',
-                                              fit: BoxFit.contain,
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
                                           // Foreground mask group (windmill + hands)
@@ -250,6 +257,9 @@ class _LandingPageState extends ConsumerState<LandingPage> {
 
           // ── Stickybar ───────────────────────────────────────────────────
           AppStickybar(
+            bottomPadding: AppDimensions.space24,
+            bottomPaddingIncludesSafeArea: true,
+            backgroundColor: AppColors.surface,
             children: [
               // Ghost — "Ayuda y contacto"
               AppButton(
@@ -297,23 +307,10 @@ class _TaglineText extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    // `Text.rich` y no `RichText`: este último ignora la ampliación de texto
-    // del sistema (WCAG 1.4.4).
-    return Text.rich(
-      TextSpan(
-        style: AppTypography.bodyL.copyWith(color: AppColors.textPrimary),
-        children: [
-          TextSpan(text: l10n.landingTaglinePrefix),
-          TextSpan(
-            text: l10n.landingTaglineHighlight,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w600,
-              height: 1.28,
-            ),
-          ),
-        ],
-      ),
+    return Text(
+      l10n.landingTagline,
+      style: AppTypography.bodyRegular.copyWith(color: AppColors.textPrimary),
+      textAlign: TextAlign.center,
     );
   }
 }

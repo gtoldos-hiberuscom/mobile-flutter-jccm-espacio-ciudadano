@@ -34,7 +34,7 @@ void main() {
       expect(rect.width, 348);
       expect(rect.center.dx, size.width / 2);
       expect(tester.takeException(), isNull);
-      await tester.tap(find.text('Salir'));
+      await tester.tap(find.text('Cerrar'));
       await tester.pumpAndSettle();
       expect(find.byKey(const ValueKey('content')), findsNothing);
     });

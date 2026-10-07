@@ -86,8 +86,12 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
       title: l10n.educationUniversityTitlesInfoTitle,
       bodyText: l10n.educationUniversityTitlesInfoBody,
       footerText: l10n.educationUniversityTitlesInfoFooter,
-      actionLabel: l10n.educationUniversityTitlesInfoContactButton,
+      actionLabel: l10n.educationTitlesInfoMoreInformation,
       actionIcon: AppIcons.openInNew,
+      actionHierarchy: AppButtonHierarchy.ghost,
+      actionIsExpanded: false,
+      actionIsExternalLink: true,
+      actionAlignment: Alignment.center,
       onActionPressed: () => _openContactUrl(context),
     );
   }
@@ -129,33 +133,37 @@ class _UniversityTitleCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title number
-                if (title.titleNumber.isNotEmpty) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                    // 6,2:1 sobre blanco (WCAG 1.4.3); sin recorte al ampliar el
-                    // texto (1.4.4).
-                    child: Text(
-                      l10n.myDataEducationTitleNumberLabel(title.titleNumber),
-                      style: AppTypography.captionUppercase.copyWith(
-                        color: AppColors.textPlaceholder,
-                      ),
-                    ),
-                  ),
-                ],
-
-                // Title name
-                Padding(
+                // Figma CardInfo: título y número comparten cabecera, rematada
+                // por un separador antes de la universidad y las fechas.
+                Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
-                  child: Text(
-                    title.titleName,
-                    style: AppTypography.leadingBold.copyWith(
-                      color: AppColors.textPrimary,
-                    ),
+                  decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(color: AppColors.neutral100)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title.titleName,
+                        style: AppTypography.leadingBold.copyWith(
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      if (title.titleNumber.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: AppDimensions.space4),
+                          child: Text(
+                            l10n.myDataEducationTitleNumberLabel(title.titleNumber),
+                            style: AppTypography.captionUppercase.copyWith(
+                              color: AppColors.textBlueMutedDark,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-
-                // University name
+                const SizedBox(height: AppDimensions.space8),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
                   child: Text(
@@ -166,8 +174,6 @@ class _UniversityTitleCard extends StatelessWidget {
                   ),
                 ),
 
-                // Dates
-                const SizedBox(height: AppDimensions.space4),
                 if (title.completionDate != null) ...[
                   _DateRow(
                     label: l10n.myDataEducationCompletionDateLabel,
@@ -241,27 +247,10 @@ class _DateRow extends StatelessWidget {
   }
 
   static String format(final AppLocalizations l10n, final DateTime date) {
-    final day = date.day;
-    final month = l10n.commonMonthShortName(_monthKey(date.month));
-    final year = date.year;
-    return '$day $month $year';
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    return '$day/$month/${date.year}';
   }
-
-  static String _monthKey(final int month) => switch (month) {
-    1 => 'january',
-    2 => 'february',
-    3 => 'march',
-    4 => 'april',
-    5 => 'may',
-    6 => 'june',
-    7 => 'july',
-    8 => 'august',
-    9 => 'september',
-    10 => 'october',
-    11 => 'november',
-    12 => 'december',
-    _ => 'other',
-  };
 }
 
 /// Rótulo en mayúsculas pasado a frase para el lector de pantalla, que de

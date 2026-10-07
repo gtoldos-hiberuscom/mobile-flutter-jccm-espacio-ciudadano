@@ -44,6 +44,13 @@ final class AuthSessionController {
   /// last-resort check only blocks reuse of a token about to expire mid-request.
   static const Duration _refreshSkew = Duration(seconds: 30);
 
+  /// Techo para el cierre de la sesión de navegador previa a un login
+  /// ([endStaleBrowserSession]). Va por delante del flujo de Cl@ve, así que un
+  /// cierre que no resuelve retrasaría la pantalla de identificación sin que el
+  /// ciudadano entienda por qué. Pasado este tiempo se sigue adelante: perder
+  /// la limpieza es peor que perder el login.
+  static const Duration _staleSessionCloseTimeout = Duration(seconds: 15);
+
   /// Monotonic session generation. Every [clear] (logout) bumps it; an in-flight
   /// [_doRefresh] captures it at start and discards its result if it changed —
   /// preventing a refresh that completes after logout from resurrecting tokens.
@@ -339,6 +346,61 @@ final class AuthSessionController {
     }
   }
 
+  /// Recuerda qué sesión de navegador hay que cerrar después, guardando el
+  /// `id_token` en cuanto el ciudadano se identifica.
+  ///
+  /// Se separa a propósito de [persist]: aquello persiste **la sesión del
+  /// ciudadano** y por eso el `SessionGuard` lo condiciona a que el
+  /// consentimiento conste (`session_guard.dart`, rama `ConsentNotRequired`).
+  /// Esto es otra cosa — no guarda una credencial de acceso, guarda la pista
+  /// para poder cerrar lo que la propia app acaba de abrir en el navegador — y
+  /// atarla al gate de consentimiento la hacía depender de que un servicio
+  /// remoto respondiera bien: si el gate falla y deja pasar, no quedaba pista, y
+  /// el siguiente login se encontraba la sesión anterior viva.
+  ///
+  /// El `id_token` no autoriza nada contra el gateway y [clear] lo borra, así
+  /// que quien sale no deja nada detrás.
+  Future<void> rememberBrowserSession(final String? idToken) async {
+    if (idToken == null || idToken.isEmpty) {
+      return;
+    }
+    await _storage.write(StorageKeys.idToken, idToken);
+  }
+
+  /// Cierra en Cerbero la sesión de navegador que dejó abierta un login
+  /// anterior, antes de arrancar uno nuevo.
+  ///
+  /// El caso que arregla (JCCMEC-224 / JCCMEC-228): la identificación no vive
+  /// en la app, vive en el navegador —Custom Tab en Android, el almacén de
+  /// `SFSafariViewController` en iOS—, y ahí sobrevive a que el ciudadano mate
+  /// la app. Es justo lo que hace funcionar el SSO con Empleo y Educamos
+  /// (`documentation/sso_portales_externos.md`), pero si quien entra después es
+  /// **otro** ciudadano, Cerbero encuentra la identidad anterior en esa sesión
+  /// y corta con `already authenticated as different user`. Reautenticar no
+  /// basta: Cl@ve identifica bien al nuevo, y el corte llega al volver.
+  ///
+  /// Sólo hay algo que cerrar si el login anterior no terminó en un cierre de
+  /// sesión en regla: [clear] borra el `id_token` (así que tras pulsar «Cerrar
+  /// sesión» esto no hace nada, y no hay pestaña de más), y [persist] escribe
+  /// el nuevo. De ahí que no se borre aquí: si el cierre falla, la pista debe
+  /// seguir estando para el siguiente intento, y cerrar una sesión ya cerrada
+  /// es inocuo.
+  ///
+  /// Nunca propaga ni bloquea: entrar con un posible corte de Cerbero por
+  /// delante es mejor que no poder entrar por un fallo de red.
+  Future<void> endStaleBrowserSession() async {
+    final String? idToken = await _storage.read(StorageKeys.idToken);
+    if (idToken == null || idToken.isEmpty) {
+      return;
+    }
+    try {
+      await _repository.logout(idToken: idToken).timeout(_staleSessionCloseTimeout);
+      logger.i('Closed the browser session left open by a previous login');
+    } on Object catch (error, stackTrace) {
+      logger.w('Could not close the browser session left open by a previous login', error: error, stackTrace: stackTrace);
+    }
+  }
+
   Future<void> _deleteRefreshToken() async {
     try {
       await _storage.clearBiometric();
@@ -370,9 +432,20 @@ final class AuthSessionController {
       // «no activado» signifique de verdad «nada guardado». El almacén
       // protegido no se toca: en Android rozarlo lo inicializa y eso pide
       // huella; de esa entrada se ocupa quien revoca la preferencia.
+      //
+      // La excepción es el `id_token`, y no contradice lo anterior: **no es
+      // una credencial de acceso**. No autoriza nada contra el gateway, sólo
+      // acredita quién fue el titular, y es lo único con lo que se puede
+      // cerrar después la sesión que este login deja abierta en el navegador
+      // (JCCMEC-224 / JCCMEC-228, ver [endStaleBrowserSession]). Sin esto el
+      // arreglo dejaría fuera justo a quien más lo necesita: el ciudadano de
+      // un móvil compartido, que es el que no activa el acceso rápido.
       await Future.wait([
         _storage.delete(StorageKeys.accessToken),
-        _storage.delete(StorageKeys.idToken),
+        if (session.idToken != null)
+          _storage.write(StorageKeys.idToken, session.idToken!)
+        else
+          _storage.delete(StorageKeys.idToken),
         _storage.delete(StorageKeys.sessionExpiresAt),
       ]);
       return false;
