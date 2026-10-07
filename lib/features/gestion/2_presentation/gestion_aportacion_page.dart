@@ -355,11 +355,14 @@ enum _DocType {
     _DocType.cee => l10n.gestionAportacionCeeHint,
   };
 
-  /// Valor enviado al backend en `ptipodoc`/`identificacion.category`. Sin
-  /// enum documentado para NIE/CIF/PASAPORTE/CEE en el swagger — se envía
-  /// el tipo seleccionado tal cual, a petición explícita.
+  /// Valor enviado al backend en `ptipodoc` (búsqueda y detalle del
+  /// expediente del tercero). El backend no conoce `DNI`: lo rechaza con 403
+  /// en `selectbynumreg` y con «numero de DNI incorrecto» en `inicproc`, y
+  /// llama `NIF` al DNI — los mismos literales NIF/NIE/CIF que el flujo
+  /// propio obtiene de `documentTypeOf`. PASAPORTE/CEE no tienen valor
+  /// documentado en el swagger y se envían tal cual, pendientes de backend.
   String get tipodoc => switch (this) {
-    _DocType.dni => 'DNI',
+    _DocType.dni => 'NIF',
     _DocType.nie => 'NIE',
     _DocType.cif => 'CIF',
     _DocType.pasaporte => 'PASAPORTE',
