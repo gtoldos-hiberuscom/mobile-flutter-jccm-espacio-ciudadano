@@ -2308,7 +2308,7 @@
     "description": "Casework upload — status: failed."
   },
   "fileUploadCancel": "Cancel",
-  "fileUploadRemove": "Remove",
+  "fileUploadCompleted": "Completed",
   "fileUploadDelete": "Delete file",
   "fileUploadRetry": "Retry",
   "a11yFileUpload": "File: {fileName}, {fileInfo}. Status: {status}",

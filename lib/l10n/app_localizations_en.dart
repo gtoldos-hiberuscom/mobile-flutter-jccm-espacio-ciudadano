@@ -1751,7 +1751,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fileUploadCancel => 'Cancel';
 
   @override
-  String get fileUploadRemove => 'Remove';
+  String get fileUploadCompleted => 'Completed';
 
   @override
   String get fileUploadDelete => 'Delete file';

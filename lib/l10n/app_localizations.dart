@@ -3458,11 +3458,11 @@ abstract class AppLocalizations {
   /// **'Cancelar'**
   String get fileUploadCancel;
 
-  /// No description provided for @fileUploadRemove.
+  /// No description provided for @fileUploadCompleted.
   ///
   /// In es, this message translates to:
-  /// **'Eliminar'**
-  String get fileUploadRemove;
+  /// **'Completado'**
+  String get fileUploadCompleted;
 
   /// No description provided for @fileUploadDelete.
   ///

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:file_selector/file_selector.dart';
@@ -152,10 +153,14 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                   ),
                   for (final archivo in lote.archivos)
                     Padding(
+                      // La tarjeta guarda estado (el «Completado» pasajero):
+                      // sin clave, al retirar un fichero ese estado pasaría al
+                      // de debajo.
+                      key: ValueKey(archivo.path),
                       padding: const EdgeInsets.only(bottom: AppDimensions.space16),
                       child: _AportacionArchivoCard(
                         archivo: archivo,
-                        // Las tres acciones de retirada son la misma: sacarlo
+                        // Las dos acciones de retirada son la misma: sacarlo
                         // del lote. Cancelar una subida en curso lo retira
                         // igual —dejar la fila en el limbo, seleccionada pero
                         // sin que la cola la vaya a reintentar, bloquearía
@@ -164,7 +169,6 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
                         // buzón.
                         onDelete: lote.puedeEditarLista ? () => _notifier.removeArchivo(archivo.path) : null,
                         onCancel: lote.puedeEditarLista ? () => _notifier.removeArchivo(archivo.path) : null,
-                        onRemove: lote.puedeEditarLista ? () => _notifier.removeArchivo(archivo.path) : null,
                         onRetry: lote.puedeEditarLista ? () => _notifier.reintentarArchivo(archivo.path) : null,
                       ),
                     ),
@@ -364,30 +368,74 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
 /// hash, al pasar a «Subido», que es cuando el fichero se puede eliminar.
 const double _topeProgresoEnvio = 0.9;
 
-class _AportacionArchivoCard extends StatelessWidget {
+/// Cuánto se ve «Completado» antes de pasar a la papelera.
+///
+/// El diseño encadena tres estados por fichero: cargando → completado →
+/// eliminar (JCCMEC-245). Quedarse en «Completado» ocultaba la papelera, y
+/// saltar directo a ella no confirmaba que la subida había terminado.
+@visibleForTesting
+const Duration aportacionDuracionCompletado = Duration(milliseconds: 1500);
+
+class _AportacionArchivoCard extends StatefulWidget {
   const _AportacionArchivoCard({
     required this.archivo,
     required this.onDelete,
     required this.onCancel,
-    required this.onRemove,
     required this.onRetry,
   });
 
   final AportacionArchivo archivo;
   final VoidCallback? onDelete;
   final VoidCallback? onCancel;
-  final VoidCallback? onRemove;
   final VoidCallback? onRetry;
 
   @override
+  State<_AportacionArchivoCard> createState() => _AportacionArchivoCardState();
+}
+
+class _AportacionArchivoCardState extends State<_AportacionArchivoCard> {
+  Timer? _timerCompletado;
+
+  /// Una tarjeta que nace ya subida (p. ej. al reconstruirse la lista) va
+  /// directa a la papelera: el «Completado» solo acompaña a la transición.
+  bool _mostrandoCompletado = false;
+
+  @override
+  void didUpdateWidget(final _AportacionArchivoCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final antes = oldWidget.archivo.estado;
+    final ahora = widget.archivo.estado;
+    if (antes == ahora) {
+      return;
+    }
+    _timerCompletado?.cancel();
+    _mostrandoCompletado = ahora == AportacionArchivoEstado.completado;
+    if (_mostrandoCompletado) {
+      _timerCompletado = Timer(aportacionDuracionCompletado, () {
+        if (mounted) {
+          setState(() => _mostrandoCompletado = false);
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _timerCompletado?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(final BuildContext context) {
+    final archivo = widget.archivo;
     final status = switch (archivo.estado) {
-      // Un fichero sin enviar (recién elegido o tras abortarse el lote) se
-      // anuncia «Seleccionado»: mapearlo a `uploaded` lo anunciaba «Subido»
-      // junto al snackbar rojo de «falta algún fichero por enviar» (AP-7).
+      // Un fichero sin enviar (en cola o esperando a que se abra la
+      // transacción) se pinta cargando, sin papelera, pero se anuncia
+      // «Seleccionado»: anunciarlo «Subido» contradecía el snackbar rojo de
+      // «falta algún fichero por enviar» (AP-7).
       AportacionArchivoEstado.noEnviado => AppFileUploadStatus.pending,
       AportacionArchivoEstado.enviando => AppFileUploadStatus.uploading,
-      AportacionArchivoEstado.completado => AppFileUploadStatus.complete,
+      AportacionArchivoEstado.completado => _mostrandoCompletado ? AppFileUploadStatus.complete : AppFileUploadStatus.uploaded,
       AportacionArchivoEstado.error => AppFileUploadStatus.error,
     };
 
@@ -410,10 +458,9 @@ class _AportacionArchivoCard extends StatelessWidget {
           final progreso? => progreso * _topeProgresoEnvio,
           null => null,
         },
-        onDelete: onDelete,
-        onCancel: onCancel,
-        onRemove: onRemove,
-        onRetry: onRetry,
+        onDelete: widget.onDelete,
+        onCancel: widget.onCancel,
+        onRetry: widget.onRetry,
       ),
     );
   }

@@ -1752,7 +1752,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fileUploadCancel => 'Cancelar';
 
   @override
-  String get fileUploadRemove => 'Eliminar';
+  String get fileUploadCompleted => 'Completado';
 
   @override
   String get fileUploadDelete => 'Eliminar archivo';
