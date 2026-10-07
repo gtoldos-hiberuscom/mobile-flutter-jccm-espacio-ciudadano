@@ -1559,19 +1559,19 @@ abstract class AppLocalizations {
   /// Educación — título del modal de ayuda de títulos universitarios.
   ///
   /// In es, this message translates to:
-  /// **'Sobre tus títulos universitarios'**
+  /// **'Saber más sobre Mis datos de títulos universitarios'**
   String get educationUniversityTitlesInfoTitle;
 
   /// Educación — cuerpo principal del modal de ayuda de títulos universitarios.
   ///
   /// In es, this message translates to:
-  /// **'Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.'**
+  /// **'Consulta la información de tus títulos universitarios inscritos en el Registro Nacional de Titulados Universitarios Oficiales del Ministerio de Ciencia, Innovación y Universidades.\n\nSi obtuviste tu título antes de 1996, es posible que tus datos no estén disponibles automáticamente.'**
   String get educationUniversityTitlesInfoBody;
 
   /// Educación — texto de pie del modal de ayuda de títulos universitarios.
   ///
   /// In es, this message translates to:
-  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Sede Electrónica de Universidades.'**
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con el Ministerio de Ciencia, Innovación y Universidades.'**
   String get educationUniversityTitlesInfoFooter;
 
   /// Educación — botón de contacto en el modal de ayuda de títulos universitarios.
@@ -1583,13 +1583,13 @@ abstract class AppLocalizations {
   /// Educación — título del modal de ayuda de títulos no universitarios.
   ///
   /// In es, this message translates to:
-  /// **'Sobre tus títulos no universitarios'**
+  /// **'Saber más sobre Mis datos de títulos no universitarios'**
   String get educationNonUniversityTitlesInfoTitle;
 
   /// Educación — cuerpo principal del modal de ayuda de títulos no universitarios.
   ///
   /// In es, this message translates to:
-  /// **'Consulta los datos de los títulos no universitarios que figuren en el registro.'**
+  /// **'Consulta la información de tus títulos no universitarios inscritos en el Registro Nacional de Titulados no Universitarios Oficiales del Ministerio de Educación, Formación profesional y Deportes.'**
   String get educationNonUniversityTitlesInfoBody;
 
   /// Educación — texto de pie del modal de ayuda de títulos no universitarios.
@@ -1597,6 +1597,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación, Formación Profesional y Deportes.'**
   String get educationNonUniversityTitlesInfoFooter;
+
+  /// Enlace externo de los paneles informativos de títulos educativos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consultar más información'**
+  String get educationTitlesInfoMoreInformation;
 
   /// Educación — sección títulos no universitarios.
   ///
@@ -1787,19 +1793,19 @@ abstract class AppLocalizations {
   /// Mis datos de Bienestar — título del modal informativo.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Mis datos de Bienestar social'**
+  /// **'Saber más sobre Mis datos de Bienestar social'**
   String get socialWelfareInfoSheetTitle;
 
   /// Mis datos de Bienestar — descripción del modal informativo.
   ///
   /// In es, this message translates to:
-  /// **'Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.'**
+  /// **'Consulta la información de tus expedientes de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.'**
   String get socialWelfareInfoSheetDescription;
 
   /// Mensaje mostrado cuando la consulta de datos JCCM no está autorizada.
   ///
   /// In es, this message translates to:
-  /// **'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.'**
+  /// **'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.'**
   String get myDataJccmAuthorizationRequiredMessage;
 
   /// Mensaje de error cuando la comprobación de autorizaciones no está disponible (fallo de backend), distinto de una autorización no concedida.
@@ -1817,7 +1823,7 @@ abstract class AppLocalizations {
   /// Mensaje mostrado cuando la consulta de datos AGE no está autorizada.
   ///
   /// In es, this message translates to:
-  /// **'Debes autorizar la consulta de los datos que la Administración General del Estado tiene sobre ti desde tus preferencias.'**
+  /// **'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.'**
   String get myDataAgeAuthorizationRequiredMessage;
 
   /// Bienestar — sección familia numerosa.
@@ -1829,7 +1835,7 @@ abstract class AppLocalizations {
   /// Mis datos de Bienestar — descripción de la tarjeta de familia numerosa.
   ///
   /// In es, this message translates to:
-  /// **'Detalles del título y personas beneficiarias'**
+  /// **'Título y personas beneficiarias'**
   String get socialWelfareFamilyNavDescription;
 
   /// Mis datos de Bienestar — título de la tarjeta de discapacidad.
@@ -1841,13 +1847,13 @@ abstract class AppLocalizations {
   /// Mis datos de Bienestar — descripción de la tarjeta de discapacidad.
   ///
   /// In es, this message translates to:
-  /// **'Detalles del título de discapacidad'**
+  /// **'Certificado de discapacidad'**
   String get socialWelfareDisabilityNavDescription;
 
   /// Mis datos de Bienestar — título del panel informativo de discapacidad.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Mi título de discapacidad'**
+  /// **'Saber más sobre Mi título de discapacidad'**
   String get socialWelfareDisabilityInfoSheetTitle;
 
   /// Mis datos de Bienestar — descripción del panel informativo de discapacidad.
@@ -2003,7 +2009,7 @@ abstract class AppLocalizations {
   /// Mis datos de Bienestar — título del panel informativo de termalismo.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Termalismo'**
+  /// **'Saber más sobre Termalismo'**
   String get socialWelfareTermalismoInfoSheetTitle;
 
   /// Mis datos de Bienestar — descripción del panel informativo de termalismo.
@@ -2063,19 +2069,19 @@ abstract class AppLocalizations {
   /// Mis datos de Bienestar — título de la tarjeta de estacionamiento.
   ///
   /// In es, this message translates to:
-  /// **'Tarjeta estacionamiento'**
+  /// **'Tarjeta de estacionamiento'**
   String get socialWelfareParkingNavTitle;
 
   /// Mis datos de Bienestar — descripción de la tarjeta de estacionamiento.
   ///
   /// In es, this message translates to:
-  /// **'Detalles de tu tarjeta de estacionamiento'**
+  /// **'Datos de la tarjeta y condiciones de uso'**
   String get socialWelfareParkingNavDescription;
 
   /// Mis datos de Bienestar — título del panel informativo de tarjeta de estacionamiento.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Mi tarjeta de estacionamiento'**
+  /// **'Saber más sobre Mi tarjeta de estacionamiento'**
   String get socialWelfareParkingInfoSheetTitle;
 
   /// Mis datos de Bienestar — descripción del panel informativo de tarjeta de estacionamiento.
@@ -2147,7 +2153,7 @@ abstract class AppLocalizations {
   /// Mis datos de Bienestar — título del panel informativo de dependencia.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Atención a la dependencia'**
+  /// **'Saber más sobre Atención a la dependencia'**
   String get socialWelfareDependenciaInfoSheetTitle;
 
   /// Mis datos de Bienestar — descripción del panel informativo de dependencia.
@@ -3095,7 +3101,7 @@ abstract class AppLocalizations {
   /// Personalization — clear all selected life events action label.
   ///
   /// In es, this message translates to:
-  /// **'Desmarcar todo'**
+  /// **'Desmarcar todos'**
   String get lifeEventsClearAllAction;
 
   /// Personalization — reset preferences button label.
@@ -4607,7 +4613,7 @@ abstract class AppLocalizations {
   /// Familia numerosa detail — título del panel informativo.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Familia numerosa'**
+  /// **'Saber más sobre Familia numerosa'**
   String get familiaNumerosaInfoSheetTitle;
 
   /// Familia numerosa detail — descripción del panel informativo.
@@ -4727,8 +4733,20 @@ abstract class AppLocalizations {
   /// Familia numerosa detail — helper mostrado cuando no hay datos.
   ///
   /// In es, this message translates to:
-  /// **'No existe el título de familia numerosa indicado.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'No hemos encontrado información sobre tu título de familia numerosa.'**
   String get familiaNumerosaNoDataMessage;
+
+  /// Texto de contacto mostrado cuando no hay datos de familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Si esta información es incorrecta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  String get familiaNumerosaNoDataContactHint;
+
+  /// Enlace externo al listado de contactos de Bienestar Social.
+  ///
+  /// In es, this message translates to:
+  /// **'Consultar el listado de contactos'**
+  String get familiaNumerosaContactListButton;
 
   /// Familia numerosa detail — helper bajo los datos.
   ///
@@ -4741,6 +4759,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Contacto'**
   String get familiaNumerosaOfficeContactsButton;
+
+  /// Enlace externo del panel informativo de familia numerosa.
+  ///
+  /// In es, this message translates to:
+  /// **'Consultar más información'**
+  String get familiaNumerosaMoreInformation;
 
   /// Familia numerosa detail page — printed carnet number row.
   ///
@@ -4931,8 +4955,26 @@ abstract class AppLocalizations {
   /// No description provided for @myDataEmploymentOffersNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.'**
+  /// **'Aún no te has inscrito a ninguna oferta.\n\nSi la información es incorrecta o no está actualizada, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.'**
   String get myDataEmploymentOffersNoDataMessage;
+
+  /// Mensaje mostrado cuando falta autorización para consultar las inscripciones en ofertas de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Autoriza el uso de tus datos desde tus preferencias para consultar tus inscripciones en ofertas de empleo.'**
+  String get myDataEmploymentOffersAuthorizationRequiredMessage;
+
+  /// Mensaje mostrado cuando falta autorización para consultar la demanda de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Autoriza el uso de tus datos desde tus preferencias para consultar el estado de tu demanda de empleo.'**
+  String get myDataEmploymentDemandAuthorizationRequiredMessage;
+
+  /// Mensaje mostrado cuando falta autorización para consultar las citas de Atención Primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Autoriza el uso de tus datos desde tus preferencias para consultar tus citas de Atención Primaria.'**
+  String get myDataHealthAppointmentsAuthorizationRequiredMessage;
 
   /// No description provided for @discapacidadServiceUnavailableMessage.
   ///
@@ -5375,13 +5417,13 @@ abstract class AppLocalizations {
   /// Recommendations — generic error message when the list cannot be loaded.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido cargar las recomendaciones.'**
+  /// **'No hemos podido cargar la información de tus recomendaciones. Vuelve a intentarlo más tarde.'**
   String get recommendationsLoadingError;
 
   /// Recommendations — retry button label in the error state.
   ///
   /// In es, this message translates to:
-  /// **'Reintentar'**
+  /// **'Actualizar'**
   String get recommendationsLoadingErrorRetry;
 
   /// Recommendations — SnackBar shown when a card has no detail URI or the URL launcher fails.
@@ -5603,7 +5645,7 @@ abstract class AppLocalizations {
   /// No description provided for @a11yBottomSheetClose.
   ///
   /// In es, this message translates to:
-  /// **'Salir'**
+  /// **'Cerrar'**
   String get a11yBottomSheetClose;
 
   /// No description provided for @a11yCalendar.
@@ -5672,6 +5714,18 @@ abstract class AppLocalizations {
   /// **'No hemos podido borrar tus preferencias. Inténtalo de nuevo.'**
   String get preferencesResetError;
 
+  /// Mensaje mostrado cuando no se puede cargar la pantalla de preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'No hemos podido cargar tus preferencias. Vuelve a intentarlo más tarde.'**
+  String get preferencesLoadError;
+
+  /// Acción para volver a cargar la pantalla de preferencias.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get preferencesLoadRetry;
+
   /// Etiqueta del ítem de Preferencias en el menú desplegable del perfil.
   ///
   /// In es, this message translates to:
@@ -5717,7 +5771,7 @@ abstract class AppLocalizations {
   /// Texto introductorio de la pantalla Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.'**
+  /// **'Consulta tu información disponible en la Administración y accede a los servicios relacionados.'**
   String get myDataIntro;
 
   /// Título mostrado al abrir una sección no disponible con certificado de representante.
@@ -5741,7 +5795,7 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de Salud en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'SESCAM y servicios de salud'**
+  /// **'Datos sanitarios y gestión de citas médicas'**
   String get myDataHealthDescription;
 
   /// Título de la tarjeta de Bienestar Social en la pantalla Mis datos.
@@ -5753,7 +5807,7 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de Bienestar Social en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Servicios disponibles'**
+  /// **'Familia numerosa, discapacidad, dependencia y otras ayudas'**
   String get myDataSocialWelfareDescription;
 
   /// Título de la tarjeta de Empleo en la pantalla Mis datos.
@@ -5765,31 +5819,31 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de Empleo en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Demanda y servicios de empleo'**
+  /// **'Demanda de empleo, ofertas e inscripciones'**
   String get myDataEmploymentDescription;
 
   /// Título del modal informativo de Mis datos de Empleo.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Mis datos de Empleo'**
+  /// **'Saber más sobre Demanda de Empleo'**
   String get myDataEmploymentInfoSheetTitle;
 
   /// Descripción principal del modal informativo de Mis datos de Empleo.
   ///
   /// In es, this message translates to:
-  /// **'Consulta tu situación actual como demandante de empleo y tus últimas inscripciones en ofertas.'**
+  /// **'Consulta tu situación actual como demandante de empleo.'**
   String get myDataEmploymentInfoSheetDescription;
 
   /// Texto de contacto del modal informativo de Mis datos de Empleo.
   ///
   /// In es, this message translates to:
-  /// **'Si tus datos como demandante de empleo no son correctos, contacta con Servicio Público de Empleo Estatal (SEPE).'**
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con Servicio Público de Empleo Estatal (SEPE).'**
   String get myDataEmploymentInfoSheetFooter;
 
   /// Botón externo hacia oficinas y contactos en el modal informativo de Mis datos de Empleo.
   ///
   /// In es, this message translates to:
-  /// **'Contacto'**
+  /// **'Consultar más información'**
   String get myDataEmploymentInfoSheetOfficeContactsButton;
 
   /// Primera pestaña del detalle de Empleo.
@@ -5855,7 +5909,7 @@ abstract class AppLocalizations {
   /// Mensaje del helper contextual mostrado cuando el servicio de inscripciones en ofertas no está disponible.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de inscripciones en ofertas actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No hemos podido cargar tus inscripciones en ofertas de empleo. Vuelve a intentarlo más tarde.'**
   String get myDataEmploymentOffersServiceUnavailableMessage;
 
   /// Título del diálogo mostrado cuando faltan autorizaciones para ver inscripciones en ofertas.
@@ -5891,7 +5945,7 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de inscripciones en ofertas.
   ///
   /// In es, this message translates to:
-  /// **'Ofertas de empleo en las que te has inscrito'**
+  /// **'Historial de las ofertas de empleo solicitadas'**
   String get myDataEmploymentOffersDescription;
 
   /// Título de la pantalla de inscripciones en ofertas de empleo.
@@ -5906,16 +5960,22 @@ abstract class AppLocalizations {
   /// **'Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha'**
   String get myDataEmploymentOffersPortalLink;
 
+  /// Título del panel informativo de inscripciones en ofertas de empleo.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Inscripción en ofertas de empleo'**
+  String get myDataEmploymentOffersInfoSheetTitle;
+
   /// Texto de pie del modal informativo de la pantalla de inscripciones en ofertas.
   ///
   /// In es, this message translates to:
-  /// **'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.'**
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.'**
   String get myDataEmploymentOffersInfoSheetFooter;
 
   /// Descripción del modal informativo de la pantalla de inscripciones en ofertas.
   ///
   /// In es, this message translates to:
-  /// **'Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.'**
+  /// **'Consulta tus últimas inscripciones en ofertas de empleo.'**
   String get myDataEmploymentOffersInfoSheetDescription;
 
   /// Mensaje mostrado cuando no hay inscripciones en ofertas.
@@ -6005,7 +6065,7 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de Educación en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Titulos formativos'**
+  /// **'Títulos universitarios y no universitarios'**
   String get myDataEducationDescription;
 
   /// Título de la tarjeta de Vivienda en la pantalla Mis datos.
@@ -6017,7 +6077,7 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de Vivienda en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Titularidad de bienes inmueble'**
+  /// **'Datos catastrales y titularidad de inmuebles'**
   String get myDataHousingDescription;
 
   /// Título del modal informativo de Mis datos de Vivienda.
@@ -6053,25 +6113,25 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de bienes inmuebles en el detalle de Vivienda.
   ///
   /// In es, this message translates to:
-  /// **'Datos catastrales de mis inmuebles'**
+  /// **'Datos catastrales de la propiedad'**
   String get myDataHousingRealEstateDescription;
 
   /// Título del modal informativo de bienes inmuebles.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Bienes Inmuebles'**
+  /// **'Saber más sobre Bienes Inmuebles'**
   String get myDataHousingRealEstateInfoSheetTitle;
 
   /// Descripción principal del modal informativo de bienes inmuebles.
   ///
   /// In es, this message translates to:
-  /// **'Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.'**
+  /// **'Consulta la información catastral de los inmuebles que tienes registrados a tu nombre en el Catastro.'**
   String get myDataHousingRealEstateInfoSheetDescription;
 
   /// Pie del modal informativo de bienes inmuebles.
   ///
   /// In es, this message translates to:
-  /// **'Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro'**
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Sede Electrónica del Catastro.'**
   String get myDataHousingRealEstateInfoSheetFooter;
 
   /// Etiqueta del filtro de todos los bienes inmuebles.
@@ -6203,25 +6263,25 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de domicilio en el detalle de Vivienda.
   ///
   /// In es, this message translates to:
-  /// **'Datos en la base padronal'**
+  /// **'Datos padronales'**
   String get myDataHousingAddressDescription;
 
   /// Título del modal informativo del detalle de domicilio.
   ///
   /// In es, this message translates to:
-  /// **'Sobre tu domicilio'**
+  /// **'Saber más sobre Domicilio en Castilla-La Mancha'**
   String get myDataHousingAddressInfoSheetTitle;
 
   /// Descripción principal del modal informativo del detalle de domicilio.
   ///
   /// In es, this message translates to:
-  /// **'Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.'**
+  /// **'Consulta los datos de tu empadronamiento registrados en el Instituto Nacional de Estadística (INE). Esta información procede de los padrones municipales de Castilla-La Mancha y se actualiza cada mes con los datos que envían los ayuntamientos.\n\nSi has cambiado recientemente tu empadronamiento, es posible que esta información todavía no esté actualizada.'**
   String get myDataHousingAddressInfoSheetDescription;
 
   /// Pie del modal informativo del detalle de domicilio.
   ///
   /// In es, this message translates to:
-  /// **'Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.'**
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con el Ayuntamiento correspondiente.'**
   String get myDataHousingAddressInfoSheetFooter;
 
   /// Título de la sección de datos del domicilio.
@@ -6311,13 +6371,13 @@ abstract class AppLocalizations {
   /// Enlace al portal de Vivienda Castilla-La Mancha.
   ///
   /// In es, this message translates to:
-  /// **'Vivienda Castilla-La Mancha'**
+  /// **'Portal de Vivienda de Castilla-La Mancha'**
   String get myDataHousingLinkClmHousing;
 
   /// Enlace a la Sede del Catastro.
   ///
   /// In es, this message translates to:
-  /// **'Sede del catastro'**
+  /// **'Sede Electrónica del Catastro'**
   String get myDataHousingLinkCadastre;
 
   /// Título de la sección de trámites relacionados con vivienda.
@@ -6335,7 +6395,7 @@ abstract class AppLocalizations {
   /// Trámite de inscripción en el registro de demandantes de vivienda con protección pública de CLM.
   ///
   /// In es, this message translates to:
-  /// **'Inscripción en el registro de demandantes de vivienda con protección pública de CLM'**
+  /// **'Inscripción en el Registro de Demandantes de Vivienda'**
   String get myDataHousingProcedureProtectedHousingRegister;
 
   /// Trámite de ayudas de emergencia social.
@@ -6353,31 +6413,31 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de Vehículos en la pantalla Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Tus vehículos registrados'**
+  /// **'Matriculación y titularidad de vehículos registrados'**
   String get myDataVehiclesDescription;
 
   /// Título del modal informativo de Mis datos de Vehículos.
   ///
   /// In es, this message translates to:
-  /// **'Sobre Mis datos de Vehículos'**
+  /// **'Saber más sobre Vehículos'**
   String get myDataVehiclesInfoSheetTitle;
 
   /// Descripción principal del modal informativo de Mis datos de Vehículos.
   ///
   /// In es, this message translates to:
-  /// **'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.'**
+  /// **'Consulta la información de los vehículos que tienes registrados a tu nombre en la Dirección General de Tráfico (DGT).'**
   String get myDataVehiclesInfoSheetDescription;
 
   /// Texto del pie de página del modal informativo de Mis datos de Vehículos.
   ///
   /// In es, this message translates to:
-  /// **'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)'**
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Dirección General de Tráfico (DGT).'**
   String get myDataVehiclesInfoSheetFooter;
 
   /// Etiqueta del botón de contacto en el modal informativo de Mis datos de Vehículos.
   ///
   /// In es, this message translates to:
-  /// **'Contacto'**
+  /// **'Consultar más información'**
   String get myDataVehiclesInfoSheetContactButton;
 
   /// Primera pestaña del detalle de Vehículos.
@@ -6518,6 +6578,12 @@ abstract class AppLocalizations {
   /// **'Universidades públicas y privadas'**
   String get myDataEducationTitlesDescription;
 
+  /// Descripción de la tarjeta de títulos no universitarios en Mis datos de Educación.
+  ///
+  /// In es, this message translates to:
+  /// **'Formación profesional y otras titulaciones'**
+  String get myDataEducationNonUniversityTitlesDescription;
+
   /// Estado vacío temporal de la pestaña Información y servicios de Educación.
   ///
   /// In es, this message translates to:
@@ -6590,6 +6656,12 @@ abstract class AppLocalizations {
   /// **'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.'**
   String get myDataHealthInfoSheetContactHint;
 
+  /// Enlace externo del modal informativo de Salud hacia la web del SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Consultar más información'**
+  String get myDataHealthInfoSheetMoreInformation;
+
   /// Primera pestaña del detalle de Salud.
   ///
   /// In es, this message translates to:
@@ -6644,10 +6716,10 @@ abstract class AppLocalizations {
   /// **'Mi Salud Digital'**
   String get myDataHealthLinkDigitalHealth;
 
-  /// Enlace a Historia clínica Digital del Sistema Nacional de Salud.
+  /// Enlace a Historia clínica del Sistema Nacional de Salud (HCDSNS)
   ///
   /// In es, this message translates to:
-  /// **'Historia clínica Digital (Sistema Nacional de Salud)'**
+  /// **'Historia clínica del Sistema Nacional de Salud (HCDSNS)'**
   String get myDataHealthLinkClinicalHistory;
 
   /// Título principal del bloque de citas sanitarias.
@@ -6655,6 +6727,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Citas de Atención Primaria'**
   String get myDataHealthAppointmentsTitle;
+
+  /// Código de identificación personal mostrado encima de las citas de Atención Primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Código de Identificación Personal (CIP): {cip}'**
+  String myDataHealthCipLabel(String cip);
 
   /// Estado vacío del listado de citas sanitarias.
   ///
@@ -6773,7 +6851,7 @@ abstract class AppLocalizations {
   /// Descripción de la tarjeta de navegación a Mis expedientes.
   ///
   /// In es, this message translates to:
-  /// **'Consulta y gestiona tus expedientes administrativos'**
+  /// **'Consulta la información y el estado de los expedientes que has iniciado con la Junta de Comunidades de Castilla-La Mancha (JCCM).'**
   String get gestionExpedientesDescription;
 
   /// Título de la tarjeta de navegación a Mis registros.
@@ -6911,8 +6989,20 @@ abstract class AppLocalizations {
   /// Aviso persistente con las condiciones de subida de ficheros.
   ///
   /// In es, this message translates to:
-  /// **'Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.'**
+  /// **'Puedes adjuntar hasta 5 archivos de un máximo de 20 MB cada uno. Se admiten archivos en formato PDF, DOC, DOCX, ZIP, XLS y XLSX.'**
   String get gestionAportarDocumentacionHelperText;
+
+  /// Título de la hoja de información de aportar documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Aportar documentación'**
+  String get gestionAportarDocumentacionInfoTitle;
+
+  /// Texto de la hoja de información de aportar documentación.
+  ///
+  /// In es, this message translates to:
+  /// **'Los documentos aportados solo estarán disponibles para su consulta por la Administración y no podrán consultarse desde el expediente.'**
+  String get gestionAportarDocumentacionInfoBody;
 
   /// Botón para cancelar la aportación de documentación.
   ///
@@ -6929,7 +7019,7 @@ abstract class AppLocalizations {
   /// Botón para registrar los documentos aportados.
   ///
   /// In es, this message translates to:
-  /// **'Registrar documentos aportados'**
+  /// **'Enviar documentos'**
   String get gestionAportarDocumentacionRegistrarButton;
 
   /// Error al superar el número máximo de ficheros permitidos.
@@ -6989,13 +7079,13 @@ abstract class AppLocalizations {
   /// Título del diálogo de éxito al completar la aportación de documentación.
   ///
   /// In es, this message translates to:
-  /// **'Los documentos han sido enviados correctamente'**
+  /// **'Documentos enviados. Descarga el justificante de la aportación.'**
   String get gestionAportarDocumentacionExitoTitulo;
 
   /// Descripción del diálogo de éxito al completar la aportación de documentación.
   ///
   /// In es, this message translates to:
-  /// **'La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante'**
+  /// **'Has enviado la documentación correctamente y la aportación ha quedado registrada.\n\nDescarga el justificante ahora para conservar una copia de la aportación. Después, no podrás volver a descargarlo.'**
   String get gestionAportarDocumentacionExitoDescripcion;
 
   /// Botón secundario del diálogo de éxito de aportación de documentación.
@@ -7136,6 +7226,30 @@ abstract class AppLocalizations {
   /// **'Tipo de identificación y número'**
   String get gestionAportacionTipoIdLabel;
 
+  /// Label del selector y número de identificación de la persona interesada.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de identificación'**
+  String get gestionAportacionTipoIdShortLabel;
+
+  /// Label del selector del identificador del expediente.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de identificación'**
+  String get gestionAportacionExpedienteIdentifierTypeLabel;
+
+  /// Opción para identificar el expediente por su número de registro.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de registro'**
+  String get gestionAportacionRegistroOption;
+
+  /// Opción para identificar el expediente por su código identificador.
+  ///
+  /// In es, this message translates to:
+  /// **'Número de expediente'**
+  String get gestionAportacionCodigoOption;
+
   /// Placeholder del campo de número de identificación en la pantalla de aportación.
   ///
   /// In es, this message translates to:
@@ -7145,25 +7259,25 @@ abstract class AppLocalizations {
   /// Texto de ayuda del campo de tipo de identificación.
   ///
   /// In es, this message translates to:
-  /// **'El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos'**
+  /// **'El número de identificación debe ser el que figura en el expediente.'**
   String get gestionAportacionTipoIdHelper;
 
   /// Texto introductorio de la pantalla de aportación de documentos.
   ///
   /// In es, this message translates to:
-  /// **'Consulta el expediente sobre el que quieres aportar documentación'**
+  /// **'Para aportar documentos, primero tienes que identificar el expediente al que quieres asociarlos e introducir los siguientes datos:'**
   String get gestionAportacionIntroText;
 
   /// Etiqueta de sección para identificar a la persona interesada.
   ///
   /// In es, this message translates to:
-  /// **'IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE'**
+  /// **'DATOS DE LA PERSONA INTERESADA'**
   String get gestionAportacionPersonaLabel;
 
   /// Etiqueta de sección para indicar el expediente.
   ///
   /// In es, this message translates to:
-  /// **'INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN'**
+  /// **'DATOS DEL EXPEDIENTE'**
   String get gestionAportacionExpedienteLabel;
 
   /// Nota informativa de los campos del expediente.
@@ -7181,13 +7295,13 @@ abstract class AppLocalizations {
   /// Placeholder del campo número de registro del expediente.
   ///
   /// In es, this message translates to:
-  /// **'Introduce el número de registro'**
+  /// **'Número de registro'**
   String get gestionAportacionNumRegistroHint;
 
   /// Texto de ayuda del campo número de registro.
   ///
   /// In es, this message translates to:
-  /// **'Este número se obtiene en el momento de la presentación del expediente'**
+  /// **'Este número lo encontrarás en el justificante de presentación de la solicitud.'**
   String get gestionAportacionNumRegistroHelper;
 
   /// Label del campo código identificador del expediente.
@@ -7199,7 +7313,7 @@ abstract class AppLocalizations {
   /// Placeholder del campo código identificador del expediente.
   ///
   /// In es, this message translates to:
-  /// **'Introduce el código identificador'**
+  /// **'Número de expediente'**
   String get gestionAportacionCodIdentificadorHint;
 
   /// Texto de ayuda del campo código identificador.
@@ -7211,13 +7325,13 @@ abstract class AppLocalizations {
   /// Encabezado del bottom sheet informativo de aportación.
   ///
   /// In es, this message translates to:
-  /// **'Aportar documentos a un expediente'**
+  /// **'Saber más sobre Aportar documentos a un expediente'**
   String get gestionAportacionInfoHeading;
 
   /// Cuerpo del bottom sheet informativo de aportación.
   ///
   /// In es, this message translates to:
-  /// **'Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:'**
+  /// **'Puedes aportar documentos a un expediente solo si eres una persona autorizada, y siempre que el procedimiento esté en curso y todavía no se haya dictado la resolución final. Para aportar documentos a uno de tus expedientes accede a Mis expedientes.'**
   String get gestionAportacionInfoBody;
 
   /// Primera viñeta del bottom sheet informativo de aportación.
@@ -7247,7 +7361,7 @@ abstract class AppLocalizations {
   /// Opción DNI en el selector de tipo de documento.
   ///
   /// In es, this message translates to:
-  /// **'DNI'**
+  /// **'DNI/NIE'**
   String get gestionAportacionDni;
 
   /// Opción NIE en el selector de tipo de documento.
@@ -7277,7 +7391,7 @@ abstract class AppLocalizations {
   /// Texto del botón principal del formulario de aportación.
   ///
   /// In es, this message translates to:
-  /// **'Encontrar expediente'**
+  /// **'Buscar Expediente'**
   String get gestionAportacionFindButton;
 
   /// Error de validación cuando el número de documento está vacío.
@@ -7301,19 +7415,19 @@ abstract class AppLocalizations {
   /// Texto del helper contextual bajo la card desactivada de notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.'**
+  /// **'Indica tus datos de contacto para activar los avisos y recibirlos cuando tengas una nueva notificación.'**
   String get gestionNotificacionesContextualMessage;
 
   /// Etiqueta del botón ghost del helper contextual de notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'Activar'**
+  /// **'Indicar datos y activar avisos'**
   String get gestionNotificacionesContextualAction;
 
   /// Título del NavBar de la pantalla de activación de notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'Activar notificaciones'**
+  /// **'Mis notificaciones'**
   String get gestionNotificacionesAltaTitle;
 
   /// Texto introductorio de la pantalla de activación de notificaciones.
@@ -7325,7 +7439,7 @@ abstract class AppLocalizations {
   /// Nota de campo obligatorio en la pantalla de activación de notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'*Obligatorio rellenar al menos uno de los medios de contacto'**
+  /// **'Es obligatorio completar al menos uno de los campos marcados con (*)'**
   String get gestionNotificacionesAltaRequiredNote;
 
   /// Etiqueta del campo de teléfono en la pantalla de activación.
@@ -7337,13 +7451,13 @@ abstract class AppLocalizations {
   /// Placeholder del campo de teléfono en la pantalla de activación.
   ///
   /// In es, this message translates to:
-  /// **'600 000 000'**
+  /// **'Ejemplo: 000 000 000'**
   String get gestionNotificacionesAltaPhoneHint;
 
   /// Texto de ayuda bajo el campo de teléfono en la pantalla de activación.
   ///
   /// In es, this message translates to:
-  /// **'Para recibir las notificaciones en mensaje SMS'**
+  /// **'Recibe notificaciones por SMS en tu teléfono móvil.'**
   String get gestionNotificacionesAltaPhoneHelper;
 
   /// Etiqueta del campo de email en la pantalla de activación.
@@ -7367,7 +7481,7 @@ abstract class AppLocalizations {
   /// Etiqueta del botón principal sticky de la pantalla de activación.
   ///
   /// In es, this message translates to:
-  /// **'Dar de alta notificaciones'**
+  /// **'Activar'**
   String get gestionNotificacionesAltaSaveButton;
 
   /// Título del bottom sheet informativo de la pantalla de activación.
@@ -7589,7 +7703,7 @@ abstract class AppLocalizations {
   /// Estado activado de una tarjeta de preferencias.
   ///
   /// In es, this message translates to:
-  /// **'Activado'**
+  /// **'Activo'**
   String get appPreferenceStatusEnabled;
 
   /// Etiqueta de la tarjeta de preferencia cuando no se ha podido consultar su estado. No afirma nada sobre la configuración del ciudadano.
@@ -7967,7 +8081,7 @@ abstract class AppLocalizations {
   /// Recomendaciones — título de la pantalla de filtros por hecho vital.
   ///
   /// In es, this message translates to:
-  /// **'Filtrar recomendaciones por hecho'**
+  /// **'Filtrar por hechos vitales'**
   String get recommendationsFilterPageTitle;
 
   /// Recomendaciones — aviso informativo de la pantalla de filtros por hecho vital.
@@ -7979,7 +8093,7 @@ abstract class AppLocalizations {
   /// Recomendaciones — texto introductorio de la pantalla de filtros por hecho vital.
   ///
   /// In es, this message translates to:
-  /// **'Puede filtrar las recomendaciones según los hechos vitales que haya configurado en sus preferencias, para recibir información personalizada y ajustada a su situación.'**
+  /// **'Selecciona los hechos vitales que quieras utilizar para filtrar las recomendaciones. Puedes ampliar el listado y añadir nuevos hechos vitales desde tus preferencias.'**
   String get recommendationsFilterIntro;
 
   /// Recomendaciones — botón que abre el filtro por hechos vitales.
@@ -7997,25 +8111,25 @@ abstract class AppLocalizations {
   /// Recomendaciones — aviso cuando no hay recomendaciones que coincidan con las preferencias.
   ///
   /// In es, this message translates to:
-  /// **'Actualmente no hay recomendaciones disponibles que se ajusten a tus preferencias. Ajusta tus hechos vitales para explorar más opciones o espera a nuevas actualizaciones.'**
+  /// **'Actualmente no hay recomendaciones para ti. Puedes modificar la selección actual de tus hechos vitales desde las preferencias o esperar a recibir nuevas actualizaciones.'**
   String get recommendationsEmptyNoMatches;
 
   /// Recomendaciones — botón para editar los hechos vitales desde el estado vacío.
   ///
   /// In es, this message translates to:
-  /// **'Editar preferencias - hechos vitales'**
+  /// **'Ir a Preferencias'**
   String get recommendationsEditLifeEventsCta;
 
   /// Recomendaciones — aviso cuando el filtro aplicado no devuelve resultados.
   ///
   /// In es, this message translates to:
-  /// **'No hay recomendaciones para el filtro realizado.'**
+  /// **'Actualmente no hay recomendaciones para los filtros seleccionados. Puedes modificar la selección de filtros o esperar a recibir nuevas actualizaciones.'**
   String get recommendationsEmptyFiltered;
 
   /// Recomendaciones — botón para restablecer el filtro por hechos vitales.
   ///
   /// In es, this message translates to:
-  /// **'Resetear filtro'**
+  /// **'Reiniciar filtro'**
   String get recommendationsResetFilterCta;
 
   /// Recomendaciones — plazo de presentación con solo fecha de inicio.
@@ -8561,7 +8675,7 @@ abstract class AppLocalizations {
   /// Ayuda y contacto — botón que abre el formulario de soporte.
   ///
   /// In es, this message translates to:
-  /// **'Formulario de Soporte'**
+  /// **'Completar formulario de soporte'**
   String get helpContactSupportFormButton;
 
   /// FAQ — pregunta sobre qué es el Espacio Ciudadano.
@@ -8639,7 +8753,7 @@ abstract class AppLocalizations {
   /// Título del AppBar del formulario de soporte.
   ///
   /// In es, this message translates to:
-  /// **'Formulario soporte'**
+  /// **'Formulario de soporte'**
   String get supportFormPageTitle;
 
   /// Formulario de soporte — botón cancelar.
@@ -8675,7 +8789,7 @@ abstract class AppLocalizations {
   /// Formulario de soporte — hint de los campos de correo electrónico.
   ///
   /// In es, this message translates to:
-  /// **'Ejemplo: maríapérez@correo.es'**
+  /// **'Ejemplo: mperez@correo.es'**
   String get supportFieldEmailHint;
 
   /// Formulario de soporte — etiqueta del campo de confirmación de correo.
@@ -8687,7 +8801,7 @@ abstract class AppLocalizations {
   /// Formulario de soporte — hint del campo de asunto.
   ///
   /// In es, this message translates to:
-  /// **'Ejemplo: Consulta sobre una notificación'**
+  /// **'Escribe el motivo de la consulta'**
   String get supportFieldSubjectHint;
 
   /// Formulario de soporte — texto de ayuda bajo el campo de asunto.
@@ -8701,6 +8815,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Mensaje'**
   String get supportFieldMessage;
+
+  /// Formulario de soporte — hint del campo de mensaje.
+  ///
+  /// In es, this message translates to:
+  /// **'Describe los detalles de la consulta'**
+  String get supportFieldMessageHint;
 
   /// Formulario de soporte — etiqueta de la sección de adjuntos.
   ///
@@ -9326,10 +9446,10 @@ abstract class AppLocalizations {
   /// **'Reducir el Tamaño del Texto: CTRL -'**
   String get accessibilityOptionalItemDecreaseText;
 
-  /// Aviso legal — encabezado H1 de la página (el texto original incluye "(...)").
+  /// Aviso legal — encabezado H1 de la página.
   ///
   /// In es, this message translates to:
-  /// **'Aviso legal (...)'**
+  /// **'Aviso legal'**
   String get legalNoticeHeading;
 
   /// Error al enviar el formulario de soporte sin permisos (401/403).

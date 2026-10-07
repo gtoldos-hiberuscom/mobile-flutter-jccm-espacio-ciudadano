@@ -86,6 +86,18 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
     super.dispose();
   }
 
+  void _showInfoSheet(final BuildContext context, final AppLocalizations l10n) {
+    // ignore: discarded_futures
+    AppBottomSheet.show<void>(
+      context: context,
+      title: l10n.gestionAportarDocumentacionInfoTitle,
+      body: Text(
+        l10n.gestionAportarDocumentacionInfoBody,
+        style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+      ),
+    );
+  }
+
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -115,6 +127,13 @@ class _GestionAportarDocumentacionPageState extends ConsumerState<GestionAportar
         type: AppNavBarType.detail,
         title: l10n.gestionAportarDocumentacionTitle,
         onBack: volverAlExpediente,
+        actions: [
+          IconButton(
+            icon: const Icon(AppIcons.info),
+            tooltip: l10n.gestionMasInformacionTooltip,
+            onPressed: () => _showInfoSheet(context, l10n),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -385,7 +404,7 @@ class _AportacionArchivoCard extends StatelessWidget {
       ),
       child: AppFileUpload(
         fileName: archivo.nombre,
-        fileInfo: _formatFileInfo(archivo.tamanioBytes),
+        fileInfo: _formatFileInfo(archivo),
         status: status,
         progress: switch (archivo.progreso) {
           final progreso? => progreso * _topeProgresoEnvio,
@@ -402,7 +421,15 @@ class _AportacionArchivoCard extends StatelessWidget {
   /// Unidades decimales, como iOS en Archivos y como el límite
   /// `maxTamanioBytesAportacion`: el tamaño de la tarjeta tiene que coincidir
   /// con el que el ciudadano vio al elegir el fichero.
-  String _formatFileInfo(final int bytes) {
+  String _formatFileInfo(final AportacionArchivo archivo) {
+    final bytes = archivo.tamanioBytes;
+    final extensionIndex = archivo.nombre.lastIndexOf('.');
+    final format = extensionIndex > 0 && extensionIndex < archivo.nombre.length - 1 ? archivo.nombre.substring(extensionIndex + 1).toUpperCase() : null;
+    final size = _formatFileSize(bytes);
+    return format == null ? size : '$format, $size';
+  }
+
+  String _formatFileSize(final int bytes) {
     if (bytes < 1000) {
       return '$bytes B';
     }

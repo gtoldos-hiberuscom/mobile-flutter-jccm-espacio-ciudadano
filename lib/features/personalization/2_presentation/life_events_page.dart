@@ -103,6 +103,8 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         appBar: AppNavBar(
           type: AppNavBarType.level2,
           title: l10n.lifeEventsTitle,
+          backgroundColor: AppColors.backgroundBlueLighter,
+          bottomBorderColor: AppColors.borderBlueMutedLighter,
           onBack: () {
             if (context.canPop()) {
               context.pop();
@@ -115,7 +117,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ── Intro heading + description ─────────────────────────────────
-            if (!widget.isOnboarding) _IntroSection(l10n: l10n),
+            if (!widget.isOnboarding && !isPreferencesEditing) _IntroSection(l10n: l10n),
 
             // ── Body content ────────────────────────────────────────────────
             Expanded(
@@ -126,6 +128,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
                 isResetting,
                 notifier,
                 isOnboarding: widget.isOnboarding,
+                showPersonalizedRecommendations: widget.isOnboarding || isPreferencesEditing,
               ),
             ),
 
@@ -141,12 +144,12 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
               )
             else
               AppStickyBar(
-                type: AppStickyBarType.dicotomy,
-                secondaryLabel: isPreferencesEditing ? 'Limpiar' : l10n.lifeEventsResetCancel,
-                onSecondary: isPreferencesEditing ? notifier.clearSelection : notifier.requestReset,
+                type: isPreferencesEditing ? AppStickyBarType.vertical : AppStickyBarType.dicotomy,
+                secondaryLabel: isPreferencesEditing ? l10n.lifeEventsClearAllAction : l10n.lifeEventsResetCancel,
+                onSecondary: isPreferencesEditing && hasSelection ? notifier.clearSelection : (!isPreferencesEditing ? notifier.requestReset : null),
                 secondaryHierarchy: AppButtonHierarchy.tertiary,
-                secondaryLeadingIcon: Icons.highlight_off,
-                primaryLabel: l10n.lifeEventsSaveAction,
+                secondaryLeadingIcon: isPreferencesEditing ? Icons.sync : Icons.highlight_off,
+                primaryLabel: isPreferencesEditing ? l10n.lifeEventsAcceptAction : l10n.lifeEventsSaveAction,
                 onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
                 isPrimaryLoading: isSaving,
                 primaryLeadingIcon: Icons.check,
@@ -255,6 +258,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     final bool isResetting,
     final LifeEventsNotifier notifier, {
     required final bool isOnboarding,
+    required final bool showPersonalizedRecommendations,
   }) {
     final status = lifeState.status;
 
@@ -280,13 +284,13 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
       // Figma node 41779:22467 — content area px:16 py:24 (top handled by IntroSection)
       padding: appPagePadding(
         context,
-        top: isOnboarding ? AppDimensions.space16 : 0,
+        top: showPersonalizedRecommendations ? AppDimensions.space16 : 0,
         bottom: AppDimensions.space24,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (isOnboarding) ...[
+          if (showPersonalizedRecommendations) ...[
             _OnboardingIntro(l10n: l10n),
             const SizedBox(height: AppDimensions.space16),
           ],

@@ -60,9 +60,10 @@ class _MyDataHousingRealEstatePageState extends ConsumerState<MyDataHousingRealE
       // El contacto de estos datos es el Catastro, que es de quien vienen.
       // Estaba solo en el estado vacío, así que quien sí tiene inmuebles no
       // tenía a dónde acudir.
-      actionLabel: l10n.myDataNoDataContact,
+      actionLabel: l10n.familiaNumerosaMoreInformation,
       onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(_catastroUrl)),
       actionIcon: AppIcons.openInNew,
+      actionIsExternalLink: true,
     );
   }
 }

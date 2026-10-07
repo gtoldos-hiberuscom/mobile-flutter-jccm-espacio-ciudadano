@@ -59,6 +59,10 @@ class AppInfoSheet {
     final String? actionLabel,
     final VoidCallback? onActionPressed,
     final IconData? actionIcon,
+    final AppButtonHierarchy actionHierarchy = AppButtonHierarchy.ghost,
+    final bool actionIsExpanded = false,
+    final bool actionIsExternalLink = false,
+    final AlignmentGeometry actionAlignment = Alignment.center,
     final String? semanticsLabel,
     final String? closeLabel,
   }) async {
@@ -90,6 +94,10 @@ class AppInfoSheet {
         actionLabel: actionLabel,
         onActionPressed: onActionPressed,
         actionIcon: actionIcon,
+        actionHierarchy: actionHierarchy,
+        actionIsExpanded: actionIsExpanded,
+        actionIsExternalLink: actionIsExternalLink,
+        actionAlignment: actionAlignment,
         hasFooter: hasFooter,
         hasAction: hasAction,
       ),
@@ -107,6 +115,10 @@ class _AppInfoSheetBody extends StatelessWidget {
     this.actionLabel,
     this.onActionPressed,
     this.actionIcon,
+    required this.actionHierarchy,
+    required this.actionIsExpanded,
+    required this.actionIsExternalLink,
+    required this.actionAlignment,
   });
 
   final String bodyText;
@@ -115,6 +127,10 @@ class _AppInfoSheetBody extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onActionPressed;
   final IconData? actionIcon;
+  final AppButtonHierarchy actionHierarchy;
+  final bool actionIsExpanded;
+  final bool actionIsExternalLink;
+  final AlignmentGeometry actionAlignment;
   final bool hasFooter;
   final bool hasAction;
 
@@ -160,10 +176,16 @@ class _AppInfoSheetBody extends StatelessWidget {
 
         if (hasAction) ...[
           const SizedBox(height: AppDimensions.space8),
-          _AppInfoSheetActionButton(
-            label: actionLabel!,
-            onPressed: onActionPressed!,
-            icon: actionIcon,
+          Align(
+            alignment: actionAlignment,
+            child: _AppInfoSheetActionButton(
+              label: actionLabel!,
+              onPressed: onActionPressed!,
+              icon: actionIcon,
+              hierarchy: actionHierarchy,
+              isExpanded: actionIsExpanded,
+              isExternalLink: actionIsExternalLink,
+            ),
           ),
         ],
       ],
@@ -176,20 +198,27 @@ class _AppInfoSheetActionButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.icon,
+    required this.hierarchy,
+    required this.isExpanded,
+    required this.isExternalLink,
   });
 
   final String label;
   final VoidCallback onPressed;
   final IconData? icon;
+  final AppButtonHierarchy hierarchy;
+  final bool isExpanded;
+  final bool isExternalLink;
 
   @override
   Widget build(final BuildContext context) {
     return AppButton(
       label: label,
       onPressed: onPressed,
-      hierarchy: AppButtonHierarchy.secondary,
+      hierarchy: hierarchy,
       trailingIcon: icon,
-      isExpanded: true,
+      isExpanded: isExpanded,
+      isExternalLink: isExternalLink,
     );
   }
 }

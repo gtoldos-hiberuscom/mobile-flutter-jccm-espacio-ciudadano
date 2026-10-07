@@ -131,7 +131,7 @@ class _ExpedienteDetalleBody extends StatelessWidget {
                   AppTextBlock(
                     text: l10n.gestionExpedientesDatosExpedienteTitle,
                     variant: AppTextBlockVariant.h3,
-                    color: AppColors.textBase,
+                    color: AppColors.primary,
                     showLeadingIcon: false,
                     showTrailingIcon: false,
                   ),
@@ -147,7 +147,7 @@ class _ExpedienteDetalleBody extends StatelessWidget {
                   AppTextBlock(
                     text: l10n.gestionExpedientesEstadoTramitacionTitle,
                     variant: AppTextBlockVariant.h3,
-                    color: AppColors.textBase,
+                    color: AppColors.primary,
                     showLeadingIcon: false,
                     showTrailingIcon: false,
                   ),

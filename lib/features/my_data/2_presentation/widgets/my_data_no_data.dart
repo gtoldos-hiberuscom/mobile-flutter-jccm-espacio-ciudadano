@@ -24,6 +24,14 @@ class MyDataNoData extends StatelessWidget {
     // Only the full-page variant carries the page margin; nested inside an
     // already padded page it keeps its own 16 dp inset.
     final horizontal = scrollable ? appPageHorizontalPadding(context) : AppDimensions.space16;
+    // The copy for these states deliberately has two paragraphs: the result of
+    // the query and, when present, the guidance on where to correct it. Keep
+    // that guidance outside the alert so every "Mis datos" empty state uses
+    // the same visual hierarchy as the large-family title screen.
+    final paragraphs = message.split('\n\n');
+    final noDataMessage = paragraphs.first;
+    final contactMessage = paragraphs.skip(1).join('\n\n');
+
     final content = Padding(
       padding: EdgeInsets.fromLTRB(
         horizontal,
@@ -31,14 +39,32 @@ class MyDataNoData extends StatelessWidget {
         horizontal,
         AppDimensions.space64,
       ),
-      child: AppAlertContextual(
-        message: message,
-        action: AppButton(
-          label: actionLabel,
-          hierarchy: AppButtonHierarchy.secondary,
-          trailingIcon: AppIcons.openInNew,
-          onPressed: onAction ?? () => _openContact(context),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppAlertContextual(message: noDataMessage),
+          if (contactMessage.isNotEmpty) ...[
+            const SizedBox(height: AppDimensions.space16),
+            Padding(
+              // Align with the alert text, after its icon and gap.
+              padding: const EdgeInsets.only(left: AppDimensions.space32 + AppDimensions.space4),
+              child: Text(
+                contactMessage,
+                style: AppTypography.bodyRegular.copyWith(color: AppColors.primaryDark),
+              ),
+            ),
+          ],
+          const SizedBox(height: AppDimensions.space16),
+          Align(
+            child: AppButton(
+              label: actionLabel,
+              hierarchy: AppButtonHierarchy.ghost,
+              trailingIcon: AppIcons.openInNew,
+              isExternalLink: true,
+              onPressed: onAction ?? () => _openContact(context),
+            ),
+          ),
+        ],
       ),
     );
     return scrollable ? SingleChildScrollView(child: content) : content;

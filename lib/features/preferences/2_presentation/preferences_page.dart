@@ -132,6 +132,29 @@ class PreferencesPage extends ConsumerStatefulWidget {
   ConsumerState<PreferencesPage> createState() => _PreferencesPageState();
 }
 
+class _PreferencesLoadError extends StatelessWidget {
+  const _PreferencesLoadError({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SingleChildScrollView(
+      padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space64),
+      child: AppAlertContextual(
+        message: l10n.preferencesLoadError,
+        action: AppButton(
+          label: l10n.preferencesLoadRetry,
+          hierarchy: AppButtonHierarchy.ghost,
+          trailingIcon: AppIcons.autorenew,
+          onPressed: onRetry,
+        ),
+      ),
+    );
+  }
+}
+
 class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   bool _updatingBiometrics = false;
 
@@ -167,8 +190,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       ),
       body: state.when(
         loading: () => const AppLoadingIndicator(),
-        error: (final _, final _) => ErrorStateWidget(
-          message: l10n.errorStateDefault,
+        error: (final _, final _) => _PreferencesLoadError(
           onRetry: () => ref.invalidate(_preferencesStateProvider(preferencesArgs)),
         ),
         data: (final preferences) => _buildPreferencesContent(
@@ -235,6 +257,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
             activeDescription: l10n.preferencesNotificationContactActiveDescription,
             actionLabel: preferences.notificationContact == null ? l10n.preferencesAddContactAction : l10n.preferencesManageAction,
             actionIcon: AppIcons.edit,
+            showActiveStatus: true,
             summaryItems: [
               ?preferences.notificationContact?.phone,
               ?preferences.notificationContact?.email,
@@ -258,6 +281,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           actionIcon: preferences.biometricEnabled ? AppIcons.close : AppIcons.check,
           onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(preferencesArgs, preferences.biometricEnabled)),
           showInactiveIcon: true,
+          showActiveStatus: true,
         ),
         const SizedBox(height: AppDimensions.space24),
         AppButton(

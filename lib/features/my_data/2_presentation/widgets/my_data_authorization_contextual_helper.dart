@@ -14,6 +14,7 @@ class MyDataAuthorizationContextualHelper extends StatelessWidget {
     this.message,
     this.semanticsLabel,
     this.messageSemanticLabel,
+    this.showTextAction = true,
   }) : assert(message == null || message != '', 'message must not be empty'),
        assert(semanticsLabel == null || semanticsLabel != '', 'semanticsLabel must not be empty'),
        assert(
@@ -25,6 +26,10 @@ class MyDataAuthorizationContextualHelper extends StatelessWidget {
   final String? message;
   final String? semanticsLabel;
   final String? messageSemanticLabel;
+
+  /// Renders the settings action as the centered, underlined text link used in
+  /// the Mis datos Educación authorization state.
+  final bool showTextAction;
 
   @override
   Widget build(final BuildContext context) {
@@ -59,12 +64,19 @@ class MyDataAuthorizationContextualHelper extends StatelessWidget {
         ],
       ),
     );
-    final settingsButton = AppIconButton(
-      icon: AppIcons.settings,
-      onPressed: onOpenSettings,
-      semanticsLabel: semanticsLabel ?? l10n.myDataJccmAuthorizationRequiredCta,
-      hierarchy: AppButtonHierarchy.secondary,
-    );
+    final settingsButton = showTextAction
+        ? AppButton(
+            label: semanticsLabel ?? l10n.myDataJccmAuthorizationRequiredCta,
+            onPressed: onOpenSettings,
+            hierarchy: AppButtonHierarchy.ghost,
+            trailingIcon: Icons.north_east,
+          )
+        : AppIconButton(
+            icon: AppIcons.settings,
+            onPressed: onOpenSettings,
+            semanticsLabel: semanticsLabel ?? l10n.myDataJccmAuthorizationRequiredCta,
+            hierarchy: AppButtonHierarchy.secondary,
+          );
 
     return Semantics(
       container: true,
@@ -74,7 +86,16 @@ class MyDataAuthorizationContextualHelper extends StatelessWidget {
           horizontal: AppDimensions.space4,
           vertical: AppDimensions.space8,
         ),
-        child: usesLargeText
+        child: showTextAction
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  messageBlock,
+                  const SizedBox(height: AppDimensions.space8),
+                  Align(child: settingsButton),
+                ],
+              )
+            : usesLargeText
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

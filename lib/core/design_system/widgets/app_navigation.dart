@@ -32,6 +32,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.onHelpTap,
     this.profileInitials,
     this.backgroundColor,
+    this.bottomBorderColor,
   }) : assert(title == null || title != '', 'title must not be empty'),
        assert(
          profileInitials == null || profileInitials != '',
@@ -49,6 +50,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLeading;
   final bool showNotifications;
   final Color? backgroundColor;
+  final Color? bottomBorderColor;
 
   /// Called when the user avatar is tapped (opens the profile drawer).
   final VoidCallback? onAvatarTap;
@@ -238,12 +240,12 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       shadowColor: Colors.transparent,
       bottom: type == AppNavBarType.level2
-          ? const PreferredSize(
-              preferredSize: Size.fromHeight(1),
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(1),
               child: Divider(
                 height: 1,
                 thickness: 1,
-                color: AppColors.dividerColor,
+                color: bottomBorderColor ?? AppColors.dividerColor,
               ),
             )
           : null,

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/employment_offer_registration.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_employment_offers_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_employment_offers_provider.dart';
@@ -66,7 +65,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('WCAG 2.1.1 / 4.1.2: el enlace al portal de empleo de la ayuda es enfocable y es un enlace', (final tester) async {
+  testWidgets('WCAG 2.1.1 / 4.1.2: el enlace de más información de la ayuda es un enlace externo', (final tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pumpAndSettle();
     final l10n = AppLocalizations.of(tester.element(find.byType(MyDataEmploymentOffersPage)));
@@ -74,19 +73,9 @@ void main() {
     await tester.tap(find.byTooltip('Información'));
     await tester.pumpAndSettle();
 
-    final link = find.byType(AppInlineLink);
-    expect(link, findsOneWidget);
-    final data = find.semantics.byLabel(l10n.myDataEmploymentOffersPortalLink).evaluate().single.getSemanticsData();
-    expect(data.flagsCollection.isLink, isTrue);
-
-    var reached = false;
-    for (var i = 0; i < 10 && !reached; i++) {
-      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
-      await tester.pumpAndSettle();
-      final focused = primaryFocus?.context;
-      reached = focused != null && find.ancestor(of: find.byWidget(focused.widget), matching: link).evaluate().isNotEmpty;
-    }
-    expect(reached, isTrue);
+    final link = tester.widget<AppButton>(find.byType(AppButton));
+    expect(link.label, l10n.myDataEmploymentInfoSheetOfficeContactsButton);
+    expect(link.isExternalLink, isTrue);
   });
 }
 

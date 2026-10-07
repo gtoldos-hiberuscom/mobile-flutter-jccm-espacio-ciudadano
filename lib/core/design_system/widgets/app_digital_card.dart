@@ -202,8 +202,11 @@ class AppDigitalCard extends StatelessWidget {
 }
 
 abstract final class AppDigitalCardAssets {
-  static const String disability = 'assets/icons/carnets/discapacidad.svg';
-  static const String largeFamily = 'assets/icons/carnets/familia.svg';
+  // Estos dos artes contienen una imagen raster embebida en el SVG original,
+  // una construcción que `flutter_svg` no renderiza. Se usan sus PNG
+  // equivalentes para que siempre se vean en Android e iOS.
+  static const String disability = 'assets/icons/carnets/discapacidad.png';
+  static const String largeFamily = 'assets/icons/carnets/familia.png';
   static const String youth = 'assets/icons/carnets/joven.svg';
 }
 

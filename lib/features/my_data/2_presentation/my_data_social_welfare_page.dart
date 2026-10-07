@@ -37,6 +37,7 @@ class _MyDataSocialWelfarePageState extends ConsumerState<MyDataSocialWelfarePag
     return AppTabbedDetailScaffold(
       title: l10n.socialWelfareScreenTitle,
       onBack: () => context.go(widget.backRoute),
+      onInfo: () => _showInfoSheet(context, l10n),
       tabs: [
         l10n.socialWelfareDataTab,
         l10n.socialWelfareServicesTab,
@@ -47,6 +48,17 @@ class _MyDataSocialWelfarePageState extends ConsumerState<MyDataSocialWelfarePag
         _SocialWelfareDataTab(),
         _SocialWelfareServicesTab(),
       ],
+    );
+  }
+
+  Future<void> _showInfoSheet(
+    final BuildContext context,
+    final AppLocalizations l10n,
+  ) async {
+    await AppInfoSheet.show(
+      context: context,
+      title: l10n.socialWelfareInfoSheetTitle,
+      bodyText: l10n.socialWelfareInfoSheetDescription,
     );
   }
 }
@@ -128,6 +140,7 @@ class _SocialWelfareDataList extends StatelessWidget {
         // Show contextual helper at the top when authorization is missing
         if (!hasJccmAuthorization && index == 0) {
           return MyDataAuthorizationContextualHelper(
+            showTextAction: true,
             onOpenSettings: () => context.push(
               Uri(
                 path: Routes.consent,

@@ -61,7 +61,7 @@ void main() {
     final launcher = _RecordingLauncher();
     await _pumpContactTab(tester, launcher: launcher);
 
-    final button = find.widgetWithText(AppButton, 'Formulario de Soporte');
+    final button = find.widgetWithText(AppButton, 'Completar formulario de soporte');
     expect(tester.widget<AppButton>(button).trailingIcon, AppIcons.openInNew);
 
     await tester.tap(button);
@@ -83,7 +83,7 @@ void main() {
       claims: const JwtClaims(exp: 0, iat: 0, iss: '', aud: [], sub: 'sub'),
     );
 
-    final button = find.widgetWithText(AppButton, 'Formulario de Soporte');
+    final button = find.widgetWithText(AppButton, 'Completar formulario de soporte');
     expect(tester.widget<AppButton>(button).trailingIcon, AppIcons.arrowForward);
 
     await tester.tap(button);

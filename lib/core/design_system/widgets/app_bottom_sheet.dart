@@ -15,7 +15,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// - 80 % dark scrim (`#031B35 @ 80%`)
 /// - White card with 16 dp radius, 8 dp gap between children
 /// - Drag handle pill (80 × 8 dp, grey)
-/// - "Salir" close button with underlined text + close icon
+/// - "Cerrar" close button with underlined text + close icon
 /// - Slots: [title], [body], optional [footer]
 ///
 /// Use the static [AppBottomSheet.show] helper to display.
