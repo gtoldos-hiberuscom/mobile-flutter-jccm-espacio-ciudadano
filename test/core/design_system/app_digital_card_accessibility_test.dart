@@ -94,12 +94,11 @@ void main() {
       ),
     );
 
-    expect(find.text('Title / Card'), findsOneWidget);
-    expect(find.text('Card number'), findsOneWidget);
+    expect(find.text('Youth card'), findsOneWidget);
     expect(find.semantics.byLabel('Youth card. Card number: Y-15'), findsOneWidget);
   });
 
-  testWidgets('no trunca el número y crece con texto al 200 por ciento', (final tester) async {
+  testWidgets('crece sin errores con texto al 200 por ciento', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(320, 568);
     addTearDown(tester.view.reset);
@@ -111,12 +110,11 @@ void main() {
       ),
     );
 
-    final number = tester.widget<Text>(find.text('FN-123456789'));
-    expect(number.maxLines, isNull);
+    expect(find.text('Familia numerosa'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('muestra completo el mapa decorativo con y sin estado', (final tester) async {
+  testWidgets('mantiene dentro del carnet las decoraciones del nuevo diseño', (final tester) async {
     final variants = <AppDigitalCard>[
       card(onDownload: () {}),
       const AppDigitalCard(title: 'Joven', number: '00000000000000000000', downloadLabel: 'Descargar'),
@@ -126,28 +124,22 @@ void main() {
       await tester.pumpWidget(buildApp(variant));
 
       final cardBounds = tester.getRect(find.byType(AppDigitalCard));
-      final mapBounds = tester.getRect(find.byKey(const ValueKey('digital-card-map-pattern')));
+      final cornerBounds = tester.getRect(find.byKey(const ValueKey('digital-card-corner-circle')));
+      final brandingBounds = tester.getRect(find.byKey(const ValueKey('digital-card-branding')));
 
-      expect(cardBounds.contains(mapBounds.topLeft), isTrue);
-      expect(cardBounds.contains(mapBounds.bottomRight), isTrue);
+      expect(cardBounds.overlaps(cornerBounds), isTrue);
+      expect(cardBounds.contains(brandingBounds.bottomRight), isTrue);
     }
   });
 
-  testWidgets('el mapa conserva los huecos de su silueta', (final tester) async {
+  testWidgets('usa la ilustración específica del carnet', (final tester) async {
     await tester.pumpWidget(buildApp(card(onDownload: () {})));
 
-    final map = find.byKey(const ValueKey('digital-card-map-pattern'));
-    final paintedDots = find.descendant(
-      of: map,
-      matching: find.byWidgetPredicate(
-        (final widget) => widget is Container && widget.decoration is BoxDecoration && (widget.decoration! as BoxDecoration).shape == BoxShape.circle,
-      ),
-    );
-
-    expect(paintedDots, findsNWidgets(24));
+    expect(find.byKey(const ValueKey('digital-card-branding')), findsOneWidget);
+    expect(find.byKey(const ValueKey('digital-card-corner-circle')), findsOneWidget);
   });
 
-  testWidgets('WCAG 1.4.3: rótulos y «Descargar» alcanzan 4,5:1 sobre el carnet', (final tester) async {
+  testWidgets('WCAG 1.4.3: «Descargar» alcanza 4,5:1 sobre el carnet', (final tester) async {
     double contrast(final Color a, final Color b) {
       final la = a.computeLuminance();
       final lb = b.computeLuminance();
@@ -157,9 +149,7 @@ void main() {
 
     await tester.pumpWidget(buildApp(card(onDownload: () {})));
 
-    expect(contrast(cardCaptionColor, AppColors.primaryLight), greaterThanOrEqualTo(4.5));
     expect(contrast(downloadColor, AppColors.primaryLight), greaterThanOrEqualTo(4.5));
-    expect(tester.widget<Text>(find.text('Título / Carnet')).style!.color, cardCaptionColor);
     final button = tester.widget<TextButton>(find.byType(TextButton));
     expect(button.style!.foregroundColor!.resolve(const {}), downloadColor);
     // El foco no pinta un velo que baje el contraste del texto.

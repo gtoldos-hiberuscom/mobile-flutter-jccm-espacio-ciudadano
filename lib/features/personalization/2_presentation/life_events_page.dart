@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
@@ -24,7 +25,8 @@ import 'package:jccm_espacio_ciudadano/features/personalization/2_presentation/l
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-/// "Mis Hechos Vitales" screen — Figma node `41779:22465`.
+/// "Mis Hechos Vitales" screen — Figma nodes `41779:22465` and
+/// onboarding `44469:24900` (`44469:24903` main content).
 ///
 /// Displays selectable life-event checkboxes for personalisation.
 /// Uses DS components exclusively with full WCAG 2.1 AA accessibility.
@@ -72,6 +74,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     final isSaving = lifeState.status == LifeEventsStatus.saving;
     final isResetting = lifeState.status == LifeEventsStatus.resetting;
     final isPreferencesEditing = widget.returnTo == Routes.preferences;
+    final hasSelection = lifeState.events.any((final event) => event.selected);
 
     return PopScope(
       canPop: !lifeState.isDirty,
@@ -98,9 +101,10 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
         backgroundColor: AppColors.backgroundWhite,
         // Figma node 41779:22466 — bg #f1f8f9, border bluemuted-lighter, Shadow/Low
         appBar: AppNavBar(
-          type: widget.isOnboarding ? AppNavBarType.detail : AppNavBarType.level2,
+          type: AppNavBarType.level2,
           title: l10n.lifeEventsTitle,
-          showLeading: !widget.isOnboarding,
+          backgroundColor: AppColors.backgroundBlueLighter,
+          bottomBorderColor: AppColors.borderBlueMutedLighter,
           onBack: () {
             if (context.canPop()) {
               context.pop();
@@ -113,7 +117,7 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // ── Intro heading + description ─────────────────────────────────
-            _IntroSection(l10n: l10n),
+            if (!widget.isOnboarding && !isPreferencesEditing) _IntroSection(l10n: l10n),
 
             // ── Body content ────────────────────────────────────────────────
             Expanded(
@@ -123,6 +127,8 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
                 lifeState,
                 isResetting,
                 notifier,
+                isOnboarding: widget.isOnboarding,
+                showPersonalizedRecommendations: widget.isOnboarding || isPreferencesEditing,
               ),
             ),
 
@@ -130,20 +136,20 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
             if (widget.isOnboarding)
               _OnboardingStickyBar(
                 l10n: l10n,
-                canSave: !isSaving,
+                canSave: hasSelection && !isSaving,
                 isSaving: isSaving,
                 onFillLater: () => unawaited(notifier.skipOnboarding()),
-                onClearAll: notifier.clearSelection,
+                onClearAll: hasSelection ? notifier.clearSelection : null,
                 onSave: () => unawaited(notifier.save()),
               )
             else
               AppStickyBar(
-                type: AppStickyBarType.dicotomy,
-                secondaryLabel: isPreferencesEditing ? 'Limpiar' : l10n.lifeEventsResetCancel,
-                onSecondary: isPreferencesEditing ? notifier.clearSelection : notifier.requestReset,
+                type: isPreferencesEditing ? AppStickyBarType.vertical : AppStickyBarType.dicotomy,
+                secondaryLabel: isPreferencesEditing ? l10n.lifeEventsClearAllAction : l10n.lifeEventsResetCancel,
+                onSecondary: isPreferencesEditing && hasSelection ? notifier.clearSelection : (!isPreferencesEditing ? notifier.requestReset : null),
                 secondaryHierarchy: AppButtonHierarchy.tertiary,
-                secondaryLeadingIcon: Icons.highlight_off,
-                primaryLabel: l10n.lifeEventsSaveAction,
+                secondaryLeadingIcon: isPreferencesEditing ? Icons.sync : Icons.highlight_off,
+                primaryLabel: isPreferencesEditing ? l10n.lifeEventsAcceptAction : l10n.lifeEventsSaveAction,
                 onPrimary: (lifeState.isDirty && !isSaving) ? () => unawaited(notifier.save()) : null,
                 isPrimaryLoading: isSaving,
                 primaryLeadingIcon: Icons.check,
@@ -250,8 +256,10 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
     final AppLocalizations l10n,
     final LifeEventsState lifeState,
     final bool isResetting,
-    final LifeEventsNotifier notifier,
-  ) {
+    final LifeEventsNotifier notifier, {
+    required final bool isOnboarding,
+    required final bool showPersonalizedRecommendations,
+  }) {
     final status = lifeState.status;
 
     if (status == LifeEventsStatus.loading || status == LifeEventsStatus.initial) {
@@ -274,10 +282,18 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
 
     return SingleChildScrollView(
       // Figma node 41779:22467 — content area px:16 py:24 (top handled by IntroSection)
-      padding: appPagePadding(context, bottom: AppDimensions.space24),
+      padding: appPagePadding(
+        context,
+        top: showPersonalizedRecommendations ? AppDimensions.space16 : 0,
+        bottom: AppDimensions.space24,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (showPersonalizedRecommendations) ...[
+            _OnboardingIntro(l10n: l10n),
+            const SizedBox(height: AppDimensions.space16),
+          ],
           // Figma node 41779:13486 — white card, border rgba(12,13,13,0.05),
           // Shadow/Medium, borderRadius 4, padding 16
           DecoratedBox(
@@ -285,21 +301,24 @@ class _LifeEventsPageState extends ConsumerState<LifeEventsPage> {
               color: AppColors.backgroundWhite,
               borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
               border: Border.all(
-                color: const Color(0x0D0C0D0D), // rgba(12,13,13,0.05)
+                color: isOnboarding ? AppColors.borderNeutralLight : const Color(0x0D0C0D0D),
               ),
               boxShadow: AppShadows.medium,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ...lifeState.events.map(
-                  (final event) => _LifeEventCheckRow(
-                    event: event,
-                    onToggle: () => notifier.toggle(event.id),
-                    isLast: event == lifeState.events.last,
+            child: Padding(
+              padding: isOnboarding ? const EdgeInsets.all(AppDimensions.space16) : EdgeInsets.zero,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ...lifeState.events.map(
+                    (final event) => _LifeEventCheckRow(
+                      event: event,
+                      onToggle: () => notifier.toggle(event.id),
+                      isLast: event == lifeState.events.last,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -348,9 +367,10 @@ class _OnboardingStickyBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AppButton(
-            label: l10n.lifeEventsFillLaterAction,
+            label: l10n.lifeEventsCompleteLaterAction,
             onPressed: onFillLater,
             hierarchy: AppButtonHierarchy.tertiary,
+            leadingIcon: Icons.schedule,
           ),
           const SizedBox(height: AppDimensions.space16),
           AppButton(
@@ -401,6 +421,40 @@ class _IntroSection extends StatelessWidget {
   }
 }
 
+class _OnboardingIntro extends StatelessWidget {
+  const _OnboardingIntro({required this.l10n});
+
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(final BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(
+          top: AppDimensions.space8,
+          bottom: AppDimensions.space16,
+        ),
+        child: Semantics(
+          header: true,
+          headingLevel: 1,
+          child: Text(
+            l10n.lifeEventsOnboardingTitle,
+            style: AppTypography.h1.copyWith(color: AppColors.primaryDark),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
+        child: Text(
+          l10n.lifeEventsOnboardingDescription,
+          style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+        ),
+      ),
+    ],
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // LIFE EVENT CHECK ROW — Figma node BuildingBlocks/SelectOption
 // padding:8, border-bottom rgba(12,13,13,0.08), label color primary,
@@ -441,10 +495,8 @@ class _LifeEventCheckRow extends StatelessWidget {
                   : Border(
                       bottom: BorderSide(
                         // selected → success green, unselected → rgba(12,13,13,0.08)
-                        color: event.selected
-                            ? AppColors
-                                  .success // #22a85a
-                            : const Color(0x140C0D0D), // rgba(12,13,13,0.08)
+                        color: event.selected ? AppColors.successDark : AppColors.neutral100,
+                        width: event.selected ? 2 : 1,
                       ),
                     ),
             ),
@@ -467,10 +519,14 @@ class _LifeEventCheckRow extends StatelessWidget {
                 ),
                 const SizedBox(width: AppDimensions.space8),
                 // Checkbox icon trailing — 24×24
-                Icon(
-                  event.selected ? Icons.check_box : Icons.check_box_outline_blank,
-                  size: AppDimensions.iconMedium,
-                  color: event.selected ? AppColors.success : AppColors.primary,
+                SvgPicture.asset(
+                  event.selected ? 'assets/icons/Status=True.svg' : 'assets/icons/Status=False.svg',
+                  width: AppDimensions.iconMedium,
+                  height: AppDimensions.iconMedium,
+                  colorFilter: ColorFilter.mode(
+                    event.selected ? AppColors.successDark : AppColors.primaryDark,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ],
             ),

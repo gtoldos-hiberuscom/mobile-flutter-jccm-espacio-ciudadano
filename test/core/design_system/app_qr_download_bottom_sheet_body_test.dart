@@ -69,6 +69,8 @@ void main() {
     );
 
     expect(find.text('Código QR'), findsOneWidget);
+    expect(find.text('¿Quieres guardar el carnet?'), findsOneWidget);
+    expect(find.text('Elige cómo quieres descargarlo:'), findsOneWidget);
     expect(find.bySemanticsLabel('Descargar Código QR'), findsOneWidget);
   }, variant: const TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS}));
 

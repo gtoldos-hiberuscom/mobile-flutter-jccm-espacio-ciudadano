@@ -151,6 +151,7 @@ class AppInputCase extends StatefulWidget {
     this.maxLines = 1,
     this.focusNode,
     this.isRequired = false,
+    this.labelUppercase = true,
   }) : assert(label.length > 0, 'label must not be empty');
 
   final String label;
@@ -173,6 +174,7 @@ class AppInputCase extends StatefulWidget {
   final bool readOnly;
   final int maxLines;
   final bool isRequired;
+  final bool labelUppercase;
   final FocusNode? focusNode;
 
   @override
@@ -324,6 +326,7 @@ class _AppInputCaseState extends State<AppInputCase> {
                 text: widget.label,
                 color: labelColor,
                 required: widget.isRequired,
+                uppercase: widget.labelUppercase,
               ),
             ),
             const SizedBox(height: AppDimensions.space4),

@@ -29,7 +29,7 @@ class MyDataSocialWelfareParkingPage extends ConsumerWidget {
         title: l10n.socialWelfareParkingInfoSheetTitle,
         bodyText: l10n.socialWelfareParkingInfoSheetDescription,
         footerText: l10n.familiaNumerosaContactHint,
-        actionLabel: l10n.familiaNumerosaOfficeContactsButton,
+        actionLabel: l10n.familiaNumerosaMoreInformation,
         onActionPressed: () => launchSocialWelfareOfficeContacts(context, ref),
         actionIcon: AppIcons.openInNew,
       ),

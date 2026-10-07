@@ -95,6 +95,7 @@ class _EducationDataContent extends StatelessWidget {
             MyDataAuthorizationContextualHelper(
               message: l10n.myDataAgeAuthorizationRequiredMessage,
               semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
+              showTextAction: true,
               onOpenSettings: () => _openSettings(context),
             ),
             const SizedBox(height: AppDimensions.space16),
@@ -119,13 +120,13 @@ class _EducationDataContent extends StatelessWidget {
           if (hasAgeAuthorization)
             AppNavigationCard(
               title: l10n.myDataEducationNonUniversityTitles,
-              description: l10n.myDataEducationTitlesDescription,
+              description: l10n.myDataEducationNonUniversityTitlesDescription,
               onTap: () => context.go(Routes.myDataEducationNonUniversityTitles),
             )
           else
             MyDataDisabledNavigationCard(
               title: l10n.myDataEducationNonUniversityTitles,
-              description: l10n.myDataEducationTitlesDescription,
+              description: l10n.myDataEducationNonUniversityTitlesDescription,
             ),
         ],
       ),

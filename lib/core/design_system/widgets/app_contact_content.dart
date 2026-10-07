@@ -139,6 +139,7 @@ class AppContactActionCard extends StatelessWidget {
     this.semanticLabel,
     this.semanticHint,
     this.isExternalLink = true,
+    this.showSubtitle = true,
   }) : assert(title.length > 0, 'title must not be empty'),
        assert(subtitle.length > 0, 'subtitle must not be empty'),
        assert(iconSize > 0, 'iconSize must be positive'),
@@ -153,6 +154,7 @@ class AppContactActionCard extends StatelessWidget {
   final String? semanticLabel;
   final String? semanticHint;
   final bool isExternalLink;
+  final bool showSubtitle;
 
   @override
   Widget build(final BuildContext context) {
@@ -198,11 +200,13 @@ class AppContactActionCard extends StatelessWidget {
                                 title,
                                 style: AppTypography.leadingMedium.copyWith(color: AppColors.primary),
                               ),
-                              const SizedBox(height: AppDimensions.space4),
-                              Text(
-                                subtitle,
-                                style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-                              ),
+                              if (showSubtitle) ...[
+                                const SizedBox(height: AppDimensions.space4),
+                                Text(
+                                  subtitle,
+                                  style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+                                ),
+                              ],
                             ],
                           ),
                         ),
@@ -229,6 +233,7 @@ class AppPhoneActionCard extends StatelessWidget {
     super.key,
     this.semanticLabel,
     this.semanticHint,
+    this.showSubtitle = true,
   }) : assert(number.length > 0, 'number must not be empty'),
        assert(subtitle.length > 0, 'subtitle must not be empty'),
        assert(semanticLabel == null || semanticLabel.length > 0, 'semanticLabel must not be empty'),
@@ -239,6 +244,7 @@ class AppPhoneActionCard extends StatelessWidget {
   final VoidCallback onTap;
   final String? semanticLabel;
   final String? semanticHint;
+  final bool showSubtitle;
 
   @override
   Widget build(final BuildContext context) {
@@ -251,6 +257,7 @@ class AppPhoneActionCard extends StatelessWidget {
       semanticLabel: semanticLabel ?? l10n.appPhoneCallLabel(number, subtitle),
       semanticHint: semanticHint ?? l10n.appPhoneCallHint,
       isExternalLink: false,
+      showSubtitle: showSubtitle,
       onTap: onTap,
     );
   }

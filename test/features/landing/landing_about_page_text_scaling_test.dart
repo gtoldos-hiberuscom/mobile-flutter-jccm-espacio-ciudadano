@@ -6,7 +6,7 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_n
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// WCAG 1.4.4: «Información y ayuda sobre el espacio» amplía todo su texto,
-/// incluido el párrafo con negrita, y el título de la barra no se recorta.
+/// incluido el párrafo descriptivo, y el título de la barra no se recorta.
 void main() {
   Widget buildApp({required final TextScaler textScaler}) => ProviderScope(
     overrides: [landingProvider.overrideWith(_StaticLandingNotifier.new)],
@@ -22,7 +22,7 @@ void main() {
     ),
   );
 
-  testWidgets('el párrafo con negrita se amplía al 200 por ciento', (final tester) async {
+  testWidgets('el párrafo descriptivo se amplía al 200 por ciento', (final tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(375, 667);
     addTearDown(tester.view.reset);
@@ -30,7 +30,7 @@ void main() {
     await tester.pumpWidget(buildApp(textScaler: TextScaler.noScaling));
     await tester.pump();
     final l10n = AppLocalizations.of(tester.element(find.byType(LandingAboutPage)));
-    final paragraph = find.textContaining(l10n.landingAboutBodyBold);
+    final paragraph = find.text(l10n.landingAboutBody);
     final baseHeight = tester.getSize(paragraph).height;
 
     await tester.pumpWidget(buildApp(textScaler: const TextScaler.linear(2)));
@@ -57,6 +57,19 @@ void main() {
     expect(titleRect.height, greaterThan(28 * 2.0));
     expect(titleRect.bottom, lessThanOrEqualTo(barRect.bottom));
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('la barra no muestra el icono de información', (final tester) async {
+    await tester.pumpWidget(buildApp(textScaler: TextScaler.noScaling));
+    await tester.pump();
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.byIcon(Icons.info_outline),
+      ),
+      findsNothing,
+    );
   });
 }
 

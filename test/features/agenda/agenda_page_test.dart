@@ -102,7 +102,7 @@ void main() {
     );
 
     expect(find.text('Cita de Atención Primaria'), findsOneWidget);
-    expect(find.text('Presencial'), findsOneWidget);
+    expect(find.text('PRESENCIAL'), findsOneWidget);
     expect(find.text('Alvaro nombre largo garcia bulero'), findsOneWidget);
     expect(find.text('Consulta a demanda'), findsOneWidget);
     expect(find.text('C.S. PALOMAREJOS_PREN'), findsNothing);
@@ -118,6 +118,7 @@ void main() {
     expect(find.text(_sinCip), findsOneWidget);
     expect(find.text(_citasSanitariasCaidas), findsNothing);
     expect(find.text(_sinCitas), findsNothing);
+    expect(tester.getTopLeft(find.text(_sinCip)).dy, lessThan(tester.getTopLeft(find.byType(AppCalendar)).dy));
   });
 
   testWidgets('si la fuente que sobrevive no trae nada, el aviso sustituye al estado vacío', (final tester) async {
@@ -136,6 +137,7 @@ void main() {
     await _pumpAgenda(tester, appointments: const []);
 
     expect(find.text(_sinCitas), findsOneWidget);
+    expect(tester.getTopLeft(find.text(_sinCitas)).dy, lessThan(tester.getTopLeft(find.byType(AppCalendar)).dy));
   });
 }
 

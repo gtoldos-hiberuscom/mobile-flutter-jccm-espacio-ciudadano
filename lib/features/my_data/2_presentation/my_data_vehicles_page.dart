@@ -65,6 +65,7 @@ class _MyDataVehiclesPageState extends ConsumerState<MyDataVehiclesPage> {
       actionLabel: l10n.myDataVehiclesInfoSheetContactButton,
       onActionPressed: () => _launchDgtContactUrl(context),
       actionIcon: Icons.open_in_new,
+      actionIsExternalLink: true,
     );
   }
 

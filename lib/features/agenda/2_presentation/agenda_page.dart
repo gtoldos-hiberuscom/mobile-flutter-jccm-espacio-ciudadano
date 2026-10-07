@@ -125,22 +125,39 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
     final eventDates = state.appointments.map((final appointment) => DateUtils.dateOnly(appointment.dateTime)).toSet();
     final sections = _buildSections(appointments);
     final initialDate = appointments.isEmpty ? DateTime.now() : appointments.first.dateTime;
+    final showEmptyState = state.hasJccmAuthorization && appointments.isEmpty && !(state.appointments.isEmpty && (state.isPartial || state.healthCipMissing));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (state.hasJccmAuthorization) ...[
-          _FilterNavigation(
-            selectedFilter: _selectedFilter,
-            onSelected: (final filter) => setState(() => _selectedFilter = filter),
-          ),
+        _FilterNavigation(
+          selectedFilter: _selectedFilter,
+          onSelected: state.hasJccmAuthorization ? (final filter) => setState(() => _selectedFilter = filter) : null,
+        ),
+        // Todos los avisos de Agenda se muestran antes del calendario: así
+        // quedan junto a los filtros que contextualizan lo que el ciudadano
+        // está viendo, sin interrumpir la lectura de las citas.
+        if (!state.hasJccmAuthorization) ...[
           const SizedBox(height: AppDimensions.space8),
-        ] else ...[
           MyDataAuthorizationContextualHelper(
             onOpenSettings: () => unawaited(_openJccmAuthorization()),
           ),
-          const SizedBox(height: AppDimensions.space8),
         ],
+        // Un aviso por fuente caída, en el orden del enum para que no dependa
+        // de la iteración del `Set`.
+        for (final source in AgendaAppointmentSource.values.where(state.failedSources.contains)) ...[
+          const SizedBox(height: AppDimensions.space8),
+          _AgendaPartialLoadNotice(source: source),
+        ],
+        if (state.healthCipMissing) ...[
+          const SizedBox(height: AppDimensions.space8),
+          const _AgendaHealthCipMissingNotice(),
+        ],
+        if (showEmptyState) ...[
+          const SizedBox(height: AppDimensions.space8),
+          const _AgendaEmptyState(),
+        ],
+        const SizedBox(height: AppDimensions.space8),
         ClipRRect(
           borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
           child: AppCalendar(
@@ -158,17 +175,6 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
             onRefresh: _refreshing ? null : () => unawaited(_refreshAgenda()),
           ),
         ],
-        // Un aviso por fuente caída, en el orden del enum para que no dependa
-        // de la iteración del `Set`. Cuando fallan todas, el repositorio
-        // propaga el error y aquí no se llega: se pinta `_buildErrorContent`.
-        for (final source in AgendaAppointmentSource.values.where(state.failedSources.contains)) ...[
-          const SizedBox(height: AppDimensions.space8),
-          _AgendaPartialLoadNotice(source: source),
-        ],
-        if (state.healthCipMissing) ...[
-          const SizedBox(height: AppDimensions.space8),
-          const _AgendaHealthCipMissingNotice(),
-        ],
         const SizedBox(height: AppDimensions.space12),
         if (!state.hasJccmAuthorization)
           const SizedBox.shrink()
@@ -179,7 +185,7 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         else if (appointments.isEmpty && state.appointments.isEmpty && (state.isPartial || state.healthCipMissing))
           const SizedBox.shrink()
         else if (appointments.isEmpty)
-          const _AgendaEmptyState()
+          const SizedBox.shrink()
         else ...[
           Semantics(
             header: true,
@@ -218,9 +224,14 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
           selectedFilter: _selectedFilter,
           onSelected: (final filter) => setState(() => _selectedFilter = filter),
         ),
-        const SizedBox(height: AppDimensions.space32),
+        const SizedBox(height: AppDimensions.space8),
         _AgendaErrorState(
           onRetry: () => ref.invalidate(agendaAppointmentsProvider),
+        ),
+        const SizedBox(height: AppDimensions.space8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+          child: const AppCalendar(headingLevel: 2),
         ),
       ],
     );

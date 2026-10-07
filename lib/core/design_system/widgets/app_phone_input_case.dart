@@ -28,6 +28,7 @@ class AppPhoneInputCase extends StatefulWidget {
     this.enabled = true,
     this.readOnly = false,
     this.isRequired = false,
+    this.labelUppercase = true,
     this.textInputAction = TextInputAction.next,
     this.autofillHints = const [AutofillHints.telephoneNumber],
     this.selectorSemanticsLabel,
@@ -48,6 +49,7 @@ class AppPhoneInputCase extends StatefulWidget {
   final bool enabled;
   final bool readOnly;
   final bool isRequired;
+  final bool labelUppercase;
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
   final String? selectorSemanticsLabel;
@@ -121,7 +123,7 @@ class _AppPhoneInputCaseState extends State<AppPhoneInputCase> {
       children: [
         ExcludeSemantics(
           child: Text(
-            widget.label.toUpperCase(),
+            widget.labelUppercase ? widget.label.toUpperCase() : widget.label,
             style: AppTypography.captionUppercase.copyWith(color: color),
           ),
         ),

@@ -106,7 +106,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       });
     }
     final fromHome = widget.fromHome;
-    final textColor = fromHome ? AppColors.textPrimary : AppColors.textBase;
+    const textColor = AppColors.primaryDark;
     final entries = _contentEntries(
       context: context,
       l10n: l10n,
@@ -268,7 +268,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     required final Color textColor,
     required final bool fromHome,
   }) {
-    final bodyStyle = fromHome ? AppTypography.leadingMedium : AppTypography.bodyRegular;
+    const bodyStyle = AppTypography.leadingMedium;
     final responsibleTitle = l10n.privacyResponsibleTitle;
     final responsibleIntro = l10n.privacyResponsibleIntro;
     final responsibleItems = [
@@ -276,26 +276,16 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       l10n.privacyResponsibleItemVisualizations,
       l10n.privacyResponsibleItemRecommendations,
       l10n.privacyResponsibleItemDownloads,
-      l10n.privacyResponsibleItemAgenda,
     ];
     final responsibleOrg = l10n.privacyResponsibleOrgParagraph;
     final responsibleContactIntro = l10n.privacyResponsibleContactIntro;
     final responsibleContact = '${l10n.privacyResponsibleContactAddressLabel}${l10n.privacyResponsibleContactAddressValue}';
-    final populationControllerText = l10n.privacyPopulationControllerText;
     final purposeTitle = l10n.privacyPurposeTitle;
     final purposeIntro = l10n.privacyPurposeIntro;
     final purposeItems = [
       l10n.privacyPurposeItemIdentity,
       l10n.privacyPurposeItemVisualizations,
     ];
-    final legalBasisTitle = l10n.privacyLegalBasisTitle;
-    final legalBasisText = l10n.privacyLegalBasisText;
-    final transfersTitle = l10n.privacyTransfersTitle;
-    final transfersText = l10n.privacyTransfersText;
-    final retentionTitle = l10n.privacyRetentionTitle;
-    final retentionText = l10n.privacyRetentionText;
-    final rightsTitle = l10n.privacyRightsTitle;
-    final rightsText = l10n.privacyRightsText;
     final aepdTitle = l10n.privacyAepdTitle;
     final aepdText = '${l10n.privacyAepdTextBeforeLink}https://www.aepd.es/${l10n.privacyAepdTextAfterLink}';
     final securityTitle = l10n.privacySecurityTitle;
@@ -308,18 +298,9 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
 
     return [
       _SearchableEntry(
-        id: 'page-title',
-        searchText: l10n.privacyDocumentTitle,
-        child: _PageTitle(
-          l10n.privacyDocumentTitle,
-          color: textColor,
-          highlightQuery: _searchQuery,
-        ),
-      ),
-      _SearchableEntry(
         id: 'responsible-title',
         searchText: responsibleTitle,
-        child: _SectionTitle(responsibleTitle, color: textColor, highlightQuery: _searchQuery),
+        child: _SectionTitle(responsibleTitle, color: AppColors.primary, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'responsible-intro',
@@ -350,27 +331,14 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
           color: textColor,
           highlightQuery: _searchQuery,
           links: {
-            'direcciongerenciaatd@jccm.es': () => _openEmail(context, 'direcciongerenciaatd@jccm.es'),
-          },
-        ),
-      ),
-      _SearchableEntry(
-        id: 'population-controller',
-        searchText: populationControllerText,
-        child: _LinkedBodyBlock(
-          text: populationControllerText,
-          style: bodyStyle,
-          color: textColor,
-          highlightQuery: _searchQuery,
-          links: {
-            'oficinadeldato@jccm.es': () => _openEmail(context, 'oficinadeldato@jccm.es'),
+            'vicealyca@jccm.es': () => _openEmail(context, 'vicealyca@jccm.es'),
           },
         ),
       ),
       _SearchableEntry(
         id: 'purpose-title',
         searchText: purposeTitle,
-        child: _SectionTitle(purposeTitle, color: textColor, highlightQuery: _searchQuery),
+        child: _SectionTitle(purposeTitle, color: AppColors.primary, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'purpose-intro',
@@ -380,62 +348,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'purpose-items',
         searchText: purposeItems.join(' '),
-        child: _ContentColumn(
-          children: [
-            for (final item in purposeItems) _BodyBlock(item, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
-          ],
-        ),
-      ),
-      _SearchableEntry(
-        id: 'legal-basis-title',
-        searchText: legalBasisTitle,
-        child: _SectionTitle(legalBasisTitle, color: textColor, highlightQuery: _searchQuery),
-      ),
-      _SearchableEntry(
-        id: 'legal-basis-text',
-        searchText: legalBasisText,
-        child: _BodyBlock(legalBasisText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
-      ),
-      _SearchableEntry(
-        id: 'transfers-title',
-        searchText: transfersTitle,
-        child: _SectionTitle(transfersTitle, color: textColor, highlightQuery: _searchQuery),
-      ),
-      _SearchableEntry(
-        id: 'transfers-text',
-        searchText: transfersText,
-        child: _BodyBlock(transfersText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
-      ),
-      _SearchableEntry(
-        id: 'retention-title',
-        searchText: retentionTitle,
-        child: _SectionTitle(retentionTitle, color: textColor, highlightQuery: _searchQuery),
-      ),
-      _SearchableEntry(
-        id: 'retention-text',
-        searchText: retentionText,
-        child: _BodyBlock(retentionText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
-      ),
-      _SearchableEntry(
-        id: 'rights-title',
-        searchText: rightsTitle,
-        child: _SectionTitle(rightsTitle, color: textColor, highlightQuery: _searchQuery),
-      ),
-      _SearchableEntry(
-        id: 'rights-text',
-        searchText: rightsText,
-        child: _LinkedBodyBlock(
-          text: rightsText,
-          style: bodyStyle,
-          color: textColor,
-          highlightQuery: _searchQuery,
-          links: {
-            'https://www.jccm.es/tramites/1001969': () => launchExternalUrlWithConfirmation(
-              context,
-              Uri.parse('https://www.jccm.es/tramites/1001969'),
-            ),
-          },
-        ),
+        child: _BulletList(style: bodyStyle, color: textColor, items: purposeItems, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'aepd-title',
@@ -455,7 +368,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'security-title',
         searchText: securityTitle,
-        child: _SectionTitle(securityTitle, color: textColor, highlightQuery: _searchQuery),
+        child: _SectionTitle(securityTitle, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'security-text',
@@ -465,7 +378,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'profiling-title',
         searchText: profilingTitle,
-        child: _SectionTitle(profilingTitle, color: textColor, highlightQuery: _searchQuery),
+        child: _SectionTitle(profilingTitle, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'profiling-text',
@@ -475,7 +388,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'dpo-title',
         searchText: dpoTitle,
-        child: _SectionTitle(dpoTitle, color: textColor, highlightQuery: _searchQuery),
+        child: _SectionTitle(dpoTitle, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'dpo-intro',
@@ -627,35 +540,6 @@ class _SearchableEntry {
   final Widget child;
 }
 
-class _PageTitle extends StatelessWidget {
-  const _PageTitle(
-    this.text, {
-    required this.color,
-    this.highlightQuery = '',
-  });
-
-  final String text;
-  final Color color;
-  final String highlightQuery;
-
-  @override
-  Widget build(final BuildContext context) => Semantics(
-    header: true,
-    headingLevel: 1,
-    child: Padding(
-      padding: const EdgeInsets.only(
-        top: AppDimensions.space8,
-        bottom: AppDimensions.space16,
-      ),
-      child: _HighlightedText(
-        text: text,
-        style: AppTypography.h1.copyWith(color: color),
-        query: highlightQuery,
-      ),
-    ),
-  );
-}
-
 class _SectionTitle extends StatelessWidget {
   const _SectionTitle(
     this.text, {
@@ -756,10 +640,7 @@ class _LinkedBodyBlock extends StatelessWidget {
               onTap: links[nextLabel],
               child: Text(
                 nextLabel,
-                style: baseStyle.copyWith(
-                  color: AppColors.textLinkOnLight,
-                  decoration: TextDecoration.underline,
-                ),
+                style: baseStyle,
               ),
             ),
           ),
@@ -855,11 +736,11 @@ class _AepdBlock extends StatelessWidget {
             child: Semantics(
               link: true,
               button: true,
-              label: 'https://www.aepd.es/',
+              label: AppLocalizations.of(context).privacyAepdLinkLabel,
               child: InkWell(
                 onTap: onTap,
                 child: Text(
-                  'https://www.aepd.es/ ⇲',
+                  AppLocalizations.of(context).privacyAepdLinkLabel,
                   style: style.copyWith(
                     decoration: TextDecoration.underline,
                     color: color,

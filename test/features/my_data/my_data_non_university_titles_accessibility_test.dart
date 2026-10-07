@@ -40,7 +40,7 @@ void main() {
 
     expect(
       find.semantics.byLabel(
-        'Libro: 12, orden: 34, folio: 56. Técnico en Gestión Administrativa. IES Merced. Provincia: Madrid. Fecha expedición: 8 abr 1989',
+        'Libro: 12, orden: 34, folio: 56. Técnico en Gestión Administrativa. IES Merced. Provincia: Madrid. Fecha expedición: 08/04/1989',
       ),
       findsOneWidget,
     );

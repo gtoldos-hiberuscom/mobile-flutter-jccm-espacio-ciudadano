@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_divider.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ciudadanos_endpoint_id_provider.dart';
@@ -75,12 +74,11 @@ class GestionPage extends ConsumerWidget {
                 for (final section in sections) ...[
                   if (section.hasDividerAbove) ...[
                     const SizedBox(height: AppDimensions.space16),
-                    const AppDivider(strength: AppDividerStrength.medium),
+                    const AppDivider(),
                     const SizedBox(height: AppDimensions.space16),
                   ],
                   AppNavigationCard(
                     title: section.title,
-                    description: section.description,
                     onTap: () => context.go(section.route),
                   ),
                   if (!section.hasDividerAbove) const SizedBox(height: AppDimensions.space16),
@@ -135,19 +133,16 @@ class _GestionSectionDefinition {
   const _GestionSectionDefinition({
     required this.title,
     required this.route,
-    this.description,
     this.hasDividerAbove = false,
   });
 
   final _GestionText title;
-  final _GestionText? description;
   final bool hasDividerAbove;
   final String route;
 
   _GestionSection resolve(final AppLocalizations l10n) {
     return _GestionSection(
       title: title.resolve(l10n),
-      description: description?.resolve(l10n),
       hasDividerAbove: hasDividerAbove,
       route: route,
     );
@@ -183,11 +178,9 @@ class _GestionSection {
     required this.title,
     required this.hasDividerAbove,
     required this.route,
-    this.description,
   });
 
   final String title;
-  final String? description;
   final bool hasDividerAbove;
   final String route;
 }

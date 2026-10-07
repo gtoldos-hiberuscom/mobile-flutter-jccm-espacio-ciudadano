@@ -28,7 +28,12 @@ class MyDataEmploymentOffersPage extends ConsumerWidget {
         data: (final offers) => MyDataEmploymentOffersContent(offers: offers),
         loading: () => const Center(child: AppLoadingIndicator()),
         error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
-            ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataEmploymentOffers, onAuthorized: () => ref.invalidate(employmentOfferRegistrationsProvider))
+            ? MyDataAuthorizationRequiredState(
+                returnTo: Routes.myDataEmploymentOffers,
+                message: l10n.myDataEmploymentOffersAuthorizationRequiredMessage,
+                showTextAction: true,
+                onAuthorized: () => ref.invalidate(employmentOfferRegistrationsProvider),
+              )
             : MyDataEmploymentOffersLoadError(
                 onRetry: () => ref.invalidate(employmentOfferRegistrationsProvider),
               ),
@@ -38,29 +43,18 @@ class MyDataEmploymentOffersPage extends ConsumerWidget {
 
   Future<void> _showInfoSheet(final BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    final linkLabel = l10n.myDataEmploymentOffersPortalLink;
-    final footer = l10n.myDataEmploymentOffersInfoSheetFooter;
-    final linkStart = footer.indexOf(linkLabel);
-    // Enlace enfocable con teclado, con anillo de foco y rol de enlace
-    // externo (WCAG 2.1.1, 2.4.7 y 4.1.2).
     await AppInfoSheet.show(
       context: context,
-      title: l10n.myDataEmploymentOffersPageTitle,
+      title: l10n.myDataEmploymentOffersInfoSheetTitle,
       bodyText: l10n.myDataEmploymentOffersInfoSheetDescription,
-      footerSpan: TextSpan(
-        children: [
-          TextSpan(text: footer.substring(0, linkStart)),
-          AppInlineLink.span(
-            text: linkLabel,
-            style: AppTypography.bodyLink.copyWith(color: AppColors.textPrimary),
-            onTap: () => launchExternalUrlWithConfirmation(
-              context,
-              Uri.parse('https://empleo.castillalamancha.es/'),
-            ),
-          ),
-          TextSpan(text: footer.substring(linkStart + linkLabel.length)),
-        ],
+      footerText: l10n.myDataEmploymentOffersInfoSheetFooter,
+      actionLabel: l10n.myDataEmploymentInfoSheetOfficeContactsButton,
+      onActionPressed: () => launchExternalUrlWithConfirmation(
+        context,
+        Uri.parse('https://empleo.castillalamancha.es/'),
       ),
+      actionIcon: AppIcons.openInNew,
+      actionIsExternalLink: true,
     );
   }
 }
