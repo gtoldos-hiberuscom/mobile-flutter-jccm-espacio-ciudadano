@@ -322,6 +322,9 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     try {
       if (currentlyEnabled) {
         await appStorage.write('${StorageKeys.biometricQuickAccessEnabledPrefix}${preferencesArgs.idAgente}', false);
+        // Desactivarlo a mano también es un «no»: la home no se lo vuelve a
+        // ofrecer en el siguiente login.
+        await appStorage.write('${StorageKeys.biometricQuickAccessDeclinedPrefix}${preferencesArgs.idAgente}', true);
       } else {
         final authenticator = ref.read(biometricAuthenticatorProvider);
         if (!await authenticator.canAuthenticateWithBiometrics()) {

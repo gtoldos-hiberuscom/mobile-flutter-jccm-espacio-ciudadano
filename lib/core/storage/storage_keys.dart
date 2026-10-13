@@ -30,9 +30,12 @@ abstract final class StorageKeys {
   /// sesión se guardara sin habérselo preguntado.
   static const String biometricQuickAccessEnabledPrefix = 'biometric_quick_access_enabled_';
 
-  /// Prefix for the per-user "quick-access offer already shown" flag.
-  /// Full key = biometricQuickAccessPromptSeenPrefix + idAgente
-  static const String biometricQuickAccessPromptSeenPrefix = 'biometric_quick_access_prompt_seen_';
+  /// Prefix for the per-user "declined the quick-access offer" flag.
+  /// Full key = biometricQuickAccessDeclinedPrefix + idAgente
+  ///
+  /// Quien dice que no —en la oferta de la home o desactivándolo en
+  /// Preferencias— no vuelve a ver la oferta; lo puede activar él mismo.
+  static const String biometricQuickAccessDeclinedPrefix = 'biometric_quick_access_declined_';
 
   /// The locale code last selected by the user (e.g. `'es'`).
   static const String selectedLocale = 'selected_locale';
