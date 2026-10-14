@@ -43,11 +43,14 @@ void main() {
     appStorage = FakeAppStorage();
   });
 
+  late _FakeAuthRepository repository;
+
   ProviderContainer buildContainer(final TokenResponse elevated) {
+    repository = _FakeAuthRepository(token: elevated);
     final container = ProviderContainer(
       retry: (final _, final _) => null,
       overrides: [
-        authRepositoryProvider.overrideWithValue(_FakeAuthRepository(token: elevated)),
+        authRepositoryProvider.overrideWithValue(repository),
         secureStorageProvider.overrideWithValue(storage),
         appStorageProvider.overrideWithValue(appStorage),
         // El caso de uso lee los parámetros de elevación de la configuración.
@@ -110,6 +113,57 @@ void main() {
     expect(container.read(elevationProvider).outcome, ElevationOutcome.identityChanged);
     expect(container.read(tokenResponseProvider), isNull);
   });
+
+  // Desde JCCMEC-224/228 el login guarda el `id_token` para cerrar después la
+  // sesión que abre en el navegador. La elevación abre una nueva, así que la
+  // pista tiene que pasar a ser la suya.
+  group('pista de cierre de la sesión de navegador', () {
+    test('tras elevar, la pista es el id_token nuevo', () async {
+      storage.store[StorageKeys.idToken] = 'id-token-previo';
+      final container = buildContainer(_token(_claimsToken(level: 'substantial'), idToken: 'id-token-elevado'));
+      startLowLevelSession(container);
+
+      await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
+
+      expect(storage.store[StorageKeys.idToken], 'id-token-elevado');
+    });
+
+    test('vuelve insuficiente: la pista también es la nueva', () async {
+      storage.store[StorageKeys.idToken] = 'id-token-previo';
+      final container = buildContainer(_token(_claimsToken(level: 'low'), idToken: 'id-token-elevado'));
+      startLowLevelSession(container);
+
+      await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
+
+      expect(container.read(elevationProvider).outcome, ElevationOutcome.stillInsufficient);
+      expect(storage.store[StorageKeys.idToken], 'id-token-elevado');
+    });
+
+    test('no cierra la sesión del navegador antes de elevar', () async {
+      // Es el mismo ciudadano: cerrársela es lo que lo echaba al landing si
+      // después cancelaba (29/09). `prompt=login` ya fuerza el desafío.
+      storage.store[StorageKeys.idToken] = 'id-token-previo';
+      final container = buildContainer(_token(_claimsToken(level: 'substantial'), idToken: 'id-token-elevado'));
+      startLowLevelSession(container);
+
+      await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
+
+      expect(repository.logoutCalls, isEmpty);
+    });
+
+    test('otra identidad: queda la pista de esa persona para que el siguiente login la cierre', () async {
+      storage.store[StorageKeys.idToken] = 'id-token-previo';
+      final container = buildContainer(_token(_claimsToken(level: 'high', document: '00000000T'), idToken: 'id-token-de-otra-persona'));
+      startLowLevelSession(container);
+
+      await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
+
+      expect(container.read(elevationProvider).outcome, ElevationOutcome.identityChanged);
+      expect(container.read(tokenResponseProvider), isNull);
+      expect(storage.store[StorageKeys.idToken], 'id-token-de-otra-persona');
+      expect(storage.store.containsKey(StorageKeys.accessToken), isFalse);
+    });
+  });
 }
 
 String _claimsToken({required final String level, final String document = '99999999R'}) {
@@ -123,11 +177,11 @@ String _claimsToken({required final String level, final String document = '99999
   return 'header.${base64Url.encode(utf8.encode(payload))}.signature';
 }
 
-TokenResponse _token(final String accessToken) => TokenResponse(
+TokenResponse _token(final String accessToken, {final String idToken = 'id-token'}) => TokenResponse(
   accessToken,
   'refresh',
   DateTime(2030),
-  'id-token',
+  idToken,
   'Bearer',
   const ['openid'],
   const <String, dynamic>{},
@@ -155,5 +209,9 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<void> revokeOfflineSession({required final String refreshToken}) => throw UnimplementedError();
 
   @override
-  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {}
+  Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {
+    logoutCalls.add(idToken);
+  }
+
+  final List<String> logoutCalls = [];
 }

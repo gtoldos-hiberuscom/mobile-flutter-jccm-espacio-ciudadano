@@ -81,6 +81,9 @@ void main() {
     final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
 
     expect(result, isA<ElevationIdentityMismatch>());
+    // Lleva el `id_token` de esa otra persona: sin él no habría con qué cerrar
+    // su sesión de navegador antes del siguiente login.
+    expect((result as ElevationIdentityMismatch).idToken, 'id-token');
   });
 
   // Elevar cambia de proveedor de identidad y con él el `sub`, así que comparar

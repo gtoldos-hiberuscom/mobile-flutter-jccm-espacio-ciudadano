@@ -49,10 +49,15 @@ final class ElevationInsufficient extends ElevationResult {
 /// tiene en la mano sigue siendo el titular de la sesión anterior. Quien llama
 /// tiene que cerrar sesión del todo.
 final class ElevationIdentityMismatch extends ElevationResult {
-  ElevationIdentityMismatch({required this.previous, required this.next});
+  ElevationIdentityMismatch({required this.previous, required this.next, this.idToken});
 
   final JwtClaims previous;
   final JwtClaims next;
+
+  /// `id_token` de la identificación nueva. No se adopta nada con él: es la
+  /// pista para que el siguiente login cierre en el navegador la sesión de esa
+  /// otra persona, que de lo contrario Cerbero encontraría viva.
+  final String? idToken;
 }
 
 /// El ciudadano volvió atrás. Se mantiene el bloqueo, sin ruido.
@@ -129,7 +134,7 @@ final class ElevateAuthenticationLevelUseCase {
         // Identidad primero, nivel después: un token de otra persona no se
         // adopta aunque su nivel baste.
         if (!currentClaims.identifiesSamePersonAs(jwtClaims)) {
-          return ElevationIdentityMismatch(previous: currentClaims, next: jwtClaims);
+          return ElevationIdentityMismatch(previous: currentClaims, next: jwtClaims, idToken: tokenResponse.idToken);
         }
 
         final reading = AuthenticationLevelReading.parse(jwtClaims.authNLevelRaw);

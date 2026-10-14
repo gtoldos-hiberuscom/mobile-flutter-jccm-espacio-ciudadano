@@ -79,10 +79,21 @@ class ElevationNotifier extends Notifier<ElevationState> {
       switch (result) {
         case ElevationSucceeded(:final tokenResponse, :final jwtClaims):
         case ElevationInsufficient(:final tokenResponse, :final jwtClaims):
-          // Se adopta haciendo **exactamente lo mismo que
-          // `LandingNotifier.login`**, que es lo que esta elevación es: un
-          // login. Dos pasos, y ninguno más.
+          // Se adopta como lo hace `LandingNotifier.login`, que es lo que
+          // esta elevación es: un login. Memoria, pista de navegador e
+          // invalidar el consentimiento.
+          //
+          // Lo que el login hace y aquí **no**: `endStaleBrowserSession()`
+          // antes de autorizar. Aquello cierra la sesión que dejó otro
+          // ciudadano (JCCMEC-224/228); aquí es el mismo, `prompt=login` ya
+          // obliga a Cl@ve a desafiar, y cerrarle la sesión antes de elevar
+          // fue lo que lo echaba al landing el 29/09 si después cancelaba.
           session.startInMemory(tokenResponse, claims: jwtClaims);
+          // La sesión del navegador es ahora la de esta identificación, así
+          // que el `id_token` que la cierra también. Con el anterior, el
+          // siguiente cambio de ciudadano no podría cerrarla y Cerbero
+          // volvería a cortar con «already authenticated as different user».
+          await session.rememberBrowserSession(tokenResponse.idToken);
           if (!ref.mounted) {
             return;
           }
@@ -102,11 +113,17 @@ class ElevationNotifier extends Notifier<ElevationState> {
             outcome: result is ElevationSucceeded ? ElevationOutcome.succeeded : ElevationOutcome.stillInsufficient,
           );
 
-        case ElevationIdentityMismatch():
+        case ElevationIdentityMismatch(:final idToken):
           // Acaba de identificarse otra persona en este dispositivo: no se
           // adopta el token nuevo, y tampoco vale seguir con el viejo.
           logger.w({'event': 'auth_elevation_identity_mismatch'});
           await session.clear();
+          // `clear()` borra la pista de navegador, pero en el navegador queda
+          // viva la sesión de esa otra persona. Se deja la suya —después del
+          // `clear()`, que si no la borraría— para que el siguiente login la
+          // cierre (`endStaleBrowserSession`). No autoriza nada: solo sirve
+          // para cerrar.
+          await session.rememberBrowserSession(idToken);
           if (!ref.mounted) {
             return;
           }
