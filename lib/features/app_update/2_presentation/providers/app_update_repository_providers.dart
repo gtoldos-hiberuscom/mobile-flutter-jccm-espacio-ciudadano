@@ -44,7 +44,7 @@ final appUpdateRepositoryProvider = Provider<AppUpdateRepository>(
     source: ref.watch(appUpdateSourceProvider),
     platform: ref.watch(appUpdateStorePlatformProvider),
     // El servidor de versiones cuelga del mismo host que el resto de APIs.
-    api: () => AppVersionApi.standalone(baseUrl: ref.read(appConfigProvider).baseUrl),
+    api: () => AppVersionApi.standalone(config: ref.read(appConfigProvider)),
   ),
 );
 

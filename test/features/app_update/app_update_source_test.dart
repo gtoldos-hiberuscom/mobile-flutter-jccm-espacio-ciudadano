@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_version.dart';
@@ -41,7 +42,7 @@ void main() {
     var apiBuilds = 0;
     AppVersionApi api() {
       apiBuilds++;
-      return AppVersionApi.standalone(baseUrl: 'https://example.invalid');
+      return AppVersionApi(Dio());
     }
 
     setUp(() => apiBuilds = 0);

@@ -1,19 +1,19 @@
 import 'package:dio/dio.dart';
-import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/network/api_client.dart';
 
 /// Cliente del servidor de versiones (`GET /api/v1/app-movil/actualizacion`,
 /// contrato en `documentation/api/app-version-api.yaml`).
 final class AppVersionApi {
   AppVersionApi(this._dio);
 
-  /// Dio propio y no el cliente de la app: la consulta se hace al arrancar,
-  /// antes del login, así que no lleva el interceptor de autenticación (que
-  /// además podría refrescar o cerrar sesión ante un 401) ni el de errores (el
-  /// `DioException` crudo lo convierte el use case en «no bloquear»). Solo el
-  /// logger, que no vuelca cuerpos.
-  factory AppVersionApi.standalone({required final String baseUrl}) => AppVersionApi(
-    Dio(BaseOptions(baseUrl: baseUrl, connectTimeout: timeout, receiveTimeout: timeout, sendTimeout: timeout))..interceptors.add(EmojiDioLogger()),
-  );
+  /// Cliente sin sesión (`buildPublicDioClient`) y no el de la app: la
+  /// consulta se hace al arrancar, antes del login, así que no lleva el
+  /// interceptor de autenticación (que además podría refrescar o cerrar sesión
+  /// ante un 401) ni el de errores (el `DioException` crudo lo convierte el use
+  /// case en «no bloquear»). Mismas cabeceras y mismas trazas de red (cuerpos y
+  /// curl en desarrollo) que el resto de APIs.
+  factory AppVersionApi.standalone({required final AppConfig config}) => AppVersionApi(buildPublicDioClient(config: config, timeout: timeout));
 
   /// Corto a propósito: la comprobación corre en cada arranque y vuelta de
   /// segundo plano y no debe retrasar nada; si tarda, se da por no disponible.
