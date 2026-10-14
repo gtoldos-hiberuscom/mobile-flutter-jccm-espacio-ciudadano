@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,26 +19,13 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/ex
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/1_domain/repositories/gestion_notificaciones_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_notificaciones_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/providers/biometric_quick_access_offer_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/1_domain/recommendations_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/2_presentation/providers/recommendations_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 bool _isTablet(final BuildContext context) => isTabletLayout(context);
-
-/// Evita repetir la oferta de acceso rápido si se vuelve a la home dentro de
-/// la misma sesión: vive en un provider y no en el State porque la página se
-/// remonta al navegar por las pestañas del shell.
-final _biometricPromptShownInSessionProvider = NotifierProvider<_BiometricPromptSessionNotifier, bool>(
-  _BiometricPromptSessionNotifier.new,
-);
-
-class _BiometricPromptSessionNotifier extends Notifier<bool> {
-  @override
-  bool build() => false;
-
-  void markShown() => state = true;
-}
 
 /// Authenticated home screen — Figma node 43716:13302 "Inicio".
 ///
@@ -97,17 +83,15 @@ class _HomePageState extends ConsumerState<HomePage> {
   /// ciudadano lo acepta no se guarda el token de larga vida, así que nadie
   /// acaba con una sesión de semanas sin haberla pedido.
   ///
-  /// No se insiste: si lo rechaza, no se vuelve a preguntar en esta sesión, y
+  /// No se insiste: si lo rechaza, no se le vuelve a preguntar nunca, y
   /// siempre puede activarlo después desde Preferencias.
   Future<void> _offerBiometricQuickAccess(final String idAgente) async {
+    final offer = ref.read(biometricQuickAccessOfferProvider.notifier);
+    if (!offer.shouldOffer(idAgente)) {
+      return;
+    }
     final appStorage = ref.read(appStorageProvider);
     final enabledKey = '${StorageKeys.biometricQuickAccessEnabledPrefix}$idAgente';
-    if (appStorage.read<bool>(enabledKey) ?? false) {
-      return;
-    }
-    if (ref.read(_biometricPromptShownInSessionProvider)) {
-      return;
-    }
 
     // Sin biometría dada de alta no se ofrece nada: el almacén rechazaría la
     // escritura y la promesa de «entra sin identificarte» sería falsa.
@@ -115,9 +99,15 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (!mounted || !hasBiometrics) {
       return;
     }
-    ref.read(_biometricPromptShownInSessionProvider.notifier).markShown();
+    offer.markShown();
 
     final accepted = await AppBiometricAccessDialog.show(context);
+    if (accepted == false) {
+      // Sólo el «no» explícito cuenta como rechazo: cerrar el diálogo con el
+      // botón atrás de Android no es una respuesta, y se le vuelve a ofrecer
+      // en el siguiente login.
+      await offer.recordDeclined(idAgente);
+    }
     if (!mounted || accepted != true) {
       // Aquí NO se revoca, aunque este token vaya a quedar sin usar. Medido en
       // PRE: `POST /logout` con el refresh token cierra la sesión entera, no
@@ -131,20 +121,19 @@ class _HomePageState extends ConsumerState<HomePage> {
       return;
     }
 
-    // En iOS se autentica aquí, al activar: guardar en el Keychain con control
-    // de acceso no pide nada, así que sin esto el permiso de Face ID del
-    // sistema le aparecería al ciudadano días después, al abrir la app y sin
-    // contexto. En Android sobra —escribir en el KeyStore ya exige autenticar,
-    // justo debajo—, y hacerlo igualmente encadenaba dos huellas seguidas.
-    if (!Platform.isAndroid) {
-      final authenticated = await ref
-          .read(biometricAuthenticatorProvider)
-          .authenticateForSessionUnlock(
-            localizedReason: AppLocalizations.of(context).sessionUnlockBiometricReason,
-          );
-      if (!mounted || !authenticated) {
-        return;
-      }
+    // Se autentica aquí, al activar: guardar no pide huella, así que sin esto
+    // se activaría sin comprobar a nadie, y en iOS el permiso de Face ID le
+    // aparecería al ciudadano días después, al abrir la app y sin contexto.
+    final l10n = AppLocalizations.of(context);
+    final authenticated = await ref
+        .read(biometricAuthenticatorProvider)
+        .authenticateForSessionUnlock(
+          localizedReason: l10n.sessionUnlockBiometricReason,
+          title: l10n.sessionUnlockBiometricTitle,
+          cancelLabel: l10n.sessionUnlockBiometricCancel,
+        );
+    if (!mounted || !authenticated) {
+      return;
     }
 
     await appStorage.write(enabledKey, true);
