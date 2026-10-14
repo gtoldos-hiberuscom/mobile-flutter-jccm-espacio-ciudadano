@@ -24,7 +24,7 @@ class MyDataHealthCipField extends ConsumerWidget {
     final style = AppTypography.captionRegular.copyWith(color: AppColors.primary);
 
     return ref.watch(myDataHealthCipProvider).when(
-      loading: () => Text(l10n.myDataHealthCipValue('…'), style: style),
+      loading: () => Text(l10n.myDataHealthCipLabel('…'), style: style),
       error: (final error, final _) => error is MyDataHealthCipMissing
           ? AppAlertContextual(
               message: l10n.agendaHealthCipMissing,
@@ -34,7 +34,7 @@ class MyDataHealthCipField extends ConsumerWidget {
           : Text(l10n.myDataHealthCipUnavailable, style: style),
       data: (final cip) => cip == null || cip.isEmpty
           ? Text(l10n.myDataHealthCipUnavailable, style: style)
-          : Text(l10n.myDataHealthCipValue(cip), style: style),
+          : Text(l10n.myDataHealthCipLabel(cip), style: style),
     );
   }
 }

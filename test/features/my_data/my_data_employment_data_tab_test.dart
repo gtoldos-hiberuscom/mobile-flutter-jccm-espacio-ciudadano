@@ -24,7 +24,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.text('Debes autorizar la consulta de los datos que la Administración General del Estado tiene sobre ti desde tus preferencias.'),
+      find.text('Autoriza el uso de tus datos desde tus preferencias para consultar el estado de tu demanda de empleo.'),
       findsOneWidget,
     );
     expect(find.text('INSCRIPCIÓN NO ACTIVA'), findsNothing);

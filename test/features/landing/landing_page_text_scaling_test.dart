@@ -31,7 +31,7 @@ void main() {
     await tester.pumpWidget(buildApp(textScaler: TextScaler.noScaling));
     await tester.pump();
     final l10n = AppLocalizations.of(tester.element(find.byType(LandingPage)));
-    final taglineFinder = find.textContaining(l10n.landingTaglineHighlight);
+    final taglineFinder = find.text(l10n.landingTagline);
     final baseTaglineHeight = tester.getSize(taglineFinder).height;
     final baseLogoSize = tester.getSize(find.byType(SvgPicture).first);
 

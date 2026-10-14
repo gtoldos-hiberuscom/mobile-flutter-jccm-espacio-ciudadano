@@ -2,6 +2,7 @@ import 'dart:ui' show SemanticsAction;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_card_and_list.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_file_upload.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -24,7 +25,6 @@ void main() {
   AppFileUpload upload(
     final AppFileUploadStatus status, {
     final VoidCallback? onCancel,
-    final VoidCallback? onRemove,
     final VoidCallback? onDelete,
     final VoidCallback? onRetry,
   }) => AppFileUpload(
@@ -33,7 +33,6 @@ void main() {
     status: status,
     progress: 0.45,
     onCancel: onCancel,
-    onRemove: onRemove,
     onDelete: onDelete,
     onRetry: onRetry,
   );
@@ -48,17 +47,37 @@ void main() {
   testWidgets('un fichero pendiente se anuncia Seleccionado, nunca Subido', (final tester) async {
     // AP-7: un fichero sin enviar (recién elegido o tras abortarse el lote)
     // se anunciaba «Subido» junto al snackbar rojo que decía lo contrario.
-    var deletes = 0;
-    await tester.pumpWidget(buildApp(upload(AppFileUploadStatus.pending, onDelete: () => deletes++)));
+    await tester.pumpWidget(buildApp(upload(AppFileUploadStatus.pending, onCancel: () {}, onDelete: () {})));
 
     expect(
       find.semantics.byLabel('Archivo: documento_acreditativo.pdf, PDF, 245 KB. Estado: Seleccionado').evaluate(),
       hasLength(1),
     );
+  });
 
-    // Conserva la acción de quitar el fichero, como la fila de subido.
-    await tester.tap(find.byTooltip('Eliminar archivo'));
-    expect(deletes, 1);
+  testWidgets('un fichero pendiente se pinta cargando, sin papelera', (final tester) async {
+    // JCCMEC-245: la papelera salía antes de empezar la subida, invirtiendo la
+    // secuencia cargando → completado → eliminar.
+    var cancels = 0;
+    await tester.pumpWidget(buildApp(upload(AppFileUploadStatus.pending, onCancel: () => cancels++, onDelete: () {})));
+
+    expect(find.byTooltip('Eliminar archivo'), findsNothing);
+    expect(tester.widget<AppProgressBar>(find.byType(AppProgressBar)).value, isNull);
+
+    await tester.tap(find.widgetWithText(TextButton, 'Cancelar'));
+    expect(cancels, 1);
+  });
+
+  testWidgets('un fichero recién subido muestra Completado, sin acciones', (final tester) async {
+    await tester.pumpWidget(buildApp(upload(AppFileUploadStatus.complete, onDelete: () {})));
+
+    expect(find.text('Completado'), findsOneWidget);
+    expect(find.byTooltip('Eliminar archivo'), findsNothing);
+    expect(find.byType(TextButton), findsNothing);
+    expect(
+      find.semantics.byLabel('Archivo: documento_acreditativo.pdf, PDF, 245 KB. Estado: Subido').evaluate(),
+      hasLength(1),
+    );
   });
 
   testWidgets('mantiene cada acción como botón independiente', (final tester) async {
@@ -99,7 +118,6 @@ void main() {
         Column(
           children: [
             upload(AppFileUploadStatus.uploading, onCancel: () {}),
-            upload(AppFileUploadStatus.complete, onRemove: () {}),
             upload(AppFileUploadStatus.uploaded, onDelete: () {}),
             upload(AppFileUploadStatus.error, onRetry: () {}),
           ],
@@ -109,7 +127,6 @@ void main() {
 
     final controls = <Finder>[
       find.widgetWithText(TextButton, 'Cancelar'),
-      find.widgetWithText(TextButton, 'Eliminar'),
       find.byTooltip('Eliminar archivo'),
       find.widgetWithText(TextButton, 'Reintentar'),
     ];

@@ -15,13 +15,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingTitle => 'Espacio Ciudadano';
 
   @override
-  String get landingTagline => 'Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha';
+  String get landingTagline => 'Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de Castilla-La Mancha.';
 
   @override
-  String get landingTaglinePrefix => 'Gestión ágil y online de trámites para la ciudadanía de ';
+  String get landingTaglinePrefix => 'Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de ';
 
   @override
-  String get landingTaglineHighlight => 'Castilla-La Mancha';
+  String get landingTaglineHighlight => 'Castilla-La Mancha.';
 
   @override
   String landingAccessStepLabel(int stepNumber) {
@@ -32,7 +32,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingCtaButton => 'Acceder a mi Espacio ciudadano';
 
   @override
-  String get landingAboutButton => 'Información y ayuda sobre el espacio';
+  String get landingAboutButton => 'Saber más sobre Espacio ciudadano';
 
   @override
   String get landingHelpLink => 'Ayuda y contacto';
@@ -53,10 +53,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingHelpExternalLink => 'Enlace externo';
 
   @override
-  String get landingAboutPageTitle => 'Saber más sobre el Espacio Ciudadano';
+  String get landingAboutPageTitle => 'Saber más sobre Espacio Ciudadano';
 
   @override
-  String get landingAboutTitle => 'Espacio ciudadano';
+  String get landingAboutTitle => '¿Qué es el Espacio ciudadano?';
 
   @override
   String get landingAboutBodyPrefix => 'es el área digital donde aparecerá información relevante con el objetivo de';
@@ -68,10 +68,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingAboutBodySuffix => 'en los trámites y procedimientos en los que seas parte o que puedan ser de tu interés.';
 
   @override
-  String get landingAboutWhatYouFindTitle => '¿Qué encontrarás?';
+  String get landingAboutBody => 'Espacio ciudadano es un espacio digital donde puedes consultar tus trámites, encontrar otros que pueden interesarte y acceder a información y servicios que facilitan tu relación con la Administración.';
 
   @override
-  String get landingAboutWhatYouFindIntro => 'Tus datos en relación con la Junta de Comunidades de Castilla-La Mancha:';
+  String get landingAboutWhatYouFindTitle => '¿Qué puedo consultar?';
+
+  @override
+  String get landingAboutWhatYouFindIntro => 'En el Espacio ciudadano encontrarás:';
 
   @override
   String get landingAboutBullet1 => 'Tu información personal.';
@@ -86,13 +89,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingAboutBullet4 => 'Tus carnets digitales.';
 
   @override
-  String get landingAboutBullet5 => 'Tus citas o eventos.';
+  String get landingAboutBullet5 => 'Tus citas y eventos.';
 
   @override
-  String get landingAboutBullet6 => 'Recomendaciones personalizadas basadas en tus intereses.';
+  String get landingAboutBullet6 => 'Recomendaciones personalizadas según tus intereses.';
 
   @override
-  String get landingAboutAccessButton => 'Acceder a mi Espacio Ciudadano';
+  String get landingAboutHelpLink => 'Mostrar información de Ayuda y contacto';
+
+  @override
+  String get landingAboutAccessButton => 'Acceder a mi Espacio ciudadano';
 
   @override
   String get landingAboutExternalLink => 'Enlace externo';
@@ -319,6 +325,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get externalNavigationDialogTitle => 'Vas a salir de la aplicación';
+
+  @override
+  String get drawerElectronicOfficeDialogTitle => 'Te vamos a redirigir a la Sede Electrónica';
 
   @override
   String get externalNavigationDialogBody => 'El contenido se abrirá en una ventana de tu navegador';
@@ -767,25 +776,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get educationUniversityTitlesError => 'No hemos podido cargar tus títulos universitarios.';
 
   @override
-  String get educationUniversityTitlesInfoTitle => 'Sobre tus títulos universitarios';
+  String get educationUniversityTitlesInfoTitle => 'Saber más sobre Mis datos de títulos universitarios';
 
   @override
-  String get educationUniversityTitlesInfoBody => 'Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.';
+  String get educationUniversityTitlesInfoBody => 'Consulta la información de tus títulos universitarios inscritos en el Registro Nacional de Titulados Universitarios Oficiales del Ministerio de Ciencia, Innovación y Universidades.\n\nSi obtuviste tu título antes de 1996, es posible que tus datos no estén disponibles automáticamente.';
 
   @override
-  String get educationUniversityTitlesInfoFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Sede Electrónica de Universidades.';
+  String get educationUniversityTitlesInfoFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con el Ministerio de Ciencia, Innovación y Universidades.';
 
   @override
   String get educationUniversityTitlesInfoContactButton => 'Contacto';
 
   @override
-  String get educationNonUniversityTitlesInfoTitle => 'Sobre tus títulos no universitarios';
+  String get educationNonUniversityTitlesInfoTitle => 'Saber más sobre Mis datos de títulos no universitarios';
 
   @override
-  String get educationNonUniversityTitlesInfoBody => 'Consulta los datos de los títulos no universitarios que figuren en el registro.';
+  String get educationNonUniversityTitlesInfoBody => 'Consulta la información de tus títulos no universitarios inscritos en el Registro Nacional de Titulados no Universitarios Oficiales del Ministerio de Educación, Formación profesional y Deportes.';
 
   @override
   String get educationNonUniversityTitlesInfoFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación, Formación Profesional y Deportes.';
+
+  @override
+  String get educationTitlesInfoMoreInformation => 'Consultar más información';
 
   @override
   String get educationNonUniversityTitlesTitle => 'Títulos no universitarios';
@@ -883,13 +895,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareTemporaryResidentialStayProcedure => 'Plaza para el servicio de estancias temporales en centros residenciales para personas mayores';
 
   @override
-  String get socialWelfareInfoSheetTitle => 'Sobre Mis datos de Bienestar social';
+  String get socialWelfareInfoSheetTitle => 'Saber más sobre Mis datos de Bienestar social';
 
   @override
-  String get socialWelfareInfoSheetDescription => 'Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.';
+  String get socialWelfareInfoSheetDescription => 'Consulta la información de tus expedientes de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get myDataJccmAuthorizationRequiredMessage => 'Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.';
+  String get myDataJccmAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.';
 
   @override
   String get authorizationCheckFailedMessage => 'No hemos podido comprobar tus autorizaciones. Inténtalo de nuevo.';
@@ -898,22 +910,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataJccmAuthorizationRequiredCta => 'Ir a Condiciones de uso y autorizaciones';
 
   @override
-  String get myDataAgeAuthorizationRequiredMessage => 'Debes autorizar la consulta de los datos que la Administración General del Estado tiene sobre ti desde tus preferencias.';
+  String get myDataAgeAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.';
 
   @override
   String get socialWelfareFamilyTitle => 'Familia numerosa';
 
   @override
-  String get socialWelfareFamilyNavDescription => 'Detalles del título y personas beneficiarias';
+  String get socialWelfareFamilyNavDescription => 'Título y personas beneficiarias';
 
   @override
   String get socialWelfareDisabilityTitle => 'Discapacidad';
 
   @override
-  String get socialWelfareDisabilityNavDescription => 'Detalles del título de discapacidad';
+  String get socialWelfareDisabilityNavDescription => 'Certificado de discapacidad';
 
   @override
-  String get socialWelfareDisabilityInfoSheetTitle => 'Sobre Mi título de discapacidad';
+  String get socialWelfareDisabilityInfoSheetTitle => 'Saber más sobre Mi título de discapacidad';
 
   @override
   String get socialWelfareDisabilityInfoSheetDescription => 'Consulta los datos de tu título de discapacidad.';
@@ -993,7 +1005,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareTermalismoNavDescription => 'Balneario adjudicado';
 
   @override
-  String get socialWelfareTermalismoInfoSheetTitle => 'Sobre Termalismo';
+  String get socialWelfareTermalismoInfoSheetTitle => 'Saber más sobre Termalismo';
 
   @override
   String get socialWelfareTermalismoInfoSheetDescription => 'Consulta los datos del último balneario que te han adjudicado de forma definitiva en el Programa Termalismo de Castilla-La Mancha.';
@@ -1023,13 +1035,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareParkingTitle => 'Tarjeta de estacionamiento';
 
   @override
-  String get socialWelfareParkingNavTitle => 'Tarjeta estacionamiento';
+  String get socialWelfareParkingNavTitle => 'Tarjeta de estacionamiento';
 
   @override
-  String get socialWelfareParkingNavDescription => 'Detalles de tu tarjeta de estacionamiento';
+  String get socialWelfareParkingNavDescription => 'Datos de la tarjeta y condiciones de uso';
 
   @override
-  String get socialWelfareParkingInfoSheetTitle => 'Sobre Mi tarjeta de estacionamiento';
+  String get socialWelfareParkingInfoSheetTitle => 'Saber más sobre Mi tarjeta de estacionamiento';
 
   @override
   String get socialWelfareParkingInfoSheetDescription => 'Consulta los datos de tu tarjeta de estacionamiento en vigor para personas con discapacidad y movilidad reducida de Castilla-La Mancha.';
@@ -1065,7 +1077,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareDependenciaNavDescription => 'Situación actual y prestaciones';
 
   @override
-  String get socialWelfareDependenciaInfoSheetTitle => 'Sobre Atención a la dependencia';
+  String get socialWelfareDependenciaInfoSheetTitle => 'Saber más sobre Atención a la dependencia';
 
   @override
   String get socialWelfareDependenciaInfoSheetDescription => 'Consulta los datos sobre tu situación actual de las prestaciones en ayuda a la dependencia.';
@@ -1441,7 +1453,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsTypeFamiliaNumerosa => 'Familia Numerosa';
 
   @override
-  String get digitalCardsTypeJoven => 'Joven';
+  String get digitalCardsTypeJoven => 'Carnet Joven';
 
   @override
   String get digitalCardsTypeDiscapacidad => 'Discapacidad';
@@ -1525,6 +1537,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lifeEventsHeaderDescription => 'Selecciona los hechos vitales que mejor describen tu situación para recibir recomendaciones personalizadas.';
 
   @override
+  String get lifeEventsOnboardingTitle => 'Recomendaciones personalizadas';
+
+  @override
+  String get lifeEventsOnboardingDescription => 'Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.';
+
+  @override
+  String get lifeEventsCompleteLaterAction => 'Completar más tarde';
+
+  @override
   String get lifeEventsIntroHeading => 'Selecciona las temáticas sobre las que te gustaría recibir información';
 
   @override
@@ -1540,7 +1561,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lifeEventsFillLaterAction => 'Rellenar luego';
 
   @override
-  String get lifeEventsClearAllAction => 'Desmarcar todo';
+  String get lifeEventsClearAllAction => 'Desmarcar todos';
 
   @override
   String get lifeEventsResetAction => 'Borrar preferencias';
@@ -1731,7 +1752,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fileUploadCancel => 'Cancelar';
 
   @override
-  String get fileUploadRemove => 'Eliminar';
+  String get fileUploadCompleted => 'Completado';
 
   @override
   String get fileUploadDelete => 'Eliminar archivo';
@@ -2345,7 +2366,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get familiaNumerosaDetailTitle => 'Familia numerosa';
 
   @override
-  String get familiaNumerosaInfoSheetTitle => 'Sobre Familia numerosa';
+  String get familiaNumerosaInfoSheetTitle => 'Saber más sobre Familia numerosa';
 
   @override
   String get familiaNumerosaInfoSheetDescription => 'Consulta los datos de tu título de familia numerosa.';
@@ -2407,13 +2428,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get familiaNumerosaNo => 'No';
 
   @override
-  String get familiaNumerosaNoDataMessage => 'No existe el título de familia numerosa indicado.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get familiaNumerosaNoDataMessage => 'No hemos encontrado información sobre tu título de familia numerosa.';
+
+  @override
+  String get familiaNumerosaNoDataContactHint => 'Si esta información es incorrecta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+
+  @override
+  String get familiaNumerosaContactListButton => 'Consultar el listado de contactos';
 
   @override
   String get familiaNumerosaContactHint => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
 
   @override
   String get familiaNumerosaOfficeContactsButton => 'Contacto';
+
+  @override
+  String get familiaNumerosaMoreInformation => 'Consultar más información';
 
   @override
   String familiaNumerosaCardNumberLabel(String number) {
@@ -2513,7 +2543,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentDemandNoDataMessage => 'No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.';
 
   @override
-  String get myDataEmploymentOffersNoDataMessage => 'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.';
+  String get myDataEmploymentOffersNoDataMessage => 'Aún no te has inscrito a ninguna oferta.\n\nSi la información es incorrecta o no está actualizada, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentOffersAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar tus inscripciones en ofertas de empleo.';
+
+  @override
+  String get myDataEmploymentDemandAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar el estado de tu demanda de empleo.';
+
+  @override
+  String get myDataHealthAppointmentsAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar tus citas de Atención Primaria.';
 
   @override
   String get discapacidadServiceUnavailableMessage => 'El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
@@ -2747,10 +2786,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsLifeEventsComingSoon => 'Mis hechos vitales estará disponible próximamente';
 
   @override
-  String get recommendationsLoadingError => 'No hemos podido cargar las recomendaciones.';
+  String get recommendationsLoadingError => 'No hemos podido cargar la información de tus recomendaciones. Vuelve a intentarlo más tarde.';
 
   @override
-  String get recommendationsLoadingErrorRetry => 'Reintentar';
+  String get recommendationsLoadingErrorRetry => 'Actualizar';
 
   @override
   String get recommendationsDetailUnavailable => 'Detalle disponible próximamente';
@@ -2895,7 +2934,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get a11yBottomSheet => 'Panel inferior';
 
   @override
-  String get a11yBottomSheetClose => 'Salir';
+  String get a11yBottomSheetClose => 'Cerrar';
 
   @override
   String get a11yCalendar => 'Calendario';
@@ -2939,6 +2978,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesResetError => 'No hemos podido borrar tus preferencias. Inténtalo de nuevo.';
 
   @override
+  String get preferencesLoadError => 'No hemos podido cargar tus preferencias. Vuelve a intentarlo más tarde.';
+
+  @override
+  String get preferencesLoadRetry => 'Actualizar';
+
+  @override
   String get drawerPreferences => 'Preferencias';
 
   @override
@@ -2962,7 +3007,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataTitle => 'Mis datos';
 
   @override
-  String get myDataIntro => 'Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.';
+  String get myDataIntro => 'Consulta tu información disponible en la Administración y accede a los servicios relacionados.';
 
   @override
   String get representativeUnavailableTitle => 'Información no disponible';
@@ -2974,31 +3019,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthTitle => 'Salud';
 
   @override
-  String get myDataHealthDescription => 'SESCAM y servicios de salud';
+  String get myDataHealthDescription => 'Datos sanitarios y gestión de citas médicas';
 
   @override
   String get myDataSocialWelfareTitle => 'Bienestar Social';
 
   @override
-  String get myDataSocialWelfareDescription => 'Servicios disponibles';
+  String get myDataSocialWelfareDescription => 'Familia numerosa, discapacidad, dependencia y otras ayudas';
 
   @override
   String get myDataEmploymentTitle => 'Empleo';
 
   @override
-  String get myDataEmploymentDescription => 'Demanda y servicios de empleo';
+  String get myDataEmploymentDescription => 'Demanda de empleo, ofertas e inscripciones';
 
   @override
-  String get myDataEmploymentInfoSheetTitle => 'Sobre Mis datos de Empleo';
+  String get myDataEmploymentInfoSheetTitle => 'Saber más sobre Demanda de Empleo';
 
   @override
-  String get myDataEmploymentInfoSheetDescription => 'Consulta tu situación actual como demandante de empleo y tus últimas inscripciones en ofertas.';
+  String get myDataEmploymentInfoSheetDescription => 'Consulta tu situación actual como demandante de empleo.';
 
   @override
-  String get myDataEmploymentInfoSheetFooter => 'Si tus datos como demandante de empleo no son correctos, contacta con Servicio Público de Empleo Estatal (SEPE).';
+  String get myDataEmploymentInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con Servicio Público de Empleo Estatal (SEPE).';
 
   @override
-  String get myDataEmploymentInfoSheetOfficeContactsButton => 'Contacto';
+  String get myDataEmploymentInfoSheetOfficeContactsButton => 'Consultar más información';
 
   @override
   String get myDataEmploymentDataTab => 'Mis datos de Empleo';
@@ -3031,7 +3076,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentServiceUnavailableReload => 'Recargar página';
 
   @override
-  String get myDataEmploymentOffersServiceUnavailableMessage => 'El servicio de inscripciones en ofertas actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get myDataEmploymentOffersServiceUnavailableMessage => 'No hemos podido cargar tus inscripciones en ofertas de empleo. Vuelve a intentarlo más tarde.';
 
   @override
   String get myDataEmploymentAuthorizationDialogTitle => 'No has autorizado la consulta de datos en tu perfil';
@@ -3049,7 +3094,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentOffersTitle => 'Inscripciones en ofertas';
 
   @override
-  String get myDataEmploymentOffersDescription => 'Ofertas de empleo en las que te has inscrito';
+  String get myDataEmploymentOffersDescription => 'Historial de las ofertas de empleo solicitadas';
 
   @override
   String get myDataEmploymentOffersPageTitle => 'Inscripción en ofertas de empleo';
@@ -3058,10 +3103,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentOffersPortalLink => 'Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha';
 
   @override
-  String get myDataEmploymentOffersInfoSheetFooter => 'Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.';
+  String get myDataEmploymentOffersInfoSheetTitle => 'Saber más sobre Inscripción en ofertas de empleo';
 
   @override
-  String get myDataEmploymentOffersInfoSheetDescription => 'Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.';
+  String get myDataEmploymentOffersInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.';
+
+  @override
+  String get myDataEmploymentOffersInfoSheetDescription => 'Consulta tus últimas inscripciones en ofertas de empleo.';
 
   @override
   String get myDataEmploymentOffersEmptyMessage => 'Aún no te has inscrito a ninguna oferta. Si consideras que no es correcto o no está actualizado, contacta con el servicio de Lirem ipsum';
@@ -3106,13 +3154,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEducationTitle => 'Educación';
 
   @override
-  String get myDataEducationDescription => 'Titulos formativos';
+  String get myDataEducationDescription => 'Títulos universitarios y no universitarios';
 
   @override
   String get myDataHousingTitle => 'Vivienda';
 
   @override
-  String get myDataHousingDescription => 'Titularidad de bienes inmueble';
+  String get myDataHousingDescription => 'Datos catastrales y titularidad de inmuebles';
 
   @override
   String get myDataHousingInfoSheetTitle => 'Sobre Mis datos de Vivienda';
@@ -3130,16 +3178,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingRealEstateTitle => 'Bienes inmuebles';
 
   @override
-  String get myDataHousingRealEstateDescription => 'Datos catastrales de mis inmuebles';
+  String get myDataHousingRealEstateDescription => 'Datos catastrales de la propiedad';
 
   @override
-  String get myDataHousingRealEstateInfoSheetTitle => 'Sobre Bienes Inmuebles';
+  String get myDataHousingRealEstateInfoSheetTitle => 'Saber más sobre Bienes Inmuebles';
 
   @override
-  String get myDataHousingRealEstateInfoSheetDescription => 'Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.';
+  String get myDataHousingRealEstateInfoSheetDescription => 'Consulta la información catastral de los inmuebles que tienes registrados a tu nombre en el Catastro.';
 
   @override
-  String get myDataHousingRealEstateInfoSheetFooter => 'Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro';
+  String get myDataHousingRealEstateInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Sede Electrónica del Catastro.';
 
   @override
   String get myDataHousingRealEstateFilterAll => 'Todo';
@@ -3207,16 +3255,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingAddressTitle => 'Domicilio en Castilla-La Mancha';
 
   @override
-  String get myDataHousingAddressDescription => 'Datos en la base padronal';
+  String get myDataHousingAddressDescription => 'Datos padronales';
 
   @override
-  String get myDataHousingAddressInfoSheetTitle => 'Sobre tu domicilio';
+  String get myDataHousingAddressInfoSheetTitle => 'Saber más sobre Domicilio en Castilla-La Mancha';
 
   @override
-  String get myDataHousingAddressInfoSheetDescription => 'Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.';
+  String get myDataHousingAddressInfoSheetDescription => 'Consulta los datos de tu empadronamiento registrados en el Instituto Nacional de Estadística (INE). Esta información procede de los padrones municipales de Castilla-La Mancha y se actualiza cada mes con los datos que envían los ayuntamientos.\n\nSi has cambiado recientemente tu empadronamiento, es posible que esta información todavía no esté actualizada.';
 
   @override
-  String get myDataHousingAddressInfoSheetFooter => 'Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.';
+  String get myDataHousingAddressInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con el Ayuntamiento correspondiente.';
 
   @override
   String get myDataHousingAddressDataTitle => 'Datos del domicilio';
@@ -3261,10 +3309,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingLinksTitle => 'Enlaces de interés';
 
   @override
-  String get myDataHousingLinkClmHousing => 'Vivienda Castilla-La Mancha';
+  String get myDataHousingLinkClmHousing => 'Portal de Vivienda de Castilla-La Mancha';
 
   @override
-  String get myDataHousingLinkCadastre => 'Sede del catastro';
+  String get myDataHousingLinkCadastre => 'Sede Electrónica del Catastro';
 
   @override
   String get myDataHousingProceduresTitle => 'Trámites que te pueden interesar';
@@ -3273,7 +3321,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingProcedureRentalHousingAid => 'Ayudas al alquiler de viviendas';
 
   @override
-  String get myDataHousingProcedureProtectedHousingRegister => 'Inscripción en el registro de demandantes de vivienda con protección pública de CLM';
+  String get myDataHousingProcedureProtectedHousingRegister => 'Inscripción en el Registro de Demandantes de Vivienda';
 
   @override
   String get myDataHousingProcedureSocialEmergencyAid => 'Ayudas de emergencia social';
@@ -3282,19 +3330,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataVehiclesTitle => 'Vehículos';
 
   @override
-  String get myDataVehiclesDescription => 'Tus vehículos registrados';
+  String get myDataVehiclesDescription => 'Matriculación y titularidad de vehículos registrados';
 
   @override
-  String get myDataVehiclesInfoSheetTitle => 'Sobre Mis datos de Vehículos';
+  String get myDataVehiclesInfoSheetTitle => 'Saber más sobre Vehículos';
 
   @override
-  String get myDataVehiclesInfoSheetDescription => 'Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.';
+  String get myDataVehiclesInfoSheetDescription => 'Consulta la información de los vehículos que tienes registrados a tu nombre en la Dirección General de Tráfico (DGT).';
 
   @override
-  String get myDataVehiclesInfoSheetFooter => 'Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)';
+  String get myDataVehiclesInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Dirección General de Tráfico (DGT).';
 
   @override
-  String get myDataVehiclesInfoSheetContactButton => 'Contacto';
+  String get myDataVehiclesInfoSheetContactButton => 'Consultar más información';
 
   @override
   String get myDataVehiclesDataTab => 'Mis datos de Vehículos';
@@ -3368,6 +3416,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEducationTitlesDescription => 'Universidades públicas y privadas';
 
   @override
+  String get myDataEducationNonUniversityTitlesDescription => 'Formación profesional y otras titulaciones';
+
+  @override
   String get myDataEducationServicesEmpty => 'Información y servicios de Educación disponible próximamente.';
 
   @override
@@ -3404,6 +3455,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthInfoSheetContactHint => 'Si algún dato no es correcto o no está actualizado, contacta con tu Centro de Salud.';
 
   @override
+  String get myDataHealthInfoSheetMoreInformation => 'Consultar más información';
+
+  @override
   String get myDataHealthDataTab => 'Mis datos de Salud';
 
   @override
@@ -3431,10 +3485,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthLinkDigitalHealth => 'Mi Salud Digital';
 
   @override
-  String get myDataHealthLinkClinicalHistory => 'Historia clínica Digital (Sistema Nacional de Salud)';
+  String get myDataHealthLinkClinicalHistory => 'Historia clínica del Sistema Nacional de Salud (HCDSNS)';
 
   @override
   String get myDataHealthAppointmentsTitle => 'Citas de Atención Primaria';
+
+  @override
+  String myDataHealthCipLabel(String cip) {
+    return 'Código de Identificación Personal (CIP): $cip';
+  }
 
   @override
   String get myDataHealthAppointmentsEmpty => 'No hay citas para mostrar.';
@@ -3514,11 +3573,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String myDataHealthCipValue(String cip) {
-    return 'CIP: $cip';
-  }
-
-  @override
   String get myDataHealthCipUnavailable => 'CIP no disponible';
 
   @override
@@ -3588,7 +3642,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionExpedientesTitle => 'Mis expedientes';
 
   @override
-  String get gestionExpedientesDescription => 'Consulta y gestiona tus expedientes administrativos';
+  String get gestionExpedientesDescription => 'Consulta la información y el estado de los expedientes que has iniciado con la Junta de Comunidades de Castilla-La Mancha (JCCM).';
 
   @override
   String get gestionRegistrosTitle => 'Mis registros';
@@ -3657,7 +3711,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportarDocumentacionTitle => 'Aportar documentación';
 
   @override
-  String get gestionAportarDocumentacionHelperText => 'Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.';
+  String get gestionAportarDocumentacionHelperText => 'Puedes adjuntar hasta 5 archivos de un máximo de 20 MB cada uno. Se admiten archivos en formato PDF, DOC, DOCX, ZIP, XLS y XLSX.';
+
+  @override
+  String get gestionAportarDocumentacionInfoTitle => 'Saber más sobre Aportar documentación';
+
+  @override
+  String get gestionAportarDocumentacionInfoBody => 'Los documentos aportados solo estarán disponibles para su consulta por la Administración y no podrán consultarse desde el expediente.';
 
   @override
   String get gestionAportarDocumentacionCancelarButton => 'Cancelar';
@@ -3666,7 +3726,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportarDocumentacionSeleccionarButton => 'Seleccionar documentos';
 
   @override
-  String get gestionAportarDocumentacionRegistrarButton => 'Registrar documentos aportados';
+  String get gestionAportarDocumentacionRegistrarButton => 'Enviar documentos';
 
   @override
   String get gestionAportarDocumentacionMaxFilesError => 'No puedes aportar más de 5 ficheros.';
@@ -3696,10 +3756,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportarDocumentacionUploadErrorParcial => 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
 
   @override
-  String get gestionAportarDocumentacionExitoTitulo => 'Los documentos han sido enviados correctamente';
+  String get gestionAportarDocumentacionExitoTitulo => 'Documentos enviados. Descarga el justificante de la aportación.';
 
   @override
-  String get gestionAportarDocumentacionExitoDescripcion => 'La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante';
+  String get gestionAportarDocumentacionExitoDescripcion => 'Has enviado la documentación correctamente y la aportación ha quedado registrada.\n\nDescarga el justificante ahora para conservar una copia de la aportación. Después, no podrás volver a descargarlo.';
 
   @override
   String get gestionAportarDocumentacionCerrarSinDescargarButton => 'Cerrar sin descargar';
@@ -3771,19 +3831,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionTipoIdLabel => 'Tipo de identificación y número';
 
   @override
+  String get gestionAportacionTipoIdShortLabel => 'Tipo de identificación';
+
+  @override
+  String get gestionAportacionExpedienteIdentifierTypeLabel => 'Tipo de identificación';
+
+  @override
+  String get gestionAportacionRegistroOption => 'Número de registro';
+
+  @override
+  String get gestionAportacionCodigoOption => 'Número de expediente';
+
+  @override
   String get gestionAportacionTipoIdHint => '000000000A';
 
   @override
-  String get gestionAportacionTipoIdHelper => 'El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos';
+  String get gestionAportacionTipoIdHelper => 'El número de identificación debe ser el que figura en el expediente.';
 
   @override
-  String get gestionAportacionIntroText => 'Consulta el expediente sobre el que quieres aportar documentación';
+  String get gestionAportacionIntroText => 'Para aportar documentos, primero tienes que identificar el expediente al que quieres asociarlos e introducir los siguientes datos:';
 
   @override
-  String get gestionAportacionPersonaLabel => 'IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE';
+  String get gestionAportacionPersonaLabel => 'DATOS DE LA PERSONA INTERESADA';
 
   @override
-  String get gestionAportacionExpedienteLabel => 'INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN';
+  String get gestionAportacionExpedienteLabel => 'DATOS DEL EXPEDIENTE';
 
   @override
   String get gestionAportacionExpedienteNote => '*Rellenar solo uno de los dos campos';
@@ -3792,25 +3864,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionNumRegistroLabel => 'NÚMERO DE REGISTRO DEL EXPEDIENTE';
 
   @override
-  String get gestionAportacionNumRegistroHint => 'Introduce el número de registro';
+  String get gestionAportacionNumRegistroHint => 'Número de registro';
 
   @override
-  String get gestionAportacionNumRegistroHelper => 'Este número se obtiene en el momento de la presentación del expediente';
+  String get gestionAportacionNumRegistroHelper => 'Este número lo encontrarás en el justificante de presentación de la solicitud.';
 
   @override
   String get gestionAportacionCodIdentificadorLabel => 'CÓDIGO IDENTIFICADOR DEL EXPEDIENTE';
 
   @override
-  String get gestionAportacionCodIdentificadorHint => 'Introduce el código identificador';
+  String get gestionAportacionCodIdentificadorHint => 'Número de expediente';
 
   @override
   String get gestionAportacionCodIdentificadorHelper => 'Este número se encuentra en la documentación del expediente';
 
   @override
-  String get gestionAportacionInfoHeading => 'Aportar documentos a un expediente';
+  String get gestionAportacionInfoHeading => 'Saber más sobre Aportar documentos a un expediente';
 
   @override
-  String get gestionAportacionInfoBody => 'Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:';
+  String get gestionAportacionInfoBody => 'Puedes aportar documentos a un expediente solo si eres una persona autorizada, y siempre que el procedimiento esté en curso y todavía no se haya dictado la resolución final. Para aportar documentos a uno de tus expedientes accede a Mis expedientes.';
 
   @override
   String get gestionAportacionInfoBullet1 => 'La persona interesada';
@@ -3825,7 +3897,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionSeleccionarTipo => 'Seleccionar tipo de documento';
 
   @override
-  String get gestionAportacionDni => 'DNI';
+  String get gestionAportacionDni => 'DNI/NIE';
 
   @override
   String get gestionAportacionNie => 'NIE';
@@ -3840,7 +3912,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionCee => 'CEE';
 
   @override
-  String get gestionAportacionFindButton => 'Encontrar expediente';
+  String get gestionAportacionFindButton => 'Buscar Expediente';
 
   @override
   String get gestionAportacionDocNumberRequiredError => 'Introduce el número de documento de la persona interesada.';
@@ -3852,28 +3924,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionCamposExpedienteError => 'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).';
 
   @override
-  String get gestionNotificacionesContextualMessage => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
+  String get gestionNotificacionesContextualMessage => 'Indica tus datos de contacto para activar los avisos y recibirlos cuando tengas una nueva notificación.';
 
   @override
-  String get gestionNotificacionesContextualAction => 'Activar';
+  String get gestionNotificacionesContextualAction => 'Indicar datos y activar avisos';
 
   @override
-  String get gestionNotificacionesAltaTitle => 'Activar notificaciones';
+  String get gestionNotificacionesAltaTitle => 'Mis notificaciones';
 
   @override
   String get gestionNotificacionesAltaIntro => 'Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get gestionNotificacionesAltaRequiredNote => '*Obligatorio rellenar al menos uno de los medios de contacto';
+  String get gestionNotificacionesAltaRequiredNote => 'Es obligatorio completar al menos uno de los campos marcados con (*)';
 
   @override
   String get gestionNotificacionesAltaPhoneLabel => 'Teléfono móvil';
 
   @override
-  String get gestionNotificacionesAltaPhoneHint => '600 000 000';
+  String get gestionNotificacionesAltaPhoneHint => 'Ejemplo: 000 000 000';
 
   @override
-  String get gestionNotificacionesAltaPhoneHelper => 'Para recibir las notificaciones en mensaje SMS';
+  String get gestionNotificacionesAltaPhoneHelper => 'Recibe notificaciones por SMS en tu teléfono móvil.';
 
   @override
   String get gestionNotificacionesAltaEmailLabel => 'Correo electrónico';
@@ -3885,7 +3957,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionNotificacionesAltaEmailHelper => 'Para recibir las notificaciones en tu correo electrónico';
 
   @override
-  String get gestionNotificacionesAltaSaveButton => 'Dar de alta notificaciones';
+  String get gestionNotificacionesAltaSaveButton => 'Activar';
 
   @override
   String get gestionNotificacionesAltaInfoTitle => 'Datos de contacto';
@@ -3996,7 +4068,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPreferenceStatusPending => 'Pendiente';
 
   @override
-  String get appPreferenceStatusEnabled => 'Activado';
+  String get appPreferenceStatusEnabled => 'Activo';
 
   @override
   String get appPreferenceStatusUnavailable => 'No disponible';
@@ -4017,7 +4089,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appQrCodeLabel => 'Código QR';
 
   @override
-  String get appQrDownloadFormatTitle => 'Formato de descarga';
+  String get appQrDownloadFormatTitle => '¿Quieres guardar el carnet?';
+
+  @override
+  String get appQrDownloadFormatDescription => 'Elige cómo quieres descargarlo:';
 
   @override
   String get appQrDownloadWalletLabelAndroid => 'Cartera digital';
@@ -4134,10 +4209,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesInfoSheetBody => 'Gestiona tus autorizaciones y avisos.';
 
   @override
-  String get preferencesLifeEventsInactiveDescription => 'Para seleccionar tus hechos vitales y poder recibir recomendaciones primero debes aceptar el uso de estos datos en Condiciones de uso y autorizaciones.';
+  String get consentAuthorizationsInfoTitle => 'Saber más sobre Condiciones de uso y autorización';
 
   @override
-  String get preferencesLifeEventsPendingDescription => 'Aún no has seleccionado las temáticas de las que quieras recibir actualizaciones dentro de tu sección de recomendaciones';
+  String get consentAuthorizationsInfoBody => 'Si no autorizas el uso de tus datos, las Administraciones públicas no podrán mostrarte la información que tienen sobre ti.';
+
+  @override
+  String get consentAuthorizationsInfoClose => 'Cerrar';
+
+  @override
+  String get preferencesLifeEventsInactiveDescription => 'Acepta el uso de tus datos sobre los hechos vitales en las Condiciones de uso y autorizaciones para poder seleccionarlos y recibir recomendaciones personalizadas.';
+
+  @override
+  String get preferencesLifeEventsPendingDescription => 'Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.';
 
   @override
   String get preferencesLifeEventsActiveDescription => 'Tienes hechos vitales seleccionados para recibir recomendaciones personalizadas.';
@@ -4146,10 +4230,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesSelectAction => 'Seleccionar';
 
   @override
-  String get preferencesNotificationContactTitle => 'Datos de contacto para notificaciones';
+  String get preferencesNotificationContactTitle => 'Datos de contacto para recibir avisos de notificaciones';
 
   @override
-  String get preferencesNotificationContactInactiveDescription => 'Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.';
+  String get preferencesNotificationContactInactiveDescription => 'Indica un teléfono móvil o un correo electrónico para recibir avisos cuando tengas notificaciones nuevas.';
 
   @override
   String get preferencesNotificationContactPendingDescription => 'Gestiona el medio de aviso para recibir notificaciones electrónicas.';
@@ -4161,13 +4245,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesManageAction => 'Gestionar';
 
   @override
-  String get preferencesRevokeDialogTitle => 'Revocación de permisos';
+  String get preferencesAddContactAction => 'Añadir datos';
 
   @override
-  String get preferencesRevokeDialogDescription => '¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\nAl hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.';
+  String get preferencesBiometricTitle => 'Acceso biométrico';
 
   @override
-  String get preferencesRevokeDialogConfirm => 'Eliminar';
+  String get preferencesBiometricInactiveDescription => 'Activa el acceso con huella dactilar o reconocimiento facial para acceder a la aplicación de forma más rápida.';
+
+  @override
+  String get preferencesBiometricActiveDescription => 'El acceso biométrico a la aplicación está activado.';
+
+  @override
+  String get preferencesBiometricEnableAction => 'Activar';
+
+  @override
+  String get preferencesBiometricDisableAction => 'Desactivar';
+
+  @override
+  String get preferencesRevokeDialogTitle => 'Vas a borrar tus preferencias';
+
+  @override
+  String get preferencesRevokeDialogDescription => 'Al borrar tus preferencias, se eliminarán las autorizaciones que has concedido a la organización para consultar tus datos personales.\n\nSi vuelves a acceder a la aplicación, tendrás que completar de nuevo el proceso de autentificación y aceptar las Condiciones de uso y las autorizaciones.';
+
+  @override
+  String get preferencesRevokeDialogConfirm => 'Borrar';
 
   @override
   String get preferencesMissingUserIdError => 'No se ha encontrado el identificador del usuario.';
@@ -4228,13 +4330,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthFilterDateLabel => 'Fecha de la cita';
 
   @override
-  String get recommendationsFilterPageTitle => 'Filtrar recomendaciones por hecho';
+  String get recommendationsFilterPageTitle => 'Filtrar por hechos vitales';
 
   @override
   String get recommendationsFilterInfoMessage => 'Selecciona los hechos vitales que quieras usar para filtrar tus recomendaciones.';
 
   @override
-  String get recommendationsFilterIntro => 'Puede filtrar las recomendaciones según los hechos vitales que haya configurado en sus preferencias, para recibir información personalizada y ajustada a su situación.';
+  String get recommendationsFilterIntro => 'Selecciona los hechos vitales que quieras utilizar para filtrar las recomendaciones. Puedes ampliar el listado y añadir nuevos hechos vitales desde tus preferencias.';
 
   @override
   String get recommendationsFilterByLifeEvents => 'Filtrar por hechos vitales';
@@ -4243,16 +4345,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsPreferencesHint => 'Personaliza tus recomendaciones editando tus hechos vitales en Preferencias siempre que quieras.';
 
   @override
-  String get recommendationsEmptyNoMatches => 'Actualmente no hay recomendaciones disponibles que se ajusten a tus preferencias. Ajusta tus hechos vitales para explorar más opciones o espera a nuevas actualizaciones.';
+  String get recommendationsEmptyNoMatches => 'Actualmente no hay recomendaciones para ti. Puedes modificar la selección actual de tus hechos vitales desde las preferencias o esperar a recibir nuevas actualizaciones.';
 
   @override
-  String get recommendationsEditLifeEventsCta => 'Editar preferencias - hechos vitales';
+  String get recommendationsEditLifeEventsCta => 'Ir a Preferencias';
 
   @override
-  String get recommendationsEmptyFiltered => 'No hay recomendaciones para el filtro realizado.';
+  String get recommendationsEmptyFiltered => 'Actualmente no hay recomendaciones para los filtros seleccionados. Puedes modificar la selección de filtros o esperar a recibir nuevas actualizaciones.';
 
   @override
-  String get recommendationsResetFilterCta => 'Resetear filtro';
+  String get recommendationsResetFilterCta => 'Reiniciar filtro';
 
   @override
   String recommendationsDeadlineFrom(Object date) {
@@ -4503,76 +4605,88 @@ class AppLocalizationsEs extends AppLocalizations {
   String get helpContactGuidesTitle => 'Guías de ayuda';
 
   @override
-  String get helpContactGuidesIntro => 'Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda';
+  String get helpFaqIntro => 'Resuelve las dudas más habituales sobre Espacio ciudadano.';
 
   @override
-  String get helpContactGoToJccmPortal => 'Ir al portal web JCCM';
+  String get helpContactGuidesIntro => 'Consulta las guías disponibles para resolver tus dudas paso a paso.';
+
+  @override
+  String get helpContactShowAllGuides => 'Mostrar todas las guías';
+
+  @override
+  String get helpContactGoToJccmPortal => 'Ir al portal de Castilla-La Mancha';
 
   @override
   String get helpContactInfoHeading => 'Información de contacto';
 
   @override
-  String get helpContactPhonesIntro => 'Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.';
+  String get helpContactPhonesIntro => 'Para consultas generales o información administrativa, puedes contactar con el servicio de Atención a la ciudadanía.';
 
   @override
-  String get helpContactPhonesIntroBold1 => 'consultas generales e información administrativa';
+  String get helpContactPhonesIntroBold1 => 'consultas generales o información administrativa';
 
   @override
-  String get helpContactPhonesIntroBold2 => 'teléfonos de atención ciudadana';
+  String get helpContactPhonesIntroBold2 => 'Atención a la ciudadanía';
 
   @override
   String get helpContactCallCitizenService => 'Llamar a Atención a la Ciudadanía';
 
   @override
-  String get helpContactExpedienteIntro => 'Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.';
+  String get helpContactExpedienteIntro => 'Para conocer más detalles sobre un expediente, debes contactar con la oficina tramitadora o la consejería responsable que corresponda.';
 
   @override
   String get helpContactExpedienteIntroBold => 'conocer más detalles sobre un expediente';
 
   @override
-  String get helpContactOfficesListTitle => 'Listado de Oficina de Información y registro';
+  String get helpContactOfficesListTitle => 'Listado de Oficinas de Información y Registro';
 
   @override
-  String get helpContactSupportIntro => 'Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.';
+  String get helpContactSupportIntro => 'Si necesitas asistencia técnica, puedes contactar con el equipo de soporte técnico a través de un formulario.';
 
   @override
   String get helpContactSupportIntroBold => 'asistencia técnica';
 
   @override
-  String get helpContactSupportFormButton => 'Formulario de Soporte';
+  String get helpContactSupportFormButton => 'Completar formulario de soporte';
 
   @override
-  String get faqQuestion1 => '¿Qué es y qué podré encontrar en el Espacio ciudadano?';
+  String get faqQuestion1 => '¿Qué es Espacio ciudadano y qué puedo consultar?';
 
   @override
   String get faqAnswer1 => 'Espacio Ciudadano reúne en un único lugar información y servicios de la Junta de Comunidades de Castilla-La Mancha. Podrás consultar tus datos, expedientes, notificaciones, citas y otros servicios disponibles.';
 
   @override
-  String get faqQuestion2 => '¿Qué necesito para acceder?';
+  String get faqQuestion2 => '¿Qué necesito para acceder a mi Espacio ciudadano?';
 
   @override
   String get faqAnswer2 => 'Necesitas identificarte con Cl@ve, certificado electrónico o el sistema de acceso habilitado. Puedes usar Cl@ve Móvil, Cl@ve Permanente, DNI electrónico o un certificado electrónico.';
 
   @override
-  String get faqQuestion3 => '¿Qué datos personales se almacenan en Espacio Ciudadano?';
+  String get faqQuestion3 => '¿Qué datos personales se almacenan?';
 
   @override
   String get faqAnswer3 => 'Se muestran los datos necesarios para prestar los servicios disponibles en la aplicación.';
 
   @override
-  String get faqQuestion4 => 'Los datos mostrados contienen algún error, ¿puedo corregirlo?';
+  String get faqQuestion4 => '¿Cómo puedo corregir un dato incorrecto?';
 
   @override
   String get faqAnswer4 => 'Contacta con el órgano responsable del trámite o expediente para solicitar la corrección.';
 
   @override
-  String get faqQuestion5 => '¿Qué eventos se muestran en Mi Agenda?';
+  String get faqQuestion5 => '¿Qué expedientes y trámites puedo consultar?';
 
   @override
-  String get faqAnswer5 => 'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.';
+  String get faqAnswer5 => 'Puedes consultar los expedientes y trámites disponibles que estén relacionados con tu identidad y con los servicios integrados en Espacio Ciudadano.';
 
   @override
-  String get supportFormPageTitle => 'Formulario soporte';
+  String get faqQuestion6 => '¿Qué eventos aparecerán en mi agenda?';
+
+  @override
+  String get faqAnswer6 => 'Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.';
+
+  @override
+  String get supportFormPageTitle => 'Formulario de soporte';
 
   @override
   String get supportCancelButton => 'Cancelar';
@@ -4590,19 +4704,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get supportFieldFullNameHint => 'Ejemplo: María Pérez';
 
   @override
-  String get supportFieldEmailHint => 'Ejemplo: maríapérez@correo.es';
+  String get supportFieldEmailHint => 'Ejemplo: mperez@correo.es';
 
   @override
   String get supportFieldConfirmEmail => 'Confirma tu correo electrónico';
 
   @override
-  String get supportFieldSubjectHint => 'Ejemplo: Consulta sobre una notificación';
+  String get supportFieldSubjectHint => 'Escribe el motivo de la consulta';
 
   @override
   String get supportFieldSubjectHelper => 'Motivo de consulta. Límite de 1000 caracteres';
 
   @override
   String get supportFieldMessage => 'Mensaje';
+
+  @override
+  String get supportFieldMessageHint => 'Describe los detalles de la consulta';
 
   @override
   String get supportAttachmentSectionLabel => 'ADJUNTAR DOCUMENTOS DE EVIDENCIA';
@@ -4707,7 +4824,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get legalSearchCloseTooltip => 'Cerrar búsqueda';
 
   @override
-  String get privacyResponsibleTitle => '¿Quién es el responsable del tratamiento?';
+  String get privacyResponsibleTitle => '¿Quién es responsable del tratamiento de datos?';
 
   @override
   String get privacyDocumentTitle => 'Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano';
@@ -4716,49 +4833,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyEmailCopied => 'No hay una aplicación de correo disponible. La dirección se ha copiado al portapapeles.';
 
   @override
-  String get privacyResponsibleIntro => '1. La Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
+  String get privacyResponsibleIntro => 'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:';
 
   @override
-  String get privacyResponsibleItemProfile => 'Visualización de las notificaciones y registro';
+  String get privacyResponsibleItemProfile => 'Información del perfil de usuario.';
 
   @override
-  String get privacyResponsibleItemVisualizations => 'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado';
+  String get privacyResponsibleItemVisualizations => 'Visualización de datos seleccionados de la Administración regional y de otros temas de interés.';
 
   @override
-  String get privacyResponsibleItemRecommendations => 'Recomendaciones realizadas en base a los hechos vitales marcados';
+  String get privacyResponsibleItemRecommendations => 'Recomendaciones personalizadas según los hechos vitales indicados.';
 
   @override
-  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados';
+  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados.';
 
   @override
   String get privacyResponsibleItemAgenda => 'Visualización de la agenda';
 
   @override
-  String get privacyResponsibleOrgParagraph => 'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento o hecho administrativo.';
+  String get privacyResponsibleOrgParagraph => 'Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.';
 
   @override
-  String get privacyResponsibleContactIntro => 'Los datos de contacto de este responsable son los siguientes:';
+  String get privacyResponsibleContactIntro => 'Para contactar con el responsable, puedes hacelo mediante:';
 
   @override
-  String get privacyResponsibleContactAddressLabel => 'Dirección Postal:\n';
+  String get privacyResponsibleContactAddressLabel => 'Dirección postal\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es';
 
   @override
-  String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad de tratamiento?';
+  String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad del tratamiento?';
 
   @override
   String get privacyPopulationControllerText => '2. La Oficina del Dato es responsable del tratamiento de datos del Registro de Población, a cuyos datos se puede acceder en el apartado “Datos de empadronamiento del Registro de Población” en la sección \"Mis datos de contacto\".\n\nLos datos de contacto de este responsable son los siguientes:\n\nDirección Postal:\nOficina del Dato de Castilla-La Mancha\nC/ Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\nDirección de correo electrónico: oficinadeldato@jccm.es';
 
   @override
-  String get privacyPurposeIntro => 'Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:';
+  String get privacyPurposeIntro => 'Las finalidades de los tratamientos de datos personales que se realizan directamente en Espacio Ciudadano son:';
 
   @override
-  String get privacyPurposeItemIdentity => 'Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.';
+  String get privacyPurposeItemIdentity => 'Gestionar los datos identificativos de la ciudadanía.';
 
   @override
-  String get privacyPurposeItemVisualizations => 'Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.';
+  String get privacyPurposeItemVisualizations => 'Mostrar los datos seleccionados de la Administración regional y de otros temas de interés.';
 
   @override
   String get privacyLegalBasisTitle => '¿Cuál es la legitimación de este tratamiento?';
@@ -4789,37 +4906,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyAepdTitle => '¿Puedo reclamar ante la Agencia Española de Protección de Datos?';
 
   @override
-  String get privacyAepdTextBeforeLink => 'Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ';
+  String get privacyAepdTextBeforeLink => 'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ';
 
   @override
-  String get privacyAepdTextAfterLink => '. También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.';
+  String get privacyAepdLinkLabel => 'Agencia Española de Protección de Datos (AEPD)';
 
   @override
-  String get privacySecurityTitle => '¿Qué medidas de seguridad se encuentran implantadas?';
+  String get privacyAepdTextAfterLink => '.\n\nTambién puedes reclamar ante la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM), cuya información de contacto está indicada más adelante.';
 
   @override
-  String get privacySecurityText => 'Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.';
+  String get privacySecurityTitle => '¿Qué medidas de seguridad están implantadas?';
 
   @override
-  String get privacyProfilingTitle => 'Decisiones automatizadas, incluida la elaboración de perfiles';
+  String get privacySecurityText => 'Las medidas implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.';
 
   @override
-  String get privacyProfilingText => 'En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.';
+  String get privacyProfilingTitle => 'Decisiones automatizadas y elaboración de perfiles';
 
   @override
-  String get privacyDpoTitle => 'Datos de contacto de la delegada de protección de datos';
+  String get privacyProfilingText => 'Las recomendaciones de trámites que se muestran en función de los hechos vitales indicados por la persona interesada implican la elaboración de perfiles.';
 
   @override
-  String get privacyDpoIntro => 'Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:';
+  String get privacyDpoTitle => 'Información de contacto de la Delegada de Protección de Datos';
 
   @override
-  String get privacyDpoContactAddressLabel => 'Dirección postal:\n';
+  String get privacyDpoIntro => 'Para cualquier cuestión relacionada con la protección de datos puedes dirigirte a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM).\n\nPuedes contactar mediante:';
 
   @override
-  String get privacyDpoContactAddressValue => 'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n';
+  String get privacyDpoContactAddressLabel => 'Dirección postal\n';
 
   @override
-  String get privacyDpoContactEmailLabel => 'Dirección de correo electrónico:\n';
+  String get privacyDpoContactAddressValue => 'Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12, edificio CIE III\n45071 Toledo\n\n';
+
+  @override
+  String get privacyDpoContactEmailLabel => 'Correo electrónico\n';
 
   @override
   String get accessibilityStatementHeading => 'Declaración de accesibilidad';
@@ -4915,7 +5035,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accessibilityOptionalItemDecreaseText => 'Reducir el Tamaño del Texto: CTRL -';
 
   @override
-  String get legalNoticeHeading => 'Aviso legal (...)';
+  String get legalNoticeHeading => 'Aviso legal';
 
   @override
   String get supportErrorSubmitUnauthorized => 'No tienes permisos para enviar el formulario de soporte.';
@@ -4969,14 +5089,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sessionContinueBiometricReason => 'Tu sesión necesita renovarse. Confirma tu identidad para continuar.';
 
   @override
-  String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella o reconocimiento facial?';
+  String get biometricAccessDialogTitle => '¿Quieres activar el acceso rápido con huella dactilar o reconocimiento facial?';
 
   @override
-  String get biometricAccessDialogDescription => 'Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.';
+  String get biometricAccessDialogDescription => 'Podrás acceder a la aplicación de forma más rápida sin tener que autentificarte cada vez. Para proteger tus datos te pediremos que vuelvas a autentificarte cada cierto tiempo.';
 
   @override
-  String get biometricAccessDialogCancel => 'Ahora no';
+  String get biometricAccessDialogCancel => 'Completar más tarde';
 
   @override
-  String get biometricAccessDialogConfirm => 'Activar acceso rápido';
+  String get biometricAccessDialogConfirm => 'Activar';
 }

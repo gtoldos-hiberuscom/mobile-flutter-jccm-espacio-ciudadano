@@ -17,6 +17,19 @@ void main() {
     expect(find.text('Aportar documentación'), findsNothing);
   });
 
+  testWidgets('shows fecha de inicio as dd/MM/yyyy', (final tester) async {
+    await _pumpDetail(tester, canAttachDocuments: false, fechaInicio: '2026-07-15');
+
+    expect(find.text('15/07/2026'), findsOneWidget);
+  });
+
+  testWidgets('shows a dash when fecha de inicio is missing', (final tester) async {
+    await _pumpDetail(tester, canAttachDocuments: false);
+
+    expect(find.text('FECHA DE INICIO'), findsOneWidget);
+    expect(find.text('-'), findsOneWidget);
+  });
+
   testWidgets('reintenta la carga del detalle después de un error', (final tester) async {
     var attempts = 0;
 
@@ -55,7 +68,7 @@ void main() {
   });
 }
 
-Future<void> _pumpDetail(final WidgetTester tester, {required final bool canAttachDocuments}) async {
+Future<void> _pumpDetail(final WidgetTester tester, {required final bool canAttachDocuments, final String? fechaInicio}) async {
   await tester.pumpWidget(
     ProviderScope(
       key: ValueKey(canAttachDocuments),
@@ -65,6 +78,7 @@ Future<void> _pumpDetail(final WidgetTester tester, {required final bool canAtta
             numexp: key.numexp,
             titulo: 'Expediente de prueba',
             consejeria: 'JCCM',
+            fechaInicio: fechaInicio,
             canAttachDocuments: canAttachDocuments,
           ),
         ),

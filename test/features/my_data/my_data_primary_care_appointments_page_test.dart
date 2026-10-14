@@ -14,9 +14,10 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _pendientes = 'Pendientes';
 const _pasadas = 'Pasadas';
-const _sinCitas =
-    'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\n'
-    'Si la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.';
+// `MyDataNoData` parte el mensaje en dos: el resultado, dentro del aviso, y la
+// indicación de dónde corregirlo, debajo.
+const _sinCitas = 'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.';
+const _sinCitasContacto = 'Si la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.';
 const _servicioCaido =
     'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
 const _sinCip = 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
@@ -39,7 +40,7 @@ void main() {
       ],
     );
 
-    expect(find.text('CIP: PNRV901264600010'), findsOneWidget);
+    expect(find.text('Código de Identificación Personal (CIP): PNRV901264600010'), findsOneWidget);
     expect(find.text('Revision'), findsOneWidget);
     expect(find.text('Dra. castellanos'), findsOneWidget);
     expect(find.text(_sinCitas), findsNothing);
@@ -82,6 +83,7 @@ void main() {
     await _pump(tester);
 
     expect(find.text(_sinCitas), findsOneWidget);
+    expect(find.text(_sinCitasContacto), findsOneWidget);
   });
 
   testWidgets('un fallo del servicio se muestra con reintento', (final tester) async {

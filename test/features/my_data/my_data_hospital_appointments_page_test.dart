@@ -39,13 +39,14 @@ void main() {
       ],
     );
 
-    expect(find.text('CIP: PNRV901264600010'), findsOneWidget);
+    expect(find.text('Código de Identificación Personal (CIP): PNRV901264600010'), findsOneWidget);
     // Los siete campos del apartado 6.3, cada uno localizable en pantalla.
     expect(find.text('3'), findsOneWidget); // día
     expect(find.text('martes'), findsOneWidget); // día de la semana
     expect(find.text('11:40'), findsOneWidget); // hora
     expect(find.text('Traumatologia'), findsOneWidget); // servicio
-    expect(find.text('Consulta sucesiva'), findsOneWidget); // prestación
+    // La prestación va en el hueco de canal, que el diseño pinta en mayúsculas.
+    expect(find.text('CONSULTA SUCESIVA'), findsOneWidget); // prestación
     expect(find.textContaining('Sala: Planta 1'), findsOneWidget);
     expect(find.textContaining('Centro: Hospital general de tomelloso'), findsOneWidget);
     expect(find.textContaining('Agenda: Traumatologia 6 - dra. castellanos'), findsOneWidget);

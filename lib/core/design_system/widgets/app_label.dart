@@ -32,6 +32,7 @@ class AppLabel extends StatelessWidget {
     this.required = false,
     this.color,
     this.semanticsLabel,
+    this.uppercase = true,
   }) : assert(text != '', 'text must not be empty'),
        assert(
          semanticsLabel == null || semanticsLabel != '',
@@ -45,6 +46,9 @@ class AppLabel extends StatelessWidget {
 
   /// Optional pronunciation-friendly alternative for [text].
   final String? semanticsLabel;
+
+  /// Whether medium labels are rendered in uppercase.
+  final bool uppercase;
 
   @override
   Widget build(final BuildContext context) {
@@ -60,7 +64,7 @@ class AppLabel extends StatelessWidget {
           fontWeight: FontWeight.w700,
           letterSpacing: 0,
         );
-        displayText = text.toUpperCase();
+        displayText = uppercase ? text.toUpperCase() : text;
       case AppLabelSize.s:
         textStyle = AppTypography.bodyS.copyWith(color: effectiveColor);
         displayText = text;

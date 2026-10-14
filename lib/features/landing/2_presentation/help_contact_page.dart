@@ -150,6 +150,12 @@ class _FaqTab extends StatelessWidget {
       children: [
         AppSectionHeading(l10n.helpFaqSectionTitle),
         const SizedBox(height: AppDimensions.space16),
+        AppIconTextBlock(
+          iconAsset: AppIconAssets.question,
+          iconSize: 36,
+          text: l10n.helpFaqIntro,
+        ),
+        const SizedBox(height: AppDimensions.space24),
         AppList(
           padding: const EdgeInsets.all(AppDimensions.space8),
           children: faqEntries
@@ -176,7 +182,7 @@ class _FaqTab extends StatelessWidget {
         ),
         const SizedBox(height: AppDimensions.space24),
         AppContactActionCard(
-          title: l10n.helpContactGuidesTitle,
+          title: l10n.helpContactShowAllGuides,
           subtitle: l10n.helpContactGoToJccmPortal,
           onTap: onOpenGuides,
         ),
@@ -216,12 +222,14 @@ class _ContactTab extends StatelessWidget {
         AppPhoneActionCard(
           number: '012',
           subtitle: l10n.helpContactCallCitizenService,
+          showSubtitle: false,
           onTap: () => onCallPhone('012'),
         ),
         const SizedBox(height: AppDimensions.space16),
         AppPhoneActionCard(
           number: '925 274 552',
           subtitle: l10n.helpContactCallCitizenService,
+          showSubtitle: false,
           onTap: () => onCallPhone('925 274 552'),
         ),
         const SizedBox(height: AppDimensions.space24),

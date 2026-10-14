@@ -73,7 +73,7 @@ class MyDataAppointmentSections extends StatelessWidget {
             Semantics(
               header: true,
               headingLevel: 2,
-              child: Text(year.key.toString(), style: AppTypography.h2.copyWith(color: AppColors.textBase)),
+              child: Text(year.key.toString(), style: AppTypography.h2.copyWith(color: AppColors.primary)),
             ),
             const SizedBox(height: AppDimensions.space8),
             for (final month in year.value.entries) ...[
@@ -86,7 +86,7 @@ class MyDataAppointmentSections extends StatelessWidget {
                 excludeSemantics: true,
                 child: Text(
                   l10n.commonMonthName(monthKey(month.key)),
-                  style: AppTypography.h3.copyWith(color: AppColors.textBase),
+                  style: AppTypography.h3.copyWith(color: AppColors.primary),
                 ),
               ),
               const SizedBox(height: AppDimensions.space8),

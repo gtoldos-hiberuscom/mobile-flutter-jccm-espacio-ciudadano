@@ -171,11 +171,6 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.gestionNotificacionesAltaIntro,
-                style: AppTypography.bodyRegular.copyWith(color: AppColors.textBase),
-              ),
-              const SizedBox(height: AppDimensions.space16),
-              Text(
                 l10n.gestionNotificacionesAltaRequiredNote,
                 style: AppTypography.smallRegular.copyWith(color: AppColors.textBase),
               ),
@@ -189,8 +184,6 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
                 ),
               ],
               const SizedBox(height: AppDimensions.space24),
-              _SectionLabel(text: l10n.gestionNotificacionesAltaPhoneLabel),
-              const SizedBox(height: AppDimensions.space8),
               AppPhoneInputCase(
                 label: l10n.gestionNotificacionesAltaPhoneLabel,
                 controller: _phoneController,
@@ -201,8 +194,6 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
                 onChanged: (_) => _clearError(),
               ),
               const SizedBox(height: AppDimensions.space24),
-              _SectionLabel(text: l10n.gestionNotificacionesAltaEmailLabel),
-              const SizedBox(height: AppDimensions.space8),
               AppInputCase(
                 label: l10n.gestionNotificacionesAltaEmailLabel,
                 hint: l10n.gestionNotificacionesAltaEmailHint,
@@ -218,20 +209,6 @@ class _GestionNotificacionesAltaPageState extends ConsumerState<GestionNotificac
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(final BuildContext context) {
-    return Text(
-      text,
-      style: AppTypography.captionUppercase.copyWith(color: AppColors.borderBlueMutedBase),
     );
   }
 }

@@ -73,6 +73,42 @@ void main() {
     expect(isContinueEnabled(tester), isTrue);
   });
 
+  testWidgets('muestra el contenido de protección de datos definido en Figma', (final tester) async {
+    await pumpPrivacyPage(tester);
+
+    expect(
+      find.text('Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano', findRichText: true),
+      findsNothing,
+    );
+    expect(find.text('¿Quién es responsable del tratamiento de datos?', findRichText: true), findsOneWidget);
+    expect(
+      find.text(
+        'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:',
+        findRichText: true,
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Información del perfil de usuario.', findRichText: true), findsOneWidget);
+    expect(find.text('¿Cuál es la denominación y finalidad del tratamiento?', findRichText: true), findsOneWidget);
+    expect(find.text('Información de contacto de la Delegada de Protección de Datos', findRichText: true), findsOneWidget);
+
+    final firstHeading = tester.widget<RichText>(
+      find.text('¿Quién es responsable del tratamiento de datos?', findRichText: true),
+    );
+    final body = tester.widget<RichText>(
+      find.text(
+        'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:',
+        findRichText: true,
+      ),
+    );
+    final finalHeading = tester.widget<RichText>(
+      find.text('Información de contacto de la Delegada de Protección de Datos', findRichText: true),
+    );
+    expect(firstHeading.text.style?.color, AppColors.primary);
+    expect(body.text.style?.color, AppColors.primaryDark);
+    expect(finalHeading.text.style?.color, AppColors.textBase);
+  });
+
   testWidgets('a failed clause load still unlocks Continuar at the bottom, and tapping it retries', (final tester) async {
     repository.fetchError = const ConsentStatusUnknownException(statusCode: 429, message: 'Clausulas endpoint unavailable');
     await pumpPrivacyPage(tester);

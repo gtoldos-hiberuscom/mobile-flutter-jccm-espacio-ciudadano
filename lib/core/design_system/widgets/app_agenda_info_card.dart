@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -33,6 +32,9 @@ class AppAgendaInfoCard extends StatelessWidget {
     this.primaryText,
     this.secondaryText,
     this.details = const <AppAgendaInfoCardDetail>[],
+    this.showTypeIcon = true,
+    this.channelBeforeTitle = false,
+    this.titleIsRegular = false,
     this.semanticsLabel,
   }) : assert(day.length > 0, 'day must not be empty'),
        assert(weekday.length > 0, 'weekday must not be empty'),
@@ -52,10 +54,18 @@ class AppAgendaInfoCard extends StatelessWidget {
   /// defecto: las tarjetas que no las pasan se pintan exactamente igual que
   /// antes.
   final List<AppAgendaInfoCardDetail> details;
-  final String? semanticsLabel;
 
-  bool get _isNotification => type == AppAgendaInfoCardType.notification;
-  bool get _isCredential => type == AppAgendaInfoCardType.credential;
+  /// Whether to render the trailing icon that identifies the agenda item type.
+  final bool showTypeIcon;
+
+  /// Places the channel label above the title when it is the appointment
+  /// heading, instead of showing it as supporting information.
+  final bool channelBeforeTitle;
+
+  /// Uses the body-regular token for the title (the health appointment card
+  /// variant), instead of the default emphasized title.
+  final bool titleIsRegular;
+  final String? semanticsLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -84,7 +94,7 @@ class AppAgendaInfoCard extends StatelessWidget {
       day: day,
       weekday: weekday,
       time: time,
-      showVerticalDivider: _isCredential && !useVerticalLayout,
+      showVerticalDivider: !useVerticalLayout,
     );
     final contentBlock = _ContentBlock(
       title: title,
@@ -92,8 +102,10 @@ class AppAgendaInfoCard extends StatelessWidget {
       primaryText: primaryText,
       secondaryText: secondaryText,
       details: details,
+      channelBeforeTitle: channelBeforeTitle,
+      titleIsRegular: titleIsRegular,
     );
-    final typeIcon = _TypeIcon(type: type, semanticsLabel: typeLabel);
+    final typeIcon = showTypeIcon ? _TypeIcon(type: type, semanticsLabel: typeLabel) : null;
 
     return Semantics(
       container: true,
@@ -101,13 +113,10 @@ class AppAgendaInfoCard extends StatelessWidget {
       child: ExcludeSemantics(
         child: Container(
           width: double.infinity,
-          padding:
-              EdgeInsets.all(
-                _isNotification ? AppDimensions.space16 : AppDimensions.space8,
-              ).copyWith(
-                top: AppDimensions.space16,
-                bottom: AppDimensions.space16,
-              ),
+          padding: const EdgeInsets.all(AppDimensions.space8).copyWith(
+            top: AppDimensions.space16,
+            bottom: AppDimensions.space16,
+          ),
           decoration: _decoration,
           child: useVerticalLayout
               ? Column(
@@ -118,7 +127,7 @@ class AppAgendaInfoCard extends StatelessWidget {
                       children: [
                         Expanded(child: dateBlock),
                         const SizedBox(width: AppDimensions.space8),
-                        typeIcon,
+                        ?typeIcon,
                       ],
                     ),
                     const SizedBox(height: AppDimensions.space8),
@@ -130,12 +139,12 @@ class AppAgendaInfoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       dateBlock,
-                      SizedBox(
-                        width: _isNotification ? AppDimensions.space4 : AppDimensions.space8,
-                      ),
+                      const SizedBox(width: AppDimensions.space8),
                       Expanded(child: contentBlock),
-                      const SizedBox(width: AppDimensions.space4),
-                      Align(alignment: Alignment.topCenter, child: typeIcon),
+                      if (typeIcon != null) ...[
+                        const SizedBox(width: AppDimensions.space4),
+                        Align(alignment: Alignment.topCenter, child: typeIcon),
+                      ],
                     ],
                   ),
                 ),
@@ -144,30 +153,16 @@ class AppAgendaInfoCard extends StatelessWidget {
     );
   }
 
-  BoxDecoration get _decoration {
-    if (_isNotification) {
-      return BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(
-          color: AppColors.secondaryLight400,
-          width: 2,
-        ),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        boxShadow: AppShadows.medium,
-      );
-    }
-
-    return const BoxDecoration(
-      color: AppColors.surface,
-      border: Border(
-        left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
-        top: BorderSide(color: AppColors.borderBlueMutedLight),
-        right: BorderSide(color: AppColors.borderBlueMutedLight),
-        bottom: BorderSide(color: AppColors.borderBlueMutedLight),
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(1)),
-    );
-  }
+  BoxDecoration get _decoration => const BoxDecoration(
+    color: AppColors.surface,
+    border: Border(
+      left: BorderSide(color: AppColors.borderBlueMutedLight, width: 4),
+      top: BorderSide(color: AppColors.borderBlueMutedLight),
+      right: BorderSide(color: AppColors.borderBlueMutedLight),
+      bottom: BorderSide(color: AppColors.borderBlueMutedLight),
+    ),
+    borderRadius: BorderRadius.all(Radius.circular(1)),
+  );
 }
 
 class _DateBlock extends StatelessWidget {
@@ -187,7 +182,7 @@ class _DateBlock extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Container(
       width: 80,
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space4),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
       decoration: showVerticalDivider
           ? const BoxDecoration(
               border: Border(
@@ -205,16 +200,19 @@ class _DateBlock extends StatelessWidget {
             maxLines: 1,
             softWrap: false,
           ),
-          Text(
-            weekday.toLowerCase(),
-            style: AppTypography.captionRegular.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              weekday.toLowerCase(),
+              style: AppTypography.captionRegular.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0,
+              ),
+              maxLines: 1,
+              softWrap: false,
+              textAlign: TextAlign.center,
             ),
-            maxLines: 1,
-            softWrap: false,
-            textAlign: TextAlign.center,
           ),
           if (time != null) ...[
             const Padding(
@@ -247,6 +245,8 @@ class _ContentBlock extends StatelessWidget {
     required this.primaryText,
     required this.secondaryText,
     required this.details,
+    required this.channelBeforeTitle,
+    required this.titleIsRegular,
   });
 
   final String title;
@@ -254,6 +254,8 @@ class _ContentBlock extends StatelessWidget {
   final String? primaryText;
   final String? secondaryText;
   final List<AppAgendaInfoCardDetail> details;
+  final bool channelBeforeTitle;
+  final bool titleIsRegular;
 
   @override
   Widget build(final BuildContext context) {
@@ -261,15 +263,25 @@ class _ContentBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (channelBeforeTitle && channel != null && channel!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppDimensions.space4),
+            child: Text(
+              channel!.toUpperCase(),
+              style: AppTypography.captionUppercase.copyWith(
+                color: AppColors.textBlueMutedDark,
+              ),
+            ),
+          ),
         Text(
           _displayCase(title),
-          style: AppTypography.bodyBold.copyWith(color: AppColors.textPrimary),
+          style: (titleIsRegular ? AppTypography.bodyRegular : AppTypography.bodyBold).copyWith(color: AppColors.textPrimary),
         ),
-        if (channel != null && channel!.isNotEmpty)
+        if (!channelBeforeTitle && channel != null && channel!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
             child: Text(
-              _displayCase(channel!),
+              channel!.toUpperCase(),
               style: AppTypography.captionUppercase.copyWith(
                 color: AppColors.blueMuted900,
               ),

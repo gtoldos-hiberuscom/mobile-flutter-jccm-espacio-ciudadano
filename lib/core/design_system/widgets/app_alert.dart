@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
@@ -848,7 +849,7 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
   final String cancelLabel;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
-  final IconData icon;
+  final IconData? icon;
   final String? semanticsLabel;
 
   /// Displays this dialog and returns `true` on confirm, `false` on cancel.
@@ -858,7 +859,7 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
     required final String description,
     required final String confirmLabel,
     required final String cancelLabel,
-    final IconData icon = AppIcons.info,
+    final IconData? icon = AppIcons.info,
     final String? semanticsLabel,
   }) {
     return showDialog<bool>(
@@ -927,19 +928,21 @@ class AppDestructiveConfirmDialog extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: ExcludeSemantics(
-                      child: Container(
-                        padding: const EdgeInsets.all(AppDimensions.space8),
-                        decoration: BoxDecoration(
-                          color: AppColors.errorLight,
-                          borderRadius: BorderRadius.circular(64),
+                  if (icon != null) ...[
+                    Center(
+                      child: ExcludeSemantics(
+                        child: Container(
+                          padding: const EdgeInsets.all(AppDimensions.space8),
+                          decoration: BoxDecoration(
+                            color: AppColors.errorLight,
+                            borderRadius: BorderRadius.circular(64),
+                          ),
+                          child: AppIcon(icon!, color: AppColors.errorDark),
                         ),
-                        child: AppIcon(icon, color: AppColors.errorDark),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: AppDimensions.space12),
+                    const SizedBox(height: AppDimensions.space12),
+                  ],
                   Semantics(
                     header: true,
                     headingLevel: 1,
@@ -1273,23 +1276,147 @@ class _DialogActions extends StatelessWidget {
   }
 }
 
-/// Biometric quick-access opt-in dialog.
-///
-/// Built from existing design-system pieces: [AppAlertDialog], [AppButton],
-/// [AppIcon], and [AppIcons.fingerprint].
-class AppBiometricAccessDialog {
-  const AppBiometricAccessDialog._();
+/// Biometric quick-access opt-in dialog — Figma node `44744:15094`.
+class AppBiometricAccessDialog extends StatelessWidget {
+  const AppBiometricAccessDialog({
+    required this.title,
+    required this.description,
+    required this.confirmLabel,
+    required this.cancelLabel,
+    required this.onConfirm,
+    required this.onCancel,
+    super.key,
+  });
+
+  final String title;
+  final String description;
+  final String confirmLabel;
+  final String cancelLabel;
+  final VoidCallback onConfirm;
+  final VoidCallback onCancel;
 
   static Future<bool?> show(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return AppAlertDialog.show(
-      context,
-      icon: AppIcons.fingerprint,
-      title: l10n.biometricAccessDialogTitle,
-      description: l10n.biometricAccessDialogDescription,
-      confirmLabel: l10n.biometricAccessDialogConfirm,
-      cancelLabel: l10n.biometricAccessDialogCancel,
+    return showDialog<bool>(
+      context: context,
+      requestFocus: true,
+      barrierDismissible: false,
+      barrierColor: const Color(0xCC031B35),
+      builder: (final dialogContext) => AppBiometricAccessDialog(
+        title: l10n.biometricAccessDialogTitle,
+        description: l10n.biometricAccessDialogDescription,
+        confirmLabel: l10n.biometricAccessDialogConfirm,
+        cancelLabel: l10n.biometricAccessDialogCancel,
+        onConfirm: () => Navigator.of(dialogContext).pop(true),
+        onCancel: () => Navigator.of(dialogContext).pop(false),
+      ),
+    );
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    return Semantics(
+      container: true,
+      scopesRoute: true,
+      namesRoute: true,
+      explicitChildNodes: true,
+      label: title,
+      child: FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: Dialog(
+          constraints: appModalDialogConstraints(context),
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.space16,
+            vertical: AppDimensions.space64,
+          ),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.backgroundWhite,
+              border: Border.all(color: AppColors.borderBlueMutedLight),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+              boxShadow: AppShadows.overAll,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.space16,
+              vertical: AppDimensions.space32,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: ExcludeSemantics(
+                      child: Container(
+                        padding: const EdgeInsets.all(AppDimensions.space8),
+                        decoration: const BoxDecoration(
+                          color: AppColors.borderBlueMutedLighter,
+                          shape: BoxShape.circle,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/fingerprint.svg',
+                          width: AppDimensions.iconMedium,
+                          height: AppDimensions.iconMedium,
+                          colorFilter: const ColorFilter.mode(
+                            Color(0xFF678099),
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space12),
+                  Semantics(
+                    header: true,
+                    headingLevel: 1,
+                    sortKey: const OrdinalSortKey(1),
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.h3.copyWith(color: AppColors.primary),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space16),
+                  Semantics(
+                    sortKey: const OrdinalSortKey(2),
+                    child: Text(
+                      description,
+                      style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.space8),
+                  Semantics(
+                    sortKey: const OrdinalSortKey(3),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          AppButton(
+                            label: cancelLabel,
+                            hierarchy: AppButtonHierarchy.tertiary,
+                            isExpanded: true,
+                            onPressed: onCancel,
+                          ),
+                          const SizedBox(height: AppDimensions.space16),
+                          AppButton(
+                            label: confirmLabel,
+                            isExpanded: true,
+                            onPressed: onConfirm,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

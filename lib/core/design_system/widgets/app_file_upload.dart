@@ -7,16 +7,18 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Upload status for [AppFileUpload].
 ///
-/// Mirrors the three Figma states of the "FileUpload" component (node `102:1689`):
-/// - [pending]   — file selected but not sent yet (same layout as [uploaded]
-///   with a delete action); its status reads "Seleccionado", never "Subido".
-///   Not in the Figma component — added because announcing a never-sent file
-///   as uploaded (AP-7) contradicted the red "some files missing" snackbar
-///   right below it. Visual treatment still pending a design pass.
+/// Mirrors the three Figma states of the "FileUpload" component (node `102:1689`),
+/// which a file goes through in order: [uploading] → [complete] → [uploaded].
+/// - [pending]   — file selected and waiting for its upload to start (queued
+///   behind another file, or while the transaction opens). Drawn like
+///   [uploading] with an indeterminate bar and the cancel action: a delete
+///   icon here read as "already uploaded" before anything was sent
+///   (JCCMEC-245). Its status reads "Seleccionado", never "Subido" (AP-7).
 /// - [uploading] — file is being transferred; shows an indeterminate/partial
 ///   progress bar and a cancel action.
-/// - [complete]  — transfer finished; shows a full progress bar (success
-///   colour) and a remove action.
+/// - [complete]  — transfer just finished; shows a full progress bar (success
+///   colour) and a "Completado" label, with no action. Meant to be shown
+///   briefly before switching to [uploaded].
 /// - [uploaded]  — file is already stored (no progress bar); shows the file
 ///   details and a delete action.
 /// - [error]     — the upload failed; shows an error-coloured bar and a
@@ -46,11 +48,9 @@ class AppFileUpload extends StatelessWidget {
     super.key,
     this.progress,
     this.onCancel,
-    this.onRemove,
     this.onDelete,
     this.onRetry,
     this.cancelLabel,
-    this.removeLabel,
     this.deleteLabel,
     this.retryLabel,
   }) : assert(fileName != '', 'fileName must not be empty'),
@@ -65,14 +65,13 @@ class AppFileUpload extends StatelessWidget {
   final AppFileUploadStatus status;
 
   /// Upload progress in `[0.0, 1.0]`.  `null` renders an indeterminate bar.
-  /// Only used when [status] is [AppFileUploadStatus.uploading].
+  /// Only used when [status] is [AppFileUploadStatus.uploading];
+  /// [AppFileUploadStatus.pending] is always indeterminate.
   final double? progress;
 
-  /// Called when the user taps the cancel button during upload.
+  /// Called when the user taps the cancel button while the file is pending or
+  /// uploading.
   final VoidCallback? onCancel;
-
-  /// Called when the user taps the remove button after a completed upload.
-  final VoidCallback? onRemove;
 
   /// Called when the user taps the delete icon on an already-uploaded file.
   final VoidCallback? onDelete;
@@ -82,9 +81,6 @@ class AppFileUpload extends StatelessWidget {
 
   /// Label for the cancel action. Defaults to `'Cancelar'`.
   final String? cancelLabel;
-
-  /// Label for the remove action. Defaults to `'Eliminar'`.
-  final String? removeLabel;
 
   /// Accessible and visible tooltip for deleting an uploaded file.
   final String? deleteLabel;
@@ -102,11 +98,11 @@ class AppFileUpload extends StatelessWidget {
       AppFileUploadStatus.error => l10n.caseworkUploadStatusFailed,
     };
     final content = switch (status) {
-      AppFileUploadStatus.pending => _UploadedRow(
+      AppFileUploadStatus.pending => _UploadingRow(
         fileName: fileName,
         fileInfo: fileInfo,
-        onDelete: onDelete,
-        deleteLabel: deleteLabel ?? l10n.fileUploadDelete,
+        onCancel: onCancel,
+        cancelLabel: cancelLabel ?? l10n.fileUploadCancel,
       ),
       AppFileUploadStatus.uploading => _UploadingRow(
         fileName: fileName,
@@ -118,8 +114,7 @@ class AppFileUpload extends StatelessWidget {
       AppFileUploadStatus.complete => _CompleteRow(
         fileName: fileName,
         fileInfo: fileInfo,
-        onRemove: onRemove,
-        removeLabel: removeLabel ?? l10n.fileUploadRemove,
+        completedLabel: l10n.fileUploadCompleted,
       ),
       AppFileUploadStatus.uploaded => _UploadedRow(
         fileName: fileName,
@@ -284,14 +279,12 @@ class _CompleteRow extends StatelessWidget {
   const _CompleteRow({
     required this.fileName,
     required this.fileInfo,
-    required this.removeLabel,
-    this.onRemove,
+    required this.completedLabel,
   });
 
   final String fileName;
   final String fileInfo;
-  final VoidCallback? onRemove;
-  final String removeLabel;
+  final String completedLabel;
 
   @override
   Widget build(final BuildContext context) {
@@ -305,28 +298,25 @@ class _CompleteRow extends StatelessWidget {
         const SizedBox(height: AppDimensions.space8),
         _FileMetaRow(
           fileInfo: fileInfo,
-          action: TextButton.icon(
-            onPressed: onRemove,
-            style: TextButton.styleFrom(
+          // Plain status, not an action: the delete icon only appears once
+          // the card moves on to `uploaded`.
+          action: ExcludeSemantics(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8),
-              minimumSize: const Size(
-                AppDimensions.minTouchTarget,
-                AppDimensions.minTouchTarget,
-              ),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: const Icon(
-              Icons.check_circle_outline_rounded,
-              size: AppDimensions.iconSmall,
-              color: AppColors.successDark,
-            ),
-            iconAlignment: IconAlignment.end,
-            label: Text(
-              removeLabel,
-              style: AppTypography.smallRegular.copyWith(
-                color: AppColors.primary,
-                decoration: TextDecoration.underline,
-                decorationColor: AppColors.primary,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    completedLabel,
+                    style: AppTypography.smallRegular.copyWith(color: AppColors.successDark),
+                  ),
+                  const SizedBox(width: AppDimensions.space4),
+                  const Icon(
+                    Icons.check_circle_outline_rounded,
+                    size: AppDimensions.iconSmall,
+                    color: AppColors.successDark,
+                  ),
+                ],
               ),
             ),
           ),

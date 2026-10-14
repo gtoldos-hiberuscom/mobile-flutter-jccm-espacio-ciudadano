@@ -3,9 +3,11 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
@@ -67,6 +69,10 @@ class _MyDataPrimaryCareAppointmentsPageState extends ConsumerState<MyDataPrimar
       title: l10n.myDataHealthInfoSheetTitle,
       bodyText: l10n.myDataHealthInfoSheetDescription,
       footerText: l10n.myDataHealthInfoSheetContactHint,
+      actionLabel: l10n.myDataHealthInfoSheetMoreInformation,
+      actionIcon: AppIcons.openInNew,
+      actionIsExternalLink: true,
+      onActionPressed: () => launchExternalUrlWithConfirmation(context, ref.read(appConfigProvider).sescamUrl),
     );
   }
 
@@ -119,7 +125,7 @@ class _MyDataPrimaryCareAppointmentsPageState extends ConsumerState<MyDataPrimar
             ),
             data: (final hasJccmAuthorization) {
               if (!hasJccmAuthorization) {
-                return MyDataAuthorizationContextualHelper(onOpenSettings: _openConsentSettings);
+                return MyDataAuthorizationContextualHelper(onOpenSettings: _openConsentSettings, message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage, semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta);
               }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +172,7 @@ class _PendingAppointmentsList extends ConsumerWidget {
         child: Center(child: AppLoadingIndicator()),
       ),
       error: (final error, final _) => switch (error) {
-        MyDataAuthorizationRequired() => MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings),
+        MyDataAuthorizationRequired() => MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings, message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage, semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta),
         MyDataHealthCipMissing() => const _HealthCipMissingState(),
         _ => _HealthErrorState(onRetry: () => ref.invalidate(myDataPrimaryCarePendingAppointmentsProvider)),
       },
@@ -202,7 +208,7 @@ class _PastAppointmentsList extends ConsumerWidget {
           child: Center(child: AppLoadingIndicator()),
         );
       case PastPrimaryCareAppointmentsStatus.authorizationRequired:
-        return MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings);
+        return MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings, message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage, semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta);
       case PastPrimaryCareAppointmentsStatus.cipMissing:
         return const _HealthCipMissingState();
       case PastPrimaryCareAppointmentsStatus.loadError:
@@ -256,7 +262,7 @@ class _AppointmentCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final date = appointment.dateTime;
-    final detail = appointment.modality ?? appointment.center ?? '';
+    final detail = appointment.description;
     final channel = appointment.channel?.trim();
     final isPhone = detail.toLowerCase().contains('teleconsulta') || detail.toLowerCase().contains('telef');
 
@@ -265,9 +271,11 @@ class _AppointmentCard extends StatelessWidget {
       day: date.day.toString(),
       weekday: l10n.commonWeekdayName(weekdayKey(date.weekday)),
       time: '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
-      title: appointment.description,
+      title: appointment.professional,
       channel: channel != null && channel.isNotEmpty ? channel : (isPhone ? l10n.agendaChannelPhone : l10n.agendaChannelInPerson),
-      primaryText: appointment.professional,
+      showTypeIcon: false,
+      channelBeforeTitle: true,
+      titleIsRegular: true,
       secondaryText: detail,
     );
   }

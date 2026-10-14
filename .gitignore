@@ -55,3 +55,6 @@ app.*.map.json
 /linux/
 /windows/
 /web/
+
+# Ficheros de bloqueo de Excel (~$Libro.xlsx) que deja abierto el visor
+~$*
