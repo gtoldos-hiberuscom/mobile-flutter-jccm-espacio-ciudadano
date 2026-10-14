@@ -10,7 +10,12 @@ abstract final class StorageKeys {
   static const String accessToken = 'access_token';
 
   /// JWT refresh token for silent re-authentication.
-  static const String refreshToken = 'refresh_token';
+  ///
+  /// Va en el almacén seguro normal y la app sólo lo usa tras la huella. El
+  /// valor no es `refresh_token` a propósito: con ese nombre quedaba la entrada
+  /// del almacén biométrico de antes, y en iOS leerla por el mismo nombre
+  /// levantaría Face ID.
+  static const String refreshToken = 'quick_access_refresh_token';
 
   /// OIDC ID token, kept so logout can send `id_token_hint` to `end_session`
   /// even after an app restart (otherwise the Keycloak/Cl@ve SSO session and

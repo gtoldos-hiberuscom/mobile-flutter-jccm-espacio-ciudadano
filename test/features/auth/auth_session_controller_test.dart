@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
@@ -42,11 +43,35 @@ final class FakeAppStorage implements AppStorage {
   }
 }
 
+/// [BiometricAuthenticator] fake: la huella es la puerta del token guardado,
+/// así que cada diálogo que la app levantaría queda registrado aquí.
+final class FakeBiometricAuthenticator implements BiometricAuthenticator {
+  /// Si el ciudadano supera el diálogo.
+  bool allow = true;
+
+  int prompts = 0;
+  String? lastReason;
+  String? lastTitle;
+  String? lastCancelLabel;
+
+  @override
+  Future<bool> canAuthenticateWithBiometrics() async => true;
+
+  @override
+  Future<bool> authenticateForSessionUnlock({required final String localizedReason, final String? title, final String? cancelLabel}) async {
+    prompts++;
+    lastReason = localizedReason;
+    lastTitle = title;
+    lastCancelLabel = cancelLabel;
+    return allow;
+  }
+}
+
 /// In-memory [SecureStorage] fake.
 ///
 /// Records the protection each key was written with, and which keys were read,
-/// so the tests can assert *where* the biometric gate sits: on a real device a
-/// read of a biometric key raises the platform prompt.
+/// so the tests can assert that the long-lived token is only read after the
+/// biometric check.
 final class FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
   final Map<String, SecureStorageProtection> writtenWith = {};
@@ -213,6 +238,7 @@ void main() {
   late FakeAuthRepository repository;
   late FakeSecureStorage storage;
   late FakeAppStorage appStorage;
+  late FakeBiometricAuthenticator biometrics;
 
   ProviderContainer buildContainer() {
     final container = ProviderContainer(
@@ -220,6 +246,7 @@ void main() {
         authRepositoryProvider.overrideWithValue(repository),
         secureStorageProvider.overrideWithValue(storage),
         appStorageProvider.overrideWithValue(appStorage),
+        biometricAuthenticatorProvider.overrideWithValue(biometrics),
       ],
     );
     addTearDown(container.dispose);
@@ -229,6 +256,7 @@ void main() {
   setUp(() {
     repository = FakeAuthRepository();
     storage = FakeSecureStorage();
+    biometrics = FakeBiometricAuthenticator();
     appStorage = FakeAppStorage()
       // El grueso de los tests ejercita la sesión persistida, que ahora exige
       // el opt-in; los que comprueban lo contrario lo apagan explícitamente.
@@ -246,9 +274,9 @@ void main() {
       expect(repository.revokedTokens, ['refresh']);
     });
 
-    test('sin token en memoria no intenta nada, y no lee el almacén protegido', () async {
-      // Leerlo levantaría el diálogo biométrico, y pedir la huella para cerrar
-      // sesión es justo lo que se quiso evitar.
+    test('sin token en memoria no intenta nada, y no pide la huella', () async {
+      // Usar el token guardado exige la huella, y pedirla para cerrar sesión
+      // es justo lo que se quiso evitar.
       storage.store[StorageKeys.refreshToken] = 'guardado';
       final container = buildContainer();
 
@@ -256,6 +284,7 @@ void main() {
 
       expect(repository.revokedTokens, isEmpty);
       expect(storage.readKeys, isNot(contains(StorageKeys.refreshToken)));
+      expect(biometrics.prompts, 0);
     });
 
     test('un fallo de revocación no impide cerrar sesión', () async {
@@ -269,7 +298,12 @@ void main() {
   });
 
   group('AuthSessionController biometric protection of the offline token', () {
-    test('only the refresh token is stored behind the biometric gate', () async {
+    test('REGRESSION: guardar la sesión no pide huella', () async {
+      // El token iba al almacén biométrico de `flutter_secure_storage`, que en
+      // Android pide la huella en la primera operación de cada proceso,
+      // escritura incluida: tras cerrar sesión y matar la app, la pedía justo
+      // después de entrar con Cl@ve (y cancelarla colgaba la app). La huella
+      // se pide al usar el token, no al guardarlo.
       final container = buildContainer();
       final controller = container.read(authSessionControllerProvider);
 
@@ -278,20 +312,33 @@ void main() {
         claims: _claims,
       );
 
-      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.biometric);
-      expect(
-        storage.writtenWith[StorageKeys.accessToken],
-        SecureStorageProtection.standard,
-        reason: 'the access token must stay readable without a prompt, or "if there is an access token you can enter" is impossible',
-      );
+      expect(storage.store[StorageKeys.refreshToken], 'refresh');
+      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.standard);
+      expect(storage.writtenWith[StorageKeys.accessToken], SecureStorageProtection.standard);
       expect(storage.writtenWith[StorageKeys.idToken], SecureStorageProtection.standard);
+      expect(biometrics.prompts, 0);
     });
 
-    test('a device that cannot protect the token keeps working instead of crashing', () async {
-      // `enforceBiometrics` makes the write fail rather than silently storing
-      // the token unprotected. Correct policy — but it must not take the
-      // navigation down with it: the session just does not survive a restart,
-      // exactly as it behaved before any of this existed.
+    test('el token guardado no se usa sin la huella', () async {
+      storage.store[StorageKeys.accessToken] = 'persisted-access';
+      storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
+      biometrics.allow = false;
+      final container = buildContainer();
+      final controller = container.read(authSessionControllerProvider)
+        ..startInMemory(
+          TokenResponse('persisted-access', null, DateTime.now().subtract(const Duration(minutes: 1)), null, null, null, null),
+          claims: _claims,
+        );
+
+      expect(await controller.unlockPersistedSession(), isFalse);
+      expect(storage.readKeys, isNot(contains(StorageKeys.refreshToken)), reason: 'sin superar la huella ni se lee');
+      expect(container.read(tokenResponseProvider)?.refreshToken, isNull);
+    });
+
+    test('a failed write of the token keeps working instead of crashing', () async {
+      // It must not take the navigation down with it: the session just does
+      // not survive a restart, exactly as it behaved before any of this
+      // existed.
       storage.unwritableKeys.add(StorageKeys.refreshToken);
       final container = buildContainer();
       final controller = container.read(authSessionControllerProvider);
@@ -305,27 +352,7 @@ void main() {
       );
 
       expect(storage.store[StorageKeys.accessToken], 'access');
-      expect(storage.store[StorageKeys.refreshToken], isNull, reason: 'never stored unprotected');
-    });
-
-    test('REGRESSION: the offline token is deleted before being written, so the access control is really applied', () async {
-      // El Keychain no permite cambiar el ACL con SecItemUpdate, y el plugin
-      // sólo lo aplica en SecItemAdd. Sin el borrado previo, una entrada
-      // preexistente —creada sin protección por cualquier build anterior—
-      // conservaría su ACL viejo y el token quedaría legible sin biometría.
-      storage.store[StorageKeys.refreshToken] = 'token-de-una-build-anterior';
-      final container = buildContainer();
-
-      await container.read(authSessionControllerProvider).persist(
-        TokenResponse('access', 'refresh', DateTime.now().add(const Duration(minutes: 5)), 'id', null, null, null),
-        claims: _claims,
-      );
-
-      expect(
-        storage.operations,
-        containsAllInOrder(<String>['delete:${StorageKeys.refreshToken}', 'write:${StorageKeys.refreshToken}']),
-      );
-      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.biometric);
+      expect(storage.store[StorageKeys.refreshToken], isNull);
     });
 
     test('REGRESSION: el borrado de instalación limpia puede dejar fuera el almacén biométrico', () async {
@@ -431,7 +458,7 @@ void main() {
       await controller.applyBiometricQuickAccessChange();
 
       expect(storage.store[StorageKeys.refreshToken], 'refresh');
-      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.biometric);
+      expect(biometrics.prompts, 0, reason: 'la huella al activar la pide la pantalla, no el guardado');
     });
 
     test('hydrating on start-up never touches the refresh token, so no prompt is raised', () async {
@@ -453,7 +480,7 @@ void main() {
     test('a rejected biometric check keeps the session instead of destroying it', () async {
       storage.store[StorageKeys.accessToken] = 'persisted-access';
       storage.store[StorageKeys.refreshToken] = 'persisted-refresh';
-      storage.unreadableKeys.add(StorageKeys.refreshToken);
+      biometrics.allow = false;
       final container = buildContainer();
       final controller = container.read(authSessionControllerProvider)
         // Estado de una sesión hidratada: identidad y access token caducado en
@@ -490,14 +517,14 @@ void main() {
       // traducir nada.
       await controller.refreshStatus(force: true);
 
+      expect(biometrics.prompts, 1);
       expect(
-        storage.lastReadPrompt,
-        isNotNull,
+        biometrics.lastTitle,
+        isNotEmpty,
         reason: 'sin copia Android saca su texto genérico, y este diálogo es el que pilla al ciudadano ya dentro de la app',
       );
-      expect(storage.lastReadPrompt!.title, isNotEmpty);
-      expect(storage.lastReadPrompt!.subtitle, isNotEmpty);
-      expect(storage.lastReadPrompt!.cancelLabel, isNotEmpty);
+      expect(biometrics.lastReason, isNotEmpty);
+      expect(biometrics.lastCancelLabel, isNotEmpty);
     });
   });
 
