@@ -76,6 +76,12 @@ paths:
           (normalmente la última publicada en la tienda de esa plataforma). Una versión nunca se
           recomienda a sí misma.
         - Si `accion` es `NINGUNA`, `versionPublicada` y `mensaje` van a `null`.
+        - **`versionPublicada` debe poder descargarse ya en la tienda de esa plataforma para
+          todos los usuarios**: en iOS, aprobada por Apple y publicada; en Android, con el
+          despliegue gradual al 100 %. Si se fuerza a una versión que la tienda aún no ofrece,
+          el ciudadano queda bloqueado: el aviso no se puede cerrar y la tienda no le da la
+          actualización. Las reglas se configuran por plataforma precisamente porque las dos
+          tiendas publican a ritmos distintos.
 
         **Precedencia recomendada al resolver** (para una plataforma e `idAplicacion`):
 

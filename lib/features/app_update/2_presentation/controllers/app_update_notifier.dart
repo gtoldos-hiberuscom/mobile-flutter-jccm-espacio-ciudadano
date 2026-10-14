@@ -118,7 +118,16 @@ class AppUpdateNotifier extends Notifier<AppUpdateState> {
     if (current is! AppUpdateVisible) {
       return;
     }
-    final opened = await ref.read(appStoreLauncherProvider).openStore();
+    bool opened;
+    try {
+      opened = await ref.read(appStoreLauncherProvider).openStore();
+    } on Object catch (error, stackTrace) {
+      // El lanzador no lanza, pero construirlo lee la configuración
+      // (`APP_STORE_ID`): un fallo ahí debe acabar en el texto de error del
+      // aviso, no en un error sin capturar.
+      logger.e('[app_update] no se pudo preparar la apertura de la tienda', error: error, stackTrace: stackTrace);
+      opened = false;
+    }
     if (!ref.mounted) {
       return;
     }

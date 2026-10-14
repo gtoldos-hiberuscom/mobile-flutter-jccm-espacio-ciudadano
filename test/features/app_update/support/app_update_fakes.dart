@@ -103,11 +103,16 @@ final class FakeAppStoreLauncher implements AppStoreLauncher {
   FakeAppStoreLauncher({this.result = true});
 
   bool result;
+  Exception? error;
   int opened = 0;
 
   @override
   Future<bool> openStore() async {
     opened++;
+    final failure = error;
+    if (failure != null) {
+      throw failure;
+    }
     return result;
   }
 }

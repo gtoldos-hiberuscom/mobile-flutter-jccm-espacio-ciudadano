@@ -30,7 +30,7 @@ GET {BASE_URL}/api/v1/app-movil/actualizacion?plataforma=ANDROID&idAplicacion=es
 
 - **Versión:** solo la de marketing `x.y.z` (`PackageInfo.version`), en las dos plataformas. El build no viaja: requisito de publicación, **cada subida a tienda sube la `x.y.z`**.
 - **Host:** hoy `AppConfig.baseUrl` (el mismo gateway que el resto de APIs). Punto abierto con back.
-- **Autenticación:** ninguna; la consulta se hace antes del login con Cl@ve. Dio propio (`AppVersionApi.standalone`) sin el interceptor de autenticación (que podría refrescar o cerrar sesión ante un 401) ni el de errores. Punto abierto con back si quieren protegerlo.
+- **Autenticación:** ninguna; la consulta se hace antes del login con Cl@ve. Cliente sin sesión `buildPublicDioClient` (`lib/core/network/api_client.dart`): mismo host, cabeceras y trazas de red que el cliente principal (cuerpos y curl solo en desarrollo), sin el interceptor de autenticación (que podría refrescar o cerrar sesión ante un 401) ni el de errores. Punto abierto con back si quieren protegerlo.
 - **Plazo:** 5 s.
 
 Capas: `AppVersionApi` (Dio) → `AppUpdateDecisionDto` (sobre `Respuesta` + `body`, valida forma) → `AppUpdateDecisionMapper` (valida significado) → `AppUpdateDecision` → `CheckAppUpdateUsecase`.
@@ -45,6 +45,10 @@ No viene del servidor: la construye `appStorePageUrl` (`3_data/url_launcher_app_
 | iOS | `https://apps.apple.com/es/app/id<APP_STORE_ID>` |
 
 `APP_STORE_ID` es la clave obligatoria de los `config_*.json` con el Apple ID de la app en App Store Connect (`6795089236`); no se puede deducir del bundle id.
+
+## Riesgo operativo (para quien configure las reglas)
+
+**No forzar nunca a una versión que la tienda de esa plataforma aún no ofrece a todos** (iOS pendiente de revisión de Apple; Android con despliegue gradual a menos del 100 %). El aviso forzado no se puede cerrar y la tienda no daría la actualización: el ciudadano queda bloqueado hasta que se corrija la regla en el servidor. Está recogido en el contrato.
 
 ## Decisiones
 

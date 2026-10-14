@@ -198,6 +198,16 @@ void main() {
       expect((container.read(appUpdateProvider) as AppUpdateVisible).storeOpenFailed, isFalse);
     });
 
+    test('si abrir la tienda lanza, el aviso enseña el error en vez de propagarlo', () async {
+      launcher.error = const FormatException('APP_STORE_ID inválido');
+      final container = buildContainer();
+      await pumpEventQueue();
+
+      await container.read(appUpdateProvider.notifier).openStore();
+
+      expect((container.read(appUpdateProvider) as AppUpdateVisible).storeOpenFailed, isTrue);
+    });
+
     test('si el remoto deja de pedir actualización, el aviso se retira', () async {
       final container = buildContainer();
       await pumpEventQueue();
