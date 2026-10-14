@@ -95,7 +95,7 @@ final class AuthRepositoryImpl implements AuthRepository {
       );
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
       Error.throwWithStackTrace(
-        _mapPlatformException(error),
+        _isSafariViewControllerDismissal(error) ? AuthException.cancelled(cause: error) : _mapPlatformException(error),
         stackTrace,
       );
     } on AuthException {
@@ -197,6 +197,9 @@ final class AuthRepositoryImpl implements AuthRepository {
     } on FlutterAppAuthUserCancelledException {
       return;
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
+      if (_isSafariViewControllerDismissal(error)) {
+        return;
+      }
       Error.throwWithStackTrace(
         _mapPlatformException(error),
         stackTrace,
@@ -248,6 +251,22 @@ final class AuthRepositoryImpl implements AuthRepository {
   /// distinguishing an OAuth error returned by the authorization server
   /// (`error`/`error_description` per RFC 6749) from a technical failure in
   /// the AppAuth SDK or the browser session.
+  /// En iOS, cerrar Cl@ve con «OK» del `SFSafariViewController` **es una
+  /// cancelación del ciudadano**, pero `flutter_appauth` 12.0.0 no la reporta
+  /// como tal: su agente la emite como `OIDErrorCodeProgramCanceledAuthorizationFlow`
+  /// (`-4`, `OIDExternalUserAgentIOSSafariViewController.m`,
+  /// `safariViewControllerDidFinish`) y el plugin solo marca `user_did_cancel`
+  /// con `-3` (`FlutterAppAuth.m`). Sin esto, cerrar Cl@ve en iOS salía como
+  /// fallo inesperado: el aviso de elevación volvía a abrirse con «No ha sido
+  /// posible elevar» y el ciudadano no podía salir.
+  ///
+  /// La app no cancela flujos por programa, y en esa versión del plugin ese
+  /// código solo lo produce el cierre del `SFSafariViewController`.
+  static bool _isSafariViewControllerDismissal(final FlutterAppAuthPlatformException error) {
+    final details = error.platformErrorDetails;
+    return details.type == 'org.openid.appauth.general' && details.code == '-4';
+  }
+
   static AuthException _mapPlatformException(
     final FlutterAppAuthPlatformException error,
   ) {

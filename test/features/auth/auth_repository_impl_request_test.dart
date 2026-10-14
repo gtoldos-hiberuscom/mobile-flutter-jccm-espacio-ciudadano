@@ -102,6 +102,56 @@ void main() {
     expect(additional.containsKey('prompt'), isFalse);
   });
 
+  /// Lo que `flutter_appauth` 12.0.0 manda en iOS al cerrar el
+  /// `SFSafariViewController`: `OIDErrorCodeProgramCanceledAuthorizationFlow`
+  /// (-4) y `user_did_cancel` a `false`.
+  void mockSafariViewControllerDismissed() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (final call) async {
+      capturedArguments = call.arguments as Map<Object?, Object?>;
+      throw PlatformException(
+        code: 'authorize_and_exchange_code_failed',
+        message: 'Failed to authorize',
+        details: <String, String>{
+          'type': 'org.openid.appauth.general',
+          'code': '-4',
+          'user_did_cancel': 'false',
+        },
+      );
+    });
+  }
+
+  // Regresión del 14/10 en iOS: cerrar Cl@ve salía como fallo inesperado, y el
+  // aviso de elevación volvía a abrirse sin dejar salir al ciudadano.
+  test('iOS: cerrar el SFSafariViewController durante el login es una cancelación', () async {
+    mockSafariViewControllerDismissed();
+
+    await expectLater(
+      repository.login(),
+      throwsA(isA<AuthException>().having((final e) => e.reason, 'reason', AuthFailureReason.cancelled)),
+    );
+  });
+
+  test('iOS: cerrarlo durante el cierre de sesión tampoco es un error', () async {
+    mockSafariViewControllerDismissed();
+
+    await expectLater(repository.logout(idToken: 'fake-id-token'), completes);
+  });
+
+  test('otro código del dominio general de AppAuth sigue siendo inesperado', () async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (final call) async {
+      throw PlatformException(
+        code: 'authorize_and_exchange_code_failed',
+        message: 'Failed to authorize',
+        details: <String, String>{'type': 'org.openid.appauth.general', 'code': '-5'},
+      );
+    });
+
+    await expectLater(
+      repository.login(),
+      throwsA(isA<AuthException>().having((final e) => e.reason, 'reason', AuthFailureReason.unexpected)),
+    );
+  });
+
   test('login and logout ask for the SFSafariViewController agent', () async {
     // De ese agente depende el SSO con los portales de JCCM en iOS: guarda en
     // un almacén propio de la app, compartido con las pestañas que la app abre
