@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -59,13 +58,9 @@ Future<void> _clearRestoredSecureSessionOnFreshInstall({
 
   final isFreshInstall = sharedPreferences.getKeys().isEmpty;
   if (isFreshInstall) {
-    // El almacén biométrico se deja fuera en Android a propósito. Esta rutina
-    // existe por iOS, donde el Keychain sobrevive a la desinstalación y puede
-    // quedar una sesión de la instalación anterior; en Android una instalación
-    // limpia ya trae el almacenamiento vacío, así que no hay nada que limpiar
-    // y tocarlo sólo consigue crearlo — con el diálogo de huella que eso
-    // arrastra, antes de que el ciudadano haya hecho nada.
-    await FlutterSecureStorageImpl(const FlutterSecureStorage()).clear(includeBiometric: !Platform.isAndroid);
+    // Esta rutina existe por iOS, donde el Keychain sobrevive a la
+    // desinstalación y puede quedar una sesión de la instalación anterior.
+    await FlutterSecureStorageImpl(const FlutterSecureStorage()).clear();
   }
   await appStorage.write(StorageKeys.installBootstrapped, true);
 }

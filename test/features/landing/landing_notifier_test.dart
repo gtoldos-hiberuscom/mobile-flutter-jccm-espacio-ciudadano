@@ -6,6 +6,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
@@ -31,9 +32,11 @@ void main() {
     final AuthRepository repository, {
     final _FakeSecureStorage? storage,
     final bool quickAccessEnabled = false,
+    final _FakeBiometricAuthenticator? biometrics,
   }) {
     final container = ProviderContainer(
       overrides: [
+        biometricAuthenticatorProvider.overrideWithValue(biometrics ?? _FakeBiometricAuthenticator()),
         loginUseCaseProvider.overrideWithValue(LoginUseCase(repository)),
         authRepositoryProvider.overrideWithValue(repository),
         secureStorageProvider.overrideWithValue(storage ?? _FakeSecureStorage()),
@@ -125,7 +128,8 @@ void main() {
         ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
         ..store[StorageKeys.refreshToken] = 'guardado'
         ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
-      final container = buildContainer(repository, storage: storage, quickAccessEnabled: true);
+      final biometrics = _FakeBiometricAuthenticator();
+      final container = buildContainer(repository, storage: storage, quickAccessEnabled: true, biometrics: biometrics);
 
       await container.read(landingProvider.notifier).tryRestoreSession(
         localizedTitle: 't',
@@ -134,11 +138,8 @@ void main() {
       );
 
       expect(container.read(landingProvider).loginSuccess, isTrue);
-      expect(
-        storage.readKeys,
-        contains(StorageKeys.refreshToken),
-        reason: 'leer el almacén protegido ES la comprobación biométrica: sin esa lectura no se le ha pedido nada al ciudadano',
-      );
+      expect(biometrics.prompts, 1, reason: 'el token guardado no se usa sin superar la huella');
+      expect(biometrics.lastTitle, 't', reason: 'el diálogo lleva la copia de la landing');
       expect(
         repository.refreshAttempts,
         0,
@@ -153,9 +154,8 @@ void main() {
       final storage = _FakeSecureStorage()
         ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
         ..store[StorageKeys.refreshToken] = 'guardado'
-        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String()
-        ..unreadableKeys.add(StorageKeys.refreshToken);
-      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().add(const Duration(minutes: 5)).toIso8601String();
+      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true, biometrics: _FakeBiometricAuthenticator()..allow = false);
 
       await container.read(landingProvider.notifier).tryRestoreSession(
         localizedTitle: 't',
@@ -197,9 +197,9 @@ void main() {
     });
 
     test('REGRESSION: con el access token caducado y sin acceso rápido, no se restaura', () async {
-      // Revocar en Android exige autenticar para borrar, y el ciudadano puede
-      // cancelarlo: entonces la entrada sigue en el dispositivo. Sin este gate
-      // el acceso rápido seguiría funcionando pese a figurar como desactivado.
+      // Si por cualquier motivo queda un token huérfano en el dispositivo, sin
+      // este gate el acceso rápido seguiría funcionando pese a figurar como
+      // desactivado.
       final storage = _FakeSecureStorage()
         ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
         ..store[StorageKeys.refreshToken] = 'huerfano';
@@ -266,9 +266,8 @@ void main() {
       final storage = _FakeSecureStorage()
         ..store[StorageKeys.accessToken] = _accessTokenFor(_idAgente)
         ..store[StorageKeys.refreshToken] = 'bueno'
-        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().subtract(const Duration(minutes: 1)).toIso8601String()
-        ..unreadableKeys.add(StorageKeys.refreshToken);
-      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true);
+        ..store[StorageKeys.sessionExpiresAt] = DateTime.now().subtract(const Duration(minutes: 1)).toIso8601String();
+      final container = buildContainer(_HangingAuthRepository(), storage: storage, quickAccessEnabled: true, biometrics: _FakeBiometricAuthenticator()..allow = false);
 
       await container.read(landingProvider.notifier).tryRestoreSession(
         localizedTitle: 't',
@@ -417,37 +416,43 @@ final class _FakeAppStorage implements AppStorage {
   }
 }
 
+final class _FakeBiometricAuthenticator implements BiometricAuthenticator {
+  bool allow = true;
+  int prompts = 0;
+  String? lastTitle;
+
+  @override
+  Future<bool> canAuthenticateWithBiometrics() async => true;
+
+  @override
+  Future<bool> authenticateForSessionUnlock({required final String localizedReason, final String? title, final String? cancelLabel}) async {
+    prompts++;
+    lastTitle = title;
+    return allow;
+  }
+}
+
 final class _FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
 
-  /// Claves leídas, en orden. Sirve para comprobar que la reanudación no toca
-  /// el almacén protegido cuando no hace falta — en un dispositivo real, esa
-  /// lectura es el diálogo biométrico.
+  /// Claves leídas, en orden.
   final List<String> readKeys = [];
 
-  /// Claves cuya lectura falla: simula una biometría cancelada o fallida.
-  final Set<String> unreadableKeys = {};
-
   @override
-  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+  Future<String?> read(final String key) async {
     readKeys.add(key);
-    if (unreadableKeys.contains(key)) {
-      throw StateError('biometría rechazada para $key');
-    }
     return store[key];
   }
 
   @override
-  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => store[key] = value;
+  Future<void> write(final String key, final String value) async => store[key] = value;
 
   @override
-  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
+  Future<void> delete(final String key) async => store.remove(key);
+
 
   @override
-  Future<void> clearBiometric() async => store.remove(StorageKeys.refreshToken);
-
-  @override
-  Future<void> clear({final bool includeBiometric = true}) async => store.clear();
+  Future<void> clear() async => store.clear();
 }
 
 /// Repositorio cuyo refresco siempre falla con la excepción dada.
