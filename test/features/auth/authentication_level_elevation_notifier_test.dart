@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
@@ -114,6 +115,20 @@ void main() {
     expect(container.read(tokenResponseProvider), isNull);
   });
 
+  // Regresión del 14/10: la cancelación dejaba el estado como si no hubiera
+  // pasado nada, y la pantalla, al montarse de nuevo, relanzaba Cl@ve en bucle.
+  test('cerrar Cl@ve sin identificarse es un desenlace propio, y no toca la sesión', () async {
+    final container = buildContainer(_token(_claimsToken(level: 'substantial')));
+    startLowLevelSession(container);
+    repository.loginError = const AuthException.cancelled();
+
+    await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
+
+    expect(container.read(elevationProvider).outcome, ElevationOutcome.cancelled);
+    expect(container.read(elevationProvider).isElevating, isFalse);
+    expect(container.read(authenticationLevelProvider).meets(AuthenticationLevel.substantial), isFalse);
+  });
+
   // Desde JCCMEC-224/228 el login guarda el `id_token` para cerrar después la
   // sesión que abre en el navegador. La elevación abre una nueva, así que la
   // pista tiene que pasar a ser la suya.
@@ -192,12 +207,21 @@ final class _FakeAuthRepository implements AuthRepository {
 
   final TokenResponse token;
 
+  /// Si está, `login` falla con él (p. ej. el ciudadano cierra Cl@ve).
+  Object? loginError;
+
   @override
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
     final Map<String, String> extraParameters = const <String, String>{},
-  }) async => token;
+  }) async {
+    if (loginError case final error?) {
+      // ignore: only_throw_errors — el error a simular lo elige el test.
+      throw error;
+    }
+    return token;
+  }
 
   @override
   Future<TokenResponse> refreshToken({

@@ -250,13 +250,22 @@ List<MyDataAppointmentEntry> _entries(final List<HospitalAppointment> appointmen
 /// consultar hasta que se eleve, y sus dos botones son dicotómicos — volver a
 /// Salud o ir a Cl@ve.
 ///
-/// Se abre una sola vez por entrada, y **vuelve a abrirse solo cuando llega un
-/// desenlace**: así se cuenta que el método elegido no bastó o que la elevación
-/// falló, sin reintentar en bucle. Un reintento automático metería al ciudadano
-/// en un carrusel de Cl@ve.
+/// **Cl@ve se intenta una sola vez por decisión del ciudadano.** El desenlace de
+/// la elevación es una señal de un solo uso que consume el bloqueo que esté
+/// montado — también uno recién montado: al volver de Cl@ve la pantalla pasa
+/// por `loading` y este widget se crea de nuevo, así que no basta con escuchar
+/// cambios. Por desenlace:
 ///
-/// Quien marcó «No volver a mostrar» se salta el diálogo y va directo a Cl@ve.
-/// Eso omite **la explicación, no el control**: el gate sigue decidiendo.
+/// - **cancelado** (cerró Cl@ve con la X o volvió atrás) → a Salud. Relanzar
+///   Cl@ve aquí era el bucle: cerrar, reabrir, cerrar…
+/// - **insuficiente** o **fallido** → el diálogo con el motivo, **siempre**,
+///   aunque se marcara «No volver a mostrar»: es otro mensaje, y saltárselo
+///   relanzaría Cl@ve sin que el ciudadano lo pida.
+///
+/// Quien marcó «No volver a mostrar» —con cualquiera de los dos botones— se
+/// salta la explicación en las siguientes entradas y va directo a Cl@ve, una
+/// vez: si lo cierra, vuelve a Salud. Omite **la explicación, no el control**:
+/// el gate sigue decidiendo.
 class _LevelBlockedState extends ConsumerStatefulWidget {
   const _LevelBlockedState({required this.reading, required this.minimum});
 
@@ -269,12 +278,48 @@ class _LevelBlockedState extends ConsumerStatefulWidget {
 
 class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
   bool _isShowing = false;
-  bool _hasOpenedOnce = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((final _) => _open());
+    WidgetsBinding.instance.addPostFrameCallback((final _) => _start());
+  }
+
+  /// Al montarse: si hay una elevación en curso, su desenlace llegará por el
+  /// `listen`; si ya llegó y nadie lo consumió, se atiende ahora; si no hay
+  /// nada pendiente, es una entrada nueva.
+  void _start() {
+    if (!mounted) {
+      return;
+    }
+    final elevation = ref.read(elevationProvider);
+    if (elevation.isElevating) {
+      return;
+    }
+    if (elevation.outcome case final outcome?) {
+      _handleOutcome(outcome);
+      return;
+    }
+    unawaited(_open());
+  }
+
+  void _handleOutcome(final ElevationOutcome outcome) {
+    final l10n = AppLocalizations.of(context);
+    ref.read(elevationProvider.notifier).acknowledge();
+    switch (outcome) {
+      case ElevationOutcome.cancelled:
+        context.go(Routes.myDataHealth);
+      case ElevationOutcome.stillInsufficient:
+        unawaited(_open(message: l10n.myDataHealthLevelStillInsufficientMessage));
+      case ElevationOutcome.failed:
+        unawaited(_open(message: l10n.myDataHealthLevelElevationFailedMessage));
+      // `succeeded` deja de bloquear y la pantalla pinta el listado por
+      // derivación, e `identityChanged` cierra sesión: si aun así hay bloqueo
+      // montado, es una entrada nueva.
+      case ElevationOutcome.succeeded:
+      case ElevationOutcome.identityChanged:
+        unawaited(_open());
+    }
   }
 
   String? get _suppressionKey {
@@ -295,11 +340,12 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
     unawaited(notifier.elevate(minimum: widget.minimum));
   }
 
+  /// [message] es el motivo de un intento anterior; con él el diálogo sale
+  /// siempre, aunque el ciudadano pidiera no volver a verlo.
   Future<void> _open({final String? message}) async {
     if (_isShowing || !mounted) {
       return;
     }
-    _hasOpenedOnce = true;
 
     // El diseño da un solo texto para cualquier bloqueo por nivel, así que un
     // literal que no sepamos leer se ve igual que un nivel bajo. La distinción
@@ -309,7 +355,7 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
       logger.w({'event': 'auth_level_not_readable', 'reading': widget.reading.toString()});
     }
 
-    if (_isSuppressed) {
+    if (message == null && _isSuppressed) {
       _elevate();
       return;
     }
@@ -317,45 +363,35 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
     _isShowing = true;
     final choice = await AppIdentityVerificationDialog.show(context, message: message);
     _isShowing = false;
-    if (!mounted || choice == null) {
+    if (!mounted) {
       return;
     }
-
-    if (choice.suppressFuture) {
+    // La preferencia se guarda con cualquiera de los dos botones: es sobre el
+    // aviso, no sobre la decisión de ir o no a Cl@ve.
+    if (choice?.suppressFuture ?? false) {
       final key = _suppressionKey;
       if (key != null) {
         unawaited(ref.read(appStorageProvider).write(key, true));
       }
     }
-
-    if (choice.accepted) {
-      _elevate();
-    } else {
+    // Sin elección es el botón atrás del sistema, que cierra el diálogo: es
+    // «Volver», y como tal lleva a Salud. Quedarse dejaba la pantalla vacía y
+    // el aviso volvía a salir.
+    if (choice == null || !choice.accepted) {
       context.go(Routes.myDataHealth);
+      return;
     }
+    _elevate();
   }
 
   @override
   Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    // El desenlace es una señal de un solo uso: se consume reabriendo el aviso
-    // con lo que haya pasado, y solo entonces.
     ref.listen<ElevationState>(elevationProvider, (final previous, final next) {
       final outcome = next.outcome;
-      if (outcome == null || outcome == previous?.outcome || !_hasOpenedOnce) {
+      if (outcome == null || outcome == previous?.outcome) {
         return;
       }
-      final message = switch (outcome) {
-        ElevationOutcome.stillInsufficient => l10n.myDataHealthLevelStillInsufficientMessage,
-        ElevationOutcome.failed => l10n.myDataHealthLevelElevationFailedMessage,
-        // `succeeded` no llega aquí: el gate deja de lanzar y la pantalla pasa
-        // a mostrar el listado por derivación. `identityChanged` cierra sesión.
-        _ => null,
-      };
-      if (message != null) {
-        unawaited(_open(message: message));
-      }
+      _handleOutcome(outcome);
     });
 
     // Mientras el diálogo decide, detrás no hay nada que enseñar. Durante la

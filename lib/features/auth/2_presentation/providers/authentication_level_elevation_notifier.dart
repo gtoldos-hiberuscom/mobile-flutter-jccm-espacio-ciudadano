@@ -21,6 +21,11 @@ enum ElevationOutcome {
 
   /// No se pudo completar. Se mantiene el bloqueo y se puede reintentar.
   failed,
+
+  /// El ciudadano cerró Cl@ve sin identificarse (la X del navegador o volver
+  /// atrás). Es un desenlace, no la ausencia de uno: sin él, quien vuelve a
+  /// montar el bloqueo no sabe que ya se intentó y relanza Cl@ve en bucle.
+  cancelled,
 }
 
 final class ElevationState {
@@ -130,8 +135,9 @@ class ElevationNotifier extends Notifier<ElevationState> {
           state = const ElevationState(outcome: ElevationOutcome.identityChanged);
 
         case ElevationCancelled():
-          // Silencio, como el login trata la cancelación.
-          state = const ElevationState();
+          // Sin mensaje, como el login trata la cancelación, pero **con
+          // desenlace**: la pantalla lo necesita para no volver a lanzar Cl@ve.
+          state = const ElevationState(outcome: ElevationOutcome.cancelled);
 
         case ElevationFailed(:final message, :final cause):
           logger.e({'event': 'auth_elevation_failed', 'message': message}, error: cause);
