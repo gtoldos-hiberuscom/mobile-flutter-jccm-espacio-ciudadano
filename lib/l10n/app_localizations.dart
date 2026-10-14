@@ -6779,26 +6779,20 @@ abstract class AppLocalizations {
   /// Salud — tarjeta del menú que lleva a las citas de atención primaria.
   ///
   /// In es, this message translates to:
-  /// **'Atención primaria'**
-  String get myDataHealthPrimaryCareNavTitle;
-
-  /// Salud — descripción de la tarjeta de atención primaria.
-  ///
-  /// In es, this message translates to:
   /// **'Citas de atención primaria'**
-  String get myDataHealthPrimaryCareNavDescription;
+  String get myDataHealthPrimaryCareNavTitle;
 
   /// Salud — tarjeta del menú que lleva a las citas hospitalarias.
   ///
   /// In es, this message translates to:
-  /// **'Atención hospitalaria'**
+  /// **'Citas de atención hospitalaria'**
   String get myDataHealthHospitalNavTitle;
 
-  /// Salud — descripción de la tarjeta de atención hospitalaria.
+  /// Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas.
   ///
   /// In es, this message translates to:
-  /// **'Citas hospitalarias del SESCAM'**
-  String get myDataHealthHospitalNavDescription;
+  /// **'Verifica tu identidad para continuar'**
+  String get myDataHealthHospitalNavVerificationRequired;
 
   /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.
   ///

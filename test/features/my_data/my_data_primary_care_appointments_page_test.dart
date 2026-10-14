@@ -27,7 +27,7 @@ const _sinCip = 'En el servicio del SESCAM no existe ningún CIP vinculado a su 
 /// Hasta ahora **no tenía ni un test de interfaz**, así que estos cubren lo que
 /// se ha mudado: es la red que avisa si el traslado cambió algo.
 void main() {
-  testWidgets('abre en pendientes, con el CIP y sus citas', (final tester) async {
+  testWidgets('abre en pendientes con sus citas, sin repetir el CIP del menú', (final tester) async {
     await _pump(
       tester,
       pending: [
@@ -40,7 +40,8 @@ void main() {
       ],
     );
 
-    expect(find.text('Código de Identificación Personal (CIP): PNRV901264600010'), findsOneWidget);
+    // El CIP vive en el menú de Salud (Figma 45045:57735), no aquí.
+    expect(find.textContaining('(CIP)'), findsNothing);
     expect(find.text('Revision'), findsOneWidget);
     expect(find.text('Dra. castellanos'), findsOneWidget);
     expect(find.text(_sinCitas), findsNothing);
@@ -100,7 +101,7 @@ void main() {
     expect(find.text(_servicioCaido), findsNothing);
   });
 
-  testWidgets('sin autorización no se pintan ni el CIP ni las pestañas', (final tester) async {
+  testWidgets('sin autorización no se pintan las pestañas', (final tester) async {
     await _pump(tester, hasAuthorization: false);
 
     expect(find.text(_pendientes), findsNothing);

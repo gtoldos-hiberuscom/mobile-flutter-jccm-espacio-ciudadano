@@ -17,8 +17,10 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-const _primaria = 'Atención primaria';
-const _hospitalaria = 'Atención hospitalaria';
+const _primaria = 'Citas de atención primaria';
+const _hospitalaria = 'Citas de atención hospitalaria';
+const _cip = 'Código de Identificación Personal (CIP): CIP-1';
+const _verificar = 'Verifica tu identidad para continuar';
 
 /// Salud es un **menú** de dos opciones al mismo nivel, como Bienestar Social y
 /// Educación. Antes primaria se mostraba dentro de Salud y hospitalaria se
@@ -45,11 +47,52 @@ void main() {
     expect(find.byType(MyDataHospitalAppointmentsPage), findsOneWidget);
   });
 
-  testWidgets('sin autorización las dos salen deshabilitadas y no navegan', (final tester) async {
+  // Figma 45045:57735: el CIP se muestra una sola vez, en el menú, y no se
+  // repite dentro de las consultas.
+  testWidgets('el CIP sale en el menú y no dentro de las consultas', (final tester) async {
+    await _pumpHealth(tester);
+    expect(find.text(_cip), findsOneWidget);
+
+    await tester.tap(find.text(_primaria));
+    await tester.pumpAndSettle();
+    expect(find.byType(MyDataPrimaryCareAppointmentsPage), findsOneWidget);
+    expect(find.text(_cip), findsNothing);
+  });
+
+  // Figma 45049:59358: Body/Caption (Inter Regular 12/18, sin tracking) en
+  // ColorBrand/Primary/Base. `captionRegular` se llama igual pero es negrita.
+  testWidgets('el CIP usa Body/Caption en primario', (final tester) async {
+    await _pumpHealth(tester);
+
+    final style = tester.widget<Text>(find.text(_cip)).style!;
+    expect(style.fontSize, 12);
+    expect(style.fontWeight, FontWeight.w400);
+    expect(style.height, 18 / 12);
+    expect(style.letterSpacing, 0);
+    expect(style.color, AppColors.primary);
+  });
+
+  testWidgets('con nivel bajo, hospitalaria avisa con candado de que pedirá verificar la identidad', (final tester) async {
+    await _pumpHealth(tester, authNLevel: 'low');
+
+    expect(find.text(_verificar), findsOneWidget);
+    expect(find.byIcon(AppIcons.lock), findsOneWidget);
+  });
+
+  testWidgets('con nivel suficiente, hospitalaria no avisa de nada', (final tester) async {
+    await _pumpHealth(tester);
+
+    expect(find.text(_verificar), findsNothing);
+    expect(find.byIcon(AppIcons.lock), findsNothing);
+  });
+
+  testWidgets('sin autorización las dos salen deshabilitadas, sin CIP, y no navegan', (final tester) async {
     await _pumpHealth(tester, hasAuthorization: false);
 
     expect(find.byType(MyDataDisabledNavigationCard), findsNWidgets(2));
     expect(find.byType(AppNavigationCard), findsNothing);
+    // Sin autorización no se puede consultar al SESCAM.
+    expect(find.text(_cip), findsNothing);
 
     await tester.tap(find.text(_primaria));
     await tester.pumpAndSettle();
@@ -59,7 +102,11 @@ void main() {
   });
 }
 
-Future<GoRouter> _pumpHealth(final WidgetTester tester, {final bool hasAuthorization = true}) async {
+Future<GoRouter> _pumpHealth(
+  final WidgetTester tester, {
+  final bool hasAuthorization = true,
+  final String authNLevel = 'substantial',
+}) async {
   final router = GoRouter(
     initialLocation: Routes.myDataHealth,
     routes: [
@@ -84,7 +131,7 @@ Future<GoRouter> _pumpHealth(final WidgetTester tester, {final bool hasAuthoriza
         myDataHealthCipProvider.overrideWith((final ref) async => 'CIP-1'),
         myDataHealthRepositoryProvider.overrideWithValue(_EmptyHealthRepository()),
         // Hospitalaria gatea por nivel; sin claims no llegaría a pintarse.
-        jwtClaimsProvider.overrideWith(_StubClaims.new),
+        jwtClaimsProvider.overrideWith(() => _StubClaims(authNLevel)),
       ],
       child: MaterialApp.router(
         locale: const Locale('es'),
@@ -99,8 +146,12 @@ Future<GoRouter> _pumpHealth(final WidgetTester tester, {final bool hasAuthoriza
 }
 
 final class _StubClaims extends JwtClaimsNotifier {
+  _StubClaims(this.authNLevel);
+
+  final String authNLevel;
+
   @override
-  JwtClaims? build() => const JwtClaims(
+  JwtClaims? build() => JwtClaims(
     exp: 0,
     iat: 0,
     iss: 'issuer',
@@ -108,7 +159,7 @@ final class _StubClaims extends JwtClaimsNotifier {
     sub: 'subject',
     subAlt: 'PER1',
     idAgente: 'PER1',
-    authNLevelRaw: 'substantial',
+    authNLevelRaw: authNLevel,
   );
 }
 

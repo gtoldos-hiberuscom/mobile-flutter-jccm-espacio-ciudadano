@@ -7,11 +7,14 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment_access.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_health_cip_field.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -61,13 +64,19 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
 
 enum _HealthTab { data, services }
 
-/// Las dos consultas de citas, como tarjetas de navegación.
+/// El CIP y las dos consultas de citas, como tarjetas de navegación.
+///
+/// El CIP vive **solo aquí** (Figma `45045:57735`): es del ciudadano, no de una
+/// consulta, así que se muestra una vez encima de las dos y no se repite dentro.
 class _HealthMenuTab extends ConsumerWidget {
   const _HealthMenuTab();
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    // Se avisa en la tarjeta de que hospitalaria pedirá verificar la identidad,
+    // con el mismo umbral que aplica el gate de la consulta.
+    final hospitalNeedsVerification = !ref.watch(authenticationLevelProvider).meets(kHospitalAppointmentsMinimumLevel);
 
     return ref.watch(jccmDataAuthorizationProvider).when(
       loading: () => const Padding(
@@ -90,29 +99,27 @@ class _HealthMenuTab extends ConsumerWidget {
               MyDataAuthorizationContextualHelper(onOpenSettings: () => _openConsentSettings(context)),
               const SizedBox(height: AppDimensions.space16),
             ],
-            if (hasJccmAuthorization)
+            if (hasJccmAuthorization) ...[
+              // Sin autorización no se puede consultar al SESCAM: el CIP sale
+              // solo cuando hay con qué pedirlo.
+              const MyDataHealthCipField(),
+              const SizedBox(height: AppDimensions.space16),
               AppNavigationCard(
                 title: l10n.myDataHealthPrimaryCareNavTitle,
-                description: l10n.myDataHealthPrimaryCareNavDescription,
                 onTap: () => context.go(Routes.myDataHealthPrimaryCareAppointments),
-              )
-            else
-              MyDataDisabledNavigationCard(
-                title: l10n.myDataHealthPrimaryCareNavTitle,
-                description: l10n.myDataHealthPrimaryCareNavDescription,
               ),
+            ] else
+              MyDataDisabledNavigationCard(title: l10n.myDataHealthPrimaryCareNavTitle),
             const SizedBox(height: AppDimensions.space16),
             if (hasJccmAuthorization)
               AppNavigationCard(
                 title: l10n.myDataHealthHospitalNavTitle,
-                description: l10n.myDataHealthHospitalNavDescription,
+                description: hospitalNeedsVerification ? l10n.myDataHealthHospitalNavVerificationRequired : null,
+                descriptionIcon: hospitalNeedsVerification ? AppIcons.lock : null,
                 onTap: () => context.go(Routes.myDataHealthHospitalAppointments),
               )
             else
-              MyDataDisabledNavigationCard(
-                title: l10n.myDataHealthHospitalNavTitle,
-                description: l10n.myDataHealthHospitalNavDescription,
-              ),
+              MyDataDisabledNavigationCard(title: l10n.myDataHealthHospitalNavTitle),
           ],
         ),
       ),

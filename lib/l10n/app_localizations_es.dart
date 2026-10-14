@@ -3517,16 +3517,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Citas hospitalarias';
 
   @override
-  String get myDataHealthPrimaryCareNavTitle => 'Atención primaria';
+  String get myDataHealthPrimaryCareNavTitle => 'Citas de atención primaria';
 
   @override
-  String get myDataHealthPrimaryCareNavDescription => 'Citas de atención primaria';
+  String get myDataHealthHospitalNavTitle => 'Citas de atención hospitalaria';
 
   @override
-  String get myDataHealthHospitalNavTitle => 'Atención hospitalaria';
-
-  @override
-  String get myDataHealthHospitalNavDescription => 'Citas hospitalarias del SESCAM';
+  String get myDataHealthHospitalNavVerificationRequired => 'Verifica tu identidad para continuar';
 
   @override
   String get myDataHealthHospitalLinkTitle => 'Mis citas hospitalarias';

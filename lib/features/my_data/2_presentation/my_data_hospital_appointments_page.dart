@@ -21,15 +21,15 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_appointment_date_filter.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_appointment_sections.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_health_cip_field.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Citas hospitalarias del SESCAM.
 ///
 /// Requisito funcional de JCCM (septiembre de 2026), apartados 2.1, 2.2 y 6.3:
-/// enlace propio desde Mis datos → Salud, CIP visible, dos pestañas con
-/// «Citas pendientes» por defecto, y los siete campos por cita.
+/// enlace propio desde Mis datos → Salud, dos pestañas con «Citas pendientes»
+/// por defecto, y los siete campos por cita. El CIP se muestra en el menú de
+/// Salud, no aquí (Figma `45045:57735`).
 ///
 /// Es de **solo consulta**: no se contempla solicitar, modificar ni anular.
 class MyDataHospitalAppointmentsPage extends ConsumerStatefulWidget {
@@ -105,7 +105,7 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
   ///
   /// El requisito pide que tras aceptar las cláusulas se pueda retomar la
   /// consulta con el flujo habitual de la app, así que a la vuelta se invalidan
-  /// la comprobación de autorización, el CIP y los listados ya retenidos. Es el
+  /// la comprobación de autorización y los listados ya retenidos. Es el
   /// mismo patrón que `MyDataAuthorizationRequiredState.onAuthorized`.
   Future<void> _openConsentSettings() async {
     await context.push<void>(
@@ -120,9 +120,7 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
     if (!mounted) {
       return;
     }
-    ref
-      ..invalidate(jccmDataAuthorizationProvider)
-      ..invalidate(myDataHealthCipProvider);
+    ref.invalidate(jccmDataAuthorizationProvider);
     for (final filter in _retained) {
       ref.invalidate(myDataHospitalAppointmentsProvider(filter));
     }
@@ -131,8 +129,8 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    // El CIP y la comprobación de autorización se observan **aquí**, por encima
-    // del área que conmuta, para que cambiar de pestaña no los revalide.
+    // La comprobación de autorización se observa **aquí**, por encima del área
+    // que conmuta, para que cambiar de pestaña no la revalide.
     final authorizationAsync = ref.watch(jccmDataAuthorizationProvider);
 
     return AppDetailScaffold(
@@ -163,8 +161,6 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const MyDataHealthCipField(),
-                const SizedBox(height: AppDimensions.space16),
                 AppSegmentedControl(
                   segments: [l10n.myDataHealthHospitalPendingTab, l10n.myDataHealthHospitalPastTab],
                   selectedIndex: _filter == HealthAppointmentFilter.pending ? 0 : 1,

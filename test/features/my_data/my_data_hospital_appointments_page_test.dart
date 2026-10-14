@@ -24,7 +24,7 @@ const _avisoTitulo = 'Verificación de identidad';
 const _avisoCuerpo = 'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.';
 
 void main() {
-  testWidgets('abre en pendientes y pinta el CIP y los campos de la cita', (final tester) async {
+  testWidgets('abre en pendientes y pinta los campos de la cita, sin repetir el CIP del menú', (final tester) async {
     await _pump(
       tester,
       pending: [
@@ -39,7 +39,8 @@ void main() {
       ],
     );
 
-    expect(find.text('Código de Identificación Personal (CIP): PNRV901264600010'), findsOneWidget);
+    // El CIP vive en el menú de Salud (Figma 45045:57735), no aquí.
+    expect(find.textContaining('(CIP)'), findsNothing);
     // Los siete campos del apartado 6.3, cada uno localizable en pantalla.
     expect(find.text('3'), findsOneWidget); // día
     expect(find.text('martes'), findsOneWidget); // día de la semana
@@ -141,7 +142,7 @@ void main() {
     expect(find.text(_avisoTitulo), findsNothing);
   });
 
-  testWidgets('sin autorización previa no se pinta ni el CIP ni las pestañas', (final tester) async {
+  testWidgets('sin autorización previa no se pintan las pestañas', (final tester) async {
     await _pump(tester, hasAuthorization: false);
 
     expect(find.text(_pendientes), findsNothing);

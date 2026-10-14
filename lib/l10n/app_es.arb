@@ -4655,21 +4655,17 @@
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Título del bloque de citas hospitalarias."
   },
-  "myDataHealthPrimaryCareNavTitle": "Atención primaria",
+  "myDataHealthPrimaryCareNavTitle": "Citas de atención primaria",
   "@myDataHealthPrimaryCareNavTitle": {
     "description": "Salud — tarjeta del menú que lleva a las citas de atención primaria."
   },
-  "myDataHealthPrimaryCareNavDescription": "Citas de atención primaria",
-  "@myDataHealthPrimaryCareNavDescription": {
-    "description": "Salud — descripción de la tarjeta de atención primaria."
-  },
-  "myDataHealthHospitalNavTitle": "Atención hospitalaria",
+  "myDataHealthHospitalNavTitle": "Citas de atención hospitalaria",
   "@myDataHealthHospitalNavTitle": {
     "description": "Salud — tarjeta del menú que lleva a las citas hospitalarias."
   },
-  "myDataHealthHospitalNavDescription": "Citas hospitalarias del SESCAM",
-  "@myDataHealthHospitalNavDescription": {
-    "description": "Salud — descripción de la tarjeta de atención hospitalaria."
+  "myDataHealthHospitalNavVerificationRequired": "Verifica tu identidad para continuar",
+  "@myDataHealthHospitalNavVerificationRequired": {
+    "description": "Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas."
   },
   "myDataHealthHospitalLinkTitle": "Mis citas hospitalarias",
   "@myDataHealthHospitalLinkTitle": {

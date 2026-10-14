@@ -3516,16 +3516,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
 
   @override
-  String get myDataHealthPrimaryCareNavTitle => 'Primary care';
+  String get myDataHealthPrimaryCareNavTitle => 'Primary care appointments';
 
   @override
-  String get myDataHealthPrimaryCareNavDescription => 'Primary care appointments';
+  String get myDataHealthHospitalNavTitle => 'Hospital care appointments';
 
   @override
-  String get myDataHealthHospitalNavTitle => 'Hospital care';
-
-  @override
-  String get myDataHealthHospitalNavDescription => 'SESCAM hospital appointments';
+  String get myDataHealthHospitalNavVerificationRequired => 'Verify your identity to continue';
 
   @override
   String get myDataHealthHospitalLinkTitle => 'My hospital appointments';

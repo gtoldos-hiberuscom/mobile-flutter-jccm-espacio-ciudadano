@@ -18,7 +18,6 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_appointment_date_filter.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_appointment_sections.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_health_cip_field.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -130,8 +129,6 @@ class _MyDataPrimaryCareAppointmentsPageState extends ConsumerState<MyDataPrimar
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const MyDataHealthCipField(),
-                  const SizedBox(height: AppDimensions.space16),
                   AppSegmentedControl(
                     segments: [l10n.myDataHealthPendingTab, l10n.myDataHealthPastTab],
                     selectedIndex: _filter == HealthAppointmentFilter.pending ? 0 : 1,

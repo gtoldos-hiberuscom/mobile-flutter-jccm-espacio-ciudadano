@@ -4607,21 +4607,17 @@
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Title of the hospital appointments block."
   },
-  "myDataHealthPrimaryCareNavTitle": "Primary care",
+  "myDataHealthPrimaryCareNavTitle": "Primary care appointments",
   "@myDataHealthPrimaryCareNavTitle": {
     "description": "Health — menu card leading to primary care appointments."
   },
-  "myDataHealthPrimaryCareNavDescription": "Primary care appointments",
-  "@myDataHealthPrimaryCareNavDescription": {
-    "description": "Health — description of the primary care card."
-  },
-  "myDataHealthHospitalNavTitle": "Hospital care",
+  "myDataHealthHospitalNavTitle": "Hospital care appointments",
   "@myDataHealthHospitalNavTitle": {
     "description": "Health — menu card leading to hospital appointments."
   },
-  "myDataHealthHospitalNavDescription": "SESCAM hospital appointments",
-  "@myDataHealthHospitalNavDescription": {
-    "description": "Health — description of the hospital care card."
+  "myDataHealthHospitalNavVerificationRequired": "Verify your identity to continue",
+  "@myDataHealthHospitalNavVerificationRequired": {
+    "description": "Health — note under the hospital appointments card, with a lock, when the current identification level is not enough to view them."
   },
   "myDataHealthHospitalLinkTitle": "My hospital appointments",
   "@myDataHealthHospitalLinkTitle": {

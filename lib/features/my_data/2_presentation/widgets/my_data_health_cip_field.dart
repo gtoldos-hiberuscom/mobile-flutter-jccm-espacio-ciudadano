@@ -7,8 +7,8 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Identificador CIP del ciudadano ante el SESCAM.
 ///
-/// Lo muestran las dos consultas de citas —primaria y hospitalaria—, así que
-/// vive aquí y no dentro de una de ellas.
+/// Se muestra una sola vez, en el menú de Salud y encima de las dos consultas
+/// de citas (Figma `45045:57735`): es un dato del ciudadano, no de una de ellas.
 ///
 /// Se resuelve con `when` y **nunca** con `asData?.value`: con lo segundo, un
 /// fallo del servicio se presentaba como «no tienes CIP», que es justo el tipo
@@ -21,7 +21,8 @@ class MyDataHealthCipField extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final style = AppTypography.captionRegular.copyWith(color: AppColors.primary);
+    // Figma 45049:59358: Body/Caption sobre ColorBrand/Primary/Base.
+    final style = AppTypography.bodyCaption.copyWith(color: AppColors.primary);
 
     return ref.watch(myDataHealthCipProvider).when(
       loading: () => Text(l10n.myDataHealthCipLabel('…'), style: style),
