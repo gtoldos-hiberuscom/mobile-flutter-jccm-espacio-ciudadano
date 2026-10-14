@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: API de versiones de la app Carpeta Ciudadana
-  version: 1.0.0
+  version: 1.1.0
   contact:
     email: ae.modernizacion@jccm.es
   description: |
@@ -36,16 +36,60 @@ info:
     misma `x.y.z`. Las versiones se comparan numéricamente componente a componente
     (`0.10.0` > `0.9.3`).
 
+    ## Configuración de reglas (propuesta de back, 14/10/2026)
+
+    Una entrada por `plataforma` + `idAplicacion`. El formato de almacenamiento lo decide back;
+    estos son los campos y su significado:
+
+    ```json
+    {
+      "aplicaciones": [
+        {
+          "plataforma": "ANDROID",
+          "idAplicacion": "es.jccm.espaciociudadano",
+          "versionPublicada": "0.2.0",
+          "versionMinima": "0.1.5",
+          "versionRecomendada": "0.2.0",
+          "versionesBloqueadas": ["0.1.7"],
+          "mensajeForzada": null,
+          "mensajeRecomendada": null
+        }
+      ]
+    }
+    ```
+
+    | Campo | Significado |
+    |---|---|
+    | `versionPublicada` | Última versión **disponible para todos** en la tienda de esa plataforma. Es la que se devuelve en la respuesta. |
+    | `versionMinima` | Por debajo se fuerza. |
+    | `versionRecomendada` | Por debajo (y por encima de la mínima) se recomienda. Si coincide con `versionPublicada`, se recomienda a todo el que no tenga la última. |
+    | `versionesBloqueadas` | Versiones concretas que se fuerzan aunque estén por encima de la mínima (p. ej. una con un error grave). |
+    | `mensajeForzada` / `mensajeRecomendada` | Texto opcional que va en `mensaje` según la acción. `null` → la app usa su texto propio. |
+
+    **Validación al cargar la configuración** (una entrada que no la cumpla se descarta y esa
+    plataforma/app responde `NINGUNA`, dejándolo en el log de back):
+
+    - Todas las versiones con formato `MAYOR.MENOR.PARCHE`.
+    - `versionMinima` ≤ `versionRecomendada` ≤ `versionPublicada`.
+
+    Una versión bloqueada igual o superior a `versionPublicada` no invalida la entrada, pero no
+    tiene efecto (ver el paso 2 de la lógica): conviene avisarlo en el log de back.
+
+    **Entornos:** la app usa el mismo `idAplicacion` (`es.jccm.espaciociudadano`) en
+    desarrollo, preproducción y producción, así que **cada entorno de back necesita su propia
+    configuración**: el id no distingue entornos.
+
     ## Puntos abiertos para back
 
-    1. **Host y entornos** (des / pre / pro): sustituyen al servidor genérico de abajo.
+    1. **Host y entornos** (des / pre / pro): sustituyen al servidor genérico de abajo. Hoy la
+       app llama al mismo host que el resto de APIs (`BASE_URL` del gateway de cada entorno).
     2. **Autenticación:** el endpoint se consulta sin sesión de usuario, así que no puede exigir
        el Bearer de Cl@ve. Si se protege, debe ser con algo de lo que la app disponga sin
        sesión (por ejemplo, una cabecera de API key por entorno); en ese caso se añadirá aquí el
        `securityScheme` correspondiente.
-    3. **Gestión de reglas:** cómo se dan de alta las reglas por plataforma / app / versión lo
-       define back; este contrato solo cubre la consulta que hace la app. La precedencia
-       recomendada está descrita en la operación.
+    3. **Cambio de reglas sin redespliegue:** un forzado urgente debe surtir efecto en minutos.
+       Si la configuración se monta como fichero (p. ej. un ConfigMap), back debe recargarla sin
+       reiniciar o documentar cuánto tarda en aplicarse.
 servers:
   - url: https://{host}
     description: Servidor por definir (punto abierto 1).
@@ -71,10 +115,12 @@ paths:
 
         - Siempre `200` cuando la petición es válida, también si no hay ninguna regla configurada
           para esa plataforma, aplicación o versión: en ese caso `accion = NINGUNA`. Nunca `404`.
-        - Si `accion` es `RECOMENDADA` o `FORZADA`, `versionPublicada` es obligatoria y debe ser
-          **estrictamente mayor** que `version`: es la versión a la que se invita a actualizar
-          (normalmente la última publicada en la tienda de esa plataforma). Una versión nunca se
-          recomienda a sí misma.
+        - Si `accion` es `RECOMENDADA` o `FORZADA`, `versionPublicada` es obligatoria, es la
+          `versionPublicada` configurada para esa plataforma y debe ser **estrictamente mayor**
+          que `version` (lo garantiza el paso 2 de la lógica). Una versión nunca se recomienda a
+          sí misma.
+        - `mensaje` es `mensajeForzada` si la acción es `FORZADA` y `mensajeRecomendada` si es
+          `RECOMENDADA`.
         - Si `accion` es `NINGUNA`, `versionPublicada` y `mensaje` van a `null`.
         - **`versionPublicada` debe poder descargarse ya en la tienda de esa plataforma para
           todos los usuarios**: en iOS, aprobada por Apple y publicada; en Android, con el
@@ -83,13 +129,24 @@ paths:
           actualización. Las reglas se configuran por plataforma precisamente porque las dos
           tiendas publican a ritmos distintos.
 
-        **Precedencia recomendada al resolver** (para una plataforma e `idAplicacion`):
+        **Lógica** (acordada con back el 14/10/2026), en este orden; la primera que se cumple
+        decide:
 
-        1. La versión instalada está bloqueada explícitamente, o es menor que la versión mínima
-           soportada → `FORZADA`.
-        2. La versión instalada es menor que la última publicada → la política configurada para
-           ese tramo (`RECOMENDADA` o `NINGUNA`).
-        3. En otro caso → `NINGUNA`.
+        1. La `plataforma` o el `idAplicacion` no están en la configuración → `NINGUNA`.
+        2. `version` ≥ `versionPublicada` → `NINGUNA`. Cubre también las builds de pruebas con
+           versión superior a la publicada.
+        3. `version` está en `versionesBloqueadas` → `FORZADA`.
+        4. `version` < `versionMinima` → `FORZADA`.
+        5. `version` < `versionRecomendada` → `RECOMENDADA`.
+        6. En otro caso → `NINGUNA`.
+
+        Las comparaciones son **numéricas componente a componente**, nunca de texto: `0.10.0` es
+        mayor que `0.9.3`, y `"0.10.0" < "0.9.3"` como cadenas daría el resultado contrario.
+
+        Consecuencia del paso 2: una versión bloqueada solo se fuerza cuando ya hay otra
+        posterior publicada. Si la última versión publicada tiene un error, primero se publica la
+        corrección en tienda, se sube `versionPublicada` y después se bloquea la versión con el
+        error.
 
         **Rendimiento y caché:** la app espera como máximo 5 segundos. La respuesta no debe
         cachearse en intermediarios más allá de unos minutos (`Cache-Control: no-store` o un
@@ -107,8 +164,8 @@ paths:
           required: true
           description: |
             Identificador de la app en la plataforma: `applicationId` (paquete) en Android,
-            `CFBundleIdentifier` en iOS. Permite distinguir las builds de cada entorno si conviven
-            identificadores distintos.
+            `CFBundleIdentifier` en iOS. Hoy es `es.jccm.espaciociudadano` en todas las
+            plataformas y entornos.
           schema:
             type: string
             minLength: 1
